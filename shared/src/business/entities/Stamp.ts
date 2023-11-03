@@ -10,29 +10,20 @@ import {
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import joi from 'joi';
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
 
-const todayFormatted = formatDateString(
-  createISODateAtStartOfDayEST(),
-  FORMATS.ISO,
-);
+const joi: Root = joiImported.extend(joiDate);
 
-/**
- * constructor
- *
- * @param {object} providers the providers object
- * @param {object} providers.rawStamp the raw stamp data
- * @constructor
- */
 export class Stamp extends JoiValidationEntity {
-  public date: string;
+  public customText?: string;
+  public date?: string;
+  public deniedAsMoot?: string;
+  public deniedWithoutPrejudice?: string;
   public disposition: string;
-  public deniedAsMoot: string;
-  public deniedWithoutPrejudice: string;
-  public strickenFromTrialSession: string;
-  public jurisdictionalOption: string;
-  public dueDateMessage: string;
-  public customText: string;
+  public dueDateMessage?: string;
+  public jurisdictionalOption?: string;
+  public strickenFromTrialSession?: string;
 
   constructor(rawStamp) {
     super('Stamp');
@@ -45,6 +36,11 @@ export class Stamp extends JoiValidationEntity {
     this.dueDateMessage = rawStamp.dueDateMessage;
     this.customText = rawStamp.customText;
   }
+
+  static TODAY = formatDateString(
+    createISODateAtStartOfDayEST(),
+    FORMATS.MMDDYY,
+  );
 
   static VALIDATION_ERROR_MESSAGES = {
     date: [
@@ -63,7 +59,11 @@ export class Stamp extends JoiValidationEntity {
       date: joi.when('dueDateMessage', {
         is: joi.exist().not(null),
         otherwise: joi.optional().allow(null),
-        then: JoiValidationConstants.ISO_DATE.min(todayFormatted)
+        then: joi
+          .date()
+          .iso()
+          .format(['MM/DD/YY'])
+          .min(Stamp.TODAY)
           .required()
           .description(
             'The due date of the status report (or proposed stipulated decision) filing',
@@ -90,3 +90,5 @@ export class Stamp extends JoiValidationEntity {
     return Stamp.VALIDATION_ERROR_MESSAGES;
   }
 }
+
+export type RawStamp = ExcludeMethods<Stamp>;
