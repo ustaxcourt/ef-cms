@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
-import { isEmpty } from 'lodash';
+import {
+  JoiErrorDetail,
+  getFormattedValidationErrors_NEW,
+} from './joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
+import { differenceWith, fromPairs, isEmpty, isEqual, toPairs } from 'lodash';
 import joi from 'joi';
 
 const setIsValidated = obj => {
@@ -113,7 +117,48 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
       if (!obj[key]) delete obj[key];
     }
   }
-  return Object.keys(obj).length === 0 ? null : obj;
+  const results = Object.keys(obj).length === 0 ? null : obj;
+  // TODO: revert these after manual testing in test is complete
+  const newResults = getFormattedValidationErrors_NEW(entity);
+
+  /* eslint-disable no-restricted-globals */
+  const inFrontEnd = typeof document !== 'undefined';
+
+  if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
+    const newResultsDiff = differenceWith(
+      toPairs(newResults!),
+      toPairs(results!),
+      isEqual,
+    );
+
+    const resultsDiff = differenceWith(
+      toPairs(results!),
+      toPairs(newResults!),
+      isEqual,
+    );
+
+    const thisURL = new URL(document.URL);
+    const errorMessage = `Validation message mismatch. Please take a screenshot of this message and add to Devex Card 1187. 
+    Page: ${thisURL.pathname}
+    Entity Name: ${entity.entityName}
+    Old Results: ${JSON.stringify(fromPairs(resultsDiff))}
+    New Results: ${JSON.stringify(fromPairs(newResultsDiff))}`;
+    alert(errorMessage);
+  }
+
+  return results;
+}
+
+function customStringify(obj) {
+  if (!obj) return null;
+  const keys = Object.keys(obj).sort();
+  const result: string[] = [];
+
+  for (const key of keys) {
+    const value = obj[key];
+    result.push(`"${key}": ${JSON.stringify(value)}`);
+  }
+  return `{\n\t${result.join(',\n\t')}\n}`;
 }
 
 export abstract class JoiValidationEntity {
@@ -125,6 +170,8 @@ export abstract class JoiValidationEntity {
 
   abstract getValidationRules(): any;
   abstract getErrorToMessageMap(): any;
+
+  abstract getValidationRules_NEW(): any;
 
   getValidationErrors() {
     const rules = this.getValidationRules();
@@ -143,6 +190,22 @@ export abstract class JoiValidationEntity {
       }
     });
     return errors;
+  }
+
+  getValidationErrors_NEW(): { details: JoiErrorDetail[] } | null {
+    try {
+      const rules = this.getValidationRules_NEW();
+      const schema = rules.validate ? rules : joi.object().keys(rules);
+      const { error } = schema.validate(this, {
+        abortEarly: false,
+        allowUnknown: true,
+      });
+      if (!error) return null;
+      return error;
+    } catch (e) {
+      console.log('THIS IS THE ENTITY ', this.entityName);
+      return null;
+    }
   }
 
   isValid() {
@@ -188,6 +251,10 @@ export abstract class JoiValidationEntity {
     return getFormattedValidationErrors(this);
   }
 
+  getFormattedValidationErrors_NEW() {
+    return getFormattedValidationErrors_NEW(this);
+  }
+
   toRawObject() {
     return toRawObject(this) as ExcludeMethods<this>;
   }
@@ -205,7 +272,6 @@ export abstract class JoiValidationEntity {
     });
 
     if (error) {
-      console.log('Error, entity is invalid: ', this);
       throw new InvalidEntityError(
         this.entityName,
         JSON.stringify(

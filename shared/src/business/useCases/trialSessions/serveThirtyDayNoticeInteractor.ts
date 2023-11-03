@@ -8,7 +8,7 @@ import {
   InvalidRequest,
   NotFoundError,
   UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

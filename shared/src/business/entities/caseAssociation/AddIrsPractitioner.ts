@@ -1,37 +1,51 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
-export class AddIrsPractitioner extends JoiValidationEntity {
-  public email: string;
+export class AddIrsPractitioner extends JoiValidationEntity_New {
+  public email?: string;
   public serviceIndicator: string;
   public user: any;
 
   constructor(rawProps: any) {
     super('AddIrsPractitioner');
+
     this.email = rawProps.user?.email;
     this.serviceIndicator = rawProps.serviceIndicator;
     this.user = rawProps.user;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    serviceIndicator: [
-      {
-        contains: 'must be one of',
-        message:
+  static VALIDATION_RULES = {
+    email: JoiValidationConstants.STRING.optional(),
+    serviceIndicator: joi
+      .when('email', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.STRING.valid(
+          SERVICE_INDICATOR_TYPES.SI_NONE,
+          SERVICE_INDICATOR_TYPES.SI_PAPER,
+        ),
+        then: JoiValidationConstants.STRING.valid(
+          ...Object.values(SERVICE_INDICATOR_TYPES),
+        ),
+      })
+      .required()
+      .messages({
+        '*': 'Select service type',
+        'any.only':
           'No email found for electronic service. Select a valid service preference.',
-      },
-      'Select service type',
-    ],
-    user: 'Select a respondent counsel',
-  } as const;
-
-  getErrorToMessageMap() {
-    return AddIrsPractitioner.VALIDATION_ERROR_MESSAGES;
-  }
+      }),
+    user: joi.object().required().messages({
+      '*': 'Select a respondent counsel',
+    }),
+  };
 
   getValidationRules() {
+    return AddIrsPractitioner.VALIDATION_RULES;
+  }
+
+  getValidationRules_NEW() {
     return {
       email: JoiValidationConstants.STRING.optional(),
       serviceIndicator: joi
@@ -45,12 +59,18 @@ export class AddIrsPractitioner extends JoiValidationEntity {
             ...Object.values(SERVICE_INDICATOR_TYPES),
           ),
         })
-        .required(),
-      user: joi.object().required(),
+        .required()
+        .messages({
+          ...setDefaultErrorMessage('Select service type'),
+          'any.only':
+            'No email found for electronic service. Select a valid service preference.',
+        }),
+      user: joi
+        .object()
+        .required()
+        .messages(setDefaultErrorMessage('Select a respondent counsel')),
     };
   }
 }
 
-declare global {
-  type RawAddIrsPractitioner = ExcludeMethods<AddIrsPractitioner>;
-}
+export type RawAddIrsPractitioner = ExcludeMethods<AddIrsPractitioner>;

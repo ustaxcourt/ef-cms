@@ -2,7 +2,7 @@ import {
   MOCK_CASE,
   MOCK_SUBMITTED_CASE,
 } from '../../../../../../shared/src/test/mockCase';
-import { migrateItems } from './0013-default-case-status-history';
+import { migrateItems } from './0014-default-case-status-history';
 
 describe('migrateItems', () => {
   it('should add an empty case status history for cases that do not have one already', () => {

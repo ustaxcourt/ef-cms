@@ -383,6 +383,24 @@ describe('TrialSession entity', () => {
         });
       });
     });
+
+    describe('postal code', () => {
+      it('should return error messages when postal code does not match regex', () => {
+        const trialSession = new TrialSession(
+          {
+            ...MOCK_TRIAL_REGULAR,
+            postalCode: 'NOT A REAL POSTAL CODE',
+          },
+          {
+            applicationContext,
+          },
+        );
+
+        expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+          postalCode: 'Enter ZIP code',
+        });
+      });
+    });
   });
 
   describe('validate', () => {

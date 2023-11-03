@@ -12,7 +12,7 @@ export const getCasesMetadataByLeadDocketNumber = async ({
 }: {
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
-}) => {
+}): Promise<RawCase[]> => {
   const consolidatedGroup = await queryFull<
     IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
   >({

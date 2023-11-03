@@ -1,11 +1,11 @@
 import { Case } from '../../entities/cases/Case';
-import { Message } from '../../entities/Message';
+import { Message, RawMessage } from '../../entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const replyToMessage = async (
   applicationContext: IApplicationContext,
