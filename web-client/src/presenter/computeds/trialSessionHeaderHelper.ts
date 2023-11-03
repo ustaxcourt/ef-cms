@@ -7,7 +7,15 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const trialSessionHeaderHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): {
+  isStandaloneSession: boolean;
+  nameToDisplay: string;
+  showBatchDownloadButton: boolean;
+  showPrintCalendarButton: boolean;
+  showPrintPaperServicePDFsButton: boolean;
+  showSwitchToSessionDetail: boolean;
+  showSwitchToWorkingCopy: boolean;
+} => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const currentUser = applicationContext.getCurrentUser();
@@ -35,6 +43,9 @@ export const trialSessionHeaderHelper = (
     isAssigned && 'TrialSessionWorkingCopy'.includes(get(state.currentPage));
   const showSwitchToWorkingCopy =
     isAssigned && 'TrialSessionDetail'.includes(get(state.currentPage));
+  const showPrintPaperServicePDFsButton =
+    formattedTrialSession.paperServicePdfs.length > 0 &&
+    get(state.permissions!.REPRINT_PAPER_SERVICE);
 
   return {
     isStandaloneSession: TrialSession.isStandaloneRemote(
@@ -44,8 +55,9 @@ export const trialSessionHeaderHelper = (
       ? currentUser.name
       : formattedTrialSession.formattedJudge,
     showBatchDownloadButton: !isEmpty(formattedTrialSession.allCases),
+    showPrintCalendarButton: formattedTrialSession.isCalendared,
+    showPrintPaperServicePDFsButton,
     showSwitchToSessionDetail,
     showSwitchToWorkingCopy,
-    title: 'Session Working Copy',
   };
 };

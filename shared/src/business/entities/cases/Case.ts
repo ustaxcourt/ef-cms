@@ -1865,12 +1865,7 @@ export class Case extends JoiValidationEntity {
     this.hearings.splice(removeIndex, 1);
   }
 
-  /**
-   * remove case from trial with optional associated judge
-   * @param {string} associatedJudge (optional) the associated judge for the case
-   * @returns {Case} the updated case entity
-   */
-  removeFromTrialWithAssociatedJudge(associatedJudge) {
+  removeFromTrialWithAssociatedJudge(associatedJudge?: string): Case {
     if (associatedJudge) {
       this.associatedJudge = associatedJudge;
     }

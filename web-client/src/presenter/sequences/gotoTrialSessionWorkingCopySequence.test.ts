@@ -22,6 +22,7 @@ describe('gotoTrialSessionWorkingCopySequence', () => {
     term: 'Fall',
     termYear: '2025',
     trialLocation: 'Birmingham, Alabama',
+    trialSessionId: mockTrialSessionId,
   };
 
   const mockWorkingCopy = {
@@ -63,7 +64,6 @@ describe('gotoTrialSessionWorkingCopySequence', () => {
 
     expect(cerebralTest.getState()).toMatchObject({
       trialSession: mockTrialSession,
-      trialSessionId: mockTrialSessionId,
       trialSessionWorkingCopy: mockWorkingCopy,
     });
   });

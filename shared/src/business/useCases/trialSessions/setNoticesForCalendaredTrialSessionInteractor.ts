@@ -6,31 +6,10 @@ import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-const waitForJobToFinish = async ({ applicationContext, jobId }) => {
-  let unfinishedCases;
-  while (unfinishedCases !== 0) {
-    const jobStatus = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase({
-        applicationContext,
-        jobId,
-      });
-    ({ unfinishedCases } = jobStatus);
-
-    await applicationContext.getUtilities().sleep(5000);
-  }
-};
-
-/**
- * Generates notices for all calendared cases for the given trialSessionId
- * @param {object} applicationContext the applicationContext
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the trial session id
- */
 export const setNoticesForCalendaredTrialSession = async (
   applicationContext: IApplicationContext,
   { trialSessionId }: { trialSessionId: string },
-) => {
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -44,7 +23,7 @@ export const setNoticesForCalendaredTrialSession = async (
       trialSessionId,
     });
 
-  let trialNoticePdfsKeys = [];
+  let trialNoticePdfsKeys: string[] = [];
 
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -53,6 +32,7 @@ export const setNoticesForCalendaredTrialSession = async (
         action: 'notice_generation_complete',
         hasPaper: false,
         trialNoticePdfsKeys,
+        trialSessionId,
       },
       userId: user.userId,
     });
@@ -140,7 +120,7 @@ export const setNoticesForCalendaredTrialSession = async (
       trialSessionStatus: 'complete',
     });
 
-  await trialSessionEntity.setNoticesIssued();
+  trialSessionEntity.setNoticesIssued();
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
@@ -168,11 +148,32 @@ export const setNoticesForCalendaredTrialSession = async (
     message: {
       action: 'notice_generation_complete',
       trialNoticePdfsKeys,
+      trialSessionId: trialSessionEntity.trialSessionId,
     },
     userId: user.userId,
   });
 };
 
+const waitForJobToFinish = async ({
+  applicationContext,
+  jobId,
+}: {
+  applicationContext: IApplicationContext;
+  jobId: string;
+}): Promise<void> => {
+  const { unfinishedCases } = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionJobStatusForCase({
+      applicationContext,
+      jobId,
+    });
+  if (unfinishedCases === 0) {
+    return;
+  }
+
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  await waitForJobToFinish({ applicationContext, jobId });
+};
 export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { trialSessionId }: { trialSessionId: string },
