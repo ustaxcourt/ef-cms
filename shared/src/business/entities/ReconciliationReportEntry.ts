@@ -1,8 +1,8 @@
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { pick } from 'lodash';
 
-export class ReconciliationReportEntry extends JoiValidationEntity_New {
+export class ReconciliationReportEntry extends JoiValidationEntity {
   public caseCaption: string;
   public docketEntryId: string;
   public docketNumber: string;
