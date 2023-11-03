@@ -270,6 +270,15 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+            if [ "$MIGRATE_FLAG" == "false" ]; then
+              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${DESTINATION_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            fi
       - run:
           name: Disable Check Migration Status Cron
           command: |
