@@ -1,5 +1,5 @@
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { ROLES } from './EntityConstants';
 import { User } from './User';
 
@@ -9,7 +9,7 @@ import { User } from './User';
  * @param {object} rawUser the raw user data
  * @constructor
  */
-export class PublicUser extends JoiValidationEntity_New {
+export class PublicUser extends JoiValidationEntity {
   public name: string;
   public role: string;
   public judgeFullName?: string;
