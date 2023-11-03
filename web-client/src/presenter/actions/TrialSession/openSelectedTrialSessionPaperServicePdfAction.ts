@@ -1,10 +1,8 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 export const openSelectedTrialSessionPaperServicePdfAction = async ({
   applicationContext,
-  get,
+  props,
 }: ActionProps) => {
-  const selectedPdf = get(state.modal.form.selectedPdf);
+  const { selectedPdf } = props;
   const { url } = await applicationContext
     .getUseCases()
     .getPaperServicePdfUrlInteractor(applicationContext, {

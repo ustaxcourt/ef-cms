@@ -1,3 +1,4 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ModalDialog } from '@web-client/views/ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -11,51 +12,38 @@ export const ReprintPaperServiceDocumentsModal = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSelectedTrialSessionPaperServicePdfSequence:
       sequences.openSelectedTrialSessionPaperServicePdfSequence,
-    updatePDFsSelectedForPrintSequence:
-      sequences.updatePDFsSelectedForPrintSequence,
   },
   function ReprintPaperServiceDocumentsModal({
     clearModalSequence,
-    form,
     formattedTrialSessionDetails,
     openSelectedTrialSessionPaperServicePdfSequence,
-    updatePDFsSelectedForPrintSequence,
   }) {
     return (
       <ModalDialog
-        cancelLabel="Cancel"
         cancelSequence={clearModalSequence}
-        confirmLabel="Open PDF"
-        confirmSequence={openSelectedTrialSessionPaperServicePdfSequence}
-        message="Select the PDF(s) that you would like to print. They will open in seperate tabs and be available for three days after the PDF was originally generated."
+        confirmLabel="Done"
+        confirmSequence={clearModalSequence}
+        message="Select the PDF that you would like to print. It will open in a separate tab and be available for three days after the PDF was originally generated."
         title="Print Paper Service PDF"
       >
-        <form data-cy="trial-session-paper-pdf-options">
+        <div data-cy="trial-session-paper-pdf-options">
           {formattedTrialSessionDetails.paperServicePdfs.map(pdfInfo => {
             return (
-              <div className="usa-radio" key={pdfInfo.fileId}>
-                <input
-                  checked={form.selectedPdf === pdfInfo.fileId}
-                  className="usa-radio__input"
-                  id={`${pdfInfo.fileId}`}
-                  name={`${pdfInfo.fileId}`}
-                  type="radio"
-                  onChange={e => {
-                    updatePDFsSelectedForPrintSequence({
-                      key: e.target.name,
+              <div key={pdfInfo.fileId}>
+                <Button
+                  link
+                  onClick={() => {
+                    openSelectedTrialSessionPaperServicePdfSequence({
+                      selectedPdf: pdfInfo.fileId,
                     });
                   }}
-                />
-                <label
-                  className="usa-radio__label"
-                  htmlFor={`${pdfInfo.fileId}`}
                 >
                   {pdfInfo.title}
-                </label>
+                </Button>
               </div>
             );
           })}
-        </form>
+        </div>
       </ModalDialog>
     );
   },
