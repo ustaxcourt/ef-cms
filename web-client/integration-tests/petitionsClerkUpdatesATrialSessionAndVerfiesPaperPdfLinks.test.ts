@@ -124,6 +124,21 @@ describe('petitions clerk calendars a trial session and verifies the paper pdf l
         currentItem: 'currentPage',
         expectedItem: 'PrintPaperTrialNotices',
       });
+
+      await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
+      });
+
+      await cerebralTest.runSequence('openPrintGeneratedPaperServiceSequence');
+
+      const trialSessionFormatted = runCompute(
+        withAppContextDecorator(formattedTrialSessionDetails),
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
+      expect(trialSessionFormatted.paperServicePdfs.length).toEqual(2);
     });
   });
 
