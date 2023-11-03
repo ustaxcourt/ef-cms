@@ -46,6 +46,10 @@ export const serveThirtyDayNoticeInteractor = async (
     throw new NotFoundError(`No trial session found for ${trialSessionId}`);
   }
 
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
+
   if (!trialSession.caseOrder?.length) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
