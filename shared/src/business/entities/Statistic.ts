@@ -1,5 +1,5 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { PENALTY_TYPES } from './EntityConstants';
 import { Penalty } from './Penalty';
 import joi from 'joi';
@@ -10,7 +10,7 @@ import joi from 'joi';
  * @param {object} rawStatistic the raw statistic data
  * @constructor
  */
-export class Statistic extends JoiValidationEntity_New {
+export class Statistic extends JoiValidationEntity {
   public determinationDeficiencyAmount: string;
   public determinationTotalPenalties: string;
   public irsDeficiencyAmount: string;

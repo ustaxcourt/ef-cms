@@ -19,7 +19,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getValidationErrors()!)).toContain(
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toContain(
         'yearOrPeriod',
       );
     });
@@ -64,7 +64,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getValidationErrors()!)).toEqual([
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
         'irsDeficiencyAmount',
         'irsTotalPenalties',
         'year',
@@ -84,7 +84,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(statistic.getValidationErrors()).toMatchObject({
+      expect(statistic.getFormattedValidationErrors()).toMatchObject({
         lastDateOfPeriod: 'Enter valid last date of period',
       });
     });
@@ -108,7 +108,9 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getValidationErrors()!)).toEqual(['year']);
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
+        'year',
+      ]);
     });
 
     it('passes validation with valid values', () => {
@@ -177,7 +179,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getValidationErrors()!)).toEqual([
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
         'determinationDeficiencyAmount',
       ]);
     });
@@ -203,7 +205,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getValidationErrors()!)).toEqual([
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
         'determinationTotalPenalties',
       ]);
     });
