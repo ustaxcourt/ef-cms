@@ -116,7 +116,7 @@ describe('trialSessionHeaderHelper', () => {
   });
 
   describe('showPrintPaperServicePDFsButton', () => {
-    it('should be true when the trial session has at least one paper service pdf that can be reprinted', () => {
+    it('should be true when the trial session has at least one paper service pdf that can be reprinted and the user has permissions', () => {
       mockFormattedTrialSession = {
         ...mockFormattedTrialSession,
         paperServicePdfs: [
@@ -128,7 +128,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: baseState,
+        state: { ...baseState, permissions: { REPRINT_PAPER_SERVICE: true } },
       });
 
       expect(result.showPrintPaperServicePDFsButton).toBe(true);

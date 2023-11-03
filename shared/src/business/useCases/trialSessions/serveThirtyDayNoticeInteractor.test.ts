@@ -209,6 +209,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         applicationContext: expect.anything(),
         message: {
           action: 'thirty_day_notice_paper_service_complete',
+          fileId: mockFileId,
           hasPaper: true,
           pdfUrl: mockPdfUrl,
         },
