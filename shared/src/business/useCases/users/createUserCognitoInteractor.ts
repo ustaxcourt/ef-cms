@@ -1,8 +1,18 @@
 import { type AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 
 export const createUserCognitoInteractor = async (
   applicationContext: IApplicationContext,
-  { user }: { user: { password: string; name: string; email: string } },
+  {
+    user,
+  }: {
+    user: {
+      password: string;
+      name: string;
+      email: string;
+      confirmPassword: string;
+    };
+  },
 ): Promise<AdminCreateUserResponse> => {
   const emailExistsInSystem = await checkUserAlreadyExists(
     applicationContext,
@@ -13,20 +23,22 @@ export const createUserCognitoInteractor = async (
     throw new Error('User already exists');
   }
 
+  const newUser = new NewPetitionerUser(user).validate().toRawObject();
+
   const params = {
     ClientId: process.env.COGNITO_CLIENT_ID,
-    Password: user.password,
+    Password: newUser.password,
     UserAttributes: [
       {
         Name: 'email',
-        Value: user.email,
+        Value: newUser.email,
       },
       {
         Name: 'name',
-        Value: user.name,
+        Value: newUser.name,
       },
     ],
-    Username: user.email,
+    Username: newUser.email,
   };
 
   return await applicationContext.getCognito().signUp(params).promise();
