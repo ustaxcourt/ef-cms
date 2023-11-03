@@ -4,7 +4,11 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -38,6 +42,9 @@ export const serveThirtyDayNoticeInteractor = async (
       applicationContext,
       trialSessionId,
     });
+  if (!trialSession) {
+    throw new NotFoundError(`No trial session found for ${trialSessionId}`);
+  }
 
   if (!trialSession.caseOrder?.length) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -202,17 +209,16 @@ export const serveThirtyDayNoticeInteractor = async (
   await Promise.all(generateNottForCases);
 
   let pdfUrl: string | undefined = undefined;
+  let fileId: string | undefined = undefined;
   if (hasPaperService) {
     const paperServicePdfData = await paperServicePdf.save();
-    const { fileId, url } = await applicationContext
+    ({ fileId, url: pdfUrl } = await applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl({
         applicationContext,
         file: paperServicePdfData,
         fileNamePrefix: 'paper-service-pdf/',
-      });
-
-    pdfUrl = url;
+      }));
 
     trialSessionEntity.addPaperServicePdf(
       fileId,
@@ -235,6 +241,7 @@ export const serveThirtyDayNoticeInteractor = async (
     applicationContext,
     message: {
       action: 'thirty_day_notice_paper_service_complete',
+      fileId,
       hasPaper: hasPaperService,
       pdfUrl,
     },
