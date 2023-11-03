@@ -1,5 +1,5 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import { remove } from 'lodash';
 import joi from 'joi';
@@ -12,7 +12,7 @@ import joi from 'joi';
  * @param {object} providers.rawScan the raw scan data
  * @constructor
  */
-export class Scan extends JoiValidationEntity_New {
+export class Scan extends JoiValidationEntity {
   public batches: any[];
   public createdAt: string;
   public scanId: string;
@@ -77,7 +77,7 @@ export class Scan extends JoiValidationEntity_New {
       .array()
       .min(1)
       .required()
-      .messages({ '*': '#At least one batch is required' }),
+      .messages({ '*': 'At least one batch is required' }),
     createdAt: JoiValidationConstants.ISO_DATE.required(),
     scanId: JoiValidationConstants.UUID.required(),
   });

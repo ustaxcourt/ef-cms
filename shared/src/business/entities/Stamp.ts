@@ -9,7 +9,7 @@ import {
   STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
 const todayFormatted = formatDateString(
@@ -24,7 +24,7 @@ const todayFormatted = formatDateString(
  * @param {object} providers.rawStamp the raw stamp data
  * @constructor
  */
-export class Stamp extends JoiValidationEntity_New {
+export class Stamp extends JoiValidationEntity {
   public date: string;
   public disposition: string;
   public deniedAsMoot: string;
