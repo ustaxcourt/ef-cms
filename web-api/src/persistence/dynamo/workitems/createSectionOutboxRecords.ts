@@ -2,6 +2,7 @@ import {
   FORMATS,
   formatDateString,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { RawOutboxItem } from '@shared/business/entities/OutboxItem';
 import { TDynamoRecord } from '../dynamoTypes';
 import { calculateTimeToLive } from '../calculateTimeToLive';
 import { put } from '../../dynamodbClientService';

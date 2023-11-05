@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES, DOCKET_SECTION } from './EntityConstants';
-import { OutboxItem } from './OutboxItem';
+import { OutboxItem, RawOutboxItem } from './OutboxItem';
 import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('OutboxItem', () => {
