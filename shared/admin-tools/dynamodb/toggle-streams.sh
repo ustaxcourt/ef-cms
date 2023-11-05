@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 ./check-env-variables.sh \
   "ENV" \
