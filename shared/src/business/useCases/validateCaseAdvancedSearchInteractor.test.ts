@@ -2,23 +2,19 @@ import { CaseSearch } from '../entities/cases/CaseSearch';
 import { validateCaseAdvancedSearchInteractor } from './validateCaseAdvancedSearchInteractor';
 
 describe('validateCaseAdvancedSearchInteractor', () => {
-  let validatorSpy;
+  const mockValidationErrors = {
+    petitionerName: 'Enter a name',
+  };
+  let validatorSpy = jest
+    .spyOn(CaseSearch.prototype, 'getValidationErrors')
+    .mockReturnValue(mockValidationErrors);
 
-  beforeEach(() => {
-    validatorSpy = jest
-      .spyOn(CaseSearch.prototype, 'getFormattedValidationErrors')
-      .mockImplementation(() => []);
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  it('should be able to set an item', () => {
-    validateCaseAdvancedSearchInteractor({
+  it('should return the results of validating the case search parameters', () => {
+    const result = validateCaseAdvancedSearchInteractor({
       caseSearch: {},
     });
 
     expect(validatorSpy.mock.calls.length).toEqual(1);
+    expect(result).toEqual(mockValidationErrors);
   });
 });
