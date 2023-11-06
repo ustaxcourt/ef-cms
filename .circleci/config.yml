@@ -702,6 +702,17 @@ jobs:
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
       - run:
+          name: Test Users Setup
+          command: |
+            DEPLOYING_COLOR="$CURRENT_COLOR" ./shared/admin-tools/user/setup-test-users.sh "$ENV"
+      - run:
+          name: Judge Users Setup
+          environment:
+            FILE_NAME: ./scripts/circleci/judge/judge_users.csv
+          command: |
+            
+            npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
+      - run:
           name: Enable Dynamodb Streams
           command: |
             ./shared/admin-tools/dynamodb/toggle-streams.sh --on
@@ -740,6 +751,7 @@ jobs:
               exit 1
             fi
       - run:
+          no_output_timeout: 175m
           name: Sync S3 buckets with timeout
           command: |
             ./scripts/circleci/sync-s3-buckets-with-timeout.sh 175m
