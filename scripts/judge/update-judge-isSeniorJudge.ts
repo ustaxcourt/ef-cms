@@ -1,25 +1,75 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME', 'DYNAMODB_ENDPOINT']);
 import { createApplicationContext } from '@web-api/applicationContext';
+import { requireEnvVars } from '../../shared/admin-tools/util';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
-/**
-How to Run:
+requireEnvVars([
+  'DYNAMODB_ENDPOINT',
+  'DYNAMODB_TABLE_NAME',
+  'ELASTICSEARCH_ENDPOINT',
+  'ENV',
+  'REGION',
+]);
 
-npx ts-node --transpile-only scripts/judgeUpdates/update-judge-isSeniorJudge.ts
-*/
-
-// ******************************** INPUTS ******************************
-const judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[] = [
-  {
-    isSeniorJudge: true,
-    userId: '111111-11111-1111-111111-111111',
-  },
+const seniorJudges = [
+  'Cohen',
+  'Colvin',
+  'Gale',
+  'Goeke',
+  'Gustafson',
+  'Halpern',
+  'Holmes',
+  'Lauber',
+  'Marvel',
+  'Morrison',
+  'Paris',
+  'Thornton',
+  'Vasquez',
 ];
-// **********************************************************************
+
+const getJudges = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}) => {
+  return (
+    await search({
+      applicationContext,
+      searchParameters: {
+        body: {
+          from: 0,
+          query: {
+            bool: {
+              must: [
+                {
+                  terms: {
+                    'role.S': ['judge', 'legacyJudge'],
+                  },
+                },
+              ],
+            },
+          },
+          size: MAX_ELASTICSEARCH_PAGINATION,
+        },
+        index: 'efcms-user',
+      },
+    })
+  )?.results;
+};
+
+let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
 
 (async () => {
   const applicationContext = createApplicationContext({});
+
+  const allJudges = await getJudges({ applicationContext });
+  judgesToUpdateIds = allJudges.map(
+    (judge: { name: string; userId: string }) => ({
+      isSeniorJudge: seniorJudges.includes(judge.name),
+      userId: judge.userId,
+    }),
+  );
 
   for (let judge of judgesToUpdateIds) {
     const { userId } = judge;
