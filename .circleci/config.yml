@@ -270,6 +270,7 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
             if [ "$MIGRATE_FLAG" == "false" ]; then
               DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
               ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
