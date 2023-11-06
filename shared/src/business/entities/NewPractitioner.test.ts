@@ -47,7 +47,7 @@ describe('NewPractitioner', () => {
     });
 
     expect(user.isValid()).toBeFalsy();
-    expect(user.getValidationErrors()).toMatchObject({
+    expect(user.getFormattedValidationErrors()).toMatchObject({
       email: 'Enter email address',
     });
   });
@@ -60,7 +60,7 @@ describe('NewPractitioner', () => {
     });
 
     expect(user.isValid()).toBeFalsy();
-    expect(user.getValidationErrors()).toMatchObject({
+    expect(user.getFormattedValidationErrors()).toMatchObject({
       firstName: 'Enter first name',
       lastName: 'Enter last name',
     });
@@ -90,7 +90,7 @@ describe('NewPractitioner', () => {
       validNewPractitioner.confirmEmail = undefined;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
-      expect(validNewPractitioner.getValidationErrors()).toEqual({
+      expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
         email: 'Enter email address',
       });
@@ -101,7 +101,7 @@ describe('NewPractitioner', () => {
       validNewPractitioner.confirmEmail = undefined;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
-      expect(validNewPractitioner.getValidationErrors()).toEqual({
+      expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
       });
     });
@@ -111,7 +111,7 @@ describe('NewPractitioner', () => {
       validNewPractitioner.confirmEmail = invalidEmail;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
-      expect(validNewPractitioner.getValidationErrors()).toEqual({
+      expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
       });
     });
@@ -121,7 +121,7 @@ describe('NewPractitioner', () => {
       validNewPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
-      expect(validNewPractitioner.getValidationErrors()).toEqual({
+      expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
       });
     });
