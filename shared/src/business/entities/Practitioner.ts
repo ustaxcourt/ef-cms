@@ -187,7 +187,7 @@ export class Practitioner extends User {
   });
 
   getValidationRules() {
-    return Practitioner.VALIDATION_RULES;
+    return Practitioner.VALIDATION_RULES as any;
   }
 
   toRawObject() {

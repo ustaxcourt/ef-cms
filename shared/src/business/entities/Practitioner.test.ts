@@ -180,7 +180,7 @@ describe('Practitioner', () => {
     });
 
     expect(user.isValid()).toBeFalsy();
-    expect(user.getValidationErrors()).toEqual({
+    expect(user.getFormattedValidationErrors()).toEqual({
       practitionerNotes:
         'Limit is 500 characters. Enter 500 or fewer characters',
     });
@@ -252,7 +252,7 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = invalidEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getValidationErrors()).toEqual({
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
         updatedEmail: 'Enter a valid email address',
       });
@@ -263,7 +263,7 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getValidationErrors()).toEqual({
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
       });
     });
@@ -273,7 +273,7 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getValidationErrors()).toEqual({
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
       });
     });
@@ -283,7 +283,7 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getValidationErrors()).toEqual({
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
       });
     });
@@ -293,7 +293,7 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = undefined;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getValidationErrors()).toEqual({
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         updatedEmail: 'Enter a valid email address',
       });
     });
@@ -303,7 +303,7 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = invalidEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getValidationErrors()).toEqual({
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
         updatedEmail: 'Enter a valid email address',
       });
