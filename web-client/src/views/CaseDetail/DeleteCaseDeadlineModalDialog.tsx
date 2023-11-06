@@ -24,7 +24,7 @@ export const DeleteCaseDeadlineModalDialog = connect(
         title="Are You Sure You Want to Delete This Deadline?"
       >
         <label className="margin-right-2" htmlFor="deadline-to-delete">
-          {form.deadlineDate}
+          {form.deadlineDateFormatted}
         </label>
         <span id="deadline-to-delete">{form.description}</span>
       </ModalDialog>
