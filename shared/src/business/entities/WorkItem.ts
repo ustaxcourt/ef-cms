@@ -1,12 +1,12 @@
 import { CASE_STATUS_TYPES, CHIEF_JUDGE } from './EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { ExcludeMethods } from 'types/TEntity';
-import { JoiValidationEntity_New } from './joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
 import { pick } from 'lodash';
 
-export class WorkItem extends JoiValidationEntity_New {
+export class WorkItem extends JoiValidationEntity {
   public assigneeId: string;
   public assigneeName: string;
   public associatedJudge: string;
