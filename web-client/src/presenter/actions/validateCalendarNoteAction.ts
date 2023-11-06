@@ -17,7 +17,7 @@ export const validateCalendarNoteAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateCalendarNoteInteractor(applicationContext, {
+    .validateCalendarNoteInteractor({
       note,
     });
 

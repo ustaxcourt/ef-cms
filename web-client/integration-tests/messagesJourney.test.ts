@@ -36,7 +36,6 @@ describe('messages journey', () => {
   const cerebralTest = setupTest();
 
   beforeAll(() => {
-    jest.setTimeout(40000);
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',

@@ -1,3 +1,4 @@
+import { RawMessage } from '@shared/business/entities/Message';
 import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
 import { replyToMessage } from './replyToMessageInteractor';
 
