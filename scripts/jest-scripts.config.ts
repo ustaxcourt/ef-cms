@@ -13,7 +13,6 @@ const config: Config = {
     '!circleci/judge/bulkImportJudgeUsers.ts',
     '!elasticsearch/ready-cluster-for-migration.ts',
     '!elasticsearch/reindex.ts',
-    '!elasticsearch/setup-versioned-indices-and-create-aliases.ts',
     '!glue/**',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
