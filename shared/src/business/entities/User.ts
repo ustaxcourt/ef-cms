@@ -9,11 +9,11 @@ import {
 } from './EntityConstants';
 import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
 import joi from 'joi';
 
-export class User extends JoiValidationEntity_New {
+export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
   public email: string;
   public name: string;
