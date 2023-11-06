@@ -16,6 +16,22 @@
       line-height: 20px;
     }
 
+    ol ol ol ol, ol ol ol ol ol ol ol {
+      list-style-type: decimal;
+    }
+
+    ol ol, ol ol ol ol ol, ol ol ol ol ol ol ol ol {
+      list-style-type: lower-alpha;
+    }
+
+    ol ol ol, ol ol ol ol ol ol, ol ol ol ol ol ol ol ol ol {
+      list-style-type: lower-roman;
+    }
+
+    ul, ul ul {
+      list-style: inside disc;
+    }
+
     #order-signature {
       font-size: 16px;
       line-height: 15px;
