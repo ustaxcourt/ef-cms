@@ -2,7 +2,7 @@ import { Client } from '@opensearch-project/opensearch';
 import { areAllReindexTasksFinished } from '../../shared/admin-tools/elasticsearch/check-reindex-complete';
 import { baseAliases } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
-import { reindexIfNecessary } from './reindex.helpers';
+import { reindexIfNecessary } from '../elasticsearch/reindex.helpers';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { setupAliases } from '../../web-api/elasticsearch/elasticsearch-alias-settings.helpers';
 import { setupIndexes } from '../../web-api/elasticsearch/elasticsearch-index-settings.helpers';
