@@ -1,8 +1,8 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import joi from 'joi';
 
-export class InternalDocumentSearchResult extends JoiValidationEntity {
+export class InternalDocumentSearchResult extends JoiValidationEntity_New {
   public caseCaption: string;
   public docketEntryId: string;
   public docketNumber: string;
@@ -22,6 +22,7 @@ export class InternalDocumentSearchResult extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('InternalDocumentSearchResult');
+
     this.caseCaption = rawProps.caseCaption;
     this.docketEntryId = rawProps.docketEntryId;
     this.docketNumber = rawProps.docketNumber;
@@ -61,20 +62,10 @@ export class InternalDocumentSearchResult extends JoiValidationEntity {
     signedJudgeName: JoiValidationConstants.STRING.optional().allow(null),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
-
   static DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
   getValidationRules() {
     return InternalDocumentSearchResult.VALIDATION_RULES;
-  }
-
-  getValidationRules_NEW() {
-    return InternalDocumentSearchResult.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return InternalDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
   }
 }
 
