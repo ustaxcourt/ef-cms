@@ -109,8 +109,11 @@ describe('petitions clerk calendars a trial session and verifies the paper pdf l
       });
 
       await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-        key: 'judgeId',
-        value: '09b7c6c9-2d9e-43a5-83a4-096ae5362725',
+        key: 'judge',
+        value: {
+          name: 'Gustafson',
+          userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
+        },
       });
 
       await cerebralTest.runSequence('updateTrialSessionSequence');
