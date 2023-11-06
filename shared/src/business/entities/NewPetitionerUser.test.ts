@@ -33,6 +33,15 @@ describe('NewPetitionerUser', () => {
     });
   });
 
+  it('should return error message for email', () => {
+    const formEntity = new NewPetitionerUser({
+      ...validEntity,
+      email: 'hello',
+    });
+    expect(formEntity.isValid()).toBeFalsy();
+    expect(formEntity.getValidationErrors()).toEqual(null);
+  });
+
   describe('Name', () => {
     it('should return error message for name when not provided', () => {
       const formEntity = new NewPetitionerUser({
