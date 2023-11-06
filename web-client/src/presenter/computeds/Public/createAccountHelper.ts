@@ -16,7 +16,7 @@ export type CreateAccountHelperResults = {
 export const createAccountHelper = (get: Get): CreateAccountHelperResults => {
   const form = get(state.form);
   const formEntity = new NewPetitionerUser(form);
-  const errors = formEntity.getFormattedValidationErrors();
+  const errors = formEntity.getLiveFormattedValidationErrors();
 
   const passwordErrors: NewPetitionerUserPasswordValidations =
     errors?.password as NewPetitionerUserPasswordValidations;

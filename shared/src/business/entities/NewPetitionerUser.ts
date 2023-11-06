@@ -3,22 +3,30 @@ import { JoiValidationEntity } from './JoiValidationEntity';
 import joi from 'joi';
 
 export type NewPetitionerUserPasswordValidations = {
-  hasNoLeadingOrTrailingSpace: boolean;
-  hasOneLowercase: boolean;
-  hasOneNumber: boolean;
-  hasOneUppercase: boolean;
-  hasSpecialCharacterOrSpace: boolean;
-  isProperLength: boolean;
+  hasNoLeadingOrTrailingSpace: string;
+  hasOneLowercase: string;
+  hasOneNumber: string;
+  hasOneUppercase: string;
+  hasSpecialCharacterOrSpace: string;
+  isProperLength: string;
+};
+const NewPetitionerUserPasswordValidationErrorMessages = {
+  hasNoLeadingOrTrailingSpace: 'Must not contain leading or trailing space',
+  hasOneLowercase: 'Must contain lower case letter',
+  hasOneNumber: 'Must contain number',
+  hasOneUppercase: 'Must contain upper case letter',
+  hasSpecialCharacterOrSpace: 'Must contain special character or space',
+  isProperLength: 'Must be between 8-99 characters long',
 };
 
 function getDefaultErrors(): NewPetitionerUserPasswordValidations {
   return {
-    hasNoLeadingOrTrailingSpace: true,
-    hasOneLowercase: true,
-    hasOneNumber: true,
-    hasOneUppercase: true,
-    hasSpecialCharacterOrSpace: true,
-    isProperLength: true,
+    hasNoLeadingOrTrailingSpace: '',
+    hasOneLowercase: '',
+    hasOneNumber: '',
+    hasOneUppercase: '',
+    hasSpecialCharacterOrSpace: '',
+    isProperLength: '',
   };
 }
 
@@ -41,40 +49,61 @@ export class NewPetitionerUser extends JoiValidationEntity {
     confirmPassword: joi.valid(joi.ref('password')).required(),
     email: JoiValidationConstants.EMAIL.lowercase()
       .required()
+      .messages({
+        '*': 'Enter a valid email address',
+        'string.max': 'Email address must be fewer than 100 characters', //todo test
+      })
       .description('Email of user'),
     entityName:
       JoiValidationConstants.STRING.valid('NewPetitionerUser').required(),
     name: JoiValidationConstants.STRING.max(100)
       .required()
+      .messages({
+        '*': 'Enter a name',
+        'string.max': 'Enter a name with fewer than 100 characters',
+      })
       .description('Name of the user.'),
     password: JoiValidationConstants.STRING.custom((value, helper) => {
       const errors = getDefaultErrors();
 
       if (value.length < 8 || value.length > 99) {
-        errors.isProperLength = false;
+        errors.isProperLength =
+          NewPetitionerUserPasswordValidationErrorMessages.isProperLength;
       }
 
       if (!/[a-z]/.test(value)) {
-        errors.hasOneLowercase = false;
+        errors.hasOneLowercase =
+          NewPetitionerUserPasswordValidationErrorMessages.hasOneLowercase;
       }
 
       if (!/[A-Z]/.test(value)) {
-        errors.hasOneUppercase = false;
+        errors.hasOneUppercase =
+          NewPetitionerUserPasswordValidationErrorMessages.hasOneUppercase;
       }
 
       if (!/[\^$*.[\]{}()?\-“!@#%&/,><’:;|_~`]/.test(value)) {
-        errors.hasSpecialCharacterOrSpace = false;
+        errors.hasSpecialCharacterOrSpace =
+          NewPetitionerUserPasswordValidationErrorMessages.hasSpecialCharacterOrSpace;
       }
 
       if (!/[0-9]/.test(value)) {
-        errors.hasOneNumber = false;
+        errors.hasOneNumber =
+          NewPetitionerUserPasswordValidationErrorMessages.hasOneNumber;
       }
 
       if (/^\s/.test(value) || /\s$/.test(value)) {
-        errors.hasNoLeadingOrTrailingSpace = false;
+        errors.hasNoLeadingOrTrailingSpace =
+          NewPetitionerUserPasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace;
       }
 
-      if (Object.values(errors).every(Boolean)) {
+      const noErrors = Object.values(errors).reduce(
+        (accumulator, currentValue) => {
+          return accumulator && !currentValue;
+        },
+        true,
+      );
+
+      if (noErrors) {
         return value;
       } else {
         return helper.message(
@@ -93,8 +122,7 @@ export class NewPetitionerUser extends JoiValidationEntity {
     return NewPetitionerUser.VALIDATION_RULES;
   }
 
-  // @ts-ignore
-  getFormattedValidationErrors(): {
+  getLiveFormattedValidationErrors(): {
     [key: string]: string | NewPetitionerUserPasswordValidations;
   } {
     const results: {
@@ -112,7 +140,8 @@ export class NewPetitionerUser extends JoiValidationEntity {
     const errorsToReturn = getDefaultErrors();
 
     for (let error of errors) {
-      errorsToReturn[error] = false;
+      errorsToReturn[error] =
+        NewPetitionerUserPasswordValidationErrorMessages[error];
     }
     results.password = errorsToReturn;
 
@@ -120,20 +149,11 @@ export class NewPetitionerUser extends JoiValidationEntity {
   }
 
   getErrorToMessageMap() {
-    return {
-      email: 'Enter a valid email address',
-      name: [
-        {
-          contains: 'must be less than or equal to',
-          message: 'Enter a name with less than 100 characters',
-        },
-        'Enter a name',
-      ],
-    };
+    return {};
   }
 
   isValid(): boolean {
-    const errors = this.getFormattedValidationErrors();
+    const errors = this.getLiveFormattedValidationErrors();
     return this.isFormValid(errors);
   }
 
