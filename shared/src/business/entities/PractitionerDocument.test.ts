@@ -2,7 +2,7 @@ import { PRACTITIONER_DOCUMENT_TYPES_MAP } from './EntityConstants';
 import { PractitionerDocument } from './PractitionerDocument';
 import { applicationContext } from '../test/createTestApplicationContext';
 
-describe('Document', () => {
+describe('PractitionerDocument', () => {
   it('should create a valid document when passed all required fields', () => {
     const document = new PractitionerDocument(
       {
@@ -13,6 +13,7 @@ describe('Document', () => {
       },
       { applicationContext },
     );
+
     expect(document.isValid()).toBeTruthy();
   });
 
@@ -26,6 +27,7 @@ describe('Document', () => {
       },
       { applicationContext },
     );
+
     expect(document.isValid()).toBeFalsy();
   });
 
@@ -39,6 +41,7 @@ describe('Document', () => {
       },
       { applicationContext },
     );
+
     expect(document.isValid()).toBeFalsy();
   });
 
@@ -54,6 +57,7 @@ describe('Document', () => {
       },
       { applicationContext },
     );
+
     expect(document.isValid()).toBeFalsy();
   });
 
@@ -69,6 +73,7 @@ describe('Document', () => {
       },
       { applicationContext },
     );
+
     expect(document.isValid()).toBeTruthy();
   });
 
@@ -85,6 +90,7 @@ describe('Document', () => {
       },
       { applicationContext },
     );
+
     expect(document.isValid()).toBeTruthy();
   });
 });
