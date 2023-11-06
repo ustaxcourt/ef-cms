@@ -1,5 +1,9 @@
 import { Case } from '../../entities/cases/Case';
 import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
@@ -8,7 +12,6 @@ import {
   TrialSession,
 } from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
 import { flatten, partition, uniq } from 'lodash';
 
@@ -28,6 +31,10 @@ export const setTrialSessionCalendarInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,

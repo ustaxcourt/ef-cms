@@ -1,10 +1,13 @@
 import { Case } from '../../entities/cases/Case';
 import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const removeCaseFromTrial = async (
@@ -35,6 +38,10 @@ export const removeCaseFromTrial = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
