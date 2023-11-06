@@ -691,6 +691,13 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
       - run:
           name: Disable Wait for Workflow Cron
           command: |
@@ -710,7 +717,6 @@ jobs:
           environment:
             FILE_NAME: ./scripts/circleci/judge/judge_users.csv
           command: |
-            
             npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
       - run:
           name: Enable Dynamodb Streams
