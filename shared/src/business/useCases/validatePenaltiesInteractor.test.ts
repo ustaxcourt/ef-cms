@@ -3,7 +3,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { validatePenaltiesInteractor } from './validatePenaltiesInteractor';
 
 describe('validatePenaltiesInteractor', () => {
-  it('runs validation on a Penalty with no invalid properties', () => {
+  it('should not return validation erros when the penalty is valid', () => {
     const mockPenalty = {
       name: 'Penalty 1(IRS)',
       penaltyAmount: 100.0,
@@ -15,10 +15,10 @@ describe('validatePenaltiesInteractor', () => {
       rawPenalty: mockPenalty,
     });
 
-    expect(errors).toBeUndefined();
+    expect(errors).toEqual(null);
   });
 
-  it('runs validation on a penalty with invalid properties', () => {
+  it('should return validation errors when the penalty is NOT valid', () => {
     const invalidMockPenalty = {
       name: 5, // must be a string to be valid
       penaltyAmount: '', // invalid due to expecting a numerical input
