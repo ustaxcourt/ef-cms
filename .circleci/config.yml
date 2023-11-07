@@ -169,6 +169,13 @@ jobs:
               exit 0
             fi
             if [ "${CIRCLE_BRANCH}" == "test" ]; then
+              SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${SOURCE_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
               npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
             else
               ./scripts/circleci/judge/bulk-import-judge-users.sh
