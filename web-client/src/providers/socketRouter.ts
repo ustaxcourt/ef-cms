@@ -17,8 +17,8 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
-      case 'paper_service_complete':
-        await app.getSequence('paperServiceCompleteSequence')({
+      case 'set_trial_calendar_paper_service_complete':
+        await app.getSequence('updateTrialSessionCompleteSequence')({
           ...message,
         });
         break;
@@ -129,6 +129,9 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
           showModal: 'WorkItemAlreadyCompletedModal',
         });
+        break;
+      case 'retry_async_request':
+        await app.getSequence('retryAsyncRequestSequence')(message);
         break;
     }
 

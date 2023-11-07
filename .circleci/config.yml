@@ -740,6 +740,7 @@ jobs:
               exit 1
             fi
       - run:
+          no_output_timeout: 175m
           name: Sync S3 buckets with timeout
           command: |
             ./scripts/circleci/sync-s3-buckets-with-timeout.sh 175m

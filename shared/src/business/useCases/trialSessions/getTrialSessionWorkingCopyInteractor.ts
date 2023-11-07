@@ -1,7 +1,4 @@
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -67,6 +64,11 @@ export const getTrialSessionWorkingCopyInteractor = async (
         applicationContext,
         trialSessionId,
       });
+
+    if (!trialSessionDetails) {
+      throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+    }
+
     const trialSessionEntity = new TrialSession(trialSessionDetails, {
       applicationContext,
     });

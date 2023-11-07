@@ -4,6 +4,7 @@ import {
 } from './CourtIssuedDocumentConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CourtIssuedDocumentBase extends CourtIssuedDocument {
@@ -46,6 +47,32 @@ export class CourtIssuedDocumentBase extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentBase.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    attachments: joi
+      .boolean()
+      .required()
+      .messages(setDefaultErrorMessage('Enter selection for Attachments')),
+    documentTitle: JoiValidationConstants.STRING.optional(),
+    documentType: JoiValidationConstants.STRING.required().messages(
+      setDefaultErrorMessage('Select a document type'),
+    ),
+    eventCode: JoiValidationConstants.STRING.optional(),
+    filingDate: joi
+      .when('eventCode', {
+        is: joi
+          .exist()
+          .not(null)
+          .valid(...UNSERVABLE_EVENT_CODES),
+        otherwise: joi.optional().allow(null),
+        then: JoiValidationConstants.ISO_DATE.max('now').required(),
+      })
+      .messages(setDefaultErrorMessage('Enter a filing date')),
+  };
+
+  getValidationRules_NEW() {
+    return CourtIssuedDocumentBase.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {

@@ -7,6 +7,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
 import { getStandaloneRemoteDocumentTitle } from '../../utilities/getStandaloneRemoteDocumentTitle';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   public attachments: boolean;
@@ -64,6 +65,25 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentTypeF.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES_NEW,
+    freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
+      'any.required': 'Enter a description',
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    }),
+    judge: JoiValidationConstants.STRING.required().messages(
+      setDefaultErrorMessage('Select a judge'),
+    ),
+    judgeWithtitle: JoiValidationConstants.STRING.optional(),
+    trialLocation: JoiValidationConstants.STRING.required().messages(
+      setDefaultErrorMessage('Select a trial location'),
+    ),
+  };
+
+  getValidationRules_NEW() {
+    return CourtIssuedDocumentTypeF.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
