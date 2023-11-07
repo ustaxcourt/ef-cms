@@ -88,16 +88,17 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
     eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
       .required()
       .messages({ '*': 'Select a document' }),
-    filers: joi
-      .when('partyIrsPractitioner', {
-        is: true,
-        otherwise: joi.array().items(JoiValidationConstants.UUID).min(1),
-        then: joi.array().max(0),
-      })
-      .messages({
-        // 'array.max': 'Select a party',
-        'array.min': 'Select a party',
+    filers: joi.when('partyIrsPractitioner', {
+      is: true,
+      otherwise: joi
+        .array()
+        .items(JoiValidationConstants.UUID)
+        .min(1)
+        .messages({ 'array.min': 'Select a party' }),
+      then: joi.array().max(0).messages({
+        '*': 'Select a party',
       }),
+    }),
     hasSupportingDocuments: joi
       .boolean()
       .optional()
