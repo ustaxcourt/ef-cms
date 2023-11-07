@@ -10,5 +10,5 @@ export const validateCreateMessageInteractor = ({
     toUserId?: string;
   };
 }): Record<string, string> | null => {
-  return new NewMessage(message).getValidationErrors();
+  return new NewMessage(message).getFormattedValidationErrors();
 };
