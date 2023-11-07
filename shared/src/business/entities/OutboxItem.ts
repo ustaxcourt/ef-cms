@@ -1,9 +1,9 @@
 import { CASE_STATUS_TYPES } from './EntityConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { OUTBOX_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { pick } from 'lodash';
 
-export class OutboxItem extends JoiValidationEntity_New {
+export class OutboxItem extends JoiValidationEntity {
   public assigneeId: string;
   public caseIsInProgress: boolean;
   public caseStatus: string;
