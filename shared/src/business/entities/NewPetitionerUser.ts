@@ -64,7 +64,7 @@ export class NewPetitionerUser extends JoiValidationEntity {
   constructor(rawProps) {
     super('NewPetitionerUser');
 
-    this.email = rawProps.email ? rawProps.email?.toLowerCase() : '';
+    this.email = rawProps.email?.toLowerCase();
     this.name = rawProps.name;
     this.password = rawProps.password;
     this.confirmPassword = rawProps.confirmPassword;
