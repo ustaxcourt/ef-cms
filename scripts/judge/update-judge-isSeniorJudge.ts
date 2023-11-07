@@ -1,3 +1,5 @@
+// usage: npx ts-node --transpile-only scripts/judgeUpdates/update-judge-isSeniorJudge.ts
+
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { createApplicationContext } from '@web-api/applicationContext';
@@ -12,6 +14,7 @@ requireEnvVars([
   'REGION',
 ]);
 
+// WARNING: this list is subject to change! check https://www.ustaxcourt.gov/judges.html
 const seniorJudges = [
   'Cohen',
   'Colvin',
