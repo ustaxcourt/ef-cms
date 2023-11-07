@@ -1,10 +1,7 @@
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
-import {
-  CAV_AND_SUBMITTED_CASE_STATUS_TYPES,
-  VALIDATION_ERROR_MESSAGES,
-} from '../EntityConstants';
+import { CAV_AND_SUBMITTED_CASE_STATUS_TYPES } from '../EntityConstants';
 import {
   FORMATS,
   calculateISODate,
@@ -68,7 +65,14 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .min(joi.ref('startDate'))
       .description(
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
-      ),
+      )
+      .messages({
+        '*': 'Enter a valid end date.',
+        'any.required': 'Enter an end date',
+        'date.less': 'End date cannot be in the future. Enter a valid date.',
+        'date.min':
+          'End date cannot be prior to start date. Enter a valid date.',
+      }),
     judgeId: joi
       .optional()
       .description('The userId of the judge to generate the report for'),
@@ -79,9 +83,32 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .array()
       .items(joi.string())
       .description('The last names of judges to generate report for'),
-    startDate: JoiValidationConstants.ISO_DATE.max('now').description(
-      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-    ),
+    pageNumber: joi
+      .number()
+      .optional()
+      .description(
+        'The page of the selected subset of CAV and Submitted cases for display',
+      ),
+    pageSize: joi
+      .number()
+      .optional()
+      .description(
+        'The page size for calculating the number of CAV and Submitted cases to display.',
+      ),
+    searchAfter: joi
+      .number()
+      .description(
+        'The last docket number to be used to make the next set of calls per page number',
+      ),
+    startDate: JoiValidationConstants.ISO_DATE.max('now')
+      .description(
+        'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+      )
+      .messages({
+        '*': 'Enter a valid start date.',
+        'any.required': 'Enter a start date.',
+        'date.max': 'Start date cannot be in the future. Enter a valid date.',
+      }),
     statuses: JoiValidationConstants.JUDGES_STATUSES.optional().description(
       'The CAV and Submitted case statuses associated with judges',
     ),
@@ -90,42 +117,8 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     ),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {
-    endDate: [
-      {
-        contains: 'ref:startDate',
-        message: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR,
-      },
-      {
-        contains: 'ref:tomorrow',
-        message: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR,
-      },
-      {
-        contains: 'is required',
-        message: 'Enter an end date.',
-      },
-      'Enter a valid end date.',
-    ],
-    startDate: [
-      {
-        contains: 'is required',
-        message: 'Enter a start date.',
-      },
-      {
-        contains: 'must be less than or equal to',
-        message:
-          VALIDATION_ERROR_MESSAGES.START_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
-      },
-      'Enter a valid start date.',
-    ],
-  };
-
   getValidationRules() {
     return JudgeActivityReportSearch.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES;
   }
 }
 
