@@ -8,7 +8,7 @@ describe('AddPrivatePractitioner', () => {
     it('should have error messages for missing fields', () => {
       const entity = new AddPrivatePractitioner({});
 
-      expect(entity.getValidationErrors()).toEqual({
+      expect(entity.getFormattedValidationErrors()).toEqual({
         representing: 'Select a represented party',
         serviceIndicator: 'Select service type',
         user: 'Select a petitioner counsel',
@@ -22,7 +22,7 @@ describe('AddPrivatePractitioner', () => {
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
 
-      expect(entity.getValidationErrors()).toEqual(null);
+      expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should not be valid if representing is empty', () => {
@@ -32,7 +32,7 @@ describe('AddPrivatePractitioner', () => {
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
 
-      expect(entity.getValidationErrors()).toEqual({
+      expect(entity.getFormattedValidationErrors()).toEqual({
         representing: 'Select a represented party',
       });
     });
@@ -44,7 +44,7 @@ describe('AddPrivatePractitioner', () => {
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
 
-      expect(entity.getValidationErrors()).toEqual({
+      expect(entity.getFormattedValidationErrors()).toEqual({
         serviceIndicator:
           'No email found for electronic service. Select a valid service preference.',
       });

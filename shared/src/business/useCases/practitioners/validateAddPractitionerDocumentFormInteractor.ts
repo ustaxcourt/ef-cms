@@ -1,10 +1,9 @@
 import { PractitionerDocument } from '../../entities/PractitionerDocument';
-import { TValidationError } from '@shared/business/entities/joiValidationEntity/helper';
 
 export const validateAddPractitionerDocumentFormInteractor = (
   applicationContext: IApplicationContext,
   form,
-): TValidationError | null => {
+) => {
   return new PractitionerDocument(
     {
       categoryName: form.categoryName,
@@ -15,5 +14,5 @@ export const validateAddPractitionerDocumentFormInteractor = (
     {
       applicationContext,
     },
-  ).getValidationErrors();
+  ).getFormattedValidationErrors();
 };
