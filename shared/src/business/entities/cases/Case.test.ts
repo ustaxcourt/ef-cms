@@ -15,7 +15,6 @@ import {
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
-import { Contact } from '../contacts/Contact';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
@@ -1027,7 +1026,7 @@ describe('Case entity', () => {
             city: 'Enter city',
             countryType: 'Enter country type',
             index: 0,
-            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
+            name: 'Enter name',
             phone: 'Enter phone number',
             postalCode: 'Enter ZIP code',
             state: 'Enter state',
@@ -1037,7 +1036,7 @@ describe('Case entity', () => {
             city: 'Enter city',
             countryType: 'Enter country type',
             index: 1,
-            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
+            name: 'Enter name',
             phone: 'Enter phone number',
             postalCode: 'Enter ZIP code',
             state: 'Enter state',
@@ -1067,7 +1066,7 @@ describe('Case entity', () => {
             city: 'Enter city',
             countryType: 'Enter country type',
             index: 0,
-            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
+            name: 'Enter name',
             phone: 'Enter phone number',
             postalCode: 'Enter ZIP code',
             state: 'Enter state',
