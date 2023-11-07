@@ -1,16 +1,30 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
+import { TValidationError } from '@shared/business/entities/joiValidationEntity/helper';
 import joi from 'joi';
 
-export type NewPetitionerUserPasswordValidations = {
-  hasNoLeadingOrTrailingSpace: string;
-  hasOneLowercase: string;
-  hasOneNumber: string;
-  hasOneUppercase: string;
-  hasSpecialCharacterOrSpace: string;
-  isProperLength: string;
+interface PasswordValidation {
+  message: string;
+  valid: boolean;
+}
+
+type TValidationErrorPlusPasswordValidations = {
+  [key: string]:
+    | string
+    | TValidationError
+    | TValidationError[]
+    | NewPetitionerUserPasswordValidations;
 };
-const NewPetitionerUserPasswordValidationErrorMessages = {
+
+export type NewPetitionerUserPasswordValidations = {
+  hasNoLeadingOrTrailingSpace: PasswordValidation;
+  hasOneLowercase: PasswordValidation;
+  hasOneNumber: PasswordValidation;
+  hasOneUppercase: PasswordValidation;
+  hasSpecialCharacterOrSpace: PasswordValidation;
+  isProperLength: PasswordValidation;
+};
+export const NewPetitionerUserPasswordValidationErrorMessages = {
   hasNoLeadingOrTrailingSpace: 'Must not contain leading or trailing space',
   hasOneLowercase: 'Must contain lower case letter',
   hasOneNumber: 'Must contain number',
@@ -19,14 +33,34 @@ const NewPetitionerUserPasswordValidationErrorMessages = {
   isProperLength: 'Must be between 8-99 characters long',
 };
 
-function getDefaultErrors(): NewPetitionerUserPasswordValidations {
+function getDefaultPasswordErrors(): NewPetitionerUserPasswordValidations {
   return {
-    hasNoLeadingOrTrailingSpace: '',
-    hasOneLowercase: '',
-    hasOneNumber: '',
-    hasOneUppercase: '',
-    hasSpecialCharacterOrSpace: '',
-    isProperLength: '',
+    hasNoLeadingOrTrailingSpace: {
+      message:
+        NewPetitionerUserPasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace,
+      valid: true,
+    },
+    hasOneLowercase: {
+      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneLowercase,
+      valid: true,
+    },
+    hasOneNumber: {
+      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneNumber,
+      valid: true,
+    },
+    hasOneUppercase: {
+      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneUppercase,
+      valid: true,
+    },
+    hasSpecialCharacterOrSpace: {
+      message:
+        NewPetitionerUserPasswordValidationErrorMessages.hasSpecialCharacterOrSpace,
+      valid: true,
+    },
+    isProperLength: {
+      message: NewPetitionerUserPasswordValidationErrorMessages.isProperLength,
+      valid: true,
+    },
   };
 }
 
@@ -64,41 +98,35 @@ export class NewPetitionerUser extends JoiValidationEntity {
       })
       .description('Name of the user.'),
     password: JoiValidationConstants.STRING.custom((value, helper) => {
-      const errors = getDefaultErrors();
+      const passwordValidations = getDefaultPasswordErrors();
 
       if (value.length < 8 || value.length > 99) {
-        errors.isProperLength =
-          NewPetitionerUserPasswordValidationErrorMessages.isProperLength;
+        passwordValidations.isProperLength.valid = false;
       }
 
       if (!/[a-z]/.test(value)) {
-        errors.hasOneLowercase =
-          NewPetitionerUserPasswordValidationErrorMessages.hasOneLowercase;
+        passwordValidations.hasOneLowercase.valid = false;
       }
 
       if (!/[A-Z]/.test(value)) {
-        errors.hasOneUppercase =
-          NewPetitionerUserPasswordValidationErrorMessages.hasOneUppercase;
+        passwordValidations.hasOneUppercase.valid = false;
       }
 
       if (!/[\^$*.[\]{}()?\-“!@#%&/,><’:;|_~`]/.test(value)) {
-        errors.hasSpecialCharacterOrSpace =
-          NewPetitionerUserPasswordValidationErrorMessages.hasSpecialCharacterOrSpace;
+        passwordValidations.hasSpecialCharacterOrSpace.valid = false;
       }
 
       if (!/[0-9]/.test(value)) {
-        errors.hasOneNumber =
-          NewPetitionerUserPasswordValidationErrorMessages.hasOneNumber;
+        passwordValidations.hasOneNumber.valid = false;
       }
 
       if (/^\s/.test(value) || /\s$/.test(value)) {
-        errors.hasNoLeadingOrTrailingSpace =
-          NewPetitionerUserPasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace;
+        passwordValidations.hasNoLeadingOrTrailingSpace.valid = false;
       }
 
-      const noErrors = Object.values(errors).reduce(
+      const noErrors = Object.values(passwordValidations).reduce(
         (accumulator, currentValue) => {
-          return accumulator && !currentValue;
+          return accumulator && currentValue.valid;
         },
         true,
       );
@@ -106,12 +134,10 @@ export class NewPetitionerUser extends JoiValidationEntity {
       if (noErrors) {
         return value;
       } else {
-        return helper.message(
-          Object.entries(errors)
-            .filter(([, curValue]) => !curValue)
-            .map(([key]) => key)
-            .join('|') as any,
-        );
+        return helper.error('custom.invalid', {
+          message: '',
+          passwordValidations,
+        });
       }
     }).description(
       'Password for the account. Contains a custom validation because we want to construct a string with all the keys that failed which later we parse out to an object',
@@ -122,30 +148,32 @@ export class NewPetitionerUser extends JoiValidationEntity {
     return NewPetitionerUser.VALIDATION_RULES;
   }
 
-  getLiveFormattedValidationErrors(): {
-    [key: string]: string | NewPetitionerUserPasswordValidations;
-  } {
-    const results: {
-      [key: string]: string | NewPetitionerUserPasswordValidations;
-    } | null = super.getFormattedValidationErrors();
+  getValidationErrors(): TValidationErrorPlusPasswordValidations {
+    const schema = this.getValidationRules();
 
-    if (!results) return { password: getDefaultErrors() };
-    if (!results.password || typeof results.password !== 'string')
-      return {
-        ...results,
-        password: getDefaultErrors(),
-      };
+    const { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
 
-    const errors = results.password.split('|');
-    const errorsToReturn = getDefaultErrors();
+    const errors: TValidationErrorPlusPasswordValidations = {
+      password: getDefaultPasswordErrors(),
+    };
+    error?.details.forEach(detail => {
+      if (!detail.context) return;
+      if (!Number.isInteger(detail.context.key)) {
+        const KEY = detail.context.key || detail.type;
+        if (KEY === 'password') {
+          errors[KEY] = detail.context.passwordValidations;
+        } else {
+          errors[KEY] = detail.message;
+        }
+      } else {
+        errors[detail.context.label!] = detail.message;
+      }
+    });
 
-    for (let error of errors) {
-      errorsToReturn[error] =
-        NewPetitionerUserPasswordValidationErrorMessages[error];
-    }
-    results.password = errorsToReturn;
-
-    return results;
+    return errors;
   }
 
   getErrorToMessageMap() {
@@ -153,18 +181,23 @@ export class NewPetitionerUser extends JoiValidationEntity {
   }
 
   isValid(): boolean {
-    const errors = this.getLiveFormattedValidationErrors();
+    const errors = this.getFormattedValidationErrors() as {
+      [key: string]: string | NewPetitionerUserPasswordValidations;
+    };
     return this.isFormValid(errors);
   }
 
-  isFormValid(errors: {
-    [key: string]: string | NewPetitionerUserPasswordValidations;
-  }): boolean {
+  isFormValid(errors: TValidationErrorPlusPasswordValidations): boolean {
     const keys = Object.keys(errors);
     if (keys.length > 1) return false;
     if (keys[0] !== 'password') return false;
 
-    return !Object.values(errors.password).every(Boolean);
+    return Object.values(errors.password).reduce(
+      (accumulator, currentValue) => {
+        return accumulator && currentValue.valid;
+      },
+      true,
+    );
   }
 }
 

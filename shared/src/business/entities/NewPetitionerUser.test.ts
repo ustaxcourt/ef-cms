@@ -1,4 +1,7 @@
-import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
+import {
+  NewPetitionerUser,
+  NewPetitionerUserPasswordValidationErrorMessages,
+} from '@shared/business/entities/NewPetitionerUser';
 
 describe('NewPetitionerUser', () => {
   const validEntity = {
@@ -111,12 +114,36 @@ describe('NewPetitionerUser', () => {
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getFormattedValidationErrors()).toEqual({
         password: {
-          hasNoLeadingOrTrailingSpace: false,
-          hasOneLowercase: true,
-          hasOneNumber: true,
-          hasOneUppercase: true,
-          hasSpecialCharacterOrSpace: true,
-          isProperLength: true,
+          hasNoLeadingOrTrailingSpace: {
+            message:
+              NewPetitionerUserPasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace,
+            valid: false,
+          },
+          hasOneLowercase: {
+            message:
+              NewPetitionerUserPasswordValidationErrorMessages.hasOneLowercase,
+            valid: true,
+          },
+          hasOneNumber: {
+            message:
+              NewPetitionerUserPasswordValidationErrorMessages.hasOneNumber,
+            valid: true,
+          },
+          hasOneUppercase: {
+            message:
+              NewPetitionerUserPasswordValidationErrorMessages.hasOneUppercase,
+            valid: true,
+          },
+          hasSpecialCharacterOrSpace: {
+            message:
+              NewPetitionerUserPasswordValidationErrorMessages.hasSpecialCharacterOrSpace,
+            valid: true,
+          },
+          isProperLength: {
+            message:
+              NewPetitionerUserPasswordValidationErrorMessages.isProperLength,
+            valid: true,
+          },
         },
       });
     });
