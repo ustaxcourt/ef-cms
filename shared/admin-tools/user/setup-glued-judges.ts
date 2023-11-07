@@ -4,17 +4,16 @@ requireEnvVars([
   'DESTINATION_TABLE',
   'ELASTICSEARCH_ENDPOINT',
   'ENV',
-  'REGION',
 ]);
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { DynamoDB } from 'aws-sdk';
-import { MAX_SEARCH_CLIENT_RESULTS } from '@shared/business/entities/EntityConstants';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { getUserPoolId } from '../util';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-const dynamo = new DynamoDB({ region: process.env.REGION });
+const dynamo = new DynamoDB({ region: 'us-east-1' });
 
 const createOrUpdateCognitoUser = async ({
   email,
@@ -165,7 +164,7 @@ const getJudgeUsersByName = async (
             ],
           },
         },
-        size: MAX_SEARCH_CLIENT_RESULTS,
+        size: MAX_ELASTICSEARCH_PAGINATION,
       },
       index: 'efcms-user',
     },
