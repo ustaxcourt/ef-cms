@@ -51,7 +51,7 @@ export class NewPetitionerUser extends JoiValidationEntity {
       .required()
       .messages({
         '*': 'Enter a valid email address',
-        'string.max': 'Email address must be fewer than 100 characters', //todo test
+        'string.max': 'Email address must contain fewer than 100 characters', //todo test
       })
       .description('Email of user'),
     entityName:
@@ -164,7 +164,7 @@ export class NewPetitionerUser extends JoiValidationEntity {
     if (keys.length > 1) return false;
     if (keys[0] !== 'password') return false;
 
-    return Object.values(errors.password).every(Boolean);
+    return !Object.values(errors.password).every(Boolean);
   }
 }
 
