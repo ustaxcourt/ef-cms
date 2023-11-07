@@ -41,7 +41,7 @@ describe('CaseDeadline', () => {
     it('should be invalid when required fields that are not defaulted in the constructor are not provided', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
 
-      expect(caseDeadline.getValidationErrors()).toEqual({
+      expect(caseDeadline.getFormattedValidationErrors()).toEqual({
         associatedJudge: 'Associated judge is required',
         deadlineDate: 'Enter a valid deadline date',
         description: 'Enter a description of this deadline',
@@ -62,7 +62,7 @@ describe('CaseDeadline', () => {
         { applicationContext },
       );
 
-      expect(caseDeadline.getValidationErrors()).toEqual(null);
+      expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be valid when all required fields are present and optional fields are not', () => {
@@ -77,7 +77,7 @@ describe('CaseDeadline', () => {
         { applicationContext },
       );
 
-      expect(caseDeadline.getValidationErrors()).toEqual(null);
+      expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be invalid and return a helpful message when the user provides a description that is too long', () => {
@@ -98,7 +98,7 @@ describe('CaseDeadline', () => {
         { applicationContext },
       );
 
-      expect(caseDeadline.getValidationErrors()).toEqual({
+      expect(caseDeadline.getFormattedValidationErrors()).toEqual({
         description:
           'The description is too long. Please enter a valid description.',
       });

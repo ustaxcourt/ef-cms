@@ -1,8 +1,8 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
-export class InternalDocumentSearchResult extends JoiValidationEntity_New {
+export class InternalDocumentSearchResult extends JoiValidationEntity {
   public caseCaption: string;
   public docketEntryId: string;
   public docketNumber: string;
