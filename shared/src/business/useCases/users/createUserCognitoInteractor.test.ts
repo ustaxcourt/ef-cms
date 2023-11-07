@@ -65,6 +65,21 @@ describe('createUserCognitoInteractor', () => {
     expect(applicationContext.getCognito().signUp).toHaveBeenCalled();
   });
 
+  it('should return an error if entity validation fails', async () => {
+    await expect(
+      createUserCognitoInteractor(applicationContext, {
+        user: {
+          confirmPassword: password,
+          email,
+          name,
+          password: 'password',
+        },
+      }),
+    ).rejects.toThrow();
+
+    expect(applicationContext.getCognito().signUp).not.toHaveBeenCalled();
+  });
+
   it('should return an error if email already exists in system', async () => {
     applicationContext.getCognito().listUsers.mockReturnValueOnce({
       promise: () => {
