@@ -4,7 +4,7 @@ describe('InternalDocumentSearchResult', () => {
   it('should return validation errors for required fields when no data is passed in', () => {
     const searchResult = new InternalDocumentSearchResult({});
 
-    const validationErrors = searchResult.getValidationErrors();
+    const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(Object.keys(validationErrors!)).toEqual([
       'caseCaption',
@@ -29,7 +29,7 @@ describe('InternalDocumentSearchResult', () => {
       documentTitle: 'This is a matching document',
     });
 
-    const validationErrors = searchResult.getValidationErrors();
+    const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -43,7 +43,7 @@ describe('InternalDocumentSearchResult', () => {
       isStricken: true,
     });
 
-    const validationErrors = searchResult.getValidationErrors();
+    const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -59,7 +59,7 @@ describe('InternalDocumentSearchResult', () => {
       isDocketEntrySealed: true, // the event code MUST be an opinion type
     });
 
-    const validationErrors = searchResult.getValidationErrors();
+    const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -75,7 +75,7 @@ describe('InternalDocumentSearchResult', () => {
       isDocketEntrySealed: true,
     });
 
-    const validationErrors = searchResult.getValidationErrors();
+    const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -96,7 +96,7 @@ describe('InternalDocumentSearchResult', () => {
       signedJudgeName: null, // Optional
     });
 
-    const validationErrors = searchResult.getValidationErrors();
+    const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });

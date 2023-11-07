@@ -1,9 +1,9 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { PENALTY_TYPES } from './EntityConstants';
 import joi from 'joi';
 
-export class Penalty extends JoiValidationEntity_New {
+export class Penalty extends JoiValidationEntity {
   public name: string;
   public penaltyAmount: string;
   public penaltyId: string;
