@@ -1,10 +1,10 @@
 import { Case } from './cases/Case';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from './joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
 
-export class CaseDeadline extends JoiValidationEntity_New {
+export class CaseDeadline extends JoiValidationEntity {
   public associatedJudge: string;
   public caseDeadlineId: string;
   public createdAt: string;
