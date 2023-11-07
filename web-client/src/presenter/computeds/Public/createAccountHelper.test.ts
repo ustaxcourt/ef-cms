@@ -26,7 +26,7 @@ describe('createAccountHelper', () => {
         },
       });
 
-      expect(result.passwordErrors!['isProperLength'].valid).toBeFalsy();
+      expect(result.passwordErrors!.isProperLength.valid).toBeFalsy();
     });
 
     it('should return object with multiple invalid flags when "password" is not valid', () => {
@@ -39,15 +39,15 @@ describe('createAccountHelper', () => {
       });
 
       expect(
-        result.passwordErrors!['hasNoLeadingOrTrailingSpace'].valid,
+        result.passwordErrors!.hasNoLeadingOrTrailingSpace.valid,
       ).toBeTruthy();
-      expect(result.passwordErrors!['hasOneLowercase'].valid).toBeTruthy();
-      expect(result.passwordErrors!['hasOneNumber'].valid).toBeFalsy();
-      expect(result.passwordErrors!['hasOneUppercase'].valid).toBeFalsy();
+      expect(result.passwordErrors!.hasOneLowercase.valid).toBeTruthy();
+      expect(result.passwordErrors!.hasOneNumber.valid).toBeFalsy();
+      expect(result.passwordErrors!.hasOneUppercase.valid).toBeFalsy();
       expect(
-        result.passwordErrors!['hasSpecialCharacterOrSpace'].valid,
+        result.passwordErrors!.hasSpecialCharacterOrSpace.valid,
       ).toBeFalsy();
-      expect(result.passwordErrors!['isProperLength'].valid).toBeTruthy();
+      expect(result.passwordErrors!.isProperLength.valid).toBeTruthy();
     });
   });
 
