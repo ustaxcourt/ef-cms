@@ -62,10 +62,7 @@ export const CaseDetailPendingReportList = connect(
                     <span className="no-wrap">{entry.createdAtFormatted}</span>
                   </td>
                   <td>
-                    <FilingsAndProceedings
-                      arrayIndex={entry.index}
-                      entry={entry}
-                    />
+                    <FilingsAndProceedings entry={entry} />
                   </td>
                   <td>{entry.filedBy}</td>
                   <td>
