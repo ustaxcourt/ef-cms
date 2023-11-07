@@ -17,7 +17,9 @@ describe('Penalty', () => {
       );
 
       expect(penalty.isValid()).toBeFalsy();
-      expect(Object.keys(penalty.getValidationErrors()!)).toContain('name');
+      expect(Object.keys(penalty.getFormattedValidationErrors()!)).toContain(
+        'name',
+      );
     });
 
     it('should fail if penaltyAmount is undefined', () => {
@@ -32,7 +34,7 @@ describe('Penalty', () => {
       );
 
       expect(penalty.isValid()).toBe(false);
-      expect(Object.keys(penalty.getValidationErrors()!)).toContain(
+      expect(Object.keys(penalty.getFormattedValidationErrors()!)).toContain(
         'penaltyAmount',
       );
     });
@@ -49,7 +51,7 @@ describe('Penalty', () => {
       );
 
       expect(penalty.isValid()).toBe(false);
-      expect(Object.keys(penalty.getValidationErrors()!)).toContain(
+      expect(Object.keys(penalty.getFormattedValidationErrors()!)).toContain(
         'penaltyAmount',
       );
     });
@@ -66,7 +68,7 @@ describe('Penalty', () => {
       );
 
       expect(penalty.isValid()).toBe(false);
-      expect(Object.keys(penalty.getValidationErrors()!)).toContain(
+      expect(Object.keys(penalty.getFormattedValidationErrors()!)).toContain(
         'penaltyType',
       );
     });
@@ -83,7 +85,7 @@ describe('Penalty', () => {
       );
 
       expect(penalty.isValid()).toBe(false);
-      expect(Object.keys(penalty.getValidationErrors()!)).toContain(
+      expect(Object.keys(penalty.getFormattedValidationErrors()!)).toContain(
         'statisticId',
       );
     });

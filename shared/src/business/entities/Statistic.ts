@@ -73,6 +73,7 @@ export class Statistic extends JoiValidationEntity {
     penalties: 'Enter at least one IRS penalty.',
     year: 'Enter a valid year.',
   };
+
   static VALIDATION_RULES = joi.object().keys({
     determinationDeficiencyAmount: joi
       .alternatives()
