@@ -122,7 +122,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(message.getValidationErrors()!.subject).toEqual(
+      expect(message.getFormattedValidationErrors()!.subject).toEqual(
         'Enter a subject line',
       );
     });
@@ -137,7 +137,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(message.getValidationErrors()!.subject).toEqual(
+      expect(message.getFormattedValidationErrors()!.subject).toEqual(
         'Enter a subject line',
       );
     });
@@ -152,7 +152,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(message.getValidationErrors()!.subject).toEqual(
+      expect(message.getFormattedValidationErrors()!.subject).toEqual(
         'Enter a subject line',
       );
     });
@@ -168,7 +168,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(message.getValidationErrors()!.subject).toEqual(
+      expect(message.getFormattedValidationErrors()!.subject).toEqual(
         'Limit is 250 characters. Enter 250 or fewer characters.',
       );
     });
@@ -187,7 +187,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(Object.keys(message.getValidationErrors()!)).toEqual([
+      expect(Object.keys(message.getFormattedValidationErrors()!)).toEqual([
         'completedAt',
         'completedBy',
         'completedBySection',
@@ -234,7 +234,7 @@ describe('Message', () => {
       );
 
       expect(message.isValid()).toBeFalsy();
-      expect(Object.keys(message.getValidationErrors()!)).toEqual([
+      expect(Object.keys(message.getFormattedValidationErrors()!)).toEqual([
         'documentId',
       ]);
     });
@@ -250,7 +250,7 @@ describe('Message', () => {
         { applicationContext },
       );
 
-      expect(message.getValidationErrors()).toEqual({
+      expect(message.getFormattedValidationErrors()).toEqual({
         message: 'Limit is 700 characters. Enter 700 or fewer characters.',
       });
     });
