@@ -3,7 +3,7 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('createAccountHelper', () => {
   describe('passwordErrors', () => {
-    it('should return object with all validations set to true when "password" passes validations', () => {
+    it('should return object with no error messages when "password" passes validations', () => {
       const result = runCompute(createAccountHelper, {
         state: {
           form: {
@@ -12,16 +12,9 @@ describe('createAccountHelper', () => {
         },
       });
 
-      expect(result).toMatchObject({
-        passwordErrors: {
-          hasNoLeadingOrTrailingSpace: true,
-          hasOneLowercase: true,
-          hasOneNumber: true,
-          hasOneUppercase: true,
-          hasSpecialCharacterOrSpace: true,
-          isProperLength: true,
-        },
-      });
+      for (const error in result.passwordErrors) {
+        expect(result.passwordErrors[error]).toBeFalsy();
+      }
     });
   });
 
@@ -84,7 +77,7 @@ describe('createAccountHelper', () => {
       });
 
       expect(result).toMatchObject({
-        name: 'Enter a name with less than 100 characters',
+        name: 'Enter a name with fewer than 100 characters',
       });
     });
   });
