@@ -127,7 +127,7 @@ export class NewPetitionerUser extends JoiValidationEntity {
       } else {
         return helper.message(
           Object.entries(errors)
-            .filter(([, curValue]) => !curValue)
+            .filter(([, curValue]) => !curValue.valid)
             .map(([key]) => key)
             .join('|') as any,
         );
