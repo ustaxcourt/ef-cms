@@ -32,7 +32,7 @@ export const validatePetitionerInteractor = (
     updateUserEmailErrors = new UpdateUserEmail({
       ...contactInfo,
       email: contactInfo.updatedEmail,
-    }).getValidationErrors();
+    }).getFormattedValidationErrors();
   }
 
   const aggregatedErrors = {

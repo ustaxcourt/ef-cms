@@ -1,7 +1,7 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
-export class CalendarNote extends JoiValidationEntity_New {
+export class CalendarNote extends JoiValidationEntity {
   public note?: string;
 
   constructor(rawProps) {
