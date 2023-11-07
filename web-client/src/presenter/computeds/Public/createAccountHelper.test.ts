@@ -3,18 +3,51 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('createAccountHelper', () => {
   describe('passwordErrors', () => {
-    it('should return object with no error messages when "password" passes validations', () => {
+    it('should return object with valid flags when "password" passes validations', () => {
       const result = runCompute(createAccountHelper, {
         state: {
           form: {
-            confirmPassword: 'aA1!aaaa',
+            password: 'aA1!aaaa',
           },
         },
       });
 
       for (const error in result.passwordErrors) {
-        expect(result.passwordErrors[error]).toBeFalsy();
+        expect(result.passwordErrors[error].valid).toBeTruthy();
       }
+    });
+
+    it('should return object with invalid length flag when "password" is not long enough', () => {
+      const result = runCompute(createAccountHelper, {
+        state: {
+          form: {
+            password: 'aA1!aaa',
+          },
+        },
+      });
+
+      expect(result.passwordErrors!['isProperLength'].valid).toBeFalsy();
+    });
+
+    it('should return object with multiple invalid flags when "password" is not valid', () => {
+      const result = runCompute(createAccountHelper, {
+        state: {
+          form: {
+            password: 'aaaaaaaa',
+          },
+        },
+      });
+
+      expect(
+        result.passwordErrors!['hasNoLeadingOrTrailingSpace'].valid,
+      ).toBeTruthy();
+      expect(result.passwordErrors!['hasOneLowercase'].valid).toBeTruthy();
+      expect(result.passwordErrors!['hasOneNumber'].valid).toBeFalsy();
+      expect(result.passwordErrors!['hasOneUppercase'].valid).toBeFalsy();
+      expect(
+        result.passwordErrors!['hasSpecialCharacterOrSpace'].valid,
+      ).toBeFalsy();
+      expect(result.passwordErrors!['isProperLength'].valid).toBeTruthy();
     });
   });
 
