@@ -6,7 +6,7 @@ describe('AddIrsPractitioner', () => {
     it('should return expected error messages when required fields are missing', () => {
       const entity = new AddIrsPractitioner({});
 
-      expect(entity.getValidationErrors()).toEqual({
+      expect(entity.getFormattedValidationErrors()).toEqual({
         serviceIndicator: 'Select service type',
         user: 'Select a respondent counsel',
       });
@@ -18,7 +18,7 @@ describe('AddIrsPractitioner', () => {
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
 
-      expect(entity.getValidationErrors()).toEqual(null);
+      expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should not be valid if no email is given and the service preference is electronic', () => {
@@ -27,7 +27,7 @@ describe('AddIrsPractitioner', () => {
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
 
-      expect(entity.getValidationErrors()).toEqual({
+      expect(entity.getFormattedValidationErrors()).toEqual({
         serviceIndicator:
           'No email found for electronic service. Select a valid service preference.',
       });
