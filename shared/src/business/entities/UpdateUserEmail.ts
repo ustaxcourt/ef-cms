@@ -1,47 +1,34 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
-/**
- * constructor
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.rawUpdateUserEmail the raw UpdateUserEmail data
- * @constructor
- */
 export class UpdateUserEmail extends JoiValidationEntity {
-  public email: string;
   public confirmEmail: string;
+  public email: string;
 
-  constructor(rawUpdateUserEmail) {
+  constructor(rawUpdateUserEmail: { email: string; confirmEmail: string }) {
     super('UpdateUserEmail');
+
     this.email = rawUpdateUserEmail.email;
     this.confirmEmail = rawUpdateUserEmail.confirmEmail;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    confirmEmail: [
-      {
-        contains: 'must be [ref:email]',
-        message: 'Email addresses do not match',
-      },
-      { contains: 'is required', message: 'Enter a valid email address' },
-      { contains: 'must be a valid', message: 'Enter a valid email address' },
-    ],
-    email: 'Enter a valid email address',
+  static VALIDATION_RULES = {
+    confirmEmail: JoiValidationConstants.EMAIL.valid(joi.ref('email'))
+      .required()
+      .messages({
+        'any.only': 'Email addresses do not match',
+        'any.required': 'Enter a valid email address',
+        'string.email': 'Enter a valid email address',
+      }),
+    email: JoiValidationConstants.EMAIL.required().messages({
+      '*': 'Enter a valid email address',
+    }),
   };
 
   getValidationRules() {
-    return {
-      confirmEmail: JoiValidationConstants.EMAIL.valid(
-        joi.ref('email'),
-      ).required(),
-      email: JoiValidationConstants.EMAIL.required(),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return UpdateUserEmail.VALIDATION_ERROR_MESSAGES;
+    return UpdateUserEmail.VALIDATION_RULES;
   }
 }
+
+export type RawUpdateUserEmail = ExcludeMethods<UpdateUserEmail>;

@@ -19,14 +19,14 @@ export const ErrorFactory = {
     } else if (401 == responseCode) {
       newError = new UnidentifiedUserError();
     } else if (504 === responseCode) {
-      newError = new GatewayTimeoutError(e);
+      newError = new GatewayTimeoutError();
     } else if (/^4/.test(responseCode)) {
-      newError = new InvalidRequestError(e);
+      newError = new InvalidRequestError();
     } else if (/^5/.test(responseCode)) {
-      newError = new ServerInvalidResponseError(e);
+      newError = new ServerInvalidResponseError();
     } else if (!e.response) {
       // this should only happen if cognito throws a cors exception due to expired tokens or invalid tokens
-      newError = new UnidentifiedUserError(e);
+      newError = new UnidentifiedUserError();
     }
     newError.originalError = e;
     newError.responseCode = responseCode;
