@@ -86,9 +86,7 @@ export class Contact extends JoiValidationEntity {
     ),
     contactType: JoiValidationConstants.STRING.valid(
       ...Object.values(CONTACT_TYPES),
-    )
-      .required()
-      .messages({ '*': 'Enter country type' }),
+    ).required(),
     email: JoiValidationConstants.EMAIL.when('hasEAccess', {
       is: true,
       otherwise: joi.optional(),
