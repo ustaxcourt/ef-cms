@@ -6,7 +6,7 @@ export const validateCaseDeadlineInteractor = (
 ): Record<string, string> | null => {
   const errors = new CaseDeadline(caseDeadline, {
     applicationContext,
-  }).getValidationErrors();
+  }).getFormattedValidationErrors();
 
   return errors;
 };

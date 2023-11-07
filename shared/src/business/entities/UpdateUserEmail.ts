@@ -1,8 +1,8 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from './joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
-export class UpdateUserEmail extends JoiValidationEntity_New {
+export class UpdateUserEmail extends JoiValidationEntity {
   public confirmEmail: string;
   public email: string;
 

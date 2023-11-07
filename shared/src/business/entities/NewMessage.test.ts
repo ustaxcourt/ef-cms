@@ -39,7 +39,7 @@ describe('NewMessage', () => {
         toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-      expect(message.getValidationErrors()).toEqual({
+      expect(message.getFormattedValidationErrors()).toEqual({
         message: 'Limit is 700 characters. Enter 700 or fewer characters.',
       });
     });
