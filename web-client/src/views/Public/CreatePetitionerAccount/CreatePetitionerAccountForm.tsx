@@ -148,38 +148,58 @@ export const CreatePetitionerAccountForm = connect(
               <div className="margin-top-1" hidden={!password}>
                 <RequirementsText
                   fieldName="password"
-                  text="Must contain lower case letter"
-                  valid={createAccountHelper.passwordErrors?.hasOneLowercase}
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text="Must contain upper case letter"
-                  valid={createAccountHelper.passwordErrors?.hasOneUppercase}
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text="Must contain number"
-                  valid={createAccountHelper.passwordErrors?.hasOneNumber}
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text="Must be between 8-99 characters long"
-                  valid={createAccountHelper.passwordErrors?.isProperLength}
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text="Must contain special character or space"
+                  text={
+                    createAccountHelper.passwordErrors?.hasOneLowercase.message
+                  }
                   valid={
-                    createAccountHelper.passwordErrors
-                      ?.hasSpecialCharacterOrSpace
+                    createAccountHelper.passwordErrors?.hasOneLowercase.valid
                   }
                 ></RequirementsText>
                 <RequirementsText
                   fieldName="password"
-                  text="Must not contain leading or trailing space"
+                  text={
+                    createAccountHelper.passwordErrors?.hasOneUppercase.message
+                  }
+                  valid={
+                    createAccountHelper.passwordErrors?.hasOneUppercase.valid
+                  }
+                ></RequirementsText>
+                <RequirementsText
+                  fieldName="password"
+                  text={
+                    createAccountHelper.passwordErrors?.hasOneNumber.message
+                  }
+                  valid={createAccountHelper.passwordErrors?.hasOneNumber.valid}
+                ></RequirementsText>
+                <RequirementsText
+                  fieldName="password"
+                  text={
+                    createAccountHelper.passwordErrors?.isProperLength.message
+                  }
+                  valid={
+                    createAccountHelper.passwordErrors?.isProperLength.valid
+                  }
+                ></RequirementsText>
+                <RequirementsText
+                  fieldName="password"
+                  text={
+                    createAccountHelper.passwordErrors
+                      ?.hasSpecialCharacterOrSpace.message
+                  }
                   valid={
                     createAccountHelper.passwordErrors
-                      ?.hasNoLeadingOrTrailingSpace
+                      ?.hasSpecialCharacterOrSpace.valid
+                  }
+                ></RequirementsText>
+                <RequirementsText
+                  fieldName="password"
+                  text={
+                    createAccountHelper.passwordErrors
+                      ?.hasNoLeadingOrTrailingSpace.message
+                  }
+                  valid={
+                    createAccountHelper.passwordErrors
+                      ?.hasNoLeadingOrTrailingSpace.valid
                   }
                 ></RequirementsText>
               </div>
