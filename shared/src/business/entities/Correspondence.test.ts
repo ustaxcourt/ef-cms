@@ -16,7 +16,7 @@ describe('Correspondence', () => {
       const correspondence = new Correspondence(validCorrespondence);
 
       expect(correspondence.isValid()).toBe(true);
-      expect(correspondence.getValidationErrors()).toBeNull();
+      expect(correspondence.getFormattedValidationErrors()).toBeNull();
     });
   });
 
