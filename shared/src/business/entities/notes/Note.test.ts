@@ -1,7 +1,5 @@
 import { Note } from './Note';
 
-const { VALIDATION_ERROR_MESSAGES } = Note;
-
 describe('Note', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
@@ -9,7 +7,7 @@ describe('Note', () => {
       const notesConfiguration: any = {};
       const entity = new Note(notesConfiguration);
       expect(entity.getFormattedValidationErrors()).toEqual({
-        notes: VALIDATION_ERROR_MESSAGES.notes,
+        notes: 'Add note',
       });
     });
 
