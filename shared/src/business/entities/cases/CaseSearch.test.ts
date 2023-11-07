@@ -12,7 +12,7 @@ describe('Case Search entity', () => {
       startDate: undefined,
     });
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -20,7 +20,7 @@ describe('Case Search entity', () => {
   it('should fail validation when a petitioner name is not provided', () => {
     const caseSearch = new CaseSearch({});
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors!.petitionerName).toEqual('Enter a name');
   });
@@ -31,7 +31,7 @@ describe('Case Search entity', () => {
       startDate: '06/01/2000',
     });
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -42,7 +42,7 @@ describe('Case Search entity', () => {
       petitionerName: 'Solomon Grundy',
     });
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -54,7 +54,7 @@ describe('Case Search entity', () => {
       startDate: '06/01/2000',
     });
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -66,7 +66,7 @@ describe('Case Search entity', () => {
       startDate: '06/01/2000',
     });
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
@@ -78,7 +78,7 @@ describe('Case Search entity', () => {
       startDate: '06/01/2010',
     });
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors!.endDate).toBeDefined();
   });
@@ -90,7 +90,7 @@ describe('Case Search entity', () => {
       startDate: '06/01/9999',
     });
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors!.startDate).toBeDefined();
   });
@@ -102,7 +102,7 @@ describe('Case Search entity', () => {
       startDate: 'WRONG FORMAT FOR DATE',
     });
 
-    const validationErrors = caseSearch.getValidationErrors();
+    const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors!.startDate).toBeDefined();
   });
