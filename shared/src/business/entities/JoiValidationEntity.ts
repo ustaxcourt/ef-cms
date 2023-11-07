@@ -53,23 +53,26 @@ function toRawObject(entity) {
 function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
   const errors = entity.getValidationErrors();
   if (!errors) return null;
-  for (let key of Object.keys(errors)) {
-    const errorMap = entity.getErrorToMessageMap()[key];
-    if (Array.isArray(errorMap)) {
-      for (let errorObject of errorMap) {
-        if (
-          typeof errorObject === 'object' &&
-          errors[key].includes(errorObject.contains)
-        ) {
-          errors[key] = errorObject.message;
-          break;
-        } else if (typeof errorObject !== 'object') {
-          errors[key] = errorObject;
-          break;
+
+  if (entity.getErrorToMessageMap) {
+    for (let key of Object.keys(errors)) {
+      const errorMap = entity.getErrorToMessageMap()[key];
+      if (Array.isArray(errorMap)) {
+        for (let errorObject of errorMap) {
+          if (
+            typeof errorObject === 'object' &&
+            errors[key].includes(errorObject.contains)
+          ) {
+            errors[key] = errorObject.message;
+            break;
+          } else if (typeof errorObject !== 'object') {
+            errors[key] = errorObject;
+            break;
+          }
         }
+      } else if (errorMap) {
+        errors[key] = errorMap;
       }
-    } else if (errorMap) {
-      errors[key] = errorMap;
     }
   }
   return errors;
@@ -169,7 +172,8 @@ export abstract class JoiValidationEntity {
   }
 
   abstract getValidationRules(): any;
-  abstract getErrorToMessageMap(): any;
+
+  getErrorToMessageMap?(): any;
 
   abstract getValidationRules_NEW(): any;
 

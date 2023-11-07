@@ -1,9 +1,9 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import joi from 'joi';
 
-export class Batch extends JoiValidationEntity_New {
+export class Batch extends JoiValidationEntity {
   public batchId: string;
   public batchIndex: string;
   public createdAt: string;

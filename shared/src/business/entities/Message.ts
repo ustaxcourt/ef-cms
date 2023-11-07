@@ -1,11 +1,11 @@
 import { CASE_STATUS_TYPES } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
-export class Message extends JoiValidationEntity_New {
+export class Message extends JoiValidationEntity {
   public attachments?: {
     documentId: string;
   }[];

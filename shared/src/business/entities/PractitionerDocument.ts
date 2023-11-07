@@ -1,5 +1,5 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import {
   MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
   PRACTITIONER_DOCUMENT_TYPES,
@@ -9,7 +9,7 @@ import { createISODateString } from '../utilities/DateHandler';
 import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
-export class PractitionerDocument extends JoiValidationEntity_New {
+export class PractitionerDocument extends JoiValidationEntity {
   public categoryName: string;
   public categoryType: string;
   public description: string;

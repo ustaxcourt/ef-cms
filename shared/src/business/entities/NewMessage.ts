@@ -1,8 +1,8 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { Message } from './Message';
 
-export class NewMessage extends JoiValidationEntity_New {
+export class NewMessage extends JoiValidationEntity {
   public message: string;
   public subject: string;
   public toSection: string;
