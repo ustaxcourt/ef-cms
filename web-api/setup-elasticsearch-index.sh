@@ -9,7 +9,7 @@
 #   - node must be setup on your machine
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 
 ( ! command -v aws > /dev/null ) && echo "aws was not found on your path. Please install aws." && exit 1
 ( ! command -v node > /dev/null ) && echo "node was not found on your path. Please install node." && exit 1
