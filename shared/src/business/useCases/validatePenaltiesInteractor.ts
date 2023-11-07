@@ -6,5 +6,5 @@ export const validatePenaltiesInteractor = (
 ): Record<string, string> | null => {
   return new Penalty(rawPenalty, {
     applicationContext,
-  }).getValidationErrors();
+  }).getFormattedValidationErrors();
 };
