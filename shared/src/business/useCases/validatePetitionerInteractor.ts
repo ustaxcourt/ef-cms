@@ -18,7 +18,10 @@ export const validatePetitionerInteractor = (
   {
     contactInfo,
     existingPetitioners,
-  }: { contactInfo: RawContact; existingPetitioners: TPetitioner[] },
+  }: {
+    contactInfo: RawContact & { updatedEmail?: string; confirmEmail?: string };
+    existingPetitioners: TPetitioner[];
+  },
 ) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
@@ -26,10 +29,10 @@ export const validatePetitionerInteractor = (
 
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
-    updateUserEmailErrors = new UpdateUserEmail(
-      { ...contactInfo, email: contactInfo.updatedEmail },
-      { applicationContext },
-    ).getFormattedValidationErrors();
+    updateUserEmailErrors = new UpdateUserEmail({
+      ...contactInfo,
+      email: contactInfo.updatedEmail,
+    }).getFormattedValidationErrors();
   }
 
   const aggregatedErrors = {

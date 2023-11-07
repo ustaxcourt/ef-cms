@@ -1,5 +1,5 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
 export class CalendarNote extends JoiValidationEntity {
   public note?: string;
@@ -14,14 +14,8 @@ export class CalendarNote extends JoiValidationEntity {
     note: JoiValidationConstants.STRING.allow('', null).optional(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
-
   getValidationRules() {
     return CalendarNote.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CalendarNote.VALIDATION_ERROR_MESSAGES;
   }
 }
 
