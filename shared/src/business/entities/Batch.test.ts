@@ -25,7 +25,7 @@ describe('Batch entity', () => {
     it('validates minimum number of pages', () => {
       const batch = new Batch({ applicationContext, rawBatch: {} });
 
-      expect(batch.getValidationErrors()).toMatchObject({
+      expect(batch.getFormattedValidationErrors()).toMatchObject({
         pages: 'At least one page is required',
       });
     });
@@ -39,7 +39,7 @@ describe('Batch entity', () => {
         },
       });
 
-      expect(batch.getValidationErrors()).toMatchObject({
+      expect(batch.getFormattedValidationErrors()).toMatchObject({
         batchIndex: 'Invalid batch index',
       });
     });
