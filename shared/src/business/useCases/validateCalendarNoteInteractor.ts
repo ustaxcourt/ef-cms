@@ -9,7 +9,5 @@ import { CalendarNote } from '../entities/notes/CalendarNote';
  * @returns {object} the errors or null
  */
 export const validateCalendarNoteInteractor = ({ note }: { note: string }) => {
-  const errors = new CalendarNote({ note }).getValidationErrors();
-  if (!errors) return null;
-  return errors;
+  return new CalendarNote({ note }).getFormattedValidationErrors();
 };
