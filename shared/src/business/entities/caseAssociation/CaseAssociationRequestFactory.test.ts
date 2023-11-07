@@ -18,49 +18,49 @@ describe('CaseAssociationRequestFactory', () => {
 
     it('should require a file', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .primaryDocumentFile,
       ).toEqual('Upload a document');
 
       rawEntity.primaryDocumentFile = {};
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .primaryDocumentFile,
       ).toEqual(undefined);
     });
 
     it('should require a certificate Of Service selection', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .certificateOfService,
       ).toEqual('Indicate whether you are including a Certificate of Service');
 
       rawEntity.certificateOfService = false;
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .certificateOfService,
       ).toEqual(undefined);
     });
 
     it('should require document type', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .documentType,
       ).toEqual('Select a document type');
 
       rawEntity.documentType = 'Entry of Appearance';
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .documentType,
       ).toEqual(undefined);
     });
 
     it('should require document title template', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .documentTitleTemplate,
       ).toEqual('Select a document');
 
@@ -68,35 +68,35 @@ describe('CaseAssociationRequestFactory', () => {
         'Entry of Appearance for [Petitioner Names]';
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .documentTitleTemplate,
       ).toEqual(undefined);
     });
 
     it('should require event code', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .eventCode,
       ).toEqual('Select a document');
 
       rawEntity.eventCode = 'P';
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .eventCode,
       ).toEqual(undefined);
     });
 
     it('should require scenario title', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .scenario,
       ).toEqual('Select a document');
 
       rawEntity.scenario = 'Standard';
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .scenario,
       ).toEqual(undefined);
     });
@@ -108,15 +108,17 @@ describe('CaseAssociationRequestFactory', () => {
 
       it('should require certificate of service date to be entered', () => {
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .certificateOfServiceDate,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.certificateOfServiceDate,
         ).toEqual('Enter date of service');
 
         rawEntity.certificateOfServiceDate = createISODateString();
 
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .certificateOfServiceDate,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.certificateOfServiceDate,
         ).toEqual(undefined);
       });
 
@@ -128,8 +130,9 @@ describe('CaseAssociationRequestFactory', () => {
         });
 
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .certificateOfServiceDate,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.certificateOfServiceDate,
         ).toEqual(
           'Certificate of Service date cannot be in the future. Enter a valid date.',
         );
@@ -145,15 +148,17 @@ describe('CaseAssociationRequestFactory', () => {
 
       it('should require objections be selected', () => {
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .objections,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.objections,
         ).toEqual('Enter selection for Objections.');
 
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
 
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .objections,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.objections,
         ).toEqual(undefined);
       });
     });
@@ -168,43 +173,49 @@ describe('CaseAssociationRequestFactory', () => {
 
       it('should require attachments be selected', () => {
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .attachments,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.attachments,
         ).toEqual('Enter selection for Attachments.');
 
         rawEntity.attachments = false;
 
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .attachments,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.attachments,
         ).toEqual(undefined);
       });
 
       it('should require objections be selected', () => {
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .objections,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.objections,
         ).toEqual('Enter selection for Objections.');
 
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
 
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .objections,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.objections,
         ).toEqual(undefined);
       });
 
       it('should require has supporting documents be selected', () => {
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .hasSupportingDocuments,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.hasSupportingDocuments,
         ).toEqual('Enter selection for Supporting Documents.');
 
         rawEntity.hasSupportingDocuments = false;
 
         expect(
-          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-            .hasSupportingDocuments,
+          CaseAssociationRequestFactory(
+            rawEntity,
+          ).getFormattedValidationErrors()!.hasSupportingDocuments,
         ).toEqual(undefined);
       });
 
@@ -218,15 +229,18 @@ describe('CaseAssociationRequestFactory', () => {
 
         it('should require supporting document type be entered', () => {
           expect(
-            CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-              .supportingDocuments[0].supportingDocument,
+            CaseAssociationRequestFactory(
+              rawEntity,
+            ).getFormattedValidationErrors()!.supportingDocuments[0]
+              .supportingDocument,
           ).toEqual('Select a document type');
 
           rawEntity.supportingDocuments[0].supportingDocument = 'Brief';
 
           expect(
-            CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-              .supportingDocuments,
+            CaseAssociationRequestFactory(
+              rawEntity,
+            ).getFormattedValidationErrors()!.supportingDocuments,
           ).toEqual(undefined);
         });
 
@@ -235,16 +249,19 @@ describe('CaseAssociationRequestFactory', () => {
           rawEntity.supportingDocuments[0].supportingDocument = 'brief';
 
           expect(
-            CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-              .supportingDocuments[0].certificateOfServiceDate,
+            CaseAssociationRequestFactory(
+              rawEntity,
+            ).getFormattedValidationErrors()!.supportingDocuments[0]
+              .certificateOfServiceDate,
           ).toEqual('Enter date of service');
 
           rawEntity.supportingDocuments[0].certificateOfServiceDate =
             createISODateString();
 
           expect(
-            CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
-              .supportingDocuments,
+            CaseAssociationRequestFactory(
+              rawEntity,
+            ).getFormattedValidationErrors()!.supportingDocuments,
           ).toEqual(undefined);
         });
       });
@@ -252,13 +269,15 @@ describe('CaseAssociationRequestFactory', () => {
 
     it('should require one filer to be selected', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!.filers,
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+          .filers,
       ).toEqual('Select a party');
 
       rawEntity.filers = ['c41fdac6-cc16-4ca6-97fc-980ebb618dd5'];
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!.filers,
+        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+          .filers,
       ).toEqual(undefined);
     });
 

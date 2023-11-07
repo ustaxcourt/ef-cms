@@ -8,7 +8,7 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
-      expect(externalDocumentC.getValidationErrors()).toEqual({
+      expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
         documentType: 'Select a document type',
         freeText: 'Enter name',
@@ -26,7 +26,7 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
-      expect(externalDocumentC.getValidationErrors()).toEqual(null);
+      expect(externalDocumentC.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when freeText is over 1000 characters', () => {
@@ -39,7 +39,7 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
-      expect(externalDocumentC.getValidationErrors()).toEqual({
+      expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
         freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
     });
@@ -54,7 +54,7 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
-      expect(externalDocumentC.getValidationErrors()).toEqual({
+      expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
         documentTitle:
           'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });

@@ -29,7 +29,7 @@ describe('CaseAssociationRequestDocumentTypeC', () => {
         VALID_REQUEST_DOC_C,
       );
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual(null);
     });
 
@@ -41,7 +41,7 @@ describe('CaseAssociationRequestDocumentTypeC', () => {
         objections: 'INVALID VALUE',
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         attachments: 'Enter selection for Attachments.',
         hasSupportingDocuments: 'Enter selection for Supporting Documents.',

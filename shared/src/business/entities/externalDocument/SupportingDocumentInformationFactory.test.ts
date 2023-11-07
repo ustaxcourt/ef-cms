@@ -15,7 +15,7 @@ describe('SupportingDocumentInformationFactory', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const extDoc = new SupportingDocumentInformationFactory({});
-      expect(extDoc.getValidationErrors()).toEqual({
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
         certificateOfService:
           'Indicate whether you are including a Certificate of Service',
         supportingDocument: 'Select a document type',
@@ -29,7 +29,7 @@ describe('SupportingDocumentInformationFactory', () => {
         supportingDocument: 'Affidavit in Support',
         supportingDocumentFile: {},
       });
-      expect(extDoc.getValidationErrors()).toEqual({
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
         supportingDocumentFreeText: 'Enter name',
       });
     });
@@ -41,7 +41,7 @@ describe('SupportingDocumentInformationFactory', () => {
         supportingDocument: 'Brief in Support',
         supportingDocumentFile: {},
       });
-      expect(extDoc.getValidationErrors()).toEqual(null);
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     describe('Has Certificate of Service', () => {
@@ -52,7 +52,7 @@ describe('SupportingDocumentInformationFactory', () => {
           supportingDocument: 'Brief in Support',
           supportingDocumentFile: {},
         });
-        expect(extDoc.getValidationErrors()).toEqual({
+        expect(extDoc.getFormattedValidationErrors()).toEqual({
           certificateOfServiceDate: 'Enter date of service',
         });
       });

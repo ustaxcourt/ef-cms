@@ -30,7 +30,7 @@ describe('CaseAssociationRequestDocumentTypeD', () => {
         VALID_REQUEST_DOC_D,
       );
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual(null);
     });
 
@@ -41,7 +41,7 @@ describe('CaseAssociationRequestDocumentTypeD', () => {
         primaryDocumentFile: undefined,
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         primaryDocumentFile: 'Upload a document',
       });
@@ -54,7 +54,7 @@ describe('CaseAssociationRequestDocumentTypeD', () => {
         primaryDocumentFile: undefined,
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual(null);
     });
   });

@@ -4,7 +4,7 @@ describe('SecondaryDocumentInformationFactory', () => {
   describe('validation', () => {
     it('should be valid with an empty object', () => {
       const extDoc = new SecondaryDocumentInformationFactory({});
-      expect(extDoc.getValidationErrors()).toEqual(null);
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should not be valid when document is a Motion, a file is selected, and objections is not present', () => {
@@ -13,7 +13,7 @@ describe('SecondaryDocumentInformationFactory', () => {
         documentType: 'Motion for New Trial',
         secondaryDocumentFile: {},
       });
-      expect(extDoc.getValidationErrors()?.objections).toEqual(
+      expect(extDoc.getFormattedValidationErrors()?.objections).toEqual(
         'Enter selection for Objections.',
       );
     });
@@ -23,7 +23,7 @@ describe('SecondaryDocumentInformationFactory', () => {
         category: 'Motion',
         documentType: 'Motion for New Trial',
       });
-      expect(extDoc.getValidationErrors()).toEqual(null);
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be valid when document is not a Motion and objections is not present', () => {
@@ -31,14 +31,14 @@ describe('SecondaryDocumentInformationFactory', () => {
         category: 'Answer',
         documentType: 'Answer',
       });
-      expect(extDoc.getValidationErrors()).toEqual(null);
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should require attachments and certificateOfService of secondaryDocumentFile is selected', () => {
       const extDoc = new SecondaryDocumentInformationFactory({
         secondaryDocumentFile: {},
       });
-      expect(extDoc.getValidationErrors()).toEqual({
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
         certificateOfService:
           'Indicate whether you are including a Certificate of Service',
       });
@@ -50,7 +50,7 @@ describe('SecondaryDocumentInformationFactory', () => {
         certificateOfService: false,
         secondaryDocumentFile: {},
       });
-      expect(extDoc.getValidationErrors()).toEqual(null);
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     describe('Has Certificate of Service', () => {
@@ -60,7 +60,7 @@ describe('SecondaryDocumentInformationFactory', () => {
           certificateOfService: true,
           secondaryDocumentFile: {},
         });
-        expect(extDoc.getValidationErrors()).toEqual({
+        expect(extDoc.getFormattedValidationErrors()).toEqual({
           certificateOfServiceDate: 'Enter date of service',
         });
       });
@@ -71,7 +71,7 @@ describe('SecondaryDocumentInformationFactory', () => {
           certificateOfService: false,
           secondaryDocumentFile: {},
         });
-        expect(extDoc.getValidationErrors()).toEqual(null);
+        expect(extDoc.getFormattedValidationErrors()).toEqual(null);
       });
     });
   });

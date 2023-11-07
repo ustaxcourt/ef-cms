@@ -27,7 +27,7 @@ describe('CaseAssociationRequestDocumentTypeB', () => {
         VALID_REQUEST_DOC_B,
       );
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual(null);
     });
 
@@ -37,7 +37,7 @@ describe('CaseAssociationRequestDocumentTypeB', () => {
         objections: 'INVALID VALUE',
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         objections: 'Enter selection for Objections.',
       });

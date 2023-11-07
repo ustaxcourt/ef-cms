@@ -8,7 +8,7 @@ describe('ExternalDocumentNonStandardB', () => {
         scenario: 'Nonstandard B',
       });
 
-      expect(externalDocumentB.getValidationErrors()).toEqual({
+      expect(externalDocumentB.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
         documentType: 'Select a document type',
         freeText: 'Provide an answer',
@@ -24,7 +24,7 @@ describe('ExternalDocumentNonStandardB', () => {
         scenario: 'Nonstandard B',
       });
 
-      expect(externalDocumentB.getValidationErrors()).toEqual(null);
+      expect(externalDocumentB.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
@@ -36,7 +36,7 @@ describe('ExternalDocumentNonStandardB', () => {
         scenario: 'Nonstandard B',
       });
 
-      expect(externalDocumentB.getValidationErrors()).toEqual({
+      expect(externalDocumentB.getFormattedValidationErrors()).toEqual({
         documentTitle:
           'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
@@ -52,7 +52,7 @@ describe('ExternalDocumentNonStandardB', () => {
       scenario: 'Nonstandard B',
     });
 
-    expect(externalDocumentB.getValidationErrors()).toEqual({
+    expect(externalDocumentB.getFormattedValidationErrors()).toEqual({
       freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     });
   });

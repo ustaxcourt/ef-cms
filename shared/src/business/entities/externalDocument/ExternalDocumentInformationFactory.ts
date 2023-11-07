@@ -6,7 +6,7 @@ import {
 } from '../EntityConstants';
 import { ExternalDocumentBase } from '@shared/business/entities/externalDocument/ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { SecondaryDocumentInformationFactory } from './SecondaryDocumentInformationFactory';
 import { SupportingDocumentInformationFactory } from './SupportingDocumentInformationFactory';
 import {
@@ -16,7 +16,7 @@ import {
 import { isEqual, reduce, some, sortBy, values } from 'lodash';
 import joi from 'joi';
 
-export class ExternalDocumentInformationFactory extends JoiValidationEntity_New {
+export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   public attachments: string;
   public casesParties?: object;
   public certificateOfService: boolean;

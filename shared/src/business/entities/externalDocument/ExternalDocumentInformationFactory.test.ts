@@ -9,7 +9,9 @@ describe('ExternalDocumentInformationFactory', () => {
   let baseDoc;
 
   const errors = () =>
-    new ExternalDocumentInformationFactory(baseDoc).getValidationErrors()!;
+    new ExternalDocumentInformationFactory(
+      baseDoc,
+    ).getFormattedValidationErrors()!;
 
   describe('Standard Document', () => {
     const VALID_DOC = {
@@ -37,7 +39,7 @@ describe('ExternalDocumentInformationFactory', () => {
     describe('Validation Errors', () => {
       it('should return null if there are no validation error', () => {
         const entity = new ExternalDocumentInformationFactory(VALID_DOC);
-        const formattedValidationErrors = entity.getValidationErrors();
+        const formattedValidationErrors = entity.getFormattedValidationErrors();
         expect(formattedValidationErrors).toEqual(null);
       });
     });

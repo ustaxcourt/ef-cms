@@ -21,7 +21,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
     it('should create entity without any validation errors', () => {
       const entity = new CaseAssociationRequestDocumentBase(rawTestData);
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual(null);
     });
 
@@ -31,7 +31,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         attachments: 'NOT A BOOLEAN',
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         attachments: 'Enter selection for Attachments.',
       });
@@ -43,7 +43,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         certificateOfService: 'NOT A BOOLEAN',
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         certificateOfService:
           'Indicate whether you are including a Certificate of Service',
@@ -56,7 +56,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         certificateOfService: undefined,
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         certificateOfService:
           'Indicate whether you are including a Certificate of Service',
@@ -70,7 +70,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         certificateOfServiceDate: undefined,
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         certificateOfServiceDate: 'Enter date of service',
       });
@@ -83,7 +83,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         certificateOfServiceDate: '9999-01-01T01:01:01.000Z',
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         certificateOfServiceDate:
           'Certificate of Service date cannot be in the future. Enter a valid date.',
@@ -96,7 +96,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         documentTitle: '',
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         documentTitle:
           'Document title must be 500 characters or fewer. Update this document title and try again.',
@@ -109,7 +109,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         documentTitle: generateString(501, 'a'),
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         documentTitle:
           'Document title must be 500 characters or fewer. Update this document title and try again.',
@@ -121,7 +121,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         ...rawTestData,
         documentType: undefined,
       });
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({ documentType: 'Select a document type' });
     });
 
@@ -130,7 +130,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         ...rawTestData,
         documentType: 'invalid document type',
       });
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         documentType: 'Select a document type',
       });
@@ -141,7 +141,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         ...rawTestData,
         filers: ['a'],
       });
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({ filers: 'Select a party' });
     });
 
@@ -151,7 +151,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         filers: [],
         partyIrsPractitioner: false,
       });
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({ filers: 'Select a party' });
     });
 
@@ -162,7 +162,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         partyIrsPractitioner: false,
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         'filers[0]': '"filers[0]" must be a valid GUID',
       });
@@ -174,7 +174,7 @@ describe('CaseAssociationRequestDocumentBase', () => {
         partyPrivatePractitioner: 'NOT A BOOLEAN',
       });
 
-      const errors = entity.getValidationErrors();
+      const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         partyPrivatePractitioner:
           '"partyPrivatePractitioner" must be a boolean',

@@ -12,7 +12,7 @@ describe('ExternalDocumentNonStandardD', () => {
         scenario: 'Nonstandard D',
       });
 
-      expect(externalDocumentD.getValidationErrors()).toEqual({
+      expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
         documentType: 'Select a document type',
         previousDocument: 'Select a document',
@@ -32,7 +32,7 @@ describe('ExternalDocumentNonStandardD', () => {
         serviceDate,
       });
 
-      expect(externalDocumentD.getValidationErrors()).toEqual({
+      expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
         serviceDate:
           'Service date cannot be in the future. Enter a valid date.',
       });
@@ -50,7 +50,7 @@ describe('ExternalDocumentNonStandardD', () => {
         serviceDate,
       });
 
-      expect(externalDocumentD.getValidationErrors()).toEqual(null);
+      expect(externalDocumentD.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when serviceDate is undefined-undefined-undefined', () => {
@@ -65,7 +65,7 @@ describe('ExternalDocumentNonStandardD', () => {
         serviceDate,
       });
 
-      expect(externalDocumentD.getValidationErrors()).toEqual({
+      expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
         serviceDate: 'Provide a service date',
       });
     });
@@ -82,7 +82,7 @@ describe('ExternalDocumentNonStandardD', () => {
         serviceDate,
       });
 
-      expect(externalDocumentD.getValidationErrors()).toEqual({
+      expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
         documentTitle:
           'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });

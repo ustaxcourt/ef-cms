@@ -10,5 +10,5 @@ import { ExternalDocumentFactory } from '../../entities/externalDocument/Externa
 export const validateExternalDocumentInteractor = ({ documentMetadata }) => {
   const externalDocument = ExternalDocumentFactory(documentMetadata);
 
-  return externalDocument.getValidationErrors();
+  return externalDocument.getFormattedValidationErrors();
 };

@@ -465,7 +465,7 @@ describe('validate', () => {
       expect(docketEntry.isValid()).toBeFalsy();
       if (item.expectValidationErrors) {
         expect(
-          Object.keys(docketEntry.getValidationErrors() as object),
+          Object.keys(docketEntry.getFormattedValidationErrors() as object),
         ).toEqual(item.expectValidationErrors);
       }
     }),

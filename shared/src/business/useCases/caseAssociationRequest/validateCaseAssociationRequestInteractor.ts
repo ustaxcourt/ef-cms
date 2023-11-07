@@ -5,7 +5,7 @@ export const validateCaseAssociationRequestInteractor = ({
 }) => {
   const errors = CaseAssociationRequestFactory(
     caseAssociationRequest,
-  ).getValidationErrors();
+  ).getFormattedValidationErrors();
 
   return errors || null;
 };

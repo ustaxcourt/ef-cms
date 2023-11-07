@@ -8,7 +8,7 @@ describe('ExternalDocumentNonStandardJ', () => {
         scenario: 'Nonstandard J',
       });
 
-      expect(exexternalDocumentJDoc.getValidationErrors()).toEqual({
+      expect(exexternalDocumentJDoc.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
         documentType: 'Select a document type',
         freeText: 'Provide an answer',
@@ -26,7 +26,7 @@ describe('ExternalDocumentNonStandardJ', () => {
         scenario: 'Nonstandard J',
       });
 
-      expect(externalDocumentJ.getValidationErrors()).toEqual(null);
+      expect(externalDocumentJ.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should not be valid when freeText or freeText2 is over 1000 characters', () => {
@@ -39,7 +39,7 @@ describe('ExternalDocumentNonStandardJ', () => {
         scenario: 'Nonstandard J',
       });
 
-      expect(externalDocumentJ.getValidationErrors()).toEqual({
+      expect(externalDocumentJ.getFormattedValidationErrors()).toEqual({
         freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
         freeText2: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
@@ -55,7 +55,7 @@ describe('ExternalDocumentNonStandardJ', () => {
         scenario: 'Nonstandard J',
       });
 
-      expect(externalDocumentJ.getValidationErrors()).toEqual({
+      expect(externalDocumentJ.getFormattedValidationErrors()).toEqual({
         documentTitle:
           'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });

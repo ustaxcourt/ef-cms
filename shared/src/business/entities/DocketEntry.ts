@@ -13,7 +13,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { User } from './User';
 import { WorkItem } from './WorkItem';
 import {
@@ -21,7 +21,7 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
-export class DocketEntry extends JoiValidationEntity_New {
+export class DocketEntry extends JoiValidationEntity {
   public action?: string;
   public additionalInfo?: string;
   public additionalInfo2?: string;

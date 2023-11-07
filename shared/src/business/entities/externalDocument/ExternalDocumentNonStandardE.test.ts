@@ -8,7 +8,7 @@ describe('ExternalDocumentNonStandardE', () => {
         scenario: 'Nonstandard E',
       });
 
-      expect(externalDocumentD.getValidationErrors()).toEqual({
+      expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
         documentType: 'Select a document type',
         trialLocation: 'Select a preferred trial location.',
@@ -26,7 +26,7 @@ describe('ExternalDocumentNonStandardE', () => {
         trialLocation: 'Little Rock, AR',
       });
 
-      expect(externalDocumentD.getValidationErrors()).toEqual(null);
+      expect(externalDocumentD.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
@@ -39,7 +39,7 @@ describe('ExternalDocumentNonStandardE', () => {
         trialLocation: 'Little Rock, AR',
       });
 
-      expect(externalDocumentD.getValidationErrors()).toEqual({
+      expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
         documentTitle:
           'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });

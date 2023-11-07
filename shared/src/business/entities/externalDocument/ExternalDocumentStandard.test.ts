@@ -8,7 +8,7 @@ describe('ExternalDocumentStandard', () => {
         scenario: 'Standard',
       });
 
-      expect(externalDocumentStandard.getValidationErrors()).toEqual({
+      expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
         documentType: 'Select a document type',
       });
@@ -22,7 +22,9 @@ describe('ExternalDocumentStandard', () => {
         scenario: 'Standard',
       });
 
-      expect(externalDocumentStandard.getValidationErrors()).toEqual(null);
+      expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual(
+        null,
+      );
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
@@ -33,7 +35,7 @@ describe('ExternalDocumentStandard', () => {
         scenario: 'Standard',
       });
 
-      expect(externalDocumentStandard.getValidationErrors()).toEqual({
+      expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual({
         documentTitle:
           'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
@@ -48,7 +50,9 @@ describe('ExternalDocumentStandard', () => {
           scenario: 'Standard',
         });
 
-        expect(externalDocumentStandard.getValidationErrors()).toEqual(null);
+        expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual(
+          null,
+        );
       });
 
       describe('Consolidated Case filing to multiple cases', () => {
@@ -61,7 +65,9 @@ describe('ExternalDocumentStandard', () => {
             selectedCases: ['101-19', '102-19'],
           });
 
-          expect(externalDocumentStandard.getValidationErrors()).toEqual({
+          expect(
+            externalDocumentStandard.getFormattedValidationErrors(),
+          ).toEqual({
             documentType:
               'Proposed Stipulated Decision must be filed separately in each case',
           });

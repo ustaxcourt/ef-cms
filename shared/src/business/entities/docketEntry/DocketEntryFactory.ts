@@ -9,10 +9,10 @@ import {
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
 import { ExternalDocumentFactory } from '../externalDocument/ExternalDocumentFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
-export class DocketEntryFactory extends JoiValidationEntity_New {
+export class DocketEntryFactory extends JoiValidationEntity {
   public receivedAt: string;
   public isDocumentRequired: boolean;
   public partyPrivatePractitioner: boolean;

@@ -4,10 +4,10 @@ import {
 } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
-export class PublicDocketEntry extends JoiValidationEntity_New {
+export class PublicDocketEntry extends JoiValidationEntity {
   public additionalInfo?: string;
   public additionalInfo2?: string;
   public attachments?: boolean;

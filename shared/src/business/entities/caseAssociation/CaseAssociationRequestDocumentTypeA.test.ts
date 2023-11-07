@@ -7,7 +7,7 @@ describe('CaseAssociationRequestFactory', () => {
       documentType: 'Notice of Intervention',
     });
 
-    expect(entity.getValidationErrors()!.attachments).toEqual(
+    expect(entity.getFormattedValidationErrors()!.attachments).toEqual(
       'Enter selection for Attachments.',
     );
   });

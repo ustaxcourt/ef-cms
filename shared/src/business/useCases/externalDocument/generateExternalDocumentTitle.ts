@@ -24,7 +24,7 @@ export const generateExternalDocumentTitle = (
   }
 
   const externalDocument = ExternalDocumentFactory(documentMetadata);
-  const errors = externalDocument.getValidationErrors();
+  const errors = externalDocument.getFormattedValidationErrors();
   if (!errors) {
     return externalDocument.getDocumentTitle();
   }
