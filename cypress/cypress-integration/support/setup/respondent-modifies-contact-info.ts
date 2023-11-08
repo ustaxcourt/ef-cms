@@ -1,5 +1,13 @@
-export function respondentModifiesContactInfo(irsUser: string) {
-  cy.login(irsUser, 'user/contact/edit');
+/**
+ * Logs in as a user and modifies their address with a random string
+ *
+ * aliases:
+ *  input: n/a
+ *  output:
+ *    - @contactAddress - the new address which is set on the users contact info
+ */
+export function respondentModifiesContactInfo(userId: string) {
+  cy.login(userId, 'user/contact/edit');
   cy.get('input[name="contact.address1"]').clear();
   const newAddress = 'NEW ADDRESS ' + Date.now();
   cy.get('input[name="contact.address1"]').type(newAddress);

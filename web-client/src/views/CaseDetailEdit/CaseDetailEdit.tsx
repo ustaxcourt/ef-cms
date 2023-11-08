@@ -42,6 +42,7 @@ export const CaseDetailEdit = connect(
         </Tabs>
 
         <Button
+          data-testid="submit-case"
           id="submit-case"
           type="button"
           onClick={() => {
