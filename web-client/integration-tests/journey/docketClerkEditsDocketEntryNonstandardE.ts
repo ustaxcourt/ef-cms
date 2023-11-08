@@ -1,7 +1,4 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { getFormattedDocketEntriesForTest, waitForCondition } from '../helpers';
-
-const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardE = cerebralTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard E scenario', async () => {
@@ -31,7 +28,7 @@ export const docketClerkEditsDocketEntryNonstandardE = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
+      trialLocation: 'Select a preferred trial location.',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
