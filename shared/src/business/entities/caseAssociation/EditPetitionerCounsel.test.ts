@@ -6,8 +6,7 @@ describe('EditPetitionerCounsel', () => {
       const entity = new EditPetitionerCounsel({});
 
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representing:
-          EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES.representing,
+        representing: 'Select a representing party',
       });
     });
 
@@ -25,8 +24,7 @@ describe('EditPetitionerCounsel', () => {
       });
 
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representing:
-          EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES.representing,
+        representing: 'Select a representing party',
       });
     });
   });

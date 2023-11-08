@@ -14,14 +14,9 @@ export class PetitionerConservatorContact extends Contact {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      secondaryName: JoiValidationConstants.STRING.max(500).required(),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      secondaryName: 'Enter name of conservator',
+      secondaryName: JoiValidationConstants.STRING.max(500)
+        .required()
+        .messages({ '*': 'Enter name of conservator' }),
     };
   }
 }
