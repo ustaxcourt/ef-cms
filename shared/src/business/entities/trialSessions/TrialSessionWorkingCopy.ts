@@ -54,10 +54,6 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
     this.userId = rawSession.userId;
   }
 
-  getErrorToMessageMap() {
-    return {};
-  }
-
   getValidationRules() {
     return {
       caseMetadata: joi

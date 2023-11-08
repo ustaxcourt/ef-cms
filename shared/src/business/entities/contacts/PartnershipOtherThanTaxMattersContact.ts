@@ -14,14 +14,9 @@ export class PartnershipOtherThanTaxMattersPrimaryContact extends Contact {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      secondaryName: JoiValidationConstants.STRING.max(500).required(),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      secondaryName: 'Enter name of partner',
+      secondaryName: JoiValidationConstants.STRING.max(500)
+        .required()
+        .messages({ '*': 'Enter name of partner' }),
     };
   }
 }
