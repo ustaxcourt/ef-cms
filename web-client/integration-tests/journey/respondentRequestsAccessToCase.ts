@@ -30,7 +30,6 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
       documentTitleTemplate: 'Select a document',
       documentType: 'Select a document type',
       eventCode: 'Select a document',
-      filers: 'Select a party',
       primaryDocumentFile: 'Upload a document',
       scenario: 'Select a document',
     });
