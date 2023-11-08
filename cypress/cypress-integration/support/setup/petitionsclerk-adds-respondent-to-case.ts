@@ -1,5 +1,10 @@
 /**
- * Logs in as petitionsclerk, finds a case by @docketNumber, and adds a respondent to the case
+ *  Logs in as petitionsclerk, finds a case by @docketNumber, and adds a respondent to the case
+ *
+ * aliases:
+ *  input:
+ *    - @docketNumber - the docket number the respondent should be added to
+ *  output: n/a
  */
 export function petitionsclerkAddsRespondentToCase(barNumber: string) {
   cy.get('@docketNumber').then(docketNumber => {
