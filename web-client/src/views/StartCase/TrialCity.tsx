@@ -60,6 +60,7 @@ export const TrialCity = connect(
         )}
         <select
           className="usa-select"
+          data-testid="preferred-trial-city"
           id="preferred-trial-city"
           name="preferredTrialCity"
           value={value}

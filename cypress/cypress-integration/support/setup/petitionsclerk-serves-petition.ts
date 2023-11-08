@@ -6,10 +6,8 @@
  *    - @docketNumber - the docket number the respondent should be added to
  *  output: n/a
  */
-export function petitionsclerkServePetition() {
-  cy.get('@docketNumber').then(docketNumber => {
-    cy.login('petitionsclerk', `case-detail/${docketNumber}`);
-  });
+export function petitionsclerkServePetition(docketNumber: string) {
+  cy.login('petitionsclerk', `case-detail/${docketNumber}`);
   cy.get('button').contains('Petition').click();
   cy.get('a').contains('Review and Serve Petition').click();
   cy.get('#tab-irs-notice').click();

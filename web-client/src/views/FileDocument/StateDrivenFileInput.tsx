@@ -29,6 +29,7 @@ export const StateDrivenFileInput = connect(
     id,
     updateFormValueSequence,
     validationSequence,
+    ...remainingProps
   }) {
     let inputRef;
 
@@ -37,6 +38,7 @@ export const StateDrivenFileInput = connect(
     return (
       <React.Fragment>
         <input
+          {...remainingProps}
           accept={accept}
           aria-describedby={ariaDescribedBy}
           className="usa-input"

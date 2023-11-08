@@ -174,6 +174,7 @@ export const ContactPrimary = connect(
             <input
               autoCapitalize="none"
               className="usa-input"
+              data-testid="contact-primary-name"
               id="name"
               name="contactPrimary.name"
               type="text"
@@ -247,6 +248,7 @@ export const ContactPrimary = connect(
             <input
               autoCapitalize="none"
               className="usa-input max-width-200"
+              data-testid="phone"
               id="phone"
               name="contactPrimary.phone"
               type="tel"

@@ -58,6 +58,7 @@ export const StartCaseStep1 = connect(
                 'usa-label ustc-upload-stin with-hint',
                 startCaseHelper.showStinFileValid && 'validated',
               )}
+              data-testid="stin-file-label"
               htmlFor="stin-file"
               id="stin-file-label"
             >
@@ -87,6 +88,7 @@ export const StartCaseStep1 = connect(
             </div>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"
+              data-testid="stin-file"
               id="stin-file"
               name="stinFile"
               updateFormValueSequence="updateStartCaseFormValueSequence"
