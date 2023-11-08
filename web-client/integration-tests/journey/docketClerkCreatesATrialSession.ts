@@ -4,7 +4,6 @@ import {
   TRIAL_SESSION_PROCEEDING_TYPES,
   TrialSessionTypes,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
 
 type CreateTrialSessionOverrides = {
   maxCases?: number;
@@ -42,12 +41,12 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      maxCases: TrialSession.VALIDATION_ERROR_MESSAGES.maxCases,
-      sessionType: TrialSession.VALIDATION_ERROR_MESSAGES.sessionType,
-      startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
-      term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
-      termYear: TrialSession.VALIDATION_ERROR_MESSAGES.termYear,
-      trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
+      maxCases: 'Enter a valid number of maximum cases',
+      sessionType: 'Select a session type',
+      startDate: 'Enter a valid start date',
+      term: 'Term session is not valid',
+      termYear: 'Term year is required',
+      trialLocation: 'Select a trial session location',
     });
 
     const createTrialSessionForm = {
@@ -94,9 +93,9 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
-      term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
-      trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
+      startDate: 'Enter a valid start date',
+      term: 'Term session is not valid',
+      trialLocation: 'Select a trial session location',
     });
 
     await cerebralTest.runSequence(
@@ -124,8 +123,7 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      estimatedEndDate:
-        TrialSession.VALIDATION_ERROR_MESSAGES.estimatedEndDate[1],
+      estimatedEndDate: 'Enter a valid estimated end date',
     });
 
     await cerebralTest.runSequence(
