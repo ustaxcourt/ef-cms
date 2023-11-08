@@ -65,9 +65,6 @@ describe('petitions clerk calendars a trial session and verifies the paper pdf l
       cerebralTest.casesReadyForTrial = [cerebralTest.docketNumber];
     });
 
-    // loginAs(cerebralTest, 'docketclerk@example.com');
-    // docketClerkSetsCaseReadyForTrial(cerebralTest);
-
     petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
   });
 

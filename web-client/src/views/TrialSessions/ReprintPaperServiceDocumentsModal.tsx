@@ -24,6 +24,7 @@ export const ReprintPaperServiceDocumentsModal = connect(
         confirmLabel="Done"
         confirmSequence={clearModalSequence}
         message="Select the PDF that you would like to print. It will open in a separate tab and be available for three days after the PDF was originally generated."
+        messageClass=""
         title="Print Paper Service PDF"
       >
         <div data-cy="trial-session-paper-pdf-options">

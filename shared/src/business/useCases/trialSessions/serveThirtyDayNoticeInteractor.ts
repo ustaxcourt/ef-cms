@@ -42,9 +42,6 @@ export const serveThirtyDayNoticeInteractor = async (
       applicationContext,
       trialSessionId,
     });
-  if (!trialSession) {
-    throw new NotFoundError(`No trial session found for ${trialSessionId}`);
-  }
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
