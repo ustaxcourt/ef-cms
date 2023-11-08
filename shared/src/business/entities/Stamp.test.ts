@@ -2,15 +2,13 @@ import { FORMATS, formatNow } from '../utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from './EntityConstants';
 import { Stamp } from './Stamp';
 
-const { VALIDATION_ERROR_MESSAGES } = Stamp;
-
 describe('Stamp entity', () => {
   describe('Validation', () => {
     it('should be invalid when disposition is undefined', () => {
       const stamp = new Stamp({});
 
       expect(stamp.getFormattedValidationErrors()).toMatchObject({
-        disposition: VALIDATION_ERROR_MESSAGES.disposition,
+        disposition: 'Enter a disposition',
       });
     });
 

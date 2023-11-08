@@ -14,14 +14,9 @@ export class PartnershipBBAPrimaryContact extends Contact {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      secondaryName: JoiValidationConstants.STRING.max(500).required(),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      secondaryName: 'Enter partnership representative name',
+      secondaryName: JoiValidationConstants.STRING.max(500)
+        .required()
+        .messages({ '*': 'Enter partnership representative name' }),
     };
   }
 }
