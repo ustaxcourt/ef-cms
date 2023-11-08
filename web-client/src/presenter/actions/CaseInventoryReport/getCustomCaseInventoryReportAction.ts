@@ -32,14 +32,21 @@ export const getCustomCaseInventoryReportAction = async ({
   }
 
   const [startMonth, startDay, startYear] = filterValues.startDate.split('/');
-  const formattedStartDate = applicationContext
-    .getUtilities()
-    .createStartOfDayISO({ day: startDay, month: startMonth, year: startYear });
-  const [month, day, year] = filterValues.endDate.split('/');
 
-  const formattedEndDate = applicationContext
-    .getUtilities()
-    .createEndOfDayISO({ day, month, year });
+  const formattedStartDate = filterValues.startDate
+    ? applicationContext.getUtilities().createStartOfDayISO({
+        day: startDay,
+        month: startMonth,
+        year: startYear,
+      })
+    : undefined;
+
+  const [endMonth, endDay, endYear] = filterValues.endDate.split('/');
+  const formattedEndDate = filterValues.endDate
+    ? applicationContext
+        .getUtilities()
+        .createEndOfDayISO({ day: endDay, month: endMonth, year: endYear })
+    : undefined;
 
   const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
