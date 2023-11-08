@@ -1,6 +1,6 @@
 import { DocketHeader } from '../components/DocketHeader';
 import { PractitionerLabel } from '@shared/business/utilities/pdfGenerator/components/PractitionerLabel';
-import { PrimaryHeader } from '../components/PrimaryHeader';
+import { PrimaryHeaderWithoutSeal } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeaderWithoutSeal';
 import React from 'react';
 
 export const EntryOfAppearance = ({
@@ -34,9 +34,11 @@ export const EntryOfAppearance = ({
   };
 }) => {
   const filersString = joinWithCommasAnd(filers);
+
   return (
     <div id="entry-of-appearance-pdf">
-      <PrimaryHeader />
+      <PrimaryHeaderWithoutSeal />
+
       <DocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
