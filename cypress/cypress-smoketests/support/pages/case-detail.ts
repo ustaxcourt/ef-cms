@@ -117,7 +117,7 @@ export const uploadCourtIssuedDocPdf = () => {
   cy.url().should('contain', '/upload-court-issued');
   cy.get('#upload-description').type('An Uploaded PDF');
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
-  cy.get('[data-cy="upload-file-success"]');
+  cy.get('[data-testid="upload-file-success"]');
 };
 
 export const reviewAndServePetition = () => {

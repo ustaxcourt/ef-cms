@@ -9,26 +9,26 @@ describe('Judge`s chambers stamps an order', () => {
     cy.get('@docketNumber').then(docketNumber => {
       cy.login('docketclerk1', `case-detail/${docketNumber}`);
     });
-    cy.get('[data-test="create-dropdown"]').click();
-    cy.get('[data-test="menu-button-add-paper-filing"').click();
+    cy.get('[data-testid="create-dropdown"]').click();
+    cy.get('[data-testid="menu-button-add-paper-filing"').click();
 
     cy.get('input#date-received-picker').type('11/01/2023');
     cy.get('#document-type .select-react-element__input-container input').type(
       'Motion for Continuance',
     );
     cy.get('#react-select-2-option-0').click({ force: true });
-    cy.get('[data-test="filed-by-option"]').contains('Petitioner').click();
+    cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
 
     cy.get('#upload-mode-upload').click();
     cy.get('input#primaryDocumentFile-file').attachFile(
       '../fixtures/w3-dummy.pdf',
     );
 
-    cy.get('[data-cy="remove-pdf"]');
+    cy.get('[data-testid="remove-pdf"]');
 
-    cy.get('[data-test="save-and-serve"]').click();
+    cy.get('[data-testid="save-and-serve"]').click();
 
-    cy.get('[data-test="confirm"]').click();
+    cy.get('[data-testid="confirm"]').click();
 
     cy.get('.usa-alert').should(
       'contain',
@@ -39,11 +39,11 @@ describe('Judge`s chambers stamps an order', () => {
       cy.login('colvinschambers', `case-detail/${docketNumber}`);
     });
 
-    cy.get('[data-test="document-viewer-link-M006"]').last().click();
+    cy.get('[data-testid="document-viewer-link-M006"]').last().click();
 
-    cy.get('[data-test="apply-stamp"]').click();
+    cy.get('[data-testid="apply-stamp"]').click();
 
-    cy.get('[data-test="status-report-or-stip-decision-due-date"]').click();
+    cy.get('[data-testid="status-report-or-stip-decision-due-date"]').click();
     cy.get('input#due-date-input-statusReportDueDate-picker').type(
       '11/02/2023',
     );
@@ -52,9 +52,9 @@ describe('Judge`s chambers stamps an order', () => {
       '11/02/2023',
     );
 
-    cy.get('[data-test="clear-optional-fields"]').click();
+    cy.get('[data-testid="clear-optional-fields"]').click();
 
-    cy.get('[data-test="status-report-or-stip-decision-due-date"]').click();
+    cy.get('[data-testid="status-report-or-stip-decision-due-date"]').click();
     cy.get('input#due-date-input-statusReportDueDate-picker').should(
       'have.value',
       '',
