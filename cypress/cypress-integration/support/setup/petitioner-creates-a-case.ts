@@ -37,19 +37,4 @@ export function petitionerCreatesACase() {
       cy.getByTestId('button-back-to-dashboard').click();
       return cy.wrap<string>(docketNumberWithSuffix);
     });
-
-  // cy.intercept('POST', '**/cases').as('postCase');
-
-  // cy.getByTestId(`case-link-${docketNumber}`).click()
-  // return cy.wait('@postCase').then(({ response }) => {
-  //   expect(response?.body).to.have.property('docketNumber');
-  //   const docketNumber = response?.body.docketNumber;
-  //   cy.url().should('include', 'file-a-petition/success');
-  //   cy.getByTestId('button-back-to-dashboard').click();
-  //   cy.getByTestId(`case-link-${docketNumber}`).should(
-  //     'contain.text',
-  //     docketNumber,
-  //   );
-  //   return cy.wrap<string>(docketNumber);
-  // });
 }
