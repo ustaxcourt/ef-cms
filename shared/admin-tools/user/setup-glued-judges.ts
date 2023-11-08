@@ -5,15 +5,33 @@ requireEnvVars([
   'ELASTICSEARCH_ENDPOINT',
   'ENV',
 ]);
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DynamoDB } from 'aws-sdk';
+import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  SearchClientResultsType,
+  formatResults,
+} from '@web-api/persistence/elasticsearch/searchClient';
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { getUserPoolId } from '../util';
-import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-const dynamo = new DynamoDB({ region: 'us-east-1' });
+const dynamoClient = new DynamoDBClient({
+  region: 'us-east-1',
+});
+const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
+const esClient = new Client({
+  ...AwsSigv4Signer({
+    getCredentials: () => {
+      const credentialsProvider = defaultProvider();
+      return credentialsProvider();
+    },
+    region: 'us-east-1',
+  }),
+  node: `https://${elasticsearchEndpoint}:443`,
+});
 
 const createOrUpdateCognitoUser = async ({
   email,
@@ -105,13 +123,12 @@ const deleteDuplicateImportedJudgeUser = async ({
     pk: { S: `section|${section}` },
     sk: { S: `user|${bulkImportedUserId}` },
   };
+  const deleteMappingItemCommand = new DeleteItemCommand({
+    Key: sectionMappingKey,
+    TableName,
+  });
   try {
-    await dynamo
-      .deleteItem({
-        Key: sectionMappingKey,
-        TableName,
-      })
-      .promise();
+    await dynamoClient.send(deleteMappingItemCommand);
   } catch (err) {
     console.error(
       `ERROR deleting duplicate chambers section mapping for ${name}:`,
@@ -123,22 +140,19 @@ const deleteDuplicateImportedJudgeUser = async ({
     pk: { S: `user|${bulkImportedUserId}` },
     sk: { S: `user|${bulkImportedUserId}` },
   };
+  const deleteUserItemCommand = new DeleteItemCommand({
+    Key: userKey,
+    TableName,
+  });
   try {
-    await dynamo
-      .deleteItem({
-        Key: userKey,
-        TableName,
-      })
-      .promise();
+    await dynamoClient.send(deleteUserItemCommand);
   } catch (err) {
     console.error(`ERROR deleting duplicate ${name}:`, err);
   }
   console.log(`Deleted duplicate ${name}`);
 };
 
-const getJudgeUsersByName = async (
-  applicationContext: IApplicationContext,
-): Promise<{
+const getJudgeUsersByName = async (): Promise<{
   [key: string]: {
     bulkImportedUserId?: string;
     email: string;
@@ -148,31 +162,29 @@ const getJudgeUsersByName = async (
     section: string;
   };
 }> => {
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        from: 0,
-        query: {
-          bool: {
-            filter: [
-              {
-                terms: {
-                  'role.S': ['judge', 'legacyJudge'],
-                },
+  const queryResults = await esClient.search({
+    body: {
+      from: 0,
+      query: {
+        bool: {
+          filter: [
+            {
+              terms: {
+                'role.S': ['judge', 'legacyJudge'],
               },
-            ],
-          },
+            },
+          ],
         },
-        size: MAX_ELASTICSEARCH_PAGINATION,
       },
-      index: 'efcms-user',
+      size: MAX_ELASTICSEARCH_PAGINATION,
     },
+    index: 'efcms-user',
   });
+  const { results }: SearchClientResultsType = formatResults(queryResults.body);
 
   let judgeUsers = {};
   for (const judge of results) {
-    const emailDomain = judge.email.split('@')[1];
+    const emailDomain = (judge as any).email.split('@')[1];
     if (!(judge.name in judgeUsers)) {
       judgeUsers[judge.name] = {
         email: `${
@@ -227,10 +239,8 @@ const updateCognitoUserId = async ({
 };
 
 (async () => {
-  const applicationContext = createApplicationContext({});
   const userPoolId = await getUserPoolId();
-
-  const judgeUsers = await getJudgeUsersByName(applicationContext);
+  const judgeUsers = await getJudgeUsersByName();
 
   for (const judge in judgeUsers) {
     if (!judgeUsers[judge].gluedUserId) {
