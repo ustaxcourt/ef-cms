@@ -96,6 +96,7 @@ export const StartCaseStep1 = connect(
         </div>
 
         <Button
+          data-testid="complete-step-1"
           id="submit-case"
           onClick={() => {
             completeStartCaseWizardStepSequence({ nextStep: 2 });

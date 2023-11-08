@@ -247,6 +247,7 @@ export const StartCaseStep5 = connect(
 
         <div className="margin-top-5">
           <Button
+            data-testid="file-petition"
             id="submit-case"
             onClick={() => {
               submitFilePetitionSequence();
