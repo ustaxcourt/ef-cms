@@ -14,15 +14,10 @@ export class PetitionerDeceasedSpouseContact extends Contact {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      inCareOf: JoiValidationConstants.STRING.max(100).required(),
+      inCareOf: JoiValidationConstants.STRING.max(100)
+        .required()
+        .messages({ '*': 'Enter name for in care of' }),
       phone: JoiValidationConstants.STRING.max(100).optional().allow(null),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      inCareOf: 'Enter name for in care of',
     };
   }
 }

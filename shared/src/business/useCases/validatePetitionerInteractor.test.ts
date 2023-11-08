@@ -3,7 +3,6 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { Contact } from '../entities/contacts/Contact';
 import { Petitioner } from '../entities/contacts/Petitioner';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validatePetitionerInteractor } from './validatePetitionerInteractor';
@@ -69,7 +68,7 @@ describe('validatePetitionerInteractor', () => {
 
     expect(errors).toEqual({
       confirmEmail: 'Enter a valid email address',
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
+      postalCode: 'Enter ZIP code',
       serviceIndicator: Petitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator,
     });
   });
@@ -88,7 +87,7 @@ describe('validatePetitionerInteractor', () => {
 
     expect(errors).toEqual({
       confirmEmail: 'Enter a valid email address',
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
+      postalCode: 'Enter ZIP code',
     });
   });
 
@@ -108,7 +107,7 @@ describe('validatePetitionerInteractor', () => {
     expect(errors).toEqual({
       confirmEmail: 'Email addresses do not match',
       email: 'Enter a valid email address',
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
+      postalCode: 'Enter ZIP code',
     });
   });
 
