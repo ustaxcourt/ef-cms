@@ -32,7 +32,7 @@ export type CustomCaseProcedureTypes =
 export class CustomCaseInventorySearch extends JoiValidationEntity {
   public caseStatuses: CaseStatus[];
   public caseTypes: CaseType[];
-  public endDate: string;
+  public endDate?: string;
   public filingMethod: CustomCaseFilingMethods;
   public highPriority: boolean;
   public judges: string[];
@@ -43,7 +43,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     receivedAt: number;
     pk: string;
   };
-  public startDate: string;
+  public startDate?: string;
 
   constructor(rawProps) {
     super('CustomCaseInventorySearch');
@@ -64,7 +64,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     return {
       caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
       caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
-      endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate,
+      endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate.optional(),
       filingMethod: joi
         .string()
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
@@ -84,7 +84,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
           receivedAt: joi.number().required(),
         })
         .required(),
-      startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
+      startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate.optional(),
     };
   }
 }

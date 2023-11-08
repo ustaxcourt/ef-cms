@@ -448,7 +448,7 @@ export const CustomCaseReport = connect(
             </label>
           </div>
           <Button
-            disabled={customCaseInventoryReportHelper.runReportButtonIsDisabled}
+            // disabled={customCaseInventoryReportHelper.runReportButtonIsDisabled}
             id="run-custom-case-report"
             tooltip="Run Report"
             onClick={() => {
