@@ -86,7 +86,7 @@ export const PaperFiling = connect(
                 <div className="margin-top-5">
                   {paperDocketEntryHelper.canAllowDocumentServiceForCase && (
                     <Button
-                      id="save-and-serve"
+                      data-test="save-and-serve"
                       type="submit"
                       onClick={() => {
                         openConfirmPaperServiceModalSequence();
