@@ -275,7 +275,7 @@ export const ScanBatchPreviewer = connect(
             <Button
               link
               className="red-warning push-right margin-bottom-1 padding-top-0"
-              data-cy="remove-pdf"
+              data-testid="remove-pdf"
               onClick={() => {
                 openConfirmDeletePDFModalSequence();
               }}
