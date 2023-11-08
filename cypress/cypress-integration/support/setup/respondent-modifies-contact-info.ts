@@ -14,5 +14,5 @@ export function respondentModifiesContactInfo(userId: string) {
   cy.get('button').contains('Save').click();
   cy.get('#progress-description').should('exist');
   cy.get('#progress-description').should('not.exist');
-  cy.wrap(newAddress).as('contactAddress');
+  return cy.wrap(newAddress);
 }
