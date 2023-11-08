@@ -6,7 +6,7 @@
  *    - @docketNumber - the docket number the respondent should be added to
  *  output: n/a
  */
-export function petitionsclerkServePetition() {
+export function petitionsClerkServesPetition() {
   cy.get('@docketNumber').then(docketNumber => {
     cy.login('petitionsclerk', `case-detail/${docketNumber}`);
   });
