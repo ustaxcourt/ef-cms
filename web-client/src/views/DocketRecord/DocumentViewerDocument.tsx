@@ -170,6 +170,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showApplyStampButton && (
                 <Button
                   link
+                  data-test="apply-stamp"
                   icon="stamp"
                   onClick={() => {
                     navigateToPathAndSetRedirectUrlSequence({

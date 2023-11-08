@@ -338,8 +338,8 @@ export const ApplyStamp = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-test="status-report-or-stip-decision-due-date"
                         htmlFor="dueDateMessage-statusReportOrStipDecisionDueDate"
-                        id="dueDateMessage-statusReportOrStipDecisionDueDate-label"
                       >
                         The parties shall file a status report or proposed
                         stipulated decision by:
@@ -404,7 +404,7 @@ export const ApplyStamp = connect(
                   <Button
                     link
                     className="margin-left-205"
-                    id="clear-optional-fields"
+                    data-test="clear-optional-fields"
                     onClick={e => {
                       e.preventDefault();
                       clearOptionalFieldsStampFormSequence();
