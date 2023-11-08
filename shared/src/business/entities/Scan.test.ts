@@ -2,8 +2,6 @@ import { Batch } from './Batch';
 import { Scan } from './Scan';
 import { applicationContext } from '../test/createTestApplicationContext';
 
-const { VALIDATION_ERROR_MESSAGES } = Scan;
-
 describe('Scan entity', () => {
   it('adds a Batch entity to the Scan entity', () => {
     const scan = new Scan({
@@ -88,7 +86,7 @@ describe('Scan entity', () => {
       });
 
       expect(scan.getFormattedValidationErrors()).toMatchObject({
-        batches: VALIDATION_ERROR_MESSAGES.batches,
+        batches: 'At least one batch is required',
       });
     });
   });

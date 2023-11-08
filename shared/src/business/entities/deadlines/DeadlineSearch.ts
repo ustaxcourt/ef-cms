@@ -26,7 +26,15 @@ export class DeadlineSearch extends JoiValidationEntity {
       .required()
       .description(
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
-      ),
+      )
+      .messages({
+        '*': 'Enter a valid end date',
+        'any.ref':
+          'End date cannot be prior to Start Date. Enter a valid End date.',
+        'any.required': 'Enter an End date.',
+        'date.min':
+          'End date cannot be prior to Start Date. Enter a valid End date.',
+      }),
     startDate: joi
       .date()
       .iso()
@@ -34,37 +42,15 @@ export class DeadlineSearch extends JoiValidationEntity {
       .required()
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-      ),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = {
-    endDate: [
-      {
-        contains: 'ref:startDate',
-        message:
-          'End date cannot be prior to Start Date. Enter a valid End date.',
-      },
-      {
-        contains: 'is required',
-        message: 'Enter an End date.',
-      },
-      'Enter a valid end date',
-    ],
-    startDate: [
-      {
-        contains: 'is required',
-        message: 'Enter a Start date.',
-      },
-      'Enter a valid start date',
-    ],
+      )
+      .messages({
+        '*': 'Enter a valid start date',
+        'any.required': 'Enter a Start date.',
+      }),
   };
 
   getValidationRules() {
     return DeadlineSearch.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return DeadlineSearch.VALIDATION_ERROR_MESSAGES;
   }
 }
 
