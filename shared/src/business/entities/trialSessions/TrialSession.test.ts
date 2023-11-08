@@ -251,7 +251,7 @@ describe('TrialSession entity', () => {
 
         expect(trialSession.isValid()).toBe(false);
         expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-          proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
+          proceedingType: 'Enter a valid proceeding type',
         });
       });
 
@@ -311,7 +311,7 @@ describe('TrialSession entity', () => {
 
         expect(trialSession.isValid()).toBe(false);
         expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-          proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
+          proceedingType: 'Enter a valid proceeding type',
         });
       });
     });
@@ -584,8 +584,7 @@ describe('TrialSession entity', () => {
 
       expect(() => trialSession.validate()).toThrow();
       expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-        estimatedEndDate:
-          TrialSession.VALIDATION_ERROR_MESSAGES.estimatedEndDate[0].message,
+        estimatedEndDate: 'Enter a valid estimated end date',
       });
     });
 
