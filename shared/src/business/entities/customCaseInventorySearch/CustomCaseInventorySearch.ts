@@ -4,7 +4,7 @@ import {
   CaseStatus,
   CaseType,
 } from '../EntityConstants';
-import { DATE_RANGE_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
+import { DATE_RANGE_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
@@ -60,36 +60,6 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     this.startDate = rawProps.startDate;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    endDate: [
-      {
-        contains: 'ref:startDate',
-        message:
-          'End date cannot be prior to start date. Enter a valid end date.',
-      },
-      {
-        contains: 'must be less than or equal to',
-        message: 'End date cannot be in the future. Enter a valid date.',
-      },
-      {
-        contains: 'is required',
-        message: 'Enter an end date.',
-      },
-      'Enter a valid end date.',
-    ],
-    startDate: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Start date cannot be in the future. Enter a valid date.',
-      },
-      {
-        contains: 'is required',
-        message: 'Enter a start date.',
-      },
-      'Enter a valid start date.',
-    ],
-  };
-
   getValidationRules() {
     return {
       caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
@@ -116,9 +86,5 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         .required(),
       startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
     };
-  }
-
-  getErrorToMessageMap() {
-    return CustomCaseInventorySearch.VALIDATION_ERROR_MESSAGES;
   }
 }
