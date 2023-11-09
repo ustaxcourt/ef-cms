@@ -1,6 +1,7 @@
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { ROLES } from './EntityConstants';
-import { User } from './User';
+import joi from 'joi';
 
 export class PublicUser extends JoiValidationEntity {
   public name: string;
@@ -18,13 +19,26 @@ export class PublicUser extends JoiValidationEntity {
     }
   }
 
-  getErrorToMessageMap() {
-    return {
-      role: 'Role is required',
-    } as any;
-  }
+  static VALIDATION_RULES = {
+    judgeFullName: JoiValidationConstants.STRING.max(100).when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
+    judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({ '*': 'Enter name' }),
+    role: JoiValidationConstants.STRING.valid(...Object.values(ROLES))
+      .required()
+      .messages({ '*': 'Role is required' }),
+  };
 
   getValidationRules() {
-    return User.VALIDATION_RULES as any;
+    return PublicUser.VALIDATION_RULES;
   }
 }

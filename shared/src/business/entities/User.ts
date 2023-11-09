@@ -119,6 +119,20 @@ export class User extends JoiValidationEntity {
   };
 
   static VALIDATION_RULES = {
+    contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
+    email: JoiValidationConstants.EMAIL.optional(),
+    entityName: JoiValidationConstants.STRING.valid('User').required(),
+    isSeniorJudge: joi.when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.boolean().required(),
+    }),
+    isUpdatingInformation: joi
+      .boolean()
+      .optional()
+      .description(
+        'Whether the contact information for the user is being updated.',
+      ),
     judgeFullName: JoiValidationConstants.STRING.max(100).when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),
@@ -132,9 +146,15 @@ export class User extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter name' }),
+    pendingEmail: JoiValidationConstants.EMAIL.allow(null).optional(),
+    pendingEmailVerificationToken:
+      JoiValidationConstants.UUID.allow(null).optional(),
     role: JoiValidationConstants.STRING.valid(
       ...Object.values(ROLES),
     ).required(),
+    section: JoiValidationConstants.STRING.optional(),
+    token: JoiValidationConstants.STRING.optional(),
+    userId: JoiValidationConstants.UUID.required(),
   };
 
   isChambersUser(): boolean {
@@ -180,29 +200,7 @@ export class User extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    return {
-      ...User.VALIDATION_RULES,
-      contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
-      email: JoiValidationConstants.EMAIL.optional(),
-      entityName: JoiValidationConstants.STRING.valid('User').required(),
-      isSeniorJudge: joi.when('role', {
-        is: ROLES.judge,
-        otherwise: joi.optional().allow(null),
-        then: joi.boolean().required(),
-      }),
-      isUpdatingInformation: joi
-        .boolean()
-        .optional()
-        .description(
-          'Whether the contact information for the user is being updated.',
-        ),
-      pendingEmail: JoiValidationConstants.EMAIL.allow(null).optional(),
-      pendingEmailVerificationToken:
-        JoiValidationConstants.UUID.allow(null).optional(),
-      section: JoiValidationConstants.STRING.optional(),
-      token: JoiValidationConstants.STRING.optional(),
-      userId: JoiValidationConstants.UUID.required(),
-    };
+    return User.VALIDATION_RULES;
   }
 }
 

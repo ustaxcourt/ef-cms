@@ -1,5 +1,6 @@
 import { IrsPractitioner } from '../entities/IrsPractitioner';
 import { PETITIONS_SECTION, ROLES } from '../entities/EntityConstants';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -138,7 +139,7 @@ describe('getUserInteractor', () => {
       admissionsStatus: 'Active',
       birthYear: '1976',
       employer: 'IRS',
-      entityName: IrsPractitioner.ENTITY_NAME,
+      entityName: Practitioner.ENTITY_NAME,
       firstName: 'Bob',
       lastName: 'Ross',
       name: 'Bob Ross',
