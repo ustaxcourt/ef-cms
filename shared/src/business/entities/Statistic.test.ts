@@ -141,9 +141,7 @@ describe('Statistic', () => {
 
       expect(statistic.isValid()).toBeFalsy();
       expect(statistic.getFormattedValidationErrors()).toMatchObject({
-        lastDateOfPeriod: (
-          Statistic.VALIDATION_ERROR_MESSAGES.lastDateOfPeriod[0] as any
-        ).message,
+        lastDateOfPeriod: 'Enter valid last date of period',
       });
     });
 
