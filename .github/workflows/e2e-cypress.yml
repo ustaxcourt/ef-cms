@@ -49,7 +49,7 @@ jobs:
           start: |
             mkdir -p /tmp/cypress/
             npm run start:all:ci
-            ./wait-until-services.sh
+            npm run wait-for-all-services
 
       # - name: Store Cypress Failure Videos
       #   if: always()
