@@ -15,9 +15,11 @@ import { queryFull } from '../../dynamodbClientService';
 export const getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
+  includeConsolidatedCases = true,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
+  includeConsolidatedCases?: boolean;
 }): Promise<RawCase> => {
   const caseItems = await queryFull({
     ExpressionAttributeNames: {
@@ -34,7 +36,7 @@ export const getCaseByDocketNumber = async ({
     isCaseItem(caseItem),
   )?.leadDocketNumber;
   let consolidatedCases: RawConsolidatedCaseSummary[] = [];
-  if (leadDocketNumber) {
+  if (leadDocketNumber && includeConsolidatedCases) {
     const consolidatedCaseItems = await queryFull<
       IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
     >({

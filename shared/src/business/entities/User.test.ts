@@ -257,7 +257,7 @@ describe('User entity', () => {
       });
 
       expect(user.isValid()).toBeFalsy();
-      expect(user.getValidationErrors()).toEqual({
+      expect(user.getFormattedValidationErrors()).toEqual({
         pendingEmailVerificationToken: expect.anything(),
       });
     });
@@ -271,7 +271,7 @@ describe('User entity', () => {
         role: ROLES.irsPractitioner,
       });
       expect(user.isValid()).toBeFalsy();
-      expect(user.getValidationErrors()).toEqual({
+      expect(user.getFormattedValidationErrors()).toEqual({
         address1: 'Enter mailing address',
         city: 'Enter city',
         countryType: 'Enter country type',

@@ -14,5 +14,5 @@ export const validateAddPractitionerInteractor = (
 ) => {
   return new NewPractitioner(practitioner, {
     applicationContext,
-  }).getValidationErrors();
+  }).getFormattedValidationErrors();
 };
