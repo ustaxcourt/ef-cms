@@ -88,7 +88,6 @@ import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequen
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createMessageSequence } from './sequences/createMessageSequence';
-import { createNewAccountLocalSequence } from './sequences/createNewAccountLocalSequence';
 import { deleteCalendarNoteSequence } from './sequences/deleteCalendarNoteSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
@@ -123,7 +122,7 @@ import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryRepo
 import { getCustomCaseInventoryReportSequence } from './sequences/getCustomCaseInventoryReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
-import { goToCreateAccountLocalSequence } from './sequences/goToCreateAccountLocalSequence';
+import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDeficiencyStatisticsSequence } from './sequences/gotoAddDeficiencyStatisticsSequence';
@@ -634,7 +633,6 @@ export const presenterSequences = {
   countryTypeUserContactChangeSequence,
   createCaseDeadlineSequence,
   createMessageSequence,
-  createNewAccountLocalSequence,
   deleteCalendarNoteSequence,
   deleteCaseDeadlineSequence,
   deleteCaseNoteSequence,
@@ -668,7 +666,7 @@ export const presenterSequences = {
   getCustomCaseInventoryReportSequence,
   getUsersInSectionSequence,
   goToApplyStampSequence,
-  goToCreateAccountLocalSequence,
+  goToCreatePetitionerAccountSequence,
   gotoAccessibilityStatementSequence,
   gotoAddCourtIssuedDocketEntrySequence,
   gotoAddDeficiencyStatisticsSequence,
@@ -1118,8 +1116,11 @@ export const presenter = {
 export type Sequences = typeof presenterSequences;
 
 declare global {
-  type ActionProps<Props = any> = {
-    applicationContext: ClientApplicationContext;
+  type ActionProps<
+    Props = any,
+    ApplicationContext = ClientApplicationContext,
+  > = {
+    applicationContext: ApplicationContext;
     get: <T>(slice: T) => T;
     store: {
       set: (key: any, value: any) => void;

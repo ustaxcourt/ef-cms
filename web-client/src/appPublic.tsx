@@ -33,6 +33,9 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 // Icons - Regular
 import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
+import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { isFunction, mapValues } from 'lodash';
@@ -70,6 +73,9 @@ const appPublic = {
       faTimesCircle,
       faInfoCircle,
       faCheckCircle,
+      faExclamation,
+      faExclamationCircle,
+      faExclamationTriangle,
       faChevronUp,
       faEnvelopeSolid,
       faPhone,
@@ -81,6 +87,8 @@ const appPublic = {
 
     presenter.providers.applicationContext = applicationContext;
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+    presenter.state.cognitoRequestPasswordResetUrl =
+      applicationContext.getCognitoRequestPasswordResetUrl();
 
     presenter.state.constants = applicationContext.getConstants();
 

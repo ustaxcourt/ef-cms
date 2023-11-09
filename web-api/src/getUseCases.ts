@@ -21,6 +21,7 @@ import { changePasswordLocalInteractor } from '../../shared/src/business/useCase
 import { checkEmailAvailabilityInteractor } from '../../shared/src/business/useCases/users/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from '../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor';
+import { cognitoResendVerificationLinkInteractor } from '@shared/business/useCases/public/cognitoResendVerificationLinkInteractor';
 import { completeDocketEntryQCInteractor } from '../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor';
 import { completeMessageInteractor } from '../../shared/src/business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/business/useCases/workitems/completeWorkItemInteractor';
@@ -34,8 +35,8 @@ import { createPetitionerAccountInteractor } from '../../shared/src/business/use
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
 import { createPractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor';
+import { createUserCognitoInteractor } from '../../shared/src/business/useCases/users/createUserCognitoInteractor';
 import { createUserInteractor } from '../../shared/src/business/useCases/users/createUserInteractor';
-import { createUserInteractorLocal } from '../../shared/src/business/useCases/users/createUserInteractorLocal';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
@@ -229,6 +230,7 @@ const useCases = {
   checkEmailAvailabilityInteractor,
   checkForReadyForTrialCasesInteractor,
   closeTrialSessionInteractor,
+  cognitoResendVerificationLinkInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
@@ -242,8 +244,8 @@ const useCases = {
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
+  createUserCognitoInteractor,
   createUserInteractor,
-  createUserInteractorLocal,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
