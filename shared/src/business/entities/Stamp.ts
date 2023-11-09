@@ -9,7 +9,7 @@ import {
   STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
 const todayFormatted = formatDateString(
@@ -46,21 +46,10 @@ export class Stamp extends JoiValidationEntity {
     this.customText = rawStamp.customText;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    date: [
-      {
-        contains: 'must be greater than or equal to',
-        message: 'Due date cannot be prior to today. Enter a valid date.',
-      },
-      'Enter a valid date',
-    ],
-    disposition: 'Enter a disposition',
-  };
-
-  getValidationRules() {
-    return {
-      customText: JoiValidationConstants.STRING.max(60).optional().allow(''),
-      date: joi.when('dueDateMessage', {
+  static VALIDATION_RULES = joi.object().keys({
+    customText: JoiValidationConstants.STRING.max(60).optional().allow(''),
+    date: joi
+      .when('dueDateMessage', {
         is: joi.exist().not(null),
         otherwise: joi.optional().allow(null),
         then: JoiValidationConstants.ISO_DATE.min(todayFormatted)
@@ -68,25 +57,30 @@ export class Stamp extends JoiValidationEntity {
           .description(
             'The due date of the status report (or proposed stipulated decision) filing',
           ),
+      })
+      .messages({
+        '*': 'Enter a valid date',
+        'date.min': 'Due date cannot be prior to today. Enter a valid date.',
       }),
-      deniedAsMoot: joi.boolean().optional().allow(null),
-      deniedWithoutPrejudice: joi.boolean().optional().allow(null),
-      disposition: JoiValidationConstants.STRING.valid(
-        ...Object.values(MOTION_DISPOSITIONS),
-      ).required(),
-      dueDateMessage: joi.optional().allow(null),
-      jurisdictionalOption: JoiValidationConstants.STRING.valid(
-        ...Object.values(JURISDICTIONAL_OPTIONS),
-      ),
-      strickenFromTrialSession: JoiValidationConstants.STRING.valid(
-        STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
-      )
-        .optional()
-        .allow(null),
-    };
-  }
+    deniedAsMoot: joi.boolean().optional().allow(null),
+    deniedWithoutPrejudice: joi.boolean().optional().allow(null),
+    disposition: JoiValidationConstants.STRING.valid(
+      ...Object.values(MOTION_DISPOSITIONS),
+    )
+      .required()
+      .messages({ '*': 'Enter a disposition' }),
+    dueDateMessage: joi.optional().allow(null),
+    jurisdictionalOption: JoiValidationConstants.STRING.valid(
+      ...Object.values(JURISDICTIONAL_OPTIONS),
+    ),
+    strickenFromTrialSession: JoiValidationConstants.STRING.valid(
+      STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
+    )
+      .optional()
+      .allow(null),
+  });
 
-  getErrorToMessageMap() {
-    return Stamp.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return Stamp.VALIDATION_RULES;
   }
 }
