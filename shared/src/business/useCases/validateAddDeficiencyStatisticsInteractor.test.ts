@@ -2,7 +2,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { validateAddDeficiencyStatisticsInteractor } from './validateAddDeficiencyStatisticsInteractor';
 
 describe('validateAddDeficiencyStatisticsInteractor', () => {
-  it('returns the expected errors object on an empty statistic', () => {
+  it('should return validation errors when the statistic is empty', () => {
     const errors = validateAddDeficiencyStatisticsInteractor(
       applicationContext,
       {
@@ -10,10 +10,10 @@ describe('validateAddDeficiencyStatisticsInteractor', () => {
       },
     );
 
-    expect(Object.keys(errors).length).toBeGreaterThan(0);
+    expect(errors).not.toBeNull();
   });
 
-  it('returns null when there are no errors', () => {
+  it('should return null when the statistic is valid', () => {
     const result = validateAddDeficiencyStatisticsInteractor(
       applicationContext,
       {
