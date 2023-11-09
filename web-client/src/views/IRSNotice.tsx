@@ -90,6 +90,7 @@ export const IRSNotice = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid="has-irs-verified-notice-no"
                 htmlFor="hasVerifiedIrsNotice-no"
                 id="has-irs-verified-notice-no"
               >
