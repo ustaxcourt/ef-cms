@@ -10,32 +10,6 @@ describe('CustomCaseInventorySearch', () => {
   const today = createISODateString();
 
   describe('Start and End Date', () => {
-    it('should have validation errors when start date is not provided', () => {
-      const customCaseInventorySearch = new CustomCaseInventorySearch({
-        endDate: today,
-        startDate: undefined,
-      });
-
-      expect(
-        customCaseInventorySearch.getFormattedValidationErrors(),
-      ).toMatchObject({
-        startDate: 'Enter a start date.',
-      });
-    });
-
-    it('should have validation errors when end date is not provided', () => {
-      const customCaseInventorySearch = new CustomCaseInventorySearch({
-        endDate: undefined,
-        startDate: today,
-      });
-
-      expect(
-        customCaseInventorySearch.getFormattedValidationErrors(),
-      ).toMatchObject({
-        endDate: 'Enter an end date.',
-      });
-    });
-
     it('should have validation errors when the end date provided is chronologically before a valid start date', () => {
       const customCaseInventorySearch = new CustomCaseInventorySearch({
         endDate: mockPastDate,
@@ -60,8 +34,34 @@ describe('CustomCaseInventorySearch', () => {
       expect(
         customCaseInventorySearch.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate: 'Enter an end date.',
         startDate: 'Start date cannot be in the future. Enter a valid date.',
+      });
+    });
+
+    it('should have validation errors when the end date provided is in the future and the start date is not submitted', () => {
+      const customCaseInventorySearch = new CustomCaseInventorySearch({
+        endDate: mockFutureDate,
+        startDate: undefined,
+      });
+
+      expect(
+        customCaseInventorySearch.getFormattedValidationErrors(),
+      ).toMatchObject({
+        endDate: 'End date cannot be in the future. Enter a valid date.',
+      });
+    });
+
+    it('should have validation errors when the start date or end date provided is invalid', () => {
+      const customCaseInventorySearch = new CustomCaseInventorySearch({
+        endDate: 'McDonalds',
+        startDate: 'Ring Toss',
+      });
+
+      expect(
+        customCaseInventorySearch.getFormattedValidationErrors(),
+      ).toMatchObject({
+        endDate: 'Enter a valid end date.',
+        startDate: 'Enter a valid start date.',
       });
     });
   });

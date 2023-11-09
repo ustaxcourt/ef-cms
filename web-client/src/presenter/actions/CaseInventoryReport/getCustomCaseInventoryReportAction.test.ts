@@ -157,9 +157,8 @@ describe('getCustomCaseInventoryReportAction', () => {
   it('should not format the start or end date if they have not been selected', async () => {
     filterValues.startDate = '';
     filterValues.endDate = '';
-
-    expectedRequest.startDate = '';
-    expectedRequest.endDate = '';
+    expectedRequest.startDate = undefined;
+    expectedRequest.endDate = undefined;
 
     await runAction(getCustomCaseInventoryReportAction, {
       modules: {

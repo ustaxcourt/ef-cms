@@ -16,8 +16,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export type CustomCaseInventoryReportFilters = {
   caseStatuses: CaseStatus[];
   caseTypes: CaseType[];
-  endDate: string;
-  startDate: string;
+  endDate?: string;
+  startDate?: string;
   filingMethod: CustomCaseFilingMethods;
   preferredTrialCities: string[];
   highPriority?: boolean;
