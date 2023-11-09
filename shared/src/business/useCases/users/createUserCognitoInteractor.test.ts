@@ -80,7 +80,7 @@ describe('createUserCognitoInteractor', () => {
     expect(applicationContext.getCognito().signUp).not.toHaveBeenCalled();
   });
 
-  it('should return an error if email already exists in system', async () => {
+  it('should return an error if email already exists in system and it is confirmed', async () => {
     applicationContext.getCognito().listUsers.mockReturnValueOnce({
       promise: () => {
         return {
@@ -90,6 +90,7 @@ describe('createUserCognitoInteractor', () => {
               Enabled: true,
               UserCreateDate: '2023-10-27T15:18:37.000Z',
               UserLastModifiedDate: '2023-10-27T15:18:37.000Z',
+              UserStatus: 'CONFIRMED',
               Username: email,
             },
           ],
@@ -101,7 +102,34 @@ describe('createUserCognitoInteractor', () => {
       createUserCognitoInteractor(applicationContext, {
         user,
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrow('User already exists');
+
+    expect(applicationContext.getCognito().signUp).not.toHaveBeenCalled();
+  });
+
+  it('should return an error if email already exists in system and it is "UNCONFIRMED"', async () => {
+    applicationContext.getCognito().listUsers.mockReturnValueOnce({
+      promise: () => {
+        return {
+          Users: [
+            {
+              Attributes: [],
+              Enabled: true,
+              UserCreateDate: '2023-10-27T15:18:37.000Z',
+              UserLastModifiedDate: '2023-10-27T15:18:37.000Z',
+              UserStatus: 'UNCONFIRMED',
+              Username: email,
+            },
+          ],
+        };
+      },
+    });
+
+    await expect(
+      createUserCognitoInteractor(applicationContext, {
+        user,
+      }),
+    ).rejects.toThrow('User exists, email unconfirmed');
 
     expect(applicationContext.getCognito().signUp).not.toHaveBeenCalled();
   });
