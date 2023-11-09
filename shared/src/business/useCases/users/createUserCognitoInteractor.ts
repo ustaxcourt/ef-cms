@@ -23,14 +23,15 @@ export const createUserCognitoInteractor = async (
   );
 
   if (existingUsers.length) {
-    if (
-      existingUsers.some(
-        existingUser => existingUser.UserStatus === 'UNCONFIRMED',
-      )
-    ) {
-      throw new Error('User exists, email unconfirmed');
-    }
-    throw new Error('User already exists');
+    const accountUnconfirmed = existingUsers.some(
+      acct => acct.UserStatus === 'UNCONFIRMED',
+    );
+
+    const errorMessage = accountUnconfirmed
+      ? 'User exists, email unconfirmed'
+      : 'User already exists';
+
+    throw new Error(errorMessage);
   }
 
   const newUser = new NewPetitionerUser(user).validate().toRawObject();
