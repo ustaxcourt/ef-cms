@@ -48,8 +48,8 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getEligibleCasesForTrialSession.mockReturnValue([MOCK_ELIGIBLE_CASE]);
     applicationContext
-      .getUseCases()
-      .getCalendaredCasesForTrialSessionInteractor.mockImplementation(() => [
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockImplementation(() => [
         MOCK_ASSOCIATED_CASE,
       ]);
   });

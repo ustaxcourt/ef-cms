@@ -1,24 +1,28 @@
-import { CASE_TYPES, DOCKET_NUMBER_SUFFIXES } from '../EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CaseStatus,
+  DOCKET_NUMBER_SUFFIXES,
+} from '../EntityConstants';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { setPretrialMemorandumFiler } from '../../utilities/getFormattedTrialSessionDetails';
 import joi from 'joi';
 
-export class EligibleCase extends JoiValidationEntity {
+export class CalendaredCase extends JoiValidationEntity {
   public caseCaption?: string;
-  public caseType: string;
   public docketNumber: string;
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix?: string;
-  public highPriority?: boolean;
-  public leadDocketNumber?: string;
   public irsPractitioners?: IrsPractitioner[];
+  public leadDocketNumber?: string;
+  public PMTServedPartiesCode?: string;
   public privatePractitioners?: PrivatePractitioner[];
-  public qcCompleteForTrial?: Record<string, any>;
+  public status: CaseStatus;
 
   constructor(rawProps) {
-    super('EligibleCase');
+    super('CalendaredCase');
 
     this.caseCaption = rawProps.caseCaption;
     this.docketNumber = rawProps.docketNumber;
@@ -26,9 +30,12 @@ export class EligibleCase extends JoiValidationEntity {
     this.docketNumberSuffix = rawProps.docketNumberSuffix;
     this.docketNumberWithSuffix =
       rawProps.docketNumber + (rawProps.docketNumberSuffix || '');
-    this.highPriority = rawProps.highPriority;
-    this.caseType = rawProps.caseType;
-    this.qcCompleteForTrial = rawProps.qcCompleteForTrial || {};
+    this.status = rawProps.status;
+
+    // instead of sending EVERY docket entry over, the front end only cares about the filingPartiesCode on PMT documents not stricken
+    this.PMTServedPartiesCode = setPretrialMemorandumFiler({
+      caseItem: rawProps,
+    });
 
     if (Array.isArray(rawProps.privatePractitioners)) {
       this.privatePractitioners = rawProps.privatePractitioners.map(
@@ -48,8 +55,8 @@ export class EligibleCase extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
+    PMTServedPartiesCode: JoiValidationConstants.STRING.allow('').optional(),
     caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-    caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
       'Unique case identifier in XXXXX-YY format.',
     ),
@@ -60,10 +67,6 @@ export class EligibleCase extends JoiValidationEntity {
       JoiValidationConstants.STRING.optional().description(
         'Auto-generated from docket number and the suffix.',
       ),
-    highPriority: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] }),
     irsPractitioners: joi
       .array()
       .items(IrsPractitioner.VALIDATION_RULES)
@@ -76,18 +79,20 @@ export class EligibleCase extends JoiValidationEntity {
       .items(PrivatePractitioner.VALIDATION_RULES)
       .optional()
       .description('List of private practitioners associated with the case.'),
-    qcCompleteForTrial: joi
-      .object()
-      .optional()
-      .meta({ tags: ['Restricted'] })
-      .description(
-        'QC Checklist object that must be completed before the case can go to trial.',
-      ),
+    status: JoiValidationConstants.STRING.valid(
+      ...Object.values(CASE_STATUS_TYPES),
+    ),
   };
 
+  static VALIDATION_ERROR_MESSAGES = {};
+
   getValidationRules() {
-    return EligibleCase.VALIDATION_RULES;
+    return CalendaredCase.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return CalendaredCase.VALIDATION_ERROR_MESSAGES;
   }
 }
 
-export type RawEligibleCase = ExcludeMethods<EligibleCase>;
+export type RawCalendaredCase = ExcludeMethods<CalendaredCase>;

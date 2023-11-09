@@ -29,12 +29,18 @@ export class NewPractitioner extends Practitioner {
     email: JoiValidationConstants.EMAIL.required().messages({
       '*': 'Enter email address',
     }),
-    firstName: super.VALIDATION_RULES.firstName.messages({
-      '*': 'Enter first name',
-    }),
-    lastName: super.VALIDATION_RULES.lastName.messages({
-      '*': 'Enter last name',
-    }),
+    firstName: JoiValidationConstants.STRING.max(100)
+      .required()
+      .description('The first name of the practitioner.')
+      .messages({
+        '*': 'Enter first name',
+      }),
+    lastName: JoiValidationConstants.STRING.max(100)
+      .required()
+      .description('The last name of the practitioner.')
+      .messages({
+        '*': 'Enter last name',
+      }),
     role: JoiValidationConstants.STRING.optional().allow(null),
     updatedEmail: JoiValidationConstants.STRING.optional().allow(null),
     userId: JoiValidationConstants.STRING.optional().allow(null),
