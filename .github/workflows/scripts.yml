@@ -1,0 +1,22 @@
+name: Node.js CI - Scripts
+
+on:
+  pull_request:
+
+jobs:
+  Scripts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
+      - name: Collect WorkQflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
+        with:
+          comment_on_pr: false
+      - name: Install Node Dependencies
+        run: npm ci
+      - name: Scripts
+        run: npm run test:scripts
