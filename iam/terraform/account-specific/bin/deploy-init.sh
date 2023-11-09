@@ -54,4 +54,4 @@ if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
 fi
 export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
 
-../../../../shared/terraform/bin/init.sh permissions
+ENVIRONMENT=account ../../../../shared/terraform/bin/init.sh permissions
