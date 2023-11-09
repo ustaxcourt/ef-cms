@@ -1,29 +1,28 @@
 import { CASE_STATUS_TYPES } from './EntityConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { OUTBOX_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { pick } from 'lodash';
 
 export class OutboxItem extends JoiValidationEntity {
-  public entityName: string;
+  public assigneeId: string;
+  public caseIsInProgress: boolean;
   public caseStatus: string;
   public caseTitle: string;
   public completedAt: string;
   public completedBy: string;
-  public caseIsInProgress: boolean;
   public docketEntry: Partial<RawDocketEntry>;
   public docketNumber: string;
   public highPriority: boolean;
   public inProgress: boolean;
   public leadDocketNumber: string;
   public section: string;
-  public assigneeId: string;
   public trialDate?: string;
   public trialLocation?: string;
   public workItemId: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(rawOutboxItem: RawOutboxItem, { applicationContext }) {
     super('OutboxItem');
+
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -49,7 +48,6 @@ export class OutboxItem extends JoiValidationEntity {
       'isUnservable',
       'servedAt',
     ]);
-
     this.docketNumber = rawOutboxItem.docketNumber;
     this.highPriority =
       rawOutboxItem.highPriority ||
@@ -66,12 +64,6 @@ export class OutboxItem extends JoiValidationEntity {
   getValidationRules() {
     return OUTBOX_ITEM_VALIDATION_RULES;
   }
-
-  getErrorToMessageMap() {
-    return {};
-  }
 }
 
-declare global {
-  type RawOutboxItem = ExcludeMethods<OutboxItem>;
-}
+export type RawOutboxItem = ExcludeMethods<OutboxItem>;

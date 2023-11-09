@@ -1,56 +1,48 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
 import joi from 'joi';
 
 export class AddIrsPractitioner extends JoiValidationEntity {
-  public email: string;
+  public email?: string;
   public serviceIndicator: string;
   public user: any;
 
   constructor(rawProps: any) {
     super('AddIrsPractitioner');
+
     this.email = rawProps.user?.email;
     this.serviceIndicator = rawProps.serviceIndicator;
     this.user = rawProps.user;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    serviceIndicator: [
-      {
-        contains: 'must be one of',
-        message:
+  static VALIDATION_RULES = {
+    email: JoiValidationConstants.STRING.optional(),
+    serviceIndicator: joi
+      .when('email', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.STRING.valid(
+          SERVICE_INDICATOR_TYPES.SI_NONE,
+          SERVICE_INDICATOR_TYPES.SI_PAPER,
+        ),
+        then: JoiValidationConstants.STRING.valid(
+          ...Object.values(SERVICE_INDICATOR_TYPES),
+        ),
+      })
+      .required()
+      .messages({
+        '*': 'Select service type',
+        'any.only':
           'No email found for electronic service. Select a valid service preference.',
-      },
-      'Select service type',
-    ],
-    user: 'Select a respondent counsel',
-  } as const;
-
-  getErrorToMessageMap() {
-    return AddIrsPractitioner.VALIDATION_ERROR_MESSAGES;
-  }
+      }),
+    user: joi.object().required().messages({
+      '*': 'Select a respondent counsel',
+    }),
+  };
 
   getValidationRules() {
-    return {
-      email: JoiValidationConstants.STRING.optional(),
-      serviceIndicator: joi
-        .when('email', {
-          is: joi.exist().not(null),
-          otherwise: JoiValidationConstants.STRING.valid(
-            SERVICE_INDICATOR_TYPES.SI_NONE,
-            SERVICE_INDICATOR_TYPES.SI_PAPER,
-          ),
-          then: JoiValidationConstants.STRING.valid(
-            ...Object.values(SERVICE_INDICATOR_TYPES),
-          ),
-        })
-        .required(),
-      user: joi.object().required(),
-    };
+    return AddIrsPractitioner.VALIDATION_RULES;
   }
 }
 
-declare global {
-  type RawAddIrsPractitioner = ExcludeMethods<AddIrsPractitioner>;
-}
+export type RawAddIrsPractitioner = ExcludeMethods<AddIrsPractitioner>;

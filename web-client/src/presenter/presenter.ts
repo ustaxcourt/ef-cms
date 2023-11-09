@@ -203,6 +203,7 @@ import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequ
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
+import { handleIdleLogoutSequence } from './sequences/handleIdleLogoutSequence';
 import { initialState } from '@web-client/presenter/state';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
@@ -356,8 +357,6 @@ import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSe
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setForHearingSequence } from './sequences/setForHearingSequence';
 import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequence';
-import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
-import { setIdleTimerRefSequence } from './sequences/setIdleTimerRefSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setJudgeActivityReportFiltersSequence } from './sequences/setJudgeActivityReportFiltersSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
@@ -747,6 +746,7 @@ export const presenterSequences = {
   gotoVerifyEmailSequence,
   gotoViewAllDocumentsSequence,
   gotoWorkQueueSequence,
+  handleIdleLogoutSequence,
   leaveCaseForLaterServiceSequence,
   loadDefaultDocketViewerDocumentToDisplaySequence,
   loadDefaultDraftViewerDocumentToDisplaySequence,
@@ -898,8 +898,6 @@ export const presenterSequences = {
   setDocumentUploadModeSequence,
   setForHearingSequence,
   setIdleStatusActiveSequence,
-  setIdleStatusIdleSequence,
-  setIdleTimerRefSequence,
   setIrsNoticeFalseSequence,
   setJudgeActivityReportFiltersSequence,
   setMessageDetailViewerDocumentToDisplaySequence,

@@ -282,6 +282,7 @@ describe('getCaseByDocketNumber', () => {
       consolidatedCases: [
         {
           docketNumber: leadDocketNumber,
+          entityName: 'ConsolidatedCaseSummary',
           irsPractitioners: [
             {
               userId: 'abc-123',
@@ -298,6 +299,7 @@ describe('getCaseByDocketNumber', () => {
         },
         {
           docketNumber: docketNumber1,
+          entityName: 'ConsolidatedCaseSummary',
           irsPractitioners: [
             {
               userId: 'abc-124',
@@ -340,5 +342,35 @@ describe('getCaseByDocketNumber', () => {
       ],
       status: CASE_STATUS_TYPES.new,
     });
+  });
+
+  it('does not make call to fetch consolidated cases if includeConsolidatedCases is false', async () => {
+    const leadDocketNumber = '123-20';
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Items: [
+            {
+              docketNumber: '123-20',
+              leadDocketNumber,
+              pk: 'case|123-20',
+              sk: 'case|123-20',
+              status: CASE_STATUS_TYPES.new,
+            },
+          ],
+        }),
+    });
+
+    const result = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: leadDocketNumber,
+      includeConsolidatedCases: false,
+    });
+
+    expect(applicationContext.getDocumentClient().query).toHaveBeenCalledTimes(
+      1,
+    );
+
+    expect(result.consolidatedCases).toEqual([]);
   });
 });

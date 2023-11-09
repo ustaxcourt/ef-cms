@@ -1,5 +1,5 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
 
@@ -8,17 +8,18 @@ export class Correspondence extends JoiValidationEntity {
   public correspondenceId: string;
   public documentTitle: string;
   public filedBy: string;
-  public userId: string;
   public filingDate: string;
+  public userId: string;
 
   constructor(rawProps) {
     super('Correspondence');
+
     this.archived = rawProps.archived;
     this.correspondenceId = rawProps.correspondenceId;
     this.documentTitle = rawProps.documentTitle;
     this.filedBy = rawProps.filedBy;
-    this.userId = rawProps.userId;
     this.filingDate = rawProps.filingDate || createISODateString();
+    this.userId = rawProps.userId;
   }
 
   static VALIDATION_RULES = {
@@ -38,12 +39,6 @@ export class Correspondence extends JoiValidationEntity {
   getValidationRules() {
     return Correspondence.VALIDATION_RULES;
   }
-
-  getErrorToMessageMap() {
-    return {};
-  }
 }
 
-declare global {
-  type RawCorrespondence = ExcludeMethods<Correspondence>;
-}
+export type RawCorrespondence = ExcludeMethods<Correspondence>;

@@ -1,4 +1,5 @@
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { ROLES } from './EntityConstants';
 import { User } from './User';
 
@@ -24,13 +25,13 @@ export class PublicUser extends JoiValidationEntity {
     }
   }
 
-  getErrorToMessageMap() {
-    return {
-      role: 'Role is required',
-    } as any;
-  }
-
   getValidationRules() {
-    return User.BASE_USER_VALIDATION as any;
+    return {
+      ...User.BASE_USER_VALIDATION,
+      name: JoiValidationConstants.STRING.max(100).required(),
+      role: User.BASE_USER_VALIDATION.role.messages({
+        '*': 'Role is required',
+      }),
+    };
   }
 }

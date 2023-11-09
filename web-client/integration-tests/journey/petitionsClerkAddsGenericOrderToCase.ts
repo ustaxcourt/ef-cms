@@ -1,8 +1,4 @@
-import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../src/applicationContext';
-import { first } from 'lodash';
-
-const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
 export const petitionsClerkAddsGenericOrderToCase = cerebralTest => {
   return it('Petitions clerk adds a generic Order (eventCode O) to case', async () => {
@@ -11,9 +7,9 @@ export const petitionsClerkAddsGenericOrderToCase = cerebralTest => {
     await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitle: errorMessages.documentTitle[0].message,
-      documentType: errorMessages.documentType,
-      eventCode: errorMessages.eventCode,
+      documentTitle: 'Enter the title of this order',
+      documentType: 'Select an order type',
+      eventCode: 'Select an order type',
     });
 
     await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
@@ -51,7 +47,7 @@ export const petitionsClerkAddsGenericOrderToCase = cerebralTest => {
         caseDetail: cerebralTest.getState('caseDetail'),
       });
 
-    const createdOrder = first(draftDocuments);
+    const createdOrder = draftDocuments[0];
 
     expect(createdOrder.documentTitle).toEqual(cerebralTest.freeText);
     expect(createdOrder.freeText).toEqual(cerebralTest.freeText);

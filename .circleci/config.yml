@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.6.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.17
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.19
 
 parameters:
   run_build_and_deploy:
@@ -169,6 +169,13 @@ jobs:
               exit 0
             fi
             if [ "${CIRCLE_BRANCH}" == "test" ]; then
+              SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${SOURCE_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
               npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
             else
               ./scripts/circleci/judge/bulk-import-judge-users.sh
@@ -691,6 +698,13 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
       - run:
           name: Disable Wait for Workflow Cron
           command: |
@@ -701,6 +715,14 @@ jobs:
             export APPROVAL_JOB_NAME=wait-for-glue-workflow
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Test Users Setup
+          command: |
+            DEPLOYING_COLOR="$CURRENT_COLOR" ./shared/admin-tools/user/setup-test-users.sh "$ENV"
+      - run:
+          name: Judge Users Setup
+          command: |
+            npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
       - run:
           name: Enable Dynamodb Streams
           command: |
@@ -740,6 +762,7 @@ jobs:
               exit 1
             fi
       - run:
+          no_output_timeout: 175m
           name: Sync S3 buckets with timeout
           command: |
             ./scripts/circleci/sync-s3-buckets-with-timeout.sh 175m

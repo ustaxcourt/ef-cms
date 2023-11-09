@@ -71,6 +71,62 @@ describe('Statistic', () => {
       ]);
     });
 
+    it('should be invalid when one of the penalties in the statistic is NOT valid', () => {
+      const statistic = new Statistic(
+        {
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: undefined, // This is a required field
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
+          year: '2001',
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      expect(statistic.getFormattedValidationErrors()!).toEqual({
+        penalties: [
+          {
+            index: 0,
+            penaltyAmount: 'Enter penalty amount.',
+          },
+        ],
+      });
+    });
+
+    it('should be invalid when one of the penalties in the statistic is NOT valid', () => {
+      const statistic = new Statistic(
+        {
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          penalties: [
+            {
+              name: 'Penalty 1(IRS)',
+              penaltyAmount: undefined, // This is a required field
+              penaltyType: 'irsPenaltyAmount',
+            },
+          ],
+          year: '2001',
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      expect(statistic.getFormattedValidationErrors()!).toEqual({
+        penalties: [
+          {
+            index: 0,
+            penaltyAmount: 'Enter penalty amount.',
+          },
+        ],
+      });
+    });
+
     it('fails validation if a lastDateOfPeriod is a date in the future', () => {
       const statistic = new Statistic(
         {
@@ -85,9 +141,7 @@ describe('Statistic', () => {
 
       expect(statistic.isValid()).toBeFalsy();
       expect(statistic.getFormattedValidationErrors()).toMatchObject({
-        lastDateOfPeriod: (
-          Statistic.VALIDATION_ERROR_MESSAGES.lastDateOfPeriod[0] as any
-        ).message,
+        lastDateOfPeriod: 'Enter valid last date of period',
       });
     });
 
