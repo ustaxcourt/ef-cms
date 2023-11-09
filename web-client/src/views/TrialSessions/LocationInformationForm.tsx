@@ -36,7 +36,10 @@ export const LocationInformationForm = connect(
           {!addTrialSessionInformationHelper.isStandaloneSession && (
             <>
               <FormGroup errorText={validationErrors.proceedingType}>
-                <fieldset className="start-time usa-fieldset margin-bottom-0">
+                <fieldset
+                  className="start-time usa-fieldset margin-bottom-0"
+                  data-cy="trial-session-proceeding-type"
+                >
                   <legend className="usa-legend" id="proceeding-type-legend">
                     Proceeding type
                   </legend>
@@ -81,6 +84,7 @@ export const LocationInformationForm = connect(
                 </label>
                 <select
                   className="usa-select"
+                  data-cy="trial-session-trial-location"
                   id="trial-location"
                   name="trialLocation"
                   value={form.trialLocation}
