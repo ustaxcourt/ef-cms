@@ -74,6 +74,7 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
 
   const USTC_ADMIN_PASS = makeNewPassword();
 
+  // Should only be run locally; is it necessary?
   console.log({
     DEFAULT_ACCOUNT_PASS,
     USTC_ADMIN_PASS,
