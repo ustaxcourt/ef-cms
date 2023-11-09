@@ -5,10 +5,5 @@ export const validateAddPrivatePractitionerInteractor = ({
 }: {
   counsel: any;
 }) => {
-  const errors = new AddPrivatePractitioner(
-    counsel,
-  ).getFormattedValidationErrors();
-
-  if (!errors) return null;
-  return errors;
+  return new AddPrivatePractitioner(counsel).getFormattedValidationErrors();
 };

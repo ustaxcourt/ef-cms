@@ -7,7 +7,7 @@ describe('UserCaseNote', () => {
 
       expect(entity.getFormattedValidationErrors()).toEqual({
         docketNumber: '"docketNumber" is required',
-        notes: UserCaseNote.VALIDATION_ERROR_MESSAGES.notes,
+        notes: 'Add note',
         userId: '"userId" is required',
       });
     });

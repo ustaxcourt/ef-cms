@@ -1,5 +1,5 @@
 import { Case } from '../../entities/cases/Case';
-import { Message } from '../../entities/Message';
+import { Message, RawMessage } from '../../entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

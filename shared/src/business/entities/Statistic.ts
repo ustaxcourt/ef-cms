@@ -1,5 +1,5 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { PENALTY_TYPES } from './EntityConstants';
 import { Penalty } from './Penalty';
 import joi from 'joi';
@@ -57,22 +57,6 @@ export class Statistic extends JoiValidationEntity {
     }
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    determinationDeficiencyAmount: 'Enter deficiency as determined by Court.',
-    determinationTotalPenalties:
-      'Enter total penalties as determined by Court.',
-    irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
-    irsTotalPenalties: 'Enter total penalties on IRS Notice.',
-    lastDateOfPeriod: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Enter valid last date of period',
-      },
-      'Enter last date of period',
-    ],
-    penalties: 'Enter at least one IRS penalty.',
-    year: 'Enter a valid year.',
-  };
   static VALIDATION_RULES = joi.object().keys({
     determinationDeficiencyAmount: joi
       .alternatives()
@@ -81,7 +65,8 @@ export class Statistic extends JoiValidationEntity {
         otherwise: joi.number().optional().allow(null),
         then: joi.number().required(),
       })
-      .description('The amount of the deficiency determined by the Court.'),
+      .description('The amount of the deficiency determined by the Court.')
+      .messages({ '*': 'Enter deficiency as determined by Court.' }),
     determinationTotalPenalties: joi
       .alternatives()
       .conditional('determinationDeficiencyAmount', {
@@ -91,25 +76,32 @@ export class Statistic extends JoiValidationEntity {
       })
       .description(
         'The total amount of penalties for the period or year determined by the Court.',
-      ),
+      )
+      .messages({ '*': 'Enter total penalties as determined by Court.' }),
     entityName: JoiValidationConstants.STRING.valid('Statistic').required(),
     irsDeficiencyAmount: joi
       .number()
       .required()
-      .description('The amount of the deficiency on the IRS notice.'),
+      .description('The amount of the deficiency on the IRS notice.')
+      .messages({ '*': 'Enter deficiency on IRS Notice.' }),
     irsTotalPenalties: joi
       .number()
       .required()
       .description(
         'The total amount of penalties for the period or year on the IRS notice.',
-      ),
+      )
+      .messages({ '*': 'Enter total penalties on IRS Notice.' }),
     lastDateOfPeriod: JoiValidationConstants.ISO_DATE.max('now')
       .when('yearOrPeriod', {
         is: 'Period',
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       })
-      .description('Last date of the statistics period.'),
+      .description('Last date of the statistics period.')
+      .messages({
+        '*': 'Enter last date of period',
+        'date.max': 'Enter valid last date of period',
+      }),
     penalties: joi
       .array()
       .has(
@@ -118,7 +110,8 @@ export class Statistic extends JoiValidationEntity {
         }),
       )
       .required()
-      .description('List of Penalty Entities for the statistic.'),
+      .description('List of Penalty Entities for the statistic.')
+      .messages({ '*': 'Enter at least one IRS penalty.' }),
     statisticId: JoiValidationConstants.UUID.required().description(
       'Unique statistic ID only used by the system.',
     ),
@@ -126,7 +119,9 @@ export class Statistic extends JoiValidationEntity {
       is: 'Year',
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    }).description('The year of the statistics period.'),
+    })
+      .description('The year of the statistics period.')
+      .messages({ '*': 'Enter a valid year.' }),
     yearOrPeriod: JoiValidationConstants.STRING.required()
       .valid('Year', 'Period')
       .description('Whether the statistics are for a year or period.'),
@@ -163,9 +158,6 @@ export class Statistic extends JoiValidationEntity {
 
   getValidationRules() {
     return Statistic.VALIDATION_RULES;
-  }
-  getErrorToMessageMap() {
-    return Statistic.VALIDATION_ERROR_MESSAGES;
   }
 }
 
