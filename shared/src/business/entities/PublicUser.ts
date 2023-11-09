@@ -1,3 +1,4 @@
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { ROLES } from './EntityConstants';
@@ -42,3 +43,5 @@ export class PublicUser extends JoiValidationEntity {
     return PublicUser.VALIDATION_RULES;
   }
 }
+
+export type RawPublicUser = ExcludeMethods<PublicUser>;
