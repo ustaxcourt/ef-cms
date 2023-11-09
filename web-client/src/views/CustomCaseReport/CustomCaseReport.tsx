@@ -10,7 +10,7 @@ import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
-import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
+import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef, useState } from 'react';
@@ -448,7 +448,6 @@ export const CustomCaseReport = connect(
             </label>
           </div>
           <Button
-            // disabled={customCaseInventoryReportHelper.runReportButtonIsDisabled}
             id="run-custom-case-report"
             tooltip="Run Report"
             onClick={() => {

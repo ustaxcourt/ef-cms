@@ -4,11 +4,14 @@ import {
   CHIEF_JUDGE,
   CUSTOM_CASE_INVENTORY_PAGE_SIZE,
   TRIAL_CITIES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  CaseInventory,
+  CustomCaseInventoryReportFilters,
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { CustomCaseInventoryReportFilters } from '../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { InputOption } from '@web-client/ustc-ui/Utils/types';
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
@@ -18,7 +21,18 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const customCaseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): {
+  activeTrialCities: InputOption[];
+  caseStatuses: InputOption[];
+  caseTypes: InputOption[];
+  cases: CaseInventory[];
+  clearFiltersIsDisabled: boolean;
+  judges: InputOption[];
+  pageCount: number;
+  searchableTrialCities: InputOption[];
+  today: string;
+  trialCitiesByState: InputOption[];
+} => {
   const caseStatuses = CASE_STATUSES.map(status => ({
     label: status,
     value: status,
@@ -72,10 +86,6 @@ export const customCaseInventoryReportHelper = (
   const totalCases = get(state.customCaseInventory.totalCases);
   const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
 
-  const runReportButtonIsDisabled = !(
-    populatedFilters.startDate && populatedFilters.endDate
-  );
-
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
@@ -113,7 +123,6 @@ export const customCaseInventoryReportHelper = (
     clearFiltersIsDisabled,
     judges,
     pageCount,
-    runReportButtonIsDisabled,
     searchableTrialCities,
     today,
     trialCitiesByState: states,

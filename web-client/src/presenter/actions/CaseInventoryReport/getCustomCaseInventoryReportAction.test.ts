@@ -1,4 +1,4 @@
-import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
+import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportRequest,
@@ -12,6 +12,8 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('getCustomCaseInventoryReportAction', () => {
   const lastCaseId = 8291;
   let mockCustomCaseReportResponse: GetCaseInventoryReportResponse;
+  let filterValues: CustomCaseInventoryReportFilters;
+  let expectedRequest: GetCaseInventoryReportRequest;
 
   beforeEach(() => {
     mockCustomCaseReportResponse = {
@@ -27,27 +29,26 @@ describe('getCustomCaseInventoryReportAction', () => {
       );
 
     presenter.providers.applicationContext = applicationContext;
+    filterValues = {
+      caseStatuses: ['Assigned - Case'],
+      caseTypes: ['Deficiency'],
+      endDate: '05/14/2022',
+      filingMethod: 'electronic',
+      highPriority: true,
+      judges: ['Colvin'],
+      preferredTrialCities: ['Jackson, Mississippi'],
+      procedureType: 'All',
+      startDate: '05/10/2022',
+    };
+
+    expectedRequest = {
+      ...filterValues,
+      endDate: '2022-05-15T03:59:59.999Z',
+      pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+      searchAfter: 0,
+      startDate: '2022-05-10T04:00:00.000Z',
+    };
   });
-
-  const filterValues: CustomCaseInventoryReportFilters = {
-    caseStatuses: ['Assigned - Case'],
-    caseTypes: ['Deficiency'],
-    endDate: '05/14/2022',
-    filingMethod: 'electronic',
-    highPriority: true,
-    judges: ['Colvin'],
-    preferredTrialCities: ['Jackson, Mississippi'],
-    procedureType: 'All',
-    startDate: '05/10/2022',
-  };
-
-  const expectedRequest: GetCaseInventoryReportRequest = {
-    ...filterValues,
-    endDate: '2022-05-15T03:59:59.999Z',
-    pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
-    searchAfter: 0,
-    startDate: '2022-05-10T04:00:00.000Z',
-  };
 
   it('should get the custom case inventory report with filter values that the user has selected', async () => {
     const result = await runAction(getCustomCaseInventoryReportAction, {
@@ -151,5 +152,32 @@ describe('getCustomCaseInventoryReportAction', () => {
       ...expectedRequest,
       highPriority: undefined,
     });
+  });
+
+  it('should not format the start or end date if they have not been selected', async () => {
+    filterValues.startDate = '';
+    filterValues.endDate = '';
+
+    expectedRequest.startDate = '';
+    expectedRequest.endDate = '';
+
+    await runAction(getCustomCaseInventoryReportAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        selectedPage: 0,
+      },
+      state: {
+        customCaseInventory: {
+          filters: filterValues,
+          lastIdsOfPages: [0],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getCustomCaseInventoryReportInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
   });
 });

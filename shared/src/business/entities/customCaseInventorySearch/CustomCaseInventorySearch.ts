@@ -8,11 +8,6 @@ import { DATE_RANGE_VALIDATION_RULE_KEYS } from '@shared/business/entities/Entit
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
-/**
- * Custom Case Inventory Report Entity
- * @param {object} rawProps the raw activity search data
- * @constructor
- */
 export const CUSTOM_CASE_REPORT_FILING_METHODS = [
   'all',
   'electronic',
@@ -32,7 +27,7 @@ export type CustomCaseProcedureTypes =
 export class CustomCaseInventorySearch extends JoiValidationEntity {
   public caseStatuses: CaseStatus[];
   public caseTypes: CaseType[];
-  public endDate?: string;
+  public endDate: string;
   public filingMethod: CustomCaseFilingMethods;
   public highPriority: boolean;
   public judges: string[];
@@ -43,7 +38,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     receivedAt: number;
     pk: string;
   };
-  public startDate?: string;
+  public startDate: string;
 
   constructor(rawProps) {
     super('CustomCaseInventorySearch');

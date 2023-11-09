@@ -1,9 +1,9 @@
 import {
   CASE_STATUS_TYPES,
   CUSTOM_CASE_INVENTORY_PAGE_SIZE,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { CustomCaseInventoryReportState } from '../customCaseInventoryReportState';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { customCaseInventoryReportHelper as customCaseInventoryReportHelperComputed } from './customCaseInventoryReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -14,11 +14,11 @@ const customCaseInventoryReportHelper = withAppContextDecorator(
   applicationContext,
 );
 
-const cases = [
+const cases: RawCase[] = [
   {
     ...MOCK_CASE,
     associatedJudge: 'Chief Judge',
-    caseType: 'New',
+    caseType: 'Passport',
     procedureType: 'Regular',
     receivedAt: '2018-03-01T21:40:46.415Z',
     status: CASE_STATUS_TYPES.new,
@@ -78,7 +78,7 @@ describe('customCaseInventoryReportHelper', () => {
     expect(result.cases).toMatchObject([
       {
         associatedJudge: 'Chief Judge',
-        caseType: 'New',
+        caseType: 'Passport',
         docketNumber: '101-18',
         preferredTrialCity: 'Washington, District of Columbia',
         receivedAt: '03/01/18',
@@ -115,27 +115,6 @@ describe('customCaseInventoryReportHelper', () => {
         caseCaption: 'Daffy Duck',
       },
     ]);
-  });
-
-  it('should return true for runReportButtonIsDisabled if endDate or startDate are falsy', () => {
-    defaultCustomCaseState.filters.endDate = 's';
-    defaultCustomCaseState.filters.startDate = '';
-
-    const result = runCompute(customCaseInventoryReportHelper, {
-      state: initialState,
-    });
-
-    expect(result.runReportButtonIsDisabled).toEqual(true);
-  });
-
-  it('should return true for runReportButtonIsDisabled if endDate and startDate are both truthy', () => {
-    defaultCustomCaseState.filters.endDate = 's';
-    defaultCustomCaseState.filters.startDate = 's';
-    const result = runCompute(customCaseInventoryReportHelper, {
-      state: initialState,
-    });
-
-    expect(result.runReportButtonIsDisabled).toEqual(false);
   });
 
   it('should return true for clearFiltersIsDisabled when no optional filters are selected', () => {

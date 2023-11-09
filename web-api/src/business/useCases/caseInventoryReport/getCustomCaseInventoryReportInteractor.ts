@@ -1,23 +1,23 @@
 import {
   CaseStatus,
   CaseType,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   CustomCaseFilingMethods,
   CustomCaseInventorySearch,
   CustomCaseProcedureTypes,
-} from '../../../../../shared/src/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
+} from '@shared/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type CustomCaseInventoryReportFilters = {
   caseStatuses: CaseStatus[];
   caseTypes: CaseType[];
-  endDate?: string;
-  startDate?: string;
+  endDate: string;
+  startDate: string;
   filingMethod: CustomCaseFilingMethods;
   preferredTrialCities: string[];
   highPriority?: boolean;
@@ -54,17 +54,6 @@ export type CaseInventory = Pick<
   | 'highPriority'
 >;
 
-/**
- * getCustomCaseInventoryReportInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the endDate filter
- * @param {string} providers.startDate the startDate filter
- * @param {array} providers.caseStatuses the case statuses array filter
- * @param {array} providers.caseTypes the caseTypes array filter
- * @param {string} providers.filingMethod filing method filter
- * @returns {object} the report data
- */
 export const getCustomCaseInventoryReportInteractor = async (
   applicationContext: IApplicationContext,
   params: GetCaseInventoryReportRequest,
