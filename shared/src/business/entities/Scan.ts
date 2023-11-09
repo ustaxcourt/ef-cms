@@ -1,5 +1,5 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import { remove } from 'lodash';
 import joi from 'joi';
@@ -72,19 +72,17 @@ export class Scan extends JoiValidationEntity {
     return aggregatedPngs;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    batches: '#At least one batch is required',
-  };
-
-  getErrorToMessageMap() {
-    return Scan.VALIDATION_ERROR_MESSAGES;
-  }
+  static VALIDATION_RULES = joi.object().keys({
+    batches: joi
+      .array()
+      .min(1)
+      .required()
+      .messages({ '*': 'At least one batch is required' }),
+    createdAt: JoiValidationConstants.ISO_DATE.required(),
+    scanId: JoiValidationConstants.UUID.required(),
+  });
 
   getValidationRules() {
-    return {
-      batches: joi.array().min(1).required(),
-      createdAt: JoiValidationConstants.ISO_DATE.required(),
-      scanId: JoiValidationConstants.UUID.required(),
-    };
+    return Scan.VALIDATION_RULES;
   }
 }
