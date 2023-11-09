@@ -410,7 +410,7 @@ export const ReviewSavedPetition = connect(
 
           <div className="margin-top-5">
             <Button
-              data-testid="serve-case-to-irs"
+              data-cy="serve-to-irs"
               id="submit-case"
               onClick={() => {
                 openConfirmServeToIrsModalSequence();

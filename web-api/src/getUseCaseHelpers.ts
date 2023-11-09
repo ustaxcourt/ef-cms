@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
