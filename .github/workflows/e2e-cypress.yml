@@ -51,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
-          path: ${{ github.workspace }}/cypress/cypress-integration/videos
+          path: ${{ github.workspace }}/cypress/cypress-integration/videos/${{ matrix.ci_node_index }}
