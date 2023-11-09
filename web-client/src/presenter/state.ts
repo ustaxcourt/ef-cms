@@ -284,6 +284,7 @@ export const baseState = {
     totalCount: number;
     page: number;
   },
+  caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,

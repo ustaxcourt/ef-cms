@@ -58,8 +58,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for button[data-test="add-edit-case-worksheet"] to be visible',
-      'click element button[data-test="add-edit-case-worksheet"]',
+      'wait for button[data-testid="add-edit-case-worksheet"] to be visible',
+      'click element button[data-testid="add-edit-case-worksheet"]',
       'wait for .modal-screen to be visible',
       'click element #confirm',
     ],
