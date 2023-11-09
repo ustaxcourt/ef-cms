@@ -6,54 +6,49 @@ on:
 jobs:
   e2e_cypress:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2]
+        ci_node_total: [2]
+        ci_node_index: [0, 1]
+
     env:
       CI: true
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
       - uses: actions/checkout@v3
-
       - uses: actions/setup-node@v3
         with:
           node-version: '18.16.1'
-
       - name: Runs Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
           stack-version: 7.10.2
           security-enabled: false
-
       - name: Setup DynamoDB Local
         uses: rrainn/dynamodb-action@v3.0.0
         with:
           port: 8000
           cors: '*'
-
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v1
         with:
           comment_on_pr: false
-
       - name: Install Node Dependencies
         run: npm ci
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
+      - name: Run E2E Cypress
+        run: |
+          mkdir -p /tmp/cypress/
+          npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
+          ./wait-until-services.sh
+          sleep 5
+          export TESTFILES=$(npx ts-node split-tests-cypress.ts)
+          npm run cypress:integration:file $TESTFILES
+      - name: Store Cypress Failure Videos
+        if: always()
+        uses: actions/upload-artifact@v3
         with:
-          record: false
-          parallel: true
-          browser: 'edge'
-          spec: cypress/cypress-integration/integration/*
-          start: |
-            mkdir -p /tmp/cypress/
-            npm run start:all:ci
-            npm run wait-for-all-services
-
-      # - name: Store Cypress Failure Videos
-      #   if: always()
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: cypress-videos
-      #     path: ${{ github.workspace }}/cypress/cypress-integration/videos
+          name: cypress-videos
+          path: ${{ github.workspace }}/cypress/cypress-integration/videos
