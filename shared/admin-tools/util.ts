@@ -44,7 +44,7 @@ export const requireEnvVars = (requiredEnvVars: Array<string>): void => {
   }
   if (missing) {
     console.error(`Missing environment variable(s): ${missing}`);
-    process.exit();
+    process.exit(1);
   }
 };
 
