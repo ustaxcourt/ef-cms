@@ -1,5 +1,4 @@
 import { CONTACT_TYPES, SERVICE_INDICATOR_TYPES } from '../EntityConstants';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { User } from '@shared/business/entities/User';
@@ -36,6 +35,7 @@ export class Petitioner extends JoiValidationEntity {
     { applicationContext }: { applicationContext: IApplicationContext },
   ) {
     super('Petitioner');
+
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -67,13 +67,17 @@ export class Petitioner extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     ...User.USER_CONTACT_VALIDATION_RULES,
-    additionalName: JoiValidationConstants.STRING.max(600).optional(),
+    additionalName: JoiValidationConstants.STRING.max(100).optional().messages({
+      'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
+    }),
     contactId: JoiValidationConstants.UUID.required().description(
       'Unique contact ID only used by the system.',
     ),
     contactType: JoiValidationConstants.STRING.valid(
       ...Object.values(CONTACT_TYPES),
-    ).required(),
+    )
+      .required()
+      .messages({ '*': 'Select a role type' }),
     email: JoiValidationConstants.EMAIL.when('hasEAccess', {
       is: true,
       otherwise: joi.optional(),
@@ -93,56 +97,24 @@ export class Petitioner extends JoiValidationEntity {
       ),
     inCareOf: JoiValidationConstants.STRING.max(100).optional(),
     isAddressSealed: joi.boolean().required(),
-    name: JoiValidationConstants.STRING.max(100).required(),
+    name: JoiValidationConstants.STRING.max(100).required().messages({
+      '*': 'Enter name',
+      'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
+    }),
     paperPetitionEmail: JoiValidationConstants.EMAIL.optional().description(
       'Email provided by the petitioner on a paper petition',
     ),
     sealedAndUnavailable: joi.boolean().optional(),
     serviceIndicator: JoiValidationConstants.STRING.valid(
       ...Object.values(SERVICE_INDICATOR_TYPES),
-    ).required(),
+    )
+      .required()
+      .messages({ '*': 'Select a service indicator' }),
     title: JoiValidationConstants.STRING.max(100).optional(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {
-    additionalName: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Limit is 100 characters. Enter 100 or fewer characters.',
-      },
-    ],
-    address1: 'Enter mailing address',
-    city: 'Enter city',
-    contactType: 'Select a role type',
-    contactTypeSecondIntervenor:
-      'Only one (1) Intervenor is allowed per case. Please select a different Role.',
-    country: 'Enter a country',
-    countryType: 'Enter country type',
-    name: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Limit is 100 characters. Enter 100 or fewer characters.',
-      },
-      'Enter name',
-    ],
-    phone: 'Enter phone number',
-    postalCode: [
-      {
-        contains: 'match',
-        message: 'Enter ZIP code',
-      },
-      'Enter ZIP code',
-    ],
-    serviceIndicator: 'Select a service indicator',
-    state: 'Enter state',
-  } as const;
-
   getValidationRules() {
     return Petitioner.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return Petitioner.VALIDATION_ERROR_MESSAGES;
   }
 }
 
