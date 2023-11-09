@@ -16,10 +16,9 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 export class ConsolidatedCaseSummary extends JoiValidationEntity {
   public caseCaption: string;
   public docketNumber: string;
-  public isSealed: boolean;
   public docketNumberWithSuffix: string;
-  public entityName: string;
   public irsPractitioners: object[];
+  public isSealed: boolean;
   public leadDocketNumber: string;
   public petitioners: object[];
   public privatePractitioners: object[];
@@ -28,10 +27,10 @@ export class ConsolidatedCaseSummary extends JoiValidationEntity {
 
   constructor(rawCase: any) {
     super('ConsolidatedCaseSummary');
+
     this.caseCaption = rawCase.caseCaption;
     this.docketNumber = rawCase.docketNumber;
     this.docketNumberWithSuffix = rawCase.docketNumberWithSuffix;
-    this.entityName = rawCase.entityName;
     this.irsPractitioners = rawCase.irsPractitioners || [];
     this.leadDocketNumber = rawCase.leadDocketNumber;
     this.isSealed = rawCase.isSealed;
@@ -54,8 +53,6 @@ export class ConsolidatedCaseSummary extends JoiValidationEntity {
     status: CASE_STATUS_RULE,
   } as const;
 
-  static VALIDATION_ERROR_MESSAGES = {} as const;
-
   static getFields() {
     return Object.getOwnPropertyNames.call(
       Object,
@@ -65,10 +62,6 @@ export class ConsolidatedCaseSummary extends JoiValidationEntity {
 
   getValidationRules() {
     return ConsolidatedCaseSummary.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return ConsolidatedCaseSummary.VALIDATION_ERROR_MESSAGES;
   }
 }
 
