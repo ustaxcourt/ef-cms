@@ -270,6 +270,7 @@ describe('User entity', () => {
         pendingEmailVerificationToken: null,
         role: ROLES.irsPractitioner,
       });
+
       expect(user.isValid()).toBeFalsy();
       expect(user.getFormattedValidationErrors()).toEqual({
         address1: 'Enter mailing address',

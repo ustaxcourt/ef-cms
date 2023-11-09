@@ -25,10 +25,6 @@ export class PrivatePractitioner extends User {
 
   static ENTITY_NAME = 'PrivatePractitioner';
 
-  isRepresenting(petitionerContactId) {
-    return this.representing.includes(petitionerContactId);
-  }
-
   static VALIDATION_RULES = joi.object().keys({
     barNumber: JoiValidationConstants.STRING.max(100)
       .required()
@@ -64,6 +60,10 @@ export class PrivatePractitioner extends User {
 
   getValidationRules() {
     return PrivatePractitioner.VALIDATION_RULES;
+  }
+
+  isRepresenting(petitionerContactId) {
+    return this.representing.includes(petitionerContactId);
   }
 }
 
