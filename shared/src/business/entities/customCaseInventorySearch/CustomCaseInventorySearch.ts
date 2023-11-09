@@ -4,8 +4,9 @@ import {
   CaseStatus,
   CaseType,
 } from '../EntityConstants';
-import { DATE_RANGE_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { createEndOfDayISO } from '@shared/business/utilities/DateHandler';
 import joi from 'joi';
 
 export const CUSTOM_CASE_REPORT_FILING_METHODS = [
@@ -59,7 +60,27 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     return {
       caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
       caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
-      endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate.optional(),
+      endDate: joi
+        .alternatives()
+        .conditional('startDate', {
+          is: JoiValidationConstants.ISO_DATE.exist().not(null),
+          otherwise: JoiValidationConstants.ISO_DATE.max(
+            createEndOfDayISO(),
+          ).description(
+            'The end date search filter must be of valid date format',
+          ),
+          then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+            .min(joi.ref('startDate'))
+            .description(
+              'The end date search filter must be of valid date format and greater than or equal to the start date',
+            ),
+        })
+        .messages({
+          '*': 'Enter a valid end date.',
+          'date.max': 'End date cannot be in the future. Enter a valid date.',
+          'date.min':
+            'End date cannot be prior to start date. Enter a valid end date.',
+        }),
       filingMethod: joi
         .string()
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
@@ -79,7 +100,14 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
           receivedAt: joi.number().required(),
         })
         .required(),
-      startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate.optional(),
+      startDate: JoiValidationConstants.ISO_DATE.max('now')
+        .description(
+          'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+        )
+        .messages({
+          '*': 'Enter a valid start date.',
+          'date.max': 'Start date cannot be in the future. Enter a valid date.',
+        }),
     };
   }
 }

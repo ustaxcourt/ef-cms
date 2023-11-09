@@ -13,22 +13,23 @@ export const getCustomCaseInventoryReportAction = async ({
     delete filterValues.highPriority;
   }
 
-  const [startMonth, startDay, startYear] = filterValues.startDate.split('/');
+  let formattedStartDate: string | undefined;
+  if (filterValues.startDate) {
+    const [startMonth, startDay, startYear] = filterValues.startDate.split('/');
+    formattedStartDate = applicationContext.getUtilities().createStartOfDayISO({
+      day: startDay,
+      month: startMonth,
+      year: startYear,
+    });
+  }
 
-  const formattedStartDate = filterValues.startDate
-    ? applicationContext.getUtilities().createStartOfDayISO({
-        day: startDay,
-        month: startMonth,
-        year: startYear,
-      })
-    : '';
-
-  const [endMonth, endDay, endYear] = filterValues.endDate.split('/');
-  const formattedEndDate = filterValues.endDate
-    ? applicationContext
-        .getUtilities()
-        .createEndOfDayISO({ day: endDay, month: endMonth, year: endYear })
-    : '';
+  let formattedEndDate: string | undefined;
+  if (filterValues.endDate) {
+    const [endMonth, endDay, endYear] = filterValues.endDate.split('/');
+    formattedEndDate = applicationContext
+      .getUtilities()
+      .createEndOfDayISO({ day: endDay, month: endMonth, year: endYear });
+  }
 
   const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
