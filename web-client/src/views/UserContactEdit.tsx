@@ -82,6 +82,7 @@ export const UserContactEdit = connect(
             />
           </div>
           <Button
+            data-testid="save-edit-contact"
             onClick={() => {
               submitUpdateUserContactInformationSequence();
             }}

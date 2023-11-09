@@ -158,6 +158,7 @@ export const ModalDialog = ({
               <div className="margin-top-5">
                 <Button
                   className="modal-button-confirm"
+                  data-testid="modal-button-confirm"
                   disabled={disableSubmit}
                   href={confirmHref}
                   id="modal-button-confirm"

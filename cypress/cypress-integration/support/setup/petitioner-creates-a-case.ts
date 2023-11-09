@@ -1,6 +1,3 @@
-/**
- * Logs in as petitioner and create a case.
- */
 export function petitionerCreatesACase() {
   cy.login('petitioner', 'file-a-petition/step-1');
   cy.getByTestId('stin-file-label').should('not.have.class', 'validated');

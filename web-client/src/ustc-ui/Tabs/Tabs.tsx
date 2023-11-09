@@ -28,6 +28,7 @@ const renderTabFactory = ({
       tabName,
       title,
     } = child.props;
+    console.log(child.props);
 
     const isActiveTab = tabName === activeKey;
     const tabContentId =
@@ -61,7 +62,7 @@ const renderTabFactory = ({
 
     return (
       <li {...tabProps}>
-        <button {...buttonProps}>
+        <button {...buttonProps} data-testid={child.props['data-testid']}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
           {icon}
         </button>

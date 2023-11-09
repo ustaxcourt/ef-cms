@@ -117,7 +117,12 @@ export const CaseDetail = connect(
                           <CaseInformationExternal />
                         </Tab>
 
-                        <Tab id="tab-parties" tabName="parties" title="Parties">
+                        <Tab
+                          data-testid="tab-parties"
+                          id="tab-parties"
+                          tabName="parties"
+                          title="Parties"
+                        >
                           <PartiesInformation />
                         </Tab>
                       </Tabs>

@@ -84,6 +84,7 @@ export const PartiesInformation = connect(
                     currentViewMetadata.caseDetail.partyViewTab ===
                       partyViewTabs.respondentCounsel && 'active',
                   )}
+                  data-testid="respondent-counsel"
                   id="respondent-counsel"
                   onClick={() => {
                     updatePartyViewTabSequence({

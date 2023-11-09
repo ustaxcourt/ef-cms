@@ -13,13 +13,13 @@ describe('a repondent modifies their address', () => {
       petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER).then(newAddress => {
         cy.login(USER, `case-detail/${docketNumber}`);
-        cy.get('button')
-          .contains('Notice of Change of Address')
+        cy.getByTestId('document-download-link-NCA').should('exist');
+        cy.getByTestId('tab-case-information').click();
+        cy.getByTestId('tab-parties').click();
+        cy.getByTestId('respondent-counsel').click();
+        cy.getByTestId('address1-line')
+          .contains(`${newAddress}`)
           .should('exist');
-        cy.get('button').contains('Case Information').click();
-        cy.get('button').contains('Parties').click();
-        cy.get('button').contains('Respondent Counsel').click();
-        cy.get('span').contains(`${newAddress}`).should('exist');
       });
     });
   });
@@ -29,10 +29,7 @@ describe('a repondent modifies their address', () => {
       petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER);
       cy.login(USER, `case-detail/${docketNumber}`);
-
-      cy.get('button')
-        .contains('Notice of Change of Address for Test IRS Practitioner')
-        .should('not.exist');
+      cy.getByTestId('document-download-link-NCA').should('not.exist');
     });
   });
 });
