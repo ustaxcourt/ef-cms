@@ -44,17 +44,16 @@ jobs:
         with:
           record: false
           parallel: true
-          group: 'UI-Chrome'
+          browser: 'edge'
+          spec: cypress/cypress-integration/integration/*
           start: |
             mkdir -p /tmp/cypress/
-            npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
+            npm run start:all:ci
             ./wait-until-services.sh
-            sleep 5
-            npm run cypress:integration
 
-      - name: Store Cypress Failure Videos
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress-videos
-          path: ${{ github.workspace }}/cypress/cypress-integration/videos
+      # - name: Store Cypress Failure Videos
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: cypress-videos
+      #     path: ${{ github.workspace }}/cypress/cypress-integration/videos
