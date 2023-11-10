@@ -11,9 +11,14 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
   {
+    clientConnectionId,
     trialNoticePdfsKeys,
     trialSessionId,
-  }: { trialNoticePdfsKeys: string[]; trialSessionId: string },
+  }: {
+    trialNoticePdfsKeys: string[];
+    trialSessionId: string;
+    clientConnectionId: string;
+  },
 ): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
@@ -26,6 +31,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'paper_service_started',
       totalPdfs: trialNoticePdfsKeys.length,
@@ -55,6 +61,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
+      clientConnectionId,
       message: {
         action: 'paper_service_updated',
         pdfsAppended,
@@ -104,6 +111,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'set_trial_calendar_paper_service_complete',
       fileId,

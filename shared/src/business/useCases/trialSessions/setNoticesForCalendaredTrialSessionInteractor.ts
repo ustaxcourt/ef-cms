@@ -10,7 +10,10 @@ import { TrialSession } from '../../entities/trialSessions/TrialSession';
 
 export const setNoticesForCalendaredTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
-  { trialSessionId }: { trialSessionId: string },
+  {
+    clientConnectionId,
+    trialSessionId,
+  }: { trialSessionId: string; clientConnectionId: string },
 ): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
@@ -30,6 +33,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
+      clientConnectionId,
       message: {
         action: 'notice_generation_complete',
         hasPaper: false,
@@ -44,6 +48,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'notice_generation_start',
       totalCases: calendaredCases.length,
@@ -151,6 +156,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'notice_generation_complete',
       trialNoticePdfsKeys,
@@ -158,6 +164,16 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
     },
     userId: user.userId,
   });
+
+  if (trialNoticePdfsKeys.length) {
+    await applicationContext
+      .getUseCases()
+      .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
+        clientConnectionId,
+        trialNoticePdfsKeys,
+        trialSessionId,
+      });
+  }
 };
 
 const waitForJobToFinish = async ({

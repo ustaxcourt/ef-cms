@@ -285,6 +285,7 @@ export const baseState = {
     page: number;
   },
   caseDetail: {} as RawCase,
+  clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognitoLoginUrl: null,
   completeForm: {},
