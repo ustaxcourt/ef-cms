@@ -16,9 +16,12 @@ export const setNoticesForCalendaredTrialSessionAction = async ({
   const trialSessionId =
     props.trialSessionId || get(state.trialSession.trialSessionId);
 
+  const clientConnectionId = get(state.clientConnectionId);
+
   await applicationContext
     .getUseCases()
     .setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      clientConnectionId,
       trialSessionId,
     });
 };
