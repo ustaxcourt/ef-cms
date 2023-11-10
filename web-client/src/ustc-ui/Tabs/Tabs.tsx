@@ -28,7 +28,6 @@ const renderTabFactory = ({
       tabName,
       title,
     } = child.props;
-    console.log(child.props);
 
     const isActiveTab = tabName === activeKey;
     const tabContentId =
