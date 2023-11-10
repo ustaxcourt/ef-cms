@@ -1,5 +1,4 @@
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
-import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -10,7 +9,7 @@ import React from 'react';
 export const AddEditCaseWorksheetModal = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
-    STATUS_OF_MATTER_OPTIONS: CaseWorksheet.STATUS_OF_MATTER_OPTIONS,
+    STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     addEditCaseWorksheetModalHelper: state.addEditCaseWorksheetModalHelper,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
