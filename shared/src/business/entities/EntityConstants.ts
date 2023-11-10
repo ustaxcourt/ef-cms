@@ -121,6 +121,7 @@ export const STATUS_OF_MATTER_OPTIONS = [
   'Submitted to Chief Judge',
   'Revising Draft',
   'Submitted to Reporter',
+  'Awaiting Release',
   'Stayed',
 ];
 
