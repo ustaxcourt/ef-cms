@@ -22,10 +22,6 @@ export class CourtIssuedDocumentTypeC extends CourtIssuedDocument {
     this.docketNumbers = rawProps.docketNumbers;
   }
 
-  getDocumentTitle() {
-    return replaceBracketed(this.documentTitle, this.docketNumbers);
-  }
-
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
     docketNumbers: JoiValidationConstants.STRING.max(500).required().messages({
@@ -36,6 +32,10 @@ export class CourtIssuedDocumentTypeC extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentTypeC.VALIDATION_RULES;
+  }
+
+  getDocumentTitle() {
+    return replaceBracketed(this.documentTitle, this.docketNumbers);
   }
 }
 

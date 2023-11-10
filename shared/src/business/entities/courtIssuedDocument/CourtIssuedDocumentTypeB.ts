@@ -25,15 +25,9 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
     this.judgeWithTitle = rawProps.judgeWithTitle;
   }
 
-  getDocumentTitle() {
-    const judge = this.judgeWithTitle || this.judge;
-    return replaceBracketed(this.documentTitle, judge, this.freeText);
-  }
-
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
-      'any.required': 'Enter a description',
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
     judge: JoiValidationConstants.STRING.required().messages({
@@ -44,6 +38,11 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentTypeB.VALIDATION_RULES;
+  }
+
+  getDocumentTitle() {
+    const judge = this.judgeWithTitle || this.judge;
+    return replaceBracketed(this.documentTitle, judge, this.freeText);
   }
 }
 

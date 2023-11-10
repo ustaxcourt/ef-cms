@@ -31,14 +31,6 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
     this.freeText = rawProps.freeText;
   }
 
-  getDocumentTitle() {
-    return replaceBracketed(
-      this.documentTitle,
-      formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
-      this.freeText,
-    );
-  }
-
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: joi
@@ -54,13 +46,20 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
         'date.min': 'Enter a valid date',
       }),
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
-      'any.required': 'Enter a description',
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
   };
 
   getValidationRules() {
     return CourtIssuedDocumentTypeD.VALIDATION_RULES;
+  }
+
+  getDocumentTitle() {
+    return replaceBracketed(
+      this.documentTitle,
+      formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
+      this.freeText,
+    );
   }
 }
 

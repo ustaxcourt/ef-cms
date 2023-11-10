@@ -29,13 +29,6 @@ export class CourtIssuedDocumentTypeE extends CourtIssuedDocument {
     this.date = rawProps.date;
   }
 
-  getDocumentTitle() {
-    return replaceBracketed(
-      this.documentTitle,
-      formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
-    );
-  }
-
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: joi
@@ -54,6 +47,13 @@ export class CourtIssuedDocumentTypeE extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentTypeE.VALIDATION_RULES;
+  }
+
+  getDocumentTitle() {
+    return replaceBracketed(
+      this.documentTitle,
+      formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
+    );
   }
 }
 

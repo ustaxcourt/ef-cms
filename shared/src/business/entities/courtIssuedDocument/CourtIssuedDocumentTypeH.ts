@@ -25,14 +25,6 @@ export class CourtIssuedDocumentTypeH extends CourtIssuedDocument {
     this.freeText = rawProps.freeText;
   }
 
-  getDocumentTitle() {
-    return replaceBracketed(
-      this.documentTitle,
-      this.freeText,
-      formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
-    );
-  }
-
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: JoiValidationConstants.ISO_DATE.max('now').required().messages({
@@ -48,6 +40,14 @@ export class CourtIssuedDocumentTypeH extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentTypeH.VALIDATION_RULES;
+  }
+
+  getDocumentTitle() {
+    return replaceBracketed(
+      this.documentTitle,
+      this.freeText,
+      formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
+    );
   }
 }
 

@@ -1,9 +1,8 @@
+import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import {
   GENERIC_ORDER_DOCUMENT_TYPE,
   REPORT_PAMPHLET_DOCUMENT_TYPE,
 } from './CourtIssuedDocumentConstants';
-
-import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeA', () => {
