@@ -54,7 +54,7 @@ import { clearExistingDocumentSequence } from './sequences/clearExistingDocument
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
-import { clearOptionalCustomCaseInventoryFilterSequence } from './sequences/clearOptionalCustomCaseInventoryFilterSequence';
+import { clearOptionalCustomCaseReportFilterSequence } from './sequences/clearOptionalCustomCaseReportFilterSequence';
 import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalFieldsStampFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
@@ -120,7 +120,7 @@ import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequ
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
-import { getCustomCaseInventoryReportSequence } from './sequences/getCustomCaseInventoryReportSequence';
+import { getCustomCaseReportSequence } from './sequences/getCustomCaseReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
 import { goToCreateAccountLocalSequence } from './sequences/goToCreateAccountLocalSequence';
@@ -350,7 +350,7 @@ import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimar
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
-import { setCustomCaseInventoryReportFiltersSequence } from './sequences/setCustomCaseInventoryReportFiltersSequence';
+import { setCustomCaseReportFiltersSequence } from './sequences/setCustomCaseReportFiltersSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
@@ -597,7 +597,7 @@ export const presenterSequences = {
   clearModalFormSequence,
   clearModalSequence,
   clearOpenClosedCasesCurrentPageSequence,
-  clearOptionalCustomCaseInventoryFilterSequence,
+  clearOptionalCustomCaseReportFilterSequence,
   clearOptionalFieldsStampFormSequence,
   clearPdfPreviewUrlSequence,
   clearPreferredTrialCitySequence,
@@ -662,7 +662,7 @@ export const presenterSequences = {
   generatePdfFromScanSessionSequence,
   getBlockedCasesByTrialLocationSequence,
   getCaseInventoryReportSequence,
-  getCustomCaseInventoryReportSequence,
+  getCustomCaseReportSequence,
   getUsersInSectionSequence,
   goToApplyStampSequence,
   goToCreateAccountLocalSequence,
@@ -890,7 +890,7 @@ export const presenterSequences = {
   setCaseDetailPrimaryTabSequence,
   setCaseTypeToDisplaySequence,
   setCurrentPageIndexSequence,
-  setCustomCaseInventoryReportFiltersSequence,
+  setCustomCaseReportFiltersSequence,
   setDocumentForPreviewSequence,
   setDocumentForUploadSequence,
   setDocumentUploadModeSequence,

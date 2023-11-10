@@ -4,10 +4,10 @@ import {
   CustomCaseFilingMethods,
   CustomCaseProcedureTypes,
 } from '@shared/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
-import { setCustomCaseInventoryFiltersAction } from '../actions/CaseInventoryReport/setCustomCaseInventoryFiltersAction';
+import { setCustomCaseReportFiltersAction } from '../actions/CaseInventoryReport/setCustomCaseReportFiltersAction';
 
-export const setCustomCaseInventoryReportFiltersSequence = [
-  setCustomCaseInventoryFiltersAction,
+export const setCustomCaseReportFiltersSequence = [
+  setCustomCaseReportFiltersAction,
 ] as unknown as (props: {
   caseStatuses?: { action: 'add' | 'remove'; caseStatus: CaseStatus };
   caseTypes?: { action: 'add' | 'remove'; caseType: CaseType };

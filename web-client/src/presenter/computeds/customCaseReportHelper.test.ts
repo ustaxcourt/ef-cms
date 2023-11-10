@@ -2,15 +2,15 @@ import {
   CASE_STATUS_TYPES,
   CUSTOM_CASE_INVENTORY_PAGE_SIZE,
 } from '@shared/business/entities/EntityConstants';
-import { CustomCaseInventoryReportState } from '../customCaseInventoryReportState';
+import { CustomCaseReportState } from '../customCaseReportState';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { customCaseInventoryReportHelper as customCaseInventoryReportHelperComputed } from './customCaseInventoryReportHelper';
+import { customCaseReportHelper as customCaseReportHelperComputed } from './customCaseReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const customCaseInventoryReportHelper = withAppContextDecorator(
-  customCaseInventoryReportHelperComputed,
+const customCaseReportHelper = withAppContextDecorator(
+  customCaseReportHelperComputed,
   applicationContext,
 );
 
@@ -42,8 +42,8 @@ const mockJudges = [
   { name: 'Judge Currozo', role: 'judge' },
 ];
 
-describe('customCaseInventoryReportHelper', () => {
-  let defaultCustomCaseState: CustomCaseInventoryReportState;
+describe('customCaseReportHelper', () => {
+  let defaultCustomCaseState: CustomCaseReportState;
   let initialState;
 
   beforeEach(() => {
@@ -63,7 +63,7 @@ describe('customCaseInventoryReportHelper', () => {
       totalCases: 0,
     };
     initialState = {
-      customCaseInventory: defaultCustomCaseState,
+      customCaseReport: defaultCustomCaseState,
       judges: mockJudges,
     };
   });
@@ -71,7 +71,7 @@ describe('customCaseInventoryReportHelper', () => {
   it('should generated generate cases with formatted dates', () => {
     defaultCustomCaseState.cases = cases;
 
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -103,7 +103,7 @@ describe('customCaseInventoryReportHelper', () => {
 
     defaultCustomCaseState.cases = foundCases;
 
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -122,7 +122,7 @@ describe('customCaseInventoryReportHelper', () => {
     defaultCustomCaseState.filters.caseStatuses = [];
     defaultCustomCaseState.filters.judges = [];
     defaultCustomCaseState.filters.preferredTrialCities = [];
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -132,7 +132,7 @@ describe('customCaseInventoryReportHelper', () => {
   it('should return false for clearFiltersIsDisabled when case status(es) or case type(s) are selected', () => {
     defaultCustomCaseState.filters.caseTypes = ['CDP (Lien/Levy)'];
     defaultCustomCaseState.filters.caseStatuses = [];
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -142,7 +142,7 @@ describe('customCaseInventoryReportHelper', () => {
   it('should return false for clearFiltersIsDisabled when judges or preferred trial city are selected', () => {
     defaultCustomCaseState.filters.judges = [];
     defaultCustomCaseState.filters.preferredTrialCities = ['Mobile, Alabama'];
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -152,7 +152,7 @@ describe('customCaseInventoryReportHelper', () => {
   it('should return the number of pages rounded up to the nearest whole number', () => {
     defaultCustomCaseState.totalCases = 305;
 
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -164,7 +164,7 @@ describe('customCaseInventoryReportHelper', () => {
     const mockToday = '2022-04-13';
     applicationContext.getUtilities().formatNow.mockReturnValue(mockToday);
 
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
