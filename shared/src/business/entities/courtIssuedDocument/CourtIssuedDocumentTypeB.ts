@@ -1,11 +1,7 @@
-import {
-  CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
-} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-
 export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
   public attachments: boolean;
   public documentTitle?: string;
@@ -29,26 +25,25 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
     this.judgeWithTitle = rawProps.judgeWithTitle;
   }
 
-  static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    freeText: JoiValidationConstants.STRING.max(1000).optional(),
-    judge: JoiValidationConstants.STRING.required(),
-    judgeWithTitle: JoiValidationConstants.STRING.optional(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
-
   getDocumentTitle() {
     const judge = this.judgeWithTitle || this.judge;
     return replaceBracketed(this.documentTitle, judge, this.freeText);
   }
 
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
+      'any.required': 'Enter a description',
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    }),
+    judge: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a judge',
+    }),
+    judgeWithTitle: JoiValidationConstants.STRING.optional(),
+  };
+
   getValidationRules() {
     return CourtIssuedDocumentTypeB.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeB.VALIDATION_ERROR_MESSAGES;
   }
 }
 

@@ -1,7 +1,6 @@
 import {
   GENERIC_ORDER_DOCUMENT_TYPE,
   REPORT_PAMPHLET_DOCUMENT_TYPE,
-  VALIDATION_ERROR_MESSAGES,
 } from './CourtIssuedDocumentConstants';
 
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
@@ -27,7 +26,7 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: 'Select a document type',
       });
     });
 
@@ -67,9 +66,8 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
         serviceStamp: undefined,
       });
-
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+        serviceStamp: 'Select a service stamp',
       });
     });
 
@@ -108,8 +106,8 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
-        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+        freeText: 'Enter a description',
+        serviceStamp: 'Select a service stamp',
       });
     });
 
@@ -120,7 +118,7 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
+        freeText: 'Enter a description',
       });
     });
 
@@ -134,7 +132,7 @@ describe('CourtIssuedDocumentTypeA', () => {
         serviceStamp: 'Served',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
     });
 
@@ -148,7 +146,7 @@ describe('CourtIssuedDocumentTypeA', () => {
         serviceStamp: 'Something invalid',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+        serviceStamp: 'Select a service stamp',
       });
     });
 
