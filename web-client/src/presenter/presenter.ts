@@ -1117,6 +1117,7 @@ declare global {
     get: <T>(slice: T) => T;
     store: {
       set: (key: any, value: any) => void;
+      merge: (key: any, value: any) => void;
       unset: (key: any) => void;
     };
     path: any;

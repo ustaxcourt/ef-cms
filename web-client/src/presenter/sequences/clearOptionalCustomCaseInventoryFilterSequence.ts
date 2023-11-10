@@ -2,4 +2,4 @@ import { clearOptionalCustomCaseInventoryFilterAction } from '../actions/CaseInv
 
 export const clearOptionalCustomCaseInventoryFilterSequence = [
   clearOptionalCustomCaseInventoryFilterAction,
-];
+] as unknown as () => void;
