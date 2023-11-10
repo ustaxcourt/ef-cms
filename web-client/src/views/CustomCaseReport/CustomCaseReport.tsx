@@ -17,23 +17,22 @@ import React, { useRef, useState } from 'react';
 
 export const CustomCaseReport = connect(
   {
-    clearOptionalCustomCaseInventoryFilterSequence:
-      sequences.clearOptionalCustomCaseInventoryFilterSequence,
-    customCaseInventoryFilters: state.customCaseInventory.filters,
-    customCaseInventoryReportHelper: state.customCaseInventoryReportHelper,
-    getCustomCaseInventoryReportSequence:
-      sequences.getCustomCaseInventoryReportSequence,
-    setCustomCaseInventoryReportFiltersSequence:
-      sequences.setCustomCaseInventoryReportFiltersSequence,
-    totalCases: state.customCaseInventory.totalCases,
+    clearOptionalCustomCaseReportFilterSequence:
+      sequences.clearOptionalCustomCaseReportFilterSequence,
+    customCaseReportFilters: state.customCaseReport.filters,
+    customCaseReportHelper: state.customCaseReportHelper,
+    getCustomCaseReportSequence: sequences.getCustomCaseReportSequence,
+    setCustomCaseReportFiltersSequence:
+      sequences.setCustomCaseReportFiltersSequence,
+    totalCases: state.customCaseReport.totalCases,
     validationErrors: state.validationErrors,
   },
   function CustomCaseReport({
-    clearOptionalCustomCaseInventoryFilterSequence,
-    customCaseInventoryFilters,
-    customCaseInventoryReportHelper,
-    getCustomCaseInventoryReportSequence,
-    setCustomCaseInventoryReportFiltersSequence,
+    clearOptionalCustomCaseReportFilterSequence,
+    customCaseReportFilters,
+    customCaseReportHelper,
+    getCustomCaseReportSequence,
+    setCustomCaseReportFiltersSequence,
     totalCases,
     validationErrors,
   }) {
@@ -63,7 +62,7 @@ export const CustomCaseReport = connect(
                 endPickerCls={'grid-col-6 padding-left-2'}
                 endValue=""
                 formGroupCls={'margin-bottom-0'}
-                maxDate={customCaseInventoryReportHelper.today}
+                maxDate={customCaseReportHelper.today}
                 rangePickerCls={'grid-row '}
                 startDateErrorText={validationErrors.startDate}
                 startLabel="Case created start date"
@@ -71,12 +70,12 @@ export const CustomCaseReport = connect(
                 startPickerCls={'grid-col-6 padding-right-2'}
                 startValue=""
                 onChangeEnd={e => {
-                  setCustomCaseInventoryReportFiltersSequence({
+                  setCustomCaseReportFiltersSequence({
                     endDate: e.target.value,
                   });
                 }}
                 onChangeStart={e => {
-                  setCustomCaseInventoryReportFiltersSequence({
+                  setCustomCaseReportFiltersSequence({
                     startDate: e.target.value,
                   });
                 }}
@@ -89,13 +88,13 @@ export const CustomCaseReport = connect(
                 <legend>Petition filing method</legend>
                 <input
                   aria-describedby="petition-filing-method-radios"
-                  checked={customCaseInventoryFilters.filingMethod === 'all'}
+                  checked={customCaseReportFilters.filingMethod === 'all'}
                   className="usa-radio__input"
                   id="petitionFilingMethod-all"
                   name="filingMethod"
                   type="radio"
                   onChange={() => {
-                    setCustomCaseInventoryReportFiltersSequence({
+                    setCustomCaseReportFiltersSequence({
                       filingMethod: 'all',
                     });
                   }}
@@ -111,14 +110,14 @@ export const CustomCaseReport = connect(
                 <input
                   aria-describedby="petition-filing-method-radios"
                   checked={
-                    customCaseInventoryFilters.filingMethod === 'electronic'
+                    customCaseReportFilters.filingMethod === 'electronic'
                   }
                   className="usa-radio__input"
                   id="petitionFilingMethod-electronic"
                   name="filingMethod"
                   type="radio"
                   onChange={() => {
-                    setCustomCaseInventoryReportFiltersSequence({
+                    setCustomCaseReportFiltersSequence({
                       filingMethod: 'electronic',
                     });
                   }}
@@ -133,13 +132,13 @@ export const CustomCaseReport = connect(
               <div className="usa-radio usa-radio__inline">
                 <input
                   aria-describedby="case-procedure-type-radios"
-                  checked={customCaseInventoryFilters.filingMethod === 'paper'}
+                  checked={customCaseReportFilters.filingMethod === 'paper'}
                   className="usa-radio__input"
                   id="petitionFilingMethod-paper"
                   name="filingMethod"
                   type="radio"
                   onChange={() => {
-                    setCustomCaseInventoryReportFiltersSequence({
+                    setCustomCaseReportFiltersSequence({
                       filingMethod: 'paper',
                     });
                   }}
@@ -157,13 +156,13 @@ export const CustomCaseReport = connect(
                 <legend>Case procedure</legend>
                 <input
                   aria-describedby="case-procedure-type-radios"
-                  checked={customCaseInventoryFilters.procedureType === 'All'}
+                  checked={customCaseReportFilters.procedureType === 'All'}
                   className="usa-radio__input"
                   id="caseProcedureType-all"
                   name="procedureType"
                   type="radio"
                   onChange={() => {
-                    setCustomCaseInventoryReportFiltersSequence({
+                    setCustomCaseReportFiltersSequence({
                       procedureType: 'All',
                     });
                   }}
@@ -178,15 +177,13 @@ export const CustomCaseReport = connect(
               <div className="usa-radio usa-radio__inline">
                 <input
                   aria-describedby="case-procedure-type-radios"
-                  checked={
-                    customCaseInventoryFilters.procedureType === 'Regular'
-                  }
+                  checked={customCaseReportFilters.procedureType === 'Regular'}
                   className="usa-radio__input"
                   id="caseProcedureType-regular"
                   name="procedureType"
                   type="radio"
                   onChange={() => {
-                    setCustomCaseInventoryReportFiltersSequence({
+                    setCustomCaseReportFiltersSequence({
                       procedureType: 'Regular',
                     });
                   }}
@@ -201,13 +198,13 @@ export const CustomCaseReport = connect(
               <div className="usa-radio usa-radio__inline">
                 <input
                   aria-describedby="case-procedure-type-radios"
-                  checked={customCaseInventoryFilters.procedureType === 'Small'}
+                  checked={customCaseReportFilters.procedureType === 'Small'}
                   className="usa-radio__input"
                   id="caseProcedureType-small"
                   name="procedureType"
                   type="radio"
                   onChange={() => {
-                    setCustomCaseInventoryReportFiltersSequence({
+                    setCustomCaseReportFiltersSequence({
                       procedureType: 'Small',
                     });
                   }}
@@ -236,12 +233,12 @@ export const CustomCaseReport = connect(
                   aria-labelledby="case-status-label"
                   id="case-status"
                   name="caseStatus"
-                  options={customCaseInventoryReportHelper.caseStatuses}
+                  options={customCaseReportHelper.caseStatuses}
                   placeholder="- Select one or more -"
                   value={'Select one or more'}
                   onChange={inputValue => {
                     if (inputValue) {
-                      setCustomCaseInventoryReportFiltersSequence({
+                      setCustomCaseReportFiltersSequence({
                         caseStatuses: {
                           action: 'add',
                           caseStatus: inputValue.value,
@@ -264,12 +261,12 @@ export const CustomCaseReport = connect(
                   aria-labelledby="case-type-label"
                   id="case-type"
                   name="eventCode"
-                  options={customCaseInventoryReportHelper.caseTypes}
+                  options={customCaseReportHelper.caseTypes}
                   placeholder="- Select one or more -"
                   value="Select one or more"
                   onChange={inputValue => {
                     if (inputValue) {
-                      setCustomCaseInventoryReportFiltersSequence({
+                      setCustomCaseReportFiltersSequence({
                         caseTypes: {
                           action: 'add',
                           caseType: inputValue.value,
@@ -293,12 +290,12 @@ export const CustomCaseReport = connect(
                   aria-labelledby="judges-label"
                   id="judges"
                   name="judges"
-                  options={customCaseInventoryReportHelper.judges}
+                  options={customCaseReportHelper.judges}
                   placeholder="- Select one or more -"
                   value={'Select one or more'}
                   onChange={inputValue => {
                     if (inputValue) {
-                      setCustomCaseInventoryReportFiltersSequence({
+                      setCustomCaseReportFiltersSequence({
                         judges: {
                           action: 'add',
                           judge: inputValue.value,
@@ -321,15 +318,15 @@ export const CustomCaseReport = connect(
                   aria-labelledby="requested-place-of-trial-label"
                   id="trial-location"
                   name="requestedPlaceOfTrial"
-                  options={customCaseInventoryReportHelper.trialCitiesByState}
+                  options={customCaseReportHelper.trialCitiesByState}
                   placeholder="- Select one or more -"
                   searchableOptions={
-                    customCaseInventoryReportHelper.searchableTrialCities
+                    customCaseReportHelper.searchableTrialCities
                   }
                   value="Select one or more"
                   onChange={inputValue => {
                     if (inputValue) {
-                      setCustomCaseInventoryReportFiltersSequence({
+                      setCustomCaseReportFiltersSequence({
                         preferredTrialCities: {
                           action: 'add',
                           preferredTrialCity: inputValue.value,
@@ -344,7 +341,7 @@ export const CustomCaseReport = connect(
 
           <div className="grid-col-12">
             <div className="grid-row">
-              {customCaseInventoryFilters.caseStatuses.map(status => (
+              {customCaseReportFilters.caseStatuses.map(status => (
                 <span className="blue-pill" key={status}>
                   {status}
                   <Icon
@@ -353,7 +350,7 @@ export const CustomCaseReport = connect(
                     icon="times"
                     size="1x"
                     onClick={() => {
-                      setCustomCaseInventoryReportFiltersSequence({
+                      setCustomCaseReportFiltersSequence({
                         caseStatuses: {
                           action: 'remove',
                           caseStatus: status,
@@ -364,7 +361,7 @@ export const CustomCaseReport = connect(
                 </span>
               ))}
 
-              {customCaseInventoryFilters.caseTypes.map(caseType => {
+              {customCaseReportFilters.caseTypes.map(caseType => {
                 return (
                   <span className="blue-pill" key={caseType}>
                     {caseType}
@@ -374,7 +371,7 @@ export const CustomCaseReport = connect(
                       icon="times"
                       size="1x"
                       onClick={() => {
-                        setCustomCaseInventoryReportFiltersSequence({
+                        setCustomCaseReportFiltersSequence({
                           caseTypes: {
                             action: 'remove',
                             caseType,
@@ -386,7 +383,7 @@ export const CustomCaseReport = connect(
                 );
               })}
 
-              {customCaseInventoryFilters.judges.map(judge => {
+              {customCaseReportFilters.judges.map(judge => {
                 return (
                   <span className="blue-pill" key={judge}>
                     {judge}
@@ -396,7 +393,7 @@ export const CustomCaseReport = connect(
                       icon="times"
                       size="1x"
                       onClick={() => {
-                        setCustomCaseInventoryReportFiltersSequence({
+                        setCustomCaseReportFiltersSequence({
                           judges: {
                             action: 'remove',
                             judge,
@@ -407,7 +404,7 @@ export const CustomCaseReport = connect(
                   </span>
                 );
               })}
-              {customCaseInventoryFilters.preferredTrialCities.map(city => {
+              {customCaseReportFilters.preferredTrialCities.map(city => {
                 return (
                   <span className="blue-pill" key={city}>
                     {city}
@@ -417,7 +414,7 @@ export const CustomCaseReport = connect(
                       icon="times"
                       size="1x"
                       onClick={() => {
-                        setCustomCaseInventoryReportFiltersSequence({
+                        setCustomCaseReportFiltersSequence({
                           preferredTrialCities: {
                             action: 'remove',
                             city,
@@ -433,12 +430,12 @@ export const CustomCaseReport = connect(
           <div className="usa-checkbox">
             <input
               aria-label="Select calendaring high priority"
-              checked={customCaseInventoryFilters.highPriority}
+              checked={customCaseReportFilters.highPriority}
               className="usa-checkbox__input"
               id="high-priority-checkbox"
               type="checkbox"
               onChange={() => {
-                setCustomCaseInventoryReportFiltersSequence({
+                setCustomCaseReportFiltersSequence({
                   highPriority: 'highPriority',
                 });
               }}
@@ -456,7 +453,7 @@ export const CustomCaseReport = connect(
             tooltip="Run Report"
             onClick={() => {
               setHasRunCustomCaseReport(true);
-              getCustomCaseInventoryReportSequence({ selectedPage: 0 });
+              getCustomCaseReportSequence({ selectedPage: 0 });
               setActivePage(0);
             }}
           >
@@ -464,24 +461,24 @@ export const CustomCaseReport = connect(
           </Button>
           <Button
             link
-            disabled={customCaseInventoryReportHelper.clearFiltersIsDisabled}
+            disabled={customCaseReportHelper.clearFiltersIsDisabled}
             tooltip="Clear Filters"
-            onClick={() => clearOptionalCustomCaseInventoryFilterSequence()}
+            onClick={() => clearOptionalCustomCaseReportFilterSequence()}
           >
             Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
           <div ref={paginatorTop}>
-            {customCaseInventoryReportHelper.pageCount > 1 && (
+            {customCaseReportHelper.pageCount > 1 && (
               <Paginator
                 breakClassName="hide"
                 forcePage={activePage}
                 marginPagesDisplayed={0}
-                pageCount={customCaseInventoryReportHelper.pageCount}
+                pageCount={customCaseReportHelper.pageCount}
                 pageRangeDisplayed={0}
                 onPageChange={async pageChange => {
                   setActivePage(pageChange.selected);
-                  await getCustomCaseInventoryReportSequence({
+                  await getCustomCaseReportSequence({
                     selectedPage: pageChange.selected,
                   });
                   focusPaginatorTop(paginatorTop);
@@ -496,20 +493,20 @@ export const CustomCaseReport = connect(
             {formatPositiveNumber(totalCases)}
           </div>
           <ReportTable
-            cases={customCaseInventoryReportHelper.cases}
+            cases={customCaseReportHelper.cases}
             hasRunCustomCaseReport={hasRunCustomCaseReport}
             totalCases={totalCases}
           />
-          {customCaseInventoryReportHelper.pageCount > 1 && (
+          {customCaseReportHelper.pageCount > 1 && (
             <Paginator
               breakClassName="hide"
               forcePage={activePage}
               marginPagesDisplayed={0}
-              pageCount={customCaseInventoryReportHelper.pageCount}
+              pageCount={customCaseReportHelper.pageCount}
               pageRangeDisplayed={0}
               onPageChange={async pageChange => {
                 setActivePage(pageChange.selected);
-                await getCustomCaseInventoryReportSequence({
+                await getCustomCaseReportSequence({
                   selectedPage: pageChange.selected,
                 });
                 focusPaginatorTop(paginatorTop);
@@ -534,7 +531,7 @@ const ReportTable = ({
   return (
     <>
       <table
-        aria-label="custom case inventory record"
+        aria-label="custom case record"
         className="usa-table case-detail ustc-table responsive-table"
         id="custom-case-report-table"
       >

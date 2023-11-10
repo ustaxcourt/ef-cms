@@ -18,7 +18,7 @@ import { addConsolidatedProperties } from './utilities/addConsolidatedProperties
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const customCaseInventoryReportHelper = (
+export const customCaseReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
@@ -43,7 +43,7 @@ export const customCaseInventoryReportHelper = (
     value: type,
   }));
 
-  const cases = get(state.customCaseInventory.cases);
+  const cases = get(state.customCaseReport.cases);
 
   const formatDate = isoDateString =>
     applicationContext
@@ -63,7 +63,7 @@ export const customCaseInventoryReportHelper = (
   });
 
   const populatedFilters: CustomCaseInventoryReportFilters = get(
-    state.customCaseInventory.filters,
+    state.customCaseReport.filters,
   );
 
   const clearFiltersIsDisabled = ![
@@ -83,7 +83,7 @@ export const customCaseInventoryReportHelper = (
       return applicationContext.getUtilities().compareStrings(a.label, b.label);
     });
 
-  const totalCases = get(state.customCaseInventory.totalCases);
+  const totalCases = get(state.customCaseReport.totalCases);
   const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);

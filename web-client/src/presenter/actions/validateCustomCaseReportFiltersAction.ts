@@ -12,7 +12,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateCustomInventoryFiltersAction = ({
+export const validateCustomCaseReportFiltersAction = ({
   applicationContext,
   get,
   path,
@@ -25,7 +25,7 @@ export const validateCustomInventoryFiltersAction = ({
   path: any;
 }) => {
   const filters: CustomCaseInventoryReportFilters = get(
-    state.customCaseInventory.filters,
+    state.customCaseReport.filters,
   );
 
   const formattedEndDate = filters.endDate
@@ -40,7 +40,7 @@ export const validateCustomInventoryFiltersAction = ({
         .createISODateString(filters.startDate, FORMATS.MMDDYYYY)
     : undefined;
 
-  const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
+  const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
 
   const errors = new CustomCaseInventorySearch({

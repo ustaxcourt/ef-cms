@@ -10,7 +10,7 @@ import {
 import { CustomCaseInventoryReportFilters } from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setCustomCaseInventoryFiltersAction = ({
+export const setCustomCaseReportFiltersAction = ({
   get,
   props,
   store,
@@ -29,32 +29,29 @@ export const setCustomCaseInventoryFiltersAction = ({
   judges?: { action: 'add' | 'remove'; judge: string };
 }>) => {
   const currentFilters: CustomCaseInventoryReportFilters = get(
-    state.customCaseInventory.filters,
+    state.customCaseReport.filters,
   );
 
   if (props.startDate || props.startDate === '') {
-    store.set(state.customCaseInventory.filters.startDate, props.startDate);
+    store.set(state.customCaseReport.filters.startDate, props.startDate);
   }
   if (props.endDate || props.endDate === '') {
-    store.set(state.customCaseInventory.filters.endDate, props.endDate);
+    store.set(state.customCaseReport.filters.endDate, props.endDate);
   }
   if (props.filingMethod) {
-    store.set(
-      state.customCaseInventory.filters.filingMethod,
-      props.filingMethod,
-    );
+    store.set(state.customCaseReport.filters.filingMethod, props.filingMethod);
   }
 
   if (props.highPriority) {
     store.set(
-      state.customCaseInventory.filters.highPriority,
-      !get(state.customCaseInventory.filters.highPriority),
+      state.customCaseReport.filters.highPriority,
+      !get(state.customCaseReport.filters.highPriority),
     );
   }
 
   if (props.procedureType) {
     store.set(
-      state.customCaseInventory.filters.procedureType,
+      state.customCaseReport.filters.procedureType,
       props.procedureType,
     );
   }
@@ -64,13 +61,13 @@ export const setCustomCaseInventoryFiltersAction = ({
       !currentFilters.caseStatuses.includes(props.caseStatuses.caseStatus)
     ) {
       currentFilters.caseStatuses.push(props.caseStatuses.caseStatus);
-      store.merge(state.customCaseInventory.filters, currentFilters);
+      store.merge(state.customCaseReport.filters, currentFilters);
     } else if (props.caseStatuses.action === 'remove') {
       const foundIndex = currentFilters.caseStatuses.findIndex(
         caseStatus => caseStatus === props.caseStatuses!.caseStatus,
       );
       currentFilters.caseStatuses.splice(foundIndex, 1);
-      store.merge(state.customCaseInventory.filters, currentFilters);
+      store.merge(state.customCaseReport.filters, currentFilters);
     }
   }
   if (props.caseTypes) {
@@ -79,13 +76,13 @@ export const setCustomCaseInventoryFiltersAction = ({
       !currentFilters.caseTypes.includes(props.caseTypes.caseType)
     ) {
       currentFilters.caseTypes.push(props.caseTypes.caseType);
-      store.merge(state.customCaseInventory.filters, currentFilters);
+      store.merge(state.customCaseReport.filters, currentFilters);
     } else if (props.caseTypes.action === 'remove') {
       const foundIndex = currentFilters.caseTypes.findIndex(
         caseType => caseType === props.caseTypes!.caseType,
       );
       currentFilters.caseTypes.splice(foundIndex, 1);
-      store.merge(state.customCaseInventory.filters, currentFilters);
+      store.merge(state.customCaseReport.filters, currentFilters);
     }
   }
 
@@ -95,13 +92,13 @@ export const setCustomCaseInventoryFiltersAction = ({
       !currentFilters.judges.includes(props.judges.judge)
     ) {
       currentFilters.judges.push(props.judges.judge);
-      store.merge(state.customCaseInventory.filters, currentFilters);
+      store.merge(state.customCaseReport.filters, currentFilters);
     } else if (props.judges.action === 'remove') {
       const foundIndex = currentFilters.judges.findIndex(
         caseType => caseType === props.judges!.judge,
       );
       currentFilters.judges.splice(foundIndex, 1);
-      store.merge(state.customCaseInventory.filters, currentFilters);
+      store.merge(state.customCaseReport.filters, currentFilters);
     }
   }
 
@@ -115,13 +112,13 @@ export const setCustomCaseInventoryFiltersAction = ({
       currentFilters.preferredTrialCities.push(
         props.preferredTrialCities.preferredTrialCity,
       );
-      store.merge(state.customCaseInventory.filters, currentFilters);
+      store.merge(state.customCaseReport.filters, currentFilters);
     } else if (props.preferredTrialCities.action === 'remove') {
       const foundIndex = currentFilters.preferredTrialCities.findIndex(
         caseType => caseType === props.preferredTrialCities!.preferredTrialCity,
       );
       currentFilters.preferredTrialCities.splice(foundIndex, 1);
-      store.merge(state.customCaseInventory.filters, currentFilters);
+      store.merge(state.customCaseReport.filters, currentFilters);
     }
   }
 };

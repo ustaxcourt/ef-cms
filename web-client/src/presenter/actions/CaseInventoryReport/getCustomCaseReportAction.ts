@@ -1,13 +1,13 @@
 import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getCustomCaseInventoryReportAction = async ({
+export const getCustomCaseReportAction = async ({
   applicationContext,
   get,
   props,
   store,
 }: ActionProps<{ selectedPage: number }>) => {
-  const filterValues = get(state.customCaseInventory.filters);
+  const filterValues = get(state.customCaseReport.filters);
 
   if (!filterValues.highPriority) {
     delete filterValues.highPriority;
@@ -31,7 +31,7 @@ export const getCustomCaseInventoryReportAction = async ({
       .createEndOfDayISO({ day: endDay, month: endMonth, year: endYear });
   }
 
-  const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
+  const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
 
   const reportData = await applicationContext
@@ -45,10 +45,10 @@ export const getCustomCaseInventoryReportAction = async ({
     });
 
   store.set(
-    state.customCaseInventory.lastIdsOfPages[props.selectedPage + 1],
+    state.customCaseReport.lastIdsOfPages[props.selectedPage + 1],
     reportData.lastCaseId,
   );
 
-  store.set(state.customCaseInventory.cases, reportData.foundCases);
-  store.set(state.customCaseInventory.totalCases, reportData.totalCount);
+  store.set(state.customCaseReport.cases, reportData.foundCases);
+  store.set(state.customCaseReport.totalCases, reportData.totalCount);
 };
