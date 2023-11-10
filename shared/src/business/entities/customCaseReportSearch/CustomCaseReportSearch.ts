@@ -25,7 +25,7 @@ export const CUSTOM_CASE_REPORT_PROCEDURE_TYPES = [
 export type CustomCaseProcedureTypes =
   (typeof CUSTOM_CASE_REPORT_PROCEDURE_TYPES)[number];
 
-export class CustomCaseInventorySearch extends JoiValidationEntity {
+export class CustomCaseReportSearch extends JoiValidationEntity {
   public caseStatuses: CaseStatus[];
   public caseTypes: CaseType[];
   public endDate: string;
@@ -42,7 +42,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
   public startDate: string;
 
   constructor(rawProps) {
-    super('CustomCaseInventorySearch');
+    super('CustomCaseReportSearch');
     this.caseStatuses = rawProps.caseStatuses;
     this.caseTypes = rawProps.caseTypes;
     this.endDate = rawProps.endDate;

@@ -1,32 +1,15 @@
-import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
-import { CustomCaseInventoryReportFilters } from '../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { CustomCaseInventorySearch } from '../../../../shared/src/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
+import { CUSTOM_CASE_REPORT_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
+import { CustomCaseReportSearch } from '../../../../shared/src/business/entities/customCaseReportSearch/CustomCaseReportSearch';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Validates the judge activity report search form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
- * @returns {object} the next path based on if validation was successful or error
- */
 export const validateCustomCaseReportFiltersAction = ({
   applicationContext,
   get,
   path,
   props,
-}: {
-  applicationContext: IApplicationContext;
-  get: any;
-  props: { selectedPage: number };
-  store: any;
-  path: any;
-}) => {
-  const filters: CustomCaseInventoryReportFilters = get(
-    state.customCaseReport.filters,
-  );
+}: ActionProps<{ selectedPage: number }>) => {
+  const filters = get(state.customCaseReport.filters);
 
   const formattedEndDate = filters.endDate
     ? applicationContext
@@ -43,10 +26,10 @@ export const validateCustomCaseReportFiltersAction = ({
   const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
 
-  const errors = new CustomCaseInventorySearch({
+  const errors = new CustomCaseReportSearch({
     ...filters,
     endDate: formattedEndDate,
-    pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+    pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
     searchAfter,
     startDate: formattedStartDate,
   }).getFormattedValidationErrors();

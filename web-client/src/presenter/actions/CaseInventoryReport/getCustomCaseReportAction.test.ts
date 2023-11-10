@@ -1,9 +1,9 @@
-import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import { CUSTOM_CASE_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import {
-  CustomCaseInventoryReportFilters,
-  GetCaseInventoryReportRequest,
-  GetCaseInventoryReportResponse,
-} from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+  CustomCaseReportFilters,
+  GetCustomCaseReportRequest,
+  GetCustomCaseReportResponse,
+} from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getCustomCaseReportAction } from './getCustomCaseReportAction';
 import { presenter } from '../../presenter-mock';
@@ -11,9 +11,9 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getCustomCaseReportAction', () => {
   const lastCaseId = { pk: 'lastCaseId', receivedAt: 8394 };
-  let mockCustomCaseReportResponse: GetCaseInventoryReportResponse;
-  let filterValues: CustomCaseInventoryReportFilters;
-  let expectedRequest: GetCaseInventoryReportRequest;
+  let mockCustomCaseReportResponse: GetCustomCaseReportResponse;
+  let filterValues: CustomCaseReportFilters;
+  let expectedRequest: GetCustomCaseReportRequest;
 
   beforeEach(() => {
     mockCustomCaseReportResponse = {
@@ -24,7 +24,7 @@ describe('getCustomCaseReportAction', () => {
 
     applicationContext
       .getUseCases()
-      .getCustomCaseInventoryReportInteractor.mockResolvedValue(
+      .getCustomCaseReportInteractor.mockResolvedValue(
         mockCustomCaseReportResponse,
       );
 
@@ -44,7 +44,7 @@ describe('getCustomCaseReportAction', () => {
     expectedRequest = {
       ...filterValues,
       endDate: '2022-05-15T03:59:59.999Z',
-      pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+      pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
       searchAfter: { pk: '', receivedAt: 0 },
       startDate: '2022-05-10T04:00:00.000Z',
     };
@@ -67,7 +67,7 @@ describe('getCustomCaseReportAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCustomCaseInventoryReportInteractor,
+      applicationContext.getUseCases().getCustomCaseReportInteractor,
     ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
     expect(result.state.customCaseReport.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
@@ -90,7 +90,7 @@ describe('getCustomCaseReportAction', () => {
     };
     applicationContext
       .getUseCases()
-      .getCustomCaseInventoryReportInteractor.mockResolvedValue(
+      .getCustomCaseReportInteractor.mockResolvedValue(
         mockCustomCaseReportResponse,
       );
     const page1SearchId = { pk: 'page1', receivedAt: 123 };
@@ -115,7 +115,7 @@ describe('getCustomCaseReportAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCustomCaseInventoryReportInteractor,
+      applicationContext.getUseCases().getCustomCaseReportInteractor,
     ).toHaveBeenCalledWith(expect.anything(), expectedRequestWithSearchAfter);
     expect(result.state.customCaseReport.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
@@ -147,7 +147,7 @@ describe('getCustomCaseReportAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCustomCaseInventoryReportInteractor,
+      applicationContext.getUseCases().getCustomCaseReportInteractor,
     ).toHaveBeenCalledWith(expect.anything(), {
       ...expectedRequest,
       highPriority: undefined,
@@ -176,7 +176,7 @@ describe('getCustomCaseReportAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCustomCaseInventoryReportInteractor,
+      applicationContext.getUseCases().getCustomCaseReportInteractor,
     ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
   });
 });

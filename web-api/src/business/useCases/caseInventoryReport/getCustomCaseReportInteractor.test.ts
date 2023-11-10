@@ -1,12 +1,12 @@
 import {
-  GetCaseInventoryReportRequest,
-  getCustomCaseInventoryReportInteractor,
-} from './getCustomCaseInventoryReportInteractor';
+  GetCustomCaseReportRequest,
+  getCustomCaseReportInteractor,
+} from './getCustomCaseReportInteractor';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
-describe('getCustomCaseInventoryReportInteractor', () => {
-  let params: GetCaseInventoryReportRequest;
+describe('getCustomCaseReportInteractor', () => {
+  let params: GetCustomCaseReportRequest;
   beforeEach(() => {
     params = {
       caseStatuses: ['CAV'],
@@ -33,13 +33,11 @@ describe('getCustomCaseInventoryReportInteractor', () => {
       });
 
       await expect(
-        getCustomCaseInventoryReportInteractor(applicationContext, params),
+        getCustomCaseReportInteractor(applicationContext, params),
       ).rejects.toThrow('Unauthorized for case inventory report');
     });
 
     const testCases = [
-      { missingField: 'endDate' },
-      { missingField: 'startDate' },
       { missingField: 'filingMethod' },
       { missingField: 'procedureType' },
     ];
@@ -49,7 +47,7 @@ describe('getCustomCaseInventoryReportInteractor', () => {
         delete params[testCase.missingField];
 
         await expect(
-          getCustomCaseInventoryReportInteractor(applicationContext, params),
+          getCustomCaseReportInteractor(applicationContext, params),
         ).rejects.toThrow();
       });
     });
@@ -63,7 +61,7 @@ describe('getCustomCaseInventoryReportInteractor', () => {
         totalCount: 0,
       });
 
-    await getCustomCaseInventoryReportInteractor(applicationContext, params);
+    await getCustomCaseReportInteractor(applicationContext, params);
 
     expect(
       applicationContext.getPersistenceGateway().getCasesByFilters,

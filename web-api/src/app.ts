@@ -79,7 +79,7 @@ import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getComp
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getCustomCaseInventoryReportLambda } from './lambdas/reports/getCustomCaseInventoryReportLambda';
+import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
 import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocumentQCInboxForSectionLambda';
@@ -751,8 +751,8 @@ app.get(
     lambdaWrapper(getCaseInventoryReportLambda),
   );
   app.get(
-    '/reports/custom-case-inventory-report',
-    lambdaWrapper(getCustomCaseInventoryReportLambda),
+    '/reports/custom-case-report',
+    lambdaWrapper(getCustomCaseReportLambda),
   );
   app.get(
     '/reports/printable-case-inventory-report',
