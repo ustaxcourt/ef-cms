@@ -4,16 +4,16 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import {
   CustomCaseFilingMethods,
-  CustomCaseInventorySearch,
   CustomCaseProcedureTypes,
-} from '@shared/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
+  CustomCaseReportSearch,
+} from '@shared/business/entities/customCaseReportSearch/CustomCaseReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-export type CustomCaseInventoryReportFilters = {
+export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];
   caseTypes: CaseType[];
   endDate?: string;
@@ -25,7 +25,7 @@ export type CustomCaseInventoryReportFilters = {
   judges: string[];
 };
 
-export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
+export type GetCustomCaseReportRequest = CustomCaseReportFilters & {
   pageSize: number;
   searchAfter: {
     receivedAt: number;
@@ -33,7 +33,7 @@ export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
   };
 };
 
-export type GetCaseInventoryReportResponse = {
+export type GetCustomCaseReportResponse = {
   foundCases: CaseInventory[];
   lastCaseId: { receivedAt: number; pk: string };
   totalCount: number;
@@ -54,10 +54,10 @@ export type CaseInventory = Pick<
   | 'highPriority'
 >;
 
-export const getCustomCaseInventoryReportInteractor = async (
+export const getCustomCaseReportInteractor = async (
   applicationContext: IApplicationContext,
-  params: GetCaseInventoryReportRequest,
-): Promise<GetCaseInventoryReportResponse> => {
+  params: GetCustomCaseReportRequest,
+): Promise<GetCustomCaseReportResponse> => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
@@ -68,7 +68,7 @@ export const getCustomCaseInventoryReportInteractor = async (
   params.judges = params.judges || [];
   params.preferredTrialCities = params.preferredTrialCities || [];
 
-  new CustomCaseInventorySearch(params).validate();
+  new CustomCaseReportSearch(params).validate();
 
   return await applicationContext.getPersistenceGateway().getCasesByFilters({
     applicationContext,

@@ -1,12 +1,12 @@
 import {
   CaseInventory,
-  CustomCaseInventoryReportFilters,
-} from '../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+  CustomCaseReportFilters,
+} from '../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 
 export type CustomCaseReportState = {
   totalCases: number;
   cases: CaseInventory[];
-  filters: CustomCaseInventoryReportFilters;
+  filters: CustomCaseReportFilters;
   lastIdsOfPages: { receivedAt: number; pk: string }[];
 };
 

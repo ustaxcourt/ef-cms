@@ -6,8 +6,8 @@ import {
 import {
   CustomCaseFilingMethods,
   CustomCaseProcedureTypes,
-} from '@shared/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
-import { CustomCaseInventoryReportFilters } from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+} from '@shared/business/entities/customCaseReportSearch/CustomCaseReportSearch';
+import { CustomCaseReportFilters } from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setCustomCaseReportFiltersAction = ({
@@ -28,7 +28,7 @@ export const setCustomCaseReportFiltersAction = ({
   procedureType?: CustomCaseProcedureTypes;
   judges?: { action: 'add' | 'remove'; judge: string };
 }>) => {
-  const currentFilters: CustomCaseInventoryReportFilters = get(
+  const currentFilters: CustomCaseReportFilters = get(
     state.customCaseReport.filters,
   );
 

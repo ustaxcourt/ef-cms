@@ -2,14 +2,14 @@ import {
   CASE_STATUSES,
   CASE_TYPES,
   CHIEF_JUDGE,
-  CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+  CUSTOM_CASE_REPORT_PAGE_SIZE,
   TRIAL_CITIES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   CaseInventory,
-  CustomCaseInventoryReportFilters,
-} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+  CustomCaseReportFilters,
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
@@ -62,7 +62,7 @@ export const customCaseReportHelper = (
     return entry;
   });
 
-  const populatedFilters: CustomCaseInventoryReportFilters = get(
+  const populatedFilters: CustomCaseReportFilters = get(
     state.customCaseReport.filters,
   );
 
@@ -84,7 +84,7 @@ export const customCaseReportHelper = (
     });
 
   const totalCases = get(state.customCaseReport.totalCases);
-  const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+  const pageCount = Math.ceil(totalCases / CUSTOM_CASE_REPORT_PAGE_SIZE);
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 

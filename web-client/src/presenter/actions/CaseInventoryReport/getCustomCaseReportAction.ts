@@ -1,4 +1,4 @@
-import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import { CUSTOM_CASE_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getCustomCaseReportAction = async ({
@@ -36,10 +36,10 @@ export const getCustomCaseReportAction = async ({
 
   const reportData = await applicationContext
     .getUseCases()
-    .getCustomCaseInventoryReportInteractor(applicationContext, {
+    .getCustomCaseReportInteractor(applicationContext, {
       ...filterValues,
       endDate: formattedEndDate,
-      pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+      pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
       searchAfter,
       startDate: formattedStartDate,
     });

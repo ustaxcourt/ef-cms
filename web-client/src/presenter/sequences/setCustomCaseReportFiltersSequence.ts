@@ -3,7 +3,7 @@ import { CaseType } from '@shared/business/entities/EntityConstants';
 import {
   CustomCaseFilingMethods,
   CustomCaseProcedureTypes,
-} from '@shared/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
+} from '@shared/business/entities/customCaseReportSearch/CustomCaseReportSearch';
 import { setCustomCaseReportFiltersAction } from '../actions/CaseInventoryReport/setCustomCaseReportFiltersAction';
 
 export const setCustomCaseReportFiltersSequence = [

@@ -1,6 +1,6 @@
 import {
   CASE_STATUS_TYPES,
-  CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+  CUSTOM_CASE_REPORT_PAGE_SIZE,
 } from '@shared/business/entities/EntityConstants';
 import { CustomCaseReportState } from '../customCaseReportState';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -156,7 +156,7 @@ describe('customCaseReportHelper', () => {
       state: initialState,
     });
 
-    const expectedPageCount = Math.ceil(305 / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+    const expectedPageCount = Math.ceil(305 / CUSTOM_CASE_REPORT_PAGE_SIZE);
     expect(result.pageCount).toEqual(expectedPageCount);
   });
 
