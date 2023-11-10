@@ -50,9 +50,11 @@ jobs:
         run: |
           mkdir -p cypress/cypress-integration/videos-${{ matrix.ci_node_index }}/
           cp cypress/cypress-integration/videos/* cypress/cypress-integration/videos-${{ matrix.ci_node_index }}/
+          ls cypress/cypress-integration/videos/
+          ls cypress/cypress-integration/videos/videos-${{ matrix.ci_node_index }}
       - name: Store Cypress Failure Videos
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: cypress-videos
+          name: cypress-videos-${{ matrix.ci_node_index }}
           path: ${{ github.workspace }}/cypress/cypress-integration/videos-${{ matrix.ci_node_index }}
