@@ -54,9 +54,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .boolean()
     .optional()
     .messages({ '*': 'Enter selection for Attachments.' }),
-  certificateOfService: joi.boolean().optional().messages({
-    '*': 'Indicate whether you are including a Certificate of Service',
-  }),
+  certificateOfService: joi.boolean().optional(),
   certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now')
     .when('certificateOfService', {
       is: true,

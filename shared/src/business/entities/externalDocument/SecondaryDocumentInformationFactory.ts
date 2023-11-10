@@ -31,9 +31,7 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
       attachments: joi
         .boolean()
         .messages({ '*': 'Enter selection for Attachments.' }),
-      certificateOfService: joi.boolean().messages({
-        '*': 'Indicate whether you are including a Certificate of Service',
-      }),
+      certificateOfService: joi.boolean(),
       certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
         'now',
       ).messages({
