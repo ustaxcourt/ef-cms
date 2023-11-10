@@ -1,6 +1,5 @@
 import {
   CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
   yesterdayFormatted,
 } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
@@ -32,19 +31,6 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
     this.freeText = rawProps.freeText;
   }
 
-  static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    date: joi.when('createdAt', {
-      is: joi.exist().not(null),
-      otherwise:
-        JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
-      then: JoiValidationConstants.ISO_DATE.required(),
-    }),
-    freeText: JoiValidationConstants.STRING.max(1000).optional(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
-
   getDocumentTitle() {
     return replaceBracketed(
       this.documentTitle,
@@ -53,12 +39,28 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
     );
   }
 
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    date: joi
+      .when('createdAt', {
+        is: joi.exist().not(null),
+        otherwise:
+          JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
+        then: JoiValidationConstants.ISO_DATE.required(),
+      })
+      .messages({
+        '*': 'Enter a date',
+        'date.max': 'Enter a valid date',
+        'date.min': 'Enter a valid date',
+      }),
+    freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
+      'any.required': 'Enter a description',
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    }),
+  };
+
   getValidationRules() {
     return CourtIssuedDocumentTypeD.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeD.VALIDATION_ERROR_MESSAGES;
   }
 }
 

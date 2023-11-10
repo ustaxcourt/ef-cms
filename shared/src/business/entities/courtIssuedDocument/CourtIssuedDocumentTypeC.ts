@@ -1,7 +1,4 @@
-import {
-  CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
-} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -25,23 +22,20 @@ export class CourtIssuedDocumentTypeC extends CourtIssuedDocument {
     this.docketNumbers = rawProps.docketNumbers;
   }
 
-  static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    docketNumbers: JoiValidationConstants.STRING.max(500).required(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
-
   getDocumentTitle() {
     return replaceBracketed(this.documentTitle, this.docketNumbers);
   }
 
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    docketNumbers: JoiValidationConstants.STRING.max(500).required().messages({
+      'any.required': 'Enter docket number(s)',
+      'string.max': 'Limit is 500 characters. Enter 500 or fewer characters.',
+    }),
+  };
+
   getValidationRules() {
     return CourtIssuedDocumentTypeC.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeC.VALIDATION_ERROR_MESSAGES;
   }
 }
 
