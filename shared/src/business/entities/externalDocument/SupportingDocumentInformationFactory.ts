@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { MAX_FILE_SIZE_BYTES } from '../EntityConstants';
+import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_MB } from '../EntityConstants';
 import { includes } from 'lodash';
 import { makeRequiredHelper } from './externalDocumentHelpers';
 import joi from 'joi';
@@ -54,14 +54,22 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
     let schema = { ...SupportingDocumentInformationFactory.VALIDATION_RULES };
 
     let schemaOptionalItems = {
-      supportingDocumentFile: joi.object(),
+      supportingDocumentFile: joi
+        .object()
+        .messages({ '*': 'Upload a document' }),
       supportingDocumentFileSize: joi
         .number()
         .optional()
         .min(1)
         .max(MAX_FILE_SIZE_BYTES)
-        .integer(),
-      supportingDocumentFreeText: JoiValidationConstants.STRING,
+        .integer()
+        .messages({
+          '*': 'Your Supporting Document file size is empty.',
+          'number.max': `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
+      supportingDocumentFreeText: JoiValidationConstants.STRING.messages({
+        '*': 'Enter name',
+      }),
     };
 
     const makeRequired = itemName => {
