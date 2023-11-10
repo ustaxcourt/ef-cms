@@ -1,9 +1,12 @@
 import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
 /**
  * saveCalendarNoteInteractor
@@ -34,6 +37,10 @@ export const saveCalendarNoteInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   trialSession.caseOrder.forEach(_caseOrder => {
     if (_caseOrder.docketNumber === docketNumber) {
