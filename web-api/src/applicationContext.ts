@@ -193,7 +193,10 @@ export const createApplicationContext = (
     user = new User(appContextUser);
   }
 
-  const getCurrentUser = () => {
+  const getCurrentUser = (): {
+    role: string;
+    userId: string;
+  } => {
     return user;
   };
 
@@ -278,6 +281,13 @@ export const createApplicationContext = (
             }),
             adminUpdateUserAttributes: () => ({
               promise: () => {},
+            }),
+            listUsers: () => ({
+              promise: () => {
+                throw new Error(
+                  'Please use cognito locally by running npm run start:api:cognito-local',
+                );
+              },
             }),
           };
         }

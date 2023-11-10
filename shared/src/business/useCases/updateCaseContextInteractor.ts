@@ -1,11 +1,14 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../web-api/src/errors/errors';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 
 /**
  * updateCaseContextInteractor
@@ -71,6 +74,12 @@ export const updateCaseContextInteractor = async (
           applicationContext,
           trialSessionId: oldCase.trialSessionId,
         });
+
+      if (!trialSession) {
+        throw new NotFoundError(
+          `Trial session ${oldCase.trialSessionId} was not found.`,
+        );
+      }
 
       const trialSessionEntity = new TrialSession(trialSession, {
         applicationContext,
