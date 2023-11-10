@@ -22,22 +22,22 @@ const getJudgeUser = async (
   return judgeUser;
 };
 
-/**
- * getNotificationsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseServicesSupervisorData optional caseServicesSupervisorData containing section
- * @param {object} providers.judgeUser optional judgeUser for additional filtering
- * @returns {object} inbox unread message counts for the individual and section inboxes
- */
 export const getNotificationsInteractor = async (
   applicationContext: IServerApplicationContext,
   {
     caseServicesSupervisorData,
     judgeUserId,
   }: { judgeUserId: string; caseServicesSupervisorData: any },
-) => {
+): Promise<{
+  qcIndividualInProgressCount: number;
+  qcIndividualInboxCount: number;
+  qcSectionInProgressCount: number;
+  qcSectionInboxCount: number;
+  qcUnreadCount: number;
+  unreadMessageCount: number;
+  userInboxCount: number;
+  userSectionCount: number;
+}> => {
   const appContextUser = applicationContext.getCurrentUser();
 
   const [currentUser, judgeUser] = await Promise.all([
