@@ -2,23 +2,37 @@ import {
   CASE_STATUSES,
   CASE_TYPES,
   CHIEF_JUDGE,
-  CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+  CUSTOM_CASE_REPORT_PAGE_SIZE,
   TRIAL_CITIES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  CaseInventory,
+  CustomCaseReportFilters,
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { CustomCaseInventoryReportFilters } from '../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { InputOption } from '@web-client/ustc-ui/Utils/types';
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const customCaseInventoryReportHelper = (
+export const customCaseReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): {
+  activeTrialCities: InputOption[];
+  caseStatuses: InputOption[];
+  caseTypes: InputOption[];
+  cases: CaseInventory[];
+  clearFiltersIsDisabled: boolean;
+  judges: InputOption[];
+  pageCount: number;
+  searchableTrialCities: InputOption[];
+  today: string;
+  trialCitiesByState: InputOption[];
+} => {
   const caseStatuses = CASE_STATUSES.map(status => ({
     label: status,
     value: status,
@@ -29,7 +43,7 @@ export const customCaseInventoryReportHelper = (
     value: type,
   }));
 
-  const cases = get(state.customCaseInventory.cases);
+  const cases = get(state.customCaseReport.cases);
 
   const formatDate = isoDateString =>
     applicationContext
@@ -48,8 +62,8 @@ export const customCaseInventoryReportHelper = (
     return entry;
   });
 
-  const populatedFilters: CustomCaseInventoryReportFilters = get(
-    state.customCaseInventory.filters,
+  const populatedFilters: CustomCaseReportFilters = get(
+    state.customCaseReport.filters,
   );
 
   const clearFiltersIsDisabled = ![
@@ -69,12 +83,8 @@ export const customCaseInventoryReportHelper = (
       return applicationContext.getUtilities().compareStrings(a.label, b.label);
     });
 
-  const totalCases = get(state.customCaseInventory.totalCases);
-  const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
-
-  const runReportButtonIsDisabled = !(
-    populatedFilters.startDate && populatedFilters.endDate
-  );
+  const totalCases = get(state.customCaseReport.totalCases);
+  const pageCount = Math.ceil(totalCases / CUSTOM_CASE_REPORT_PAGE_SIZE);
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
@@ -113,7 +123,6 @@ export const customCaseInventoryReportHelper = (
     clearFiltersIsDisabled,
     judges,
     pageCount,
-    runReportButtonIsDisabled,
     searchableTrialCities,
     today,
     trialCitiesByState: states,
