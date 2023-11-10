@@ -72,7 +72,6 @@ export const getUserTokenWithRetry = async (
   username: string,
   password: string,
 ) => {
-  console.log('starting getUserTokenWithRetry', username, password);
   return promiseRetry(
     retry => {
       return getUserToken(password, username).catch(retry);
