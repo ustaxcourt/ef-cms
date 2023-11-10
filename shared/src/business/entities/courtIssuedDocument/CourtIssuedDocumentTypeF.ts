@@ -30,6 +30,24 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
     this.freeText = rawProps.freeText;
   }
 
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    }),
+    judge: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a judge',
+    }),
+    judgeWithtitle: JoiValidationConstants.STRING.optional(),
+    trialLocation: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a trial location',
+    }),
+  };
+
+  getValidationRules() {
+    return CourtIssuedDocumentTypeF.VALIDATION_RULES;
+  }
+
   getDocumentTitle() {
     const judge = this.judgeWithTitle || this.judge;
 
@@ -47,25 +65,6 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
       this.trialLocation,
       this.freeText,
     );
-  }
-
-  static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
-      'any.required': 'Enter a description',
-      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
-    }),
-    judge: JoiValidationConstants.STRING.required().messages({
-      '*': 'Select a judge',
-    }),
-    judgeWithtitle: JoiValidationConstants.STRING.optional(),
-    trialLocation: JoiValidationConstants.STRING.required().messages({
-      '*': 'Select a trial location',
-    }),
-  };
-
-  getValidationRules() {
-    return CourtIssuedDocumentTypeF.VALIDATION_RULES;
   }
 }
 

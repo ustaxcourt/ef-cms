@@ -20,10 +20,6 @@ export class CourtIssuedDocumentBase extends CourtIssuedDocument {
     this.filingDate = rawProps.filingDate;
   }
 
-  getDocumentTitle() {
-    return this.documentTitle!;
-  }
-
   static VALIDATION_RULES = {
     attachments: joi
       .boolean()
@@ -48,6 +44,10 @@ export class CourtIssuedDocumentBase extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentBase.VALIDATION_RULES;
+  }
+
+  getDocumentTitle() {
+    return this.documentTitle!;
   }
 }
 

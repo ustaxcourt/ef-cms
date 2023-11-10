@@ -27,6 +27,22 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
     this.trialLocation = rawProps.trialLocation;
   }
 
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    date: JoiValidationConstants.ISO_DATE.required().messages({
+      '*': 'Enter a date',
+      'date.max': 'Enter a valid date',
+      'date.min': 'Enter a valid date',
+    }),
+    trialLocation: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a trial location',
+    }),
+  };
+
+  getValidationRules() {
+    return CourtIssuedDocumentTypeG.VALIDATION_RULES;
+  }
+
   getDocumentTitle() {
     if (this.trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
       this.documentTitle = getStandaloneRemoteDocumentTitle({
@@ -44,22 +60,6 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
       formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
       this.trialLocation,
     );
-  }
-
-  static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    date: JoiValidationConstants.ISO_DATE.required().messages({
-      '*': 'Enter a date',
-      'date.max': 'Enter a valid date',
-      'date.min': 'Enter a valid date',
-    }),
-    trialLocation: JoiValidationConstants.STRING.required().messages({
-      '*': 'Select a trial location',
-    }),
-  };
-
-  getValidationRules() {
-    return CourtIssuedDocumentTypeG.VALIDATION_RULES;
   }
 }
 

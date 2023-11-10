@@ -32,10 +32,6 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
     this.serviceStamp = rawProps.serviceStamp;
   }
 
-  getDocumentTitle() {
-    return replaceBracketed(this.documentTitle, this.freeText);
-  }
-
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000)
@@ -64,6 +60,10 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentTypeA.VALIDATION_RULES;
+  }
+
+  getDocumentTitle() {
+    return replaceBracketed(this.documentTitle, this.freeText);
   }
 }
 
