@@ -67,6 +67,13 @@ export const CaseListTable = connect(
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
           {cases?.length > 0 && (
             <>
+              {dashboardExternalHelper.showFilingFeeMessage && (
+                <span className="float-right margin-bottom-1">
+                  * May take 2-3 business days from payment received date or
+                  approval of waiver to update
+                </span>
+              )}
+
               <table
                 className="usa-table responsive-table dashboard"
                 id="case-list"
