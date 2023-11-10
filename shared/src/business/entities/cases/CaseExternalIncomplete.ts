@@ -62,7 +62,7 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
       is: joi.exist(),
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    }).messages({ '*': 'Select a case type' }), // todo test
+    }).messages({ '*': 'Select a case type' }),
     countryType: JoiValidationConstants.STRING.optional(),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
