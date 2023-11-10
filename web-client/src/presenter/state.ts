@@ -391,7 +391,7 @@ export const baseState = {
   },
   pdfPreviewUrl: '',
   pendingReports: {},
-  permissions: null,
+  permissions: {} as Record<string, boolean>,
   practitionerDetail: {},
   previewPdfFile: null,
   progressIndicator: {
