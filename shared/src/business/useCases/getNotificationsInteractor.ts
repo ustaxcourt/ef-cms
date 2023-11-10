@@ -62,34 +62,30 @@ export const getNotificationsInteractor = async (
     .getUtilities()
     .getWorkQueueFilters({ section: sectionToDisplay, user: currentUser });
 
-  const userInbox = await applicationContext
-    .getPersistenceGateway()
-    .getUserInboxMessages({
+  const [
+    userInbox,
+    sectionInbox,
+    documentQCIndividualInbox,
+    documentQCSectionInbox,
+  ] = await Promise.all([
+    applicationContext.getPersistenceGateway().getUserInboxMessages({
       applicationContext,
       userId,
-    });
-
-  const sectionInbox = await applicationContext
-    .getPersistenceGateway()
-    .getSectionInboxMessages({
+    }),
+    applicationContext.getPersistenceGateway().getSectionInboxMessages({
       applicationContext,
       section,
-    });
-
-  const documentQCIndividualInbox = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCInboxForUser({
+    }),
+    applicationContext.getPersistenceGateway().getDocumentQCInboxForUser({
       applicationContext,
       userId,
-    });
-
-  const documentQCSectionInbox = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCInboxForSection({
+    }),
+    applicationContext.getPersistenceGateway().getDocumentQCInboxForSection({
       applicationContext,
       judgeUserName: judgeUser ? judgeUser.name : null,
       section: sectionToDisplay,
-    });
+    }),
+  ]);
 
   const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
     filters['my']['inProgress'],
