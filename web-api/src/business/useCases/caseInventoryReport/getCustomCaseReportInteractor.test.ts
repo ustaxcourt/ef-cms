@@ -13,6 +13,7 @@ describe('getCustomCaseReportInteractor', () => {
       caseTypes: ['Deficiency'],
       endDate: '2022-02-01T17:21:05.483Z',
       filingMethod: 'all',
+      judges: [],
       pageSize: 100,
       preferredTrialCities: ['Birmingham, Alabama'],
       procedureType: 'All',
