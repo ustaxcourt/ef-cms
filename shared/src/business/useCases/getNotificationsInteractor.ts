@@ -1,22 +1,24 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
+import { IServerApplicationContext } from '@web-api/applicationContext';
 import { isEmpty } from 'lodash';
 
 const getJudgeUser = async (
   judgeUserId: string,
   applicationContext: IApplicationContext,
-  currentUser: any,
+  role: string,
 ) => {
-  let judgeUser = null;
+  let judgeUser;
 
   if (judgeUserId) {
     judgeUser = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId: judgeUserId });
-  } else if (currentUser.role === ROLES.adc) {
+  } else if (role === ROLES.adc) {
     judgeUser = {
       name: CHIEF_JUDGE,
     };
   }
+
   return judgeUser;
 };
 
@@ -30,7 +32,7 @@ const getJudgeUser = async (
  * @returns {object} inbox unread message counts for the individual and section inboxes
  */
 export const getNotificationsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: IServerApplicationContext,
   {
     caseServicesSupervisorData,
     judgeUserId,
@@ -38,15 +40,12 @@ export const getNotificationsInteractor = async (
 ) => {
   const appContextUser = applicationContext.getCurrentUser();
 
-  const currentUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: appContextUser.userId });
-
-  const judgeUser = await getJudgeUser(
-    judgeUserId,
-    applicationContext,
-    currentUser,
-  );
+  const [currentUser, judgeUser] = await Promise.all([
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById({ applicationContext, userId: appContextUser.userId }),
+    getJudgeUser(judgeUserId, applicationContext, appContextUser.role),
+  ]);
 
   const { section, userId } = caseServicesSupervisorData || currentUser;
 
