@@ -51,6 +51,10 @@ export const CustomCaseReport = connect(
             <h1>Custom Case Report</h1>
           </div>
           <div className="grid-col-12 blue-container margin-bottom-4">
+            <p className="margin-x-3">
+              Search by start or end date, date range, or leave blank for all
+              dates.
+            </p>
             <div className="grid-col-auto margin-x-3">
               <DateRangePickerComponent
                 endDateErrorText={validationErrors.endDate}
