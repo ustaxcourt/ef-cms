@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const createOrderHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const documentToEdit = get(state.documentToEdit);
   const caseDetail = get(state.caseDetail);
   const addedDocketNumbers = get(state.addedDocketNumbers);
