@@ -5,7 +5,7 @@ import { LocationInformationForm } from './LocationInformationForm';
 import { SessionAssignmentsForm } from './SessionAssignmentsForm';
 import { SessionInformationForm } from './SessionInformationForm';
 import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';

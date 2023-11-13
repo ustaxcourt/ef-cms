@@ -124,7 +124,7 @@ export const filterFormattedSessionsByStatus = trialTerms => {
 export const formattedTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const judgeId = get(state.judgeUser.userId);
   const currentTrialSessionId = get(state.trialSession.trialSessionId);
   const currentUser = applicationContext.getCurrentUser();

@@ -1,12 +1,10 @@
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
