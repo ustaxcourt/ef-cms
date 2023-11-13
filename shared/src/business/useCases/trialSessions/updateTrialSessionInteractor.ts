@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Case } from '../../entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -15,7 +16,10 @@ import { get } from 'lodash';
 // eslint-disable-next-line complexity
 export const updateTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: RawTrialSession },
+  {
+    clientConnectionId,
+    trialSession,
+  }: { trialSession: RawTrialSession; clientConnectionId: string },
 ): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
@@ -189,6 +193,7 @@ export const updateTrialSessionInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'update_trial_session_complete',
       fileId,

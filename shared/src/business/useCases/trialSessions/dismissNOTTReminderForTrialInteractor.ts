@@ -4,7 +4,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-
 /**
  * dismissNOTTReminderForTrialInteractor
  * @param {object} applicationContext the application context

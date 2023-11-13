@@ -837,7 +837,8 @@ export const presenterSequences = {
     gotoPractitionerEditDocumentSequence as unknown as Function,
   gotoPrintPaperServiceSequence:
     gotoPrintPaperServiceSequence as unknown as Function,
-  gotoPrintPaperTrialNoticesSequence,
+  gotoPrintPaperTrialNoticesSequence:
+    gotoPrintPaperTrialNoticesSequence as unknown as Function,
   gotoPrintPractitionerCasesSequence:
     gotoPrintPractitionerCasesSequence as unknown as Function,
   gotoPrintableCaseConfirmationSequence:

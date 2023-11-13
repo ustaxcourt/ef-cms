@@ -5,7 +5,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-
 /**
  * setForHearingInteractor
  *
