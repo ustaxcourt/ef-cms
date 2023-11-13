@@ -1,4 +1,4 @@
-import { state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 
 import { Get } from 'cerebral';
 export const publicCaseDetailHeaderHelper = (get: Get) => {
