@@ -17,7 +17,7 @@ export const createConfirmLinkLocalAction = ({ props }: ActionProps) => {
   return {
     alertSuccess: {
       alertType: 'success',
-      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${confirmationLink}">Verify Email Address</a>.`,
+      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${confirmationLink}">Verify Email Address</a>`,
       title: 'Account Created Locally',
     },
   };

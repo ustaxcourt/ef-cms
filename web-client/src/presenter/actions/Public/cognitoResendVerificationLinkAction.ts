@@ -18,7 +18,7 @@ export const cognitoResendVerificationLinkAction = async ({
       return path.success({
         alertSuccess: {
           alertType: 'success',
-          message: `Email verification re-sent to ${email}.`,
+          message: `Verification email was sent again to ${email}.`,
           title: 'Email re-sent',
         },
       });
