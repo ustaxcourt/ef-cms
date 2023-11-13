@@ -30,7 +30,7 @@ export const getSupportingDocumentTypeList = categoryMap => {
 export const addDocketEntryHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     AMENDMENT_EVENT_CODES,
     INTERNAL_CATEGORY_MAP,
