@@ -2,7 +2,7 @@ import { CourtIssuedNonstandardForm } from '../CourtIssuedDocketEntry/CourtIssue
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   courtIssuedDocketEntryOnChange,
   onInputChange,

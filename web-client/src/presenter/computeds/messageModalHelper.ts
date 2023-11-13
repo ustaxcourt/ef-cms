@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const messageModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
     CASE_SERVICES_SUPERVISOR_SECTION,

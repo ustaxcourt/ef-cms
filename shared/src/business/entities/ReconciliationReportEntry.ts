@@ -1,5 +1,5 @@
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { pick } from 'lodash';
 
 export class ReconciliationReportEntry extends JoiValidationEntity {
@@ -45,10 +45,6 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
       'servedAt',
       'servedPartiesCode',
     ]);
-  }
-
-  getErrorToMessageMap() {
-    return {};
   }
 }
 
