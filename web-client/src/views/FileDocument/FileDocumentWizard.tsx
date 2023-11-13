@@ -7,7 +7,7 @@ import { SelectDocumentType } from './SelectDocumentType';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { ViewAllDocuments } from './ViewAllDocuments';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
