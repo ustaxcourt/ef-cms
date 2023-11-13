@@ -286,6 +286,7 @@ export const baseState = {
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
+  clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
   cognitoLoginUrl: null,
