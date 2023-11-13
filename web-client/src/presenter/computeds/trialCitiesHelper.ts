@@ -11,7 +11,8 @@ import { findIndex, sortBy } from 'lodash';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 export const trialCitiesHelper =
-  (get: Get, applicationContext: ClientApplicationContext) => procedureType => {
+  (get: Get, applicationContext: ClientApplicationContext): any =>
+  procedureType => {
     const { TRIAL_CITIES, TRIAL_SESSION_SCOPE_TYPES } =
       applicationContext.getConstants();
     let trialCities;

@@ -13,7 +13,7 @@ import { Get } from 'cerebral';
 export const editPetitionerInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { CONTACT_TYPES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
   const { contact } = cloneDeep(get(state.form));

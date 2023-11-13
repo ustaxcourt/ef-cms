@@ -3,7 +3,6 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-
 export const getCaseInventoryReportInteractor = async (
   applicationContext,
   {

@@ -1,6 +1,6 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { ModalDialog } from '../ModalDialog';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
