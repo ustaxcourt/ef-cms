@@ -39,6 +39,7 @@ describe('updateTrialSessionInteractor', () => {
 
     await expect(
       updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: MOCK_TRIAL_REMOTE,
       }),
     ).rejects.toThrow();
@@ -54,6 +55,7 @@ describe('updateTrialSessionInteractor', () => {
 
     await expect(
       updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: { ...MOCK_TRIAL_REMOTE, startDate: '1776-12-01' },
       }),
     ).rejects.toThrow('Trial session cannot be updated after its start date');
@@ -68,6 +70,7 @@ describe('updateTrialSessionInteractor', () => {
 
     await expect(
       updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: MOCK_TRIAL_REMOTE,
       }),
     ).rejects.toThrow();
@@ -79,6 +82,7 @@ describe('updateTrialSessionInteractor', () => {
       .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: MOCK_TRIAL_INPERSON,
     });
 
@@ -96,6 +100,7 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         judge: undefined,
@@ -117,6 +122,7 @@ describe('updateTrialSessionInteractor', () => {
       .getTrialSessionById.mockResolvedValue(mockTrialSessionWithJudge);
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         judge: judgeUser,
@@ -144,6 +150,7 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         judge: {
@@ -171,6 +178,7 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         trialClerk: trialClerkUser,
@@ -198,6 +206,7 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         trialClerk: {
@@ -229,6 +238,7 @@ describe('updateTrialSessionInteractor', () => {
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: MOCK_TRIAL_INPERSON,
     });
 
@@ -256,6 +266,7 @@ describe('updateTrialSessionInteractor', () => {
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: MOCK_TRIAL_INPERSON,
     });
 
@@ -308,6 +319,7 @@ describe('updateTrialSessionInteractor', () => {
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         ...updatedFields,
@@ -333,6 +345,7 @@ describe('updateTrialSessionInteractor', () => {
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         ...updatedFields,
@@ -357,6 +370,7 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         isCalendared: true,
@@ -382,6 +396,7 @@ describe('updateTrialSessionInteractor', () => {
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: MOCK_TRIAL_INPERSON,
     });
 
@@ -399,6 +414,7 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: MOCK_TRIAL_INPERSON,
     });
 
@@ -415,6 +431,7 @@ describe('updateTrialSessionInteractor', () => {
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         caseOrder: [
@@ -438,6 +455,7 @@ describe('updateTrialSessionInteractor', () => {
     const mockSwingSessionId = '06419775-e726-4c3b-a7e0-193d379fa39d';
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         swingSession: true,
@@ -498,6 +516,7 @@ describe('updateTrialSessionInteractor', () => {
         '07a2a119-c142-4811-87e0-7d6bc2d06a1b';
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: desiredTrialSession,
       });
 
@@ -517,6 +536,7 @@ describe('updateTrialSessionInteractor', () => {
         TRIAL_SESSION_PROCEEDING_TYPES.remote;
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: desiredTrialSession,
       });
 
@@ -540,6 +560,7 @@ describe('updateTrialSessionInteractor', () => {
         TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: desiredTrialSession,
       });
 

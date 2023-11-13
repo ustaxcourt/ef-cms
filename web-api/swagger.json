@@ -4811,7 +4811,7 @@
         ]
       }
     },
-    "/async/trial-sessions/paper-service-pdf/{key}": {
+    "/trial-sessions/paper-service-pdf/{key}": {
       "parameters": [
         {
           "name": "key",
