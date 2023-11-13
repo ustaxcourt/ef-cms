@@ -16,7 +16,7 @@ const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 export const fileDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { AMENDMENT_EVENT_CODES, CATEGORY_MAP, PARTY_TYPES } =
     applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);

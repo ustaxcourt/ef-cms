@@ -53,7 +53,7 @@ import { Get } from 'cerebral';
 export const partiesInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { ALLOWLIST_FEATURE_FLAGS, CONTACT_TYPES } =
     applicationContext.getConstants();
   const otherContactTypes = [
