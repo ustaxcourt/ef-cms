@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const caseDetailSubnavHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const isInternalUser = applicationContext

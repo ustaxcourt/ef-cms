@@ -4,7 +4,7 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getCalendaredCasesForTrialSessionInteractor } from './getCalendaredCasesForTrialSessionInteractor';

@@ -4,10 +4,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

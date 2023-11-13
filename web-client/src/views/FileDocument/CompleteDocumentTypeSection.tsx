@@ -2,7 +2,7 @@ import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSect
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   fileDocumentPrimaryOnChange,
   onInputChange,
