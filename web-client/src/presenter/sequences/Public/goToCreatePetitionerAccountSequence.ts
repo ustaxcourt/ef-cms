@@ -6,4 +6,4 @@ export const goToCreatePetitionerAccountSequence = [
   clearFormAction,
   clearErrorAlertsAction,
   setupCurrentPageAction('CreatePetitionerAccount'),
-];
+] as unknown as () => void;
