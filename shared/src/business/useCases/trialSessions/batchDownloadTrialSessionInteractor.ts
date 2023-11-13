@@ -1,9 +1,6 @@
 import { Case, isClosed } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
