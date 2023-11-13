@@ -13,10 +13,12 @@ export const DateSelector = ({
   label,
   minDate,
   onChange,
+  placeHolderText,
   showDateHint = false,
 }: {
   defaultValue: string | undefined;
   displayOptionalHintText?: boolean;
+  placeHolderText?: string;
   errorText?: string;
   disabled?: boolean;
   formGroupClassNames?: string;
@@ -102,6 +104,7 @@ export const DateSelector = ({
           className="usa-input"
           id={`${id}-picker`}
           name={`${id}-date-picker`}
+          placeholder={placeHolderText}
           type="text"
         />
       </div>
