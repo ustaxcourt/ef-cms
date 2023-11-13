@@ -6,7 +6,7 @@ import { Get } from 'cerebral';
 export const startCaseHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { CASE_TYPES_MAP, FILING_TYPES, PARTY_TYPES, USER_ROLES } =
     applicationContext.getConstants();
   const form = get(state.form);

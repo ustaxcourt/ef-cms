@@ -2,7 +2,7 @@ import { Mobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicCaseDetailHeader } from './PublicCaseDetailHeader';
 import { PublicCaseDetailSubnavTabs } from './PublicCaseDetailSubnavTabs';
 import { PublicDocketRecord } from './PublicDocketRecord';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
