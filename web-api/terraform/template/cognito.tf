@@ -28,7 +28,7 @@ resource "aws_cognito_user_pool" "pool" {
           text-decoration: none;">Verify Email</button>##}
       </span>
 
-      <p>If you did not create an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a></p>
+      <p>If you did not create an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</p>
 
       <hr>
 
