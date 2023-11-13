@@ -1,10 +1,10 @@
 import { Case } from '../../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * deleteTrialSessionInteractor
@@ -32,7 +32,7 @@ export const deleteTrialSessionInteractor = async (
     });
 
   if (!trialSession) {
-    throw new Error('trial session not found');
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
   const trialSessionEntity = new TrialSession(trialSession, {
