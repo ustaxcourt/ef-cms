@@ -8,7 +8,7 @@ import { Get } from 'cerebral';
 export const practitionerDocumentationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const permissions = get(state.permissions);
   const practitionerDocuments = get(state.practitionerDocuments) ?? [];
   const tableSort = get(state.tableSort);

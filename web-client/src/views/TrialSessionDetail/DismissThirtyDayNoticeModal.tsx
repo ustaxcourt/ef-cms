@@ -1,5 +1,5 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
 export const DismissThirtyDayNoticeModal = connect(

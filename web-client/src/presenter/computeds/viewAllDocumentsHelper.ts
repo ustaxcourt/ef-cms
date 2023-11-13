@@ -9,7 +9,7 @@ import { Get } from 'cerebral';
 export const viewAllDocumentsHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { CATEGORIES, CATEGORY_MAP } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
 
