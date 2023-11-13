@@ -4,7 +4,7 @@
 #   smoketest to verify the Cognito pool retains its Lambda triggers
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "${1}" ] && echo "ERROR: The env to run smoketest is missing from the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1

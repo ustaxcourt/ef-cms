@@ -1,5 +1,5 @@
 import { Case } from '../../entities/cases/Case';
-import { NotFoundError } from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -9,7 +9,6 @@ import {
   TrialSession,
 } from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { partition } from 'lodash';
 
 export const setTrialSessionCalendarInteractor = async (

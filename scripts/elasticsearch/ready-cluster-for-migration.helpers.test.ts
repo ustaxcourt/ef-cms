@@ -8,15 +8,25 @@ import {
 import {
   checkIfEmpty,
   checkIfExists,
-  deleteIfExists,
   readyClusterForMigration,
 } from './ready-cluster-for-migration.helpers';
 import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
+import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { mockClient } from 'aws-sdk-client-mock';
 
 let mockedStatusCode: number = 200;
 let mockedCount: number = 0;
+const aliases = jest
+  .fn()
+  .mockImplementation(() => ({ body: [], statusCode: 200 }));
+const indices = jest
+  .fn()
+  .mockImplementation(() => ({ body: [], statusCode: 200 }));
 const mockedClient = {
+  cat: {
+    aliases,
+    indices,
+  },
   count: jest.fn().mockImplementation(() => ({
     body: {
       count: mockedCount,
@@ -24,6 +34,7 @@ const mockedClient = {
   })),
   indices: {
     delete: jest.fn(),
+    deleteAlias: jest.fn().mockReturnValue({ statusCode: 200 }),
     exists: jest
       .fn()
       .mockImplementation(() => ({ statusCode: mockedStatusCode })),
@@ -39,37 +50,6 @@ const mockedExit = jest
   .mockImplementation((code?: number | undefined): never => {
     throw new Error('process.exit: ' + code);
   });
-
-describe('deleteIfExists', () => {
-  beforeEach(() => {
-    mockedStatusCode = 200;
-  });
-
-  it('checks to see if the index exists', async () => {
-    await deleteIfExists({ client: mockedClient, index: 'double-foo' });
-
-    expect(mockedClient.indices.exists).toHaveBeenCalledWith({
-      body: {},
-      index: 'double-foo',
-    });
-  });
-
-  it('deletes the index if it exists', async () => {
-    mockedStatusCode = 200;
-    await deleteIfExists({ client: mockedClient, index: 'double-foo' });
-
-    expect(mockedClient.indices.delete).toHaveBeenCalledWith({
-      body: {},
-      index: 'double-foo',
-    });
-  });
-
-  it('does not attempt to delete the index if it does not exist', async () => {
-    mockedStatusCode = 404;
-    await deleteIfExists({ client: mockedClient, index: 'double-foo' });
-    expect(mockedClient.indices.delete).not.toHaveBeenCalled();
-  });
-});
 
 describe('checkIfExists', () => {
   const mockedDomainName = 'foo';
@@ -170,19 +150,42 @@ describe('readyClusterForMigration', () => {
       mockedCount = 0;
     });
 
-    it.each(elasticsearchIndexes)(
-      'checks if each index exists and deletes it',
-      async index => {
-        await readyClusterForMigration(mockedDomainName);
-        expect(mockedClient.indices.exists).toHaveBeenCalledWith({
-          body: {},
+    it('does not delete aliases if none exist', async () => {
+      await readyClusterForMigration(mockedDomainName);
+      expect(mockedClient.indices.deleteAlias).not.toHaveBeenCalled();
+    });
+
+    it("lists the cluster's aliases and deletes them", async () => {
+      const mockAliases = elasticsearchIndexes.map(index => {
+        return {
+          alias: getBaseAliasFromIndexName(index),
           index,
-        });
-        expect(mockedClient.indices.exists).toHaveBeenCalledWith({
-          body: {},
-          index,
-        });
-      },
-    );
+        };
+      });
+      aliases.mockReturnValueOnce({ body: mockAliases, statusCode: 200 });
+
+      await readyClusterForMigration(mockedDomainName);
+      expect(mockedClient.indices.deleteAlias).toHaveBeenCalledTimes(
+        mockAliases.length,
+      );
+    });
+
+    it('does not delete indices if none exist', async () => {
+      await readyClusterForMigration(mockedDomainName);
+      expect(mockedClient.indices.delete).not.toHaveBeenCalled();
+    });
+
+    it("lists the cluster's indices and deletes them", async () => {
+      aliases.mockReturnValueOnce({ body: [], statusCode: 200 });
+      const mockIndices = elasticsearchIndexes.map(index => {
+        return { index };
+      });
+      indices.mockReturnValueOnce({ body: mockIndices, statusCode: 200 });
+
+      await readyClusterForMigration(mockedDomainName);
+      expect(mockedClient.indices.delete).toHaveBeenCalledTimes(
+        mockIndices.length,
+      );
+    });
   });
 });

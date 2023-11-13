@@ -127,7 +127,7 @@ export const FilingsAndProceedings = connect<
                 entry.isStricken && 'stricken-docket-record',
                 'view-pdf-link',
               )}
-              data-test={`document-viewer-link-${entry.eventCode}`}
+              data-testid={`document-viewer-link-${entry.eventCode}`}
               onClick={() =>
                 changeTabAndSetViewerDocumentToDisplaySequence({
                   docketRecordTab: 'documentView',
