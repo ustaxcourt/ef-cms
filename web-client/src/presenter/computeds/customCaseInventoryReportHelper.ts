@@ -18,7 +18,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const customCaseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseStatuses = CASE_STATUSES.map(status => ({
     label: status,
     value: status,

@@ -1,5 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 const seal = require('../images/ustc_seal.svg') as string;
 
