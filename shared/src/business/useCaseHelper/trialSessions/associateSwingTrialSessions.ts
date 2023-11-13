@@ -1,9 +1,12 @@
 import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
 /**
  * associateSwingTrialSessions
@@ -33,6 +36,10 @@ export const associateSwingTrialSessions = async (
       applicationContext,
       trialSessionId: swingSessionId,
     });
+
+  if (!swingTrialSession) {
+    throw new NotFoundError(`Trial session ${swingSessionId} was not found.`);
+  }
 
   const swingSessionEntity = new TrialSession(swingTrialSession, {
     applicationContext,

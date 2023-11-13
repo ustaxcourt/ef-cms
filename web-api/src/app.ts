@@ -35,7 +35,6 @@ import { createPractitionerDocumentLambda } from './lambdas/practitioners/create
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
 import { createTrialSessionLambda } from './lambdas/trialSessions/createTrialSessionLambda';
 import { createUserLambda } from './lambdas/users/createUserLambda';
-import { createUserLocalLambda } from './users/createUserLocalLambda';
 import { deleteAuthCookieLambda } from './lambdas/auth/deleteAuthCookieLambda';
 import { deleteCaseDeadlineLambda } from './lambdas/caseDeadline/deleteCaseDeadlineLambda';
 import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
@@ -79,7 +78,7 @@ import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getComp
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getCustomCaseInventoryReportLambda } from './lambdas/reports/getCustomCaseInventoryReportLambda';
+import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
 import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocumentQCInboxForSectionLambda';
@@ -99,6 +98,7 @@ import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseL
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
+import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionerDocumentDownloadUrlLambda } from './lambdas/practitioners/getPractitionerDocumentDownloadUrlLambda';
 import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPractitionerDocumentLambda';
@@ -751,8 +751,8 @@ app.get(
     lambdaWrapper(getCaseInventoryReportLambda),
   );
   app.get(
-    '/reports/custom-case-inventory-report',
-    lambdaWrapper(getCustomCaseInventoryReportLambda),
+    '/reports/custom-case-report',
+    lambdaWrapper(getCustomCaseReportLambda),
   );
   app.get(
     '/reports/printable-case-inventory-report',
@@ -800,6 +800,10 @@ app.get(
   app.post(
     '/async/trial-sessions/paper-service-pdf',
     lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
+  );
+  app.get(
+    '/trial-sessions/paper-service-pdf/:fileId',
+    lambdaWrapper(getPaperServicePdfUrlLambda),
   );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
@@ -1026,8 +1030,6 @@ if (process.env.IS_LOCAL) {
       isAsync: true,
     }),
   );
-
-  app.post('/users/local', lambdaWrapper(createUserLocalLambda));
 
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 
