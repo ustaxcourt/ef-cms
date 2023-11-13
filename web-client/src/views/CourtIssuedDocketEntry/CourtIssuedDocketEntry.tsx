@@ -74,7 +74,7 @@ export const CourtIssuedDocketEntry = connect(
 
           {!addCourtIssuedDocketEntryHelper.showServiceWarning &&
             isEditingDocketEntry && (
-              <Hint exclamation fullWidth>
+              <Hint fullWidth>
                 This docket entry has not been served on the parties.
               </Hint>
             )}
