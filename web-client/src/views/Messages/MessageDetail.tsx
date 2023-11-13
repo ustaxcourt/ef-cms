@@ -9,7 +9,7 @@ import { ForwardMessageModalDialog } from './ForwardMessageModalDialog';
 import { MessageDocument } from './MessageDocument';
 import { ReplyToMessageModalDialog } from './ReplyToMessageModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
