@@ -1,6 +1,6 @@
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';

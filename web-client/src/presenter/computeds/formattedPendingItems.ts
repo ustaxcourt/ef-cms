@@ -33,7 +33,7 @@ import { Get } from 'cerebral';
 export const formattedPendingItems = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
   let items = (get(state.pendingReports.pendingItems) || []).map(item =>

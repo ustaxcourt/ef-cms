@@ -5,7 +5,7 @@ import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
