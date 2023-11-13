@@ -1,8 +1,10 @@
-import { sequence } from 'cerebral';
 import { toggleWorkingCopySortAction } from '../actions/TrialSessionWorkingCopy/toggleWorkingCopySortAction';
 import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
 
-export const toggleWorkingCopySortSequence = sequence<{
+export const toggleWorkingCopySortSequence = [
+  toggleWorkingCopySortAction,
+  updateTrialSessionWorkingCopyAction,
+] as unknown as (props: {
   sortField: string;
   sortOrder: 'asc' | 'desc';
-}>([toggleWorkingCopySortAction, updateTrialSessionWorkingCopyAction]);
+}) => void;

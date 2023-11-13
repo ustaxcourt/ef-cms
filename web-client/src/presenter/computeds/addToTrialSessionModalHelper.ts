@@ -133,7 +133,7 @@ import { Get } from 'cerebral';
 export const addToTrialSessionModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
   const trialSessionsFilter = trialSession =>
     [SESSION_STATUS_GROUPS.new, SESSION_STATUS_GROUPS.open].includes(

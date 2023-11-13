@@ -4,7 +4,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
