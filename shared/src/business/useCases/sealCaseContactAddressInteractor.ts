@@ -6,7 +6,7 @@ import {
 import {
   UnauthorizedError,
   UnprocessableEntityError,
-} from '../../../../web-api/src/errors/errors';
+} from '@web-api/errors/errors';
 
 /**
  * sealCaseContactAddressInteractor

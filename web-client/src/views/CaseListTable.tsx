@@ -4,7 +4,7 @@ import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from './WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';

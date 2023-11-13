@@ -124,7 +124,7 @@ import { Get } from 'cerebral';
 export const formattedTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const judgeId = get(state.judgeUser.userId);
   const currentTrialSessionId = get(state.trialSessionId);
   const currentUser = applicationContext.getCurrentUser();

@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const caseInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { STATUS_TYPES } = applicationContext.getConstants();
 
   const user = applicationContext.getCurrentUser();
