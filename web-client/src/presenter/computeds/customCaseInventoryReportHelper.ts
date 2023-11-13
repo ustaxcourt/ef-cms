@@ -4,21 +4,39 @@ import {
   CHIEF_JUDGE,
   CUSTOM_CASE_INVENTORY_PAGE_SIZE,
   TRIAL_CITIES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  CaseInventory,
+  CustomCaseInventoryReportFilters,
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { CustomCaseInventoryReportFilters } from '../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { InputOption } from '@web-client/ustc-ui/Utils/types';
-import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const customCaseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  activeTrialCities: InputOption[];
+  caseStatuses: InputOption[];
+  caseTypes: InputOption[];
+  cases: (CaseInventory & {
+    inConsolidatedGroup: boolean;
+    consolidatedIconTooltipText: string;
+    shouldIndent: boolean;
+    isLeadCase: boolean;
+  })[];
+  clearFiltersIsDisabled: boolean;
+  judges: InputOption[];
+  pageCount: number;
+  searchableTrialCities: InputOption[];
+  today: string;
+  trialCitiesByState: InputOption[];
+} => {
   const caseStatuses = CASE_STATUSES.map(status => ({
     label: status,
     value: status,
@@ -37,15 +55,14 @@ export const customCaseInventoryReportHelper = (
       .formatDateString(isoDateString, FORMATS.MMDDYY);
 
   const reportData = cases.map(entry => {
-    entry = addConsolidatedProperties({
-      applicationContext,
-      consolidatedObject: entry,
-    });
+    const consolidatedEntry = applicationContext
+      .getUtilities()
+      .setConsolidationFlagsForDisplay(entry);
 
-    entry.caseCaption = Case.getCaseTitle(entry.caseCaption);
-    entry.receivedAt = formatDate(entry.receivedAt);
+    consolidatedEntry.caseCaption = Case.getCaseTitle(entry.caseCaption);
+    consolidatedEntry.receivedAt = formatDate(entry.receivedAt);
 
-    return entry;
+    return consolidatedEntry;
   });
 
   const populatedFilters: CustomCaseInventoryReportFilters = get(
