@@ -15,7 +15,7 @@ import { PublicSearch } from './Public/PublicSearch';
 import { TodaysOpinions } from './Public/TodaysOpinions';
 import { TodaysOrders } from './Public/TodaysOrders';
 import { UsaBanner } from './UsaBanner';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { useScript } from '../utilities/useScript';
 import React, { useEffect } from 'react';

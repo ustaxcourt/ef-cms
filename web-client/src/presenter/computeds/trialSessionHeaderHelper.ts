@@ -7,15 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const trialSessionHeaderHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): {
-  isStandaloneSession: boolean;
-  nameToDisplay: string;
-  showBatchDownloadButton: boolean;
-  showPrintCalendarButton: boolean;
-  showPrintPaperServicePDFsButton: boolean;
-  showSwitchToSessionDetail: boolean;
-  showSwitchToWorkingCopy: boolean;
-} => {
+): any => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const currentUser = applicationContext.getCurrentUser();

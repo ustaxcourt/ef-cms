@@ -1,14 +1,12 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../web-api/src/errors/errors';
+import { NotFoundError } from '../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * updateCaseContextInteractor
