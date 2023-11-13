@@ -10,7 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const formattedMessages = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const tableSort = get(state.tableSort);
 
   const { completedMessages, messages } = getFormattedMessages({
