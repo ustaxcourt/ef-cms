@@ -4,7 +4,6 @@ import {
   goToCaseDetail,
   verifyEmailChange,
 } from '../support/pages/case-detail';
-import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import { goToCaseDetailPetitioner } from '../support/pages/petitioner-dashboard';
@@ -14,11 +13,12 @@ import {
   serveCaseToIrs,
 } from '../support/pages/create-paper-case';
 import { goToMyDocumentQC } from '../support/pages/document-qc';
+import { v4 as uuidv4 } from 'uuid';
 const { closeScannerSetupDialogIfExists, login } =
   getEnvironmentSpecificFunctions();
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
-const randomizedEmail = `${faker.string.uuid()}@example.com`;
+const randomizedEmail = `${uuidv4()}@example.com`;
 
 if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
   describe('Petitions clerk', () => {

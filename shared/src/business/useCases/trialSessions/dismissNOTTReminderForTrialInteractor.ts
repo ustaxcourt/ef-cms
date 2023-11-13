@@ -1,9 +1,10 @@
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '@web-api/errors/errors';
+
 /**
  * dismissNOTTReminderForTrialInteractor
  * @param {object} applicationContext the application context
@@ -26,6 +27,10 @@ export const dismissNOTTReminderForTrialInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!currentTrialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const updatedTrialSessionEntity: TrialSession = new TrialSession(
     { ...currentTrialSession, dismissedAlertForNOTT: true },

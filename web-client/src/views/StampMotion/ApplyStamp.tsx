@@ -338,8 +338,8 @@ export const ApplyStamp = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-testid="status-report-or-stip-decision-due-date"
                         htmlFor="dueDateMessage-statusReportOrStipDecisionDueDate"
-                        id="dueDateMessage-statusReportOrStipDecisionDueDate-label"
                       >
                         The parties shall file a status report or proposed
                         stipulated decision by:
@@ -355,7 +355,7 @@ export const ApplyStamp = connect(
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
                           key: 'date',
-                          toFormat: constants.DATE_FORMATS.ISO,
+                          toFormat: constants.DATE_FORMATS.MMDDYY,
                           value: e.target.value,
                         });
                         validateStampSequence();
@@ -404,7 +404,7 @@ export const ApplyStamp = connect(
                   <Button
                     link
                     className="margin-left-205"
-                    id="clear-optional-fields"
+                    data-testid="clear-optional-fields"
                     onClick={e => {
                       e.preventDefault();
                       clearOptionalFieldsStampFormSequence();
@@ -444,7 +444,7 @@ export const ApplyStamp = connect(
                         </span>
                         {(form.strickenFromTrialSession ||
                           form.jurisdictionalOption ||
-                          (form.dueDateMessage && form.day) ||
+                          (form.dueDateMessage && form.date) ||
                           form.customText) && <hr className="narrow-hr" />}
                         {form.strickenFromTrialSession && (
                           <>
@@ -458,10 +458,9 @@ export const ApplyStamp = connect(
                           </>
                         )}
                         <span>
-                          {form.day && (
+                          {form.date && (
                             <>
-                              - {form.dueDateMessage} {form.month}/{form.day}/
-                              {form.year} -
+                              - {form.dueDateMessage} {form.date} -
                               <br />
                             </>
                           )}
