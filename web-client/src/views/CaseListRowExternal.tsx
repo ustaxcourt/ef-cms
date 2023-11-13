@@ -12,7 +12,7 @@ const getCaseRow = ({
 }) => {
   return (
     <React.Fragment key={formattedCase.docketNumber}>
-      <tr>
+      <tr data-testid={formattedCase.docketNumber}>
         <td>
           <span
             className={classNames({
@@ -42,7 +42,11 @@ const getCaseRow = ({
           </div>
           {formattedCase.caseTitle}
         </td>
-        {showFilingFee && <td>{formattedCase.petitionPaymentStatus}</td>}
+        {showFilingFee && (
+          <td data-testid="petition-payment-status">
+            {formattedCase.petitionPaymentStatus}
+          </td>
+        )}
       </tr>
       {formattedCase.consolidatedCases &&
         formattedCase.consolidatedCases.map(consolidatedCase =>
