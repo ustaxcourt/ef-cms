@@ -4,10 +4,7 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
-import {
-  InvalidRequest,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
