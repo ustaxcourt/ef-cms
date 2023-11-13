@@ -31,9 +31,10 @@ response=$(aws cognito-idp admin-initiate-auth \
     --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}" 2>/dev/null)
 
 
-if [[ "${response}" == *'.AuthenticationResult.IdToken'* ]]; then
-    PETITIONS_CLERK_TOKEN=$(echo "${response}" | jq -r '.AuthenticationResult.IdToken')
+if [ $? -eq 0 ]; then
+          PETITIONS_CLERK_TOKEN=$(echo "${response}" | jq -r '.AuthenticationResult.IdToken')
     export PETITIONS_CLERK_TOKEN
+
 else
-    echo "Error: 'AuthenticationResult.IdToken' not found in the response"
+    echo "Error: cognito-idp admin-initiate-auth failed; unable to set PETITIONS_CLERK_TOKEN"
 fi
