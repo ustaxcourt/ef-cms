@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { navigateToTrialSessionDetailAction } from '@web-client/presenter/actions/TrialSession/navigateToTrialSessionDetailAction';
 
 export const printPaperServiceForTrialCompleteSequence = [
   clearAlertsAction,
-  setupCurrentPageAction('TrialSessionDetail'),
+  navigateToTrialSessionDetailAction,
 ];

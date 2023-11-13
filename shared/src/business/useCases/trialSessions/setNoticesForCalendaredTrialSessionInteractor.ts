@@ -1,37 +1,17 @@
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '@web-api/errors/errors';
 
-const waitForJobToFinish = ({ applicationContext, jobId }) => {
-  return new Promise(resolve => {
-    const interval = setInterval(async () => {
-      const jobStatus = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionJobStatusForCase({
-          applicationContext,
-          jobId,
-        });
-      if (jobStatus && jobStatus.unfinishedCases === 0) {
-        clearInterval(interval);
-        resolve(undefined);
-      }
-    }, 5000);
-  });
-};
-
-/**
- * Generates notices for all calendared cases for the given trialSessionId
- * @param {object} applicationContext the applicationContext
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the trial session id
- */
 export const setNoticesForCalendaredTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
-  { trialSessionId }: { trialSessionId: string },
-) => {
+  {
+    clientConnectionId,
+    trialSessionId,
+  }: { trialSessionId: string; clientConnectionId: string },
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -45,15 +25,17 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       trialSessionId,
     });
 
-  let trialNoticePdfsKeys = [];
+  let trialNoticePdfsKeys: string[] = [];
 
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
+      clientConnectionId,
       message: {
         action: 'notice_generation_complete',
         hasPaper: false,
         trialNoticePdfsKeys,
+        trialSessionId,
       },
       userId: user.userId,
     });
@@ -63,6 +45,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'notice_generation_start',
       totalCases: calendaredCases.length,
@@ -76,6 +59,10 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
@@ -141,7 +128,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       trialSessionStatus: 'complete',
     });
 
-  await trialSessionEntity.setNoticesIssued();
+  trialSessionEntity.setNoticesIssued();
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
@@ -166,10 +153,43 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'notice_generation_complete',
       trialNoticePdfsKeys,
+      trialSessionId: trialSessionEntity.trialSessionId,
     },
     userId: user.userId,
   });
+
+  if (trialNoticePdfsKeys.length) {
+    await applicationContext
+      .getUseCases()
+      .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
+        clientConnectionId,
+        trialNoticePdfsKeys,
+        trialSessionId,
+      });
+  }
+};
+
+const waitForJobToFinish = async ({
+  applicationContext,
+  jobId,
+}: {
+  applicationContext: IApplicationContext;
+  jobId: string;
+}): Promise<void> => {
+  const { unfinishedCases } = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionJobStatusForCase({
+      applicationContext,
+      jobId,
+    });
+  if (unfinishedCases === 0) {
+    return;
+  }
+
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  await waitForJobToFinish({ applicationContext, jobId });
 };
