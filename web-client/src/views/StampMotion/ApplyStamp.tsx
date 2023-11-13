@@ -352,6 +352,7 @@ export const ApplyStamp = connect(
                       formGroupClassNames="display-inline-block padding-0 margin-left-5"
                       id="due-date-input-statusReportDueDate"
                       minDate={applyStampFormHelper.minDate}
+                      placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
                           key: 'date',
