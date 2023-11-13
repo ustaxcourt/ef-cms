@@ -2,7 +2,6 @@ import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
-import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
@@ -21,10 +20,10 @@ const formatPendingItem = (
   { applicationContext }: { applicationContext: ClientApplicationContext },
 ): PendingItemFormatted => {
   if (item.leadDocketNumber) {
-    item = addConsolidatedProperties({
-      applicationContext,
-      consolidatedObject: item,
-    });
+    // TODO 10174: add consolidation types
+    item = applicationContext
+      .getUtilities()
+      .setConsolidationFlagsForDisplay(item);
   }
 
   const caseTitle = applicationContext.getCaseTitle(item.caseCaption || '');
