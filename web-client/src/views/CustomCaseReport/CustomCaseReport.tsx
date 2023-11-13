@@ -417,7 +417,7 @@ export const CustomCaseReport = connect(
                         setCustomCaseReportFiltersSequence({
                           preferredTrialCities: {
                             action: 'remove',
-                            city,
+                            preferredTrialCity: city,
                           },
                         });
                       }}
