@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const userContactEditHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
 

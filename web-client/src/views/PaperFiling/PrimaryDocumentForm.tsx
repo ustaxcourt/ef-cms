@@ -5,7 +5,7 @@ import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   docketEntryOnChange,
   onInputChange,

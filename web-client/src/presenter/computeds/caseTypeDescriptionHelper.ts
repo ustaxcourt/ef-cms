@@ -14,7 +14,7 @@ import { Get } from 'cerebral';
 export const caseTypeDescriptionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const form = get(state.form);
   const {
     CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
