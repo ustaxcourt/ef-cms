@@ -436,7 +436,7 @@ export const CustomCaseReport = connect(
               type="checkbox"
               onChange={() => {
                 setCustomCaseReportFiltersSequence({
-                  highPriority: 'highPriority',
+                  highPriority: true,
                 });
               }}
             />
