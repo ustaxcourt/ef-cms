@@ -1,6 +1,7 @@
 import { Case } from './cases/Case';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
+import { PaymentStatusTypes } from './EntityConstants';
 import { createISODateString } from '../utilities/DateHandler';
 
 export class UserCase extends JoiValidationEntity {
@@ -11,6 +12,7 @@ export class UserCase extends JoiValidationEntity {
   public leadDocketNumber?: string;
   public status: string;
   public closedDate?: string;
+  // public petitionPaymentStatus: PaymentStatusTypes;
 
   constructor(rawUserCase) {
     super('UserCase');
@@ -22,6 +24,7 @@ export class UserCase extends JoiValidationEntity {
     this.leadDocketNumber = rawUserCase.leadDocketNumber;
     this.status = rawUserCase.status;
     this.closedDate = rawUserCase.closedDate;
+    // this.petitionPaymentStatus = rawUserCase.petitionPaymentStatus;
   }
 
   getValidationRules() {
@@ -33,6 +36,7 @@ export class UserCase extends JoiValidationEntity {
       docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
       entityName: JoiValidationConstants.STRING.valid('UserCase').required(),
       leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber,
+      // petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
       status: Case.VALIDATION_RULES.status,
     };
   }

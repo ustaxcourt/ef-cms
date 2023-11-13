@@ -89,6 +89,7 @@ export const CaseListTable = connect(
                   </tr>
                 </thead>
                 <tbody>
+                  {console.log('cases', cases)}
                   {cases.map(item => (
                     <CaseListRowExternal
                       onlyLinkIfRequestedUserAssociated
