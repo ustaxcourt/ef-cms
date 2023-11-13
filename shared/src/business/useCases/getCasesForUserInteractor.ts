@@ -4,14 +4,17 @@ import {
   isLeadCase,
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
+import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
 import { RawUserCase, UserCase } from '../entities/UserCase';
+import { UserCaseDTO } from '@shared/business/entities/UserCaseDTO';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { uniqBy } from 'lodash';
 
 export type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
   consolidatedCases?: TAssociatedCase[];
-} & RawUserCase;
+  petitionPaymentStatus: PaymentStatusTypes;
+} & Omit<RawUserCase, 'entityName'>;
 
 export const getCasesForUserInteractor = async (
   applicationContext: IApplicationContext,
@@ -21,20 +24,28 @@ export const getCasesForUserInteractor = async (
 }> => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  const allUserCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
+  const docketNumbers = (
+    await applicationContext.getPersistenceGateway().getCasesForUser({
       applicationContext,
       userId,
-    });
+    })
+  ).map(c => c.docketNumber);
 
-  const associatedUserCases = allUserCases.map(aCase => {
-    return { ...aCase, isRequestingUserAssociated: true };
+  const allUserCases: TAssociatedCase[] = Case.validateRawCollection(
+    await applicationContext.getPersistenceGateway().getCasesByDocketNumbers({
+      applicationContext,
+      docketNumbers,
+    }),
+    { applicationContext },
+  ).map(c => {
+    return new UserCaseDTO({ ...c, isRequestingUserAssociated: true });
   });
+
+  console.log('allUserCases', allUserCases);
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
-    cases: associatedUserCases,
+    cases: allUserCases,
     userId,
   });
 
@@ -177,14 +188,11 @@ const sortAndFilterCases = (
       }
     })
     .map(nestedCase => ({
-      ...new UserCase(nestedCase).toRawObject(),
+      ...new UserCaseDTO(nestedCase),
       consolidatedCases: nestedCase.consolidatedCases
-        ? nestedCase.consolidatedCases.map(consolidatedCase => ({
-            ...new UserCase(consolidatedCase),
-            isRequestingUserAssociated:
-              consolidatedCase.isRequestingUserAssociated,
-          }))
+        ? nestedCase.consolidatedCases.map(consolidatedCase => {
+            return new UserCaseDTO(consolidatedCase);
+          })
         : undefined,
-      isRequestingUserAssociated: nestedCase.isRequestingUserAssociated,
     }));
 };
