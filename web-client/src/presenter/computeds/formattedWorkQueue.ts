@@ -325,7 +325,7 @@ import { Get } from 'cerebral';
 export const formattedWorkQueue = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const section = get(state.workQueueToDisplay.section);
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);

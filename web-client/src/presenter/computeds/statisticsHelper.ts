@@ -58,7 +58,7 @@ import { Get } from 'cerebral';
 export const statisticsHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { caseType, damages, docketNumber, litigationCosts, statistics } = get(
     state.caseDetail,
   );
