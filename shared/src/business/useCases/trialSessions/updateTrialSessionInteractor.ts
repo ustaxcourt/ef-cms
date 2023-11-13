@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Case } from '../../entities/cases/Case';
 import {
   NotFoundError,
@@ -17,7 +18,10 @@ import { get } from 'lodash';
 
 export const updateTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: RawTrialSession },
+  {
+    clientConnectionId,
+    trialSession,
+  }: { trialSession: RawTrialSession; clientConnectionId: string },
 ): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
@@ -191,6 +195,7 @@ export const updateTrialSessionInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'update_trial_session_complete',
       fileId,
