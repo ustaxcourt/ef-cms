@@ -8,6 +8,7 @@ const getCaseRow = ({
   isNestedCase,
   onlyLinkIfRequestedUserAssociated,
   onlyText,
+  showFilingFee,
 }) => {
   return (
     <React.Fragment key={formattedCase.docketNumber}>
@@ -41,6 +42,7 @@ const getCaseRow = ({
           </div>
           {formattedCase.caseTitle}
         </td>
+        {showFilingFee && <td>{formattedCase.petitionPaymentStatus}</td>}
       </tr>
       {formattedCase.consolidatedCases &&
         formattedCase.consolidatedCases.map(consolidatedCase =>
@@ -51,6 +53,7 @@ const getCaseRow = ({
             onlyText:
               onlyLinkIfRequestedUserAssociated &&
               consolidatedCase.isRequestingUserAssociated === false,
+            showFilingFee,
           }),
         )}
     </React.Fragment>
@@ -60,6 +63,7 @@ const getCaseRow = ({
 export const CaseListRowExternal = ({
   formattedCase,
   onlyLinkIfRequestedUserAssociated,
+  showFilingFee,
 }) =>
   getCaseRow({
     formattedCase,
@@ -68,6 +72,7 @@ export const CaseListRowExternal = ({
     onlyText:
       onlyLinkIfRequestedUserAssociated &&
       formattedCase.isRequestingUserAssociated === false,
+    showFilingFee,
   });
 
 CaseListRowExternal.displayName = 'CaseListRowExternal';

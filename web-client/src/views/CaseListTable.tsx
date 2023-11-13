@@ -67,7 +67,7 @@ export const CaseListTable = connect(
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
           {cases?.length > 0 && (
             <>
-              {dashboardExternalHelper.showFilingFeeMessage && (
+              {dashboardExternalHelper.showFilingFee && (
                 <span className="float-right margin-bottom-1">
                   * May take 2-3 business days from payment received date or
                   approval of waiver to update
@@ -86,15 +86,18 @@ export const CaseListTable = connect(
                     <th>Docket number</th>
                     <th>Case title</th>
                     <th>Date filed</th>
+                    {dashboardExternalHelper.showFilingFee && (
+                      <th>Filing fee*</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
-                  {console.log('cases', cases)}
                   {cases.map(item => (
                     <CaseListRowExternal
                       onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
                       key={item.docketNumber}
+                      showFilingFee={dashboardExternalHelper.showFilingFee}
                     />
                   ))}
                 </tbody>
