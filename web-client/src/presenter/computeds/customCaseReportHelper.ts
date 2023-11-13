@@ -14,7 +14,6 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { InputOption } from '@web-client/ustc-ui/Utils/types';
-import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -25,7 +24,12 @@ export const customCaseReportHelper = (
   activeTrialCities: InputOption[];
   caseStatuses: InputOption[];
   caseTypes: InputOption[];
-  cases: CaseInventory[];
+  cases: (CaseInventory & {
+    inConsolidatedGroup: boolean;
+    consolidatedIconTooltipText: string;
+    shouldIndent: boolean;
+    isLeadCase: boolean;
+  })[];
   clearFiltersIsDisabled: boolean;
   judges: InputOption[];
   pageCount: number;
@@ -51,15 +55,14 @@ export const customCaseReportHelper = (
       .formatDateString(isoDateString, FORMATS.MMDDYY);
 
   const reportData = cases.map(entry => {
-    entry = addConsolidatedProperties({
-      applicationContext,
-      consolidatedObject: entry,
-    });
+    const consolidatedEntry = applicationContext
+      .getUtilities()
+      .setConsolidationFlagsForDisplay(entry);
 
-    entry.caseCaption = Case.getCaseTitle(entry.caseCaption);
-    entry.receivedAt = formatDate(entry.receivedAt);
+    consolidatedEntry.caseCaption = Case.getCaseTitle(entry.caseCaption);
+    consolidatedEntry.receivedAt = formatDate(entry.receivedAt);
 
-    return entry;
+    return consolidatedEntry;
   });
 
   const populatedFilters: CustomCaseReportFilters = get(
