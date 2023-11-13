@@ -1,8 +1,5 @@
 import { Case } from '../../entities/cases/Case';
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -15,6 +12,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { get } from 'lodash';
 
+// eslint-disable-next-line complexity
 export const updateTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
   { trialSession }: { trialSession: RawTrialSession },
