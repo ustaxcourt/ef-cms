@@ -13,7 +13,7 @@ import { Get } from 'cerebral';
 export const blockedCasesReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const blockedCases = get(state.blockedCases);
   const procedureTypeFilter = get(state.form.procedureType);
 
