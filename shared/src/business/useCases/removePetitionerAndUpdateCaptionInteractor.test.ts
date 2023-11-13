@@ -7,7 +7,6 @@ import {
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
-
 import {
   ServiceUnavailableError,
   UnauthorizedError,
