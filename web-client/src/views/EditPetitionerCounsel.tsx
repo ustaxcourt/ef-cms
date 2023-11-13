@@ -8,7 +8,7 @@ import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerCounselModal } from './CaseDetail/RemovePetitionerCounselModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
