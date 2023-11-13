@@ -208,7 +208,7 @@ import { Get } from 'cerebral';
 export const internalPetitionPartiesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { ALLOWLIST_FEATURE_FLAGS, PARTY_TYPES } =
     applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();

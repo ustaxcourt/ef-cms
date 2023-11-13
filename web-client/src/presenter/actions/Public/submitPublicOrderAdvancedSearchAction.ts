@@ -1,6 +1,6 @@
 import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { clone } from 'lodash';
-import { state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 
 /**

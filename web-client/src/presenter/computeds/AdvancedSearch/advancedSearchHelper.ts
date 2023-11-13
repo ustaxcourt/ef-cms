@@ -26,7 +26,7 @@ import { Get } from 'cerebral';
 export const advancedSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const countryType = get(

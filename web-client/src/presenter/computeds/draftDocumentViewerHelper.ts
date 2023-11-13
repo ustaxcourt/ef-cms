@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const draftDocumentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,

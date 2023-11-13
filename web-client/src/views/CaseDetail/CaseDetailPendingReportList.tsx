@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmRemoveCaseDetailPendingItemModal } from './ConfirmRemoveCaseDetailPendingItemModal';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -62,10 +62,7 @@ export const CaseDetailPendingReportList = connect(
                     <span className="no-wrap">{entry.createdAtFormatted}</span>
                   </td>
                   <td>
-                    <FilingsAndProceedings
-                      arrayIndex={entry.index}
-                      entry={entry}
-                    />
+                    <FilingsAndProceedings entry={entry} />
                   </td>
                   <td>{entry.filedBy}</td>
                   <td>

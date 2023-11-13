@@ -140,4 +140,4 @@ export const presenter = {
   state: initialPublicState,
 };
 
-export type Sequences = typeof presenterSequences;
+export type PublicSequences = typeof presenterSequences;
