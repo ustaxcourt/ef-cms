@@ -743,8 +743,7 @@ export const presenterSequences = {
   getCustomCaseReportSequence,
   getUsersInSectionSequence: getUsersInSectionSequence as unknown as Function,
   goToApplyStampSequence: goToApplyStampSequence as unknown as Function,
-  goToCreatePetitionerAccountSequence:
-    goToCreatePetitionerAccountSequence as unknown as Function,
+  goToCreatePetitionerAccountSequence,
   gotoAccessibilityStatementSequence:
     gotoAccessibilityStatementSequence as unknown as Function,
   gotoAddCourtIssuedDocketEntrySequence:

@@ -45,7 +45,7 @@ describe('createConfirmLinkLocalAction', () => {
     const { alertType, message, title } = result.output!.alertSuccess;
     expect(alertType).toEqual('success');
     expect(message).toEqual(
-      `New user account created successfully for ${email}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${confirmationLink}">Verify Email Address</a>.`,
+      `New user account created successfully for ${email}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${confirmationLink}">Verify Email Address</a>`,
     );
     expect(title).toEqual('Account Created Locally');
   });

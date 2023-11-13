@@ -35,11 +35,12 @@ export const VerificationSent = connect(
             didn&apos;t receive a verification email, check your spam folder or
             you can{' '}
             <button
-              className="usa-button--unstyled"
+              className="usa-button--unstyled cursor-pointer"
               onClick={() => cognitoResendVerificationLinkSequence()}
             >
-              send the verification email again.
+              send the verification email again
             </button>
+            .
           </p>
         </div>
       </div>
