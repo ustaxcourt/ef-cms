@@ -5,10 +5,10 @@ import {
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
-import { RawUserCase, UserCase } from '../entities/UserCase';
+import { RawUserCase } from '../entities/UserCase';
 import { UserCaseDTO } from '@shared/business/entities/UserCaseDTO';
 import { compareISODateStrings } from '../utilities/sortFunctions';
-import { uniqBy } from 'lodash';
+import { partition, uniqBy } from 'lodash';
 
 export type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
@@ -41,17 +41,20 @@ export const getCasesForUserInteractor = async (
     return new UserCaseDTO({ ...c, isRequestingUserAssociated: true });
   });
 
-  console.log('allUserCases', allUserCases);
-
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
     cases: allUserCases,
     userId,
   });
 
-  const sortedOpenCases = sortAndFilterCases(nestedCases, 'open');
+  const [openCases, closedCases] = partition(nestedCases, aCase => {
+    return [aCase, ...(aCase.consolidatedCases || [])].some(c => !isClosed(c));
+  });
 
-  const sortedClosedCases = sortAndFilterCases(nestedCases, 'closed');
+  console.log(openCases, closedCases);
+
+  const sortedOpenCases = sortCases(openCases, 'open');
+  const sortedClosedCases = sortCases(closedCases, 'closed');
 
   return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
 };
@@ -85,13 +88,82 @@ async function fetchConsolidatedGroupsAndNest({
   cases: TAssociatedCase[];
   userId: string;
 }): Promise<TAssociatedCase[]> {
-  // Get all cases with a lead docket number and add "isRequestingUserAssociated" property
-  const consolidatedGroups = (
+  const consolidatedGroups = await getAllConsolidatedCases(
+    applicationContext,
+    cases,
+    userId,
+  );
+
+  // Combine open cases and consolidated cases and remove duplicates
+  const allCasesAndConsolidatedCases = uniqBy(
+    [...cases, ...consolidatedGroups],
+    aCase => aCase.docketNumber,
+  ).map(aCase => ({
+    ...aCase,
+    consolidatedCases: (aCase.consolidatedCases || []) as TAssociatedCase[],
+  }));
+
+  const [topLevelCases, memberConsolidatedCases] = partition(
+    allCasesAndConsolidatedCases,
+    aCase => isTopLevelCase(aCase),
+  );
+
+  memberConsolidatedCases.forEach(mCase => {
+    const topCase = topLevelCases.find(
+      c => c.docketNumber === mCase.leadDocketNumber,
+    )!;
+
+    topCase.consolidatedCases.push(mCase);
+  });
+
+  // Sort consolidated cases by docket number and return all cases
+  const allCases = topLevelCases.map(aCase => {
+    return {
+      ...aCase,
+      consolidatedCases: aCase.consolidatedCases
+        ? Case.sortByDocketNumber(aCase.consolidatedCases)
+        : undefined,
+    };
+  });
+
+  return allCases;
+}
+
+const sortCases = (
+  nestedCases: TAssociatedCase[],
+  caseType: 'open' | 'closed',
+): TAssociatedCase[] => {
+  return nestedCases
+    .sort((a, b) => {
+      if (caseType === 'closed') {
+        return compareISODateStrings(b.closedDate, a.closedDate);
+      } else {
+        return compareISODateStrings(b.createdAt, a.createdAt);
+      }
+    })
+    .map(nestedCase => ({
+      ...new UserCaseDTO(nestedCase),
+      consolidatedCases: nestedCase.consolidatedCases
+        ? nestedCase.consolidatedCases.map(consolidatedCase => {
+            return new UserCaseDTO(consolidatedCase);
+          })
+        : undefined,
+    }));
+};
+
+async function getAllConsolidatedCases(
+  applicationContext: IApplicationContext,
+  cases: TAssociatedCase[],
+  userId: string,
+): Promise<(RawCase & { isRequestingUserAssociated: boolean })[]> {
+  const uniqueLeadDocketNumbers = uniqBy(
+    cases.filter(aCase => aCase.leadDocketNumber),
+    'leadDocketNumber',
+  );
+
+  return (
     await Promise.all(
-      uniqBy(
-        cases.filter(aCase => aCase.leadDocketNumber),
-        'leadDocketNumber',
-      ).map(aCase =>
+      uniqueLeadDocketNumbers.map(aCase =>
         applicationContext
           .getPersistenceGateway()
           .getCasesMetadataByLeadDocketNumber({
@@ -108,91 +180,15 @@ async function fetchConsolidatedGroupsAndNest({
         isRequestingUserAssociated: userIsDirectlyAssociated({ aCase, userId }),
       };
     });
-
-  // Combine open cases and consolidated cases and remove duplicates
-  const associatedAndUnassociatedCases: TAssociatedCase[] = uniqBy(
-    [...cases, ...consolidatedGroups],
-    aCase => aCase.docketNumber,
-  );
-
-  // Create a map of all cases, filtered by whether they're a lead case or not
-  const caseMap: Record<string, TAssociatedCase> =
-    associatedAndUnassociatedCases
-      .filter(
-        aCase =>
-          isLeadCase(aCase) || (!isLeadCase(aCase) && !aCase.leadDocketNumber),
-      )
-      .reduce(
-        (obj, aCase) => ({
-          ...obj,
-          [aCase.docketNumber]: aCase,
-        }),
-        {},
-      );
-
-  // Add consolidated cases to their lead case
-  associatedAndUnassociatedCases
-    .filter(aCase => !isLeadCase(aCase) && aCase.leadDocketNumber)
-    .forEach(aCase => {
-      const leadCase = caseMap[aCase.leadDocketNumber!];
-      leadCase.consolidatedCases = leadCase.consolidatedCases ?? [];
-      leadCase.consolidatedCases.push(aCase);
-    });
-
-  // Sort consolidated cases by docket number and return all cases
-  const allCases = Object.values(caseMap).map(aCase => {
-    return {
-      ...aCase,
-      consolidatedCases: aCase.consolidatedCases
-        ? Case.sortByDocketNumber(aCase.consolidatedCases)
-        : undefined,
-    };
-  });
-
-  return allCases;
 }
 
-const sortAndFilterCases = (
-  nestedCases: TAssociatedCase[],
-  caseType: 'open' | 'closed',
-): TAssociatedCase[] => {
-  return nestedCases
-    .map((c: any) => {
-      // explicitly unset the entityName because this is returning a composite entity and if an entityName
-      // is set, the genericHandler will send it through the entity constructor for that entity and strip
-      // out necessary data
-      c.entityName = undefined;
-      return c;
-    })
-    .filter(nestedCase => {
-      const caseStatusFilter = [
-        nestedCase,
-        ...(nestedCase.consolidatedCases || []),
-      ].some(aCase =>
-        caseType === 'open' ? !isClosed(aCase) : isClosed(aCase),
-      );
+function isSoloCase(aCase: { leadDocketNumber?: string }): boolean {
+  return !aCase.leadDocketNumber;
+}
 
-      return caseStatusFilter;
-    })
-    .sort((a, b) => {
-      if (caseType === 'closed') {
-        const closedDateA = a.closedDate
-          ? a.closedDate
-          : a.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
-        const closedDateB = b.closedDate
-          ? b.closedDate
-          : b.consolidatedCases.find(aCase => aCase.closedDate).closedDate;
-        return compareISODateStrings(closedDateB, closedDateA);
-      } else {
-        return compareISODateStrings(b.createdAt, a.createdAt);
-      }
-    })
-    .map(nestedCase => ({
-      ...new UserCaseDTO(nestedCase),
-      consolidatedCases: nestedCase.consolidatedCases
-        ? nestedCase.consolidatedCases.map(consolidatedCase => {
-            return new UserCaseDTO(consolidatedCase);
-          })
-        : undefined,
-    }));
-};
+function isTopLevelCase(aCase: {
+  docketNumber: string;
+  leadDocketNumber?: string;
+}): boolean {
+  return isLeadCase(aCase) || isSoloCase(aCase);
+}
