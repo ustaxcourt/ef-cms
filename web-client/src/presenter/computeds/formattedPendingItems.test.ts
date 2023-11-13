@@ -165,7 +165,7 @@ describe('formattedPendingItems', () => {
       items: [
         {
           inConsolidatedGroup: true,
-          inLeadCase: false,
+          isLeadCase: false,
           leadDocketNumber: '100-19',
         },
       ],

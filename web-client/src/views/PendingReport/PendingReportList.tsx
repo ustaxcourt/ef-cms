@@ -92,7 +92,7 @@ export const PendingReportList = connect(
                       item.consolidatedIconTooltipText
                     }
                     inConsolidatedGroup={item.inConsolidatedGroup}
-                    showLeadCaseIcon={item.inLeadCase}
+                    showLeadCaseIcon={item.isLeadCase}
                   />
                 </td>
                 <td>
