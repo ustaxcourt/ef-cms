@@ -1,5 +1,5 @@
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
 export const PublicCaseDetailSubnavTabs = connect(

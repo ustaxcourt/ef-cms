@@ -12,7 +12,7 @@ import { Get } from 'cerebral';
 export const statisticsFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { CASE_TYPES_MAP, PENALTY_TYPES } = applicationContext.getConstants();
   const form = get(state.form);
 

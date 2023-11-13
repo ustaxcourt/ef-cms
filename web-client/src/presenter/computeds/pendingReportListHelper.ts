@@ -1,7 +1,7 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { Get } from 'cerebral';
-export const pendingReportListHelper = (get: Get) => {
+export const pendingReportListHelper = (get: Get): any => {
   const searchResultsCount = get(state.pendingReports.pendingItemsTotal);
   const pendingItemsPage = get(state.pendingReports.pendingItemsPage);
   const hasPendingItemsResults = get(
