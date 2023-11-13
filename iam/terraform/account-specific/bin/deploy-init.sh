@@ -39,29 +39,6 @@ if [ -z "$NUM_DAYS_TO_KEEP_LOGS" ]; then
   exit 1
 fi
 
-../../../../scripts/verify-terraform-version.sh
-
-BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="permissions-account.tfstate"
-LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
-
-rm -rf .terraform
-sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
-
-echo "checking for the dynamodb lock table..."
-aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
-result=$?
-if [ ${result} -ne 0 ]; then
-  echo "dynamodb lock does not exist, creating"
-  sh ../bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
-else
-  echo "dynamodb lock table already exists"
-fi
-
-# exit on any failure
-set -eo pipefail
-
 npm run build:lambda:rotate-info-indices
 
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
@@ -77,4 +54,4 @@ if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
 fi
 export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+ENVIRONMENT=account ../../../../shared/terraform/bin/init.sh permissions

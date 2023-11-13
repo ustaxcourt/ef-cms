@@ -16,7 +16,7 @@ import { Get } from 'cerebral';
 export const caseDetailEditHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
   const caseDetail = get(state.form);
   const showContacts = showContactsHelper(caseDetail.partyType, PARTY_TYPES);

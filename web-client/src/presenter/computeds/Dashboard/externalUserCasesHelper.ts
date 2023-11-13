@@ -4,7 +4,7 @@ import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserIntera
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-type TAssociatedCaseFormatted = TAssociatedCase & {
+export type TAssociatedCaseFormatted = TAssociatedCase & {
   caseTitle: string;
   consolidatedIconTooltipText: string;
   createdAtFormatted: string;

@@ -83,7 +83,7 @@ import { Get } from 'cerebral';
 export const formattedEligibleCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const { formatCaseForTrialSession, setConsolidationFlagsForDisplay } =
     applicationContext.getUtilities();
