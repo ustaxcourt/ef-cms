@@ -28,7 +28,7 @@ import { Get } from 'cerebral';
 export const formattedCaseDeadlines = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseDeadlines = get(state.caseDeadlines);
 
   const caseDeadlinesFormatted = (caseDeadlines || [])

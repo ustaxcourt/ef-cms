@@ -6,6 +6,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+
 /**
  * used to remove a petitioner from a case
  * @param {object} applicationContext the application context
@@ -15,7 +16,6 @@ import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the case data
  */
-
 export const removePetitionerAndUpdateCaption = async (
   applicationContext: IApplicationContext,
   {

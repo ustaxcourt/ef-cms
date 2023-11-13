@@ -1,9 +1,10 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
+import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from './WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
@@ -61,6 +62,11 @@ export const CaseListTable = connect(
       showLoadMore,
       showMoreResultsSequence,
       tabName,
+    }: {
+      cases: TAssociatedCaseFormatted[];
+      showLoadMore: boolean;
+      showMoreResultsSequence: boolean;
+      tabName: string;
     }) => {
       return (
         <>
@@ -76,9 +82,9 @@ export const CaseListTable = connect(
                     <th>
                       <span className="usa-sr-only">Lead Case Indicator</span>
                     </th>
-                    <th>Docket number</th>
-                    <th>Case title</th>
-                    <th>Date filed</th>
+                    <th>Docket No.</th>
+                    <th>Case Title</th>
+                    <th>Filed Date</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const caseDeadlineReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { CHIEF_JUDGE, DATE_FORMATS } = applicationContext.getConstants();
 
   let caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];

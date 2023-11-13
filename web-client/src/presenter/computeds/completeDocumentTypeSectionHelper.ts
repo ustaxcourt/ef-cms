@@ -11,7 +11,7 @@ import { Get } from 'cerebral';
 export const completeDocumentTypeSectionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
