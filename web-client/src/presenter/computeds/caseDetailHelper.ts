@@ -8,7 +8,7 @@ import { Get } from 'cerebral';
 export const caseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const permissions = get(state.permissions);

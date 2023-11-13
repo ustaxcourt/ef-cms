@@ -4,7 +4,6 @@ import {
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
-import { getTrialCityName } from '../computeds/formattedTrialCity';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from './startCaseHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -27,7 +26,6 @@ describe('start a case computed', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {},
-        getTrialCityName,
       },
     });
     expect(result.showPetitionFileValid).toBeFalsy();
@@ -37,7 +35,6 @@ describe('start a case computed', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: { petitionFile: true },
-        getTrialCityName,
       },
     });
     expect(result.showPetitionFileValid).toBeTruthy();
@@ -51,7 +48,6 @@ describe('start a case computed', () => {
           partyType: true,
           petitionFile: true,
         },
-        getTrialCityName,
       },
     });
     expect(result.showCorporateDisclosure).toBeTruthy();
@@ -65,7 +61,6 @@ describe('start a case computed', () => {
           partyType: true,
           petitionFile: true,
         },
-        getTrialCityName,
       },
     });
     expect(result.showCorporateDisclosure).toBeFalsy();
@@ -77,7 +72,6 @@ describe('start a case computed', () => {
         form: {
           hasIrsNotice: true,
         },
-        getTrialCityName,
       },
     });
     expect(result.showHasIrsNoticeOptions).toBeTruthy();
@@ -90,7 +84,6 @@ describe('start a case computed', () => {
         form: {
           hasIrsNotice: false,
         },
-        getTrialCityName,
       },
     });
     expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
@@ -103,7 +96,6 @@ describe('start a case computed', () => {
         form: {
           hasIrsNotice: false,
         },
-        getTrialCityName,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
@@ -119,7 +111,6 @@ describe('start a case computed', () => {
         form: {
           hasIrsNotice: false,
         },
-        getTrialCityName,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.privatePractitioner);
@@ -135,7 +126,6 @@ describe('start a case computed', () => {
         form: {
           hasIrsNotice: false,
         },
-        getTrialCityName,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
@@ -148,7 +138,6 @@ describe('start a case computed', () => {
           contactPrimary: { name: 'Michael G. Scott' },
           partyType: PARTY_TYPES.petitioner,
         },
-        getTrialCityName,
       },
     });
 
@@ -163,7 +152,6 @@ describe('start a case computed', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
-        getTrialCityName,
       },
     });
 
@@ -178,7 +166,6 @@ describe('start a case computed', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerSpouse,
         },
-        getTrialCityName,
       },
     });
 
@@ -193,7 +180,6 @@ describe('start a case computed', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
-        getTrialCityName,
       },
     });
 
@@ -210,7 +196,6 @@ describe('start a case computed', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerSpouse,
         },
-        getTrialCityName,
       },
     });
 
@@ -226,7 +211,6 @@ describe('start a case computed', () => {
           contactPrimary: { name: '' },
           partyType: PARTY_TYPES.trust,
         },
-        getTrialCityName,
       },
     });
 
@@ -240,7 +224,6 @@ describe('start a case computed', () => {
           contactPrimary: { name: '' },
           partyType: PARTY_TYPES.trust,
         },
-        getTrialCityName,
       },
     });
 
@@ -254,7 +237,6 @@ describe('start a case computed', () => {
           form: {
             caseType: 'Disclosure1',
           },
-          getTrialCityName,
         },
       });
 
@@ -267,7 +249,6 @@ describe('start a case computed', () => {
           form: {
             caseType: 'Disclosure2',
           },
-          getTrialCityName,
         },
       });
 
@@ -280,7 +261,6 @@ describe('start a case computed', () => {
           form: {
             caseType: CASE_TYPES_MAP.deficiency,
           },
-          getTrialCityName,
         },
       });
 
