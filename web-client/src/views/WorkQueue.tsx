@@ -3,7 +3,7 @@ import { HeaderDashboardInternal } from './Dashboards/HeaderDashboardInternal';
 import { IndividualWorkQueue } from './WorkQueue/IndividualWorkQueue';
 import { SectionWorkQueue } from './WorkQueue/SectionWorkQueue';
 import { SuccessNotification } from './SuccessNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 

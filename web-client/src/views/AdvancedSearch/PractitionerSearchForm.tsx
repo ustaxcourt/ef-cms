@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { PractitionerSearchByBarNumber } from './PractitionerSearchByBarNumber';
 import { PractitionerSearchByName } from './PractitionerSearchByName';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
