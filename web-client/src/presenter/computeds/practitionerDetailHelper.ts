@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const practitionerDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const practitionerDetail = get(state.practitionerDetail);
   const permissions = get(state.permissions);
   const user = get(state.user);

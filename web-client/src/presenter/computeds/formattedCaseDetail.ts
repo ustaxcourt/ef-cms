@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const formattedOpenCases = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { formatCase } = applicationContext.getUtilities();
 
   const cases = get(state.openCases);
@@ -15,7 +15,7 @@ export const formattedOpenCases = (
 export const formattedClosedCases = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { formatCase } = applicationContext.getUtilities();
 
   const cases = get(state.closedCases);
@@ -81,7 +81,7 @@ const getCalendarDetailsForTrialSession = ({
 export const formattedCaseDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const user = applicationContext.getCurrentUser();
 
   const { formatCase, setServiceIndicatorsForCase } =
