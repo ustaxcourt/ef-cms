@@ -7,7 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const advancedDocumentSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   let paginatedResults = {};
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);

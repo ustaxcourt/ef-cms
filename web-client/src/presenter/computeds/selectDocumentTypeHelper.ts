@@ -127,7 +127,7 @@ const range = size => {
   return [...Array(size).keys()].map(i => (i + 1).toString());
 };
 
-export const getOrdinalValuesForUploadIteration = () => {
+export const getOrdinalValuesForUploadIteration = (): string[] => {
   const iterationList = range(15);
   return [...iterationList, 'Other'];
 };

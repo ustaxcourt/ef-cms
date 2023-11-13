@@ -30,7 +30,7 @@ import { Get } from 'cerebral';
 export const formattedMessageDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const messageDetail = get(state.messageDetail);
   const caseDetail = get(state.caseDetail);
   const isExpanded = get(state.isExpanded);
