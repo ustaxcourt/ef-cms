@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const sealedCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseDetail = get(state.caseDetail);
   const isCaseSealed = applicationContext
     .getUtilities()

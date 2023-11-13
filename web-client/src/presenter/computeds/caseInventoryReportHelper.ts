@@ -6,7 +6,7 @@ import { Get } from 'cerebral';
 export const caseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     CASE_INVENTORY_PAGE_SIZE,
     CHIEF_JUDGE,
