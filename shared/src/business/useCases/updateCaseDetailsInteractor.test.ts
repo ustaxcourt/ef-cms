@@ -5,7 +5,7 @@ import {
   PAYMENT_STATUS,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '@shared/test/mockUsers';
