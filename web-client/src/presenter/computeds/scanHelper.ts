@@ -10,7 +10,7 @@ import { Get } from 'cerebral';
 export const scanHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   // Master switch for the time being
   const scanFeatureEnabled = true;
 

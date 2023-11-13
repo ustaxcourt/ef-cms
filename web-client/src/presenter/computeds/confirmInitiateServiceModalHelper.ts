@@ -13,7 +13,7 @@ import { Get } from 'cerebral';
 export const confirmInitiateServiceModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     CONTACT_TYPE_TITLES,
     NON_MULTI_DOCKETABLE_EVENT_CODES,

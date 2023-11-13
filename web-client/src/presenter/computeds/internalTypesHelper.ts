@@ -49,7 +49,7 @@ export const getSortFunction = searchText => {
 export const internalTypesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { INTERNAL_CATEGORY_MAP, LEGACY_DOCUMENT_TYPES, LODGED_EVENT_CODE } =
     applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
