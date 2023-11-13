@@ -8,7 +8,7 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences } from '@web-client/presenter/app.cerebral';

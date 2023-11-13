@@ -7,7 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const trialSessionHeaderHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const currentUser = applicationContext.getCurrentUser();
