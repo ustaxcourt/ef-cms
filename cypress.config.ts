@@ -7,6 +7,7 @@ export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:1234',
+    experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
         getEmailVerificationToken({ userId }) {
