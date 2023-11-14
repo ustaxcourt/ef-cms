@@ -1,4 +1,5 @@
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets today's orders
@@ -9,7 +10,7 @@ import { state } from '@web-client/presenter/app-public.cerebral';
 export const getTodaysOrdersAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps<{}, ClientPublicApplicationContext>) => {
   const page = get(state.todaysOrders.page) || 1;
   const { TODAYS_ORDERS_SORT_DEFAULT } = applicationContext.getConstants();
   const todaysOrdersSort =
