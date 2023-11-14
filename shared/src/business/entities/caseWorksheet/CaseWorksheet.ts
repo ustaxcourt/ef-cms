@@ -1,6 +1,5 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { STATUS_OF_MATTER_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 export class CaseWorksheet extends JoiValidationEntity {
   public docketNumber: string;
@@ -17,6 +16,18 @@ export class CaseWorksheet extends JoiValidationEntity {
     this.statusOfMatter = rawProps.statusOfMatter;
   }
 
+  static STATUS_OF_MATTER_OPTIONS = [
+    'Awaiting Consideration',
+    'Awaiting Briefs',
+    'Drafting',
+    'Reviewing Draft',
+    'Submitted to Chief Judge',
+    'Revising Draft',
+    'Submitted to Reporter',
+    'Awaiting Release',
+    'Stayed',
+  ];
+
   static VALIDATION_RULES = {
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
     finalBriefDueDate: JoiValidationConstants.DATE.allow('')
@@ -26,7 +37,7 @@ export class CaseWorksheet extends JoiValidationEntity {
       }),
     primaryIssue: JoiValidationConstants.STRING.allow('').optional(),
     statusOfMatter: JoiValidationConstants.STRING.valid(
-      ...STATUS_OF_MATTER_OPTIONS,
+      ...CaseWorksheet.STATUS_OF_MATTER_OPTIONS,
     )
       .allow(null)
       .optional(),
