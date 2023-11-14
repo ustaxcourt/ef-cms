@@ -277,14 +277,20 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            if [ "$MIGRATE_FLAG" == "false" ]; then
+              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${DESTINATION_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            fi
       - run:
           name: Disable Check Migration Status Cron
           command: |
             ./web-api/workflow-terraform/migration-cron/bin/disable.sh
-      - run:
-          name: Deploy Check Reindex Status Cron Lambda
-          command: |
-            npm run deploy:reindex-cron -- $ENV
       - run:
           name: Track successful migrations
           command: |
@@ -297,6 +303,16 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
+      - run:
+          name: Begin Reindexing
+          command: |
+            if [ "$MIGRATE_FLAG" == "false" ]; then
+              npx ts-node --transpile-only ./scripts/elasticsearch/reindex.ts
+            fi
+      - run:
+          name: Deploy Check Reindex Status Cron Lambda
+          command: |
+            npm run deploy:reindex-cron -- $ENV
       - run:
           name: Enable Check Reindex Status Cron
           command: |
@@ -529,6 +545,14 @@ jobs:
           name: Destroy Check Reindex Status Cron Infrastructure
           command: |
             npm run destroy:reindex-cron -- $ENV
+      - run:
+          name: Setup Elasticsearch Aliases
+          command: |
+            ./web-api/setup-elasticsearch-aliases.sh $ENV
+      - run:
+          name: Delete Source Elasticsearch Indices After Reindex
+          command: |
+            ./web-api/delete-unaliased-elasticsearch-indices.sh $ENV
       - run:
           name: Delete Source ElasticSearch cluster
           command: |
