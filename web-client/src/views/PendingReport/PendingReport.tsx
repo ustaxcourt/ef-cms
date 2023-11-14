@@ -10,10 +10,13 @@ import React from 'react';
 
 export const PendingReport = connect(
   {
-    formattedPendingItems: state.formattedPendingItems,
+    formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     pendingReportListHelper: state.pendingReportListHelper,
   },
-  function PendingReport({ formattedPendingItems, pendingReportListHelper }) {
+  function PendingReport({
+    formattedPendingItemsHelper,
+    pendingReportListHelper,
+  }) {
     return (
       <>
         <BigHeader text="Reports" />
@@ -28,7 +31,7 @@ export const PendingReport = connect(
                   link
                   aria-describedby="pending-report-tab"
                   className="margin-top-2"
-                  href={formattedPendingItems.printUrl}
+                  href={formattedPendingItemsHelper.printUrl}
                   icon="print"
                 >
                   Printable Report

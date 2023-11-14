@@ -9,14 +9,14 @@ import React from 'react';
 
 export const PendingReportList = connect(
   {
-    formattedPendingItems: state.formattedPendingItems,
+    formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
     pendingReportListHelper: state.pendingReportListHelper,
     setPendingReportSelectedJudgeSequence:
       sequences.setPendingReportSelectedJudgeSequence,
   },
   function PendingReportList({
-    formattedPendingItems,
+    formattedPendingItemsHelper,
     loadMorePendingItemsSequence,
     pendingReportListHelper,
     setPendingReportSelectedJudgeSequence,
@@ -47,7 +47,7 @@ export const PendingReportList = connect(
                 }
               >
                 <option value="">-Judge-</option>
-                {formattedPendingItems.judges.map(judge => (
+                {formattedPendingItemsHelper.judges.map(judge => (
                   <option key={`pending-judge-${judge}`} value={judge}>
                     {judge}
                   </option>
@@ -81,7 +81,7 @@ export const PendingReportList = connect(
               <th>Judge</th>
             </tr>
           </thead>
-          {formattedPendingItems.items.map(item => (
+          {formattedPendingItemsHelper.items.map(item => (
             <tbody key={`pending-item-${item.docketEntryId}`}>
               <tr className="pending-item-row">
                 <td>

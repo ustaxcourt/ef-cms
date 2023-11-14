@@ -1,9 +1,15 @@
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { formatSearchResultRecord } from './AdvancedSearch/advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const formatPendingItem = (item, { applicationContext }) => {
+export const formatPendingItem = (
+  item,
+  { applicationContext }: { applicationContext: ClientApplicationContext },
+) => {
   let result = formatSearchResultRecord(item, { applicationContext });
 
   if (result.leadDocketNumber) {
@@ -23,14 +29,22 @@ export const formatPendingItem = (item, { applicationContext }) => {
 
   result.formattedName = result.documentTitle || result.documentType;
 
+  if (result.status === CASE_STATUS_TYPES.calendared) {
+    const trialDate = applicationContext
+      .getUtilities()
+      .formatDateString(result.trialDate, 'MM/dd/yy');
+    const trialLocation = applicationContext
+      .getUtilities()
+      .abbreviateState(result.trialLocation);
+    result.status = `${result.status} - ${trialDate} ${trialLocation}`;
+  }
+
   result.documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
 
   return result;
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
-export const formattedPendingItems = (
+export const formattedPendingItemsHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
