@@ -1,8 +1,6 @@
 import fs from 'fs';
 import shuffleSeed from 'shuffle-seed';
 
-// const testType = process.argv[2] || '';
-
 const specDir = './cypress/cypress-integration/integration';
 const files = fs.readdirSync(specDir).filter(f => f.endsWith('cy.ts'));
 
