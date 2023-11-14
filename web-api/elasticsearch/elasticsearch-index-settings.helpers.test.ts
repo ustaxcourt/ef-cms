@@ -4,7 +4,7 @@ import {
   deleteUnaliasedIndices,
   setupIndexes,
 } from './elasticsearch-index-settings.helpers';
-import { elasticsearchIndexes } from './elasticsearch-indexes';
+import { elasticsearchIndexes, esIndexType } from './elasticsearch-indexes';
 import { getBaseAliasFromIndexName } from './elasticsearch-aliases';
 
 const mockAliases = elasticsearchIndexes.map(index => {
@@ -78,7 +78,7 @@ describe('setupIndexes', () => {
 });
 
 describe('deleteUnaliasedIndices', () => {
-  const mockIndices: { index: string }[] = [{ index: '.kibana1' }];
+  const mockIndices: esIndexType[] = [{ index: '.kibana1' }];
   const mockUnaliasedIndices: string[] = [];
   for (const index of elasticsearchIndexes) {
     const baseAlias = getBaseAliasFromIndexName(index);
