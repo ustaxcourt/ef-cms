@@ -1,5 +1,5 @@
 import { Client } from '@opensearch-project/opensearch';
-import { baseAliases } from './elasticsearch-aliases';
+import { baseAliases, esAliasType } from './elasticsearch-aliases';
 import { elasticsearchIndexes } from './elasticsearch-indexes';
 
 export const setupAliases = async ({
@@ -7,9 +7,9 @@ export const setupAliases = async ({
 }: {
   client: Client;
 }): Promise<void> => {
-  const existingAliases: { alias: string; index: string }[] =
+  const existingAliases: esAliasType[] =
     (await client.cat.aliases({ format: 'json' })).body?.filter(
-      (a: { alias: string; index: string }) => {
+      (a: esAliasType) => {
         return a.alias !== '.kibana';
       },
     ) || [];

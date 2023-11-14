@@ -3,10 +3,13 @@ import { createHash } from 'crypto';
 import { efcmsCaseMappings } from '../../web-api/elasticsearch/efcms-case-mappings';
 import { efcmsDocketEntryMappings } from '../../web-api/elasticsearch/efcms-docket-entry-mappings';
 import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
-import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
+import {
+  esAliasType,
+  getBaseAliasFromIndexName,
+} from '../../web-api/elasticsearch/elasticsearch-aliases';
 
 export const mockDifferentExistingMappings = (): {
-  existingAliases: { alias: string; index: string }[];
+  existingAliases: esAliasType[];
   existingCaseIndexName: string;
   existingDocketEntryIndexName: string;
   newCaseIndexName: string;

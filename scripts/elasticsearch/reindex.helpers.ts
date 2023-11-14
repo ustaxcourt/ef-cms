@@ -1,6 +1,7 @@
 import { Client } from '@opensearch-project/opensearch';
 import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import {
+  esAliasType,
   getBaseAliasFromIndexName,
   getElasticsearchAliases,
 } from '../../web-api/elasticsearch/elasticsearch-aliases';
@@ -10,10 +11,9 @@ export const reindexIfNecessary = async ({
 }: {
   client: Client;
 }): Promise<void> => {
-  const aliases: { alias: string; index: string }[] =
-    await getElasticsearchAliases({
-      client,
-    });
+  const aliases: esAliasType[] = await getElasticsearchAliases({
+    client,
+  });
   const indexesWithoutAliases = elasticsearchIndexes.filter(
     index => !aliases.map(alias => alias.index).includes(index),
   );
