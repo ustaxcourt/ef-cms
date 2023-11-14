@@ -28,6 +28,7 @@ const config: Config = {
     }),
     uuid: require.resolve('uuid'),
   },
+  setupFiles: ['core-js'],
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
