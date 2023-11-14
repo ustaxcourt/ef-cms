@@ -1,14 +1,15 @@
+import { Client } from '@opensearch-project/opensearch';
 import { getClient } from '../../web-api/elasticsearch/client';
 import { getVersion, requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['ENV']);
 
-const environmentName = process.env.ENV!;
-const index = 'efcms-user-practitioner-firm';
+const environmentName: string = process.env.ENV!;
+const index: string = 'efcms-user-practitioner-firm';
 
 (async () => {
-  const version = await getVersion();
-  const client = await getClient({ environmentName, version });
+  const version: string = await getVersion();
+  const client: Client = await getClient({ environmentName, version });
 
   const { body: indexExists } = await client.indices.exists({ index });
 
