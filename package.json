@@ -274,6 +274,7 @@
     "@faker-js/faker": "^8.2.0",
     "@miovision/eslint-plugin-disallow-date": "^2.0.0",
     "@sparticuz/chromium": "112.0.2",
+    "@types/uuid": "^9.0.7",
     "@types/aws-lambda": "^8.10.126",
     "@types/jest": "^29.5.8",
     "@types/lodash": "^4.14.201",
