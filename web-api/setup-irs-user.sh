@@ -4,7 +4,7 @@
 #   creates the IRS user in the IRS user pool
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 ( ! command -v curl > /dev/null ) && echo "curl was not found on your path. Please install curl." && exit 1
