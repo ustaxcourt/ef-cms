@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { formattedPendingItems as formattedPendingItemsComputed } from './formattedPendingItems';
+import { formattedPendingItemsHelper as formattedPendingItemsComputed } from './formattedPendingItems';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -100,6 +100,47 @@ describe('formattedPendingItems', () => {
           formattedFiledDate: '01/20/18',
           formattedName: 'Affidavit of Bob in Support of Petition',
           receivedAt: '2018-01-20',
+        },
+      ],
+    });
+  });
+
+  it('should add the trial location and trial date to the case status for pending items on cases that are calendared', () => {
+    const result = runCompute(formattedPendingItems, {
+      state: {
+        judges: [],
+        pendingReports: {
+          pendingItems: [
+            {
+              associatedJudge: 'Judge A',
+              createdAt: '2018-01-20',
+              docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
+              docketNumber: '103-19',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+              documentTitle: 'Affidavit of Bob in Support of Petition',
+              documentType: 'Affidavit in Support',
+              eventCode: 'AFF',
+              receivedAt: '2018-01-20',
+              status: STATUS_TYPES.calendared,
+              trialDate: '2022-02-01T17:21:05.486Z',
+              trialLocation: 'Houston, Texas',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      items: [
+        {
+          associatedJudge: 'Judge A',
+          associatedJudgeFormatted: 'A',
+          documentLink:
+            '/case-detail/103-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-ac7faee40426',
+          formattedFiledDate: '01/20/18',
+          formattedName: 'Affidavit of Bob in Support of Petition',
+          receivedAt: '2018-01-20',
+          status: `${STATUS_TYPES.calendared} - 02/01/22 Houston, TX`,
         },
       ],
     });
