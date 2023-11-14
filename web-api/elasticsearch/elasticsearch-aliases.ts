@@ -3,6 +3,8 @@ import { elasticsearchIndexes } from './elasticsearch-indexes';
 import { getClient } from './client';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 
+export type esAliasType = { alias: string; index: string };
+
 export const getBaseAliasFromIndexName = (indexName: string): string => {
   if (!indexName.includes('-')) {
     return indexName;
@@ -12,11 +14,10 @@ export const getBaseAliasFromIndexName = (indexName: string): string => {
   return indexParts.join('-');
 };
 
-export const baseAliases: { alias: string; index: string }[] =
-  elasticsearchIndexes.map(index => {
-    const baseAlias = getBaseAliasFromIndexName(index);
-    return { alias: baseAlias, index };
-  });
+export const baseAliases: esAliasType[] = elasticsearchIndexes.map(index => {
+  const baseAlias = getBaseAliasFromIndexName(index);
+  return { alias: baseAlias, index };
+});
 
 export const getIndexNameFromAlias = (alias: string): string | undefined => {
   return baseAliases.find(a => a.alias === alias)?.index || undefined;
@@ -26,12 +27,7 @@ export const getElasticsearchAliases = async ({
   client,
 }: {
   client?: Client;
-}): Promise<
-  {
-    alias: string;
-    index: string;
-  }[]
-> => {
+}): Promise<esAliasType[]> => {
   if (!client) {
     requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
     const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
@@ -42,10 +38,10 @@ export const getElasticsearchAliases = async ({
     });
   }
 
-  let aliases: { alias: string; index: string }[];
+  let aliases: esAliasType[];
   const existingAliases = (
     await client.cat.aliases({ format: 'json' })
-  ).body?.filter((a: { alias: string; index: string }) => {
+  ).body?.filter((a: esAliasType) => {
     return a.alias !== '.kibana';
   });
   if (!existingAliases.length) {
@@ -54,7 +50,7 @@ export const getElasticsearchAliases = async ({
       return { alias, index: alias };
     });
   } else {
-    aliases = existingAliases.map((a: { alias: string; index: string }) => {
+    aliases = existingAliases.map((a: esAliasType) => {
       return { alias: a.alias, index: a.index };
     });
   }
