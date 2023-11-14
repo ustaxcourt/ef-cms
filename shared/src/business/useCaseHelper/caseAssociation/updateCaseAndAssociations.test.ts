@@ -16,8 +16,8 @@ import { Message } from '../../entities/Message';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { faker } from '@faker-js/faker';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('updateCaseAndAssociations', () => {
   let updateCaseMock = jest.fn();
@@ -386,7 +386,7 @@ describe('updateCaseAndAssociations', () => {
 
     it('the trial date has been updated', async () => {
       updatedCase.trialDate = '2021-01-02T05:22:16.001Z';
-      updatedCase.trialSessionId = faker.string.uuid();
+      updatedCase.trialSessionId = uuidv4();
 
       await updateCaseAndAssociations({
         applicationContext,
@@ -403,7 +403,7 @@ describe('updateCaseAndAssociations', () => {
       const oldCase = {
         ...validMockCase,
         trialDate: '2021-01-02T05:22:16.001Z',
-        trialSessionId: faker.string.uuid(),
+        trialSessionId: uuidv4(),
       };
 
       applicationContext
@@ -431,7 +431,7 @@ describe('updateCaseAndAssociations', () => {
           ...validMockCase,
           trialDate: '2021-01-02T05:22:16.001Z',
           trialLocation: 'Lubbock, Texas',
-          trialSessionId: faker.string.uuid(),
+          trialSessionId: uuidv4(),
         },
       });
 
@@ -446,7 +446,7 @@ describe('updateCaseAndAssociations', () => {
         ...validMockCase,
         trialDate: '2021-01-02T05:22:16.001Z',
         trialLocation: 'Lubbock, Texas',
-        trialSessionId: faker.string.uuid(),
+        trialSessionId: uuidv4(),
       };
 
       applicationContext
