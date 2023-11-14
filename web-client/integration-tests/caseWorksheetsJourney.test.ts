@@ -1,7 +1,5 @@
-import {
-  CASE_STATUS_TYPES,
-  STATUS_OF_MATTER_OPTIONS,
-} from '../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseWorksheetsHelper as caseWorksheetsHelperComputed } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
@@ -249,7 +247,7 @@ describe('Case Worksheets Journey', () => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statusOfMatter',
-      value: STATUS_OF_MATTER_OPTIONS[0],
+      value: CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],
     });
 
     await cerebralTest.runSequence('updateCaseWorksheetSequence');
@@ -266,7 +264,7 @@ describe('Case Worksheets Journey', () => {
       worksheet: {
         docketNumber: cerebralTest.docketNumber,
         finalBriefDueDate: '2023-08-29',
-        statusOfMatter: STATUS_OF_MATTER_OPTIONS[0],
+        statusOfMatter: CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],
       },
     });
   });
@@ -296,7 +294,7 @@ describe('Case Worksheets Journey', () => {
       status: CASE_STATUS_TYPES.cav,
       worksheet: {
         finalBriefDueDate: '2023-08-29',
-        statusOfMatter: STATUS_OF_MATTER_OPTIONS[0],
+        statusOfMatter: CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],
       },
     });
   });
