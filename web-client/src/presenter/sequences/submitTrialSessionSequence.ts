@@ -2,7 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeSubmitTrialSessionDataAction } from '../actions/TrialSession/computeSubmitTrialSessionDataAction';
 import { createTrialSessionAction } from '../actions/TrialSession/createTrialSessionAction';
 import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession/getCreateTrialSessionAlertSuccessAction';
-import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
+import { openTrialSessionInNewTabAction } from '@web-client/presenter/actions/openTrialSessionInNewTabAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -33,7 +33,7 @@ export const submitTrialSessionSequence = [
           setSaveAlertsForNavigationAction,
           getCreateTrialSessionAlertSuccessAction,
           setAlertSuccessAction,
-          navigateToTrialSessionsAction,
+          openTrialSessionInNewTabAction,
         ],
       },
     ]),
