@@ -82,7 +82,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     2,
   );
 
-  it('save Lead Case and member case docket numbers', async () => {
+  it('save Lead Case and member case docket numbers', () => {
     createdDocketNumbers.push(
       cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries[0],
     );
@@ -95,7 +95,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     preferredTrialCity: trialLocation,
     procedureType: SESSION_TYPES.small,
   });
-  it('save member case that has no lead case in trial session', async () => {
+  it('save member case that has no lead case in trial session', () => {
     createdDocketNumbers.push(
       cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries[1],
     );
