@@ -23,13 +23,6 @@ export const Hint = connect(function Hint(props) {
             size="lg"
           />
         )}
-        {exclamation && (
-          <FontAwesomeIcon
-            className="fa-icon-blue-vivid"
-            icon={['fas', 'exclamation-circle']}
-            size="lg"
-          />
-        )}
         {children}
       </span>
     </div>
