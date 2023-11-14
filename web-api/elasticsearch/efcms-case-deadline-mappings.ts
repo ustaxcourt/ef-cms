@@ -1,4 +1,6 @@
-module.exports = {
+import { createHash } from 'crypto';
+
+export const efcmsCaseDeadlineMappings = {
   properties: {
     'associatedJudge.S': {
       type: 'text',
@@ -28,3 +30,9 @@ module.exports = {
     },
   },
 };
+
+const efcmsCaseDeadlineMappingsHash: string = createHash('md5')
+  .update(JSON.stringify(efcmsCaseDeadlineMappings), 'utf8')
+  .digest('hex');
+
+export const efcmsCaseDeadlineIndex: string = `efcms-case-deadline-${efcmsCaseDeadlineMappingsHash}`;

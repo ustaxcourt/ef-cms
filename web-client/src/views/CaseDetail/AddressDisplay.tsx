@@ -36,7 +36,9 @@ export const AddressDisplay = connect(
           contact.isAddressSealed && 'sealed-address',
         )}
       >
-        <span className="address-line">{contact.address1}</span>
+        <span className="address-line" data-testid="address1-line">
+          {contact.address1}
+        </span>
         <span className="address-line">{contact.address2}</span>
         <span className="address-line">{contact.address3}</span>
         <span className="address-line">

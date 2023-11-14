@@ -61,6 +61,7 @@ export const StartCaseStep2 = connect(
                 'usa-label ustc-upload-petition with-hint',
                 startCaseHelper.showPetitionFileValid && 'validated',
               )}
+              data-testid="petition-file-label"
               htmlFor="petition-file"
               id="petition-file-label"
             >
@@ -89,6 +90,7 @@ export const StartCaseStep2 = connect(
             </div>
             <StateDrivenFileInput
               aria-describedby="petition-file-label"
+              data-testid="petition-file"
               id="petition-file"
               name="petitionFile"
               updateFormValueSequence="updateStartCaseFormValueSequence"
@@ -126,6 +128,7 @@ export const StartCaseStep2 = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-testid={`irs-notice-${option}`}
                         htmlFor={`hasIrsNotice-${option}`}
                         id={`hasIrsNotice-${idx}`}
                       >
