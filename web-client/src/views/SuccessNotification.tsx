@@ -32,6 +32,7 @@ export const SuccessNotification = connect(
               'usa-alert--success',
               isMessageOnly && 'usa-alert-success-message-only',
             )}
+            data-testid="success-alert"
             ref={notificationRef}
             role="alert"
           >

@@ -221,6 +221,7 @@ export const editPetitionerEmail = (emailAddress: string) => {
   cy.get('#updatedEmail').type(emailAddress);
   cy.get('#confirm-email').type(emailAddress);
   cy.get('#submit-edit-petitioner-information').click();
+  cy.get('[data-testId="no-matching-email-modal"]');
   cy.get('#modal-button-confirm').click();
   cy.get('.modal-dialog', { timeout: 1000 }).should('not.exist');
   cy.get(`div.parties-card:contains(${emailAddress} (Pending))`).should(
