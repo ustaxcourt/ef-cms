@@ -86,6 +86,7 @@ export const StartCaseStep3 = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-testid={`filing-type-${idx}`}
                         htmlFor={filingType}
                         id={`filing-type-${idx}`}
                       >
@@ -135,6 +136,7 @@ export const StartCaseStep3 = connect(
                     />
                     <label
                       className="usa-radio__label"
+                      data-testid={`is-spouse-deceased-${idx}`}
                       htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
                       id={`is-spouse-deceased-${idx}`}
                     >
