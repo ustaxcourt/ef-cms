@@ -47,11 +47,17 @@ export const getCasesForUserInteractor = async (
     userId,
   });
 
-  const [openCases, closedCases] = partition(nestedCases, aCase => {
-    return [aCase, ...(aCase.consolidatedCases || [])].some(c => !isClosed(c));
+  const openCases = nestedCases.filter(nestedCase => {
+    return [nestedCase, ...(nestedCase.consolidatedCases || [])].some(
+      aCase => !isClosed(aCase),
+    );
   });
 
-  console.log(openCases, closedCases);
+  const closedCases = nestedCases.filter(nestedCase => {
+    return [nestedCase, ...(nestedCase.consolidatedCases || [])].some(aCase =>
+      isClosed(aCase),
+    );
+  });
 
   const sortedOpenCases = sortCases(openCases, 'open');
   const sortedClosedCases = sortCases(closedCases, 'closed');
@@ -136,7 +142,13 @@ const sortCases = (
   return nestedCases
     .sort((a, b) => {
       if (caseType === 'closed') {
-        return compareISODateStrings(b.closedDate, a.closedDate);
+        const closedDateA = a.closedDate
+          ? a.closedDate
+          : a.consolidatedCases.find(aCase => aCase.closedDate)!.closedDate;
+        const closedDateB = b.closedDate
+          ? b.closedDate
+          : b.consolidatedCases.find(aCase => aCase.closedDate)!.closedDate;
+        return compareISODateStrings(closedDateB, closedDateA);
       } else {
         return compareISODateStrings(b.createdAt, a.createdAt);
       }
