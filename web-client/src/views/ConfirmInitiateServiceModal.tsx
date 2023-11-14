@@ -52,7 +52,7 @@ export const ConfirmInitiateServiceModal = connect(
           <strong>{documentTitle}</strong>
         </p>
         {confirmInitiateServiceModalHelper.showPaperAlert && (
-          <Hint exclamation fullWidth className="block">
+          <Hint fullWidth className="block">
             <div className="margin-bottom-1">
               This {confirmInitiateServiceModalHelper.caseOrGroup} has parties
               receiving paper service:
