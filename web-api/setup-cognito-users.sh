@@ -4,7 +4,7 @@
 #   creates the TESTING users inside our system
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 
 ( ! command -v curl > /dev/null ) && echo "curl was not found on your path. Please install curl." && exit 1
 ( ! command -v aws > /dev/null ) && echo "aws was not found on your path. Please install aws." && exit 1

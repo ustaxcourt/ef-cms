@@ -4,7 +4,7 @@
 #   smoketest to verify the private buckets are configured as private
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "$1" ] && echo "ERROR: The env to run smoketest to \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
@@ -31,7 +31,7 @@ for bucket in "${BUCKETS[@]}"; do
   # file exists and throw an error on status codes
   aws s3api get-bucket-policy --bucket "${bucket}" >> /dev/null 2>&1
   code=$?
-  if [[ "${code}" == "0" ]] && [[ ! $(bucket_with_policy_for_glue_job "${bucket}") ]]; then 
+  if [[ "${code}" == "0" ]] && [[ ! $(bucket_with_policy_for_glue_job "${bucket}") ]]; then
     echo "ERROR: the bucket of $bucket is not private; it has a bucket policy when it should not"
     exit 1
   fi

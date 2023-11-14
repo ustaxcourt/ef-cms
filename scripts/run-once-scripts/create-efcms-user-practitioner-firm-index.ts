@@ -1,14 +1,20 @@
-import * as efcmsUserMappings from '../../web-api/elasticsearch/efcms-user-mappings';
+import { Client } from '@opensearch-project/opensearch';
+import { areAllReindexTasksFinished } from '../../shared/admin-tools/elasticsearch/check-reindex-complete';
+import { efcmsUserMappings } from '../../web-api/elasticsearch/efcms-user-mappings';
+import {
+  esSettingsType,
+  settings,
+} from '../../web-api/elasticsearch/elasticsearch-settings';
 import { getClient } from '../../web-api/elasticsearch/client';
 import { getVersion, requireEnvVars } from '../../shared/admin-tools/util';
-import { settings } from '../../web-api/elasticsearch/elasticsearch-settings';
 
-requireEnvVars(['ENV', 'OVERRIDE_ES_NUMBER_OF_REPLICAS']);
+requireEnvVars(['ENV', 'SOURCE_TABLE', 'OVERRIDE_ES_NUMBER_OF_REPLICAS']);
 
-const environmentName = process.env.ENV!;
-const overriddenNumberOfReplicasIfNonProd =
-  process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS!;
-const index = 'efcms-user-practitioner-firm';
+const environmentName: string = process.env.ENV!;
+const overriddenNumberOfReplicasIfNonProd: number = Number(
+  process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS!,
+);
+const index: string = 'efcms-user-practitioner-firm';
 const efcmsUserPractitionerFirmMappings = {
   properties: {
     ...efcmsUserMappings.properties,
@@ -17,31 +23,14 @@ const efcmsUserPractitionerFirmMappings = {
     },
   },
 };
-const esSettings = settings({
+const esSettings: esSettingsType = settings({
   environment: environmentName,
   overriddenNumberOfReplicasIfNonProd,
 });
 
-const areAllReindexTasksFinished = async ({ client }): Promise<boolean> => {
-  try {
-    const tasks = await client.cat.tasks({ format: 'json' });
-    if (tasks && tasks.body && tasks.body.length) {
-      const reindexTasks = tasks.body.filter(
-        (task: { action: string }) =>
-          task.action === 'indices:data/write/reindex',
-      );
-      const numReindexTasks = reindexTasks ? reindexTasks.length : 0;
-      return numReindexTasks === 0;
-    }
-  } catch (error) {
-    console.error('unable to list elasticsearch tasks', error);
-  }
-  return true;
-};
-
 (async () => {
-  const version = await getVersion();
-  const client = await getClient({ environmentName, version });
+  const version: string = await getVersion();
+  const client: Client = await getClient({ environmentName, version });
 
   const { body: indexExists } = await client.indices.exists({ index });
 
@@ -87,8 +76,8 @@ const areAllReindexTasksFinished = async ({ client }): Promise<boolean> => {
 
   let reindexFinished: boolean;
   do {
-    reindexFinished = await areAllReindexTasksFinished({ client });
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    reindexFinished = await areAllReindexTasksFinished({ environmentName });
+    await new Promise(resolve => setTimeout(resolve, 2000));
   } while (!reindexFinished);
   console.log('reindex complete');
 })();
