@@ -283,8 +283,8 @@ module.exports = [
   {
     actions: [
       'wait for #docket-record-table to be visible',
-      'wait for button[data-test="document-viewer-link-A"] to be visible',
-      'click element button[data-test="document-viewer-link-A"]',
+      'wait for button[data-testid="document-viewer-link-A"] to be visible',
+      'click element button[data-testid="document-viewer-link-A"]',
       'click element button[data-test="serve-paper-filed-document"]',
       'wait for .modal-dialog to be visible',
     ],
