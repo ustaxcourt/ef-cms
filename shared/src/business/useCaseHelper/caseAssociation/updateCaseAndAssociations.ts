@@ -6,7 +6,6 @@ import { IrsPractitioner } from '../../entities/IrsPractitioner';
 import { Message } from '../../entities/Message';
 import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
 import { WorkItem } from '../../entities/WorkItem';
-import { pick } from 'lodash';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -399,56 +398,6 @@ const updateCaseWorkItems = async ({
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
  * @returns {Array<function>} the persistence functions required to complete this action
  */
-const updateUserCaseMappings = async ({
-  applicationContext,
-  caseToUpdate,
-  oldCase,
-}) => {
-  const userCaseMappingsRequireUpdate =
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber;
-
-  if (!userCaseMappingsRequireUpdate) {
-    return [];
-  }
-
-  const userCaseMappings = await applicationContext
-    .getPersistenceGateway()
-    .getUserCaseMappingsByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
-
-  const updatedAttributeValues = pick(caseToUpdate, [
-    'caseCaption',
-    'closedDate',
-    'docketNumberSuffix',
-    'docketNumberWithSuffix',
-    'leadDocketNumber',
-    'status',
-  ]);
-
-  return userCaseMappings.map(
-    ucItem =>
-      function updateUserCaseMappings_cb() {
-        applicationContext.getPersistenceGateway().updateUserCaseMapping({
-          applicationContext,
-          userCaseItem: { ...ucItem, ...updatedAttributeValues },
-        });
-      },
-  );
-};
-
-/**
- * Identifies user case mappings which require updates and issues persistence calls
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated document data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<function>} the persistence functions required to complete this action
- */
 const updateCaseDeadlines = async ({
   applicationContext,
   caseToUpdate,
@@ -524,7 +473,6 @@ export const updateCaseAndAssociations = async ({
     updateHearings,
     updateIrsPractitioners,
     updatePrivatePractitioners,
-    updateUserCaseMappings,
   ];
 
   const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>
