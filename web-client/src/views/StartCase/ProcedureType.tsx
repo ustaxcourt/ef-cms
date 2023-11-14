@@ -44,6 +44,7 @@ export const ProcedureType = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid={`procedure-type-${idx}`}
                 htmlFor={procedureType}
                 id={`procedure-type-${idx}`}
               >
