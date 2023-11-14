@@ -86,6 +86,7 @@ echo "clearing elasticsearch"
 ./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
 echo "setting up elasticsearch"
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
+./web-api/setup-elasticsearch-aliases.sh "${ENV}"
 
 echo "clearing dynamo"
 npx ts-node --transpile-only ./web-api/clear-dynamodb-table.ts "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
