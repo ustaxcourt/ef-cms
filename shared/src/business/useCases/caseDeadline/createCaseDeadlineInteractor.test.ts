@@ -4,7 +4,7 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';

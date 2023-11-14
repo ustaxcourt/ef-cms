@@ -1,6 +1,6 @@
 import { BaseModal } from '../../ustc-ui/Modal/BaseModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
