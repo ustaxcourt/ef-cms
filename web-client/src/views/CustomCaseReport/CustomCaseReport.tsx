@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseInventory } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
@@ -417,7 +418,7 @@ export const CustomCaseReport = connect(
                         setCustomCaseReportFiltersSequence({
                           preferredTrialCities: {
                             action: 'remove',
-                            city,
+                            preferredTrialCity: city,
                           },
                         });
                       }}
@@ -436,7 +437,7 @@ export const CustomCaseReport = connect(
               type="checkbox"
               onChange={() => {
                 setCustomCaseReportFiltersSequence({
-                  highPriority: 'highPriority',
+                  highPriority: true,
                 });
               }}
             />
@@ -524,7 +525,12 @@ const ReportTable = ({
   hasRunCustomCaseReport,
   totalCases,
 }: {
-  cases: any[];
+  cases: (CaseInventory & {
+    inConsolidatedGroup: boolean;
+    consolidatedIconTooltipText: string;
+    shouldIndent: boolean;
+    isLeadCase: boolean;
+  })[];
   hasRunCustomCaseReport: boolean;
   totalCases: number;
 }) => {
@@ -556,14 +562,14 @@ const ReportTable = ({
         {cases.length !== 0 && (
           <tbody id="custom-case-report-table-body">
             {cases.map(entry => (
-              <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
+              <tr key={`${entry.docketNumber}-${entry.receivedAt}`}>
                 <td>
                   <ConsolidatedCaseIcon
                     consolidatedIconTooltipText={
                       entry.consolidatedIconTooltipText
                     }
                     inConsolidatedGroup={entry.inConsolidatedGroup}
-                    showLeadCaseIcon={entry.inLeadCase}
+                    showLeadCaseIcon={entry.isLeadCase}
                   />
                 </td>
                 <td>
