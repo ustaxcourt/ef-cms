@@ -3,7 +3,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { TrialCity } from '../StartCase/TrialCity';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
