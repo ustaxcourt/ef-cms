@@ -34,7 +34,12 @@ export const CaseDetailEdit = connect(
           <Tab id="tab-case-info" tabName="caseInfo" title="Case Info">
             <CaseInfo />
           </Tab>
-          <Tab id="tab-irs-notice" tabName="irsNotice" title="IRS Notice">
+          <Tab
+            data-testid="tab-irs-notice"
+            id="tab-irs-notice"
+            tabName="irsNotice"
+            title="IRS Notice"
+          >
             <div className="blue-container">
               <IRSNotice validationName="validateCaseDetailSequence" />
             </div>
@@ -42,6 +47,7 @@ export const CaseDetailEdit = connect(
         </Tabs>
 
         <Button
+          data-testid="submit-case"
           id="submit-case"
           type="button"
           onClick={() => {
