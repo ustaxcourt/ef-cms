@@ -36,6 +36,7 @@ npm run deploy:api "${ENV}"
 
 # Setting up indices
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
+./web-api/setup-elasticsearch-aliases.sh "${ENV}"
 
 # Indexing data
 npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"

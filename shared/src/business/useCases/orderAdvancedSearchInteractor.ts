@@ -67,7 +67,7 @@ export const orderAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('private order search', {
+  applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
     totalCount,

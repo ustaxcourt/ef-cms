@@ -26,7 +26,7 @@ export const PaperServiceConfirmModal = connect(
 
         <p className="text-semibold">{documentTitle}</p>
 
-        <Hint exclamation fullWidth className="block">
+        <Hint fullWidth className="block">
           <div className="margin-bottom-1">
             This case has parties receiving paper service:
           </div>
