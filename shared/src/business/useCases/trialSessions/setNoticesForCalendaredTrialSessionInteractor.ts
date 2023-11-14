@@ -4,8 +4,9 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-export const setNoticesForCalendaredTrialSessionInteractor = async (
+export const setNoticesForCalendaredTrialSession = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -193,3 +194,43 @@ const waitForJobToFinish = async ({
   await new Promise(resolve => setTimeout(resolve, 3000));
   await waitForJobToFinish({ applicationContext, jobId });
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
+) => {
+  const calendaredCases = await applicationContext
+    .getPersistenceGateway()
+    .getCalendaredCasesForTrialSession({ applicationContext, trialSessionId });
+
+  return {
+    identifiers: calendaredCases.map(
+      ({ docketNumber }) => `case|${docketNumber}`,
+    ),
+    ttl: 900,
+  };
+};
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'set_notices_for_calendared_trial_session',
+    },
+    userId: user.userId,
+  });
+};
+
+export const setNoticesForCalendaredTrialSessionInteractor = withLocking(
+  setNoticesForCalendaredTrialSession,
+  determineEntitiesToLock,
+  handleLockError,
+);
