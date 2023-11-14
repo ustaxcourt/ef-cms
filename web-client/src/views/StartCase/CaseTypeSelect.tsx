@@ -41,6 +41,7 @@ export const CaseTypeSelect = connect(
             <select
               aria-labelledby="case-type-select-legend"
               className="usa-select"
+              data-testid="case-type-select"
               id="case-type"
               name="caseType"
               value={value}

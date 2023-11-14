@@ -122,6 +122,7 @@ export const ConfirmModal = connect(
           <div className="margin-top-5">
             {!noConfirm && (
               <Button
+                data-testid="modal-confirm"
                 disabled={waitingForResponse}
                 id="confirm"
                 onClick={runConfirmSequence}
