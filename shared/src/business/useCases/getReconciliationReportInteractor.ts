@@ -11,8 +11,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
-import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
-
+import { UnauthorizedError } from '@web-api/errors/errors';
 const isValidDate = dateString => {
   const dateInputValid = PATTERNS.YYYYMMDD.test(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);

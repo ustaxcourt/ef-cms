@@ -13,7 +13,7 @@ import { Get } from 'cerebral';
 export const formattedDashboardTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
   const formatSessionFn = session => formatSession(session, applicationContext);

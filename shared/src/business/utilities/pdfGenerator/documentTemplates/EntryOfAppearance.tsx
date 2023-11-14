@@ -1,6 +1,5 @@
 import { DocketHeader } from '../components/DocketHeader';
-import { PractitionerLabel } from '@shared/business/utilities/pdfGenerator/components/PractitionerLabel';
-import { PrimaryHeader } from '../components/PrimaryHeader';
+import { PrimaryHeaderWithoutSeal } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeaderWithoutSeal';
 import React from 'react';
 
 export const EntryOfAppearance = ({
@@ -34,9 +33,11 @@ export const EntryOfAppearance = ({
   };
 }) => {
   const filersString = joinWithCommasAnd(filers);
+
   return (
     <div id="entry-of-appearance-pdf">
-      <PrimaryHeader />
+      <PrimaryHeaderWithoutSeal />
+
       <DocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
@@ -44,7 +45,7 @@ export const EntryOfAppearance = ({
         documentTitle="Entry of Appearance"
       />
 
-      <div id="entry-body">
+      <div>
         <p className="indent-paragraph">
           The undersigned, being duly admitted to practice before the United
           States Tax Court, hereby enters an appearance for {filersString} in
@@ -53,21 +54,27 @@ export const EntryOfAppearance = ({
 
         <div className="appearance-grid">
           <div className="grow">Dated: {date}</div>
-          <div>
-            <PractitionerLabel
-              address1={practitionerInformation.contact.address1}
-              address2={practitionerInformation.contact.address2}
-              address3={practitionerInformation.contact.address3}
-              barNumber={practitionerInformation.barNumber}
-              city={practitionerInformation.contact.city}
-              country={practitionerInformation.contact.country}
-              countryType={practitionerInformation.contact.countryType}
-              email={practitionerInformation.email}
-              name={practitionerInformation.name}
-              phone={practitionerInformation.contact.phone}
-              postalCode={practitionerInformation.contact.postalCode}
-              state={practitionerInformation.contact.state}
-            />
+          <div className="address-label">
+            <div>{practitionerInformation.name}</div>
+            <div>{practitionerInformation.contact.address1}</div>
+            {practitionerInformation.contact.address2 && (
+              <div>{practitionerInformation.contact.address2}</div>
+            )}
+            {practitionerInformation.contact.address3 && (
+              <div>{practitionerInformation.contact.address3}</div>
+            )}
+            <div>
+              {practitionerInformation.contact.city},{' '}
+              {practitionerInformation.contact.state}{' '}
+              {practitionerInformation.contact.postalCode}
+            </div>
+            <div>
+              {practitionerInformation.contact.countryType ===
+                'international' && practitionerInformation.contact.country}
+            </div>
+            <div>{practitionerInformation.contact.phone}</div>
+            <div>Tax Court Bar No. {practitionerInformation.barNumber}</div>
+            <div>{practitionerInformation.email}</div>
           </div>
         </div>
 
