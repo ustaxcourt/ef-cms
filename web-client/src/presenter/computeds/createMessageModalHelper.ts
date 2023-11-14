@@ -1,7 +1,7 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { Get } from 'cerebral';
-export const createMessageModalHelper = (get: Get) => {
+export const createMessageModalHelper = (get: Get): any => {
   const users = get(state.users);
 
   const formattedUsers = (users || []).map(user => {
