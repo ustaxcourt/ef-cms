@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const updateCaseModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseDetail = get(state.caseDetail);
   const {
     STATUS_TYPES,

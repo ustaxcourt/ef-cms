@@ -12,7 +12,7 @@ import { Get } from 'cerebral';
 export const applyStampFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { DATE_FORMATS } = applicationContext.getConstants();
   const form = get(state.form);
   const pdfForSigning = get(state.pdfForSigning);

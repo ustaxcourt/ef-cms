@@ -1,5 +1,5 @@
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createPractitionerUserInteractor } from './createPractitionerUserInteractor';
 
