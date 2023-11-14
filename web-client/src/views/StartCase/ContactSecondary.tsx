@@ -65,6 +65,7 @@ export const ContactSecondary = connect(
             <input
               autoCapitalize="none"
               className="usa-input"
+              data-testid="contact-secondary-name"
               id="secondaryName"
               name="contactSecondary.name"
               type="text"
@@ -98,6 +99,7 @@ export const ContactSecondary = connect(
               />
               <label
                 className="usa-checkbox__label"
+                data-testid="use-same-address-above-label"
                 htmlFor="use-same-address-above"
                 id="use-same-address-above-label"
               >

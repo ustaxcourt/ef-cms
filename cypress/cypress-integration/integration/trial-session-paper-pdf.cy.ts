@@ -55,7 +55,7 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
             `/case-detail/${docketNumber}/petition-qc/document-view/${petitionId}`,
           );
           cy.get('#submit-case').click();
-          cy.get('[data-cy="serve-to-irs"]').click();
+          cy.get('[data-testid="serve-case-to-irs"]').click();
           cy.intercept(`/cases/${docketNumber}/serve-to-irs`).as('serveToIrs');
           cy.get('#confirm').click();
           cy.wait('@serveToIrs');
