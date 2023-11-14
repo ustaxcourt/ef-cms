@@ -39,9 +39,9 @@ export const DocketEntryQc = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           {docketEntryQcHelper.showPaperServiceWarning && (
-            <Hint exclamation fullWidth>
+            <Hint fullWidth>
               This document was automatically generated and requires paper
-              service
+              service.
             </Hint>
           )}
           <h2 className="heading-1">

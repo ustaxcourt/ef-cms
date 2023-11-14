@@ -1,6 +1,6 @@
 import { Client } from '@opensearch-project/opensearch';
-import { baseAliases } from './elasticsearch-aliases';
-import { elasticsearchIndexes } from './elasticsearch-indexes';
+import { baseAliases, esAliasType } from './elasticsearch-aliases';
+import { elasticsearchIndexes, esIndexType } from './elasticsearch-indexes';
 import { elasticsearchMappings } from './elasticsearch-mappings';
 import { esSettingsType } from './elasticsearch-settings';
 import { settings } from './elasticsearch-settings';
@@ -66,18 +66,16 @@ export const deleteUnaliasedIndices = async ({
 }): Promise<void> => {
   const indices: string[] =
     (await client.cat.indices({ format: 'json' })).body
-      ?.filter((i: { index: string }) => {
+      ?.filter((i: esIndexType) => {
         return i.index.includes('efcms');
       })
-      .map((i: { index: string }) => i.index) || [];
+      .map((i: esIndexType) => i.index) || [];
   const aliasedIndices: string[] =
     (await client.cat.aliases({ format: 'json' })).body
-      ?.filter((a: { alias: string; index: string }) => {
-        return baseAliases
-          .map((ba: { alias: string; index: string }) => ba.alias)
-          .includes(a.alias);
+      ?.filter((a: esAliasType) => {
+        return baseAliases.map((ba: esAliasType) => ba.alias).includes(a.alias);
       })
-      .map((a: { alias: string; index: string }) => a.index) || [];
+      .map((a: esAliasType) => a.index) || [];
   const unaliasedIndices =
     indices.filter(index => {
       return !aliasedIndices.includes(index);

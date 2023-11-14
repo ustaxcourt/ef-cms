@@ -2,6 +2,8 @@ import {
   DescribeDomainCommand,
   OpenSearchClient,
 } from '@aws-sdk/client-opensearch';
+import { esAliasType } from '../../web-api/elasticsearch/elasticsearch-aliases';
+import { esIndexType } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { getClient } from '../../web-api/elasticsearch/client';
 
 export const checkIfExists = async (DomainName: string): Promise<boolean> => {
@@ -83,7 +85,7 @@ export const readyClusterForMigration = async (DomainName?: string) => {
 
   const aliases = await client.cat.aliases({ format: 'json' });
   await Promise.all(
-    aliases.body?.map((alias: { alias: string; index: string }) =>
+    aliases.body?.map((alias: esAliasType) =>
       client.indices.deleteAlias({
         index: alias.index,
         name: alias.alias,
@@ -93,7 +95,7 @@ export const readyClusterForMigration = async (DomainName?: string) => {
 
   const indices = await client.cat.indices({ format: 'json' });
   await Promise.all(
-    indices.body?.map((index: { index: string }) =>
+    indices.body?.map((index: esIndexType) =>
       client.indices.delete({ index: index.index }),
     ),
   );
