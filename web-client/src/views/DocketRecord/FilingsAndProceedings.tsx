@@ -57,6 +57,7 @@ export const FilingsAndProceedings = connect<
                 'text-left',
                 entry.isStricken && 'stricken-docket-record',
               )}
+              data-testid={`document-download-link-${entry.eventCode}`}
               onClick={() =>
                 openCaseDocumentDownloadUrlSequence({
                   docketEntryId: entry.docketEntryId,
