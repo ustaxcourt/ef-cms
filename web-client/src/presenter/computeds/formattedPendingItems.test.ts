@@ -11,33 +11,11 @@ describe('formattedPendingItems', () => {
     formattedPendingItemsComputed,
   );
 
-  const mockPendingItems = [
-    {
-      associatedJudge: CHIEF_JUDGE,
-      caseStatus: STATUS_TYPES.new,
-      createdAt: '2019-01-10',
-      docketEntryId: '33ddbf4f-90f8-417c-8967-57851b0b9069',
-      docketNumber: '101-19',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-      documentType: 'Administrative Record',
-      eventCode: 'ADMR',
-      receivedAt: '2019-01-10',
-    },
-    {
-      associatedJudge: CHIEF_JUDGE,
-      caseStatus: STATUS_TYPES.new,
-      createdAt: '2018-01-20',
-      docketEntryId: 'dd956ab1-5cde-4e78-bae0-fff4aee40426',
-      docketNumber: '101-19',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-      documentTitle: 'Affidavit of Sally in Support of Petition',
-      documentType: 'Affidavit in Support',
-      eventCode: 'AFF',
-      receivedAt: '2018-01-20',
-    },
-    {
+  let mockPendingItems;
+  let pendingItem;
+  beforeEach(() => {
+    pendingItem = {
       associatedJudge: 'Judge A',
-      caseStatus: STATUS_TYPES.new,
       createdAt: '2018-01-20',
       docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
       docketNumber: '103-19',
@@ -46,8 +24,49 @@ describe('formattedPendingItems', () => {
       documentType: 'Affidavit in Support',
       eventCode: 'AFF',
       receivedAt: '2018-01-20',
-    },
-  ];
+      status: STATUS_TYPES.calendared,
+      trialDate: '2022-02-01T17:21:05.486Z',
+      trialLocation: 'Houston, Texas',
+    };
+
+    mockPendingItems = [
+      {
+        associatedJudge: CHIEF_JUDGE,
+        caseStatus: STATUS_TYPES.new,
+        createdAt: '2019-01-10',
+        docketEntryId: '33ddbf4f-90f8-417c-8967-57851b0b9069',
+        docketNumber: '101-19',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+        documentType: 'Administrative Record',
+        eventCode: 'ADMR',
+        receivedAt: '2019-01-10',
+      },
+      {
+        associatedJudge: CHIEF_JUDGE,
+        caseStatus: STATUS_TYPES.new,
+        createdAt: '2018-01-20',
+        docketEntryId: 'dd956ab1-5cde-4e78-bae0-fff4aee40426',
+        docketNumber: '101-19',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+        documentTitle: 'Affidavit of Sally in Support of Petition',
+        documentType: 'Affidavit in Support',
+        eventCode: 'AFF',
+        receivedAt: '2018-01-20',
+      },
+      {
+        associatedJudge: 'Judge A',
+        caseStatus: STATUS_TYPES.new,
+        createdAt: '2018-01-20',
+        docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
+        docketNumber: '103-19',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+        documentTitle: 'Affidavit of Bob in Support of Petition',
+        documentType: 'Affidavit in Support',
+        eventCode: 'AFF',
+        receivedAt: '2018-01-20',
+      },
+    ];
+  });
 
   it('should return formatted and sorted list of judges', () => {
     const result = runCompute(formattedPendingItems, {
@@ -106,66 +125,32 @@ describe('formattedPendingItems', () => {
   });
 
   it('should add the trial location and trial date to the case status for pending items on cases that are calendared', () => {
+    pendingItem.status = STATUS_TYPES.calendared;
+    pendingItem.trialDate = '2022-02-01T17:21:05.486Z';
+    pendingItem.trialLocation = 'Houston, Texas';
+
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [],
         pendingReports: {
-          pendingItems: [
-            {
-              associatedJudge: 'Judge A',
-              createdAt: '2018-01-20',
-              docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
-              docketNumber: '103-19',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              documentTitle: 'Affidavit of Bob in Support of Petition',
-              documentType: 'Affidavit in Support',
-              eventCode: 'AFF',
-              receivedAt: '2018-01-20',
-              status: STATUS_TYPES.calendared,
-              trialDate: '2022-02-01T17:21:05.486Z',
-              trialLocation: 'Houston, Texas',
-            },
-          ],
+          pendingItems: [pendingItem],
         },
       },
     });
 
-    expect(result).toMatchObject({
-      items: [
-        {
-          associatedJudge: 'Judge A',
-          associatedJudgeFormatted: 'A',
-          documentLink:
-            '/case-detail/103-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-ac7faee40426',
-          formattedFiledDate: '01/20/18',
-          formattedName: 'Affidavit of Bob in Support of Petition',
-          receivedAt: '2018-01-20',
-          status: `${STATUS_TYPES.calendared} - 02/01/22 Houston, TX`,
-        },
-      ],
-    });
+    expect(result.items[0].status).toEqual(
+      `${STATUS_TYPES.calendared} - 02/01/22 Houston, TX`,
+    );
   });
 
   it('should add consolidated properties to a pending item in a consolidated group', () => {
+    pendingItem.leadDocketNumber = '100-19';
+
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [],
         pendingReports: {
-          pendingItems: [
-            {
-              associatedJudge: 'Judge A',
-              caseStatus: STATUS_TYPES.new,
-              createdAt: '2018-01-20',
-              docketEntryId: '6ad0a175-048a-475f-977c-12cb63e37c91',
-              docketNumber: '104-19',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              documentTitle: 'Administrative Record',
-              documentType: 'Administrative Record',
-              eventCode: 'ADMR',
-              leadDocketNumber: '100-19',
-              receivedAt: '2018-01-20',
-            },
-          ],
+          pendingItems: [pendingItem],
         },
       },
     });
@@ -173,17 +158,9 @@ describe('formattedPendingItems', () => {
     expect(result).toMatchObject({
       items: [
         {
-          associatedJudge: 'Judge A',
-          associatedJudgeFormatted: 'A',
-          caseStatus: STATUS_TYPES.new,
-          consolidatedIconTooltipText: 'Consolidated case',
-          documentLink:
-            '/case-detail/104-19/document-view?docketEntryId=6ad0a175-048a-475f-977c-12cb63e37c91',
-          formattedFiledDate: '01/20/18',
-          formattedName: 'Administrative Record',
           inConsolidatedGroup: true,
           inLeadCase: false,
-          receivedAt: '2018-01-20',
+          leadDocketNumber: '100-19',
         },
       ],
     });
