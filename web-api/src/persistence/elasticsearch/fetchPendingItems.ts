@@ -20,6 +20,7 @@ export const fetchPendingItems = async ({
     'leadDocketNumber',
     'trialDate',
     'trialLocation',
+    'docketNumberWithSuffix',
   ];
   const docketEntrySource = [
     'docketEntryId',
@@ -113,6 +114,8 @@ export const fetchPendingItems = async ({
     applicationContext,
     searchParameters,
   });
+
+  console.log('results', results);
 
   return { foundDocuments: results, total };
 };
