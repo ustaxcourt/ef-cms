@@ -59,7 +59,7 @@ export const opinionAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('private opinion search', {
+  applicationContext.logger.info('private opinion search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
     totalCount,

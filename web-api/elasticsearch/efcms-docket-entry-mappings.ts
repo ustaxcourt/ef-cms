@@ -1,4 +1,6 @@
-module.exports = {
+import { createHash } from 'crypto';
+
+export const efcmsDocketEntryMappings = {
   properties: {
     'associatedJudge.S': {
       type: 'text',
@@ -109,3 +111,9 @@ module.exports = {
     },
   },
 };
+
+const efcmsDocketEntryMappingsHash: string = createHash('md5')
+  .update(JSON.stringify(efcmsDocketEntryMappings), 'utf8')
+  .digest('hex');
+
+export const efcmsDocketEntryIndex: string = `efcms-docket-entry-${efcmsDocketEntryMappingsHash}`;
