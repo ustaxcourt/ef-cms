@@ -146,7 +146,11 @@ describe('getCasesForUserInteractor', () => {
 
     it('should return links to both open and closed consolidated cases when there is a single consolidated group and one case is closed, and one case is open', async () => {
       const consolidatedGroup = [
-        { ...leadCase, status: CASE_STATUS_TYPES.closed },
+        {
+          ...leadCase,
+          closedDate: '2020-08-16T17:29:10.132Z',
+          status: CASE_STATUS_TYPES.closed,
+        },
         memberCase1,
       ];
       applicationContext
@@ -252,7 +256,7 @@ describe('getCasesForUserInteractor', () => {
       expect(userCases.closedCaseList).toEqual(expectedCaseList);
     });
 
-    it.only('should sort closed cases by most recently closed when closed cases contain a consolidated group where the lead case is not closed (we use the closed date of the next lowest docket number to sort closed cases when the lead case is open)', async () => {
+    it('should sort closed cases by most recently closed when closed cases contain a consolidated group where the lead case is not closed (we use the closed date of the next lowest docket number to sort closed cases when the lead case is open)', async () => {
       const closedDate = '2020-08-16T17:29:10.132Z';
       const consolidatedGroup = [
         leadCase,
