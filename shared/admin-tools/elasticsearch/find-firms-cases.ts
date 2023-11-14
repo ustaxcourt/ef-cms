@@ -10,10 +10,11 @@
  */
 
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import { Search } from '@opensearch-project/opensearch/api/requestParams';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
-const firmTerms = process.argv.slice(2);
+const firmTerms: string[] = process.argv.slice(2);
 if (!firmTerms.length) {
   console.error(
     'usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv',
@@ -21,7 +22,11 @@ if (!firmTerms.length) {
   process.exit(1);
 }
 
-const getFirmsPractitioners = async ({ applicationContext }) => {
+const getFirmsPractitioners = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<{ userId: string }[]> => {
   const must: {}[] = [
     {
       term: {
@@ -43,7 +48,7 @@ const getFirmsPractitioners = async ({ applicationContext }) => {
       },
     });
   }
-  const searchParameters = {
+  const searchParameters: Search = {
     body: {
       query: {
         bool: {
@@ -58,8 +63,21 @@ const getFirmsPractitioners = async ({ applicationContext }) => {
   return (await search({ applicationContext, searchParameters }))?.results;
 };
 
-const getFirmsCases = async ({ applicationContext, firmsPractitionerIds }) => {
-  const searchParameters = {
+const getFirmsCases = async ({
+  applicationContext,
+  firmsPractitionerIds,
+}: {
+  applicationContext: IApplicationContext;
+  firmsPractitionerIds: string[];
+}): Promise<
+  {
+    associatedJudge: string;
+    caseCaption: string;
+    docketNumber: string;
+    status: string;
+  }[]
+> => {
+  const searchParameters: Search = {
     body: {
       query: {
         bool: {
@@ -81,7 +99,7 @@ const getFirmsCases = async ({ applicationContext, firmsPractitionerIds }) => {
 };
 
 (async () => {
-  const applicationContext = createApplicationContext({});
+  const applicationContext: IApplicationContext = createApplicationContext({});
   const firmsPractitionerIds = (
     await getFirmsPractitioners({
       applicationContext,
