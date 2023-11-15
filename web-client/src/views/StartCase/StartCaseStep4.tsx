@@ -154,6 +154,7 @@ export const StartCaseStep4 = connect(
 
         <div className="margin-top-5">
           <Button
+            data-testid="complete-step-4"
             id="submit-case"
             onClick={() => {
               completeStartCaseWizardStepSequence({
