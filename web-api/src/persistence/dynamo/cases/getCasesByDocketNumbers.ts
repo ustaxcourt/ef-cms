@@ -1,4 +1,3 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { batchGet } from '../../dynamodbClientService';
 
 /**
@@ -21,5 +20,5 @@ export const getCasesByDocketNumbers = async ({
     })),
   });
 
-  return results.map(c => new Case(c, { applicationContext }).toRawObject());
+  return results;
 };

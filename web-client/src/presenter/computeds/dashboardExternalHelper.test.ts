@@ -101,7 +101,7 @@ describe('dashboardExternalHelper', () => {
     });
   });
 
-  it('should set the showFilingFeeMessage to true when the user is a private practitioner or petitioner', () => {
+  it('should set the showFilingFee to true when the user is a private practitioner or petitioner', () => {
     const userRoles = ['petitioner', 'privatePractitioner'];
 
     userRoles.forEach(userRole => {
@@ -116,11 +116,11 @@ describe('dashboardExternalHelper', () => {
         },
       });
 
-      expect(result.showFilingFeeMessage).toEqual(true);
+      expect(result.showFilingFee).toEqual(true);
     });
   });
 
-  it('should set the showFilingFeeMessage to false when the user is NOT a private practitioner or petitioner', () => {
+  it('should set the showFilingFee to false when the user is NOT a private practitioner or petitioner', () => {
     applicationContext.getCurrentUser = () => docketClerk1User;
 
     const result = runCompute(dashboardExternalHelper, {
@@ -130,6 +130,6 @@ describe('dashboardExternalHelper', () => {
       },
     });
 
-    expect(result.showFilingFeeMessage).toEqual(false);
+    expect(result.showFilingFee).toEqual(false);
   });
 });
