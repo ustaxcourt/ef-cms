@@ -11,7 +11,7 @@ export const CreatePetitionerAccountInfo = connect({}, () => {
         this Court as provided by the{' '}
         <a
           className="usa-link"
-          href="https://ustaxcourt.gov/resources/ropp/Complete_Rules_of_Practice_and_Procedure_Amended_03202023.pdf"
+          href="https://ustaxcourt.gov/rules.html"
           rel="noreferrer"
           target="_blank"
         >
