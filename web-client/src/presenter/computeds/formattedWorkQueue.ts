@@ -169,8 +169,8 @@ const getDocketEntryEditLink = ({
         ? FROM_PAGES.qcSectionInProgress
         : FROM_PAGES.qcSectionInbox
       : workQueueToDisplay.box === 'inProgress'
-      ? FROM_PAGES.qcMyInProgress
-      : FROM_PAGES.qcMyInbox;
+        ? FROM_PAGES.qcMyInProgress
+        : FROM_PAGES.qcMyInbox;
 
   let editLink;
   if (
