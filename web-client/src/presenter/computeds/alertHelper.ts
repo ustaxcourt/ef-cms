@@ -6,7 +6,7 @@ import { Get } from 'cerebral';
 export const alertHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const alertError = get(state.alertError) || {};
   const userIsIdentified = applicationContext.getCurrentUser() || false;
 

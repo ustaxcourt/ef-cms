@@ -3,7 +3,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -58,6 +58,7 @@ export const StartCaseStep1 = connect(
                 'usa-label ustc-upload-stin with-hint',
                 startCaseHelper.showStinFileValid && 'validated',
               )}
+              data-testid="stin-file-label"
               htmlFor="stin-file"
               id="stin-file-label"
             >
@@ -87,6 +88,7 @@ export const StartCaseStep1 = connect(
             </div>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"
+              data-testid="stin-file"
               id="stin-file"
               name="stinFile"
               updateFormValueSequence="updateStartCaseFormValueSequence"
@@ -96,6 +98,7 @@ export const StartCaseStep1 = connect(
         </div>
 
         <Button
+          data-testid="complete-step-1"
           id="submit-case"
           onClick={() => {
             completeStartCaseWizardStepSequence({ nextStep: 2 });

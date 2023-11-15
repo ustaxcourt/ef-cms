@@ -1,7 +1,7 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -52,7 +52,7 @@ export const ConfirmInitiateServiceModal = connect(
           <strong>{documentTitle}</strong>
         </p>
         {confirmInitiateServiceModalHelper.showPaperAlert && (
-          <Hint exclamation fullWidth className="block">
+          <Hint fullWidth className="block">
             <div className="margin-bottom-1">
               This {confirmInitiateServiceModalHelper.caseOrGroup} has parties
               receiving paper service:

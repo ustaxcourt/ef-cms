@@ -12,7 +12,7 @@ async function putEventHistory(
   applicationContext: IApplicationContext,
   eventID: string,
 ) {
-  const twentyFourHours = 24 * 60 * 60 * 1000;
+  const twentyFourHours = 24 * 60 * 60;
 
   await applicationContext
     .getDocumentClient({
@@ -22,7 +22,7 @@ async function putEventHistory(
       Item: {
         pk: `stream-event-id|${eventID}`,
         sk: `stream-event-id|${eventID}`,
-        ttl: Date.now() + twentyFourHours,
+        ttl: Math.floor(Date.now() / 1000) + twentyFourHours,
       },
       TableName: getTableName({
         applicationContext,

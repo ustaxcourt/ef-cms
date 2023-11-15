@@ -1,3 +1,8 @@
+import { efcmsCaseIndex } from '../../../elasticsearch/efcms-case-mappings';
+import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
+import { efcmsMessageIndex } from '../../../elasticsearch/efcms-message-mappings';
+import { efcmsWorkItemIndex } from '../../../elasticsearch/efcms-work-item-mappings';
+
 export const emptyResults = {
   body: {
     _shards: {
@@ -31,7 +36,7 @@ export const mockCaseSearchResult = {
       hits: [
         {
           _id: 'case|101-23_case|101-23',
-          _index: 'efcms-case',
+          _index: efcmsCaseIndex,
           _score: null,
           _source: {
             associatedJudge: { S: 'Buch' },
@@ -78,7 +83,7 @@ export const mockDocketEntrySearchResult = {
       hits: [
         {
           _id: 'case|312-21_docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-          _index: 'efcms-docket-entry',
+          _index: efcmsDocketEntryIndex,
           _routing: 'case|312-21_case|312-21|mapping',
           _score: null,
           _source: {
@@ -96,7 +101,7 @@ export const mockDocketEntrySearchResult = {
                 hits: [
                   {
                     _id: 'case|312-21_case|312-21|mapping',
-                    _index: 'efcms-message',
+                    _index: efcmsMessageIndex,
                     _score: 1,
                     _source: {
                       docketNumber: {
@@ -140,7 +145,7 @@ export const mockMessageSearchResult = {
       hits: [
         {
           _id: 'case|312-21_message|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-          _index: 'efcms-message',
+          _index: efcmsMessageIndex,
           _routing: 'case|312-21_case|312-21|mapping',
           _score: null,
           _source: {
@@ -158,7 +163,7 @@ export const mockMessageSearchResult = {
                 hits: [
                   {
                     _id: 'case|312-21_case|312-21|mapping',
-                    _index: 'efcms-message',
+                    _index: efcmsMessageIndex,
                     _score: 1,
                     _source: {
                       leadDocketNumber: {
@@ -202,7 +207,7 @@ export const mockWorkItemSearchResult = {
       hits: [
         {
           _id: 'case|312-work-item|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-          _index: 'efcms-work-item',
+          _index: efcmsWorkItemIndex,
           _routing: 'case|312-21_case|312-21|mapping',
           _score: null,
           _source: {
@@ -220,7 +225,7 @@ export const mockWorkItemSearchResult = {
                 hits: [
                   {
                     _id: 'case|312-21_case|312-21|mapping',
-                    _index: 'efcms-message',
+                    _index: efcmsMessageIndex,
                     _score: 1,
                     _source: {
                       leadDocketNumber: {
@@ -325,7 +330,7 @@ export const openCasesReceivedOnJulyFourthSearchParameters = {
 const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   {
     _id: 'case|14811-22_case|14811-22',
-    _index: 'efcms-case',
+    _index: efcmsCaseIndex,
     _score: null,
     _source: {
       docketNumber: { S: '14811-22' },
@@ -336,7 +341,7 @@ const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   },
   {
     _id: 'case|14812-22_case|14812-22',
-    _index: 'efcms-case',
+    _index: efcmsCaseIndex,
     _score: null,
     _source: {
       docketNumber: { S: '14812-22' },
@@ -347,7 +352,7 @@ const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   },
   {
     _id: 'case|14813-22_case|14813-22',
-    _index: 'efcms-case',
+    _index: efcmsCaseIndex,
     _score: null,
     _source: {
       docketNumber: { S: '14813-22' },
@@ -358,7 +363,7 @@ const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   },
   {
     _id: 'case|14814-22_case|14814-22',
-    _index: 'efcms-case',
+    _index: efcmsCaseIndex,
     _score: null,
     _source: {
       docketNumber: { S: '14814-22' },
@@ -369,7 +374,7 @@ const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   },
   {
     _id: 'case|14815-22_case|14815-22',
-    _index: 'efcms-case',
+    _index: efcmsCaseIndex,
     _score: null,
     _source: {
       docketNumber: { S: '14815-22' },
@@ -380,7 +385,7 @@ const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   },
   {
     _id: 'case|14816-22_case|14816-22',
-    _index: 'efcms-case',
+    _index: efcmsCaseIndex,
     _score: null,
     _source: {
       docketNumber: { S: '14816-22' },
@@ -391,7 +396,7 @@ const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   },
   {
     _id: 'case|14817-22_case|14817-22',
-    _index: 'efcms-case',
+    _index: efcmsCaseIndex,
     _score: null,
     _source: {
       docketNumber: { S: '14817-22' },

@@ -3,7 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const addCourtIssuedDocketEntryNonstandardHelper = (
   get,
   applicationContext,
-) => {
+): any => {
   const { COURT_ISSUED_EVENT_CODES, TRANSCRIPT_EVENT_CODE } =
     applicationContext.getConstants();
 

@@ -10,7 +10,7 @@ import { Hint } from '../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
 import { SuccessNotification } from './SuccessNotification';
 import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCompletedModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -39,9 +39,9 @@ export const DocketEntryQc = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           {docketEntryQcHelper.showPaperServiceWarning && (
-            <Hint exclamation fullWidth>
+            <Hint fullWidth>
               This document was automatically generated and requires paper
-              service
+              service.
             </Hint>
           )}
           <h2 className="heading-1">

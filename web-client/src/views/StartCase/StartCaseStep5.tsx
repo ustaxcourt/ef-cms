@@ -6,7 +6,7 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -67,6 +67,7 @@ export const StartCaseStep5 = connect(
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
                                   <PDFPreviewButton
+                                    data-testid="petition-preview-button"
                                     file={form.petitionFile}
                                     id="petition-preview-button"
                                     shouldAbbreviateTitle={false}
@@ -247,6 +248,7 @@ export const StartCaseStep5 = connect(
 
         <div className="margin-top-5">
           <Button
+            data-testid="file-petition"
             id="submit-case"
             onClick={() => {
               submitFilePetitionSequence();

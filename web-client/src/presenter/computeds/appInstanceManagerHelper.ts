@@ -3,7 +3,7 @@ import { Get } from 'cerebral';
 export const appInstanceManagerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const broadcastChannel = applicationContext.getBroadcastGateway();
 
   return {
