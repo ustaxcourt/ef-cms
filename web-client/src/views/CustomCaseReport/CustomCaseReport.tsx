@@ -186,7 +186,7 @@ export const CustomCaseReport = connect(
               </div>
             </div>
           </div>
-          <div className="grid-row desktop:grid-col-8 tablet:grid-col-12">
+          <div className="grid-col-auto">
             <DateRangePickerComponent
               endDateErrorText={validationErrors.endDate}
               endLabel={
@@ -198,11 +198,7 @@ export const CustomCaseReport = connect(
               endName="caseCreationEndDate"
               endPickerCls={'grid-col-6 padding-left-2 margin-top-4'}
               endValue=""
-              formGroupCls={
-                validationErrors.endDate || validationErrors.startDate
-                  ? 'margin-bottom-2'
-                  : 'margin-bottom-0'
-              }
+              formGroupCls="margin-bottom-0"
               maxDate={customCaseReportHelper.today}
               rangePickerCls={'grid-row '}
               startDateErrorText={validationErrors.startDate}
@@ -227,8 +223,8 @@ export const CustomCaseReport = connect(
               }}
             />
           </div>
-          <div className="desktop:grid-col-8 tablet:grid-col-12">
-            <div className="grid-row margin-top-0 margin-bottom-2">
+          <div className="desktop:grid-col-8 tablet:grid-col-12 margin-top-1 margin-bottom-2">
+            <div className="grid-row">
               <div className="grid-col margin-right-4">
                 <label
                   className="usa-label"
@@ -288,8 +284,8 @@ export const CustomCaseReport = connect(
             </div>
           </div>
 
-          <div className="desktop:grid-col-8 tablet:grid-col-12">
-            <div className="grid-row margin-top-4 margin-bottom-2">
+          <div className="desktop:grid-col-8 tablet:grid-col-12 margin-top-4 margin-bottom-2">
+            <div className="grid-row">
               <div className="grid-col margin-right-4">
                 <label className="usa-label" htmlFor="judges" id="judges-label">
                   Assigned judge{' '}
