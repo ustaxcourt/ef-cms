@@ -67,6 +67,7 @@ export const StartCaseStep5 = connect(
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
                                   <PDFPreviewButton
+                                    data-testid="petition-preview-button"
                                     file={form.petitionFile}
                                     id="petition-preview-button"
                                     shouldAbbreviateTitle={false}
@@ -247,6 +248,7 @@ export const StartCaseStep5 = connect(
 
         <div className="margin-top-5">
           <Button
+            data-testid="file-petition"
             id="submit-case"
             onClick={() => {
               submitFilePetitionSequence();
