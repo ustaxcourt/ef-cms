@@ -1,4 +1,4 @@
-import { PendingItem } from '@web-api/persistence/elasticsearch/fetchPendingItems';
+import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setPendingItemsAction = ({
@@ -6,7 +6,7 @@ export const setPendingItemsAction = ({
   props,
   store,
 }: ActionProps<{ pendingItems: PendingItem[]; total: number }>) => {
-  const pendingItems = get(state.pendingReports.pendingItems) || [];
+  const pendingItems = get(state.pendingReports.pendingItems);
   store.set(state.pendingReports.pendingItems, [
     ...pendingItems,
     ...props.pendingItems,
