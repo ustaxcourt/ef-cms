@@ -1,6 +1,6 @@
+import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
-import { STATUS_OF_MATTER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -12,7 +12,7 @@ describe('updateCaseWorksheetAction', () => {
   it('should update the caseworksheet with values from the form', async () => {
     const mockForm = {
       docketNumber: MOCK_CASE.docketNumber,
-      statusOfMatter: STATUS_OF_MATTER_OPTIONS[0],
+      statusOfMatter: CaseWorksheet.STATUS_OF_MATTER_OPTIONS[0],
     };
     applicationContext
       .getUseCases()

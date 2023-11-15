@@ -4,7 +4,7 @@
 #   smoketest to verify that the authorizer is working on the api
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 
 [ -z "$1" ] && echo "The env to run smoketest to \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
