@@ -76,7 +76,7 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
             ),
         })
         .messages({
-          '*': 'Enter a valid end date.',
+          '*': 'Enter date in format MM/DD/YYYY.',
           'date.max': 'End date cannot be in the future. Enter a valid date.',
           'date.min':
             'End date cannot be prior to start date. Enter a valid end date.',
@@ -105,7 +105,7 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
           'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
         )
         .messages({
-          '*': 'Enter a valid start date.',
+          '*': 'Enter date in format MM/DD/YYYY.',
           'date.max': 'Start date cannot be in the future. Enter a valid date.',
         }),
     };

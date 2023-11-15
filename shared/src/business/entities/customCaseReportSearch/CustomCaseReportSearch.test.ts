@@ -60,8 +60,8 @@ describe('CustomCaseReportSearch', () => {
       expect(
         customCaseReportSearch.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate: 'Enter a valid end date.',
-        startDate: 'Enter a valid start date.',
+        endDate: 'Enter date in format MM/DD/YYYY.',
+        startDate: 'Enter date in format MM/DD/YYYY.',
       });
     });
   });
