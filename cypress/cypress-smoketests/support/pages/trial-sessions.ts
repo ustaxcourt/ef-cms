@@ -65,7 +65,6 @@ export const createTrialSession = (testData, overrides = {}) => {
   cy.wait('@postTrialSession').then(({ response }) => {
     const { trialSessionId } = response.body;
     testData.trialSessionIds.push(trialSessionId);
-    cy.get('#new-trial-sessions-tab').click();
     cy.get(`a[href="/trial-session-detail/${trialSessionId}"]`).should('exist');
   });
 };
