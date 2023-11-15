@@ -1,3 +1,9 @@
+import { efcmsCaseDeadlineIndex } from '../../../elasticsearch/efcms-case-deadline-mappings';
+import { efcmsCaseIndex } from '../../../elasticsearch/efcms-case-mappings';
+import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
+import { efcmsMessageIndex } from '../../../elasticsearch/efcms-message-mappings';
+import { efcmsUserIndex } from '../../../elasticsearch/efcms-user-mappings';
+import { efcmsWorkItemIndex } from '../../../elasticsearch/efcms-work-item-mappings';
 import { getIndexNameForRecord } from './getIndexNameForRecord';
 
 describe('getIndexNameForRecord', () => {
@@ -6,11 +12,11 @@ describe('getIndexNameForRecord', () => {
 
     record = undefined;
     result = getIndexNameForRecord(record);
-    expect(result).toEqual(null);
+    expect(result).toEqual('');
 
     record = {};
     result = getIndexNameForRecord(record);
-    expect(result).toEqual(null);
+    expect(result).toEqual('');
   });
 
   it('returns efcms-case for Case records', () => {
@@ -22,7 +28,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-case');
+    expect(result).toEqual(efcmsCaseIndex);
   });
 
   it('returns efcms-docket-entry for DocketEntry records', () => {
@@ -34,7 +40,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-docket-entry');
+    expect(result).toEqual(efcmsDocketEntryIndex);
   });
 
   it('returns efcms-docket-entry for CaseDocketEntryMapping records', () => {
@@ -46,7 +52,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-docket-entry');
+    expect(result).toEqual(efcmsDocketEntryIndex);
   });
 
   it('returns efcms-message for CaseMessageMapping records', () => {
@@ -58,7 +64,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-message');
+    expect(result).toEqual(efcmsMessageIndex);
   });
 
   it('returns efcms-user for User records', () => {
@@ -76,7 +82,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-user');
+    expect(result).toEqual(efcmsUserIndex);
   });
 
   it('should NOT return efcms-user when the record has a user entity name but the pk and sk are not "user"', () => {
@@ -94,7 +100,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual(null);
+    expect(result).toEqual('');
   });
 
   it('returns efcms-user for Practitioner records', () => {
@@ -112,7 +118,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-user');
+    expect(result).toEqual(efcmsUserIndex);
   });
 
   it('returns efcms-user for PrivatePractitioner records', () => {
@@ -130,7 +136,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-user');
+    expect(result).toEqual(efcmsUserIndex);
   });
 
   it('returns efcms-user for IrsPractitioner records', () => {
@@ -148,7 +154,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-user');
+    expect(result).toEqual(efcmsUserIndex);
   });
 
   it('returns efcms-message for Message records', () => {
@@ -160,7 +166,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-message');
+    expect(result).toEqual(efcmsMessageIndex);
   });
 
   it('returns efcms-case-deadline for CaseDeadline records', () => {
@@ -172,7 +178,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-case-deadline');
+    expect(result).toEqual(efcmsCaseDeadlineIndex);
   });
 
   it('returns efcms-case for unmarshalled Case record', () => {
@@ -182,7 +188,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-case');
+    expect(result).toEqual(efcmsCaseIndex);
   });
 
   it('returns efcms-work-item for WorkItem records', () => {
@@ -192,7 +198,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-work-item');
+    expect(result).toEqual(efcmsWorkItemIndex);
   });
 
   it('returns efcms-work-item for CaseWorkItemMapping records', () => {
@@ -204,6 +210,6 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-work-item');
+    expect(result).toEqual(efcmsWorkItemIndex);
   });
 });
