@@ -5,7 +5,7 @@ import {
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
 } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { irsPractitionerUser } from '../../../test/mockUsers';
 import { updateUserContactInformationInteractor } from './updateUserContactInformationInteractor';
