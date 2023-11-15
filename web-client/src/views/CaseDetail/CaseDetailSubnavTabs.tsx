@@ -74,6 +74,7 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showCaseInformationTab && (
               <Tab
+                data-testid="tab-case-information"
                 id="tab-case-information"
                 tabName="caseInformation"
                 title="Case Information"

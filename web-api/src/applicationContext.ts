@@ -193,7 +193,10 @@ export const createApplicationContext = (
     user = new User(appContextUser);
   }
 
-  const getCurrentUser = () => {
+  const getCurrentUser = (): {
+    role: string;
+    userId: string;
+  } => {
     return user;
   };
 
