@@ -100,6 +100,7 @@ export const StartCaseInternal = connect(
             <div className="grid-row grid-gap margin-top-3">
               <div className="grid-col-5">
                 <Button
+                  data-testid="submit-paper-petition"
                   id="submit-case"
                   type="button"
                   onClick={() => {
