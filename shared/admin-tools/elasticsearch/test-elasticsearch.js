@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const { get, pick } = require('lodash');
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
-// const mappings = require('../elasticsearch/elasticsearch-mappings');
+// const { elasticsearchMappings: mappings } = require('../elasticsearch/elasticsearch-mappings');
 
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
