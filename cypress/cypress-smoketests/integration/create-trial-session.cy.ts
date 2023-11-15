@@ -37,7 +37,7 @@ import {
   verifyOpenCaseOnTrialSession,
 } from '../support/pages/trial-sessions';
 import { faker } from '@faker-js/faker';
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { getEnvironmentSpecificFunctions } from '../support/environment-specific-factory';
 import {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,

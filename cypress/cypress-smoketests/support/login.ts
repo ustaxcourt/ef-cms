@@ -1,19 +1,15 @@
-export const getRestApi = async () => {
-  let apigateway = new AWS.APIGateway({
-    region: awsRegion,
-  });
-  const { items: apis } = await apigateway
-    .getRestApis({ limit: 200 })
-    .promise();
+import { AuthenticationResult } from '../../support/login-types';
 
-  const services = apis
-    .filter(api => api.name.includes(`gateway_api_${ENV}_${DEPLOYING_COLOR}`))
-    .reduce((obj, api) => {
-      obj[
-        api.name.replace(`_${ENV}_${DEPLOYING_COLOR}`, '')
-      ] = `https://${api.id}.execute-api.${awsRegion}.amazonaws.com/${ENV}`;
-      return obj;
-    }, {});
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-  return services['gateway_api'];
+export const login = (email: string, route = '/') => {
+  return cy
+    .task<AuthenticationResult>('getUserToken', {
+      email,
+      password: DEFAULT_ACCOUNT_PASS,
+    })
+    .then(result => {
+      const token = result.AuthenticationResult.IdToken;
+      cy.visit(`/log-in?token=${token}&path=${route}`);
+    });
 };

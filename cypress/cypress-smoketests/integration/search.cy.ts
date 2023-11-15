@@ -12,7 +12,7 @@ import {
   searchOpinionByKeyword,
 } from '../support/pages/advanced-search';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { getEnvironmentSpecificFunctions } from '../support/environment-specific-factory';
 import { goToCaseDetail } from '../support/pages/case-detail';
 import {
   goToCreateCase,

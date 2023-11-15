@@ -1,5 +1,5 @@
-import { closeScannerSetupDialogIfExists as closeScannerSetupDialogDeployed } from './create-paper-case';
-import { closeScannerSetupDialogIfExists as closeScannerSetupDialogLocal } from './create-paper-case-local';
+import { closeScannerSetupDialogIfExists as closeScannerSetupDialogDeployed } from './pages/create-paper-case';
+import { closeScannerSetupDialogIfExists as closeScannerSetupDialogLocal } from './pages/create-paper-case-local';
 
 import { login as loginDeployed } from './login';
 import { login as loginLocal } from './local-login';

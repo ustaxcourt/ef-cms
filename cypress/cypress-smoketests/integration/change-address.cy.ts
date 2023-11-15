@@ -1,5 +1,5 @@
 import { AuthenticationResult } from '../../support/login-types';
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { getEnvironmentSpecificFunctions } from '../support/environment-specific-factory';
 import {
   goToEditContactInformation,
   goToMyAccount,

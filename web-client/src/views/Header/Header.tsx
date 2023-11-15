@@ -120,6 +120,7 @@ const NavigationItems = (
               'usa-nav__link',
               headerHelper.pageIsDocumentQC && 'usa-current',
             )}
+            data-testid="document-qc-nav-item"
             href={headerHelper.defaultQCBoxPath}
             onClick={() => toggleMobileMenuSequence()}
           >

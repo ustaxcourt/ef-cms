@@ -68,6 +68,7 @@ export const serveCourtIssuedDocketEntry = () => {
   cy.get('button:contains("Serve")').click();
   cy.get('.modal-button-confirm').click();
   cy.get('h3:contains("Order to Show Cause")').should('exist');
+  cy.get('#print-paper-service-done-button').click();
   cy.get('div:contains("Served")').should('exist');
 };
 
@@ -90,10 +91,10 @@ export const addDocketEntryForUploadedPdfAndServe = () => {
   cy.get('div#document-type').type('Miscellaneous{enter}');
   cy.get('#serve-to-parties-btn').click();
   cy.get('.modal-button-confirm').click();
+  cy.get('#print-paper-service-done-button').click();
+  cy.getByTestId('success-alert').contains('Document served');
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
-  cy.get('button:contains("An Uploaded PDF")').click();
-  cy.get('h3:contains("An Uploaded PDF")').should('exist');
-  cy.get('div:contains("Served")').should('exist');
+  cy.get('button:contains("An Uploaded PDF")').should('exist');
 };
 
 export const addDocketEntryForUploadedPdfAndServePaper = () => {
@@ -135,7 +136,6 @@ export const reviewAndServePetition = () => {
 export const clickSaveUploadedPdfButton = () => {
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('h1:contains("Drafts")').should('exist');
-  cy.get('h3:contains("An Uploaded PDF")').should('exist');
 };
 
 export const manuallyAddCaseToNewTrialSession = (trialSessionId: string) => {

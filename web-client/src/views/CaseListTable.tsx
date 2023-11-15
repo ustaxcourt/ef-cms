@@ -43,6 +43,7 @@ export const CaseListTable = connect(
       <Button
         aria-describedby=""
         className="margin-top-1 margin-right-0"
+        data-testid="file-a-petition"
         href={
           dashboardExternalHelper.showFileACase
             ? '/file-a-petition/step-1'

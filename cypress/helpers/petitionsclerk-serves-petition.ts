@@ -1,5 +1,5 @@
 export function petitionsclerkServePetition(docketNumber: string) {
-  cy.login('petitionsclerk', `case-detail/${docketNumber}`);
+  cy.login('petitionsclerk1', `case-detail/${docketNumber}`);
   cy.getByTestId('document-viewer-link-P').click();
   cy.getByTestId('review-and-serve-petition').click();
   cy.getByTestId('tab-irs-notice').click();
