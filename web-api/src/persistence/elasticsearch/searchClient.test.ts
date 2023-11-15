@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { count, search, searchAll } from './searchClient';
 import {
   emptyResults,
@@ -42,6 +42,7 @@ describe('searchClient', () => {
       await expect(
         search({
           applicationContext,
+          // @ts-ignore TS2322 - intentionally invalid request
           searchParameters: { some: '[bad: $syntax -=error' },
         }),
       ).rejects.toThrow('Search client encountered an error.');
@@ -299,6 +300,28 @@ describe('searchClient', () => {
         count: 5,
       },
     };
+    it('count should throw and log an error when a query exception is thrown by elasticsearch', async () => {
+      applicationContext
+        .getSearchClient()
+        .count.mockImplementation(() =>
+          Promise.reject(
+            new Error('malformed elasticsearch query syntax error'),
+          ),
+        );
+
+      await expect(
+        count({
+          applicationContext,
+          // @ts-ignore TS2322 - intentionally invalid request
+          searchParameters: { some: '[bad: $syntax -=error' },
+        }),
+      ).rejects.toThrow('Search client encountered an error.');
+
+      expect(applicationContext.getSearchClient().count).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
+    });
 
     it('returns 0 if no results were found', async () => {
       applicationContext

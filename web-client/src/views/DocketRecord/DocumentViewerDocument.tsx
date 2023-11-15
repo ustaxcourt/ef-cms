@@ -135,6 +135,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServePetitionButton && (
                 <Button
                   link
+                  data-testid="review-and-serve-petition"
                   href={documentViewerLinksHelper.reviewAndServePetitionLink}
                   icon="paper-plane"
                   iconColor="white"
