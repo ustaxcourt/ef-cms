@@ -1,7 +1,7 @@
-import { petitionerCreatesACase } from '../support/setup/petitioner-creates-a-case';
-import { petitionsclerkAddsRespondentToCase } from '../support/setup/petitionsclerk-adds-respondent-to-case';
-import { petitionsclerkServePetition } from '../support/setup/petitionsclerk-serves-petition';
-import { respondentModifiesContactInfo } from '../support/setup/respondent-modifies-contact-info';
+import { petitionerCreatesACase } from '../../helpers/petitioner-creates-a-case';
+import { petitionsclerkAddsRespondentToCase } from '../../helpers/petitionsclerk-adds-respondent-to-case';
+import { petitionsclerkServePetition } from '../../helpers/petitionsclerk-serves-petition';
+import { respondentModifiesContactInfo } from '../../helpers/respondent-modifies-contact-info';
 
 const BAR_NUMBER = 'WN7777';
 const USER = 'irspractitioner2';

@@ -2,7 +2,7 @@ export function petitionsclerkAddsRespondentToCase(
   docketNumber: string,
   barNumber: string,
 ) {
-  cy.login('petitionsclerk', `case-detail/${docketNumber}`);
+  cy.login('petitionsclerk1', `case-detail/${docketNumber}`);
   cy.getByTestId('tab-case-information').click();
   cy.getByTestId('tab-parties').click();
   cy.getByTestId('respondent-counsel').click();

@@ -1,4 +1,7 @@
 import 'cypress-file-upload';
+import { getEnvironmentSpecificFunctions } from './environment-specific-factory';
+
+const { login } = getEnvironmentSpecificFunctions();
 
 Cypress.Commands.add('goToRoute', (...args) => {
   cy.get('.progress-indicator').should('not.exist');
@@ -6,6 +9,14 @@ Cypress.Commands.add('goToRoute', (...args) => {
     // eslint-disable-next-line no-underscore-dangle
     w.__cy_route(...args);
   });
+});
+
+Cypress.Commands.add('getByTestId', (testId: string) => {
+  return cy.get(`[data-testid="${testId}"]`);
+});
+
+Cypress.Commands.add('login', (username, route = '/') => {
+  login(`${username}@example.com`, route);
 });
 
 Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
@@ -25,7 +36,7 @@ Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
   /**
    *
    */
-  function waitAndSee(iteration) {
+  function waitAndSee(iteration: number) {
     didDOMChange = false;
 
     const thenTimeout = 8000;

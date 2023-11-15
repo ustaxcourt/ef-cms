@@ -1,5 +1,7 @@
 export function petitionerCreatesACase() {
-  cy.login('petitioner', 'file-a-petition/step-1');
+  cy.login('petitioner1');
+  cy.getByTestId('file-a-petition').click();
+  cy.getByTestId('go-to-step-1').click();
   cy.getByTestId('stin-file-label').should('not.have.class', 'validated');
   cy.getByTestId('stin-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.getByTestId('stin-file-label').should('have.class', 'validated');

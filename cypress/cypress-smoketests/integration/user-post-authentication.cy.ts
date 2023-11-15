@@ -5,7 +5,7 @@ import {
   verifyEmailChange,
 } from '../support/pages/case-detail';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { getEnvironmentSpecificFunctions } from '../support/environment-specific-factory';
 import { goToCaseDetailPetitioner } from '../support/pages/petitioner-dashboard';
 import {
   goToCreateCase,
