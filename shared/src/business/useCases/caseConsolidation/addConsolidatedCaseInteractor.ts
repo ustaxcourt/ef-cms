@@ -4,9 +4,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * addConsolidatedCaseInteractor
+ * addConsolidatedCase
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +15,7 @@ import {
  * @param {object} providers.docketNumberToConsolidateWith the docket number of the case with which to consolidate
  * @returns {object} the updated case data
  */
-export const addConsolidatedCaseInteractor = async (
+export const addConsolidatedCase = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -97,3 +98,17 @@ export const addConsolidatedCaseInteractor = async (
 
   await Promise.all(updateCasePromises);
 };
+
+export const determineEntitiesToLock = (
+  _applicationContext,
+  { docketNumber, docketNumberToConsolidateWith },
+) => ({
+  identifiers: [docketNumber, docketNumberToConsolidateWith].map(
+    item => `case|${item}`,
+  ),
+});
+
+export const addConsolidatedCaseInteractor = withLocking(
+  addConsolidatedCase,
+  determineEntitiesToLock,
+);

@@ -56,10 +56,8 @@ import {
   calculateDifferenceInDays,
   calculateISODate,
   checkDate,
-  computeDate,
   createEndOfDayISO,
   createISODateString,
-  createISODateStringFromObject,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
@@ -101,7 +99,7 @@ import { createMessageInteractor } from '../../shared/src/proxies/messages/creat
 import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
-import { createUserInteractorLocal } from '../../shared/src/proxies/createUserInteractorLocalProxy';
+import { createUserCognitoInteractor } from '../../shared/src/proxies/createUserCognitoProxy';
 import { deleteAuthCookieInteractor } from '../../shared/src/proxies/auth/deleteAuthCookieProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
@@ -173,7 +171,7 @@ import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/
 import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
-import { getCustomCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseInventoryReportProxy';
+import { getCustomCaseReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseReportProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import {
   getDocQcSectionForUser,
@@ -275,6 +273,7 @@ import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
@@ -413,7 +412,7 @@ const allUseCases = {
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
-  createUserInteractorLocal,
+  createUserCognitoInteractor,
   deleteAuthCookieInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
@@ -460,7 +459,7 @@ const allUseCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
-  getCustomCaseInventoryReportInteractor,
+  getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
   getDocumentQCInboxForSectionInteractor,
@@ -736,10 +735,8 @@ const applicationContext = {
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
-      computeDate,
       createEndOfDayISO,
       createISODateString,
-      createISODateStringFromObject,
       createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
@@ -801,6 +798,7 @@ const applicationContext = {
       setConsolidationFlagsForDisplay,
       setServiceIndicatorsForCase,
       setupPdfDocument,
+      sleep,
       sortDocketEntries,
       transformFormValueToTitleCaseOrdinal,
       userIsDirectlyAssociated,
