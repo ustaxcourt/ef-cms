@@ -1,22 +1,18 @@
+import { PendingItem } from '@web-api/persistence/elasticsearch/fetchPendingItems';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { UNSERVABLE_EVENT_CODES } from '../../entities/EntityConstants';
+} from '@shared/authorization/authorizationClientService';
+import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-/**
- * fetchPendingItemsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.judge the optional judge filter
- * @param {number} providers.page the optional page number
- * @returns {Array} the pending items found
- */
+
 export const fetchPendingItemsInteractor = async (
   applicationContext: IApplicationContext,
   { judge, page }: { judge: string; page: number },
-) => {
+): Promise<{
+  foundDocuments: PendingItem[];
+  total: number;
+}> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {

@@ -1,4 +1,25 @@
+import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
+
+export type PendingItem = Pick<RawCase, (typeof caseSource)[number]> &
+  Pick<RawDocketEntry, (typeof docketEntrySource)[number]>;
+const caseSource = [
+  'associatedJudge',
+  'caseCaption',
+  'docketNumber',
+  'docketNumberSuffix',
+  'status',
+  'leadDocketNumber',
+  'trialDate',
+  'trialLocation',
+  'docketNumberWithSuffix',
+] as const;
+const docketEntrySource = [
+  'docketEntryId',
+  'documentType',
+  'documentTitle',
+  'receivedAt',
+] as const;
 
 export const fetchPendingItems = async ({
   applicationContext,
@@ -10,25 +31,7 @@ export const fetchPendingItems = async ({
   judge?: string;
   page?: number;
   unservableEventCodes: typeof UNSERVABLE_EVENT_CODES;
-}) => {
-  const caseSource = [
-    'associatedJudge',
-    'caseCaption',
-    'docketNumber',
-    'docketNumberSuffix',
-    'status',
-    'leadDocketNumber',
-    'trialDate',
-    'trialLocation',
-    'docketNumberWithSuffix',
-  ];
-  const docketEntrySource = [
-    'docketEntryId',
-    'documentType',
-    'documentTitle',
-    'receivedAt',
-  ];
-
+}): Promise<{ foundDocuments: PendingItem[]; total: number }> => {
   const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
 
   const size = page ? PENDING_ITEMS_PAGE_SIZE : 5000;
@@ -114,8 +117,6 @@ export const fetchPendingItems = async ({
     applicationContext,
     searchParameters,
   });
-
-  console.log('results', results);
 
   return { foundDocuments: results, total };
 };
