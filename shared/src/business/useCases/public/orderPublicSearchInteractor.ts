@@ -49,7 +49,7 @@ export const orderPublicSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('public order search', {
+  applicationContext.logger.info('public order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
     totalCount,
