@@ -61,7 +61,7 @@ const renderTabFactory = ({
 
     return (
       <li {...tabProps}>
-        <button {...buttonProps}>
+        <button {...buttonProps} data-testid={child.props['data-testid']}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
           {icon}
         </button>
