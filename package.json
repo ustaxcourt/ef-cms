@@ -251,15 +251,10 @@
     "watch": "nodemon -e yml --exec sls offline start"
   },
   "overrides": {
-    "@cypress/request": "3.0.0",
-    "dot-prop": "5.1.1",
-    "ejs": "3.1.7",
-    "got": "^13.0.0",
+    "axios" : "$axios",
     "jsonwebtoken": "$jsonwebtoken",
-    "meow": "^9.0.0",
     "postcss": "8.4.31",
-    "semver": "^7.5.2",
-    "tough-cookie": "^4.1.3"
+    "semver": "^7.5.2"
   },
   "devDependencies": {
     "@aws-sdk/client-iam": "^3.451.0",
