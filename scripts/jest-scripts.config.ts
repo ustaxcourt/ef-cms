@@ -12,6 +12,7 @@ const config: Config = {
     '!coverage/**',
     '!circleci/judge/bulkImportJudgeUsers.ts',
     '!elasticsearch/ready-cluster-for-migration.ts',
+    '!elasticsearch/reindex.ts',
     '!glue/**',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
