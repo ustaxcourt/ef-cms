@@ -1451,12 +1451,7 @@ export class Case extends JoiValidationEntity {
     this.hearings.splice(removeIndex, 1);
   }
 
-  /**
-   * remove case from trial with optional associated judge
-   * @param {string} associatedJudge (optional) the associated judge for the case
-   * @returns {Case} the updated case entity
-   */
-  removeFromTrialWithAssociatedJudge(associatedJudge) {
+  removeFromTrialWithAssociatedJudge(associatedJudge?: string): Case {
     if (associatedJudge) {
       this.associatedJudge = associatedJudge;
     }
@@ -1692,7 +1687,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   checkForReadyForTrial() {
-    const currentDate = prepareDateFromString().toISOString();
+    const currentDate = prepareDateFromString().toISO();
 
     const isCaseGeneralDocketNotAtIssue =
       this.status === CASE_STATUS_TYPES.generalDocket;
@@ -1705,7 +1700,7 @@ export class Case extends JoiValidationEntity {
         );
 
         const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
-          currentDate,
+          currentDate!,
           docketEntry.createdAt,
         );
 

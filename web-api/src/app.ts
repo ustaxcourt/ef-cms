@@ -35,7 +35,6 @@ import { createPractitionerDocumentLambda } from './lambdas/practitioners/create
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
 import { createTrialSessionLambda } from './lambdas/trialSessions/createTrialSessionLambda';
 import { createUserLambda } from './lambdas/users/createUserLambda';
-import { createUserLocalLambda } from './users/createUserLocalLambda';
 import { deleteAuthCookieLambda } from './lambdas/auth/deleteAuthCookieLambda';
 import { deleteCaseDeadlineLambda } from './lambdas/caseDeadline/deleteCaseDeadlineLambda';
 import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
@@ -63,7 +62,6 @@ import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/ge
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
-import { generateTrialSessionPaperServicePdfLambda } from './lambdas/trialSessions/generateTrialSessionPaperServicePdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
 import { getCalendaredCasesForTrialSessionLambda } from './lambdas/trialSessions/getCalendaredCasesForTrialSessionLambda';
@@ -99,6 +97,7 @@ import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseL
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
+import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionerDocumentDownloadUrlLambda } from './lambdas/practitioners/getPractitionerDocumentDownloadUrlLambda';
 import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPractitionerDocumentLambda';
@@ -797,9 +796,9 @@ app.get(
  * trial-sessions
  */
 {
-  app.post(
-    '/async/trial-sessions/paper-service-pdf',
-    lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
+  app.get(
+    '/trial-sessions/paper-service-pdf/:fileId',
+    lambdaWrapper(getPaperServicePdfUrlLambda),
   );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
@@ -1026,8 +1025,6 @@ if (process.env.IS_LOCAL) {
       isAsync: true,
     }),
   );
-
-  app.post('/users/local', lambdaWrapper(createUserLocalLambda));
 
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 
