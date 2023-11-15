@@ -51,7 +51,7 @@ describe('Docket clerk runs custom case report', () => {
 
     const validationErrors = cerebralTest.getState('validationErrors');
     expect(validationErrors).toEqual({
-      startDate: 'Enter a valid start date.',
+      startDate: 'Enter date in format MM/DD/YYYY.',
     });
   });
 

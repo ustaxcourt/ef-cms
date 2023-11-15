@@ -50,39 +50,6 @@ export const CustomCaseReport = connect(
           <div className="title">
             <h1>Custom Case Report</h1>
           </div>
-          <div className="grid-col-12 blue-container margin-bottom-4">
-            <p className="margin-x-3">
-              Search by start or end date, date range, or leave blank for all
-              dates.
-            </p>
-            <div className="grid-col-auto margin-x-3">
-              <DateRangePickerComponent
-                endDateErrorText={validationErrors.endDate}
-                endLabel="Case created end date"
-                endName="caseCreationEndDate"
-                endPickerCls={'grid-col-6 padding-left-2'}
-                endValue=""
-                formGroupCls={'margin-bottom-0'}
-                maxDate={customCaseReportHelper.today}
-                rangePickerCls={'grid-row '}
-                startDateErrorText={validationErrors.startDate}
-                startLabel="Case created start date"
-                startName="caseCreationStartDate"
-                startPickerCls={'grid-col-6 padding-right-2'}
-                startValue=""
-                onChangeEnd={e => {
-                  setCustomCaseReportFiltersSequence({
-                    endDate: e.target.value,
-                  });
-                }}
-                onChangeStart={e => {
-                  setCustomCaseReportFiltersSequence({
-                    startDate: e.target.value,
-                  });
-                }}
-              />
-            </div>
-          </div>
           <div className="grid-row desktop:grid-col-8 tablet:grid-col-12">
             <div className="desktop:grid-col desktop:margin-right-4 tablet:grid-col-6">
               <div className="usa-radio usa-radio__inline">
@@ -219,8 +186,45 @@ export const CustomCaseReport = connect(
               </div>
             </div>
           </div>
-          <div className="desktop:grid-col-8 tablet:grid-col-12">
-            <div className="grid-row margin-top-4 margin-bottom-2">
+          <div className="grid-col-auto">
+            <DateRangePickerComponent
+              endDateErrorText={validationErrors.endDate}
+              endLabel={
+                <span>
+                  Case created end date{' '}
+                  <span className="optional-light-text">(optional)</span>
+                </span>
+              }
+              endName="caseCreationEndDate"
+              endPickerCls={'grid-col-6 padding-left-2 margin-top-4'}
+              endValue=""
+              formGroupCls="margin-bottom-0"
+              maxDate={customCaseReportHelper.today}
+              rangePickerCls={'grid-row '}
+              startDateErrorText={validationErrors.startDate}
+              startLabel={
+                <span>
+                  Case created start date{' '}
+                  <span className="optional-light-text">(optional)</span>
+                </span>
+              }
+              startName="caseCreationStartDate"
+              startPickerCls={'grid-col-6 padding-right-2 margin-top-4'}
+              startValue=""
+              onChangeEnd={e => {
+                setCustomCaseReportFiltersSequence({
+                  endDate: e.target.value,
+                });
+              }}
+              onChangeStart={e => {
+                setCustomCaseReportFiltersSequence({
+                  startDate: e.target.value,
+                });
+              }}
+            />
+          </div>
+          <div className="desktop:grid-col-8 tablet:grid-col-12 margin-top-1 margin-bottom-2">
+            <div className="grid-row">
               <div className="grid-col margin-right-4">
                 <label
                   className="usa-label"
@@ -280,8 +284,8 @@ export const CustomCaseReport = connect(
             </div>
           </div>
 
-          <div className="desktop:grid-col-8 tablet:grid-col-12">
-            <div className="grid-row margin-top-4 margin-bottom-2">
+          <div className="desktop:grid-col-8 tablet:grid-col-12 margin-top-4 margin-bottom-2">
+            <div className="grid-row">
               <div className="grid-col margin-right-4">
                 <label className="usa-label" htmlFor="judges" id="judges-label">
                   Assigned judge{' '}
