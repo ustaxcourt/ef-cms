@@ -89,7 +89,6 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '@shared/business/utilities/getWorkQueueFilters';
-import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '@web-api/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from '@shared/business/test/getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
@@ -478,9 +477,6 @@ const createTestApplicationContext = () => {
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest.fn(),
     getDocumentQCInboxForUser: jest.fn(),
-    getDocumentQCServedForSection: jest
-      .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
