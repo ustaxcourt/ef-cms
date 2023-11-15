@@ -1,4 +1,3 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkConvertsAnOrderToAnOpinion = (
@@ -55,7 +54,7 @@ export const docketClerkConvertsAnOrderToAnOpinion = (
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      judge: VALIDATION_ERROR_MESSAGES.judge,
+      judge: 'Select a judge',
     });
 
     await cerebralTest.runSequence(
