@@ -79,6 +79,7 @@ import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -653,7 +654,7 @@ export const baseState = {
     stampData: null,
   },
   pdfPreviewUrl: '',
-  pendingReports: {},
+  pendingReports: cloneDeep(initialPendingReportsState),
   permissions: null,
   practitionerDetail: {},
   previewPdfFile: null,

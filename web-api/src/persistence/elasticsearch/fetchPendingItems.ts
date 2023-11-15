@@ -1,25 +1,10 @@
+import {
+  PendingItem,
+  pendingItemCaseSource,
+  pendingItemDocketEntrySource,
+} from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
-
-export type PendingItem = Pick<RawCase, (typeof caseSource)[number]> &
-  Pick<RawDocketEntry, (typeof docketEntrySource)[number]>;
-const caseSource = [
-  'associatedJudge',
-  'caseCaption',
-  'docketNumber',
-  'docketNumberSuffix',
-  'status',
-  'leadDocketNumber',
-  'trialDate',
-  'trialLocation',
-  'docketNumberWithSuffix',
-] as const;
-const docketEntrySource = [
-  'docketEntryId',
-  'documentType',
-  'documentTitle',
-  'receivedAt',
-] as const;
 
 export const fetchPendingItems = async ({
   applicationContext,
@@ -42,7 +27,7 @@ export const fetchPendingItems = async ({
     has_parent: {
       inner_hits: {
         _source: {
-          includes: caseSource,
+          includes: pendingItemCaseSource,
         },
         name: 'case-mappings',
       },
@@ -53,7 +38,7 @@ export const fetchPendingItems = async ({
 
   const searchParameters = {
     body: {
-      _source: docketEntrySource,
+      _source: pendingItemDocketEntrySource,
       from,
       query: {
         bool: {

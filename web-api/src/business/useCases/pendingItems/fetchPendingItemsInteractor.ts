@@ -1,10 +1,33 @@
-import { PendingItem } from '@web-api/persistence/elasticsearch/fetchPendingItems';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
+export const pendingItemCaseSource = [
+  'associatedJudge',
+  'caseCaption',
+  'docketNumber',
+  'docketNumberSuffix',
+  'status',
+  'leadDocketNumber',
+  'trialDate',
+  'trialLocation',
+  'docketNumberWithSuffix',
+] as const;
+export const pendingItemDocketEntrySource = [
+  'docketEntryId',
+  'documentType',
+  'documentTitle',
+  'receivedAt',
+] as const;
+
+export type PendingItem = Pick<
+  RawCase,
+  (typeof pendingItemCaseSource)[number]
+> &
+  Pick<RawDocketEntry, (typeof pendingItemDocketEntrySource)[number]>;
 
 export const fetchPendingItemsInteractor = async (
   applicationContext: IApplicationContext,

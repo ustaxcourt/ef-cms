@@ -10,14 +10,18 @@ import React from 'react';
 export const PendingReportList = connect(
   {
     formattedPendingItemsHelper: state.formattedPendingItemsHelper,
+    hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
     loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
+    pendingItemsTotal: state.pendingReports.pendingItemsTotal,
     pendingReportListHelper: state.pendingReportListHelper,
     setPendingReportSelectedJudgeSequence:
       sequences.setPendingReportSelectedJudgeSequence,
   },
   function PendingReportList({
     formattedPendingItemsHelper,
+    hasPendingItemsResults,
     loadMorePendingItemsSequence,
+    pendingItemsTotal,
     pendingReportListHelper,
     setPendingReportSelectedJudgeSequence,
   }) {
@@ -55,11 +59,9 @@ export const PendingReportList = connect(
               </BindedSelect>
             </div>
           </div>
-          {pendingReportListHelper.hasPendingItemsResults && (
+          {hasPendingItemsResults && (
             <div className="grid-col-4 text-right margin-top-1">
-              <span className="text-semibold">
-                Count: {pendingReportListHelper.searchResultsCount}
-              </span>
+              <span className="text-semibold">Count: {pendingItemsTotal}</span>
             </div>
           )}
         </div>
@@ -107,10 +109,6 @@ export const PendingReportList = connect(
             </tbody>
           ))}
         </table>
-
-        {pendingReportListHelper.showLoading && (
-          <p>Loading pending reports...</p>
-        )}
 
         {pendingReportListHelper.showNoPendingItems && (
           <p>There is nothing pending.</p>

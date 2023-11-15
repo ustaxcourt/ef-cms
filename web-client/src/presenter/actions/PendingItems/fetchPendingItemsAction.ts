@@ -1,4 +1,4 @@
-import { PendingItem } from '@web-api/persistence/elasticsearch/fetchPendingItems';
+import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const fetchPendingItemsAction = async ({
