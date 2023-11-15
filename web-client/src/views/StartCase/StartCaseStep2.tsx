@@ -4,7 +4,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -61,6 +61,7 @@ export const StartCaseStep2 = connect(
                 'usa-label ustc-upload-petition with-hint',
                 startCaseHelper.showPetitionFileValid && 'validated',
               )}
+              data-testid="petition-file-label"
               htmlFor="petition-file"
               id="petition-file-label"
             >
@@ -89,6 +90,7 @@ export const StartCaseStep2 = connect(
             </div>
             <StateDrivenFileInput
               aria-describedby="petition-file-label"
+              data-testid="petition-file"
               id="petition-file"
               name="petitionFile"
               updateFormValueSequence="updateStartCaseFormValueSequence"
@@ -126,6 +128,7 @@ export const StartCaseStep2 = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-testid={`irs-notice-${option}`}
                         htmlFor={`hasIrsNotice-${option}`}
                         id={`hasIrsNotice-${idx}`}
                       >
@@ -163,6 +166,7 @@ export const StartCaseStep2 = connect(
         </div>
 
         <Button
+          data-testid="complete-step-2"
           id="submit-case"
           onClick={() => {
             completeStartCaseWizardStepSequence({ nextStep: 3 });

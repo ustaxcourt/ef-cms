@@ -3,6 +3,8 @@ import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 import { get } from 'lodash';
+import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
+import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
 import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
@@ -43,15 +45,15 @@ export const formatResults = <T>(body: Record<string, any>) => {
     sourceUnmarshalled['_score'] = hit['_score'];
 
     const isDocketEntryResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-docket-entry' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-docket-entry') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
     const isMessageResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-message' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-message') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
     const isWorkItemResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-work-item' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-work-item') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
 
@@ -80,6 +82,7 @@ export const count = async ({
   applicationContext: IApplicationContext;
   searchParameters: Search;
 }): Promise<SearchClientCountResultsType> => {
+  updateIndex({ searchParameters });
   try {
     const response = await applicationContext
       .getSearchClient()
@@ -98,6 +101,7 @@ export const search = async <T>({
   applicationContext: IApplicationContext;
   searchParameters: Search;
 }): Promise<SearchClientResultsType> => {
+  updateIndex({ searchParameters });
   try {
     const response = await applicationContext
       .getSearchClient()
@@ -116,6 +120,7 @@ export const searchAll = async ({
   applicationContext: IApplicationContext;
   searchParameters: SearchAllParametersType;
 }): Promise<SearchClientResultsType> => {
+  updateIndex({ searchParameters });
   const index = searchParameters.index || '';
   const query = searchParameters.body?.query || {};
   const size = searchParameters.size || CHUNK_SIZE;

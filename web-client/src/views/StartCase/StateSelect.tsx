@@ -12,6 +12,7 @@ export const StateSelect = ({
   return (
     <select
       className="usa-select"
+      data-testid={`${type}.state`}
       id={`${type}.state`}
       name={`${type}.state`}
       value={data[type].state || ''}

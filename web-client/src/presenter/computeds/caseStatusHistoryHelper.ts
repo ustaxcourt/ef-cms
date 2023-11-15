@@ -12,7 +12,7 @@ import { Get } from 'cerebral';
 export const caseStatusHistoryHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseStatusHistory = get(state.caseDetail.caseStatusHistory);
 
   return {

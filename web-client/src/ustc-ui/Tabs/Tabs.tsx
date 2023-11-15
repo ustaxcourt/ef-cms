@@ -1,5 +1,5 @@
 import { camelCase } from 'lodash';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   decorateWithPostCallback,
   useCerebralStateFactory,
@@ -61,7 +61,7 @@ const renderTabFactory = ({
 
     return (
       <li {...tabProps}>
-        <button {...buttonProps}>
+        <button {...buttonProps} data-testid={child.props['data-testid']}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
           {icon}
         </button>

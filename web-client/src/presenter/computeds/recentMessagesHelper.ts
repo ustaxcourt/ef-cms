@@ -7,7 +7,7 @@ import { Get } from 'cerebral';
 export const recentMessagesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { messages } = getFormattedMessages({
     applicationContext,
     messages: get(state.messages) || [],

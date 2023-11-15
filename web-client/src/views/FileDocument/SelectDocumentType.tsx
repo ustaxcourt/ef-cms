@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
-import { Hint } from '../../ustc-ui/Hint/Hint';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -17,7 +16,6 @@ export const SelectDocumentType = connect(
   },
   function SelectDocumentType({
     completeDocumentSelectSequence,
-    fileDocumentHelper,
     formCancelToggleCancelSequence,
   }) {
     return (
@@ -25,12 +23,6 @@ export const SelectDocumentType = connect(
         <div className="grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-6">
-              {fileDocumentHelper.formattedDocketNumbers && (
-                <Hint exclamation>
-                  Your documents will be filed in docket numbers{' '}
-                  {fileDocumentHelper.formattedDocketNumbers}.
-                </Hint>
-              )}
               <h1 id="file-a-document-header" tabIndex={-1}>
                 What Document are You Filing?
               </h1>
