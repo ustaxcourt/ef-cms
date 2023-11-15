@@ -18,5 +18,8 @@
     "serverless-bundle": "6.0.0",
     "serverless-dotenv-plugin": "^6.0.0",
     "serverless-offline": "^13.2.1"
+  },
+  "overrides": {
+    "axios" : "$axios"
   }
 }
