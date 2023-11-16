@@ -67,25 +67,28 @@ export const CaseListRowExternal = ({
 
       <Phone>
         <tr key={formattedCase.docketNumber}>
-          <td data-label="Docket No." style={{ display: 'flex' }}>
-            <span
-              className={classNames({
-                'margin-left-2':
-                  formattedCase.inConsolidatedGroup &&
-                  !formattedCase.isLeadCase,
-                'margin-right-2': formattedCase.isLeadCase,
-              })}
-            >
-              <ConsolidatedCaseIcon
-                consolidatedIconTooltipText={
-                  formattedCase.consolidatedIconTooltipText
-                }
-                inConsolidatedGroup={formattedCase.inConsolidatedGroup}
-                showLeadCaseIcon={formattedCase.isLeadCase}
-              />
-            </span>
-            <div className={isNestedCase ? 'margin-left-2' : ''}>
-              <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
+          <td data-label="Docket No.">
+            <div>Docket No.</div>
+            <div style={{ display: 'flex' }}>
+              <span
+                className={classNames({
+                  'margin-left-2':
+                    formattedCase.inConsolidatedGroup &&
+                    !formattedCase.isLeadCase,
+                  'margin-right-2': formattedCase.isLeadCase,
+                })}
+              >
+                <ConsolidatedCaseIcon
+                  consolidatedIconTooltipText={
+                    formattedCase.consolidatedIconTooltipText
+                  }
+                  inConsolidatedGroup={formattedCase.inConsolidatedGroup}
+                  showLeadCaseIcon={formattedCase.isLeadCase}
+                />
+              </span>
+              <div className={isNestedCase ? 'margin-left-2' : ''}>
+                <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
+              </div>
             </div>
           </td>
           <td data-label="Filed Date">{formattedCase.createdAtFormatted}</td>
