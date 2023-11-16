@@ -1,4 +1,5 @@
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
   calculateDifferenceInDays,
@@ -46,6 +47,7 @@ import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDo
 import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 
 const utilities = {
+  abbreviateState,
   calculateDaysElapsedSinceLastStatusChange,
   calculateDifferenceInDays,
   calculateISODate,
