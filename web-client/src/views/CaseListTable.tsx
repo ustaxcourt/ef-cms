@@ -1,6 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
-import { CaseListRowExternalMobile } from '@web-client/views/CaseListRowExternalMobile';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -98,30 +97,19 @@ export const CaseListTable = connect(
                     )}
                   </tr>
                 </thead>
-                <NonMobile>
-                  <tbody>
-                    {cases.map(item => (
-                      <CaseListRowExternal
-                        onlyLinkIfRequestedUserAssociated
-                        formattedCase={item}
-                        key={item.docketNumber}
-                        showFilingFee={dashboardExternalHelper.showFilingFee}
-                      />
-                    ))}
-                  </tbody>
-                </NonMobile>
-                <Mobile>
-                  <tbody>
-                    {cases.map(item => (
-                      <CaseListRowExternalMobile
-                        onlyLinkIfRequestedUserAssociated
-                        formattedCase={item}
-                        key={item.docketNumber}
-                        showFilingFee={dashboardExternalHelper.showFilingFee}
-                      />
-                    ))}
-                  </tbody>
-                </Mobile>
+
+                <tbody>
+                  {cases.map(item => (
+                    <CaseListRowExternal
+                      onlyLinkIfRequestedUserAssociated
+                      formattedCase={item}
+                      isNestedCase={false}
+                      key={item.docketNumber}
+                      onlyText={false}
+                      showFilingFee={dashboardExternalHelper.showFilingFee}
+                    />
+                  ))}
+                </tbody>
               </table>
               {showLoadMore && (
                 <Button
