@@ -1,50 +1,15 @@
-import { AuthenticationResult } from '../../support/login-types';
-import { getEnvironmentSpecificFunctions } from '../support/environment-specific-factory';
-import {
-  goToEditContactInformation,
-  goToMyAccount,
-  saveContactInformation,
-  updateAddress1,
-} from '../support/pages/my-account';
+import { faker } from '@faker-js/faker';
 
-const { login } = getEnvironmentSpecificFunctions();
-
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
-
-describe('Private practitioner', () => {
-  let token: string;
-
-  before(() => {
-    cy.task<AuthenticationResult>('getUserToken', {
-      email: 'privatePractitioner1@example.com',
-      password: DEFAULT_ACCOUNT_PASS,
-    }).then(result => {
-      token = result.AuthenticationResult.IdToken;
-    });
-  });
-
-  it('logs in', () => {
-    login(token);
-  });
-
-  describe('changes their address', () => {
-    it('can navigate to "My Account"', () => {
-      goToMyAccount();
-    });
-
-    it('can navigate to "Edit Contact Information"', () => {
-      goToEditContactInformation();
-    });
-
-    it(
-      'can update and save their address',
-      {
-        defaultCommandTimeout: 90000,
-      },
-      () => {
-        updateAddress1();
-        saveContactInformation();
-      },
-    );
+describe('a private practitioner changes their address', () => {
+  it('login as a private practitioner and change their contact information', () => {
+    cy.login('privatePractitioner1');
+    cy.getByTestId('inbox-tab-content').should('exist');
+    cy.getByTestId('account-menu-button').click();
+    cy.getByTestId('my-account-link').click();
+    cy.getByTestId('edit-contact-info').click();
+    cy.getByTestId('contact.address1').clear();
+    cy.getByTestId('contact.address1').type(faker.location.streetAddress());
+    cy.getByTestId('save-edit-contact').click();
+    cy.get('.usa-alert--success').should('exist');
   });
 });

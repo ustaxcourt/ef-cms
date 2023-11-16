@@ -51,6 +51,7 @@ export const SearchBox = connect(
           <a
             aria-label="advanced search"
             className="usa-link advanced margin-left-105"
+            data-testid="search-link"
             href="/search"
             onClick={() => toggleMobileMenuSequence()}
           >

@@ -19,7 +19,7 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
     petitionsclerkCreatesAndServesPaperPetition().then(
       createdPaperDocketNumber => {
         cy.login('docketclerk1');
-        cy.get('#inbox-tab-content').should('exist');
+        cy.getByTestId('inbox-tab-content').should('exist');
         createOrder(createdPaperDocketNumber);
         editAndSignOrder();
         addDocketEntryForOrderAndServePaper();
@@ -35,7 +35,7 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
     petitionerCreatesACase().then(createdPaperDocketNumber => {
       petitionsclerkServePetition(createdPaperDocketNumber);
       cy.login('docketclerk1');
-      cy.get('#inbox-tab-content').should('exist');
+      cy.getByTestId('inbox-tab-content').should('exist');
       createOrder(createdPaperDocketNumber);
       editAndSignOrder();
       addDocketEntryForOrderAndSaveForLater('0');
