@@ -163,6 +163,7 @@ const NavigationItems = (
               'usa-nav__link',
               headerHelper.pageIsTrialSessions && 'usa-current',
             )}
+            data-testid="trial-session-link"
             href="/trial-sessions"
             onClick={() => toggleMobileMenuSequence()}
           >

@@ -306,6 +306,7 @@ export const SessionInformationForm = connect(
                   />
                   <label
                     className="usa-radio__label"
+                    data-testid={`session-type-${option}`}
                     htmlFor={`session-type-${option}`}
                   >
                     {option}
@@ -322,6 +323,7 @@ export const SessionInformationForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input usa-input--small"
+                data-testid="max-cases"
                 id="max-cases"
                 name="maxCases"
                 type="text"

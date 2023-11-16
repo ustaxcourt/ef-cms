@@ -31,6 +31,7 @@ export const SessionAssignmentsForm = connect(
             <select
               aria-describedby="judge-label"
               className="usa-select"
+              data-testid="judgeId"
               id="judgeId"
               name="judgeId"
               value={form.judgeId || ''}
@@ -84,6 +85,7 @@ export const SessionAssignmentsForm = connect(
               <select
                 aria-describedby="trial-clerk-label"
                 className="usa-select"
+                data-testid="trial-clerk"
                 id="trial-clerk"
                 name="trialClerkId"
                 value={form.trialClerkId || ''}

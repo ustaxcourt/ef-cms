@@ -76,6 +76,7 @@ export const CaseListTable = connect(
             <>
               <table
                 className="usa-table responsive-table dashboard"
+                data-testid="case-list-table"
                 id="case-list"
               >
                 <thead>
