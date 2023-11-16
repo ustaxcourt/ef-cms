@@ -1,5 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
+import { CaseListRowExternalMobile } from '@web-client/views/CaseListRowExternalMobile';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -97,9 +98,19 @@ export const CaseListTable = connect(
                     )}
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="hide-on-mobile ">
                   {cases.map(item => (
                     <CaseListRowExternal
+                      onlyLinkIfRequestedUserAssociated
+                      formattedCase={item}
+                      key={item.docketNumber}
+                      showFilingFee={dashboardExternalHelper.showFilingFee}
+                    />
+                  ))}
+                </tbody>
+                <tbody className="show-on-mobile ">
+                  {cases.map(item => (
+                    <CaseListRowExternalMobile
                       onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
                       key={item.docketNumber}
@@ -215,5 +226,3 @@ export const CaseListTable = connect(
     );
   },
 );
-
-CaseListTable.displayName = 'CaseListTable';
