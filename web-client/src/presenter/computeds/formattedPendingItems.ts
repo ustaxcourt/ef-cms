@@ -47,9 +47,9 @@ export const formattedPendingItemsHelper = (
   };
 };
 
-const formatPendingItem = (
+export const formatPendingItem = (
   item: PendingItem,
-  { applicationContext }: { applicationContext: ClientApplicationContext },
+  { applicationContext }: { applicationContext: IApplicationContext },
 ): PendingItemFormatted => {
   const pendingItemWithConsolidatedFlags = applicationContext
     .getUtilities()

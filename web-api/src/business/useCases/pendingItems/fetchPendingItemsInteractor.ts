@@ -2,7 +2,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const pendingItemCaseSource = [
@@ -51,6 +50,5 @@ export const fetchPendingItemsInteractor = async (
     applicationContext,
     judge,
     page,
-    unservableEventCodes: UNSERVABLE_EVENT_CODES,
   });
 };

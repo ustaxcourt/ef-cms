@@ -1,5 +1,5 @@
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
-import { ReportsHeader } from '../components/ReportsHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader';
+import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -32,7 +32,7 @@ export const PendingReport = ({ pendingItems, subtitle }) => {
                     <div
                       className={classNames(
                         `${
-                          pendingItem.inLeadCase && 'lead-consolidated-icon'
+                          pendingItem.isLeadCase && 'lead-consolidated-icon'
                         } ${
                           pendingItem.inConsolidatedGroup && 'consolidated-icon'
                         }`,
