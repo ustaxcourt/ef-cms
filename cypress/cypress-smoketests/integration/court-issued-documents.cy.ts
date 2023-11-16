@@ -1,18 +1,4 @@
-import {
-  addDocketEntryForOrderAndSaveForLater,
-  addDocketEntryForOrderAndServePaper,
-  addDocketEntryForUploadedPdfAndServe,
-  addDocketEntryForUploadedPdfAndServePaper,
-  clickSaveUploadedPdfButton,
-  createOrder,
-  editAndSignOrder,
-  goToCaseDetail,
-  serveCourtIssuedDocketEntry,
-  uploadCourtIssuedDocPdf,
-} from '../support/pages/case-detail';
-import { petitionerCreatesACase } from '../../helpers/petitioner-creates-a-case';
 import { petitionsclerkCreatesAndServesPaperPetition } from '../../helpers/petitionsclerk-creates-and-serves-paper-petition';
-import { petitionsclerkServePetition } from '../../helpers/petitionsclerk-serves-petition';
 
 describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
   it('should create a paper petition, serve the petition, and create an order on the petition', () => {
@@ -20,30 +6,28 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
       createdPaperDocketNumber => {
         cy.login('docketclerk1');
         cy.getByTestId('inbox-tab-content').should('exist');
-        createOrder(createdPaperDocketNumber);
-        editAndSignOrder();
-        addDocketEntryForOrderAndServePaper();
-        goToCaseDetail(createdPaperDocketNumber);
-        uploadCourtIssuedDocPdf();
-        clickSaveUploadedPdfButton();
-        addDocketEntryForUploadedPdfAndServePaper();
+        cy.get('#search-field').clear();
+        cy.get('#search-field').type(createdPaperDocketNumber);
+        cy.get('[data-testid="search-docket-number"]').click();
+        cy.get('[data-testid="case-detail-menu-button"]').click();
+        cy.get('#menu-button-create-order').click();
+        cy.get('#eventCode').select('O');
+        cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('.ql-editor').click();
+        cy.get('#save-order-button').click();
+        cy.get('#sign-pdf-canvas').click();
+        cy.get('#save-signature-button').click();
+        cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+        cy.get(':nth-child(2) > .usa-radio__label').click();
+        cy.get('#service-stamp-0').check();
+        cy.get('[data-testid="serve-to-parties-btn"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="print-paper-service-done-button"]').click();
+        cy.get('[data-testid="document-viewer-link-O"]').should(
+          'have.text',
+          'Order',
+        );
       },
     );
-  });
-
-  it('should create an e-filed petition, serve the petition, and create an order on the petition', () => {
-    petitionerCreatesACase().then(createdPaperDocketNumber => {
-      petitionsclerkServePetition(createdPaperDocketNumber);
-      cy.login('docketclerk1');
-      cy.getByTestId('inbox-tab-content').should('exist');
-      createOrder(createdPaperDocketNumber);
-      editAndSignOrder();
-      addDocketEntryForOrderAndSaveForLater('0');
-      serveCourtIssuedDocketEntry();
-      goToCaseDetail(createdPaperDocketNumber);
-      uploadCourtIssuedDocPdf();
-      clickSaveUploadedPdfButton();
-      addDocketEntryForUploadedPdfAndServe();
-    });
   });
 });

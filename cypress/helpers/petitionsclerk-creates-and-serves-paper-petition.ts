@@ -1,6 +1,12 @@
 export function petitionsclerkCreatesAndServesPaperPetition() {
   cy.login('petitionsclerk1');
   cy.getByTestId('inbox-tab-content').should('exist');
+  cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
+    body: `window.Dynamsoft = {DWT: {
+            GetWebTwain() {}
+          }}`,
+    statusCode: 200,
+  });
   cy.getByTestId('document-qc-nav-item').click();
   cy.getByTestId('start-a-petition').click();
   cy.get('#party-type').select('Petitioner');
@@ -44,7 +50,7 @@ export function petitionsclerkCreatesAndServesPaperPetition() {
     .get('.docket-number-header a')
     .invoke('attr', 'href')
     .then(href => {
-      const docketNumber = href.split('/').pop();
+      const docketNumber = href!.split('/').pop();
       cy.getByTestId('serve-case-to-irs').click();
       cy.getByTestId('modal-confirm').click();
       cy.get('#done-viewing-paper-petition-receipt-button').click();

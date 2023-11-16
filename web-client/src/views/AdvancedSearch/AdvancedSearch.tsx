@@ -90,6 +90,7 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
+                data-testid="tab-opinion"
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
                 title={'Opinion'}

@@ -1,14 +1,12 @@
+import { attachDummyFile } from './attach-file';
+
 // TODO: this is an exact duplicate of petitioner-creates-a-case.ts, please fix
 export function practitionerCreatesACase() {
   cy.login('privatePractitioner1');
   cy.getByTestId('file-a-petition').click();
-  cy.getByTestId('stin-file-label').should('not.have.class', 'validated');
-  cy.getByTestId('stin-file').attachFile('../fixtures/w3-dummy.pdf');
-  cy.getByTestId('stin-file-label').should('have.class', 'validated');
+  attachDummyFile('stin-file');
   cy.getByTestId('complete-step-1').click();
-  cy.getByTestId('petition-file-label').should('not.have.class', 'validated');
-  cy.getByTestId('petition-file').attachFile('../fixtures/w3-dummy.pdf');
-  cy.getByTestId('petition-file-label').should('have.class', 'validated');
+  attachDummyFile('petition-file');
   cy.getByTestId('irs-notice-Yes').click();
   cy.getByTestId('case-type-select').select('Notice of Deficiency');
   cy.getByTestId('complete-step-2').click();

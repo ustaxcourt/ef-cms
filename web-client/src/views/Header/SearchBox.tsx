@@ -44,7 +44,11 @@ export const SearchBox = connect(
               });
             }}
           />
-          <Button className="ustc-search-button" type="submit">
+          <Button
+            className="ustc-search-button"
+            data-testid="search-docket-number"
+            type="submit"
+          >
             <span className="usa-search-submit-text">Search</span>
             <span className="usa-sr-only">Search</span>
           </Button>

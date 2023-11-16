@@ -64,6 +64,7 @@ export const LocationInformationForm = connect(
                         <label
                           aria-label={value}
                           className="smaller-padding-right usa-radio__label"
+                          data-testid={`${key}-proceeding-label`}
                           htmlFor={`${key}-proceeding`}
                           id={`${key}-proceeding-label`}
                         >
@@ -81,6 +82,7 @@ export const LocationInformationForm = connect(
                 </label>
                 <select
                   className="usa-select"
+                  data-testid="trial-location"
                   id="trial-location"
                   name="trialLocation"
                   value={form.trialLocation}
