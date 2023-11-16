@@ -1,6 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
-import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
+import { NonPhone, Phone } from '../ustc-ui/Responsive/Responsive';
 import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from './WarningNotification';
@@ -8,6 +8,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
 
 export const CaseListTable = connect(
   {
@@ -59,6 +60,7 @@ export const CaseListTable = connect(
 
     const renderCaseListTable = ({
       cases = [],
+      isMobile,
       showLoadMore,
       showMoreResultsSequence,
       tabName,
@@ -67,6 +69,7 @@ export const CaseListTable = connect(
       showLoadMore: boolean;
       showMoreResultsSequence: boolean;
       tabName: string;
+      isMobile: boolean;
     }) => {
       return (
         <>
@@ -81,7 +84,11 @@ export const CaseListTable = connect(
               )}
 
               <table
-                className="usa-table responsive-table dashboard"
+                className={classNames({
+                  'usa-table responsive-table dashboard': !isMobile,
+                  'usa-table usa-table--stacked-header usa-table--borderless':
+                    isMobile,
+                })}
                 id="case-list"
               >
                 <thead>
@@ -132,7 +139,8 @@ export const CaseListTable = connect(
     return (
       <>
         <WarningNotification />
-        <NonMobile>
+
+        <NonPhone>
           <div className="grid-container padding-x-0">
             <div className="grid-row">
               <div className="grid-column-auto">
@@ -148,6 +156,7 @@ export const CaseListTable = connect(
                   >
                     {renderCaseListTable({
                       cases: externalUserCasesHelper.openCaseResults,
+                      isMobile: false,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreOpenCases,
                       showMoreResultsSequence: showMoreOpenCasesSequence,
@@ -161,6 +170,7 @@ export const CaseListTable = connect(
                   >
                     {renderCaseListTable({
                       cases: externalUserCasesHelper.closedCaseResults,
+                      isMobile: false,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreClosedCases,
                       showMoreResultsSequence: showMoreClosedCasesSequence,
@@ -175,8 +185,9 @@ export const CaseListTable = connect(
               </div>
             </div>
           </div>
-        </NonMobile>
-        <Mobile>
+        </NonPhone>
+
+        <Phone>
           <div className="grid-container padding-x-0">
             <div className="grid-row">{renderStartButton()}</div>
             <div className="grid-row">
@@ -200,6 +211,7 @@ export const CaseListTable = connect(
               {caseType === closedTab &&
                 renderCaseListTable({
                   cases: externalUserCasesHelper.closedCaseResults,
+                  isMobile: true,
                   showLoadMore: externalUserCasesHelper.showLoadMoreClosedCases,
                   showMoreResultsSequence: showMoreClosedCasesSequence,
                   tabName: closedTab,
@@ -207,13 +219,14 @@ export const CaseListTable = connect(
               {caseType === openTab &&
                 renderCaseListTable({
                   cases: externalUserCasesHelper.openCaseResults,
+                  isMobile: true,
                   showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
                   showMoreResultsSequence: showMoreOpenCasesSequence,
                   tabName: openTab,
                 })}
             </div>
           </div>
-        </Mobile>
+        </Phone>
       </>
     );
   },
