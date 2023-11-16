@@ -67,32 +67,29 @@ export const CaseListRowExternal = ({
 
       <Phone>
         <tr key={formattedCase.docketNumber}>
-          <td data-label="Docket No.">
-            <div>Docket No.</div>
-            <div style={{ display: 'flex' }}>
-              <span
-                className={classNames({
-                  'margin-left-2':
-                    formattedCase.inConsolidatedGroup &&
-                    !formattedCase.isLeadCase,
-                  'margin-right-2': formattedCase.isLeadCase,
-                })}
-              >
-                <ConsolidatedCaseIcon
-                  consolidatedIconTooltipText={
-                    formattedCase.consolidatedIconTooltipText
-                  }
-                  inConsolidatedGroup={formattedCase.inConsolidatedGroup}
-                  showLeadCaseIcon={formattedCase.isLeadCase}
-                />
-              </span>
-              <div className={isNestedCase ? 'margin-left-2' : ''}>
-                <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
-              </div>
+          <td data-label="Docket no." style={{ display: 'flex' }}>
+            <span
+              className={classNames({
+                'margin-left-2':
+                  formattedCase.inConsolidatedGroup &&
+                  !formattedCase.isLeadCase,
+                'margin-right-2': formattedCase.isLeadCase,
+              })}
+            >
+              <ConsolidatedCaseIcon
+                consolidatedIconTooltipText={
+                  formattedCase.consolidatedIconTooltipText
+                }
+                inConsolidatedGroup={formattedCase.inConsolidatedGroup}
+                showLeadCaseIcon={formattedCase.isLeadCase}
+              />
+            </span>
+            <div className={isNestedCase ? 'margin-left-2' : ''}>
+              <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
             </div>
           </td>
-          <td data-label="Filed Date">{formattedCase.createdAtFormatted}</td>
-          <td data-label="Case Title">{formattedCase.caseTitle}</td>
+          <td data-label="Case title">{formattedCase.caseTitle}</td>
+          <td data-label="Filed date">{formattedCase.createdAtFormatted}</td>
           {showFilingFee && (
             <td data-label="Filing fee*" data-testid="petition-payment-status">
               {formattedCase.petitionPaymentStatus}
