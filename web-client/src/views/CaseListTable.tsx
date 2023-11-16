@@ -96,9 +96,9 @@ export const CaseListTable = connect(
                     <th>
                       <span className="usa-sr-only">Lead Case Indicator</span>
                     </th>
-                    <th>Docket No.</th>
-                    <th>Case Title</th>
-                    <th>Filed Date</th>
+                    <th>Docket no.</th>
+                    <th>Case title</th>
+                    <th>Filed date</th>
                     {dashboardExternalHelper.showFilingFee && (
                       <th data-testid="filing-fee">Filing fee*</th>
                     )}
@@ -193,8 +193,7 @@ export const CaseListTable = connect(
             <div className="grid-row">
               <select
                 aria-label="additional case info"
-                className="usa-select"
-                id="mobile-case-type-tab-selector"
+                className="usa-select margin-bottom-2"
                 onChange={e => {
                   setCaseTypeToDisplaySequence({ tabName: e.target.value });
                 }}
