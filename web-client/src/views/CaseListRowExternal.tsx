@@ -29,19 +29,13 @@ const getCaseRow = ({
             />
           </span>
         </td>
-        <td className="hide-on-mobile">
+        <td>
           <div className={isNestedCase ? 'margin-left-2' : ''}>
             <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
           </div>
         </td>
-        <td className="hide-on-mobile">{formattedCase.caseTitle}</td>
+        <td>{formattedCase.caseTitle}</td>
         <td>{formattedCase.createdAtFormatted}</td>
-        <td className="show-on-mobile">
-          <div className={isNestedCase ? 'margin-left-2' : ''}>
-            <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
-          </div>
-          {formattedCase.caseTitle}
-        </td>
         {showFilingFee && (
           <td data-testid="petition-payment-status">
             {formattedCase.petitionPaymentStatus}
