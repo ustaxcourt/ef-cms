@@ -6,6 +6,7 @@ import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateT
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setTabAction } from '@web-client/presenter/actions/setTabAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -33,6 +34,7 @@ export const submitTrialSessionSequence = [
           setSaveAlertsForNavigationAction,
           getCreateTrialSessionAlertSuccessAction,
           setAlertSuccessAction,
+          setTabAction('new'),
           navigateToTrialSessionsAction,
         ],
       },
