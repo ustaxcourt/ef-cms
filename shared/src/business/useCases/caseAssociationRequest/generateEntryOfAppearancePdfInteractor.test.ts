@@ -84,8 +84,8 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
     ).toHaveBeenCalledWith(
       expect.objectContaining({
-        URLTTL: 60 * 60 * 24,
         file: mockFile,
+        urlTtl: 60 * 60 * 24,
         useTempBucket: true,
       }),
     );
