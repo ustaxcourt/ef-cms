@@ -98,26 +98,30 @@ export const CaseListTable = connect(
                     )}
                   </tr>
                 </thead>
-                <tbody className="hide-on-mobile ">
-                  {cases.map(item => (
-                    <CaseListRowExternal
-                      onlyLinkIfRequestedUserAssociated
-                      formattedCase={item}
-                      key={item.docketNumber}
-                      showFilingFee={dashboardExternalHelper.showFilingFee}
-                    />
-                  ))}
-                </tbody>
-                <tbody className="show-on-mobile ">
-                  {cases.map(item => (
-                    <CaseListRowExternalMobile
-                      onlyLinkIfRequestedUserAssociated
-                      formattedCase={item}
-                      key={item.docketNumber}
-                      showFilingFee={dashboardExternalHelper.showFilingFee}
-                    />
-                  ))}
-                </tbody>
+                <NonMobile>
+                  <tbody>
+                    {cases.map(item => (
+                      <CaseListRowExternal
+                        onlyLinkIfRequestedUserAssociated
+                        formattedCase={item}
+                        key={item.docketNumber}
+                        showFilingFee={dashboardExternalHelper.showFilingFee}
+                      />
+                    ))}
+                  </tbody>
+                </NonMobile>
+                <Mobile>
+                  <tbody>
+                    {cases.map(item => (
+                      <CaseListRowExternalMobile
+                        onlyLinkIfRequestedUserAssociated
+                        formattedCase={item}
+                        key={item.docketNumber}
+                        showFilingFee={dashboardExternalHelper.showFilingFee}
+                      />
+                    ))}
+                  </tbody>
+                </Mobile>
               </table>
               {showLoadMore && (
                 <Button
