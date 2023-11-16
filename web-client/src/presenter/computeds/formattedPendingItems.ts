@@ -19,6 +19,34 @@ type PendingItemFormatted = PendingItem & {
   isLeadCase: boolean;
 };
 
+export const formattedPendingItemsHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): {
+  printUrl: string;
+  judges: string[];
+  items: PendingItemFormatted[];
+} => {
+  const { CHIEF_JUDGE } = applicationContext.getConstants();
+
+  const items = get(state.pendingReports.pendingItems).map(item =>
+    formatPendingItem(item, { applicationContext }),
+  );
+  const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
+  const judges = get(state.judges)
+    .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
+    .concat(CHIEF_JUDGE)
+    .sort();
+
+  const queryString = qs.stringify({ judgeFilter });
+
+  return {
+    items,
+    judges,
+    printUrl: `/reports/pending-report/printable?${queryString}`,
+  };
+};
+
 const formatPendingItem = (
   item: PendingItem,
   { applicationContext }: { applicationContext: ClientApplicationContext },
@@ -60,33 +88,5 @@ const formatPendingItem = (
     formattedFiledDate,
     formattedName,
     formattedStatus,
-  };
-};
-
-export const formattedPendingItemsHelper = (
-  get: Get,
-  applicationContext: ClientApplicationContext,
-): {
-  printUrl: string;
-  judges: string[];
-  items: PendingItemFormatted[];
-} => {
-  const { CHIEF_JUDGE } = applicationContext.getConstants();
-
-  let items = get(state.pendingReports.pendingItems).map(item =>
-    formatPendingItem(item, { applicationContext }),
-  );
-  const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
-  const judges = get(state.judges)
-    .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
-    .concat(CHIEF_JUDGE)
-    .sort();
-
-  const queryString = qs.stringify({ judgeFilter });
-
-  return {
-    items,
-    judges,
-    printUrl: `/reports/pending-report/printable?${queryString}`,
   };
 };
