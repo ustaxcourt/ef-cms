@@ -86,9 +86,6 @@ async function getUserToken(password: string, username: string) {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
-  console.log('userPoolId: ', userPoolId);
-  console.log('clientId: ', clientId);
-
   return cognito
     .adminInitiateAuth({
       AuthFlow: 'ADMIN_NO_SRP_AUTH',
