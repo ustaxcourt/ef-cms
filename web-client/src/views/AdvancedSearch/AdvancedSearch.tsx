@@ -107,6 +107,7 @@ export const AdvancedSearch = connect(
               </Tab>
               {advancedSearchHelper.showPractitionerSearch && (
                 <Tab
+                  data-testid="tab-practitioner"
                   id="tab-practitioner"
                   tabName={searchTabs.PRACTITIONER}
                   title="Practitioner"
