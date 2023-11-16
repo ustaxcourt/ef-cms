@@ -10,6 +10,6 @@ export const updateTrialSessionLambda = event =>
     return await applicationContext
       .getUseCases()
       .updateTrialSessionInteractor(applicationContext, {
-        trialSession: JSON.parse(event.body),
+        ...JSON.parse(event.body),
       });
   });

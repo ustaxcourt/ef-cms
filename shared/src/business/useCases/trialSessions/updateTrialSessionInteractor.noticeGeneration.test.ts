@@ -58,6 +58,7 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
         });
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: inPersonNonCalendaredTrialSession,
       });
 
@@ -96,6 +97,7 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
         });
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: inPersonCalendaredTrialSession,
       });
 
@@ -131,6 +133,7 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
         });
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: inPersonCalendaredTrialSession,
       });
 
@@ -167,6 +170,7 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
         });
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: inPersonCalendaredTrialSession,
       });
 
@@ -204,6 +208,7 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
         });
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: remoteCalendaredTrialSession,
       });
 
@@ -242,6 +247,7 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
         });
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: remoteCalendaredTrialSession,
       });
 
@@ -278,6 +284,7 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
         });
 
       await updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId: '123',
         trialSession: remoteTrialSession,
       });
 
@@ -327,6 +334,7 @@ describe('Change of Trial Judge', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...remoteCalendaredTrialSession,
         judge: mockJudgeOne,
@@ -367,6 +375,7 @@ describe('Change of Trial Judge', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...remoteCalendaredTrialSession,
         judge: mockJudgeTwo,
@@ -405,6 +414,7 @@ describe('Change of Trial Judge', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...remoteCalendaredTrialSession,
         judge: mockJudgeTwo,
@@ -444,6 +454,7 @@ describe('Change of Trial Judge', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...remoteCalendaredTrialSession,
         judge: mockJudgeOne,
@@ -482,6 +493,7 @@ describe('Change of Trial Judge', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...remoteCalendaredTrialSession,
         judge: undefined,
@@ -521,6 +533,7 @@ describe('Change of Trial Judge', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
+      clientConnectionId: '123',
       trialSession: {
         ...remoteCalendaredTrialSession,
         judge: mockJudgeTwo,
