@@ -22,6 +22,7 @@ import {
 } from '../../shared/src/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
 import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
@@ -62,6 +63,7 @@ const utilities = {
   formatDateString,
   formatJudgeName,
   formatNow,
+  formatPendingItem,
   getAddressPhoneDiff,
   getCropBox,
   getDescriptionDisplay,

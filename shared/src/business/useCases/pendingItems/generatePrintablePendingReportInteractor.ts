@@ -3,7 +3,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { formatPendingItem } from '@web-client/presenter/computeds/formattedPendingItems';
 
 export const generatePrintablePendingReportInteractor = async (
   applicationContext: IApplicationContext,
@@ -24,8 +23,10 @@ export const generatePrintablePendingReportInteractor = async (
     });
 
   const formattedPendingItems = pendingDocuments.map(pendingItem =>
-    formatPendingItem(pendingItem, { applicationContext }),
-  ); // To Do compare formatPendingItem to old implementation and formatting
+    applicationContext
+      .getUtilities()
+      .formatPendingItem(pendingItem, { applicationContext }),
+  );
 
   let reportTitle = 'All Judges';
 

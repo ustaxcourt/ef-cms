@@ -10,18 +10,21 @@ describe('generatePrintablePendingReportInteractor', () => {
     {
       associatedJudge: 'Judge Judgey',
       docketNumber: '456-68',
+      docketNumberWithSuffix: '456-68',
       documentTitle: 'Test Document Best',
       receivedAt: '2022-02-04T12:00:00.000Z',
     },
     {
       associatedJudge: 'Judge Judger',
       docketNumber: '456-69',
+      docketNumberWithSuffix: '456-69',
       documentTitle: 'Test Document Best',
       receivedAt: '2021-03-04T12:00:00.000Z',
     },
     {
       associatedJudge: 'Judge Foley',
       docketNumber: '456-67',
+      docketNumberWithSuffix: '456-67',
       documentTitle: 'Test Document Best',
       receivedAt: '2020-03-04T12:00:00.000Z',
     },
@@ -29,6 +32,7 @@ describe('generatePrintablePendingReportInteractor', () => {
       associatedJudge: 'Judge Colvin',
       caseCaption: 'Test Caption, Petitioner',
       docketNumber: '123-45',
+      docketNumberWithSuffix: '123-45',
       documentTitle: 'Test Document Title',
       receivedAt: '1990-01-01T12:00:00.000Z',
     },
@@ -36,6 +40,7 @@ describe('generatePrintablePendingReportInteractor', () => {
       associatedJudge: 'Judge Judgeson',
       caseCaption: 'Test Caption, Petitioner',
       docketNumber: '123-49',
+      docketNumberWithSuffix: '123-49',
       documentTitle: 'Test Document Title',
       receivedAt: '1999-01-01T12:00:00.000Z',
     },
@@ -44,12 +49,14 @@ describe('generatePrintablePendingReportInteractor', () => {
       caseCaption: 'Test Caption Two, Petitioner(s)',
       docketNumber: '234-56',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      docketNumberWithSuffix: '234-56S',
       documentType: 'Test Document Type',
       receivedAt: '2020-02-02T12:00:00.000Z',
     },
     {
       associatedJudge: 'Judge Alvin',
       docketNumber: '345-67',
+      docketNumberWithSuffix: '345-67',
       documentTitle: 'Test Document Title',
       leadDocketNumber: '456-78',
       receivedAt: '2020-03-03T12:00:00.000Z',
@@ -57,6 +64,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     {
       associatedJudge: 'Judge Buch',
       docketNumber: '456-78',
+      docketNumberWithSuffix: '456-78',
       documentTitle: 'Fear and Trembling',
       leadDocketNumber: '456-78',
       receivedAt: '2020-03-03T12:00:00.000Z',
@@ -70,13 +78,9 @@ describe('generatePrintablePendingReportInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .fetchPendingItems.mockReturnValue({
+      .fetchPendingItems.mockResolvedValue({
         foundDocuments: mockFoundDocuments,
       });
-
-    applicationContext
-      .getUseCaseHelpers()
-      .fetchPendingItemsByDocketNumber.mockReturnValue(mockFoundDocuments);
 
     applicationContext
       .getPersistenceGateway()
@@ -149,7 +153,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '02/04/22',
         formattedName: 'Test Document Best',
         inConsolidatedGroup: false,
-        inLeadCase: false,
+        isLeadCase: false,
         receivedAt: '2022-02-04T12:00:00.000Z',
       },
       {
@@ -162,7 +166,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '03/04/21',
         formattedName: 'Test Document Best',
         inConsolidatedGroup: false,
-        inLeadCase: false,
+        isLeadCase: false,
         receivedAt: '2021-03-04T12:00:00.000Z',
       },
       {
@@ -175,7 +179,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '03/04/20',
         formattedName: 'Test Document Best',
         inConsolidatedGroup: false,
-        inLeadCase: false,
+        isLeadCase: false,
         receivedAt: '2020-03-04T12:00:00.000Z',
       },
       {
@@ -189,7 +193,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '01/01/90',
         formattedName: 'Test Document Title',
         inConsolidatedGroup: false,
-        inLeadCase: false,
+        isLeadCase: false,
         receivedAt: '1990-01-01T12:00:00.000Z',
       },
       {
@@ -203,7 +207,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '01/01/99',
         formattedName: 'Test Document Title',
         inConsolidatedGroup: false,
-        inLeadCase: false,
+        isLeadCase: false,
         receivedAt: '1999-01-01T12:00:00.000Z',
       },
       {
@@ -218,7 +222,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '02/02/20',
         formattedName: 'Test Document Type',
         inConsolidatedGroup: false,
-        inLeadCase: false,
+        isLeadCase: false,
         receivedAt: '2020-02-02T12:00:00.000Z',
       },
       {
@@ -238,7 +242,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         docketNumber: '456-78',
         documentTitle: 'Fear and Trembling',
         inConsolidatedGroup: true,
-        inLeadCase: true,
+        isLeadCase: true,
         leadDocketNumber: '456-78',
         receivedAt: '2020-03-03T12:00:00.000Z',
       },
