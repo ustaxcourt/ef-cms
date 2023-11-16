@@ -1,4 +1,9 @@
+import {
+  PendingReports,
+  initialPendingReportsState,
+} from '@web-client/presenter/state/pendingReportState';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import { formattedPendingItemsHelper as formattedPendingItemsComputed } from './formattedPendingItems';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -13,6 +18,7 @@ describe('formattedPendingItems', () => {
 
   let mockPendingItems;
   let pendingItem;
+  let pendingReportsState: PendingReports;
   beforeEach(() => {
     pendingItem = {
       associatedJudge: 'Judge A',
@@ -66,15 +72,16 @@ describe('formattedPendingItems', () => {
         receivedAt: '2018-01-20',
       },
     ];
+
+    pendingReportsState = cloneDeep(initialPendingReportsState);
+    pendingReportsState.pendingItems = mockPendingItems;
   });
 
-  it.only('should return formatted and sorted list of judges', () => {
+  it('should return formatted and sorted list of judges', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
-        pendingReports: {
-          pendingReports: mockPendingItems,
-        },
+        pendingReports: pendingReportsState,
       },
     });
 
@@ -85,9 +92,7 @@ describe('formattedPendingItems', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [],
-        pendingReports: {
-          pendingItems: mockPendingItems,
-        },
+        pendingReports: pendingReportsState,
       },
     });
 
@@ -131,30 +136,28 @@ describe('formattedPendingItems', () => {
     pendingItem.status = STATUS_TYPES.calendared;
     pendingItem.trialDate = '2022-02-01T17:21:05.486Z';
     pendingItem.trialLocation = 'Houston, Texas';
+    pendingReportsState.pendingItems = [pendingItem];
 
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [],
-        pendingReports: {
-          pendingItems: [pendingItem],
-        },
+        pendingReports: pendingReportsState,
       },
     });
 
-    expect(result.items[0].status).toEqual(
+    expect(result.items[0].formattedStatus).toEqual(
       `${STATUS_TYPES.calendared} - 02/01/22 Houston, TX`,
     );
   });
 
   it('should add consolidated properties to a pending item in a consolidated group', () => {
     pendingItem.leadDocketNumber = '100-19';
+    pendingReportsState.pendingItems = [pendingItem];
 
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [],
-        pendingReports: {
-          pendingItems: [pendingItem],
-        },
+        pendingReports: pendingReportsState,
       },
     });
 
@@ -173,6 +176,7 @@ describe('formattedPendingItems', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [],
+        pendingReports: pendingReportsState,
         screenMetadata: { pendingItemsFilters: { judge: 'Judge Somebody' } },
       },
     });
@@ -184,6 +188,7 @@ describe('formattedPendingItems', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [],
+        pendingReports: pendingReportsState,
         screenMetadata: { pendingItemsFilters: {} },
       },
     });
