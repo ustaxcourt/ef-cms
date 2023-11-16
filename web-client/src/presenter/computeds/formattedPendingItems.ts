@@ -1,56 +1,79 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
-import { formatSearchResultRecord } from './AdvancedSearch/advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const formatPendingItem = (
-  item,
-  { applicationContext }: { applicationContext: ClientApplicationContext },
-) => {
-  let result = formatSearchResultRecord(item, { applicationContext });
+type PendingItemFormatted = PendingItem & {
+  caseTitle: string;
+  formattedFiledDate: string;
+  associatedJudgeFormatted: string;
+  formattedName: string;
+  status: string;
+  documentLink: string;
+  formattedStatus: string;
+};
 
-  if (result.leadDocketNumber) {
-    result = addConsolidatedProperties({
+const formatPendingItem = (
+  item: PendingItem,
+  { applicationContext }: { applicationContext: ClientApplicationContext },
+): PendingItemFormatted => {
+  if (item.leadDocketNumber) {
+    item = addConsolidatedProperties({
       applicationContext,
-      consolidatedObject: result,
+      consolidatedObject: item,
     });
   }
 
-  result.formattedFiledDate = applicationContext
+  const caseTitle = applicationContext.getCaseTitle(item.caseCaption || '');
+
+  const formattedFiledDate = applicationContext
     .getUtilities()
-    .formatDateString(result.receivedAt, 'MMDDYY');
+    .formatDateString(item.receivedAt, 'MMDDYY');
 
-  result.associatedJudgeFormatted = applicationContext
+  const associatedJudgeFormatted = applicationContext
     .getUtilities()
-    .formatJudgeName(result.associatedJudge);
+    .formatJudgeName(item.associatedJudge);
 
-  result.formattedName = result.documentTitle || result.documentType;
+  const formattedName = item.documentTitle || item.documentType;
 
-  if (result.status === CASE_STATUS_TYPES.calendared) {
+  let formattedStatus: string = item.status;
+  if (item.status === CASE_STATUS_TYPES.calendared) {
     const trialDate = applicationContext
       .getUtilities()
-      .formatDateString(result.trialDate, 'MM/dd/yy');
+      .formatDateString(item.trialDate, 'MM/dd/yy');
     const trialLocation = applicationContext
       .getUtilities()
-      .abbreviateState(result.trialLocation);
-    result.status = `${result.status} - ${trialDate} ${trialLocation}`;
+      .abbreviateState(item.trialLocation);
+    formattedStatus = `${item.status} - ${trialDate} ${trialLocation}`;
   }
 
-  result.documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
+  const documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
 
-  return result;
+  return {
+    ...item,
+    associatedJudgeFormatted,
+    caseTitle,
+    documentLink,
+    formattedFiledDate,
+    formattedName,
+    formattedStatus,
+  };
 };
 
 export const formattedPendingItemsHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  printUrl: string;
+  judges: string[];
+  items: PendingItemFormatted[];
+} => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
-  let items = (get(state.pendingReports.pendingItems) || []).map(item =>
+  let items = get(state.pendingReports.pendingItems).map(item =>
     formatPendingItem(item, { applicationContext }),
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);

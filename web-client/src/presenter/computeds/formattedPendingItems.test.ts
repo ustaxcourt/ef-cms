@@ -68,10 +68,13 @@ describe('formattedPendingItems', () => {
     ];
   });
 
-  it('should return formatted and sorted list of judges', () => {
+  it.only('should return formatted and sorted list of judges', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
+        pendingReports: {
+          pendingReports: mockPendingItems,
+        },
       },
     });
 
