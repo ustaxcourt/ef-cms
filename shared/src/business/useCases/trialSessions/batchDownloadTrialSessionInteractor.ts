@@ -1,5 +1,6 @@
 import { Case, isClosed } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -32,6 +33,10 @@ const batchDownloadTrialSessionInteractorHelper = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSessionDetails) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   let allSessionCases = await applicationContext
     .getPersistenceGateway()
