@@ -63,6 +63,7 @@ import {
   formatJudgeName,
   getJudgeLastName,
 } from '../../../src/business/utilities/getFormattedJudgeName';
+import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import { formatPhoneNumber } from '../../../src/business/utilities/formatPhoneNumber';
 import { generateAndServeDocketEntry } from '../useCaseHelper/service/createChangeItems';
 import { generateChangeOfAddressHelper } from '@shared/business/useCaseHelper/generateChangeOfAddressHelper';
@@ -239,6 +240,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
+    formatPendingItem,
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest

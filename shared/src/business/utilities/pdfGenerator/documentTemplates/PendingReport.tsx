@@ -1,9 +1,16 @@
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
 import classNames from 'classnames';
 
-export const PendingReport = ({ pendingItems, subtitle }) => {
+export const PendingReport = ({
+  pendingItems,
+  subtitle,
+}: {
+  pendingItems: PendingItemFormatted[];
+  subtitle: string;
+}) => {
   return (
     <>
       <PrimaryHeader />
@@ -44,7 +51,7 @@ export const PendingReport = ({ pendingItems, subtitle }) => {
                   <td>{pendingItem.formattedFiledDate}</td>
                   <td>{pendingItem.caseTitle}</td>
                   <td>{pendingItem.formattedName}</td>
-                  <td>{pendingItem.status}</td>
+                  <td>{pendingItem.formattedStatus}</td>
                   <td>{pendingItem.associatedJudgeFormatted}</td>
                 </tr>
               );
