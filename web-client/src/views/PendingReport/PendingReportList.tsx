@@ -103,7 +103,7 @@ export const PendingReportList = connect(
                 <td>
                   <a href={item.documentLink}>{item.formattedName}</a>
                 </td>
-                <td>{item.status}</td>
+                <td>{item.formattedStatus}</td>
                 <td>{item.associatedJudgeFormatted}</td>
               </tr>
             </tbody>

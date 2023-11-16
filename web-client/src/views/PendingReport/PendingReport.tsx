@@ -11,11 +11,11 @@ import React from 'react';
 export const PendingReport = connect(
   {
     formattedPendingItemsHelper: state.formattedPendingItemsHelper,
-    pendingReportListHelper: state.pendingReportListHelper,
+    hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
   },
   function PendingReport({
     formattedPendingItemsHelper,
-    pendingReportListHelper,
+    hasPendingItemsResults,
   }) {
     return (
       <>
@@ -23,10 +23,9 @@ export const PendingReport = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-
           <Tabs bind="reportsTab.group" defaultActiveTab="pendingReport">
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-              {pendingReportListHelper.hasPendingItemsResults && (
+              {hasPendingItemsResults && (
                 <Button
                   link
                   aria-describedby="pending-report-tab"
