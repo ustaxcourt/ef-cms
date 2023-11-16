@@ -5,7 +5,6 @@ import {
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
-import { RawUserCase } from '../entities/UserCase';
 import { UserCaseDTO } from '@shared/business/entities/UserCaseDTO';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { partition, uniqBy } from 'lodash';
@@ -14,7 +13,7 @@ export type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
   consolidatedCases?: TAssociatedCase[];
   petitionPaymentStatus: PaymentStatusTypes;
-} & Omit<RawUserCase, 'entityName'>;
+} & UserCaseDTO;
 
 export const getCasesForUserInteractor = async (
   applicationContext: IApplicationContext,
@@ -126,7 +125,7 @@ async function fetchConsolidatedGroupsAndNest({
   const allCases = topLevelCases.map(aCase => {
     return {
       ...aCase,
-      consolidatedCases: aCase.consolidatedCases
+      consolidatedCases: aCase.consolidatedCases.length
         ? Case.sortByDocketNumber(aCase.consolidatedCases)
         : undefined,
     };
@@ -144,10 +143,10 @@ const sortCases = (
       if (caseType === 'closed') {
         const closedDateA = a.closedDate
           ? a.closedDate
-          : a.consolidatedCases.find(aCase => aCase.closedDate)!.closedDate;
+          : a.consolidatedCases?.find(aCase => aCase.closedDate)!.closedDate;
         const closedDateB = b.closedDate
           ? b.closedDate
-          : b.consolidatedCases.find(aCase => aCase.closedDate)!.closedDate;
+          : b.consolidatedCases?.find(aCase => aCase.closedDate)!.closedDate;
         return compareISODateStrings(closedDateB, closedDateA);
       } else {
         return compareISODateStrings(b.createdAt, a.createdAt);

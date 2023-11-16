@@ -383,6 +383,7 @@ describe('getCasesForUserInteractor', () => {
 
       expect(userCases.closedCaseList).toEqual([
         expect.objectContaining({
+          consolidatedCases: undefined,
           docketNumber: unconsolidatedClosedCase1.docketNumber,
           isRequestingUserAssociated: true,
         }),
