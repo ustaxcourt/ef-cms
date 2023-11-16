@@ -97,12 +97,15 @@ export const CaseListTable = connect(
                     )}
                   </tr>
                 </thead>
+
                 <tbody>
                   {cases.map(item => (
                     <CaseListRowExternal
                       onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
+                      isNestedCase={false}
                       key={item.docketNumber}
+                      onlyText={false}
                       showFilingFee={dashboardExternalHelper.showFilingFee}
                     />
                   ))}
