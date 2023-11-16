@@ -43,7 +43,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.32.zip" -o "
   rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.6.3/terraform_1.6.3_linux_amd64.zip && \ 
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.6.4/terraform_1.6.4_linux_amd64.zip && \ 
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/
