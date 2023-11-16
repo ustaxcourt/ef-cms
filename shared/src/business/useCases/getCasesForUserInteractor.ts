@@ -5,9 +5,19 @@ import {
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
-import { UserCaseDTO } from '@shared/business/entities/UserCaseDTO';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { partition, uniqBy } from 'lodash';
+
+interface UserCaseDTO {
+  caseCaption: string;
+  closedDate?: string;
+  createdAt: string;
+  docketNumber: string;
+  docketNumberWithSuffix?: string;
+  leadDocketNumber?: string;
+  petitionPaymentStatus: PaymentStatusTypes;
+  status: string;
+}
 
 export type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
@@ -36,9 +46,23 @@ export const getCasesForUserInteractor = async (
       docketNumbers,
     }),
     { applicationContext },
-  ).map(c => {
-    return new UserCaseDTO({ ...c, isRequestingUserAssociated: true });
-  });
+  )
+    .map(c => {
+      const userCaseDTO: UserCaseDTO = {
+        caseCaption: c.caseCaption,
+        closedDate: c.closedDate,
+        createdAt: c.createdAt,
+        docketNumber: c.docketNumber,
+        docketNumberWithSuffix: c.docketNumberWithSuffix,
+        leadDocketNumber: c.leadDocketNumber,
+        petitionPaymentStatus: c.petitionPaymentStatus,
+        status: c.status,
+      };
+      return userCaseDTO;
+    })
+    .map(cDTO => {
+      return { ...cDTO, isRequestingUserAssociated: true };
+    });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
@@ -152,15 +176,34 @@ const sortCases = (
         return compareISODateStrings(b.createdAt, a.createdAt);
       }
     })
-    .map(nestedCase => ({
-      ...new UserCaseDTO(nestedCase),
-      consolidatedCases: nestedCase.consolidatedCases
-        ? nestedCase.consolidatedCases.map(consolidatedCase => {
-            return new UserCaseDTO(consolidatedCase);
+    .map(c => ({
+      ...convertCaseToUserCaseDTO(c),
+      consolidatedCases: c.consolidatedCases
+        ? c.consolidatedCases.map(consolidatedCase => {
+            return {
+              ...convertCaseToUserCaseDTO(consolidatedCase),
+              isRequestingUserAssociated:
+                consolidatedCase.isRequestingUserAssociated,
+            };
           })
         : undefined,
+      isRequestingUserAssociated: c.isRequestingUserAssociated,
     }));
 };
+
+function convertCaseToUserCaseDTO(rawCase: TAssociatedCase): UserCaseDTO {
+  const userCaseDTO: UserCaseDTO = {
+    caseCaption: rawCase.caseCaption,
+    closedDate: rawCase.closedDate,
+    createdAt: rawCase.createdAt,
+    docketNumber: rawCase.docketNumber,
+    docketNumberWithSuffix: rawCase.docketNumberWithSuffix,
+    leadDocketNumber: rawCase.leadDocketNumber,
+    petitionPaymentStatus: rawCase.petitionPaymentStatus,
+    status: rawCase.status,
+  };
+  return userCaseDTO;
+}
 
 async function getAllConsolidatedCases(
   applicationContext: IApplicationContext,
