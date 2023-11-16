@@ -13,18 +13,19 @@ type PendingItemFormatted = PendingItem & {
   status: string;
   documentLink: string;
   formattedStatus: string;
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+  shouldIndent: boolean;
+  isLeadCase: boolean;
 };
 
 const formatPendingItem = (
   item: PendingItem,
   { applicationContext }: { applicationContext: ClientApplicationContext },
 ): PendingItemFormatted => {
-  if (item.leadDocketNumber) {
-    // TODO 10174: add consolidation types
-    item = applicationContext
-      .getUtilities()
-      .setConsolidationFlagsForDisplay(item);
-  }
+  const pendingItemWithConsolidatedFlags = applicationContext
+    .getUtilities()
+    .setConsolidationFlagsForDisplay(item);
 
   const caseTitle = applicationContext.getCaseTitle(item.caseCaption || '');
 
@@ -52,7 +53,7 @@ const formatPendingItem = (
   const documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
 
   return {
-    ...item,
+    ...pendingItemWithConsolidatedFlags,
     associatedJudgeFormatted,
     caseTitle,
     documentLink,
