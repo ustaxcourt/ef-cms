@@ -6,7 +6,7 @@ export class UserCaseDTO {
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
-  public docketNumberWithSuffix: string;
+  public docketNumberWithSuffix?: string;
   public isRequestingUserAssociated: boolean;
   public leadDocketNumber?: string;
   public petitionPaymentStatus: PaymentStatusTypes;
