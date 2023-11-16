@@ -1,4 +1,6 @@
-module.exports = {
+import { createHash } from 'crypto';
+
+export const efcmsUserMappings = {
   properties: {
     'admissionsStatus.S': {
       type: 'keyword',
@@ -29,3 +31,9 @@ module.exports = {
     },
   },
 };
+
+const efcmsUserMappingsHash: string = createHash('md5')
+  .update(JSON.stringify(efcmsUserMappings), 'utf8')
+  .digest('hex');
+
+export const efcmsUserIndex: string = `efcms-user-${efcmsUserMappingsHash}`;
