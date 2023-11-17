@@ -170,7 +170,7 @@ export const CaseDetailHeaderMenu = connect(
         {caseDetailHeaderHelper.showAddDocketEntryButton && (
           <li
             className="usa-nav__submenu-item row-button"
-            id="menu-button-add-docket-entry"
+            data-testid="menu-button-add-paper-filing"
             onClick={() => {
               navigateToPathSequence({
                 path: `/case-detail/${caseDetail.docketNumber}/add-paper-filing`,

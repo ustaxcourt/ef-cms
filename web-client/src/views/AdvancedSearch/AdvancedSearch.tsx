@@ -132,7 +132,7 @@ export const AdvancedSearch = connect(
               <select
                 aria-label="advanced search type"
                 className="usa-select"
-                data-test="advanced-search-type-mobile-selector"
+                data-testid="advanced-search-type-mobile-selector"
                 value={advancedSearchTab}
                 onChange={e => {
                   cerebralBindSimpleSetStateSequence({
