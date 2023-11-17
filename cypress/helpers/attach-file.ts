@@ -9,6 +9,6 @@ export function attachDummyFile(testId: string) {
     'not.have.class',
     'validated',
   );
-  cy.get('[data-testid="testId"]').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get(`[data-testid="${testId}"]`).attachFile('../fixtures/w3-dummy.pdf');
   cy.get(`[data-testid="${testId}-label"]`).should('have.class', 'validated');
 }
