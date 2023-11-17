@@ -63,7 +63,6 @@ import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/ge
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
-import { generateTrialSessionPaperServicePdfLambda } from './lambdas/trialSessions/generateTrialSessionPaperServicePdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
 import { getCalendaredCasesForTrialSessionLambda } from './lambdas/trialSessions/getCalendaredCasesForTrialSessionLambda';
@@ -79,7 +78,7 @@ import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getComp
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getCustomCaseInventoryReportLambda } from './lambdas/reports/getCustomCaseInventoryReportLambda';
+import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
 import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocumentQCInboxForSectionLambda';
@@ -99,6 +98,7 @@ import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseL
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
+import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionerDocumentDownloadUrlLambda } from './lambdas/practitioners/getPractitionerDocumentDownloadUrlLambda';
 import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPractitionerDocumentLambda';
@@ -751,8 +751,8 @@ app.get(
     lambdaWrapper(getCaseInventoryReportLambda),
   );
   app.get(
-    '/reports/custom-case-inventory-report',
-    lambdaWrapper(getCustomCaseInventoryReportLambda),
+    '/reports/custom-case-report',
+    lambdaWrapper(getCustomCaseReportLambda),
   );
   app.get(
     '/reports/printable-case-inventory-report',
@@ -797,9 +797,9 @@ app.get(
  * trial-sessions
  */
 {
-  app.post(
-    '/async/trial-sessions/paper-service-pdf',
-    lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
+  app.get(
+    '/trial-sessions/paper-service-pdf/:fileId',
+    lambdaWrapper(getPaperServicePdfUrlLambda),
   );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',

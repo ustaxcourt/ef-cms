@@ -180,7 +180,7 @@ export const MessageDetail = connect(
                   })
                 }
               >
-                <div className="accordion-item-title padding-left-1">
+                <div className="accordion-item-title padding-left-1 padding-right-3">
                   {formattedMessageDetail.isCompleted ? (
                     <CompletedMessage
                       message={formattedMessageDetail.currentMessage}

@@ -5,10 +5,13 @@ export const updateTrialSessionAction = async ({
   get,
   path,
 }: ActionProps) => {
+  const clientConnectionId = get(state.clientConnectionId);
+
   try {
     await applicationContext
       .getUseCases()
       .updateTrialSessionInteractor(applicationContext, {
+        clientConnectionId,
         trialSession: get(state.form),
       });
   } catch (err) {
