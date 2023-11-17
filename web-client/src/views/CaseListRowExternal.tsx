@@ -59,13 +59,13 @@ export const CaseListRowExternal = ({
                 <CaseListRowExternal
                   isNestedCase
                   onlyLinkIfRequestedUserAssociated
-                  showFilingFee
                   formattedCase={consolidatedCase}
                   key={consolidatedCase.docketNumber}
                   onlyText={
                     onlyLinkIfRequestedUserAssociated &&
                     consolidatedCase.isRequestingUserAssociated === false
                   }
+                  showFilingFee={showFilingFee}
                 />
               );
             })}
@@ -133,13 +133,13 @@ export const CaseListRowExternal = ({
               <CaseListRowExternal
                 isNestedCase
                 onlyLinkIfRequestedUserAssociated
-                showFilingFee
                 formattedCase={consolidatedCase}
                 key={consolidatedCase.docketNumber}
                 onlyText={
                   onlyLinkIfRequestedUserAssociated &&
                   consolidatedCase.isRequestingUserAssociated === false
                 }
+                showFilingFee={showFilingFee}
               />
             );
           })}
