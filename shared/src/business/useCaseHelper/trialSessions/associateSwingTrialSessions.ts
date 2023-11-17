@@ -1,3 +1,4 @@
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -33,6 +34,10 @@ export const associateSwingTrialSessions = async (
       applicationContext,
       trialSessionId: swingSessionId,
     });
+
+  if (!swingTrialSession) {
+    throw new NotFoundError(`Trial session ${swingSessionId} was not found.`);
+  }
 
   const swingSessionEntity = new TrialSession(swingTrialSession, {
     applicationContext,

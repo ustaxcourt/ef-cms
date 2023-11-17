@@ -32,7 +32,7 @@ export const deleteTrialSessionInteractor = async (
     });
 
   if (!trialSession) {
-    throw new NotFoundError('trial session not found');
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
   const trialSessionEntity = new TrialSession(trialSession, {
