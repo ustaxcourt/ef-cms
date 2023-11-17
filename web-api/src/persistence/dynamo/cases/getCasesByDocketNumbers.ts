@@ -8,14 +8,17 @@ import { batchGet } from '../../dynamodbClientService';
  * @param {Array} providers.docketNumbers the docket numbers to get
  * @returns {Array} the case details
  */
-export const getCasesByDocketNumbers = ({
+export const getCasesByDocketNumbers = async ({
   applicationContext,
   docketNumbers,
-}) =>
-  batchGet({
+}) => {
+  const results = await batchGet({
     applicationContext,
     keys: docketNumbers.map(docketNumber => ({
       pk: `case|${docketNumber}`,
       sk: `case|${docketNumber}`,
     })),
   });
+
+  return results;
+};
