@@ -5,7 +5,7 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
     petitionsclerkCreatesAndServesPaperPetition().then(
       createdPaperDocketNumber => {
         cy.login('docketclerk1');
-        cy.getByTestId('inbox-tab-content').should('exist');
+        cy.get('[data-testid="inbox-tab-content"]').should('exist');
         cy.get('#search-field').clear();
         cy.get('#search-field').type(createdPaperDocketNumber);
         cy.get('[data-testid="search-docket-number"]').click();

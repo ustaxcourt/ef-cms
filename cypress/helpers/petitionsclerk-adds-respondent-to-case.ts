@@ -3,12 +3,14 @@ export function petitionsclerkAddsRespondentToCase(
   barNumber: string,
 ) {
   cy.login('petitionsclerk1', `case-detail/${docketNumber}`);
-  cy.getByTestId('tab-case-information').click();
-  cy.getByTestId('tab-parties').click();
-  cy.getByTestId('respondent-counsel').click();
-  cy.getByTestId('respondent-search-field').type(barNumber);
-  cy.getByTestId('search-for-respondent').click();
-  cy.getByTestId('modal-button-confirm').click();
-  cy.getByTestId('success-alert').should('exist');
-  cy.getByTestId('respondent-counsel-name').contains(barNumber).should('exist');
+  cy.get('[data-testid="tab-case-information"]').click();
+  cy.get('[data-testid="tab-parties"]').click();
+  cy.get('[data-testid="respondent-counsel"]').click();
+  cy.get('[data-testid="respondent-search-field"]').type(barNumber);
+  cy.get('[data-testid="search-for-respondent"]').click();
+  cy.get('[data-testid="modal-button-confirm"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
+  cy.get('[data-testid="respondent-counsel-name"]')
+    .contains(barNumber)
+    .should('exist');
 }

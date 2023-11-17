@@ -13,11 +13,11 @@ describe('a repondent modifies their address', () => {
       petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER).then(newAddress => {
         cy.login(USER, `case-detail/${docketNumber}`);
-        cy.getByTestId('document-download-link-NCA').should('exist');
-        cy.getByTestId('tab-case-information').click();
-        cy.getByTestId('tab-parties').click();
-        cy.getByTestId('respondent-counsel').click();
-        cy.getByTestId('address1-line')
+        cy.get('[data-testid="document-download-link-NCA"]').should('exist');
+        cy.get('[data-testid="tab-case-information"]').click();
+        cy.get('[data-testid="tab-partie"]s').click();
+        cy.get('[data-testid="respondent-counsel"]').click();
+        cy.get('[data-testid="address1-line"]')
           .contains(`${newAddress}`)
           .should('exist');
       });
@@ -29,7 +29,7 @@ describe('a repondent modifies their address', () => {
       petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER);
       cy.login(USER, `case-detail/${docketNumber}`);
-      cy.getByTestId('document-download-link-NCA').should('not.exist');
+      cy.get('[data-testid="document-download-link-NCA"]').should('not.exist');
     });
   });
 });

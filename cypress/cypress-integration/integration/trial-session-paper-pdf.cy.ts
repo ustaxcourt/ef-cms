@@ -1,6 +1,5 @@
 import { fillInCreateCaseFromPaperForm } from '../support/pages/create-paper-petition';
 import { getCreateACaseButton } from '../support/pages/document-qc';
-import { manuallyAddCaseToNewTrialSession } from '../../cypress-smoketests/support/pages/case-detail';
 import { waitForLoadingComplete } from '../support/generalCommands/waitForLoader';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
@@ -64,7 +63,19 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           ).click();
           cy.url().should('include', `/case-detail/${docketNumber}`);
           cy.get('#tab-case-information').click();
-          manuallyAddCaseToNewTrialSession(createdTrialSessionId);
+          cy.get('#add-to-trial-session-btn').should('exist').click();
+          cy.get('label[for="show-all-locations-true"]').click();
+          cy.get('select#trial-session').select(createdTrialSessionId);
+          cy.get('select#trial-session').should(
+            'have.value',
+            createdTrialSessionId,
+          );
+          cy.get('#modal-root .modal-button-confirm').click();
+          cy.get('.usa-alert--success').should(
+            'contain',
+            'Case scheduled for trial.',
+          );
+          cy.get('h3:contains("Trial - Scheduled")').should('exist');
           cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
           cy.get(`label[for="${docketNumber}-complete"]`).click();
           waitForLoadingComplete();
