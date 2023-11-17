@@ -8,6 +8,9 @@ const main = async () => {
   if (args[0]) {
     // eslint-disable-next-line security/detect-non-literal-require
     entries = require(args[0]);
+    entries = entries.filter(
+      record => !record.pk.startsWith('stream-event-id'),
+    );
   }
 
   await seedLocalDatabase(entries);

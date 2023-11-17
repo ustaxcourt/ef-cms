@@ -1,3 +1,4 @@
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { put } from '../requests';
 
 /**
@@ -9,11 +10,17 @@ import { put } from '../requests';
  */
 export const updateTrialSessionInteractor = (
   applicationContext,
-  { trialSession },
+  {
+    clientConnectionId,
+    trialSession,
+  }: { clientConnectionId: string; trialSession: RawTrialSession },
 ) => {
   return put({
     applicationContext,
-    body: trialSession,
+    body: {
+      clientConnectionId,
+      trialSession,
+    },
     endpoint: '/async/trial-sessions',
   });
 };
