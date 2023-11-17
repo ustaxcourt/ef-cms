@@ -25,7 +25,7 @@ export default defineConfig({
     toConsole: true,
   },
   requestTimeout: 60000,
-  retries: 4,
+  retries: 0,
   screenshotsFolder: 'cypress/cypress-integration/screenshots',
   video: true,
   videosFolder: 'cypress/cypress-integration/videos',
