@@ -64,7 +64,7 @@ describe('Manually block consolidated cases', () => {
     cerebralTest.docketNumber = leadDocketNumber;
   });
   petitionsClerkBlocksCase(cerebralTest, trialLocation);
-  it('should verify blocked case has inLeadCase flag, inConsolidatedGroup flag and "Lead case" tool tip', () => {
+  it('should verify blocked case has isLeadCase flag, inConsolidatedGroup flag and "Lead case" tool tip', () => {
     const { blockedCasesFormatted } = runCompute(
       blockedCasesReportHelperComputed,
       {
@@ -76,7 +76,7 @@ describe('Manually block consolidated cases', () => {
         expect.objectContaining({
           consolidatedIconTooltipText: 'Lead case',
           inConsolidatedGroup: true,
-          inLeadCase: true,
+          isLeadCase: true,
         }),
       ]),
     );
@@ -86,7 +86,7 @@ describe('Manually block consolidated cases', () => {
     cerebralTest.docketNumber = memberCaseDocketNumber;
   });
   petitionsClerkBlocksCase(cerebralTest, trialLocation);
-  it('should verify blocked case does NOT have inLeadCase flag, but has inConsolidatedGroup flag and "Consolidated case" tool tip', () => {
+  it('should verify blocked case does NOT have isLeadCase flag, but has inConsolidatedGroup flag and "Consolidated case" tool tip', () => {
     const { blockedCasesFormatted } = runCompute(
       blockedCasesReportHelperComputed,
       {
@@ -98,7 +98,7 @@ describe('Manually block consolidated cases', () => {
         expect.objectContaining({
           consolidatedIconTooltipText: 'Consolidated case',
           inConsolidatedGroup: true,
-          inLeadCase: false,
+          isLeadCase: false,
         }),
       ]),
     );

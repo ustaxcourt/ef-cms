@@ -4,15 +4,11 @@ import {
   CaseStatus,
   CaseType,
 } from '../EntityConstants';
-import { DATE_RANGE_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { createEndOfDayISO } from '@shared/business/utilities/DateHandler';
 import joi from 'joi';
 
-/**
- * Custom Case Inventory Report Entity
- * @param {object} rawProps the raw activity search data
- * @constructor
- */
 export const CUSTOM_CASE_REPORT_FILING_METHODS = [
   'all',
   'electronic',
@@ -29,7 +25,7 @@ export const CUSTOM_CASE_REPORT_PROCEDURE_TYPES = [
 export type CustomCaseProcedureTypes =
   (typeof CUSTOM_CASE_REPORT_PROCEDURE_TYPES)[number];
 
-export class CustomCaseInventorySearch extends JoiValidationEntity {
+export class CustomCaseReportSearch extends JoiValidationEntity {
   public caseStatuses: CaseStatus[];
   public caseTypes: CaseType[];
   public endDate: string;
@@ -46,7 +42,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
   public startDate: string;
 
   constructor(rawProps) {
-    super('CustomCaseInventorySearch');
+    super('CustomCaseReportSearch');
     this.caseStatuses = rawProps.caseStatuses;
     this.caseTypes = rawProps.caseTypes;
     this.endDate = rawProps.endDate;
@@ -64,7 +60,27 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     return {
       caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
       caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
-      endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate,
+      endDate: joi
+        .alternatives()
+        .conditional('startDate', {
+          is: JoiValidationConstants.ISO_DATE.exist().not(null),
+          otherwise: JoiValidationConstants.ISO_DATE.max(
+            createEndOfDayISO(),
+          ).description(
+            'The end date search filter must be of valid date format',
+          ),
+          then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+            .min(joi.ref('startDate'))
+            .description(
+              'The end date search filter must be of valid date format and greater than or equal to the start date',
+            ),
+        })
+        .messages({
+          '*': 'Enter date in format MM/DD/YYYY.',
+          'date.max': 'End date cannot be in the future. Enter a valid date.',
+          'date.min':
+            'End date cannot be prior to start date. Enter a valid end date.',
+        }),
       filingMethod: joi
         .string()
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
@@ -84,7 +100,14 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
           receivedAt: joi.number().required(),
         })
         .required(),
-      startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
+      startDate: JoiValidationConstants.ISO_DATE.max('now')
+        .description(
+          'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+        )
+        .messages({
+          '*': 'Enter date in format MM/DD/YYYY.',
+          'date.max': 'Start date cannot be in the future. Enter a valid date.',
+        }),
     };
   }
 }
