@@ -70,10 +70,10 @@ export const CaseListRowExternal = ({
           <td data-label="Docket no.">
             <span
               className={classNames({
-                'margin-left-2':
+                'margin-left-205':
                   formattedCase.inConsolidatedGroup &&
                   !formattedCase.isLeadCase,
-                'margin-right-2': formattedCase.isLeadCase,
+                'margin-right-2': formattedCase.isLeadCase, // todo: why?
               })}
             >
               <ConsolidatedCaseIcon
@@ -84,14 +84,38 @@ export const CaseListRowExternal = ({
                 showLeadCaseIcon={formattedCase.isLeadCase}
               />
             </span>
-            <span className={isNestedCase ? 'margin-left-2' : ''}>
+            <span className={isNestedCase ? 'margin-left-205' : ''}>
               <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
             </span>
           </td>
-          <td data-label="Case Title">{formattedCase.caseTitle}</td>
-          <td data-label="Filed Date">{formattedCase.createdAtFormatted}</td>
+          <td
+            className={classNames({
+              'consolidated-case-padding':
+                formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase,
+            })}
+            data-label="Case Title"
+          >
+            {formattedCase.caseTitle}
+          </td>
+          <td
+            className={classNames({
+              'consolidated-case-padding':
+                formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase,
+            })}
+            data-label="Filed Date"
+          >
+            {formattedCase.createdAtFormatted}
+          </td>
           {showFilingFee && (
-            <td data-label="Filing Fee*" data-testid="petition-payment-status">
+            <td
+              className={classNames({
+                'consolidated-case-padding':
+                  formattedCase.inConsolidatedGroup &&
+                  !formattedCase.isLeadCase,
+              })}
+              data-label="Filing Fee*"
+              data-testid="petition-payment-status"
+            >
               {formattedCase.petitionPaymentStatus}
             </td>
           )}
