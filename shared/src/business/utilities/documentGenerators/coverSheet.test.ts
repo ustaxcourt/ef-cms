@@ -1,8 +1,5 @@
-import {
-  JURISDICTIONAL_OPTIONS,
-  MOTION_DISPOSITIONS,
-  PARTY_TYPES,
-} from '../../entities/EntityConstants';
+import { MOCK_STAMP } from '@shared/test/mockStamp';
+import { PARTY_TYPES } from '../../entities/EntityConstants';
 import { Stamp } from '../../entities/Stamp';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { coverSheet } from './coverSheet';
@@ -77,18 +74,7 @@ describe('coverSheet', () => {
       'Generates a CoverSheet document for a docket entry that is part of a consolidated case group',
   });
 
-  const stamp = new Stamp({
-    customText: 'Custom stamp data text',
-    date: '2022-07-27T04:00:00.000Z',
-    deniedAsMoot: true,
-    deniedWithoutPrejudice: true,
-    disposition: MOTION_DISPOSITIONS.DENIED,
-    dueDateMessage: 'The parties shall file a status report by',
-    jurisdictionalOption: JURISDICTIONAL_OPTIONS.restoredToDocket,
-    nameForSigning: 'Buch',
-    nameForSigningLine2: 'Judge',
-    strickenFromTrialSession: true,
-  });
+  const mockStamp = new Stamp(MOCK_STAMP).validate().toRawObject();
 
   generateAndVerifyPdfDiff({
     fileName: 'StampedCoverSheet.pdf',
@@ -108,7 +94,7 @@ describe('coverSheet', () => {
           documentTitle: 'Petition',
           electronicallyFiled: true,
           index: 10,
-          stamp,
+          stamp: mockStamp,
         },
       });
     },
