@@ -133,7 +133,7 @@ export const CoverSheet = ({
                 <br />
               </>
             )}
-            - {stamp.customText} -
+            {stamp.customText && <> - {stamp.customText} - </>}
             <hr className="narrow-hr" />
             <span className="text-bold" id="stamp-signature">
               (Signed) {stamp.nameForSigning}

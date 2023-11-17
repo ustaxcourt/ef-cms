@@ -54,7 +54,7 @@ import { clearExistingDocumentSequence } from './sequences/clearExistingDocument
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
-import { clearOptionalCustomCaseInventoryFilterSequence } from './sequences/clearOptionalCustomCaseInventoryFilterSequence';
+import { clearOptionalCustomCaseReportFilterSequence } from './sequences/clearOptionalCustomCaseReportFilterSequence';
 import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalFieldsStampFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
@@ -120,7 +120,7 @@ import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequ
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
-import { getCustomCaseInventoryReportSequence } from './sequences/getCustomCaseInventoryReportSequence';
+import { getCustomCaseReportSequence } from './sequences/getCustomCaseReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
 import { goToCreateAccountLocalSequence } from './sequences/goToCreateAccountLocalSequence';
@@ -353,7 +353,7 @@ import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimar
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
-import { setCustomCaseInventoryReportFiltersSequence } from './sequences/setCustomCaseInventoryReportFiltersSequence';
+import { setCustomCaseReportFiltersSequence } from './sequences/setCustomCaseReportFiltersSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
@@ -632,8 +632,7 @@ export const presenterSequences = {
   clearModalSequence: clearModalSequence as unknown as Function,
   clearOpenClosedCasesCurrentPageSequence:
     clearOpenClosedCasesCurrentPageSequence as unknown as Function,
-  clearOptionalCustomCaseInventoryFilterSequence:
-    clearOptionalCustomCaseInventoryFilterSequence as unknown as Function,
+  clearOptionalCustomCaseReportFilterSequence,
   clearOptionalFieldsStampFormSequence:
     clearOptionalFieldsStampFormSequence as unknown as Function,
   clearPdfPreviewUrlSequence: clearPdfPreviewUrlSequence as unknown as Function,
@@ -744,8 +743,7 @@ export const presenterSequences = {
     getBlockedCasesByTrialLocationSequence as unknown as Function,
   getCaseInventoryReportSequence:
     getCaseInventoryReportSequence as unknown as Function,
-  getCustomCaseInventoryReportSequence:
-    getCustomCaseInventoryReportSequence as unknown as Function,
+  getCustomCaseReportSequence,
   getUsersInSectionSequence: getUsersInSectionSequence as unknown as Function,
   goToApplyStampSequence: goToApplyStampSequence as unknown as Function,
   goToCreateAccountLocalSequence:
@@ -1147,8 +1145,7 @@ export const presenterSequences = {
     setCaseTypeToDisplaySequence as unknown as Function,
   setCurrentPageIndexSequence:
     setCurrentPageIndexSequence as unknown as Function,
-  setCustomCaseInventoryReportFiltersSequence:
-    setCustomCaseInventoryReportFiltersSequence as unknown as Function,
+  setCustomCaseReportFiltersSequence,
   setDocumentForPreviewSequence:
     setDocumentForPreviewSequence as unknown as Function,
   setDocumentForUploadSequence:
@@ -1527,6 +1524,7 @@ declare global {
     get: <T>(slice: T) => T;
     store: {
       set: (key: any, value: any) => void;
+      merge: (key: any, value: any) => void;
       unset: (key: any) => void;
     };
     path: any;

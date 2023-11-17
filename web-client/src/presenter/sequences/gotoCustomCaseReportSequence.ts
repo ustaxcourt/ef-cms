@@ -1,13 +1,13 @@
 import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { resetCustomCaseInventoryReportStateAction } from '../actions/resetCustomCaseInventoryReportStateAction';
+import { resetCustomCaseReportStateAction } from '../actions/resetCustomCaseReportStateAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoCustomCaseReport = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('Interstitial'),
-  resetCustomCaseInventoryReportStateAction,
+  resetCustomCaseReportStateAction,
   getSetJudgesSequence,
   setupCurrentPageAction('CustomCaseReport'),
 ]);

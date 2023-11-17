@@ -73,10 +73,6 @@ export const generateCoverSheetData = async ({
     ? formatDateString(docketEntryEntity.filingDate, FORMATS.MMDDYY)
     : '';
 
-  if (stampData && stampData.date) {
-    stampData.date = formatDateString(stampData.date, FORMATS.MMDDYYYY);
-  }
-
   const { caseCaptionExtension, caseTitle } = formatCaseTitle({
     applicationContext,
     caseEntity,
