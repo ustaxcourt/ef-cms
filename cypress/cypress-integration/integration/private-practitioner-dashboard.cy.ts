@@ -4,6 +4,7 @@ import { petitionerCreatesACase } from '../support/setup/petitioner-creates-a-ca
 describe('Private practitioner views dashboard', () => {
   it('should display filing fee column', () => {
     loginAs('privatepractitioner');
+    cy.getByTestId('case-list');
     cy.getByTestId('filing-fee');
     petitionerCreatesACase().then(docketNumber => {
       cy.getByTestId('filing-fee');
