@@ -1,18 +1,18 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 
-export type PendingItemFormatted = PendingItem & {
+export type PendingItemFormatted = {
   caseTitle: string;
   formattedFiledDate: string;
   associatedJudgeFormatted: string;
   formattedName: string;
-  status: string;
   documentLink: string;
   formattedStatus: string;
   inConsolidatedGroup: boolean;
   consolidatedIconTooltipText: string;
   shouldIndent: boolean;
   isLeadCase: boolean;
+  docketNumberWithSuffix: string;
 };
 
 export const formatPendingItem = (
@@ -49,12 +49,18 @@ export const formatPendingItem = (
   const documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
 
   return {
-    ...pendingItemWithConsolidatedFlags,
     associatedJudgeFormatted,
     caseTitle,
+    consolidatedIconTooltipText:
+      pendingItemWithConsolidatedFlags.consolidatedIconTooltipText,
+    docketNumberWithSuffix:
+      pendingItemWithConsolidatedFlags.docketNumberWithSuffix!,
     documentLink,
     formattedFiledDate,
     formattedName,
     formattedStatus,
+    inConsolidatedGroup: pendingItemWithConsolidatedFlags.inConsolidatedGroup,
+    isLeadCase: pendingItemWithConsolidatedFlags.isLeadCase,
+    shouldIndent: pendingItemWithConsolidatedFlags.shouldIndent,
   };
 };

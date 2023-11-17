@@ -1,4 +1,5 @@
 import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { PendingReport } from '../pdfGenerator/documentTemplates/PendingReport';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
@@ -11,16 +12,7 @@ export const pendingReport = async ({
 }: {
   applicationContext: IApplicationContext;
   data: {
-    pendingItems: {
-      docketNumberWithSuffix: string;
-      isLeadCase: boolean;
-      inConsolidatedGroup: boolean;
-      formattedFiledDate: string;
-      caseTitle: string;
-      formattedName: string;
-      formattedStatus: string;
-      associatedJudgeFormatted: string;
-    }[];
+    pendingItems: PendingItemFormatted[];
     subtitle: string;
   };
 }): Promise<Buffer> => {
