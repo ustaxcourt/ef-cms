@@ -180,6 +180,7 @@ import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDeta
 import { gotoPractitionerDocumentationSequence } from './sequences/gotoPractitionerDocumentationSequence';
 import { gotoPractitionerEditDocumentSequence } from './sequences/gotoPractitionerEditDocumentSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
+import { gotoPrintPaperTrialNoticesSequence } from '@web-client/presenter/sequences/gotoPrintPaperTrialNoticesSequence';
 import { gotoPrintPractitionerCasesSequence } from './sequences/gotoPrintPractitionerCasesSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
 import { gotoPrintableCaseInventoryReportSequence } from './sequences/gotoPrintableCaseInventoryReportSequence';
@@ -282,6 +283,7 @@ import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGai
 import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPenaltiesModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
+import { openPrintGeneratedPaperServiceSequence } from '@web-client/presenter/sequences/openPrintGeneratedPaperServiceSequence';
 import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
@@ -291,6 +293,7 @@ import { openRemoveRespondentCounselModalSequence } from './sequences/openRemove
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
 import { openSealDocketEntryModalSequence } from './sequences/openSealDocketEntryModalSequence';
+import { openSelectedTrialSessionPaperServicePdfSequence } from '@web-client/presenter/sequences/openSelectedTrialSessionPaperServicePdfSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openSetForHearingModalSequence } from './sequences/openSetForHearingModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
@@ -838,6 +841,8 @@ export const presenterSequences = {
     gotoPractitionerEditDocumentSequence as unknown as Function,
   gotoPrintPaperServiceSequence:
     gotoPrintPaperServiceSequence as unknown as Function,
+  gotoPrintPaperTrialNoticesSequence:
+    gotoPrintPaperTrialNoticesSequence as unknown as Function,
   gotoPrintPractitionerCasesSequence:
     gotoPrintPractitionerCasesSequence as unknown as Function,
   gotoPrintableCaseConfirmationSequence:
@@ -1023,6 +1028,8 @@ export const presenterSequences = {
     openPdfPreviewModalSequence as unknown as Function,
   openPractitionerDocumentDownloadUrlSequence:
     openPractitionerDocumentDownloadUrlSequence as unknown as Function,
+  openPrintGeneratedPaperServiceSequence:
+    openPrintGeneratedPaperServiceSequence as unknown as Function,
   openPrintableTrialSessionWorkingCopyModalSequence:
     openPrintableTrialSessionWorkingCopyModalSequence as unknown as Function,
   openPrioritizeCaseModalSequence:
@@ -1041,6 +1048,8 @@ export const presenterSequences = {
     openSealAddressModalSequence as unknown as Function,
   openSealDocketEntryModalSequence:
     openSealDocketEntryModalSequence as unknown as Function,
+  openSelectedTrialSessionPaperServicePdfSequence:
+    openSelectedTrialSessionPaperServicePdfSequence as unknown as Function,
   openSetCalendarModalSequence:
     openSetCalendarModalSequence as unknown as Function,
   openSetForHearingModalSequence:

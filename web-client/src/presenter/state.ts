@@ -546,6 +546,7 @@ export const baseState = {
     page: number;
   },
   caseDetail: {} as RawCase,
+  clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognitoLoginUrl: null,
   completeForm: {},
@@ -621,7 +622,7 @@ export const baseState = {
     docketEntry: undefined,
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
-  } as Record<string, string | undefined>,
+  } as Record<string, any>,
   navigation: {},
   noticeStatusState: {
     casesProcessed: 0,
