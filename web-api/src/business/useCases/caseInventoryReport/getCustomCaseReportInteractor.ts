@@ -1,22 +1,23 @@
 import {
   CaseStatus,
   CaseType,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   CustomCaseFilingMethods,
-  CustomCaseInventorySearch,
   CustomCaseProcedureTypes,
-} from '../../../../../shared/src/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
+  CustomCaseReportSearch,
+} from '@shared/business/entities/customCaseReportSearch/CustomCaseReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-export type CustomCaseInventoryReportFilters = {
+
+export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];
   caseTypes: CaseType[];
-  endDate: string;
-  startDate: string;
+  endDate?: string;
+  startDate?: string;
   filingMethod: CustomCaseFilingMethods;
   preferredTrialCities: string[];
   highPriority?: boolean;
@@ -24,7 +25,7 @@ export type CustomCaseInventoryReportFilters = {
   judges: string[];
 };
 
-export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
+export type GetCustomCaseReportRequest = CustomCaseReportFilters & {
   pageSize: number;
   searchAfter: {
     receivedAt: number;
@@ -32,7 +33,7 @@ export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
   };
 };
 
-export type GetCaseInventoryReportResponse = {
+export type GetCustomCaseReportResponse = {
   foundCases: CaseInventory[];
   lastCaseId: { receivedAt: number; pk: string };
   totalCount: number;
@@ -53,21 +54,10 @@ export type CaseInventory = Pick<
   | 'highPriority'
 >;
 
-/**
- * getCustomCaseInventoryReportInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the endDate filter
- * @param {string} providers.startDate the startDate filter
- * @param {array} providers.caseStatuses the case statuses array filter
- * @param {array} providers.caseTypes the caseTypes array filter
- * @param {string} providers.filingMethod filing method filter
- * @returns {object} the report data
- */
-export const getCustomCaseInventoryReportInteractor = async (
+export const getCustomCaseReportInteractor = async (
   applicationContext: IApplicationContext,
-  params: GetCaseInventoryReportRequest,
-): Promise<GetCaseInventoryReportResponse> => {
+  params: GetCustomCaseReportRequest,
+): Promise<GetCustomCaseReportResponse> => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
@@ -78,7 +68,7 @@ export const getCustomCaseInventoryReportInteractor = async (
   params.judges = params.judges || [];
   params.preferredTrialCities = params.preferredTrialCities || [];
 
-  new CustomCaseInventorySearch(params).validate();
+  new CustomCaseReportSearch(params).validate();
 
   return await applicationContext.getPersistenceGateway().getCasesByFilters({
     applicationContext,

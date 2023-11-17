@@ -74,7 +74,7 @@ export const BlockedCasesReport = connect(
                                       className="fa-icon-blue"
                                       icon="copy"
                                     />
-                                    {item.inLeadCase && (
+                                    {item.isLeadCase && (
                                       <span className="fa-inverse lead-case-icon-text">
                                         L
                                       </span>
