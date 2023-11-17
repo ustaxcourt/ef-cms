@@ -96,9 +96,9 @@ export const CaseListTable = connect(
                     <th>
                       <span className="usa-sr-only">Lead Case Indicator</span>
                     </th>
-                    <th>Docket no.</th>
-                    <th>Case title</th>
-                    <th>Filed date</th>
+                    <th>Docket No.</th>
+                    <th>Case Title</th>
+                    <th>Filed Date</th>
                     {dashboardExternalHelper.showFilingFee && (
                       <th data-testid="filing-fee">Filing fee*</th>
                     )}
