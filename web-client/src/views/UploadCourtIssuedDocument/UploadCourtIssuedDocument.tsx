@@ -54,7 +54,7 @@ export const UploadCourtIssuedDocument = connect(
             </div>
 
             <form
-              data-cy="upload-court-issued-document"
+              data-testid="upload-court-issued-document"
               onSubmit={e => {
                 e.preventDefault();
                 uploadCourtIssuedDocumentSequence({
