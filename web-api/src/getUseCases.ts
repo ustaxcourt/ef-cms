@@ -87,7 +87,7 @@ import { getCasesForUserInteractor } from '../../shared/src/business/useCases/ge
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
-import { getCustomCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import { getCustomCaseReportInteractor } from './business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor';
 import { getDocumentQCInboxForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor';
@@ -295,7 +295,7 @@ const useCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
-  getCustomCaseInventoryReportInteractor,
+  getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
