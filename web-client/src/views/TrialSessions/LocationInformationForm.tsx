@@ -38,7 +38,7 @@ export const LocationInformationForm = connect(
               <FormGroup errorText={validationErrors.proceedingType}>
                 <fieldset
                   className="start-time usa-fieldset margin-bottom-0"
-                  data-cy="trial-session-proceeding-type"
+                  data-testid="trial-session-proceeding-type"
                 >
                   <legend className="usa-legend" id="proceeding-type-legend">
                     Proceeding type
@@ -85,8 +85,7 @@ export const LocationInformationForm = connect(
                 </label>
                 <select
                   className="usa-select"
-                  data-cy="trial-session-trial-location"
-                  data-testid="trial-location"
+                  data-testid="trial-session-trial-location"
                   id="trial-location"
                   name="trialLocation"
                   value={form.trialLocation}

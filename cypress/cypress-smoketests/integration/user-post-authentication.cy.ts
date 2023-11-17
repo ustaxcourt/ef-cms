@@ -28,12 +28,8 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
       cy.get('[data-testid="phone"]').clear();
       cy.get('[data-testid="phone"]').type('4444444444');
       cy.get('#tab-case-info > .button-text').click();
-      cy.get(
-        '.usa-date-picker__wrapper > [data-cy="date-received-picker"]',
-      ).clear();
-      cy.get(
-        '.usa-date-picker__wrapper > [data-cy="date-received-picker"]',
-      ).type('01/02/2023');
+      cy.get('[data-testid="date-received-picker"]').clear();
+      cy.get('[data-testid="date-received-picker"]').type('01/02/2023');
       cy.get('#mailing-date').clear();
       cy.get('#mailing-date').type('01/02/2023');
       cy.get(
@@ -53,7 +49,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
           cy.get('[data-testid="serve-case-to-irs"]').click();
           cy.get('[data-testid="modal-confirm"]').click();
           cy.get(
-            '[data-cy="done-viewing-paper-petition-receipt-button"]',
+            '[data-testid="done-viewing-paper-petition-receipt-button"]',
           ).click();
           cy.get('.usa-alert__text').should('be.visible');
           cy.login('admissionsclerk1');

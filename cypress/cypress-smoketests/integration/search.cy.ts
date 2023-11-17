@@ -58,7 +58,7 @@ describe('search page functionality', () => {
       cy.get('[data-testid="primary-document-file"]').attachFile(
         '../fixtures/w3-dummy.pdf',
       );
-      cy.get('[data-cy="upload-file-success"]').should('exist');
+      cy.get('[data-testid="upload-file-success"]').should('exist');
       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
       cy.get('#react-select-2-input').clear();
