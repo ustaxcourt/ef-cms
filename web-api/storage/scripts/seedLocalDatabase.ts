@@ -24,31 +24,33 @@ export const putEntries = async entries => {
 
   const chunks = chunk(entries, 25);
 
-  for (let aChunk of chunks) {
-    try {
-      validationMigration(aChunk);
-    } catch (e) {
-      console.log('Seed data is invalid, exiting.', e);
-      process.exit(1);
-    }
+  await Promise.all(
+    chunks.map(async aChunk => {
+      try {
+        validationMigration(aChunk);
+      } catch (e) {
+        console.log('Seed data is invalid, exiting.', e);
+        process.exit(1);
+      }
 
-    const putRequests = aChunk.map(item => ({
-      PutRequest: {
-        Item: item,
-      },
-    }));
-
-    await docClient.send(
-      new BatchWriteCommand({
-        RequestItems: {
-          ['efcms-local']: putRequests as any,
+      const putRequests = aChunk.map(item => ({
+        PutRequest: {
+          Item: item,
         },
-      }),
-    );
-  }
+      }));
+
+      await docClient.send(
+        new BatchWriteCommand({
+          RequestItems: {
+            ['efcms-local']: putRequests as any,
+          },
+        }),
+      );
+    }),
+  );
 };
 
-export const seedLocalDatabase = async () => {
+export const seedLocalDatabase = async (entriesOverride: any) => {
   await createUsers(); // TODO: we should probably remove this at some point
-  await putEntries(seedEntries);
+  await putEntries(entriesOverride ?? seedEntries);
 };
