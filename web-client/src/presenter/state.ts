@@ -43,7 +43,7 @@ import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelp
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
-import { customCaseInventoryReportHelper } from './computeds/customCaseInventoryReportHelper';
+import { customCaseReportHelper } from './computeds/customCaseReportHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
@@ -79,7 +79,7 @@ import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { headerHelper } from './computeds/headerHelper';
-import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialCustomCaseReportState } from './customCaseReportState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -255,10 +255,9 @@ export const computeds = {
     createPractitionerUserHelper as unknown as ReturnType<
       typeof createPractitionerUserHelper
     >,
-  customCaseInventoryReportHelper:
-    customCaseInventoryReportHelper as unknown as ReturnType<
-      typeof customCaseInventoryReportHelper
-    >,
+  customCaseReportHelper: customCaseReportHelper as unknown as ReturnType<
+    typeof customCaseReportHelper
+  >,
   dashboardExternalHelper: dashboardExternalHelper as unknown as ReturnType<
     typeof dashboardExternalHelper
   >,
@@ -547,7 +546,9 @@ export const baseState = {
     totalCount: number;
     page: number;
   },
+  caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
+  clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognitoLoginUrl: null,
   completeForm: {},
@@ -580,7 +581,7 @@ export const baseState = {
       tab: null,
     },
   },
-  customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
+  customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
@@ -623,7 +624,7 @@ export const baseState = {
     docketEntry: undefined,
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
-  } as Record<string, string | undefined>,
+  } as Record<string, any>,
   navigation: {},
   noticeStatusState: {
     casesProcessed: 0,

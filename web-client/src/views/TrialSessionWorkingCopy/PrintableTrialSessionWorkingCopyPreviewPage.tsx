@@ -12,7 +12,7 @@ export const PrintableTrialSessionWorkingCopyPreviewPage = connect(
   {
     gotoTrialSessionWorkingCopySequence:
       sequences.gotoTrialSessionWorkingCopySequence,
-    trialSessionId: state.trialSessionId,
+    trialSessionId: state.trialSession.trialSessionId,
   },
   function PrintableTrialSessionWorkingCopyPreviewPage({
     gotoTrialSessionWorkingCopySequence,

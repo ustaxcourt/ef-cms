@@ -25,7 +25,7 @@ export const DateRangePickerComponent = ({
 }: {
   showDateHint?: boolean;
   endDateErrorText?: string;
-  endLabel?: string;
+  endLabel?: string | React.ReactNode;
   endName: string;
   endPickerCls?: string;
   endValue: string;
@@ -35,7 +35,7 @@ export const DateRangePickerComponent = ({
   onChangeStart: (event: React.ChangeEvent<HTMLInputElement>) => void;
   startDateErrorText?: string;
   startPickerCls?: string;
-  startLabel?: string;
+  startLabel?: string | React.ReactNode;
   omitFormGroupClass?: boolean;
   startName: string;
   startValue: string;
