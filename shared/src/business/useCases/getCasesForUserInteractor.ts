@@ -46,23 +46,9 @@ export const getCasesForUserInteractor = async (
       docketNumbers,
     }),
     { applicationContext },
-  )
-    .map(c => {
-      const userCaseDTO: UserCaseDTO = {
-        caseCaption: c.caseCaption,
-        closedDate: c.closedDate,
-        createdAt: c.createdAt,
-        docketNumber: c.docketNumber,
-        docketNumberWithSuffix: c.docketNumberWithSuffix,
-        leadDocketNumber: c.leadDocketNumber,
-        petitionPaymentStatus: c.petitionPaymentStatus,
-        status: c.status,
-      };
-      return userCaseDTO;
-    })
-    .map(cDTO => {
-      return { ...cDTO, isRequestingUserAssociated: true };
-    });
+  ).map(c => {
+    return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
+  });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
@@ -191,7 +177,7 @@ const sortCases = (
     }));
 };
 
-function convertCaseToUserCaseDTO(rawCase: TAssociatedCase): UserCaseDTO {
+function convertCaseToUserCaseDTO(rawCase: UserCaseDTO): UserCaseDTO {
   const userCaseDTO: UserCaseDTO = {
     caseCaption: rawCase.caseCaption,
     closedDate: rawCase.closedDate,
