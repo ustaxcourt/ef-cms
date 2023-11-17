@@ -1,7 +1,7 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const generatePrintablePendingReportInteractor = async (
@@ -39,9 +39,7 @@ export const generatePrintablePendingReportInteractor = async (
         applicationContext,
         docketNumber,
       });
-    reportTitle = `Docket ${caseResult.docketNumber}${
-      caseResult.docketNumberSuffix || ''
-    }`;
+    reportTitle = `Docket ${caseResult.docketNumberWithSuffix}`;
   }
 
   const pdf = await applicationContext.getDocumentGenerators().pendingReport({

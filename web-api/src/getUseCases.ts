@@ -67,7 +67,7 @@ import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCase
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/business/useCases/generatePractitionerCaseListPdfInteractor';
 import { generatePrintableCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor';
-import { generatePrintablePendingReportInteractor } from '../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor';
+import { generatePrintablePendingReportInteractor } from './business/useCases/pendingItems/generatePrintablePendingReportInteractor';
 import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from '../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor';
 import { generateStandingPretrialOrderInteractor } from '../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor';
