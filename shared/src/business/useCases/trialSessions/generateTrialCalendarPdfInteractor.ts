@@ -1,3 +1,4 @@
+import { NotFoundError } from '@web-api/errors/errors';
 import { compact } from 'lodash';
 import { compareCasesByDocketNumberFactory } from '../../utilities/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
@@ -13,6 +14,10 @@ export const generateTrialCalendarPdfInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const calendaredCases = await applicationContext
     .getPersistenceGateway()

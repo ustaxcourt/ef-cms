@@ -141,7 +141,7 @@ describe('formattedPendingItems', () => {
           formattedFiledDate: '01/20/18',
           formattedName: 'Administrative Record',
           inConsolidatedGroup: true,
-          inLeadCase: false,
+          isLeadCase: false,
           receivedAt: '2018-01-20',
         },
       ],
