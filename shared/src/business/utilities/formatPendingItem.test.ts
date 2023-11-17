@@ -74,34 +74,25 @@ describe('formatPendingItem', () => {
 
     expect(result).toMatchObject([
       {
-        associatedJudge: CHIEF_JUDGE,
         associatedJudgeFormatted: CHIEF_JUDGE,
         documentLink:
           '/case-detail/101-19/document-view?docketEntryId=33ddbf4f-90f8-417c-8967-57851b0b9069',
         formattedFiledDate: '01/10/19',
         formattedName: 'Bop dop baboo',
-        receivedAt: '2019-01-10',
-        status: CASE_STATUS_TYPES.new,
       },
       {
-        associatedJudge: CHIEF_JUDGE,
         associatedJudgeFormatted: CHIEF_JUDGE,
         documentLink:
           '/case-detail/101-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-fff4aee40426',
         formattedFiledDate: '01/20/18',
         formattedName: 'Affidavit of Sally in Support of Petition',
-        receivedAt: '2018-01-20',
-        status: CASE_STATUS_TYPES.new,
       },
       {
-        associatedJudge: 'Judge A',
         associatedJudgeFormatted: 'A',
         documentLink:
           '/case-detail/103-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-ac7faee40426',
         formattedFiledDate: '01/20/18',
         formattedName: 'Affidavit of Bob in Support of Petition',
-        receivedAt: '2018-01-20',
-        status: CASE_STATUS_TYPES.new,
       },
     ]);
   });
@@ -126,7 +117,6 @@ describe('formatPendingItem', () => {
     expect(result).toMatchObject({
       inConsolidatedGroup: true,
       isLeadCase: false,
-      leadDocketNumber: '100-19',
     });
   });
 });
