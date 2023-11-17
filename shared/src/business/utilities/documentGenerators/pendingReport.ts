@@ -1,7 +1,17 @@
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-export const pendingReport = async ({ applicationContext, data }) => {
+export const pendingReport = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    pendingItems: PendingItemFormatted[];
+    subtitle: string;
+  };
+}): Promise<Buffer> => {
   const { pendingItems, subtitle } = data;
 
   const pendingReportTemplate = reactTemplateGenerator({
