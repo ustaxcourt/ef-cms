@@ -1,6 +1,9 @@
-import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
+import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
+import { PendingReport } from '../pdfGenerator/documentTemplates/PendingReport';
+import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const pendingReport = async ({
   applicationContext,
@@ -8,38 +11,39 @@ export const pendingReport = async ({
 }: {
   applicationContext: IApplicationContext;
   data: {
-    pendingItems: PendingItemFormatted[];
+    pendingItems: {
+      docketNumberWithSuffix: string;
+      isLeadCase: boolean;
+      inConsolidatedGroup: boolean;
+      formattedFiledDate: string;
+      caseTitle: string;
+      formattedName: string;
+      formattedStatus: string;
+      associatedJudgeFormatted: string;
+    }[];
     subtitle: string;
   };
 }): Promise<Buffer> => {
-  const { pendingItems, subtitle } = data;
-
-  const pendingReportTemplate = reactTemplateGenerator({
-    componentName: 'PendingReport',
-    data: {
-      pendingItems,
-      subtitle,
-    },
-  });
+  const pendingReportTemplate = ReactDOM.renderToString(
+    React.createElement(PendingReport, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: pendingReportTemplate,
   });
 
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'ReportsMetaHeader',
-    data: {
-      headerTitle: `Pending Report: ${subtitle}`,
-    },
-  });
+  const headerHtml = ReactDOM.renderToString(
+    React.createElement(ReportsMetaHeader, {
+      headerTitle: `Pending Report: ${data.subtitle}`,
+    }),
+  );
 
-  const footerHtml = reactTemplateGenerator({
-    componentName: 'DatePrintedFooter',
-    data: {
+  const footerHtml = ReactDOM.renderToString(
+    React.createElement(DatePrintedFooter, {
       datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
-    },
-  });
+    }),
+  );
 
   const pdf = await applicationContext
     .getUseCases()
