@@ -263,7 +263,7 @@ export const formatDateString = (
   return result;
 };
 
-export const formatNow = (formatStr?: TimeFormats): string => {
+export const formatNow = (formatStr?: TimeFormatNames | TimeFormats) => {
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };

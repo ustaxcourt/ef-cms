@@ -1,4 +1,5 @@
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
   calculateDifferenceInDays,
@@ -21,6 +22,7 @@ import {
 } from '../../shared/src/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
 import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
@@ -47,6 +49,7 @@ import { sleep } from '../../shared/src/business/utilities/sleep';
 import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 
 const utilities = {
+  abbreviateState,
   calculateDaysElapsedSinceLastStatusChange,
   calculateDifferenceInDays,
   calculateISODate,
@@ -61,6 +64,7 @@ const utilities = {
   formatDateString,
   formatJudgeName,
   formatNow,
+  formatPendingItem,
   getAddressPhoneDiff,
   getCropBox,
   getDescriptionDisplay,
