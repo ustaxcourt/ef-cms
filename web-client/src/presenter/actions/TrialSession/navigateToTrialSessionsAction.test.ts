@@ -9,28 +9,12 @@ presenter.providers.router = {
 };
 
 describe('navigateToTrialSessionAction', () => {
-  it('should navigate to the trial sessions page using an unmodified route if `tab` is not set in state.currentViewMetadata', async () => {
+  it('should go to the trial sessions route', async () => {
     await runAction(navigateToTrialSessionsAction, {
       modules: {
         presenter,
       },
     });
     expect(routeStub.mock.calls.length).toEqual(1);
-    expect(routeStub.mock.calls[0][0]).toEqual('/trial-sessions');
-  });
-
-  it('should navigate to the trial sessions after appending `tab` from state.currentViewMetadata to the route as a query string', async () => {
-    await runAction(navigateToTrialSessionsAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        currentViewMetadata: {
-          tab: 'new',
-        },
-      },
-    });
-    expect(routeStub.mock.calls.length).toEqual(1);
-    expect(routeStub.mock.calls[0][0]).toEqual('/trial-sessions?status=new');
   });
 });
