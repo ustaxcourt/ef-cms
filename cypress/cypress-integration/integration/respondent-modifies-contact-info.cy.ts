@@ -15,7 +15,7 @@ describe('a repondent modifies their address', () => {
         cy.login(USER, `case-detail/${docketNumber}`);
         cy.get('[data-testid="document-download-link-NCA"]').should('exist');
         cy.get('[data-testid="tab-case-information"]').click();
-        cy.get('[data-testid="tab-partie"]s').click();
+        cy.get('[data-testid="tab-parties"]').click();
         cy.get('[data-testid="respondent-counsel"]').click();
         cy.get('[data-testid="address1-line"]')
           .contains(`${newAddress}`)
