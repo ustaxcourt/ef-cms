@@ -67,7 +67,7 @@ export const CaseListRowExternal = ({
 
       <Phone>
         <tr key={formattedCase.docketNumber}>
-          <td className="display-flex" data-label="Docket no.">
+          <td data-label="Docket no.">
             <span
               className={classNames({
                 'margin-left-2':
@@ -84,14 +84,14 @@ export const CaseListRowExternal = ({
                 showLeadCaseIcon={formattedCase.isLeadCase}
               />
             </span>
-            <div className={isNestedCase ? 'margin-left-2' : ''}>
+            <span className={isNestedCase ? 'margin-left-2' : ''}>
               <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
-            </div>
+            </span>
           </td>
-          <td data-label="Case title">{formattedCase.caseTitle}</td>
-          <td data-label="Filed date">{formattedCase.createdAtFormatted}</td>
+          <td data-label="Case Title">{formattedCase.caseTitle}</td>
+          <td data-label="Filed Date">{formattedCase.createdAtFormatted}</td>
           {showFilingFee && (
-            <td data-label="Filing fee*" data-testid="petition-payment-status">
+            <td data-label="Filing Fee*" data-testid="petition-payment-status">
               {formattedCase.petitionPaymentStatus}
             </td>
           )}

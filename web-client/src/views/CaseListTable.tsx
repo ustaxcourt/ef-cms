@@ -100,7 +100,7 @@ export const CaseListTable = connect(
                     <th>Case Title</th>
                     <th>Filed Date</th>
                     {dashboardExternalHelper.showFilingFee && (
-                      <th data-testid="filing-fee">Filing fee*</th>
+                      <th data-testid="filing-fee">Filing Fee*</th>
                     )}
                   </tr>
                 </thead>
