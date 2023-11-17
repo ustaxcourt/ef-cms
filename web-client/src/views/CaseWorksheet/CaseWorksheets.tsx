@@ -82,7 +82,7 @@ export const CaseWorksheets = connect(
                     <td>
                       <Button
                         link
-                        data-test="add-edit-case-worksheet"
+                        data-testid="add-edit-case-worksheet"
                         icon="edit"
                         onClick={() => {
                           openAddEditCaseWorksheetModalSequence({

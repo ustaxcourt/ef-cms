@@ -1,5 +1,9 @@
 import 'cypress-file-upload';
 
+Cypress.Commands.add('getByTestId', (testId: string) => {
+  return cy.get(`[data-testid="${testId}"]`);
+});
+
 Cypress.Commands.add('goToRoute', (...args) => {
   cy.get('.progress-indicator').should('not.exist');
   return cy.window().then(w => {
