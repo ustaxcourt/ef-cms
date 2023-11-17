@@ -14,7 +14,9 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
 
   const today = applicationContext.getUtilities().prepareDateFromString();
 
-  if (deadlineDate.isBefore(today, 'day')) {
+  const deadLineIsBeforeToday =
+    deadlineDate.startOf('day') < today.startOf('day');
+  if (deadLineIsBeforeToday) {
     result.overdue = true;
   }
 
