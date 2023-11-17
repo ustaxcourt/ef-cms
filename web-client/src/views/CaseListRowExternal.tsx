@@ -1,6 +1,7 @@
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
+import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -10,6 +11,12 @@ export const CaseListRowExternal = ({
   onlyLinkIfRequestedUserAssociated,
   onlyText,
   showFilingFee,
+}: {
+  formattedCase: TAssociatedCaseFormatted;
+  isNestedCase: boolean;
+  onlyLinkIfRequestedUserAssociated: boolean;
+  onlyText: boolean;
+  showFilingFee: boolean;
 }) => {
   return (
     <>
