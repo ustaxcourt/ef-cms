@@ -45,7 +45,7 @@ export const StatisticsForm = connect(
         </label>
         <DollarsInput
           className="usa-input usa-input-inline"
-          data-cy={`deficiency-amount-${index}`}
+          data-testid={`deficiency-amount-${index}`}
           id={`deficiency-amount-${index}`}
           name={`statistics.${index}.irsDeficiencyAmount`}
           value={form.statistics[index].irsDeficiencyAmount || ''}
