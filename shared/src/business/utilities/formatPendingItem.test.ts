@@ -9,18 +9,19 @@ import { formatPendingItem } from '@shared/business/utilities/formatPendingItem'
 
 describe('formatPendingItem', () => {
   let mockPendingItems: PendingItem[];
-  let pendingItem;
+  let pendingItem: PendingItem;
 
   beforeEach(() => {
     pendingItem = {
       associatedJudge: 'Judge A',
-      createdAt: '2018-01-20',
+      caseCaption: 'bubbly',
       docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
       docketNumber: '103-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+      docketNumberWithSuffix: '103-19L',
       documentTitle: 'Affidavit of Bob in Support of Petition',
       documentType: 'Affidavit in Support',
-      eventCode: 'AFF',
+      leadDocketNumber: undefined,
       receivedAt: '2018-01-20',
       status: CASE_STATUS_TYPES.calendared,
       trialDate: '2022-02-01T17:21:05.486Z',

@@ -84,7 +84,9 @@ export const PendingReportList = connect(
             </tr>
           </thead>
           {formattedPendingItemsHelper.items.map(item => (
-            <tbody key={`pending-item-${item.docketEntryId}`}>
+            <tbody
+              key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}`}
+            >
               <tr className="pending-item-row">
                 <td>
                   <ConsolidatedCaseIcon

@@ -1,3 +1,4 @@
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
@@ -7,16 +8,7 @@ export const PendingReport = ({
   pendingItems,
   subtitle,
 }: {
-  pendingItems: {
-    docketNumberWithSuffix: string;
-    isLeadCase: boolean;
-    inConsolidatedGroup: boolean;
-    formattedFiledDate: string;
-    caseTitle: string;
-    formattedName: string;
-    formattedStatus: string;
-    associatedJudgeFormatted: string;
-  }[];
+  pendingItems: PendingItemFormatted[];
   subtitle: string;
 }) => {
   return (
