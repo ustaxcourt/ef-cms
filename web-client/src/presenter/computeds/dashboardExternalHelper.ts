@@ -1,11 +1,16 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const dashboardExternalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  showFileACase: boolean;
+  showFilingFee: boolean;
+  showStartButton: boolean;
+  showWhatToExpect: boolean;
+} => {
   const { USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
 
