@@ -1,24 +1,24 @@
 import {
   CASE_STATUS_TYPES,
-  CUSTOM_CASE_INVENTORY_PAGE_SIZE,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { CustomCaseInventoryReportState } from '../customCaseInventoryReportState';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+  CUSTOM_CASE_REPORT_PAGE_SIZE,
+} from '@shared/business/entities/EntityConstants';
+import { CustomCaseReportState } from '../customCaseReportState';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { customCaseInventoryReportHelper as customCaseInventoryReportHelperComputed } from './customCaseInventoryReportHelper';
+import { customCaseReportHelper as customCaseReportHelperComputed } from './customCaseReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const customCaseInventoryReportHelper = withAppContextDecorator(
-  customCaseInventoryReportHelperComputed,
+const customCaseReportHelper = withAppContextDecorator(
+  customCaseReportHelperComputed,
   applicationContext,
 );
 
-const cases = [
+const cases: RawCase[] = [
   {
     ...MOCK_CASE,
     associatedJudge: 'Chief Judge',
-    caseType: 'New',
+    caseType: 'Passport',
     procedureType: 'Regular',
     receivedAt: '2018-03-01T21:40:46.415Z',
     status: CASE_STATUS_TYPES.new,
@@ -42,8 +42,8 @@ const mockJudges = [
   { name: 'Judge Currozo', role: 'judge' },
 ];
 
-describe('customCaseInventoryReportHelper', () => {
-  let defaultCustomCaseState: CustomCaseInventoryReportState;
+describe('customCaseReportHelper', () => {
+  let defaultCustomCaseState: CustomCaseReportState;
   let initialState;
 
   beforeEach(() => {
@@ -63,7 +63,7 @@ describe('customCaseInventoryReportHelper', () => {
       totalCases: 0,
     };
     initialState = {
-      customCaseInventory: defaultCustomCaseState,
+      customCaseReport: defaultCustomCaseState,
       judges: mockJudges,
     };
   });
@@ -71,14 +71,14 @@ describe('customCaseInventoryReportHelper', () => {
   it('should generated generate cases with formatted dates', () => {
     defaultCustomCaseState.cases = cases;
 
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
     expect(result.cases).toMatchObject([
       {
         associatedJudge: 'Chief Judge',
-        caseType: 'New',
+        caseType: 'Passport',
         docketNumber: '101-18',
         preferredTrialCity: 'Washington, District of Columbia',
         receivedAt: '03/01/18',
@@ -103,7 +103,7 @@ describe('customCaseInventoryReportHelper', () => {
 
     defaultCustomCaseState.cases = foundCases;
 
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -117,33 +117,12 @@ describe('customCaseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should return true for runReportButtonIsDisabled if endDate or startDate are falsy', () => {
-    defaultCustomCaseState.filters.endDate = 's';
-    defaultCustomCaseState.filters.startDate = '';
-
-    const result = runCompute(customCaseInventoryReportHelper, {
-      state: initialState,
-    });
-
-    expect(result.runReportButtonIsDisabled).toEqual(true);
-  });
-
-  it('should return true for runReportButtonIsDisabled if endDate and startDate are both truthy', () => {
-    defaultCustomCaseState.filters.endDate = 's';
-    defaultCustomCaseState.filters.startDate = 's';
-    const result = runCompute(customCaseInventoryReportHelper, {
-      state: initialState,
-    });
-
-    expect(result.runReportButtonIsDisabled).toEqual(false);
-  });
-
   it('should return true for clearFiltersIsDisabled when no optional filters are selected', () => {
     defaultCustomCaseState.filters.caseTypes = [];
     defaultCustomCaseState.filters.caseStatuses = [];
     defaultCustomCaseState.filters.judges = [];
     defaultCustomCaseState.filters.preferredTrialCities = [];
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -153,7 +132,7 @@ describe('customCaseInventoryReportHelper', () => {
   it('should return false for clearFiltersIsDisabled when case status(es) or case type(s) are selected', () => {
     defaultCustomCaseState.filters.caseTypes = ['CDP (Lien/Levy)'];
     defaultCustomCaseState.filters.caseStatuses = [];
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -163,7 +142,7 @@ describe('customCaseInventoryReportHelper', () => {
   it('should return false for clearFiltersIsDisabled when judges or preferred trial city are selected', () => {
     defaultCustomCaseState.filters.judges = [];
     defaultCustomCaseState.filters.preferredTrialCities = ['Mobile, Alabama'];
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
@@ -173,11 +152,11 @@ describe('customCaseInventoryReportHelper', () => {
   it('should return the number of pages rounded up to the nearest whole number', () => {
     defaultCustomCaseState.totalCases = 305;
 
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
-    const expectedPageCount = Math.ceil(305 / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+    const expectedPageCount = Math.ceil(305 / CUSTOM_CASE_REPORT_PAGE_SIZE);
     expect(result.pageCount).toEqual(expectedPageCount);
   });
 
@@ -185,7 +164,7 @@ describe('customCaseInventoryReportHelper', () => {
     const mockToday = '2022-04-13';
     applicationContext.getUtilities().formatNow.mockReturnValue(mockToday);
 
-    const result = runCompute(customCaseInventoryReportHelper, {
+    const result = runCompute(customCaseReportHelper, {
       state: initialState,
     });
 
