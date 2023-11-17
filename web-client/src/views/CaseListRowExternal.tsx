@@ -67,7 +67,7 @@ export const CaseListRowExternal = ({
 
       <Phone>
         <tr key={formattedCase.docketNumber}>
-          <td data-label="Docket no." style={{ display: 'flex' }}>
+          <td data-label="Docket no.">
             <span
               className={classNames({
                 'margin-left-2':
