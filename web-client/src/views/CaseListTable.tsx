@@ -89,6 +89,7 @@ export const CaseListTable = connect(
                   'usa-table usa-table--stacked-header usa-table--borderless':
                     isMobile,
                 })}
+                data-testid="case-list"
                 id="case-list"
               >
                 <thead>
@@ -104,7 +105,6 @@ export const CaseListTable = connect(
                     )}
                   </tr>
                 </thead>
-
                 <tbody>
                   {cases.map(item => (
                     <CaseListRowExternal
