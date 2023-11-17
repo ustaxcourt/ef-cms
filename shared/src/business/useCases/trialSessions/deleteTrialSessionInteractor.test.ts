@@ -54,7 +54,9 @@ describe('deleteTrialSessionInteractor', () => {
       deleteTrialSessionInteractor(applicationContext, {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
-    ).rejects.toThrow('trial session not found');
+    ).rejects.toThrow(
+      'Trial session c54ba5a9-b37b-479d-9201-067ec6e335bb was not found.',
+    );
   });
 
   it('throws error when trial session start date is in the past', async () => {

@@ -149,7 +149,6 @@ import { generatePrintablePendingReportInteractor } from '../../shared/src/proxi
 import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/proxies/trialSessions/generatePrintableTrialSessionCopyReportProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
-import { generateTrialSessionPaperServicePdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialSessionPaperServicePdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
@@ -172,7 +171,7 @@ import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/
 import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
-import { getCustomCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseInventoryReportProxy';
+import { getCustomCaseReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseReportProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import {
   getDocQcSectionForUser,
@@ -204,6 +203,7 @@ import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
+import { getPaperServicePdfUrlInteractor } from '@shared/proxies/trialSessions/getPaperServicePdfUrlProxy';
 import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
@@ -445,7 +445,6 @@ const allUseCases = {
   generatePrintableTrialSessionCopyReportInteractor,
   generateSignedDocumentInteractor,
   generateTrialCalendarPdfInteractor,
-  generateTrialSessionPaperServicePdfInteractor,
   getAllFeatureFlagsInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
@@ -460,7 +459,7 @@ const allUseCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
-  getCustomCaseInventoryReportInteractor,
+  getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
   getDocumentQCInboxForSectionInteractor,
@@ -481,6 +480,7 @@ const allUseCases = {
   getNotificationsInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
+  getPaperServicePdfUrlInteractor,
   getPdfFromUrlInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionerDocumentDownloadUrlInteractor,

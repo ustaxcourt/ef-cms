@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';

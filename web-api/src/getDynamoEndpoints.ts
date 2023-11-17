@@ -22,7 +22,10 @@ export const getDynamoEndpoints = ({
   masterDynamoDbEndpoint,
   masterRegion,
   useMasterRegion,
-}) => {
+}): {
+  fallbackRegionDB: AWS.DynamoDB.DocumentClient;
+  mainRegionDB: AWS.DynamoDB.DocumentClient;
+} => {
   const baseConfig = {
     httpOptions: {
       timeout: 5000,
