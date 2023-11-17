@@ -62,12 +62,12 @@ export const generateEntryOfAppearancePdfInteractor = async (
     });
 
   // 24 hrs
-  const URLTTL = 60 * 60 * 24;
+  const urlTtl = 60 * 60 * 24;
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
-    URLTTL,
     applicationContext,
     file,
+    urlTtl,
     useTempBucket: true,
   });
 };
