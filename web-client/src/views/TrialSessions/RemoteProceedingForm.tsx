@@ -19,6 +19,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-cy="trial-session-meeting-id"
             id="meeting-id"
             name="meetingId"
             type="text"
@@ -39,6 +40,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-cy="trial-session-password"
             id="password"
             name="password"
             type="text"
@@ -66,6 +68,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-cy="trial-session-join-phone-number"
             id="join-phone-number"
             name="joinPhoneNumber"
             type="text"
@@ -86,6 +89,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-cy="trial-session-chambers-phone-number"
             id="chambers-phone-number"
             name="chambersPhoneNumber"
             type="text"

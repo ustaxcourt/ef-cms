@@ -90,6 +90,7 @@ export const DateSelector = ({
         <input
           aria-describedby={`date-picker-label ${id}-date-hint`}
           className="usa-input"
+          data-cy={`${id}-picker`}
           id={`${id}-picker`}
           name={`${id}-date-picker`}
           type="text"
