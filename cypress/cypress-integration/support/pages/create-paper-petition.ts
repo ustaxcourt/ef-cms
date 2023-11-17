@@ -43,8 +43,10 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
 
   const deficiencyAmount = '120,035';
   const deficiencyAmountWithoutComma = deficiencyAmount.replace(',', '');
-  cy.get('[data-cy="deficiency-amount-0"]').type(deficiencyAmountWithoutComma);
-  cy.get('[data-cy="deficiency-amount-0"]').should(
+  cy.get('[data-testid="deficiency-amount-0"]').type(
+    deficiencyAmountWithoutComma,
+  );
+  cy.get('[data-testid="deficiency-amount-0"]').should(
     'have.value',
     `$${deficiencyAmount}.00`,
   );
@@ -53,17 +55,17 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
   cy.get('#penalty_0').type('0');
   cy.get('button#modal-button-confirm').click();
 
-  cy.get('#upload-mode-upload').click();
+  cy.getByTestId('button-upload-pdf').click();
   cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
-  cy.get('[data-cy="remove-pdf"]');
+  cy.get('[data-testid="remove-pdf"]');
   cy.get('button#tabButton-stinFile').click();
-  cy.get('#upload-mode-upload').click();
+  cy.getByTestId('button-upload-pdf').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
-  cy.get('[data-cy="remove-pdf"]');
+  cy.get('[data-testid="remove-pdf"]');
   cy.get('button#tabButton-requestForPlaceOfTrialFile').click();
-  cy.get('#upload-mode-upload').click();
+  cy.getByTestId('button-upload-pdf').click();
   cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
-  cy.get('[data-cy="remove-pdf"]');
+  cy.get('[data-testid="remove-pdf"]');
 };

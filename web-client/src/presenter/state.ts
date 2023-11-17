@@ -545,6 +545,7 @@ export const baseState = {
     totalCount: number;
     page: number;
   },
+  caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
