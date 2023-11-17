@@ -11,10 +11,13 @@ import { post } from '../requests';
  */
 export const setNoticesForCalendaredTrialSessionInteractor = (
   applicationContext,
-  { trialSessionId },
+  { clientConnectionId, trialSessionId },
 ) => {
   return post({
     applicationContext,
+    body: {
+      clientConnectionId,
+    },
     endpoint: `/async/trial-sessions/${trialSessionId}/generate-notices`,
   });
 };
