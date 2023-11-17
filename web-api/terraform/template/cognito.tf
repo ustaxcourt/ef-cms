@@ -35,7 +35,7 @@ resource "aws_cognito_user_pool" "pool" {
       <p>This is an automated email. We are unable to respond to any messages to this email address.</p>
     </body>
   EMAILMESSAGE
-    email_subject_by_link = "U.S. Tax Court Dawson Account Verification"
+    email_subject_by_link = "U.S. Tax Court DAWSON Account Verification"
   }
 
   account_recovery_setting {

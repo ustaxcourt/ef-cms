@@ -7,7 +7,10 @@ describe('headerPublicHelper', () => {
       state: { currentPage: '' },
     });
 
-    expect(result).toEqual({ inSignUpProcess: false });
+    expect(result).toEqual({
+      onCreationPage: false,
+      onVerificationSentPage: false,
+    });
   });
 
   it('should signify being in the sign-up process when the current page is CreatePetitionerAccount', () => {
@@ -15,7 +18,10 @@ describe('headerPublicHelper', () => {
       state: { currentPage: 'CreatePetitionerAccount' },
     });
 
-    expect(result).toEqual({ inSignUpProcess: true });
+    expect(result).toEqual({
+      onCreationPage: true,
+      onVerificationSentPage: false,
+    });
   });
 
   it('should signify being in the sign-up process when the current page is VerificationSent', () => {
@@ -23,6 +29,9 @@ describe('headerPublicHelper', () => {
       state: { currentPage: 'VerificationSent' },
     });
 
-    expect(result).toEqual({ inSignUpProcess: true });
+    expect(result).toEqual({
+      onCreationPage: false,
+      onVerificationSentPage: true,
+    });
   });
 });

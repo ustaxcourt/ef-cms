@@ -64,7 +64,7 @@ export class NewPetitionerUser extends JoiValidationEntity {
   constructor(rawProps) {
     super('NewPetitionerUser');
 
-    this.email = rawProps.email?.toLowerCase();
+    this.email = rawProps.email;
     this.name = rawProps.name;
     this.password = rawProps.password;
     this.confirmPassword = rawProps.confirmPassword;
@@ -72,8 +72,7 @@ export class NewPetitionerUser extends JoiValidationEntity {
 
   static VALIDATION_RULES = joi.object().keys({
     confirmPassword: joi.valid(joi.ref('password')).required(),
-    email: JoiValidationConstants.EMAIL.lowercase()
-      .required()
+    email: JoiValidationConstants.EMAIL.required()
       .messages({
         '*': 'Enter a valid email address',
         'string.max': 'Email address must contain fewer than 100 characters', //todo test

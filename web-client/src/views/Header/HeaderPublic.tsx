@@ -67,7 +67,7 @@ export const HeaderPublic = connect(
                   Welcome to DAWSON{' '}
                   {isTerminalUser && ': US Tax Court Terminal'}
                 </h1>
-                {!headerPublicHelper.inSignUpProcess && (
+                {!headerPublicHelper.onCreationPage && (
                   <>
                     <div className="login-container">
                       <Button
@@ -86,28 +86,33 @@ export const HeaderPublic = connect(
                         Log In
                       </button>
                     </div>
-                    <div className="create-container">
-                      <Button
-                        className="usa-button--unstyled"
-                        onClick={() =>
-                          navigateToCreatePetitionerAccountSequence()
-                        }
-                      >
-                        Create Account
-                      </Button>
-                    </div>
-                    <div className="create-container mobile">
-                      <button
-                        className="usa-menu-btn"
-                        onClick={() =>
-                          navigateToCreatePetitionerAccountSequence()
-                        }
-                      >
-                        Create Account
-                      </button>
-                    </div>
                   </>
                 )}
+                {!headerPublicHelper.onCreationPage &&
+                  !headerPublicHelper.onVerificationSentPage && (
+                    <>
+                      <div className="create-container">
+                        <Button
+                          className="usa-button--unstyled"
+                          onClick={() =>
+                            navigateToCreatePetitionerAccountSequence()
+                          }
+                        >
+                          Create Account
+                        </Button>
+                      </div>
+                      <div className="create-container mobile">
+                        <button
+                          className="usa-menu-btn"
+                          onClick={() =>
+                            navigateToCreatePetitionerAccountSequence()
+                          }
+                        >
+                          Create Account
+                        </button>
+                      </div>
+                    </>
+                  )}
               </div>
             </div>
           </header>
