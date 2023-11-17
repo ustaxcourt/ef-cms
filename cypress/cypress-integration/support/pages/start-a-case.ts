@@ -15,7 +15,7 @@ export const fillInAndSubmitForm = () => {
 
       // wizard step 1
       cy.get('input#stin-file').should('be.enabled').selectFile(fileOptions);
-      cy.get('[data-cy="upload-file-success"]');
+      cy.get('[data-testid="upload-file-success"]');
       cy.get('button#submit-case').trigger('click');
 
       // wizard step 2

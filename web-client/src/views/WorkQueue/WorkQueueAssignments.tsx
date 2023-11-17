@@ -39,6 +39,7 @@ export const WorkQueueAssignments = connect(
                 aria-label="assignment"
                 bind="screenMetadata.assignmentFilterValue.userId"
                 className="select-left inline-select margin-left-1pt5rem"
+                data-testid="dropdown-select-assignee"
                 id="assignmentFilter"
                 name="assignment"
                 onChange={() => {
@@ -103,6 +104,7 @@ export const WorkQueueAssignments = connect(
                 <select
                   aria-label="select an assignee"
                   className="usa-select"
+                  data-testid="dropdown-select-assignee"
                   id="options"
                   name="options"
                   onChange={evt => {

@@ -53,6 +53,7 @@ export const trialSessionWorkingCopyHelper = (
         applicationContext,
         caseItem,
         eligibleCases: trialSession.calendaredCases,
+        setFilingPartiesCode: true,
       }),
     )
     .sort(compareCasesByDocketNumber)
