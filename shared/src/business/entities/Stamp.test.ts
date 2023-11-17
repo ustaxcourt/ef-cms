@@ -1,11 +1,4 @@
-import {
-  FORMATS,
-  calculateISODate,
-  createISODateAtStartOfDayEST,
-  createISODateString,
-  formatDateString,
-  formatNow,
-} from '../utilities/DateHandler';
+import { FORMATS, formatNow } from '../utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from './EntityConstants';
 import { Stamp } from './Stamp';
 
@@ -19,21 +12,9 @@ describe('Stamp entity', () => {
       });
     });
 
-    it('should be invalid when date is yesterday', () => {
-      let yesterdayIso = createISODateAtStartOfDayEST();
-      yesterdayIso = calculateISODate({
-        dateString: yesterdayIso,
-        howMuch: -1,
-        units: 'days',
-      });
-
-      const yesterdayFormatted = formatDateString(
-        createISODateString(yesterdayIso),
-        FORMATS.ISO,
-      );
-
+    it('should be invalid when date is in the past', () => {
       const stamp = new Stamp({
-        date: yesterdayFormatted,
+        date: '08/08/21',
         disposition: MOTION_DISPOSITIONS.GRANTED,
         dueDateMessage: 'something',
       });
@@ -57,7 +38,7 @@ describe('Stamp entity', () => {
 
     it('should be valid when date and dueDateMessage are defined', () => {
       const stamp = new Stamp({
-        date: '2222-12-05T00:00:00.000-05:00',
+        date: '12/05/55',
         disposition: MOTION_DISPOSITIONS.GRANTED,
         dueDateMessage: 'something',
       });
@@ -66,7 +47,7 @@ describe('Stamp entity', () => {
     });
 
     it('should be valid when date is today', () => {
-      const mockToday = formatNow();
+      const mockToday = formatNow(FORMATS.MMDDYY);
 
       const stamp = new Stamp({
         date: mockToday,

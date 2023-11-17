@@ -118,7 +118,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServePaperFiledDocumentButton && (
                 <Button
                   link
-                  data-test="serve-paper-filed-document"
+                  data-testid="serve-paper-filed-document"
                   icon="paper-plane"
                   iconColor="white"
                   onClick={() => {
@@ -171,6 +171,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showApplyStampButton && (
                 <Button
                   link
+                  data-testid="apply-stamp"
                   icon="stamp"
                   onClick={() => {
                     navigateToPathAndSetRedirectUrlSequence({
