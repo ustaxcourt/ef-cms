@@ -28,7 +28,7 @@ export function practitionerCreatesACase() {
   cy.get('[data-testid="complete-step-4"]').click();
   cy.get('[data-testid="file-petition"]').click();
   return cy
-    .get('[data-testid="fdocket-number-with-suffix"]')
+    .get('[data-testid="docket-number-with-suffix"]')
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="button-back-to-dashboard"]').click();
