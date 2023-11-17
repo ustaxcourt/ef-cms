@@ -154,7 +154,6 @@ import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPri
 import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
-import { updateAttributeOnDynamoRecord } from './persistence/dynamo/workitems/updateAttributeOnDynamoRecord';
 import { updateCase } from './persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from './persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
@@ -254,7 +253,6 @@ const gatewayMethods = {
     setPriorityOnAllWorkItems,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
-    updateAttributeOnDynamoRecord,
     updateCase,
     updateCaseCorrespondence,
     updateCaseHearing,
