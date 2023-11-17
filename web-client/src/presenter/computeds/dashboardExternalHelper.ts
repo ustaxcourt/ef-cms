@@ -16,6 +16,7 @@ export const dashboardExternalHelper = (
 
   let showFileACase = false;
   let showStartButton = false;
+  let showFilingFee = false;
 
   if (user.role === USER_ROLES.privatePractitioner) {
     showFileACase = true;
@@ -26,10 +27,12 @@ export const dashboardExternalHelper = (
     user.role === USER_ROLES.petitioner
   ) {
     showStartButton = true;
+    showFilingFee = true;
   }
 
   return {
     showFileACase,
+    showFilingFee,
     showStartButton,
     showWhatToExpect: cases.length === 0,
   };

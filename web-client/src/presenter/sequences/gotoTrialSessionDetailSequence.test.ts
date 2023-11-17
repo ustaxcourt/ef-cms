@@ -30,6 +30,7 @@ describe('gotoTrialSessionDetailSequence', () => {
         },
       ],
       isCalendared: false,
+      trialSessionId: mockTrialSessionId,
     };
 
     applicationContext
@@ -62,8 +63,8 @@ describe('gotoTrialSessionDetailSequence', () => {
           },
           { docketNumber: '222-21' },
         ],
+        trialSessionId: mockTrialSessionId,
       },
-      trialSessionId: mockTrialSessionId,
     });
   });
 
@@ -82,6 +83,7 @@ describe('gotoTrialSessionDetailSequence', () => {
         },
       ],
       isCalendared: true,
+      trialSessionId: mockTrialSessionId,
     };
 
     applicationContext
@@ -121,8 +123,8 @@ describe('gotoTrialSessionDetailSequence', () => {
             docketNumber: '222-21',
           },
         ],
+        trialSessionId: mockTrialSessionId,
       },
-      trialSessionId: mockTrialSessionId,
     });
   });
 });

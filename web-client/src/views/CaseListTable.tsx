@@ -73,6 +73,13 @@ export const CaseListTable = connect(
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
           {cases?.length > 0 && (
             <>
+              {dashboardExternalHelper.showFilingFee && (
+                <span className="float-right margin-bottom-1">
+                  *Filing fee status may take 2-3 business days from payment
+                  received date or approval of waiver to update
+                </span>
+              )}
+
               <table
                 className="usa-table responsive-table dashboard"
                 id="case-list"
@@ -85,6 +92,9 @@ export const CaseListTable = connect(
                     <th>Docket No.</th>
                     <th>Case Title</th>
                     <th>Filed Date</th>
+                    {dashboardExternalHelper.showFilingFee && (
+                      <th data-testid="filing-fee">Filing fee*</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -93,6 +103,7 @@ export const CaseListTable = connect(
                       onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
                       key={item.docketNumber}
+                      showFilingFee={dashboardExternalHelper.showFilingFee}
                     />
                   ))}
                 </tbody>

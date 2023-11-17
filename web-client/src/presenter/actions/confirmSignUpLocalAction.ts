@@ -22,7 +22,10 @@ export const confirmSignUpLocalAction = async ({
       });
     return path.yes({
       alertSuccess: {
-        message: 'Your registration has been confirmed!',
+        alertType: 'success',
+        message:
+          'Your registration has been confirmed! You will be redirected shortly!',
+        title: 'Account Confirmed Locally',
       },
     });
   } catch (e) {

@@ -828,10 +828,6 @@ const router = {
       }),
     );
 
-    registerRoute('/create-new-account-local', () => {
-      return app.getSequence('goToCreateAccountLocalSequence')();
-    });
-
     registerRoute('/change-password-local', () => {
       return app.getSequence('gotoChangePasswordLocalSequence')();
     });
@@ -1042,6 +1038,17 @@ const router = {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
         return app.getSequence('gotoPrintPaperServiceSequence')({
           docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/trial-session-detail/*/print-paper-trial-notices/*',
+      ifHasAccess({ app }, (trialSessionId, fileId) => {
+        setPageTitle('Print Paper Trial Notices');
+        return app.getSequence('gotoPrintPaperTrialNoticesSequence')({
+          fileId,
+          trialSessionId,
         });
       }),
     );
