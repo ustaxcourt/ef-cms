@@ -13,6 +13,7 @@ export const setNoticesForCalendaredTrialSessionLambda = event =>
     return await applicationContext
       .getUseCases()
       .setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+        ...JSON.parse(event.body),
         trialSessionId,
       });
   });
