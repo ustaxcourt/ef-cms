@@ -1,17 +1,24 @@
 import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { get } from '../../dynamodbClientService';
+import { aggregateTrialSessionItems } from '@web-api/persistence/dynamo/helpers/aggregateTrialSessionItems';
+import { queryFull } from '../../dynamodbClientService';
 
-export const getTrialSessionById = ({
+export const getTrialSessionById = async ({
   applicationContext,
   trialSessionId,
 }: {
   applicationContext: IApplicationContext;
   trialSessionId: string;
-}): Promise<RawTrialSession> =>
-  get({
-    Key: {
-      pk: `trial-session|${trialSessionId}`,
-      sk: `trial-session|${trialSessionId}`,
+}): Promise<RawTrialSession | undefined> => {
+  const trialSessionItems = await queryFull({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
     },
+    ExpressionAttributeValues: {
+      ':pk': `trial-session|${trialSessionId}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
     applicationContext,
   });
+
+  return aggregateTrialSessionItems(trialSessionItems);
+};

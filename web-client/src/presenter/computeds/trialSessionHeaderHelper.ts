@@ -35,6 +35,9 @@ export const trialSessionHeaderHelper = (
     isAssigned && 'TrialSessionWorkingCopy'.includes(get(state.currentPage));
   const showSwitchToWorkingCopy =
     isAssigned && 'TrialSessionDetail'.includes(get(state.currentPage));
+  const showPrintPaperServicePDFsButton =
+    formattedTrialSession.paperServicePdfs.length > 0 &&
+    get(state.permissions!.REPRINT_PAPER_SERVICE);
 
   return {
     isStandaloneSession: TrialSession.isStandaloneRemote(
@@ -44,8 +47,9 @@ export const trialSessionHeaderHelper = (
       ? currentUser.name
       : formattedTrialSession.formattedJudge,
     showBatchDownloadButton: !isEmpty(formattedTrialSession.allCases),
+    showPrintCalendarButton: formattedTrialSession.isCalendared,
+    showPrintPaperServicePDFsButton,
     showSwitchToSessionDetail,
     showSwitchToWorkingCopy,
-    title: 'Session Working Copy',
   };
 };

@@ -353,14 +353,14 @@ describe('formattedTrialSessions', () => {
     expect(formatTrialSessionDisplayOptions).toHaveBeenCalled();
   });
 
-  it('removes the current trial session from the sessionsByTerm when state.trialSessionId is defined', () => {
+  it('removes the current trial session from the sessionsByTerm when state.trialSession.trialSessionId is defined', () => {
     const { sessionsByTerm } = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
         form: {
           term: 'Winter',
         },
-        trialSessionId: TRIAL_SESSIONS_LIST[1].trialSessionId,
+        trialSession: { trialSessionId: TRIAL_SESSIONS_LIST[1].trialSessionId },
         trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
       },
