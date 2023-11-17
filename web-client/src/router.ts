@@ -1047,6 +1047,17 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session-detail/*/print-paper-trial-notices/*',
+      ifHasAccess({ app }, (trialSessionId, fileId) => {
+        setPageTitle('Print Paper Trial Notices');
+        return app.getSequence('gotoPrintPaperTrialNoticesSequence')({
+          fileId,
+          trialSessionId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/trial-session-detail/*',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },

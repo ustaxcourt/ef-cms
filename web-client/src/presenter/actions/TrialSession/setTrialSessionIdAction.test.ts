@@ -10,7 +10,7 @@ describe('setTrialSessionIdAction', () => {
     });
 
     expect(result.state).toMatchObject({
-      trialSessionId: 'trial-session-id-123',
+      trialSession: { trialSessionId: 'trial-session-id-123' },
     });
   });
 });

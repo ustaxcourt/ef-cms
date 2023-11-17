@@ -58,6 +58,7 @@ const SectionWorkQueueTable = connect(
                     />
                     <label
                       className="padding-top-05 usa-checkbox__label"
+                      data-testid="checkbox-select-all-workitems"
                       htmlFor="workitem-select-all-checkbox"
                       id="label-workitem-select-all-checkbox"
                     />
@@ -110,7 +111,7 @@ SectionWorkQueueTable.Row = React.memo(
   }) {
     return (
       <tbody>
-        <tr>
+        <tr data-testid={`work-item-${item.docketNumber}`}>
           {showSelectColumn && (
             <td className="message-select-control">
               <div className="usa-checkbox">
@@ -128,6 +129,7 @@ SectionWorkQueueTable.Row = React.memo(
                 />
                 <label
                   className="padding-top-05 usa-checkbox__label"
+                  data-testid="checkbox-assign-work-item"
                   htmlFor={item.workItemId}
                   id={`label-${item.workItemId}`}
                 />
@@ -183,7 +185,12 @@ SectionWorkQueueTable.Row = React.memo(
           )}
           <td className="message-queue-row">{item.formattedCaseStatus}</td>
           {showAssignedToColumn && (
-            <td className="to message-queue-row">{item.assigneeName}</td>
+            <td
+              className="to message-queue-row"
+              data-testid="table-column-work-item-assigned-to"
+            >
+              {item.assigneeName}
+            </td>
           )}
         </tr>
       </tbody>
