@@ -2,6 +2,7 @@ import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 
 export type PendingItemFormatted = {
+  docketNumber: string;
   caseTitle: string;
   formattedFiledDate: string;
   associatedJudgeFormatted: string;
@@ -53,6 +54,7 @@ export const formatPendingItem = (
     caseTitle,
     consolidatedIconTooltipText:
       pendingItemWithConsolidatedFlags.consolidatedIconTooltipText,
+    docketNumber: item.docketNumber,
     docketNumberWithSuffix:
       pendingItemWithConsolidatedFlags.docketNumberWithSuffix!,
     documentLink,
