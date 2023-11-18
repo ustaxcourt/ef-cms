@@ -19,4 +19,8 @@ export const saveSelectedDocketNumbersAction = ({
     .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix);
 
   store.set(state.addedDocketNumbers, checkedCases);
+
+  //for confirming the selected consolidated cases
+  // PLEASE REFACTOR WHEN finding out how to initialize the data for the modals form info
+  store.set(state.processConsolidatedCasesSelection, true);
 };

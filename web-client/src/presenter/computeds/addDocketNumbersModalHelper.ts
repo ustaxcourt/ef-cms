@@ -1,12 +1,34 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
-export const addDocketNumbersModalHelper = (get: Get): any => {
-  const addedDocketNumbers = get(state.addedDocketNumbers);
+export const addDocketNumbersModalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): {
+  confirmLabelTitle: string;
+  modalTitle: string;
+} => {
+  console.log(
+    'get(state.modal.form.processConsolidatedCasesSelection)',
+    get(state.processConsolidatedCasesSelection),
+  );
+
+  const addConsolidatedCasesSeletected = get(
+    state.processConsolidatedCasesSelection,
+  );
+  // console.log('addConsolidatedCasesSeletected', addConsolidatedCasesSeletected);
+  // const addedDocketNumbers = applicationContext
+  //   .getUtilities()
+  //   .getSelectedConsolidatedCasesToMultiDocketOn(
+  //     consolidatedCasesToMultiDocketOn,
+  //   );
 
   return {
-    confirmLabelTitle: addedDocketNumbers ? 'Save' : 'Add Docket Numbers',
-    modalTitle: addedDocketNumbers
+    confirmLabelTitle: addConsolidatedCasesSeletected
+      ? 'Save'
+      : 'Add Docket Numbers',
+    modalTitle: addConsolidatedCasesSeletected
       ? 'Edit Docket Numbers'
       : 'Add Docket Numbers',
   };
