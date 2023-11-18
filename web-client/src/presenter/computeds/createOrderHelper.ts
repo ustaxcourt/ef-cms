@@ -8,27 +8,36 @@ export const createOrderHelper = (
 ): any => {
   const documentToEdit = get(state.documentToEdit);
   const caseDetail = get(state.caseDetail);
-  const addedDocketNumbers = get(state.addedDocketNumbers);
-  const isEditing = !!documentToEdit;
   const { documentTitle } = get(state.form);
+  const consolidatedCasesToMultiDocketOn = get(
+    state.modal.form.consolidatedCasesToMultiDocketOn,
+  );
 
-  const pageTitle = isEditing
-    ? `Edit ${documentTitle}`
-    : `Create ${documentTitle}`;
+  const addedDocketNumbers = applicationContext
+    .getUtilities()
+    .getSelectedConsolidatedCasesToMultiDocketOn(
+      consolidatedCasesToMultiDocketOn,
+    );
 
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
-
   const addDocketNumbersToOrderEnabled = get(
     state.featureFlags[
       ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS.key
     ],
   );
+  const isEditing = !!documentToEdit;
+
+  const pageTitle = isEditing
+    ? `Edit ${documentTitle}`
+    : `Create ${documentTitle}`;
 
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
 
   return {
-    addDocketNumbersButtonIcon: addedDocketNumbers ? 'edit' : 'plus-circle',
-    addDocketNumbersButtonText: addedDocketNumbers
+    addDocketNumbersButtonIcon: addedDocketNumbers.length
+      ? 'edit'
+      : 'plus-circle',
+    addDocketNumbersButtonText: addedDocketNumbers.length
       ? 'Edit docket numbers in the caption'
       : 'Add docket numbers to the caption',
     documentToEdit,

@@ -1,3 +1,4 @@
+import { RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -11,7 +12,9 @@ export const setMultiDocketingCheckboxesAction = ({
   get,
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{
+  consolidatedCases: RawConsolidatedCaseSummary[];
+}>) => {
   const consolidatedCases =
     props.consolidatedCases || get(state.caseDetail.consolidatedCases);
 
