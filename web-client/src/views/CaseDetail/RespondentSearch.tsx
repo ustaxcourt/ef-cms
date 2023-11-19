@@ -1,5 +1,5 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -61,6 +61,7 @@ export const RespondentSearch = connect(
                     validationErrors.respondentSearchError &&
                       'usa-input--error',
                   )}
+                  data-testid="respondent-search-field"
                   id="respondent-search-field"
                   name="respondentSearch"
                   placeholder="Enter bar no. or name"
@@ -75,6 +76,7 @@ export const RespondentSearch = connect(
                 />
                 <button
                   className="small-search-button usa-button"
+                  data-testid="search-for-respondent"
                   id="search-for-respondent"
                   type="submit"
                 >

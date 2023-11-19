@@ -1,5 +1,5 @@
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -77,6 +77,7 @@ export const FilingPartiesForm = connect(
                       />
                       <label
                         className="usa-checkbox__label"
+                        data-testid="filed-by-option"
                         htmlFor={`filing-${petitioner.contactId}`}
                       >
                         {petitioner.displayName}

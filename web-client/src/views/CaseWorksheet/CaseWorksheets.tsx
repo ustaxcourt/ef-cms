@@ -2,7 +2,7 @@ import { AddEditCaseWorksheetModal } from './AddEditCaseWorksheetModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -82,7 +82,7 @@ export const CaseWorksheets = connect(
                     <td>
                       <Button
                         link
-                        data-test="add-edit-case-worksheet"
+                        data-testid="add-edit-case-worksheet"
                         icon="edit"
                         onClick={() => {
                           openAddEditCaseWorksheetModalSequence({

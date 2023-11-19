@@ -1,8 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { sequence } from 'cerebral';
-import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { navigateToTrialSessionDetailAction } from '@web-client/presenter/actions/TrialSession/navigateToTrialSessionDetailAction';
 
-export const printPaperServiceForTrialCompleteSequence = sequence([
+export const printPaperServiceForTrialCompleteSequence = [
   clearAlertsAction,
-  setupCurrentPageAction('TrialSessionDetail'),
-]);
+  navigateToTrialSessionDetailAction,
+];

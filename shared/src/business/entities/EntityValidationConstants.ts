@@ -24,7 +24,6 @@ import {
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { createEndOfDayISO } from '../utilities/DateHandler';
 import joi from 'joi';
 
 export const SERVICE_INDICATOR_ERROR = {
@@ -473,26 +472,6 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
   section: JoiValidationConstants.STRING.required(),
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
-};
-
-export const DATE_RANGE_VALIDATION_RULE_KEYS = {
-  endDate: joi.alternatives().conditional('startDate', {
-    is: JoiValidationConstants.ISO_DATE.exist().not(null),
-    otherwise: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
-      .required()
-      .description('The end date search filter must be of valid date format'),
-    then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
-      .min(joi.ref('startDate'))
-      .required()
-      .description(
-        'The end date search filter must be of valid date format and greater than or equal to the start date',
-      ),
-  }),
-  startDate: JoiValidationConstants.ISO_DATE.max('now')
-    .required()
-    .description(
-      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-    ),
 };
 
 export const DOCKET_ENTRY_VALIDATION_RULES = joi

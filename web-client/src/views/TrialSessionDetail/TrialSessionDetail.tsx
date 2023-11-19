@@ -2,6 +2,7 @@ import { AllCases } from './AllCases';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { DeleteTrialSessionModal } from '@web-client/views/TrialSessionDetail/DeleteTrialSessionModal';
 import { DismissThirtyDayNoticeModal } from './DismissThirtyDayNoticeModal';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
@@ -9,6 +10,7 @@ import { InactiveCases } from './InactiveCases';
 import { NoticeStatusModal } from '../NoticeStatusModal';
 import { OpenCases } from './OpenCases';
 import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
+import { ReprintPaperServiceDocumentsModal } from '@web-client/views/TrialSessions/ReprintPaperServiceDocumentsModal';
 import { ServeThirtyDayNoticeModal } from './ServeThirtyDayNoticeModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
@@ -19,7 +21,7 @@ import {
   WarningNotification,
   WarningNotificationComponent,
 } from '../WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -50,6 +52,7 @@ export const TrialSessionDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           <WarningNotification />
+
           {formattedTrialSessionDetails.showAlertForNOTTReminder && (
             <WarningNotificationComponent
               alertWarning={{
@@ -217,6 +220,10 @@ export const TrialSessionDetail = connect(
         )}
         {showModal === 'NoticeStatusModal' && <NoticeStatusModal />}
         {showModal === 'PaperServiceStatusModal' && <PaperServiceStatusModal />}
+        {showModal === 'ReprintPaperServiceDocumentsModal' && (
+          <ReprintPaperServiceDocumentsModal />
+        )}
+        {showModal === 'DeleteTrialSessionModal' && <DeleteTrialSessionModal />}
       </>
     );
   },

@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -36,7 +36,9 @@ export const AddressDisplay = connect(
           contact.isAddressSealed && 'sealed-address',
         )}
       >
-        <span className="address-line">{contact.address1}</span>
+        <span className="address-line" data-testid="address1-line">
+          {contact.address1}
+        </span>
         <span className="address-line">{contact.address2}</span>
         <span className="address-line">{contact.address3}</span>
         <span className="address-line">

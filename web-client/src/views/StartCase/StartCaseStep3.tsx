@@ -5,7 +5,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { SpousePermissionConfirmModal } from './SpousePermissionConfirmModal';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -86,6 +86,7 @@ export const StartCaseStep3 = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-testid={`filing-type-${idx}`}
                         htmlFor={filingType}
                         id={`filing-type-${idx}`}
                       >
@@ -135,6 +136,7 @@ export const StartCaseStep3 = connect(
                     />
                     <label
                       className="usa-radio__label"
+                      data-testid={`is-spouse-deceased-${idx}`}
                       htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
                       id={`is-spouse-deceased-${idx}`}
                     >
@@ -412,6 +414,7 @@ export const StartCaseStep3 = connect(
 
         <div className="margin-top-5">
           <Button
+            data-testid="complete-step-3"
             id="submit-case"
             onClick={() => {
               completeStartCaseWizardStepSequence({ nextStep: 4 });

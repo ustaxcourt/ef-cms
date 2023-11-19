@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../cloneFile';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { limitFileSize } from '../limitFileSize';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -29,6 +29,7 @@ export const StateDrivenFileInput = connect(
     id,
     updateFormValueSequence,
     validationSequence,
+    ...remainingProps
   }) {
     let inputRef;
 
@@ -37,6 +38,7 @@ export const StateDrivenFileInput = connect(
     return (
       <React.Fragment>
         <input
+          {...remainingProps}
           accept={accept}
           aria-describedby={ariaDescribedBy}
           className="usa-input"
@@ -77,7 +79,7 @@ export const StateDrivenFileInput = connect(
           <div>
             <span
               className="success-message icon-upload margin-right-1"
-              data-cy="upload-file-success"
+              data-testid="upload-file-success"
             >
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>

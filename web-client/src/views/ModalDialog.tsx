@@ -19,6 +19,7 @@ export const ModalDialog = ({
   confirmTarget = '_self',
   disableSubmit = false,
   message,
+  messageClass = 'margin-bottom-5',
   preventCancelOnBlur,
   preventScrolling,
   showButtons = true,
@@ -27,6 +28,7 @@ export const ModalDialog = ({
 }: {
   cancelLabel?: string;
   cancelLink?: boolean;
+  messageClass?: string;
   cancelSequence: any;
   children?: ReactNode;
   className?: string;
@@ -137,6 +139,7 @@ export const ModalDialog = ({
                       iconRight
                       link
                       className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
+                      data-testid="close-modal-button"
                       icon="times-circle"
                       id="close-modal-button"
                       onClick={
@@ -151,12 +154,13 @@ export const ModalDialog = ({
                 </div>
               </div>
             </div>
-            {message && <p className="margin-bottom-5">{message}</p>}
+            {message && <p className={messageClass}>{message}</p>}
             {children}
             {showButtons && (
               <div className="margin-top-5">
                 <Button
                   className="modal-button-confirm"
+                  data-testid="modal-button-confirm"
                   disabled={disableSubmit}
                   href={confirmHref}
                   id="modal-button-confirm"
@@ -185,5 +189,3 @@ export const ModalDialog = ({
 
   return ReactDOM.createPortal(renderModalContent(), getEl());
 };
-
-ModalDialog.displayName = 'ModalDialog';

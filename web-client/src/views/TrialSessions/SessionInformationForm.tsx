@@ -1,6 +1,6 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -282,7 +282,10 @@ export const SessionInformationForm = connect(
               </>
             )}
           <FormGroup errorText={validationErrors.sessionType}>
-            <fieldset className="usa-fieldset margin-bottom-0">
+            <fieldset
+              className="usa-fieldset margin-bottom-0"
+              data-cy="session-type-options"
+            >
               <legend className="usa-legend" id="session-type-legend">
                 Session type
               </legend>
@@ -322,6 +325,7 @@ export const SessionInformationForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input usa-input--small"
+                data-cy="trial-session-number-of-cases-allowed"
                 id="max-cases"
                 name="maxCases"
                 type="text"

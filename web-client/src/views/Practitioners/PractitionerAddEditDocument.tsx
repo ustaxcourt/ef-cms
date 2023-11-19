@@ -8,7 +8,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerUserHeader } from './PractitionerUserHeader';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SuccessNotification } from '../SuccessNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';

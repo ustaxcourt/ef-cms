@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -13,7 +13,11 @@ export const FilePetitionSuccess = connect(
 
         <section className="usa-section grid-container">
           <p>
-            Your case has been assigned Docket Number {docketNumberWithSuffix}.
+            Your case has been assigned Docket Number{' '}
+            <span data-testid="docket-number-with-suffix">
+              {docketNumberWithSuffix}
+            </span>
+            .
           </p>
 
           <p>
@@ -36,6 +40,7 @@ export const FilePetitionSuccess = connect(
 
           <Button
             className="tablet-full-width"
+            data-testid="button-back-to-dashboard"
             href="/"
             id="button-back-to-dashboard"
           >

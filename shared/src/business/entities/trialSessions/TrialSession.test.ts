@@ -251,7 +251,7 @@ describe('TrialSession entity', () => {
 
         expect(trialSession.isValid()).toBe(false);
         expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-          proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
+          proceedingType: 'Enter a valid proceeding type',
         });
       });
 
@@ -311,7 +311,7 @@ describe('TrialSession entity', () => {
 
         expect(trialSession.isValid()).toBe(false);
         expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-          proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
+          proceedingType: 'Enter a valid proceeding type',
         });
       });
     });
@@ -584,8 +584,7 @@ describe('TrialSession entity', () => {
 
       expect(() => trialSession.validate()).toThrow();
       expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-        estimatedEndDate:
-          TrialSession.VALIDATION_ERROR_MESSAGES.estimatedEndDate[0].message,
+        estimatedEndDate: 'Enter a valid estimated end date',
       });
     });
 
@@ -616,6 +615,39 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.dismissedAlertForNOTT).toBe(false);
+    });
+  });
+
+  describe('paperServicePdfs', () => {
+    it('should default to an empty array when the trial session does not already have any paper service pdfs', () => {
+      const trialSession = new TrialSession(
+        {
+          ...MOCK_TRIAL_REGULAR,
+          paperServicePdfs: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.paperServicePdfs).toEqual([]);
+    });
+
+    it('should require a fileId and title on each entry to be valid', () => {
+      const trialSession = new TrialSession(
+        {
+          ...MOCK_TRIAL_REGULAR,
+          paperServicePdfs: [{}],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.getFormattedValidationErrors()).toEqual({
+        fileId: '"paperServicePdfs[0].fileId" is required',
+        title: '"paperServicePdfs[0].title" is required',
+      });
     });
   });
 });
