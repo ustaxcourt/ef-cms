@@ -117,7 +117,7 @@ export const uploadCourtIssuedDocPdf = () => {
   cy.url().should('contain', '/upload-court-issued');
   cy.get('#upload-description').type('An Uploaded PDF');
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
-  cy.get('[data-cy="upload-file-success"]');
+  cy.get('[data-testid="upload-file-success"]');
 };
 
 export const reviewAndServePetition = () => {
@@ -221,6 +221,7 @@ export const editPetitionerEmail = (emailAddress: string) => {
   cy.get('#updatedEmail').type(emailAddress);
   cy.get('#confirm-email').type(emailAddress);
   cy.get('#submit-edit-petitioner-information').click();
+  cy.get('[data-testId="no-matching-email-modal"]');
   cy.get('#modal-button-confirm').click();
   cy.get('.modal-dialog', { timeout: 1000 }).should('not.exist');
   cy.get(`div.parties-card:contains(${emailAddress} (Pending))`).should(

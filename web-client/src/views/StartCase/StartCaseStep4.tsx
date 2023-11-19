@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { ProcedureType } from './ProcedureType';
 import { TrialCity } from './TrialCity';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -154,6 +154,7 @@ export const StartCaseStep4 = connect(
 
         <div className="margin-top-5">
           <Button
+            data-testid="complete-step-4"
             id="submit-case"
             onClick={() => {
               completeStartCaseWizardStepSequence({

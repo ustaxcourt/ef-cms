@@ -15,7 +15,7 @@ import { RemoveFromTrialSessionModal } from './RemoveFromTrialSessionModal';
 import { UnblockFromTrialModal } from './UnblockFromTrialModal';
 import { UnprioritizeCaseModal } from './UnprioritizeCaseModal';
 import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -170,7 +170,7 @@ export const CaseDetailHeaderMenu = connect(
         {caseDetailHeaderHelper.showAddDocketEntryButton && (
           <li
             className="usa-nav__submenu-item row-button"
-            id="menu-button-add-docket-entry"
+            data-testid="menu-button-add-paper-filing"
             onClick={() => {
               navigateToPathSequence({
                 path: `/case-detail/${caseDetail.docketNumber}/add-paper-filing`,
@@ -260,6 +260,7 @@ export const CaseDetailHeaderMenu = connect(
             <button
               aria-expanded={menuHelper.isCaseDetailMenuOpen}
               className="usa-accordion__button usa-nav__link hidden-underline case-detail-menu__button text-no-wrap"
+              data-testid="create-dropdown"
               id="case-detail-menu-button"
               onClick={() => {
                 toggleMenuSequence({ caseDetailMenu: 'CaseDetailMenu' });

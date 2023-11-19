@@ -13,7 +13,7 @@ import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   courtIssuedDocketEntryOnChange,
   onInputChange,
@@ -74,7 +74,7 @@ export const CourtIssuedDocketEntry = connect(
 
           {!addCourtIssuedDocketEntryHelper.showServiceWarning &&
             isEditingDocketEntry && (
-              <Hint exclamation fullWidth>
+              <Hint fullWidth>
                 This docket entry has not been served on the parties.
               </Hint>
             )}

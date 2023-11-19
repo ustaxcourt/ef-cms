@@ -26,14 +26,8 @@ export class PublicContact extends JoiValidationEntity {
     state: JoiValidationConstants.STRING.optional(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
-
   getValidationRules() {
     return PublicContact.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return PublicContact.VALIDATION_ERROR_MESSAGES;
   }
 }
 

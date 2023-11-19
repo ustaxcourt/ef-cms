@@ -14,19 +14,12 @@ export class EditPetitionerCounsel extends JoiValidationEntity {
     representing: joi
       .array()
       .items(JoiValidationConstants.UUID.required())
-      .required(),
-  } as const;
-
-  static VALIDATION_ERROR_MESSAGES = {
-    representing: 'Select a representing party',
+      .required()
+      .messages({ '*': 'Select a representing party' }),
   } as const;
 
   getValidationRules() {
     return EditPetitionerCounsel.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES;
   }
 }
 

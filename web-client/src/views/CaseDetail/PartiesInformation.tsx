@@ -4,7 +4,7 @@ import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
 import { PetitionersAndCounsel } from './PetitionersAndCounsel';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { RespondentCounsel } from './RespondentCounsel';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -84,6 +84,7 @@ export const PartiesInformation = connect(
                     currentViewMetadata.caseDetail.partyViewTab ===
                       partyViewTabs.respondentCounsel && 'active',
                   )}
+                  data-testid="respondent-counsel"
                   id="respondent-counsel"
                   onClick={() => {
                     updatePartyViewTabSequence({

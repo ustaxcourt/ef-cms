@@ -12,7 +12,7 @@ import { SearchResults } from './SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from '../WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -130,7 +130,7 @@ export const AdvancedSearch = connect(
               <select
                 aria-label="advanced search type"
                 className="usa-select"
-                data-test="advanced-search-type-mobile-selector"
+                data-testid="advanced-search-type-mobile-selector"
                 value={advancedSearchTab}
                 onChange={e => {
                   cerebralBindSimpleSetStateSequence({

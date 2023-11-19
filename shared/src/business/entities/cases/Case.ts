@@ -63,7 +63,7 @@ import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
+import { UnprocessableEntityError } from '@web-api/errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
@@ -1451,12 +1451,7 @@ export class Case extends JoiValidationEntity {
     this.hearings.splice(removeIndex, 1);
   }
 
-  /**
-   * remove case from trial with optional associated judge
-   * @param {string} associatedJudge (optional) the associated judge for the case
-   * @returns {Case} the updated case entity
-   */
-  removeFromTrialWithAssociatedJudge(associatedJudge) {
+  removeFromTrialWithAssociatedJudge(associatedJudge?: string): Case {
     if (associatedJudge) {
       this.associatedJudge = associatedJudge;
     }

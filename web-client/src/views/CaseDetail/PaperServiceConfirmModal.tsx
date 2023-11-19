@@ -1,6 +1,6 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -26,7 +26,7 @@ export const PaperServiceConfirmModal = connect(
 
         <p className="text-semibold">{documentTitle}</p>
 
-        <Hint exclamation fullWidth className="block">
+        <Hint fullWidth className="block">
           <div className="margin-bottom-1">
             This case has parties receiving paper service:
           </div>

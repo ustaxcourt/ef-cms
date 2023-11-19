@@ -85,14 +85,8 @@ export class EligibleCase extends JoiValidationEntity {
       ),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
-
   getValidationRules() {
     return EligibleCase.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return EligibleCase.VALIDATION_ERROR_MESSAGES;
   }
 }
 

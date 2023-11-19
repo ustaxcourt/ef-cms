@@ -3,7 +3,7 @@ import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { StatisticsForm } from './StartCaseInternal/StatisticsForm';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -90,6 +90,7 @@ export const IRSNotice = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid="has-irs-verified-notice-no"
                 htmlFor="hasVerifiedIrsNotice-no"
                 id="has-irs-verified-notice-no"
               >

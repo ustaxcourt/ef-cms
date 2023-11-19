@@ -1,34 +1,38 @@
 export const saveFileAndGenerateUrl = async ({
   applicationContext,
   file,
-  URLTTL,
+  fileNamePrefix,
+  urlTtl,
   useTempBucket = false,
 }: {
   applicationContext: IApplicationContext;
   file: Buffer;
-  useTempBucket: boolean;
-  // time to live of link in seconds
-  URLTTL?: number;
+  fileNamePrefix?: string;
+  useTempBucket?: boolean;
+  urlTtl?: number; // time to live of link in seconds
 }): Promise<{
   fileId: string;
   url: string;
 }> => {
   const fileId = applicationContext.getUniqueId();
 
+  const fileName = fileNamePrefix ? `${fileNamePrefix}${fileId}` : fileId;
+
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: file,
-    key: fileId,
+    key: fileName,
     useTempBucket,
   });
 
   const { url } = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
-      URLTTL,
       applicationContext,
-      key: fileId,
+      key: fileName,
+      urlTtl,
       useTempBucket,
     });
+
   return { fileId, url };
 };

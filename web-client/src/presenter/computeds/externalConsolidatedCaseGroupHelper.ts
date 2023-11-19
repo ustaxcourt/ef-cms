@@ -1,9 +1,11 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const externalConsolidatedCaseGroupHelper = (
-  get,
-  applicationContext,
-) => {
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): any => {
   const caseDetail = get(state.caseDetail);
 
   const { CONTACT_TYPE_TITLES, USER_ROLES } = applicationContext.getConstants();

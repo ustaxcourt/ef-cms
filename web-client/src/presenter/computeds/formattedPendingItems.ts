@@ -1,16 +1,19 @@
-import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { formatSearchResultRecord } from './AdvancedSearch/advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const formatPendingItem = (item, { applicationContext }) => {
+const formatPendingItem = (
+  item,
+  { applicationContext }: { applicationContext: ClientApplicationContext },
+) => {
   let result = formatSearchResultRecord(item, { applicationContext });
 
   if (result.leadDocketNumber) {
-    result = addConsolidatedProperties({
-      applicationContext,
-      consolidatedObject: result,
-    });
+    result = applicationContext
+      .getUtilities()
+      .setConsolidationFlagsForDisplay(result);
   }
 
   result.formattedFiledDate = applicationContext
@@ -28,12 +31,10 @@ export const formatPendingItem = (item, { applicationContext }) => {
   return result;
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedPendingItems = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
   let items = (get(state.pendingReports.pendingItems) || []).map(item =>

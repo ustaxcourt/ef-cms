@@ -1,5 +1,5 @@
 import { ModalDialog } from '../ModalDialog';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -23,12 +23,10 @@ export const DeleteCaseDeadlineModalDialog = connect(
         confirmSequence={confirmSequence}
         title="Are You Sure You Want to Delete This Deadline?"
       >
-        <div className="ustc-delete-case-deadline-modal margin-bottom-2">
-          <label className="margin-right-2" htmlFor="deadline-to-delete">
-            {form.month}/{form.day}/{form.year}
-          </label>
-          <span id="deadline-to-delete">{form.description}</span>
-        </div>
+        <label className="margin-right-2" htmlFor="deadline-to-delete">
+          {form.deadlineDateFormatted}
+        </label>
+        <span id="deadline-to-delete">{form.description}</span>
       </ModalDialog>
     );
   },

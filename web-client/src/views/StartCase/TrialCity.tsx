@@ -1,6 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -60,6 +60,7 @@ export const TrialCity = connect(
         )}
         <select
           className="usa-select"
+          data-testid="preferred-trial-city"
           id="preferred-trial-city"
           name="preferredTrialCity"
           value={value}
