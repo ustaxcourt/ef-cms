@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
-import { ReportsHeader } from '../components/ReportsHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader';
+import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
 
 const getTermHeaders = (termData, idx) => {
@@ -35,7 +35,6 @@ export const TrialSessionPlanningReport = ({
       <table>
         <thead>
           <tr>
-            <th>State</th>
             <th>Location</th>
             <th>All</th>
             <th>Small</th>
@@ -48,7 +47,6 @@ export const TrialSessionPlanningReport = ({
             locationData.map((trialLocation, idx) => {
               return (
                 <tr key={`row-${idx}`}>
-                  <td>{trialLocation.stateAbbreviation}</td>
                   <td>{trialLocation.trialCityState}</td>
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>

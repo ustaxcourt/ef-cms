@@ -50,11 +50,7 @@ export const getTrialSessionPlanningReportData = async ({
 
   const trialCities = [...TRIAL_CITIES.ALL];
   trialCities.sort((a, b) => {
-    if (a.state === b.state) {
-      return applicationContext.getUtilities().compareStrings(a.city, b.city);
-    } else {
-      return applicationContext.getUtilities().compareStrings(a.state, b.state);
-    }
+    return applicationContext.getUtilities().compareStrings(a.city, b.city);
   });
 
   let allTrialSessions = await applicationContext
@@ -65,7 +61,14 @@ export const getTrialSessionPlanningReportData = async ({
     ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),
   );
 
-  const trialLocationData: Object[] = [];
+  const trialLocationData: {
+    allCaseCount: number;
+    previousTermsData: any[];
+    regularCaseCount: number;
+    smallCaseCount: number;
+    stateAbbreviation: string;
+    trialCityState: string;
+  }[] = [];
   for (const trialLocation of trialCities) {
     const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
     const trialCityStateStripped = trialCityState.replace(/[\s.,]/g, '');
