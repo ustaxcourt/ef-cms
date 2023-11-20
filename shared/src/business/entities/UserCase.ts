@@ -1,4 +1,5 @@
 import { Case } from './cases/Case';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
@@ -26,19 +27,19 @@ export class UserCase extends JoiValidationEntity {
 
   getValidationRules() {
     return {
-      caseCaption: Case.VALIDATION_RULES.caseCaption,
+      caseCaption: Case.VALIDATION_RULES.caseCaption.messages({
+        '*': 'Enter a case caption',
+      }),
       closedDate: Case.VALIDATION_RULES.closedDate,
       createdAt: Case.VALIDATION_RULES.createdAt,
-      docketNumber: Case.VALIDATION_RULES.docketNumber,
+      docketNumber: Case.VALIDATION_RULES.docketNumber.messages({
+        '*': 'Docket number is required',
+      }),
       docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
       entityName: JoiValidationConstants.STRING.valid('UserCase').required(),
       leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber,
       status: Case.VALIDATION_RULES.status,
     };
-  }
-
-  getErrorToMessageMap() {
-    return Case.VALIDATION_ERROR_MESSAGES;
   }
 }
 
