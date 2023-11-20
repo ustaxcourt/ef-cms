@@ -11,6 +11,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
+import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -52,6 +53,7 @@ const utilities = {
   calculateDaysElapsedSinceLastStatusChange,
   calculateDifferenceInDays,
   calculateISODate,
+  caseStatusWithTrialInformation,
   combineTwoPdfs,
   compareCasesByDocketNumber,
   compareISODateStrings,
