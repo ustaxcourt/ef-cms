@@ -3,14 +3,15 @@ import { CaseWorksheets } from '../CaseWorksheet/CaseWorksheets';
 import { ErrorNotification } from '../ErrorNotification';
 import { RecentMessages } from '../WorkQueue/RecentMessages';
 import { SuccessNotification } from '../SuccessNotification';
+import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { TrialSessionsSummary } from '../TrialSessions/TrialSessionsSummary';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const DashboardJudge = connect(
-  { user: state.user },
-  function DashboardJudge({ user }) {
+  { caseWorksheetsHelper: state.caseWorksheetsHelper, user: state.user },
+  function DashboardJudge({ caseWorksheetsHelper, user }) {
     return (
       <>
         <BigHeader text={`Welcome, ${user.judgeTitle} ${user.name}`} />
@@ -18,8 +19,18 @@ export const DashboardJudge = connect(
           <SuccessNotification />
           <ErrorNotification />
           <TrialSessionsSummary />
-          <RecentMessages />
-          <CaseWorksheets />
+          <Tabs>
+            <Tab tabName="recentMessages" title="Recent Messages">
+              <RecentMessages />
+            </Tab>
+
+            <Tab
+              tabName="caseWorksheets"
+              title={`Submitted/CAV (${caseWorksheetsHelper.caseWorksheetsFormatted.length})`}
+            >
+              <CaseWorksheets />
+            </Tab>
+          </Tabs>
         </section>
       </>
     );
