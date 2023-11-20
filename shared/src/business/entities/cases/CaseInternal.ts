@@ -1,6 +1,7 @@
 import {
   CASE_TYPES,
   FILING_TYPES,
+  MAX_FILE_SIZE_MB,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -152,6 +153,9 @@ export class CaseInternal extends JoiValidationEntity {
           is: PAYMENT_STATUS.WAIVED,
           otherwise: joi.optional().allow(null),
           then: joi.required(),
+        })
+        .messages({
+          '*': 'Upload or scan an Application for Waiver of Filing Fee (APW)',
         }),
       applicationForWaiverOfFilingFeeFileSize:
         JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
@@ -161,27 +165,39 @@ export class CaseInternal extends JoiValidationEntity {
             otherwise: joi.optional().allow(null),
             then: joi.required(),
           },
-        ),
+        ).messages({
+          '*': 'Your Filing Fee Waiver file size is empty',
+          'number.max': `Your Filing Fee Waiver file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
       archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
       archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
-      caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
-      caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
-      corporateDisclosureFile: joi.object().when('partyType', {
-        is: joi
-          .exist()
-          .valid(
-            PARTY_TYPES.corporation,
-            PARTY_TYPES.partnershipAsTaxMattersPartner,
-            PARTY_TYPES.partnershipBBA,
-            PARTY_TYPES.partnershipOtherThanTaxMatters,
-          ),
-        otherwise: joi.optional().allow(null),
-        then: joi.when('orderForCds', {
-          is: joi.not(true),
-          otherwise: joi.optional().allow(null),
-          then: joi.required(),
-        }),
+      caseCaption: JoiValidationConstants.CASE_CAPTION.required().messages({
+        '*': 'Enter a case caption',
       }),
+      caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES)
+        .required()
+        .messages({ '*': 'Select a case type' }),
+      corporateDisclosureFile: joi
+        .object()
+        .when('partyType', {
+          is: joi
+            .exist()
+            .valid(
+              PARTY_TYPES.corporation,
+              PARTY_TYPES.partnershipAsTaxMattersPartner,
+              PARTY_TYPES.partnershipBBA,
+              PARTY_TYPES.partnershipOtherThanTaxMatters,
+            ),
+          otherwise: joi.optional().allow(null),
+          then: joi.when('orderForCds', {
+            is: joi.not(true),
+            otherwise: joi.optional().allow(null),
+            then: joi.required(),
+          }),
+        })
+        .messages({
+          '*': 'Upload or scan Corporate Disclosure Statement(CDS)',
+        }),
       corporateDisclosureFileSize:
         JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
           'corporateDisclosureFile',
@@ -190,14 +206,24 @@ export class CaseInternal extends JoiValidationEntity {
             otherwise: joi.optional().allow(null),
             then: joi.required(),
           },
-        ),
+        ).messages({
+          '*': 'Your Corporate Disclosure Statement file size is empty',
+          'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
       filingType: JoiValidationConstants.STRING.valid(
         ...FILING_TYPES[ROLES.petitioner],
         ...FILING_TYPES[ROLES.privatePractitioner],
-      ).optional(),
-      hasVerifiedIrsNotice: joi.boolean().required(),
+      )
+        .optional()
+        .messages({ '*': 'Select on whose behalf you are filing' }),
+      hasVerifiedIrsNotice: joi
+        .boolean()
+        .required()
+        .messages({ '*': 'Indicate whether you received an IRS notice' }),
       irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
-      mailingDate: JoiValidationConstants.STRING.max(25).required(),
+      mailingDate: JoiValidationConstants.STRING.max(25)
+        .required()
+        .messages({ '*': 'Enter a mailing date' }),
       noticeOfAttachments: Case.VALIDATION_RULES.noticeOfAttachments,
       orderDesignatingPlaceOfTrial:
         Case.VALIDATION_RULES.orderDesignatingPlaceOfTrial,
@@ -210,8 +236,13 @@ export class CaseInternal extends JoiValidationEntity {
       orderToShowCause: Case.VALIDATION_RULES.orderToShowCause,
       partyType: JoiValidationConstants.STRING.valid(
         ...Object.values(PARTY_TYPES),
-      ).required(),
-      petitionFile: joi.object().required(), // object of type File
+      )
+        .required()
+        .messages({ '*': 'Select a party type' }),
+      petitionFile: joi
+        .object()
+        .required()
+        .messages({ '*': 'Upload or scan a Petition' }), // object of type File
       petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'petitionFile',
         {
@@ -219,17 +250,26 @@ export class CaseInternal extends JoiValidationEntity {
           otherwise: joi.optional().allow(null),
           then: joi.required(),
         },
-      ),
-      petitionPaymentDate: JoiValidationConstants.ISO_DATE.max('now').when(
-        'petitionPaymentStatus',
-        {
+      ).messages({
+        '*': 'Your Petition file size is empty',
+        'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      }),
+      petitionPaymentDate: JoiValidationConstants.ISO_DATE.max('now')
+        .when('petitionPaymentStatus', {
           is: PAYMENT_STATUS.PAID,
           otherwise: joi.optional().allow(null),
           then: joi.required(),
-        },
-      ),
+        })
+        .messages({
+          '*': 'Enter a valid payment date',
+          'date.max':
+            'Payment date cannot be in the future. Enter a valid date.',
+        }),
       petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
-      petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
+      petitionPaymentStatus:
+        Case.VALIDATION_RULES.petitionPaymentStatus.messages({
+          '*': 'Select a filing fee option',
+        }),
       petitionPaymentWaivedDate:
         Case.VALIDATION_RULES.petitionPaymentWaivedDate,
       petitioners: Case.VALIDATION_RULES.petitioners,
@@ -239,18 +279,26 @@ export class CaseInternal extends JoiValidationEntity {
           is: joi.exist().not(null),
           otherwise: joi.optional().allow(null),
           then: JoiValidationConstants.STRING.required(),
+        })
+        .messages({ '*': 'Select a preferred trial location' }),
+      procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
+        .required()
+        .messages({ '*': 'Select a case procedure' }),
+      receivedAt: JoiValidationConstants.ISO_DATE.max('now')
+        .required()
+        .messages({
+          '*': 'Enter a valid date received',
+          'date.max':
+            'Date received cannot be in the future. Enter a valid date.',
         }),
-      procedureType: JoiValidationConstants.STRING.valid(
-        ...PROCEDURE_TYPES,
-      ).required(),
-      receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
       requestForPlaceOfTrialFile: joi
         .alternatives()
         .conditional('preferredTrialCity', {
           is: joi.exist().not(null),
           otherwise: joi.object().optional(),
           then: joi.object().required(), // object of type File
-        }),
+        })
+        .messages({ '*': 'Upload or scan a Request for Place of Trial (RQT)' }),
       requestForPlaceOfTrialFileSize:
         JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
           'requestForPlaceOfTrialFile',
@@ -259,9 +307,14 @@ export class CaseInternal extends JoiValidationEntity {
             otherwise: joi.optional().allow(null),
             then: joi.required(),
           },
-        ),
+        ).messages({
+          '*': 'Your Request for Place of Trial file size is empty',
+          'number.max': `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
       statistics: Case.VALIDATION_RULES.statistics,
-      stinFile: joi.object().optional(), // object of type File
+      stinFile: joi.object().optional().messages({
+        '*': 'Upload a Statement of Taxpayer Identification Number (STIN)',
+      }), // object of type File
       stinFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'stinFile',
         {
@@ -269,7 +322,10 @@ export class CaseInternal extends JoiValidationEntity {
           otherwise: joi.optional().allow(null),
           then: joi.required(),
         },
-      ),
+      ).messages({
+        '*': 'Your STIN file size is empty',
+        'number.max': `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      }),
       useSameAsPrimary: Case.VALIDATION_RULES.useSameAsPrimary,
     })
     .or(
@@ -278,44 +334,21 @@ export class CaseInternal extends JoiValidationEntity {
       'orderDesignatingPlaceOfTrial',
     );
 
-  static VALIDATION_ERROR_MESSAGES = {
-    ...Case.VALIDATION_ERROR_MESSAGES,
-    applicationForWaiverOfFilingFeeFile:
-      'Upload or scan an Application for Waiver of Filing Fee (APW)',
-    chooseAtLeastOneValue:
-      'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
-    corporateDisclosureFile:
-      'Upload or scan Corporate Disclosure Statement(CDS)',
-    petitionFile: 'Upload or scan a Petition',
-    petitionPaymentDate: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Payment date cannot be in the future. Enter a valid date.',
-      },
-      'Enter a valid payment date',
-    ],
-    petitionPaymentStatus: 'Select a filing fee option',
-    preferredTrialCity: 'Select a preferred trial location',
-    requestForPlaceOfTrialFile:
-      'Upload or scan a Request for Place of Trial (RQT)',
-  };
-
   getValidationRules() {
     return CaseInternal.VALIDATION_RULES;
   }
 
-  getErrorToMessageMap() {
-    return CaseInternal.VALIDATION_ERROR_MESSAGES;
-  }
-
-  getValidationErrors(): {} | null {
+  getValidationErrors() {
     const validationErrors = super.getValidationErrors();
+    if (!validationErrors) return validationErrors;
 
-    if (validationErrors && validationErrors['object.missing']) {
-      validationErrors['chooseAtLeastOneValue'] =
-        validationErrors['object.missing'];
-      delete validationErrors['object.missing'];
-    }
+    Object.keys(validationErrors).forEach(k => {
+      if (k === 'object.missing') {
+        validationErrors['chooseAtLeastOneValue'] =
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial';
+        delete validationErrors['object.missing'];
+      }
+    });
 
     return validationErrors;
   }
