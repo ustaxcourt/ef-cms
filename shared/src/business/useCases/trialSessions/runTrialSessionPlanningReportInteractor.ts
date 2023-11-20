@@ -10,13 +10,13 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { capitalize, invert } from 'lodash';
 
-type PreviousTerm = {
+export type PreviousTerm = {
   term: string;
   termDisplay: string;
   year: string;
 };
 
-type TrialLocationData = {
+export type TrialLocationData = {
   allCaseCount: number;
   previousTermsData: string[][];
   regularCaseCount: number;
