@@ -26,11 +26,9 @@ describe('trial sessions', () => {
     cy.get('[data-testid="state"]').select('TN');
     cy.get('[data-testid="postal-code"]').clear();
     cy.get('[data-testid="postal-code"]').type('33333');
-    cy.get('[data-testid="trial-session-judge"]').select(
-      'dabbad02-18d0-43ec-bafb-654e83405416',
-    );
+    cy.get('[data-testid="trial-session-judge"]').select('Colvin');
     cy.get('[data-testid="trial-session-trial-clerk"]').select(
-      'd1f8a729-cbfa-4d22-a09b-73743a12f188',
+      'Test trialclerk1',
     );
     cy.get('[data-testid="submit-trial-session"]').click();
     cy.get('[data-testid="success-alert"]').should('exist');
