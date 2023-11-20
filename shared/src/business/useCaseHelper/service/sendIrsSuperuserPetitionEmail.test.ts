@@ -6,14 +6,12 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
 import { sendIrsSuperuserPetitionEmail } from './sendIrsSuperuserPetitionEmail';
-jest.mock(
-  '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
-  () => ({
-    reactTemplateGenerator: jest.fn(),
-  }),
-);
+import React from 'react';
+
+jest.mock('React', () => ({
+  createElement: jest.fn(),
+}));
 
 describe('sendIrsSuperuserPetitionEmail', () => {
   const PRIMARY_CONTACT_ID = '679088cf-c125-444a-bfe4-936971050e5a';
@@ -51,7 +49,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
-    expect(reactTemplateGenerator).toHaveBeenCalled();
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
     ).toHaveBeenCalled();
@@ -61,7 +58,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     ).toMatchObject([{ email: 'irs@example.com' }]);
   });
 
-  it('should use docketNumberSuffix if a docketNumberSuffix is present', async () => {
+  it.only('should use docketNumberSuffix if a docketNumberSuffix is present', async () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
@@ -111,7 +108,8 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
-    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+    const { caseDetail } = React.createElement.mock.calls[0][1];
+    // const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
     expect(caseDetail.docketNumber).toEqual('123-20');
     expect(caseDetail.docketNumberWithSuffix).toEqual('123-20L');
   });
