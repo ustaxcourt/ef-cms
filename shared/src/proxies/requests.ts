@@ -111,7 +111,7 @@ export const post = async ({
       await applicationContext
         .getUtilities()
         .sleep(err.response?.headers['Retry-After'] || 5000);
-      return exports.post({
+      return post({
         applicationContext,
         body,
         endpoint,
@@ -153,7 +153,7 @@ export const put = async ({
       await applicationContext
         .getUtilities()
         .sleep(err.response?.headers['Retry-After'] || 5000);
-      return exports.put({
+      return put({
         applicationContext,
         body,
         endpoint,
@@ -201,7 +201,7 @@ export const remove = async ({
       await applicationContext
         .getUtilities()
         .sleep(err.response?.headers['Retry-After'] || 5000);
-      return exports.remove({
+      return remove({
         applicationContext,
         endpoint,
         params,
