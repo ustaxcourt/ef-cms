@@ -3,6 +3,15 @@ import { petitionsclerkServePetition } from '../../helpers/petitionsclerk-serves
 import { practitionerCreatesACase } from '../../helpers/practitioner-creates-a-case';
 
 describe('change of address', () => {
+  beforeEach(() => {
+    cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
+      body: `window.Dynamsoft = {DWT: {
+            GetWebTwain() {}
+          }}`,
+      statusCode: 200,
+    });
+  });
+
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
     const newAddress = faker.location.streetAddress();
     practitionerCreatesACase().then(docketNumber => {
