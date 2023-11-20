@@ -7,7 +7,11 @@ import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimp
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
+import { cognitoResendVerificationLinkSequence } from '@web-client/presenter/sequences/Public/cognitoResendVerificationLinkSequence';
+import { confirmSignUpLocalSequence } from '@web-client/presenter/sequences/confirmSignUpLocalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
+import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
@@ -23,6 +27,7 @@ import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
+import { navigateToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/navigateToCreatePetitionerAccountSequence';
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
@@ -32,18 +37,21 @@ import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequ
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
+import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/Public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
+import { toggleShowPasswordSequence } from '@web-client/presenter/sequences/toggleShowPasswordSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
+import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
@@ -56,7 +64,11 @@ export const presenterSequences = {
   clearAdvancedSearchFormSequence,
   clearPdfPreviewUrlSequence,
   closeModalAndNavigateToMaintenanceSequence,
+  cognitoResendVerificationLinkSequence,
+  confirmSignUpLocalSequence,
   dismissModalSequence,
+  goToCreatePetitionerAccountSequence,
+  goToVerificationSentSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
   gotoHealthCheckSequence: showMaintenancePageDecorator(
     gotoHealthCheckSequence,
@@ -85,6 +97,7 @@ export const presenterSequences = {
   loadMoreTodaysOrdersSequence,
   navigateBackSequence,
   navigateToCognitoSequence,
+  navigateToCreatePetitionerAccountSequence,
   navigateToPublicSiteSequence,
   notFoundErrorSequence,
   openAppMaintenanceModalSequence,
@@ -92,18 +105,21 @@ export const presenterSequences = {
   persistFormsOnReloadSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
+  submitCreatePetitionerAccountFormSequence,
   submitPublicCaseAdvancedSearchSequence,
   submitPublicCaseDocketNumberSearchSequence,
   submitPublicOpinionAdvancedSearchSequence,
   submitPublicOrderAdvancedSearchSequence,
   toggleBetaBarSequence,
   toggleMobileDocketSortSequence,
+  toggleShowPasswordSequence,
   toggleUsaBannerDetailsSequence,
   updateAdvancedOpinionSearchFormValueSequence,
   updateAdvancedOrderSearchFormValueSequence,
   updateAdvancedSearchFormValueSequence,
   updateCaseAdvancedSearchByNameFormValueSequence,
   updateDocketNumberSearchFormSequence,
+  updateFormValueSequence,
   updateSessionMetadataSequence,
   validateCaseAdvancedSearchFormSequence,
   validateCaseDocketNumberSearchFormSequence,

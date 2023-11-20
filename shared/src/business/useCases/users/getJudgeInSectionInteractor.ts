@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 /**
  * getJudgeInSectionInteractor - returns the judge user for a given section
  *

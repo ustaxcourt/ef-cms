@@ -1,3 +1,4 @@
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { sortBy } from 'lodash';
 
 /**
@@ -8,7 +9,7 @@ import { sortBy } from 'lodash';
  */
 export const getPublicJudgesAction = async ({
   applicationContext,
-}: ActionProps) => {
+}: ActionProps<{}, ClientPublicApplicationContext>) => {
   const judges = await applicationContext
     .getUseCases()
     .getPublicJudgesInteractor(applicationContext);

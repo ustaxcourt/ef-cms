@@ -1,11 +1,13 @@
-/**
- * changes the route to view the trial sessions
- * @param {object} providers the providers object
- * @param {object} providers.router the riot.router object that is used for changing the route
- * @returns {Promise<*>} the promise when the item is complete
- */
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const navigateToTrialSessionsAction = async ({
+  get,
   router,
 }: ActionProps) => {
-  await router.route('/trial-sessions');
+  let route = '/trial-sessions';
+  const trialSessionsTab = get(state.currentViewMetadata.tab);
+
+  if (trialSessionsTab) route += `?status=${trialSessionsTab}`;
+
+  await router.route(route);
 };
