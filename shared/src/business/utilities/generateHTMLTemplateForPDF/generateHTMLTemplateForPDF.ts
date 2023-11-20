@@ -12,12 +12,13 @@ export const generateHTMLTemplateForPDF = ({
   content,
   options = {},
 }) => {
+  const main = require('../htmlGenerator/index.scss_');
   const template = require('../htmlGenerator/index.pug_');
 
   const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
-  const { css } = sass.compile('../htmlGenerator/index.scss_');
+  const { css } = sass.compileString(main);
 
   const compiledFunction = pug.compile(template);
   const html = compiledFunction({
