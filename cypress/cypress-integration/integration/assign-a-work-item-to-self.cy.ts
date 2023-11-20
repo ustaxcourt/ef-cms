@@ -3,6 +3,7 @@ import { retry } from '../../helpers/retry';
 describe('Work item assignment', () => {
   it('petitionsClerk assigns a work item to themselves, docketClerk should NOT see that work item as unassigned', () => {
     cy.login('petitionsclerk', '/document-qc/section/inbox');
+    cy.get('#section-work-queue').should('exist');
     cy.get('[data-testid="work-item-102-20"]')
       .find('[data-testid="checkbox-assign-work-item"]')
       .click();
