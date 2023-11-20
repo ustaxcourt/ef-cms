@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { CaseWorksheets } from '../CaseWorksheet/CaseWorksheets';
 import { ErrorNotification } from '../ErrorNotification';
+import { PendingMotion } from '@web-client/views/PendingMotion/PendingMotion';
 import { RecentMessages } from '../WorkQueue/RecentMessages';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
@@ -30,7 +31,11 @@ export const DashboardChambers = connect(
             >
               <CaseWorksheets />
             </Tab>
-          </Tabs>{' '}
+
+            <Tab tabName="pendingMotions" title={'Pending Motions (to do)'}>
+              <PendingMotion />
+            </Tab>
+          </Tabs>
         </section>
       </>
     );
