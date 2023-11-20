@@ -77,6 +77,7 @@ export const FilingPartiesForm = connect(
                       />
                       <label
                         className="usa-checkbox__label"
+                        data-testid="filed-by-option"
                         htmlFor={`filing-${petitioner.contactId}`}
                       >
                         {petitioner.displayName}

@@ -9,13 +9,13 @@ presenter.providers.router = {
 };
 
 describe('navigateToTrialSessionDetailAction', () => {
-  it('should go to the trials session detail route using state.trialSessionId', async () => {
+  it('should go to the trials session detail route using state.trialSession.trialSessionId', async () => {
     await runAction(navigateToTrialSessionDetailAction, {
       modules: {
         presenter,
       },
       state: {
-        trialSessionId: '123',
+        trialSession: { trialSessionId: '123' },
       },
     });
     expect(routeMock).toHaveBeenCalled();
