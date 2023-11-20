@@ -20,17 +20,16 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal({}, { applicationContext });
 
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        caseCaption: CaseInternal.VALIDATION_ERROR_MESSAGES.caseCaption,
-        caseType: CaseInternal.VALIDATION_ERROR_MESSAGES.caseType,
+        caseCaption: 'Enter a case caption',
+        caseType: 'Select a case type',
         chooseAtLeastOneValue:
-          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
-        mailingDate: CaseInternal.VALIDATION_ERROR_MESSAGES.mailingDate,
-        partyType: CaseInternal.VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile: CaseInternal.VALIDATION_ERROR_MESSAGES.petitionFile,
-        petitionPaymentStatus:
-          CaseInternal.VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
-        procedureType: CaseInternal.VALIDATION_ERROR_MESSAGES.procedureType,
-        receivedAt: CaseInternal.VALIDATION_ERROR_MESSAGES.receivedAt[1],
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
+        mailingDate: 'Enter a mailing date',
+        partyType: 'Select a party type',
+        petitionFile: 'Upload or scan a Petition',
+        petitionPaymentStatus: 'Select a filing fee option',
+        procedureType: 'Select a case procedure',
+        receivedAt: 'Enter a valid date received',
       });
     });
 
@@ -236,7 +235,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+      ).toEqual('Your Petition file size is empty');
     });
 
     it('fails validation if petitionPaymentStatus is Waived but applicationForWaiverOfFilingFeeFile is not set', () => {
@@ -252,10 +251,7 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFile,
-      ).toEqual(
-        CaseInternal.VALIDATION_ERROR_MESSAGES
-          .applicationForWaiverOfFilingFeeFile,
-      );
+      ).toEqual('Upload or scan an Application for Waiver of Filing Fee (APW)');
     });
 
     it('fails validation if partyType is Corporation and orderForCds is undefined', () => {
@@ -268,7 +264,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors()!.corporateDisclosureFile,
-      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+      ).toEqual('Upload or scan Corporate Disclosure Statement(CDS)');
     });
 
     it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForCds is false', () => {
@@ -282,7 +278,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors()!.corporateDisclosureFile,
-      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+      ).toEqual('Upload or scan Corporate Disclosure Statement(CDS)');
     });
 
     it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
@@ -298,10 +294,7 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFileSize,
-      ).toEqual(
-        CaseInternal.VALIDATION_ERROR_MESSAGES
-          .applicationForWaiverOfFilingFeeFileSize[1],
-      );
+      ).toEqual('Your Filing Fee Waiver file size is empty');
     });
 
     it('fails validation if stinFile is set, but stinFileSize is not', () => {
@@ -315,7 +308,7 @@ describe('CaseInternal entity', () => {
       );
 
       expect(caseInternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        CaseInternal.VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+        'Your STIN file size is empty',
       );
     });
 
@@ -332,9 +325,7 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(
-        CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1],
-      );
+      ).toEqual('Your Corporate Disclosure Statement file size is empty');
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but requestForPlaceOfTrialFileSize is not', () => {
@@ -350,10 +341,7 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors()!
           .requestForPlaceOfTrialFileSize,
-      ).toEqual(
-        CaseInternal.VALIDATION_ERROR_MESSAGES
-          .requestForPlaceOfTrialFileSize[1],
-      );
+      ).toEqual('Your Request for Place of Trial file size is empty');
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but preferredTrialCity is not', () => {
@@ -368,7 +356,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors()!.preferredTrialCity,
-      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.preferredTrialCity);
+      ).toEqual('Select a preferred trial location');
     });
 
     it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
@@ -383,9 +371,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors()!.requestForPlaceOfTrialFile,
-      ).toEqual(
-        CaseInternal.VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile,
-      );
+      ).toEqual('Upload or scan a Request for Place of Trial (RQT)');
     });
 
     it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
@@ -427,7 +413,7 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
         chooseAtLeastOneValue:
-          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
       });
     });
 
@@ -471,7 +457,7 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
         chooseAtLeastOneValue:
-          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
       });
     });
   });
