@@ -94,13 +94,6 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
     ).optional(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrivatePractitioner: joi.boolean().optional(),
-    // primaryDocumentFileSize: [
-    //   {
-    //     contains: 'must be less than or equal to',
-    //     message: `Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    //   },
-    //   'Your Primary Document file size is empty.',
-    // ],
     primaryDocumentFile: joi
       .object()
       .required()
