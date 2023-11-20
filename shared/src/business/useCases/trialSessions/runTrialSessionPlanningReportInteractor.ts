@@ -25,6 +25,40 @@ type TrialLocationData = {
   trialCityState: string;
 };
 
+export const runTrialSessionPlanningReportInteractor = async (
+  applicationContext: IApplicationContext,
+  { term, year }: { term: string; year: string },
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const reportData = await getTrialSessionPlanningReportData({
+    applicationContext,
+    term,
+    year,
+  });
+
+  const trialSessionPlanningReport = await applicationContext
+    .getDocumentGenerators()
+    .trialSessionPlanningReport({
+      applicationContext,
+      data: {
+        locationData: reportData.trialLocationData,
+        previousTerms: reportData.previousTerms,
+        term: `${capitalize(term)} ${year}`,
+      },
+    });
+
+  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
+    applicationContext,
+    file: trialSessionPlanningReport,
+    useTempBucket: true,
+  });
+};
+
 export const getPreviousTerm = (
   currentTerm: string,
   currentYear: string,
@@ -157,38 +191,4 @@ export const getTrialSessionPlanningReportData = async ({
   );
 
   return { previousTerms, trialLocationData };
-};
-
-export const runTrialSessionPlanningReportInteractor = async (
-  applicationContext: IApplicationContext,
-  { term, year }: { term: string; year: string },
-) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const reportData = await getTrialSessionPlanningReportData({
-    applicationContext,
-    term,
-    year,
-  });
-
-  const trialSessionPlanningReport = await applicationContext
-    .getDocumentGenerators()
-    .trialSessionPlanningReport({
-      applicationContext,
-      data: {
-        locationData: reportData.trialLocationData,
-        previousTerms: reportData.previousTerms,
-        term: `${capitalize(term)} ${year}`,
-      },
-    });
-
-  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
-    applicationContext,
-    file: trialSessionPlanningReport,
-    useTempBucket: true,
-  });
 };
