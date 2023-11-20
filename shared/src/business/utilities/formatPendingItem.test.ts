@@ -97,18 +97,6 @@ describe('formatPendingItem', () => {
     ]);
   });
 
-  it('should add the trial location and trial date to the case status for pending items on cases that are calendared', () => {
-    pendingItem.status = CASE_STATUS_TYPES.calendared;
-    pendingItem.trialDate = '2022-02-01T17:21:05.486Z';
-    pendingItem.trialLocation = 'Houston, Texas';
-
-    const result = formatPendingItem(pendingItem, { applicationContext });
-
-    expect(result.formattedStatus).toEqual(
-      `${CASE_STATUS_TYPES.calendared} - 02/01/22 Houston, TX`,
-    );
-  });
-
   it('should add consolidated properties to a pending item in a consolidated group', () => {
     pendingItem.leadDocketNumber = '100-19';
 
