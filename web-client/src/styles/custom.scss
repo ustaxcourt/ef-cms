@@ -989,6 +989,7 @@ header.usa-header {
 }
 
 .floating-card-pages {
+  flex: 1;
   background-color: color($theme-color-primary-darker);
 
   .usa-label {
