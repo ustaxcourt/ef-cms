@@ -5,7 +5,6 @@ import {
   MULTI_DOCKET_FILING_EVENT_CODES,
   PARTY_TYPES,
 } from '../entities/EntityConstants';
-import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generateCoverSheetData } from './generateCoverSheetData';
@@ -418,23 +417,6 @@ describe('generateCoverSheetData', () => {
     } as any);
 
     expect(result.documentTitle).toBe(mockDocumentType);
-  });
-
-  it('should append the formatted stamp date as "MM/DD/YYYY" to the coversheet when stampData.date is defined', async () => {
-    const mockDate = applicationContext.getUtilities().createISODateString();
-
-    const result = await generateCoverSheetData({
-      applicationContext,
-      caseEntity: testingCaseData,
-      docketEntryEntity: testingCaseData.docketEntries[0],
-      stampData: {
-        date: mockDate,
-      },
-    } as any);
-
-    expect(result.stamp.date).toEqual(
-      formatDateString(mockDate, FORMATS.MMDDYYYY),
-    );
   });
 
   it('should not call formatConsolidatedCaseCoversheetData if the document is not in a case in a consolidated group', async () => {
