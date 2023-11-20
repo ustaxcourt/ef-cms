@@ -33,6 +33,7 @@ export const SearchBox = connect(
           </label>
           <input
             className="usa-input"
+            data-testid="docket-number-search-input"
             id="search-field"
             name="searchTerm"
             placeholder="Enter docket no. (123-19)"
