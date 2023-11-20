@@ -11,10 +11,23 @@ describe('run trial session planning report', () => {
   let user;
 
   beforeEach(() => {
+    user = {
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsClerk',
+    };
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialCity.mockResolvedValue([
+        { docketNumber: '123-20' },
+        { docketNumber: '234-20' },
+      ]);
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessions.mockResolvedValue([]);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -36,11 +49,6 @@ describe('run trial session planning report', () => {
   });
 
   it('returns the created pdf url', async () => {
-    user = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsClerk',
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getEligibleCasesForTrialCity.mockReturnValue([
@@ -87,7 +95,7 @@ describe('run trial session planning report', () => {
           startDate: '2019-05-01T21:40:46.415Z',
           term: 'spring',
           termYear: '2019',
-          trialLocation: 'Birmingham, Alabama',
+          trialLocation: 'Aberdeen, South Dakota',
           trialSessionId: '123',
         },
         {
@@ -96,7 +104,7 @@ describe('run trial session planning report', () => {
           startDate: '2019-04-01T21:40:46.415Z',
           term: 'spring',
           termYear: '2019',
-          trialLocation: 'Birmingham, Alabama',
+          trialLocation: 'Aberdeen, South Dakota',
           trialSessionId: '234',
         },
         {
@@ -105,7 +113,7 @@ describe('run trial session planning report', () => {
           startDate: '2019-06-01T21:40:46.415Z',
           term: 'spring',
           termYear: '2019',
-          trialLocation: 'Birmingham, Alabama',
+          trialLocation: 'Aberdeen, South Dakota',
           trialSessionId: '234',
         },
         {
@@ -114,7 +122,7 @@ describe('run trial session planning report', () => {
           startDate: '2019-09-01T21:40:46.415Z',
           term: 'fall',
           termYear: '2019',
-          trialLocation: 'Birmingham, Alabama',
+          trialLocation: 'Aberdeen, South Dakota',
           trialSessionId: '345',
         },
         {
@@ -123,7 +131,7 @@ describe('run trial session planning report', () => {
           startDate: '2019-10-01T21:40:46.415Z',
           term: 'fall',
           termYear: '2019',
-          trialLocation: 'Birmingham, Alabama',
+          trialLocation: 'Aberdeen, South Dakota',
           trialSessionId: '456',
         },
         {
@@ -132,7 +140,7 @@ describe('run trial session planning report', () => {
           startDate: '2019-11-11T21:40:40.415Z',
           term: 'fall',
           termYear: '2019',
-          trialLocation: 'Mobile, Alabama',
+          trialLocation: 'Albany, New York',
           trialSessionId: '888',
         },
       ];
@@ -140,13 +148,6 @@ describe('run trial session planning report', () => {
         role: ROLES.petitionsClerk,
         userId: 'petitionsClerk',
       };
-
-      applicationContext
-        .getPersistenceGateway()
-        .getEligibleCasesForTrialCity.mockReturnValue([
-          { docketNumber: '123-20' },
-          { docketNumber: '234-20' },
-        ]);
 
       applicationContext
         .getPersistenceGateway()
@@ -169,17 +170,36 @@ describe('run trial session planning report', () => {
         previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Colvin'], []],
         regularCaseCount: 2,
         smallCaseCount: 2,
-        stateAbbreviation: 'AL',
-        trialCityState: 'Birmingham, Alabama',
+        stateAbbreviation: 'SD',
+        trialCityState: 'Aberdeen, South Dakota',
       });
       expect(results.trialLocationData[1]).toMatchObject({
         allCaseCount: 4,
         previousTermsData: [['(HS) Ashford'], [], []],
         regularCaseCount: 2,
         smallCaseCount: 2,
-        stateAbbreviation: 'AL',
-        trialCityState: 'Mobile, Alabama',
+        stateAbbreviation: 'NY',
+        trialCityState: 'Albany, New York',
       });
+    });
+
+    it('sorts trial locations by city', async () => {
+      const results = await getTrialSessionPlanningReportData({
+        applicationContext,
+        term: 'winter',
+        year: '2020',
+      });
+
+      expect(results.trialLocationData[0].trialCityState).toEqual(
+        'Aberdeen, South Dakota',
+      );
+      expect(results.trialLocationData[1].trialCityState).toEqual(
+        'Albany, New York',
+      );
+      expect(
+        results.trialLocationData[results.trialLocationData.length - 1]
+          .trialCityState,
+      ).toEqual('Winston-Salem, North Carolina');
     });
   });
 
