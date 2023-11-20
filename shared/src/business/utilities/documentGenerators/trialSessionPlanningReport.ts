@@ -1,10 +1,21 @@
+import {
+  PreviousTerm,
+  TrialLocationData,
+} from '@shared/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
 export const trialSessionPlanningReport = async ({
   applicationContext,
   data,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    locationData: TrialLocationData[];
+    previousTerms: PreviousTerm[];
+    term: string;
+  };
+}): Promise<Buffer> => {
   const { locationData, previousTerms, term } = data;
 
   const trialSessionPlanningReportTemplate = reactTemplateGenerator({
