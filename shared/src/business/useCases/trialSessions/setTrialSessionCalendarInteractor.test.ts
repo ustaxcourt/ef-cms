@@ -1,9 +1,11 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import {
   PARTY_TYPES,
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
@@ -27,19 +29,25 @@ describe('setTrialSessionCalendarInteractor', () => {
     termYear: '2025',
     trialLocation: 'Birmingham, Alabama',
   };
+  let mockLock;
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+    applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
   beforeEach(() => {
+    mockLock = undefined;
     user = new User({
       name: 'petitionsClerk',
       role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL);
@@ -233,6 +241,41 @@ describe('setTrialSessionCalendarInteractor', () => {
         .mock.calls[0][0],
     ).toMatchObject({
       limit: 149, // max cases + buffer - manually added case
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      setTrialSessionCalendarInteractor(applicationContext, {
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 900,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
   });
 });

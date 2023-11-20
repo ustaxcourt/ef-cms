@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
-import {
-  acquireLock,
-  deleteLock,
-} from './persistence/dynamo/locks/acquireLock';
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
@@ -20,6 +16,11 @@ import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCas
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
+import {
+  createLock,
+  getLock,
+  removeLock,
+} from './persistence/dynamo/locks/acquireLock';
 import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
@@ -118,7 +119,6 @@ import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSes
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
-import { getUserCaseMappingsByDocketNumber } from './persistence/dynamo/cases/getUserCaseMappingsByDocketNumber';
 import { getUserCaseNote } from './persistence/dynamo/userCaseNotes/getUserCaseNote';
 import { getUserCaseNoteForCases } from './persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
 import { getUserInboxMessages } from './persistence/elasticsearch/messages/getUserInboxMessages';
@@ -171,7 +171,6 @@ import { updatePractitionerUser } from './persistence/dynamo/users/updatePractit
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { updateUser } from './persistence/dynamo/users/updateUser';
-import { updateUserCaseMapping } from './persistence/dynamo/cases/updateUserCaseMapping';
 import { updateUserCaseNote } from './persistence/dynamo/userCaseNotes/updateUserCaseNote';
 import { updateUserEmail } from './persistence/dynamo/users/updateUserEmail';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
@@ -273,7 +272,6 @@ const gatewayMethods = {
     updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
-  acquireLock,
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
@@ -283,12 +281,12 @@ const gatewayMethods = {
       : confirmAuthCodeLocal
     : confirmAuthCode,
   createChangeOfAddressJob,
+  createLock,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
-  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
@@ -340,6 +338,7 @@ const gatewayMethods = {
   getFirstSingleCaseRecord,
   getInternalUsers,
   getLimiterByKey,
+  getLock,
   getMaintenanceMode,
   getMessageById,
   getMessageThreadByParentId,
@@ -365,7 +364,6 @@ const gatewayMethods = {
   getUploadPolicy,
   getUserByEmail,
   getUserById,
-  getUserCaseMappingsByDocketNumber,
   getUserCaseNote,
   getUserCaseNoteForCases,
   getUserInboxMessages,
@@ -385,10 +383,10 @@ const gatewayMethods = {
       })
     : refreshToken,
   removeIrsPractitionerOnCase,
+  removeLock,
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
-  updateUserCaseMapping,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,
