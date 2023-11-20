@@ -9,10 +9,10 @@ export const addDocketNumbersModalHelper = (
   confirmLabelTitle: string;
   modalTitle: string;
 } => {
-  console.log(
-    'get(state.modal.form.processConsolidatedCasesSelection)',
-    get(state.processConsolidatedCasesSelection),
-  );
+  // console.log(
+  //   'get(state.modal.form.processConsolidatedCasesSelection)',
+  //   get(state.processConsolidatedCasesSelection),
+  // );
 
   const addConsolidatedCasesSeletected = get(
     state.processConsolidatedCasesSelection,
