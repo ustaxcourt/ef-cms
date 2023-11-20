@@ -22,6 +22,7 @@ export const sendIrsSuperuserPetitionEmail = async ({
   const caseDetail = applicationContext
     .getUtilities()
     .setServiceIndicatorsForCase(caseEntity);
+
   const {
     caseCaption,
     docketNumber,
