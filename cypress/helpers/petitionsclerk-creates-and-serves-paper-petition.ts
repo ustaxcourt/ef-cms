@@ -1,4 +1,5 @@
 export function petitionsclerkCreatesAndServesPaperPetition() {
+  const name = 'rick james ' + Date.now();
   cy.login('petitionsclerk1');
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
@@ -11,7 +12,7 @@ export function petitionsclerkCreatesAndServesPaperPetition() {
   cy.get('[data-testid="start-a-petition"]').click();
   cy.get('#party-type').select('Petitioner');
   cy.get('[data-testid="contact-primary-name"]').clear();
-  cy.get('[data-testid="contact-primary-name"]').type('rick james');
+  cy.get('[data-testid="contact-primary-name"]').type(name);
   cy.get('[data-testid="contactPrimary.address1"]').clear();
   cy.get('[data-testid="contactPrimary.address1"]').type('some random street');
   cy.get('[data-testid="contactPrimary.city"]').clear();
@@ -55,6 +56,6 @@ export function petitionsclerkCreatesAndServesPaperPetition() {
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('#done-viewing-paper-petition-receipt-button').click();
       cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
-      return cy.wrap(docketNumber!);
+      return cy.wrap({ docketNumber: docketNumber!, name });
     });
 }
