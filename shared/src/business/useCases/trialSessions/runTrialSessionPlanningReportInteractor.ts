@@ -28,7 +28,10 @@ export type TrialLocationData = {
 export const runTrialSessionPlanningReportInteractor = async (
   applicationContext: IApplicationContext,
   { term, year }: { term: string; year: string },
-) => {
+): Promise<{
+  fileId: string;
+  url: string;
+}> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
