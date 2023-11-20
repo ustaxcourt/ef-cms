@@ -8,9 +8,9 @@ describe('Private practitioner mobile', () => {
   it('should have access to case, order, and opinion advanced searches (and NOT practitioner advanced search)', () => {
     navigateToDashboard('privatePractitioner');
 
-    cy.get('[data-test="advanced-search-link"]').click();
+    cy.get('[data-testid="advanced-search-link"]').click();
 
-    cy.get('[data-test="advanced-search-type-mobile-selector"]')
+    cy.get('[data-testid="advanced-search-type-mobile-selector"]')
       .children()
       .then(options => {
         const actualAdvancedSearchOptions: string[] = [...options].map(

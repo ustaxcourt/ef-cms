@@ -103,7 +103,10 @@ export const privatePractitionerUser = {
   userId: '330d4b65-620a-489d-8414-6623653ebc4f',
 };
 
-export const trialClerkUser = {
+export const trialClerkUser: RawUser = {
+  email: 'kason.marzena@example.com',
+  entityName: 'User',
+  name: 'Kason Marzena',
   role: ROLES.trialClerk,
   section: TRIAL_CLERKS_SECTION,
   userId: '4b1bb9ca-c997-4356-9682-2bca88fb048d',
