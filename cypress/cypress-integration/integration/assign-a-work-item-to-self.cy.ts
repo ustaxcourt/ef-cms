@@ -20,7 +20,7 @@ describe('Work item assignment', () => {
           ).length > 0
         );
       });
-    });
+    }, 10);
 
     cy.login('docketclerk', '/document-qc/section/inbox');
     cy.get('[data-testid="checkbox-select-all-workitems"]').click();
