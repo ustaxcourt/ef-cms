@@ -1,6 +1,9 @@
-import { DOCKET_NUMBER_SUFFIXES, ROLES } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  DOCKET_NUMBER_SUFFIXES,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintablePendingReportInteractor } from './generatePrintablePendingReportInteractor';
 
 describe('generatePrintablePendingReportInteractor', () => {
@@ -10,18 +13,21 @@ describe('generatePrintablePendingReportInteractor', () => {
     {
       associatedJudge: 'Judge Judgey',
       docketNumber: '456-68',
+      docketNumberWithSuffix: '456-68',
       documentTitle: 'Test Document Best',
       receivedAt: '2022-02-04T12:00:00.000Z',
     },
     {
       associatedJudge: 'Judge Judger',
       docketNumber: '456-69',
+      docketNumberWithSuffix: '456-69',
       documentTitle: 'Test Document Best',
       receivedAt: '2021-03-04T12:00:00.000Z',
     },
     {
       associatedJudge: 'Judge Foley',
       docketNumber: '456-67',
+      docketNumberWithSuffix: '456-67',
       documentTitle: 'Test Document Best',
       receivedAt: '2020-03-04T12:00:00.000Z',
     },
@@ -29,6 +35,7 @@ describe('generatePrintablePendingReportInteractor', () => {
       associatedJudge: 'Judge Colvin',
       caseCaption: 'Test Caption, Petitioner',
       docketNumber: '123-45',
+      docketNumberWithSuffix: '123-45',
       documentTitle: 'Test Document Title',
       receivedAt: '1990-01-01T12:00:00.000Z',
     },
@@ -36,6 +43,7 @@ describe('generatePrintablePendingReportInteractor', () => {
       associatedJudge: 'Judge Judgeson',
       caseCaption: 'Test Caption, Petitioner',
       docketNumber: '123-49',
+      docketNumberWithSuffix: '123-49',
       documentTitle: 'Test Document Title',
       receivedAt: '1999-01-01T12:00:00.000Z',
     },
@@ -44,12 +52,14 @@ describe('generatePrintablePendingReportInteractor', () => {
       caseCaption: 'Test Caption Two, Petitioner(s)',
       docketNumber: '234-56',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      docketNumberWithSuffix: '234-56S',
       documentType: 'Test Document Type',
       receivedAt: '2020-02-02T12:00:00.000Z',
     },
     {
       associatedJudge: 'Judge Alvin',
       docketNumber: '345-67',
+      docketNumberWithSuffix: '345-67',
       documentTitle: 'Test Document Title',
       leadDocketNumber: '456-78',
       receivedAt: '2020-03-03T12:00:00.000Z',
@@ -57,6 +67,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     {
       associatedJudge: 'Judge Buch',
       docketNumber: '456-78',
+      docketNumberWithSuffix: '456-78',
       documentTitle: 'Fear and Trembling',
       leadDocketNumber: '456-78',
       receivedAt: '2020-03-03T12:00:00.000Z',
@@ -70,13 +81,9 @@ describe('generatePrintablePendingReportInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .fetchPendingItems.mockReturnValue({
+      .fetchPendingItems.mockResolvedValue({
         foundDocuments: mockFoundDocuments,
       });
-
-    applicationContext
-      .getUseCaseHelpers()
-      .fetchPendingItemsByDocketNumber.mockReturnValue(mockFoundDocuments);
 
     applicationContext
       .getPersistenceGateway()
@@ -140,107 +147,78 @@ describe('generatePrintablePendingReportInteractor', () => {
 
     expect(pendingItems).toMatchObject([
       {
-        associatedJudge: 'Judge Judgey',
         associatedJudgeFormatted: 'Judgey',
         caseTitle: '',
         docketNumber: '456-68',
         docketNumberWithSuffix: '456-68',
-        documentTitle: 'Test Document Best',
         formattedFiledDate: '02/04/22',
         formattedName: 'Test Document Best',
         inConsolidatedGroup: false,
-        inLeadCase: false,
-        receivedAt: '2022-02-04T12:00:00.000Z',
+        isLeadCase: false,
       },
       {
-        associatedJudge: 'Judge Judger',
         associatedJudgeFormatted: 'Judger',
         caseTitle: '',
         docketNumber: '456-69',
         docketNumberWithSuffix: '456-69',
-        documentTitle: 'Test Document Best',
         formattedFiledDate: '03/04/21',
         formattedName: 'Test Document Best',
         inConsolidatedGroup: false,
-        inLeadCase: false,
-        receivedAt: '2021-03-04T12:00:00.000Z',
+        isLeadCase: false,
       },
       {
-        associatedJudge: 'Judge Foley',
         associatedJudgeFormatted: 'Foley',
         caseTitle: '',
         docketNumber: '456-67',
         docketNumberWithSuffix: '456-67',
-        documentTitle: 'Test Document Best',
         formattedFiledDate: '03/04/20',
         formattedName: 'Test Document Best',
         inConsolidatedGroup: false,
-        inLeadCase: false,
-        receivedAt: '2020-03-04T12:00:00.000Z',
+        isLeadCase: false,
       },
       {
-        associatedJudge: 'Judge Colvin',
         associatedJudgeFormatted: 'Colvin',
-        caseCaption: 'Test Caption, Petitioner',
         caseTitle: 'Test Caption',
         docketNumber: '123-45',
         docketNumberWithSuffix: '123-45',
-        documentTitle: 'Test Document Title',
         formattedFiledDate: '01/01/90',
         formattedName: 'Test Document Title',
         inConsolidatedGroup: false,
-        inLeadCase: false,
-        receivedAt: '1990-01-01T12:00:00.000Z',
+        isLeadCase: false,
       },
       {
-        associatedJudge: 'Judge Judgeson',
         associatedJudgeFormatted: 'Judgeson',
-        caseCaption: 'Test Caption, Petitioner',
         caseTitle: 'Test Caption',
         docketNumber: '123-49',
         docketNumberWithSuffix: '123-49',
-        documentTitle: 'Test Document Title',
         formattedFiledDate: '01/01/99',
         formattedName: 'Test Document Title',
         inConsolidatedGroup: false,
-        inLeadCase: false,
-        receivedAt: '1999-01-01T12:00:00.000Z',
+        isLeadCase: false,
       },
       {
-        associatedJudge: 'Judge Buch',
         associatedJudgeFormatted: 'Buch',
-        caseCaption: 'Test Caption Two, Petitioner(s)',
         caseTitle: 'Test Caption Two',
         docketNumber: '234-56',
-        docketNumberSuffix: 'S',
         docketNumberWithSuffix: '234-56S',
-        documentType: 'Test Document Type',
         formattedFiledDate: '02/02/20',
         formattedName: 'Test Document Type',
         inConsolidatedGroup: false,
-        inLeadCase: false,
-        receivedAt: '2020-02-02T12:00:00.000Z',
+        isLeadCase: false,
       },
       {
-        associatedJudge: 'Judge Alvin',
         associatedJudgeFormatted: 'Alvin',
         caseTitle: '',
         docketNumber: '345-67',
         docketNumberWithSuffix: '345-67',
-        documentTitle: 'Test Document Title',
         formattedFiledDate: '03/03/20',
         formattedName: 'Test Document Title',
         inConsolidatedGroup: true,
-        receivedAt: '2020-03-03T12:00:00.000Z',
       },
       {
-        associatedJudge: 'Judge Buch',
         docketNumber: '456-78',
-        documentTitle: 'Fear and Trembling',
         inConsolidatedGroup: true,
-        inLeadCase: true,
-        leadDocketNumber: '456-78',
-        receivedAt: '2020-03-03T12:00:00.000Z',
+        isLeadCase: true,
       },
     ]);
   });
@@ -281,7 +259,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should generate a subtitle with the docket number suffix if present', async () => {
-    MOCK_CASE.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
+    MOCK_CASE.docketNumberWithSuffix = `${MOCK_CASE.docketNumber}${DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER}`;
 
     await generatePrintablePendingReportInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
