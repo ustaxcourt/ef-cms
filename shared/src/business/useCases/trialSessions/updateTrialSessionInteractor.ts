@@ -14,7 +14,6 @@ import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessi
 import { get } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-// eslint-disable-next-line complexity
 export const updateTrialSession = async (
   applicationContext: IApplicationContext,
   {
