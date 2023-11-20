@@ -22,9 +22,9 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
         caseCaption: 'Enter a case caption',
         caseType: 'Select a case type',
-        chooseAtLeastOneValue:
-          'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
         mailingDate: 'Enter a mailing date',
+        'object.missing':
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
         partyType: 'Select a party type',
         petitionFile: 'Upload or scan a Petition',
         petitionPaymentStatus: 'Select a filing fee option',
@@ -412,7 +412,7 @@ describe('CaseInternal entity', () => {
 
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        chooseAtLeastOneValue:
+        'object.missing':
           'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
       });
     });
@@ -456,7 +456,7 @@ describe('CaseInternal entity', () => {
 
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        chooseAtLeastOneValue:
+        'object.missing':
           'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
       });
     });

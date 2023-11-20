@@ -332,7 +332,11 @@ export class CaseInternal extends JoiValidationEntity {
       'preferredTrialCity',
       'requestForPlaceOfTrialFile',
       'orderDesignatingPlaceOfTrial',
-    );
+    )
+    .messages({
+      'object.missing':
+        'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
+    });
 
   getValidationRules() {
     return CaseInternal.VALIDATION_RULES;
@@ -340,15 +344,6 @@ export class CaseInternal extends JoiValidationEntity {
 
   getValidationErrors() {
     const validationErrors = super.getValidationErrors();
-    if (!validationErrors) return validationErrors;
-
-    Object.keys(validationErrors).forEach(k => {
-      if (k === 'object.missing') {
-        validationErrors['chooseAtLeastOneValue'] =
-          'Select trial location and upload/scan RQT or check Order Designating Place of Trial';
-        delete validationErrors['object.missing'];
-      }
-    });
 
     return validationErrors;
   }
