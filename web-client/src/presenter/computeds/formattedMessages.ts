@@ -73,22 +73,3 @@ export const formattedMessages = (
 
   return sharedComputedResult;
 };
-
-export const setTrialInformationOnMessage = ({
-  applicationContext,
-  message,
-}) => {
-  const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
-
-  if (message.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-    message.formattedTrialLocation = applicationContext
-      .getUtilities()
-      .abbreviateState(message.trialLocation);
-  } else {
-    message.formattedTrialLocation = message.trialLocation;
-  }
-
-  message.formattedTrialDate = applicationContext
-    .getUtilities()
-    .formatDateString(message.trialDate, 'MMDDYY');
-};
