@@ -55,7 +55,7 @@ describe('Notes Icon triggered by Judges Notes', () => {
 
     cy.login('judgecolvin');
     cy.getByTestId('message-header-link').first().click();
-    cy.getByTestId('notes-icon');
+    cy.getByTestId('notes-icon').should('exist');
   });
 
   it('should display the notes icon when logged in as a chambers user and there are judges notes on the case we navigated to using the messages link', () => {
@@ -76,6 +76,6 @@ describe('Notes Icon triggered by Judges Notes', () => {
 
     cy.login('colvinschambers');
     cy.getByTestId('message-header-link').first().click();
-    cy.getByTestId('notes-icon');
+    cy.getByTestId('notes-icon').should('exist');
   });
 });
