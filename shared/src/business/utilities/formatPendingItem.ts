@@ -1,4 +1,3 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 
 export type PendingItemFormatted = {
@@ -36,16 +35,14 @@ export const formatPendingItem = (
 
   const formattedName = item.documentTitle || item.documentType;
 
-  let formattedStatus: string = item.status;
-  if (item.status === CASE_STATUS_TYPES.calendared) {
-    const trialDate = applicationContext
-      .getUtilities()
-      .formatDateString(item.trialDate, 'MM/dd/yy');
-    const trialLocation = applicationContext
-      .getUtilities()
-      .abbreviateState(item.trialLocation);
-    formattedStatus = `${item.status} - ${trialDate} ${trialLocation}`;
-  }
+  const formattedStatus: string = applicationContext
+    .getUtilities()
+    .caseStatusWithTrialInformation({
+      applicationContext,
+      caseStatus: item.status,
+      trialDate: item.trialDate,
+      trialLocation: item.trialLocation,
+    });
 
   const documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
 

@@ -20,18 +20,16 @@ export const formattedMessages = (
     tableSort,
   });
 
-  const { STATUS_TYPES } = applicationContext.getConstants();
-
   messages.forEach(message => {
-    message.showTrialInformation =
-      message.caseStatus === STATUS_TYPES.calendared;
-
-    if (message.showTrialInformation) {
-      setTrialInformationOnMessage({
+    const statusWithTrialInfo = applicationContext
+      .getUtilities()
+      .caseStatusWithTrialInformation({
         applicationContext,
-        message,
+        caseStatus: message.caseStatus,
+        trialDate: message.trialDate,
+        trialLocation: message.trialLocation,
       });
-    }
+    message.caseStatus = statusWithTrialInfo;
   });
 
   const { box } = get(state.messageBoxToDisplay);
