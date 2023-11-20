@@ -13,10 +13,12 @@ export const DateSelector = ({
   label,
   minDate,
   onChange,
+  placeHolderText,
   showDateHint = false,
 }: {
   defaultValue: string | undefined;
   displayOptionalHintText?: boolean;
+  placeHolderText?: string;
   errorText?: string;
   disabled?: boolean;
   formGroupClassNames?: string;
@@ -27,6 +29,7 @@ export const DateSelector = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
 }) => {
+  const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
   const formGroupInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -40,12 +43,13 @@ export const DateSelector = ({
        * we can get the actual visible value of the input.
        */
       datePicker.on(formGroupInputRef.current);
-      const myDatePicker = formGroupInputRef.current.querySelector(
-        `#${id}-picker.usa-date-picker__external-input`,
-      );
+      const myDatePicker =
+        formGroupInputRef.current.querySelector(datePickerId);
+
       if (!myDatePicker) throw new Error('could not find expected date picker');
-      myDatePicker.addEventListener('change', onChange);
-      myDatePicker.addEventListener('input', onChange);
+
+      (myDatePicker as HTMLInputElement).addEventListener('change', onChange);
+      (myDatePicker as HTMLInputElement).addEventListener('input', onChange);
     }
   }, [formGroupInputRef]);
 
@@ -53,6 +57,14 @@ export const DateSelector = ({
     if (formGroupInputRef.current) {
       const input = formGroupInputRef.current.querySelector('.usa-date-picker');
       if (disabled) {
+        const myDatePicker =
+          formGroupInputRef.current.querySelector(datePickerId);
+
+        if (!myDatePicker)
+          throw new Error('could not find expected date picker');
+
+        (myDatePicker as HTMLInputElement).value = '';
+
         datePicker.disable(input);
       } else {
         datePicker.enable(input);
@@ -93,6 +105,7 @@ export const DateSelector = ({
           data-cy={`${id}-picker`}
           id={`${id}-picker`}
           name={`${id}-date-picker`}
+          placeholder={placeHolderText}
           type="text"
         />
       </div>
