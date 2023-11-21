@@ -2,10 +2,10 @@ import { addDocketNumbersModalHelper } from './addDocketNumbersModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('addDocketNumbersModalHelper', () => {
-  it('should display the proper modal text when addedDocketNumbers is defined with only 1 docket number', () => {
+  it('should display the "Edit Docket Numbers" modalTitle and "Save" label title if proper modal text if processConsolidatedCasesSelection is true', () => {
     const result = runCompute(addDocketNumbersModalHelper, {
       state: {
-        addedDocketNumbers: ['101-20'],
+        processConsolidatedCasesSelection: true,
       },
     });
     expect(result).toMatchObject({
@@ -14,22 +14,10 @@ describe('addDocketNumbersModalHelper', () => {
     });
   });
 
-  it('should display the proper modal text when addedDocketNumbers is defined with multiple docket number', () => {
+  it('should display the "Add Docket Numbers" modalTitle and confirmLabelTitle if processConsolidatedCasesSelection is false', () => {
     const result = runCompute(addDocketNumbersModalHelper, {
       state: {
-        addedDocketNumbers: ['101-20'],
-      },
-    });
-    expect(result).toMatchObject({
-      confirmLabelTitle: 'Save',
-      modalTitle: 'Edit Docket Numbers',
-    });
-  });
-
-  it('should display the proper modal text when addedDocketNumbers is undefined', () => {
-    const result = runCompute(addDocketNumbersModalHelper, {
-      state: {
-        addedDocketNumbers: undefined,
+        processConsolidatedCasesSelection: false,
       },
     });
     expect(result).toMatchObject({
