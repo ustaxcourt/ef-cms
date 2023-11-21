@@ -58,6 +58,8 @@ export class CaseInternal extends JoiValidationEntity {
   public statistics: any;
   public archivedDocketEntries: any;
   public archivedCorrespondences: any;
+  // TODO consider converting any to Docket Entry
+  public docketEntries: any;
 
   constructor(rawProps, { applicationContext }) {
     if (!applicationContext) {
@@ -108,6 +110,7 @@ export class CaseInternal extends JoiValidationEntity {
       rawProps.applicationForWaiverOfFilingFeeFile;
     this.applicationForWaiverOfFilingFeeFileSize =
       rawProps.applicationForWaiverOfFilingFeeFileSize;
+    this.docketEntries = rawProps.docketEntries;
 
     this.statistics = Array.isArray(rawProps.statistics)
       ? rawProps.statistics.map(
@@ -249,7 +252,24 @@ export class CaseInternal extends JoiValidationEntity {
         .conditional('preferredTrialCity', {
           is: joi.exist().not(null),
           otherwise: joi.object().optional(),
-          then: joi.object().required(), // object of type File
+          then: joi.custom((value, helper) => {
+            if (typeof value === 'object') {
+              return value;
+            }
+
+            if (
+              this.docketEntries.find(
+                document =>
+                  document.documentType === 'Request for Place of Trial',
+              )
+            ) {
+              return value;
+            }
+
+            return helper.message(
+              'Upload or scan a Request for Place of Trial (RQT)',
+            );
+          }),
         }),
       requestForPlaceOfTrialFileSize:
         JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
