@@ -55,15 +55,15 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
   cy.get('#penalty_0').type('0');
   cy.get('button#modal-button-confirm').click();
 
-  cy.getByTestId('button-upload-pdf').click();
+  cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('[data-testid="remove-pdf"]');
   cy.get('button#tabButton-stinFile').click();
-  cy.getByTestId('button-upload-pdf').click();
+  cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('[data-testid="remove-pdf"]');
   cy.get('button#tabButton-requestForPlaceOfTrialFile').click();
-  cy.getByTestId('button-upload-pdf').click();
+  cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
