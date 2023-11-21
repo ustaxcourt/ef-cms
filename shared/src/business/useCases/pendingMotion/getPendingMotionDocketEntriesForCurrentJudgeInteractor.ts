@@ -10,7 +10,14 @@ import {
   prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
 
-export type DocketEntryWithWorksheet = RawDocketEntry & {
+export type FormattedPendingMotionDocketEntry = RawDocketEntry & {
+  daysSinceCreated: number;
+  petitioners: TPetitioner[];
+  consolidatedGroupCount: number;
+  leadDocketNumber?: string;
+};
+
+export type DocketEntryWithWorksheet = FormattedPendingMotionDocketEntry & {
   docketEntryWorksheet: RawDocketEntryWorksheet;
 };
 
@@ -40,20 +47,30 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
       }),
     ),
   );
-
-  //TODO: MISSING PROPERTIES
-  //PETITIONERS
-  //COUNT OF CONSOLOIDATED CASES
-  // NUMBER OF DAYS IN PENDING STATE
-
   const pendingMotionDocketEntries = allCasesByJudge.reduce(
     (accumulator, aCase) => {
       const currentCasePendingMotionDocketEntries = (
         aCase.docketEntries as RawDocketEntry[]
-      ).filter(docketEntry => filterPendingMotionDocketEntry(docketEntry));
+      )
+        .map(docketEntry => {
+          const currentDate = prepareDateFromString().toISOString();
+          const dayDifference = calculateDifferenceInDays(
+            currentDate,
+            docketEntry.createdAt,
+          );
+
+          return {
+            ...docketEntry,
+            consolidatedGroupCount: aCase.consolidatedCases.length || 1,
+            daysSinceCreated: dayDifference,
+            leadDocketNumber: aCase.leadDocketNumber,
+            petitioners: aCase.petitioners,
+          };
+        })
+        .filter(docketEntry => filterPendingMotionDocketEntry(docketEntry));
       return [...accumulator, ...currentCasePendingMotionDocketEntries];
     },
-    [] as RawDocketEntry[],
+    [] as FormattedPendingMotionDocketEntry[],
   );
 
   const pendingMotionsDocketEntriesWithWorksheet: DocketEntryWithWorksheet[] =
@@ -83,23 +100,19 @@ async function getDocketNumbersOfCasesWithStatusType(
   ).map(c => c.docketNumber);
 }
 
-function filterPendingMotionDocketEntry(docketEntry: RawDocketEntry): boolean {
-  function isDocketEntryOlderThan180Days(createdAt: string) {
-    const currentDate = prepareDateFromString().toISOString();
-    const dayDifference = calculateDifferenceInDays(currentDate, createdAt);
-    return dayDifference >= 180;
-  }
-
+function filterPendingMotionDocketEntry(
+  docketEntry: FormattedPendingMotionDocketEntry,
+): boolean {
   return (
     !!docketEntry.pending &&
     MOTION_EVENT_CODES.includes(docketEntry.eventCode) &&
-    isDocketEntryOlderThan180Days(docketEntry.createdAt)
+    docketEntry.daysSinceCreated >= 180
   );
 }
 
 async function attachDocketEntryWorkSheets(
   applicationContext: IApplicationContext,
-  docketEntries: RawDocketEntry[],
+  docketEntries: FormattedPendingMotionDocketEntry[],
 ): Promise<DocketEntryWithWorksheet[]> {
   const docketEntryIds = docketEntries.map(
     docketEntry => docketEntry.docketEntryId,
@@ -125,7 +138,7 @@ async function attachDocketEntryWorkSheets(
       return {
         ...docketEntry,
         docketEntryWorksheet:
-          docketEntryWorksheetDictionary[docketEntry.docketEntryId],
+          docketEntryWorksheetDictionary[docketEntry.docketEntryId] || {},
       };
     });
 
