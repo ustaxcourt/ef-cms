@@ -1,10 +1,11 @@
+import { DocketEntryWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionCasesForCurrentJudgeInteractor';
 import { get } from '../requests';
 
 export const getPendingMotionCasesForCurrentJudgeInteractor = (
   applicationContext,
   params: any,
 ): Promise<{
-  cases: any[];
+  docketEntries: DocketEntryWithWorksheet[];
 }> => {
   return get({
     applicationContext,

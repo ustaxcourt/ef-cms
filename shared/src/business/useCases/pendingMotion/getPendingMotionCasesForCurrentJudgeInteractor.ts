@@ -3,27 +3,22 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/docketEntryWorksheet';
+import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   calculateDifferenceInDays,
   prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
 
-export type PendingMotionCasesWithDocketEntryWorksheets = Omit<
-  RawCase,
-  'docketEntries'
-> & {
-  docketEntries: (RawDocketEntry & {
-    docketEntryWorksheet: RawDocketEntryWorksheet;
-  })[];
+export type DocketEntryWithWorksheet = RawDocketEntry & {
+  docketEntryWorksheet: RawDocketEntryWorksheet;
 };
 
 export const getPendingMotionCasesForCurrentJudgeInteractor = async (
   applicationContext: IApplicationContext,
   params: { judges: string[] },
 ): Promise<{
-  cases: PendingMotionCasesWithDocketEntryWorksheets[];
+  docketEntries: DocketEntryWithWorksheet[];
 }> => {
   const { judges } = params;
   const authorizedUser = applicationContext.getCurrentUser();
@@ -45,18 +40,24 @@ export const getPendingMotionCasesForCurrentJudgeInteractor = async (
     ),
   );
 
-  const pendingMotionCasesByJudge: RawCase[] = allCasesByJudge.filter(aCase =>
-    filterCasesIfPendingMotion(aCase),
+  const pendingMotionDocketEntries = allCasesByJudge.reduce(
+    (accumulator, aCase) => {
+      const currentCasePendingMotionDocketEntries = (
+        aCase.docketEntries as RawDocketEntry[]
+      ).filter(docketEntry => filterPendingMotionDocketEntry(docketEntry));
+      return [...accumulator, ...currentCasePendingMotionDocketEntries];
+    },
+    [] as RawDocketEntry[],
   );
 
-  const pendingMotionsCasesWithDocketEntryWorksheet: PendingMotionCasesWithDocketEntryWorksheets[] =
+  const pendingMotionsDocketEntriesWithWorksheet: DocketEntryWithWorksheet[] =
     await attachDocketEntryWorkSheets(
       applicationContext,
-      pendingMotionCasesByJudge,
+      pendingMotionDocketEntries,
     );
 
   return {
-    cases: pendingMotionsCasesWithDocketEntryWorksheet,
+    docketEntries: pendingMotionsDocketEntriesWithWorksheet,
   };
 };
 
@@ -76,34 +77,27 @@ async function getDocketNumbersOfCasesWithStatusType(
   ).map(c => c.docketNumber);
 }
 
-function filterCasesIfPendingMotion(aCase: {
-  docketEntries: RawDocketEntry[];
-}): boolean {
-  return aCase.docketEntries.some(docketEntry => {
-    return (
-      docketEntry.pending &&
-      MOTION_EVENT_CODES.includes(docketEntry.eventCode) &&
-      isDocketEntryOlderThan180Days(docketEntry.createdAt)
-    );
-  });
-
+function filterPendingMotionDocketEntry(docketEntry: RawDocketEntry): boolean {
   function isDocketEntryOlderThan180Days(createdAt: string) {
     const currentDate = prepareDateFromString().toISOString();
     const dayDifference = calculateDifferenceInDays(currentDate, createdAt);
     return dayDifference >= 180;
   }
+
+  return (
+    !!docketEntry.pending &&
+    MOTION_EVENT_CODES.includes(docketEntry.eventCode) &&
+    isDocketEntryOlderThan180Days(docketEntry.createdAt)
+  );
 }
 
 async function attachDocketEntryWorkSheets(
   applicationContext: IApplicationContext,
-  cases: RawCase[],
-): Promise<PendingMotionCasesWithDocketEntryWorksheets[]> {
-  const docketEntryIds = cases.reduce((accumulator, aCase) => {
-    const ids = aCase.docketEntries.map(
-      docketEntry => docketEntry.docketEntryId,
-    );
-    return [...accumulator, ...ids];
-  }, [] as string[]);
+  docketEntries: RawDocketEntry[],
+): Promise<DocketEntryWithWorksheet[]> {
+  const docketEntryIds = docketEntries.map(
+    docketEntry => docketEntry.docketEntryId,
+  );
 
   const docketEntryWorksheets = await applicationContext
     .getPersistenceGateway()
@@ -120,17 +114,14 @@ async function attachDocketEntryWorkSheets(
     {} as { [key: string]: RawDocketEntryWorksheet },
   );
 
-  const completeCaseRecords = cases.map(aCase => {
-    return {
-      ...aCase,
-      docketEntries: aCase.docketEntries.map(docketEntry => {
-        return {
-          ...docketEntry,
-          docketEntryWorksheet:
-            docketEntryWorksheetDictionary[docketEntry.docketEntryId] || {},
-        };
-      }),
-    };
-  });
-  return completeCaseRecords;
+  const docketEntriesWithWorksheets: DocketEntryWithWorksheet[] =
+    docketEntries.map(docketEntry => {
+      return {
+        ...docketEntry,
+        docketEntryWorksheet:
+          docketEntryWorksheetDictionary[docketEntry.docketEntryId],
+      };
+    });
+
+  return docketEntriesWithWorksheets;
 }
