@@ -68,7 +68,7 @@ export const createOpinion = () => {
   cy.get('#menu-button-upload-pdf').click();
   cy.get('#upload-description').type('A Smoketest Opinion');
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
-  cy.get('[data-cy="upload-file-success"]');
+  cy.get('[data-testid="upload-file-success"]');
   cy.get('#save-uploaded-pdf-button').scrollIntoView();
   cy.get('#save-uploaded-pdf-button').click();
 };

@@ -11,7 +11,7 @@ export const PrintableTrialCalendar = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     gotoTrialSessionDetailSequence: sequences.gotoTrialSessionDetailSequence,
-    trialSessionId: state.trialSessionId,
+    trialSessionId: state.trialSession.trialSessionId,
   },
   function PrintableTrialCalendar({
     formattedTrialSessionDetails,
