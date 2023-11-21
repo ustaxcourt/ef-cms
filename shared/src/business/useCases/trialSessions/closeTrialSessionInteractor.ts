@@ -1,3 +1,4 @@
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -31,7 +32,7 @@ export const closeTrialSessionInteractor = async (
     });
 
   if (!trialSession) {
-    throw new Error('trial session not found');
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
   if (
