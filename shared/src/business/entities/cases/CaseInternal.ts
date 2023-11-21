@@ -217,18 +217,7 @@ export class CaseInternal extends JoiValidationEntity {
       ).required(),
       petitionFile: joi.alternatives().conditional('petitionFile', {
         is: joi.exist().not(null),
-        otherwise: joi.alternatives().conditional('docketEntries', {
-          is: joi
-            .array()
-            .items(
-              joi.object({
-                eventCode: joi.string(),
-              }),
-            )
-            .has(joi.object({ eventCode: joi.string().valid('P') })),
-          otherwise: joi.object().required(), // object of type File
-          then: joi.object().optional(),
-        }),
+        otherwise: createDocketEntriesValidation('P'),
         then: joi.object().required(),
       }),
       // petitionFile: joi.object().required(), // object of type File
@@ -269,18 +258,7 @@ export class CaseInternal extends JoiValidationEntity {
         .conditional('preferredTrialCity', {
           is: joi.exist().not(null),
           otherwise: joi.object().optional(),
-          then: joi.alternatives().conditional('docketEntries', {
-            is: joi
-              .array()
-              .items(
-                joi.object({
-                  eventCode: joi.string(),
-                }),
-              )
-              .has(joi.object({ eventCode: joi.string().valid('RQT') })),
-            otherwise: joi.object().required(), // object of type File
-            then: joi.object().optional(),
-          }),
+          then: createDocketEntriesValidation('RQT'),
         }),
       requestForPlaceOfTrialFileSize:
         JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
@@ -350,4 +328,19 @@ export class CaseInternal extends JoiValidationEntity {
 
     return validationErrors;
   }
+}
+
+function createDocketEntriesValidation(eventCode: string) {
+  return joi.alternatives().conditional('docketEntries', {
+    is: joi
+      .array()
+      .items(
+        joi.object({
+          eventCode: joi.string(),
+        }),
+      )
+      .has(joi.object({ eventCode: joi.string().valid(eventCode) })),
+    otherwise: joi.object().required(), // object of type File
+    then: joi.object().optional(),
+  });
 }
