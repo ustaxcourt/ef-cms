@@ -110,7 +110,7 @@ export class CaseInternal extends JoiValidationEntity {
       rawProps.applicationForWaiverOfFilingFeeFile;
     this.applicationForWaiverOfFilingFeeFileSize =
       rawProps.applicationForWaiverOfFilingFeeFileSize;
-    this.docketEntries = rawProps.docketEntries;
+    this.docketEntries = rawProps.docketEntries || [];
 
     this.statistics = Array.isArray(rawProps.statistics)
       ? rawProps.statistics.map(
@@ -194,6 +194,7 @@ export class CaseInternal extends JoiValidationEntity {
             then: joi.required(),
           },
         ),
+      docketEntries: joi.array().optional(),
       filingType: JoiValidationConstants.STRING.valid(
         ...FILING_TYPES[ROLES.petitioner],
         ...FILING_TYPES[ROLES.privatePractitioner],
@@ -214,7 +215,23 @@ export class CaseInternal extends JoiValidationEntity {
       partyType: JoiValidationConstants.STRING.valid(
         ...Object.values(PARTY_TYPES),
       ).required(),
-      petitionFile: joi.object().required(), // object of type File
+      petitionFile: joi.alternatives().conditional('petitionFile', {
+        is: joi.exist().not(null),
+        otherwise: joi.alternatives().conditional('docketEntries', {
+          is: joi
+            .array()
+            .items(
+              joi.object({
+                eventCode: joi.string(),
+              }),
+            )
+            .has(joi.object({ eventCode: joi.string().valid('P') })),
+          otherwise: joi.object().required(), // object of type File
+          then: joi.object().optional(),
+        }),
+        then: joi.object().required(),
+      }),
+      // petitionFile: joi.object().required(), // object of type File
       petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'petitionFile',
         {
@@ -252,23 +269,17 @@ export class CaseInternal extends JoiValidationEntity {
         .conditional('preferredTrialCity', {
           is: joi.exist().not(null),
           otherwise: joi.object().optional(),
-          then: joi.custom((value, helper) => {
-            if (typeof value === 'object') {
-              return value;
-            }
-
-            if (
-              this.docketEntries.find(
-                document =>
-                  document.documentType === 'Request for Place of Trial',
+          then: joi.alternatives().conditional('docketEntries', {
+            is: joi
+              .array()
+              .items(
+                joi.object({
+                  eventCode: joi.string(),
+                }),
               )
-            ) {
-              return value;
-            }
-
-            return helper.message(
-              'Upload or scan a Request for Place of Trial (RQT)',
-            );
+              .has(joi.object({ eventCode: joi.string().valid('RQT') })),
+            otherwise: joi.object().required(), // object of type File
+            then: joi.object().optional(),
           }),
         }),
       requestForPlaceOfTrialFileSize:
