@@ -11,8 +11,16 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const DashboardJudge = connect(
-  { caseWorksheetsHelper: state.caseWorksheetsHelper, user: state.user },
-  function DashboardJudge({ caseWorksheetsHelper, user }) {
+  {
+    caseWorksheetsHelper: state.caseWorksheetsHelper,
+    pendingMotionsHelper: state.pendingMotionsHelper,
+    user: state.user,
+  },
+  function DashboardJudge({
+    caseWorksheetsHelper,
+    pendingMotionsHelper,
+    user,
+  }) {
     return (
       <>
         <BigHeader text={`Welcome, ${user.judgeTitle} ${user.name}`} />
@@ -32,7 +40,10 @@ export const DashboardJudge = connect(
               <CaseWorksheets />
             </Tab>
 
-            <Tab tabName="pendingMotions" title={'Pending Motions (to do)'}>
+            <Tab
+              tabName="pendingMotions"
+              title={`Pending Motions (${pendingMotionsHelper.formattedPendingMotions.length})`}
+            >
               <PendingMotion />
             </Tab>
           </Tabs>
