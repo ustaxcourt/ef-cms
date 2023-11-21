@@ -31,6 +31,7 @@ export const PrintPaperService = connect(
             <div className="grid-col-4">
               <Button
                 className="push-right margin-right-0 margin-top-6"
+                data-testid="print-paper-service-done-button"
                 id="print-paper-service-done-button"
                 onClick={() => {
                   navigateToCaseDetailFromPaperServiceSequence();
