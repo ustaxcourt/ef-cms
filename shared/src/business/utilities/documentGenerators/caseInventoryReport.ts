@@ -1,33 +1,34 @@
+import { CaseInventoryReport } from '@shared/business/utilities/pdfGenerator/documentTemplates/CaseInventoryReport';
+import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
+import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const caseInventoryReport = async ({ applicationContext, data }) => {
   const { formattedCases, reportTitle, showJudgeColumn, showStatusColumn } =
     data;
 
-  const caseInventoryReportTemplate = reactTemplateGenerator({
-    componentName: 'CaseInventoryReport',
-    data: {
+  const caseInventoryReportTemplate = ReactDOM.renderToString(
+    React.createElement(CaseInventoryReport, {
       formattedCases,
       reportTitle,
       showJudgeColumn,
       showStatusColumn,
-    },
-  });
+    }),
+  );
 
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'ReportsMetaHeader',
-    data: {
+  const headerHtml = ReactDOM.renderToString(
+    React.createElement(ReportsMetaHeader, {
       headerTitle: `Case Inventory Report: ${reportTitle}`,
-    },
-  });
+    }),
+  );
 
-  const footerHtml = reactTemplateGenerator({
-    componentName: 'DatePrintedFooter',
-    data: {
+  const footerHtml = ReactDOM.renderToString(
+    React.createElement(DatePrintedFooter, {
       datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
-    },
-  });
+    }),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
