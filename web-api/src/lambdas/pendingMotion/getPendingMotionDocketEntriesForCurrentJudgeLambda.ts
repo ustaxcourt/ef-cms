@@ -1,10 +1,10 @@
 import { genericHandler } from '../../genericHandler';
 
-export const getPendingMotionCasesForCurrentJudgeLambda = event =>
+export const getPendingMotionDocketEntriesForCurrentJudgeLambda = event =>
   genericHandler(event, ({ applicationContext }) =>
     applicationContext
       .getUseCases()
-      .getPendingMotionCasesForCurrentJudgeInteractor(
+      .getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         event.queryStringParameters,
       ),
