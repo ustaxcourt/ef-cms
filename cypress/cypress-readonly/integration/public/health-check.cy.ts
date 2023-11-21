@@ -17,10 +17,6 @@ const HEALTH_CHECK_IDS = [
   's3-west-temp-documents',
 ];
 
-const assertHealthCheckPassed = id => {
-  cy.get(`#${id} svg[data-icon="check-circle"]`).should('exist');
-};
-
 describe('Health check', () => {
   const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
 
@@ -29,7 +25,7 @@ describe('Health check', () => {
       cy.visit('/health');
       cy.url().should('include', '/health');
       for (const id of HEALTH_CHECK_IDS) {
-        assertHealthCheckPassed(id);
+        cy.get(`#${id} svg[data-icon="check-circle"]`).should('exist');
       }
     });
   }
