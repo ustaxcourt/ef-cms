@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { DocketEntryWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
   JudgeActivityReportState,
@@ -97,6 +98,7 @@ import { paperServiceStatusHelper } from './computeds/paperServiceStatusHelper';
 import { partiesInformationHelper } from './computeds/partiesInformationHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { pendingMotionsHelper } from '@web-client/presenter/computeds/PendingMotions/pendingMotionsHelper';
 import { pendingReportListHelper } from './computeds/pendingReportListHelper';
 import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
@@ -402,6 +404,9 @@ export const computeds = {
   pdfSignerHelper: pdfSignerHelper as unknown as ReturnType<
     typeof pdfSignerHelper
   >,
+  pendingMotionsHelper: pendingMotionsHelper as unknown as ReturnType<
+    typeof pendingMotionsHelper
+  >,
   pendingReportListHelper: pendingReportListHelper as unknown as ReturnType<
     typeof pendingReportListHelper
   >,
@@ -654,7 +659,7 @@ export const baseState = {
   },
   pdfPreviewUrl: '',
   pendingMotions: {
-    docketEntries: [],
+    docketEntries: [] as DocketEntryWithWorksheet[],
   },
   pendingReports: {},
   permissions: null,
