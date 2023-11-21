@@ -8,9 +8,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeAction = async ({
 }: ActionProps): Promise<{
   docketEntries: DocketEntryWithWorksheet[];
 }> => {
-  console.log('getPendingMotionDocketEntriesForCurrentJudgeAction');
   const { name } = get(state.judgeUser);
-  console.log('name', name);
 
   const { docketEntries } = await applicationContext
     .getUseCases()
@@ -21,8 +19,6 @@ export const getPendingMotionDocketEntriesForCurrentJudgeAction = async ({
         statuses: [CASE_STATUS_TYPES.calendared],
       },
     );
-
-  console.log('docketEntries', docketEntries);
 
   return {
     docketEntries,
