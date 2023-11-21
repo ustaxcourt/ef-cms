@@ -9,8 +9,8 @@ export function loginAsPrivatePractitioner() {
 }
 
 export function loginAsPetitioner() {
-  cy.login('petitioner1');
-  cy.get('[data-testid="case-list-table"]').should('exist');
+  cy.login('petitioner5');
+  cy.get('[data-testid="file-a-petition"]').should('exist');
 }
 
 export function loginAsPetitionsClerk() {
