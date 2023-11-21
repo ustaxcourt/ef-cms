@@ -36,9 +36,15 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
+        includeConsolidatedCases: true,
       }),
     ),
   );
+
+  //TODO: MISSING PROPERTIES
+  //PETITIONERS
+  //COUNT OF CONSOLOIDATED CASES
+  // NUMBER OF DAYS IN PENDING STATE
 
   const pendingMotionDocketEntries = allCasesByJudge.reduce(
     (accumulator, aCase) => {
