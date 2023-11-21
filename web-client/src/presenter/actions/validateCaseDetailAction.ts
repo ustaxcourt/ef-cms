@@ -12,30 +12,12 @@ export const validateCaseDetailAction = ({
 }: ActionProps) => {
   const form = get(state.form);
 
-  const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
-
-  const findDocumentByType = type => {
-    return form.docketEntries.find(document => document.documentType === type);
-  };
-
-  const initialDocumentFormFiles = {};
-  Object.keys(INITIAL_DOCUMENT_TYPES_MAP).forEach(key => {
-    const foundDocument = findDocumentByType(INITIAL_DOCUMENT_TYPES_MAP[key]);
-    if (foundDocument) {
-      initialDocumentFormFiles[key] = {};
-      initialDocumentFormFiles[`${key}Size`] = 1;
-    }
-  });
-
   let errors;
   if (form.isPaper) {
     errors = applicationContext
       .getUseCases()
       .validatePetitionFromPaperInteractor(applicationContext, {
-        petition: {
-          ...form,
-          ...initialDocumentFormFiles,
-        },
+        petition: form,
       });
   } else {
     errors = applicationContext
