@@ -6,6 +6,7 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
+import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -100,6 +101,7 @@ const goToDashboard = [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
                     ],
+                    [getPendingMotionDocketEntriesForCurrentJudgeAction],
                   ]),
                   setupCurrentPageAction('DashboardJudge'),
                 ],
