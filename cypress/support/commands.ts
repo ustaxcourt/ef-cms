@@ -8,6 +8,12 @@ Cypress.Commands.add('login', (username, route = '/') => {
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );
+  cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
+    body: `window.Dynamsoft = {DWT: {
+            GetWebTwain() {}
+          }}`,
+    statusCode: 200,
+  });
 });
 
 before(() => {

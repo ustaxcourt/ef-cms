@@ -1,4 +1,5 @@
-import { petitionerCreatesACase } from '../../helpers/petitioner-creates-a-case';
+import { createEletronicCase } from '../../helpers/create-electronic-case';
+import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
 import { petitionsclerkAddsRespondentToCase } from '../../helpers/petitionsclerk-adds-respondent-to-case';
 import { respondentModifiesContactInfo } from '../../helpers/respondent-modifies-contact-info';
@@ -8,7 +9,8 @@ const USER = 'irspractitioner2';
 
 describe('a repondent modifies their address', () => {
   it('should generate a notice of change address for all cases associated with the respondent', function () {
-    petitionerCreatesACase().then(docketNumber => {
+    loginAsPetitioner();
+    createEletronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER).then(newAddress => {
@@ -25,7 +27,8 @@ describe('a repondent modifies their address', () => {
   });
 
   it('should not generate a notice of change address for any cases with unserved petitions', function () {
-    petitionerCreatesACase().then(docketNumber => {
+    loginAsPetitioner();
+    createEletronicCase().then(docketNumber => {
       petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER);
       cy.login(USER, `case-detail/${docketNumber}`);

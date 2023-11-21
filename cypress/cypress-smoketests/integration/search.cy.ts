@@ -1,35 +1,32 @@
-import { petitionsclerkCreatesAndServesPaperPetition } from '../../helpers/petitionsclerk-creates-and-serves-paper-petition';
+import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { loginAsPetitionsClerk } from '../../helpers/auth/login-as-helpers';
 import { retry } from '../../helpers/retry';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('search page functionality', () => {
   it('should be able to create a case and serve to IRS', () => {
-    petitionsclerkCreatesAndServesPaperPetition().then(
-      ({ docketNumber, name }) => {
-        cy.get('[data-testid="search-link"]').click();
-        cy.get('[data-testid="petitioner-name"]').clear();
-        cy.get('[data-testid="petitioner-name"]').type(name);
+    loginAsPetitionsClerk();
+    createAndServePaperPetition().then(({ docketNumber, name }) => {
+      cy.get('[data-testid="search-link"]').click();
+      cy.get('[data-testid="petitioner-name"]').clear();
+      cy.get('[data-testid="petitioner-name"]').type(name);
 
-        retry(() => {
-          cy.get('[data-testid="case-search-by-name"]').click();
-          return cy.get('body').then(body => {
-            return (
-              body.find(`[data-testid="case-result-${docketNumber}"]`).length >
-              0
-            );
-          });
+      retry(() => {
+        cy.get('[data-testid="case-search-by-name"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="case-result-${docketNumber}"]`).length > 0
+          );
         });
+      });
 
-        cy.get('[data-testid="clear-search-by-name"]').click();
-        cy.get(`[data-testid="case-result-${docketNumber}"]`).should(
-          'not.exist',
-        );
-        cy.get('[data-testid="docket-number"]').clear();
-        cy.get('[data-testid="docket-number"]').type(docketNumber);
-        cy.get('[data-testid="docket-search-button"]').click();
-        cy.url().should('include', `/case-detail/${docketNumber}`);
-      },
-    );
+      cy.get('[data-testid="clear-search-by-name"]').click();
+      cy.get(`[data-testid="case-result-${docketNumber}"]`).should('not.exist');
+      cy.get('[data-testid="docket-number"]').clear();
+      cy.get('[data-testid="docket-number"]').type(docketNumber);
+      cy.get('[data-testid="docket-search-button"]').click();
+      cy.url().should('include', `/case-detail/${docketNumber}`);
+    });
   });
 
   it('should be able to search for practitioners by name', () => {
@@ -61,7 +58,8 @@ describe('search page functionality', () => {
   });
 
   it('create an opinion on a case and search for it', () => {
-    petitionsclerkCreatesAndServesPaperPetition().then(({ docketNumber }) => {
+    loginAsPetitionsClerk();
+    createAndServePaperPetition().then(({ docketNumber }) => {
       cy.login('docketclerk1');
       cy.get('[data-testid="inbox-tab-content"]').should('exist');
       searchByDocketNumberInHeader(docketNumber);
