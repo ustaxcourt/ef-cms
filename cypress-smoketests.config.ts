@@ -42,7 +42,6 @@ export default defineConfig({
   screenshotsFolder: 'cypress/cypress-smoketests/screenshots',
   video: true,
   videoCompression: 10,
-  videoUploadOnPasses: false,
   videosFolder: 'cypress/cypress-smoketests/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
