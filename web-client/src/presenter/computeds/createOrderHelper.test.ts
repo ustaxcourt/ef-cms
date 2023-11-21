@@ -73,11 +73,6 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
-        modal: {
-          form: {
-            consolidatedCasesToMultiDocketOn,
-          },
-        },
       },
     });
 
@@ -140,11 +135,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
-        modal: {
-          form: {
-            consolidatedCasesToMultiDocketOn: undefined, // REFACTOR DEFAULT STATE OF consolidatedCasesToMultiDocketOn on modal to have a default state when creating of order starts to make
-          },
-        },
+        processConsolidatedCasesSelection: false,
       },
     });
     expect(result.addDocketNumbersButtonText).toEqual(
@@ -167,11 +158,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
-        modal: {
-          form: {
-            consolidatedCasesToMultiDocketOn,
-          },
-        },
+        processConsolidatedCasesSelection: true,
       },
     });
 
