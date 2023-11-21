@@ -1,11 +1,11 @@
 export function petitionsClerkServesPetition(docketNumber: string) {
   cy.login('petitionsclerk', `case-detail/${docketNumber}`);
-  cy.getByTestId('document-viewer-link-P').click();
-  cy.getByTestId('review-and-serve-petition').click();
-  cy.getByTestId('tab-irs-notice').click();
-  cy.getByTestId('has-irs-verified-notice-no').click();
-  cy.getByTestId('submit-case').click();
-  cy.getByTestId('serve-case-to-irs').click();
-  cy.getByTestId('modal-confirm').click();
-  cy.getByTestId('success-alert').should('exist');
+  cy.get('[data-testid="document-viewer-link-P"]').click();
+  cy.get('[data-testid="review-and-serve-petition"]').click();
+  cy.get('[data-testid="tab-irs-notice"]').click();
+  cy.get('[data-testid="has-irs-verified-notice-no"]').click();
+  cy.get('[data-testid="submit-case"]').click();
+  cy.get('[data-testid="serve-case-to-irs"]').click();
+  cy.get('[data-testid="modal-confirm"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
 }
