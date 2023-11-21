@@ -4,7 +4,7 @@ import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates
 describe('Petitioner views dashboard', () => {
   it('should display filing fee column', () => {
     loginAs('petitioner');
-    cy.get('[data-testid="case-list"]');
+    cy.get('[data-testid="case-list-table"]');
     cy.get('[data-testid="filing-fee"]');
     petitionerCreatesEletronicCase().then(docketNumber => {
       cy.get('[data-testid="filing-fee"]');
