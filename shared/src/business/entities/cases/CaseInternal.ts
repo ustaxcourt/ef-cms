@@ -150,11 +150,11 @@ export class CaseInternal extends JoiValidationEntity {
     .object()
     .keys({
       applicationForWaiverOfFilingFeeFile: joi
-        .object()
-        .when('petitionPaymentStatus', {
+        .alternatives()
+        .conditional('petitionPaymentStatus', {
           is: PAYMENT_STATUS.WAIVED,
           otherwise: joi.optional().allow(null),
-          then: joi.required(),
+          then: createDocketEntriesValidation('APW'),
         }),
       applicationForWaiverOfFilingFeeFileSize:
         JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
@@ -169,7 +169,7 @@ export class CaseInternal extends JoiValidationEntity {
       archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
       caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
       caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
-      corporateDisclosureFile: joi.object().when('partyType', {
+      corporateDisclosureFile: joi.alternatives().conditional('partyType', {
         is: joi
           .exist()
           .valid(
@@ -179,10 +179,10 @@ export class CaseInternal extends JoiValidationEntity {
             PARTY_TYPES.partnershipOtherThanTaxMatters,
           ),
         otherwise: joi.optional().allow(null),
-        then: joi.when('orderForCds', {
+        then: joi.alternatives().conditional('orderForCds', {
           is: joi.not(true),
           otherwise: joi.optional().allow(null),
-          then: joi.required(),
+          then: createDocketEntriesValidation('DISC'),
         }),
       }),
       corporateDisclosureFileSize:
@@ -220,7 +220,6 @@ export class CaseInternal extends JoiValidationEntity {
         otherwise: createDocketEntriesValidation('P'),
         then: joi.object().required(),
       }),
-      // petitionFile: joi.object().required(), // object of type File
       petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'petitionFile',
         {
