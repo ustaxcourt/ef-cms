@@ -208,6 +208,7 @@ import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/mes
 import { getPaperServicePdfUrlInteractor } from '@shared/proxies/trialSessions/getPaperServicePdfUrlProxy';
 import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
+import { getPendingMotionCasesForCurrentJudgeInteractor } from '@shared/proxies/pendingMotion/getPendingMotionCasesForCurrentJudgeProxy';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionerDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getPractitionerDocumentDownloadUrlProxy';
 import { getPractitionerDocumentInteractor } from '../../shared/src/proxies/getPractitionerDocumentProxy';
@@ -483,6 +484,7 @@ const allUseCases = {
   getOutboxMessagesForUserInteractor,
   getPaperServicePdfUrlInteractor,
   getPdfFromUrlInteractor,
+  getPendingMotionCasesForCurrentJudgeInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionerDocumentDownloadUrlInteractor,
   getPractitionerDocumentInteractor,
