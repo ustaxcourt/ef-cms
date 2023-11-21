@@ -44,6 +44,7 @@ export const CaseListTable = connect(
       <Button
         aria-describedby=""
         className="margin-top-1 margin-right-0"
+        data-testid="file-a-petition"
         href={
           dashboardExternalHelper.showFileACase
             ? '/file-a-petition/step-1'
@@ -89,7 +90,7 @@ export const CaseListTable = connect(
                   'usa-table usa-table--stacked-header usa-table--borderless':
                     isMobile,
                 })}
-                data-testid="case-list"
+                data-testid="case-list-table"
                 id="case-list"
               >
                 <thead>

@@ -31,7 +31,7 @@ export const SessionAssignmentsForm = connect(
             <select
               aria-describedby="judge-label"
               className="usa-select"
-              data-cy="trial-session-judge"
+              data-testid="trial-session-judge"
               id="judgeId"
               name="judgeId"
               value={form.judgeId || ''}
@@ -85,7 +85,7 @@ export const SessionAssignmentsForm = connect(
               <select
                 aria-describedby="trial-clerk-label"
                 className="usa-select"
-                data-cy="trial-session-trial-clerk"
+                data-testid="trial-session-trial-clerk"
                 id="trial-clerk"
                 name="trialClerkId"
                 value={form.trialClerkId || ''}
@@ -119,7 +119,7 @@ export const SessionAssignmentsForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
-                data-cy="trial-session-trial-clerk-alternate"
+                data-testid="trial-session-trial-clerk-alternate"
                 id="alternate-trial-clerk-name"
                 name="alternateTrialClerkName"
                 type="text"
@@ -140,7 +140,7 @@ export const SessionAssignmentsForm = connect(
             <input
               autoCapitalize="none"
               className="usa-input"
-              data-cy="trial-session-court-reporter"
+              data-testid="trial-session-court-reporter"
               id="court-reporter"
               name="courtReporter"
               type="text"
@@ -162,7 +162,7 @@ export const SessionAssignmentsForm = connect(
             <input
               autoCapitalize="none"
               className="usa-input"
-              data-cy="trial-session-irs-calendar-administrator"
+              data-testid="trial-session-irs-calendar-administrator"
               id="irs-calendar-administrator"
               name="irsCalendarAdministrator"
               type="text"
