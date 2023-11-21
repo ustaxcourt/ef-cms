@@ -14,7 +14,7 @@ export type DocketEntryWithWorksheet = RawDocketEntry & {
   docketEntryWorksheet: RawDocketEntryWorksheet;
 };
 
-export const getPendingMotionCasesForCurrentJudgeInteractor = async (
+export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
   applicationContext: IApplicationContext,
   params: { judges: string[] },
 ): Promise<{
