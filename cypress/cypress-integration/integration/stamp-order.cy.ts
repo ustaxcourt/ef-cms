@@ -1,11 +1,11 @@
-import { createEletronicCase } from '../../helpers/create-electronic-case';
 import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
+import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
 
 describe('Judge`s chambers stamps an order', () => {
   it('should create an order, serve it, and apply a stamp to it', () => {
     loginAsPetitioner();
-    createEletronicCase().then(docketNumber => {
+    petitionerCreatesEletronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       cy.login('docketclerk1', `case-detail/${docketNumber}`);
