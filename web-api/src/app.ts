@@ -99,6 +99,7 @@ import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
 import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
+import { getPendingMotionCasesForCurrentJudgeLambda } from '@web-api/lambdas/pendingMotion/getPendingMotionCasesForCurrentJudgeLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionerDocumentDownloadUrlLambda } from './lambdas/practitioners/getPractitionerDocumentDownloadUrlLambda';
 import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPractitionerDocumentLambda';
@@ -617,6 +618,10 @@ app.use(logger());
     lambdaWrapper(updateCaseWorksheetLambda),
   );
 }
+app.get(
+  '/pending-motion-cases',
+  lambdaWrapper(getPendingMotionCasesForCurrentJudgeLambda),
+);
 
 /**
  * case-worksheets
