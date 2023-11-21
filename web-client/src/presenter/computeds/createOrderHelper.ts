@@ -17,9 +17,7 @@ export const createOrderHelper = (
   const caseDetail = get(state.caseDetail);
   const { documentTitle } = get(state.form);
 
-  const processConsolidatedCasesSelection = get(
-    state.processConsolidatedCasesSelection,
-  );
+  const saveSelectedDocketNumbers = get(state.saveSelectedDocketNumbers);
 
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const addDocketNumbersToOrderEnabled = get(
@@ -36,10 +34,10 @@ export const createOrderHelper = (
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
 
   return {
-    addDocketNumbersButtonIcon: processConsolidatedCasesSelection
+    addDocketNumbersButtonIcon: saveSelectedDocketNumbers
       ? 'edit'
       : 'plus-circle',
-    addDocketNumbersButtonText: processConsolidatedCasesSelection
+    addDocketNumbersButtonText: saveSelectedDocketNumbers
       ? 'Edit docket numbers in the caption'
       : 'Add docket numbers to the caption',
     documentToEdit,

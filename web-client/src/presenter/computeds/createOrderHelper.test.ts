@@ -135,7 +135,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
-        processConsolidatedCasesSelection: false,
+        saveSelectedDocketNumbers: false,
       },
     });
     expect(result.addDocketNumbersButtonText).toEqual(
@@ -158,7 +158,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
-        processConsolidatedCasesSelection: true,
+        saveSelectedDocketNumbers: true,
       },
     });
 
