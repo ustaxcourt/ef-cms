@@ -2,21 +2,22 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-// TODO: type return of helper
 export const createOrderHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  addDocketNumbersButtonIcon: string;
+  addDocketNumbersButtonText: string;
+  documentToEdit: boolean;
+  isEditing: boolean;
+  pageTitle: string;
+  showAddDocketNumbersButton: boolean;
+} => {
   const documentToEdit = get(state.documentToEdit);
   const caseDetail = get(state.caseDetail);
   const { documentTitle } = get(state.form);
 
-  // we can potentially refactor out of using what consolidated cases 
-  // to render UI info
-  // const consolidatedCasesToMultiDocketOn = get(
-  //   state.modal.form.consolidatedCasesToMultiDocketOn,
-  // );
-  const addConsolidatedCasesSeletected = get(
+  const processConsolidatedCasesSelection = get(
     state.processConsolidatedCasesSelection,
   );
 
@@ -35,10 +36,10 @@ export const createOrderHelper = (
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
 
   return {
-    addDocketNumbersButtonIcon: addConsolidatedCasesSeletected
+    addDocketNumbersButtonIcon: processConsolidatedCasesSelection
       ? 'edit'
       : 'plus-circle',
-    addDocketNumbersButtonText: addConsolidatedCasesSeletected
+    addDocketNumbersButtonText: processConsolidatedCasesSelection
       ? 'Edit docket numbers in the caption'
       : 'Add docket numbers to the caption',
     documentToEdit,
