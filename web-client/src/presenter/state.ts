@@ -653,6 +653,9 @@ export const baseState = {
     stampData: null,
   },
   pdfPreviewUrl: '',
+  pendingMotions: {
+    docketEntries: [],
+  },
   pendingReports: {},
   permissions: null,
   practitionerDetail: {},

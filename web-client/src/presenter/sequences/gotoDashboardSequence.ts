@@ -21,6 +21,7 @@ import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
+import { setPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/setPendingMotionDocketEntriesForCurrentJudgeAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setSubmittedAndCavCasesForJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
@@ -101,7 +102,10 @@ const goToDashboard = [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
                     ],
-                    [getPendingMotionDocketEntriesForCurrentJudgeAction],
+                    [
+                      getPendingMotionDocketEntriesForCurrentJudgeAction,
+                      setPendingMotionDocketEntriesForCurrentJudgeAction,
+                    ],
                   ]),
                   setupCurrentPageAction('DashboardJudge'),
                 ],
