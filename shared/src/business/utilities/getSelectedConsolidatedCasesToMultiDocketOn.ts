@@ -1,10 +1,10 @@
-export type ConsolidatedCasesWithCheckboxInfoType = {
+export type CaseWithSelectionInfo = {
   checked: boolean;
   docketNumberWithSuffix: string;
 };
 
 export const getSelectedConsolidatedCasesToMultiDocketOn = (
-  consolidatedCases: ConsolidatedCasesWithCheckboxInfoType[],
+  consolidatedCases: CaseWithSelectionInfo[],
 ): string[] | [] => {
   if (!consolidatedCases.length) return [];
   const checkedCases = consolidatedCases
