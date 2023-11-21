@@ -1,9 +1,14 @@
-// todo type input and output
-export const getSelectedConsolidatedCasesToMultiDocketOn =
-  consolidatedCases => {
-    if (!consolidatedCases) return [];
-    const checkedCases = consolidatedCases
-      .filter(consolidatedCase => consolidatedCase.checked)
-      .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix);
-    return checkedCases;
-  };
+export type ConsolidatedCasesWithCheckboxInfoType = {
+  checked: boolean;
+  docketNumberWithSuffix: string;
+};
+
+export const getSelectedConsolidatedCasesToMultiDocketOn = (
+  consolidatedCases: ConsolidatedCasesWithCheckboxInfoType[],
+): string[] | [] => {
+  if (!consolidatedCases.length) return [];
+  const checkedCases = consolidatedCases
+    .filter(consolidatedCase => consolidatedCase.checked)
+    .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix);
+  return checkedCases;
+};
