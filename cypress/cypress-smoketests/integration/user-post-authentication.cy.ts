@@ -8,12 +8,6 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
       cy.login('petitionsclerk1');
       cy.get('table').should('exist');
       cy.get(':nth-child(2) > .usa-nav__link').click();
-      cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
-        body: `window.Dynamsoft = {DWT: {
-            GetWebTwain() {}
-          }}`,
-        statusCode: 200,
-      });
       cy.get('#file-a-petition').click();
       cy.get('#party-type').select('Petitioner');
       cy.get('[data-testid="contact-primary-name"]').clear();

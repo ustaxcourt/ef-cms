@@ -1,8 +1,10 @@
-import { petitionsclerkCreatesAndServesPaperPetition } from '../../helpers/petitionsclerk-creates-and-serves-paper-petition';
+import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { loginAsPetitionsClerk } from '../../helpers/auth/login-as-helpers';
 
 describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
   it('should create a paper petition, serve the petition, and create an order on the petition', () => {
-    petitionsclerkCreatesAndServesPaperPetition().then(({ docketNumber }) => {
+    loginAsPetitionsClerk();
+    createAndServePaperPetition().then(({ docketNumber }) => {
       cy.login('docketclerk1');
       cy.get('[data-testid="inbox-tab-content"]').should('exist');
       cy.get('#search-field').clear();

@@ -1,9 +1,7 @@
 import { attachDummyFile } from './attach-file';
 
-export function petitionerCreatesACase() {
-  cy.login('petitioner1'); // TODO: don't login in helper functions
+export function createEletronicCase() {
   cy.get('[data-testid="file-a-petition"]').click();
-  cy.get('[data-testid="go-to-step-1"]').click();
   attachDummyFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
   attachDummyFile('petition-file');

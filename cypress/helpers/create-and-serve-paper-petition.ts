@@ -1,13 +1,7 @@
-export function petitionsclerkCreatesAndServesPaperPetition() {
+export function createAndServePaperPetition() {
   const name = 'rick james ' + Date.now();
   cy.login('petitionsclerk1');
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
-  cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
-    body: `window.Dynamsoft = {DWT: {
-            GetWebTwain() {}
-          }}`,
-    statusCode: 200,
-  });
   cy.get('[data-testid="document-qc-nav-item"]').click();
   cy.get('[data-testid="start-a-petition"]').click();
   cy.get('#party-type').select('Petitioner');

@@ -50,7 +50,7 @@ At some point we may decide to slowly refactor existing integration tests into c
 In order to write a realiable cypress test suites, there are some best practices we should follow that our outlined in the cypress documentation and also some best practices we have learned from trying to write realiable tests.
 
 - every `it` statement should be a repeatable test that should be able to run in isolation.  This means your `it` statement shouldn't depend on a previous it statement to pass.  If you write tests that depend on previous it statements, your tests can become flaky.  This also goes against the best practices outlined in the cypress docs.
-- dom elements should be accessed using our custom cypress command `cy.getByTestId("")`.  This means any element you need to click or find in the UI must have a `data-testid` attribute.  The reason test ids are prefered is that some attributes such as classes and ids can accidently be changed when making style changes; whereas, it's obvious when you see a data-testid that a cypress test uses that element.
+- dom elements should be accessed using our custom cypress command `cy.get('[data-testid="YOUR_ID"]')`.  This means any element you need to click or find in the UI must have a `data-testid` attribute.  The reason test ids are prefered is that some attributes such as classes and ids can accidently be changed when making style changes; whereas, it's obvious when you see a data-testid that a cypress test uses that element.
   - for example, if you need to click on a button on from inside a test, your button should look like this `<button data-testid="my-button">submit</button>`
   - avoid cy.get('.my-class')
   - avoid cy.get('#my-id')
