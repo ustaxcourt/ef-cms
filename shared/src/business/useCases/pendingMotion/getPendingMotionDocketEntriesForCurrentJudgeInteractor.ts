@@ -12,7 +12,7 @@ import {
 
 export type FormattedPendingMotionDocketEntry = RawDocketEntry & {
   daysSinceCreated: number;
-  petitioners: TPetitioner[];
+  caseCaption: string;
   consolidatedGroupCount: number;
   leadDocketNumber?: string;
 };
@@ -61,10 +61,10 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 
           return {
             ...docketEntry,
+            caseCaption: aCase.caseCaption,
             consolidatedGroupCount: aCase.consolidatedCases.length || 1,
             daysSinceCreated: dayDifference,
             leadDocketNumber: aCase.leadDocketNumber,
-            petitioners: aCase.petitioners,
           };
         })
         .filter(docketEntry => filterPendingMotionDocketEntry(docketEntry));
