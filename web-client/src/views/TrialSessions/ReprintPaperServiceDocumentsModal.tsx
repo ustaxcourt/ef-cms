@@ -27,7 +27,7 @@ export const ReprintPaperServiceDocumentsModal = connect(
         messageClass=""
         title="Print Paper Service PDF"
       >
-        <div data-cy="trial-session-paper-pdf-options">
+        <div data-testid="trial-session-paper-pdf-options">
           {formattedTrialSessionDetails.paperServicePdfs.map(pdfInfo => {
             return (
               <div key={pdfInfo.fileId}>

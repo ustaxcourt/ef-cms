@@ -86,6 +86,7 @@ export const DocumentSearchResults = connect(
                         <Button
                           link
                           className="padding-0"
+                          data-testid={`docket-number-link-${result.docketNumber}`}
                           onClick={() => {
                             openCaseDocumentDownloadUrlSequence({
                               docketEntryId: result.docketEntryId,

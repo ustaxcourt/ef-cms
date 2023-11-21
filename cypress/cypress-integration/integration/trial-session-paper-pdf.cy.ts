@@ -1,39 +1,44 @@
 import { fillInCreateCaseFromPaperForm } from '../support/pages/create-paper-petition';
 import { getCreateACaseButton } from '../support/pages/document-qc';
-import { manuallyAddCaseToNewTrialSession } from '../../cypress-smoketests/support/pages/case-detail';
 import { waitForLoadingComplete } from '../support/generalCommands/waitForLoader';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
   it('should create a trial session, add a case, and generate a pdf for paper service', () => {
     cy.login('petitionsclerk', 'trial-sessions');
 
-    cy.get('[data-cy="add-trial-session-button"]').click();
+    cy.get('[data-testid="add-trial-session-button"]').click();
     cy.contains('Location-based').click();
-    cy.get('[data-cy="start-date-picker"]').eq(1).type('08/20/2050');
-    cy.get('[data-cy="estimated-end-date-picker"]').eq(1).type('08/22/2050');
-    cy.get('[data-cy="session-type-options"]').contains('Regular').click();
-    cy.get('[data-cy="trial-session-number-of-cases-allowed"]').type('20');
-    cy.get('[data-cy="trial-session-proceeding-type"]')
+    cy.get('[data-testid="start-date-picker"]').eq(1).type('08/20/2050');
+    cy.get('[data-testid="estimated-end-date-picker"]')
+      .eq(1)
+      .type('08/22/2050');
+    cy.get('[data-testid="session-type-options"]').contains('Regular').click();
+    cy.get('[data-testid="trial-session-number-of-cases-allowed"]').type('20');
+    cy.get('[data-testid="trial-session-proceeding-type"]')
       .contains('Remote')
       .click();
-    cy.get('[data-cy="trial-session-trial-location"]').select(
+    cy.get('[data-testid="trial-session-trial-location"]').select(
       'Fresno, California',
     );
-    cy.get('[data-cy="trial-session-meeting-id"]').type('123456789Meet');
-    cy.get('[data-cy="trial-session-password"]').type('iamTrialSessionPass');
-    cy.get('[data-cy="trial-session-join-phone-number"]').type('6473829180');
-    cy.get('[data-cy="trial-session-chambers-phone-number"]').type(
+    cy.get('[data-testid="trial-session-meeting-id"]').type('123456789Meet');
+    cy.get('[data-testid="trial-session-password"]').type(
+      'iamTrialSessionPass',
+    );
+    cy.get('[data-testid="trial-session-join-phone-number"]').type(
+      '6473829180',
+    );
+    cy.get('[data-testid="trial-session-chambers-phone-number"]').type(
       '9870654321',
     );
-    cy.get('[data-cy="trial-session-judge"]').select('Buch');
-    cy.get('[data-cy="trial-session-trial-clerk"]').select('Other');
-    cy.get('[data-cy="trial-session-trial-clerk-alternate"]').type('Abu');
-    cy.get('[data-cy="trial-session-court-reporter"]').type('Fameet');
-    cy.get('[data-cy="trial-session-irs-calendar-administrator"]').type(
+    cy.get('[data-testid="trial-session-judge"]').select('Buch');
+    cy.get('[data-testid="trial-session-trial-clerk"]').select('Other');
+    cy.get('[data-testid="trial-session-trial-clerk-alternate"]').type('Abu');
+    cy.get('[data-testid="trial-session-court-reporter"]').type('Fameet');
+    cy.get('[data-testid="trial-session-irs-calendar-administrator"]').type(
       'rasta reporter',
     );
     cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
-    cy.get('[data-cy="submit-trial-session"]').click();
+    cy.get('[data-testid="submit-trial-session"]').click();
     cy.wait('@createTrialSession').then(
       ({ response: trialSessionResponse }) => {
         expect(trialSessionResponse?.body).to.have.property('trialSessionId');
@@ -60,11 +65,23 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           cy.get('#confirm').click();
           cy.wait('@serveToIrs');
           cy.get(
-            '[data-cy="done-viewing-paper-petition-receipt-button"]',
+            '[data-testid="done-viewing-paper-petition-receipt-button"]',
           ).click();
           cy.url().should('include', `/case-detail/${docketNumber}`);
           cy.get('#tab-case-information').click();
-          manuallyAddCaseToNewTrialSession(createdTrialSessionId);
+          cy.get('#add-to-trial-session-btn').should('exist').click();
+          cy.get('label[for="show-all-locations-true"]').click();
+          cy.get('select#trial-session').select(createdTrialSessionId);
+          cy.get('select#trial-session').should(
+            'have.value',
+            createdTrialSessionId,
+          );
+          cy.get('#modal-root .modal-button-confirm').click();
+          cy.get('.usa-alert--success').should(
+            'contain',
+            'Case scheduled for trial.',
+          );
+          cy.get('h3:contains("Trial - Scheduled")').should('exist');
           cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
           cy.get(`label[for="${docketNumber}-complete"]`).click();
           waitForLoadingComplete();
@@ -72,25 +89,27 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           cy.get('#modal-button-confirm').click();
           waitForLoadingComplete();
           cy.url().should('include', 'print-paper-trial-notices');
-          cy.get('[data-cy="printing-complete"]').click();
+          cy.get('[data-testid="printing-complete"]').click();
           cy.url().should(
             'include',
             `trial-session-detail/${createdTrialSessionId}`,
           );
           cy.visit(`/edit-trial-session/${createdTrialSessionId}`);
-          cy.get('[data-cy="trial-session-judge"]').select('Colvin');
-          cy.get('[data-cy="submit-edit-trial-session"]').click();
+          cy.get('[data-testid="trial-session-judge"]').select('Colvin');
+          cy.get('[data-testid="submit-edit-trial-session"]').click();
           cy.url().should('include', 'print-paper-trial-notices');
-          cy.get('[data-cy="printing-complete"]').click();
+          cy.get('[data-testid="printing-complete"]').click();
           cy.url().should(
             'include',
             `trial-session-detail/${createdTrialSessionId}`,
           );
-          cy.get('[data-cy="trial-session-open-paper-service-pdfs"]').click();
-          cy.get('[data-cy="trial-session-paper-pdf-options"]').contains(
+          cy.get(
+            '[data-testid="trial-session-open-paper-service-pdfs"]',
+          ).click();
+          cy.get('[data-testid="trial-session-paper-pdf-options"]').contains(
             'Initial Calendaring',
           );
-          cy.get('[data-cy="trial-session-paper-pdf-options"]').contains(
+          cy.get('[data-testid="trial-session-paper-pdf-options"]').contains(
             'Notice of Change of Trial Judge',
           );
         });
