@@ -16,10 +16,17 @@ export const getPdfUrlAction = async ({
     state.modal.form.consolidatedCasesToMultiDocketOn,
   );
 
+  const consolidatedCasesToMultiDocketOnMetaData = (
+    consolidatedCasesToMultiDocketOn || []
+  ).map(caseInfo => ({
+    checked: caseInfo.checked,
+    docketNumberWithSuffix: caseInfo.docketNumberWithSuffix,
+  }));
+
   const addedDocketNumbers = applicationContext
     .getUtilities()
     .getSelectedConsolidatedCasesToMultiDocketOn(
-      consolidatedCasesToMultiDocketOn,
+      consolidatedCasesToMultiDocketOnMetaData,
     );
 
   const { url } = await applicationContext
