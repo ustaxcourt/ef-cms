@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+import { RawUser } from '@shared/business/entities/User';
 
 /*
   The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.

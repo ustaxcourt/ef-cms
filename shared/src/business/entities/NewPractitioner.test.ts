@@ -1,11 +1,15 @@
-import { COUNTRY_TYPES, ROLES } from './EntityConstants';
-import { NewPractitioner } from './NewPractitioner';
+import {
+  COUNTRY_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from './EntityConstants';
+import { NewPractitioner, RawNewPractitioner } from './NewPractitioner';
 
 describe('NewPractitioner', () => {
-  const mockPractitioner = {
+  const mockPractitioner: RawNewPractitioner = {
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
-    birthYear: 2019,
+    birthYear: '2019',
     confirmEmail: 'test@example.com',
     contact: {
       address1: '234 Main St',
@@ -20,36 +24,46 @@ describe('NewPractitioner', () => {
     },
     email: 'test@example.com',
     employer: 'Private',
+    entityName: 'NewPractitioner',
     firmName: 'GW Law Offices',
     firstName: 'Test',
     lastName: 'Practitioner',
     originalBarState: 'IL',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   };
 
-  it('Creates a valid NewPractitioner with all required fields', () => {
+  it('should be valid when all required fields have been provided', () => {
     const user = new NewPractitioner(mockPractitioner);
+
     expect(user.isValid()).toBeTruthy();
   });
 
-  it('Creates an invalid NewPractitioner with missing required fields', () => {
+  it('should return validation errors and be invalid when required fields are missing', () => {
     const user = new NewPractitioner({
-      role: ROLES.privatePractitioner,
+      email: undefined,
+      role: ROLES.privatePractitioner, // Email is a required field
     });
+
     expect(user.isValid()).toBeFalsy();
     expect(user.getFormattedValidationErrors()).toMatchObject({
-      email: NewPractitioner.VALIDATION_ERROR_MESSAGES.email,
+      email: 'Enter email address',
     });
   });
 
-  it('Creates an invalid NewPractitioner with missing firstName and lastName', () => {
+  it('should be invalid and return validation errors when firstName and lastName are missing', () => {
     const user = new NewPractitioner({
       ...mockPractitioner,
       firstName: undefined,
       lastName: undefined,
     });
+
     expect(user.isValid()).toBeFalsy();
+    expect(user.getFormattedValidationErrors()).toMatchObject({
+      firstName: 'Enter first name',
+      lastName: 'Enter last name',
+    });
   });
 
   describe('updating email', () => {
@@ -58,61 +72,57 @@ describe('NewPractitioner', () => {
 
     const validNewPractitioner = new NewPractitioner(mockPractitioner);
 
-    it('passes validation when updatedEmail is undefined', () => {
+    it('should be valid when updatedEmail is undefined', () => {
       validNewPractitioner.updatedEmail = undefined;
 
       expect(validNewPractitioner.isValid()).toBeTruthy();
     });
 
-    it('passes validation when email and confirmEmail match', () => {
+    it('should be valid when email and confirmEmail match', () => {
       validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = mockUpdatedEmail;
 
       expect(validNewPractitioner.isValid()).toBeTruthy();
     });
 
-    it('fails validation when email is not a valid email address', () => {
+    it('should be invalid when email is not a valid email address', () => {
       validNewPractitioner.email = invalidEmail;
       validNewPractitioner.confirmEmail = undefined;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-        email: NewPractitioner.VALIDATION_ERROR_MESSAGES.email,
+        confirmEmail: 'Enter a valid email address',
+        email: 'Enter email address',
       });
     });
 
-    it('fails validation when email is defined and confirmEmail is undefined', () => {
+    it('should be invalid when email is defined and confirmEmail is undefined', () => {
       validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = undefined;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+        confirmEmail: 'Enter a valid email address',
       });
     });
 
-    it('fails validation when email is defined and confirmEmail is not a valid email address', () => {
+    it('should be invalid when email is defined and confirmEmail is not a valid email address', () => {
       validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = invalidEmail;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+        confirmEmail: 'Enter a valid email address',
       });
     });
 
-    it('fails validation when email and confirmEmail do not match', () => {
+    it('should be invalid when email and confirmEmail do not match', () => {
       validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+        confirmEmail: 'Email addresses do not match',
       });
     });
   });

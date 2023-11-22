@@ -4,6 +4,7 @@ import {
   PARTIES_CODES,
 } from '../../entities/EntityConstants';
 import { DocketEntry, getServedPartiesCode } from '../../entities/DocketEntry';
+import { RawUser } from '@shared/business/entities/User';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { createISODateString } from '../../utilities/DateHandler';
 
