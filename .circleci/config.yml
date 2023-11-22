@@ -216,8 +216,6 @@ jobs:
             else
               echo "skipping…"
             fi
-      - store_artifacts:
-          path: /home/app/cypress-smoketests/videos/
       - run:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
@@ -403,7 +401,7 @@ jobs:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly:public
       - store_artifacts:
-          path: /root/project/cypress-readonly/videos/
+          path: /root/project/cypress/cypress-readonly/videos/
 
   loadtests:
     docker:
