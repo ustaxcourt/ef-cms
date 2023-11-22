@@ -24,8 +24,8 @@ export const pendingMotionsHelper = (get: Get): PendingMotionsHelperResults => {
       };
     })
     .sort((aCase, bCase) => {
-      if (aCase.daysSinceCreated < bCase.daysSinceCreated) return -1;
-      if (aCase.daysSinceCreated > bCase.daysSinceCreated) return 1;
+      if (aCase.daysSinceCreated < bCase.daysSinceCreated) return 1;
+      if (aCase.daysSinceCreated > bCase.daysSinceCreated) return -1;
       return 0;
     });
 
