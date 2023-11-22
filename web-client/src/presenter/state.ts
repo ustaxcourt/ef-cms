@@ -657,7 +657,7 @@ export const baseState = {
   },
   pdfPreviewUrl: '',
   pendingReports: cloneDeep(initialPendingReportsState),
-  permissions: null,
+  permissions: {} as Record<string, boolean>,
   practitionerDetail: {},
   previewPdfFile: null,
   progressIndicator: {

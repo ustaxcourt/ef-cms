@@ -133,7 +133,7 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     !formattedEntry.isUnservable &&
     formattedEntry.isOnDocketRecord
   ) {
-    formattedEntry.createdAtFormatted = undefined;
+    formattedEntry.createdAtFormatted = '';
   } else if (formattedEntry.isOnDocketRecord) {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
@@ -175,8 +175,8 @@ export const getFilingsAndProceedings = formattedDocketEntry => {
       formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
         : formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.NO
-          ? '(No Objection)'
-          : ''
+        ? '(No Objection)'
+        : ''
     }`,
     `${formattedDocketEntry.lodged ? '(Lodged)' : ''}`,
   ];
