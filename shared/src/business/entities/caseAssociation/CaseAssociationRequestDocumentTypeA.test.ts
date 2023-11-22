@@ -1,4 +1,3 @@
-import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
 import { CaseAssociationRequestDocumentTypeA } from './CaseAssociationRequestDocumentTypeA';
 
 describe('CaseAssociationRequestFactory', () => {
@@ -9,7 +8,7 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     expect(entity.getFormattedValidationErrors()!.attachments).toEqual(
-      CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.attachments,
+      'Enter selection for Attachments.',
     );
   });
 
