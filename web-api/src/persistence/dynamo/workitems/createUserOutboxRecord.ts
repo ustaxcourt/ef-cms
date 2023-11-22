@@ -2,6 +2,7 @@ import {
   FORMATS,
   formatDateString,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { calculateTimeToLive } from '../calculateTimeToLive';
 import { put } from '../../dynamodbClientService';
 
