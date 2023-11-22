@@ -7,6 +7,7 @@ import {
   TrialSession,
 } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 /**
  * canSetTrialSessionAsCalendaredInteractor
  *

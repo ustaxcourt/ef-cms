@@ -43,6 +43,7 @@ import { serveCaseDocument } from '../../shared/src/business/utilities/serveCase
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 
 const utilities = {
@@ -79,6 +80,7 @@ const utilities = {
   setConsolidationFlagsForDisplay,
   setServiceIndicatorsForCase,
   setupPdfDocument,
+  sleep,
   uploadToS3,
 };
 
