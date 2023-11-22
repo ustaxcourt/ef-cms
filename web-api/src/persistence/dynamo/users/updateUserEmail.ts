@@ -1,3 +1,5 @@
+import { RawUser } from '@shared/business/entities/User';
+
 export const updateUserEmail = async ({
   applicationContext,
   user,

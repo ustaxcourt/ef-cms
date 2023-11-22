@@ -7,12 +7,12 @@ import {
 } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { irsPractitionerUser } from '../../../test/mockUsers';
-import { entityName as practitionerEntityName } from '../../entities/Practitioner';
 import { updateUserContactInformationInteractor } from './updateUserContactInformationInteractor';
 
 jest.mock('./generateChangeOfAddress');
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 
 describe('updateUserContactInformationInteractor', () => {
@@ -37,7 +37,7 @@ describe('updateUserContactInformationInteractor', () => {
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[2],
-      entityName: irsPractitionerEntityName,
+      entityName: IrsPractitioner.ENTITY_NAME,
       firmName: 'broken',
       firstName: 'Roy',
       lastName: 'Rogers',
@@ -128,7 +128,7 @@ describe('updateUserContactInformationInteractor', () => {
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[1],
-      entityName: irsPractitionerEntityName,
+      entityName: IrsPractitioner.ENTITY_NAME,
       firstName: 'Test',
       lastName: 'IRS Practitioner',
       originalBarState: 'OR',
@@ -155,7 +155,7 @@ describe('updateUserContactInformationInteractor', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      entityName: practitionerEntityName,
+      entityName: Practitioner.ENTITY_NAME,
       isUpdatingInformation: true,
       token: undefined,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -165,7 +165,7 @@ describe('updateUserContactInformationInteractor', () => {
   it('should update the user when the user being updated is a irsPractitioner', async () => {
     mockUser = {
       ...mockUser,
-      entityName: irsPractitionerEntityName,
+      entityName: IrsPractitioner.ENTITY_NAME,
       role: ROLES.irsPractitioner,
     };
 

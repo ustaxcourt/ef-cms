@@ -1,3 +1,4 @@
+import { RawUser } from '@shared/business/entities/User';
 import { getUserById } from './getUserById';
 import { updateUserRecords } from './updateUserRecords';
 
