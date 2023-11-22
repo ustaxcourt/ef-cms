@@ -3,7 +3,6 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { Petitioner } from '../entities/contacts/Petitioner';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validatePetitionerInteractor } from './validatePetitionerInteractor';
 
@@ -69,7 +68,7 @@ describe('validatePetitionerInteractor', () => {
     expect(errors).toEqual({
       confirmEmail: 'Enter a valid email address',
       postalCode: 'Enter ZIP code',
-      serviceIndicator: Petitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator,
+      serviceIndicator: 'Select a service indicator',
     });
   });
 
@@ -130,7 +129,7 @@ describe('validatePetitionerInteractor', () => {
 
     expect(errors).toEqual({
       contactType:
-        Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor,
+        'Only one (1) Intervenor is allowed per case. Please select a different Role.',
     });
   });
 
