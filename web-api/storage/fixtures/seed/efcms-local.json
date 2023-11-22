@@ -39240,6 +39240,11 @@
     "pk": "e-consent-fields-enabled-feature-flag"
   },
   {
+    "sk": "entity-locking-feature-flag",
+    "current": true,
+    "pk": "entity-locking-feature-flag"
+  },
+  {
     "sk": "AnchorageAlaska-H-B-20230311000000-105-67",
     "pk": "eligible-for-trial-case-catalog",
     "docketNumber": "105-67",

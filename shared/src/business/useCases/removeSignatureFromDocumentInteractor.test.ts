@@ -76,9 +76,9 @@ describe('removeSignatureFromDocumentInteractor', () => {
       doc => doc.docketEntryId === mockDocketEntryId,
     );
     expect(unsignedDocument).toMatchObject({
-      signedAt: null,
-      signedByUserId: null,
-      signedJudgeName: null,
+      signedAt: undefined,
+      signedByUserId: undefined,
+      signedJudgeName: undefined,
     });
   });
 });
