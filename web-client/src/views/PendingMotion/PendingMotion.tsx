@@ -98,6 +98,10 @@ export const PendingMotion = connect(
             })}
           </tbody>
         </table>
+
+        {pendingMotionsHelper.formattedPendingMotions.length === 0 && (
+          <div>There are no motions pending for more than 180 days.</div>
+        )}
       </>
     );
   },
