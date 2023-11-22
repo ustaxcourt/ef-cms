@@ -1,4 +1,3 @@
-import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
@@ -45,21 +44,12 @@ export const practitionerRequestsAccessToCaseManual = (
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitleTemplate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentTitleTemplate,
-      documentType:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
-      eventCode:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.eventCode,
-      filers:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
-      primaryDocumentFile:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      scenario:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.scenario,
+      documentTitleTemplate: 'Select a document',
+      documentType: 'Select a document type',
+      eventCode: 'Select a document',
+      filers: 'Select a party',
+      primaryDocumentFile: 'Upload a document',
+      scenario: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -82,11 +72,8 @@ export const practitionerRequestsAccessToCaseManual = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      filers:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
-      primaryDocumentFile:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
+      filers: 'Select a party',
+      primaryDocumentFile: 'Upload a document',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -97,8 +84,7 @@ export const practitionerRequestsAccessToCaseManual = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      filers:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
+      filers: 'Select a party',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -109,11 +95,8 @@ export const practitionerRequestsAccessToCaseManual = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      certificateOfServiceDate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[1],
-      filers:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
+      certificateOfServiceDate: 'Enter date of service',
+      filers: 'Select a party',
     });
 
     await cerebralTest.runSequence(
@@ -128,10 +111,8 @@ export const practitionerRequestsAccessToCaseManual = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[0].message,
-      filers:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
+      filers: 'Select a party',
     });
 
     await cerebralTest.runSequence(
@@ -145,8 +126,7 @@ export const practitionerRequestsAccessToCaseManual = (
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      filers:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
+      filers: 'Select a party',
     });
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);

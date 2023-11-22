@@ -1,5 +1,7 @@
+import { ReceiptOfFiling } from '@shared/business/utilities/pdfGenerator/documentTemplates/ReceiptOfFiling';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const receiptOfFiling = async ({ applicationContext, data }) => {
   const {
@@ -16,9 +18,8 @@ export const receiptOfFiling = async ({ applicationContext, data }) => {
     supportingDocuments,
   } = data;
 
-  const reactReceiptOfFilingTemplate = reactTemplateGenerator({
-    componentName: 'ReceiptOfFiling',
-    data: {
+  const reactReceiptOfFilingTemplate = ReactDOM.renderToString(
+    React.createElement(ReceiptOfFiling, {
       consolidatedCasesDocketNumbers,
       document,
       fileAcrossConsolidatedGroup,
@@ -32,8 +33,8 @@ export const receiptOfFiling = async ({ applicationContext, data }) => {
       secondaryDocument,
       secondarySupportingDocuments,
       supportingDocuments,
-    },
-  });
+    }),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
