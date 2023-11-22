@@ -22,6 +22,7 @@ export const MyContactInformation = connect(
             <Button
               link
               className="text-left"
+              data-testid="edit-contact-info"
               icon="edit"
               onClick={() => {
                 canEditContactInformationSequence();

@@ -34,7 +34,7 @@ export const caseDeadlineReportHelper = (
   let formattedFilterDateHeader = applicationContext
     .getUtilities()
     .formatDateString(filterStartDate, DATE_FORMATS.MONTH_DAY_YEAR);
-  if (filterEndDate && !filterStartDate.isSame(filterEndDate, 'day')) {
+  if (filterEndDate && !filterStartDate.hasSame(filterEndDate, 'day')) {
     filterEndDate = applicationContext
       .getUtilities()
       .prepareDateFromString(filterEndDate);

@@ -5,6 +5,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 /**
  * dismissNOTTReminderForTrialInteractor
  * @param {object} applicationContext the application context
