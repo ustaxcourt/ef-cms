@@ -14,7 +14,7 @@ import {
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import { User } from './User';
+import { RawUser, User } from './User';
 import { WorkItem } from './WorkItem';
 import {
   createISODateAtStartOfDayEST,
