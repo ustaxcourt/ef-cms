@@ -9,7 +9,7 @@ const BASE_ROUTE = '/';
 route.base(BASE_ROUTE);
 
 // Add this prefix to page titles for all pages that are related to a case
-const getPageTitleDocketPrefix = docketNumber => {
+const getPageTitleDocketPrefix = (docketNumber: string): string => {
   return `Docket ${docketNumber} | `;
 };
 
