@@ -3,8 +3,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../entities/User';
+import { RawUser, User } from '../entities/User';
+import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 
 /**
  * getUserByIdInteractor
