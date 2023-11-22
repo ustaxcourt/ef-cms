@@ -53,7 +53,6 @@ export const ConfirmModal = connect(
     };
 
     const runConfirmSequence = event => {
-      console.log('runConfirmSequence');
       event.stopPropagation();
       onConfirm?.call();
     };
