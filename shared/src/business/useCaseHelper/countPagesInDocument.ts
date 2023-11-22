@@ -11,7 +11,7 @@ export const countPagesInDocument = async ({
   const { PDFDocument } = await applicationContext.getPdfLib();
   if (documentBytes) {
     bytes = documentBytes;
-  } else {
+  } else if (docketEntryId) {
     bytes = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       key: docketEntryId,

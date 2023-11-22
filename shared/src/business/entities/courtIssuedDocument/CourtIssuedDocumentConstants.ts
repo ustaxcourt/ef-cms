@@ -16,44 +16,6 @@ export abstract class CourtIssuedDocument extends JoiValidationEntity {
   abstract getDocumentTitle(): string;
 }
 
-/**
- * these are in a separate file from the entity so they can be used
- * in each of the sub-types without a circular dependency
- */
-export const VALIDATION_ERROR_MESSAGES = {
-  attachments: 'Enter selection for Attachments',
-  date: [
-    {
-      contains: 'must be greater than or equal to',
-      message: 'Enter a valid date',
-    },
-    {
-      contains: 'must be less than or equal to',
-      message: 'Enter a valid date',
-    },
-    'Enter a date',
-  ],
-  docketNumbers: [
-    { contains: 'is required', message: 'Enter docket number(s)' },
-    {
-      contains: 'must be less than or equal to',
-      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
-    },
-  ],
-  documentType: 'Select a document type',
-  filingDate: 'Enter a filing date',
-  freeText: [
-    { contains: 'is required', message: 'Enter a description' },
-    {
-      contains: 'must be less than or equal to',
-      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
-    },
-  ],
-  judge: 'Select a judge',
-  serviceStamp: 'Select a service stamp',
-  trialLocation: 'Select a trial location',
-} as const;
-
 export const ENTERED_AND_SERVED_EVENT_CODES = [
   'ODJ',
   'OD',
