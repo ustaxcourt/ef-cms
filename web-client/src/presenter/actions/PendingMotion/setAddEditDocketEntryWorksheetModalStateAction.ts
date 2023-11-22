@@ -14,8 +14,6 @@ export const setAddEditDocketEntryWorksheetModalStateAction = ({
     deWs => deWs.docketEntryId === docketEntryId,
   );
 
-  console.log('docketEntryWorksheet', docketEntry);
-
   store.set(state.form, {
     ...docketEntry?.docketEntryWorksheet,
     docketNumber: docketEntry?.docketNumber,
