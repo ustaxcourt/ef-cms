@@ -23,7 +23,7 @@ export const PendingMotion = connect(
   }) {
     return (
       <>
-        <span className="float-right">
+        <span className="float-right text-semibold">
           Count: {pendingMotionsHelper.formattedPendingMotions.length}
         </span>
 
