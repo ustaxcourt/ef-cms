@@ -1,7 +1,4 @@
-import {
-  CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
-} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
@@ -35,13 +32,21 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
 
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    freeText: JoiValidationConstants.STRING.max(1000).optional(),
-    judge: JoiValidationConstants.STRING.required(),
+    freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    }),
+    judge: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a judge',
+    }),
     judgeWithtitle: JoiValidationConstants.STRING.optional(),
-    trialLocation: JoiValidationConstants.STRING.required(),
+    trialLocation: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a trial location',
+    }),
   };
 
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CourtIssuedDocumentTypeF.VALIDATION_RULES;
+  }
 
   getDocumentTitle() {
     const judge = this.judgeWithTitle || this.judge;
@@ -60,14 +65,6 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
       this.trialLocation,
       this.freeText,
     );
-  }
-
-  getValidationRules() {
-    return CourtIssuedDocumentTypeF.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeF.VALIDATION_ERROR_MESSAGES;
   }
 }
 
