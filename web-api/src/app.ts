@@ -175,6 +175,7 @@ import { updateCourtIssuedDocketEntryLambda } from './lambdas/documents/updateCo
 import { updateCourtIssuedOrderToCaseLambda } from './lambdas/documents/updateCourtIssuedOrderToCaseLambda';
 import { updateDeficiencyStatisticLambda } from './lambdas/cases/updateDeficiencyStatisticLambda';
 import { updateDocketEntryMetaLambda } from './lambdas/documents/updateDocketEntryMetaLambda';
+import { updateDocketEntryWorksheetLambda } from '@web-api/lambdas/pendingMotion/updateDocketEntryWorksheetLambda';
 import { updateOtherStatisticsLambda } from './lambdas/cases/updateOtherStatisticsLambda';
 import { updatePetitionerInformationLambda } from './lambdas/cases/updatePetitionerInformationLambda';
 import { updatePractitionerUserLambda } from './lambdas/practitioners/updatePractitionerUserLambda';
@@ -621,6 +622,10 @@ app.use(logger());
 app.get(
   '/docket-entries/pending-motion',
   lambdaWrapper(getPendingMotionDocketEntriesForCurrentJudgeLambda),
+);
+app.post(
+  '/docket-entry/:docketEntryId/case-worksheet',
+  lambdaWrapper(updateDocketEntryWorksheetLambda),
 );
 
 /**
