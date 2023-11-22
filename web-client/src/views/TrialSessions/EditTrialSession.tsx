@@ -76,6 +76,7 @@ export const EditTrialSession = connect(
             </div>
 
             <Button
+              data-testid="submit-edit-trial-session"
               type="submit"
               onClick={() => {
                 updateTrialSessionSequence();

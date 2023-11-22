@@ -24,6 +24,7 @@ export const PrintPaperPetitionReceipt = connect(
             <div className="grid-col-4">
               <Button
                 className="push-right margin-right-0 margin-bottom-4"
+                data-testid="done-viewing-paper-petition-receipt-button"
                 id="done-viewing-paper-petition-receipt-button"
                 onClick={() => {
                   completePrintPaperPetitionReceiptSequence();

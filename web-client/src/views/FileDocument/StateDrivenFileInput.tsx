@@ -42,6 +42,7 @@ export const StateDrivenFileInput = connect(
           accept={accept}
           aria-describedby={ariaDescribedBy}
           className="usa-input"
+          data-testid={id}
           id={id}
           name={fileInputName}
           ref={ref => (inputRef = ref)}
@@ -79,7 +80,7 @@ export const StateDrivenFileInput = connect(
           <div>
             <span
               className="success-message icon-upload margin-right-1"
-              data-cy="upload-file-success"
+              data-testid="upload-file-success"
             >
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>

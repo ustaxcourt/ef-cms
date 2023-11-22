@@ -1,41 +1,39 @@
-import {
-  getWorkItemCheckboxLabel,
-  getWorkItemRow,
-  navigateTo as navigateToDashboard,
-  selectAssignee,
-  viewDocumentQCSectionInbox,
-} from '../support/pages/dashboard';
+import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
+import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
 
-describe('Assign a work item', () => {
-  it('views the section inbox', () => {
-    navigateToDashboard('petitionsclerk');
-    viewDocumentQCSectionInbox();
-    getWorkItemRow('102-20S').should('exist');
-  });
-
-  it('assigns the work item to self', () => {
-    getWorkItemCheckboxLabel('77d8449a-ffe1-48e5-b056-a6112a819a4b').click();
-    selectAssignee('Test Petitionsclerk');
-  });
-
-  it('creates a section inbox message in this work item', () => {
-    getWorkItemRow('102-20S')
-      .contains('td.to', 'Test Petitionsclerk')
-      .should('exist');
-  });
-
-  it('views the docket section qc inbox', () => {
-    navigateToDashboard('docketclerk');
-    viewDocumentQCSectionInbox();
-    cy.get('#label-workitem-select-all-checkbox').click();
-    cy.get('.message-select-control input:checked').then(elm => {
-      cy.get('.assign-work-item-count-docket').should(
-        'contain',
-        elm.length - 1,
+describe('Work item assignment', () => {
+  it('petitionsClerk assigns a work item to themselves, docketClerk should NOT see that work item as unassigned', () => {
+    loginAsPetitioner();
+    petitionerCreatesEletronicCase().then(docketNumber => {
+      cy.login('petitionsclerk', '/document-qc/section/inbox');
+      cy.get('#section-work-queue').should('exist');
+      cy.get(`[data-testid="work-item-${docketNumber}"]`)
+        .find('[data-testid="checkbox-assign-work-item"]')
+        .click();
+      cy.get('[data-testid="dropdown-select-assignee"]').select(
+        'Test Petitionsclerk',
       );
-    });
-    cy.get('#assignmentFilter').select('Unassigned');
 
-    cy.get('.message-select-control input:checked').should('have.length', 0);
+      cy.login('petitionsclerk', '/document-qc/section/inbox');
+      cy.get('#section-work-queue').should('exist');
+      cy.get('body').then(body => {
+        return (
+          body.find(
+            `[data-testid="work-item-${docketNumber}"] [data-testid="table-column-work-item-assigned-to"]:contains("Test Petitionsclerk")`,
+          ).length > 0
+        );
+      });
+
+      cy.login('docketclerk', '/document-qc/section/inbox');
+      cy.get('[data-testid="checkbox-select-all-workitems"]').click();
+      cy.get('.message-select-control input:checked').then(elm => {
+        cy.get('.assign-work-item-count-docket').should(
+          'contain',
+          elm.length - 1,
+        );
+      });
+      cy.get('[data-testid="dropdown-select-assignee"]').select('Unassigned');
+      cy.get('.message-select-control input:checked').should('have.length', 0);
+    });
   });
 });

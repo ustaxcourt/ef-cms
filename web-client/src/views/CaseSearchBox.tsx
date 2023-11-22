@@ -37,7 +37,7 @@ export const CaseSearchBox = connect(
                     {caseSearchBoxHelper.showAdvancedSearch && (
                       <a
                         className="usa-link float-right"
-                        data-test="advanced-search-link"
+                        data-testid="advanced-search-link"
                         href="/search"
                         id="advanced-search-button"
                       >
@@ -86,7 +86,11 @@ export const CaseSearchBox = connect(
                   </div>
                 </div>
 
-                <Button secondary type="submit">
+                <Button
+                  secondary
+                  data-testid="search-by-docket-number"
+                  type="submit"
+                >
                   <span className="usa-search-submit-text">Search</span>
                 </Button>
               </div>
