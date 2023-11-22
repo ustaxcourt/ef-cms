@@ -47,6 +47,7 @@ export const TrialSessions = connect(
 
             <Button
               className="tab-right-button"
+              data-testid="add-trial-session-button"
               href="/add-a-trial-session"
               icon="plus-circle"
             >

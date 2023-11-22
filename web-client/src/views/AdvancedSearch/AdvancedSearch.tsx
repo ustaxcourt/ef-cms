@@ -90,6 +90,7 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
+                data-testid="tab-opinion"
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
                 title={'Opinion'}
@@ -107,6 +108,7 @@ export const AdvancedSearch = connect(
               </Tab>
               {advancedSearchHelper.showPractitionerSearch && (
                 <Tab
+                  data-testid="tab-practitioner"
                   id="tab-practitioner"
                   tabName={searchTabs.PRACTITIONER}
                   title="Practitioner"
@@ -130,7 +132,7 @@ export const AdvancedSearch = connect(
               <select
                 aria-label="advanced search type"
                 className="usa-select"
-                data-test="advanced-search-type-mobile-selector"
+                data-testid="advanced-search-type-mobile-selector"
                 value={advancedSearchTab}
                 onChange={e => {
                   cerebralBindSimpleSetStateSequence({
