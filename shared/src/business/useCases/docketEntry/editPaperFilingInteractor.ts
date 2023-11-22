@@ -9,6 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep, uniq } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 

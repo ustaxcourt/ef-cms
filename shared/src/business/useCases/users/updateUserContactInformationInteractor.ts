@@ -1,16 +1,13 @@
-import {
-  Practitioner,
-  entityName as practitionerEntityName,
-} from '../../entities/Practitioner';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { Practitioner } from '../../entities/Practitioner';
+import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
-import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { isEqual } from 'lodash';
-import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
@@ -36,9 +33,9 @@ const updateUserContactInformationHelper = async (
 
   const isPractitioner = u => {
     return (
-      u.entityName === privatePractitionerEntityName ||
-      u.entityName === irsPractitionerEntityName ||
-      u.entityName === practitionerEntityName
+      u.entityName === PrivatePractitioner.ENTITY_NAME ||
+      u.entityName === IrsPractitioner.ENTITY_NAME ||
+      u.entityName === Practitioner.ENTITY_NAME
     );
   };
 
@@ -70,9 +67,9 @@ const updateUserContactInformationHelper = async (
 
   let userEntity;
   if (
-    user.entityName === privatePractitionerEntityName ||
-    user.entityName === irsPractitionerEntityName ||
-    user.entityName === practitionerEntityName
+    user.entityName === PrivatePractitioner.ENTITY_NAME ||
+    user.entityName === IrsPractitioner.ENTITY_NAME ||
+    user.entityName === Practitioner.ENTITY_NAME
   ) {
     userEntity = new Practitioner({
       ...user,
