@@ -15,6 +15,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const getIsUserAuthorized = ({
   oldCase,
@@ -93,7 +94,7 @@ const updateCaseEntityAndGenerateChange = async ({
 };
 
 /**
- * updatePetitionerInformationInteractor
+ * updatePetitionerInformation
  *
  * this interactor is invoked when an internal user updates the petitioner information from the parties tab.
  *
@@ -103,7 +104,7 @@ const updateCaseEntityAndGenerateChange = async ({
  * @param {string} providers.updatedPetitionerData the updatedPetitionerData to update
  * @returns {object} the updated case data
  */
-export const updatePetitionerInformationInteractor = async (
+export const updatePetitionerInformation = async (
   applicationContext,
   { docketNumber, updatedPetitionerData },
 ) => {
@@ -301,3 +302,10 @@ export const updatePetitionerInformationInteractor = async (
     updatedCase,
   };
 };
+
+export const updatePetitionerInformationInteractor = withLocking(
+  updatePetitionerInformation,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
