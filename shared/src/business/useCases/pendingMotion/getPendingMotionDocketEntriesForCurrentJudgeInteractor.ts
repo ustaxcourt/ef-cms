@@ -9,6 +9,8 @@ import {
   calculateDifferenceInDays,
   prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { partition } from 'lodash';
 
 export type FormattedPendingMotionDocketEntry = RawDocketEntry & {
   daysSinceCreated: number;
@@ -79,8 +81,11 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
       pendingMotionDocketEntries,
     );
 
+  const uniquePendingMotions: DocketEntryWithWorksheet[] =
+    removeDuplicateDocketEntries(pendingMotionsDocketEntriesWithWorksheet);
+
   return {
-    docketEntries: pendingMotionsDocketEntriesWithWorksheet,
+    docketEntries: uniquePendingMotions,
   };
 };
 
@@ -144,4 +149,30 @@ async function attachDocketEntryWorkSheets(
     });
 
   return docketEntriesWithWorksheets;
+}
+function removeDuplicateDocketEntries(
+  docketEntries: DocketEntryWithWorksheet[],
+): DocketEntryWithWorksheet[] {
+  const [docketEntriesWithLead, soloDocketEntries] = partition(
+    docketEntries,
+    de => !!de.leadDocketNumber,
+  );
+
+  const uniqueDocketEntryDictionary = docketEntriesWithLead.reduce(
+    (accumulator, docketEntry) => {
+      if (!accumulator[docketEntry.docketEntryId]) {
+        accumulator[docketEntry.docketEntryId] = docketEntry;
+        return accumulator;
+      }
+      if (isLeadCase(docketEntry)) {
+        accumulator[docketEntry.docketEntryId] = docketEntry;
+        return accumulator;
+      }
+
+      return accumulator;
+    },
+    {} as { [key: string]: DocketEntryWithWorksheet },
+  );
+
+  return [...soloDocketEntries, ...Object.values(uniqueDocketEntryDictionary)];
 }
