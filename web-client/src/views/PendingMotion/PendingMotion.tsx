@@ -23,11 +23,7 @@ export const PendingMotion = connect(
   }) {
     return (
       <>
-        <span className="float-right text-semibold">
-          Count: {pendingMotionsHelper.formattedPendingMotions.length}
-        </span>
-
-        <span className="float-left">
+        <div>
           Showing motions pending for more than 180 days. To view all, run the{' '}
           <Button
             link
@@ -39,7 +35,10 @@ export const PendingMotion = connect(
           >
             Pending Report.
           </Button>
-        </span>
+        </div>
+        <div className="float-right margin-bottom-2 text-semibold">
+          Count: {pendingMotionsHelper.formattedPendingMotions.length}
+        </div>
 
         <table className="usa-table ustc-table">
           <thead>
