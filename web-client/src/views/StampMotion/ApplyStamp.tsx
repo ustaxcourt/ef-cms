@@ -420,6 +420,7 @@ export const ApplyStamp = connect(
               <div className="margin-bottom-1 display-flex flex-justify-end">
                 <Button
                   className="margin-right-0"
+                  data-testid="save-signature-button"
                   disabled={!applyStampFormHelper.canSaveStampOrder}
                   id="save-signature-button"
                   onClick={() => submitStampMotionSequence()}
