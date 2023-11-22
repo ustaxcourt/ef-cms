@@ -1,7 +1,7 @@
 import {
   DocketEntryWorksheet,
   RawDocketEntryWorksheet,
-} from '@shared/business/entities/docketEntryWorksheet/docketEntryWorksheet';
+} from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 
 describe('DocketEntryWorksheet', () => {
   const VALID_ENTITY_DATA: RawDocketEntryWorksheet = {
@@ -18,6 +18,16 @@ describe('DocketEntryWorksheet', () => {
   });
 
   describe('validation', () => {
+    it('should be invalid when the docketEntryId is NOT a UUID', () => {
+      const worksheet = new DocketEntryWorksheet({
+        docketEntryId: 'NOT UUID',
+      });
+
+      expect(worksheet.getFormattedValidationErrors()!.docketEntryId).toEqual(
+        '"docketEntryId" must be a valid GUID',
+      );
+    });
+
     it('should be invalid when the final brief due date is NOT a date string', () => {
       const worksheet = new DocketEntryWorksheet({
         finalBriefDueDate: 'abcdef',
