@@ -6,7 +6,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { RawUser } from '@shared/business/entities/User';
+import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { replaceBracketed } from '../utilities/replaceBracketed';
 
