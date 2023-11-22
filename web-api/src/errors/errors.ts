@@ -103,6 +103,22 @@ export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error
   }
 };
 
+export const ServiceUnavailableError = class ServiceUnavailableError extends Error {
+  /**
+   * constructor
+   *
+   * @param {string} message the error message
+   */
+  public statusCode: number;
+  retryAfter?: number;
+  constructor(message = 'Service Unavailable', retryAfter = 3000) {
+    super(message);
+
+    this.retryAfter = retryAfter;
+    this.statusCode = 503;
+  }
+};
+
 /**
  * InvalidEntityError error
  * @type {module.InvalidEntityError}
@@ -112,6 +128,10 @@ export const InvalidEntityError = class InvalidEntityError extends Error {
    * constructor
    * @param {string} message the error message
    */
+  public details?: {
+    [key: string]: any;
+  };
+
   constructor(
     entityName,
     message = 'entity is invalid or invalid for operation',

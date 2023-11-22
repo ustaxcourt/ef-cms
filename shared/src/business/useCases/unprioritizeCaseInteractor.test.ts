@@ -1,23 +1,32 @@
 import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
 
 describe('unprioritizeCaseInteractor', () => {
   let mockUser;
-
-  beforeEach(() => {
-    mockUser = {
-      role: ROLES.petitionsClerk,
-      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
-    };
-
+  let mockLock;
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+
     applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock.mockImplementation(
         ({ caseEntity }) => caseEntity,
       );
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    mockUser = {
+      role: ROLES.petitionsClerk,
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
+    };
   });
 
   it('should throw an unauthorized error if the user has no access to unprioritize the case', async () => {
@@ -110,5 +119,42 @@ describe('unprioritizeCaseInteractor', () => {
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      unprioritizeCaseInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    mockLock = undefined;
+
+    await unprioritizeCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 });

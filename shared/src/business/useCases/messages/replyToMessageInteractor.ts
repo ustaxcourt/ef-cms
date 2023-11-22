@@ -6,6 +6,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 export const replyToMessage = async (
   applicationContext: IApplicationContext,
   {
