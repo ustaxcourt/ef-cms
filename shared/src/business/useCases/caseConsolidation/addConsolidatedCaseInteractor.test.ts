@@ -1,12 +1,22 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { ROLES } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addConsolidatedCaseInteractor } from './addConsolidatedCaseInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 let mockCases;
+let mockLock;
 
 describe('addConsolidatedCaseInteractor', () => {
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
   beforeEach(() => {
+    mockLock = undefined;
     mockCases = {
       '119-19': {
         ...MOCK_CASE,
@@ -80,6 +90,39 @@ describe('addConsolidatedCaseInteractor', () => {
         docketNumberToConsolidateWith: '319-19',
       }),
     ).rejects.toThrow('Unauthorized for case consolidation');
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      addConsolidatedCaseInteractor(applicationContext, {
+        docketNumber: '519-19',
+        docketNumberToConsolidateWith: '319-19',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the cases', async () => {
+    await addConsolidatedCaseInteractor(applicationContext, {
+      docketNumber: '519-19',
+      docketNumberToConsolidateWith: '319-19',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: 'case|519-19',
+      ttl: 30,
+    });
   });
 
   it('Should try to get the case by its docketNumber', async () => {

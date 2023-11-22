@@ -4,7 +4,9 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
@@ -12,17 +14,12 @@ describe('addCaseToTrialSessionInteractor', () => {
   let mockCurrentUser;
   let mockTrialSession;
   let mockCase;
+  let mockLock;
 
-  beforeEach(() => {
-    mockCurrentUser = {
-      role: ROLES.petitionsClerk,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
-
-    mockTrialSession = MOCK_TRIAL_REMOTE;
-
-    mockCase = MOCK_CASE;
-
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
     applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
       .getPersistenceGateway()
@@ -30,6 +27,16 @@ describe('addCaseToTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    mockCurrentUser = {
+      role: ROLES.petitionsClerk,
+      userId: '8675309b-18d0-43ec-bafb-654e83405411',
+    };
+    mockTrialSession = MOCK_TRIAL_REMOTE;
+    mockCase = MOCK_CASE;
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
@@ -42,7 +49,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes: 'testing',
         docketNumber: mockCase.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -57,7 +64,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes: 'testing',
         docketNumber: mockCase.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
       }),
     ).rejects.toThrow('The case is already calendared');
   });
@@ -73,7 +80,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes: 'testing',
         docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
       }),
     ).rejects.toThrow('The case is already part of this trial session.');
   });
@@ -114,7 +121,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'Test',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
     });
 
     const caseWithCalendarNotes = applicationContext
@@ -135,7 +142,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'testing',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
     });
 
     expect(
@@ -157,11 +164,50 @@ describe('addCaseToTrialSessionInteractor', () => {
     await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'testing',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
     });
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      addCaseToTrialSessionInteractor(applicationContext, {
+        calendarNotes: 'testing',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: mockTrialSession.trialSessionId,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await addCaseToTrialSessionInteractor(applicationContext, {
+      calendarNotes: 'testing',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: mockTrialSession.trialSessionId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 });

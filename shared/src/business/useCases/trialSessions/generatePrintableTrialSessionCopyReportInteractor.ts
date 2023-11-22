@@ -5,6 +5,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 export const generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext: IApplicationContext,
   {

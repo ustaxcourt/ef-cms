@@ -264,6 +264,7 @@ export const CourtIssuedDocketEntry = connect(
                 <div className="margin-top-5">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
                     <Button
+                      data-testid="serve-to-parties-btn"
                       id="serve-to-parties-btn"
                       onClick={() => {
                         openConfirmInitiateCourtIssuedFilingServiceModalSequence();
