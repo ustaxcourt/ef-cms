@@ -128,7 +128,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: { ...baseState, permissions: { REPRINT_PAPER_SERVICE: true } },
+        state: { ...baseState, permissions: { TRIAL_SESSIONS: true } },
       });
 
       expect(result.showPrintPaperServicePDFsButton).toBe(true);
