@@ -10,6 +10,7 @@ import {
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
 export const adcUser = {

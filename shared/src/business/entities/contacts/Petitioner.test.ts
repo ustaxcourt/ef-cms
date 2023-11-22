@@ -38,7 +38,7 @@ describe('Petitioner', () => {
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
-        serviceIndicator: Petitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator,
+        serviceIndicator: 'Select a service indicator',
       });
     });
 
@@ -53,7 +53,7 @@ describe('Petitioner', () => {
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
-        name: Petitioner.VALIDATION_ERROR_MESSAGES.name[0].message,
+        name: 'Limit is 100 characters. Enter 100 or fewer characters.',
       });
     });
 
@@ -69,7 +69,7 @@ describe('Petitioner', () => {
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
         additionalName:
-          Petitioner.VALIDATION_ERROR_MESSAGES.additionalName[0].message,
+          'Limit is 100 characters. Enter 100 or fewer characters.',
       });
     });
 
