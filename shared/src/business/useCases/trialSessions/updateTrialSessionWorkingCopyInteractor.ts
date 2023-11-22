@@ -7,6 +7,7 @@ import {
   TrialSessionWorkingCopy,
 } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 /**
  * updateTrialSessionWorkingCopyInteractor
  *
