@@ -681,6 +681,7 @@ export const baseState = {
     docketRecordSort: [],
     todaysOrdersSort: [],
   },
+  setSelectedConsolidatedCasesToMultiDocketOn: false,
   showValidation: false,
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],

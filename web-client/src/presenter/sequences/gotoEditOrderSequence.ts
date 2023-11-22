@@ -12,6 +12,7 @@ import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { setSelectedConsolidatedCasesToMultiDocketOnAction } from '@web-client/presenter/actions/setSelectedConsolidatedCasesToMultiDocketOnAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -33,6 +34,7 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setParentMessageIdAction,
   convertHtml2PdfSequence,
   setAddedDocketNumbersAction,
+  setSelectedConsolidatedCasesToMultiDocketOnAction(false),
   setupCurrentPageAction('CreateOrder'),
 ]);
 
