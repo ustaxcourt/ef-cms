@@ -53,6 +53,7 @@ export const PendingMotion = connect(
               <th>Motion</th>
               <th>No. Days Pending</th>
               <th>Final Brief Due Date</th>
+              <th>Status of Matter</th>
               <th aria-hidden="true"></th>
             </tr>
           </thead>
@@ -82,6 +83,7 @@ export const PendingMotion = connect(
                     <td>{motion.documentTitle}</td>
                     <td>{motion.daysSinceCreated}</td>
                     <td>{motion.docketEntryWorksheet.finalBriefDueDate}</td>
+                    <td>{motion.docketEntryWorksheet.statusOfMatter}</td>
                     <td>
                       <Button
                         link
