@@ -1,6 +1,5 @@
 import {
   CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
   yesterdayFormatted,
 } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
@@ -34,16 +33,26 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
 
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    date: joi.when('createdAt', {
-      is: joi.exist().not(null),
-      otherwise:
-        JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
-      then: JoiValidationConstants.ISO_DATE.required(),
+    date: joi
+      .when('createdAt', {
+        is: joi.exist().not(null),
+        otherwise:
+          JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
+        then: JoiValidationConstants.ISO_DATE.required(),
+      })
+      .messages({
+        '*': 'Enter a date',
+        'date.max': 'Enter a valid date',
+        'date.min': 'Enter a valid date',
+      }),
+    freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
-    freeText: JoiValidationConstants.STRING.max(1000).optional(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CourtIssuedDocumentTypeD.VALIDATION_RULES;
+  }
 
   getDocumentTitle() {
     return replaceBracketed(
@@ -51,14 +60,6 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
       formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
       this.freeText,
     );
-  }
-
-  getValidationRules() {
-    return CourtIssuedDocumentTypeD.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeD.VALIDATION_ERROR_MESSAGES;
   }
 }
 
