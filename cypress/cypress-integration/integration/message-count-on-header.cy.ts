@@ -20,7 +20,7 @@ describe('Message Count', () => {
     sendMessage();
 
     cy.login('judgecolvin');
-    cy.getByTestId('header-message-count').should('exist');
+    cy.get('[data-testid="header-message-count"]').should('exist');
   });
 
   it("should display the message count on the Chamber's dashboard", () => {
@@ -34,6 +34,6 @@ describe('Message Count', () => {
     sendMessage();
 
     cy.login('colvinschambers');
-    cy.getByTestId('header-message-count').should('exist');
+    cy.get('[data-testid="header-message-count"]').should('exist');
   });
 });
