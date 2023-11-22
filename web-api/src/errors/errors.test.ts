@@ -1,6 +1,7 @@
 import {
   InvalidEntityError,
   NotFoundError,
+  ServiceUnavailableError,
   UnauthorizedError,
   UnknownUserError,
   UnprocessableEntityError,
@@ -89,7 +90,7 @@ describe('InvalidEntityError', () => {
     expect(error.message).toEqual(
       'The TestEntity entity was invalid. entity is invalid or invalid for operation',
     );
-    expect(error.details.foo).toBe(true);
+    expect(error.details!.foo).toBe(true);
   });
 });
 
@@ -106,5 +107,21 @@ describe('UnsanitizedEntityError', () => {
 
   it('should set the message', () => {
     expect(error.message).toEqual('Unsanitized entity');
+  });
+});
+
+describe('ServiceUnavailableError', () => {
+  let error;
+
+  beforeEach(() => {
+    error = new ServiceUnavailableError();
+  });
+
+  it('should set a status code of 503', () => {
+    expect(error.statusCode).toEqual(503);
+  });
+
+  it('should set the message', () => {
+    expect(error.message).toEqual('Service Unavailable');
   });
 });
