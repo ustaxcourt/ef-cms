@@ -1,6 +1,7 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { fetchUserNotificationsSequence } from '@web-client/presenter/sequences/fetchUserNotificationsSequence';
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
@@ -67,6 +68,7 @@ const goToDashboard = [
                   proceedToMessages,
                 ),
                 chambers: [
+                  fetchUserNotificationsSequence,
                   getJudgeForCurrentUserAction,
                   setJudgeUserAction,
                   parallel([
@@ -91,6 +93,7 @@ const goToDashboard = [
                 ],
                 irsSuperuser: [setupCurrentPageAction('DashboardIrsSuperuser')],
                 judge: [
+                  fetchUserNotificationsSequence,
                   passAlongJudgeUserAction,
                   setJudgeUserAction,
                   parallel([

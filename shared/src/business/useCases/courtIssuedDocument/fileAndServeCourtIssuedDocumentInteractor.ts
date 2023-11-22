@@ -11,10 +11,10 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { omit } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
- *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
  * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
@@ -24,7 +24,7 @@ import { omit } from 'lodash';
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  * @returns {Object} the URL of the document that was served
  */
-export const fileAndServeCourtIssuedDocumentInteractor = async (
+export const fileAndServeCourtIssuedDocument = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -252,3 +252,40 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    docketNumbers = [],
+    subjectCaseDocketNumber,
+  }: {
+    docketNumbers?: string[];
+    subjectCaseDocketNumber: string;
+  },
+) => ({
+  identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
+    item => `case|${item}`,
+  ),
+  ttl: 900,
+});
+
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'file_and_serve_court_issued_document',
+    },
+    userId: user.userId,
+  });
+};
+
+export const fileAndServeCourtIssuedDocumentInteractor = withLocking(
+  fileAndServeCourtIssuedDocument,
+  determineEntitiesToLock,
+  handleLockError,
+);
