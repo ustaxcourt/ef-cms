@@ -39,6 +39,7 @@ export const DocketRecord = connect(
             <table
               aria-label="docket record"
               className="usa-table ustc-table usa-table--stacked"
+              data-testid="docket-record-table"
               id="docket-record-table"
             >
               <thead>

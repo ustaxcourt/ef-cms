@@ -72,6 +72,7 @@ export const CaseSearchBox = connect(
                     </label>
                     <input
                       className="usa-input"
+                      data-testid="docket-search-field"
                       id="docket-search-field"
                       name="searchTerm"
                       placeholder="Enter docket number (e.g., 123-19)"

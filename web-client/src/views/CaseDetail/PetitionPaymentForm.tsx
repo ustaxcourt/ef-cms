@@ -73,6 +73,7 @@ export const PetitionPaymentForm = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid="payment-status-unpaid-label"
                 htmlFor="payment-status-unpaid"
               >
                 {paymentStatus.UNPAID}
