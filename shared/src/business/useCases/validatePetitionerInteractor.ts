@@ -53,7 +53,7 @@ export const validatePetitionerInteractor = (
     contactInfo.contactType === CONTACT_TYPES.intervenor
   ) {
     aggregatedErrors.contactType =
-      Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
+      'Only one (1) Intervenor is allowed per case. Please select a different Role.';
   }
 
   return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
