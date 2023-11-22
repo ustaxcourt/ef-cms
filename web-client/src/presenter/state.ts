@@ -12,6 +12,7 @@ import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourt
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
 import { addEditCaseWorksheetModalHelper } from '@web-client/presenter/computeds/CaseWorksheets/addEditCaseWorksheetModalHelper';
+import { addEditDocketEntryWorksheetModalHelper } from '@web-client/presenter/computeds/PendingMotions/addEditDocketEntryWorksheetModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -159,6 +160,10 @@ export const computeds = {
   addEditCaseWorksheetModalHelper:
     addEditCaseWorksheetModalHelper as unknown as ReturnType<
       typeof addEditCaseWorksheetModalHelper
+    >,
+  addEditDocketEntryWorksheetModalHelper:
+    addEditDocketEntryWorksheetModalHelper as unknown as ReturnType<
+      typeof addEditDocketEntryWorksheetModalHelper
     >,
   addToTrialSessionModalHelper:
     addToTrialSessionModalHelper as unknown as ReturnType<

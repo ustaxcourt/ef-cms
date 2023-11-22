@@ -137,8 +137,9 @@ async function attachDocketEntryWorkSheets(
     docketEntries.map(docketEntry => {
       return {
         ...docketEntry,
-        docketEntryWorksheet:
-          docketEntryWorksheetDictionary[docketEntry.docketEntryId] || {},
+        docketEntryWorksheet: docketEntryWorksheetDictionary[
+          docketEntry.docketEntryId
+        ] || { docketEntryId: docketEntry.docketEntryId },
       };
     });
 

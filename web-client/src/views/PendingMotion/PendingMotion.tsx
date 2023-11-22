@@ -1,3 +1,4 @@
+import { AddEditDocketEntryWorksheetModal } from '@web-client/views/PendingMotion/AddEditDocketEntryWorksheetModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
@@ -9,9 +10,17 @@ import React from 'react';
 export const PendingMotion = connect(
   {
     navigateToPathSequence: sequences.navigateToPathSequence,
+    openAddEditDocketEntryWorksheetModalSequence:
+      sequences.openAddEditDocketEntryWorksheetModalSequence,
     pendingMotionsHelper: state.pendingMotionsHelper,
+    showModal: state.modal.showModal,
   },
-  function PendingMotion({ navigateToPathSequence, pendingMotionsHelper }) {
+  function PendingMotion({
+    navigateToPathSequence,
+    openAddEditDocketEntryWorksheetModalSequence,
+    pendingMotionsHelper,
+    showModal,
+  }) {
     return (
       <>
         <span className="float-right">
@@ -78,7 +87,11 @@ export const PendingMotion = connect(
                         link
                         data-testid="add-edit-case-worksheet"
                         icon="edit"
-                        onClick={() => {}}
+                        onClick={() =>
+                          openAddEditDocketEntryWorksheetModalSequence({
+                            docketEntryId: motion.docketEntryId,
+                          })
+                        }
                       >
                         Edit
                       </Button>
@@ -101,6 +114,10 @@ export const PendingMotion = connect(
 
         {pendingMotionsHelper.formattedPendingMotions.length === 0 && (
           <div>There are no motions pending for more than 180 days.</div>
+        )}
+
+        {showModal === 'AddEditDocketEntryWorksheetModal' && (
+          <AddEditDocketEntryWorksheetModal />
         )}
       </>
     );
