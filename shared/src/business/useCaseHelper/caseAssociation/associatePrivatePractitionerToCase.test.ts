@@ -7,6 +7,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { MOCK_USERS } from '../../../test/mockUsers';
+import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
 import {

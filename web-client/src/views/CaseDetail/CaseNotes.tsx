@@ -99,6 +99,7 @@ export const CaseNotes = connect(
                         <Button
                           link
                           className="float-right margin-right-0 margin-top-1 padding-0"
+                          data-testid="add-case-judge-notes-button"
                           icon="plus-circle"
                           onClick={() => {
                             openAddEditUserCaseNoteModalFromDetailSequence({

@@ -1,7 +1,7 @@
-import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { CaseExternal } from './CaseExternal';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
 export class CaseExternalIncomplete extends JoiValidationEntity {
@@ -56,14 +56,8 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
     procedureType: CaseExternal.VALIDATION_RULES.procedureType,
   } as const;
 
-  static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
-
   getValidationRules() {
     return CaseExternalIncomplete.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES;
   }
 
   getContactPrimary() {
