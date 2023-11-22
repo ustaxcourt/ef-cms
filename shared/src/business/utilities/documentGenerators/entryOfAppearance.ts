@@ -1,6 +1,8 @@
+import { EntryOfAppearance } from '@shared/business/utilities/pdfGenerator/documentTemplates/EntryOfAppearance';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const entryOfAppearance = async ({ applicationContext, data }) => {
   const {
@@ -14,9 +16,8 @@ export const entryOfAppearance = async ({ applicationContext, data }) => {
 
   const date = applicationContext.getUtilities().formatNow(FORMATS.MMDDYY);
 
-  const EntryOfAppearanceTemplate = reactTemplateGenerator({
-    componentName: 'EntryOfAppearance',
-    data: {
+  const EntryOfAppearanceTemplate = ReactDOM.renderToString(
+    React.createElement(EntryOfAppearance, {
       caseCaptionExtension,
       caseTitle,
       date,
@@ -24,8 +25,8 @@ export const entryOfAppearance = async ({ applicationContext, data }) => {
       docketNumberWithSuffix,
       filers,
       practitionerInformation,
-    },
-  });
+    }),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,

@@ -1,15 +1,6 @@
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePdfFromHtmlHelper } from './generatePdfFromHtmlHelper';
 
-jest.mock(
-  '../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
-  () => {
-    return {
-      reactTemplateGenerator: jest.fn().mockImplementation(() => '<div></div>'),
-    };
-  },
-);
-
 describe('generatePdfFromHtmlHelper', () => {
   let pageContent = '';
   let closeMock;
