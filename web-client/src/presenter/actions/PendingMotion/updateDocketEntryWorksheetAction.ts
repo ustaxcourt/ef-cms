@@ -8,7 +8,6 @@ export const updateDocketEntryWorksheetAction = async ({
   const { docketEntryId, finalBriefDueDate, primaryIssue, statusOfMatter } =
     get(state.form);
 
-  console.log('updateDocketEntryWorksheetInteractor');
   const updatedWorksheet = await applicationContext
     .getUseCases()
     .updateDocketEntryWorksheetInteractor(applicationContext, {
