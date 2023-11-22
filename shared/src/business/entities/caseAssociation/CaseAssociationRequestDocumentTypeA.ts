@@ -41,33 +41,26 @@ export class CaseAssociationRequestDocumentTypeA extends CaseAssociationRequestD
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return new SupportingDocumentInformationFactory(
-          item,
-          CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
   }
 
   static VALIDATION_RULES = {
     ...CaseAssociationRequestDocumentBase.VALIDATION_RULES,
-    attachments: joi.boolean().required(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES =
-    CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
-
-  getDocumentTitle = () => {
-    return this.documentTitleTemplate;
+    attachments: joi
+      .boolean()
+      .required()
+      .messages({ '*': 'Enter selection for Attachments.' }),
   };
 
   getValidationRules() {
     return CaseAssociationRequestDocumentTypeA.VALIDATION_RULES;
   }
 
-  getErrorToMessageMap() {
-    return CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES;
-  }
+  getDocumentTitle = () => {
+    return this.documentTitleTemplate;
+  };
 }
 
 export type RawCaseAssociationRequestDocumentTypeA =

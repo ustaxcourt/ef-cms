@@ -45,18 +45,23 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return new SupportingDocumentInformationFactory(
-          item,
-          CaseAssociationRequestDocumentTypeD.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
   }
 
-  static VALIDATION_RULES = CaseAssociationRequestDocumentBase.VALIDATION_RULES;
+  static VALIDATION_RULES = {
+    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES,
+    primaryDocumentFile: joi.when('generationType', {
+      is: GENERATION_TYPES.AUTO,
+      otherwise: joi.object().required().messages({ '*': 'Upload a document' }),
+      then: joi.object().optional(),
+    }),
+  };
 
-  static VALIDATION_ERROR_MESSAGES =
-    CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES;
+  }
 
   getDocumentTitle = petitioners => {
     let petitionerNames;
@@ -77,18 +82,6 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
 
     return replaceBracketed(this.documentTitleTemplate, petitionerNames);
   };
-
-  getValidationRules() {
-    const rules = { ...CaseAssociationRequestDocumentTypeD.VALIDATION_RULES };
-    if (this.generationType === GENERATION_TYPES.AUTO) {
-      rules.primaryDocumentFile = joi.object().optional();
-    }
-    return rules;
-  }
-
-  getErrorToMessageMap() {
-    return CaseAssociationRequestDocumentTypeD.VALIDATION_ERROR_MESSAGES;
-  }
 }
 
 export type RawCaseAssociationRequestDocumentTypeD =

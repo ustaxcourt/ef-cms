@@ -68,7 +68,7 @@ describe('handleBounceNotificationInteractor', () => {
     ).toHaveBeenCalledWith(
       expect.objectContaining({
         destinations: [{ email: 'sysadmin@example.com' }],
-        templateName: process.env.EMAIL_BOUNCED_SUPER_USER_TEMPLATE,
+        templateName: process.env.BOUNCE_ALERT_TEMPLATE,
       }),
     );
 

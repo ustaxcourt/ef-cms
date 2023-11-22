@@ -6,6 +6,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { createISODateString } from '../../utilities/DateHandler';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * completeWorkItemInteractor
@@ -16,7 +17,7 @@ import { createISODateString } from '../../utilities/DateHandler';
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {object} the completed work item
  */
-export const completeWorkItemInteractor = async (
+export const completeWorkItem = async (
   applicationContext: IApplicationContext,
   {
     completedMessage,
@@ -89,3 +90,24 @@ export const completeWorkItemInteractor = async (
 
   return completedWorkItem;
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { workItemId }: { workItemId: string },
+) => {
+  const originalWorkItem: RawWorkItem = await applicationContext
+    .getPersistenceGateway()
+    .getWorkItemById({
+      applicationContext,
+      workItemId,
+    });
+
+  return {
+    identifiers: [`case|${originalWorkItem.docketNumber}`],
+  };
+};
+
+export const completeWorkItemInteractor = withLocking(
+  completeWorkItem,
+  determineEntitiesToLock,
+);
