@@ -11,6 +11,7 @@ import { cloneDeep } from 'lodash';
 describe('WorkItem', () => {
   describe('isValid', () => {
     let aValidWorkItem;
+
     beforeEach(() => {
       aValidWorkItem = {
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -221,7 +222,7 @@ describe('WorkItem', () => {
     expect(workItem.highPriority).toBe(true);
   });
 
-  it('Creates a workItem containing a docketEntry with only the picked fields', () => {
+  it('creates a workItem containing a docketEntry with only the picked fields', () => {
     const workItem = new WorkItem(
       {
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
