@@ -1,3 +1,4 @@
+import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { applicationContext } from '../../applicationContext';
 import { createOrderHelper as createOrderHelperComputed } from './createOrderHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -9,20 +10,25 @@ const createOrderHelper = withAppContextDecorator(
 );
 
 describe('createOrderHelper', () => {
-  const consolidatedCasesToMultiDocketOn = [
-    {
-      checked: true,
-      docketNumber: '101-20',
-      docketNumberWithSuffix: '101-20L',
-      leadDocketNumber: '101-20',
-    },
-    {
-      checked: false,
-      docketNumber: '103-67',
-      docketNumberWithSuffix: '103-67S',
-      leadDocketNumber: '101-20',
-    },
-  ];
+  const consolidatedCasesToMultiDocketOn: ConsolidatedCasesWithCheckboxInfoType[] =
+    [
+      {
+        checkboxDisabled: false,
+        checked: true,
+        docketNumber: '101-20',
+        docketNumberWithSuffix: '101-20L',
+        formattedPetitioners: 'Petitioner 1, Petitioner2',
+        leadDocketNumber: '101-20',
+      },
+      {
+        checkboxDisabled: false,
+        checked: false,
+        docketNumber: '103-67',
+        docketNumberWithSuffix: '103-67S',
+        formattedPetitioners: 'Petitioner 1, Petitioner2',
+        leadDocketNumber: '101-20',
+      },
+    ];
 
   let caseDetail;
   let setSelectedConsolidatedCasesToMultiDocketOn: boolean;
