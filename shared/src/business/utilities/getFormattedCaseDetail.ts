@@ -133,7 +133,7 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     !formattedEntry.isUnservable &&
     formattedEntry.isOnDocketRecord
   ) {
-    formattedEntry.createdAtFormatted = undefined;
+    formattedEntry.createdAtFormatted = '';
   } else if (formattedEntry.isOnDocketRecord) {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()

@@ -144,7 +144,6 @@ const app = {
       }
       return value;
     });
-
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.constants = applicationContext.getConstants();
     presenter.state.cognitoLocalEnabled =

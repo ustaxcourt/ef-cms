@@ -21,6 +21,7 @@ import { changePasswordLocalInteractor } from '../../shared/src/business/useCase
 import { checkEmailAvailabilityInteractor } from '../../shared/src/business/useCases/users/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from '../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor';
+import { cognitoResendVerificationLinkInteractor } from '@shared/business/useCases/public/cognitoResendVerificationLinkInteractor';
 import { completeDocketEntryQCInteractor } from '../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor';
 import { completeMessageInteractor } from '../../shared/src/business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/business/useCases/workitems/completeWorkItemInteractor';
@@ -34,8 +35,8 @@ import { createPetitionerAccountInteractor } from '../../shared/src/business/use
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
 import { createPractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor';
+import { createUserCognitoInteractor } from '../../shared/src/business/useCases/users/createUserCognitoInteractor';
 import { createUserInteractor } from '../../shared/src/business/useCases/users/createUserInteractor';
-import { createUserInteractorLocal } from '../../shared/src/business/useCases/users/createUserInteractorLocal';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
@@ -46,7 +47,7 @@ import { deleteUserCaseNoteInteractor } from '../../shared/src/business/useCases
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/business/useCases/trialSessions/dismissNOTTReminderForTrialInteractor';
 import { editPaperFilingInteractor } from '../../shared/src/business/useCases/docketEntry/editPaperFilingInteractor';
 import { editPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/editPractitionerDocumentInteractor';
-import { fetchPendingItemsInteractor } from '../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor';
+import { fetchPendingItemsInteractor } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { fileCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor';
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor';
@@ -65,7 +66,7 @@ import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCase
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/business/useCases/generatePractitionerCaseListPdfInteractor';
 import { generatePrintableCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor';
-import { generatePrintablePendingReportInteractor } from '../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor';
+import { generatePrintablePendingReportInteractor } from './business/useCases/pendingItems/generatePrintablePendingReportInteractor';
 import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from '../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor';
 import { generateStandingPretrialOrderInteractor } from '../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor';
@@ -232,6 +233,7 @@ const useCases = {
   checkEmailAvailabilityInteractor,
   checkForReadyForTrialCasesInteractor,
   closeTrialSessionInteractor,
+  cognitoResendVerificationLinkInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
@@ -245,8 +247,8 @@ const useCases = {
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
+  createUserCognitoInteractor,
   createUserInteractor,
-  createUserInteractorLocal,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,

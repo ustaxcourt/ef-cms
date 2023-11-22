@@ -1,22 +1,25 @@
 import { confirmSignUpLocalAction } from '../actions/confirmSignUpLocalAction';
-import { gotoLoginSequence } from './gotoLoginSequence';
+import { navigateToCognitoAction } from '@web-client/presenter/actions/navigateToCognitoAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { sleep } from '@shared/tools/helpers';
 
-export const confirmSignUpLocalSequence = showProgressSequenceDecorator([
+export const confirmSignUpLocalSequence = [
   confirmSignUpLocalAction,
   {
     no: [
       setAlertErrorAction,
       setSaveAlertsForNavigationAction,
-      gotoLoginSequence,
+      navigateToCognitoAction,
     ],
     yes: [
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
-      gotoLoginSequence,
+      async () => {
+        await sleep(3000);
+      },
+      navigateToCognitoAction,
     ],
   },
-]);
+];

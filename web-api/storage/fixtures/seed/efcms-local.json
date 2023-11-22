@@ -339,9 +339,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -369,9 +367,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -644,9 +640,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.325Z",
@@ -684,9 +678,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.327Z",
@@ -724,9 +716,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.316Z",
@@ -905,9 +895,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.912Z",
@@ -992,9 +980,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.921Z",
@@ -1032,9 +1018,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.924Z",
@@ -1497,9 +1481,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
@@ -1527,9 +1509,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|101-20",
     "docketNumber": "101-20"
@@ -1956,9 +1936,7 @@
     "eventCode": "EVID",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -2181,9 +2159,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-21",
     "docketNumber": "101-21"
   },
@@ -2811,9 +2787,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "pending",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-21",
     "docketNumber": "101-21"
   },
@@ -3000,9 +2974,7 @@
     "eventCode": "MOTR",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -3847,9 +3819,7 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"filersMap\":{\"7805d1ab-18d0-43ec-bafb-654e83405416\":true},\"filers\":[\"7805d1ab-18d0-43ec-bafb-654e83405416\"],\"practitioner\":[],\"dateReceivedMonth\":1,\"dateReceivedDay\":1,\"dateReceivedYear\":2018,\"primaryDocumentFileSize\":100,\"eventCode\":\"A\",\"category\":\"Answer (filed by respondent only)\",\"documentType\":\"Answer\",\"documentTitle\":\"Answer\",\"scenario\":\"Standard\",\"pending\":true,\"certificateOfServiceDate\":null,\"dateReceived\":\"2018-01-01T05:00:00.000Z\",\"createdAt\":\"2018-01-01T05:00:00.000Z\",\"docketNumber\":\"101-21\",\"isFileAttached\":false,\"isPaper\":true,\"receivedAt\":\"2018-01-01T05:00:00.000Z\"}",
     "pk": "case|101-21",
@@ -10140,9 +10110,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10170,9 +10138,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10412,9 +10378,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-23",
     "docketNumber": "101-23"
   },
@@ -10443,9 +10407,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-23",
     "docketNumber": "101-23"
   },
@@ -10761,9 +10723,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
@@ -10835,9 +10795,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|102-20",
     "docketNumber": "102-20"
@@ -10866,9 +10824,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -11040,9 +10996,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -11071,9 +11025,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -11267,9 +11219,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "filers": ["5da54af1-1969-4011-8275-a949084b7928"],
     "servedPartiesCode": "R",
     "pk": "case|102-67",
     "servedAt": "2023-04-03T15:52:59.426Z",
@@ -11308,9 +11258,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "filers": ["5da54af1-1969-4011-8275-a949084b7928"],
     "servedPartiesCode": "R",
     "pk": "case|102-67",
     "servedAt": "2023-04-03T15:52:59.423Z",
@@ -11450,9 +11398,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|102-67",
-    "representing": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "representing": ["5da54af1-1969-4011-8275-a949084b7928"],
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
@@ -11728,9 +11674,7 @@
     "eventCode": "SIAB",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "23d9342c-577d-4cc4-a44d-aae2dca9a436"
-    ],
+    "filers": ["23d9342c-577d-4cc4-a44d-aae2dca9a436"],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "pk": "case|103-19",
@@ -11960,9 +11904,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "servedAt": "2020-01-23T21:45:34.521Z",
     "pk": "case|103-20",
@@ -12004,9 +11946,7 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
@@ -12081,9 +12021,7 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "NOEI",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
     "servedAt": "2020-09-21T20:55:12.840Z",
@@ -12153,9 +12091,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|103-20",
     "servedAt": "2020-09-25T19:27:16.630Z",
@@ -12183,9 +12119,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
@@ -12236,9 +12170,7 @@
       "countryType": "domestic"
     },
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "firmName": "GW Law Offices",
     "pk": "case|103-20",
@@ -12579,9 +12511,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "DISC",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.587Z",
@@ -12620,9 +12550,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.588Z",
@@ -12696,9 +12624,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.589Z",
@@ -12923,9 +12849,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-17",
@@ -12962,9 +12886,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MISC",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -12998,9 +12920,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13175,9 +13095,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-18",
@@ -13214,9 +13132,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -13250,9 +13166,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13677,9 +13591,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
@@ -13716,9 +13628,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
     "pk": "case|104-20",
@@ -13752,9 +13662,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
     "pk": "case|104-20",
@@ -13898,9 +13806,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "40eb0890-aab3-4925-8769-e056b30c502d"
-    ],
+    "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
     "servedPartiesCode": "R",
     "pk": "case|104-23",
     "servedAt": "2023-01-06T22:33:13.813Z",
@@ -13968,9 +13874,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "40eb0890-aab3-4925-8769-e056b30c502d"
-    ],
+    "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
     "servedPartiesCode": "R",
     "pk": "case|104-23",
     "servedAt": "2023-01-06T22:33:13.821Z",
@@ -14066,9 +13970,7 @@
       "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
       "eventCode": "P",
       "processingStatus": "complete",
-      "filers": [
-        "40eb0890-aab3-4925-8769-e056b30c502d"
-      ],
+      "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
       "servedPartiesCode": "R",
       "pk": "case|104-23",
       "servedAt": "2023-01-06T22:33:13.813Z",
@@ -14657,9 +14559,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "28cae029-bae2-4eef-ac54-878fbbab65e3"
-    ],
+    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -14889,9 +14789,7 @@
     "eventCode": "M000",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "freeText": "For testing Stamp Data",
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
@@ -14929,9 +14827,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "pk": "case|105-20",
@@ -14967,9 +14863,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "servedAt": "2020-04-29T15:51:29.168Z",
     "pk": "case|105-20",
@@ -15038,9 +14932,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -15306,9 +15198,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "29425430-3b75-456d-9e25-6f906b8f11d1"
-    ],
+    "filers": ["29425430-3b75-456d-9e25-6f906b8f11d1"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -15348,9 +15238,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "R",
     "pk": "case|105-23",
     "servedAt": "2023-07-26T17:04:05.684Z",
@@ -15507,9 +15395,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -15548,9 +15434,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "SIMB",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
     "docketNumber": "105-23"
@@ -15643,9 +15527,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -15838,9 +15720,7 @@
     "eventCode": "BRF",
     "processingStatus": "complete",
     "lodged": true,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -15971,9 +15851,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "SIAB",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16012,9 +15890,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "R",
     "pk": "case|105-23",
     "servedAt": "2023-07-26T17:04:05.693Z",
@@ -16063,9 +15939,7 @@
     "eventCode": "SEOB",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -16180,9 +16054,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16258,9 +16130,7 @@
         "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
         "eventCode": "AMAT",
         "processingStatus": "complete",
-        "filers": [
-          "7805d1ab-18d0-43ec-bafb-654e83405418"
-        ],
+        "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
         "servedPartiesCode": "B",
         "certificateOfServiceDate": null,
         "servedAt": "2023-07-26T17:29:33.751Z",
@@ -16288,9 +16158,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "M014",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16344,9 +16212,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16401,9 +16267,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16608,9 +16472,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "REPL",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16834,9 +16696,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "REDC",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16922,9 +16782,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "serviceIndicator": "Electronic",
@@ -17035,9 +16893,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -17173,9 +17029,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -17604,9 +17458,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -17878,9 +17730,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -18401,9 +18251,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -18685,9 +18533,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -19245,9 +19091,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "filers": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "servedPartiesCode": "R",
     "pk": "case|105-67",
     "servedAt": "2023-04-03T15:52:36.489Z",
@@ -19286,9 +19130,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "filers": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "servedPartiesCode": "R",
     "pk": "case|105-67",
     "servedAt": "2023-04-03T15:52:36.482Z",
@@ -19320,9 +19162,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|102-67",
-    "representing": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "representing": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
@@ -19542,9 +19382,7 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -19636,9 +19474,7 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -19880,9 +19716,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "servedPartiesCode": "R",
     "pk": "case|106-23",
     "servedAt": "2023-01-06T22:34:39.112Z",
@@ -19980,9 +19814,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "servedPartiesCode": "R",
     "pk": "case|106-23",
     "servedAt": "2023-01-06T22:34:39.108Z",
@@ -20021,9 +19853,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|104-23",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -20424,9 +20254,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -21124,9 +20952,7 @@
       "countryType": "domestic"
     },
     "name": "Ronald Buch Jr.",
-    "representing": [
-      "6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"
-    ],
+    "representing": ["6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"],
     "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
     "firmName": "Firmly Grasped, LLP",
     "pk": "case|110-19",
@@ -21327,9 +21153,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.564Z",
@@ -21366,9 +21190,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.554Z",
@@ -21401,9 +21223,7 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "editState": "{}",
     "pk": "case|111-19",
@@ -21476,9 +21296,7 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Guy Fieri",
       "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -21580,9 +21398,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.670Z",
@@ -21619,9 +21435,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.667Z",
@@ -21724,9 +21538,7 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Brian Earl Spilner",
       "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
@@ -21854,9 +21666,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.643Z",
@@ -21893,9 +21703,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.636Z",
@@ -22056,9 +21864,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
     "pk": "case|117-20",
@@ -22087,9 +21893,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|117-20",
     "docketNumber": "117-20"
@@ -22269,9 +22073,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
     "pk": "case|120-20",
@@ -22304,9 +22106,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|120-20",
     "docketNumber": "120-20"
@@ -22416,9 +22216,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "pk": "case|121-20",
     "docketNumber": "121-20"
@@ -22461,9 +22259,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "APW",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
@@ -22508,9 +22304,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
@@ -22644,9 +22438,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -22705,9 +22497,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -22838,9 +22628,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -22891,9 +22679,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -23034,9 +22820,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
-    ],
+    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.162Z",
@@ -23073,9 +22857,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
-    ],
+    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.222Z",
@@ -23297,9 +23079,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -23350,9 +23130,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -23482,9 +23260,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
-    ],
+    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -23511,9 +23287,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
-    ],
+    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -23667,9 +23441,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -23721,9 +23493,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -23853,9 +23623,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -23883,9 +23651,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -24090,9 +23856,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "05b98fff-e4ca-4114-b8ec-7218effc982e"
-    ],
+    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.081Z",
@@ -24129,9 +23893,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "05b98fff-e4ca-4114-b8ec-7218effc982e"
-    ],
+    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.130Z",
@@ -24926,9 +24688,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -24957,9 +24717,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -25127,9 +24885,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25158,9 +24914,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25260,9 +25014,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25291,9 +25043,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25518,9 +25268,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -25549,9 +25297,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -25719,9 +25465,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -25775,9 +25519,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -25945,9 +25687,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -26001,9 +25741,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -26196,9 +25934,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -26226,9 +25962,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -26395,9 +26129,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -26450,9 +26182,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -26644,9 +26374,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -26674,9 +26402,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -26797,9 +26523,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -26873,9 +26597,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -27067,9 +26789,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -27122,9 +26842,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -27415,9 +27133,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -27445,9 +27161,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -27712,9 +27426,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -27742,9 +27454,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -28043,9 +27753,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.976Z",
@@ -28083,9 +27791,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.967Z",
@@ -28123,9 +27829,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.979Z",
@@ -28365,9 +28069,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -28395,9 +28097,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -28662,9 +28362,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -28717,9 +28415,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -28984,9 +28680,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -29039,9 +28733,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -29306,9 +28998,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -29361,9 +29051,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -29653,9 +29341,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -29683,9 +29369,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -29950,9 +29634,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -29980,9 +29662,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -30303,9 +29983,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -30345,9 +30023,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-08T15:19:17.214Z",
@@ -30388,9 +30064,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "A",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|320-21",
@@ -30428,9 +30102,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-05T15:19:17.229Z",
@@ -30554,9 +30226,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -39946,9 +39616,7 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatepractitioner@example.com"
@@ -40243,6 +39911,11 @@
     "sk": "e-consent-fields-enabled-feature-flag",
     "current": true,
     "pk": "e-consent-fields-enabled-feature-flag"
+  },
+  {
+    "sk": "entity-locking-feature-flag",
+    "current": true,
+    "pk": "entity-locking-feature-flag"
   },
   {
     "sk": "AnchorageAlaska-H-B-20230311000000-105-67",
@@ -43079,9 +42752,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44235,9 +43906,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -44343,9 +44012,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -44448,9 +44115,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44561,9 +44226,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44671,9 +44334,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -44778,9 +44439,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -46277,9 +45936,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -47421,9 +47078,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -47528,9 +47183,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -47633,9 +47286,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -47745,9 +47396,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -47853,9 +47502,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -47959,9 +47606,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -68468,9 +68113,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -69892,9 +69535,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -69999,9 +69640,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -70104,9 +69743,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -70216,9 +69853,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -70324,9 +69959,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -70430,9 +70063,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -72481,87 +72112,46 @@
     "email": "buchschambers@example.com"
   },
   {
-    "createdAt": "2020-01-21T16:41:39.474Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|102-20",
-    "caseCaption": "Eve Brewer, Petitioner",
     "sk": "case|102-20",
-    "docketNumberWithSuffix": "102-20S",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "102-20",
-    "status": "New"
+    "gsi1pk": "user-case|102-20"
   },
   {
-    "createdAt": "2023-04-03T15:47:49.663Z",
-    "leadDocketNumber": "102-67",
-    "entityName": "UserCase",
-    "caseCaption": "Dacey Cox, Petitioner",
-    "gsi1pk": "user-case|102-67",
     "sk": "case|102-67",
-    "docketNumberWithSuffix": "102-67L",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "102-67",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|102-67"
   },
   {
-    "createdAt": "2019-03-01T22:53:50.097Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|103-19",
-    "caseCaption": "Samson Workman, Petitioner",
     "sk": "case|103-19",
-    "docketNumberWithSuffix": "103-19S",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-19",
-    "status": "New"
+    "gsi1pk": "user-case|103-19"
   },
   {
-    "createdAt": "2023-04-03T15:49:19.618Z",
-    "docketNumberSuffix": "L",
-    "leadDocketNumber": "102-67",
-    "entityName": "UserCase",
-    "caseCaption": "Britanney Wiley, Petitioner",
-    "gsi1pk": "user-case|103-67",
     "sk": "case|103-67",
-    "docketNumberWithSuffix": "103-67L",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-67",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|103-67"
   },
   {
-    "createdAt": "2023-04-03T15:50:59.961Z",
-    "leadDocketNumber": "102-67",
-    "entityName": "UserCase",
-    "caseCaption": "Cassidy Mejia & juvek@mailinator.com, Deceased, Cassidy Mejia, Surviving Spouse, Petitioners",
-    "gsi1pk": "user-case|104-67",
     "sk": "case|104-67",
-    "docketNumberWithSuffix": "104-67L",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "104-67",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|104-67"
   },
   {
-    "createdAt": "2023-04-03T15:52:32.341Z",
-    "docketNumberSuffix": "L",
-    "leadDocketNumber": "102-67",
-    "entityName": "UserCase",
-    "caseCaption": "Magee Schmidt, Deceased, Magee Schmidt, Surviving Spouse, Petitioner",
-    "gsi1pk": "user-case|105-67",
     "sk": "case|105-67",
-    "docketNumberWithSuffix": "105-67L",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-67",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|105-67"
   },
   {
-    "createdAt": "2019-08-16T17:29:10.132Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|107-19",
-    "caseCaption": "Tatum Craig, Petitioner",
     "sk": "case|107-19",
-    "docketNumberWithSuffix": "107-19L",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "107-19",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|107-19"
   },
   {
     "endpoint": "ws://localhost:3011",
@@ -72732,565 +72322,286 @@
     "email": "irspractitioner4@example.com"
   },
   {
-    "createdAt": "2022-02-01T17:21:05.483Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2022-02-01T17:21:07.674Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|100-22",
     "sk": "case|100-22",
-    "docketNumberWithSuffix": "100-22W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "100-22",
-    "status": "Closed"
+    "gsi1pk": "user-case|100-22"
   },
   {
-    "createdAt": "2019-03-01T21:40:46.415Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|101-19",
-    "caseCaption": "Brett Osborne, Petitioner",
     "sk": "case|101-19",
-    "docketNumberWithSuffix": "101-19W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "101-19",
-    "status": "New"
+    "gsi1pk": "user-case|101-19"
   },
   {
-    "createdAt": "2022-02-15T16:52:11.651Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2022-02-15T16:52:14.349Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|101-22",
     "sk": "case|101-22",
-    "docketNumberWithSuffix": "101-22W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "101-22",
-    "status": "Closed"
+    "gsi1pk": "user-case|101-22"
   },
   {
-    "createdAt": "2023-03-13T22:23:32.843Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|101-23",
     "sk": "case|101-23",
-    "docketNumberWithSuffix": "101-23W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "101-23",
-    "status": "New"
+    "gsi1pk": "user-case|101-23"
   },
   {
-    "createdAt": "2019-03-01T21:40:46.415Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|102-19",
-    "caseCaption": "Selma Horn & Cairo Harris, Petitioners",
     "sk": "case|102-19",
-    "docketNumberWithSuffix": "102-19P",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "102-19",
-    "status": "New"
+    "gsi1pk": "user-case|102-19"
   },
   {
-    "createdAt": "2020-01-21T16:41:39.474Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|102-20",
-    "caseCaption": "Eve Brewer, Petitioner",
     "sk": "case|102-20",
-    "docketNumberWithSuffix": "102-20S",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "102-20",
-    "status": "New"
+    "gsi1pk": "user-case|102-20"
   },
   {
-    "createdAt": "2022-12-21T19:03:01.908Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|102-22",
     "sk": "case|102-22",
-    "docketNumberWithSuffix": "102-22W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "102-22",
-    "status": "New"
+    "gsi1pk": "user-case|102-22"
   },
   {
-    "createdAt": "2019-03-01T22:53:50.097Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|103-19",
-    "caseCaption": "Samson Workman, Petitioner",
     "sk": "case|103-19",
-    "docketNumberWithSuffix": "103-19S",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-19",
-    "status": "New"
+    "gsi1pk": "user-case|103-19"
   },
   {
-    "createdAt": "2020-01-23T21:45:34.520Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|103-20",
-    "caseCaption": "Reuben Blair, Petitioner",
     "sk": "case|103-20",
-    "docketNumberWithSuffix": "103-20L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-20",
-    "status": "Calendared"
+    "gsi1pk": "user-case|103-20"
   },
   {
-    "createdAt": "2020-04-14T19:59:46.086Z",
-    "entityName": "UserCase",
-    "caseCaption": "Hanan Al Hroub, Petitioner",
-    "gsi1pk": "user-case|104-17",
     "sk": "case|104-17",
-    "docketNumberWithSuffix": "104-17R",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "104-17",
-    "status": "General Docket - Not at Issue"
+    "gsi1pk": "user-case|104-17"
   },
   {
-    "createdAt": "2020-04-14T19:59:46.086Z",
-    "entityName": "UserCase",
-    "caseCaption": "Hanan Al Hroub, Petitioner",
-    "gsi1pk": "user-case|104-18",
     "sk": "case|104-18",
-    "docketNumberWithSuffix": "104-18R",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "104-18",
-    "status": "General Docket - Not at Issue"
+    "gsi1pk": "user-case|104-18"
   },
   {
-    "createdAt": "2019-03-05T17:34:13.490Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|104-19",
-    "caseCaption": "Mufutau Wade, Petitioner",
     "sk": "case|104-19",
-    "docketNumberWithSuffix": "104-19L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "104-19",
-    "status": "New"
+    "gsi1pk": "user-case|104-19"
   },
   {
-    "createdAt": "2020-04-14T19:59:46.086Z",
-    "closedDate": "2020-04-14T03:01:50.746Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|104-20",
-    "caseCaption": "Hanan Al Hroub, Petitioner",
     "sk": "case|104-20",
-    "docketNumberWithSuffix": "104-20R",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "104-20",
-    "status": "Closed"
+    "gsi1pk": "user-case|104-20"
   },
   {
-    "createdAt": "2020-04-29T15:50:41.686Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|105-20",
-    "caseCaption": "Astra Santiago, Petitioner",
     "sk": "case|105-20",
-    "docketNumberWithSuffix": "105-20L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-20",
-    "status": "General Docket - Not at Issue"
+    "gsi1pk": "user-case|105-20"
   },
   {
-    "createdAt": "2019-07-12T17:09:41.026Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|106-19",
-    "caseCaption": "Denise Gould, Petitioner",
     "sk": "case|106-19",
-    "docketNumberWithSuffix": "106-19",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
-    "status": "New"
+    "gsi1pk": "user-case|106-19"
   },
   {
-    "createdAt": "2019-08-16T17:29:10.132Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|107-19",
-    "caseCaption": "Tatum Craig, Petitioner",
     "sk": "case|107-19",
-    "docketNumberWithSuffix": "107-19L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "107-19",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|107-19"
   },
   {
-    "createdAt": "2019-08-16T19:21:46.146Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|108-19",
-    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
     "sk": "case|108-19",
-    "docketNumberWithSuffix": "108-19",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "108-19",
-    "status": "Calendared"
+    "gsi1pk": "user-case|108-19"
   },
   {
-    "createdAt": "2019-12-11T15:25:09.284Z",
-    "leadDocketNumber": "111-19",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|111-19",
-    "caseCaption": "Guy Fieri, Petitioner",
     "sk": "case|111-19",
-    "docketNumberWithSuffix": "111-19L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "111-19",
-    "status": "Submitted"
+    "gsi1pk": "user-case|111-19"
   },
   {
-    "createdAt": "2019-12-11T15:25:55.006Z",
-    "leadDocketNumber": "111-19",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|112-19",
-    "caseCaption": "Brian Earl Spilner, Petitioner",
     "sk": "case|112-19",
-    "docketNumberWithSuffix": "112-19L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "112-19",
-    "status": "Submitted"
+    "gsi1pk": "user-case|112-19"
   },
   {
-    "createdAt": "2019-12-11T16:02:31.173Z",
-    "leadDocketNumber": "111-19",
-    "docketNumberSuffix": "L",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|113-19",
-    "caseCaption": "Letti Toretto, Petitioner",
     "sk": "case|113-19",
-    "docketNumberWithSuffix": "113-19L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "113-19",
-    "status": "General Docket - Not at Issue"
+    "gsi1pk": "user-case|113-19"
   },
   {
-    "createdAt": "2020-06-25T20:40:13.682Z",
-    "entityName": "UserCase",
-    "caseCaption": "Bart Simpson, Petitioner",
-    "gsi1pk": "user-case|117-20",
     "sk": "case|117-20",
-    "docketNumberWithSuffix": "117-20L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "117-20",
-    "status": "New"
+    "gsi1pk": "user-case|117-20"
   },
   {
-    "createdAt": "2020-06-25T20:58:55.411Z",
-    "entityName": "UserCase",
-    "caseCaption": "Sean Connery, Petitioner",
-    "gsi1pk": "user-case|120-20",
     "sk": "case|120-20",
-    "docketNumberWithSuffix": "120-20SL",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "120-20",
-    "status": "New"
+    "gsi1pk": "user-case|120-20"
   },
   {
-    "createdAt": "2020-09-25T19:27:00.201Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|122-20",
     "sk": "case|122-20",
-    "docketNumberWithSuffix": "122-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "122-20",
-    "status": "New"
+    "gsi1pk": "user-case|122-20"
   },
   {
-    "createdAt": "2020-09-30T20:22:10.380Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|123-20",
     "sk": "case|123-20",
-    "docketNumberWithSuffix": "123-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "123-20",
-    "status": "New"
+    "gsi1pk": "user-case|123-20"
   },
   {
-    "createdAt": "2020-10-13T20:23:17.556Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|125-20",
     "sk": "case|125-20",
-    "docketNumberWithSuffix": "125-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "125-20",
-    "status": "New"
+    "gsi1pk": "user-case|125-20"
   },
   {
-    "createdAt": "2020-10-16T15:19:38.084Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|126-20",
     "sk": "case|126-20",
-    "docketNumberWithSuffix": "126-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "126-20",
-    "status": "New"
+    "gsi1pk": "user-case|126-20"
   },
   {
-    "createdAt": "2020-11-18T19:32:11.463Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|127-20",
     "sk": "case|127-20",
-    "docketNumberWithSuffix": "127-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "127-20",
-    "status": "New"
+    "gsi1pk": "user-case|127-20"
   },
   {
-    "createdAt": "2020-11-30T21:58:13.406Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|128-20",
     "sk": "case|128-20",
-    "docketNumberWithSuffix": "128-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "128-20",
-    "status": "New"
+    "gsi1pk": "user-case|128-20"
   },
   {
-    "createdAt": "2021-04-06T19:45:32.911Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|301-21",
     "sk": "case|301-21",
-    "docketNumberWithSuffix": "301-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "301-21",
-    "status": "New"
+    "gsi1pk": "user-case|301-21"
   },
   {
-    "createdAt": "2021-04-27T17:06:15.833Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-04-27T17:06:18.211Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|302-21",
     "sk": "case|302-21",
-    "docketNumberWithSuffix": "302-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "302-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|302-21"
   },
   {
-    "createdAt": "2021-04-27T17:12:53.623Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-04-27T17:12:56.089Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|303-21",
     "sk": "case|303-21",
-    "docketNumberWithSuffix": "303-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "303-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|303-21"
   },
   {
-    "createdAt": "2021-04-27T20:50:58.072Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-04-27T20:51:01.024Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|304-21",
     "sk": "case|304-21",
-    "docketNumberWithSuffix": "304-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "304-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|304-21"
   },
   {
-    "createdAt": "2021-05-04T17:17:08.075Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-05-04T17:17:10.330Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|305-21",
     "sk": "case|305-21",
-    "docketNumberWithSuffix": "305-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "305-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|305-21"
   },
   {
-    "createdAt": "2021-05-14T17:32:46.045Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-05-14T17:32:48.436Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|306-21",
     "sk": "case|306-21",
-    "docketNumberWithSuffix": "306-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "306-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|306-21"
   },
   {
-    "createdAt": "2021-05-25T13:09:44.661Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-05-25T13:09:46.930Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|307-21",
     "sk": "case|307-21",
-    "docketNumberWithSuffix": "307-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "307-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|307-21"
   },
   {
-    "createdAt": "2021-05-25T13:23:58.954Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-05-25T13:24:01.832Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|308-21",
     "sk": "case|308-21",
-    "docketNumberWithSuffix": "308-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "308-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|308-21"
   },
   {
-    "createdAt": "2021-05-28T15:15:34.673Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-05-28T15:15:37.990Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|309-21",
     "sk": "case|309-21",
-    "docketNumberWithSuffix": "309-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "309-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|309-21"
   },
   {
-    "createdAt": "2021-06-07T20:28:11.380Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-06-07T20:28:16.372Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|310-21",
     "sk": "case|310-21",
-    "docketNumberWithSuffix": "310-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "310-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|310-21"
   },
   {
-    "createdAt": "2021-06-14T15:16:20.513Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-06-14T15:16:23.279Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|311-21",
     "sk": "case|311-21",
-    "docketNumberWithSuffix": "311-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "311-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|311-21"
   },
   {
-    "createdAt": "2021-10-25T18:55:26.825Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-10-25T18:55:28.732Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|312-21",
     "sk": "case|312-21",
-    "docketNumberWithSuffix": "312-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "312-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|312-21"
   },
   {
-    "createdAt": "2021-10-29T13:04:31.309Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-10-29T13:04:36.021Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|314-21",
     "sk": "case|314-21",
-    "docketNumberWithSuffix": "314-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "314-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|314-21"
   },
   {
-    "createdAt": "2021-10-29T13:39:45.828Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-10-29T13:39:47.949Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|315-21",
     "sk": "case|315-21",
-    "docketNumberWithSuffix": "315-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "315-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|315-21"
   },
   {
-    "createdAt": "2021-12-01T23:43:53.334Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-12-01T23:43:55.628Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|316-21",
     "sk": "case|316-21",
-    "docketNumberWithSuffix": "316-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "316-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|316-21"
   },
   {
-    "createdAt": "2021-12-02T13:52:43.616Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-12-02T13:52:45.914Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|317-21",
     "sk": "case|317-21",
-    "docketNumberWithSuffix": "317-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "317-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|317-21"
   },
   {
-    "createdAt": "2021-12-02T16:16:29.565Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-12-02T16:16:32.258Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|318-21",
     "sk": "case|318-21",
-    "docketNumberWithSuffix": "318-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "318-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|318-21"
   },
   {
-    "createdAt": "2021-12-02T16:26:42.328Z",
-    "docketNumberSuffix": "W",
-    "closedDate": "2021-12-02T16:26:45.016Z",
-    "entityName": "UserCase",
-    "caseCaption": "Brett Osborne, Petitioner",
-    "gsi1pk": "user-case|319-21",
     "sk": "case|319-21",
-    "docketNumberWithSuffix": "319-21W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "319-21",
-    "status": "Closed"
+    "gsi1pk": "user-case|319-21"
   },
   {
-    "createdAt": "2021-11-05T15:09:29.301Z",
-    "docketNumberSuffix": "S",
-    "entityName": "UserCase",
-    "caseCaption": "Rand al'Thor, Petitioner",
-    "gsi1pk": "user-case|320-21",
     "sk": "case|320-21",
-    "docketNumberWithSuffix": "320-21S",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "320-21",
-    "status": "General Docket - Not at Issue"
+    "gsi1pk": "user-case|320-21"
   },
   {
     "role": "petitioner",
@@ -73306,17 +72617,10 @@
     "email": "petitioner@example.com"
   },
   {
-    "createdAt": "2023-01-06T22:34:19.386Z",
-    "docketNumberSuffix": null,
-    "leadDocketNumber": "104-23",
-    "entityName": "UserCase",
-    "caseCaption": "Thaddeus Nicholson, Petitioner",
-    "gsi1pk": "user-case|106-23",
     "sk": "case|106-23",
-    "docketNumberWithSuffix": "106-23",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405417",
     "docketNumber": "106-23",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|106-23"
   },
   {
     "role": "petitioner",
@@ -73406,98 +72710,52 @@
     "email": "privatepractitioner2@example.com"
   },
   {
-    "createdAt": "2023-04-03T15:47:49.663Z",
-    "docketNumberSuffix": "L",
-    "leadDocketNumber": "102-67",
-    "entityName": "UserCase",
-    "caseCaption": "Dacey Cox, Petitioner",
-    "gsi1pk": "user-case|102-67",
     "sk": "case|102-67",
-    "docketNumberWithSuffix": "102-67L",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "102-67",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|102-67"
   },
   {
-    "createdAt": "2020-01-23T21:44:54.034Z",
-    "entityName": "UserCase",
-    "caseCaption": "Reuben Blair, Petitioner",
-    "gsi1pk": "user-case|103-20",
     "sk": "case|103-20",
-    "docketNumberWithSuffix": "103-20L",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-20",
-    "status": "Calendared"
+    "gsi1pk": "user-case|103-20"
   },
   {
-    "createdAt": "2019-03-27T21:53:00.297Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|105-19",
-    "caseCaption": "Caryn Wall, Petitioner",
     "sk": "case|105-19",
-    "docketNumberWithSuffix": "105-19",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-19",
-    "status": "New"
+    "gsi1pk": "user-case|105-19"
   },
   {
-    "createdAt": "2020-04-29T15:50:41.686Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|105-20",
-    "caseCaption": "Astra Santiago, Petitioner",
     "sk": "case|105-20",
-    "docketNumberWithSuffix": "105-20L",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-20",
-    "status": "General Docket - Not at Issue"
+    "gsi1pk": "user-case|105-20"
   },
   {
-    "createdAt": "2023-04-03T15:52:32.341Z",
-    "docketNumberSuffix": "L",
-    "leadDocketNumber": "102-67",
-    "entityName": "UserCase",
-    "caseCaption": "Magee Schmidt, Deceased, Magee Schmidt, Surviving Spouse, Petitioner",
-    "gsi1pk": "user-case|105-67",
     "sk": "case|105-67",
-    "docketNumberWithSuffix": "105-67L",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-67",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|105-67"
   },
   {
-    "createdAt": "2023-01-06T22:34:19.386Z",
-    "docketNumberSuffix": null,
-    "leadDocketNumber": "104-23",
-    "entityName": "UserCase",
-    "caseCaption": "Thaddeus Nicholson, Petitioner",
-    "gsi1pk": "user-case|106-23",
     "sk": "case|106-23",
-    "docketNumberWithSuffix": "106-23",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-23",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|106-23"
   },
   {
-    "createdAt": "2019-08-16T17:29:10.132Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|107-19",
-    "caseCaption": "Tatum Craig, Petitioner",
     "sk": "case|107-19",
-    "docketNumberWithSuffix": "107-19L",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "107-19",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "gsi1pk": "user-case|107-19"
   },
   {
-    "createdAt": "2020-01-21T16:41:39.474Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|999-15",
-    "caseCaption": "The Sixth Migrated Case",
     "sk": "case|999-15",
-    "docketNumberWithSuffix": "999-15",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "999-15",
-    "status": "Calendared"
+    "gsi1pk": "user-case|999-15"
   },
   {
     "admissionsStatus": "Active",
@@ -73636,26 +72894,16 @@
     "email": "privatepractitioner99@example.com"
   },
   {
-    "createdAt": "2020-01-21T16:41:39.474Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|102-20",
-    "caseCaption": "Eve Brewer, Petitioner",
     "sk": "case|102-20",
-    "docketNumberWithSuffix": "102-20S",
     "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "docketNumber": "102-20",
-    "status": "New"
+    "gsi1pk": "user-case|102-20"
   },
   {
-    "createdAt": "2023-07-26T17:13:19.795Z",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|105-23",
-    "caseCaption": "Yasir Oneal, Petitioner",
     "sk": "case|105-23",
-    "docketNumberWithSuffix": "105-23",
     "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "docketNumber": "105-23",
-    "status": "General Docket - Not at Issue"
+    "gsi1pk": "user-case|105-23"
   },
   {
     "endpoint": "ws://localhost:3011",
