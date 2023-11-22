@@ -2,10 +2,10 @@ import { addDocketNumbersModalHelper } from './addDocketNumbersModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('addDocketNumbersModalHelper', () => {
-  it('should display the "Edit Docket Numbers" modalTitle and "Save" label title if proper modal text if saveSelectedDocketNumbers is true', () => {
+  it('should display the "Edit Docket Numbers" as modal title and "Save" as label title if proper modal text if setSelectedConsolidatedCasesToMultiDocketOn is true', () => {
     const result = runCompute(addDocketNumbersModalHelper, {
       state: {
-        saveSelectedDocketNumbers: true,
+        setSelectedConsolidatedCasesToMultiDocketOn: true,
       },
     });
     expect(result).toMatchObject({
@@ -14,10 +14,10 @@ describe('addDocketNumbersModalHelper', () => {
     });
   });
 
-  it('should display the "Add Docket Numbers" modalTitle and confirmLabelTitle if saveSelectedDocketNumbers is false', () => {
+  it('should display the "Add Docket Numbers" for modal title and label title if setSelectedConsolidatedCasesToMultiDocketOn is false', () => {
     const result = runCompute(addDocketNumbersModalHelper, {
       state: {
-        saveSelectedDocketNumbers: false,
+        setSelectedConsolidatedCasesToMultiDocketOn: false,
       },
     });
     expect(result).toMatchObject({

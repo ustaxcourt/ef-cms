@@ -25,12 +25,14 @@ describe('createOrderHelper', () => {
   ];
 
   let caseDetail;
+  let setSelectedConsolidatedCasesToMultiDocketOn: boolean;
 
   beforeEach(() => {
     caseDetail = {
       docketNumber: '101-20',
       leadDocketNumber: '101-20',
     };
+    setSelectedConsolidatedCasesToMultiDocketOn = false;
   });
 
   it('should set isEditing to false and set pageTitle to "Create Order" if there is no document to edit', () => {
@@ -40,6 +42,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
+        setSelectedConsolidatedCasesToMultiDocketOn,
       },
     });
 
@@ -55,6 +58,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
+        setSelectedConsolidatedCasesToMultiDocketOn,
       },
     });
 
@@ -73,6 +77,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
+        setSelectedConsolidatedCasesToMultiDocketOn,
       },
     });
 
@@ -95,6 +100,7 @@ describe('createOrderHelper', () => {
             consolidatedCasesToMultiDocketOn,
           },
         },
+        setSelectedConsolidatedCasesToMultiDocketOn,
       },
     });
 
@@ -118,6 +124,7 @@ describe('createOrderHelper', () => {
             consolidatedCasesToMultiDocketOn,
           },
         },
+        setSelectedConsolidatedCasesToMultiDocketOn,
       },
     });
 
@@ -135,7 +142,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
-        saveSelectedDocketNumbers: false,
+        setSelectedConsolidatedCasesToMultiDocketOn,
       },
     });
     expect(result.addDocketNumbersButtonText).toEqual(
@@ -145,6 +152,7 @@ describe('createOrderHelper', () => {
   });
 
   it('should display "Edit docket numbers in the caption" text and edit icon if there are selected consolidated cases', () => {
+    setSelectedConsolidatedCasesToMultiDocketOn = true;
     const result = runCompute(createOrderHelper, {
       state: {
         caseDetail: {
@@ -158,7 +166,7 @@ describe('createOrderHelper', () => {
         form: {
           documentTitle: 'Order',
         },
-        saveSelectedDocketNumbers: true,
+        setSelectedConsolidatedCasesToMultiDocketOn,
       },
     });
 

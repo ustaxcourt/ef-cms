@@ -1,10 +1,10 @@
 import {
-  ConsolidatedCasesWithCheckboxInfoType,
+  CaseWithSelectionInfo,
   getSelectedConsolidatedCasesToMultiDocketOn,
 } from './getSelectedConsolidatedCasesToMultiDocketOn';
 
 describe('getSelectedConsolidatedCasesToMultiDocketOn', () => {
-  let consolidatedCases: ConsolidatedCasesWithCheckboxInfoType[];
+  let consolidatedCases: CaseWithSelectionInfo[];
   beforeEach(() => {
     consolidatedCases = [];
   });

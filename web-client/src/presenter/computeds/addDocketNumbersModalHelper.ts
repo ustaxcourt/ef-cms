@@ -7,13 +7,15 @@ export const addDocketNumbersModalHelper = (
   confirmLabelTitle: string;
   modalTitle: string;
 } => {
-  const saveSelectedDocketNumbers = get(state.saveSelectedDocketNumbers);
+  const setSelectedConsolidatedCasesToMultiDocketOn = get(
+    state.setSelectedConsolidatedCasesToMultiDocketOn,
+  );
 
   return {
-    confirmLabelTitle: saveSelectedDocketNumbers
+    confirmLabelTitle: setSelectedConsolidatedCasesToMultiDocketOn
       ? 'Save'
       : 'Add Docket Numbers',
-    modalTitle: saveSelectedDocketNumbers
+    modalTitle: setSelectedConsolidatedCasesToMultiDocketOn
       ? 'Edit Docket Numbers'
       : 'Add Docket Numbers',
   };
