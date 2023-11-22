@@ -12,13 +12,23 @@ export const generateHTMLTemplateForPDF = ({
   content,
   options = {},
 }) => {
-  const main = require('../htmlGenerator/index.scss_');
+  const indexCss = require('../htmlGenerator/index.scss_');
   const template = require('../htmlGenerator/index.pug_');
 
   const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
-  const { css } = sass.compileString(main);
+  let compileResult;
+  try {
+    compileResult = sass.compileString(indexCss);
+  } catch (err) {
+    applicationContext.logger.error(
+      'Error compiling SASS to CSS while generating PDF',
+      err,
+    );
+  }
+
+  const { css } = compileResult;
 
   const compiledFunction = pug.compile(template);
   const html = compiledFunction({
