@@ -22,6 +22,7 @@ export const PublicDocketRecord = connect(
             <table
               aria-label="docket record"
               className="usa-table ustc-table usa-table--stacked"
+              data-testid="table-public-docket-record"
               id="docket-record-table"
             >
               <thead>
