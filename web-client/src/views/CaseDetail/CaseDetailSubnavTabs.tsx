@@ -89,11 +89,13 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showNotesTab && (
               <Tab
+                data-testid="tab-notes"
                 icon={
                   caseDetailSubnavHelper.showNotesIcon && (
                     <FontAwesomeIcon
                       className="icon-case-notes"
                       color="#ffbe2e"
+                      data-testid="notes-icon"
                       icon="sticky-note"
                     />
                   )

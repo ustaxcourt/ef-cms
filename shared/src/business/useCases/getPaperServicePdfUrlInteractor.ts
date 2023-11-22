@@ -10,7 +10,7 @@ export const getPaperServicePdfUrlInteractor = async (
 ): Promise<{ url: string }> => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.REPRINT_PAPER_SERVICE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
