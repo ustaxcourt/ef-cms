@@ -1,7 +1,4 @@
-import {
-  CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
-} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
@@ -32,11 +29,19 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
 
   static VALIDATION_RULES = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    date: JoiValidationConstants.ISO_DATE.required(),
-    trialLocation: JoiValidationConstants.STRING.required(),
+    date: JoiValidationConstants.ISO_DATE.required().messages({
+      '*': 'Enter a date',
+      'date.max': 'Enter a valid date',
+      'date.min': 'Enter a valid date',
+    }),
+    trialLocation: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a trial location',
+    }),
   };
 
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CourtIssuedDocumentTypeG.VALIDATION_RULES;
+  }
 
   getDocumentTitle() {
     if (this.trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
@@ -55,14 +60,6 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
       formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
       this.trialLocation,
     );
-  }
-
-  getValidationRules() {
-    return CourtIssuedDocumentTypeG.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeG.VALIDATION_ERROR_MESSAGES;
   }
 }
 

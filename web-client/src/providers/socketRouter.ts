@@ -130,6 +130,9 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           showModal: 'WorkItemAlreadyCompletedModal',
         });
         break;
+      case 'retry_async_request':
+        await app.getSequence('retryAsyncRequestSequence')(message);
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);

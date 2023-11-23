@@ -22,6 +22,7 @@ export const KeywordSearchField = connect(
           aria-describedby="search-keywords-header search-description"
           aria-label="keyword-search"
           className="usa-input maxw-tablet-lg"
+          data-testid="keyword-search"
           id="keyword-search"
           name="keyword"
           type="text"

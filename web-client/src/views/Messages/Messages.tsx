@@ -79,7 +79,7 @@ export const Messages = connect(
               tabName="inbox"
               title={`Inbox (${messagesHelper.inboxCount})`}
             >
-              <div id="inbox-tab-content">
+              <div data-testid="inbox-tab-content" id="inbox-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <MessagesIndividualInbox />
                 )}

@@ -2,7 +2,6 @@ import { clearCaseDeadlineReportAction } from '../actions/CaseDeadline/clearCase
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
-import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -21,7 +20,6 @@ const gotoCaseDeadlineReport = startWebSocketConnectionSequenceDecorator([
   closeMobileMenuAction,
   clearErrorAlertsAction,
   parallel([
-    fetchUserNotificationsSequence,
     getSetJudgesSequence,
     [
       clearCaseDeadlineReportAction,
