@@ -4,6 +4,18 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { judgeColvin, petitionsClerkUser } from '@shared/test/mockUsers';
 
+jest.mock('@shared/business/utilities/DateHandler', () => {
+  const originalModule = jest.requireActual(
+    '@shared/business/utilities/DateHandler',
+  );
+  return {
+    ...originalModule,
+    prepareDateFromString: jest.fn(() => ({
+      toISOString: jest.fn(() => '2023-11-23T00:00:00.000Z'),
+    })),
+  };
+});
+
 describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
   const DOCKET_NUMBER = '101-22';
   const DOCKET_ENTRY_ID = '1234-5678-9123-4567-8912';
