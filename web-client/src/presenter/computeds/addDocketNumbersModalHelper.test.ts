@@ -2,7 +2,7 @@ import { addDocketNumbersModalHelper } from './addDocketNumbersModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('addDocketNumbersModalHelper', () => {
-  it('should display the "Edit Docket Numbers" as modal title and "Save" as label title if proper modal text if setSelectedConsolidatedCasesToMultiDocketOn is true', () => {
+  it('should display the "Edit Docket Numbers" as modal title and "Save" as confirm label title if setSelectedConsolidatedCasesToMultiDocketOn is true', () => {
     const result = runCompute(addDocketNumbersModalHelper, {
       state: {
         setSelectedConsolidatedCasesToMultiDocketOn: true,
