@@ -176,7 +176,7 @@ describe('NewPetitionerUser', () => {
         password: '12$Azasodfkj3',
       });
       expect(formEntity.isValid()).toBe(true);
-      expect(formEntity.getValidationErrors()).toEqual({});
+      expect(formEntity.getValidationErrors()).toEqual(null);
     });
   });
 });
