@@ -68,6 +68,7 @@ export const RecentMessagesInbox = connect(
                           'padding-0',
                           item.isRead ? '' : 'text-bold',
                         )}
+                        data-testid="message-header-link"
                         href={item.messageDetailLink}
                       >
                         {item.subject}
