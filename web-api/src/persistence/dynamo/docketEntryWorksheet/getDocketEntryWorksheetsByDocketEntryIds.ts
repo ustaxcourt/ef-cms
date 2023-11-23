@@ -1,7 +1,7 @@
 import {
   DocketEntryWorksheet,
   RawDocketEntryWorksheet,
-} from '@shared/business/entities/docketEntryWorksheet/docketEntryWorksheet';
+} from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { batchGet } from '../../dynamodbClientService';
 
 export const getDocketEntryWorksheetsByDocketEntryIds = async ({
