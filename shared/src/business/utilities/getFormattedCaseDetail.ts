@@ -175,8 +175,8 @@ export const getFilingsAndProceedings = formattedDocketEntry => {
       formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
         : formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.NO
-          ? '(No Objection)'
-          : ''
+        ? '(No Objection)'
+        : ''
     }`,
     `${formattedDocketEntry.lodged ? '(Lodged)' : ''}`,
   ];
