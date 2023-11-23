@@ -58,8 +58,7 @@ export class PetitionIncomplete extends JoiValidationEntity {
   public statistics: any;
   public archivedDocketEntries: any;
   public archivedCorrespondences: any;
-  // TODO consider converting any to Docket Entry
-  public docketEntries: any;
+  public docketEntries: DocketEntry[];
 
   constructor(rawProps, { applicationContext }) {
     if (!applicationContext) {
