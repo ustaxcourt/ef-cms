@@ -1,3 +1,4 @@
+import { CaseWithSelectionInfo } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getPdfUrlAction = async ({
@@ -16,7 +17,7 @@ export const getPdfUrlAction = async ({
     state.modal.form.consolidatedCasesToMultiDocketOn,
   );
 
-  const consolidatedCasesToMultiDocketOnMetaData = (
+  const consolidatedCasesToMultiDocketOnMetaData: CaseWithSelectionInfo[] = (
     consolidatedCasesToMultiDocketOn || []
   ).map(caseInfo => ({
     checked: caseInfo.checked,

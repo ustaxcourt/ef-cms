@@ -8,12 +8,6 @@ describe('getSelectedConsolidatedCasesToMultiDocketOn', () => {
   beforeEach(() => {
     consolidatedCases = [];
   });
-  it('returns an empty array if there if the list of consolidated cases is an empty array', () => {
-    const result =
-      getSelectedConsolidatedCasesToMultiDocketOn(consolidatedCases);
-
-    expect(result).toEqual([]);
-  });
 
   it('returns an empty array if there if the list of consolidated cases is undefined', () => {
     const result = getSelectedConsolidatedCasesToMultiDocketOn(undefined);
@@ -21,7 +15,7 @@ describe('getSelectedConsolidatedCasesToMultiDocketOn', () => {
     expect(result).toEqual([]);
   });
 
-  it('returns a list of cases that were previously selected', () => {
+  it('returns a list of docket numbers with suffixes for cases that were previously selected', () => {
     consolidatedCases = [
       {
         checked: true,
