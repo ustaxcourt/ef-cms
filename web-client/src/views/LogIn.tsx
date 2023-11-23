@@ -14,7 +14,6 @@ export const LogIn = connect(
     form: state.form,
     loginWithCodeSequence: sequences.loginWithCodeSequence,
     loginWithCognitoLocalSequence: sequences.loginWithCognitoLocalSequence,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function LogIn({
@@ -22,7 +21,6 @@ export const LogIn = connect(
     form,
     loginWithCodeSequence,
     loginWithCognitoLocalSequence,
-    navigateToPathSequence,
     updateFormValueSequence,
   }) {
     return (
@@ -92,20 +90,6 @@ export const LogIn = connect(
             Log in
           </Button>
         </form>
-        {cognitoLocalEnabled && (
-          <div className="margin-top-2">
-            <Button
-              id="create-new-account-button"
-              onClick={() => {
-                navigateToPathSequence({
-                  path: '/create-new-account-local',
-                });
-              }}
-            >
-              Create New Account
-            </Button>
-          </div>
-        )}
       </section>
     );
   },

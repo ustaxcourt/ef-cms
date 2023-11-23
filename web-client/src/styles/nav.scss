@@ -1,4 +1,4 @@
-@use "../uswds" as *;
+@use '../uswds' as *;
 @use '../variables' as *;
 
 .ustc-header {
@@ -17,6 +17,10 @@
 
       .usa-navbar {
         justify-content: space-between;
+      }
+
+      .usa-navbar.usa-navbar-public {
+        justify-content: flex-start;
       }
 
       .usa-logo {
@@ -96,6 +100,10 @@
       .usa-navbar {
         width: unset;
         justify-content: space-between;
+      }
+      
+      .usa-navbar.usa-navbar-public {
+        justify-content: flex-start;
       }
 
       .usa-logo {

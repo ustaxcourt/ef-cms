@@ -21,6 +21,7 @@ import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../sharedAppContext';
@@ -64,6 +65,7 @@ import {
   formatJudgeName,
   getJudgeLastName,
 } from '../../../src/business/utilities/getFormattedJudgeName';
+import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import { formatPhoneNumber } from '../../../src/business/utilities/formatPhoneNumber';
 import { generateAndServeDocketEntry } from '../useCaseHelper/service/createChangeItems';
 import { generateChangeOfAddressHelper } from '@shared/business/useCaseHelper/generateChangeOfAddressHelper';
@@ -239,6 +241,7 @@ export const createTestApplicationContext = ({
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
+    formatPendingItem,
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest
@@ -605,6 +608,7 @@ export const createTestApplicationContext = ({
     getCognitoClientId: jest.fn(),
     getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
+    getCognitoRequestPasswordResetUrl,
     getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {

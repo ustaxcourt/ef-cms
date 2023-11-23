@@ -52,6 +52,9 @@ app.use(logger());
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
+import { cognitoResendVerificationLinkLambda } from '@web-api/lambdas/public-api/cognitoResendVerificationLinkLambda';
+import { confirmSignUpLocalLambda } from '@web-api/auth/confirmSignUpLocalLambda';
+import { createUserCognitoLambda } from '@web-api/users/createUserCognitoLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
@@ -133,3 +136,14 @@ app.get(
 );
 
 app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+
+app.post('/public-api/account/create', lambdaWrapper(createUserCognitoLambda));
+
+app.post(
+  '/account/resend-verification',
+  lambdaWrapper(cognitoResendVerificationLinkLambda),
+);
+
+// This following endpoint is used only by cognito-local
+
+app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));

@@ -74,6 +74,7 @@ import {
 import { canConsolidateInteractor } from '../../shared/src/business/useCases/caseConsolidation/canConsolidateInteractor';
 import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/proxies/caseAdvancedSearchProxy';
+import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { changePasswordLocalInteractor } from '../../shared/src/proxies/auth/changePasswordLocalProxy';
 import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users/checkEmailAvailabilityProxy';
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
@@ -99,7 +100,7 @@ import { createMessageInteractor } from '../../shared/src/proxies/messages/creat
 import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
-import { createUserInteractorLocal } from '../../shared/src/proxies/createUserInteractorLocalProxy';
+import { createUserCognitoInteractor } from '../../shared/src/proxies/createUserCognitoProxy';
 import { deleteAuthCookieInteractor } from '../../shared/src/proxies/auth/deleteAuthCookieProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
@@ -133,6 +134,7 @@ import {
   formatJudgeName,
   getJudgeLastName,
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import { formatPhoneNumber } from '../../shared/src/business/utilities/formatPhoneNumber';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
@@ -412,7 +414,7 @@ const allUseCases = {
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
-  createUserInteractorLocal,
+  createUserCognitoInteractor,
   deleteAuthCookieInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
@@ -731,6 +733,7 @@ const applicationContext = {
       canAllowDocumentServiceForCase,
       caseHasServedDocketEntries,
       caseHasServedPetition,
+      caseStatusWithTrialInformation,
       checkDate,
       compareCasesByDocketNumber,
       compareISODateStrings,
@@ -749,6 +752,7 @@ const applicationContext = {
       formatDollars,
       formatJudgeName,
       formatNow,
+      formatPendingItem,
       formatPhoneNumber,
       generateCourtIssuedDocumentTitle,
       generateExternalDocumentTitle,

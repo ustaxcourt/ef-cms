@@ -237,7 +237,7 @@ export const STIN_DOCKET_ENTRY_TYPE = {
   eventCode: 'STIN',
 };
 
-const pickEventCode = d => d.eventCode;
+const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
 
 export const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
@@ -879,6 +879,8 @@ export const PAYMENT_STATUS = {
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
 };
+const PAYMENT_TYPES = Object.values(PAYMENT_STATUS);
+export type PaymentStatusTypes = (typeof PAYMENT_TYPES)[number];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
