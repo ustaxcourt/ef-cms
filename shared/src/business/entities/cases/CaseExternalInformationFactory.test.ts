@@ -64,6 +64,7 @@ describe('CaseExternalInformationFactory entity', () => {
             applicationContext,
           },
         );
+
         expect(
           caseExternal.getFormattedValidationErrors()!.stinFileSize,
         ).toEqual(
