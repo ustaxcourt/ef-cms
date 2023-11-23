@@ -3,7 +3,7 @@ import {
   getUserTokenWithRetry,
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
-import { getUserToken as getUserTokenLocal } from './cypress/cypress-smoketests/support/pages/local-login';
+import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
 import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
@@ -12,6 +12,7 @@ export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
   e2e: {
+    experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
         confirmUser({ email }) {
@@ -42,7 +43,6 @@ export default defineConfig({
   screenshotsFolder: 'cypress/cypress-smoketests/screenshots',
   video: true,
   videoCompression: 10,
-  videoUploadOnPasses: false,
   videosFolder: 'cypress/cypress-smoketests/videos',
   viewportHeight: 900,
   viewportWidth: 1200,

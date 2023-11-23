@@ -1,5 +1,4 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 import {
   calculateISODate,
   createISODateString,
@@ -29,8 +28,8 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[2],
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        date: 'Enter a date',
+        documentType: 'Select a document type',
       });
     });
 
@@ -51,7 +50,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[0].message,
+        date: 'Enter a valid date',
       });
     });
 
@@ -100,7 +99,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
     });
 

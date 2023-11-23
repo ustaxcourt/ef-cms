@@ -34,6 +34,7 @@ export const AccountMenu = connect(
               className={classNames(
                 'usa-accordion__button usa-nav__link hidden-underline',
               )}
+              data-testid="account-menu-button"
               title={`Hello, ${headerHelper.userName}`}
               onClick={() => {
                 toggleMenuSequence({ openMenu: 'AccountMenu' });
@@ -52,6 +53,7 @@ export const AccountMenu = connect(
                   <li className="usa-nav__submenu-item">
                     <Button
                       className="account-menu-item usa-button usa-button--unstyled font-body-2xs"
+                      data-testid="my-account-link"
                       id="my-account"
                       overrideMargin="margin-right-0"
                       onClick={() =>

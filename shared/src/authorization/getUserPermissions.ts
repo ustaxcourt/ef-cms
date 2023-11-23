@@ -1,5 +1,6 @@
 import { ROLE_PERMISSIONS, isAuthorized } from './authorizationClientService';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawUser } from '@shared/business/entities/User';
 
 /**
  * Returns permissions based on the given user
