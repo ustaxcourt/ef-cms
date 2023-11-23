@@ -6,7 +6,7 @@ export type CaseWithSelectionInfo = {
 export const getSelectedConsolidatedCasesToMultiDocketOn = (
   consolidatedCases?: CaseWithSelectionInfo[],
 ): string[] | [] => {
-  if (!consolidatedCases || !consolidatedCases.length) return [];
+  if (!consolidatedCases) return [];
   const checkedCases = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix);

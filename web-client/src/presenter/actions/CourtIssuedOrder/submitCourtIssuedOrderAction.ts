@@ -1,3 +1,4 @@
+import { CaseWithSelectionInfo } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -17,7 +18,7 @@ export const submitCourtIssuedOrderAction = async ({
     state.modal.form.consolidatedCasesToMultiDocketOn,
   );
 
-  const consolidatedCasesToMultiDocketOnMetaData = (
+  const consolidatedCasesToMultiDocketOnMetaData: CaseWithSelectionInfo[] = (
     consolidatedCasesToMultiDocketOn || []
   ).map(caseInfo => ({
     checked: caseInfo.checked,
