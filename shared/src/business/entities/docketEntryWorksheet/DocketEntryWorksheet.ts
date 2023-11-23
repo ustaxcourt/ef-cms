@@ -49,4 +49,7 @@ export class DocketEntryWorksheet extends JoiValidationEntity {
   }
 }
 
-export type RawDocketEntryWorksheet = ExcludeMethods<DocketEntryWorksheet>;
+export type RawDocketEntryWorksheet = Omit<
+  ExcludeMethods<DocketEntryWorksheet>,
+  'entityName'
+>;

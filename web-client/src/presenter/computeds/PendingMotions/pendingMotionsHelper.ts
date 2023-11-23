@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntryWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { Get } from 'cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
@@ -8,17 +9,33 @@ export type PendingMotionsHelperResults = {
     consolidatedIconTooltipText: string;
     inConsolidatedGroup: boolean;
     isLeadCase: boolean;
+    finalBriefDueDateFormatted: string;
+    documentLink: string;
   })[];
 };
 
-export const pendingMotionsHelper = (get: Get): PendingMotionsHelperResults => {
+export const pendingMotionsHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): PendingMotionsHelperResults => {
   const { docketEntries } = get(state.pendingMotions);
 
   const formattedPendingMotions = docketEntries
     .map(entry => {
+      const finalBriefDueDateFormatted = entry.docketEntryWorksheet
+        .finalBriefDueDate
+        ? applicationContext
+            .getUtilities()
+            .formatDateString(
+              entry.docketEntryWorksheet.finalBriefDueDate,
+              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+            )
+        : '';
       return {
         ...entry,
         consolidatedIconTooltipText: isLeadCase(entry) ? 'Lead case' : '',
+        documentLink: `/case-detail/${entry.docketNumber}/document-view?docketEntryId=${entry.docketEntryId}`,
+        finalBriefDueDateFormatted,
         inConsolidatedGroup: !!entry.leadDocketNumber,
         isLeadCase: isLeadCase(entry),
       };
