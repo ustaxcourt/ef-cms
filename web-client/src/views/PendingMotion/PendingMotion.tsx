@@ -44,11 +44,9 @@ export const PendingMotion = connect(
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              <th className="small">
-                <span className="padding-left-2px">Docket No.</span>
-              </th>
+              <th>Docket No.</th>
               <th>No. of Cases</th>
-              <th>Petitioner(s)</th>
+              <th style={{ width: '12rem' }}>Petitioner(s)</th>
               <th>Motion</th>
               <th>No. Days Pending</th>
               <th>Final Brief Due Date</th>
@@ -79,9 +77,11 @@ export const PendingMotion = connect(
                     </td>
                     <td>{motion.consolidatedGroupCount}</td>
                     <td>{motion.caseCaption}</td>
-                    <td>{motion.documentTitle}</td>
+                    <td>
+                      <a href={motion.documentLink}>{motion.documentTitle}</a>
+                    </td>
                     <td>{motion.daysSinceCreated}</td>
-                    <td>{motion.docketEntryWorksheet.finalBriefDueDate}</td>
+                    <td>{motion.finalBriefDueDateFormatted}</td>
                     <td>{motion.docketEntryWorksheet.statusOfMatter}</td>
                     <td>
                       <Button
