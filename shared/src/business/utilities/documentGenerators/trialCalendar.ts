@@ -1,5 +1,9 @@
+import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
+import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
+import { TrialCalendar } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialCalendar';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const trialCalendar = async ({
   applicationContext,
@@ -39,32 +43,29 @@ export const trialCalendar = async ({
 }): Promise<Buffer> => {
   const { cases, sessionDetail } = data;
 
-  const trialCalendarTemplate = reactTemplateGenerator({
-    componentName: 'TrialCalendar',
-    data: {
+  const trialCalendarTemplate = ReactDOM.renderToString(
+    React.createElement(TrialCalendar, {
       cases,
       sessionDetail,
-    },
-  });
+    }),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: trialCalendarTemplate,
   });
 
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'ReportsMetaHeader',
-    data: {
+  const headerHtml = ReactDOM.renderToString(
+    React.createElement(ReportsMetaHeader, {
       headerTitle: `Trial Calendar: ${sessionDetail.trialLocation} - ${sessionDetail.startDate} ${sessionDetail.sessionType}`,
-    },
-  });
+    }),
+  );
 
-  const footerHtml = reactTemplateGenerator({
-    componentName: 'DatePrintedFooter',
-    data: {
+  const footerHtml = ReactDOM.renderToString(
+    React.createElement(DatePrintedFooter, {
       datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
-    },
-  });
+    }),
+  );
 
   const pdf = await applicationContext
     .getUseCases()
