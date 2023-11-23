@@ -71,7 +71,10 @@ export class NewPetitionerUser extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = joi.object().keys({
-    confirmPassword: joi.valid(joi.ref('password')).required(),
+    confirmPassword: joi
+      .valid(joi.ref('password'))
+      .required()
+      .messages({ '*': 'Passwords must match' }),
     email: JoiValidationConstants.EMAIL.required()
       .messages({
         '*': 'Enter a valid email address',
