@@ -28,7 +28,7 @@ export const DashboardJudge = connect(
           <SuccessNotification />
           <ErrorNotification />
           <TrialSessionsSummary />
-          <Tabs className="margin-top-6">
+          <Tabs className="margin-top-6" marginBottom={false}>
             <Tab tabName="recentMessages" title="Recent Messages">
               <RecentMessages />
             </Tab>
