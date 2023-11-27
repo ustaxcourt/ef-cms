@@ -1,11 +1,12 @@
+import { PetitionService } from '@shared/business/utilities/emailGenerator/emailTemplates/PetitionService';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const petitionServiceEmail = async ({ applicationContext, data }) => {
-  const petitionServiceEmailTemplate = reactTemplateGenerator({
-    componentName: 'PetitionService',
-    data,
-  });
+  const petitionServiceEmailTemplate = ReactDOM.renderToString(
+    React.createElement(PetitionService, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,

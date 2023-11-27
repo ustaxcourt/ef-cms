@@ -1,5 +1,7 @@
+import { NoticeOfDocketChange } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfDocketChange';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const noticeOfDocketChange = async ({ applicationContext, data }) => {
   const {
@@ -11,9 +13,8 @@ export const noticeOfDocketChange = async ({ applicationContext, data }) => {
     filingsAndProceedings,
   } = data;
 
-  const NoticeOfDocketChangeTemplate = reactTemplateGenerator({
-    componentName: 'NoticeOfDocketChange',
-    data: {
+  const NoticeOfDocketChangeTemplate = ReactDOM.renderToString(
+    React.createElement(NoticeOfDocketChange, {
       docketEntryIndex,
       filingParties,
       filingsAndProceedings,
@@ -22,8 +23,8 @@ export const noticeOfDocketChange = async ({ applicationContext, data }) => {
         caseTitle,
         docketNumberWithSuffix,
       },
-    },
-  });
+    }),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
