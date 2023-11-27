@@ -9,15 +9,19 @@ import React from 'react';
 
 export const PendingReportList = connect(
   {
-    formattedPendingItems: state.formattedPendingItems,
+    formattedPendingItemsHelper: state.formattedPendingItemsHelper,
+    hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
     loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
+    pendingItemsTotal: state.pendingReports.pendingItemsTotal,
     pendingReportListHelper: state.pendingReportListHelper,
     setPendingReportSelectedJudgeSequence:
       sequences.setPendingReportSelectedJudgeSequence,
   },
   function PendingReportList({
-    formattedPendingItems,
+    formattedPendingItemsHelper,
+    hasPendingItemsResults,
     loadMorePendingItemsSequence,
+    pendingItemsTotal,
     pendingReportListHelper,
     setPendingReportSelectedJudgeSequence,
   }) {
@@ -47,7 +51,7 @@ export const PendingReportList = connect(
                 }
               >
                 <option value="">-Judge-</option>
-                {formattedPendingItems.judges.map(judge => (
+                {formattedPendingItemsHelper.judges.map(judge => (
                   <option key={`pending-judge-${judge}`} value={judge}>
                     {judge}
                   </option>
@@ -55,11 +59,9 @@ export const PendingReportList = connect(
               </BindedSelect>
             </div>
           </div>
-          {pendingReportListHelper.hasPendingItemsResults && (
+          {hasPendingItemsResults && (
             <div className="grid-col-4 text-right margin-top-1">
-              <span className="text-semibold">
-                Count: {pendingReportListHelper.searchResultsCount}
-              </span>
+              <span className="text-semibold">Count: {pendingItemsTotal}</span>
             </div>
           )}
         </div>
@@ -81,8 +83,10 @@ export const PendingReportList = connect(
               <th>Judge</th>
             </tr>
           </thead>
-          {formattedPendingItems.items.map(item => (
-            <tbody key={`pending-item-${item.docketEntryId}`}>
+          {formattedPendingItemsHelper.items.map(item => (
+            <tbody
+              key={`pending-item-${item.formattedFiledDate}-${item.caseTitle}`}
+            >
               <tr className="pending-item-row">
                 <td>
                   <ConsolidatedCaseIcon
@@ -101,16 +105,12 @@ export const PendingReportList = connect(
                 <td>
                   <a href={item.documentLink}>{item.formattedName}</a>
                 </td>
-                <td>{item.status}</td>
+                <td>{item.formattedStatus}</td>
                 <td>{item.associatedJudgeFormatted}</td>
               </tr>
             </tbody>
           ))}
         </table>
-
-        {pendingReportListHelper.showLoading && (
-          <p>Loading pending reports...</p>
-        )}
 
         {pendingReportListHelper.showNoPendingItems && (
           <p>There is nothing pending.</p>

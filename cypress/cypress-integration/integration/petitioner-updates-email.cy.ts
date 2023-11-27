@@ -13,7 +13,7 @@ describe('Petitioner updates and verifies their email', () => {
   it('petitioner should be able to change their email', () => {
     loginAs('petitioner9');
 
-    const randomSuffix = parseInt(Math.random() * 100);
+    const randomSuffix = parseInt(`${Math.random() * 100}`);
     goToMyAccount();
     clickChangeEmail();
     changeEmailTo(`petitioner9+test${randomSuffix}@example.com`);
