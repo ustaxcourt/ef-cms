@@ -11,6 +11,8 @@ export const noticeOfDocketChange = async ({ applicationContext, data }) => {
     docketNumberWithSuffix,
     filingParties,
     filingsAndProceedings,
+    nameOfClerk,
+    titleOfClerk,
   } = data;
 
   const NoticeOfDocketChangeTemplate = ReactDOM.renderToString(
@@ -18,11 +20,13 @@ export const noticeOfDocketChange = async ({ applicationContext, data }) => {
       docketEntryIndex,
       filingParties,
       filingsAndProceedings,
+      nameOfClerk,
       options: {
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
       },
+      titleOfClerk,
     }),
   );
 

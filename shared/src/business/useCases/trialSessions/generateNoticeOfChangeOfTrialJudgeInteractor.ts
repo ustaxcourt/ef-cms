@@ -53,14 +53,12 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
       docketNumber,
     });
 
-  const clerkOftheCourtInfo =
-    applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION;
-
   const { name, title } = await applicationContext
     .getPersistenceGateway()
     .getConfigurationItemValue({
       applicationContext,
-      configurationItemKey: clerkOftheCourtInfo,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
     });
 
   const { docketNumberWithSuffix } = caseDetail;
