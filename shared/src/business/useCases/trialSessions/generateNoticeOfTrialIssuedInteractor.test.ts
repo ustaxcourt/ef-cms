@@ -27,6 +27,13 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
+      .getConfigurationItemValue.mockImplementation(() => ({
+        name: 'bob',
+        title: 'clerk of court',
+      }));
+
+    applicationContext
+      .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
         if (docketNumber === '123-45') {
           return {
