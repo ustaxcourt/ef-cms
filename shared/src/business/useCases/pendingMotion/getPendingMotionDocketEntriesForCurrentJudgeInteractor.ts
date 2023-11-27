@@ -55,7 +55,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
         aCase.docketEntries as RawDocketEntry[]
       )
         .map(docketEntry => {
-          const currentDate = prepareDateFromString().toISOString();
+          const currentDate = prepareDateFromString().toISO()!;
           const dayDifference = calculateDifferenceInDays(
             currentDate,
             docketEntry.createdAt,
