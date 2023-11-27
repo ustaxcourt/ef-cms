@@ -15,7 +15,7 @@ import joi from 'joi';
 
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
-  public email: string;
+  public email?: string;
   public name: string;
   public pendingEmail?: string;
   public role: string;
