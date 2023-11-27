@@ -69,7 +69,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
     getDocketEntryWorksheetsByDocketEntryIdsResults.push({
       docketEntryId: DOCKET_ENTRY_ID,
       entityName: 'RawDocketEntryWorksheet',
-      finalBriefDueDate: 'SOME FINAL BRIED DUE DATE',
+      finalBriefDueDate: 'SOME FINAL BRIEF DUE DATE',
       primaryIssue: 'SOME PRIMARY ISSUE',
       statusOfMatter: 'SOME STATUS OF MATTER',
     });
@@ -118,7 +118,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         docketEntryWorksheet: {
           docketEntryId: '1234-5678-9123-4567-8912',
           entityName: 'RawDocketEntryWorksheet',
-          finalBriefDueDate: 'SOME FINAL BRIED DUE DATE',
+          finalBriefDueDate: 'SOME FINAL BRIEF DUE DATE',
           primaryIssue: 'SOME PRIMARY ISSUE',
           statusOfMatter: 'SOME STATUS OF MATTER',
         },
@@ -138,7 +138,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
     getDocketEntryWorksheetsByDocketEntryIdsResults.push({
       docketEntryId: DOCKET_ENTRY_ID,
       entityName: 'RawDocketEntryWorksheet',
-      finalBriefDueDate: 'SOME FINAL BRIED DUE DATE',
+      finalBriefDueDate: 'SOME FINAL BRIEF DUE DATE',
       primaryIssue: 'SOME PRIMARY ISSUE',
       statusOfMatter: 'SOME STATUS OF MATTER',
     });
@@ -192,7 +192,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         docketEntryWorksheet: {
           docketEntryId: '1234-5678-9123-4567-8912',
           entityName: 'RawDocketEntryWorksheet',
-          finalBriefDueDate: 'SOME FINAL BRIED DUE DATE',
+          finalBriefDueDate: 'SOME FINAL BRIEF DUE DATE',
           primaryIssue: 'SOME PRIMARY ISSUE',
           statusOfMatter: 'SOME STATUS OF MATTER',
         },
