@@ -1,12 +1,12 @@
 // usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/get-petition-counts.js 2022
 
 const {
-  computeDate,
-  dateStringsCompared,
-} = require('../../src/business/utilities/DateHandler');
-const {
   createApplicationContext,
 } = require('../../../web-api/src/applicationContext');
+const {
+  dateStringsCompared,
+  validateDateAndCreateISO,
+} = require('../../src/business/utilities/DateHandler');
 const {
   searchAll,
 } = require('../../../web-api/src/persistence/elasticsearch/searchClient');
@@ -30,8 +30,12 @@ const getAllPetitions = async ({ applicationContext }) => {
               {
                 range: {
                   'receivedAt.S': {
-                    gte: computeDate({ day: 1, month: 1, year }),
-                    lt: computeDate({ day: 1, month: 1, year: year + 1 }),
+                    gte: validateDateAndCreateISO({ day: 1, month: 1, year }),
+                    lt: validateDateAndCreateISO({
+                      day: 1,
+                      month: 1,
+                      year: year + 1,
+                    }),
                   },
                 },
               },

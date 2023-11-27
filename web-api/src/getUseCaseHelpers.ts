@@ -1,3 +1,4 @@
+import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
@@ -13,7 +14,6 @@ import { createAndServeNoticeDocketEntry } from '../../shared/src/business/useCa
 import { createCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createTrialSessionAndWorkingCopy } from '../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy';
 import { createUserForContact } from '../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact';
-import { fetchPendingItemsByDocketNumber } from '../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber';
 import { fileAndServeDocumentOnOneCase } from '../../shared/src/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
@@ -45,6 +45,7 @@ import { updateCaseAutomaticBlock } from '../../shared/src/business/useCaseHelpe
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 
 const useCaseHelpers = {
+  acquireLock,
   addDocketEntryForSystemGeneratedOrder,
   addDraftStampOrderDocketEntryInteractor,
   addExistingUserToCase,
@@ -60,7 +61,6 @@ const useCaseHelpers = {
   createCaseAndAssociations,
   createTrialSessionAndWorkingCopy,
   createUserForContact,
-  fetchPendingItemsByDocketNumber,
   fileAndServeDocumentOnOneCase,
   formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,

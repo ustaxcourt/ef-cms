@@ -14,6 +14,8 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../entities/User';
 import { UserCase } from '../entities/UserCase';
 import { addCoverToPdf } from './addCoverToPdf';
@@ -42,6 +44,7 @@ describe('updatePetitionerInformationInteractor', () => {
       name: 'Test Secondary Petitioner',
     },
   ];
+  let mockLock;
 
   beforeAll(() => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({});
@@ -57,9 +60,13 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .createUserForContact.mockImplementation(() => new UserCase(mockCase));
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
+    mockLock = undefined;
     mockUser = docketClerkUser;
 
     mockCase = {
@@ -713,6 +720,49 @@ describe('updatePetitionerInformationInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().addExistingUserToCase,
       ).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          updatedEmail: 'changed-email@example.com',
+        },
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        updatedEmail: 'changed-email@example.com',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
   });
 });

@@ -74,7 +74,7 @@ export const AddTrialSession = connect(
             </div>
 
             <Button
-              data-cy="submit-trial-session"
+              data-testid="submit-trial-session"
               id="submit-trial-session"
               type="button"
               onClick={() => {

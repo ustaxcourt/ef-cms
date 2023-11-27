@@ -1,15 +1,21 @@
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import {
   MOTION_DISPOSITIONS,
   ORDER_TYPES,
   PETITIONS_SECTION,
 } from '../../entities/EntityConstants';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { addDraftStampOrderDocketEntryInteractor } from './addDraftStampOrderDocketEntryInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { judgeUser } from '../../../test/mockUsers';
+import { clerkOfCourtUser, judgeUser } from '../../../test/mockUsers';
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
+  let mockLock;
   const mockSigningName = 'Guy Fieri';
   const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
@@ -26,6 +32,15 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   };
 
   beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    applicationContext.getCurrentUser.mockReturnValue(clerkOfCourtUser);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -129,5 +144,44 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
         },
       ],
     });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      addDraftStampOrderDocketEntryInteractor(applicationContext, args),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await addDraftStampOrderDocketEntryInteractor(applicationContext, args);
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
+  });
+
+  it('should throw an Unauthorized error if the user is not authorized', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({});
+
+    await expect(
+      addDraftStampOrderDocketEntryInteractor(applicationContext, args),
+    ).rejects.toThrow(UnauthorizedError);
   });
 });

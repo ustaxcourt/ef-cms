@@ -1,11 +1,12 @@
+import { DocumentService } from '@shared/business/utilities/emailGenerator/emailTemplates/DocumentService';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const documentServiceEmail = async ({ applicationContext, data }) => {
-  const documentServiceEmailTemplate = reactTemplateGenerator({
-    componentName: 'DocumentService',
-    data,
-  });
+  const documentServiceEmailTemplate = ReactDOM.renderToString(
+    React.createElement(DocumentService, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,

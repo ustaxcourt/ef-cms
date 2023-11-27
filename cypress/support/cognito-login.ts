@@ -68,10 +68,7 @@ const getUserPoolId = async () => {
   return userPoolId;
 };
 
-export const getUserTokenWithRetry = async (
-  username: string,
-  password: string,
-) => {
+export const getUserTokenWithRetry = (username: string, password: string) => {
   return promiseRetry(
     retry => {
       return getUserToken(password, username).catch(retry);
@@ -85,6 +82,8 @@ export const getUserTokenWithRetry = async (
 async function getUserToken(password: string, username: string) {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
+
+  console.log({ password, userPoolId, username });
 
   return cognito
     .adminInitiateAuth({

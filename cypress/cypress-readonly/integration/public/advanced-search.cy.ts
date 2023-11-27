@@ -1,47 +1,31 @@
-import {
-  docketRecordTable,
-  enterPetitionerName,
-  navigateTo as navigateToDashboard,
-  noSearchResultsContainer,
-  searchForCaseByDocketNumber,
-} from '../../support/pages/public/advanced-search';
-
 import { isValidRequest } from '../../support/helpers';
 
-const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
-const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
-
-describe('Case Search Public UI Smoketests', () => {
+describe('advanced search pages', () => {
   it('should allow the user to search for a case by petitioner name', () => {
-    navigateToDashboard();
-    enterPetitionerName('Smith');
-
-    cy.intercept({
-      hostname: `public-api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
-      method: 'GET',
-      url: '/public-api/search?**',
-    }).as('getCaseByPetitionerName');
-
+    cy.visit('/');
+    cy.get('input#petitioner-name').type('Smith');
+    cy.intercept('GET', '**/public-api/search?**').as(
+      'getCaseByPetitionerName',
+    );
     cy.get('button#advanced-search-button').click();
-
     cy.wait('@getCaseByPetitionerName').then(isValidRequest);
   });
 
   it('should display "No Matches Found" when case search yields no results', () => {
-    navigateToDashboard();
-    searchForCaseByDocketNumber('99-21');
-    noSearchResultsContainer().should('exist');
+    cy.visit('/');
+    cy.get('input#docket-number').type('99-21');
+    cy.get('button#docket-search-button').click();
+
+    cy.get('div#no-search-results').should('exist');
   });
 
   it('should route to case detail when a case search by docket number match is found', () => {
-    navigateToDashboard();
-    searchForCaseByDocketNumber('104-20');
-    const docketRecord = docketRecordTable();
-    docketRecord.should('exist');
-    const petitionRow = docketRecord
-      .get('tr')
-      .contains('Petition', { matchCase: false });
-    petitionRow.should('exist');
-    petitionRow.find('button').should('not.exist');
+    cy.visit('/');
+    cy.get('input#docket-number').type('104-20');
+    cy.get('button#docket-search-button').click();
+    cy.get('[data-testid="header-public-case-detail"]').contains(
+      'Docket Number: 104-20',
+    );
+    cy.get('[data-testid="table-public-docket-record"]');
   });
 });

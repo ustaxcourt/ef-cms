@@ -1,8 +1,8 @@
-import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { CaseExternal } from './CaseExternal';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
 /**
@@ -28,26 +28,26 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
   public procedureType: string;
   public stinFile?: object;
   public stinFileSize?: number;
-  public wizardStep: any;
+  public wizardStep: number;
 
   constructor(rawCase, { applicationContext }) {
     super('CaseExternalInformationFactory');
 
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
+    this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
+    this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
     this.countryType = rawCase.countryType;
     this.filingType = rawCase.filingType;
     this.hasIrsNotice = rawCase.hasIrsNotice;
     this.partyType = rawCase.partyType;
-    this.preferredTrialCity = rawCase.preferredTrialCity;
-    this.procedureType = rawCase.procedureType;
-    this.wizardStep = rawCase.wizardStep;
-    this.stinFile = rawCase.stinFile;
-    this.stinFileSize = rawCase.stinFileSize;
     this.petitionFile = rawCase.petitionFile;
     this.petitionFileSize = rawCase.petitionFileSize;
-    this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
-    this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
+    this.preferredTrialCity = rawCase.preferredTrialCity;
+    this.procedureType = rawCase.procedureType;
+    this.stinFile = rawCase.stinFile;
+    this.stinFileSize = rawCase.stinFileSize;
+    this.wizardStep = rawCase.wizardStep;
 
     if (+this.wizardStep >= 3) {
       const contacts = ContactFactory({
@@ -78,14 +78,8 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     ...CaseExternalInformationFactory.wizardStep4(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
-
   getValidationRules() {
     return CaseExternalInformationFactory.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
   }
 
   static atWizardStep(stepNum, schemaObj) {

@@ -24,10 +24,6 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
   }
 });
 
-Cypress.Commands.add('getByTestId', (testId: string) => {
-  return cy.get(`[data-testid="${testId}"]`);
-});
-
 Cypress.Commands.add('login', (username, route = '/') => {
   const url = `/log-in?code=${username}@example.com&path=${route}`;
   cy.visit(url);
@@ -108,7 +104,6 @@ declare global {
       showsSpinner: (shows?: boolean) => void;
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;
-      getByTestId: (testId: string) => Chainable<JQuery<HTMLElement>>;
     }
   }
 }
