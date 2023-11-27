@@ -1,4 +1,5 @@
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
   calculateDifferenceInDays,
@@ -10,6 +11,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
+import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -21,6 +23,7 @@ import {
 } from '../../shared/src/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
 import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
@@ -47,9 +50,11 @@ import { sleep } from '../../shared/src/business/utilities/sleep';
 import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 
 const utilities = {
+  abbreviateState,
   calculateDaysElapsedSinceLastStatusChange,
   calculateDifferenceInDays,
   calculateISODate,
+  caseStatusWithTrialInformation,
   combineTwoPdfs,
   compareCasesByDocketNumber,
   compareISODateStrings,
@@ -61,6 +66,7 @@ const utilities = {
   formatDateString,
   formatJudgeName,
   formatNow,
+  formatPendingItem,
   getAddressPhoneDiff,
   getCropBox,
   getDescriptionDisplay,

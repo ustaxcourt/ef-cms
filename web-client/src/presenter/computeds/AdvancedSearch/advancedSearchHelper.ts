@@ -1,6 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const formatSearchResultRecord = (result, { applicationContext }) => {
+export const formatSearchResultRecord = (
+  result,
+  { applicationContext }: { applicationContext: ClientApplicationContext },
+) => {
   const { US_STATES } = applicationContext.getConstants();
 
   result.formattedFiledDate = applicationContext
