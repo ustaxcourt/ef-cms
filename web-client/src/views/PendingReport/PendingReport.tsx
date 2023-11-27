@@ -10,25 +10,27 @@ import React from 'react';
 
 export const PendingReport = connect(
   {
-    formattedPendingItems: state.formattedPendingItems,
-    pendingReportListHelper: state.pendingReportListHelper,
+    formattedPendingItemsHelper: state.formattedPendingItemsHelper,
+    hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
   },
-  function PendingReport({ formattedPendingItems, pendingReportListHelper }) {
+  function PendingReport({
+    formattedPendingItemsHelper,
+    hasPendingItemsResults,
+  }) {
     return (
       <>
         <BigHeader text="Reports" />
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-
           <Tabs bind="reportsTab.group" defaultActiveTab="pendingReport">
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-              {pendingReportListHelper.hasPendingItemsResults && (
+              {hasPendingItemsResults && (
                 <Button
                   link
                   aria-describedby="pending-report-tab"
                   className="margin-top-2"
-                  href={formattedPendingItems.printUrl}
+                  href={formattedPendingItemsHelper.printUrl}
                   icon="print"
                 >
                   Printable Report

@@ -1,12 +1,7 @@
+import { cloneDeep } from 'lodash';
+import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Resets the pendingReports state
- *
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object used for setting pendingItems
- * @param {object} providers.props the pendingItems to set
- */
 export const clearPendingReportsAction = ({ store }: ActionProps) => {
-  store.set(state.pendingReports, {});
+  store.set(state.pendingReports, cloneDeep(initialPendingReportsState));
 };
