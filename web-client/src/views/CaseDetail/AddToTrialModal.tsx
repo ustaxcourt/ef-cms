@@ -77,7 +77,7 @@ export const AddToTrialModal = connect(
                 />
                 <label
                   className="usa-radio__label"
-                  data-cy="all-locations-option"
+                  data-testid="all-locations-option"
                   htmlFor="show-all-locations-true"
                 >
                   All locations

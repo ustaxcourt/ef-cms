@@ -160,15 +160,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({ message }) {
           <div className="message-document-detail">{message.message}</div>
         </td>
         <td className="message-queue-row max-width-25">{message.caseTitle}</td>
-        {!message.showTrialInformation && (
-          <td className="message-queue-row">{message.caseStatus}</td>
-        )}
-        {message.showTrialInformation && (
-          <td className="message-queue-row">
-            {message.caseStatus} - {message.formattedTrialDate}{' '}
-            {message.formattedTrialLocation}
-          </td>
-        )}
+        <td className="message-queue-row">{message.caseStatus}</td>
         <td className="message-queue-row to">{message.to}</td>
         <td className="message-queue-row from">{message.from}</td>
         <td className="message-queue-row small">
