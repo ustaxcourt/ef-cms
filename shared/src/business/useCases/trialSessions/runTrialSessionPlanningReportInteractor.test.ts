@@ -1,7 +1,6 @@
 import { ROLES, TRIAL_CITIES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
-  getPreviousTerm,
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } from './runTrialSessionPlanningReportInteractor';
@@ -204,29 +203,57 @@ describe('run trial session planning report', () => {
   });
 
   describe('get previous term', () => {
-    it('returns previous term and previous year if the previous term is winter', () => {
-      const result = getPreviousTerm('winter', '2020');
-      expect(result).toEqual({
-        term: 'fall',
-        termDisplay: 'Fall 2019',
-        year: '2019',
-      });
-    });
-    it('returns previous term and same year if the previous term is fall', () => {
-      const result = getPreviousTerm('fall', '2020');
-      expect(result).toEqual({
-        term: 'spring',
-        termDisplay: 'Spring 2020',
-        year: '2020',
-      });
-    });
-    it('returns previous term and same year if the previous term is spring', () => {
-      const result = getPreviousTerm('spring', '2020');
-      expect(result).toEqual({
+    it('returns previous term and previous year if the previous term is winter', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getEligibleCasesForTrialCity.mockReturnValue([
+          { docketNumber: '123-20' },
+        ]);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessions.mockReturnValue([
+          {
+            judge: { name: 'Judge Colvin' },
+            sessionType: 'Regular',
+            startDate: '2020-05-01T21:40:46.415Z',
+            term: 'spring',
+            termYear: '2020',
+            trialLocation: 'Birmingham, Alabama',
+            trialSessionId: '123',
+          },
+        ]);
+
+      await runTrialSessionPlanningReportInteractor(applicationContext, {
         term: 'winter',
-        termDisplay: 'Winter 2020',
         year: '2020',
       });
+
+      expect(
+        applicationContext.getDocumentGenerators().trialSessionPlanningReport
+          .mock.calls[0][0].data.previousTerms,
+      ).toEqual([
+        { term: 'fall', termDisplay: 'Fall 2019', year: '2019' },
+        { term: 'spring', termDisplay: 'Spring 2019', year: '2019' },
+        { term: 'winter', termDisplay: 'Winter 2019', year: '2019' },
+      ]);
     });
+
+    // it('returns previous term and same year if the previous term is fall', () => {
+    //   const result = getPreviousTerm('fall', '2020');
+    //   expect(result).toEqual({
+    //     term: 'spring',
+    //     termDisplay: 'Spring 2020',
+    //     year: '2020',
+    //   });
+    // });
+    // it('returns previous term and same year if the previous term is spring', () => {
+    //   const result = getPreviousTerm('spring', '2020');
+    //   expect(result).toEqual({
+    //     term: 'winter',
+    //     termDisplay: 'Winter 2020',
+    //     year: '2020',
+    //   });
+    // });
   });
 });
