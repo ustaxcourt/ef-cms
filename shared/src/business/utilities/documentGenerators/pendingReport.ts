@@ -1,6 +1,6 @@
 import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
 import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
-import { PendingReport } from '../pdfGenerator/documentTemplates/PendingReport';
+import { PendingReport } from '@shared/business/utilities/pdfGenerator/documentTemplates/PendingReport';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';

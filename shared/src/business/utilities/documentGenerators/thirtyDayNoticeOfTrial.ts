@@ -1,6 +1,11 @@
-import { ThirtyDayNoticeOfTrialRequiredInfo } from '../pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
+import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
+import {
+  ThirtyDayNoticeOfTrial,
+  ThirtyDayNoticeOfTrialRequiredInfo,
+} from '../pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const thirtyDayNoticeOfTrial = async ({
   applicationContext,
@@ -9,10 +14,9 @@ export const thirtyDayNoticeOfTrial = async ({
   applicationContext: IApplicationContext;
   data: ThirtyDayNoticeOfTrialRequiredInfo;
 }): Promise<Buffer> => {
-  const thirtyDayNoticeOfTrialTemplate = reactTemplateGenerator({
-    componentName: 'ThirtyDayNoticeOfTrial',
-    data,
-  });
+  const thirtyDayNoticeOfTrialTemplate = ReactDOM.renderToString(
+    React.createElement(ThirtyDayNoticeOfTrial, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
@@ -21,12 +25,11 @@ export const thirtyDayNoticeOfTrial = async ({
 
   let footerHtml = '';
   if (data.dateServed) {
-    footerHtml = reactTemplateGenerator({
-      componentName: 'DateServedFooter',
-      data: {
+    footerHtml = ReactDOM.renderToString(
+      React.createElement(DateServedFooter, {
         dateServed: data.dateServed,
-      },
-    });
+      }),
+    );
   }
 
   const pdf = await applicationContext

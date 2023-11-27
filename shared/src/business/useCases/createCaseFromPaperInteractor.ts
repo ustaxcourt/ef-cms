@@ -1,12 +1,13 @@
 import { Case } from '../entities/cases/Case';
-import { CaseInternal } from '../entities/cases/CaseInternal';
 import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
+import { PetitionIncomplete } from '../entities/cases/PetitionIncomplete';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { RawUser } from '@shared/business/entities/User';
+import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { replaceBracketed } from '../utilities/replaceBracketed';
 
@@ -76,12 +77,12 @@ export const createCaseFromPaperInteractor = async (
     requestForPlaceOfTrialFileId,
     stinFileId,
   }: {
-    applicationForWaiverOfFilingFeeFileId: string;
-    corporateDisclosureFileId: string;
+    applicationForWaiverOfFilingFeeFileId?: string;
+    corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
-    requestForPlaceOfTrialFileId: string;
-    stinFileId: string;
+    requestForPlaceOfTrialFileId?: string;
+    stinFileId?: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -94,7 +95,7 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new CaseInternal(
+  const petitionEntity = new PetitionIncomplete(
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,
@@ -194,10 +195,12 @@ export const createCaseFromPaperInteractor = async (
   if (requestForPlaceOfTrialFileId) {
     let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
 
-    documentTitle = replaceBracketed(
-      documentTitle,
-      caseToAdd.preferredTrialCity,
-    );
+    if (caseToAdd.preferredTrialCity) {
+      documentTitle = replaceBracketed(
+        documentTitle,
+        caseToAdd.preferredTrialCity,
+      );
+    }
 
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
