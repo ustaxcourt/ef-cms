@@ -16,8 +16,13 @@ export const pendingReport = async ({
     subtitle: string;
   };
 }): Promise<Buffer> => {
+  const { pendingItems, subtitle } = data;
+
   const pendingReportTemplate = ReactDOM.renderToString(
-    React.createElement(PendingReport, data),
+    React.createElement(PendingReport, {
+      pendingItems,
+      subtitle,
+    }),
   );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
@@ -27,7 +32,7 @@ export const pendingReport = async ({
 
   const headerHtml = ReactDOM.renderToString(
     React.createElement(ReportsMetaHeader, {
-      headerTitle: `Pending Report: ${data.subtitle}`,
+      headerTitle: `Pending Report: ${subtitle}`,
     }),
   );
 
