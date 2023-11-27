@@ -62,7 +62,7 @@ export const runTrialSessionPlanningReportInteractor = async (
   });
 };
 
-export const getPreviousTerm = (
+const getPreviousTerm = (
   currentTerm: string,
   currentYear: string,
 ): PreviousTerm => {
