@@ -4,7 +4,17 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-export const noticeOfTrialIssued = async ({ applicationContext, data }) => {
+export const noticeOfTrialIssued = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    nameOfClerk: string;
+    titleOfClerk: string;
+    [key: string]: any;
+  };
+}) => {
   const { docketNumberWithSuffix } = data;
 
   const noticeOfTrialIssuedTemplate = ReactDOM.renderToString(

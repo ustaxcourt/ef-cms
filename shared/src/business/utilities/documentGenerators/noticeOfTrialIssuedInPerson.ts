@@ -7,6 +7,13 @@ import ReactDOM from 'react-dom/server';
 export const noticeOfTrialIssuedInPerson = async ({
   applicationContext,
   data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    nameOfClerk: string;
+    titleOfClerk: string;
+    [key: string]: any;
+  };
 }) => {
   const { docketNumberWithSuffix } = data;
 
