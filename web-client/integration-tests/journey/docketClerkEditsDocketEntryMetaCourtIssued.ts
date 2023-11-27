@@ -1,5 +1,4 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryMetaCourtIssued = (
@@ -51,7 +50,7 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[2],
+      date: 'Enter a date',
     });
 
     await cerebralTest.runSequence(
