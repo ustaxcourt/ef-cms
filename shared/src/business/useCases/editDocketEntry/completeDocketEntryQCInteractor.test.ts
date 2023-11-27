@@ -26,6 +26,12 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+    applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockImplementation(() => ({
+        name: 'bob',
+        title: 'clerk of court',
+      }));
   });
 
   beforeEach(() => {
