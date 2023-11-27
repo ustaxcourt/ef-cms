@@ -3,7 +3,17 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-export const noticeOfDocketChange = async ({ applicationContext, data }) => {
+export const noticeOfDocketChange = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    nameOfClerk: string;
+    titleOfClerk: string;
+    [key: string]: any;
+  };
+}) => {
   const {
     caseCaptionExtension,
     caseTitle,

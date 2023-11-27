@@ -18,6 +18,8 @@ describe('noticeOfDocketChange', () => {
             after: 'Filing and Proceedings After',
             before: 'Filing and Proceedings Before',
           },
+          nameOfClerk: 'Stephanie A. Servoss',
+          titleOfClerk: 'Clerk of the Court',
         },
       });
     },
