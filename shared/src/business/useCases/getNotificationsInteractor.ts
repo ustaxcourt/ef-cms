@@ -1,5 +1,5 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
-import { IServerApplicationContext } from '@web-api/applicationContext';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { isEmpty } from 'lodash';
 
 const getJudgeUser = async (
@@ -23,7 +23,7 @@ const getJudgeUser = async (
 };
 
 export const getNotificationsInteractor = async (
-  applicationContext: IServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseServicesSupervisorData,
     judgeUserId,
