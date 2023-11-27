@@ -100,7 +100,7 @@ import { createMessageInteractor } from '../../shared/src/proxies/messages/creat
 import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
-import { createUserInteractorLocal } from '../../shared/src/proxies/createUserInteractorLocalProxy';
+import { createUserCognitoInteractor } from '../../shared/src/proxies/createUserCognitoProxy';
 import { deleteAuthCookieInteractor } from '../../shared/src/proxies/auth/deleteAuthCookieProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
@@ -217,6 +217,7 @@ import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/p
 import { getScannerInterface } from './persistence/dynamsoft/getScannerInterface';
 import { getScannerMockInterface } from './persistence/dynamsoft/getScannerMockInterface';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
+import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
@@ -414,7 +415,7 @@ const allUseCases = {
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
-  createUserInteractorLocal,
+  createUserCognitoInteractor,
   deleteAuthCookieInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
@@ -778,6 +779,7 @@ const applicationContext = {
       getPetitionerById,
       getPractitionersRepresenting,
       getSealedDocketEntryTooltip,
+      getSelectedConsolidatedCasesToMultiDocketOn,
       getServedPartiesCode,
       getSortableDocketNumber: Case.getSortableDocketNumber,
       getStampBoxCoordinates,

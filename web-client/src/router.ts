@@ -38,7 +38,7 @@ const BASE_ROUTE = '/';
 route.base(BASE_ROUTE);
 
 // Add this prefix to page titles for all pages that are related to a case
-const getPageTitleDocketPrefix = docketNumber => {
+const getPageTitleDocketPrefix = (docketNumber: string): string => {
   return `Docket ${docketNumber} | `;
 };
 
@@ -856,10 +856,6 @@ const router = {
         return app.getSequence('gotoChangeLoginAndServiceEmailSequence')();
       }),
     );
-
-    registerRoute('/create-new-account-local', () => {
-      return app.getSequence('goToCreateAccountLocalSequence')();
-    });
 
     registerRoute('/change-password-local', () => {
       return app.getSequence('gotoChangePasswordLocalSequence')();

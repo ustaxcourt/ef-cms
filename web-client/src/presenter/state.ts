@@ -552,6 +552,7 @@ export const baseState = {
   caseDetail: {} as RawCase,
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
+  cognito: {} as any,
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
@@ -685,6 +686,7 @@ export const baseState = {
     docketRecordSort: [],
     todaysOrdersSort: [],
   },
+  setSelectedConsolidatedCasesToMultiDocketOn: false,
   showValidation: false,
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
