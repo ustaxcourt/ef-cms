@@ -4,7 +4,7 @@ import { Get } from 'cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export type PendingMotionsHelperResults = {
+type PendingMotionsHelperResults = {
   formattedPendingMotions: (DocketEntryWithWorksheet & {
     consolidatedIconTooltipText: string;
     inConsolidatedGroup: boolean;
