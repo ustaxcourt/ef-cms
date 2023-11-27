@@ -86,7 +86,7 @@ export const PendingMotion = connect(
                     <td>
                       <Button
                         link
-                        data-testid="add-edit-case-worksheet"
+                        data-testid="add-edit-pending-motion-worksheet"
                         icon="edit"
                         onClick={() =>
                           openAddEditDocketEntryWorksheetModalSequence({

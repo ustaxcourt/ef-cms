@@ -15,6 +15,7 @@ export const pendingItemCaseSource = [
   'trialLocation',
   'docketNumberWithSuffix',
 ] as const;
+
 export const pendingItemDocketEntrySource = [
   'docketEntryId',
   'documentType',
