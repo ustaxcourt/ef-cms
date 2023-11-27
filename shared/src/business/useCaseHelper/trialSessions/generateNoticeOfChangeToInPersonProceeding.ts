@@ -7,19 +7,13 @@ import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
 
-/**
- * generateNoticeOfChangeToInPersonProceeding
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docketNumber for the case
- * @param {string} providers.trialSessionInformation the trial session information
- * @returns {Uint8Array} notice of trial session pdf
- */
 export const generateNoticeOfChangeToInPersonProceeding = async (
-  applicationContext,
-  { docketNumber, trialSessionInformation },
-) => {
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    trialSessionInformation,
+  }: { docketNumber: string; trialSessionInformation: any },
+): Promise<Buffer> => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
@@ -56,6 +50,15 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
 
   const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
+  const clerkOftheCourtConfigurationKey: string =
+    applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION;
+
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey: clerkOftheCourtConfigurationKey,
+    });
 
   return await applicationContext
     .getDocumentGenerators()
@@ -65,6 +68,8 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
+        nameOfClerk: name,
+        titleOfClerk: title,
         trialInfo,
       },
     });

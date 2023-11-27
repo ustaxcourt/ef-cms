@@ -4,10 +4,14 @@ import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 
+// check if another type for FormattedTrial exists
 export type FormattedTrialInfo = RawTrialSession & {
-  chambersPhoneNumber: string | undefined;
-  formattedStartDate: string | void;
+  chambersPhoneNumber: string | undefined; // possibly a required
+  formattedStartDate: string | void; // possibly a required
   trialLocationAndProceedingType: string;
+  formattedJudge?: string;
+  formattedStartTime?: string;
+  joinPhoneNumber?: string | undefined;
 };
 
 export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
