@@ -1,14 +1,12 @@
+import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Sets the pending items property in the state
- *
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object used for setting pendingItems
- * @param {object} providers.props the pendingItems to set
- */
-export const setPendingItemsAction = ({ get, props, store }: ActionProps) => {
-  const pendingItems = get(state.pendingReports.pendingItems) || [];
+export const setPendingItemsAction = ({
+  get,
+  props,
+  store,
+}: ActionProps<{ pendingItems: PendingItem[]; total: number }>) => {
+  const pendingItems = get(state.pendingReports.pendingItems);
   store.set(state.pendingReports.pendingItems, [
     ...pendingItems,
     ...props.pendingItems,
