@@ -305,6 +305,7 @@ export const createApplicationContext = (
       CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
         ? parseInt(process.env.CHANGE_OF_ADDRESS_CONCURRENCY)
         : undefined,
+      CLERK_OF_THE_COURT_CONFIGURATION: 'clerk-of-court-configuration',
       CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,

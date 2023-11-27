@@ -1,5 +1,6 @@
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
+import { FormattedTrialInfo } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { PROCEDURE_TYPES_MAP } from '../../../entities/EntityConstants';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
@@ -8,7 +9,16 @@ export const NoticeOfChangeOfTrialJudge = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
+  nameOfClerk,
+  titleOfClerk,
   trialInfo,
+}: {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  nameOfClerk: string;
+  titleOfClerk: string;
+  trialInfo: FormattedTrialInfo;
 }) => {
   return (
     <div id="notice-of-change-of-trial-judge-pdf">
@@ -37,7 +47,10 @@ export const NoticeOfChangeOfTrialJudge = ({
           session remains in full force and effect.
         </p>
 
-        <ClerkOfTheCourtSignature />
+        <ClerkOfTheCourtSignature
+          nameOfClerk={nameOfClerk}
+          titleOfClerk={titleOfClerk}
+        />
       </div>
     </div>
   );
