@@ -84,7 +84,7 @@ const getPreviousTerm = (
   };
 };
 
-export const getTrialSessionPlanningReportData = async ({
+const getTrialSessionPlanningReportData = async ({
   applicationContext,
   term,
   year,
