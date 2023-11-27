@@ -14,6 +14,8 @@ export const generateNoticeOfDocketChangePdf = async ({
     caseTitle: string;
     docketEntryIndex: string;
     docketNumber: string;
+    titleOfClerk: string;
+    nameOfClerk: string;
     filingParties: { after: string | undefined; before: string | undefined };
     filingsAndProceedings: { after: string; before: string };
   };
@@ -31,6 +33,8 @@ export const generateNoticeOfDocketChangePdf = async ({
     docketNumber,
     filingParties,
     filingsAndProceedings,
+    nameOfClerk,
+    titleOfClerk,
   } = docketChangeInfo;
 
   const noticePdf = await applicationContext
@@ -44,6 +48,8 @@ export const generateNoticeOfDocketChangePdf = async ({
         docketNumberWithSuffix: docketNumber,
         filingParties,
         filingsAndProceedings,
+        nameOfClerk,
+        titleOfClerk,
       },
     });
 

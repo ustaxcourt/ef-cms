@@ -61,6 +61,14 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     judgeUserName: trialSession.judge.name,
   });
 
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+    });
+
   const trialInfo = {
     formattedJudge: judgeWithTitle,
     formattedStartDate,
@@ -77,6 +85,8 @@ export const generateNoticeOfTrialIssuedInteractor = async (
           caseCaptionExtension,
           caseTitle,
           docketNumberWithSuffix,
+          nameOfClerk: name,
+          titleOfClerk: title,
           trialInfo,
         },
       });
@@ -89,6 +99,8 @@ export const generateNoticeOfTrialIssuedInteractor = async (
           caseCaptionExtension,
           caseTitle,
           docketNumberWithSuffix,
+          nameOfClerk: name,
+          titleOfClerk: title,
           trialInfo,
         },
       });

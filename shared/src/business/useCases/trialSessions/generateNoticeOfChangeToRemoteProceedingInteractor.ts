@@ -50,6 +50,14 @@ export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
     joinPhoneNumber: formatPhoneNumber(trialSessionInformation.joinPhoneNumber),
   };
 
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+    });
+
   const caseDetail = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -68,6 +76,8 @@ export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
+        nameOfClerk: name,
+        titleOfClerk: title,
         trialInfo,
       },
     });

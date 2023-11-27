@@ -7,7 +7,13 @@ export const NoticeOfTrialIssued = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
+  nameOfClerk,
+  titleOfClerk,
   trialInfo,
+}: {
+  nameOfClerk: string;
+  titleOfClerk: string;
+  [key: string]: any;
 }) => {
   return (
     <div id="notice-of-trial-pdf">
@@ -82,7 +88,10 @@ export const NoticeOfTrialIssued = ({
           result in dismissal of the case and entry of decision against you.
         </p>
 
-        <ClerkOfTheCourtSignature />
+        <ClerkOfTheCourtSignature
+          nameOfClerk={nameOfClerk}
+          titleOfClerk={titleOfClerk}
+        />
       </div>
     </div>
   );
