@@ -34,6 +34,7 @@ export const DashboardJudge = connect(
             </Tab>
 
             <Tab
+              data-testid="tab-case-worksheets"
               tabName="caseWorksheets"
               title={`Submitted/CAV (${caseWorksheetsHelper.caseWorksheetsFormatted.length})`}
             >
