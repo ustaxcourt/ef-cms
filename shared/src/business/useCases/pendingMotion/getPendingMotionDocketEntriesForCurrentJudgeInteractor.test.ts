@@ -11,7 +11,7 @@ jest.mock('@shared/business/utilities/DateHandler', () => {
   return {
     ...originalModule,
     prepareDateFromString: jest.fn(() => ({
-      toISOString: jest.fn(() => '2023-11-23T00:00:00.000Z'),
+      toISO: jest.fn(() => '2023-11-23T00:00:00.000Z'),
     })),
   };
 });
