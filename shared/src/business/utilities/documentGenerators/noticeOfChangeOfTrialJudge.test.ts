@@ -17,6 +17,8 @@ describe('noticeOfChangeOfTrialJudge', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Jerad Mayer',
           docketNumberWithSuffix: '123-45S',
+          nameOfClerk: 'Stephanie A. Servoss',
+          titleOfClerk: 'Clerk of the Court',
           trialInfo: {
             caseProcedureType: PROCEDURE_TYPES.SMALL,
             chambersPhoneNumber: '1-721-740-9885 x4239',

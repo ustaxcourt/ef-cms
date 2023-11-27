@@ -13,6 +13,8 @@ describe('noticeOfChangeToInPersonProceeding', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Jerad Mayer',
           docketNumberWithSuffix: '123-45S',
+          nameOfClerk: 'Stephanie A. Servoss',
+          titleOfClerk: 'Clerk of the Court',
           trialInfo: {
             address1: 'Some Street',
             address2: 'another street',

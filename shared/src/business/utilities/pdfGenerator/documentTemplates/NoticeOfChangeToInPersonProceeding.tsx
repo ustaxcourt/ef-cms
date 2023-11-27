@@ -1,5 +1,6 @@
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
+import { FormattedTrialInfo } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
 
@@ -7,7 +8,16 @@ export const NoticeOfChangeToInPersonProceeding = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
+  nameOfClerk,
+  titleOfClerk,
   trialInfo,
+}: {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  nameOfClerk: string;
+  titleOfClerk: string;
+  trialInfo: FormattedTrialInfo; // confirm
 }) => {
   return (
     <div id="notice-of-change-to-in-person-proceeding-pdf">
@@ -73,7 +83,10 @@ export const NoticeOfChangeToInPersonProceeding = ({
           and effect.
         </p>
 
-        <ClerkOfTheCourtSignature />
+        <ClerkOfTheCourtSignature
+          nameOfClerk={nameOfClerk}
+          titleOfClerk={titleOfClerk}
+        />
       </div>
     </div>
   );
