@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const DatePrintedFooter = ({ datePrinted }) => {
+export const DatePrintedFooter = ({ datePrinted }: { datePrinted: string }) => {
   return (
     <div
       className="date-printed-footer"
