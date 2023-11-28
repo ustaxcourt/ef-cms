@@ -145,9 +145,8 @@ const getDynamoClient = ({ useMasterRegion = false } = {}): DynamoDBClient => {
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
     dynamoCache[type] = new DynamoDBClient({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
+      endpoint:
+        environment.stage === 'local' ? 'http://localhost:8000' : undefined,
       maxAttempts: 3,
       region: useMasterRegion ? environment.masterRegion : environment.region,
     });
