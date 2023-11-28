@@ -24,13 +24,13 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
     contentHtml,
     docketNumber,
     documentTitle,
-    signatureText,
+    eventCode,
   }: {
     contentHtml: string;
     addedDocketNumbers: string[];
     docketNumber: string;
     documentTitle: string;
-    signatureText: string;
+    eventCode: string;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -49,6 +49,22 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
   const { docketNumberWithSuffix } = caseDetail;
 
+  const isNoticeEvent = eventCode === 'NOT'; // todo: use a constant
+  let nameOfClerk = '';
+  let titleOfClerk = '';
+
+  if (isNoticeEvent) {
+    const { name, title } = await applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue({
+        applicationContext,
+        configurationItemKey:
+          applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+      });
+    nameOfClerk = name;
+    titleOfClerk = title;
+  }
+
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
@@ -56,9 +72,10 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
+      nameOfClerk,
       orderContent: contentHtml,
       orderTitle: documentTitle,
-      signatureText,
+      titleOfClerk,
     },
   });
 
