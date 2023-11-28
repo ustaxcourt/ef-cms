@@ -18,7 +18,7 @@ export const updateDocketEntryWorksheetInteractor = async (
 ): Promise<RawDocketEntryWorksheet> => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_WORKSHEET)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.DOCKET_ENTRY_WORKSHEET)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
