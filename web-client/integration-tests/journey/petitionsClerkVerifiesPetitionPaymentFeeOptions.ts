@@ -1,7 +1,7 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
-import { PetitionIncomplete } from '../../../shared/src/business/entities/cases/PetitionIncomplete';
+import { PetitionIncomplete } from '../../../shared/src/business/entities/cases/CaseInternal';
 
 export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
   cerebralTest,
