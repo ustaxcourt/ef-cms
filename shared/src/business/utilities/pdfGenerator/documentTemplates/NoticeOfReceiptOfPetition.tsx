@@ -55,9 +55,22 @@ export const NoticeOfReceiptOfPetition = ({
   caseTitle,
   contact,
   docketNumberWithSuffix,
+  nameOfClerk,
   preferredTrialCity,
   receivedAtFormatted,
   servedDate,
+  titleOfClerk,
+}: {
+  accessCode?: string;
+  caseCaptionExtension: string;
+  caseTitle: string;
+  contact: any; // get proper type
+  docketNumberWithSuffix: string;
+  nameOfClerk: string;
+  preferredTrialCity: string;
+  receivedAtFormatted: string;
+  servedDate: string;
+  titleOfClerk: string;
 }) => {
   return (
     <div id="document-notice-of-receipt">
@@ -144,9 +157,9 @@ export const NoticeOfReceiptOfPetition = ({
       </div>
 
       <div className="court-stamp">
-        Stephanie A. Servoss
+        {nameOfClerk}
         <br />
-        Clerk of the Court
+        {titleOfClerk}
       </div>
 
       <div id="address-label-cover-sheet">
