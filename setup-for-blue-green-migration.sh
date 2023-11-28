@@ -4,6 +4,8 @@
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
+FORCE_MIGRATION=$1
+
 set -e
 ./check-env-variables.sh \
   "ENV" \
@@ -22,7 +24,7 @@ source ./scripts/helpers/opensearch-domain-exists.sh
 node web-api/is-migration-needed.js
 SKIP_MIGRATION="$?"
 
-if [[ "$SKIP_MIGRATION" == "1" ]]; then
+if [[ "${SKIP_MIGRATION}" == "1" ]] && [[ $FORCE_MIGRATION != "--force" ]]; then
   exit 0
 fi
 
