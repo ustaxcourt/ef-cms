@@ -143,7 +143,7 @@ export const PetitionersAndCounsel = connect(
                                     });
                                   }}
                                 >
-                                  View!!!
+                                  View
                                 </Button>
                               )}
                             </span>
