@@ -58,7 +58,9 @@ export const PendingMotion = connect(
             {pendingMotionsHelper.formattedPendingMotions.map(motion => {
               return (
                 <React.Fragment key={`info-${motion.docketNumber}`}>
-                  <tr>
+                  <tr
+                    data-testid={`pending-motion-row-${motion.docketEntryId}`}
+                  >
                     <td className="consolidated-case-column">
                       <ConsolidatedCaseIcon
                         consolidatedIconTooltipText={
@@ -98,7 +100,9 @@ export const PendingMotion = connect(
                       </Button>
                     </td>
                   </tr>
-                  <tr>
+                  <tr
+                    data-testid={`pending-motion-row-${motion.docketEntryId}-primary-issue`}
+                  >
                     <td colSpan={3}></td>
                     <td colSpan={7}>
                       <span className="text-semibold margin-right-1">
