@@ -48,7 +48,7 @@ export const AddEditDocketEntryWorksheetModal = connect(
           defaultValue={form.finalBriefDueDate}
           errorText={validationErrors.finalBriefDueDate}
           formGroupClassNames={'width-half'}
-          id="final-brief-due-date"
+          id={`final-brief-due-date-${form.docketEntryId}`}
           label="Final brief due date"
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
@@ -71,7 +71,7 @@ export const AddEditDocketEntryWorksheetModal = connect(
           <select
             aria-labelledby="status-of-matter-label"
             className="usa-select"
-            id="status-of-matter"
+            id={`status-of-matter-${form.docketEntryId}`}
             name="statusOfMatter"
             value={form.statusOfMatter}
             onChange={e => {
@@ -97,7 +97,7 @@ export const AddEditDocketEntryWorksheetModal = connect(
           <label
             className="usa-label"
             htmlFor="primary-issue"
-            id="primary-issue-label"
+            id={`primary-issue-label-${form.docketEntryId}`}
           >
             Primary issue
           </label>
