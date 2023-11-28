@@ -1,6 +1,10 @@
+import { GettingReadyForTrialChecklist } from '@shared/business/utilities/pdfGenerator/documentTemplates/GettingReadyForTrialChecklist';
+import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
+import { StandingPretrialOrderForSmallCase } from '@shared/business/utilities/pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase';
 import { combineTwoPdfs } from './combineTwoPdfs';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const standingPretrialOrderForSmallCase = async ({
   applicationContext,
@@ -9,32 +13,29 @@ export const standingPretrialOrderForSmallCase = async ({
   const { caseCaptionExtension, caseTitle, docketNumberWithSuffix, trialInfo } =
     data;
 
-  const reactStandingPretrialOrderForSmallCaseTemplate = reactTemplateGenerator(
-    {
-      componentName: 'StandingPretrialOrderForSmallCase',
-      data: {
+  const reactStandingPretrialOrderForSmallCaseTemplate =
+    ReactDOM.renderToString(
+      React.createElement(StandingPretrialOrderForSmallCase, {
         options: {
           caseCaptionExtension,
           caseTitle,
           docketNumberWithSuffix,
         },
         trialInfo,
-      },
-    },
-  );
+      }),
+    );
 
   const pdfContentHtmlWithHeader = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactStandingPretrialOrderForSmallCaseTemplate,
   });
 
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
+  const headerHtml = ReactDOM.renderToString(
+    React.createElement(PageMetaHeaderDocket, {
       docketNumber: docketNumberWithSuffix,
       useCenturySchoolbookFont: true,
-    },
-  });
+    }),
+  );
 
   const pdfWithHeader = await applicationContext
     .getUseCases()
@@ -45,17 +46,16 @@ export const standingPretrialOrderForSmallCase = async ({
       headerHtml,
     });
 
-  const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
-    componentName: 'GettingReadyForTrialChecklist',
-    data: {
+  const reactGettingReadyForTrialChecklistTemplate = ReactDOM.renderToString(
+    React.createElement(GettingReadyForTrialChecklist, {
       options: {
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
       },
       trialInfo,
-    },
-  });
+    }),
+  );
 
   const pdfContentHtmlWithoutHeader = await generateHTMLTemplateForPDF({
     applicationContext,

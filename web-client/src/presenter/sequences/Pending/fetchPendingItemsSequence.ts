@@ -5,4 +5,4 @@ import { showProgressSequenceDecorator } from '../../utilities/showProgressSeque
 export const fetchPendingItemsSequence = showProgressSequenceDecorator([
   fetchPendingItemsAction,
   setPendingItemsAction,
-]);
+]) as unknown as () => void;

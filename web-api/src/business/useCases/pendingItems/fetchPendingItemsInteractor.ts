@@ -1,22 +1,41 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { UNSERVABLE_EVENT_CODES } from '../../entities/EntityConstants';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-/**
- * fetchPendingItemsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.judge the optional judge filter
- * @param {number} providers.page the optional page number
- * @returns {Array} the pending items found
- */
+
+export const pendingItemCaseSource = [
+  'associatedJudge',
+  'caseCaption',
+  'docketNumber',
+  'docketNumberSuffix',
+  'status',
+  'leadDocketNumber',
+  'trialDate',
+  'trialLocation',
+  'docketNumberWithSuffix',
+] as const;
+
+export const pendingItemDocketEntrySource = [
+  'docketEntryId',
+  'documentType',
+  'documentTitle',
+  'receivedAt',
+] as const;
+
+export type PendingItem = Pick<
+  RawCase,
+  (typeof pendingItemCaseSource)[number]
+> &
+  Pick<RawDocketEntry, (typeof pendingItemDocketEntrySource)[number]>;
+
 export const fetchPendingItemsInteractor = async (
   applicationContext: IApplicationContext,
   { judge, page }: { judge: string; page: number },
-) => {
+): Promise<{
+  foundDocuments: PendingItem[];
+  total: number;
+}> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
@@ -32,6 +51,5 @@ export const fetchPendingItemsInteractor = async (
     applicationContext,
     judge,
     page,
-    unservableEventCodes: UNSERVABLE_EVENT_CODES,
   });
 };

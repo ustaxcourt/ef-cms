@@ -1,5 +1,8 @@
+import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
+import { NoticeOfTrialIssuedInPerson } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfTrialIssuedInPerson';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const noticeOfTrialIssuedInPerson = async ({
   applicationContext,
@@ -7,22 +10,20 @@ export const noticeOfTrialIssuedInPerson = async ({
 }) => {
   const { docketNumberWithSuffix } = data;
 
-  const noticeOfTrialIssuedInPersonTemplate = reactTemplateGenerator({
-    componentName: 'NoticeOfTrialIssuedInPerson',
-    data,
-  });
+  const noticeOfTrialIssuedInPersonTemplate = ReactDOM.renderToString(
+    React.createElement(NoticeOfTrialIssuedInPerson, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: noticeOfTrialIssuedInPersonTemplate,
   });
 
-  const footerHtml = reactTemplateGenerator({
-    componentName: 'DateServedFooter',
-    data: {
+  const footerHtml = ReactDOM.renderToString(
+    React.createElement(DateServedFooter, {
       dateServed: applicationContext.getUtilities().formatNow('MMDDYY'),
-    },
-  });
+    }),
+  );
 
   const pdf = await applicationContext
     .getUseCases()
