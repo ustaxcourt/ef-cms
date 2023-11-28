@@ -801,7 +801,7 @@
         - "Next friend for a legally incompetent person (without a guardian, conservator, or other like fiduciary)"
         - "Next friend for a minor (without a guardian, conservator, or other like fiduciary)"
         - "Partnership (as the Tax Matters Partner)"
-        - "Partnership (as a partnership representative under the BBA regime)"
+        - "Partnership (as a partnership representative under BBA)"
         - "Partnership (as a partner other than Tax Matters Partner)"
         - "Petitioner"
         - "Petitioner & deceased spouse"
