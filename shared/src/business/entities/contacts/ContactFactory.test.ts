@@ -5,7 +5,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternal } from '../cases/CaseExternal';
+import { CaseExternal } from '../cases/IncompleteEditElectronicPetition';
 import { ContactFactory } from './ContactFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 

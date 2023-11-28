@@ -1,5 +1,5 @@
 import { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } from '../EntityConstants';
-import { CaseExternal } from './CaseExternal';
+import { CaseExternal } from './IncompleteEditElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {

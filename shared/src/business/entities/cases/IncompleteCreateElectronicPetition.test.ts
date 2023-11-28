@@ -4,7 +4,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternalIncomplete } from './IncompleteElectronicPetition';
+import { CaseExternalIncomplete } from './IncompleteCreateElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternalIncomplete entity', () => {
