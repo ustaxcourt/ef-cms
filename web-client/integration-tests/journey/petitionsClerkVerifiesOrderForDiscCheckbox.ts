@@ -1,5 +1,5 @@
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { PetitionIncomplete } from '../../../shared/src/business/entities/cases/PetitionIncomplete';
+import { PetitionIncomplete } from '../../../shared/src/business/entities/cases/CaseInternal';
 
 export const petitionsClerkVerifiesOrderForDiscCheckbox = (
   cerebralTest,

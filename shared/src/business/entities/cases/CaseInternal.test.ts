@@ -7,7 +7,7 @@ import {
   ROLES,
 } from '../EntityConstants';
 import { Correspondence } from '../Correspondence';
-import { PetitionIncomplete } from './PetitionIncomplete';
+import { PetitionIncomplete } from './CaseInternal';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('petitionIncomplete entity', () => {

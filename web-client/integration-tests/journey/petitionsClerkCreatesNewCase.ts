@@ -5,7 +5,7 @@ import {
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { PetitionIncomplete } from '../../../shared/src/business/entities/cases/PetitionIncomplete';
+import { PetitionIncomplete } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { fakeFile } from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (
