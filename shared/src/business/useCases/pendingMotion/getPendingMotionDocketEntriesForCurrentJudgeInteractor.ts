@@ -25,11 +25,11 @@ export type DocketEntryWithWorksheet = FormattedPendingMotionDocketEntry & {
 
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
   applicationContext: IApplicationContext,
-  params: { judges: string[] },
+  params: { judge: string },
 ): Promise<{
   docketEntries: DocketEntryWithWorksheet[];
 }> => {
-  const { judges } = params;
+  const { judge } = params;
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
@@ -37,7 +37,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 
   const docketNumbers = await getDocketNumbersOfCasesWithStatusType(
     applicationContext,
-    judges,
+    judge,
   );
 
   const allCasesByJudge = await Promise.all(
@@ -55,7 +55,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
         aCase.docketEntries as RawDocketEntry[]
       )
         .map(docketEntry => {
-          const currentDate = prepareDateFromString().toISO();
+          const currentDate = prepareDateFromString().toISO()!;
           const dayDifference = calculateDifferenceInDays(
             currentDate,
             docketEntry.createdAt,
@@ -91,7 +91,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 
 async function getDocketNumbersOfCasesWithStatusType(
   applicationContext: IApplicationContext,
-  judges: string[],
+  judge: string,
 ): Promise<string[]> {
   return (
     await applicationContext
@@ -99,7 +99,7 @@ async function getDocketNumbersOfCasesWithStatusType(
       .getDocketNumbersByStatusAndByJudge({
         applicationContext,
         params: {
-          judges,
+          judges: [judge],
         },
       })
   ).map(c => c.docketNumber);
