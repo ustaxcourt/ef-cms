@@ -27,14 +27,16 @@ export const PendingMotion = connect(
           Showing motions pending for more than 180 days. To view all, run the{' '}
           <Button
             link
+            overrideMargin="margin-0"
             onClick={() =>
               navigateToPathSequence({
                 path: '/reports/pending-report',
               })
             }
           >
-            Pending Report.
+            Pending Report
           </Button>
+          .
         </div>
         <div className="float-right margin-bottom-2 text-semibold">
           Count: {pendingMotionsHelper.formattedPendingMotions.length}
