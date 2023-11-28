@@ -4,17 +4,17 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * removePdfFromDocketEntryInteractor
- *
+ * removePdfFromDocketEntry
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.docketEntryId the docket entry id for the file to be removed
  * @returns {object} the updated case data
  */
-export const removePdfFromDocketEntryInteractor = async (
+export const removePdfFromDocketEntry = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
@@ -56,3 +56,10 @@ export const removePdfFromDocketEntryInteractor = async (
     return new Case(updatedCase, { applicationContext }).toRawObject();
   }
 };
+
+export const removePdfFromDocketEntryInteractor = withLocking(
+  removePdfFromDocketEntry,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
