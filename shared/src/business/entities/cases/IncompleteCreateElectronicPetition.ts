@@ -1,10 +1,11 @@
 import { ContactFactory } from '../contacts/ContactFactory';
+import { ExcludeMethods } from 'types/TEntity';
 import { IncompleteEditElectronicPetition } from './IncompleteEditElectronicPetition';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
-export class CaseExternalIncomplete extends JoiValidationEntity {
+export class IncompleteCreateElectronicPetition extends JoiValidationEntity {
   public businessType: string;
   public caseType: string;
   public countryType: string;
@@ -16,7 +17,7 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
   public petitioners: any[];
 
   constructor(rawCase, { applicationContext }) {
-    super('CaseExternalIncomplete');
+    super('IncompleteCreateElectronicPetition');
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
     this.countryType = rawCase.countryType;
@@ -61,7 +62,7 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
   } as const;
 
   getValidationRules() {
-    return CaseExternalIncomplete.VALIDATION_RULES;
+    return IncompleteCreateElectronicPetition.VALIDATION_RULES;
   }
 
   getContactPrimary() {
@@ -73,4 +74,5 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
   }
 }
 
-export type RawCaseExternalIncomplete = ExcludeMethods<CaseExternalIncomplete>;
+export type RawIncompleteCreateElectronicPetition =
+  ExcludeMethods<IncompleteCreateElectronicPetition>;

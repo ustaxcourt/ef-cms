@@ -1,11 +1,11 @@
 import { Case } from '../entities/cases/Case';
-import { CaseExternalIncomplete } from '../entities/cases/IncompleteCreateElectronicPetition';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
+import { IncompleteCreateElectronicPetition } from '../entities/cases/IncompleteCreateElectronicPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -84,9 +84,12 @@ export const createCaseInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-  const petitionEntity = new CaseExternalIncomplete(petitionMetadata, {
-    applicationContext,
-  }).validate();
+  const petitionEntity = new IncompleteCreateElectronicPetition(
+    petitionMetadata,
+    {
+      applicationContext,
+    },
+  ).validate();
 
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({
