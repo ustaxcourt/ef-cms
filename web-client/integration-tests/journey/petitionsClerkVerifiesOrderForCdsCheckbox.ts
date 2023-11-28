@@ -1,4 +1,4 @@
-import { CaseInternal } from '../../../shared/src/business/entities/cases/IncompletePaperCase';
+import { IncompletePaperCase } from '../../../shared/src/business/entities/cases/IncompletePaperCase';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkVerifiesOrderForCdsCheckbox = (
@@ -39,7 +39,9 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = (
 
     expect(
       cerebralTest.getState('validationErrors.corporateDisclosureFile'),
-    ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+    ).toEqual(
+      IncompletePaperCase.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
+    );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderForCds',

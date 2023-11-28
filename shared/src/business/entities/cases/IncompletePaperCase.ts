@@ -20,7 +20,7 @@ import joi from 'joi';
  *  attempting to add to the system.
  *
  */
-export class CaseInternal extends JoiValidationEntity {
+export class IncompletePaperCase extends JoiValidationEntity {
   public applicationForWaiverOfFilingFeeFile: object;
   public applicationForWaiverOfFilingFeeFileSize: number;
   public caseCaption: string;
@@ -63,7 +63,7 @@ export class CaseInternal extends JoiValidationEntity {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
-    super('CaseInternal');
+    super('IncompletePaperCase');
 
     this.caseCaption = rawProps.caseCaption;
     this.caseType = rawProps.caseType;
@@ -301,11 +301,11 @@ export class CaseInternal extends JoiValidationEntity {
   };
 
   getValidationRules() {
-    return CaseInternal.VALIDATION_RULES;
+    return IncompletePaperCase.VALIDATION_RULES;
   }
 
   getErrorToMessageMap() {
-    return CaseInternal.VALIDATION_ERROR_MESSAGES;
+    return IncompletePaperCase.VALIDATION_ERROR_MESSAGES;
   }
 
   getValidationErrors(): {} | null {

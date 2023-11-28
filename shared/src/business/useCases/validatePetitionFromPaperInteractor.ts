@@ -1,4 +1,4 @@
-import { CaseInternal } from '../entities/cases/IncompletePaperCase';
+import { IncompletePaperCase } from '../entities/cases/IncompletePaperCase';
 
 /**
  * validatePetitionFromPaper
@@ -12,7 +12,7 @@ export const validatePetitionFromPaperInteractor = (
   applicationContext: IApplicationContext,
   { petition }: { petition: any },
 ) => {
-  const errors = new CaseInternal(petition, {
+  const errors = new IncompletePaperCase(petition, {
     applicationContext,
   }).getFormattedValidationErrors();
   return errors || null;

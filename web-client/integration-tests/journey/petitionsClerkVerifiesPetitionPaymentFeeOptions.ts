@@ -1,6 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { CaseInternal } from '../../../shared/src/business/entities/cases/IncompletePaperCase';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { IncompletePaperCase } from '../../../shared/src/business/entities/cases/IncompletePaperCase';
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
@@ -79,7 +79,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
       applicationForWaiverOfFilingFeeFile:
-        CaseInternal.VALIDATION_ERROR_MESSAGES
+        IncompletePaperCase.VALIDATION_ERROR_MESSAGES
           .applicationForWaiverOfFilingFeeFile,
       petitionPaymentWaivedDate:
         Case.VALIDATION_ERROR_MESSAGES.petitionPaymentWaivedDate,
