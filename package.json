@@ -40,7 +40,7 @@
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1506.0",
     "axios": "^1.6.2",
-    "broadcast-channel": "^6.0.0",
+    "broadcast-channel": "^7.0.0",
     "canvas": "^2.11.2",
     "cerebral": "5.2.1",
     "classnames": "^2.3.2",
