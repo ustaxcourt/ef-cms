@@ -1,4 +1,8 @@
 import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
+import {
+  PreviousTerm,
+  TrialLocationData,
+} from '@shared/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { TrialSessionPlanningReport } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialSessionPlanningReport';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
@@ -8,7 +12,14 @@ import ReactDOM from 'react-dom/server';
 export const trialSessionPlanningReport = async ({
   applicationContext,
   data,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    locationData: TrialLocationData[];
+    previousTerms: PreviousTerm[];
+    term: string;
+  };
+}): Promise<Buffer> => {
   const { locationData, previousTerms, term } = data;
 
   const trialSessionPlanningReportTemplate = ReactDOM.renderToString(

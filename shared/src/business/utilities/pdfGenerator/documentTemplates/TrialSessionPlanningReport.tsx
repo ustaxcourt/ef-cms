@@ -1,17 +1,21 @@
 /* eslint-disable react/no-array-index-key */
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
-import { ReportsHeader } from '../components/ReportsHeader.tsx';
+import {
+  PreviousTerm,
+  TrialLocationData,
+} from '@shared/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
+import { PrimaryHeader } from '../components/PrimaryHeader';
+import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
 
-const getTermHeaders = (termData, idx) => {
+const getTermHeaders = (termData: PreviousTerm, idx: number) => {
   return <th key={`th-${idx}`}>{termData.termDisplay}</th>;
 };
 
-const parseTermData = data =>
+const parseTermData = (data: string[]) =>
   data && data.map((datum, idx) => <div key={`datum-${idx}`}>{datum}</div>);
 
-const getLocationDataFactory = parentIndex =>
-  function getLocationData(termData, idx) {
+const getLocationDataFactory = (parentIndex: number) =>
+  function getLocationData(termData: string[], idx: number) {
     const hasData = Array.isArray(termData) && termData.length > 0;
 
     return (
@@ -26,6 +30,10 @@ export const TrialSessionPlanningReport = ({
   locationData,
   previousTerms,
   term,
+}: {
+  locationData: TrialLocationData[];
+  previousTerms: PreviousTerm[];
+  term: string;
 }) => {
   return (
     <>
@@ -35,7 +43,6 @@ export const TrialSessionPlanningReport = ({
       <table>
         <thead>
           <tr>
-            <th>State</th>
             <th>Location</th>
             <th>All</th>
             <th>Small</th>
@@ -48,7 +55,6 @@ export const TrialSessionPlanningReport = ({
             locationData.map((trialLocation, idx) => {
               return (
                 <tr key={`row-${idx}`}>
-                  <td>{trialLocation.stateAbbreviation}</td>
                   <td>{trialLocation.trialCityState}</td>
                   <td>{trialLocation.allCaseCount}</td>
                   <td>{trialLocation.smallCaseCount}</td>
