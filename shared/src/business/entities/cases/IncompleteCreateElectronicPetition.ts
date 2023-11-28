@@ -1,5 +1,5 @@
-import { CaseExternal } from './IncompleteEditElectronicPetition';
 import { ContactFactory } from '../contacts/ContactFactory';
+import { IncompleteEditElectronicPetition } from './IncompleteEditElectronicPetition';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
@@ -42,18 +42,22 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    businessType: CaseExternal.VALIDATION_RULES.businessType,
-    caseType: CaseExternal.VALIDATION_RULES.caseType,
-    countryType: CaseExternal.VALIDATION_RULES.countryType,
-    filingType: CaseExternal.VALIDATION_RULES.filingType,
-    hasIrsNotice: CaseExternal.VALIDATION_RULES.hasIrsNotice,
-    partyType: CaseExternal.VALIDATION_RULES.partyType,
+    businessType:
+      IncompleteEditElectronicPetition.VALIDATION_RULES.businessType,
+    caseType: IncompleteEditElectronicPetition.VALIDATION_RULES.caseType,
+    countryType: IncompleteEditElectronicPetition.VALIDATION_RULES.countryType,
+    filingType: IncompleteEditElectronicPetition.VALIDATION_RULES.filingType,
+    hasIrsNotice:
+      IncompleteEditElectronicPetition.VALIDATION_RULES.hasIrsNotice,
+    partyType: IncompleteEditElectronicPetition.VALIDATION_RULES.partyType,
     petitioners: joi
       .array()
       .description('List of Contact Entities for the case.')
       .optional(),
-    preferredTrialCity: CaseExternal.VALIDATION_RULES.preferredTrialCity,
-    procedureType: CaseExternal.VALIDATION_RULES.procedureType,
+    preferredTrialCity:
+      IncompleteEditElectronicPetition.VALIDATION_RULES.preferredTrialCity,
+    procedureType:
+      IncompleteEditElectronicPetition.VALIDATION_RULES.procedureType,
   } as const;
 
   getValidationRules() {

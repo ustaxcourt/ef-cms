@@ -1,10 +1,10 @@
-import { CaseExternal } from '../entities/cases/IncompleteEditElectronicPetition';
+import { IncompleteEditElectronicPetition } from '../entities/cases/IncompleteEditElectronicPetition';
 
 export const validatePetitionInteractor = (
   applicationContext: IApplicationContext,
   { petition }: { petition: any },
 ) => {
-  return new CaseExternal(petition, {
+  return new IncompleteEditElectronicPetition(petition, {
     applicationContext,
   }).getFormattedValidationErrors();
 };

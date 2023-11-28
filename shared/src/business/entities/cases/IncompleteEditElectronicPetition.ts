@@ -11,6 +11,7 @@ import {
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
 import { ContactFactory } from '../contacts/ContactFactory';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
@@ -20,7 +21,7 @@ import joi from 'joi';
  * Represents a Case with required documents that a Petitioner is attempting to
  * add to the system.
  */
-export class CaseExternal extends JoiValidationEntity {
+export class IncompleteEditElectronicPetition extends JoiValidationEntity {
   public businessType: string;
   public caseType: string;
   public corporateDisclosureFile?: object;
@@ -38,7 +39,7 @@ export class CaseExternal extends JoiValidationEntity {
   public stinFileSize?: number;
 
   constructor(rawCase, { applicationContext }) {
-    super('CaseExternal');
+    super('IncompleteEditElectronicPetition');
 
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
@@ -176,7 +177,7 @@ export class CaseExternal extends JoiValidationEntity {
   };
 
   getValidationRules() {
-    return CaseExternal.VALIDATION_RULES;
+    return IncompleteEditElectronicPetition.VALIDATION_RULES;
   }
 
   getContactPrimary() {
@@ -188,4 +189,5 @@ export class CaseExternal extends JoiValidationEntity {
   }
 }
 
-export type RawCaseExternal = ExcludeMethods<CaseExternal>;
+export type RawIncompleteEditElectronicPetition =
+  ExcludeMethods<IncompleteEditElectronicPetition>;

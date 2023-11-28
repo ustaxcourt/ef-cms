@@ -1,16 +1,16 @@
-import { CaseExternal } from './IncompleteEditElectronicPetition';
 import { ContactFactory } from '../contacts/ContactFactory';
+import { IncompleteEditElectronicPetition } from './IncompleteEditElectronicPetition';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
 /**
- * CaseExternalInformationFactory Entity
+ * IncompleteEditElectronicPetitionInformationFactory Entity
  * Represents a Case that a Petitioner is attempting to add to the system via the File a Petition (now Create a Case) wizard.
  * Required fields are based on the user's current step in the wizard.
  */
-export class CaseExternalInformationFactory extends JoiValidationEntity {
+export class IncompleteEditElectronicPetitionInformationFactory extends JoiValidationEntity {
   private static MAX_STEPS = 4;
 
   public businessType: string;
@@ -31,7 +31,7 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
   public wizardStep: number;
 
   constructor(rawCase, { applicationContext }) {
-    super('CaseExternalInformationFactory');
+    super('IncompleteEditElectronicPetitionInformationFactory');
 
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
@@ -72,19 +72,23 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
       '3',
       '4',
     ).required(),
-    ...CaseExternalInformationFactory.wizardStep1(),
-    ...CaseExternalInformationFactory.wizardStep2(),
-    ...CaseExternalInformationFactory.wizardStep3(),
-    ...CaseExternalInformationFactory.wizardStep4(),
+    ...IncompleteEditElectronicPetitionInformationFactory.wizardStep1(),
+    ...IncompleteEditElectronicPetitionInformationFactory.wizardStep2(),
+    ...IncompleteEditElectronicPetitionInformationFactory.wizardStep3(),
+    ...IncompleteEditElectronicPetitionInformationFactory.wizardStep4(),
   };
 
   getValidationRules() {
-    return CaseExternalInformationFactory.VALIDATION_RULES;
+    return IncompleteEditElectronicPetitionInformationFactory.VALIDATION_RULES;
   }
 
   static atWizardStep(stepNum, schemaObj) {
     const stepNumArray: string[] = [];
-    for (let i = +stepNum; i <= CaseExternalInformationFactory.MAX_STEPS; i++) {
+    for (
+      let i = +stepNum;
+      i <= IncompleteEditElectronicPetitionInformationFactory.MAX_STEPS;
+      i++
+    ) {
       stepNumArray.push(`${i}`);
     }
 
@@ -100,38 +104,48 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
   }
 
   static wizardStep1() {
-    return CaseExternalInformationFactory.atWizardStep(1, {
-      stinFile: CaseExternal.VALIDATION_RULES.stinFile,
-      stinFileSize: CaseExternal.VALIDATION_RULES.stinFileSize,
+    return IncompleteEditElectronicPetitionInformationFactory.atWizardStep(1, {
+      stinFile: IncompleteEditElectronicPetition.VALIDATION_RULES.stinFile,
+      stinFileSize:
+        IncompleteEditElectronicPetition.VALIDATION_RULES.stinFileSize,
     });
   }
 
   static wizardStep2() {
-    return CaseExternalInformationFactory.atWizardStep(2, {
-      caseType: CaseExternal.VALIDATION_RULES.caseType,
-      hasIrsNotice: CaseExternal.VALIDATION_RULES.hasIrsNotice,
-      petitionFile: CaseExternal.VALIDATION_RULES.petitionFile,
-      petitionFileSize: CaseExternal.VALIDATION_RULES.petitionFileSize,
+    return IncompleteEditElectronicPetitionInformationFactory.atWizardStep(2, {
+      caseType: IncompleteEditElectronicPetition.VALIDATION_RULES.caseType,
+      hasIrsNotice:
+        IncompleteEditElectronicPetition.VALIDATION_RULES.hasIrsNotice,
+      petitionFile:
+        IncompleteEditElectronicPetition.VALIDATION_RULES.petitionFile,
+      petitionFileSize:
+        IncompleteEditElectronicPetition.VALIDATION_RULES.petitionFileSize,
     });
   }
 
   static wizardStep3() {
-    return CaseExternalInformationFactory.atWizardStep(3, {
-      businessType: CaseExternal.VALIDATION_RULES.businessType,
+    return IncompleteEditElectronicPetitionInformationFactory.atWizardStep(3, {
+      businessType:
+        IncompleteEditElectronicPetition.VALIDATION_RULES.businessType,
       corporateDisclosureFile:
-        CaseExternal.VALIDATION_RULES.corporateDisclosureFile,
+        IncompleteEditElectronicPetition.VALIDATION_RULES
+          .corporateDisclosureFile,
       corporateDisclosureFileSize:
-        CaseExternal.VALIDATION_RULES.corporateDisclosureFileSize,
-      countryType: CaseExternal.VALIDATION_RULES.countryType,
-      filingType: CaseExternal.VALIDATION_RULES.filingType,
-      partyType: CaseExternal.VALIDATION_RULES.partyType,
+        IncompleteEditElectronicPetition.VALIDATION_RULES
+          .corporateDisclosureFileSize,
+      countryType:
+        IncompleteEditElectronicPetition.VALIDATION_RULES.countryType,
+      filingType: IncompleteEditElectronicPetition.VALIDATION_RULES.filingType,
+      partyType: IncompleteEditElectronicPetition.VALIDATION_RULES.partyType,
     });
   }
 
   static wizardStep4() {
-    return CaseExternalInformationFactory.atWizardStep(4, {
-      preferredTrialCity: CaseExternal.VALIDATION_RULES.preferredTrialCity,
-      procedureType: CaseExternal.VALIDATION_RULES.procedureType,
+    return IncompleteEditElectronicPetitionInformationFactory.atWizardStep(4, {
+      preferredTrialCity:
+        IncompleteEditElectronicPetition.VALIDATION_RULES.preferredTrialCity,
+      procedureType:
+        IncompleteEditElectronicPetition.VALIDATION_RULES.procedureType,
     });
   }
 }
