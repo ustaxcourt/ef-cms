@@ -97,7 +97,7 @@ function generateRandomDate() {
   const formattedMonth = month < 10 ? `0${month}` : `${month}`;
   const formattedDay = day < 10 ? `0${day}` : `${day}`;
   const lastTwoDigits = year % 100;
-  const shortFormatYear = year === 2007 ? `0${lastTwoDigits}` : lastTwoDigits;
+  const shortFormatYear = lastTwoDigits.toString().padStart(2, '0');
 
   return {
     longFormat: `${formattedMonth}/${formattedDay}/${year}`,
