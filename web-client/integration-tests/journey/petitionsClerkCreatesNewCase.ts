@@ -5,7 +5,7 @@ import {
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { IncompletePaperCase } from '../../../shared/src/business/entities/cases/IncompletePaperCase';
+import { IncompletePaperCase } from '../../../shared/src/business/entities/cases/IncompletePaperPetition';
 import { fakeFile } from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (

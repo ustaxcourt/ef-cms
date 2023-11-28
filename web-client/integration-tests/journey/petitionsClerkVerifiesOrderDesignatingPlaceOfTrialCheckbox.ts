@@ -1,4 +1,4 @@
-import { IncompletePaperCase } from '../../../shared/src/business/entities/cases/IncompletePaperCase';
+import { IncompletePaperCase } from '../../../shared/src/business/entities/cases/IncompletePaperPetition';
 
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
   cerebralTest,

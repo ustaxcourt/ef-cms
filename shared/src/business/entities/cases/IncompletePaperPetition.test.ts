@@ -7,7 +7,7 @@ import {
   ROLES,
 } from '../EntityConstants';
 import { Correspondence } from '../Correspondence';
-import { IncompletePaperCase } from './IncompletePaperCase';
+import { IncompletePaperCase } from './IncompletePaperPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('IncompletePaperCase entity', () => {

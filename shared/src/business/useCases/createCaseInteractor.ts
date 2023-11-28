@@ -1,5 +1,5 @@
 import { Case } from '../entities/cases/Case';
-import { CaseExternalIncomplete } from '../entities/cases/CaseExternalIncomplete';
+import { CaseExternalIncomplete } from '../entities/cases/IncompleteElectronicPetition';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   INITIAL_DOCUMENT_TYPES,

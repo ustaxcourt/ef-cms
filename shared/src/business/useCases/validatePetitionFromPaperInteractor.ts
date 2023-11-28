@@ -1,4 +1,4 @@
-import { IncompletePaperCase } from '../entities/cases/IncompletePaperCase';
+import { IncompletePaperCase } from '../entities/cases/IncompletePaperPetition';
 
 /**
  * validatePetitionFromPaper

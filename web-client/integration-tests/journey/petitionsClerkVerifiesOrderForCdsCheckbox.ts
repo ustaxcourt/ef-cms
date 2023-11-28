@@ -1,4 +1,4 @@
-import { IncompletePaperCase } from '../../../shared/src/business/entities/cases/IncompletePaperCase';
+import { IncompletePaperCase } from '../../../shared/src/business/entities/cases/IncompletePaperPetition';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkVerifiesOrderForCdsCheckbox = (

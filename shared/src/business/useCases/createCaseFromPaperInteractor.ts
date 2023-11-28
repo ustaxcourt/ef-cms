@@ -1,7 +1,7 @@
 import { Case } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
-import { IncompletePaperCase } from '../entities/cases/IncompletePaperCase';
+import { IncompletePaperCase } from '../entities/cases/IncompletePaperPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
