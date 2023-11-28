@@ -1,17 +1,18 @@
+import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
 import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
-export class CaseWorksheet extends JoiValidationEntity {
-  public docketNumber: string;
+export class DocketEntryWorksheet extends JoiValidationEntity {
+  public docketEntryId: string;
   public finalBriefDueDate?: string;
   public primaryIssue?: string;
   public statusOfMatter?: string;
 
   constructor(rawProps) {
-    super('CaseWorksheet');
+    super('DocketEntryWorksheet');
 
-    this.docketNumber = rawProps.docketNumber;
+    this.docketEntryId = rawProps.docketEntryId;
     this.finalBriefDueDate = rawProps.finalBriefDueDate;
     this.primaryIssue = rawProps.primaryIssue;
     this.statusOfMatter = rawProps.statusOfMatter;
@@ -30,7 +31,7 @@ export class CaseWorksheet extends JoiValidationEntity {
   ];
 
   static VALIDATION_RULES = {
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
+    docketEntryId: DOCKET_ENTRY_VALIDATION_RULE_KEYS.docketEntryId,
     finalBriefDueDate: JoiValidationConstants.DATE.allow('')
       .optional()
       .messages({
@@ -38,15 +39,18 @@ export class CaseWorksheet extends JoiValidationEntity {
       }),
     primaryIssue: JoiValidationConstants.STRING.allow('').optional(),
     statusOfMatter: JoiValidationConstants.STRING.valid(
-      ...CaseWorksheet.STATUS_OF_MATTER_OPTIONS,
+      ...DocketEntryWorksheet.STATUS_OF_MATTER_OPTIONS,
     )
       .allow(null)
       .optional(),
   };
 
   getValidationRules() {
-    return CaseWorksheet.VALIDATION_RULES;
+    return DocketEntryWorksheet.VALIDATION_RULES;
   }
 }
 
-export type RawCaseWorksheet = ExcludeMethods<CaseWorksheet>;
+export type RawDocketEntryWorksheet = Omit<
+  ExcludeMethods<DocketEntryWorksheet>,
+  'entityName'
+>;
