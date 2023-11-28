@@ -57,8 +57,9 @@ if [[ "$EAST_EXISTS" == "1" ]] || [[ "$WEST_EXISTS" == "1" ]]; then
   NUM_WEST_ITEMS=$(aws dynamodb scan --table-name "${NEXT_TABLE}" --region us-west-1 --max-items 1 | jq .Count)
   if [[ "$NUM_EAST_ITEMS" != "0" ]] || [[ "$NUM_WEST_ITEMS" != "0" ]]; then
     ./scripts/dynamo/delete-dynamo-table.sh "$NEXT_TABLE"
+  else
+    echo "warn: the table ${NEXT_TABLE} exists, but it is empty"
   fi
-  echo "warn: the table ${NEXT_TABLE} exists, but it is empty"
 fi
 
 EXISTS=$(check_opensearch_domain_exists "$NEXT_OPENSEARCH_DOMAIN")
@@ -72,6 +73,7 @@ if [[ "$EXISTS" == "1" ]]; then
       sleep 30
       EXISTS=$(check_opensearch_domain_exists "$NEXT_OPENSEARCH_DOMAIN")
     done
+  else
+    echo "warn: the opensearch cluster ${NEXT_OPENSEARCH_DOMAIN} exists, but it is empty"
   fi
-  echo "warn: the opensearch cluster ${NEXT_OPENSEARCH_DOMAIN} exists, but it is empty"
 fi
