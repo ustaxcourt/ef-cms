@@ -1,18 +1,13 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { post } from '../requests';
 
-/**
- * runTrialSessionPlanningReportInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.term the term
- * @param {object} providers.year the year
- * @returns {Promise<*>} the promise of the api call
- */
 export const runTrialSessionPlanningReportInteractor = (
-  applicationContext,
-  { term, year },
-) => {
+  applicationContext: ClientApplicationContext,
+  { term, year }: { term: string; year: string },
+): Promise<{
+  fileId: string;
+  url: string;
+}> => {
   return post({
     applicationContext,
     body: {
