@@ -80,6 +80,10 @@ const goToDashboard = [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
                     ],
+                    [
+                      getPendingMotionDocketEntriesForCurrentJudgeAction,
+                      setPendingMotionDocketEntriesForCurrentJudgeAction,
+                    ],
                   ]),
                   setupCurrentPageAction('DashboardChambers'),
                 ],
