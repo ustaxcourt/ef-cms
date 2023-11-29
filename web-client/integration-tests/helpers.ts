@@ -108,7 +108,9 @@ Object.assign(applicationContext, {
         endpoint: 'http://localhost:8000',
         region: 'us-east-1',
       });
-      dynamoDbCache = DynamoDBDocument.from(dynamoDbClient);
+      dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
+        marshallOptions: { removeUndefinedValues: true },
+      });
     }
 
     return dynamoDbCache;
@@ -151,7 +153,9 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           endpoint: 'http://localhost:8000',
           region: 'us-east-1',
         });
-        dynamoDbCache = DynamoDBDocument.from(dynamoDbClient);
+        dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
+          marshallOptions: { removeUndefinedValues: true },
+        });
       }
 
       return dynamoDbCache;

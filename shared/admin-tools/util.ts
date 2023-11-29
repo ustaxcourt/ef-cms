@@ -11,7 +11,9 @@ export const getVersion = async (): Promise<string> => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
   const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
-  const documentClient = DynamoDBDocument.from(dynamodbClient);
+  const documentClient = DynamoDBDocument.from(dynamodbClient, {
+    marshallOptions: { removeUndefinedValues: true },
+  });
   const result = await documentClient.get({
     Key: {
       pk: 'source-table-version',
