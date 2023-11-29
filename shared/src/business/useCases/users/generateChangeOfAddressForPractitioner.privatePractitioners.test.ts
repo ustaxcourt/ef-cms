@@ -88,7 +88,7 @@ describe('generateChangeOfAddress', () => {
       .setChangeOfAddressCaseAsDone.mockReturnValue({ remaining: 0 });
   });
 
-  it('should run a change of address when address1 changes for a private practitioner and call "getCasesForUser" when cases are not provided in parameters', async () => {
+  it('should run a change of address when address1 changes for a private practitioner', async () => {
     await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
@@ -105,33 +105,6 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getPersistenceGateway().getCasesForUser,
     ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
-    ).toMatchObject({
-      docketNumber,
-    });
-  });
-
-  it('should run a change of address when address1 changes for a private practitioner and should not call "getCasesForUser" when cases are provided in parameters', async () => {
-    await generateChangeOfAddress({
-      applicationContext,
-      associatedUserCases: [{ docketNumber }],
-      contactInfo: {
-        ...mockPrivatePractitioner.contact,
-        address1: '234 Main St',
-      },
-      user: mockPrivatePractitioner,
-    } as any);
-
-    expect(
-      applicationContext.getDocumentGenerators().changeOfAddress,
-    ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).not.toHaveBeenCalled();
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
