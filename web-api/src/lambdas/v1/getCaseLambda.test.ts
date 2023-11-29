@@ -66,12 +66,8 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       .mockResolvedValue(true);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest.fn().mockReturnValue(
-          Promise.resolve({
-            Items: [], // no items with docket number is found
-          }),
-        ),
+      query: jest.fn().mockResolvedValue({
+        Items: [], // no items with docket number is found
       }),
     });
 
@@ -97,12 +93,8 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
 
     // Case is retrieved before determining authorization
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest.fn().mockReturnValue(
-          Promise.resolve({
-            Items: [mockDynamoCaseRecord],
-          }),
-        ),
+      query: jest.fn().mockResolvedValue({
+        Items: [mockDynamoCaseRecord],
       }),
     });
 
@@ -133,12 +125,8 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       .mockResolvedValue(true);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest.fn().mockReturnValue(
-          Promise.resolve({
-            Items: [], // no items with docket number is found
-          }),
-        ),
+      query: jest.fn().mockResolvedValue({
+        Items: [], // no items with docket number is found
       }),
     });
 
@@ -163,11 +151,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       .mockResolvedValue(true);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest
-          .fn()
-          .mockReturnValue(Promise.reject(new Error('test error'))),
-      }),
+      query: jest.fn().mockRejectedValue(new Error('test error')),
     });
 
     const response = await getCaseLambda(REQUEST_EVENT, {
@@ -194,12 +178,8 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
         .mockResolvedValue(isFeatureFlagOn);
 
       applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-        query: jest.fn().mockReturnValue({
-          promise: jest.fn().mockReturnValue(
-            Promise.resolve({
-              Items: [mockDynamoCaseRecord],
-            }),
-          ),
+        query: jest.fn().mockResolvedValue({
+          Items: [mockDynamoCaseRecord],
         }),
       });
 
