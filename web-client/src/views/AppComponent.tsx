@@ -23,7 +23,6 @@ import { ChangePasswordLocal } from './ChangePasswordLocal';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
-import { CreateNewAccountLocal } from './CreateNewAccountLocal';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
@@ -122,7 +121,6 @@ const pages = {
   Contact,
   ContactEdit,
   CourtIssuedDocketEntry,
-  CreateNewAccountLocal,
   CreateOrder,
   CreatePractitionerUser,
   CustomCaseReport,

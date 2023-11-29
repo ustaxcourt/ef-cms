@@ -1,7 +1,9 @@
+import { Get } from 'cerebral';
+import { ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
 export const trialSessionsHelper = (get: Get): any => {
+  const permissions: typeof ROLE_PERMISSIONS = get(state.permissions)!;
   const status = get(state.screenMetadata.trialSessionFilters.status);
   const tab =
     get(state.currentViewMetadata.trialSessions.tab) ||
@@ -27,6 +29,7 @@ export const trialSessionsHelper = (get: Get): any => {
 
   return {
     additionalColumnsShown,
+    showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: isOpenTab,
     showSessionStatus: isAllTab,
     showUnassignedJudgeFilter: isNewTab,

@@ -28,6 +28,7 @@ import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
@@ -71,8 +72,7 @@ import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
-import type { ClientApplicationContext } from '../../web-client/src/applicationContext';
-const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
+const { CognitoIdentityServiceProvider, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -139,28 +139,23 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   return dynamoClientCache[type];
 };
 
-const getDynamoClient = ({ useMasterRegion = false } = {}) => {
+const getDynamoClient = ({ useMasterRegion = false } = {}): DynamoDBClient => {
   // we don't need fallback logic here because the only method we use is describeTable
   // which is used for actually checking if the table in the same region exists.
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDB({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      httpOptions: {
-        connectTimeout: 3000,
-        timeout: 5000,
-      },
-      maxRetries: 3,
+    dynamoCache[type] = new DynamoDBClient({
+      endpoint:
+        environment.stage === 'local' ? 'http://localhost:8000' : undefined,
+      maxAttempts: 3,
       region: useMasterRegion ? environment.masterRegion : environment.region,
     });
   }
   return dynamoCache[type];
 };
 
-let dynamoClientCache = {};
-let dynamoCache = {};
+let dynamoClientCache: Record<string, any> = {};
+let dynamoCache: Record<string, DynamoDBClient> = {};
 let s3Cache;
 let sesCache;
 let sqsCache;
@@ -282,6 +277,13 @@ export const createApplicationContext = (
             }),
             adminUpdateUserAttributes: () => ({
               promise: () => {},
+            }),
+            listUsers: () => ({
+              promise: () => {
+                throw new Error(
+                  'Please use cognito locally by running npm run start:api:cognito-local',
+                );
+              },
             }),
           };
         }
@@ -557,10 +559,6 @@ export const createApplicationContext = (
   };
 };
 
-export type IServerApplicationContext = ReturnType<
+export type ServerApplicationContext = ReturnType<
   typeof createApplicationContext
 >;
-
-export type IMergeContext =
-  | IServerApplicationContext
-  | ClientApplicationContext;

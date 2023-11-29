@@ -1,4 +1,9 @@
 import { DeleteRequest, PutRequest, TDynamoRecord } from './dynamo/dynamoTypes';
+import {
+  DescribeTableCommand,
+  DescribeTableCommandOutput,
+} from '@aws-sdk/client-dynamodb';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { chunk, isEmpty, uniqBy } from 'lodash';
 import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
 
@@ -35,26 +40,34 @@ export const getDeployTableName = ({ applicationContext }) => {
   return `efcms-deploy-${env.stage}`;
 };
 
-export const describeTable = async ({ applicationContext }) => {
+export const describeTable = async ({
+  applicationContext,
+}: {
+  applicationContext: ServerApplicationContext;
+}): Promise<DescribeTableCommandOutput> => {
   const dynamoClient = applicationContext.getDynamoClient();
 
-  const params = {
+  const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
     TableName: getTableName({ applicationContext }),
-  };
+  });
 
-  return await dynamoClient.describeTable(params).promise();
+  return await dynamoClient.send(describeTableCommand);
 };
 
-export const describeDeployTable = async ({ applicationContext }) => {
+export const describeDeployTable = async ({
+  applicationContext,
+}: {
+  applicationContext: ServerApplicationContext;
+}): Promise<DescribeTableCommandOutput> => {
   const dynamoClient = applicationContext.getDynamoClient({
     useMasterRegion: true,
   });
 
-  const params = {
+  const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
     TableName: getDeployTableName({ applicationContext }),
-  };
+  });
 
-  return await dynamoClient.describeTable(params).promise();
+  return await dynamoClient.send(describeTableCommand);
 };
 
 export const put = ({

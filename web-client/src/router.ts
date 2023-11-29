@@ -38,7 +38,7 @@ const BASE_ROUTE = '/';
 route.base(BASE_ROUTE);
 
 // Add this prefix to page titles for all pages that are related to a case
-const getPageTitleDocketPrefix = docketNumber => {
+const getPageTitleDocketPrefix = (docketNumber: string): string => {
   return `Docket ${docketNumber} | `;
 };
 
@@ -857,10 +857,6 @@ const router = {
       }),
     );
 
-    registerRoute('/create-new-account-local', () => {
-      return app.getSequence('goToCreateAccountLocalSequence')();
-    });
-
     registerRoute('/change-password-local', () => {
       return app.getSequence('gotoChangePasswordLocalSequence')();
     });
@@ -1210,7 +1206,7 @@ const router = {
     registerRoute(
       '/add-a-trial-session',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        { app, permissionToCheck: ROLE_PERMISSIONS.CREATE_TRIAL_SESSION },
         () => {
           setPageTitle('Add a trial session');
           return app.getSequence('gotoAddTrialSessionSequence')();

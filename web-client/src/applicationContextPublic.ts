@@ -39,18 +39,22 @@ import {
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
+import { cognitoResendVerificationLinkInteractor } from '../../shared/src/proxies/public/cognitoResendVerificationLinkProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { confirmSignUpLocalInteractor } from '@shared/proxies/auth/confirmSignUpLocalProxy';
 import {
   createISODateString,
   formatDateString,
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
+import { createUserCognitoInteractor } from '../../shared/src/proxies/createUserCognitoProxy';
 import {
   formatDocketEntry,
   sortDocketEntries,
@@ -94,6 +98,9 @@ const ADVANCED_SEARCH_TABS = {
 
 const allUseCases = {
   casePublicSearchInteractor,
+  cognitoResendVerificationLinkInteractor,
+  confirmSignUpLocalInteractor,
+  createUserCognitoInteractor,
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
@@ -159,12 +166,11 @@ const applicationContextPublic = {
   },
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getConstants: () => frozenConstants,
   getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,
-  getEnvironment: () => ({
-    stage: process.env.STAGE || 'local',
-  }),
+  getEnvironment,
   getHttpClient: () => axios,
   getLogger: () => ({
     error: () => {
@@ -218,3 +224,5 @@ const applicationContextPublic = {
 };
 
 export { applicationContextPublic };
+
+export type ClientPublicApplicationContext = typeof applicationContextPublic;
