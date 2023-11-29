@@ -202,6 +202,10 @@ export class User extends JoiValidationEntity {
   getValidationRules() {
     return User.VALIDATION_RULES;
   }
+
+  public setisUpdatingInformation(value: boolean) {
+    this.isUpdatingInformation = value;
+  }
 }
 
 export type RawUser = ExcludeMethods<User>;
