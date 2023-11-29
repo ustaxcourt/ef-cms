@@ -196,6 +196,7 @@ export const CaseInformation = connect(
             />
             <label
               className="usa-checkbox__label"
+              data-testid="order-for-filing-fee"
               htmlFor="order-for-filing-fee"
             >
               Order for Filing Fee
