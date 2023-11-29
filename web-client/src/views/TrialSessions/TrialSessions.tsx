@@ -14,8 +14,7 @@ export const TrialSessions = connect(
     defaultTab: state.screenMetadata.trialSessionFilters.status,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
-    showNewTab: state.screenMetadata.showNewTab,
-    showNewTrialSessions: state.trialSessionsHelper.showNewTrialSession,
+    showNewTrialSession: state.trialSessionsHelper.showNewTrialSession,
   },
   function TrialSessions({
     defaultTab,
