@@ -32,9 +32,6 @@ describe('updateUserContactInformationInteractor', () => {
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockImplementation(() => [{}]);
   });
 
   beforeEach(() => {
@@ -235,17 +232,13 @@ describe('updateUserContactInformationInteractor', () => {
     expect(generateChangeOfAddress).toHaveBeenCalled();
   });
 
-  it('should not call generateChangeOfAddress when there are no associated user cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockImplementation(() => []);
+  it('should clean up DB and send websocket message if "generateChangeOfAddress" returns empty array', async () => {
+    (generateChangeOfAddress as jest.Mock).mockReturnValue([]);
 
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: mockUser.userId,
     } as any);
-
-    expect(generateChangeOfAddress).not.toHaveBeenCalled();
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
@@ -265,6 +258,27 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       contact: contactInfo,
     });
+  });
+
+  it('should not clean up DB and send websocket message if "generateChangeOfAddress" returns undefined', async () => {
+    (generateChangeOfAddress as jest.Mock).mockReturnValue(undefined);
+
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      userId: mockUser.userId,
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls.length,
+    ).toEqual(1);
+
+    const notificatsionCalls =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls;
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.action,
+    ).not.toEqual('user_contact_full_update_complete');
   });
 
   it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
