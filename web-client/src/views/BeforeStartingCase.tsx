@@ -60,7 +60,7 @@ export const BeforeStartingCase = connect(
                       last date to file.
                     </strong>{' '}
                     Petitions received after this date may be untimely and your
-                    case may be dismissed for lack of jurisdiction. &nbsp;
+                    case may be dismissed for lack of jurisdiction.
                   </p>
                 </AccordionItem>
               </Accordion>
@@ -192,7 +192,11 @@ export const BeforeStartingCase = connect(
                   <p>
                     To file a joint Petition with your spouse, you must have
                     their consent. Both you and your spouse should{' '}
-                    <a href="https://ustaxcourt.gov/dawson_faqs_case_management.html#CASE7">
+                    <a
+                      href="https://ustaxcourt.gov/dawson_faqs_case_management.html#CASE7"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
                       sign the Petition
                     </a>
                     . If you do not have your spouse’s consent, select “Myself”
@@ -202,7 +206,11 @@ export const BeforeStartingCase = connect(
                   <p>
                     To file a case on behalf of another taxpayer, you must be
                     authorized to practice before this Court as provided by the{' '}
-                    <a href="https://ustaxcourt.gov/rules.html">
+                    <a
+                      href="https://ustaxcourt.gov/rules.html"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
                       Tax Court Rules of Practice and Procedure
                     </a>{' '}
                     (Rule 60). Enrolled agents, certified public accountants,
