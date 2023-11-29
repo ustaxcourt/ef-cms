@@ -1,23 +1,14 @@
-import { AuthenticationResult } from '../../support/login-types';
 import { isValidRequest } from '../support/helpers';
-import { login } from '../support/pages/login';
+import { loginAsTestAdmissionsClerk } from '../../helpers/auth/login-as-helpers';
 
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Document QC UI Smoketests', () => {
-  before(() => {
-    cy.task<AuthenticationResult>('getUserToken', {
-      email: 'testAdmissionsClerk@example.com',
-      password: DEFAULT_ACCOUNT_PASS,
-    }).then(result => {
-      login(result.AuthenticationResult.IdToken);
-    });
-  });
-
   describe('login and view the document QC page', () => {
     it("should fetch the user's inbox upon navigation", () => {
+      loginAsTestAdmissionsClerk();
+
       cy.get('.button-switch-box')
         .contains('Switch to Section Messages')
         .click();

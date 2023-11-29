@@ -6,13 +6,26 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { addPetitionerToCaseInteractor } from './addPetitionerToCaseInteractor';
 import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('addPetitionerToCaseInteractor', () => {
   let mockContact;
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
 
   beforeEach(() => {
+    mockLock = undefined;
     mockContact = {
       address1: '2729 Chicken St',
       city: 'Eggyolk',
@@ -127,5 +140,56 @@ describe('addPetitionerToCaseInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.caseCaption,
     ).toEqual(mockUpdatedCaption);
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      addPetitionerToCaseInteractor(applicationContext, {
+        caseCaption: MOCK_CASE.caseCaption,
+        contact: mockContact,
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await addPetitionerToCaseInteractor(applicationContext, {
+      caseCaption: MOCK_CASE.caseCaption,
+      contact: mockContact,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
+  });
+
+  it('should throw an Unauthorized error if the user is not authorized', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({});
+
+    await expect(
+      addPetitionerToCaseInteractor(applicationContext, {
+        caseCaption: MOCK_CASE.caseCaption,
+        contact: mockContact,
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(UnauthorizedError);
   });
 });

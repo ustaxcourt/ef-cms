@@ -131,6 +131,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showAddDocketEntryButton && (
                 <Button
                   link
+                  data-testid="add-court-issued-docket-entry-button"
                   href={draftDocumentViewerHelper.addDocketEntryLink}
                   icon="plus-circle"
                   id="add-court-issued-docket-entry-button"

@@ -126,7 +126,7 @@
     "cypress:smoketests:local:file": "./scripts/run-cypress.sh -sl -t",
     "cypress:smoketests:local": "./scripts/run-cypress.sh -sl",
     "cypress:smoketests:open:local": "./scripts/run-cypress.sh -sol",
-    "cypress:smoketests:open": "./scripts/run-cypress.sh -so",
+    "cypress:smoketests:open": "./scripts/run-cypress.sh -sco",
     "cypress:smoketests": "./scripts/run-cypress.sh -s",
     "delete:api-gateway-mappings": "./scripts/delete-api-gateway-mappings.sh",
     "delete:dynamo-table": "./scripts/dynamo/delete-dynamo-table.sh",

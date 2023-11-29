@@ -296,6 +296,7 @@ export const OpinionSearchForm = connect(
           <div className="margin-top-4">
             <Button
               className="margin-bottom-0"
+              data-testid="advanced-search-button"
               id="advanced-search-button"
               type="submit"
             >

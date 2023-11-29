@@ -7,17 +7,17 @@ import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * sealCaseContactAddressInteractor
- *
+ * sealCaseContactAddress
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.contactId the id of the contact address to be sealed
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {object} the updated case data
  */
-export const sealCaseContactAddressInteractor = async (
+export const sealCaseContactAddress = async (
   applicationContext,
   { contactId, docketNumber },
 ) => {
@@ -58,3 +58,10 @@ export const sealCaseContactAddressInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
+
+export const sealCaseContactAddressInteractor = withLocking(
+  sealCaseContactAddress,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

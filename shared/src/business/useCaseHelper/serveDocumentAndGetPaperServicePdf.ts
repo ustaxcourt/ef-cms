@@ -20,7 +20,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext: IApplicationContext;
   caseEntities: Case[];
   docketEntryId: string;
-  stampedPdf: any;
+  stampedPdf?: any;
 }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 

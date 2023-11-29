@@ -86,7 +86,11 @@ export const CaseSearchBox = connect(
                   </div>
                 </div>
 
-                <Button secondary type="submit">
+                <Button
+                  secondary
+                  data-testid="search-by-docket-number"
+                  type="submit"
+                >
                   <span className="usa-search-submit-text">Search</span>
                 </Button>
               </div>

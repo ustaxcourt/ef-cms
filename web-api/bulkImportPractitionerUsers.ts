@@ -57,10 +57,11 @@ const main = async () => {
     .promise();
 
   const services = (apis ?? [])
-    .filter(api =>
-      api.name?.includes(
-        `gateway_api_${process.env.ENV}_${process.env.DEPLOYING_COLOR}`,
-      ),
+    .filter(
+      api =>
+        api.name?.includes(
+          `gateway_api_${process.env.ENV}_${process.env.DEPLOYING_COLOR}`,
+        ),
     )
     .reduce((obj, api) => {
       obj[

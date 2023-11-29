@@ -1,22 +1,12 @@
-import { AuthenticationResult } from '../../support/login-types';
 import { isValidRequest } from '../support/helpers';
-import { login } from '../support/pages/login';
+import { loginAsTestAdmissionsClerk } from '../../helpers/auth/login-as-helpers';
 
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Practitioner Search', () => {
-  before(() => {
-    cy.task<AuthenticationResult>('getUserToken', {
-      email: 'testAdmissionsClerk@example.com',
-      password: DEFAULT_ACCOUNT_PASS,
-    }).then(result => {
-      login(result.AuthenticationResult.IdToken);
-    });
-  });
-
-  it('should do a practitioner search by name', () => {
+  it('should do a practitioner search by name and bar number', () => {
+    loginAsTestAdmissionsClerk();
     cy.get('.advanced').contains('Advanced').click();
 
     cy.get('button#tab-practitioner').click();
@@ -32,9 +22,7 @@ describe('Practitioner Search', () => {
     cy.get('button#practitioner-search-by-name-button').click();
 
     cy.wait('@getPractitionerByName').then(isValidRequest);
-  });
 
-  it('should do a practitioner search by bar number', () => {
     cy.get('button#tab-practitioner').click();
 
     cy.intercept({

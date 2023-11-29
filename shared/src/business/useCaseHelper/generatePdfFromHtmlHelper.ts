@@ -1,6 +1,8 @@
 import { Browser } from 'puppeteer';
+import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
 import { headerFontFace } from '../useCases/headerFontFace';
-import { reactTemplateGenerator } from '../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 /**
  * generatePdfFromHtmlHelper
@@ -40,12 +42,11 @@ export const generatePdfFromHtmlHelper = async (
     await page.setContent(contentHtml);
 
     if (headerHtml === undefined) {
-      headerHtml = reactTemplateGenerator({
-        componentName: 'PageMetaHeaderDocket',
-        data: {
+      headerHtml = ReactDOM.renderToString(
+        React.createElement(PageMetaHeaderDocket, {
           docketNumber,
-        },
-      });
+        }),
+      );
     }
 
     const headerTemplate = `

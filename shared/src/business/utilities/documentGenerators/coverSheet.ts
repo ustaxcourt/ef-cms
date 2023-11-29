@@ -1,11 +1,13 @@
+import { CoverSheet } from '@shared/business/utilities/pdfGenerator/documentTemplates/CoverSheet';
+import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const coverSheet = async ({ applicationContext, data }) => {
-  const coverSheetTemplate = reactTemplateGenerator({
-    componentName: 'CoverSheet',
-    data,
-  });
+  const coverSheetTemplate = ReactDOM.renderToString(
+    React.createElement(CoverSheet, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
@@ -14,12 +16,11 @@ export const coverSheet = async ({ applicationContext, data }) => {
 
   let footerHtml = '';
   if (data.dateServed) {
-    footerHtml = reactTemplateGenerator({
-      componentName: 'DateServedFooter',
-      data: {
+    footerHtml = ReactDOM.renderToString(
+      React.createElement(DateServedFooter, {
         dateServed: data.dateServed,
-      },
-    });
+      }),
+    );
   }
 
   const pdf = await applicationContext

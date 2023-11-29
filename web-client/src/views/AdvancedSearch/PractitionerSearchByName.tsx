@@ -41,6 +41,7 @@ export const PractitionerSearchByName = connect(
                   </label>
                   <input
                     className="usa-input"
+                    data-testid="practitioner-name"
                     id="practitioner-name"
                     name="practitionerName"
                     type="text"
@@ -67,6 +68,7 @@ export const PractitionerSearchByName = connect(
               <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
+                  data-testid="practitioner-search-by-name-button"
                   id="practitioner-search-by-name-button"
                   onClick={e => {
                     e.preventDefault();

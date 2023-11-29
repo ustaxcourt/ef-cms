@@ -17,7 +17,6 @@ export default defineConfig({
   screenshotsFolder: 'cypress/cypress-readonly/screenshots',
   video: true,
   videoCompression: 10,
-  videoUploadOnPasses: false,
   videosFolder: 'cypress/cypress-readonly/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
