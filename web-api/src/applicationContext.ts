@@ -39,11 +39,6 @@ import { User } from '../../shared/src/business/entities/User';
 import { UserCase } from '../../shared/src/business/entities/UserCase';
 import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
-import {
-  clerkOfCourtNameForSigning,
-  getEnvironment,
-  getUniqueId,
-} from '../../shared/src/sharedAppContext';
 import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
@@ -54,6 +49,7 @@ import {
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocumentGenerators } from './getDocumentGenerators';
+import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -225,9 +221,6 @@ export const createApplicationContext = (
       process.env.NODE_ENV === 'production'
         ? getChromiumBrowserAWS
         : getChromiumBrowser,
-    getClerkOfCourtNameForSigning: () => {
-      return clerkOfCourtNameForSigning;
-    },
     getCognito: () => {
       if (environment.stage === 'local') {
         if (process.env.USE_COGNITO_LOCAL === 'true') {
