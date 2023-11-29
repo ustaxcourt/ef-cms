@@ -1,17 +1,17 @@
 import { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } from '../EntityConstants';
-import { CaseExternal } from './ElectronicPetition';
+import { ElectronicPetition } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {
-  describe('for Minor without Guardian Contacts', () => {
+  describe('for Petitioner And Deceased Spouse Contacts', () => {
     it('should not validate without contacts', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
-          partyType: PARTY_TYPES.nextFriendForMinor,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
           petitionFile: {},
           petitionFileSize: 1,
           preferredTrialCity: 'Memphis, Tennessee',
@@ -25,8 +25,8 @@ describe('CaseExternal', () => {
       expect(caseExternal.isValid()).toEqual(false);
     });
 
-    it('can validate contacts', () => {
-      const caseExternal = new CaseExternal(
+    it('can validate primary contact name', () => {
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -38,13 +38,21 @@ describe('CaseExternal', () => {
             name: 'Jimmy Dean',
             phone: '1234567890',
             postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
             state: 'AK',
+          },
+          contactSecondary: {
+            address1: '1599 Pennsylvania Ave',
+            city: 'Walla Walla',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            inCareOf: 'USTC',
+            name: 'Betty Crocker',
+            postalCode: '78774',
+            state: 'WA',
           },
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
-          partyType: PARTY_TYPES.nextFriendForMinor,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
           petitionFile: {},
           petitionFileSize: 1,
           preferredTrialCity: 'Memphis, Tennessee',

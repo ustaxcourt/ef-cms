@@ -5,8 +5,8 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternal } from '../cases/ElectronicPetition';
 import { ContactFactory } from './ContactFactory';
+import { ElectronicPetition } from '../cases/ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ContactFactory', () => {
@@ -44,12 +44,12 @@ describe('ContactFactory', () => {
   };
 
   it('should throw an error if app context is not passed in', () => {
-    expect(() => new CaseExternal(baseCaseExternal, {} as any)).toThrow();
+    expect(() => new ElectronicPetition(baseCaseExternal, {} as any)).toThrow();
   });
 
   describe('for Corporation Contacts', () => {
     it('should not validate without contact when the case status is new', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           ...baseCaseExternal,
           partyType: PARTY_TYPES.corporation,
@@ -60,7 +60,7 @@ describe('ContactFactory', () => {
     });
 
     it('can validate primary contact when the case is not served', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           ...baseCaseExternal,
           partyType: PARTY_TYPES.corporation,
@@ -73,7 +73,7 @@ describe('ContactFactory', () => {
   });
 
   it('can validate Petitioner contact when the case is not served', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.petitioner,
@@ -85,7 +85,7 @@ describe('ContactFactory', () => {
   });
 
   it('passes validation when primary contact is defined and everything else is valid on an unserved case', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estateWithoutExecutor,
@@ -97,7 +97,7 @@ describe('ContactFactory', () => {
   });
 
   it('passes validation when in care of is undefined and everything else is valid on a served case', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estateWithoutExecutor,
@@ -116,7 +116,7 @@ describe('ContactFactory', () => {
   });
 
   it('returns false for isValid if primary contact is missing', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
@@ -127,7 +127,7 @@ describe('ContactFactory', () => {
   });
 
   it('defaults isAddressSealed to false when no value is specified', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
@@ -140,7 +140,7 @@ describe('ContactFactory', () => {
   });
 
   it('sets the value of isAddressSealed when a value is specified', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
@@ -157,7 +157,7 @@ describe('ContactFactory', () => {
   });
 
   it('defaults sealedAndUnavailable to false when no value is specified', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
@@ -169,7 +169,7 @@ describe('ContactFactory', () => {
   });
 
   it('sets the value of sealedAndUnavailable when a value is specified', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
@@ -186,7 +186,7 @@ describe('ContactFactory', () => {
   });
 
   it('formats phone number string', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         petitioners: [
@@ -203,7 +203,7 @@ describe('ContactFactory', () => {
   });
 
   it('returns false for isValid if serviceIndicator is an invalid value', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
@@ -220,7 +220,7 @@ describe('ContactFactory', () => {
   });
 
   it('a valid case returns true for isValid when status is new', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
@@ -232,7 +232,7 @@ describe('ContactFactory', () => {
   });
 
   it('a valid case returns true for isValid when status is not new', () => {
-    const caseExternal = new CaseExternal(
+    const caseExternal = new ElectronicPetition(
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
@@ -266,7 +266,7 @@ describe('ContactFactory', () => {
     PARTY_TYPES.trust,
   ].forEach(partyType => {
     it(`can validate invalid ${partyType} contact`, () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           ...baseCaseExternal,
           partyType,
@@ -277,7 +277,7 @@ describe('ContactFactory', () => {
     });
 
     it(`can validate valid ${partyType} contact`, () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           ...baseCaseExternal,
           partyType,
@@ -292,7 +292,7 @@ describe('ContactFactory', () => {
   [PARTY_TYPES.petitionerDeceasedSpouse, PARTY_TYPES.petitionerSpouse].forEach(
     partyType => {
       it(`can validate invalid ${partyType} contact`, () => {
-        const caseExternal = new CaseExternal(
+        const caseExternal = new ElectronicPetition(
           {
             ...baseCaseExternal,
             partyType,
@@ -303,7 +303,7 @@ describe('ContactFactory', () => {
       });
 
       it(`can validate valid ${partyType} contact`, () => {
-        const caseExternal = new CaseExternal(
+        const caseExternal = new ElectronicPetition(
           {
             ...baseCaseExternal,
             partyType,
@@ -324,7 +324,7 @@ describe('ContactFactory', () => {
 
   it('throws an Error (upon construction) if `partyType` is defined but not found in the available list', () => {
     expect(() => {
-      new CaseExternal(
+      new ElectronicPetition(
         {
           ...baseCaseExternal,
           partyType: 'SOME INVALID PARTY TYPE',

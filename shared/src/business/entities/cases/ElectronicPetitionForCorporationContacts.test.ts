@@ -1,17 +1,17 @@
 import { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } from '../EntityConstants';
-import { CaseExternal } from './ElectronicPetition';
+import { ElectronicPetition } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-describe('CaseExternal', () => {
-  describe('for Petitioner And Deceased Spouse Contacts', () => {
-    it('should not validate without contacts', () => {
-      const caseExternal = new CaseExternal(
+describe('ElectronicPetition', () => {
+  describe('for Corporation Contacts', () => {
+    it('should not validate without contact', () => {
+      const electronicPetition = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
-          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: PARTY_TYPES.corporation,
           petitionFile: {},
           petitionFileSize: 1,
           preferredTrialCity: 'Memphis, Tennessee',
@@ -22,11 +22,11 @@ describe('CaseExternal', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.isValid()).toEqual(false);
+      expect(electronicPetition.isValid()).toEqual(false);
     });
 
-    it('can validate primary contact name', () => {
-      const caseExternal = new CaseExternal(
+    it('should not validate without inCareOf', () => {
+      const electronicPetition = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -40,19 +40,41 @@ describe('CaseExternal', () => {
             postalCode: '05198',
             state: 'AK',
           },
-          contactSecondary: {
-            address1: '1599 Pennsylvania Ave',
-            city: 'Walla Walla',
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          irsNoticeDate: '2009-10-13',
+          partyType: PARTY_TYPES.corporation,
+          petitionFile: {},
+          petitionFileSize: 1,
+          preferredTrialCity: 'Memphis, Tennessee',
+          procedureType: 'Small',
+          signature: true,
+        },
+        { applicationContext },
+      );
+      expect(electronicPetition.isValid()).toEqual(false);
+    });
+
+    it('can validate primary contact', () => {
+      const electronicPetition = new ElectronicPetition(
+        {
+          caseType: CASE_TYPES_MAP.other,
+          contactPrimary: {
+            address1: '876 12th Ave',
+            city: 'Nashville',
+            country: 'USA',
             countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'someone@example.com',
             inCareOf: 'USTC',
-            name: 'Betty Crocker',
-            postalCode: '78774',
-            state: 'WA',
+            name: 'Jimmy Dean',
+            phone: '1234567890',
+            postalCode: '05198',
+            state: 'AK',
           },
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
-          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: PARTY_TYPES.corporation,
           petitionFile: {},
           petitionFileSize: 1,
           preferredTrialCity: 'Memphis, Tennessee',
@@ -63,7 +85,7 @@ describe('CaseExternal', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+      expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });
