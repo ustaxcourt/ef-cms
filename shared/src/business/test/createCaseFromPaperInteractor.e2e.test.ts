@@ -31,7 +31,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
   const mockUserId = 'a805d1ab-18d0-43ec-bafb-654e83405416';
 
   beforeAll(() => {
-    createISODateString.mockReturnValue(RECEIVED_DATE);
+    (createISODateString as jest.Mock).mockReturnValue(RECEIVED_DATE);
 
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Alex Petitionsclerk',
@@ -46,10 +46,11 @@ describe('createCaseFromPaperInteractor integration test', () => {
       {
         petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
         petitionMetadata: {
-          ...MOCK_CASE,
           caseCaption: 'Bob Jones2, Petitioner',
+          caseType: MOCK_CASE.caseType,
           createdAt: RECEIVED_DATE,
           mailingDate: 'testing',
+          partyType: MOCK_CASE.partyType,
           petitionFile: { name: 'something' },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -65,6 +66,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
               state: 'CA',
             },
           ],
+          preferredTrialCity: MOCK_CASE.preferredTrialCity,
+          procedureType: MOCK_CASE.procedureType,
           receivedAt: RECEIVED_DATE,
           requestForPlaceOfTrialFile: new File(
             [],
