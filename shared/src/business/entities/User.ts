@@ -203,7 +203,7 @@ export class User extends JoiValidationEntity {
     return User.VALIDATION_RULES;
   }
 
-  public setisUpdatingInformation(value: boolean) {
+  public setIsUpdatingInformation(value: boolean) {
     this.isUpdatingInformation = value;
   }
 }

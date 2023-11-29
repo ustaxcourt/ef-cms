@@ -113,7 +113,7 @@ const updateUserContactInformationHelper = async (
       websocketMessagePrefix: 'user',
     });
   } else {
-    userEntity.setisUpdatingInformation(undefined);
+    userEntity.setIsUpdatingInformation(undefined);
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,
       user: userEntity.validate().toRawObject(),
