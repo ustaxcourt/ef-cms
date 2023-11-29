@@ -1,3 +1,4 @@
+import { loginAsPetitionsClerk } from '../../helpers/auth/login-as-helpers';
 import { v4 as uuidv4 } from 'uuid';
 
 const randomizedEmail = `${uuidv4()}@example.com`;
@@ -5,9 +6,8 @@ const randomizedEmail = `${uuidv4()}@example.com`;
 if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
   describe('add email to practitioner', () => {
     it('a noce should be generated after adding an email to a practitioner', () => {
-      cy.login('petitionsclerk1');
-      cy.get('table').should('exist');
-      cy.get(':nth-child(2) > .usa-nav__link').click();
+      loginAsPetitionsClerk();
+      cy.get('[data-testid="document-qc-nav-item"]').click();
       cy.get('#file-a-petition').click();
       cy.get('#party-type').select('Petitioner');
       cy.get('[data-testid="contact-primary-name"]').clear();
