@@ -1,5 +1,5 @@
 import { Case } from '../entities/cases/Case';
-import { CaseExternalIncomplete } from '../entities/cases/CaseExternalIncomplete';
+import { CaseExternal } from '@shared/business/entities/cases/CaseExternal';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   INITIAL_DOCUMENT_TYPES,
@@ -84,7 +84,8 @@ export const createCaseInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-  const petitionEntity = new CaseExternalIncomplete(petitionMetadata, {
+
+  const petitionEntity = new CaseExternal(petitionMetadata, {
     applicationContext,
   }).validate();
 
