@@ -32,6 +32,7 @@ export const PetitionersAndCounsel = connect(
           {partiesInformationHelper.formattedPetitioners.map(petitioner => (
             <div
               className="tablet:grid-col-9 mobile:grid-col-9 desktop:grid-col-4 margin-bottom-4 petitioner-card"
+              data-testid={`petitioner-card-${petitioner.name}`}
               key={petitioner.contactId}
             >
               <div className="card height-full margin-bottom-0">
@@ -133,6 +134,7 @@ export const PetitionersAndCounsel = connect(
                                 <Button
                                   link
                                   className="width-auto margin-left-1 padding-0 height-3 view-privatePractitioners-button"
+                                  data-testid="view-counsel-info"
                                   icon="eye"
                                   overrideMargin={true}
                                   onClick={() => {
