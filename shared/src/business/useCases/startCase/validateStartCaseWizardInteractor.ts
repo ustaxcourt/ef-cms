@@ -1,4 +1,4 @@
-import { CaseExternalInformationFactory } from '../../entities/cases/ElectronicPetitionInformationFactory';
+import { ElectronicPetitionInformationFactory } from '../../entities/cases/ElectronicPetitionInformationFactory';
 
 /**
  * validateStartCaseWizardInteractor
@@ -12,7 +12,7 @@ export const validateStartCaseWizardInteractor = (
   applicationContext: IApplicationContext,
   { petition }: { petition: any },
 ) => {
-  const errors = new CaseExternalInformationFactory(petition, {
+  const errors = new ElectronicPetitionInformationFactory(petition, {
     applicationContext,
   }).getFormattedValidationErrors();
   return errors || null;
