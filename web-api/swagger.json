@@ -8193,40 +8193,43 @@
         "docketEntries": {
           "type": "array",
           "items": {
-            "daysSinceCreated": {
-              "type": "number",
-              "description": "Number of days since the pending motion has been created"
-            },
-            "caseCaption": {
-              "type": "string",
-              "description": "Case caption from the docket entry's case"
-            },
-            "consolidatedGroupCount": {
-              "type": "number",
-              "description": "Number of consolidated cases the docket entry's case is in"
-            },
-            "leadDocketNumber": {
-              "type": "number",
-              "description": "Lead docket number"
-            },
-            "docketEntryId": {
-              "type": "string",
-              "description": "Docket entry ID"
-            },
-            "docketEntryWorksheet": {
-              "type": "object",
-              "properties": {
-                "primaryIssue": {
-                  "type": "string",
-                  "description": "the primary issue noted for the case in Submitted/CAV status to which the worksheet belongs"
-                },
-                "finalBriefDueDate": {
-                  "type": "string",
-                  "description": "the date the final briefs are due for the case to which the worksheet belongs"
-                },
-                "statusOfMatter": {
-                  "type": "string",
-                  "description": "status of matter"
+						"type": "object",
+            "properties": {
+              "daysSinceCreated": {
+                "type": "number",
+                "description": "Number of days since the pending motion has been created"
+              },
+              "caseCaption": {
+                "type": "string",
+                "description": "Case caption from the docket entry's case"
+              },
+              "consolidatedGroupCount": {
+                "type": "number",
+                "description": "Number of consolidated cases the docket entry's case is in"
+              },
+              "leadDocketNumber": {
+                "type": "number",
+                "description": "Lead docket number"
+              },
+              "docketEntryId": {
+                "type": "string",
+                "description": "Docket entry ID"
+              },
+              "docketEntryWorksheet": {
+                "type": "object",
+                "properties": {
+                  "primaryIssue": {
+                    "type": "string",
+                    "description": "the primary issue noted for the case in Submitted/CAV status to which the worksheet belongs"
+                  },
+                  "finalBriefDueDate": {
+                    "type": "string",
+                    "description": "the date the final briefs are due for the case to which the worksheet belongs"
+                  },
+                  "statusOfMatter": {
+                    "type": "string",
+                    "description": "status of matter"
+                  }
                 }
               }
             }
