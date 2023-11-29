@@ -107,6 +107,11 @@ describe('updateUserContactInformationInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[1][0].message.action,
     ).toEqual('user_contact_full_update_complete');
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[1][0].message.user,
+    ).toBeDefined();
   });
 
   it('should throw an error when updateUser throws an error', async () => {
@@ -234,12 +239,32 @@ describe('updateUserContactInformationInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesForUser.mockImplementation(() => []);
+
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: mockUser.userId,
     } as any);
 
     expect(generateChangeOfAddress).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
+        .isUpdatingInformation,
+    ).not.toBeDefined();
+
+    const notificatsionCalls =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls;
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.action,
+    ).toEqual('user_contact_full_update_complete');
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.user,
+    ).toMatchObject({
+      contact: contactInfo,
+    });
   });
 
   it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
