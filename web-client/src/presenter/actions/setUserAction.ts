@@ -12,6 +12,7 @@ export const setUserAction = ({
   props,
   store,
 }: ActionProps) => {
+  if (!props.user) return;
   store.set(state.user, props.user);
   applicationContext.setCurrentUser(props.user);
 };
