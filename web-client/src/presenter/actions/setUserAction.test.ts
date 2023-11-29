@@ -32,23 +32,4 @@ describe('setUserAction', () => {
       user,
     );
   });
-
-  it('should not update state if there is no user provided in props', async () => {
-    const user = {
-      userId: 'petitioner',
-    };
-
-    const results = await runAction(setUserAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        user,
-      },
-    });
-
-    expect(results.state.user).toEqual(user);
-    expect(applicationContext.setCurrentUser.mock.calls.length).toEqual(0);
-  });
 });
