@@ -1,3 +1,4 @@
+import { DescribeTableCommand } from '@aws-sdk/client-dynamodb';
 import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import {
   batchDelete,
@@ -26,9 +27,7 @@ describe('dynamodbClientService', function () {
   const dynamoDbTableName = 'efcms-local';
 
   const mockDynamoClient = {
-    describeTable: jest.fn().mockImplementation(() => {
-      return { promise: () => Promise.resolve(null) };
-    }),
+    send: jest.fn().mockResolvedValue(null),
   };
 
   beforeEach(() => {
@@ -244,9 +243,8 @@ describe('dynamodbClientService', function () {
   describe('getDeployTable', () => {
     it('should return the deploy table name when the environment is NOT local', async () => {
       const mockEnvironment = 'exp99';
-      applicationContext.environment = {
-        stage: mockEnvironment,
-      };
+      applicationContext.environment.stage = mockEnvironment;
+
       applicationContext.getEnvironment.mockReturnValue({
         stage: mockEnvironment,
       });
@@ -259,10 +257,8 @@ describe('dynamodbClientService', function () {
     });
 
     it('should return the regular dynamo table name when the environment is local', async () => {
-      applicationContext.environment = {
-        dynamoDbTableName,
-        stage: 'local',
-      };
+      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
+      applicationContext.environment.stage = 'local';
 
       const result = await getDeployTableName({
         applicationContext,
@@ -349,12 +345,68 @@ describe('dynamodbClientService', function () {
       const result = await query({ applicationContext });
       expect(result).toEqual([MOCK_ITEM]);
     });
+    it('uses the ConsistentRead flag to query perform strongly consistent reads', async () => {
+      const flags = [true, false];
+
+      for (let i = 0; i < flags.length; i++) {
+        const ConsistentRead = flags[i];
+        await query({ ConsistentRead, applicationContext });
+        expect(
+          applicationContext.getDocumentClient().query.mock.calls[i][0],
+        ).toMatchObject({ ConsistentRead });
+      }
+    });
+    it('uses the optional FilterExpression parameter to perform a filtered query', async () => {
+      await query({
+        FilterExpression: 'single origin for me',
+        applicationContext,
+      });
+      expect(
+        applicationContext.getDocumentClient().query.mock.calls[0][0],
+      ).toMatchObject({ FilterExpression: 'single origin for me' });
+    });
+    it('passes an undefined FilterExpression to perform an unfiltered query', async () => {
+      await query({
+        applicationContext,
+      });
+      expect(
+        applicationContext.getDocumentClient().query.mock.calls[0][0],
+      ).toMatchObject({ FilterExpression: undefined });
+    });
   });
 
   describe('queryFull', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await queryFull({ applicationContext });
       expect(result).toEqual([MOCK_ITEM]);
+    });
+    it('uses the ConsistentRead flag to query perform strongly consistent reads', async () => {
+      const flags = [true, false];
+
+      for (let i = 0; i < flags.length; i++) {
+        const ConsistentRead = flags[i];
+        await queryFull({ ConsistentRead, applicationContext });
+        expect(
+          applicationContext.getDocumentClient().query.mock.calls[i][0],
+        ).toMatchObject({ ConsistentRead });
+      }
+    });
+    it('uses the optional FilterExpression parameter to perform a filtered query', async () => {
+      await queryFull({
+        FilterExpression: 'single origin for me',
+        applicationContext,
+      });
+      expect(
+        applicationContext.getDocumentClient().query.mock.calls[0][0],
+      ).toMatchObject({ FilterExpression: 'single origin for me' });
+    });
+    it('passes an undefined FilterExpression to perform an unfiltered query', async () => {
+      await queryFull({
+        applicationContext,
+      });
+      expect(
+        applicationContext.getDocumentClient().query.mock.calls[0][0],
+      ).toMatchObject({ FilterExpression: undefined });
     });
   });
 
@@ -568,39 +620,32 @@ describe('dynamodbClientService', function () {
         applicationContext,
       });
 
-      expect(
-        applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
-      ).toEqual({
-        TableName: dynamoDbTableName,
-      });
+      expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
+        new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
+      );
     });
   });
 
   describe('describeDeployTable', () => {
     it("should return information on the environment's table", async () => {
-      applicationContext.environment = {
-        dynamoDbTableName,
-        stage: 'local',
-      };
+      applicationContext.environment.stage = 'local';
+      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
 
       await describeDeployTable({
         applicationContext,
       });
 
-      expect(
-        applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
-      ).toEqual({
-        TableName: dynamoDbTableName,
-      });
+      expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
+        new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
+      );
     });
   });
 
   describe('putInDeployTable', () => {
     it('should write an item to the deploy table', async () => {
-      applicationContext.environment = {
-        dynamoDbTableName,
-        stage: 'local',
-      };
+      applicationContext.environment.stage = 'local';
+      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
+
       const dynamoRecord = {
         data: {
           allChecksHealthy: false,

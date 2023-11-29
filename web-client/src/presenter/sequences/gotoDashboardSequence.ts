@@ -1,11 +1,13 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { fetchUserNotificationsSequence } from '@web-client/presenter/sequences/fetchUserNotificationsSequence';
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
+import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -20,6 +22,7 @@ import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
+import { setPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/setPendingMotionDocketEntriesForCurrentJudgeAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setSubmittedAndCavCasesForJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
@@ -67,6 +70,7 @@ const goToDashboard = [
                   proceedToMessages,
                 ),
                 chambers: [
+                  fetchUserNotificationsSequence,
                   getJudgeForCurrentUserAction,
                   setJudgeUserAction,
                   parallel([
@@ -75,6 +79,10 @@ const goToDashboard = [
                     [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
+                    ],
+                    [
+                      getPendingMotionDocketEntriesForCurrentJudgeAction,
+                      setPendingMotionDocketEntriesForCurrentJudgeAction,
                     ],
                   ]),
                   setupCurrentPageAction('DashboardChambers'),
@@ -91,6 +99,7 @@ const goToDashboard = [
                 ],
                 irsSuperuser: [setupCurrentPageAction('DashboardIrsSuperuser')],
                 judge: [
+                  fetchUserNotificationsSequence,
                   passAlongJudgeUserAction,
                   setJudgeUserAction,
                   parallel([
@@ -99,6 +108,10 @@ const goToDashboard = [
                     [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
+                    ],
+                    [
+                      getPendingMotionDocketEntriesForCurrentJudgeAction,
+                      setPendingMotionDocketEntriesForCurrentJudgeAction,
                     ],
                   ]),
                   setupCurrentPageAction('DashboardJudge'),

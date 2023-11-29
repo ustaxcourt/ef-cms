@@ -7,29 +7,29 @@
  * @param {object} deconstructed.options optional content that modifies the template
  * @returns {string} hydrated HTML content in string form
  */
-export const generateHTMLTemplateForPDF = async ({
+export const generateHTMLTemplateForPDF = ({
   applicationContext,
   content,
   options = {},
 }) => {
-  const sassContent = require('../htmlGenerator/index.scss_');
+  const indexCss = require('../htmlGenerator/index.scss_');
   const template = require('../htmlGenerator/index.pug_');
 
   const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
-  const { css } = await new Promise((resolve, reject) => {
-    sass.render({ data: sassContent }, (err, result) => {
-      if (err) {
-        applicationContext.logger.error(
-          'Error compiling SASS to CSS while generating PDF',
-          err,
-        );
-        return reject(err);
-      }
-      return resolve(result);
-    });
-  });
+  let compileResult;
+  try {
+    compileResult = sass.compileString(indexCss);
+  } catch (err) {
+    applicationContext.logger.error(
+      'Error compiling SASS to CSS while generating PDF',
+      err,
+    );
+  }
+
+  const { css } = compileResult;
+
   const compiledFunction = pug.compile(template);
   const html = compiledFunction({
     content,

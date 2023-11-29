@@ -1,11 +1,12 @@
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { Practitioner } from '../../entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 const updateUserPendingEmail = async ({ applicationContext, user }) => {
   const isEmailAvailable = await applicationContext
@@ -50,13 +51,12 @@ const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
 
 /**
  * updatePractitionerUserInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.barNumber the barNumber of the user to update
  * @param {object} providers.user the user data
  */
-export const updatePractitionerUserInteractor = async (
+export const updatePractitionerUser = async (
   applicationContext: IApplicationContext,
   {
     barNumber,
@@ -76,6 +76,10 @@ export const updatePractitionerUserInteractor = async (
   const oldUser = await applicationContext
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
+
+  if (!oldUser) {
+    throw new NotFoundError('Could not find user');
+  }
 
   const userHasAccount = !!oldUser.email;
   const userIsUpdatingEmail = !!user.updatedEmail;
@@ -184,3 +188,44 @@ export const updatePractitionerUserInteractor = async (
     });
   }
 };
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_practitioner_user',
+    },
+    userId: user.userId,
+  });
+};
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { user }: { user: Practitioner },
+) => {
+  const docketNumbers: string[] = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByUser({
+      applicationContext,
+      userId: user.userId,
+    });
+
+  return {
+    identifiers: docketNumbers.map(item => `case|${item}`),
+    ttl: 900,
+  };
+};
+
+export const updatePractitionerUserInteractor = withLocking(
+  updatePractitionerUser,
+  determineEntitiesToLock,
+  handleLockError,
+);

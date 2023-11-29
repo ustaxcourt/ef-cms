@@ -58,12 +58,28 @@ module.exports = [
   },
   {
     actions: [
+      'wait for [data-testid="tab-case-worksheets"] to be visible',
+      'click element [data-testid="tab-case-worksheets"]',
       'wait for button[data-testid="add-edit-case-worksheet"] to be visible',
       'click element button[data-testid="add-edit-case-worksheet"]',
       'wait for .modal-screen to be visible',
       'click element #confirm',
     ],
-    notes: 'checks a11y of add/edit case worksheet modal',
+    notes:
+      'checks a11y of add/edit case worksheet modal in case worksheets tab',
+    url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
+  },
+  {
+    actions: [
+      'wait for [data-testid="tab-pending-motions"] to be visible',
+      'click element [data-testid="tab-pending-motions"]',
+      'wait for button[data-testid="add-edit-pending-motion-worksheet"] to be visible',
+      'click element button[data-testid="add-edit-pending-motion-worksheet"]',
+      'wait for .modal-screen to be visible',
+      'click element #confirm',
+    ],
+    notes:
+      'checks a11y of add/edit pending motion worksheet modal in pending motions tab',
     url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
   },
 ];

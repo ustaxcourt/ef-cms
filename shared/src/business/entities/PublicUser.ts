@@ -1,14 +1,9 @@
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { ROLES } from './EntityConstants';
-import { User } from './User';
+import joi from 'joi';
 
-/**
- * constructor
- *
- * @param {object} rawUser the raw user data
- * @constructor
- */
 export class PublicUser extends JoiValidationEntity {
   public name: string;
   public role: string;
@@ -25,13 +20,28 @@ export class PublicUser extends JoiValidationEntity {
     }
   }
 
+  static VALIDATION_RULES = {
+    judgeFullName: JoiValidationConstants.STRING.max(100).when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
+    judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({ '*': 'Enter name' }),
+    role: JoiValidationConstants.STRING.valid(...Object.values(ROLES))
+      .required()
+      .messages({ '*': 'Role is required' }),
+  };
+
   getValidationRules() {
-    return {
-      ...User.BASE_USER_VALIDATION,
-      name: JoiValidationConstants.STRING.max(100).required(),
-      role: User.BASE_USER_VALIDATION.role.messages({
-        '*': 'Role is required',
-      }),
-    };
+    return PublicUser.VALIDATION_RULES;
   }
 }
+
+export type RawPublicUser = ExcludeMethods<PublicUser>;
