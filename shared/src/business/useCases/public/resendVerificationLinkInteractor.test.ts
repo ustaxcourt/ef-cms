@@ -1,5 +1,5 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { cognitoResendVerificationLinkInteractor } from '@shared/business/useCases/public/cognitoResendVerificationLinkInteractor';
+import { cognitoResendVerificationLinkInteractor } from '@shared/business/useCases/public/resendVerificationLinkInteractor';
 
 describe('cognitoResendVerificationLinkInteractor', () => {
   const TEST_EMAIL = 'SOME_TEST_EMAIL@EXAMPLE.COM';

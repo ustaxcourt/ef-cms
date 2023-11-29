@@ -1,4 +1,4 @@
-import { cognitoResendVerificationLinkAction } from '@web-client/presenter/actions/Public/cognitoResendVerificationLinkAction';
+import { cognitoResendVerificationLinkAction } from '@web-client/presenter/actions/Public/resendVerificationLinkAction';
 import { navigateToVerificationSentAction } from '@web-client/presenter/actions/navigateToVerificationSentAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';

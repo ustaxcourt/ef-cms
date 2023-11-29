@@ -45,7 +45,7 @@ import {
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
-import { cognitoResendVerificationLinkInteractor } from '../../shared/src/proxies/public/cognitoResendVerificationLinkProxy';
+import { cognitoResendVerificationLinkInteractor } from '../../shared/src/proxies/public/resendVerificationLinkProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { confirmSignUpLocalInteractor } from '@shared/proxies/auth/confirmSignUpLocalProxy';
 import {

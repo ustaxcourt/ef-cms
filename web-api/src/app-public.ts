@@ -52,7 +52,7 @@ app.use(logger());
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
-import { cognitoResendVerificationLinkLambda } from '@web-api/lambdas/public-api/cognitoResendVerificationLinkLambda';
+import { cognitoResendVerificationLinkLambda } from '@web-api/lambdas/public-api/resendVerificationLinkLambda';
 import { confirmSignUpLocalLambda } from '@web-api/auth/confirmSignUpLocalLambda';
 import { createUserCognitoLambda } from '@web-api/users/createUserCognitoLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
