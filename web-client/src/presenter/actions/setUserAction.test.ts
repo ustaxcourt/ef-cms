@@ -4,7 +4,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setUserAction } from './setUserAction';
 
 describe('setUserAction', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     process.env.USTC_ENV = 'dev';
     presenter.providers.applicationContext = applicationContext;
   });
@@ -31,5 +31,24 @@ describe('setUserAction', () => {
     expect(applicationContext.setCurrentUser.mock.calls[0][0]).toMatchObject(
       user,
     );
+  });
+
+  it('should not update state if there is no user provided in props', async () => {
+    const user = {
+      userId: 'petitioner',
+    };
+
+    const results = await runAction(setUserAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        user,
+      },
+    });
+
+    expect(results.state.user).toEqual(user);
+    expect(applicationContext.setCurrentUser.mock.calls.length).toEqual(0);
   });
 });
