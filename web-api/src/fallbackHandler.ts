@@ -10,22 +10,19 @@ export const fallbackHandler = ({
   mainRegionDocumentClient: DynamoDBDocument;
 }) => {
   return params => {
-    return {
-      promise: () =>
-        new Promise((resolve, reject) => {
-          mainRegionDocumentClient[dynamoMethod](params)
-            .catch(err => {
-              if (
-                err.code === 'ResourceNotFoundException' ||
-                err.statusCode === 503
-              ) {
-                return fallbackRegionDocumentClient[dynamoMethod](params);
-              }
-              throw err;
-            })
-            .then(resolve)
-            .catch(reject);
-        }),
-    };
+    return new Promise((resolve, reject) => {
+      mainRegionDocumentClient[dynamoMethod](params)
+        .catch(err => {
+          if (
+            err.code === 'ResourceNotFoundException' ||
+            err.statusCode === 503
+          ) {
+            return fallbackRegionDocumentClient[dynamoMethod](params);
+          }
+          throw err;
+        })
+        .then(resolve)
+        .catch(reject);
+    });
   };
 };

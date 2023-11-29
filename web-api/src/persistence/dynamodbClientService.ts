@@ -85,7 +85,6 @@ export const put = ({
         applicationContext,
       }),
     })
-    .promise()
     .then(() => Item);
 };
 
@@ -117,7 +116,6 @@ export const update = ({
       }),
       UpdateExpression,
     })
-    .promise()
     .then(() => undefined);
 };
 
@@ -138,7 +136,6 @@ export const updateToDeployTable = params => {
       }),
       ...filteredParams,
     })
-    .promise()
     .then(() => params.Item);
 };
 
@@ -160,7 +157,6 @@ export const updateConsistent = params => {
       }),
       ...filteredParams,
     })
-    .promise()
     .then(data => data.Attributes);
 };
 
@@ -181,7 +177,6 @@ export const get = params => {
       }),
       ...params,
     })
-    .promise()
     .then(res => {
       return removeAWSGlobalFields(res.Item);
     });
@@ -204,7 +199,6 @@ export const getFromDeployTable = params => {
       }),
       ...params,
     })
-    .promise()
     .then(res => {
       return removeAWSGlobalFields(res.Item);
     });
@@ -223,8 +217,7 @@ export const putInDeployTable = async (
       TableName: getDeployTableName({
         applicationContext,
       }),
-    })
-    .promise();
+    });
 };
 
 export const query = ({
@@ -263,7 +256,6 @@ export const query = ({
       }),
       ...params,
     })
-    .promise()
     .then(result => {
       result.Items.forEach(removeAWSGlobalFields);
       return result.Items;
@@ -286,7 +278,6 @@ export const scan = async params => {
         }),
         ...params,
       })
-      .promise()
       .then(results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
@@ -322,22 +313,19 @@ export const queryFull = async <T>({
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    const subsetResults = await applicationContext
-      .getDocumentClient()
-      .query({
-        ConsistentRead,
-        ExclusiveStartKey: lastKey,
-        ExpressionAttributeNames,
-        ExpressionAttributeValues,
-        FilterExpression,
-        IndexName,
-        KeyConditionExpression,
-        TableName: getTableName({
-          applicationContext,
-        }),
-        ...params,
-      })
-      .promise();
+    const subsetResults = await applicationContext.getDocumentClient().query({
+      ConsistentRead,
+      ExclusiveStartKey: lastKey,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      FilterExpression,
+      IndexName,
+      KeyConditionExpression,
+      TableName: getTableName({
+        applicationContext,
+      }),
+      ...params,
+    });
 
     hasMoreResults = !!subsetResults.LastEvaluatedKey;
     lastKey = subsetResults.LastEvaluatedKey;
@@ -383,7 +371,6 @@ export const batchGet = async ({
             },
           },
         })
-        .promise()
         .then(result => {
           const items = result.Responses[getTableName({ applicationContext })];
           items.forEach(item => removeAWSGlobalFields(item));
@@ -401,33 +388,30 @@ export const batchGet = async ({
  * @param {object} providers.items the items to write
  * @returns {Promise|void} the promise of the persistence call
  */
-export const batchDelete = ({ applicationContext, items }) => {
+export const batchDelete = async ({ applicationContext, items }) => {
   if (!items || items.length === 0) {
     return Promise.resolve();
   }
 
   const batchDeleteItems = itemsToDelete => {
-    return applicationContext
-      .getDocumentClient()
-      .batchWrite({
-        RequestItems: {
-          [getTableName({ applicationContext })]: itemsToDelete.map(item => ({
-            DeleteRequest: {
-              Key: {
-                pk: item.pk,
-                sk: item.sk,
-              },
+    return applicationContext.getDocumentClient().batchWrite({
+      RequestItems: {
+        [getTableName({ applicationContext })]: itemsToDelete.map(item => ({
+          DeleteRequest: {
+            Key: {
+              pk: item.pk,
+              sk: item.sk,
             },
-          })),
-        },
-      })
-      .promise();
+          },
+        })),
+      },
+    });
   };
 
-  const results = batchDeleteItems(items);
+  const results = await batchDeleteItems(items);
 
   if (!isEmpty(results.UnprocessedItems)) {
-    const retryResults = batchDeleteItems(results.UnprocessedItems);
+    const retryResults = await batchDeleteItems(results.UnprocessedItems);
 
     if (!isEmpty(retryResults.UnprocessedItems)) {
       applicationContext.logger.error(
@@ -448,13 +432,11 @@ export const batchWrite = async (
 
   await Promise.all(
     chunks.map(commandChunk =>
-      documentClient
-        .batchWrite({
-          RequestItems: {
-            [applicationContext.environment.dynamoDbTableName]: commandChunk,
-          },
-        })
-        .promise(),
+      documentClient.batchWrite({
+        RequestItems: {
+          [applicationContext.environment.dynamoDbTableName]: commandChunk,
+        },
+      }),
     ),
   );
 
@@ -468,11 +450,8 @@ export const remove = ({
   applicationContext: IApplicationContext;
   key: Record<string, string>;
 }) => {
-  return applicationContext
-    .getDocumentClient()
-    .delete({
-      Key: key,
-      TableName: getTableName({ applicationContext }),
-    })
-    .promise();
+  return applicationContext.getDocumentClient().delete({
+    Key: key,
+    TableName: getTableName({ applicationContext }),
+  });
 };
