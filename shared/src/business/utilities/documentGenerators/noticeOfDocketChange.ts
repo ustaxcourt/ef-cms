@@ -11,7 +11,12 @@ export const noticeOfDocketChange = async ({
   data: {
     nameOfClerk: string;
     titleOfClerk: string;
-    [key: string]: any;
+    docketEntryIndex: string;
+    filingParties: { after: string | undefined; before: string | undefined };
+    filingsAndProceedings: { after: string; before: string };
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
   };
 }) => {
   const {

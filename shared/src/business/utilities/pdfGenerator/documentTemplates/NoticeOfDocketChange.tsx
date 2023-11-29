@@ -11,9 +11,16 @@ export const NoticeOfDocketChange = ({
   options,
   titleOfClerk,
 }: {
+  docketEntryIndex: string;
+  filingParties: { after: string | undefined; before: string | undefined };
+  filingsAndProceedings: { after: string; before: string };
+  options: {
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+  };
   nameOfClerk: string;
   titleOfClerk: string;
-  [key: string]: any;
 }) => {
   const showFilingsAndProceedingsChange =
     filingsAndProceedings &&
