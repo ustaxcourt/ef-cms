@@ -1,5 +1,5 @@
 import { Case } from '../entities/cases/Case';
-import { CaseInternal } from '../entities/cases/CaseInternal';
+import { CaseInternal } from '../entities/cases/PaperPetition';
 import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
 import {

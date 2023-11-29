@@ -1,4 +1,4 @@
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/PaperPetition';
 
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
   cerebralTest,

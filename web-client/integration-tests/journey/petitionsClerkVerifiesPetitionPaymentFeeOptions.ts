@@ -1,5 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/PaperPetition';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 

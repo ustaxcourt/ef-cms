@@ -1,4 +1,4 @@
-import { CaseInternal } from '../entities/cases/CaseInternal';
+import { CaseInternal } from '../entities/cases/PaperPetition';
 
 /**
  * validatePetitionFromPaper

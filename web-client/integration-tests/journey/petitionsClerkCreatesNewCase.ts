@@ -4,7 +4,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/PaperPetition';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { fakeFile } from '../helpers';
 
