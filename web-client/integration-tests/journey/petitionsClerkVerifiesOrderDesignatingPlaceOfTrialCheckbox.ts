@@ -1,4 +1,4 @@
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { PetitionIncomplete } from '../../../shared/src/business/entities/cases/PetitionIncomplete';
 
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
   cerebralTest,
@@ -25,7 +25,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
       chooseAtLeastOneValue:
-        CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        PetitionIncomplete.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
     });
 
     await cerebralTest.runSequence(
