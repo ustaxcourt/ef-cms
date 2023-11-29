@@ -18,17 +18,20 @@ describe('change of address', () => {
       cy.get('[data-testid="contact.address1"]').type(newAddress);
       cy.get('[data-testid="save-edit-contact"]').click();
       cy.get('[data-testid="success-alert"]').should('exist');
-      cy.get('#docket-search-field').clear();
-      cy.get('#docket-search-field').type(docketNumber);
+      cy.get('[data-testid="docket-search-field"]').clear();
+      cy.get('[data-testid="docket-search-field"]').type(docketNumber);
       cy.get('[data-testid="search-by-docket-number"]').click();
-      cy.get('#docket-record-table td').contains('NCA').should('exist');
-      cy.get('#docket-record-table td').contains('NOTR').should('exist');
-      cy.get('[data-testid="tab-case-information"] > .button-text').click();
-      cy.get('[data-testid="tab-parties"] > .button-text').click();
+      cy.get('[data-testid="docket-record-table"] td')
+        .contains('NCA')
+        .should('exist');
+      cy.get('[data-testid="docket-record-table"] td')
+        .contains('NOTR')
+        .should('exist');
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
       cy.get(
-        ':nth-child(1) > .card > .content-wrapper > :nth-child(7) > .grid-row > .grid-col-3 > .width-auto',
+        '[data-testid="petitioner-card-John"] [data-testid="view-counsel-info"]',
       ).click();
-      cy.get(':nth-child(1) > .no-margin > .margin-top-1').click();
       cy.get('[data-testid="address1-line"]')
         .contains(newAddress)
         .should('exist');
