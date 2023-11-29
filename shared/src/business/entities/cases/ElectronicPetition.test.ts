@@ -4,7 +4,7 @@ import {
   MAX_FILE_SIZE_MB,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternal } from './CaseExternal';
+import { CaseExternal } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal entity', () => {

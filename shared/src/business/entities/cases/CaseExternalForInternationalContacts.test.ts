@@ -4,7 +4,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternal } from './CaseExternal';
+import { CaseExternal } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {

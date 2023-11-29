@@ -1,4 +1,4 @@
-import { CaseExternal } from './CaseExternal';
+import { CaseExternal } from './ElectronicPetition';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';

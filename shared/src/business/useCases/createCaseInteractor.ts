@@ -1,5 +1,5 @@
 import { Case } from '../entities/cases/Case';
-import { CaseExternal } from '@shared/business/entities/cases/CaseExternal';
+import { CaseExternal } from '@shared/business/entities/cases/ElectronicPetition';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   INITIAL_DOCUMENT_TYPES,
