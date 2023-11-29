@@ -20,8 +20,12 @@ export const getDynamoEndpoints = ({
     const mainRegionDb = getDynamoClient({ useMasterRegion: true });
     const fallbackRegionDb = getDynamoClient({ useMasterRegion: false });
 
-    mainRegionDocumentClient = DynamoDBDocument.from(mainRegionDb); // To-do No cache for document client. icky icky mcSticky.
-    fallbackRegionDocumentClient = DynamoDBDocument.from(fallbackRegionDb);
+    mainRegionDocumentClient = DynamoDBDocument.from(mainRegionDb, {
+      marshallOptions: { removeUndefinedValues: true },
+    });
+    fallbackRegionDocumentClient = DynamoDBDocument.from(fallbackRegionDb, {
+      marshallOptions: { removeUndefinedValues: true },
+    });
   }
 
   return { fallbackRegionDocumentClient, mainRegionDocumentClient };
