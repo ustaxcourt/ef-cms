@@ -2,10 +2,10 @@ import { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } from '../EntityConstants';
 import { ElectronicPetition } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-describe('CaseExternal', () => {
+describe('ElectronicPetition', () => {
   describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {
     it('should not validate without contact', () => {
-      const caseExternal = new ElectronicPetition(
+      const electronicPetition = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -22,11 +22,11 @@ describe('CaseExternal', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.isValid()).toEqual(false);
+      expect(electronicPetition.isValid()).toEqual(false);
     });
 
     it('should validate without inCareOf', () => {
-      const caseExternal = new ElectronicPetition(
+      const electronicPetition = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -54,11 +54,11 @@ describe('CaseExternal', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+      expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('can validate primary contact', () => {
-      const caseExternal = new ElectronicPetition(
+      const electronicPetition = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -87,7 +87,7 @@ describe('CaseExternal', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+      expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });
