@@ -141,6 +141,10 @@ export class CaseExternal extends JoiValidationEntity {
         '*': 'Your Petition file size is empty',
         'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
+    petitioners: joi
+      .array()
+      .description('List of Contact Entities for the case.')
+      .optional(),
     preferredTrialCity: joi
       .alternatives()
       .try(
