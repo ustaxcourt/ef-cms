@@ -12,9 +12,9 @@ describe('deleteCaseDeadline', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () => Promise.resolve({ Item: mockCaseDeadline }),
-    });
+    applicationContext
+      .getDocumentClient()
+      .get.mockResolvedValue({ Item: mockCaseDeadline });
   });
 
   it('deletes the case deadline records', async () => {
@@ -43,9 +43,7 @@ describe('deleteCaseDeadline', () => {
   });
 
   it('does not call delete function if original case deadline is not found', async () => {
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () => Promise.resolve({}),
-    });
+    applicationContext.getDocumentClient().get.mockResolvedValue({});
 
     await deleteCaseDeadline({
       applicationContext,
