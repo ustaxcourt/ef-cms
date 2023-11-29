@@ -1,15 +1,10 @@
 /* eslint-disable max-lines */
-import AWS from 'aws-sdk';
-
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import axios from 'axios';
-import pug from 'pug';
-import sass from 'sass';
-import util from 'util';
-
+import { Agent } from 'https';
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
   CLOSED_CASE_STATUSES,
@@ -20,9 +15,6 @@ import {
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-
-// eslint-disable-next-line import/no-unresolved
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
@@ -31,6 +23,7 @@ import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
@@ -73,7 +66,14 @@ import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
+import AWS from 'aws-sdk';
+import axios from 'axios';
+import pug from 'pug';
+import sass from 'sass';
+import util from 'util';
+
 const { CognitoIdentityServiceProvider, S3, SES, SQS } = AWS;
+
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -160,11 +160,15 @@ const getDynamoClient = ({ useMasterRegion = false } = {}): DynamoDBClient => {
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
     dynamoCache[type] = new DynamoDBClient({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
+      endpoint:
+        environment.stage === 'local' ? 'http://localhost:8000' : undefined,
       maxAttempts: 3,
       region: useMasterRegion ? environment.masterRegion : environment.region,
+      requestHandler: new NodeHttpHandler({
+        connectionTimeout: 3000,
+        httpsAgent: new Agent({}),
+        requestTimeout: 5000,
+      }),
     });
   }
   return dynamoCache[type];
