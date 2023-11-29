@@ -21,7 +21,6 @@ import { changePasswordLocalInteractor } from '../../shared/src/business/useCase
 import { checkEmailAvailabilityInteractor } from '../../shared/src/business/useCases/users/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from '../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor';
-import { cognitoResendVerificationLinkInteractor } from '@shared/business/useCases/public/resendVerificationLinkInteractor';
 import { completeDocketEntryQCInteractor } from '../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor';
 import { completeMessageInteractor } from '../../shared/src/business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/business/useCases/workitems/completeWorkItemInteractor';
@@ -154,6 +153,7 @@ import { removePdfFromDocketEntryInteractor } from '../../shared/src/business/us
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/business/useCases/removeSignatureFromDocumentInteractor';
 import { replyToMessageInteractor } from '../../shared/src/business/useCases/messages/replyToMessageInteractor';
+import { resendVerificationLinkInteractor } from '@shared/business/useCases/public/resendVerificationLinkInteractor';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { saveCalendarNoteInteractor } from '../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor';
@@ -230,7 +230,6 @@ const useCases = {
   checkEmailAvailabilityInteractor,
   checkForReadyForTrialCasesInteractor,
   closeTrialSessionInteractor,
-  cognitoResendVerificationLinkInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
@@ -363,6 +362,7 @@ const useCases = {
   removePetitionerAndUpdateCaptionInteractor,
   removeSignatureFromDocumentInteractor,
   replyToMessageInteractor,
+  resendVerificationLinkInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCalendarNoteInteractor,
   saveCaseDetailInternalEditInteractor,
