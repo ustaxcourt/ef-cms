@@ -1,4 +1,4 @@
-import { CaseExternal } from '../entities/cases/CaseExternal';
+import { CaseExternal } from '../entities/cases/ElectronicPetition';
 
 export const validatePetitionInteractor = (
   applicationContext: IApplicationContext,
