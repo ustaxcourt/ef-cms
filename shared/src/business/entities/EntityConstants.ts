@@ -28,6 +28,8 @@ export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
 export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
 
+export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
+
 export const LEGACY_DOCUMENT_TYPES = [
   {
     documentType: 'Designation of Counsel to Receive Service',
