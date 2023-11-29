@@ -32,6 +32,9 @@ describe('updateUserContactInformationInteractor', () => {
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockImplementation(() => [{}]);
   });
 
   beforeEach(() => {
@@ -225,6 +228,18 @@ describe('updateUserContactInformationInteractor', () => {
     } as any);
 
     expect(generateChangeOfAddress).toHaveBeenCalled();
+  });
+
+  it('should not call generateChangeOfAddress when there are no associated user cases', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockImplementation(() => []);
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      userId: mockUser.userId,
+    } as any);
+
+    expect(generateChangeOfAddress).not.toHaveBeenCalled();
   });
 
   it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
