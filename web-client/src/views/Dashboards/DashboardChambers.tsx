@@ -28,7 +28,7 @@ export const DashboardChambers = connect(
           <SuccessNotification />
           <ErrorNotification />
           <TrialSessionsSummary />
-          <Tabs>
+          <Tabs className="margin-top-6" marginBottom={false}>
             <Tab tabName="recentMessages" title="Recent Messages">
               <RecentMessages />
             </Tab>
