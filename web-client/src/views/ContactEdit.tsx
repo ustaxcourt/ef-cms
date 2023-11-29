@@ -101,6 +101,7 @@ export const ContactEdit = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input max-width-200"
+                data-testid="phone-number-input"
                 id="phone"
                 name="contact.phone"
                 type="tel"
