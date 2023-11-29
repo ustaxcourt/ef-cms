@@ -38,8 +38,8 @@ describe('createTrialSessionInteractor', () => {
 
   it('should throw an error when user is unauthorized', async () => {
     user = new User({
-      role: ROLES.petitioner,
-      userId: 'petitioner',
+      role: ROLES.judge,
+      userId: 'judge',
     });
 
     await expect(
