@@ -99,6 +99,7 @@ export const CreateOrder = connect(
             <div className="grid-row grid-gap margin-top-4">
               <div className="grid-col-8">
                 <Button
+                  data-testid="save-order-button"
                   id="save-order-button"
                   onClick={() => {
                     submitCourtIssuedOrderSequence();
