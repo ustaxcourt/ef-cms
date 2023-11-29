@@ -69,7 +69,7 @@ export const createCaseInteractor = async (
     petitionMetadata,
     stinFileId,
   }: {
-    corporateDisclosureFileId: string;
+    corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
