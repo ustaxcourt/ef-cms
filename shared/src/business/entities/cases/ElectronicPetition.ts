@@ -191,5 +191,3 @@ export class ElectronicPetition extends JoiValidationEntity {
     return getContactSecondary(this);
   }
 }
-
-export type RawElectronicPetition = ExcludeMethods<ElectronicPetition>;
