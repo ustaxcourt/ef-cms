@@ -1,6 +1,6 @@
 import { post } from '../requests';
 
-export const cognitoResendVerificationLinkInteractor = (
+export const resendVerificationLinkInteractor = (
   applicationContext,
   { email },
 ) => {

@@ -1,4 +1,4 @@
-export const cognitoResendVerificationLinkInteractor = async (
+export const resendVerificationLinkInteractor = async (
   applicationContext: IApplicationContext,
   { email }: { email: string },
 ) => {

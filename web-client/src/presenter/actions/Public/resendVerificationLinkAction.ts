@@ -1,7 +1,7 @@
 import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
-export const cognitoResendVerificationLinkAction = async ({
+export const resendVerificationLinkAction = async ({
   applicationContext,
   get,
   path,
@@ -11,7 +11,7 @@ export const cognitoResendVerificationLinkAction = async ({
   try {
     const { CodeDeliveryDetails } = await applicationContext
       .getUseCases()
-      .cognitoResendVerificationLinkInteractor(applicationContext, {
+      .resendVerificationLinkInteractor(applicationContext, {
         email,
       });
     if (CodeDeliveryDetails) {

@@ -45,7 +45,6 @@ import {
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
-import { cognitoResendVerificationLinkInteractor } from '../../shared/src/proxies/public/resendVerificationLinkProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { confirmSignUpLocalInteractor } from '@shared/proxies/auth/confirmSignUpLocalProxy';
 import {
@@ -82,6 +81,7 @@ import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionP
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { removeItem } from './persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
+import { resendVerificationLinkInteractor } from '../../shared/src/proxies/public/resendVerificationLinkProxy';
 import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -98,7 +98,6 @@ const ADVANCED_SEARCH_TABS = {
 
 const allUseCases = {
   casePublicSearchInteractor,
-  cognitoResendVerificationLinkInteractor,
   confirmSignUpLocalInteractor,
   createUserCognitoInteractor,
   generatePublicDocketRecordPdfInteractor,
@@ -117,6 +116,7 @@ const allUseCases = {
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   removeItemInteractor,
+  resendVerificationLinkInteractor,
   setItemInteractor,
   validateCaseAdvancedSearchInteractor,
   validateOpinionAdvancedSearchInteractor,
