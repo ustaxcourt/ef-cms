@@ -14,13 +14,12 @@ export const TrialSessions = connect(
     defaultTab: state.screenMetadata.trialSessionFilters.status,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
-    showNewTab: state.screenMetadata.showNewTab,
-    trialSessionsHelper: state.trialSessionsHelper,
+    showNewTrialSession: state.trialSessionsHelper.showNewTrialSession,
   },
   function TrialSessions({
     defaultTab,
     openTrialSessionPlanningModalSequence,
-    trialSessionsHelper,
+    showNewTrialSession,
   }) {
     return (
       <>
@@ -45,7 +44,7 @@ export const TrialSessions = connect(
                 Trial Session Planning Report
               </Button>
             </div>
-            {trialSessionsHelper.newTrialSession && (
+            {showNewTrialSession && (
               <Button
                 className="tab-right-button"
                 data-testid="add-trial-session-button"
@@ -55,7 +54,7 @@ export const TrialSessions = connect(
                 Add Trial Session
               </Button>
             )}
-            {trialSessionsHelper.newTrialSession && (
+            {showNewTrialSession && (
               <Tab id="new-trial-sessions-tab" tabName="new" title="New">
                 <TrialSessionsTable filter="New" />
               </Tab>
