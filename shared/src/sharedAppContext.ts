@@ -32,8 +32,6 @@ export const getCognitoLocalEnabled = () => {
   return !!process.env.USE_COGNITO_LOCAL;
 };
 
-export const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
-
 export const ERROR_MAP_429 = {
   'advanced-query-limiter': {
     message: 'Please wait 1 minute before trying your search again',
