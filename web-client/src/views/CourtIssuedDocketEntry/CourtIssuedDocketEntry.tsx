@@ -205,6 +205,7 @@ export const CourtIssuedDocketEntry = connect(
                           />
                           <label
                             className="usa-radio__label"
+                            data-testid={`service-stamp-${option}`}
                             htmlFor={`service-stamp-${idx}`}
                           >
                             {option}
