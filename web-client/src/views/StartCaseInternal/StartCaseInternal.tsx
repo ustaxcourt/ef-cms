@@ -53,10 +53,16 @@ export const StartCaseInternal = connect(
                   <Tab id="tab-parties" tabName="partyInfo" title="Parties">
                     <Parties />
                   </Tab>
-                  <Tab id="tab-case-info" tabName="caseInfo" title="Case Info">
+                  <Tab
+                    data-testid="tab-case-info"
+                    id="tab-case-info"
+                    tabName="caseInfo"
+                    title="Case Info"
+                  >
                     <CaseInformation />
                   </Tab>
                   <Tab
+                    data-testid="tab-irs-notice"
                     id="tab-irs-notice"
                     tabName="irsNotice"
                     title="IRS Notice"
