@@ -12,6 +12,6 @@ export const updateDocketEntryWorksheetInteractor = (
   return post({
     applicationContext,
     body: { worksheet },
-    endpoint: `/docket-entry/${worksheet.docketEntryId}/case-worksheet`,
+    endpoint: `/docket-entry/${worksheet.docketEntryId}/worksheet`,
   });
 };

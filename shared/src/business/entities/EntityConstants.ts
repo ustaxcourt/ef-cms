@@ -1133,8 +1133,7 @@ export const PARTY_TYPES = {
   nextFriendForMinor:
     'Next friend for a minor (without a guardian, conservator, or other like fiduciary)',
   partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
-  partnershipBBA:
-    'Partnership (as a partnership representative under the BBA regime)',
+  partnershipBBA: 'Partnership (as a partnership representative under BBA)',
   partnershipOtherThanTaxMatters:
     'Partnership (as a partner other than Tax Matters Partner)',
   petitioner: 'Petitioner',

@@ -623,7 +623,7 @@ app.get(
   lambdaWrapper(getPendingMotionDocketEntriesForCurrentJudgeLambda),
 );
 app.post(
-  '/docket-entry/:docketEntryId/case-worksheet',
+  '/docket-entry/:docketEntryId/worksheet',
   lambdaWrapper(updateDocketEntryWorksheetLambda),
 );
 
