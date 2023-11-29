@@ -1,3 +1,4 @@
+import { generateRandomPhoneNumber } from '../support/helpers';
 import { navigateTo as loginAs } from '../support/pages/maintenance';
 
 describe('Practitioners with no cases', () => {
@@ -43,18 +44,3 @@ describe('Practitioners with no cases', () => {
     );
   });
 });
-
-function generateRandomPhoneNumber() {
-  function getRandomNumber(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  const areaCode = getRandomNumber(100, 999);
-  const firstPart = getRandomNumber(100, 999);
-  const secondPart = getRandomNumber(1000, 9999);
-
-  // Format the phone number
-  const phoneNumber = `+1 (${areaCode}) ${firstPart}-${secondPart}`;
-
-  return phoneNumber;
-}
