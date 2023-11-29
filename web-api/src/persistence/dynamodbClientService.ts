@@ -272,7 +272,7 @@ export const query = ({
 
 export const scan = async params => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey;
   const allItems = [];
   while (hasMoreResults) {
     hasMoreResults = false;
@@ -316,8 +316,9 @@ export const queryFull = async <T>({
   KeyConditionExpression: string;
 }): Promise<TDynamoRecord<T>[]> => {
   let hasMoreResults = true;
-  let lastKey = null;
-  let allResults = [];
+  let lastKey;
+  let allResults: TDynamoRecord<T>[] = [];
+
   while (hasMoreResults) {
     hasMoreResults = false;
 
