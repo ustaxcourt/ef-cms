@@ -12,7 +12,8 @@
  * $ npm run admin:become-user 432143213-4321-1234-4321-432143214321
  */
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { checkEnvVar, getVersion } from '../util';
 
 const { COGNITO_USER_EMAIL, COGNITO_USER_POOL, ENV } = process.env;
@@ -66,31 +67,26 @@ if (process.argv.length < 3) {
  * @returns {String} The role found for the user
  */
 const lookupRoleForUser = async userId => {
-  const dynamodb = new DynamoDB({ region: 'us-east-1' });
+  const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
+  const documentClient = DynamoDBDocument.from(dynamodb);
   const version = await getVersion();
   const TableName = `efcms-${ENV}-${version}`;
-  const data = await dynamodb
-    .getItem({
-      ExpressionAttributeNames: {
-        '#role': 'role',
-      },
-      Key: {
-        pk: {
-          S: `user|${userId}`,
-        },
-        sk: {
-          S: `user|${userId}`,
-        },
-      },
-      ProjectionExpression: '#role',
-      TableName,
-    })
-    .promise();
+  const data = await documentClient.get({
+    ExpressionAttributeNames: {
+      '#role': 'role',
+    },
+    Key: {
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
+    },
+    ProjectionExpression: '#role',
+    TableName,
+  });
 
   if (!data) {
     throw new Error(`Could not find a user for ${userId}`);
   }
-  return data.Item?.role.S;
+  return data.Item?.role;
 };
 
 (async () => {

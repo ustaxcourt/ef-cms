@@ -1,7 +1,7 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
-const dynamodb = new DynamoDB({ region: 'us-east-1' });
+const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
 const documentClient = DynamoDBDocument.from(dynamodb);
 
 export async function waitForNoce({
