@@ -59,6 +59,7 @@ const updateUserContactInformationHelper = async (
       applicationContext,
       message: {
         action: 'user_contact_full_update_complete',
+        user,
       },
       userId: user.userId,
     });
@@ -95,13 +96,38 @@ const updateUserContactInformationHelper = async (
     userId: user.userId,
   });
 
-  await generateChangeOfAddress({
-    applicationContext,
-    contactInfo,
-    firmName,
-    user: userEntity.validate().toRawObject(),
-    websocketMessagePrefix: 'user',
-  });
+  const associatedUserCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesForUser({
+      applicationContext,
+      userId: user.userId,
+    });
+
+  if (associatedUserCases.length) {
+    await generateChangeOfAddress({
+      applicationContext,
+      associatedUserCases,
+      contactInfo,
+      firmName,
+      user: userEntity.validate().toRawObject(),
+      websocketMessagePrefix: 'user',
+    });
+  } else {
+    userEntity.setisUpdatingInformation(undefined);
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: userEntity.validate().toRawObject(),
+    });
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_full_update_complete',
+        user: userEntity.validate().toRawObject(),
+      },
+      userId: user.userId,
+    });
+  }
 };
 
 /**
