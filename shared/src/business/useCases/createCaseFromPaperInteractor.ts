@@ -1,7 +1,7 @@
 import { Case } from '../entities/cases/Case';
+import { CaseInternal } from '../entities/cases/CaseInternal';
 import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
-import { PetitionIncomplete } from '../entities/cases/PetitionIncomplete';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -95,7 +95,7 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new PetitionIncomplete(
+  const petitionEntity = new CaseInternal(
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,

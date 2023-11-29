@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TYPES,
   TRIAL_CITIES,
@@ -62,29 +63,7 @@ export const runTrialSessionPlanningReportInteractor = async (
   });
 };
 
-export const getPreviousTerm = (
-  currentTerm: string,
-  currentYear: string,
-): PreviousTerm => {
-  const terms = [
-    `fall ${+currentYear - 1}`,
-    `winter ${currentYear}`,
-    `spring ${currentYear}`,
-    `fall ${currentYear}`,
-  ];
-  const termsReversed = terms.reverse();
-  const termI = terms.findIndex(t => `${currentTerm} ${currentYear}` === t);
-  const [term, year] = termsReversed[termI + 1].split(' ');
-
-  const termDisplay = `${capitalize(term)} ${year}`;
-  return {
-    term,
-    termDisplay,
-    year,
-  };
-};
-
-export const getTrialSessionPlanningReportData = async ({
+const getTrialSessionPlanningReportData = async ({
   applicationContext,
   term,
   year,
@@ -119,79 +98,119 @@ export const getTrialSessionPlanningReportData = async ({
   );
 
   const trialLocationData: TrialLocationData[] = await Promise.all(
-    trialCities.map(async trialLocation => {
-      const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
-      const trialCityStateStripped = trialCityState.replace(/[\s.,]/g, '');
-      const stateAbbreviation = invert(US_STATES)[trialLocation.state];
-
-      const eligibleCasesSmall = await applicationContext
-        .getPersistenceGateway()
-        .getEligibleCasesForTrialCity({
-          applicationContext,
-          procedureType: 'Small',
-          trialCity: trialCityStateStripped,
-        });
-      const eligibleCasesRegular = await applicationContext
-        .getPersistenceGateway()
-        .getEligibleCasesForTrialCity({
-          applicationContext,
-          procedureType: 'Regular',
-          trialCity: trialCityStateStripped,
-        });
-
-      const smallCaseCount = eligibleCasesSmall.length;
-      const regularCaseCount = eligibleCasesRegular.length;
-      const allCaseCount = smallCaseCount + regularCaseCount;
-
-      const previousTermsData: string[][] = [];
-      previousTerms.forEach(previousTerm => {
-        const previousTermSessions = allTrialSessions.filter(
-          trialSession =>
-            trialSession.term.toLowerCase() ===
-              previousTerm.term.toLowerCase() &&
-            trialSession.termYear === previousTerm.year &&
-            trialSession.trialLocation === trialCityState,
-        );
-
-        previousTermSessions.sort((a, b) => {
-          return applicationContext
-            .getUtilities()
-            .compareISODateStrings(a.startDate, b.startDate);
-        });
-
-        const previousTermSessionList: string[] = [];
-        previousTermSessions.forEach(previousTermSession => {
-          if (
-            previousTermSession &&
-            previousTermSession.sessionType &&
-            previousTermSession.judge
-          ) {
-            const sessionTypeChar =
-              previousTermSession.sessionType === SESSION_TYPES.hybridSmall
-                ? 'HS'
-                : previousTermSession.sessionType.charAt(0);
-            const strippedJudgeName = previousTermSession.judge.name.replace(
-              'Judge ',
-              '',
-            );
-            previousTermSessionList.push(
-              `(${sessionTypeChar}) ${strippedJudgeName}`,
-            );
-          }
-        });
-        previousTermsData.push(previousTermSessionList);
-      });
-
-      return {
-        allCaseCount,
-        previousTermsData,
-        regularCaseCount,
-        smallCaseCount,
-        stateAbbreviation,
-        trialCityState,
-      };
-    }),
+    trialCities.map(trialLocation =>
+      getTrialLocation(applicationContext, {
+        allTrialSessions,
+        previousTerms,
+        trialLocation,
+      }),
+    ),
   );
 
   return { previousTerms, trialLocationData };
+};
+
+const getPreviousTerm = (
+  currentTerm: string,
+  currentYear: string,
+): PreviousTerm => {
+  const terms = [
+    `fall ${+currentYear - 1}`,
+    `winter ${currentYear}`,
+    `spring ${currentYear}`,
+    `fall ${currentYear}`,
+  ];
+  const termsReversed = terms.reverse();
+  const termI = terms.findIndex(t => `${currentTerm} ${currentYear}` === t);
+  const [term, year] = termsReversed[termI + 1].split(' ');
+
+  const termDisplay = `${capitalize(term)} ${year}`;
+  return {
+    term,
+    termDisplay,
+    year,
+  };
+};
+
+const getTrialLocation = async (
+  applicationContext: IApplicationContext,
+  {
+    allTrialSessions,
+    previousTerms,
+    trialLocation,
+  }: {
+    trialLocation: { city: string; state: string };
+    previousTerms: PreviousTerm[];
+    allTrialSessions: RawTrialSession[];
+  },
+): Promise<TrialLocationData> => {
+  const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
+  const trialCityStateStripped = trialCityState.replace(/[\s.,]/g, '');
+  const stateAbbreviation = invert(US_STATES)[trialLocation.state];
+
+  const eligibleCasesSmall = await applicationContext
+    .getPersistenceGateway()
+    .getEligibleCasesForTrialCity({
+      applicationContext,
+      procedureType: 'Small',
+      trialCity: trialCityStateStripped,
+    });
+  const eligibleCasesRegular = await applicationContext
+    .getPersistenceGateway()
+    .getEligibleCasesForTrialCity({
+      applicationContext,
+      procedureType: 'Regular',
+      trialCity: trialCityStateStripped,
+    });
+
+  const smallCaseCount = eligibleCasesSmall.length;
+  const regularCaseCount = eligibleCasesRegular.length;
+  const allCaseCount = smallCaseCount + regularCaseCount;
+
+  const previousTermsData: string[][] = [];
+  previousTerms.forEach(previousTerm => {
+    const previousTermSessions = allTrialSessions.filter(
+      trialSession =>
+        trialSession.term.toLowerCase() === previousTerm.term.toLowerCase() &&
+        trialSession.termYear === previousTerm.year &&
+        trialSession.trialLocation === trialCityState,
+    );
+
+    previousTermSessions.sort((a, b) => {
+      return applicationContext
+        .getUtilities()
+        .compareISODateStrings(a.startDate, b.startDate);
+    });
+
+    const previousTermSessionList: string[] = [];
+    previousTermSessions.forEach(previousTermSession => {
+      if (
+        previousTermSession &&
+        previousTermSession.sessionType &&
+        previousTermSession.judge
+      ) {
+        const sessionTypeChar =
+          previousTermSession.sessionType === SESSION_TYPES.hybridSmall
+            ? 'HS'
+            : previousTermSession.sessionType.charAt(0);
+        const strippedJudgeName = previousTermSession.judge.name.replace(
+          'Judge ',
+          '',
+        );
+        previousTermSessionList.push(
+          `(${sessionTypeChar}) ${strippedJudgeName}`,
+        );
+      }
+    });
+    previousTermsData.push(previousTermSessionList);
+  });
+
+  return {
+    allCaseCount,
+    previousTermsData,
+    regularCaseCount,
+    smallCaseCount,
+    stateAbbreviation,
+    trialCityState,
+  };
 };
