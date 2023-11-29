@@ -29,7 +29,6 @@ export type TUserContact = {
  */
 const generateChangeOfAddressForPractitioner = async ({
   applicationContext,
-  associatedUserCases,
   bypassDocketEntry = false,
   contactInfo,
   firmName,
@@ -40,7 +39,6 @@ const generateChangeOfAddressForPractitioner = async ({
   websocketMessagePrefix = 'user',
 }: {
   applicationContext: IApplicationContext;
-  associatedUserCases?: RawCase[];
   bypassDocketEntry?: boolean;
   contactInfo: TUserContact;
   firmName: string;
@@ -49,15 +47,13 @@ const generateChangeOfAddressForPractitioner = async ({
   updatedName?: string;
   user: any;
   websocketMessagePrefix?: string;
-}) => {
-  if (!associatedUserCases) {
-    associatedUserCases = await applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser({
-        applicationContext,
-        userId: user.userId,
-      });
-  }
+}): Promise<any[] | undefined> => {
+  const associatedUserCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesForUser({
+      applicationContext,
+      userId: user.userId,
+    });
 
   if (associatedUserCases.length === 0) {
     return [];

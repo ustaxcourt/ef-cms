@@ -7,7 +7,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
-import { isEqual } from 'lodash';
+import { isArray, isEqual } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
@@ -96,23 +96,15 @@ const updateUserContactInformationHelper = async (
     userId: user.userId,
   });
 
-  const associatedUserCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  const results = await generateChangeOfAddress({
+    applicationContext,
+    contactInfo,
+    firmName,
+    user: userEntity.validate().toRawObject(),
+    websocketMessagePrefix: 'user',
+  });
 
-  if (associatedUserCases.length) {
-    await generateChangeOfAddress({
-      applicationContext,
-      associatedUserCases,
-      contactInfo,
-      firmName,
-      user: userEntity.validate().toRawObject(),
-      websocketMessagePrefix: 'user',
-    });
-  } else {
+  if (isArray(results) && !results.length) {
     userEntity.setIsUpdatingInformation(undefined);
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,
