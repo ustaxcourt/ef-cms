@@ -2,10 +2,6 @@ import { generateRandomPhoneNumber } from '../support/helpers';
 import { navigateTo as loginAs } from '../support/pages/maintenance';
 
 describe('Practitioners with no cases', () => {
-  beforeEach(() => {
-    loginAs('petitionsclerk');
-  });
-
   it('should allow the practitioner to edit their phone number multiple times', () => {
     loginAs('privatepractitioner4');
     cy.get('[data-testid="account-menu-button"]').click();
