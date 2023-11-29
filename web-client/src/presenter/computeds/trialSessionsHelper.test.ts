@@ -408,8 +408,8 @@ describe('trialSessionsHelper', () => {
     });
   });
 
-  describe('newTrialSession', () => {
-    it('should return newTrialSession as true when current user has CREATE_TRIAL_SESSION permission', () => {
+  describe('showNewTrialSession', () => {
+    it('should return showNewTrialSession as true when current user has CREATE_TRIAL_SESSION permission', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           currentViewMetadata: {
@@ -421,10 +421,10 @@ describe('trialSessionsHelper', () => {
         },
       });
 
-      expect(result.newTrialSession).toEqual(true);
+      expect(result.showNewTrialSession).toEqual(true);
     });
 
-    it('should return newTrialSession as false when current user does not have CREATE_TRIAL_SESSION permission', () => {
+    it('should return showNewTrialSession as false when current user does not have CREATE_TRIAL_SESSION permission', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           currentViewMetadata: {
@@ -436,7 +436,7 @@ describe('trialSessionsHelper', () => {
         },
       });
 
-      expect(result.newTrialSession).toEqual(false);
+      expect(result.showNewTrialSession).toEqual(false);
     });
   });
 });

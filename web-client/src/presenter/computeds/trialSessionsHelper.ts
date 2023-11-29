@@ -29,7 +29,7 @@ export const trialSessionsHelper = (get: Get): any => {
 
   return {
     additionalColumnsShown,
-    newTrialSession: permissions.CREATE_TRIAL_SESSION,
+    showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: isOpenTab,
     showSessionStatus: isAllTab,
     showUnassignedJudgeFilter: isNewTab,
