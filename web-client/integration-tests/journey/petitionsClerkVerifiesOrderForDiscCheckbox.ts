@@ -1,4 +1,4 @@
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/PaperPetition';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkVerifiesOrderForDiscCheckbox = (

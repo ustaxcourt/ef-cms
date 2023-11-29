@@ -6,7 +6,7 @@ import {
   PAYMENT_STATUS,
   ROLES,
 } from '../EntityConstants';
-import { CaseInternal } from './CaseInternal';
+import { CaseInternal } from './PaperPetition';
 import { Correspondence } from '../Correspondence';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
