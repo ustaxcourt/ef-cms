@@ -53,19 +53,14 @@ export const BeforeStartingCase = connect(
                   <p>
                     You may have received a notice in the mail from the Internal
                     Revenue Service (IRS). The IRS notice may show the last date
-                    to file or the number of days you have to file a Petition.
-                    In most cases, the Court must receive your electronically
-                    filed Petition no later than 11:59 pm Eastern Time on the
-                    last date to file. Petitions received after this date may be
-                    untimely and your case may be dismissed for lack of
-                    jurisdiction. &nbsp;
+                    to file or the number of days you have to file a Petition.{' '}
                     <strong>
-                      The Court must receive your electronically filed Petition
-                      no later than 11:59 pm Eastern Time on the last date to
-                      file.
+                      In most cases, the Court must receive your electronically
+                      filed Petition no later than 11:59 pm Eastern Time on the
+                      last date to file.
                     </strong>{' '}
-                    Petitions received after this date are untimely and your
-                    case may be dismissed for lack of jurisdiction.
+                    Petitions received after this date may be untimely and your
+                    case may be dismissed for lack of jurisdiction. &nbsp;
                   </p>
                 </AccordionItem>
               </Accordion>
@@ -198,10 +193,10 @@ export const BeforeStartingCase = connect(
                     To file a joint Petition with your spouse, you must have
                     their consent. Both you and your spouse should{' '}
                     <a href="https://ustaxcourt.gov/dawson_faqs_case_management.html#CASE7">
-                      sign the Petition.
-                    </a>{' '}
-                    If you do not have your spouse’s consent, select “Myself” as
-                    the person who is filing.
+                      sign the Petition
+                    </a>
+                    . If you do not have your spouse’s consent, select “Myself”
+                    as the person who is filing.
                   </p>
                   <p className="label">Someone Else</p>
                   <p>
