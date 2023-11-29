@@ -20,7 +20,7 @@ import joi from 'joi';
  *  attempting to add to the system.
  *
  */
-export class PetitionIncomplete extends JoiValidationEntity {
+export class CaseInternal extends JoiValidationEntity {
   public applicationForWaiverOfFilingFeeFile: object;
   public applicationForWaiverOfFilingFeeFileSize: number;
   public caseCaption: string;
@@ -308,11 +308,11 @@ export class PetitionIncomplete extends JoiValidationEntity {
   };
 
   getValidationRules() {
-    return PetitionIncomplete.VALIDATION_RULES;
+    return CaseInternal.VALIDATION_RULES;
   }
 
   getErrorToMessageMap() {
-    return PetitionIncomplete.VALIDATION_ERROR_MESSAGES;
+    return CaseInternal.VALIDATION_ERROR_MESSAGES;
   }
 
   getValidationErrors(): {} | null {

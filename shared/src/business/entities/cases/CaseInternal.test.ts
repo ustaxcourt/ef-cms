@@ -6,40 +6,36 @@ import {
   PAYMENT_STATUS,
   ROLES,
 } from '../EntityConstants';
+import { CaseInternal } from './CaseInternal';
 import { Correspondence } from '../Correspondence';
-import { PetitionIncomplete } from './PetitionIncomplete';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-describe('petitionIncomplete entity', () => {
+describe('caseInternal entity', () => {
   describe('validation', () => {
     it('throws an exception when not provided an application context', () => {
-      expect(() => new PetitionIncomplete({}, {} as any)).toThrow();
+      expect(() => new CaseInternal({}, {} as any)).toThrow();
     });
 
     it('returns the expected set of errors for an empty object', () => {
-      const petitionIncomplete = new PetitionIncomplete(
-        {},
-        { applicationContext },
-      );
+      const caseInternal = new CaseInternal({}, { applicationContext });
 
-      expect(petitionIncomplete.getFormattedValidationErrors()).toEqual({
-        caseCaption: PetitionIncomplete.VALIDATION_ERROR_MESSAGES.caseCaption,
-        caseType: PetitionIncomplete.VALIDATION_ERROR_MESSAGES.caseType,
+      expect(caseInternal.getFormattedValidationErrors()).toEqual({
+        caseCaption: CaseInternal.VALIDATION_ERROR_MESSAGES.caseCaption,
+        caseType: CaseInternal.VALIDATION_ERROR_MESSAGES.caseType,
         chooseAtLeastOneValue:
-          PetitionIncomplete.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
-        mailingDate: PetitionIncomplete.VALIDATION_ERROR_MESSAGES.mailingDate,
-        partyType: PetitionIncomplete.VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile: PetitionIncomplete.VALIDATION_ERROR_MESSAGES.petitionFile,
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        mailingDate: CaseInternal.VALIDATION_ERROR_MESSAGES.mailingDate,
+        partyType: CaseInternal.VALIDATION_ERROR_MESSAGES.partyType,
+        petitionFile: CaseInternal.VALIDATION_ERROR_MESSAGES.petitionFile,
         petitionPaymentStatus:
-          PetitionIncomplete.VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
-        procedureType:
-          PetitionIncomplete.VALIDATION_ERROR_MESSAGES.procedureType,
-        receivedAt: PetitionIncomplete.VALIDATION_ERROR_MESSAGES.receivedAt[1],
+          CaseInternal.VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
+        procedureType: CaseInternal.VALIDATION_ERROR_MESSAGES.procedureType,
+        receivedAt: CaseInternal.VALIDATION_ERROR_MESSAGES.receivedAt[1],
       });
     });
 
     it('creates a valid petition with minimal information', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
@@ -79,12 +75,12 @@ describe('petitionIncomplete entity', () => {
         { applicationContext },
       );
 
-      expect(petitionIncomplete.getFormattedValidationErrors()).toEqual(null);
-      expect(petitionIncomplete.isValid()).toEqual(true);
+      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+      expect(caseInternal.isValid()).toEqual(true);
     });
 
     it('creates a valid petition with archived docket entries', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [
             {
@@ -134,12 +130,12 @@ describe('petitionIncomplete entity', () => {
         { applicationContext },
       );
 
-      expect(petitionIncomplete.getFormattedValidationErrors()).toEqual(null);
-      expect(petitionIncomplete.isValid()).toEqual(true);
+      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+      expect(caseInternal.isValid()).toEqual(true);
     });
 
     it('creates a valid petition with partyType Corporation and an cds file', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -173,12 +169,12 @@ describe('petitionIncomplete entity', () => {
         { applicationContext },
       );
 
-      expect(petitionIncomplete.getFormattedValidationErrors()).toEqual(null);
-      expect(petitionIncomplete.isValid()).toEqual(true);
+      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+      expect(caseInternal.isValid()).toEqual(true);
     });
 
     it('creates a valid petition with partyType Corporation and an order for cds instead of an cds file', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -211,12 +207,12 @@ describe('petitionIncomplete entity', () => {
         { applicationContext },
       );
 
-      expect(petitionIncomplete.getFormattedValidationErrors()).toEqual(null);
-      expect(petitionIncomplete.isValid()).toEqual(true);
+      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+      expect(caseInternal.isValid()).toEqual(true);
     });
 
     it('fails validation if date cannot be in the future.', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: { anObject: true },
@@ -225,13 +221,11 @@ describe('petitionIncomplete entity', () => {
         },
         { applicationContext },
       );
-      expect(petitionIncomplete.getFormattedValidationErrors()).not.toEqual(
-        null,
-      );
+      expect(caseInternal.getFormattedValidationErrors()).not.toEqual(null);
     });
 
     it('fails validation if petitionFile is set, but petitionFileSize is not', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: new File([], 'test.pdf'),
@@ -241,14 +235,12 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES.petitionFileSize[1],
-      );
+        caseInternal.getFormattedValidationErrors()!.petitionFileSize,
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
     });
 
     it('fails validation if petitionPaymentStatus is Waived but applicationForWaiverOfFilingFeeFile is not set', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -258,16 +250,16 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!
+        caseInternal.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFile,
       ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES
+        CaseInternal.VALIDATION_ERROR_MESSAGES
           .applicationForWaiverOfFilingFeeFile,
       );
     });
 
     it('fails validation if partyType is Corporation and orderForCds is undefined', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           partyType: PARTY_TYPES.corporation,
         },
@@ -275,15 +267,12 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!
-          .corporateDisclosureFile,
-      ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
-      );
+        caseInternal.getFormattedValidationErrors()!.corporateDisclosureFile,
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
     it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForCds is false', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           orderForCds: false,
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
@@ -292,15 +281,12 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!
-          .corporateDisclosureFile,
-      ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
-      );
+        caseInternal.getFormattedValidationErrors()!.corporateDisclosureFile,
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
     it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -310,16 +296,16 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!
+        caseInternal.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFileSize,
       ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES
+        CaseInternal.VALIDATION_ERROR_MESSAGES
           .applicationForWaiverOfFilingFeeFileSize[1],
       );
     });
 
     it('fails validation if stinFile is set, but stinFileSize is not', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           receivedAt: applicationContext.getUtilities().createISODateString(),
@@ -328,13 +314,13 @@ describe('petitionIncomplete entity', () => {
         { applicationContext },
       );
 
-      expect(
-        petitionIncomplete.getFormattedValidationErrors()!.stinFileSize,
-      ).toEqual(PetitionIncomplete.VALIDATION_ERROR_MESSAGES.stinFileSize[1]);
+      expect(caseInternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
+        CaseInternal.VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+      );
     });
 
     it('fails validation if corporateDisclosureFile is set, but corporateDisclosureFileSize is not', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           corporateDisclosureFile: new File([], 'test.pdf'),
@@ -344,16 +330,15 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!
+        caseInternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
       ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES
-          .corporateDisclosureFileSize[1],
+        CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1],
       );
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but requestForPlaceOfTrialFileSize is not', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           receivedAt: applicationContext.getUtilities().createISODateString(),
@@ -363,16 +348,16 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!
+        caseInternal.getFormattedValidationErrors()!
           .requestForPlaceOfTrialFileSize,
       ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES
+        CaseInternal.VALIDATION_ERROR_MESSAGES
           .requestForPlaceOfTrialFileSize[1],
       );
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but preferredTrialCity is not', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           receivedAt: applicationContext.getUtilities().createISODateString(),
@@ -382,14 +367,12 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!.preferredTrialCity,
-      ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES.preferredTrialCity,
-      );
+        caseInternal.getFormattedValidationErrors()!.preferredTrialCity,
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.preferredTrialCity);
     });
 
     it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Guy Fieri, Petitioner',
           preferredTrialCity: 'Flavortown, AR',
@@ -399,15 +382,14 @@ describe('petitionIncomplete entity', () => {
       );
 
       expect(
-        petitionIncomplete.getFormattedValidationErrors()!
-          .requestForPlaceOfTrialFile,
+        caseInternal.getFormattedValidationErrors()!.requestForPlaceOfTrialFile,
       ).toEqual(
-        PetitionIncomplete.VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile,
+        CaseInternal.VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile,
       );
     });
 
     it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -442,15 +424,15 @@ describe('petitionIncomplete entity', () => {
         { applicationContext },
       );
 
-      expect(petitionIncomplete.isValid()).toEqual(false);
-      expect(petitionIncomplete.getFormattedValidationErrors()).toEqual({
+      expect(caseInternal.isValid()).toEqual(false);
+      expect(caseInternal.getFormattedValidationErrors()).toEqual({
         chooseAtLeastOneValue:
-          PetitionIncomplete.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
       });
     });
 
     it('fails validation if only orderDesignatingPlaceOfTrial is present and it is false', () => {
-      const petitionIncomplete = new PetitionIncomplete(
+      const caseInternal = new CaseInternal(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -486,10 +468,10 @@ describe('petitionIncomplete entity', () => {
         { applicationContext },
       );
 
-      expect(petitionIncomplete.isValid()).toEqual(false);
-      expect(petitionIncomplete.getFormattedValidationErrors()).toEqual({
+      expect(caseInternal.isValid()).toEqual(false);
+      expect(caseInternal.getFormattedValidationErrors()).toEqual({
         chooseAtLeastOneValue:
-          PetitionIncomplete.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
       });
     });
   });
@@ -503,7 +485,7 @@ describe('petitionIncomplete entity', () => {
       userId: mockGuid,
     });
 
-    const petitionIncomplete = new PetitionIncomplete(
+    const caseInternal = new CaseInternal(
       {
         archivedCorrespondences: [mockCorrespondence],
         caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -544,8 +526,8 @@ describe('petitionIncomplete entity', () => {
       { applicationContext },
     );
 
-    expect(petitionIncomplete.getFormattedValidationErrors()).toEqual(null);
-    expect(petitionIncomplete.isValid()).toEqual(true);
-    expect(petitionIncomplete.archivedCorrespondences.length).toBe(1);
+    expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+    expect(caseInternal.isValid()).toEqual(true);
+    expect(caseInternal.archivedCorrespondences.length).toBe(1);
   });
 });
