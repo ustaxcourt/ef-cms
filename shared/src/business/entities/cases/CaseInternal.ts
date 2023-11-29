@@ -59,6 +59,7 @@ export class CaseInternal extends JoiValidationEntity {
   public statistics: any;
   public archivedDocketEntries: any;
   public archivedCorrespondences: any;
+  public docketEntries: DocketEntry[];
 
   constructor(rawProps, { applicationContext }) {
     if (!applicationContext) {
@@ -109,6 +110,7 @@ export class CaseInternal extends JoiValidationEntity {
       rawProps.applicationForWaiverOfFilingFeeFile;
     this.applicationForWaiverOfFilingFeeFileSize =
       rawProps.applicationForWaiverOfFilingFeeFileSize;
+    this.docketEntries = rawProps.docketEntries || [];
 
     this.statistics = Array.isArray(rawProps.statistics)
       ? rawProps.statistics.map(
@@ -148,11 +150,11 @@ export class CaseInternal extends JoiValidationEntity {
     .object()
     .keys({
       applicationForWaiverOfFilingFeeFile: joi
-        .object()
-        .when('petitionPaymentStatus', {
+        .alternatives()
+        .conditional('petitionPaymentStatus', {
           is: PAYMENT_STATUS.WAIVED,
           otherwise: joi.optional().allow(null),
-          then: joi.required(),
+          then: createDocketEntriesValidation('APW'),
         })
         .messages({
           '*': 'Upload or scan an Application for Waiver of Filing Fee (APW)',
@@ -171,15 +173,17 @@ export class CaseInternal extends JoiValidationEntity {
         }),
       archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
       archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
+
       caseCaption: JoiValidationConstants.CASE_CAPTION.required().messages({
         '*': 'Enter a case caption',
       }),
+
       caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES)
         .required()
         .messages({ '*': 'Select a case type' }),
       corporateDisclosureFile: joi
-        .object()
-        .when('partyType', {
+        .alternatives()
+        .conditional('partyType', {
           is: joi
             .exist()
             .valid(
@@ -189,10 +193,10 @@ export class CaseInternal extends JoiValidationEntity {
               PARTY_TYPES.partnershipOtherThanTaxMatters,
             ),
           otherwise: joi.optional().allow(null),
-          then: joi.when('orderForCds', {
+          then: joi.alternatives().conditional('orderForCds', {
             is: joi.not(true),
             otherwise: joi.optional().allow(null),
-            then: joi.required(),
+            then: createDocketEntriesValidation('DISC'),
           }),
         })
         .messages({
@@ -210,6 +214,7 @@ export class CaseInternal extends JoiValidationEntity {
           '*': 'Your Corporate Disclosure Statement file size is empty',
           'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
         }),
+      docketEntries: joi.array().optional(),
       filingType: JoiValidationConstants.STRING.valid(
         ...FILING_TYPES[ROLES.petitioner],
         ...FILING_TYPES[ROLES.privatePractitioner],
@@ -240,9 +245,13 @@ export class CaseInternal extends JoiValidationEntity {
         .required()
         .messages({ '*': 'Select a party type' }),
       petitionFile: joi
-        .object()
-        .required()
-        .messages({ '*': 'Upload or scan a Petition' }), // object of type File
+        .alternatives()
+        .conditional('petitionFile', {
+          is: joi.exist().not(null),
+          otherwise: createDocketEntriesValidation('P'),
+          then: joi.object().required(),
+        })
+        .messages({ '*': 'Upload or scan a Petition' }),
       petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'petitionFile',
         {
@@ -296,7 +305,7 @@ export class CaseInternal extends JoiValidationEntity {
         .conditional('preferredTrialCity', {
           is: joi.exist().not(null),
           otherwise: joi.object().optional(),
-          then: joi.object().required(), // object of type File
+          then: createDocketEntriesValidation('RQT'),
         })
         .messages({ '*': 'Upload or scan a Request for Place of Trial (RQT)' }),
       requestForPlaceOfTrialFileSize:
@@ -347,4 +356,19 @@ export class CaseInternal extends JoiValidationEntity {
 
     return validationErrors;
   }
+}
+
+function createDocketEntriesValidation(eventCode: string) {
+  return joi.alternatives().conditional('docketEntries', {
+    is: joi
+      .array()
+      .items(
+        joi.object({
+          eventCode: joi.string(),
+        }),
+      )
+      .has(joi.object({ eventCode: joi.string().valid(eventCode) })),
+    otherwise: joi.object().required(), // object of type File
+    then: joi.object().optional(),
+  });
 }

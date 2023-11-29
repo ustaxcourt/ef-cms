@@ -10,7 +10,7 @@ import { CaseInternal } from './CaseInternal';
 import { Correspondence } from '../Correspondence';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-describe('CaseInternal entity', () => {
+describe('caseInternal entity', () => {
   describe('validation', () => {
     it('throws an exception when not provided an application context', () => {
       expect(() => new CaseInternal({}, {} as any)).toThrow();

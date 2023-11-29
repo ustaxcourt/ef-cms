@@ -240,7 +240,7 @@ export const BeforeStartingCase = connect(
               </div>
             </div>
           </div>
-          <Button href="/file-a-petition/step-1">
+          <Button data-testid="go-to-step-1" href="/file-a-petition/step-1">
             Got It, Letʼs Start a Case
           </Button>
           <Button

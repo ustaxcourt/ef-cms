@@ -10,7 +10,8 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, uniq } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -26,7 +27,7 @@ interface IEditPaperFilingRequest {
  * @param {IEditPaperFilingRequest} request the request data
  * @returns {object} The paper service PDF url
  */
-export const editPaperFilingInteractor = async (
+export const editPaperFiling = async (
   applicationContext: IApplicationContext,
   request: IEditPaperFilingRequest,
 ) => {
@@ -70,11 +71,11 @@ const getEditPaperFilingStrategy = ({
     return saveForLaterStrategy;
   }
 
-  if (consolidatedGroupDocketNumbers.length) {
+  if (consolidatedGroupDocketNumbers?.length) {
     return multiDocketServeStrategy;
   }
 
-  if (consolidatedGroupDocketNumbers.length === 0) {
+  if (consolidatedGroupDocketNumbers?.length === 0) {
     return singleDocketServeStrategy;
   }
 
@@ -150,7 +151,7 @@ const multiDocketServeStrategy = async ({
   });
 
   const consolidatedCaseRecords = await Promise.all(
-    request.consolidatedGroupDocketNumbers.map(consolidatedGroupDocketNumber =>
+    request.consolidatedGroupDocketNumbers!.map(consolidatedGroupDocketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber: consolidatedGroupDocketNumber,
@@ -492,3 +493,43 @@ const getDocketEntryToEdit = async ({
 
   return { caseEntity, docketEntryEntity };
 };
+
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    consolidatedGroupDocketNumbers = [],
+    documentMetadata,
+  }: {
+    consolidatedGroupDocketNumbers?: string[];
+    documentMetadata: {
+      docketNumber: string;
+    };
+  },
+) => ({
+  identifiers: uniq([
+    documentMetadata.docketNumber,
+    ...consolidatedGroupDocketNumbers,
+  ]).map(item => `case|${item}`),
+  ttl: 900,
+});
+
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'edit_paper_filing',
+    },
+    userId: user.userId,
+  });
+};
+
+export const editPaperFilingInteractor = withLocking(
+  editPaperFiling,
+  determineEntitiesToLock,
+  handleLockError,
+);

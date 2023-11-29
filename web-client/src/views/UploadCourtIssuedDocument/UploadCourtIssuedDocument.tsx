@@ -77,6 +77,7 @@ export const UploadCourtIssuedDocument = connect(
                         aria-labelledby="upload-description-label"
                         autoCapitalize="none"
                         className="usa-input"
+                        data-testid="upload-description"
                         id="upload-description"
                         name="freeText"
                         type="text"
@@ -140,7 +141,11 @@ export const UploadCourtIssuedDocument = connect(
 
               <div className="grid-row grid-gap margin-top-4">
                 <div className="grid-col-8">
-                  <Button id="save-uploaded-pdf-button" type="submit">
+                  <Button
+                    data-testid="save-uploaded-pdf-button"
+                    id="save-uploaded-pdf-button"
+                    type="submit"
+                  >
                     Save
                   </Button>
                   <Button
