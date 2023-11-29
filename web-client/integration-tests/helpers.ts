@@ -97,7 +97,22 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
+let s3Cache;
+let sqsCache;
+let dynamoDbCache;
+
 Object.assign(applicationContext, {
+  getDocumentClient: () => {
+    if (!dynamoDbCache) {
+      const dynamoDbClient = new DynamoDBClient({
+        endpoint: 'http://localhost:8000',
+        region: 'us-east-1',
+      });
+      dynamoDbCache = DynamoDBDocument.from(dynamoDbClient);
+    }
+
+    return dynamoDbCache;
+  },
   getEnvironment: () => ({
     dynamoDbTableName: 'efcms-local',
     stage: 'local',
@@ -112,10 +127,6 @@ export const fakeFile = (() => {
 export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
-
-let s3Cache;
-let sqsCache;
-let dynamoDbCache;
 
 export const callCognitoTriggerForPendingEmail = async userId => {
   // mock application context similar to that in cognito-triggers.js
