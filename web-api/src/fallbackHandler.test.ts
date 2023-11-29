@@ -22,7 +22,7 @@ describe('fallbackHandler', () => {
       mainRegionDocumentClient,
     })({
       TableName: 'testing',
-    }).promise();
+    });
 
     expect(mainRegionGet).toHaveBeenCalledTimes(1);
   });
@@ -43,7 +43,7 @@ describe('fallbackHandler', () => {
       mainRegionDocumentClient,
     })({
       TableName: 'testing',
-    }).promise();
+    });
 
     expect(mainRegionGet).toHaveBeenCalledTimes(1);
     expect(fallbackRegionGet).toHaveBeenCalledTimes(1);
@@ -65,7 +65,7 @@ describe('fallbackHandler', () => {
       mainRegionDocumentClient,
     })({
       TableName: 'testing',
-    }).promise();
+    });
 
     expect(mainRegionGet).toHaveBeenCalledTimes(1);
     expect(fallbackRegionGet).toHaveBeenCalledTimes(1);
@@ -88,7 +88,7 @@ describe('fallbackHandler', () => {
         mainRegionDocumentClient,
       })({
         TableName: 'testing',
-      }).promise(),
+      }),
     ).rejects.toEqual({
       statusCode: 500,
     });

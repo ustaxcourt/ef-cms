@@ -68,7 +68,9 @@ if (process.argv.length < 3) {
  */
 const lookupRoleForUser = async userId => {
   const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
-  const documentClient = DynamoDBDocument.from(dynamodb);
+  const documentClient = DynamoDBDocument.from(dynamodb, {
+    marshallOptions: { removeUndefinedValues: true },
+  });
   const version = await getVersion();
   const TableName = `efcms-${ENV}-${version}`;
   const data = await documentClient.get({

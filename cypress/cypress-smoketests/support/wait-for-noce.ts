@@ -2,7 +2,9 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
 const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
-const documentClient = DynamoDBDocument.from(dynamodb);
+const documentClient = DynamoDBDocument.from(dynamodb, {
+  marshallOptions: { removeUndefinedValues: true },
+});
 
 export async function waitForNoce({
   attempts = 0,

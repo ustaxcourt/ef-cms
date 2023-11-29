@@ -31,18 +31,12 @@ describe('getDocumentQCServedForSection', () => {
 
     queryStub = jest
       .fn()
-      .mockReturnValueOnce({
-        promise: () =>
-          Promise.resolve({
-            Items: itemsToReturn,
-            LastEvaluatedKey: 'last-evaluated-key',
-          }),
+      .mockResolvedValueOnce({
+        Items: itemsToReturn,
+        LastEvaluatedKey: 'last-evaluated-key',
       })
-      .mockReturnValue({
-        promise: () =>
-          Promise.resolve({
-            Items: itemsToReturn,
-          }),
+      .mockResolvedValue({
+        Items: itemsToReturn,
       });
   });
 
