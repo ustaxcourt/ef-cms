@@ -39,7 +39,7 @@ export const cognitoLocalWrapper = cognito => {
       } else if (methodName === 'resendConfirmationCode') {
         cognito[methodName] = function (params) {
           return {
-            promise: async () => {
+            promise: () => {
               return new Promise(resolve => {
                 resolve({
                   CodeDeliveryDetails: {

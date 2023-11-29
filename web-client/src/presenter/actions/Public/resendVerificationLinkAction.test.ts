@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { cognitoResendVerificationLinkAction } from './cognitoResendVerificationLinkAction';
+import { cognitoResendVerificationLinkAction } from './resendVerificationLinkAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
