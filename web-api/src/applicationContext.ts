@@ -152,7 +152,7 @@ const getDynamoClient = ({ useMasterRegion = false } = {}): DynamoDBClient => {
       requestHandler: new NodeHttpHandler({
         connectionTimeout: 3000,
         httpsAgent: new Agent({}),
-        socketTimeout: 3000,
+        requestTimeout: 5000,
       }),
     });
   }
