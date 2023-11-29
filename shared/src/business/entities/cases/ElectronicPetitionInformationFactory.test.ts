@@ -6,7 +6,7 @@ import {
   MAX_FILE_SIZE_MB,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternalInformationFactory } from './CaseExternalInformationFactory';
+import { CaseExternalInformationFactory } from './ElectronicPetitionInformationFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternalInformationFactory entity', () => {

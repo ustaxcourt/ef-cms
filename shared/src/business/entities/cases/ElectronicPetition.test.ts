@@ -4,13 +4,13 @@ import {
   MAX_FILE_SIZE_MB,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternal } from './ElectronicPetition';
+import { ElectronicPetition } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal entity', () => {
   describe('isValid', () => {
     it('requires corporate disclosure if filing type is a business', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           businessType: PARTY_TYPES.corporation,
           caseType: CASE_TYPES_MAP.other,
@@ -28,7 +28,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('does not require corporate disclosure if filing type not set', () => {
-      const petition = new CaseExternal(
+      const petition = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           hasIrsNotice: false,
@@ -44,7 +44,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('does not require corporate disclosure if filing type not a business', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'not a biz',
@@ -61,7 +61,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('requires stinFile', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           businessType: PARTY_TYPES.corporation,
           caseType: CASE_TYPES_MAP.other,
@@ -81,7 +81,7 @@ describe('CaseExternal entity', () => {
 
   describe('Petition file size', () => {
     it('should inform you if petition file size is greater than the PDF max file size', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -103,7 +103,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should inform you if petition file size is zero', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -123,7 +123,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -141,7 +141,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should error on petitionFileSize when petitionFile is defined', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -162,7 +162,7 @@ describe('CaseExternal entity', () => {
 
   describe('STIN file size', () => {
     it('should inform you if stin file size is greater than the file max size', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -182,7 +182,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should inform you if stin file size is zero', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -202,7 +202,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should not error on stinFileSize when stinFile is undefined', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -220,7 +220,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should error on stinFileSize when stinFile is undefined', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -242,7 +242,7 @@ describe('CaseExternal entity', () => {
 
   describe('corporate disclosure file size', () => {
     it('should inform you if corporate disclosure file size is greater than the PDF max file size', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           corporateDisclosureFile: new File([], 'cdsFile.pdf'),
@@ -265,7 +265,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should inform you if corporate disclosure file size is zero', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           corporateDisclosureFile: new File([], 'test.pdf'),
@@ -286,7 +286,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should not error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -305,7 +305,7 @@ describe('CaseExternal entity', () => {
     });
 
     it('should error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           corporateDisclosureFile: new File([], 'testStinFile.pdf'),

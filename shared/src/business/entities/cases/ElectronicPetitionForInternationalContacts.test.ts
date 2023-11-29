@@ -4,13 +4,13 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternal } from './ElectronicPetition';
+import { ElectronicPetition } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {
   describe('for (international) Contacts', () => {
     it('should not validate without country', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -51,7 +51,7 @@ describe('CaseExternal', () => {
     });
 
     it('can validate the primary contact in the petitioners array', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',

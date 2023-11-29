@@ -1,4 +1,4 @@
-import { CaseExternalInformationFactory } from '../../entities/cases/CaseExternalInformationFactory';
+import { CaseExternalInformationFactory } from '../../entities/cases/ElectronicPetitionInformationFactory';
 
 /**
  * validateStartCaseWizardInteractor

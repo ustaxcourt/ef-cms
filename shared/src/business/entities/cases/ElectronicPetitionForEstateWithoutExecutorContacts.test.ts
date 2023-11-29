@@ -1,11 +1,11 @@
 import { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } from '../EntityConstants';
-import { CaseExternal } from './ElectronicPetition';
+import { ElectronicPetition } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {
   describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {
     it('should not validate without contact', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -26,7 +26,7 @@ describe('CaseExternal', () => {
     });
 
     it('should validate without inCareOf', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -58,7 +58,7 @@ describe('CaseExternal', () => {
     });
 
     it('can validate primary contact', () => {
-      const caseExternal = new CaseExternal(
+      const caseExternal = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {

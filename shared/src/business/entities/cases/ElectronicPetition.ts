@@ -20,7 +20,7 @@ import joi from 'joi';
  * Represents a Case with required documents that a Petitioner is attempting to
  * add to the system.
  */
-export class CaseExternal extends JoiValidationEntity {
+export class ElectronicPetition extends JoiValidationEntity {
   public businessType: string;
   public caseType: string;
   public corporateDisclosureFile?: object;
@@ -38,7 +38,7 @@ export class CaseExternal extends JoiValidationEntity {
   public stinFileSize?: number;
 
   constructor(rawCase, { applicationContext }) {
-    super('CaseExternal');
+    super('ElectronicPetition');
 
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
@@ -180,7 +180,7 @@ export class CaseExternal extends JoiValidationEntity {
   };
 
   getValidationRules() {
-    return CaseExternal.VALIDATION_RULES;
+    return ElectronicPetition.VALIDATION_RULES;
   }
 
   getContactPrimary() {
@@ -192,4 +192,4 @@ export class CaseExternal extends JoiValidationEntity {
   }
 }
 
-export type RawCaseExternal = ExcludeMethods<CaseExternal>;
+export type RawElectronicPetition = ExcludeMethods<ElectronicPetition>;

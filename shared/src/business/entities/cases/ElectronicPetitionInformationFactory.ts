@@ -1,5 +1,5 @@
-import { CaseExternal } from './ElectronicPetition';
 import { ContactFactory } from '../contacts/ContactFactory';
+import { ElectronicPetition } from './ElectronicPetition';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
@@ -101,37 +101,38 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
 
   static wizardStep1() {
     return CaseExternalInformationFactory.atWizardStep(1, {
-      stinFile: CaseExternal.VALIDATION_RULES.stinFile,
-      stinFileSize: CaseExternal.VALIDATION_RULES.stinFileSize,
+      stinFile: ElectronicPetition.VALIDATION_RULES.stinFile,
+      stinFileSize: ElectronicPetition.VALIDATION_RULES.stinFileSize,
     });
   }
 
   static wizardStep2() {
     return CaseExternalInformationFactory.atWizardStep(2, {
-      caseType: CaseExternal.VALIDATION_RULES.caseType,
-      hasIrsNotice: CaseExternal.VALIDATION_RULES.hasIrsNotice,
-      petitionFile: CaseExternal.VALIDATION_RULES.petitionFile,
-      petitionFileSize: CaseExternal.VALIDATION_RULES.petitionFileSize,
+      caseType: ElectronicPetition.VALIDATION_RULES.caseType,
+      hasIrsNotice: ElectronicPetition.VALIDATION_RULES.hasIrsNotice,
+      petitionFile: ElectronicPetition.VALIDATION_RULES.petitionFile,
+      petitionFileSize: ElectronicPetition.VALIDATION_RULES.petitionFileSize,
     });
   }
 
   static wizardStep3() {
     return CaseExternalInformationFactory.atWizardStep(3, {
-      businessType: CaseExternal.VALIDATION_RULES.businessType,
+      businessType: ElectronicPetition.VALIDATION_RULES.businessType,
       corporateDisclosureFile:
-        CaseExternal.VALIDATION_RULES.corporateDisclosureFile,
+        ElectronicPetition.VALIDATION_RULES.corporateDisclosureFile,
       corporateDisclosureFileSize:
-        CaseExternal.VALIDATION_RULES.corporateDisclosureFileSize,
-      countryType: CaseExternal.VALIDATION_RULES.countryType,
-      filingType: CaseExternal.VALIDATION_RULES.filingType,
-      partyType: CaseExternal.VALIDATION_RULES.partyType,
+        ElectronicPetition.VALIDATION_RULES.corporateDisclosureFileSize,
+      countryType: ElectronicPetition.VALIDATION_RULES.countryType,
+      filingType: ElectronicPetition.VALIDATION_RULES.filingType,
+      partyType: ElectronicPetition.VALIDATION_RULES.partyType,
     });
   }
 
   static wizardStep4() {
     return CaseExternalInformationFactory.atWizardStep(4, {
-      preferredTrialCity: CaseExternal.VALIDATION_RULES.preferredTrialCity,
-      procedureType: CaseExternal.VALIDATION_RULES.procedureType,
+      preferredTrialCity:
+        ElectronicPetition.VALIDATION_RULES.preferredTrialCity,
+      procedureType: ElectronicPetition.VALIDATION_RULES.procedureType,
     });
   }
 }

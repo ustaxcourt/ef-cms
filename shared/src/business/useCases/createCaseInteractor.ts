@@ -1,6 +1,6 @@
 import { Case } from '../entities/cases/Case';
-import { CaseExternal } from '@shared/business/entities/cases/ElectronicPetition';
 import { DocketEntry } from '../entities/DocketEntry';
+import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
@@ -85,7 +85,7 @@ export const createCaseInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new CaseExternal(petitionMetadata, {
+  const petitionEntity = new ElectronicPetition(petitionMetadata, {
     applicationContext,
   }).validate();
 
