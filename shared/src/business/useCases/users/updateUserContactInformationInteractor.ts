@@ -158,7 +158,7 @@ export const updateUserContactInformation = async (
       applicationContext,
       message: {
         action: 'user_contact_update_error',
-        error: error.toString(),
+        error: (error as Error).toString(),
       },
       userId: authenticatedUser.userId,
     });
