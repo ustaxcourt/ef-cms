@@ -42,6 +42,7 @@ export const CreateOrderChooseTypeModal = connect(
 
             <select
               className="usa-select"
+              data-testid="event-code-select"
               id="eventCode"
               name="eventCode"
               onChange={e => {
