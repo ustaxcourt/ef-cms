@@ -64,7 +64,7 @@ export class PaperPetition extends JoiValidationEntity {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
-    super('CaseInternal');
+    super('PaperPetition');
 
     this.caseCaption = rawProps.caseCaption;
     this.caseType = rawProps.caseType;
