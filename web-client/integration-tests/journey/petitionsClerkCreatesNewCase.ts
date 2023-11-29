@@ -4,8 +4,8 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { CaseInternal } from '../../../shared/src/business/entities/cases/PaperPetition';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { PaperPetition } from '../../../shared/src/business/entities/cases/PaperPetition';
 import { fakeFile } from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (
@@ -28,7 +28,7 @@ export const petitionsClerkCreatesNewCase = (
     trialLocation: 'Birmingham, Alabama',
   };
   overrides = Object.assign(defaults, overrides || {});
-  const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
+  const { VALIDATION_ERROR_MESSAGES } = PaperPetition;
 
   return it('Petitions clerk creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
