@@ -3,7 +3,8 @@ import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import * as pdfLib from 'pdf-lib';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { DynamoDB, S3, SQS } from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
   FORMATS,
   calculateDifferenceInDays,
@@ -14,6 +15,7 @@ import {
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { JSDOM } from 'jsdom';
+import { S3, SQS } from 'aws-sdk';
 import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { applicationContext } from '../src/applicationContext';
 import {
@@ -96,12 +98,6 @@ const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
 Object.assign(applicationContext, {
-  getDocumentClient: () => {
-    return new DynamoDB.DocumentClient({
-      endpoint: 'http://localhost:8000',
-      region: 'us-east-1',
-    });
-  },
   getEnvironment: () => ({
     dynamoDbTableName: 'efcms-local',
     stage: 'local',
@@ -119,6 +115,7 @@ export const fakeFile1 = (() => {
 
 let s3Cache;
 let sqsCache;
+let dynamoDbCache;
 
 export const callCognitoTriggerForPendingEmail = async userId => {
   // mock application context similar to that in cognito-triggers.js
@@ -138,10 +135,15 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       sendBulkTemplatedEmail,
     }),
     getDocumentClient: () => {
-      return new DynamoDB.DocumentClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
+      if (!dynamoDbCache) {
+        const dynamoDbClient = new DynamoDBClient({
+          endpoint: 'http://localhost:8000',
+          region: 'us-east-1',
+        });
+        dynamoDbCache = DynamoDBDocument.from(dynamoDbClient);
+      }
+
+      return dynamoDbCache;
     },
     getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
     getDocumentsBucketName: () => {
