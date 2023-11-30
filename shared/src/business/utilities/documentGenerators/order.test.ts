@@ -14,6 +14,7 @@ describe('orders and notices', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',
+          nameOfClerk: 'Stephanie A. Servoss',
           orderContent: `<p>This is some sample notice text.</p>
 
         <p>NOTICE that the joint motion for continuance is granted in that thesecases are stricken for trial from the Court's January 27, 2020, Los Angeles, California, trial session. It is further</p>
@@ -21,7 +22,7 @@ describe('orders and notices', () => {
         <p>NOTICE that the joint motion to remand to respondent's Appeals Office is granted and these cases are
         remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>`,
           orderTitle: 'NOTICE',
-          signatureText: 'Test Signature',
+          titleOfClerk: 'Clerk of the Court',
         },
       }),
     testDescription: 'generates a Notice document',
