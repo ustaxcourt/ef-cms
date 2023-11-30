@@ -58,6 +58,10 @@ option:first-child {
 .usa-alert {
   margin-bottom: 2rem;
 
+  p {
+    font-weight: normal;
+  }
+
   &.usa-alert-paragraph {
     width: unset;
 
