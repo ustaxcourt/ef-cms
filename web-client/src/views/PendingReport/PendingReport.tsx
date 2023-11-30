@@ -35,6 +35,28 @@ export const PendingReport = connect(
                     className="margin-top-2"
                     icon="file-export"
                     onClick={() => {
+                      exportPendingReportSequence({ method: 'e2csv' });
+                    }}
+                  >
+                    Export - E2CSV
+                  </Button>
+                  <Button
+                    link
+                    aria-label="export pending report"
+                    className="margin-top-2"
+                    icon="file-export"
+                    onClick={() => {
+                      exportPendingReportSequence({ method: 'csvs' });
+                    }}
+                  >
+                    Export - CSVS
+                  </Button>
+                  <Button
+                    link
+                    aria-label="export pending report"
+                    className="margin-top-2"
+                    icon="file-export"
+                    onClick={() => {
                       exportPendingReportSequence();
                     }}
                   >
