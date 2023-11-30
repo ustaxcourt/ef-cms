@@ -23,7 +23,7 @@ describe('createOrderAction', () => {
     presenter.providers.applicationContext = applicationContextForClient;
   });
 
-  it('sets the content html and document title for creating orders', async () => {
+  it('sets the eventCode, content html and document title for creating orders', async () => {
     const result = await runAction(createOrderAction, {
       modules: {
         presenter,

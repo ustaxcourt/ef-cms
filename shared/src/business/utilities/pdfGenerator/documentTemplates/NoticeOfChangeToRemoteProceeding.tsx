@@ -1,6 +1,7 @@
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
 import { PrimaryHeader } from '../components/PrimaryHeader';
+import { TrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import React from 'react';
 
 export const NoticeOfChangeToRemoteProceeding = ({
@@ -16,7 +17,7 @@ export const NoticeOfChangeToRemoteProceeding = ({
   caseCaptionExtension: string;
   caseTitle: string;
   docketNumberWithSuffix: string;
-  trialInfo: any;
+  trialInfo: TrialInfoType;
 }) => {
   return (
     <div id="notice-of-change-to-remote-proceeding-pdf">
