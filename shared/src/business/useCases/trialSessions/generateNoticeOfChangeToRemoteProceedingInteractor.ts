@@ -7,22 +7,13 @@ import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
 
-/**
- * generateNoticeOfChangeToRemoteProceedingInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docketNumber for the case
- * @param {string} providers.trialSessionInformation the trial session information
- * @returns {Uint8Array} notice of trial session pdf
- */
 export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
     trialSessionInformation,
-  }: { docketNumber; trialSessionInformation: any },
-) => {
+  }: { docketNumber; trialSessionInformation: any }, // type trialSessionInformation
+): Promise<Buffer> => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
