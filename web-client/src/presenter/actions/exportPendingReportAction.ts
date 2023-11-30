@@ -6,7 +6,9 @@ export const exportPendingReportAction = ({
   applicationContext,
   get,
 }: ActionProps) => {
-  //create fileName
+  //remove
+  const start = Date.now();
+
   const today = applicationContext
     .getUtilities()
     .formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
@@ -39,6 +41,8 @@ export const exportPendingReportAction = ({
   a.setAttribute('href', url);
   a.setAttribute('download', fileName);
   a.click();
+
+  console.log(`Time elapsed: ${Date.now() - start} ms`);
 };
 
 const getFileName = (judgeName, date) => {
