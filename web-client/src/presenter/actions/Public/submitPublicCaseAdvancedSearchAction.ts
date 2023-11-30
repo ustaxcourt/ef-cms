@@ -1,3 +1,4 @@
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 /**
@@ -10,7 +11,7 @@ import { state } from '@web-client/presenter/app-public.cerebral';
 export const submitPublicCaseAdvancedSearchAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps<{}, ClientPublicApplicationContext>) => {
   const form = get(state.advancedSearchForm.caseSearchByName);
   const searchResults = await applicationContext
     .getUseCases()
