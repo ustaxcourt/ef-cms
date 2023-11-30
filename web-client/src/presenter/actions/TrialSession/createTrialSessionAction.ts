@@ -22,6 +22,7 @@ export const createTrialSessionAction = async ({
   }
 
   return path.success({
+    sessionScope: result.sessionScope,
     trialSession: result.trialSessionId,
   });
 };

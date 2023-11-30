@@ -7,6 +7,7 @@ import { Agent } from 'https';
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
+  CLERK_OF_THE_COURT_CONFIGURATION,
   CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
@@ -32,11 +33,6 @@ import { User } from '../../shared/src/business/entities/User';
 import { UserCase } from '../../shared/src/business/entities/UserCase';
 import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
-import {
-  clerkOfCourtNameForSigning,
-  getEnvironment,
-  getUniqueId,
-} from '../../shared/src/sharedAppContext';
 import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
@@ -48,6 +44,7 @@ import {
 } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoEndpoints } from '@web-api/getDynamoEndpoints';
+import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -239,9 +236,6 @@ export const createApplicationContext = (
       process.env.NODE_ENV === 'production'
         ? getChromiumBrowserAWS
         : getChromiumBrowser,
-    getClerkOfCourtNameForSigning: () => {
-      return clerkOfCourtNameForSigning;
-    },
     getCognito: () => {
       if (environment.stage === 'local') {
         if (process.env.USE_COGNITO_LOCAL === 'true') {
@@ -298,6 +292,13 @@ export const createApplicationContext = (
             adminUpdateUserAttributes: () => ({
               promise: () => {},
             }),
+            listUsers: () => ({
+              promise: () => {
+                throw new Error(
+                  'Please use cognito locally by running npm run start:api:cognito-local',
+                );
+              },
+            }),
           };
         }
       } else {
@@ -320,6 +321,7 @@ export const createApplicationContext = (
       CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
         ? parseInt(process.env.CHANGE_OF_ADDRESS_CONCURRENCY)
         : undefined,
+      CLERK_OF_THE_COURT_CONFIGURATION,
       CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,

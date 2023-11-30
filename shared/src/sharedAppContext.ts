@@ -11,6 +11,10 @@ export const getCognitoLoginUrl = () => {
   }
 };
 
+export const getCognitoRequestPasswordResetUrl = () => {
+  return process.env.COGNITO_PASSWORD_RESET_REQUEST_URL || '/';
+};
+
 export const getEnvironment = () => ({
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
   stage: process.env.STAGE || 'local',
@@ -27,8 +31,6 @@ export const getUniqueId = (): string => {
 export const getCognitoLocalEnabled = () => {
   return !!process.env.USE_COGNITO_LOCAL;
 };
-
-export const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
 
 export const ERROR_MAP_429 = {
   'advanced-query-limiter': {

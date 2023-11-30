@@ -21,6 +21,7 @@ import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../sharedAppContext';
@@ -83,6 +84,7 @@ import {
   getJudgesChambers,
   getJudgesChambersWithLegacy,
 } from '../../../../web-client/src/business/chambers/getJudgesChambers';
+import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConstants } from '../../../../web-client/src/getConstants';
 import { getCropBox } from '../../../src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
@@ -482,6 +484,9 @@ export const createTestApplicationContext = ({
     getChambersSectionsLabels: jest
       .fn()
       .mockImplementation(getChambersSectionsLabels),
+    getConfigurationItemValue: jest
+      .fn()
+      .mockImplementation(getConfigurationItemValue),
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn(),
@@ -592,7 +597,6 @@ export const createTestApplicationContext = ({
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
-    getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: appContextProxy({
       adminCreateUser: jest.fn().mockReturnValue({
         promise: jest.fn(),
@@ -607,6 +611,7 @@ export const createTestApplicationContext = ({
     getCognitoClientId: jest.fn(),
     getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
+    getCognitoRequestPasswordResetUrl,
     getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {
