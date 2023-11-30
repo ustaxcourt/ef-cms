@@ -53,7 +53,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
-import { createUserCognitoInteractor } from '../../shared/src/proxies/createUserCognitoProxy';
+import { createUserCognitoInteractor } from '../../shared/src/proxies/signUpUserProxy';
 import {
   formatDocketEntry,
   sortDocketEntries,
