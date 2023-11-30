@@ -31,6 +31,16 @@ const router = {
       app.getSequence('gotoPublicCaseDetailSequence')({ docketNumber });
     });
 
+    route('/create-account/petitioner', () => {
+      setPageTitle('Account Registration');
+      app.getSequence('goToCreatePetitionerAccountSequence')();
+    });
+
+    route('/create-account/verification-sent', () => {
+      setPageTitle('Verification Sent');
+      app.getSequence('goToVerificationSentSequence')();
+    });
+
     route('/case-detail/*/printable-docket-record', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicPrintableDocketRecordSequence')({
@@ -83,6 +93,14 @@ const router = {
     route('/maintenance', () => {
       setPageTitle('Maintenance');
       return app.getSequence('gotoMaintenanceSequence')();
+    });
+
+    route('/confirm-signup-local?..', () => {
+      const { confirmationCode, email } = route.query();
+      return app.getSequence('confirmSignUpLocalSequence')({
+        confirmationCode,
+        userEmail: email,
+      });
     });
 
     route('..', () => {

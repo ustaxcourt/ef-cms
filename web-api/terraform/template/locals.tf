@@ -6,6 +6,7 @@ data "null_data_source" "locals" {
     BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
     CLAMAV_DEF_DIR                     = "/opt/var/lib/clamav"
     COGNITO_SUFFIX                     = var.cognito_suffix
+    COGNITO_CLIENT_ID                  = aws_cognito_user_pool_client.client.id
     DEFAULT_ACCOUNT_PASS               = var.default_account_pass
     DISABLE_EMAILS                     = var.disable_emails
     DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"

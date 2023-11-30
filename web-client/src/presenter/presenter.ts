@@ -88,7 +88,6 @@ import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequen
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createMessageSequence } from './sequences/createMessageSequence';
-import { createNewAccountLocalSequence } from './sequences/createNewAccountLocalSequence';
 import { deleteCalendarNoteSequence } from './sequences/deleteCalendarNoteSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
@@ -123,7 +122,7 @@ import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryRepo
 import { getCustomCaseReportSequence } from './sequences/getCustomCaseReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
-import { goToCreateAccountLocalSequence } from './sequences/goToCreateAccountLocalSequence';
+import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDeficiencyStatisticsSequence } from './sequences/gotoAddDeficiencyStatisticsSequence';
@@ -691,8 +690,6 @@ export const presenterSequences = {
     countryTypeUserContactChangeSequence as unknown as Function,
   createCaseDeadlineSequence: createCaseDeadlineSequence as unknown as Function,
   createMessageSequence: createMessageSequence as unknown as Function,
-  createNewAccountLocalSequence:
-    createNewAccountLocalSequence as unknown as Function,
   deleteCalendarNoteSequence: deleteCalendarNoteSequence as unknown as Function,
   deleteCaseDeadlineSequence: deleteCaseDeadlineSequence as unknown as Function,
   deleteCaseNoteSequence: deleteCaseNoteSequence as unknown as Function,
@@ -747,8 +744,7 @@ export const presenterSequences = {
   getCustomCaseReportSequence,
   getUsersInSectionSequence: getUsersInSectionSequence as unknown as Function,
   goToApplyStampSequence: goToApplyStampSequence as unknown as Function,
-  goToCreateAccountLocalSequence:
-    goToCreateAccountLocalSequence as unknown as Function,
+  goToCreatePetitionerAccountSequence,
   gotoAccessibilityStatementSequence:
     gotoAccessibilityStatementSequence as unknown as Function,
   gotoAddCourtIssuedDocketEntrySequence:
@@ -1521,8 +1517,11 @@ export const presenter = {
 export type Sequences = typeof presenterSequences;
 
 declare global {
-  type ActionProps<Props = any> = {
-    applicationContext: ClientApplicationContext;
+  type ActionProps<
+    Props = any,
+    ApplicationContext = ClientApplicationContext,
+  > = {
+    applicationContext: ApplicationContext;
     get: <T>(slice: T) => T;
     store: {
       set: (key: any, value: any) => void;
