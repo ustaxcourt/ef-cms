@@ -9,8 +9,13 @@ export const Order = ({
   orderTitle,
   titleOfClerk,
 }: {
-  options: any; // todo: type
-  orderContent: any;
+  options: {
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+    addedDocketNumbers: string[];
+  };
+  orderContent: string;
   orderTitle: string;
   nameOfClerk: string;
   titleOfClerk: string;

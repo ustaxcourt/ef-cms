@@ -4,8 +4,22 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-// todo: type
-export const order = async ({ applicationContext, data }) => {
+export const order = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+    addedDocketNumbers: string[];
+    nameOfClerk: string;
+    orderContent: string;
+    orderTitle: string;
+    titleOfClerk: string;
+  };
+}) => {
   const {
     addedDocketNumbers,
     caseCaptionExtension,

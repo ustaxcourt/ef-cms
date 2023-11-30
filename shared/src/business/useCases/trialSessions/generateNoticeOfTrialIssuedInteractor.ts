@@ -4,9 +4,16 @@ import {
   formatDateString,
 } from '../../utilities/DateHandler';
 import { NotFoundError } from '@web-api/errors/errors';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
+
+export type FormattedTrialInfoType = RawTrialSession & {
+  formattedStartDate: string;
+  formattedStartTime: string;
+  formattedJudge: string;
+};
 
 export const generateNoticeOfTrialIssuedInteractor = async (
   applicationContext: IApplicationContext,
@@ -60,7 +67,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
         applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
     });
 
-  const trialInfo = {
+  const trialInfo: FormattedTrialInfoType = {
     formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,

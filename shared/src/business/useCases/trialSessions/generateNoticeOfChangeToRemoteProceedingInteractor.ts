@@ -3,16 +3,23 @@ import {
   createISODateString,
   formatDateString,
 } from '../../utilities/DateHandler';
+import { TrialSessionInformationType } from '@shared/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
+
+export type TrialInfoType = TrialSessionInformationType & {
+  formattedJudge: string;
+  formattedStartDate: string;
+  formattedStartTime: string;
+};
 
 export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
     trialSessionInformation,
-  }: { docketNumber; trialSessionInformation: any }, // type trialSessionInformation
+  }: { docketNumber; trialSessionInformation: TrialSessionInformationType },
 ): Promise<Buffer> => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,
@@ -30,7 +37,7 @@ export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
     judgeUserName: trialSessionInformation.judgeName,
   });
 
-  const trialInfo = {
+  const trialInfo: TrialInfoType = {
     ...trialSessionInformation,
     chambersPhoneNumber: formatPhoneNumber(
       trialSessionInformation.chambersPhoneNumber,

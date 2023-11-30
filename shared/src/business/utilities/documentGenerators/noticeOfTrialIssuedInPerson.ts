@@ -1,4 +1,5 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
+import { FormattedTrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { NoticeOfTrialIssuedInPerson } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfTrialIssuedInPerson';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
@@ -12,7 +13,10 @@ export const noticeOfTrialIssuedInPerson = async ({
   data: {
     nameOfClerk: string;
     titleOfClerk: string;
-    [key: string]: any;
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+    trialInfo: FormattedTrialInfoType;
   };
 }) => {
   const { docketNumberWithSuffix } = data;
