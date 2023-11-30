@@ -1,3 +1,5 @@
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
+
 /**
  * gets today's opinions
  *
@@ -7,7 +9,7 @@
  */
 export const getTodaysOpinionsAction = async ({
   applicationContext,
-}: ActionProps) => {
+}: ActionProps<{}, ClientPublicApplicationContext>): Promise<any> => {
   const todaysOpinions = await applicationContext
     .getUseCases()
     .getTodaysOpinionsInteractor(applicationContext);

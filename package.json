@@ -192,6 +192,7 @@
     "seed": "run-p seed:db seed:s3",
     "shell": "docker-compose run -it shell /bin/bash",
     "start:all:ci": "run-p start:api:ci start:client:ci start:public:ci",
+    "start:all:cognito-local:ci": "run-p start:api:cognito-local:ci start:client:ci start:public:ci",
     "start:all:docker": "docker build -t efcms -f Dockerfile-local . && docker-compose up",
     "start:api:ci": "CI=true npm run start:api",
     "start:api:resume": "RESUME=true npm run start:api",
