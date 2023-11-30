@@ -53,7 +53,6 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
-import { createUserCognitoInteractor } from '../../shared/src/proxies/signUpUserProxy';
 import {
   formatDocketEntry,
   sortDocketEntries,
@@ -84,6 +83,7 @@ import { removeItemInteractor } from '../../shared/src/business/useCases/removeI
 import { resendVerificationLinkInteractor } from '../../shared/src/proxies/public/resendVerificationLinkProxy';
 import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
+import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
@@ -99,7 +99,6 @@ const ADVANCED_SEARCH_TABS = {
 const allUseCases = {
   casePublicSearchInteractor,
   confirmSignUpLocalInteractor,
-  createUserCognitoInteractor,
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
@@ -118,6 +117,7 @@ const allUseCases = {
   removeItemInteractor,
   resendVerificationLinkInteractor,
   setItemInteractor,
+  signUpUserInteractor,
   validateCaseAdvancedSearchInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
