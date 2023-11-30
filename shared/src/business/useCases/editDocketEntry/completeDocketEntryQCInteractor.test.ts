@@ -196,6 +196,26 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
+  it('should generate a notice of docket change with the name and title of the clerk of the court', async () => {
+    await completeDocketEntryQCInteractor(applicationContext, {
+      entryMetadata: {
+        ...caseRecord.docketEntries[0],
+        addToCoversheet: true,
+        additionalInfo: '123',
+        additionalInfo2: 'abc',
+        certificateOfService: false,
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data,
+    ).toMatchObject({
+      nameOfClerk: 'bob',
+      titleOfClerk: 'clerk of court',
+    });
+  });
+
   it('should save the notice of docket change on the case', async () => {
     await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {

@@ -324,6 +324,8 @@ export const ORDER_TYPES = [
 
 export const BENCH_OPINION_EVENT_CODE = 'OST';
 
+export const NOTICE_EVENT_CODE = 'NOT';
+
 export const ADVANCED_SEARCH_OPINION_TYPES = {
   Bench: BENCH_OPINION_EVENT_CODE,
   Memorandum: 'MOP',

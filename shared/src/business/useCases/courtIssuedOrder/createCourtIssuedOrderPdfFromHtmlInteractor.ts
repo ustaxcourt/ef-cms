@@ -1,22 +1,14 @@
 import {
+  CLERK_OF_THE_COURT_CONFIGURATION,
+  NOTICE_EVENT_CODE,
+} from '@shared/business/entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 
-/**
- *
- * createCourtIssuedOrderPdfFromHtmlInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case where the order is generated
- * @param {string} providers.contentHtml the html string for the pdf content
- * @param {string} providers.documentTitle the title of the document
- * @param {string} providers.signatureText (optional) text to be used as the signatory of the document
- * @returns {string} url for the generated and stored document
- */
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -32,7 +24,10 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
     documentTitle: string;
     eventCode: string;
   },
-) => {
+): Promise<{
+  fileId: string;
+  url: string;
+}> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
@@ -49,7 +44,8 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
   const { docketNumberWithSuffix } = caseDetail;
 
-  const isNoticeEvent = eventCode === 'NOT'; // todo: use a constant
+  const isNoticeEvent = eventCode === NOTICE_EVENT_CODE;
+
   let nameOfClerk = '';
   let titleOfClerk = '';
 
@@ -58,8 +54,7 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       .getPersistenceGateway()
       .getConfigurationItemValue({
         applicationContext,
-        configurationItemKey:
-          applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+        configurationItemKey: CLERK_OF_THE_COURT_CONFIGURATION,
       });
     nameOfClerk = name;
     titleOfClerk = title;
