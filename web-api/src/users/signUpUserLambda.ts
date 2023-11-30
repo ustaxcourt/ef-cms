@@ -5,11 +5,11 @@ import { genericHandler } from '../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the local api gateway response object containing the statusCode, body, and headers
  */
-export const createUserCognitoLambda = event =>
+export const signUpUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .createUserCognitoInteractor(applicationContext, {
+      .signUpUserInteractor(applicationContext, {
         user: JSON.parse(event.body),
       });
   });

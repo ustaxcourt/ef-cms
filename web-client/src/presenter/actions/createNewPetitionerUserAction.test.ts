@@ -21,12 +21,10 @@ describe('createNewPetitionerUserAction', () => {
   });
 
   it('should call the success path when the account was created', async () => {
-    const createUserCognitoInteractorResults = { UserConfirmed: {} };
+    const signUpUserInteractorResults = { UserConfirmed: {} };
     applicationContext
       .getUseCases()
-      .createUserCognitoInteractor.mockResolvedValue(
-        createUserCognitoInteractorResults,
-      );
+      .signUpUserInteractor.mockResolvedValue(signUpUserInteractorResults);
 
     const FORM = {
       confirmPassword: TEST_CONFIRM_PASSWORD,
@@ -44,12 +42,10 @@ describe('createNewPetitionerUserAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor.mock.calls
-        .length,
+      applicationContext.getUseCases().signUpUserInteractor.mock.calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor.mock
-        .calls[0][1],
+      applicationContext.getUseCases().signUpUserInteractor.mock.calls[0][1],
     ).toEqual({
       user: {
         ...FORM,
@@ -82,7 +78,7 @@ describe('createNewPetitionerUserAction', () => {
     ).rejects.toThrow();
 
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor,
+      applicationContext.getUseCases().signUpUserInteractor,
     ).not.toHaveBeenCalled();
 
     expect(mockSuccessPath).not.toHaveBeenCalled();
@@ -90,12 +86,10 @@ describe('createNewPetitionerUserAction', () => {
   });
 
   it('should call the error path when the account was not created', async () => {
-    const createUserCognitoInteractorResults = {};
+    const signUpUserInteractorResults = {};
     applicationContext
       .getUseCases()
-      .createUserCognitoInteractor.mockResolvedValue(
-        createUserCognitoInteractorResults,
-      );
+      .signUpUserInteractor.mockResolvedValue(signUpUserInteractorResults);
 
     const FORM = {
       confirmPassword: TEST_CONFIRM_PASSWORD,
@@ -113,12 +107,10 @@ describe('createNewPetitionerUserAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor.mock.calls
-        .length,
+      applicationContext.getUseCases().signUpUserInteractor.mock.calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor.mock
-        .calls[0][1],
+      applicationContext.getUseCases().signUpUserInteractor.mock.calls[0][1],
     ).toEqual({
       user: {
         ...FORM,
@@ -140,7 +132,7 @@ describe('createNewPetitionerUserAction', () => {
   it('should call the error path when the interactor throws an error because email already in system', async () => {
     applicationContext
       .getUseCases()
-      .createUserCognitoInteractor.mockRejectedValueOnce({
+      .signUpUserInteractor.mockRejectedValueOnce({
         originalError: { response: { data: 'User already exists' } },
       });
 
@@ -166,12 +158,10 @@ describe('createNewPetitionerUserAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor.mock.calls
-        .length,
+      applicationContext.getUseCases().signUpUserInteractor.mock.calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor.mock
-        .calls[0][1],
+      applicationContext.getUseCases().signUpUserInteractor.mock.calls[0][1],
     ).toEqual({
       user: {
         ...FORM,
@@ -193,7 +183,7 @@ describe('createNewPetitionerUserAction', () => {
   it('should call the error path when the interactor throws an error cognito throws', async () => {
     applicationContext
       .getUseCases()
-      .createUserCognitoInteractor.mockRejectedValueOnce({
+      .signUpUserInteractor.mockRejectedValueOnce({
         message: 'SOME COGNITO ERROR',
       });
 
@@ -214,12 +204,10 @@ describe('createNewPetitionerUserAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor.mock.calls
-        .length,
+      applicationContext.getUseCases().signUpUserInteractor.mock.calls.length,
     ).toEqual(1);
     expect(
-      applicationContext.getUseCases().createUserCognitoInteractor.mock
-        .calls[0][1],
+      applicationContext.getUseCases().signUpUserInteractor.mock.calls[0][1],
     ).toEqual({
       user: {
         ...FORM,
