@@ -7,7 +7,9 @@ export const exportPendingReportAction = ({
   get,
 }: ActionProps) => {
   //create fileName
-  const today = applicationContext.getUtilities().formatNow(FORMATS.MMDDYYYY);
+  const today = applicationContext
+    .getUtilities()
+    .formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
   const fileName = getFileName(get(state.pendingReports.selectedJudge), today);
   const formattedPendingItems = get(state.formattedPendingItemsHelper.items);
   const headers = [
@@ -44,7 +46,7 @@ const getFileName = (judgeName, date) => {
 };
 
 const getCsv = (data, headers) => {
-  const lines = headers;
+  const lines = [headers.join(';')];
   for (let item of data) {
     const line = Object.values(item).map(x => escapeCsvValue(x));
     lines.push(line.join(';'));
