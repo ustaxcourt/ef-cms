@@ -151,6 +151,7 @@ export const CaseDetailHeaderMenu = connect(
         {caseDetailHeaderHelper.showCreateOrderButton && (
           <li
             className="usa-nav__submenu-item row-button"
+            data-testid="menu-button-create-order"
             id="menu-button-create-order"
             onClick={() => {
               resetCaseMenuSequence();
