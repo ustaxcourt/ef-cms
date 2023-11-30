@@ -31,7 +31,7 @@ export const PendingReport = connect(
                 <>
                   <Button
                     link
-                    aria-describedby="pending-report-tab"
+                    aria-label="export pending report"
                     className="margin-top-2"
                     icon="file-export"
                     onClick={() => {
@@ -42,7 +42,7 @@ export const PendingReport = connect(
                   </Button>
                   <Button
                     link
-                    aria-describedby="pending-report-tab"
+                    aria-label="print pending report"
                     className="margin-top-2"
                     href={formattedPendingItemsHelper.printUrl}
                     icon="print"
