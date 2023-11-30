@@ -188,6 +188,7 @@ export const updatePractitionerCases = async ({
     applicationContext,
     message: {
       action: 'user_contact_full_update_complete',
+      user,
     },
     userId: user.userId,
   });
