@@ -26,15 +26,25 @@ export const PendingReport = connect(
           <Tabs bind="reportsTab.group" defaultActiveTab="pendingReport">
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               {hasPendingItemsResults && (
-                <Button
-                  link
-                  aria-describedby="pending-report-tab"
-                  className="margin-top-2"
-                  href={formattedPendingItemsHelper.printUrl}
-                  icon="print"
-                >
-                  Printable Report
-                </Button>
+                <>
+                  <Button
+                    link
+                    aria-describedby="pending-report-tab"
+                    className="margin-top-2"
+                    icon="file-export"
+                  >
+                    Export
+                  </Button>
+                  <Button
+                    link
+                    aria-describedby="pending-report-tab"
+                    className="margin-top-2"
+                    href={formattedPendingItemsHelper.printUrl}
+                    icon="print"
+                  >
+                    Printable Report
+                  </Button>
+                </>
               )}
             </div>
 
