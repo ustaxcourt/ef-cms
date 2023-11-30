@@ -2,7 +2,7 @@ export const chooseExportPendingReportMethodAction = ({
   path,
   props,
 }: ActionProps) => {
-  console.log(props.method);
+  console.log('Method used:', props.method);
   switch (props.method) {
     case 'e2csv':
       return path.e2csv();
