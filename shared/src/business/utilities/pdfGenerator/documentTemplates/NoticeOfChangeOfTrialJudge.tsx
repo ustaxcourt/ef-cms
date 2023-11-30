@@ -1,6 +1,6 @@
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
-import { FormattedTrialInfo } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
+import { FormattedTrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { PROCEDURE_TYPES_MAP } from '../../../entities/EntityConstants';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
@@ -18,7 +18,7 @@ export const NoticeOfChangeOfTrialJudge = ({
   docketNumberWithSuffix: string;
   nameOfClerk: string;
   titleOfClerk: string;
-  trialInfo: FormattedTrialInfo;
+  trialInfo: FormattedTrialInfoType;
 }) => {
   return (
     <div id="notice-of-change-of-trial-judge-pdf">

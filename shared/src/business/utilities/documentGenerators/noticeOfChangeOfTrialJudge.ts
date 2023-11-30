@@ -1,5 +1,5 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
-import { FormattedTrialInfo } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
+import { FormattedTrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { NoticeOfChangeOfTrialJudge } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
@@ -16,7 +16,7 @@ export const noticeOfChangeOfTrialJudge = async ({
     docketNumberWithSuffix: string;
     nameOfClerk: string;
     titleOfClerk: string;
-    trialInfo: FormattedTrialInfo;
+    trialInfo: FormattedTrialInfoType;
   };
 }): Promise<Buffer> => {
   const { docketNumberWithSuffix } = data;
