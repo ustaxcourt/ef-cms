@@ -100,7 +100,7 @@ import { createMessageInteractor } from '../../shared/src/proxies/messages/creat
 import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
-import { createUserCognitoInteractor } from '../../shared/src/proxies/createUserCognitoProxy';
+import { createUserCognitoInteractor } from '../../shared/src/proxies/signUpUserProxy';
 import { deleteAuthCookieInteractor } from '../../shared/src/proxies/auth/deleteAuthCookieProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';

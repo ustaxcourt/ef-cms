@@ -1,5 +1,5 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { createUserCognitoInteractor } from './createUserCognitoInteractor';
+import { createUserCognitoInteractor } from './signUpUserInteractor';
 
 describe('createUserCognitoInteractor', () => {
   const email = 'example@example.com';
