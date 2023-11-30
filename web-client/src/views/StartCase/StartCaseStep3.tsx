@@ -364,7 +364,7 @@ export const StartCaseStep3 = connect(
               >
                 Tax Court Rule 60
               </a>{' '}
-              requires a corporation, partnership, or limited liability company,
+              requires a corporation, partnership, or limited liability company
               filing a Petition with the Court to also file a Corporate
               Disclosure Statement (CDS).
             </Hint>
