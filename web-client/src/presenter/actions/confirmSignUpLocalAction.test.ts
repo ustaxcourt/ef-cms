@@ -40,9 +40,12 @@ describe('confirmSignUpLocalAction', () => {
         .calls[0][1],
     ).toMatchObject({ confirmationCode, userEmail });
 
-    expect(mockYes.mock.calls[0][0]).toMatchObject({
+    expect(mockYes.mock.calls[0][0]).toEqual({
       alertSuccess: {
-        message: 'Your registration has been confirmed!',
+        alertType: 'success',
+        message:
+          'Your registration has been confirmed! You will be redirected shortly!',
+        title: 'Account Confirmed Locally',
       },
     });
   });
