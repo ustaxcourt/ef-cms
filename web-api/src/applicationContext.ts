@@ -298,6 +298,13 @@ export const createApplicationContext = (
             adminUpdateUserAttributes: () => ({
               promise: () => {},
             }),
+            listUsers: () => ({
+              promise: () => {
+                throw new Error(
+                  'Please use cognito locally by running npm run start:api:cognito-local',
+                );
+              },
+            }),
           };
         }
       } else {
