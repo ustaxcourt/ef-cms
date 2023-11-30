@@ -10,11 +10,7 @@ const putMock = put as jest.Mock;
 
 describe('createCaseTrialSortMappingRecords', () => {
   it('attempts to persist the case trial sort mapping records', async () => {
-    queryMock.mockReturnValue({
-      promise: () => {
-        return Promise.resolve({ Items: [] });
-      },
-    });
+    queryMock.mockResolvedValue({ Items: [] });
 
     await createCaseTrialSortMappingRecords({
       applicationContext,

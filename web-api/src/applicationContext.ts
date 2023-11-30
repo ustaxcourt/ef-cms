@@ -1,15 +1,10 @@
 /* eslint-disable max-lines */
-import AWS from 'aws-sdk';
-
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import axios from 'axios';
-import pug from 'pug';
-import sass from 'sass';
-import util from 'util';
-
+import { Agent } from 'https';
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
@@ -21,9 +16,6 @@ import {
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-
-// eslint-disable-next-line import/no-unresolved
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
@@ -32,6 +24,7 @@ import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
@@ -50,6 +43,7 @@ import {
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocumentGenerators } from './getDocumentGenerators';
+import { getDynamoEndpoints } from '@web-api/getDynamoEndpoints';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
@@ -69,7 +63,14 @@ import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
+import AWS from 'aws-sdk';
+import axios from 'axios';
+import pug from 'pug';
+import sass from 'sass';
+import util from 'util';
+
 const { CognitoIdentityServiceProvider, S3, SES, SQS } = AWS;
+
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -96,43 +97,57 @@ const environment = {
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
-  const mainRegion = environment.region;
-  const fallbackRegion =
-    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
-  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('local')
-    ? environment.dynamoDbEndpoint.includes('localhost')
-      ? 'http://localhost:8000'
-      : environment.dynamoDbEndpoint
-    : `dynamodb.${mainRegion}.amazonaws.com`;
-  const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
-    'localhost',
-  )
-    ? 'http://localhost:8000'
-    : `dynamodb.${fallbackRegion}.amazonaws.com`;
-  const { masterDynamoDbEndpoint, masterRegion } = environment;
 
-  const config = {
-    fallbackRegion,
-    fallbackRegionEndpoint,
-    mainRegion,
-    mainRegionEndpoint,
-    masterDynamoDbEndpoint,
-    masterRegion,
-    useMasterRegion,
-  };
+  const { fallbackRegionDocumentClient, mainRegionDocumentClient } =
+    getDynamoEndpoints({
+      getDynamoClient,
+    });
 
   if (!dynamoClientCache[type]) {
     dynamoClientCache[type] = {
-      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
-      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
-      delete: fallbackHandler({ key: 'delete', ...config }),
-      get: fallbackHandler({ key: 'get', ...config }),
-      put: fallbackHandler({ key: 'put', ...config }),
-      query: fallbackHandler({ key: 'query', ...config }),
-      scan: fallbackHandler({ key: 'scan', ...config }),
-      update: fallbackHandler({ key: 'update', ...config }),
+      batchGet: fallbackHandler({
+        dynamoMethod: 'batchGet',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      batchWrite: fallbackHandler({
+        dynamoMethod: 'batchWrite',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      delete: fallbackHandler({
+        dynamoMethod: 'delete',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      get: fallbackHandler({
+        dynamoMethod: 'get',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      put: fallbackHandler({
+        dynamoMethod: 'put',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      query: fallbackHandler({
+        dynamoMethod: 'query',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      scan: fallbackHandler({
+        dynamoMethod: 'scan',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      update: fallbackHandler({
+        dynamoMethod: 'update',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
     };
   }
+
   return dynamoClientCache[type];
 };
 
@@ -146,6 +161,11 @@ const getDynamoClient = ({ useMasterRegion = false } = {}): DynamoDBClient => {
         environment.stage === 'local' ? 'http://localhost:8000' : undefined,
       maxAttempts: 3,
       region: useMasterRegion ? environment.masterRegion : environment.region,
+      requestHandler: new NodeHttpHandler({
+        connectionTimeout: 3000,
+        httpsAgent: new Agent({}),
+        requestTimeout: 5000,
+      }),
     });
   }
   return dynamoCache[type];

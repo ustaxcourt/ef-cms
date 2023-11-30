@@ -27,8 +27,7 @@ async function putEventHistory(
       TableName: getTableName({
         applicationContext,
       }),
-    })
-    .promise();
+    });
 }
 
 /**
