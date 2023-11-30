@@ -5,15 +5,17 @@ import { PendingReportList } from './PendingReportList';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PendingReport = connect(
   {
+    exportPendingReportSequence: sequences.exportPendingReportSequence,
     formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
   },
   function PendingReport({
+    exportPendingReportSequence,
     formattedPendingItemsHelper,
     hasPendingItemsResults,
   }) {
@@ -32,6 +34,9 @@ export const PendingReport = connect(
                     aria-describedby="pending-report-tab"
                     className="margin-top-2"
                     icon="file-export"
+                    onClick={() => {
+                      exportPendingReportSequence();
+                    }}
                   >
                     Export
                   </Button>
