@@ -1,10 +1,12 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { generateCsv, mkConfig } from 'export-to-csv';
 import { pick } from 'lodash';
-import { stringify } from 'csv-stringify';
+import { stringify } from 'csv-stringify/sync';
 
 const getCsv = (data, headers) => {
   const formattedData = data.map(item => {
@@ -63,13 +65,19 @@ export const exportPendingReportInteractor = async (
     'Judge',
   ];
 
+  const today = applicationContext
+    .getUtilities()
+    .formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
+
+  const fileName = getFileName(judge, today);
+
   let csvString;
   switch (method) {
     case 'e2csv':
-      csvString = getCsv(formattedPendingItems, headers);
+      csvString = getE2CSVCsv(formattedPendingItems, fileName);
       break;
     case 'csvs':
-      csvString = getStringifyCsv(formattedPendingItems, headers);
+      csvString = getStringifyCsv(formattedPendingItems);
       break;
     default:
       csvString = getCsv(formattedPendingItems, headers);
@@ -91,4 +99,24 @@ const getStringifyCsv = data => {
     ],
     header: true,
   });
+};
+
+const getE2CSVCsv = (data, fileName) => {
+  const csvConfig = mkConfig({
+    columnHeaders: [
+      { displayLabel: 'Docket No.', key: 'docketNumberWithSuffix' },
+      { displayLabel: 'Date Filed', key: 'formattedFiledDate' },
+      { displayLabel: 'Case Title', key: 'caseTitle' },
+      { displayLabel: 'Filings and Proceedings', key: 'formattedName' },
+      { displayLabel: 'Case Status', key: 'formattedStatus' },
+      { displayLabel: 'Judge', key: 'associatedJudgeFormatted' },
+    ],
+    filename: fileName,
+  });
+
+  return generateCsv(csvConfig)(data);
+};
+
+const getFileName = (judgeName, date) => {
+  return 'Pending Report - ' + judgeName + ' ' + date;
 };

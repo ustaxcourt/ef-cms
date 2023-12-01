@@ -18,6 +18,8 @@ export const exportPendingReportAction = async ({
       method: props.method,
     });
 
+  console.log('this is the csv string', csvString);
+
   const today = applicationContext
     .getUtilities()
     .formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
