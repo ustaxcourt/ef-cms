@@ -1,5 +1,4 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeC', () => {
@@ -22,8 +21,8 @@ describe('CourtIssuedDocumentTypeC', () => {
         scenario: 'Type C',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers[0].message,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        docketNumbers: 'Enter docket number(s)',
+        documentType: 'Select a document type',
       });
     });
 
@@ -49,7 +48,8 @@ describe('CourtIssuedDocumentTypeC', () => {
         scenario: 'Type C',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers[1].message,
+        docketNumbers:
+          'Limit is 500 characters. Enter 500 or fewer characters.',
       });
     });
 

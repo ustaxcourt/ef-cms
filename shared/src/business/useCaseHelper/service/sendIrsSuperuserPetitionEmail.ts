@@ -4,7 +4,9 @@ import {
   formatDateString,
   formatNow,
 } from '../../utilities/DateHandler';
-import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
+import { PetitionService } from '@shared/business/utilities/emailGenerator/emailTemplates/PetitionService';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
@@ -20,6 +22,7 @@ export const sendIrsSuperuserPetitionEmail = async ({
   const caseDetail = applicationContext
     .getUtilities()
     .setServiceIndicatorsForCase(caseEntity);
+
   const {
     caseCaption,
     docketNumber,
@@ -50,9 +53,8 @@ export const sendIrsSuperuserPetitionEmail = async ({
   const formattedMailingDate =
     mailingDate || `Electronically Filed ${filingDateFormatted}`;
 
-  const templateHtml = reactTemplateGenerator({
-    componentName: 'PetitionService',
-    data: {
+  const templateHtml = ReactDOM.renderToString(
+    React.createElement(PetitionService, {
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
         docketNumber,
@@ -73,8 +75,8 @@ export const sendIrsSuperuserPetitionEmail = async ({
       },
       practitioners: privatePractitioners,
       taxCourtLoginUrl: `https://app.${process.env.EFCMS_DOMAIN}`,
-    },
-  });
+    }),
+  );
 
   const destination = {
     email: applicationContext.getIrsSuperuserEmail(),

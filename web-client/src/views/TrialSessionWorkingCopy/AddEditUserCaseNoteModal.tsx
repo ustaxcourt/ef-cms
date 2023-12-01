@@ -41,6 +41,7 @@ export const AddEditUserCaseNoteModal = connect(
           <BindedTextarea
             aria-label="notes"
             bind="modal.notes"
+            data-testid="case-notes"
             id="case-notes"
             onChange={() => {
               validateNoteSequence();

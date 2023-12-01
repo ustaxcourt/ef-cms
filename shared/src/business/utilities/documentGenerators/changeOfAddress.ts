@@ -1,5 +1,7 @@
+import { ChangeOfAddress } from '@shared/business/utilities/pdfGenerator/documentTemplates/ChangeOfAddress';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const computeChangeOptions = ({ documentType }) => {
   const options = {
@@ -23,9 +25,8 @@ export const changeOfAddress = async ({ applicationContext, content }) => {
   } = content;
   const options = computeChangeOptions(content);
 
-  const changeOfAddressTemplate = reactTemplateGenerator({
-    componentName: 'ChangeOfAddress',
-    data: {
+  const changeOfAddressTemplate = ReactDOM.renderToString(
+    React.createElement(ChangeOfAddress, {
       name,
       newData,
       oldData,
@@ -35,8 +36,8 @@ export const changeOfAddress = async ({ applicationContext, content }) => {
         docketNumberWithSuffix,
         ...options,
       },
-    },
-  });
+    }),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,

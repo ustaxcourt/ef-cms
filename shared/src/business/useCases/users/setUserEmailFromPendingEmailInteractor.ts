@@ -1,52 +1,13 @@
 import { Practitioner } from '../../entities/Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { RawUser, User } from '../../entities/User';
-import {
-  updateCasesForPetitioner,
-  updatePractitionerCases,
-} from './verifyUserPendingEmailInteractor';
-
-/**
- * updatePetitionerCases
- * for the provided user, update their email address on all cases
- * where they are the contactPrimary
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.user the user who is a primary contact on a case
- * @returns {Promise} resolves upon completion of case updates
- */
-export const updatePetitionerCases = async ({
-  applicationContext,
-  user,
-}: {
-  applicationContext: IApplicationContext;
-  user: RawUser;
-}) => {
-  const petitionerDocketNumbers = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
-
-  const petitionerCases = petitionerDocketNumbers.map(docketNumber => ({
-    docketNumber,
-  }));
-
-  return await updateCasesForPetitioner({
-    applicationContext,
-    petitionerCases,
-    user,
-  });
-};
-
+import { User } from '../../entities/User';
+import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
+import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
 /**
  * setUserEmailFromPendingEmailInteractor
  *
  * this is invoked when logging in as a admissionsclerk and setting
  * a party's email to a new petitioner who doesn't exist in cognito yet.
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.user the user
@@ -57,16 +18,29 @@ export const setUserEmailFromPendingEmailInteractor = async (
   { user },
 ) => {
   let userEntity;
+  let docketNumbersAssociatedWithUser;
   if (
     user.role === ROLES.privatePractitioner ||
     user.role === ROLES.irsPractitioner ||
     user.role === ROLES.inactivePractitioner
   ) {
+    docketNumbersAssociatedWithUser = await applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser({
+        applicationContext,
+        userId: user.userId,
+      });
     userEntity = new Practitioner({
       ...user,
       email: user.pendingEmail,
       pendingEmail: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
+    await acquireLock({
+      applicationContext,
+      identifiers: docketNumbersAssociatedWithUser.map(item => `case|${item}`),
+      retries: 5,
+      waitTime: 3000,
     });
   } else {
     userEntity = new User({
@@ -94,8 +68,17 @@ export const setUserEmailFromPendingEmailInteractor = async (
     } else {
       await updatePractitionerCases({
         applicationContext,
+        docketNumbersAssociatedWithUser,
         user: rawUser,
       });
+      await Promise.all(
+        docketNumbersAssociatedWithUser.map(docketNumber =>
+          applicationContext.getPersistenceGateway().removeLock({
+            applicationContext,
+            identifiers: [`case|${docketNumber}`],
+          }),
+        ),
+      );
     }
   } catch (error) {
     applicationContext.logger.error(error);

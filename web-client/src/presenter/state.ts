@@ -72,7 +72,7 @@ import { formattedDocument } from './computeds/formattedDocument';
 import { formattedEligibleCasesHelper } from './computeds/formattedEligibleCasesHelper';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
-import { formattedPendingItems } from './computeds/formattedPendingItems';
+import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
@@ -80,6 +80,7 @@ import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseReportState } from './customCaseReportState';
+import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -340,9 +341,10 @@ export const computeds = {
   formattedOpenCases: formattedOpenCases as unknown as ReturnType<
     typeof formattedOpenCases
   >,
-  formattedPendingItems: formattedPendingItems as unknown as ReturnType<
-    typeof formattedPendingItems
-  >,
+  formattedPendingItemsHelper:
+    formattedPendingItemsHelper as unknown as ReturnType<
+      typeof formattedPendingItemsHelper
+    >,
   formattedTrialSessionDetails:
     formattedTrialSessionDetails as unknown as ReturnType<
       typeof formattedTrialSessionDetails
@@ -550,6 +552,7 @@ export const baseState = {
   caseDetail: {} as RawCase,
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
+  cognito: {} as any,
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
@@ -654,8 +657,8 @@ export const baseState = {
     stampData: null,
   },
   pdfPreviewUrl: '',
-  pendingReports: {},
-  permissions: null,
+  pendingReports: cloneDeep(initialPendingReportsState),
+  permissions: {} as Record<string, boolean>,
   practitionerDetail: {},
   previewPdfFile: null,
   progressIndicator: {

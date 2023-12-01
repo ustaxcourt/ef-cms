@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 export const uploadDocumentInteractor = async (
   applicationContext,
   { documentFile, key, onUploadProgress },

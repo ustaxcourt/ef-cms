@@ -45,7 +45,7 @@
       }
     }
 
-    .login-container {
+    .login-container, .create-container {
       margin-top: 25px;
       margin-left: auto;
       color: color($theme-color-primary);
@@ -67,5 +67,13 @@
         }
       }
     }
+
+		.create-container {
+			margin-left: unset;
+
+			&.mobile {
+				padding-left: 2px;
+			}
+		}
   }
 }

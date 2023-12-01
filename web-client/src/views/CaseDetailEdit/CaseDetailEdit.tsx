@@ -31,7 +31,12 @@ export const CaseDetailEdit = connect(
           <Tab id="tab-parties" tabName="partyInfo" title="Parties">
             <PartyInformation />
           </Tab>
-          <Tab id="tab-case-info" tabName="caseInfo" title="Case Info">
+          <Tab
+            data-testid="tab-case-info"
+            id="tab-case-info"
+            tabName="caseInfo"
+            title="Case Info"
+          >
             <CaseInfo />
           </Tab>
           <Tab

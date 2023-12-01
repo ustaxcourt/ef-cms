@@ -252,14 +252,14 @@ describe('formatDocketEntry', () => {
       },
       {
         description:
-          'should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document',
+          'should format docket records and set createdAtFormatted to empty string if document is an unserved court-issued document',
         docketEntry: {
           documentTitle: 'Order [Judge Name] [Anything]',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           filingDate: '2019-04-19T17:29:13.120Z',
         },
-        expectation: undefined,
+        expectation: '',
       },
       {
         description:
@@ -285,7 +285,7 @@ describe('formatDocketEntry', () => {
       },
       {
         description:
-          'should be undefined if the document is on the docket record and is an unserved court-issued document',
+          'should be empty string if the document is on the docket record and is an unserved court-issued document',
         docketEntry: {
           createdAt: '2019-03-11T17:29:13.120Z',
           documentTitle: 'Order',
@@ -295,7 +295,7 @@ describe('formatDocketEntry', () => {
           isOnDocketRecord: true,
           servedAt: undefined,
         },
-        expectation: undefined,
+        expectation: '',
       },
     ];
 

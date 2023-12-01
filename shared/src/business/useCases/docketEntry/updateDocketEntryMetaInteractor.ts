@@ -11,6 +11,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *
@@ -20,7 +21,7 @@ import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentT
  * @param {object} providers.docketNumber the docket number of the case to be updated
  * @returns {object} the updated case after the documents are added
  */
-export const updateDocketEntryMetaInteractor = async (
+export const updateDocketEntryMeta = async (
   applicationContext: IApplicationContext,
   {
     docketEntryMeta,
@@ -46,7 +47,7 @@ export const updateDocketEntryMetaInteractor = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const originalDocketEntry = caseEntity.getDocketEntryById({
+  const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 
@@ -104,7 +105,7 @@ export const updateDocketEntryMetaInteractor = async (
   const servedAtUpdated =
     editableFields.servedAt &&
     editableFields.servedAt !== originalDocketEntry.servedAt;
-  const filingDateUpdated =
+  const filingDateUpdated: boolean =
     editableFields.filingDate &&
     editableFields.filingDate !== originalDocketEntry.filingDate;
 
@@ -176,7 +177,6 @@ export const updateDocketEntryMetaInteractor = async (
       .getUseCaseHelpers()
       .removeCoversheet(applicationContext, {
         docketEntryId: originalDocketEntry.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
       });
 
     docketEntryEntity.setNumberOfPages(numberOfPages);
@@ -213,3 +213,10 @@ export const shouldGenerateCoversheetForDocketEntry = ({
     !originalDocketEntry.isMinuteEntry
   );
 };
+
+export const updateDocketEntryMetaInteractor = withLocking(
+  updateDocketEntryMeta,
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

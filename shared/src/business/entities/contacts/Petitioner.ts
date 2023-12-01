@@ -26,7 +26,7 @@ export class Petitioner extends JoiValidationEntity {
   public postalCode: string;
   public sealedAndUnavailable?: boolean;
   public secondaryName?: string;
-  public serviceIndicator: string;
+  public serviceIndicator?: string;
   public state?: string;
   public title?: string;
 

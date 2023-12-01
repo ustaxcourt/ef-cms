@@ -1,6 +1,5 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 
 describe('CourtIssuedDocumentTypeF', () => {
   describe('constructor', () => {
@@ -22,9 +21,9 @@ describe('CourtIssuedDocumentTypeF', () => {
         scenario: 'Type F',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        judge: VALIDATION_ERROR_MESSAGES.judge,
-        trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
+        documentType: 'Select a document type',
+        judge: 'Select a judge',
+        trialLocation: 'Select a trial location',
       });
     });
 
@@ -39,7 +38,7 @@ describe('CourtIssuedDocumentTypeF', () => {
       });
 
       expect(documentInstance.getFormattedValidationErrors()!.freeText).toEqual(
-        VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        'Limit is 1000 characters. Enter 1000 or fewer characters.',
       );
     });
 

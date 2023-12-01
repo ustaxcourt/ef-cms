@@ -1,6 +1,5 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 
 describe('CourtIssuedDocumentBase', () => {
   describe('validation', () => {
@@ -9,7 +8,7 @@ describe('CourtIssuedDocumentBase', () => {
         scenario: null,
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: 'Select a document type',
       });
     });
 
@@ -19,8 +18,8 @@ describe('CourtIssuedDocumentBase', () => {
         scenario: null,
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        filingDate: VALIDATION_ERROR_MESSAGES.filingDate,
+        documentType: 'Select a document type',
+        filingDate: 'Enter a filing date',
       });
     });
 
@@ -49,7 +48,7 @@ describe('CourtIssuedDocumentBase', () => {
         eventCode: UNSERVABLE_EVENT_CODES[1],
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        filingDate: VALIDATION_ERROR_MESSAGES.filingDate,
+        filingDate: 'Enter a filing date',
       });
     });
   });

@@ -83,20 +83,14 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return new SupportingDocumentInformationFactory(
-          item,
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
 
     if (this.secondarySupportingDocuments) {
       this.secondarySupportingDocuments = this.secondarySupportingDocuments.map(
         item => {
-          return new SupportingDocumentInformationFactory(
-            item,
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
-          );
+          return new SupportingDocumentInformationFactory(item);
         },
       );
     }

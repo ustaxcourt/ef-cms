@@ -43,37 +43,33 @@ export class CaseAssociationRequestDocumentTypeC extends CaseAssociationRequestD
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return new SupportingDocumentInformationFactory(
-          item,
-          CaseAssociationRequestDocumentTypeC.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
   }
 
   static VALIDATION_RULES = {
     ...CaseAssociationRequestDocumentBase.VALIDATION_RULES,
-    attachments: joi.boolean().required(),
-    hasSupportingDocuments: joi.boolean().required(),
-    objections: JoiValidationConstants.STRING.valid(
-      ...OBJECTIONS_OPTIONS,
-    ).required(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES =
-    CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
-
-  getDocumentTitle = () => {
-    return this.documentTitleTemplate;
+    attachments: joi
+      .boolean()
+      .required()
+      .messages({ '*': 'Enter selection for Attachments.' }),
+    hasSupportingDocuments: joi
+      .boolean()
+      .required()
+      .messages({ '*': 'Enter selection for Supporting Documents.' }),
+    objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
+      .required()
+      .messages({ '*': 'Enter selection for Objections.' }),
   };
 
   getValidationRules() {
     return CaseAssociationRequestDocumentTypeC.VALIDATION_RULES;
   }
 
-  getErrorToMessageMap() {
-    return CaseAssociationRequestDocumentTypeC.VALIDATION_ERROR_MESSAGES;
-  }
+  getDocumentTitle = () => {
+    return this.documentTitleTemplate;
+  };
 }
 
 export type RawCaseAssociationRequestDocumentTypeC =
