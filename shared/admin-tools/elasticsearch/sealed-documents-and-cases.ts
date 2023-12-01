@@ -1,7 +1,7 @@
 // usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/sealed-documents-and-cases.ts > ~/Desktop/sealed-cases.csv
 
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
 import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+import { serverApplicationContext } from '../../../web-api/src/applicationContext';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 const loadCaseFromInitialBlackstoneMigrationDb = async ({
@@ -243,7 +243,8 @@ const getOrdersSinceDawson = async ({
 };
 
 (async () => {
-  const applicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
   const sealedCases = await getSealedCases({ applicationContext });
   console.log(
     'Docket Number,Associated Judge,Case Caption,Case Status,Closed in Blackstone,' +

@@ -1,16 +1,17 @@
-import { createApplicationContext } from './applicationContext';
 import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
 import { logger } from './logger';
+import { serverApplicationContext } from './applicationContext';
 import { set } from 'lodash';
 import cors from 'cors';
 import express from 'express';
 
 export const app = express();
 
-const applicationContext = createApplicationContext({});
+serverApplicationContext.setCurrentUser();
+const applicationContext = serverApplicationContext;
 
 app.use(cors());
 app.use(json());

@@ -1,5 +1,4 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
@@ -7,6 +6,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { serverApplicationContext } from '@web-api/applicationContext';
 
 const {
   IRS_SYSTEM_SECTION,
@@ -41,11 +41,12 @@ describe('verify old served work items do not show up in the outbox', () => {
     caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
 
-    const appContext = applicationContextFactory({
+    serverApplicationContext.setCurrentUser({
       role: ROLES.petitionsClerk,
       section: PETITIONS_SECTION,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
+    const appContext = serverApplicationContext;
     appContext.environment.dynamoDbTableName = 'efcms-local';
 
     const CREATED_8_DAYS_AGO = applicationContext

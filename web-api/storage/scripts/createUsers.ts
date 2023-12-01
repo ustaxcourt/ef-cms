@@ -1,9 +1,9 @@
 import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
-import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
 import { createUserRecords as createPractitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createUserRecords } from '../../../web-api/src/persistence/dynamo/users/createOrUpdateUser';
 import { omit } from 'lodash';
+import { serverApplicationContext } from '../../src/applicationContext';
 import users from '../fixtures/seed/users.json';
 
 let usersByEmail = {};
@@ -17,7 +17,8 @@ export const createUsers = async () => {
     role: ROLES.admin,
   };
 
-  const applicationContext = createApplicationContext(user);
+  serverApplicationContext.setCurrentUser(user);
+  const applicationContext = serverApplicationContext;
 
   await Promise.all(
     users.map(userRecord => {
@@ -78,6 +79,7 @@ export const asUserFromEmail = async (email, callback) => {
   if (!asUser) {
     throw new Error('User not found');
   }
-  const applicationContext = createApplicationContext(asUser);
+  serverApplicationContext.setCurrentUser(asUser);
+  const applicationContext = serverApplicationContext;
   return await callback(applicationContext);
 };

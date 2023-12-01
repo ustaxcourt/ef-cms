@@ -3,9 +3,9 @@ import {
   UnauthorizedError,
   UnsanitizedEntityError,
 } from '@web-api/errors/errors';
-import { createApplicationContext } from '../applicationContext';
 import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
+import { serverApplicationContext } from '../applicationContext';
 import jwt from 'jsonwebtoken';
 
 /**
@@ -16,7 +16,8 @@ import jwt from 'jsonwebtoken';
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
 export const handle = async (event, fun) => {
-  const applicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
   try {
     let response = await fun();
 

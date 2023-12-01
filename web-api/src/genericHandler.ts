@@ -1,9 +1,9 @@
-import { createApplicationContext } from './applicationContext';
 import {
   getConnectionIdFromEvent,
   getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
+import { serverApplicationContext } from './applicationContext';
 
 export const dataSecurityFilter = (data, { applicationContext }) => {
   let returnData = data;
@@ -62,8 +62,8 @@ export const genericHandler = (awsEvent, cb, options = {}) => {
     const user = options.user || getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     const applicationContext =
-      options.applicationContext ||
-      createApplicationContext(user, awsEvent.logger);
+      options.applicationContext || serverApplicationContext;
+    applicationContext.setCurrentUser(user);
 
     delete awsEvent.logger;
 

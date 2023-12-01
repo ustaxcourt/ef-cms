@@ -1,6 +1,7 @@
-import { createApplicationContext } from '../../../../../src/applicationContext';
+import { serverApplicationContext } from '../../../../../src/applicationContext';
 
-const applicationContext = createApplicationContext({});
+serverApplicationContext.setCurrentUser();
+const applicationContext = serverApplicationContext;
 
 export const migrateItems = items => {
   for (const item of items) {

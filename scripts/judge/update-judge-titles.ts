@@ -1,7 +1,7 @@
 import { User } from '@shared/business/entities/User';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME', 'DYNAMODB_ENDPOINT']);
-import { createApplicationContext } from '@web-api/applicationContext';
+import { serverApplicationContext } from '@web-api/applicationContext';
 
 /**
 How to Run:
@@ -19,7 +19,8 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
 // **********************************************************************
 
 (async () => {
-  const applicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
 
   for (let judge of judgesToUpdateIds) {
     const { userId } = judge;

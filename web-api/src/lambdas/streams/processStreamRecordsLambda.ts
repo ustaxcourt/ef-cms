@@ -2,7 +2,7 @@ import {
   batchGet,
   getTableName,
 } from '../../persistence/dynamodbClientService';
-import { createApplicationContext } from '../../applicationContext';
+import { serverApplicationContext } from '../../applicationContext';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
 /**
@@ -57,7 +57,8 @@ async function getEventHistories(
 export const processStreamRecordsLambda = async (
   event: DynamoDBStreamEvent,
 ) => {
-  const applicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
   const recordsToProcess: DynamoDBRecord[] = [];
 
   const isStreamRecord = record =>

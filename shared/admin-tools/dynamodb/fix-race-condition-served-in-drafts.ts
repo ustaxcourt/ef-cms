@@ -6,8 +6,8 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { readFileSync } from 'fs';
+import { serverApplicationContext } from '@web-api/applicationContext';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 export const getDocumentFromDynamo = async ({
@@ -177,7 +177,8 @@ export const fixRaceConditionServedInDrafts = async (
 
   const request = JSON.parse(readFileSync(requestJsonFile, 'utf-8'));
 
-  const applicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
 
   await fixRaceConditionServedInDrafts(applicationContext, {
     docketEntryId,

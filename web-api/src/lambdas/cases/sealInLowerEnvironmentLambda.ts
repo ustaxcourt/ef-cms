@@ -1,4 +1,4 @@
-import { createApplicationContext } from '../../applicationContext';
+import { serverApplicationContext } from '../../applicationContext';
 
 /**
  * used for retroactively sealing a case in a lower environment after it is sealed in the Production environment
@@ -8,7 +8,8 @@ import { createApplicationContext } from '../../applicationContext';
  */
 export const sealInLowerEnvironmentLambda = async event => {
   const user = { role: 'docketclerk' };
-  const applicationContext = createApplicationContext(user);
+  serverApplicationContext.setCurrentUser(user);
+  const applicationContext = serverApplicationContext;
 
   const records = event.Records.map(record => ({
     ...JSON.parse(record.Sns.Message),

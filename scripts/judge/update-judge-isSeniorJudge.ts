@@ -2,9 +2,9 @@
 
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import { serverApplicationContext } from '@web-api/applicationContext';
 
 requireEnvVars([
   'DYNAMODB_ENDPOINT',
@@ -64,7 +64,8 @@ const getJudges = async ({
 let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
 
 (async () => {
-  const applicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
 
   const allJudges = await getJudges({ applicationContext });
   judgesToUpdateIds = allJudges.map(

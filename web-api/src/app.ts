@@ -25,7 +25,6 @@ import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketE
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
 import { confirmSignUpLocalLambda } from './auth/confirmSignUpLocalLambda';
-import { createApplicationContext } from './applicationContext';
 import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
@@ -148,6 +147,7 @@ import { serveCaseToIrsLambda } from './lambdas/cases/serveCaseToIrsLambda';
 import { serveCourtIssuedDocumentLambda } from './lambdas/cases/serveCourtIssuedDocumentLambda';
 import { serveExternallyFiledDocumentLambda } from './lambdas/documents/serveExternallyFiledDocumentLambda';
 import { serveThirtyDayNoticeLambda } from './lambdas/trialSessions/serveThirtyDayNoticeLambda';
+import { serverApplicationContext } from './applicationContext';
 import { set } from 'lodash';
 import { setForHearingLambda } from './lambdas/trialSessions/setForHearingLambda';
 import { setMessageAsReadLambda } from './lambdas/messages/setMessageAsReadLambda';
@@ -194,7 +194,8 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 
-const applicationContext = createApplicationContext({});
+serverApplicationContext.setCurrentUser();
+const applicationContext = serverApplicationContext;
 
 export const app = express();
 

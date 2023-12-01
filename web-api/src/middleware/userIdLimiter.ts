@@ -1,5 +1,5 @@
-import { createApplicationContext } from '../applicationContext';
 import { getUserFromAuthHeader } from './apiGatewayHelper';
+import { serverApplicationContext } from '../applicationContext';
 
 export const userIdLimiter = key => async (req, res, next) => {
   const user = getUserFromAuthHeader(req);
@@ -8,7 +8,8 @@ export const userIdLimiter = key => async (req, res, next) => {
   const WINDOW_TIME = parseInt(
     process.env.USER_LIMITER_WINDOW ?? `${60 * 1000}`,
   );
-  const applicationContext = createApplicationContext(user);
+  serverApplicationContext.setCurrentUser(user);
+  const applicationContext = serverApplicationContext;
   const KEY = `user-limiter-${key}|${user.userId}`;
 
   const limiterCache = await applicationContext

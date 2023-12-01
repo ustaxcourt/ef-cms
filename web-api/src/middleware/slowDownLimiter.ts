@@ -1,4 +1,4 @@
-import { createApplicationContext } from '../applicationContext';
+import { serverApplicationContext } from '../applicationContext';
 
 /*
   This is no longer used, but we decided to keep it around for now.
@@ -7,7 +7,8 @@ export const slowDownLimiter = key => async (req, res, next) => {
   const DELAY_TIME = 200;
   const WINDOW_TIME = 10000;
   const MAX_COUNT = 5;
-  const applicationContext = createApplicationContext(null);
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
 
   const results = await applicationContext
     .getPersistenceGateway()

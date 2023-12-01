@@ -20,7 +20,7 @@ import {
   FORMATS,
   prepareDateFromEST,
 } from '@shared/business/utilities/DateHandler';
-import { createApplicationContext } from '@web-api/applicationContext';
+import { serverApplicationContext } from '@web-api/applicationContext';
 // eslint-disable-next-line import/no-unresolved
 import { SYSTEM_ROLE } from '@shared/business/entities/EntityConstants';
 import { parse } from 'csv-parse/sync';
@@ -97,7 +97,8 @@ const parseCsv = (): Array<any> => {
 };
 
 (async () => {
-  const applicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
   const statusChangesToLog = parseCsv();
   for (const statusChange of statusChangesToLog) {
     const { updatedCaseStatus } = statusChange;

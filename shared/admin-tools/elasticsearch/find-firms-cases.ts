@@ -11,8 +11,8 @@
 
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { Search } from '@opensearch-project/opensearch/api/requestParams';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import { serverApplicationContext } from '@web-api/applicationContext';
 
 const firmTerms: string[] = process.argv.slice(2);
 if (!firmTerms.length) {
@@ -99,7 +99,8 @@ const getFirmsCases = async ({
 };
 
 (async () => {
-  const applicationContext: IApplicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
   const firmsPractitionerIds = (
     await getFirmsPractitioners({
       applicationContext,

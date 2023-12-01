@@ -2,7 +2,6 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
@@ -10,6 +9,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { serverApplicationContext } from '../../web-api/src/applicationContext';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
@@ -31,11 +31,12 @@ describe('verify old sent work items do not show up in the outbox', () => {
     caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
 
-    const applicationContext = applicationContextFactory({
+    serverApplicationContext.setCurrentUser({
       role: ROLES.petitionsClerk,
       section: 'petitions',
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
+    const applicationContext = serverApplicationContext;
     applicationContext.environment.dynamoDbTableName = 'efcms-local';
     const daysToRetrieveKey =
       applicationContext.getConstants().CONFIGURATION_ITEM_KEYS

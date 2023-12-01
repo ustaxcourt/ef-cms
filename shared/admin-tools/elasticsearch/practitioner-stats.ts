@@ -4,8 +4,8 @@ import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
 import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+import { serverApplicationContext } from '../../../web-api/src/applicationContext';
 import { validateDateAndCreateISO } from '../../src/business/utilities/DateHandler';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
@@ -65,7 +65,8 @@ const getUniqueValues = ({
 };
 
 (async () => {
-  const applicationContext = createApplicationContext({});
+  serverApplicationContext.setCurrentUser();
+  const applicationContext = serverApplicationContext;
   const allPractitioners: RawPractitioner[] =
     await getAllPractitioners(applicationContext);
   const admittedInYear = allPractitioners.filter(p => {
