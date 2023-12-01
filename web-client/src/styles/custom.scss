@@ -988,6 +988,41 @@ header.usa-header {
   color: white;
 }
 
+.floating-card-pages {
+  flex: 1;
+  background-color: color($theme-color-primary-darker);
+
+  .usa-label {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+}
+
+.requirement-text{
+	line-height: 1.43;
+
+	&.valid-requirement{
+		color: $color-green
+	}
+
+	&.invalid-requirement{
+		color: color($theme-color-secondary-vivid)
+	}
+}
+
+.create-petitioner-form {
+  input.usa-input {
+    width: 100%;
+    max-width: unset;
+  }
+
+  h1, 
+  h2 {
+    font-family: inherit;
+  }
+}
+
 .big-blue-header {
   padding: 20px 0;
   margin-bottom: 20px;
