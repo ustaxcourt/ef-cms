@@ -21,7 +21,7 @@ export const createNewPetitionerUserAction = async ({
 
   const response = await applicationContext
     .getUseCases()
-    .createUserCognitoInteractor(applicationContext, {
+    .signUpUserInteractor(applicationContext, {
       user: petitionerAccountForm,
     })
     .then(authenticationResults =>

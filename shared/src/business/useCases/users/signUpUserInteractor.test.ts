@@ -1,7 +1,7 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { createUserCognitoInteractor } from './createUserCognitoInteractor';
+import { signUpUserInteractor } from './signUpUserInteractor';
 
-describe('createUserCognitoInteractor', () => {
+describe('signUpUserInteractor', () => {
   const email = 'example@example.com';
   const name = 'Antoninus Sara';
   const userId = 'abc123';
@@ -38,7 +38,7 @@ describe('createUserCognitoInteractor', () => {
       Username: email,
     };
 
-    const result = await createUserCognitoInteractor(applicationContext, {
+    const result = await signUpUserInteractor(applicationContext, {
       user,
     });
 
@@ -57,7 +57,7 @@ describe('createUserCognitoInteractor', () => {
     });
 
     await expect(
-      createUserCognitoInteractor(applicationContext, {
+      signUpUserInteractor(applicationContext, {
         user,
       }),
     ).rejects.toThrow();
@@ -67,7 +67,7 @@ describe('createUserCognitoInteractor', () => {
 
   it('should return an error if entity validation fails', async () => {
     await expect(
-      createUserCognitoInteractor(applicationContext, {
+      signUpUserInteractor(applicationContext, {
         user: {
           confirmPassword: password,
           email,
@@ -99,7 +99,7 @@ describe('createUserCognitoInteractor', () => {
     });
 
     await expect(
-      createUserCognitoInteractor(applicationContext, {
+      signUpUserInteractor(applicationContext, {
         user,
       }),
     ).rejects.toThrow('User already exists');
@@ -126,7 +126,7 @@ describe('createUserCognitoInteractor', () => {
     });
 
     await expect(
-      createUserCognitoInteractor(applicationContext, {
+      signUpUserInteractor(applicationContext, {
         user,
       }),
     ).rejects.toThrow('User exists, email unconfirmed');

@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { cognitoResendVerificationLinkAction } from './cognitoResendVerificationLinkAction';
 import { presenter } from '../../presenter-mock';
+import { resendVerificationLinkAction } from './resendVerificationLinkAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('cognitoResendVerificationLinkAction', () => {
+describe('resendVerificationLinkAction', () => {
   const pathSuccessStub = jest.fn();
   const pathErrorStub = jest.fn();
 
@@ -19,11 +19,11 @@ describe('cognitoResendVerificationLinkAction', () => {
     const mockResponse = { CodeDeliveryDetails: {} };
     applicationContext
       .getUseCases()
-      .cognitoResendVerificationLinkInteractor.mockResolvedValue(mockResponse);
+      .resendVerificationLinkInteractor.mockResolvedValue(mockResponse);
   });
 
-  it('should call the success path when we successfully call "cognitoResendVerificationLinkInteractor" with correct email', async () => {
-    await runAction(cognitoResendVerificationLinkAction, {
+  it('should call the success path when we successfully call "resendVerificationLinkInteractor" with correct email', async () => {
+    await runAction(resendVerificationLinkAction, {
       modules: {
         presenter,
       },
@@ -34,24 +34,22 @@ describe('cognitoResendVerificationLinkAction', () => {
 
     expect(pathSuccessStub).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().cognitoResendVerificationLinkInteractor
-        .mock.calls.length,
+      applicationContext.getUseCases().resendVerificationLinkInteractor.mock
+        .calls.length,
     ).toEqual(1);
 
     expect(
-      applicationContext.getUseCases().cognitoResendVerificationLinkInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases().resendVerificationLinkInteractor.mock
+        .calls[0][1],
     ).toEqual({ email: TEST_EMAIL });
   });
 
-  it('should call the error path when we call "cognitoResendVerificationLinkInteractor" but no CodeDeliveryDetails are returned', async () => {
+  it('should call the error path when we call "resendVerificationLinkInteractor" but no CodeDeliveryDetails are returned', async () => {
     const mockResponse = {};
     applicationContext
       .getUseCases()
-      .cognitoResendVerificationLinkInteractor.mockResolvedValueOnce(
-        mockResponse,
-      );
-    await runAction(cognitoResendVerificationLinkAction, {
+      .resendVerificationLinkInteractor.mockResolvedValueOnce(mockResponse);
+    await runAction(resendVerificationLinkAction, {
       modules: {
         presenter,
       },
@@ -69,23 +67,23 @@ describe('cognitoResendVerificationLinkAction', () => {
       },
     });
     expect(
-      applicationContext.getUseCases().cognitoResendVerificationLinkInteractor
-        .mock.calls.length,
+      applicationContext.getUseCases().resendVerificationLinkInteractor.mock
+        .calls.length,
     ).toEqual(1);
 
     expect(
-      applicationContext.getUseCases().cognitoResendVerificationLinkInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases().resendVerificationLinkInteractor.mock
+        .calls[0][1],
     ).toEqual({ email: TEST_EMAIL });
   });
 
-  it('should call the error path when "cognitoResendVerificationLinkInteractor" throws an error', async () => {
+  it('should call the error path when "resendVerificationLinkInteractor" throws an error', async () => {
     applicationContext
       .getUseCases()
-      .cognitoResendVerificationLinkInteractor.mockRejectedValue(
+      .resendVerificationLinkInteractor.mockRejectedValue(
         new Error('TEST ERROR'),
       );
-    await runAction(cognitoResendVerificationLinkAction, {
+    await runAction(resendVerificationLinkAction, {
       modules: {
         presenter,
       },
@@ -104,13 +102,13 @@ describe('cognitoResendVerificationLinkAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().cognitoResendVerificationLinkInteractor
-        .mock.calls.length,
+      applicationContext.getUseCases().resendVerificationLinkInteractor.mock
+        .calls.length,
     ).toEqual(1);
 
     expect(
-      applicationContext.getUseCases().cognitoResendVerificationLinkInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases().resendVerificationLinkInteractor.mock
+        .calls[0][1],
     ).toEqual({ email: TEST_EMAIL });
   });
 });

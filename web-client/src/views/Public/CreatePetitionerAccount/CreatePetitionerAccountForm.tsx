@@ -243,7 +243,7 @@ export const CreatePetitionerAccountForm = connect(
               >
                 <RequirementsText
                   fieldName="confirm password"
-                  text="Password must match"
+                  text="Passwords must match"
                   valid={createAccountHelper.confirmPassword}
                 ></RequirementsText>
               </div>

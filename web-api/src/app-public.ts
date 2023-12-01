@@ -52,9 +52,7 @@ app.use(logger());
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
-import { cognitoResendVerificationLinkLambda } from '@web-api/lambdas/public-api/cognitoResendVerificationLinkLambda';
 import { confirmSignUpLocalLambda } from '@web-api/auth/confirmSignUpLocalLambda';
-import { createUserCognitoLambda } from '@web-api/users/createUserCognitoLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
@@ -68,6 +66,8 @@ import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambd
 import { ipLimiter } from './middleware/ipLimiter';
 import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
+import { resendVerificationLinkLambda } from '@web-api/lambdas/public-api/resendVerificationLinkLambda';
+import { signUpUserLambda } from '@web-api/users/signUpUserLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
 
@@ -137,11 +137,11 @@ app.get(
 
 app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 
-app.post('/public-api/account/create', lambdaWrapper(createUserCognitoLambda));
+app.post('/public-api/account/create', lambdaWrapper(signUpUserLambda));
 
 app.post(
   '/account/resend-verification',
-  lambdaWrapper(cognitoResendVerificationLinkLambda),
+  lambdaWrapper(resendVerificationLinkLambda),
 );
 
 // This following endpoint is used only by cognito-local

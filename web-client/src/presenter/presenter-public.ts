@@ -7,7 +7,6 @@ import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimp
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
-import { cognitoResendVerificationLinkSequence } from '@web-client/presenter/sequences/Public/cognitoResendVerificationLinkSequence';
 import { confirmSignUpLocalSequence } from '@web-client/presenter/sequences/confirmSignUpLocalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
@@ -33,6 +32,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSequence';
+import { resendVerificationLinkSequence } from '@web-client/presenter/sequences/Public/resendVerificationLinkSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
@@ -64,7 +64,6 @@ export const presenterSequences = {
   clearAdvancedSearchFormSequence,
   clearPdfPreviewUrlSequence,
   closeModalAndNavigateToMaintenanceSequence,
-  cognitoResendVerificationLinkSequence,
   confirmSignUpLocalSequence,
   dismissModalSequence,
   goToCreatePetitionerAccountSequence,
@@ -103,6 +102,7 @@ export const presenterSequences = {
   openAppMaintenanceModalSequence,
   openCaseDocumentDownloadUrlSequence,
   persistFormsOnReloadSequence,
+  resendVerificationLinkSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
   submitCreatePetitionerAccountFormSequence,
