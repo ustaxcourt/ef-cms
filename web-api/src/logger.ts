@@ -1,6 +1,6 @@
 /* eslint-disable @miovision/disallow-date/no-new-date */
 import { createLogger } from './createLogger';
-import { get } from 'lodash';
+import { get, omit } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { transports } from 'winston';
 
@@ -16,6 +16,8 @@ export const logger =
   (transport = console()) =>
   (req, res, next) => {
     const createdLogger = createLogger({ transports: [transport] });
+
+    req.body = omit(req.body, ['password']);
 
     if (process.env.NODE_ENV === 'production') {
       const currentInvoke = getCurrentInvoke();
