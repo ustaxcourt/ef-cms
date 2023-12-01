@@ -68,12 +68,6 @@ export const compute24HrTimeAndUpdateState = (
   store.set(state.form.startTime, `${hours}:${minutes}`);
 };
 
-/**
- * computes the trial session form data based on user input
- * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store function
- */
 export const computeTrialSessionFormDataAction = ({
   applicationContext,
   get,
