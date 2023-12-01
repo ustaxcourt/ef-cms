@@ -44,6 +44,7 @@ import {
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
 import { cognitoLocalWrapper } from './cognitoLocalWrapper';
+import { createLogger } from '@web-api/createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
 import { fallbackHandler } from './fallbackHandler';
@@ -194,6 +195,13 @@ const getCurrentUser = (): {
 const setCurrentUser = (newUser?: { role: string; userId: string }): void => {
   user = new User(newUser || {});
 };
+
+const logger = createLogger();
+if (process.env.NODE_ENV === 'production') {
+  const authenticated = user! && Object.keys(user).length;
+  logger.defaultMeta = logger.defaultMeta || {};
+  logger.defaultMeta.user = authenticated ? user! : { role: 'unauthenticated' };
+}
 
 export const serverApplicationContext = {
   barNumberGenerator,
