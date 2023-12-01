@@ -5,7 +5,14 @@ import { sortBy } from 'lodash';
 // often
 // are these all the judges??
 
-const JUDGES_CHAMBERS = {
+type JudgeInfo = {
+  judgeFullName: string;
+  label: string;
+  phoneNumber: string;
+  section: string;
+};
+
+const JUDGES_CHAMBERS: Record<string, JudgeInfo> = {
   ASHFORDS_CHAMBERS_SECTION: {
     judgeFullName: 'Tamara W. Ashford',
     label: 'Ashford’s Chambers',
