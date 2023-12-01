@@ -23,14 +23,12 @@ const CaseDetails = ({ caseDetail, caseDetailHelper }) => (
     <div className="grid-row">
       <div className="tablet:grid-col-6">
         <p className="label">IRS notice date</p>
-        <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
+        <p>{caseDetail.irsNoticeDateFormatted}</p>
       </div>
       {caseDetailHelper.showFilingFeeExternal && (
         <div className="tablet:grid-col-6">
-          <p className="label">Filing fee</p>
-          <p className="pay-gov-id-display margin-bottom-0">
-            {caseDetail.filingFee}
-          </p>
+          <p className="label">Filing fee*</p>
+          <p>{caseDetail.filingFee}</p>
         </div>
       )}
     </div>
@@ -40,6 +38,12 @@ const CaseDetails = ({ caseDetail, caseDetailHelper }) => (
         <p>{caseDetail.formattedPreferredTrialCity}</p>
       </div>
     </div>
+    {caseDetailHelper.showFilingFeeExternal && (
+      <span data-testid="filling-fee-message">
+        *Filing fee status may take 2-3 business days from payment received date
+        or approval of waiver to update
+      </span>
+    )}
   </React.Fragment>
 );
 

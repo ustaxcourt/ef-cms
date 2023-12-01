@@ -357,10 +357,16 @@ export const StartCaseStep3 = connect(
           <>
             <h2 className="margin-top-4">Corporate Disclosure Statement</h2>
             <Hint>
-              Tax Court Rules of Practice and Procedure (Rule 60) requires a
-              corporation, partnership, or limited liability company, filing a
-              Petition with the Court to also file a Corporate Disclosure
-              Statement (CDS).
+              <a
+                href="https://ustaxcourt.gov/rules.html"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Tax Court Rule 60
+              </a>{' '}
+              requires a corporation, partnership, or limited liability company,
+              filing a Petition with the Court to also file a Corporate
+              Disclosure Statement (CDS).
             </Hint>
             <div className="blue-container">
               <FormGroup
