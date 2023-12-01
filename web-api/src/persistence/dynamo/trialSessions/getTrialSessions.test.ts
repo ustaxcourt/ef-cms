@@ -15,11 +15,8 @@ const mockTrialSessions = [
 
 describe('getTrialSessions', () => {
   beforeAll(() => {
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Items: mockTrialSessions,
-        }),
+    applicationContext.getDocumentClient().query.mockResolvedValue({
+      Items: mockTrialSessions,
     });
   });
 

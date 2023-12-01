@@ -19,9 +19,9 @@ const mockMessage = {
 describe('getMessageThreadByParentId', () => {
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () => Promise.resolve({ Items: [mockMessage] }),
-    });
+    applicationContext
+      .getDocumentClient()
+      .query.mockResolvedValue({ Items: [mockMessage] });
   });
 
   it('retrieves the message from persistence', async () => {

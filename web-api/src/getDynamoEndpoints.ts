@@ -1,48 +1,32 @@
-import AWS from 'aws-sdk';
-const { DynamoDB } = AWS;
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
-/**
- * getDynamoEndpoints
- *
- * @param {object} providers the providers object
- * @param {object} providers.fallbackRegion the region to fallback to
- * @param {object} providers.fallbackRegionEndpoint the endpoint of the fallback region
- * @param {object} providers.mainRegion the main region in use
- * @param {object} providers.mainRegionEndpoint the main region endpoint in use
- * @param {object} providers.masterDynamoDbEndpoint the master dynamo db endpoint in use
- * @param {object} providers.masterRegion the master region
- * @param {object} providers.useMasterRegion the flag indicating whether or not to use the master region
- * @returns {Object} the main region database and the fallback region database values
- */
+let mainRegionDocumentClient: DynamoDBDocument,
+  fallbackRegionDocumentClient: DynamoDBDocument;
+
 export const getDynamoEndpoints = ({
-  fallbackRegion,
-  fallbackRegionEndpoint,
-  mainRegion,
-  mainRegionEndpoint,
-  masterDynamoDbEndpoint,
-  masterRegion,
-  useMasterRegion,
+  getDynamoClient,
+}: {
+  getDynamoClient: ({
+    useMasterRegion,
+  }: {
+    useMasterRegion: boolean;
+  }) => DynamoDBClient;
 }): {
-  fallbackRegionDB: AWS.DynamoDB.DocumentClient;
-  mainRegionDB: AWS.DynamoDB.DocumentClient;
+  fallbackRegionDocumentClient: DynamoDBDocument;
+  mainRegionDocumentClient: DynamoDBDocument;
 } => {
-  const baseConfig = {
-    httpOptions: {
-      timeout: 5000,
-    },
-    maxRetries: 3,
-  };
-  const mainRegionDB = new DynamoDB.DocumentClient({
-    ...baseConfig,
-    endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
-    region: useMasterRegion ? masterRegion : mainRegion,
-  });
+  if (!mainRegionDocumentClient) {
+    const mainRegionDb = getDynamoClient({ useMasterRegion: true });
+    const fallbackRegionDb = getDynamoClient({ useMasterRegion: false });
 
-  const fallbackRegionDB = new DynamoDB.DocumentClient({
-    ...baseConfig,
-    endpoint: useMasterRegion ? fallbackRegionEndpoint : masterDynamoDbEndpoint,
-    region: useMasterRegion ? fallbackRegion : masterRegion,
-  });
+    mainRegionDocumentClient = DynamoDBDocument.from(mainRegionDb, {
+      marshallOptions: { removeUndefinedValues: true },
+    });
+    fallbackRegionDocumentClient = DynamoDBDocument.from(fallbackRegionDb, {
+      marshallOptions: { removeUndefinedValues: true },
+    });
+  }
 
-  return { fallbackRegionDB, mainRegionDB };
+  return { fallbackRegionDocumentClient, mainRegionDocumentClient };
 };
