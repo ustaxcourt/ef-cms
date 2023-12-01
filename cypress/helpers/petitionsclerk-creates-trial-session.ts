@@ -26,4 +26,8 @@ export function petitionsClerkCreatesTrialSession() {
   );
   cy.get('[data-testid="submit-trial-session"]').click();
   cy.get('[data-testid="success-alert"]').should('exist');
+
+  return cy
+    .get('[data-testid="success-alert"]')
+    .invoke('attr', 'data-metadata');
 }
