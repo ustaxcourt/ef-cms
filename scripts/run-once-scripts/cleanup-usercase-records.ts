@@ -76,7 +76,7 @@ async function getAllExternalUsers(
                     'petitioner',
                     'privatePractitioner',
                     'irsPractitioner',
-                    'inactivePractitioner', // do these have usercase records? probably.
+                    'inactivePractitioner',
                   ],
                 },
               },
@@ -185,7 +185,7 @@ async function writeChunk(
     });
   } catch (err) {
     const wholeError = JSON.stringify(err);
-    console.log('wholeError', wholeError);
+    console.log('An error occurred: ', wholeError);
     if (wholeError.includes('ThrottlingException')) {
       console.log('All requests in the chunk failed.', err);
 
@@ -197,7 +197,7 @@ async function writeChunk(
   }
 
   if (isEmpty(result.UnprocessedItems)) {
-    console.log('CHUNKS AHOY.');
+    console.log('Successfully processed Chunk');
     return;
   } else {
     console.log(
