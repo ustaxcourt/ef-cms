@@ -110,6 +110,7 @@ import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { editPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/editPractitionerDocumentProxy';
+import { exportPendingReportInteractor } from '@shared/proxies/pendingItems/exportPendingReportProxy';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../../shared/src/proxies/documents/fileAndServeCourtIssuedDocumentProxy';
 import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentProxy';
@@ -428,6 +429,7 @@ const allUseCases = {
   dismissNOTTReminderForTrialInteractor,
   editPaperFilingInteractor,
   editPractitionerDocumentInteractor,
+  exportPendingReportInteractor,
   fetchPendingItemsInteractor,
   fileAndServeCourtIssuedDocumentInteractor,
   fileCorrespondenceDocumentInteractor,

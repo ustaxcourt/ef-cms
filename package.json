@@ -47,6 +47,7 @@
     "cookie": "^0.6.0",
     "core-js": "^3.33.2",
     "cors": "^2.8.5",
+    "csv-stringify": "^6.4.4",
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "^1.1.9",
     "english-ordinals": "^3.3.0",
@@ -253,7 +254,7 @@
     "watch": "nodemon -e yml --exec sls offline start"
   },
   "overrides": {
-    "axios" : "$axios",
+    "axios": "$axios",
     "jsonwebtoken": "$jsonwebtoken",
     "postcss": "8.4.31",
     "semver": "^7.5.2"

@@ -36,6 +36,25 @@ describe('fetchPendingItems', () => {
     });
   });
 
+  it('returns results from a query with a docketNumber', async () => {
+    (search as any).mockReturnValue({ results: ['some', 'matches'], total: 2 });
+
+    const { foundDocuments, total } = await fetchPendingItems({
+      applicationContext,
+      docketNumber: '4',
+      judge: 'Dredd',
+    });
+
+    expect(foundDocuments).toMatchObject(['some', 'matches']);
+    expect(total).toBe(2);
+    expect(search).toHaveBeenCalledTimes(1);
+    const searchQuery = (search as any).mock.calls[0][0].searchParameters.body
+      .query.bool.must;
+    expect(searchQuery[3].term).toMatchObject({
+      'docketNumber.S': '4',
+    });
+  });
+
   it('queries documents with a defined servedAt field or isLegacyServed field true', async () => {
     (search as any).mockReturnValue({ results: ['some', 'matches'], total: 2 });
     await fetchPendingItems({

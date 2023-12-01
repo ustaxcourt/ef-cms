@@ -14,6 +14,7 @@ export const FORMATS = {
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
   MMDDYYYY_DASHED: 'MM-dd-yyyy',
+  MMDDYYYY_UNDERSCORED: 'MM_dd_yyyy',
   MONTH_DAY_YEAR: 'MMMM d, yyyy',
   MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'DDDD',
   SHORT_MONTH_DAY_YEAR: 'MMM d, yyyy',
