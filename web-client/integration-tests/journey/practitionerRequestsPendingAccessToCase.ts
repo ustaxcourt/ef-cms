@@ -1,4 +1,3 @@
-import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { contactSecondaryFromState } from '../helpers';
 
@@ -14,21 +13,12 @@ export const practitionerRequestsPendingAccessToCase = (
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitleTemplate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentTitleTemplate,
-      documentType:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
-      eventCode:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.eventCode,
-      filers:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
-      primaryDocumentFile:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      scenario:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.scenario,
+      documentTitleTemplate: 'Select a document',
+      documentType: 'Select a document type',
+      eventCode: 'Select a document',
+      filers: 'Select a party',
+      primaryDocumentFile: 'Upload a document',
+      scenario: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -50,13 +40,9 @@ export const practitionerRequestsPendingAccessToCase = (
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      filers:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
-      objections:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
+      filers: 'Select a party',
+      objections: 'Enter selection for Objections.',
+      primaryDocumentFile: 'Upload a document',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {

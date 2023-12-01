@@ -1,5 +1,8 @@
+import { Order } from '@shared/business/utilities/pdfGenerator/documentTemplates/Order';
+import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const order = async ({ applicationContext, data }) => {
   const {
@@ -12,9 +15,8 @@ export const order = async ({ applicationContext, data }) => {
     signatureText,
   } = data;
 
-  const reactOrderTemplate = reactTemplateGenerator({
-    componentName: 'Order',
-    data: {
+  const reactOrderTemplate = ReactDOM.renderToString(
+    React.createElement(Order, {
       options: {
         addedDocketNumbers,
         caseCaptionExtension,
@@ -24,21 +26,20 @@ export const order = async ({ applicationContext, data }) => {
       orderContent,
       orderTitle,
       signatureText,
-    },
-  });
+    }),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactOrderTemplate,
   });
 
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
+  const headerHtml = ReactDOM.renderToString(
+    React.createElement(PageMetaHeaderDocket, {
       docketNumber: docketNumberWithSuffix,
       useCenturySchoolbookFont: true,
-    },
-  });
+    }),
+  );
 
   const pdf = await applicationContext
     .getUseCases()

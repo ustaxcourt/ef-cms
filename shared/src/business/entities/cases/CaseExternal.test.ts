@@ -1,12 +1,11 @@
 import {
   CASE_TYPES_MAP,
   MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
   PARTY_TYPES,
 } from '../EntityConstants';
 import { CaseExternal } from './CaseExternal';
 import { applicationContext } from '../../test/createTestApplicationContext';
-
-const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
 
 describe('CaseExternal entity', () => {
   describe('isValid', () => {
@@ -22,10 +21,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!.corporateDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+      ).toEqual('Upload a Corporate Disclosure Statement');
     });
+
     it('does not require corporate disclosure if filing type not set', () => {
       const petition = new CaseExternal(
         {
@@ -36,10 +37,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         petition.getFormattedValidationErrors()!.corporateDisclosureFile,
       ).toBeUndefined();
     });
+
     it('does not require corporate disclosure if filing type not a business', () => {
       const caseExternal = new CaseExternal(
         {
@@ -51,10 +54,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!.corporateDisclosureFile,
       ).toBeUndefined();
     });
+
     it('requires stinFile', () => {
       const caseExternal = new CaseExternal(
         {
@@ -67,8 +72,9 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternal.getFormattedValidationErrors()!.stinFile).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFile,
+        'Upload a Statement of Taxpayer Identification Number (STIN)',
       );
     });
   });
@@ -88,9 +94,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[0].message);
+      ).toEqual(
+        `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      );
     });
 
     it('should inform you if petition file size is zero', () => {
@@ -107,9 +116,10 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+      ).toEqual('Your Petition file size is empty');
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
@@ -124,6 +134,7 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
       ).toBeUndefined();
@@ -142,9 +153,10 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+      ).toEqual('Your Petition file size is empty');
     });
   });
 
@@ -163,8 +175,9 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFileSize[0].message,
+        `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       );
     });
 
@@ -182,8 +195,9 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+        'Your STIN file size is empty',
       );
     });
 
@@ -199,12 +213,13 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!.stinFileSize,
       ).toBeUndefined();
     });
 
-    it('should error on stinFileSize when stinFile is defined', () => {
+    it('should error on stinFileSize when stinFile is undefined', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
@@ -214,11 +229,13 @@ describe('CaseExternal entity', () => {
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           stinFile: new File([], 'testStinFile.pdf'),
+          stinFileSize: undefined,
         },
         { applicationContext },
       );
+
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+        'Your STIN file size is empty',
       );
     });
   });
@@ -238,11 +255,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
       ).toEqual(
-        VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[0].message,
+        `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       );
     });
 
@@ -260,10 +278,11 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
+      ).toEqual('Your Corporate Disclosure Statement file size is empty');
     });
 
     it('should not error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
@@ -278,17 +297,19 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
       ).toBeUndefined();
     });
 
-    it('should error on corporateDisclosureFileSize when corporateDisclosureFile is defined', () => {
+    it('should error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
           corporateDisclosureFile: new File([], 'testStinFile.pdf'),
+          corporateDisclosureFileSize: undefined,
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.nextFriendForMinor,
@@ -297,10 +318,11 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
+      ).toEqual('Your Corporate Disclosure Statement file size is empty');
     });
   });
 });

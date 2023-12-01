@@ -4,20 +4,26 @@ import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
-import { computeDate } from '@shared/business/utilities/DateHandler';
-import { createApplicationContext } from '@web-api/applicationContext';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+import { validateDateAndCreateISO } from '../../src/business/utilities/DateHandler';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
 
-const fromDate = computeDate({ day: 1, month: 1, year })!;
-const toDate = computeDate({ day: 1, month: 1, year: year + 1 })!;
+const fromDate = validateDateAndCreateISO({
+  day: '1',
+  month: '1',
+  year: `${year}`,
+});
+const toDate = validateDateAndCreateISO({
+  day: '1',
+  month: '1',
+  year: `${year + 1}`,
+});
 
-const getAllPractitioners = async ({
-  applicationContext,
-}: {
-  applicationContext: IApplicationContext;
-}): Promise<Array<any>> => {
+const getAllPractitioners = async (
+  applicationContext: IApplicationContext,
+): Promise<Array<RawPractitioner>> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
@@ -60,9 +66,10 @@ const getUniqueValues = ({
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  const allPractitioners = await getAllPractitioners({ applicationContext });
+  const allPractitioners: RawPractitioner[] =
+    await getAllPractitioners(applicationContext);
   const admittedInYear = allPractitioners.filter(p => {
-    return p.admissionsDate >= fromDate && p.admissionsDate < toDate;
+    return p.admissionsDate >= fromDate! && p.admissionsDate < toDate!;
   });
   const uniqueEmployers = getUniqueValues({
     arrayOfObjects: admittedInYear,

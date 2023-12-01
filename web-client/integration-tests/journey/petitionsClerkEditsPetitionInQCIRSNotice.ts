@@ -119,11 +119,16 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     // Attempt to submit without required statistics fields
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    let errors = cerebralTest.getState('validationErrors.statistics');
+    let errors = cerebralTest.getState('validationErrors');
 
-    expect(errors[0].enterAllValues).toContain(
-      'Enter year, deficiency amount, and total penalties',
-    );
+    expect(errors).toEqual({
+      statistics: [
+        {
+          enterAllValues: 'Enter year, deficiency amount, and total penalties',
+          index: 0,
+        },
+      ],
+    });
 
     // Change between a statistic period and year
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -143,11 +148,16 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     // Attempt to submit without required (period) statistics fields
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    errors = cerebralTest.getState('validationErrors.statistics');
+    errors = cerebralTest.getState('validationErrors');
 
-    expect(errors[0].enterAllValues).toContain(
-      'Enter year, deficiency amount, and total penalties',
-    );
+    expect(errors).toEqual({
+      statistics: [
+        {
+          enterAllValues: 'Enter year, deficiency amount, and total penalties',
+          index: 0,
+        },
+      ],
+    });
 
     // Switch back to year input
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -164,11 +174,16 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    errors = cerebralTest.getState('validationErrors.statistics');
+    errors = cerebralTest.getState('validationErrors');
 
-    expect(errors[0].enterAllValues).toContain(
-      'Enter year, deficiency amount, and total penalties',
-    );
+    expect(errors).toEqual({
+      statistics: [
+        {
+          enterAllValues: 'Enter year, deficiency amount, and total penalties',
+          index: 0,
+        },
+      ],
+    });
 
     let statisticId = cerebralTest.getState('form.statistics.0.statisticId');
 
@@ -252,11 +267,16 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    errors = cerebralTest.getState('validationErrors.statistics');
+    errors = cerebralTest.getState('validationErrors');
 
-    expect(errors[0].enterAllValues).toContain(
-      'Enter year, deficiency amount, and total penalties',
-    );
+    expect(errors).toEqual({
+      statistics: [
+        {
+          enterAllValues: 'Enter year, deficiency amount, and total penalties',
+          index: 0,
+        },
+      ],
+    });
 
     // Add 11 more statistics (reaching the maximum number of 12) back to form - they were removed
     // before by empty statistic filtering
@@ -306,8 +326,8 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    errors = cerebralTest.getState('validationErrors.statistics');
-    expect(errors).toBeUndefined();
+    errors = cerebralTest.getState('validationErrors');
+    expect(errors).toEqual({});
 
     expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 

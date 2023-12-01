@@ -1,14 +1,15 @@
+import { NoticeOfReceiptOfPetition } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const noticeOfReceiptOfPetition = async ({
   applicationContext,
   data,
 }) => {
-  const reactNoticeReceiptPetitionTemplate = reactTemplateGenerator({
-    componentName: 'NoticeOfReceiptOfPetition',
-    data,
-  });
+  const reactNoticeReceiptPetitionTemplate = ReactDOM.renderToString(
+    React.createElement(NoticeOfReceiptOfPetition, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,

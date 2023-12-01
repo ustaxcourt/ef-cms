@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
-import {
-  acquireLock,
-  deleteLock,
-} from './persistence/dynamo/locks/acquireLock';
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
@@ -20,6 +16,11 @@ import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCas
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
+import {
+  createLock,
+  getLock,
+  removeLock,
+} from './persistence/dynamo/locks/acquireLock';
 import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
@@ -273,7 +274,6 @@ const gatewayMethods = {
     updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
-  acquireLock,
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
@@ -283,12 +283,12 @@ const gatewayMethods = {
       : confirmAuthCodeLocal
     : confirmAuthCode,
   createChangeOfAddressJob,
+  createLock,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
-  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
@@ -340,6 +340,7 @@ const gatewayMethods = {
   getFirstSingleCaseRecord,
   getInternalUsers,
   getLimiterByKey,
+  getLock,
   getMaintenanceMode,
   getMessageById,
   getMessageThreadByParentId,
@@ -385,6 +386,7 @@ const gatewayMethods = {
       })
     : refreshToken,
   removeIrsPractitionerOnCase,
+  removeLock,
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,

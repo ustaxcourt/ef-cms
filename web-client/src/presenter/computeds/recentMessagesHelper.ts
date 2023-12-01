@@ -1,5 +1,4 @@
 import { getFormattedMessages } from '../utilities/processFormattedMessages';
-import { setTrialInformationOnMessage } from './formattedMessages';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
@@ -13,18 +12,16 @@ export const recentMessagesHelper = (
     messages: get(state.messages) || [],
   });
 
-  const { STATUS_TYPES } = applicationContext.getConstants();
-
   messages.forEach(message => {
-    message.showTrialInformation =
-      message.caseStatus === STATUS_TYPES.calendared;
-
-    if (message.showTrialInformation) {
-      setTrialInformationOnMessage({
+    const statusWithTrialInfo = applicationContext
+      .getUtilities()
+      .caseStatusWithTrialInformation({
         applicationContext,
-        message,
+        caseStatus: message.caseStatus,
+        trialDate: message.trialDate,
+        trialLocation: message.trialLocation,
       });
-    }
+    message.caseStatus = statusWithTrialInfo;
   });
 
   const recentMessages = messages.reverse().splice(0, 5);

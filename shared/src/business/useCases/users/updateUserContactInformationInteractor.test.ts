@@ -30,6 +30,10 @@ describe('updateUserContactInformationInteractor', () => {
     state: 'IL',
   };
 
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+  });
+
   beforeEach(() => {
     mockUser = {
       ...irsPractitionerUser,
@@ -46,23 +50,27 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.irsPractitioner,
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue();
+
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockResolvedValue(mockUser);
+
     applicationContext.getPersistenceGateway().updateUser.mockResolvedValue({});
   });
 
   it('should throw unauthorized error when user does not have permission to update contact information', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
+    mockUser = {
       role: ROLES.petitionsClerk,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+      userId: 'asdf1234-f6cd-442c-a168-202db587f16f',
+    };
 
     await expect(
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
-        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+        userId: mockUser.userId,
       } as any),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -71,7 +79,7 @@ describe('updateUserContactInformationInteractor', () => {
     await expect(
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
-        userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+        userId: 'asdf1234-f6cd-442c-a168-202db587f16f',
       } as any),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -80,7 +88,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo: mockUser.contact,
       firmName: 'broken',
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     });
 
     expect(applicationContext.getUseCases().updateUser).not.toHaveBeenCalled();
@@ -137,7 +145,7 @@ describe('updateUserContactInformationInteractor', () => {
     };
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     } as any);
 
     expect(
@@ -158,7 +166,7 @@ describe('updateUserContactInformationInteractor', () => {
       entityName: Practitioner.ENTITY_NAME,
       isUpdatingInformation: true,
       token: undefined,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     });
   });
 
@@ -171,7 +179,7 @@ describe('updateUserContactInformationInteractor', () => {
 
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     } as any);
 
     expect(
@@ -182,7 +190,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it('should notify and not update the user when the user being updated is not a privatePractitioner, irsPractitioner, or practitioner', async () => {
+  it('should notify and not update the user when the user being updated is not a privatePractitioner, irsPractitioner, or petitioner', async () => {
     applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       ...mockUser,
       entityName: 'notapractitioner',
@@ -191,7 +199,7 @@ describe('updateUserContactInformationInteractor', () => {
     await expect(
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
-        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+        userId: mockUser.userId,
       } as any),
     ).rejects.toThrow();
 
@@ -213,7 +221,7 @@ describe('updateUserContactInformationInteractor', () => {
   it('should generate a change of address document', async () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     } as any);
 
     expect(generateChangeOfAddress).toHaveBeenCalled();
@@ -223,7 +231,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       firmName: 'testing',
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     });
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
@@ -244,7 +252,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       firmName: mockUser.firmName,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     });
 
     expect(

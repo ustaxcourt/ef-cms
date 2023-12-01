@@ -34,6 +34,6 @@ export const docketClerkRemovesSignatureFromMessage = cerebralTest => {
     const caseOrderDocument = formattedDraftDocuments.find(
       d => d.docketEntryId === orderDocument.documentId,
     );
-    expect(caseOrderDocument.signedAt).toEqual(null);
+    expect(caseOrderDocument.signedAt).toBeUndefined();
   });
 };

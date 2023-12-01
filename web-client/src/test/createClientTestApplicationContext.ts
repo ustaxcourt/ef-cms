@@ -23,6 +23,7 @@ import {
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
@@ -338,10 +339,12 @@ const createTestApplicationContext = () => {
   });
 
   const mockGetHttpClientReturnValue = {
+    delete: jest.fn(),
     get: () => ({
       data: 'url',
     }),
     post: jest.fn(),
+    put: jest.fn(),
   };
 
   const mockGetUseCases = appContextProxy({
@@ -567,6 +570,7 @@ const createTestApplicationContext = () => {
     getCognitoClientId: jest.fn(),
     getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
+    getCognitoRequestPasswordResetUrl,
     getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {
