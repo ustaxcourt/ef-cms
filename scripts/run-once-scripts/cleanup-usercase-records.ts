@@ -1,3 +1,6 @@
+/**
+ * To run: npx ts-node --transpile-only scripts/run-once-scripts/cleanup-usercase-records.ts
+ */
 import {
   BatchWriteCommandOutput,
   DynamoDBDocument,
