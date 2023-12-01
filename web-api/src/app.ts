@@ -35,7 +35,6 @@ import { createPractitionerDocumentLambda } from './lambdas/practitioners/create
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
 import { createTrialSessionLambda } from './lambdas/trialSessions/createTrialSessionLambda';
 import { createUserLambda } from './lambdas/users/createUserLambda';
-import { createUserLocalLambda } from './users/createUserLocalLambda';
 import { deleteAuthCookieLambda } from './lambdas/auth/deleteAuthCookieLambda';
 import { deleteCaseDeadlineLambda } from './lambdas/caseDeadline/deleteCaseDeadlineLambda';
 import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
@@ -1026,8 +1025,6 @@ if (process.env.IS_LOCAL) {
       isAsync: true,
     }),
   );
-
-  app.post('/users/local', lambdaWrapper(createUserLocalLambda));
 
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 

@@ -58,6 +58,7 @@ export class CaseInternal extends JoiValidationEntity {
   public statistics: any;
   public archivedDocketEntries: any;
   public archivedCorrespondences: any;
+  public docketEntries: DocketEntry[];
 
   constructor(rawProps, { applicationContext }) {
     if (!applicationContext) {
@@ -108,6 +109,7 @@ export class CaseInternal extends JoiValidationEntity {
       rawProps.applicationForWaiverOfFilingFeeFile;
     this.applicationForWaiverOfFilingFeeFileSize =
       rawProps.applicationForWaiverOfFilingFeeFileSize;
+    this.docketEntries = rawProps.docketEntries || [];
 
     this.statistics = Array.isArray(rawProps.statistics)
       ? rawProps.statistics.map(
@@ -147,11 +149,11 @@ export class CaseInternal extends JoiValidationEntity {
     .object()
     .keys({
       applicationForWaiverOfFilingFeeFile: joi
-        .object()
-        .when('petitionPaymentStatus', {
+        .alternatives()
+        .conditional('petitionPaymentStatus', {
           is: PAYMENT_STATUS.WAIVED,
           otherwise: joi.optional().allow(null),
-          then: joi.required(),
+          then: createDocketEntriesValidation('APW'),
         }),
       applicationForWaiverOfFilingFeeFileSize:
         JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
@@ -166,7 +168,7 @@ export class CaseInternal extends JoiValidationEntity {
       archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
       caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
       caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
-      corporateDisclosureFile: joi.object().when('partyType', {
+      corporateDisclosureFile: joi.alternatives().conditional('partyType', {
         is: joi
           .exist()
           .valid(
@@ -176,10 +178,10 @@ export class CaseInternal extends JoiValidationEntity {
             PARTY_TYPES.partnershipOtherThanTaxMatters,
           ),
         otherwise: joi.optional().allow(null),
-        then: joi.when('orderForCds', {
+        then: joi.alternatives().conditional('orderForCds', {
           is: joi.not(true),
           otherwise: joi.optional().allow(null),
-          then: joi.required(),
+          then: createDocketEntriesValidation('DISC'),
         }),
       }),
       corporateDisclosureFileSize:
@@ -191,6 +193,7 @@ export class CaseInternal extends JoiValidationEntity {
             then: joi.required(),
           },
         ),
+      docketEntries: joi.array().optional(),
       filingType: JoiValidationConstants.STRING.valid(
         ...FILING_TYPES[ROLES.petitioner],
         ...FILING_TYPES[ROLES.privatePractitioner],
@@ -211,7 +214,11 @@ export class CaseInternal extends JoiValidationEntity {
       partyType: JoiValidationConstants.STRING.valid(
         ...Object.values(PARTY_TYPES),
       ).required(),
-      petitionFile: joi.object().required(), // object of type File
+      petitionFile: joi.alternatives().conditional('petitionFile', {
+        is: joi.exist().not(null),
+        otherwise: createDocketEntriesValidation('P'),
+        then: joi.object().required(),
+      }),
       petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'petitionFile',
         {
@@ -249,7 +256,7 @@ export class CaseInternal extends JoiValidationEntity {
         .conditional('preferredTrialCity', {
           is: joi.exist().not(null),
           otherwise: joi.object().optional(),
-          then: joi.object().required(), // object of type File
+          then: createDocketEntriesValidation('RQT'),
         }),
       requestForPlaceOfTrialFileSize:
         JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
@@ -319,4 +326,19 @@ export class CaseInternal extends JoiValidationEntity {
 
     return validationErrors;
   }
+}
+
+function createDocketEntriesValidation(eventCode: string) {
+  return joi.alternatives().conditional('docketEntries', {
+    is: joi
+      .array()
+      .items(
+        joi.object({
+          eventCode: joi.string(),
+        }),
+      )
+      .has(joi.object({ eventCode: joi.string().valid(eventCode) })),
+    otherwise: joi.object().required(), // object of type File
+    then: joi.object().optional(),
+  });
 }
