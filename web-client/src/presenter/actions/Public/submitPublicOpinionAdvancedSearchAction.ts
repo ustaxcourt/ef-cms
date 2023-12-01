@@ -1,3 +1,4 @@
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { clone } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
@@ -14,7 +15,7 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
   applicationContext,
   get,
   store,
-}: ActionProps) => {
+}: ActionProps<{}, ClientPublicApplicationContext>) => {
   const searchParams = clone(get(state.advancedSearchForm.opinionSearch));
 
   if (searchParams.docketNumber) {
