@@ -1,8 +1,8 @@
 import {
-  DynamoDBClient,
-  ProvisionedThroughputExceededException,
-} from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+  BatchWriteCommandOutput,
+  DynamoDBDocument,
+} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   IServerApplicationContext,
   createApplicationContext,
@@ -62,6 +62,7 @@ async function getAllExternalUsers(
   let role: string = '';
   let pk: string = '';
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const query = {
       _source: ['pk', 'role'],
@@ -175,7 +176,7 @@ async function writeChunk(
   commandChunk: PutRequest[],
   attempt: number,
 ) {
-  let result;
+  let result: BatchWriteCommandOutput;
   try {
     result = await documentClient.batchWrite({
       RequestItems: {
@@ -183,19 +184,20 @@ async function writeChunk(
       },
     });
   } catch (err) {
-    if (err instanceof ProvisionedThroughputExceededException) {
+    const wholeError = JSON.stringify(err);
+    console.log('wholeError', wholeError);
+    if (wholeError.includes('ThrottlingException')) {
       console.log('All requests in the chunk failed.', err);
 
       await new Promise(resolve => setTimeout(resolve, 2000 * 2 ** attempt));
 
       return writeChunk(applicationContext, commandChunk, attempt + 1);
     }
-
-    console.log('A different error occurred: ', err);
+    console.log('Unhandled Exception occurred!');
   }
 
   if (isEmpty(result.UnprocessedItems)) {
-    console.log('CHUNKS AHOY.', result);
+    console.log('CHUNKS AHOY.');
     return;
   } else {
     console.log(
