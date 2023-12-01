@@ -19,12 +19,12 @@ export const logger =
 
     if (process.env.NODE_ENV === 'production') {
       const requestBody = cloneDeep(req.body);
-
-      for (const k of ['password', 'confirmPassword']) {
-        if (!requestBody || !requestBody[k]) {
-          continue;
+      if (requestBody) {
+        for (const k of ['password', 'confirmPassword']) {
+          if (requestBody[k]) {
+            requestBody[k] = '*** REDACTED ***';
+          }
         }
-        requestBody[k] = '*** REDACTED ***';
       }
       const currentInvoke = getCurrentInvoke();
       createdLogger.defaultMeta = {
