@@ -1,6 +1,6 @@
 /* eslint-disable @miovision/disallow-date/no-new-date */
+import { cloneDeep, get } from 'lodash';
 import { createLogger } from './createLogger';
-import { get, omit } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { transports } from 'winston';
 
@@ -17,9 +17,15 @@ export const logger =
   (req, res, next) => {
     const createdLogger = createLogger({ transports: [transport] });
 
-    req.body = omit(req.body, ['password']);
-
     if (process.env.NODE_ENV === 'production') {
+      const requestBody = cloneDeep(req.body);
+
+      for (const k of ['password', 'confirmPassword']) {
+        if (!requestBody || !requestBody[k]) {
+          continue;
+        }
+        requestBody[k] = '*** REDACTED ***';
+      }
       const currentInvoke = getCurrentInvoke();
       createdLogger.defaultMeta = {
         environment: {
@@ -27,7 +33,7 @@ export const logger =
           stage: process.env.STAGE || 'local',
         },
         request: {
-          body: JSON.stringify(req.body),
+          body: JSON.stringify(requestBody),
           headers: req.headers,
           method: req.method,
           url: req.url,
