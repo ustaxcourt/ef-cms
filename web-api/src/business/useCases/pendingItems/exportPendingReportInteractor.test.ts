@@ -150,4 +150,20 @@ describe('exportPendingReportInteractor', () => {
 345-67;03/03/20;Test Caption;Test Document Title;On Appeal;Alvin
 456-78;03/03/20;Test Caption;Fear and Trembling;On Appeal;Buch`);
   });
+
+  it('alt library test', async () => {
+    const results = await exportPendingReportInteractor(applicationContext, {
+      judge,
+      method: 'csvs',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().fetchPendingItems,
+    ).toHaveBeenCalledWith({ applicationContext, judge });
+    expect(
+      applicationContext.getUtilities().formatPendingItem,
+    ).toHaveBeenCalledTimes(mockFoundDocuments.length);
+
+    expect(results).toBeDefined();
+  });
 });
