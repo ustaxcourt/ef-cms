@@ -4,7 +4,7 @@ import {
 } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 
-export const createUserCognitoInteractor = async (
+export const signUpUserInteractor = async (
   applicationContext: IApplicationContext,
   {
     user,

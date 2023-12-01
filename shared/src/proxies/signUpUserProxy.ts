@@ -1,7 +1,7 @@
 import { type AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { post } from './requests';
 
-export const createUserCognitoInteractor = (
+export const signUpUserInteractor = (
   applicationContext,
   { user },
 ): Promise<AdminCreateUserResponse> => {

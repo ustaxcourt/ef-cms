@@ -14,14 +14,16 @@ describe('NewPetitionerUser', () => {
     expect(formEntity.getValidationErrors()).toBeNull();
   });
 
-  it('should return error message for email', () => {
-    const formEntity = new NewPetitionerUser({
-      ...validEntity,
-      email: 'hello',
-    });
-    expect(formEntity.isValid()).toBeFalsy();
-    expect(formEntity.getValidationErrors()).toEqual({
-      email: 'Enter a valid email address',
+  describe('Email', () => {
+    it('should return error message for email', () => {
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        email: 'hello',
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toEqual({
+        email: 'Enter a valid email address',
+      });
     });
   });
 
@@ -46,17 +48,6 @@ describe('NewPetitionerUser', () => {
       expect(formEntity.getValidationErrors()).toEqual({
         name: 'Enter a name with fewer than 100 characters',
       });
-    });
-  });
-
-  it('should return error message for confirmPassword', () => {
-    const formEntity = new NewPetitionerUser({
-      ...validEntity,
-      confirmPassword: 'not matching',
-    });
-    expect(formEntity.isValid()).toBeFalsy();
-    expect(formEntity.getValidationErrors()).toEqual({
-      confirmPassword: '"confirmPassword" must be [ref:password]',
     });
   });
 
@@ -162,6 +153,30 @@ describe('NewPetitionerUser', () => {
       expect(formEntity.getValidationErrors()).toMatchObject({
         password: 'isProperLength',
       });
+    });
+  });
+
+  describe('confirmPassword', () => {
+    it('should return error message when confirmPassword does not match password', () => {
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        confirmPassword: 'somethingDifferent',
+        password: '12$Azasodfkj3',
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toEqual({
+        confirmPassword: 'Passwords must match',
+      });
+    });
+
+    it('should not return an error message when confirmPassword matches password', () => {
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        confirmPassword: '12$Azasodfkj3',
+        password: '12$Azasodfkj3',
+      });
+      expect(formEntity.isValid()).toBe(true);
+      expect(formEntity.getValidationErrors()).toEqual(null);
     });
   });
 });

@@ -1,7 +1,7 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { cognitoResendVerificationLinkInteractor } from '@shared/business/useCases/public/cognitoResendVerificationLinkInteractor';
+import { resendVerificationLinkInteractor } from '@shared/business/useCases/public/resendVerificationLinkInteractor';
 
-describe('cognitoResendVerificationLinkInteractor', () => {
+describe('resendVerificationLinkInteractor', () => {
   const TEST_EMAIL = 'SOME_TEST_EMAIL@EXAMPLE.COM';
   const TEST_COGNITO_CLIENT_ID = 'TEST_COGNITO_CLIENT_ID';
 
@@ -22,7 +22,7 @@ describe('cognitoResendVerificationLinkInteractor', () => {
 
   it('should call our "resendConfirmationCode" method with correct data', async () => {
     process.env.COGNITO_CLIENT_ID = TEST_COGNITO_CLIENT_ID;
-    await cognitoResendVerificationLinkInteractor(applicationContext, {
+    await resendVerificationLinkInteractor(applicationContext, {
       email: TEST_EMAIL,
     });
 

@@ -6,11 +6,10 @@ import React from 'react';
 export const VerificationSent = connect(
   {
     alertSuccess: state.alertSuccess,
-    cognitoResendVerificationLinkSequence:
-      sequences.cognitoResendVerificationLinkSequence,
     email: state.cognito.email,
+    resendVerificationLinkSequence: sequences.resendVerificationLinkSequence,
   },
-  ({ alertSuccess, cognitoResendVerificationLinkSequence, email }) => {
+  ({ alertSuccess, email, resendVerificationLinkSequence }) => {
     return (
       <div
         className="grid-container grid-gap-lg padding-x-4"
@@ -36,7 +35,7 @@ export const VerificationSent = connect(
             you can{' '}
             <button
               className="usa-button--unstyled cursor-pointer"
-              onClick={() => cognitoResendVerificationLinkSequence()}
+              onClick={() => resendVerificationLinkSequence()}
             >
               send the verification email again
             </button>
