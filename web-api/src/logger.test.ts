@@ -7,7 +7,7 @@ import { getCurrentInvoke } from '@vendia/serverless-express';
 describe('logger', () => {
   let req, res, NODE_ENV;
   beforeAll(() => {
-    // jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   beforeEach(() => {
