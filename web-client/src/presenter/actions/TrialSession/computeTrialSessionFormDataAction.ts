@@ -79,7 +79,13 @@ export const computeTrialSessionFormDataAction = ({
   get,
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{
+  key: string;
+  value: {
+    userId: string;
+    section: string;
+  };
+}>) => {
   const form = get(state.form);
 
   computeTermAndUpdateState(
@@ -101,12 +107,6 @@ export const computeTrialSessionFormDataAction = ({
 
   if (props.key === 'judgeId') {
     const selectedJudge = props.value;
-    let foundJudge: {
-      judgeFullName: string;
-      label: string;
-      phoneNumber: string;
-      section: string;
-    };
 
     store.set(state.form.judgeId, selectedJudge.userId);
     store.set(state.form.judge, selectedJudge);
@@ -115,13 +115,17 @@ export const computeTrialSessionFormDataAction = ({
       .getUtilities()
       .getJudgesChambers();
 
-    for (const chambersSection in JUDGES_CHAMBERS) {
-      if (JUDGES_CHAMBERS[chambersSection].section === selectedJudge.section) {
-        foundJudge = JUDGES_CHAMBERS[chambersSection];
-      }
+    const judge = Object.values(JUDGES_CHAMBERS).find(
+      ({ section }) => section === selectedJudge.section,
+    );
+
+    if (!judge) {
+      throw new Error(
+        'could not find an expected chambers section associated with the selected judge',
+      );
     }
 
-    store.set(state.form.chambersPhoneNumber, foundJudge!.phoneNumber);
+    store.set(state.form.chambersPhoneNumber, judge.phoneNumber);
   }
 
   if (props.key === 'trialClerkId') {
