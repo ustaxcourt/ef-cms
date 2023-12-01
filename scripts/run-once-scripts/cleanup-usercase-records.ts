@@ -162,11 +162,12 @@ async function batchWrite(
   commands.forEach(command => filterEmptyStrings(command));
 
   const chunks = chunk(commands, 25);
+  const parallelRequests = 10;
 
-  for (let i = 0; i < chunks.length; i += 20) {
+  for (let i = 0; i < chunks.length; i += parallelRequests) {
     await Promise.all(
       chunks
-        .slice(i, i + 20)
+        .slice(i, i + parallelRequests)
         .map(commandChunk => writeChunk(applicationContext, commandChunk, 0)),
     );
   }
