@@ -309,14 +309,33 @@ describe('computeTrialSessionFormDataAction', () => {
       modules: {
         presenter,
       },
-      props: { key: 'judgeId', value: { name: 'Test Judge', userId: '123' } },
+      props: {
+        key: 'judgeId',
+        value: { name: 'Test Judge', section: 'buchsChambers', userId: '123' },
+      },
       state: { form },
     });
     expect(result.state.form.judgeId).toEqual('123');
     expect(result.state.form.judge).toEqual({
       name: 'Test Judge',
+      section: 'buchsChambers',
       userId: '123',
     });
+  });
+
+  it('should set the chambers phone number after judge has been selected', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        key: 'judgeId',
+        value: { name: 'Test Judge', section: 'buchsChambers', userId: '123' },
+      },
+      state: { form },
+    });
+
+    expect(result.state.form.chambersPhoneNumber).toEqual('(202) 521-0810'); // replace 'magic' string
   });
 
   it('should correctly store the trialClerk on the form', async () => {

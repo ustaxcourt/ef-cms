@@ -100,8 +100,28 @@ export const computeTrialSessionFormDataAction = ({
   );
 
   if (props.key === 'judgeId') {
-    store.set(state.form.judgeId, props.value.userId);
-    store.set(state.form.judge, props.value);
+    const selectedJudge = props.value;
+    let foundJudge: {
+      judgeFullName: string;
+      label: string;
+      phoneNumber: string;
+      section: string;
+    };
+
+    store.set(state.form.judgeId, selectedJudge.userId);
+    store.set(state.form.judge, selectedJudge);
+
+    const JUDGES_CHAMBERS = applicationContext
+      .getUtilities()
+      .getJudgesChambers();
+
+    for (const chambersSection in JUDGES_CHAMBERS) {
+      if (JUDGES_CHAMBERS[chambersSection].section === selectedJudge.section) {
+        foundJudge = JUDGES_CHAMBERS[chambersSection];
+      }
+    }
+
+    store.set(state.form.chambersPhoneNumber, foundJudge!.phoneNumber);
   }
 
   if (props.key === 'trialClerkId') {
