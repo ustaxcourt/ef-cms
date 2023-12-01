@@ -47,6 +47,7 @@ import {
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocumentGenerators } from './getDocumentGenerators';
+import { getDynamoEndpoints } from '@web-api/getDynamoEndpoints';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -99,43 +100,57 @@ const environment = {
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
-  const mainRegion = environment.region;
-  const fallbackRegion =
-    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
-  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('local')
-    ? environment.dynamoDbEndpoint.includes('localhost')
-      ? 'http://localhost:8000'
-      : environment.dynamoDbEndpoint
-    : `dynamodb.${mainRegion}.amazonaws.com`;
-  const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
-    'localhost',
-  )
-    ? 'http://localhost:8000'
-    : `dynamodb.${fallbackRegion}.amazonaws.com`;
-  const { masterDynamoDbEndpoint, masterRegion } = environment;
 
-  const config = {
-    fallbackRegion,
-    fallbackRegionEndpoint,
-    mainRegion,
-    mainRegionEndpoint,
-    masterDynamoDbEndpoint,
-    masterRegion,
-    useMasterRegion,
-  };
+  const { fallbackRegionDocumentClient, mainRegionDocumentClient } =
+    getDynamoEndpoints({
+      getDynamoClient,
+    });
 
   if (!dynamoClientCache[type]) {
     dynamoClientCache[type] = {
-      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
-      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
-      delete: fallbackHandler({ key: 'delete', ...config }),
-      get: fallbackHandler({ key: 'get', ...config }),
-      put: fallbackHandler({ key: 'put', ...config }),
-      query: fallbackHandler({ key: 'query', ...config }),
-      scan: fallbackHandler({ key: 'scan', ...config }),
-      update: fallbackHandler({ key: 'update', ...config }),
+      batchGet: fallbackHandler({
+        dynamoMethod: 'batchGet',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      batchWrite: fallbackHandler({
+        dynamoMethod: 'batchWrite',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      delete: fallbackHandler({
+        dynamoMethod: 'delete',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      get: fallbackHandler({
+        dynamoMethod: 'get',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      put: fallbackHandler({
+        dynamoMethod: 'put',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      query: fallbackHandler({
+        dynamoMethod: 'query',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      scan: fallbackHandler({
+        dynamoMethod: 'scan',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
+      update: fallbackHandler({
+        dynamoMethod: 'update',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
+      }),
     };
   }
+
   return dynamoClientCache[type];
 };
 
