@@ -1,3 +1,5 @@
+jest.mock('react');
+jest.mock('react-dom/server');
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -6,14 +8,9 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
 import { sendIrsSuperuserPetitionEmail } from './sendIrsSuperuserPetitionEmail';
-jest.mock(
-  '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
-  () => ({
-    reactTemplateGenerator: jest.fn(),
-  }),
-);
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 describe('sendIrsSuperuserPetitionEmail', () => {
   const PRIMARY_CONTACT_ID = '679088cf-c125-444a-bfe4-936971050e5a';
@@ -21,6 +18,11 @@ describe('sendIrsSuperuserPetitionEmail', () => {
 
   beforeAll(() => {
     applicationContext.getIrsSuperuserEmail.mockReturnValue('irs@example.com');
+  });
+
+  beforeEach(() => {
+    React.createElement = jest.fn();
+    ReactDOM.renderToString = jest.fn();
   });
 
   it('should call sendBulkTemplatedEmail for the IRS superuser party', async () => {
@@ -51,7 +53,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
-    expect(reactTemplateGenerator).toHaveBeenCalled();
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
     ).toHaveBeenCalled();
@@ -111,7 +112,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
-    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+    const { caseDetail } = (React.createElement as any).mock.calls[0][1];
     expect(caseDetail.docketNumber).toEqual('123-20');
     expect(caseDetail.docketNumberWithSuffix).toEqual('123-20L');
   });
@@ -163,7 +164,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
-    const { practitioners } = reactTemplateGenerator.mock.calls[0][0].data;
+    const { practitioners } = (React.createElement as any).mock.calls[0][1];
 
     expect(practitioners).toMatchObject([
       {
@@ -205,7 +206,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
-    const { documentDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+    const { documentDetail } = (React.createElement as any).mock.calls[0][1];
 
     expect(documentDetail).toMatchObject({
       filingDate: '03/05/19',
@@ -243,7 +244,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
-    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+    const { caseDetail } = (React.createElement as any).mock.calls[0][1];
 
     expect(caseDetail).toMatchObject({
       trialLocation: 'Fake Trial Location, ST',
@@ -281,7 +282,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
-    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+    const { caseDetail } = (React.createElement as any).mock.calls[0][1];
 
     expect(caseDetail).toMatchObject({
       trialLocation: 'No requested place of trial',

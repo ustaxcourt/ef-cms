@@ -1,5 +1,7 @@
 import { CASE_STATUS_TYPES, CHIEF_JUDGE } from './EntityConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { Case } from '@shared/business/entities/cases/Case';
+import { ExcludeMethods } from 'types/TEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
 import { pick } from 'lodash';
@@ -18,13 +20,13 @@ export class WorkItem extends JoiValidationEntity {
   public createdAt: string;
   public docketEntry: any;
   public docketNumber: string;
-  public leadDocketNumber?: string;
   public docketNumberWithSuffix: string;
   public hideFromPendingMessages?: boolean;
   public highPriority: boolean;
-  public inProgress: boolean;
+  public inProgress?: boolean;
   public isInitializeCase: boolean;
   public isRead?: boolean;
+  public leadDocketNumber?: string;
   public section: string;
   public sentBy: string;
   public sentBySection: string;
@@ -34,12 +36,13 @@ export class WorkItem extends JoiValidationEntity {
   public updatedAt: string;
   public workItemId: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(rawWorkItem, { applicationContext }, caseEntity?: Case) {
     super('WorkItem');
+
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
+
     this.assigneeId = rawWorkItem.assigneeId;
     this.assigneeName = rawWorkItem.assigneeName;
     this.associatedJudge =
@@ -101,17 +104,6 @@ export class WorkItem extends JoiValidationEntity {
       rawWorkItem.workItemId || applicationContext.getUniqueId();
   }
 
-  /**
-   * Assign to a user
-   * @param {object} props the props object
-   * @param {string} props.assigneeId the user id of the user to assign the work item to
-   * @param {string} props.assigneeName the name of the user to assign the work item to
-   * @param {string} props.section the section of the user to assign the work item to
-   * @param {string} props.sentBy the name of the user who sent the work item
-   * @param {string} props.sentBySection the section of the user who sent the work item
-   * @param {string} props.sentByUserId the user id of the user who sent the work item
-   * @returns {WorkItem} the updated work item
-   */
   assignToUser({
     assigneeId,
     assigneeName,
@@ -119,7 +111,14 @@ export class WorkItem extends JoiValidationEntity {
     sentBy,
     sentBySection,
     sentByUserId,
-  }) {
+  }: {
+    assigneeId: string;
+    assigneeName: string;
+    section: string;
+    sentBy: string;
+    sentBySection: string;
+    sentByUserId: string;
+  }): WorkItem {
     Object.assign(this, {
       assigneeId,
       assigneeName,
@@ -128,51 +127,44 @@ export class WorkItem extends JoiValidationEntity {
       sentBySection,
       sentByUserId,
     });
+
     return this;
   }
 
-  setStatus(caseStatus) {
+  setStatus(caseStatus: string): void {
     this.caseStatus = caseStatus;
   }
 
-  /**
-   *
-   * @param {object} props the props object
-   * @param {string} props.message the message the user entered when setting as completed
-   * @param {object} props.user the user who triggered the complete action
-   * @returns {WorkItem} the updated work item
-   */
-  setAsCompleted({ message, user }) {
+  setAsCompleted({
+    message,
+    user,
+  }: {
+    message: string;
+    user: { name: string; userId: string };
+  }): WorkItem {
     this.completedAt = createISODateString();
     this.completedBy = user.name;
     this.completedByUserId = user.userId;
     this.completedMessage = message;
+
     delete this.inProgress;
+
     return this;
   }
 
-  isCompleted() {
+  isCompleted(): boolean {
     return !!this.completedAt;
   }
 
-  /**
-   * marks the work item as read
-   * @returns {WorkItem} the updated work item
-   */
-  markAsRead() {
+  markAsRead(): WorkItem {
     this.isRead = true;
+
     return this;
   }
 
   getValidationRules() {
     return WORK_ITEM_VALIDATION_RULES;
   }
-
-  getErrorToMessageMap() {
-    return {};
-  }
 }
 
-declare global {
-  type RawWorkItem = ExcludeMethods<WorkItem>;
-}
+export type RawWorkItem = ExcludeMethods<WorkItem>;

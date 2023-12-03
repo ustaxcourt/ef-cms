@@ -89,6 +89,7 @@ export const CourtIssuedNonstandardForm = connect(
             </label>
             <select
               className="usa-select"
+              data-testid="judge-select"
               id="judge"
               name="judge"
               value={form.judge || ''}

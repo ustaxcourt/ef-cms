@@ -57,15 +57,15 @@ const main = async () => {
     .promise();
 
   const services = (apis ?? [])
-    .filter(api =>
-      api.name?.includes(
-        `gateway_api_${process.env.ENV}_${process.env.DEPLOYING_COLOR}`,
-      ),
+    .filter(
+      api =>
+        api.name?.includes(
+          `gateway_api_${process.env.ENV}_${process.env.DEPLOYING_COLOR}`,
+        ),
     )
     .reduce((obj, api) => {
-      obj[
-        api.name?.replace(`_${process.env.ENV}`, '')!
-      ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
+      obj[api.name?.replace(`_${process.env.ENV}`, '')!] =
+        `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
       return obj;
     }, {});
 

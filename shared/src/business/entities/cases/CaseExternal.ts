@@ -3,16 +3,17 @@ import {
   FILING_TYPES,
   LEGACY_TRIAL_CITY_STRINGS,
   MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
   PARTY_TYPES,
   PROCEDURE_TYPES,
   ROLES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
-import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
 /**
@@ -83,12 +84,15 @@ export class CaseExternal extends JoiValidationEntity {
       is: joi.exist(),
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    }),
-    corporateDisclosureFile: joi.object().when('filingType', {
-      is: 'A business',
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }),
+    }).messages({ '*': 'Select a case type' }),
+    corporateDisclosureFile: joi
+      .object()
+      .when('filingType', {
+        is: 'A business',
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .messages({ '*': 'Upload a Corporate Disclosure Statement' }),
     corporateDisclosureFileSize: joi
       .number()
       .integer()
@@ -98,17 +102,31 @@ export class CaseExternal extends JoiValidationEntity {
         is: joi.exist(),
         otherwise: joi.optional().allow(null),
         then: joi.required(),
+      })
+      .messages({
+        '*': 'Your Corporate Disclosure Statement file size is empty',
+        'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
     countryType: JoiValidationConstants.STRING.optional(),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],
-    ).required(),
-    hasIrsNotice: joi.boolean().required(),
+    )
+      .required()
+      .messages({ '*': 'Select on whose behalf you are filing' }),
+    hasIrsNotice: joi
+      .boolean()
+      .required()
+      .messages({ '*': 'Indicate whether you received an IRS notice' }),
     partyType: JoiValidationConstants.STRING.valid(
       ...Object.values(PARTY_TYPES),
-    ).required(),
-    petitionFile: joi.object().required(),
+    )
+      .required()
+      .messages({ '*': 'Select a party type' }),
+    petitionFile: joi
+      .object()
+      .required()
+      .messages({ '*': 'Upload a Petition' }),
     petitionFileSize: joi
       .number()
       .integer()
@@ -118,6 +136,10 @@ export class CaseExternal extends JoiValidationEntity {
         is: joi.exist(),
         otherwise: joi.optional().allow(null),
         then: joi.required(),
+      })
+      .messages({
+        '*': 'Your Petition file size is empty',
+        'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
     preferredTrialCity: joi
       .alternatives()
@@ -129,11 +151,14 @@ export class CaseExternal extends JoiValidationEntity {
         ),
         JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
-      .required(),
-    procedureType: JoiValidationConstants.STRING.valid(
-      ...PROCEDURE_TYPES,
-    ).required(),
-    stinFile: joi.object().required(), // object of type File
+      .required()
+      .messages({ '*': 'Select a trial location' }),
+    procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
+      .required()
+      .messages({ '*': 'Select a case procedure' }),
+    stinFile: joi.object().required().messages({
+      '*': 'Upload a Statement of Taxpayer Identification Number (STIN)',
+    }), // object of type File
     stinFileSize: joi
       .number()
       .integer()
@@ -143,17 +168,15 @@ export class CaseExternal extends JoiValidationEntity {
         is: joi.exist(),
         otherwise: joi.optional().allow(null),
         then: joi.required(),
+      })
+      .messages({
+        '*': 'Your STIN file size is empty',
+        'number.max': `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
   };
 
-  static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
-
   getValidationRules() {
     return CaseExternal.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CaseExternal.VALIDATION_ERROR_MESSAGES;
   }
 
   getContactPrimary() {

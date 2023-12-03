@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ReportsMetaHeader = ({ headerTitle }) => {
+export const ReportsMetaHeader = ({ headerTitle }: { headerTitle: string }) => {
   return (
     <div style={{ position: 'relative', top: '-20px' }}>
       <div

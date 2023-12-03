@@ -27,7 +27,7 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
 
   const trialStartTimeIso = createISODateString(
     trialSessionInformation.startTime,
-    'HH:mm',
+    FORMATS.TIME_24_HOUR,
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 

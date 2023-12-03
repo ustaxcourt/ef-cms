@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
 import { MOCK_USERS } from '../../test/mockUsers';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { checkForReadyForTrialCasesInteractor } from './checkForReadyForTrialCasesInteractor';
@@ -17,6 +18,12 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       .getReadyForTrialCases.mockImplementation(() => mockCasesReadyForTrial);
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
+  });
+
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValue(undefined);
   });
 
   it('should successfully run without error', async () => {
@@ -160,5 +167,45 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should attempt to lock the case before it processes it and unlock when done', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockReturnValueOnce(MOCK_LOCK);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.generalDocket,
+      });
+
+    applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
+
+    mockCasesReadyForTrial = [
+      { docketNumber: '101-20' },
+      { docketNumber: '320-21' },
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getReadyForTrialCases.mockReturnValue([
+        { docketNumber: '101-20' },
+        { docketNumber: '320-21' },
+      ]);
+
+    await expect(
+      checkForReadyForTrialCasesInteractor(applicationContext),
+    ).resolves.not.toThrow();
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledTimes(2);
+
+    expect(
+      applicationContext.getPersistenceGateway().getLock,
+    ).toHaveBeenCalledTimes(3);
   });
 });

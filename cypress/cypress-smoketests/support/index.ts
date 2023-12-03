@@ -1,4 +1,4 @@
-import './commands';
+import '../../support/commands';
 
 before(() => {
   // Skip subsequent tests in spec when one fails.

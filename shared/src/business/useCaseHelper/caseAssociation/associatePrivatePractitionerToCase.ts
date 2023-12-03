@@ -1,5 +1,6 @@
 import { Case } from '../../entities/cases/Case';
 import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { UserCase } from '../../entities/UserCase';
 

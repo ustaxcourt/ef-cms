@@ -205,6 +205,7 @@ export const CourtIssuedDocketEntry = connect(
                           />
                           <label
                             className="usa-radio__label"
+                            data-testid={`service-stamp-${option}`}
                             htmlFor={`service-stamp-${idx}`}
                           >
                             {option}
@@ -264,6 +265,7 @@ export const CourtIssuedDocketEntry = connect(
                 <div className="margin-top-5">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
                     <Button
+                      data-testid="serve-to-parties-btn"
                       id="serve-to-parties-btn"
                       onClick={() => {
                         openConfirmInitiateCourtIssuedFilingServiceModalSequence();

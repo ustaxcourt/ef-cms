@@ -284,7 +284,7 @@ export const SessionInformationForm = connect(
           <FormGroup errorText={validationErrors.sessionType}>
             <fieldset
               className="usa-fieldset margin-bottom-0"
-              data-cy="session-type-options"
+              data-testid="session-type-options"
             >
               <legend className="usa-legend" id="session-type-legend">
                 Session type
@@ -309,6 +309,7 @@ export const SessionInformationForm = connect(
                   />
                   <label
                     className="usa-radio__label"
+                    data-testid={`session-type-${option}`}
                     htmlFor={`session-type-${option}`}
                   >
                     {option}
@@ -325,7 +326,7 @@ export const SessionInformationForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input usa-input--small"
-                data-cy="trial-session-number-of-cases-allowed"
+                data-testid="trial-session-number-of-cases-allowed"
                 id="max-cases"
                 name="maxCases"
                 type="text"

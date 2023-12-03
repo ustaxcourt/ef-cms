@@ -5,12 +5,17 @@ import {
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { Message } from '../../entities/Message';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { Stamp } from '../../entities/Stamp';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * addDraftStampOrderDocketEntryInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
@@ -20,7 +25,7 @@ import { orderBy } from 'lodash';
  * @param {string} providers.stampedDocketEntryId the id of the stamped document
  * @param {string} providers.stampData the stampData from the form
  */
-export const addDraftStampOrderDocketEntryInteractor = async (
+export const addDraftStampOrderDocketEntry = async (
   applicationContext,
   {
     docketNumber,
@@ -29,9 +34,23 @@ export const addDraftStampOrderDocketEntryInteractor = async (
     parentMessageId,
     stampData,
     stampedDocketEntryId,
+  }: {
+    docketNumber: string;
+    formattedDraftDocumentTitle: string;
+    originalDocketEntryId: string;
+    parentMessageId?: string;
+    stampData: {
+      disposition: string;
+      nameForSigning: string;
+    };
+    stampedDocketEntryId: string;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, ROLE_PERMISSIONS.STAMP_MOTION)) {
+    throw new UnauthorizedError('Unauthorized to update docket entry');
+  }
 
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -111,3 +130,10 @@ export const addDraftStampOrderDocketEntryInteractor = async (
     caseToUpdate: caseEntity,
   });
 };
+
+export const addDraftStampOrderDocketEntryInteractor = withLocking(
+  addDraftStampOrderDocketEntry,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

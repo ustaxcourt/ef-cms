@@ -10,12 +10,9 @@ import { NewPractitioner } from '../../entities/NewPractitioner';
  */
 export const validateAddPractitionerInteractor = (
   applicationContext: IApplicationContext,
-  { practitioner }: { practitioner: TPractitioner },
+  { practitioner },
 ) => {
-  const errors = new NewPractitioner(practitioner, {
+  return new NewPractitioner(practitioner, {
     applicationContext,
   }).getFormattedValidationErrors();
-
-  if (!errors) return null;
-  return errors;
 };

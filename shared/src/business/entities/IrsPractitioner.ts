@@ -1,28 +1,26 @@
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { Practitioner } from './Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from './EntityConstants';
-import {
-  USER_CONTACT_VALIDATION_RULES,
-  User,
-  VALIDATION_ERROR_MESSAGES,
-} from './User';
+import { User } from './User';
 import joi from 'joi';
-
-export const entityName = 'IrsPractitioner';
 
 export class IrsPractitioner extends User {
   public barNumber: string;
   public serviceIndicator: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(rawUser, options?) {
     super(rawUser, options);
-    this.entityName = 'IrsPractitioner';
+
+    this.entityName = IrsPractitioner.ENTITY_NAME;
+
     this.barNumber = rawUser.barNumber;
     this.serviceIndicator =
       rawUser.serviceIndicator ||
       Practitioner.getDefaultServiceIndicator(rawUser);
   }
+
+  static ENTITY_NAME = 'IrsPractitioner';
 
   static VALIDATION_RULES = joi.object().keys({
     barNumber: JoiValidationConstants.STRING.max(100)
@@ -30,7 +28,7 @@ export class IrsPractitioner extends User {
       .description(
         'A unique identifier comprising of the practitioner initials, date, and series number.',
       ),
-    contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
+    contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
     email: JoiValidationConstants.EMAIL.optional(),
     entityName:
       JoiValidationConstants.STRING.valid('IrsPractitioner').required(),
@@ -45,10 +43,6 @@ export class IrsPractitioner extends User {
 
   getValidationRules() {
     return IrsPractitioner.VALIDATION_RULES as any;
-  }
-
-  getErrorToMessageMap() {
-    return VALIDATION_ERROR_MESSAGES;
   }
 }
 

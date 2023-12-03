@@ -1,16 +1,13 @@
+import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * fetches the pending items
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.get the cerebral get function
- * @returns {object} contains the pending items
- */
 export const fetchPendingItemsAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps): Promise<{
+  pendingItems: PendingItem[];
+  total: number;
+}> => {
   const judge = get(state.pendingReports.selectedJudge);
 
   const page = get(state.pendingReports.pendingItemsPage);

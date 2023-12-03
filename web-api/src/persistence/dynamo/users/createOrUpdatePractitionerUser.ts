@@ -1,5 +1,6 @@
 import * as client from '../../dynamodbClientService';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { isUserAlreadyCreated } from './createOrUpdateUser';
 
 export const createUserRecords = async ({

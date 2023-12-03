@@ -1,4 +1,5 @@
 import * as client from '../../dynamodbClientService';
+import { RawUser } from '@shared/business/entities/User';
 
 export const persistUser = async ({
   applicationContext,

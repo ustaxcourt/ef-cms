@@ -1,3 +1,4 @@
+import { RawUser } from '@shared/business/entities/User';
 import { sortBy } from 'lodash';
 
 export const getUsersInSectionAction =
