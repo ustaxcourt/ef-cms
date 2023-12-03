@@ -1,5 +1,5 @@
 import { ROLES } from '../entities/EntityConstants';
-import { User } from '../entities/User';
+import { RawUser, User } from '../entities/User';
 
 /**
  * getJudgeInSectionHelper - returns the judge user for a given section

@@ -5,6 +5,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *
@@ -13,7 +14,7 @@ import {
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-export const updateCourtIssuedDocketEntryInteractor = async (
+export const updateCourtIssuedDocketEntry = async (
   applicationContext: IApplicationContext,
   { documentMeta }: { documentMeta: any },
 ) => {
@@ -108,3 +109,10 @@ export const updateCourtIssuedDocketEntryInteractor = async (
 
   return caseEntity.toRawObject();
 };
+
+export const updateCourtIssuedDocketEntryInteractor = withLocking(
+  updateCourtIssuedDocketEntry,
+  (_applicationContext: IApplicationContext, { documentMeta }) => ({
+    identifiers: [`case|${documentMeta.docketNumber}`],
+  }),
+);

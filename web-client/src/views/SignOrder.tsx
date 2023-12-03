@@ -194,6 +194,7 @@ export const SignOrder = connect(
 
                   <Button
                     className="margin-right-0"
+                    data-testid="save-signature-button"
                     id="save-signature-button"
                     onClick={() => saveDocumentSigningSequence()}
                   >
@@ -230,6 +231,7 @@ export const SignOrder = connect(
                       ? 'cursor-grabbing'
                       : 'cursor-grab'
                   }
+                  data-testid="sign-pdf-canvas"
                   id="sign-pdf-canvas"
                   ref={canvasRef}
                 ></canvas>

@@ -493,58 +493,7 @@ describe('formattedMessages', () => {
     expect(result.messages.length).toEqual(2);
   });
 
-  it('should set showTrialInformation to true when caseStatus is calendared', () => {
-    const mockCalendaredMessage = {
-      caseStatus: STATUS_TYPES.calendared,
-      completedAt: '2019-01-02T16:29:13.122Z',
-      createdAt: '2019-01-01T16:29:13.122Z',
-      docketNumber: '101-20',
-      message: 'This is a test message',
-      trialDate: '2025-01-01T16:29:13.122Z',
-      trialLocation: 'Austin, TX',
-    };
-    const result = runCompute(formattedMessages, {
-      state: {
-        messageBoxToDisplay: {
-          box: 'outbox',
-        },
-        messages: [mockCalendaredMessage],
-        screenMetadata: {},
-        user: {
-          role: 'adc',
-        },
-      },
-    });
-
-    expect(result.messages[0].showTrialInformation).toBe(true);
-  });
-
-  it('should set showTrialInformation to false when caseStatus is NOT calendared', () => {
-    const mockCalendaredMessage = {
-      caseStatus: STATUS_TYPES.new,
-      completedAt: '2019-01-02T16:29:13.122Z',
-      createdAt: '2019-01-01T16:29:13.122Z',
-      docketNumber: '101-20',
-      message: 'This is a test message',
-    };
-
-    const result = runCompute(formattedMessages, {
-      state: {
-        messageBoxToDisplay: {
-          box: 'outbox',
-        },
-        messages: [mockCalendaredMessage],
-        screenMetadata: {},
-        user: {
-          role: 'adc',
-        },
-      },
-    });
-
-    expect(result.messages[0].showTrialInformation).toBe(false);
-  });
-
-  it('should format the trialDate and trialLocation on the message when caseStatus is Calendared', () => {
+  it('should format the case status on the message when caseStatus is Calendared', () => {
     const mockCalendaredMessage = {
       caseStatus: STATUS_TYPES.calendared,
       completedAt: '2019-01-02T16:29:13.122Z',
@@ -569,8 +518,7 @@ describe('formattedMessages', () => {
     });
 
     expect(result.messages[0]).toMatchObject({
-      formattedTrialDate: '01/01/19',
-      formattedTrialLocation: 'Houston, TX',
+      caseStatus: 'Calendared - 01/01/19 Houston, TX',
     });
   });
 
@@ -602,7 +550,7 @@ describe('formattedMessages', () => {
       applicationContext.getUtilities().abbreviateState,
     ).not.toHaveBeenCalled();
     expect(result.messages[0]).toMatchObject({
-      formattedTrialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      caseStatus: 'Calendared - 01/01/19 Standalone Remote',
     });
   });
 });

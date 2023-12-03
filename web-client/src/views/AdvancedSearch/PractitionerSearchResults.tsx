@@ -42,7 +42,11 @@ export const PractitionerSearchResults = connect(
               </thead>
               <tbody>
                 {advancedSearchHelper.formattedSearchResults.map(result => (
-                  <tr className="search-result" key={result.barNumber}>
+                  <tr
+                    className="search-result"
+                    data-testid={`practitioner-row-${result.barNumber}`}
+                    key={result.barNumber}
+                  >
                     <td>
                       <a href={`/practitioner-detail/${result.barNumber}`}>
                         {result.barNumber}

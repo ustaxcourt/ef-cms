@@ -1,5 +1,4 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeB', () => {
@@ -22,8 +21,8 @@ describe('CourtIssuedDocumentTypeB', () => {
         scenario: 'Type B',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        judge: VALIDATION_ERROR_MESSAGES.judge,
+        documentType: 'Select a document type',
+        judge: 'Select a judge',
       });
     });
 
@@ -49,7 +48,7 @@ describe('CourtIssuedDocumentTypeB', () => {
         scenario: 'Type B',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
     });
 

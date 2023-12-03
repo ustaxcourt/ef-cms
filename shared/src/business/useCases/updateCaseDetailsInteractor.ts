@@ -9,9 +9,10 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * updateCaseDetailsInteractor
+ * updateCaseDetails
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -19,7 +20,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @param {object} providers.caseDetails the case details to update on the case
  * @returns {object} the updated case data
  */
-export const updateCaseDetailsInteractor = async (
+export const updateCaseDetails = async (
   applicationContext: IApplicationContext,
   { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
 ) => {
@@ -138,3 +139,10 @@ export const updateCaseDetailsInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const updateCaseDetailsInteractor = withLocking(
+  updateCaseDetails,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

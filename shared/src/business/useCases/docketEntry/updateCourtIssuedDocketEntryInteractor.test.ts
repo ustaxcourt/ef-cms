@@ -6,12 +6,15 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocketEntryInteractor';
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
+  let mockLock;
 
   beforeAll(() => {
     caseRecord = {
@@ -52,6 +55,18 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.docketClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
   });
 
   it('should throw an error if not authorized', async () => {
@@ -70,12 +85,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should throw an error if the document is not found on the case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await expect(
       updateCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
@@ -92,12 +101,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should call updateCase and saveWorkItem', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await updateCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -119,12 +122,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should not update non-editable fields on the document', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await updateCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -145,5 +142,56 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries[0].objections,
     ).toBeUndefined();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      updateCourtIssuedDocketEntryInteractor(applicationContext, {
+        documentMeta: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          docketNumber: caseRecord.docketNumber,
+          documentType: 'Order',
+          eventCode: 'O',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await updateCourtIssuedDocketEntryInteractor(applicationContext, {
+      documentMeta: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+        docketNumber: caseRecord.docketNumber,
+        documentType: 'Order',
+        eventCode: 'O',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${caseRecord.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${caseRecord.docketNumber}`],
+    });
   });
 });

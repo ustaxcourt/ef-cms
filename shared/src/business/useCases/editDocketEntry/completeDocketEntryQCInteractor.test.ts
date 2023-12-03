@@ -5,6 +5,7 @@ import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_ACTIVE_LOCK } from '../../../test/mockLock';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
@@ -19,8 +20,16 @@ describe('completeDocketEntryQCInteractor', () => {
 
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
 
   beforeEach(() => {
+    mockLock = undefined;
     const workItem = {
       docketEntry: {
         docketEntryId: mockDocketEntryId,
@@ -104,7 +113,10 @@ describe('completeDocketEntryQCInteractor', () => {
 
     await expect(
       completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: {},
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          leadDocketNumber: caseRecord.docketNumber,
+        },
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -602,13 +614,7 @@ describe('completeDocketEntryQCInteractor', () => {
       caseServicesSupervisorUser,
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .acquireLock.mockImplementation(() => {
-        const error: any = new Error('an error has occured');
-        error.code = 'ConditionalCheckFailedException';
-        return Promise.reject(error);
-      });
+    mockLock = MOCK_ACTIVE_LOCK;
 
     await expect(() =>
       completeDocketEntryQCInteractor(applicationContext, {

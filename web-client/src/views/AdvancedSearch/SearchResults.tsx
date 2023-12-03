@@ -75,7 +75,7 @@ export const SearchResults = connect(
                           ))}
                         </td>
                       </NonMobile>
-                      <td>
+                      <td data-testid={`case-result-${result.docketNumber}`}>
                         <CaseLink formattedCase={result} />
                       </td>
                       <NonMobile>

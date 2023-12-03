@@ -48,6 +48,7 @@ export const CaseSearchByDocketNumber = connect(
                   <input
                     aria-describedby="search-by-docket-number"
                     className="usa-input"
+                    data-testid="docket-number"
                     id="docket-number"
                     name="docketNumber"
                     type="text"
@@ -75,6 +76,7 @@ export const CaseSearchByDocketNumber = connect(
                 <Button
                   aria-describedby="search-by-docket-number"
                   className="advanced-search__button"
+                  data-testid="docket-search-button"
                   id="docket-search-button"
                   onClick={e => {
                     e.preventDefault();
@@ -87,6 +89,7 @@ export const CaseSearchByDocketNumber = connect(
                   link
                   aria-describedby="search-by-docket-number"
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  data-testid="clear-docket-number"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({

@@ -11,6 +11,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { WorkItem } from '../../entities/WorkItem';
 import { omit } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *
@@ -19,7 +20,7 @@ import { omit } from 'lodash';
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-export const fileCourtIssuedDocketEntryInteractor = async (
+export const fileCourtIssuedDocketEntry = async (
   applicationContext: IApplicationContext,
   {
     docketNumbers,
@@ -206,3 +207,15 @@ export const fileCourtIssuedDocketEntryInteractor = async (
   }).validate();
   return subjectCase.toRawObject();
 };
+
+export const fileCourtIssuedDocketEntryInteractor = withLocking(
+  fileCourtIssuedDocketEntry,
+  (
+    _applicationContext: IApplicationContext,
+    { docketNumbers = [], subjectDocketNumber },
+  ) => ({
+    identifiers: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
+      item => `case|${item}`,
+    ),
+  }),
+);

@@ -4,6 +4,7 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 
 export const createUserRecords = async ({
   applicationContext,

@@ -42,6 +42,7 @@ export const StateDrivenFileInput = connect(
           accept={accept}
           aria-describedby={ariaDescribedBy}
           className="usa-input"
+          data-testid={id}
           id={id}
           name={fileInputName}
           ref={ref => (inputRef = ref)}

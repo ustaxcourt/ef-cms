@@ -19,11 +19,15 @@ export const openCompleteAndSendMessageDialog = () => {
   cy.get('button#save-and-add-supporting').click();
 };
 
-export const selectSection = section => {
+export const selectSection = (section: string) => {
   cy.get('#toSection').scrollIntoView().select(section);
 };
 
-export const selectRecipient = recipient => {
+export const selectChambers = (chamber: string) => {
+  cy.get('#chambers').scrollIntoView().select(chamber);
+};
+
+export const selectRecipient = (recipient: string) => {
   cy.get('#toUserId').scrollIntoView().select(recipient);
 };
 
