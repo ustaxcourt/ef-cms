@@ -24,7 +24,7 @@ export const FilePetitionSuccess = connect(
             Once your Petition is processed by the Court, you’ll be able to see
             and print a confirmation page under the Case Information tab in your
             case. You’ll also be able to check the status of your case, submit
-            new documents, and view activity on the case on the docket record.
+            new documents, and view activity in the case on the docket record.
           </p>
           <strong>Next steps</strong>
 
@@ -34,7 +34,8 @@ export const FilePetitionSuccess = connect(
               all the options for this on your &quot;My Cases&quot; page.
             </li>
             <li>
-              As new info about the case becomes available you will be notified.
+              As new information about the case becomes available you will be
+              notified at the email address you provided.
             </li>
           </ul>
 
