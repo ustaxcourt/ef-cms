@@ -5,7 +5,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const exportPendingReportAction = async ({
   applicationContext,
   get,
-  props,
 }: ActionProps) => {
   //remove
   const start = Date.now();
@@ -15,7 +14,6 @@ export const exportPendingReportAction = async ({
     .getUseCases()
     .exportPendingReportInteractor(applicationContext, {
       judge,
-      method: props.method,
     });
 
   const today = applicationContext
