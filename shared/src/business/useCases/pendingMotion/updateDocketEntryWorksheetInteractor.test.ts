@@ -10,7 +10,6 @@ describe('updateDocketEntryWorksheetInteractor', () => {
 
   const VALID_WORKSHEET: RawDocketEntryWorksheet = {
     docketEntryId: TEST_DOCKET_ENTRY_ID,
-    entityName: 'RawDocketEntryWorksheet',
     finalBriefDueDate: '2023-07-29',
     primaryIssue: 'tests primaryIssue',
     statusOfMatter: 'Awaiting Consideration',
