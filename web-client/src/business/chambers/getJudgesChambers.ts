@@ -1,10 +1,5 @@
 import { sortBy } from 'lodash';
 
-// QUESTION: SHOULD THESE CHAMBERS BE STORED IN DYNAMO?
-// advantage is to make these numbers configurable if it changes although it doesn't change
-// often
-// are these all the judges??
-
 type JudgeInfo = {
   judgeFullName: string;
   label: string;
@@ -146,9 +141,9 @@ const JUDGES_CHAMBERS: Record<string, JudgeInfo> = {
     section: 'morrisonsChambers',
   },
   NEGAS_CHAMBERS_SECTION: {
-    // confirm if judge is legit
     judgeFullName: 'Joseph W. Nega',
     label: 'Nega’s Chambers',
+    phoneNumber: '(202) 521-0640',
     section: 'negasChambers',
   },
   PANUTHOS_CHAMBERS_SECTION: {
@@ -170,9 +165,9 @@ const JUDGES_CHAMBERS: Record<string, JudgeInfo> = {
     section: 'pughsChambers',
   },
   RUWES_CHAMBERS_SECTION: {
-    // check if judge is legit
     judgeFullName: 'Robert P. Ruwe',
     label: 'Ruwe’s Chambers',
+    phoneNumber: '', // inactive judge, leave blank
     section: 'ruwesChambers',
   },
   SIEGELS_CHAMBERS_SECTION: {
@@ -212,9 +207,9 @@ const JUDGES_CHAMBERS: Record<string, JudgeInfo> = {
     section: 'weilersChambers',
   },
   WELLS_CHAMBERS_SECTION: {
-    // confirm if real judge
     judgeFullName: 'Thomas B. Wells',
     label: 'Wells’ Chambers',
+    phoneNumber: '', // inactive judge, leave blank
     section: 'wellsChambers',
   },
 };
