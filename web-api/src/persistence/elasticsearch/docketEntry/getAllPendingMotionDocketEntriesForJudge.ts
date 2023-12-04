@@ -22,20 +22,17 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         name: 'case-mappings',
       },
       parent_type: 'case',
-      query: { match_all: {} },
+      query: {
+        bool: {
+          must: [
+            {
+              match_phrase: { 'associatedJudge.S': judge },
+            },
+          ],
+        },
+      },
     },
   };
-  if (judge) {
-    hasParentParam.has_parent!.query = {
-      bool: {
-        must: [
-          {
-            match_phrase: { 'associatedJudge.S': judge },
-          },
-        ],
-      },
-    };
-  }
 
   const searchParameters = {
     body: {
