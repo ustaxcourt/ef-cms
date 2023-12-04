@@ -45,7 +45,10 @@ export const describeTable = async ({
 }: {
   applicationContext: ServerApplicationContext;
 }): Promise<DescribeTableCommandOutput> => {
-  const dynamoClient = applicationContext.getDynamoClient();
+  const dynamoClient = applicationContext.getDynamoClient({
+    environment: applicationContext.environment,
+    useMasterRegion: false,
+  });
 
   const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
     TableName: getTableName({ applicationContext }),
@@ -60,6 +63,7 @@ export const describeDeployTable = async ({
   applicationContext: ServerApplicationContext;
 }): Promise<DescribeTableCommandOutput> => {
   const dynamoClient = applicationContext.getDynamoClient({
+    environment: applicationContext.environment,
     useMasterRegion: true,
   });
 
