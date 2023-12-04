@@ -36,7 +36,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 
   const { results: allDocketEntries } = await applicationContext
     .getPersistenceGateway()
-    .getAllDocketEntries({ applicationContext, judge }); //rename to pending docket entries
+    .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judge });
 
   const currentDate = prepareDateFromString().toISO()!;
 
