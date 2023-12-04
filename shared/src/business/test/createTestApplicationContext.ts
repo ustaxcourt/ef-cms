@@ -21,6 +21,7 @@ import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../sharedAppContext';
@@ -611,6 +612,7 @@ export const createTestApplicationContext = ({
     getCognitoClientId: jest.fn(),
     getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
+    getCognitoRequestPasswordResetUrl,
     getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {

@@ -35,7 +35,6 @@ import { createPractitionerDocumentInteractor } from '../../shared/src/business/
 import { createPractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor';
 import { createUserInteractor } from '../../shared/src/business/useCases/users/createUserInteractor';
-import { createUserInteractorLocal } from '../../shared/src/business/useCases/users/createUserInteractorLocal';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
@@ -154,6 +153,7 @@ import { removePdfFromDocketEntryInteractor } from '../../shared/src/business/us
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/business/useCases/removeSignatureFromDocumentInteractor';
 import { replyToMessageInteractor } from '../../shared/src/business/useCases/messages/replyToMessageInteractor';
+import { resendVerificationLinkInteractor } from '@shared/business/useCases/public/resendVerificationLinkInteractor';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { saveCalendarNoteInteractor } from '../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor';
@@ -174,6 +174,7 @@ import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/
 import { setTrialSessionCalendarInteractor } from '../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { setWorkItemAsReadInteractor } from '../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor';
+import { signUpUserInteractor } from '../../shared/src/business/useCases/users/signUpUserInteractor';
 import { strikeDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/strikeDocketEntryInteractor';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor';
@@ -244,7 +245,6 @@ const useCases = {
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
   createUserInteractor,
-  createUserInteractorLocal,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
@@ -363,6 +363,7 @@ const useCases = {
   removePetitionerAndUpdateCaptionInteractor,
   removeSignatureFromDocumentInteractor,
   replyToMessageInteractor,
+  resendVerificationLinkInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCalendarNoteInteractor,
   saveCaseDetailInternalEditInteractor,
@@ -383,6 +384,7 @@ const useCases = {
   setTrialSessionCalendarInteractor,
   setUserEmailFromPendingEmailInteractor,
   setWorkItemAsReadInteractor,
+  signUpUserInteractor,
   strikeDocketEntryInteractor,
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
