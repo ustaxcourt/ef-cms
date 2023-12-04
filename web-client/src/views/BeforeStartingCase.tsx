@@ -53,14 +53,13 @@ export const BeforeStartingCase = connect(
                   <p>
                     You may have received a notice in the mail from the Internal
                     Revenue Service (IRS). The IRS notice may show the last date
-                    to file or the number of days you have to file a Petition.
-                    &nbsp;
+                    to file or the number of days you have to file a Petition.{' '}
                     <strong>
-                      The Court must receive your electronically filed Petition
-                      no later than 11:59 pm Eastern Time on the last date to
-                      file.
+                      In most cases, the Court must receive your electronically
+                      filed Petition no later than 11:59 pm Eastern Time on the
+                      last date to file.
                     </strong>{' '}
-                    Petitions received after this date are untimely and your
+                    Petitions received after this date may be untimely and your
                     case may be dismissed for lack of jurisdiction.
                   </p>
                 </AccordionItem>
@@ -78,7 +77,7 @@ export const BeforeStartingCase = connect(
                     You’ll be asked to upload your Statement of Taxpayer
                     Identification Number (STIN)* form in Step 1 of creating a
                     case. This document is sent to the IRS to help them identify
-                    you, but it’s never stored as public record.
+                    you, but it’s never visible as part of the case record.
                   </p>
                   <p className="label">
                     If you didn’t already fill out the form, you can download it
@@ -120,8 +119,8 @@ export const BeforeStartingCase = connect(
                 >
                   <p className="label">1. Complete Your Petition</p>
                   <p>
-                    This is the document that explains why you’re challenging
-                    the IRS’s determination. You can complete the Court’s
+                    The Petition is the document that explains why you’re
+                    challenging the IRS’s determination. You can use the Court’s
                     standard Petition form or you can upload your own Petition
                     that complies with the requirements of the Tax Court Rules
                     of Practice and Procedure.
@@ -153,8 +152,8 @@ export const BeforeStartingCase = connect(
                     </span>
                   </p>
                   <p className="label">
-                    2. Create a PDF of your Petition and IRS notice (if you
-                    received one)
+                    2. Create a single PDF of your Petition and IRS notice (if
+                    you received one)
                   </p>
                   <p className="margin-top-0">
                     Scan your Petition and IRS notice into one Petition PDF (max
@@ -192,18 +191,31 @@ export const BeforeStartingCase = connect(
                   <p className="label">Joint Petition With A Spouse</p>
                   <p>
                     To file a joint Petition with your spouse, you must have
-                    their consent. Both you and your spouse must sign the
-                    Petition form. If you do not have their consent, select
-                    “Myself” as the person who is filing.
+                    their consent. Both you and your spouse should{' '}
+                    <a
+                      href="https://ustaxcourt.gov/dawson_faqs_case_management.html#CASE7"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      sign the Petition
+                    </a>
+                    . If you do not have your spouse’s consent, select “Myself”
+                    as the person who is filing.
                   </p>
                   <p className="label">Someone Else</p>
                   <p>
                     To file a case on behalf of another taxpayer, you must be
-                    authorized in this Court as provided by the Tax Court Rules
-                    of Practice and Procedure (Rule 60). Enrolled agents,
-                    certified public accountants, and powers of attorney who are
-                    not admitted to practice before the Court are not eligible
-                    to represent taxpayers.
+                    authorized to practice before this Court as provided by the{' '}
+                    <a
+                      href="https://ustaxcourt.gov/rules.html"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      Tax Court Rules of Practice and Procedure
+                    </a>{' '}
+                    (Rule 60). Enrolled agents, certified public accountants,
+                    and attorneys who are not admitted to practice before the
+                    Court are not eligible to represent taxpayers.
                   </p>
                   <p className="label">A Business</p>
                   <p>
@@ -234,8 +246,8 @@ export const BeforeStartingCase = connect(
                 <hr />
                 <p>
                   Next you’ll continue to follow the steps to upload your
-                  documents and fill in the requested information that will
-                  create your case.
+                  documents and fill in the information that will create your
+                  case.
                 </p>
               </div>
             </div>
