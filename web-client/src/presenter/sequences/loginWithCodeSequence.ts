@@ -1,10 +1,9 @@
 import { authenticateUserAction } from '../actions/authenticateUserAction';
 import { decodeTokenAction } from '../actions/decodeTokenAction';
 import { getAllFeatureFlagsAction } from '../actions/getAllFeatureFlagsAction';
-import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getUserAction } from '../actions/getUserAction';
-import { navigateToMaintenanceAction } from '../actions/navigateToMaintenanceAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
+import { parallel } from 'cerebral';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
@@ -25,17 +24,11 @@ export const loginWithCodeSequence = [
       decodeTokenAction,
       setTokenAction,
       startRefreshIntervalAction,
-      getMaintenanceModeAction,
-      {
-        maintenanceOff: [
-          getUserAction,
-          setUserAction,
-          setUserPermissionsAction,
-          getAllFeatureFlagsAction,
-          navigateToPathAction,
-        ],
-        maintenanceOn: [navigateToMaintenanceAction],
-      },
+      parallel([
+        [getUserAction, setUserAction, setUserPermissionsAction],
+        [getAllFeatureFlagsAction],
+      ]),
+      navigateToPathAction,
     ],
   },
 ];
