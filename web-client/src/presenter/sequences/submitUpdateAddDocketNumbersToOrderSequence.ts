@@ -1,7 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { saveSelectedDocketNumbersAction } from '../actions/saveSelectedDocketNumbersAction';
+import { setSelectedConsolidatedCasesToMultiDocketOnAction } from '../actions/setSelectedConsolidatedCasesToMultiDocketOnAction';
 
 export const submitUpdateAddDocketNumbersToOrderSequence = [
   clearModalAction,
-  saveSelectedDocketNumbersAction,
+  setSelectedConsolidatedCasesToMultiDocketOnAction(true),
 ];

@@ -81,6 +81,7 @@ import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
@@ -161,6 +162,7 @@ import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/u
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
+import { updateDocketEntryWorksheet } from '@web-api/persistence/dynamo/pendingMotion/updateDocketEntryWorksheet';
 import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
@@ -259,6 +261,7 @@ const gatewayMethods = {
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
+    updateDocketEntryWorksheet,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updateMessage,
@@ -323,6 +326,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
+  getDocketEntryWorksheetsByDocketEntryIds,
   getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
   getDocument,

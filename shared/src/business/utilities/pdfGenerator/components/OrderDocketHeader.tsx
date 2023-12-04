@@ -6,8 +6,14 @@ export const OrderDocketHeader = ({
   caseTitle,
   docketNumberWithSuffix,
   orderTitle,
+}: {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  orderTitle?: string;
+  addedDocketNumbers?: string[];
 }) => {
-  const isEtAlOrder = addedDocketNumbers?.length > 1;
+  const isEtAlOrder = addedDocketNumbers && addedDocketNumbers?.length > 1;
 
   return (
     <div className="order-docket-header">

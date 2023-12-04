@@ -1,243 +1,261 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import { docketClerk1User, judgeUser } from '@shared/test/mockUsers';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionsHelper as trialSessionsHelperComputed } from './trialSessionsHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
-let currentUser = {
-  role: ROLES.judge,
-  userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-};
-
 const trialSessionsHelper = withAppContextDecorator(
   trialSessionsHelperComputed,
-  {
-    getCurrentUser: () => currentUser,
-  },
 );
 
 describe('trialSessionsHelper', () => {
-  it('should show the Notice Issued column for `open` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'open',
+  describe('showNoticeIssued', () => {
+    it('should show the Notice Issued column for `open` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'open',
+            },
           },
+          permissions: getUserPermissions(docketClerk1User),
         },
-      },
+      });
+
+      expect(result.showNoticeIssued).toEqual(true);
     });
 
-    expect(result.showNoticeIssued).toEqual(true);
+    it('should NOT show the Notice Issued column for `new` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'new',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.showNoticeIssued).toEqual(false);
+    });
+
+    it('should NOT show the Notice Issued column for `closed` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'closed',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.showNoticeIssued).toEqual(false);
+    });
+
+    it('should NOT show the Notice Issued column for `all` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'all',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.showNoticeIssued).toEqual(false);
+    });
   });
 
-  it('should NOT show the Notice Issued column for `new` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'new',
+  describe('showSessionStatus', () => {
+    it('should show the Session Status column for `all` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'all',
+            },
           },
+          permissions: getUserPermissions(docketClerk1User),
         },
-      },
+      });
+
+      expect(result.showSessionStatus).toEqual(true);
     });
 
-    expect(result.showNoticeIssued).toEqual(false);
+    it('should NOT show the Session Status column for `new` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'new',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.showSessionStatus).toEqual(false);
+    });
+
+    it('should NOT show the Session Status column for `open` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'open',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.showSessionStatus).toEqual(false);
+    });
+
+    it('should NOT show the Session Status column for `closed` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'closed',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.showSessionStatus).toEqual(false);
+    });
   });
 
-  it('should NOT show the Notice Issued column for `closed` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'closed',
+  describe('additionalColumnsShown', () => {
+    it('should show 0 additional table columns for `new` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'new',
+            },
           },
+          permissions: getUserPermissions(docketClerk1User),
         },
-      },
+      });
+
+      expect(result.additionalColumnsShown).toEqual(0);
     });
 
-    expect(result.showNoticeIssued).toEqual(false);
+    it('should show 0 additional table columns for `closed` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'closed',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.additionalColumnsShown).toEqual(0);
+    });
+
+    it('should show 1 additional table column for `open` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'open',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.additionalColumnsShown).toEqual(1);
+    });
+
+    it('should show 1 additional table column for `all` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'all',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.additionalColumnsShown).toEqual(1);
+    });
   });
 
-  it('should NOT show the Notice Issued column for `all` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'all',
+  describe('showUnassignedJudgeFilter', () => {
+    it('should show the `unassigned` judge filter for `new` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'new',
+            },
           },
+          permissions: getUserPermissions(docketClerk1User),
         },
-      },
+      });
+
+      expect(result.showUnassignedJudgeFilter).toBeTruthy();
     });
 
-    expect(result.showNoticeIssued).toEqual(false);
-  });
-
-  it('should show the Session Status column for `all` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'all',
+    it('should NOT show the `unassigned` judge filter for `open` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'open',
+            },
           },
+          permissions: getUserPermissions(docketClerk1User),
         },
-      },
+      });
+
+      expect(result.showUnassignedJudgeFilter).toBeFalsy();
     });
 
-    expect(result.showSessionStatus).toEqual(true);
-  });
-
-  it('should NOT show the Session Status column for `new` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'new',
+    it('should NOT show the `unassigned` judge filter for `closed` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'close',
+            },
           },
+          permissions: getUserPermissions(docketClerk1User),
         },
-      },
+      });
+
+      expect(result.showUnassignedJudgeFilter).toBeFalsy();
     });
 
-    expect(result.showSessionStatus).toEqual(false);
-  });
-
-  it('should NOT show the Session Status column for `open` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'open',
+    it('should NOT show the `unassigned` judge filter for `all` sessions', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'all',
+            },
           },
+          permissions: getUserPermissions(docketClerk1User),
         },
-      },
+      });
+
+      expect(result.showUnassignedJudgeFilter).toBeFalsy();
     });
-
-    expect(result.showSessionStatus).toEqual(false);
-  });
-
-  it('should NOT show the Session Status column for `closed` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'closed',
-          },
-        },
-      },
-    });
-
-    expect(result.showSessionStatus).toEqual(false);
-  });
-
-  it('should show 0 additional table columns for `new` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'new',
-          },
-        },
-      },
-    });
-
-    expect(result.additionalColumnsShown).toEqual(0);
-  });
-
-  it('should show 0 additional table columns for `closed` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'closed',
-          },
-        },
-      },
-    });
-
-    expect(result.additionalColumnsShown).toEqual(0);
-  });
-
-  it('should show 1 additional table column for `open` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'open',
-          },
-        },
-      },
-    });
-
-    expect(result.additionalColumnsShown).toEqual(1);
-  });
-
-  it('should show 1 additional table column for `all` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'all',
-          },
-        },
-      },
-    });
-
-    expect(result.additionalColumnsShown).toEqual(1);
-  });
-
-  it('should show the `unassigned` judge filter for `new` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'new',
-          },
-        },
-      },
-    });
-
-    expect(result.showUnassignedJudgeFilter).toBeTruthy();
-  });
-
-  it('should NOT show the `unassigned` judge filter for `open` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'open',
-          },
-        },
-      },
-    });
-
-    expect(result.showUnassignedJudgeFilter).toBeFalsy();
-  });
-
-  it('should NOT show the `unassigned` judge filter for `closed` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'close',
-          },
-        },
-      },
-    });
-
-    expect(result.showUnassignedJudgeFilter).toBeFalsy();
-  });
-
-  it('should NOT show the `unassigned` judge filter for `all` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'all',
-          },
-        },
-      },
-    });
-
-    expect(result.showUnassignedJudgeFilter).toBeFalsy();
   });
 
   describe('trialSessionJudges', () => {
@@ -256,6 +274,7 @@ describe('trialSessionsHelper', () => {
             { name: 'I am not a legacy judge', role: ROLES.judge },
             { name: 'I am a legacy judge', role: ROLES.legacyJudge },
           ],
+          permissions: getUserPermissions(docketClerk1User),
         },
       });
 
@@ -292,6 +311,7 @@ describe('trialSessionsHelper', () => {
             { name: 'I am not a legacy judge', role: ROLES.judge },
             { name: 'I am a legacy judge', role: ROLES.legacyJudge },
           ],
+          permissions: getUserPermissions(docketClerk1User),
         },
       });
 
@@ -328,6 +348,7 @@ describe('trialSessionsHelper', () => {
             { name: 'I am not a legacy judge', role: ROLES.judge },
             { name: 'I am a legacy judge', role: ROLES.legacyJudge },
           ],
+          permissions: getUserPermissions(docketClerk1User),
         },
       });
 
@@ -364,6 +385,7 @@ describe('trialSessionsHelper', () => {
             { name: 'I am not a legacy judge', role: ROLES.judge },
             { name: 'I am a legacy judge', role: ROLES.legacyJudge },
           ],
+          permissions: getUserPermissions(docketClerk1User),
         },
       });
 
@@ -383,6 +405,38 @@ describe('trialSessionsHelper', () => {
           }),
         ]),
       );
+    });
+  });
+
+  describe('showNewTrialSession', () => {
+    it('should return showNewTrialSession as true when current user has CREATE_TRIAL_SESSION permission', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'open',
+            },
+          },
+          permissions: getUserPermissions(docketClerk1User),
+        },
+      });
+
+      expect(result.showNewTrialSession).toEqual(true);
+    });
+
+    it('should return showNewTrialSession as false when current user does not have CREATE_TRIAL_SESSION permission', () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'open',
+            },
+          },
+          permissions: getUserPermissions(judgeUser),
+        },
+      });
+
+      expect(result.showNewTrialSession).toEqual(false);
     });
   });
 });
