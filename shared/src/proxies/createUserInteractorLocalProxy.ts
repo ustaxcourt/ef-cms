@@ -7,7 +7,7 @@ import { post } from './requests';
  * @param {string} providers.user the attributes of the user being created
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createUserInteractorLocal = (applicationContext, { user }) => {
+export const createUserInteractorLocal = (applicationContext, { user }) => {
   return post({
     applicationContext,
     body: user,

@@ -55,7 +55,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judges: ['Colvin'],
+          judge: 'Colvin',
         },
       ),
     ).rejects.toThrow(UnauthorizedError);
@@ -68,7 +68,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     getDocketEntryWorksheetsByDocketEntryIdsResults.push({
       docketEntryId: DOCKET_ENTRY_ID,
-      entityName: 'RawDocketEntryWorksheet',
       finalBriefDueDate: 'SOME FINAL BRIEF DUE DATE',
       primaryIssue: 'SOME PRIMARY ISSUE',
       statusOfMatter: 'SOME STATUS OF MATTER',
@@ -103,7 +102,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judges: ['Colvin'],
+          judge: 'Colvin',
         },
       );
 
@@ -137,7 +136,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     getDocketEntryWorksheetsByDocketEntryIdsResults.push({
       docketEntryId: DOCKET_ENTRY_ID,
-      entityName: 'RawDocketEntryWorksheet',
       finalBriefDueDate: 'SOME FINAL BRIEF DUE DATE',
       primaryIssue: 'SOME PRIMARY ISSUE',
       statusOfMatter: 'SOME STATUS OF MATTER',
@@ -177,7 +175,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judges: ['Colvin'],
+          judge: 'Colvin',
         },
       );
 

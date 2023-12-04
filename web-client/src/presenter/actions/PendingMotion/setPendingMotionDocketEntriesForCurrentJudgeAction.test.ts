@@ -21,7 +21,7 @@ describe('setPendingMotionDocketEntriesForCurrentJudgeAction', () => {
     },
   ];
 
-  it('should', async () => {
+  it('should set pending motion docket entries in state', async () => {
     const results = await runAction(
       setPendingMotionDocketEntriesForCurrentJudgeAction,
       {

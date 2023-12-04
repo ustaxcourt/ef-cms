@@ -6,7 +6,6 @@ import {
 describe('DocketEntryWorksheet', () => {
   const VALID_ENTITY_DATA: RawDocketEntryWorksheet = {
     docketEntryId: '208a959f-9526-4db5-b262-e58c476a4604',
-    entityName: 'DocketEntryWorksheet',
     finalBriefDueDate: '2023-07-29',
     primaryIssue: 'SOME PRIMARY ISSUE',
     statusOfMatter: 'Awaiting Consideration',
