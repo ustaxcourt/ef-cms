@@ -8,9 +8,7 @@ const putMock = put as jest.Mock;
 
 describe('saveDispatchNotification', () => {
   beforeAll(() => {
-    putMock.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    putMock.mockResolvedValue(null);
   });
 
   it('attempts to persist the notification of a dispatched message to a specified topic', async () => {

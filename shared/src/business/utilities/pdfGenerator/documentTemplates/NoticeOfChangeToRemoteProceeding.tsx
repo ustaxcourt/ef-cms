@@ -7,7 +7,16 @@ export const NoticeOfChangeToRemoteProceeding = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
+  nameOfClerk,
+  titleOfClerk,
   trialInfo,
+}: {
+  nameOfClerk: string;
+  titleOfClerk: string;
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  trialInfo: any;
 }) => {
   return (
     <div id="notice-of-change-to-remote-proceeding-pdf">
@@ -122,7 +131,10 @@ export const NoticeOfChangeToRemoteProceeding = ({
           and effect.
         </p>
 
-        <ClerkOfTheCourtSignature />
+        <ClerkOfTheCourtSignature
+          nameOfClerk={nameOfClerk}
+          titleOfClerk={titleOfClerk}
+        />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * submit public case advanced search form
