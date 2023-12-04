@@ -879,6 +879,8 @@ export const PAYMENT_STATUS = {
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
 };
+const PAYMENT_TYPES = Object.values(PAYMENT_STATUS);
+export type PaymentStatusTypes = (typeof PAYMENT_TYPES)[number];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
