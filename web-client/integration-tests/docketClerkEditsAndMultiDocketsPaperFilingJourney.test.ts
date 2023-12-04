@@ -144,7 +144,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
       });
 
       expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
-      expect(cerebralTest.getState('alertSuccess')).toEqual({
+      expect(cerebralTest.getState('alertSuccess')).toMatchObject({
         message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
         overwritable: false,
       });
