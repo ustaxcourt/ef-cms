@@ -100,7 +100,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
 
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
-    expect(cerebralTest.getState('alertSuccess')).toEqual({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Trial session added.',
     });
 

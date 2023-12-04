@@ -21,7 +21,6 @@ export const SuccessNotification = connect(
         window.scrollTo(0, 0);
       }
     });
-
     return (
       <>
         {alertSuccess && (
@@ -32,6 +31,7 @@ export const SuccessNotification = connect(
               'usa-alert--success',
               isMessageOnly && 'usa-alert-success-message-only',
             )}
+            data-metadata={`${alertSuccess.metaData}`}
             data-testid="success-alert"
             ref={notificationRef}
             role="alert"

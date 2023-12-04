@@ -136,7 +136,10 @@ export const TrialSessionsTable = connect(
               </tbody>
               {trialDate.sessions.map(item => (
                 <tbody key={item.trialSessionId}>
-                  <tr className="trial-sessions-row">
+                  <tr
+                    className="trial-sessions-row"
+                    data-testid={`trial-sessions-row-${item.trialSessionId}`}
+                  >
                     <td>
                       {item.showAlertForNOTTReminder && (
                         <FontAwesomeIcon
@@ -159,7 +162,9 @@ export const TrialSessionsTable = connect(
                         />
                       )}
                     </td>
-                    <td>
+                    <td
+                      data-testid={`trial-location-link-${item.trialSessionId}`}
+                    >
                       <a
                         href={
                           item.userIsAssignedToSession
