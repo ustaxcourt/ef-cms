@@ -4,7 +4,7 @@ import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { pendingItemCaseSource } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
-export const getAllDocketEntries = async ({
+export const getAllPendingMotionDocketEntriesForJudge = async ({
   applicationContext,
   judge,
 }: {
