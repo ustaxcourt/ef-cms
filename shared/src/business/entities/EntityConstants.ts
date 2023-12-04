@@ -870,6 +870,8 @@ export const PAYMENT_STATUS = {
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
 };
+const PAYMENT_TYPES = Object.values(PAYMENT_STATUS);
+export type PaymentStatusTypes = (typeof PAYMENT_TYPES)[number];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
@@ -1120,8 +1122,7 @@ export const PARTY_TYPES = {
   nextFriendForMinor:
     'Next friend for a minor (without a guardian, conservator, or other like fiduciary)',
   partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
-  partnershipBBA:
-    'Partnership (as a partnership representative under the BBA regime)',
+  partnershipBBA: 'Partnership (as a partnership representative under BBA)',
   partnershipOtherThanTaxMatters:
     'Partnership (as a partner other than Tax Matters Partner)',
   petitioner: 'Petitioner',
