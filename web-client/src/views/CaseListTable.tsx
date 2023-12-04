@@ -130,6 +130,7 @@ export const CaseListTable = connect(
                   defaultActiveTab={openTab}
                 >
                   <Tab
+                    data-testid="open-cases-count"
                     id="tab-open"
                     tabName={openTab}
                     title={`Open Cases (${externalUserCasesHelper.openCasesCount})`}
@@ -143,6 +144,7 @@ export const CaseListTable = connect(
                     })}
                   </Tab>
                   <Tab
+                    data-testid="closed-cases-count"
                     id="tab-closed"
                     tabName={closedTab}
                     title={`Closed Cases (${externalUserCasesHelper.closedCasesCount})`}
