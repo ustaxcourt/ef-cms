@@ -19,5 +19,5 @@ export const exportPendingReportAction = async ({
 
   const fileName = 'Pending Report - ' + judge + ' ' + today;
 
-  applicationContext.getUtilities().downloadCsv(csvString, fileName);
+  applicationContext.getUtilities().downloadCsv({ csvString, fileName });
 };

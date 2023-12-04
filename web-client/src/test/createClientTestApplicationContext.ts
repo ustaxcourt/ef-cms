@@ -53,6 +53,7 @@ import { createMockDocumentClient } from '@shared/business/test/createMockDocume
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '@shared/business/utilities/documentUrlTranslator';
+import { downloadCsv } from '@shared/business/utilities/downloadCsv';
 import { fileAndServeDocumentOnOneCase } from '@shared/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
@@ -228,6 +229,7 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    downloadCsv: jest.fn().mockImplementation(downloadCsv),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
