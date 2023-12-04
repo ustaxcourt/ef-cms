@@ -140,30 +140,15 @@ describe('exportPendingReportInteractor', () => {
     ).toHaveBeenCalledTimes(mockFoundDocuments.length);
 
     expect(results)
-      .toEqual(`Docket No.;Date Filed;Case Title;Filings and Proceedings;Case Status;Judge
-456-68;02/04/22;Test Caption;Test Document Best;New;Judgey
-456-69;03/04/21;Test Caption;Test Document Best;New;Judger
-456-67;03/04/20;Test Caption;Test Document Best;General Docket - Not at Issue;Foley
-123-45;01/01/90;Test Caption;Test Document Title;General Docket - Not at Issue;Colvin
-123-49;01/01/99;Test Caption;Test Document Title;General Docket - Not at Issue;Judgeson
-234-56S;02/02/20;Test Caption Two;Test Document Type;On Appeal;Buch
-345-67;03/03/20;Test Caption;Test Document Title;On Appeal;Alvin
-456-78;03/03/20;Test Caption;Fear and Trembling;On Appeal;Buch`);
-  });
-
-  it('alt library test', async () => {
-    const results = await exportPendingReportInteractor(applicationContext, {
-      judge,
-      method: 'csvs',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().fetchPendingItems,
-    ).toHaveBeenCalledWith({ applicationContext, judge });
-    expect(
-      applicationContext.getUtilities().formatPendingItem,
-    ).toHaveBeenCalledTimes(mockFoundDocuments.length);
-
-    expect(results).toBeDefined();
+      .toEqual(`\ufeffDocket No.,Date Filed,Case Title,Filings and Proceedings,Case Status,Judge
+456-68,02/04/22,Test Caption,Test Document Best,New,Judgey
+456-69,03/04/21,Test Caption,Test Document Best,New,Judger
+456-67,03/04/20,Test Caption,Test Document Best,General Docket - Not at Issue,Foley
+123-45,01/01/90,Test Caption,Test Document Title,General Docket - Not at Issue,Colvin
+123-49,01/01/99,Test Caption,Test Document Title,General Docket - Not at Issue,Judgeson
+234-56S,02/02/20,Test Caption Two,Test Document Type,On Appeal,Buch
+345-67,03/03/20,Test Caption,Test Document Title,On Appeal,Alvin
+456-78,03/03/20,Test Caption,Fear and Trembling,On Appeal,Buch
+`);
   });
 });
