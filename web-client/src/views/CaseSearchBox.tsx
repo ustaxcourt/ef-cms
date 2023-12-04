@@ -27,7 +27,7 @@ export const CaseSearchBox = connect(
           }}
         >
           <div className="case-search margin-bottom-4">
-            <div className="card">
+            <div className="card" data-testid="search-for-a-case-card">
               <div className="content-wrapper gray">
                 <div className="grid-row underlined">
                   <div className="grid-col-8">
@@ -72,6 +72,7 @@ export const CaseSearchBox = connect(
                     </label>
                     <input
                       className="usa-input"
+                      data-testid="docket-search-field"
                       id="docket-search-field"
                       name="searchTerm"
                       placeholder="Enter docket number (e.g., 123-19)"
