@@ -67,6 +67,7 @@ import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpd
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
 import AWS from 'aws-sdk';
+import AWSXRay from 'aws-xray-sdk';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
@@ -159,17 +160,19 @@ const getDynamoClient = ({ useMasterRegion = false } = {}): DynamoDBClient => {
   // which is used for actually checking if the table in the same region exists.
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDBClient({
-      endpoint:
-        environment.stage === 'local' ? 'http://localhost:8000' : undefined,
-      maxAttempts: 3,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-      requestHandler: new NodeHttpHandler({
-        connectionTimeout: 3000,
-        httpsAgent: new Agent({}),
-        requestTimeout: 5000,
+    dynamoCache[type] = AWSXRay.captureAWSv3Client(
+      new DynamoDBClient({
+        endpoint:
+          environment.stage === 'local' ? 'http://localhost:8000' : undefined,
+        maxAttempts: 3,
+        region: useMasterRegion ? environment.masterRegion : environment.region,
+        requestHandler: new NodeHttpHandler({
+          connectionTimeout: 3000,
+          httpsAgent: new Agent({}),
+          requestTimeout: 5000,
+        }),
       }),
-    });
+    );
   }
   return dynamoCache[type];
 };
