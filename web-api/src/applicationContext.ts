@@ -159,16 +159,17 @@ const getDynamoClient = ({ useMasterRegion = false } = {}): DynamoDBClient => {
   // we don't need fallback logic here because the only method we use is describeTable
   // which is used for actually checking if the table in the same region exists.
   const type = useMasterRegion ? 'master' : 'region';
+
   if (!dynamoCache[type]) {
     dynamoCache[type] = AWSXRay.captureAWSv3Client(
       new DynamoDBClient({
         endpoint:
           environment.stage === 'local' ? 'http://localhost:8000' : undefined,
-        maxAttempts: 3,
+        maxAttempts: 5,
         region: useMasterRegion ? environment.masterRegion : environment.region,
         requestHandler: new NodeHttpHandler({
           connectionTimeout: 3000,
-          httpsAgent: new Agent({}),
+          httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
           requestTimeout: 5000,
         }),
       }),
