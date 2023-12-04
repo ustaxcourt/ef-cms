@@ -4,7 +4,6 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { fakeFile } from '../helpers';
 
@@ -28,7 +27,6 @@ export const petitionsClerkCreatesNewCase = (
     trialLocation: 'Birmingham, Alabama',
   };
   overrides = Object.assign(defaults, overrides || {});
-  const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
   return it('Petitions clerk creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
@@ -41,15 +39,15 @@ export const petitionsClerkCreatesNewCase = (
     );
 
     expect(cerebralTest.getState('validationErrors.caseCaption')).toEqual(
-      VALIDATION_ERROR_MESSAGES.caseCaption,
+      'Enter a case caption',
     );
 
     expect(cerebralTest.getState('validationErrors.receivedAt')).toEqual(
-      VALIDATION_ERROR_MESSAGES.receivedAt[1],
+      'Enter a valid date received',
     );
 
     expect(cerebralTest.getState('validationErrors.petitionFile')).toEqual(
-      VALIDATION_ERROR_MESSAGES.petitionFile,
+      'Upload or scan a Petition',
     );
 
     expect(
@@ -85,7 +83,7 @@ export const petitionsClerkCreatesNewCase = (
 
     expect(
       cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
-    ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
+    ).toEqual('Upload or scan a Request for Place of Trial (RQT)');
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionFile',
