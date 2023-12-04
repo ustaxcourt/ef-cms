@@ -29,9 +29,9 @@ response=$(aws cognito-idp admin-initiate-auth \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
     --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}" 2>/dev/null)
+exitcode=$?
 
-
-if [ $? -eq 0 ]; then
+if [ $exitcode -eq 0 ]; then
           PETITIONS_CLERK_TOKEN=$(echo "${response}" | jq -r '.AuthenticationResult.IdToken')
     export PETITIONS_CLERK_TOKEN
 
