@@ -35,7 +35,7 @@ export const pendingMotionsHelper = (
         ...entry,
         consolidatedIconTooltipText: isLeadCase(entry) ? 'Lead case' : '',
         documentLink: `/case-detail/${entry.docketNumber}/document-view?docketEntryId=${entry.docketEntryId}`,
-        finalBriefDueDateFormatted,
+        finalBriefDueDateFormatted: finalBriefDueDateFormatted || '',
         inConsolidatedGroup: !!entry.leadDocketNumber,
         isLeadCase: isLeadCase(entry),
       };
