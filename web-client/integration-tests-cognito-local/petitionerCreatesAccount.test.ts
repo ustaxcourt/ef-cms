@@ -1,108 +1,131 @@
-import { setupTest } from '../integration-tests/helpers';
+import { setupTest as setupTestPrivate } from '../integration-tests/helpers';
+import { setupTest as setupTestPublic } from '../integration-tests-public/helpers';
 import { userSuccessfullyUpdatesEmailAddress } from '../integration-tests/journey/userSuccessfullyUpdatesEmailAddress';
 import { userVerifiesUpdatedEmailAddress } from '../integration-tests/journey/userVerifiesUpdatedEmailAddress';
 
 const { faker } = require('@faker-js/faker');
 
 describe('Petitioner creates new account', () => {
-  const cerebralTest = setupTest();
+  const cerebralTestPrivate = setupTestPrivate();
+  const cerebralTestPublic = setupTestPublic();
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    cerebralTestPrivate.closeSocket();
   });
 
-  const userName = `${faker.internet.userName()}@example.com`;
+  const userName = `${faker.internet.userName()}@example.com`.toLowerCase();
   const updatedEmailAddress = `${faker.internet.userName()}@example.com`;
   const name = 'Test Petitioner Cognito';
-  const password = 'abc123';
-  const standardizedConfirmationCode = 123456;
+  const password = 'aA1!aaaa';
+  const standardizedConfirmationCode = '123456';
   const expectedVerificationLink = `/confirm-signup-local?confirmationCode=${standardizedConfirmationCode}&email=${userName}`;
 
   it('petitioner creates a new account', async () => {
-    await cerebralTest.runSequence('goToCreateAccountLocalSequence');
+    await cerebralTestPublic.runSequence('goToCreatePetitionerAccountSequence');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTestPublic.runSequence('updateFormValueSequence', {
       key: 'name',
       value: name,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTestPublic.runSequence('updateFormValueSequence', {
       key: 'email',
       value: userName,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTestPublic.runSequence('updateFormValueSequence', {
       key: 'password',
       value: password,
     });
 
-    await cerebralTest.runSequence('createNewAccountLocalSequence');
+    await cerebralTestPublic.runSequence('updateFormValueSequence', {
+      key: 'confirmPassword',
+      value: password,
+    });
 
-    expect(cerebralTest.getState('currentPage')).toEqual('LogIn');
+    await cerebralTestPublic.runSequence(
+      'submitCreatePetitionerAccountFormSequence',
+    );
 
-    expect(cerebralTest.getState('alertSuccess')).toEqual({
-      linkText: 'Verify Email',
-      linkUrl: expectedVerificationLink,
-      message: `New user account created successfully for ${userName}! Please click the link below to verify your email address.`,
-      newTab: false,
+    expect(cerebralTestPublic.getState('currentPage')).toEqual(
+      'VerificationSent',
+    );
+
+    //THIS IS FOR LOCAL VERIFICATION ONLY
+    expect(cerebralTestPublic.getState('alertSuccess')).toEqual({
+      alertType: 'success',
+      message: `New user account created successfully for ${userName}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${expectedVerificationLink}">Verify Email Address</a>`,
+      title: 'Account Created Locally',
     });
   });
 
   it('petitioner follows verification link to confirm new account', async () => {
-    await cerebralTest.runSequence('navigateToPathSequence', {
-      path: expectedVerificationLink,
+    await cerebralTestPublic.runSequence('confirmSignUpLocalSequence', {
+      confirmationCode: standardizedConfirmationCode,
+      userEmail: userName,
     });
-    expect(cerebralTest.getState('alertSuccess')).toEqual({
-      message: 'Your registration has been confirmed!',
-    });
+    expect(cerebralTestPublic.getState('alertSuccess')).toEqual(
+      expect.objectContaining({
+        alertType: 'success',
+        message:
+          'Your registration has been confirmed! You will be redirected shortly!',
+        title: 'Account Confirmed Locally',
+      }),
+    );
   });
 
   it('petitioner logs in successfully', async () => {
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTestPrivate.runSequence('updateFormValueSequence', {
       key: 'email',
       value: userName,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTestPrivate.runSequence('updateFormValueSequence', {
       key: 'password',
       value: password,
     });
 
-    await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
+    await cerebralTestPrivate.runSequence('loginWithCognitoLocalSequence', {
       code: userName,
       password,
     });
 
-    expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
-    expect(cerebralTest.getState('alertError')).toBeUndefined();
-    expect(cerebralTest.getState('user.email')).toEqual(userName);
+    expect(cerebralTestPrivate.getState('currentPage')).toEqual(
+      'DashboardPetitioner',
+    );
+    expect(cerebralTestPrivate.getState('alertError')).toBeUndefined();
+    expect(cerebralTestPrivate.getState('user.email')).toEqual(userName);
   });
 
   userSuccessfullyUpdatesEmailAddress(
-    cerebralTest,
+    cerebralTestPrivate,
     'petitioner',
     updatedEmailAddress,
   );
-  userVerifiesUpdatedEmailAddress(cerebralTest, 'petitioner');
+  userVerifiesUpdatedEmailAddress(cerebralTestPrivate, 'petitioner');
 
   it('petitioner logs in with new email address', async () => {
-    await cerebralTest.runSequence('signOutSequence');
+    await cerebralTestPrivate.runSequence('signOutSequence');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTestPrivate.runSequence('updateFormValueSequence', {
       key: 'email',
       value: updatedEmailAddress,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTestPrivate.runSequence('updateFormValueSequence', {
       key: 'password',
       value: password,
     });
 
-    await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
+    await cerebralTestPrivate.runSequence('loginWithCognitoLocalSequence', {
       code: updatedEmailAddress,
       password,
     });
 
-    expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
-    expect(cerebralTest.getState('alertError')).toBeUndefined();
-    expect(cerebralTest.getState('user.email')).toEqual(updatedEmailAddress);
+    expect(cerebralTestPrivate.getState('currentPage')).toEqual(
+      'DashboardPetitioner',
+    );
+    expect(cerebralTestPrivate.getState('alertError')).toBeUndefined();
+    expect(cerebralTestPrivate.getState('user.email')).toEqual(
+      updatedEmailAddress,
+    );
   });
 });
