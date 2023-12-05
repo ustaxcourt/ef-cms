@@ -50,7 +50,7 @@ export const PendingMotion = connect(
               <th>No. of Cases</th>
               <th style={{ width: '12rem' }}>Petitioner(s)</th>
               <th>Motion</th>
-              <th>No. Days Pending</th>
+              <th>Days Pending</th>
               <th>Final Brief Due Date</th>
               <th>Status of Matter</th>
               <th aria-hidden="true"></th>
