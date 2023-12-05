@@ -126,7 +126,7 @@ export const PendingMotion = connect(
         </table>
 
         {pendingMotionsHelper.formattedPendingMotions.length === 0 && (
-          <div>There are no motions pending for more than 180 days.</div>
+          <div>There are no motions pending for 180 days or more.</div>
         )}
 
         {showModal === 'AddEditDocketEntryWorksheetModal' && (
