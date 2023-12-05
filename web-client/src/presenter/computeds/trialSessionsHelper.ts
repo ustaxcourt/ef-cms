@@ -1,9 +1,8 @@
 import { Get } from 'cerebral';
-import { ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const trialSessionsHelper = (get: Get): any => {
-  const permissions: typeof ROLE_PERMISSIONS = get(state.permissions)!;
+  const permissions = get(state.permissions)!;
   const status = get(state.screenMetadata.trialSessionFilters.status);
   const tab =
     get(state.currentViewMetadata.trialSessions.tab) ||
