@@ -8193,7 +8193,7 @@
         "docketEntries": {
           "type": "array",
           "items": {
-						"type": "object",
+            "type": "object",
             "properties": {
               "daysSinceCreated": {
                 "type": "number",
