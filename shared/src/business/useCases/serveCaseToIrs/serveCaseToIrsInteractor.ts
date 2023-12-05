@@ -153,6 +153,14 @@ const generateNoticeOfReceipt = async ({
 
   let accessCode = generateAccessCode();
 
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+    });
+
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
@@ -163,6 +171,7 @@ const generateNoticeOfReceipt = async ({
         caseTitle,
         contact: contactPrimary,
         docketNumberWithSuffix,
+        nameOfClerk: name,
         preferredTrialCity,
         receivedAtFormatted: applicationContext
           .getUtilities()
@@ -170,6 +179,7 @@ const generateNoticeOfReceipt = async ({
         servedDate: applicationContext
           .getUtilities()
           .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
+        titleOfClerk: title,
       },
     });
 
@@ -212,6 +222,7 @@ const generateNoticeOfReceipt = async ({
           caseTitle,
           contact: contactSecondary,
           docketNumberWithSuffix,
+          nameOfClerk: name,
           preferredTrialCity,
           receivedAtFormatted: applicationContext
             .getUtilities()
@@ -219,6 +230,7 @@ const generateNoticeOfReceipt = async ({
           servedDate: applicationContext
             .getUtilities()
             .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
+          titleOfClerk: title,
         },
       });
   }

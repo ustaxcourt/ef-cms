@@ -37,8 +37,7 @@ export async function createLock({
       TableName: getTableName({
         applicationContext,
       }),
-    })
-    .promise();
+    });
 }
 
 /**
@@ -65,8 +64,7 @@ export async function removeLock({
           TableName: getTableName({
             applicationContext,
           }),
-        })
-        .promise(),
+        }),
     ),
   );
 }
@@ -96,8 +94,7 @@ export async function getLock({
         applicationContext,
       }),
       applicationContext,
-    })
-    .promise();
+    });
 
   if (!res?.Item || res.Item.ttl < now) {
     return undefined;
