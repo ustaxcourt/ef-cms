@@ -10,6 +10,7 @@ import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeMod
 import { confirmSignUpLocalSequence } from '@web-client/presenter/sequences/confirmSignUpLocalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
+import { goToLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
@@ -67,6 +68,7 @@ export const presenterSequences = {
   confirmSignUpLocalSequence,
   dismissModalSequence,
   goToCreatePetitionerAccountSequence,
+  goToLoginSequence,
   goToVerificationSentSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
   gotoHealthCheckSequence: showMaintenancePageDecorator(
