@@ -42,6 +42,7 @@ export const PendingReportList = connect(
                 aria-label="judge filter"
                 bind="screenMetadata.pendingItemsFilters.judge"
                 className="select-left inline-select width-mobile"
+                data-testid="dropdown-select-judge"
                 id="judgeFilter"
                 name="judge"
                 onChange={judge =>
