@@ -40,6 +40,7 @@ import { deleteCaseDeadlineLambda } from './lambdas/caseDeadline/deleteCaseDeadl
 import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
 import { deleteCounselFromCaseLambda } from './lambdas/cases/deleteCounselFromCaseLambda';
 import { deleteDeficiencyStatisticLambda } from './lambdas/cases/deleteDeficiencyStatisticLambda';
+import { deleteDocketEntryWorksheetLambda } from '@web-api/lambdas/pendingMotion/deleteDocketEntryWorksheetLambda';
 import { deletePractitionerDocumentLambda } from './lambdas/practitioners/deletePractitionerDocumentLambda';
 import { deleteTrialSessionLambda } from './lambdas/trialSessions/deleteTrialSessionLambda';
 import { deleteUserCaseNoteLambda } from './lambdas/caseNote/deleteUserCaseNoteLambda';
@@ -627,6 +628,10 @@ app.post(
   lambdaWrapper(updateDocketEntryWorksheetLambda),
 );
 
+app.delete(
+  '/docket-entry/:docketEntryId/worksheet',
+  lambdaWrapper(deleteDocketEntryWorksheetLambda),
+);
 /**
  * case-worksheets
  */
