@@ -42,6 +42,7 @@ export const PendingReport = connect(
                     link
                     aria-label="export pending report"
                     className="margin-top-2"
+                    data-testid="export-pending-report"
                     disabled={isSubmitDebounced}
                     icon="file-export"
                     onClick={() => {
