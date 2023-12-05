@@ -4,11 +4,15 @@ import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserIntera
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export type TAssociatedCaseFormatted = TAssociatedCase & {
+export type TAssociatedCaseFormatted = Omit<
+  TAssociatedCase,
+  'consolidatedCases'
+> & {
   caseTitle: string;
   consolidatedIconTooltipText: string;
   createdAtFormatted: string;
   inConsolidatedGroup: boolean;
+  consolidatedCases: TAssociatedCaseFormatted[] | undefined;
   isLeadCase: boolean;
 };
 
