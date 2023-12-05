@@ -34,7 +34,6 @@ export USER_POOL_ID
 export FILE_NAME
 
 STAGE=${ENV} \
-  DYNAMODB_ENDPOINT="dynamodb.${REGION}.amazonaws.com" \
   S3_ENDPOINT="s3.${REGION}.amazonaws.com" \
   DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" \
   npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
