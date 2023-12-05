@@ -192,6 +192,7 @@ export const createApplicationContext = (
                   applicationContext: {
                     environment,
                     getDocumentClient,
+                    getDynamoClient,
                   },
                 });
                 const users = items.filter(
