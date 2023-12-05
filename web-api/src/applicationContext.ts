@@ -3,7 +3,6 @@ import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerat
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-// import { Agent } from 'https';
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
@@ -21,10 +20,8 @@ import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
-// import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
@@ -43,6 +40,7 @@ import {
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocumentGenerators } from './getDocumentGenerators';
+import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getDynamoEndpoints } from '@web-api/getDynamoEndpoints';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
@@ -100,7 +98,7 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
 
   const { fallbackRegionDocumentClient, mainRegionDocumentClient } =
     getDynamoEndpoints({
-      getDynamoClient,
+      environment,
     });
 
   if (!dynamoClientCache[type]) {
@@ -151,28 +149,7 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   return dynamoClientCache[type];
 };
 
-const getDynamoClient = ({ useMasterRegion = false } = {}): DynamoDBClient => {
-  // we don't need fallback logic here because the only method we use is describeTable
-  // which is used for actually checking if the table in the same region exists.
-  const type = useMasterRegion ? 'master' : 'region';
-  if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDBClient({
-      endpoint:
-        environment.stage === 'local' ? 'http://localhost:8000' : undefined,
-      maxAttempts: 3,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-      // requestHandler: new NodeHttpHandler({
-      //   connectionTimeout: 3000,
-      //   httpsAgent: new Agent({}),
-      //   requestTimeout: 5000,
-      // }),
-    });
-  }
-  return dynamoCache[type];
-};
-
 let dynamoClientCache: Record<string, any> = {};
-let dynamoCache: Record<string, DynamoDBClient> = {};
 let s3Cache;
 let sesCache;
 let sqsCache;
