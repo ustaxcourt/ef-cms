@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { DocketEntryWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
+import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
   JudgeActivityReportState,
@@ -668,7 +668,7 @@ export const baseState = {
   },
   pdfPreviewUrl: '',
   pendingMotions: {
-    docketEntries: [] as DocketEntryWithWorksheet[],
+    docketEntries: [] as FormattedPendingMotionWithWorksheet[],
   },
   pendingReports: cloneDeep(initialPendingReportsState),
   permissions: {} as Record<string, boolean>,

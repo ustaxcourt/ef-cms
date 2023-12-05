@@ -1,11 +1,11 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { DocketEntryWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
+import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { Get } from 'cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
 
 type PendingMotionsHelperResults = {
-  formattedPendingMotions: (DocketEntryWithWorksheet & {
+  formattedPendingMotions: (FormattedPendingMotionWithWorksheet & {
     consolidatedIconTooltipText: string;
     inConsolidatedGroup: boolean;
     isLeadCase: boolean;
