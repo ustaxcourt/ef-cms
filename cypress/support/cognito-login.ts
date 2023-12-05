@@ -68,10 +68,7 @@ const getUserPoolId = async () => {
   return userPoolId;
 };
 
-export const getUserTokenWithRetry = async (
-  username: string,
-  password: string,
-) => {
+export const getUserTokenWithRetry = (username: string, password: string) => {
   return promiseRetry(
     retry => {
       return getUserToken(password, username).catch(retry);

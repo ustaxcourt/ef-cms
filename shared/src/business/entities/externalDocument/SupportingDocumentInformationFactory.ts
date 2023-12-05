@@ -1,7 +1,6 @@
-import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { MAX_FILE_SIZE_BYTES } from '../EntityConstants';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_MB } from '../EntityConstants';
 import { includes } from 'lodash';
 import { makeRequiredHelper } from './externalDocumentHelpers';
 import joi from 'joi';
@@ -9,16 +8,15 @@ import joi from 'joi';
 export class SupportingDocumentInformationFactory extends JoiValidationEntity {
   public attachments: string;
   public certificateOfService: boolean;
-  public certificateOfServiceDate: string;
+  public certificateOfServiceDate?: string;
   public supportingDocument: any;
-  public supportingDocumentFile: object;
+  public supportingDocumentFile?: object;
   public supportingDocumentFileSize?: number;
-  public supportingDocumentFreeText: string;
+  public supportingDocumentFreeText?: string;
 
-  private supportingDocumentValidationRules: object;
-
-  constructor(rawProps, validationRules) {
+  constructor(rawProps) {
     super('SupportingDocumentInformationFactory');
+
     this.attachments = rawProps.attachments || false;
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
@@ -26,27 +24,52 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
     this.supportingDocumentFile = rawProps.supportingDocumentFile;
     this.supportingDocumentFileSize = rawProps.supportingDocumentFileSize;
     this.supportingDocumentFreeText = rawProps.supportingDocumentFreeText;
-
-    this.supportingDocumentValidationRules = validationRules;
   }
 
+  static VALIDATION_RULES = {
+    attachments: joi
+      .boolean()
+      .required()
+      .messages({ '*': 'Enter selection for Attachments.' }),
+    certificateOfService: joi.boolean().required().messages({
+      '*': 'Indicate whether you are including a Certificate of Service',
+    }),
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now')
+      .when('certificateOfService', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .messages({
+        '*': 'Enter date of service',
+        'date.max':
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
+      }),
+    supportingDocument: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a document type',
+    }),
+  };
+
   getValidationRules() {
-    let schema = {
-      attachments: joi.boolean().required(),
-      certificateOfService: joi.boolean().required(),
-      supportingDocument: JoiValidationConstants.STRING.required(),
-    };
+    let schema = { ...SupportingDocumentInformationFactory.VALIDATION_RULES };
 
     let schemaOptionalItems = {
-      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-      supportingDocumentFile: joi.object(),
+      supportingDocumentFile: joi
+        .object()
+        .messages({ '*': 'Upload a document' }),
       supportingDocumentFileSize: joi
         .number()
         .optional()
         .min(1)
         .max(MAX_FILE_SIZE_BYTES)
-        .integer(),
-      supportingDocumentFreeText: JoiValidationConstants.STRING,
+        .integer()
+        .messages({
+          '*': 'Your Supporting Document file size is empty.',
+          'number.max': `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
+      supportingDocumentFreeText: JoiValidationConstants.STRING.messages({
+        '*': 'Enter name',
+      }),
     };
 
     const makeRequired = itemName => {
@@ -57,15 +80,12 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
       });
     };
 
-    if (this.certificateOfService === true) {
-      makeRequired('certificateOfServiceDate');
-    }
-
     const supportingDocumentFreeTextCategories = [
       'Affidavit in Support',
       'Declaration in Support',
       'Unsworn Declaration under Penalty of Perjury in Support',
     ];
+
     const supportingDocumentFileCategories = [
       'Memorandum in Support',
       'Brief in Support',
@@ -85,9 +105,5 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
     }
 
     return schema;
-  }
-
-  getErrorToMessageMap() {
-    return this.supportingDocumentValidationRules;
   }
 }

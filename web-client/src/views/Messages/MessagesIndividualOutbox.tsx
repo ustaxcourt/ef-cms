@@ -154,15 +154,7 @@ export const MessagesIndividualOutbox = connect(
                   <td className="message-queue-row max-width-25">
                     {message.caseTitle}
                   </td>
-                  {!message.showTrialInformation && (
-                    <td className="message-queue-row">{message.caseStatus}</td>
-                  )}
-                  {message.showTrialInformation && (
-                    <td className="message-queue-row">
-                      {message.caseStatus} - {message.formattedTrialDate}{' '}
-                      {message.formattedTrialLocation}
-                    </td>
-                  )}
+                  <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row small">
                     {message.toSection}

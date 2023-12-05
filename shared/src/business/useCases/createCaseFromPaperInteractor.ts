@@ -6,7 +6,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { RawUser } from '@shared/business/entities/User';
+import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { replaceBracketed } from '../utilities/replaceBracketed';
 
@@ -76,12 +77,12 @@ export const createCaseFromPaperInteractor = async (
     requestForPlaceOfTrialFileId,
     stinFileId,
   }: {
-    applicationForWaiverOfFilingFeeFileId: string;
-    corporateDisclosureFileId: string;
+    applicationForWaiverOfFilingFeeFileId?: string;
+    corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
-    requestForPlaceOfTrialFileId: string;
-    stinFileId: string;
+    requestForPlaceOfTrialFileId?: string;
+    stinFileId?: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -194,10 +195,12 @@ export const createCaseFromPaperInteractor = async (
   if (requestForPlaceOfTrialFileId) {
     let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
 
-    documentTitle = replaceBracketed(
-      documentTitle,
-      caseToAdd.preferredTrialCity,
-    );
+    if (caseToAdd.preferredTrialCity) {
+      documentTitle = replaceBracketed(
+        documentTitle,
+        caseToAdd.preferredTrialCity,
+      );
+    }
 
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {

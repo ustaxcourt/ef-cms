@@ -235,7 +235,7 @@ describe('externalUserCasesHelper', () => {
             docketNumber: '189-20',
           },
         ],
-        createdAtFormatted: undefined,
+        createdAtFormatted: '',
         docketNumber: '103-20',
       },
     ];

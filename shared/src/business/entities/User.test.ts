@@ -5,7 +5,7 @@ import {
   JUDGE_TITLES,
   ROLES,
 } from './EntityConstants';
-import { User } from './User';
+import { RawUser, User } from './User';
 
 describe('User entity', () => {
   const mockValidUser: RawUser = {
@@ -71,7 +71,7 @@ describe('User entity', () => {
   });
 
   describe('validation', () => {
-    it('Creates a valid international petitioner user', () => {
+    it('creates a valid international petitioner user', () => {
       const user = new User({
         ...mockValidUser,
         contact: {
@@ -90,13 +90,13 @@ describe('User entity', () => {
       expect(user.isValid()).toBeTruthy();
     });
 
-    it('Creates a valid domestic petitioner user', () => {
+    it('creates a valid domestic petitioner user', () => {
       const user = new User(mockValidUser);
 
       expect(user.isValid()).toBeTruthy();
     });
 
-    it('Creates a valid petitioner user without address2 or address3', () => {
+    it('creates a valid petitioner user without address2 or address3', () => {
       const user = new User({
         ...mockValidUser,
         contact: {
@@ -112,7 +112,7 @@ describe('User entity', () => {
       expect(user.isValid()).toBeTruthy();
     });
 
-    it('Creates a valid petitioner user', () => {
+    it('creates a valid petitioner user', () => {
       const user = new User({
         name: 'Saul Goodman',
         role: ROLES.petitioner,
@@ -123,7 +123,7 @@ describe('User entity', () => {
       expect(user.entityName).toEqual('User');
     });
 
-    it('Creates a valid floater user', () => {
+    it('creates a valid floater user', () => {
       const user = new User({
         name: 'Saul Goodman',
         role: ROLES.floater,
@@ -134,7 +134,7 @@ describe('User entity', () => {
       expect(user.entityName).toEqual('User');
     });
 
-    it('Creates a valid privatePractitioner user', () => {
+    it('creates a valid privatePractitioner user', () => {
       const user = new User({
         barNumber: 'SG101',
         name: 'Saul Goodman',
@@ -146,7 +146,7 @@ describe('User entity', () => {
       expect(user.isValid()).toBeTruthy();
     });
 
-    it('Creates a valid irsPractitioner user', () => {
+    it('creates a valid irsPractitioner user', () => {
       const user = new User({
         name: 'Saul Goodman',
         role: ROLES.irsPractitioner,
@@ -156,7 +156,7 @@ describe('User entity', () => {
       expect(user.isValid()).toBeTruthy();
     });
 
-    it('Creates a valid active judge user', () => {
+    it('creates a valid active judge user', () => {
       const user = new User({
         isSeniorJudge: false,
         judgeFullName: 'Saul Perfectly Goodman',
@@ -184,7 +184,7 @@ describe('User entity', () => {
       });
     });
 
-    it('is invalid when a judge does not have an isSeniorJudge designator', () => {
+    it('shold be invalid when a judge does not have an isSeniorJudge designator', () => {
       const user = new User({
         isSeniorJudge: undefined,
         judgeFullName: 'Saul Perfectly Goodman',
@@ -197,7 +197,7 @@ describe('User entity', () => {
       expect(user.isValid()).toBeFalsy();
     });
 
-    it('is invalid when a judge does not have a judge title', () => {
+    it('should be invalid when a judge does not have a judge title', () => {
       const user = new User({
         isSeniorJudge: false,
         judgeFullName: 'Saul Perfectly Goodman',
@@ -209,7 +209,7 @@ describe('User entity', () => {
       expect(user.isValid()).toBeFalsy();
     });
 
-    it('is invalid when a judge does not have a judgeFullName', () => {
+    it('should be invalid when a judge does not have a judgeFullName', () => {
       const user = new User({
         isSeniorJudge: false,
         judgeTitle: 'Judge',
@@ -221,7 +221,7 @@ describe('User entity', () => {
       expect(user.isValid()).toBeFalsy();
     });
 
-    it('Creates a valid legacy judge user', () => {
+    it('creates a valid legacy judge user', () => {
       const user = new User({
         isSeniorJudge: false,
         judgeTitle: 'Legacy Chief Judge',
@@ -233,7 +233,7 @@ describe('User entity', () => {
       expect(user.isValid()).toBeTruthy();
     });
 
-    it('Creates a valid user with a pending email and pendingEmailVerificationToken', () => {
+    it('creates a valid user with a pending email and pendingEmailVerificationToken', () => {
       const user = new User({
         name: 'Saul Goodman',
         pendingEmail: 'test@example.com',
@@ -247,7 +247,7 @@ describe('User entity', () => {
       expect(user.pendingEmailVerificationToken).toBeDefined();
     });
 
-    it('Creates an invalid user with a pendingEmailVerificationToken that is not a UUID', () => {
+    it('creates an invalid user with a pendingEmailVerificationToken that is not a UUID', () => {
       const user = new User({
         name: 'Saul Goodman',
         pendingEmail: 'test@example.com',
@@ -259,6 +259,27 @@ describe('User entity', () => {
       expect(user.isValid()).toBeFalsy();
       expect(user.getFormattedValidationErrors()).toEqual({
         pendingEmailVerificationToken: expect.anything(),
+      });
+    });
+
+    it('should return error messages related to the "contact" property', () => {
+      const user = new User({
+        contact: {},
+        name: 'Saul Goodman',
+        pendingEmail: 'test@example.com',
+        pendingEmailVerificationToken: null,
+        role: ROLES.irsPractitioner,
+      });
+
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        address1: 'Enter mailing address',
+        city: 'Enter city',
+        countryType: 'Enter country type',
+        phone: 'Enter phone number',
+        postalCode: 'Enter ZIP code',
+        state: 'Enter state',
+        userId: '"userId" is required',
       });
     });
   });

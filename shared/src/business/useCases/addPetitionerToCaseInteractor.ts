@@ -6,16 +6,17 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+
 /**
  * used to add a petitioner to a case
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.contact the contact data to add to the case
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the case data
  */
-export const addPetitionerToCaseInteractor = async (
+export const addPetitionerToCase = async (
   applicationContext: IApplicationContext,
   {
     caseCaption,
@@ -61,3 +62,10 @@ export const addPetitionerToCaseInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const addPetitionerToCaseInteractor = withLocking(
+  addPetitionerToCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

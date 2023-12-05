@@ -1,3 +1,5 @@
+import { RawUser } from '@shared/business/entities/User';
+
 export const getJudgeForCurrentUserAction = async ({
   applicationContext,
 }: ActionProps): Promise<{ judgeUser: RawUser }> => {

@@ -16,6 +16,7 @@ const SectionWorkQueueInProgressRow = React.memo(
     showSelectColumn,
   }: {
     item: {
+      docketNumber: string;
       selected: boolean;
       workItemId: string;
       consolidatedIconTooltipText: string;

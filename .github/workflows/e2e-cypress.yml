@@ -47,6 +47,7 @@ jobs:
           export TESTFILES=$(npx ts-node split-tests-cypress.ts)
           npm run cypress:integration:file $TESTFILES
       - name: Move Videos
+        if: always()
         run: |
           mkdir -p cypress/cypress-integration/videos-${{ matrix.ci_node_index }}/
           cp cypress/cypress-integration/videos/* cypress/cypress-integration/videos-${{ matrix.ci_node_index }}/

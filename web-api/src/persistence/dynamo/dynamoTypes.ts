@@ -2,6 +2,7 @@ import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawOutboxItem } from '@shared/business/entities/OutboxItem';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { RawUser } from '@shared/business/entities/User';
 import { fieldsToOmitBeforePersisting } from '@web-api/persistence/dynamo/cases/createCase';
 import { trialSessionFieldsToOmitBeforePersisting } from '@web-api/persistence/dynamo/trialSessions/updateTrialSession';
 

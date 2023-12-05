@@ -39,12 +39,14 @@ import {
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { confirmSignUpLocalInteractor } from '@shared/proxies/auth/confirmSignUpLocalProxy';
 import {
   createISODateString,
   formatDateString,
@@ -78,8 +80,10 @@ import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionP
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { removeItem } from './persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
+import { resendVerificationLinkInteractor } from '../../shared/src/proxies/public/resendVerificationLinkProxy';
 import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
+import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
@@ -94,6 +98,7 @@ const ADVANCED_SEARCH_TABS = {
 
 const allUseCases = {
   casePublicSearchInteractor,
+  confirmSignUpLocalInteractor,
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
@@ -110,7 +115,9 @@ const allUseCases = {
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   removeItemInteractor,
+  resendVerificationLinkInteractor,
   setItemInteractor,
+  signUpUserInteractor,
   validateCaseAdvancedSearchInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
@@ -159,12 +166,11 @@ const applicationContextPublic = {
   },
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getConstants: () => frozenConstants,
   getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,
-  getEnvironment: () => ({
-    stage: process.env.STAGE || 'local',
-  }),
+  getEnvironment,
   getHttpClient: () => axios,
   getLogger: () => ({
     error: () => {
@@ -218,3 +224,5 @@ const applicationContextPublic = {
 };
 
 export { applicationContextPublic };
+
+export type ClientPublicApplicationContext = typeof applicationContextPublic;

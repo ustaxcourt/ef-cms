@@ -37,5 +37,9 @@ export const navigateToCreateOrderAction = async ({
     urlString = `/case-detail/${docketNumber}/create-order`;
   }
 
-  await router.openInNewTab(`${urlString}?${queryString}`);
+  if (window.localStorage?.getItem('__cypressOrderInSameTab')) {
+    await router.route(`${urlString}?${queryString}`);
+  } else {
+    await router.openInNewTab(`${urlString}?${queryString}`);
+  }
 };

@@ -1,3 +1,4 @@
+import { RawUser } from '@shared/business/entities/User';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { judgeColvin } from '@shared/test/mockUsers';

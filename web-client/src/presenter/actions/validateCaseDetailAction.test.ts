@@ -132,40 +132,6 @@ describe('validateCaseDetail', () => {
     ).toHaveBeenCalled();
   });
 
-  it('sets file and file size properties for initially filed documents from the documents array for paper filings', async () => {
-    await runAction(validateCaseDetailAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          docketEntries: [
-            { documentType: 'Petition' },
-            { documentType: 'Statement of Taxpayer Identification' },
-            { documentType: 'Application for Waiver of Filing Fee' },
-          ],
-          docketNumber: '123-45',
-          irsNoticeDate: '2009-10-13',
-          isPaper: true,
-        },
-      },
-    });
-    expect(
-      applicationContext.getUseCases().validateCaseDetailInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().validatePetitionFromPaperInteractor.mock
-        .calls[0][1].petition,
-    ).toMatchObject({
-      applicationForWaiverOfFilingFeeFile: {},
-      applicationForWaiverOfFilingFeeFileSize: 1,
-      petitionFile: {},
-      petitionFileSize: 1,
-      stinFile: {},
-      stinFileSize: 1,
-    });
-  });
-
   it('should call the error path with contactSecondary errors from petitioners array', async () => {
     const mockInCareOfError = 'Enter name for in care of';
     applicationContext

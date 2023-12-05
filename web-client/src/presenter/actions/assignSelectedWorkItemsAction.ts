@@ -32,6 +32,7 @@ export const assignSelectedWorkItemsAction = async ({
   );
 
   // Give elasticsearch a chance to catch up
+  // TODO: we need a better solution for this; this is causing flaky functionality and failing cypress tests
   await new Promise(resolve => setTimeout(resolve, 3000));
 
   store.set(

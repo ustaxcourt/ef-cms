@@ -451,7 +451,7 @@ describe('processFormattedMessages', () => {
 
       expect(result.inProgressMessages).toEqual([
         {
-          completedAtFormatted: undefined,
+          completedAtFormatted: '',
           consolidatedIconTooltipText: '',
           createdAt: '2019-01-01T16:29:13.122Z',
           createdAtFormatted: '01/01/19',
@@ -464,7 +464,7 @@ describe('processFormattedMessages', () => {
           shouldIndent: false,
         },
         {
-          completedAtFormatted: undefined,
+          completedAtFormatted: '',
           consolidatedIconTooltipText: '',
           createdAt: '2019-01-01T17:29:13.122Z',
           createdAtFormatted: '01/01/19',

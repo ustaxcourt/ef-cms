@@ -5,6 +5,7 @@ import {
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 /**
  * getTrialSessionsForJudgeInteractor
  *

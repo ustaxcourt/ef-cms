@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+import { RawUser } from '@shared/business/entities/User';
 
 /*
   The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.
@@ -22,7 +22,7 @@ type TPetitioner = {
   phone: string;
   postalCode: string;
   sealedAndUnavailable: boolean;
-  serviceIndicator: string;
+  serviceIndicator?: string;
   state: string;
   title?: string;
 };
@@ -35,26 +35,26 @@ type TCaseNote = {
 
 type TPractitioner = {
   entityName: string;
-  additionalPhone: string;
+  additionalPhone?: string;
   admissionsDate: string;
   admissionsStatus: string;
-  representing: string[];
+  representing?: string[];
   barNumber: string;
   birthYear: string;
-  confirmEmail: string;
+  confirmEmail?: string;
   employer: string;
   firmName: string;
   firstName: string;
   lastName: string;
-  middleName: string;
+  middleName?: string;
   name: string;
   originalBarState: string;
-  practitionerNotes: string;
+  practitionerNotes?: string;
   practitionerType: string;
   section: string;
-  suffix: string;
+  suffix?: string;
   serviceIndicator: string;
-  updatedEmail: string;
+  updatedEmail?: string;
   role: string;
 } & RawUser;
 

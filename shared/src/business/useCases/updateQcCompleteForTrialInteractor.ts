@@ -4,9 +4,11 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * updateQcCompleteForTrialInteractor
+ * updateQcCompleteForTrial
+ *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
@@ -15,7 +17,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {Promise<object>} the updated case data
  */
 
-export const updateQcCompleteForTrialInteractor = async (
+export const updateQcCompleteForTrial = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -50,3 +52,10 @@ export const updateQcCompleteForTrialInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const updateQcCompleteForTrialInteractor = withLocking(
+  updateQcCompleteForTrial,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

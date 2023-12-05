@@ -4,9 +4,10 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * deleteCaseDeadlineInteractor
+ * deleteCaseDeadline
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +15,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @param {string} providers.docketNumber the docket number of the case the case deadline is attached to
  * @returns {Promise} the promise of the delete call
  */
-export const deleteCaseDeadlineInteractor = async (
+export const deleteCaseDeadline = async (
   applicationContext: IApplicationContext,
   {
     caseDeadlineId,
@@ -54,3 +55,10 @@ export const deleteCaseDeadlineInteractor = async (
     });
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
+
+export const deleteCaseDeadlineInteractor = withLocking(
+  deleteCaseDeadline,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

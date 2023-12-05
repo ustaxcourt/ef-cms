@@ -1,4 +1,3 @@
-import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
 import { CaseAssociationRequestFactory } from './CaseAssociationRequestFactory';
 import { OBJECTIONS_OPTIONS_MAP } from '../EntityConstants';
 import {
@@ -21,10 +20,7 @@ describe('CaseAssociationRequestFactory', () => {
       expect(
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .primaryDocumentFile,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      );
+      ).toEqual('Upload a document');
 
       rawEntity.primaryDocumentFile = {};
 
@@ -38,10 +34,7 @@ describe('CaseAssociationRequestFactory', () => {
       expect(
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .certificateOfService,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .certificateOfService,
-      );
+      ).toEqual('Indicate whether you are including a Certificate of Service');
 
       rawEntity.certificateOfService = false;
 
@@ -55,10 +48,7 @@ describe('CaseAssociationRequestFactory', () => {
       expect(
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .documentType,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
-      );
+      ).toEqual('Select a document type');
 
       rawEntity.documentType = 'Entry of Appearance';
 
@@ -72,10 +62,7 @@ describe('CaseAssociationRequestFactory', () => {
       expect(
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .documentTitleTemplate,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentTitleTemplate,
-      );
+      ).toEqual('Select a document');
 
       rawEntity.documentTitleTemplate =
         'Entry of Appearance for [Petitioner Names]';
@@ -90,9 +77,7 @@ describe('CaseAssociationRequestFactory', () => {
       expect(
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .eventCode,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.eventCode,
-      );
+      ).toEqual('Select a document');
 
       rawEntity.eventCode = 'P';
 
@@ -106,9 +91,7 @@ describe('CaseAssociationRequestFactory', () => {
       expect(
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .scenario,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.scenario,
-      );
+      ).toEqual('Select a document');
 
       rawEntity.scenario = 'Standard';
 
@@ -128,10 +111,7 @@ describe('CaseAssociationRequestFactory', () => {
           CaseAssociationRequestFactory(
             rawEntity,
           ).getFormattedValidationErrors()!.certificateOfServiceDate,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[1],
-        );
+        ).toEqual('Enter date of service');
 
         rawEntity.certificateOfServiceDate = createISODateString();
 
@@ -154,8 +134,7 @@ describe('CaseAssociationRequestFactory', () => {
             rawEntity,
           ).getFormattedValidationErrors()!.certificateOfServiceDate,
         ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[0].message,
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
         );
       });
     });
@@ -172,10 +151,7 @@ describe('CaseAssociationRequestFactory', () => {
           CaseAssociationRequestFactory(
             rawEntity,
           ).getFormattedValidationErrors()!.objections,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-            .objections,
-        );
+        ).toEqual('Enter selection for Objections.');
 
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
 
@@ -200,10 +176,7 @@ describe('CaseAssociationRequestFactory', () => {
           CaseAssociationRequestFactory(
             rawEntity,
           ).getFormattedValidationErrors()!.attachments,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-            .attachments,
-        );
+        ).toEqual('Enter selection for Attachments.');
 
         rawEntity.attachments = false;
 
@@ -219,10 +192,7 @@ describe('CaseAssociationRequestFactory', () => {
           CaseAssociationRequestFactory(
             rawEntity,
           ).getFormattedValidationErrors()!.objections,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-            .objections,
-        );
+        ).toEqual('Enter selection for Objections.');
 
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
 
@@ -238,10 +208,7 @@ describe('CaseAssociationRequestFactory', () => {
           CaseAssociationRequestFactory(
             rawEntity,
           ).getFormattedValidationErrors()!.hasSupportingDocuments,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-            .hasSupportingDocuments,
-        );
+        ).toEqual('Enter selection for Supporting Documents.');
 
         rawEntity.hasSupportingDocuments = false;
 
@@ -259,16 +226,14 @@ describe('CaseAssociationRequestFactory', () => {
             { attachments: false, certificateOfService: false },
           ];
         });
+
         it('should require supporting document type be entered', () => {
           expect(
             CaseAssociationRequestFactory(
               rawEntity,
             ).getFormattedValidationErrors()!.supportingDocuments[0]
               .supportingDocument,
-          ).toEqual(
-            CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-              .supportingDocument,
-          );
+          ).toEqual('Select a document type');
 
           rawEntity.supportingDocuments[0].supportingDocument = 'Brief';
 
@@ -288,10 +253,7 @@ describe('CaseAssociationRequestFactory', () => {
               rawEntity,
             ).getFormattedValidationErrors()!.supportingDocuments[0]
               .certificateOfServiceDate,
-          ).toEqual(
-            CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-              .certificateOfServiceDate[1],
-          );
+          ).toEqual('Enter date of service');
 
           rawEntity.supportingDocuments[0].certificateOfServiceDate =
             createISODateString();
@@ -309,9 +271,7 @@ describe('CaseAssociationRequestFactory', () => {
       expect(
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .filers,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
-      );
+      ).toEqual('Select a party');
 
       rawEntity.filers = ['c41fdac6-cc16-4ca6-97fc-980ebb618dd5'];
 

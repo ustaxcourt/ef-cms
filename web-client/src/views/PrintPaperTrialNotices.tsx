@@ -30,7 +30,7 @@ function PrintPaperTrialNoticesComponent({
           <div className="grid-col-4">
             <Button
               className="push-right margin-right-0 margin-top-2"
-              data-cy="printing-complete"
+              data-testid="printing-complete"
               onClick={() => printPaperServiceForTrialCompleteSequence()}
             >
               Printing Complete
