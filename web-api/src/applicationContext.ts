@@ -34,14 +34,13 @@ import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
-import { fallbackHandler } from './fallbackHandler';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
+import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
-import { getDynamoEndpoints } from '@web-api/getDynamoEndpoints';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
@@ -77,12 +76,9 @@ const environment = {
     : 'localhost:1234',
   currentColor: process.env.CURRENT_COLOR || 'green',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
-  dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
-  masterDynamoDbEndpoint:
-    process.env.MASTER_DYNAMODB_ENDPOINT || 'http://localhost:8000',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
@@ -93,63 +89,6 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-const getDocumentClient = ({ useMasterRegion = false } = {}) => {
-  const type = useMasterRegion ? 'master' : 'region';
-
-  const { fallbackRegionDocumentClient, mainRegionDocumentClient } =
-    getDynamoEndpoints({
-      environment,
-    });
-
-  if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = {
-      batchGet: fallbackHandler({
-        dynamoMethod: 'batchGet',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      batchWrite: fallbackHandler({
-        dynamoMethod: 'batchWrite',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      delete: fallbackHandler({
-        dynamoMethod: 'delete',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      get: fallbackHandler({
-        dynamoMethod: 'get',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      put: fallbackHandler({
-        dynamoMethod: 'put',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      query: fallbackHandler({
-        dynamoMethod: 'query',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      scan: fallbackHandler({
-        dynamoMethod: 'scan',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      update: fallbackHandler({
-        dynamoMethod: 'update',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-    };
-  }
-
-  return dynamoClientCache[type];
-};
-
-let dynamoClientCache: Record<string, any> = {};
 let s3Cache;
 let sesCache;
 let sqsCache;
@@ -247,6 +186,7 @@ export const createApplicationContext = (
                   applicationContext: {
                     environment,
                     getDocumentClient,
+                    getDynamoClient,
                   },
                 });
                 const users = items.filter(

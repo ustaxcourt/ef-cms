@@ -274,7 +274,7 @@ describe('dynamodbClientService', function () {
     const tableName = getDeployTableName({ applicationContext });
 
     beforeEach(() => {
-      applicationContext.getDocumentClient({ useMasterRegion: true }).get = jest
+      applicationContext.getDocumentClient({ useMainRegion: true }).get = jest
         .fn()
         .mockResolvedValue({ Item: mockItem });
     });
@@ -282,7 +282,7 @@ describe('dynamodbClientService', function () {
     it('uses the master region', async () => {
       await getFromDeployTable(mockParams);
       expect(applicationContext.getDocumentClient).toHaveBeenCalledWith({
-        useMasterRegion: true,
+        useMainRegion: true,
       });
     });
 
@@ -290,7 +290,7 @@ describe('dynamodbClientService', function () {
       await getFromDeployTable(mockParams);
 
       expect(
-        applicationContext.getDocumentClient({ useMasterRegion: true }).get,
+        applicationContext.getDocumentClient({ useMainRegion: true }).get,
       ).toHaveBeenCalledWith({ TableName: tableName, ...mockParams });
     });
 

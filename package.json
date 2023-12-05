@@ -39,7 +39,7 @@
     "archiver": "^6.0.1",
     "aws-lambda": "^1.0.7",
     "aws-xray-sdk": "^3.5.3",
-    "aws-sdk": "^2.1496.0",
+    "aws-sdk": "^2.1506.0",
     "axios": "^1.6.2",
     "broadcast-channel": "^7.0.0",
     "canvas": "^2.11.2",
