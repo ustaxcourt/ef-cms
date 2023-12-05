@@ -12,7 +12,7 @@ export const docketClerkConsolidatesCases = (
     expect(
       cerebralTest.getState('caseDetail.consolidatedCases').length,
     ).toEqual(expectedNumberOfConsolidatedCases);
-    expect(cerebralTest.getState('alertSuccess')).toEqual({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Selected cases consolidated.',
     });
     expect(cerebralTest.getState('modal.showModal')).toBeUndefined();

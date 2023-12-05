@@ -309,14 +309,52 @@ describe('computeTrialSessionFormDataAction', () => {
       modules: {
         presenter,
       },
-      props: { key: 'judgeId', value: { name: 'Test Judge', userId: '123' } },
+      props: {
+        key: 'judgeId',
+        value: { name: 'Test Judge', section: 'buchsChambers', userId: '123' },
+      },
       state: { form },
     });
     expect(result.state.form.judgeId).toEqual('123');
     expect(result.state.form.judge).toEqual({
       name: 'Test Judge',
+      section: 'buchsChambers',
       userId: '123',
     });
+  });
+
+  it('should set the chambers phone number after judge has been selected', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        key: 'judgeId',
+        value: { name: 'Test Judge', section: 'buchsChambers', userId: '123' },
+      },
+      state: { form },
+    });
+
+    expect(result.state.form.chambersPhoneNumber).toEqual('(202) 521-0810');
+  });
+
+  it('should throw an error if the judge selected does not exist in persistence', async () => {
+    await expect(
+      runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
+        props: {
+          key: 'judgeId',
+          value: {
+            name: 'Test Judge',
+            section: 'randomSection',
+            userId: '123',
+          },
+        },
+        state: { form },
+      }),
+    ).rejects.toThrow();
   });
 
   it('should correctly store the trialClerk on the form', async () => {

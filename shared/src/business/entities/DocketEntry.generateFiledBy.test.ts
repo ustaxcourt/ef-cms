@@ -168,6 +168,36 @@ describe('generateFiledBy', () => {
     expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
   });
 
+  it('should generate correct filedBy string for single intervenor in filers', () => {
+    const mockIntervenors = mockPetitioners.map(pet => ({
+      ...pet,
+      contactType: 'intervenor',
+    }));
+    const docketEntry = new DocketEntry(
+      {
+        ...mockDocketEntry,
+        filers: [mockPrimaryContactId],
+      },
+      { applicationContext, petitioners: mockIntervenors },
+    );
+    expect(docketEntry.filedBy).toEqual('Intv. Bob');
+  });
+
+  it('should generate correct filedBy string for multiple intervenors in filers', () => {
+    const mockIntervenors = mockPetitioners.map(pet => ({
+      ...pet,
+      contactType: 'intervenor',
+    }));
+    const docketEntry = new DocketEntry(
+      {
+        ...mockDocketEntry,
+        filers: [mockPrimaryContactId, mockSecondaryContactId],
+      },
+      { applicationContext, petitioners: mockIntervenors },
+    );
+    expect(docketEntry.filedBy).toEqual('Intvs. Bob & Bill');
+  });
+
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {

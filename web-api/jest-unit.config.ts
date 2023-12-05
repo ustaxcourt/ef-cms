@@ -25,6 +25,8 @@ const config: Config = {
     '!src/persistence/sqs/getMessages.ts',
     '!src/persistence/messages/*.ts',
     '!src/persistence/dynamo/**/*.ts',
+    '!src/getDynamoEndpoints.ts',
+    '!src/persistence/dynamo/getDynamoClient.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',

@@ -5,15 +5,17 @@ import { PendingReportList } from './PendingReportList';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PendingReport = connect(
   {
+    exportPendingReportSequence: sequences.exportPendingReportSequence,
     formattedPendingItemsHelper: state.formattedPendingItemsHelper,
     hasPendingItemsResults: state.pendingReports.hasPendingItemsResults,
   },
   function PendingReport({
+    exportPendingReportSequence,
     formattedPendingItemsHelper,
     hasPendingItemsResults,
   }) {
@@ -26,15 +28,39 @@ export const PendingReport = connect(
           <Tabs bind="reportsTab.group" defaultActiveTab="pendingReport">
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               {hasPendingItemsResults && (
-                <Button
-                  link
-                  aria-describedby="pending-report-tab"
-                  className="margin-top-2"
-                  href={formattedPendingItemsHelper.printUrl}
-                  icon="print"
-                >
-                  Printable Report
-                </Button>
+                <>
+                  <Button
+                    link
+                    aria-label="export pending report"
+                    className="margin-top-2"
+                    icon="file-export"
+                    onClick={() => {
+                      exportPendingReportSequence({ method: 'csvs' });
+                    }}
+                  >
+                    Export - CSVS
+                  </Button>
+                  <Button
+                    link
+                    aria-label="export pending report"
+                    className="margin-top-2"
+                    icon="file-export"
+                    onClick={() => {
+                      exportPendingReportSequence();
+                    }}
+                  >
+                    Export
+                  </Button>
+                  <Button
+                    link
+                    aria-label="print pending report"
+                    className="margin-top-2"
+                    href={formattedPendingItemsHelper.printUrl}
+                    icon="print"
+                  >
+                    Printable Report
+                  </Button>
+                </>
               )}
             </div>
 
