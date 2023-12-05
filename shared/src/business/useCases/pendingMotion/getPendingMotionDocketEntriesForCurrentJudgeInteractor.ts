@@ -34,47 +34,50 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { results: allDocketEntries } = await applicationContext
+  const {
+    results: allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch,
+  } = await applicationContext
     .getPersistenceGateway()
     .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judge });
 
   const currentDate = prepareDateFromString().toISO()!;
-
   const batchCases = (
     await Promise.all(
-      allDocketEntries.map(async (docketEntry: RawDocketEntry) => {
-        const fullCase: RawCase = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: docketEntry.docketNumber,
-            includeConsolidatedCases: true,
-          });
+      allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch.map(
+        async (docketEntry: RawDocketEntry) => {
+          const fullCase: RawCase = await applicationContext
+            .getPersistenceGateway()
+            .getCaseByDocketNumber({
+              applicationContext,
+              docketNumber: docketEntry.docketNumber,
+              includeConsolidatedCases: true,
+            });
 
-        const latestDocketEntry: RawDocketEntry = fullCase.docketEntries.find(
-          de => de.docketEntryId === docketEntry.docketEntryId,
-        );
+          const latestDocketEntry: RawDocketEntry = fullCase.docketEntries.find(
+            de => de.docketEntryId === docketEntry.docketEntryId,
+          );
 
-        const dayDifference = calculateDifferenceInDays(
-          currentDate,
-          docketEntry.createdAt,
-        );
+          const dayDifference = calculateDifferenceInDays(
+            currentDate,
+            docketEntry.createdAt,
+          );
 
-        const updatedDocketEntry: RawDocketEntry & {
-          daysSinceCreated: number;
-          caseCaption: string;
-          consolidatedGroupCount: number;
-          leadDocketNumber?: string;
-        } = {
-          ...docketEntry,
-          ...fullCase,
-          ...latestDocketEntry,
-          consolidatedGroupCount: fullCase.consolidatedCases.length || 1,
-          daysSinceCreated: dayDifference,
-        };
+          const updatedDocketEntry: RawDocketEntry & {
+            daysSinceCreated: number;
+            caseCaption: string;
+            consolidatedGroupCount: number;
+            leadDocketNumber?: string;
+          } = {
+            ...docketEntry,
+            ...fullCase,
+            ...latestDocketEntry,
+            consolidatedGroupCount: fullCase.consolidatedCases.length || 1,
+            daysSinceCreated: dayDifference,
+          };
 
-        return updatedDocketEntry;
-      }),
+          return updatedDocketEntry;
+        },
+      ),
     )
   ).filter(de => de.pending);
 
