@@ -54,8 +54,6 @@ services:
       AWS_ACCESS_KEY_ID: S3RVER
       AWS_SECRET_ACCESS_KEY: S3RVER
       ELASTICSEARCH_ENDPOINT: http://elasticsearch:9200
-      MASTER_DYNAMODB_ENDPOINT: http://dynamodb-local:8000
-      DYNAMODB_ENDPOINT: http://dynamodb-local:8000
       ELASTICSEARCH_HOST: elasticsearch
     ports:
       - '3011:3011'
