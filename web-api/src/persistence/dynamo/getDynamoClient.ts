@@ -7,19 +7,19 @@ let dynamoCache: Record<string, DynamoDBClient> = {};
 
 export const getDynamoClient = ({
   environment,
-  useMasterRegion = false,
+  useMainRegion = false,
 }: {
   environment: any;
-  useMasterRegion: boolean;
+  useMainRegion: boolean;
 }): DynamoDBClient => {
-  const type = useMasterRegion ? 'master' : 'region';
+  const type = useMainRegion ? 'master' : 'region';
 
   if (!dynamoCache[type]) {
     const dynamoClient = new DynamoDBClient({
       endpoint:
         environment.stage === 'local' ? 'http://localhost:8000' : undefined,
       maxAttempts: 5,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
+      region: useMainRegion ? environment.masterRegion : environment.region,
       requestHandler: new NodeHttpHandler({
         connectionTimeout: 3000,
         httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
