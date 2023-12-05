@@ -27,7 +27,7 @@ export const CaseSearchBox = connect(
           }}
         >
           <div className="case-search margin-bottom-4">
-            <div className="card">
+            <div className="card" data-testid="search-for-a-case-card">
               <div className="content-wrapper gray">
                 <div className="grid-row underlined">
                   <div className="grid-col-8">
