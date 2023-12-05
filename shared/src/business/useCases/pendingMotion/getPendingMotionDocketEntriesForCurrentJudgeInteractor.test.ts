@@ -136,7 +136,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         statusOfMatter: 'SOME STATUS OF MATTER',
       },
       docketNumber: DOCKET_NUMBER,
-      documentTitle: 'TEST_DOCUMENT_TITLE',
+      eventCode: 'M218',
       pending: true,
     };
     expect(results.docketEntries).toEqual([expectedDocketEntry]);
@@ -250,7 +250,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         statusOfMatter: 'LEAD SOME STATUS OF MATTER',
       },
       docketNumber: LEAD_DOCKET_NUMBER,
-      documentTitle: 'TEST_DOCUMENT_TITLE',
+      eventCode: 'M218',
       leadDocketNumber: LEAD_DOCKET_NUMBER,
       pending: true,
     };

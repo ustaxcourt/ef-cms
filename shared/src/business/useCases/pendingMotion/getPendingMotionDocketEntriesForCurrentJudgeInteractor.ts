@@ -14,7 +14,7 @@ import { partition } from 'lodash';
 export type FormattedPendingMotion = {
   docketNumber: string;
   docketEntryId: string;
-  documentTitle: string;
+  eventCode: string;
   daysSinceCreated: number;
   pending: boolean;
   caseCaption: string;
@@ -164,7 +164,7 @@ async function getLatestDataForPendingMotionsFromDynamo(
     daysSinceCreated: dayDifference,
     docketEntryId: latestDocketEntry.docketEntryId,
     docketNumber: fullCase.docketNumber,
-    documentTitle: latestDocketEntry.documentTitle,
+    eventCode: latestDocketEntry.eventCode,
     leadDocketNumber: fullCase.leadDocketNumber,
     pending: latestDocketEntry.pending,
   };
