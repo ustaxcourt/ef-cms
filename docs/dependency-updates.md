@@ -9,6 +9,12 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 ## Library Update Steps 
 
 ### Do the following for all package.json files
+
+note: we have 3 package.json files, be sure to update them all
+  - ./package.json
+  - ./cognito-triggers-sls/package.json
+  - ./web-api/runtimes/puppeteer/package.json
+
 1. `npm update --save`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
 
 2. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
