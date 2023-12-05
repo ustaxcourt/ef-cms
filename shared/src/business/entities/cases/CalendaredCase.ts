@@ -84,14 +84,8 @@ export class CalendaredCase extends JoiValidationEntity {
     ),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
-
   getValidationRules() {
     return CalendaredCase.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CalendaredCase.VALIDATION_ERROR_MESSAGES;
   }
 }
 
