@@ -14,6 +14,8 @@ describe('documentGenerators', () => {
           caseTitle:
             'Milton Schwartz, Deceased, Neil Schwartz, Fiduciary and Ada Schwartz, Deceased, Neil Schwartz, Fiduciary, Petitioners',
           docketNumberWithSuffix: '123-45S',
+          nameOfClerk: 'Stephanie A. Servoss',
+          titleOfClerk: 'Clerk of the Court',
           trialInfo: {
             formattedJudge: 'Chief Special Trial Judge Carluzzo',
             formattedStartDate: '01/01/2001',

@@ -47,6 +47,7 @@ import { dismissNOTTReminderForTrialLambda } from './lambdas/trialSessions/dismi
 import { downloadPolicyUrlLambda } from './lambdas/documents/downloadPolicyUrlLambda';
 import { editPaperFilingLambda } from './lambdas/documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './lambdas/practitioners/editPractitionerDocumentLambda';
+import { exportPendingReportLambda } from '@web-api/lambdas/pendingItems/exportPendingReportLambda';
 import { fetchPendingItemsLambda } from './lambdas/pendingItems/fetchPendingItemsLambda';
 import { fileAndServeCourtIssuedDocumentLambda } from './lambdas/cases/fileAndServeCourtIssuedDocumentLambda';
 import { fileCorrespondenceDocumentLambda } from './lambdas/correspondence/fileCorrespondenceDocumentLambda';
@@ -98,6 +99,7 @@ import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
 import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
+import { getPendingMotionDocketEntriesForCurrentJudgeLambda } from '@web-api/lambdas/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionerDocumentDownloadUrlLambda } from './lambdas/practitioners/getPractitionerDocumentDownloadUrlLambda';
 import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPractitionerDocumentLambda';
@@ -173,6 +175,7 @@ import { updateCourtIssuedDocketEntryLambda } from './lambdas/documents/updateCo
 import { updateCourtIssuedOrderToCaseLambda } from './lambdas/documents/updateCourtIssuedOrderToCaseLambda';
 import { updateDeficiencyStatisticLambda } from './lambdas/cases/updateDeficiencyStatisticLambda';
 import { updateDocketEntryMetaLambda } from './lambdas/documents/updateDocketEntryMetaLambda';
+import { updateDocketEntryWorksheetLambda } from '@web-api/lambdas/pendingMotion/updateDocketEntryWorksheetLambda';
 import { updateOtherStatisticsLambda } from './lambdas/cases/updateOtherStatisticsLambda';
 import { updatePetitionerInformationLambda } from './lambdas/cases/updatePetitionerInformationLambda';
 import { updatePractitionerUserLambda } from './lambdas/practitioners/updatePractitionerUserLambda';
@@ -616,6 +619,14 @@ app.use(logger());
     lambdaWrapper(updateCaseWorksheetLambda),
   );
 }
+app.get(
+  '/docket-entries/pending-motion',
+  lambdaWrapper(getPendingMotionDocketEntriesForCurrentJudgeLambda),
+);
+app.post(
+  '/docket-entry/:docketEntryId/worksheet',
+  lambdaWrapper(updateDocketEntryWorksheetLambda),
+);
 
 /**
  * case-worksheets
@@ -761,6 +772,10 @@ app.get(
   app.get(
     '/reports/pending-report',
     lambdaWrapper(generatePrintablePendingReportLambda),
+  );
+  app.get(
+    '/reports/pending-report/export',
+    lambdaWrapper(exportPendingReportLambda),
   );
   app.post(
     '/reports/trial-calendar-pdf',

@@ -14,12 +14,12 @@ export const TrialSessions = connect(
     defaultTab: state.screenMetadata.trialSessionFilters.status,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
-    showNewTab: state.screenMetadata.showNewTab,
+    showNewTrialSession: state.trialSessionsHelper.showNewTrialSession,
   },
   function TrialSessions({
     defaultTab,
     openTrialSessionPlanningModalSequence,
-    showNewTab,
+    showNewTrialSession,
   }) {
     return (
       <>
@@ -44,27 +44,48 @@ export const TrialSessions = connect(
                 Trial Session Planning Report
               </Button>
             </div>
-
-            <Button
-              className="tab-right-button"
-              data-testid="add-trial-session-button"
-              href="/add-a-trial-session"
-              icon="plus-circle"
-            >
-              Add Trial Session
-            </Button>
-            {showNewTab && (
-              <Tab id="new-trial-sessions-tab" tabName="new" title="New">
+            {showNewTrialSession && (
+              <Button
+                className="tab-right-button"
+                data-testid="add-trial-session-button"
+                href="/add-a-trial-session"
+                icon="plus-circle"
+              >
+                Add Trial Session
+              </Button>
+            )}
+            {showNewTrialSession && (
+              <Tab
+                data-testid="new-trial-sessions-tab"
+                id="new-trial-sessions-tab"
+                tabName="new"
+                title="New"
+              >
                 <TrialSessionsTable filter="New" />
               </Tab>
             )}
-            <Tab id="open-trial-sessions-tab" tabName="open" title="Open">
+            <Tab
+              data-testid="open-trial-sessions-tab"
+              id="open-trial-sessions-tab"
+              tabName="open"
+              title="Open"
+            >
               <TrialSessionsTable filter="Open" />
             </Tab>
-            <Tab id="closed-trial-sessions-tab" tabName="closed" title="Closed">
+            <Tab
+              data-testid="closed-trial-sessions-tab"
+              id="closed-trial-sessions-tab"
+              tabName="closed"
+              title="Closed"
+            >
               <TrialSessionsTable filter="Closed" />
             </Tab>
-            <Tab id="all-trial-sessions-tab" tabName="all" title="All">
+            <Tab
+              data-testid="all-trial-sessions-tab"
+              id="all-trial-sessions-tab"
+              tabName="all"
+              title="All"
+            >
               <TrialSessionsTable filter="All" />
             </Tab>
           </Tabs>

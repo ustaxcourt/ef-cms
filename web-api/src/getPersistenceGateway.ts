@@ -52,6 +52,7 @@ import { deleteWorkItem } from './persistence/dynamo/workitems/deleteWorkItem';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
+import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/elasticsearch/docketEntry/getAllPendingMotionDocketEntriesForJudge';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
@@ -81,6 +82,7 @@ import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
@@ -161,6 +163,7 @@ import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/u
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
+import { updateDocketEntryWorksheet } from '@web-api/persistence/dynamo/pendingMotion/updateDocketEntryWorksheet';
 import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
@@ -259,6 +262,7 @@ const gatewayMethods = {
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
+    updateDocketEntryWorksheet,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updateMessage,
@@ -297,6 +301,7 @@ const gatewayMethods = {
   deleteUserFromCase,
   deleteWorkItem,
   fetchEventCodesCountForJudges,
+  getAllPendingMotionDocketEntriesForJudge,
   getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
@@ -323,6 +328,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
+  getDocketEntryWorksheetsByDocketEntryIds,
   getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
   getDocument,
