@@ -24,11 +24,8 @@ describe('getCasesMetadataByLeadDocketNumber', () => {
   };
 
   it('should retrieve each case record along with any associated counsel records in the consolidated group', async () => {
-    applicationContext.getDocumentClient().query.mockReturnValueOnce({
-      promise: () =>
-        Promise.resolve({
-          Items: [mockLeadCase, mockMemberCase],
-        }),
+    applicationContext.getDocumentClient().query.mockResolvedValueOnce({
+      Items: [mockLeadCase, mockMemberCase],
     });
 
     applicationContext

@@ -28,7 +28,7 @@ const config = {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
   },
-  endpoint: process.env.DYNAMODB_ENDPOINT,
+  endpoint: 'http://localhost:8000',
   region: 'us-east-1',
 };
 
