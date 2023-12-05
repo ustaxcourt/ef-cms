@@ -11,6 +11,7 @@ import {
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
 import { ContactFactory } from '../contacts/ContactFactory';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
