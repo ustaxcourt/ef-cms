@@ -33,6 +33,7 @@ import { decrementJobCounter } from './persistence/dynamo/trialSessions/decremen
 import { deleteCaseDeadline } from './persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
+import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import {
   deleteKeyCount,
@@ -290,6 +291,7 @@ const gatewayMethods = {
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
+  deleteDocketEntryWorksheetRecord,
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
