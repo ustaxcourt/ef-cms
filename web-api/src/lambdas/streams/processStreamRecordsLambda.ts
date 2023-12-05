@@ -15,7 +15,7 @@ async function putEventHistory(
   const twentyFourHours = 24 * 60 * 60;
 
   await applicationContext
-    .getDocumentClient({
+    .getDocumentClient(applicationContext, {
       useMasterRegion: true,
     })
     .put({
