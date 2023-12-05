@@ -41,8 +41,8 @@ export const StartCaseStep5 = connect(
           Please make sure your information is correct. Don’t forget to check
           your PDF(s) to ensure all personal information has been removed or
           redacted from all documents EXCEPT the Statement of Taxpayer
-          Identification Number (STIN). You will not be able to edit your case
-          once you submit it.{' '}
+          Identification Number (STIN). You will not be able to make changes to
+          your case once you submit it without filing a motion.{' '}
         </Hint>
 
         <div className="grid-container padding-x-0 create-case-review">
@@ -218,8 +218,8 @@ export const StartCaseStep5 = connect(
                     Double check your IRS Notice to ensure your Petition is
                     timely. &nbsp;
                     <strong>
-                      The Court must receive your case no later than 11:59 pm
-                      Eastern Time on the last date to file.
+                      In most cases, the Court must receive your Petition no
+                      later than 11:59 pm Eastern Time on the last date to file.
                     </strong>
                   </li>
                   <li>
@@ -237,8 +237,8 @@ export const StartCaseStep5 = connect(
                   </li>
                   <li>
                     Confirm that all information being submitted appears as you
-                    want it to. You <strong>WILL NOT</strong> be able to edit
-                    your case after you submit.
+                    want it to appear. After clicking Submit to U.S. Tax Court,
+                    you will only be able to edit your case by filing a motion.
                   </li>
                 </ol>
               </div>
