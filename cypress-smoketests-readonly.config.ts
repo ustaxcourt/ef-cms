@@ -1,5 +1,5 @@
 import { defineConfig } from 'cypress';
-import { getUserToken as getUserTokenLocal } from './cypress/cypress-smoketests/support/pages/local-login';
+import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
 import { getUserTokenWithRetry } from './cypress/support/cognito-login';
 
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
@@ -8,6 +8,7 @@ const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
+    experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
         getUserToken({ email, password }) {

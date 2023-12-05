@@ -1,3 +1,4 @@
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { createSectionOutboxRecords } from './createSectionOutboxRecords';
 import { createUserOutboxRecord } from './createUserOutboxRecord';
 import { put } from '../../dynamodbClientService';

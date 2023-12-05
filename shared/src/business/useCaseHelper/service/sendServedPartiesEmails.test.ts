@@ -1,3 +1,5 @@
+jest.mock('react');
+jest.mock('react-dom/server');
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -5,20 +7,20 @@ import {
 import { Case } from '../../entities/cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
 import { sendServedPartiesEmails } from './sendServedPartiesEmails';
-jest.mock(
-  '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
-  () => ({
-    reactTemplateGenerator: jest.fn(),
-  }),
-);
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 describe('sendServedPartiesEmails', () => {
   beforeAll(() => {
     applicationContext.getIrsSuperuserEmail.mockReturnValue(
       'irssuperuser@example.com',
     );
+  });
+
+  beforeEach(() => {
+    React.createElement = jest.fn();
+    ReactDOM.renderToString = jest.fn();
   });
 
   it('should call sendBulkTemplatedEmail if there are electronic service parties on the case and include the irs superuser if the case status is not new', async () => {
@@ -214,7 +216,7 @@ describe('sendServedPartiesEmails', () => {
       },
     });
 
-    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+    const { caseDetail } = (React.createElement as any).mock.calls[0][1];
     expect(caseDetail.docketNumber).toEqual('123-20');
     expect(caseDetail.docketNumberWithSuffix).toEqual('123-20L');
   });

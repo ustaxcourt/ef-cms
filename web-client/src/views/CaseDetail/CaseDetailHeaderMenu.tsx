@@ -151,6 +151,7 @@ export const CaseDetailHeaderMenu = connect(
         {caseDetailHeaderHelper.showCreateOrderButton && (
           <li
             className="usa-nav__submenu-item row-button"
+            data-testid="menu-button-create-order"
             id="menu-button-create-order"
             onClick={() => {
               resetCaseMenuSequence();
@@ -191,6 +192,7 @@ export const CaseDetailHeaderMenu = connect(
         {caseDetailHeaderHelper.showUploadCourtIssuedDocumentButton && (
           <li
             className="usa-nav__submenu-item row-button"
+            data-testid="menu-button-upload-pdf"
             id="menu-button-upload-pdf"
             onClick={() => {
               navigateToPathSequence({
@@ -260,7 +262,7 @@ export const CaseDetailHeaderMenu = connect(
             <button
               aria-expanded={menuHelper.isCaseDetailMenuOpen}
               className="usa-accordion__button usa-nav__link hidden-underline case-detail-menu__button text-no-wrap"
-              data-testid="create-dropdown"
+              data-testid="case-detail-menu-button"
               id="case-detail-menu-button"
               onClick={() => {
                 toggleMenuSequence({ caseDetailMenu: 'CaseDetailMenu' });

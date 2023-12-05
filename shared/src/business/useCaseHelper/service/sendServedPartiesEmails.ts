@@ -1,7 +1,9 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
+import { DocumentService } from '@shared/business/utilities/emailGenerator/emailTemplates/DocumentService';
 import { cloneDeep } from 'lodash';
-import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const sendServedPartiesEmails = async ({
   applicationContext,
@@ -42,9 +44,8 @@ export const sendServedPartiesEmails = async ({
   const destinations = partiesToServe.electronic.map(party => ({
     email: party.email,
     templateData: {
-      emailContent: reactTemplateGenerator({
-        componentName: 'DocumentService',
-        data: {
+      emailContent: ReactDOM.renderToString(
+        React.createElement(DocumentService, {
           caseDetail: {
             caseTitle: Case.getCaseTitle(caseCaption),
             docketNumber,
@@ -63,8 +64,8 @@ export const sendServedPartiesEmails = async ({
           },
           name: party.name,
           taxCourtLoginUrl: `https://app.${process.env.EFCMS_DOMAIN}`,
-        },
-      }),
+        }),
+      ),
     },
   }));
 

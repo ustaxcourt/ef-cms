@@ -1,4 +1,3 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { validateCourtIssuedDocketEntryInteractor } from './validateCourtIssuedDocketEntryInteractor';
 
 describe('validateCourtIssuedDocketEntryInteractor', () => {
@@ -8,8 +7,7 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
     });
 
     expect(errors).toEqual({
-      documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: 'Select a document type',
     });
   });
 
@@ -21,7 +19,7 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
     });
 
     expect(errors).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: 'Select a document type',
     });
   });
 
@@ -33,7 +31,7 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
       },
     });
 
-    expect(errors.filingDate).toEqual(VALIDATION_ERROR_MESSAGES.filingDate);
+    expect(errors!.filingDate).toEqual('Enter a filing date');
   });
 
   it('returns no errors when all required data fields are set', () => {

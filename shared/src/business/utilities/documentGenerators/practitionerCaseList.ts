@@ -1,24 +1,24 @@
+import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
+import { PractitionerCaseList } from '@shared/business/utilities/pdfGenerator/documentTemplates/PractitionerCaseList';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const practitionerCaseList = async ({ applicationContext, data }) => {
-  // data: barNumber, closedCases, openCases, practitionerName,
-  const template = reactTemplateGenerator({
-    componentName: 'PractitionerCaseList',
-    data,
-  });
+  const template = ReactDOM.renderToString(
+    React.createElement(PractitionerCaseList, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: template,
   });
 
-  const footerHtml = reactTemplateGenerator({
-    componentName: 'DatePrintedFooter',
-    data: {
+  const footerHtml = ReactDOM.renderToString(
+    React.createElement(DatePrintedFooter, {
       datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
-    },
-  });
+    }),
+  );
 
   const pdf = await applicationContext
     .getUseCases()

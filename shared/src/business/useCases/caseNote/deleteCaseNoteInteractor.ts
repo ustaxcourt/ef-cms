@@ -4,16 +4,17 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * deleteCaseNoteInteractor
+ * deleteCaseNote
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case the procedural note is attached to
  * @returns {Promise} the promise of the delete call
  */
-export const deleteCaseNoteInteractor = async (
+export const deleteCaseNote = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
@@ -41,3 +42,10 @@ export const deleteCaseNoteInteractor = async (
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
+
+export const deleteCaseNoteInteractor = withLocking(
+  deleteCaseNote,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

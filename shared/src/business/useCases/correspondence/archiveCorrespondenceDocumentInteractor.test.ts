@@ -1,6 +1,8 @@
 import { Correspondence } from '../../entities/Correspondence';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { ROLES } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondenceDocumentInteractor';
 
@@ -9,8 +11,16 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
   let mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
   const mockCorrespondenceId = applicationContext.getUniqueId();
   let mockCorrespondence;
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
 
   beforeEach(() => {
+    mockLock = undefined;
     mockCorrespondence = new Correspondence({
       correspondenceId: mockCorrespondenceId,
       documentTitle: 'My Correspondence',
@@ -38,7 +48,10 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
-      archiveCorrespondenceDocumentInteractor(applicationContext, {} as any),
+      archiveCorrespondenceDocumentInteractor(applicationContext, {
+        correspondenceId: mockCorrespondenceId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -88,5 +101,42 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.archivedCorrespondences,
     ).toEqual([{ ...mockCorrespondence, archived: true }]);
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      archiveCorrespondenceDocumentInteractor(applicationContext, {
+        correspondenceId: mockCorrespondenceId,
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await archiveCorrespondenceDocumentInteractor(applicationContext, {
+      correspondenceId: mockCorrespondenceId,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 });

@@ -196,7 +196,7 @@ describe('internalPetitionPartiesHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime)', () => {
+  it('should validate form view information for party type Partnership (as a partnership representative under BBA)', () => {
     const result = runCompute(internalPetitionPartiesHelper, {
       state: {
         constants: {

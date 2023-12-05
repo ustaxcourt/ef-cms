@@ -1,4 +1,6 @@
-import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
+import { BouncedEmailAlert } from '@shared/business/utilities/emailGenerator/emailTemplates/BouncedEmailAlert';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 /**
  * Helper function to easily parse the information we need from the Notification about the bounce
@@ -45,24 +47,23 @@ export const handleBounceNotificationInteractor = async (
   const environmentName = applicationContext.getEnvironment().stage;
   const alertRecipients = applicationContext.getBounceAlertRecipients();
 
+  const emailContent = ReactDOM.renderToString(
+    React.createElement(BouncedEmailAlert, {
+      bounceRecipient,
+      bounceSubType,
+      bounceType,
+      currentDate: applicationContext.getUtilities().formatNow('DATE_TIME_TZ'),
+      environmentName,
+      errorMessage,
+      subject,
+    }),
+  );
+
   if (alertRecipients) {
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        emailContent: reactTemplateGenerator({
-          componentName: 'BouncedEmailAlert',
-          data: {
-            bounceRecipient,
-            bounceSubType,
-            bounceType,
-            currentDate: applicationContext
-              .getUtilities()
-              .formatNow('DATE_TIME_TZ'),
-            environmentName,
-            errorMessage,
-            subject,
-          },
-        }),
+        emailContent,
       },
       destinations: alertRecipients.map(email => ({ email })),
       templateName: process.env.BOUNCE_ALERT_TEMPLATE,

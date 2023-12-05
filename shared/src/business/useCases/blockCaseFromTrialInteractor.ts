@@ -4,16 +4,17 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+
 /**
  * used for setting a case as blocked
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.reason the reason the case is being blocked
  * @param {string} providers.docketNumber the docket number to block
  * @returns {object} the case data
  */
-export const blockCaseFromTrialInteractor = async (
+export const blockCaseFromTrial = async (
   applicationContext: IApplicationContext,
   { docketNumber, reason }: { docketNumber: string; reason: string },
 ) => {
@@ -50,3 +51,10 @@ export const blockCaseFromTrialInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const blockCaseFromTrialInteractor = withLocking(
+  blockCaseFromTrial,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

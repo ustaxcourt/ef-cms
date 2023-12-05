@@ -2,7 +2,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawUser } from '@shared/business/entities/User';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
 /**
  * getJudgeInSectionInteractor - returns the judge user for a given section
  *

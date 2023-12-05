@@ -44,8 +44,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         ...MOCK_TRIAL_REGULAR,
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       });
-    applicationContext.getNotificationGateway().sendNotificationToUser =
-      jest.fn();
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionJobStatusForCase.mockResolvedValueOnce({
@@ -60,8 +58,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionProcessingStatus.mockResolvedValue(undefined);
-    applicationContext.getPersistenceGateway().setTrialSessionProcessingStatus =
-      jest.fn();
 
     applicationContext.logger.warn.mockResolvedValue(
       `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,

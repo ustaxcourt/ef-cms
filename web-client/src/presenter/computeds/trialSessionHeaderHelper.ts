@@ -37,7 +37,7 @@ export const trialSessionHeaderHelper = (
     isAssigned && 'TrialSessionDetail'.includes(get(state.currentPage));
   const showPrintPaperServicePDFsButton =
     formattedTrialSession.paperServicePdfs.length > 0 &&
-    get(state.permissions!.REPRINT_PAPER_SERVICE);
+    get(state.permissions!.TRIAL_SESSIONS);
 
   return {
     isStandaloneSession: TrialSession.isStandaloneRemote(

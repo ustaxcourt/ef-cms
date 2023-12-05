@@ -29,7 +29,7 @@ const makeNewPassword = (): string => {
   // get number between 12 and 20
   const passwordLength = 12 + Math.floor(Math.random() * 9);
   const charSets = {
-    characters: '^*.()"@#%&/,><\':;_~`=+-',
+    characters: '^*.()@#%&/,><:;_~=+-',
     lowercase: 'abcdefghijklmnopqrstuvwxyz',
     numbers: '0123456789',
     uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',

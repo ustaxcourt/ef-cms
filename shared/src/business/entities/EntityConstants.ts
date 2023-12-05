@@ -87,6 +87,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
+  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
@@ -234,7 +237,7 @@ export const STIN_DOCKET_ENTRY_TYPE = {
   eventCode: 'STIN',
 };
 
-const pickEventCode = d => d.eventCode;
+const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
 
 export const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
@@ -876,6 +879,8 @@ export const PAYMENT_STATUS = {
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
 };
+const PAYMENT_TYPES = Object.values(PAYMENT_STATUS);
+export type PaymentStatusTypes = (typeof PAYMENT_TYPES)[number];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
@@ -1126,8 +1131,7 @@ export const PARTY_TYPES = {
   nextFriendForMinor:
     'Next friend for a minor (without a guardian, conservator, or other like fiduciary)',
   partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
-  partnershipBBA:
-    'Partnership (as a partnership representative under the BBA regime)',
+  partnershipBBA: 'Partnership (as a partnership representative under BBA)',
   partnershipOtherThanTaxMatters:
     'Partnership (as a partner other than Tax Matters Partner)',
   petitioner: 'Petitioner',

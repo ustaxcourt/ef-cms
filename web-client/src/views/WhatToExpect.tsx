@@ -169,6 +169,7 @@ export const WhatToExpect = () => (
     </div>
     <Button
       className="margin-right-0"
+      data-testid="file-a-petition"
       href="/before-filing-a-petition"
       icon="file"
       id="file-a-petition"

@@ -1,5 +1,8 @@
+import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
+import { NoticeOfChangeToRemoteProceeding } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToRemoteProceeding';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
-import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
 export const noticeOfChangeToRemoteProceeding = async ({
   applicationContext,
@@ -7,22 +10,20 @@ export const noticeOfChangeToRemoteProceeding = async ({
 }) => {
   const { docketNumberWithSuffix } = data;
 
-  const noticeOfChangeToRemoteProceedingTemplate = reactTemplateGenerator({
-    componentName: 'NoticeOfChangeToRemoteProceeding',
-    data,
-  });
+  const noticeOfChangeToRemoteProceedingTemplate = ReactDOM.renderToString(
+    React.createElement(NoticeOfChangeToRemoteProceeding, data),
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: noticeOfChangeToRemoteProceedingTemplate,
   });
 
-  const footerHtml = reactTemplateGenerator({
-    componentName: 'DateServedFooter',
-    data: {
+  const footerHtml = ReactDOM.renderToString(
+    React.createElement(DateServedFooter, {
       dateServed: applicationContext.getUtilities().formatNow('MMDDYY'),
-    },
-  });
+    }),
+  );
 
   const pdf = await applicationContext
     .getUseCases()

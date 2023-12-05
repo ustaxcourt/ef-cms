@@ -1,6 +1,5 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 
 describe('CourtIssuedDocumentTypeG', () => {
   describe('constructor', () => {
@@ -21,9 +20,9 @@ describe('CourtIssuedDocumentTypeG', () => {
         scenario: 'Type G',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[2],
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
+        date: 'Enter a date',
+        documentType: 'Select a document type',
+        trialLocation: 'Select a trial location',
       });
     });
 
@@ -37,7 +36,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[2],
+        date: 'Enter a date',
       });
     });
 
