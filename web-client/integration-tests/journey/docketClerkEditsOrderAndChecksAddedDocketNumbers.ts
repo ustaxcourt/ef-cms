@@ -3,8 +3,6 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 export const docketClerkEditsOrderAndChecksAddedDocketNumbers =
   cerebralTest => {
     return it('Docket Clerk confirms the added docket number when editing the draft document', async () => {
-      cerebralTest.setState('addedDocketNumbers', undefined);
-
       await cerebralTest.runSequence('gotoEditOrderSequence', {
         docketEntryIdToEdit: cerebralTest.docketEntryId,
         docketNumber: cerebralTest.docketNumber,
