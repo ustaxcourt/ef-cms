@@ -10,15 +10,12 @@ describe('exportPendingReportAction', () => {
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
-    //TODO: do we have to reset window after test?
-    const createObjectURLSpy = jest.fn();
+
     applicationContext
       .getUseCases()
       .exportPendingReportInteractor.mockReturnValue(expectedCsvString);
 
     applicationContext.getUtilities().formatNow.mockReturnValue(now);
-
-    window.URL.createObjectURL = createObjectURLSpy;
   });
 
   it('should call exportPendingReportInteractor with a judge name from state.pendingReports.selectedJudge and call downloadCsv with the csv string and formatted fileName', async () => {
