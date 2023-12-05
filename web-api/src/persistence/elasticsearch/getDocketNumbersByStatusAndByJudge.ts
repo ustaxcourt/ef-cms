@@ -3,7 +3,7 @@ import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types
 import { search } from './searchClient';
 
 export type DocketNumberByStatusRequest = {
-  statuses?: string[];
+  statuses: string[];
   judges?: string[];
   excludeMemberCases?: boolean;
 };
@@ -31,13 +31,11 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   params: DocketNumberByStatusRequest;
 }): Promise<SubmittedCAVTableFields[]> => {
   const shouldFilters: QueryDslQueryContainer[] = [];
-  const filters: QueryDslQueryContainer[] = params.statuses
-    ? [
-        {
-          terms: { 'status.S': params.statuses },
-        },
-      ]
-    : [];
+  const filters: QueryDslQueryContainer[] = [
+    {
+      terms: { 'status.S': params.statuses },
+    },
+  ];
 
   if (params.judges) {
     params.judges.forEach(judge => {
