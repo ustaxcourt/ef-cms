@@ -136,6 +136,7 @@ function removeDuplicateDocketEntries(
 
   return [...soloDocketEntries, ...Object.values(uniqueDocketEntryDictionary)];
 }
+
 async function getLatestDataForPendingMotionsFromDynamo(
   docketEntry: RawDocketEntry,
   applicationContext: IApplicationContext,
