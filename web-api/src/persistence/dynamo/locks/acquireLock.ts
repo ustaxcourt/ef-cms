@@ -29,7 +29,7 @@ export async function createLock({
   };
 
   await applicationContext
-    .getDocumentClient({
+    .getDocumentClient(applicationContext, {
       useMasterRegion: true,
     })
     .put({
@@ -53,7 +53,7 @@ export async function removeLock({
   await Promise.all(
     identifiers.map(identifierToUnlock =>
       applicationContext
-        .getDocumentClient({
+        .getDocumentClient(applicationContext, {
           useMasterRegion: true,
         })
         .delete({
@@ -81,7 +81,7 @@ export async function getLock({
 }): Promise<undefined | TLockDynamoRecord> {
   const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const res = await applicationContext
-    .getDocumentClient({
+    .getDocumentClient(applicationContext, {
       useMasterRegion: true,
     })
     .get({

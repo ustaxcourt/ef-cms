@@ -14,15 +14,14 @@ const loadCaseFromInitialBlackstoneMigrationDb = async ({
   docketNumber: string;
 }) => {
   const result = await applicationContext
-    .getDocumentClient()
+    .getDocumentClient(applicationContext)
     .get({
       Key: {
         pk: `case|${docketNumber}`,
         sk: `case|${docketNumber}`,
       },
       TableName: 'efcms-prod-first',
-    })
-    .promise();
+    });
 
   return result || {};
 };

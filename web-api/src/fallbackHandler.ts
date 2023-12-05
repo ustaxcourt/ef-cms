@@ -8,7 +8,7 @@ export const fallbackHandler = ({
   dynamoMethod: string;
   fallbackRegionDocumentClient: DynamoDBDocument;
   mainRegionDocumentClient: DynamoDBDocument;
-}) => {
+}): any => {
   return params => {
     return new Promise((resolve, reject) => {
       mainRegionDocumentClient[dynamoMethod](params)

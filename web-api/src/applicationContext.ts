@@ -38,14 +38,13 @@ import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
-import { fallbackHandler } from './fallbackHandler';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
+import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
-import { getDynamoEndpoints } from '@web-api/getDynamoEndpoints';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -96,63 +95,6 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-const getDocumentClient = ({ useMasterRegion = false } = {}) => {
-  const type = useMasterRegion ? 'master' : 'region';
-
-  const { fallbackRegionDocumentClient, mainRegionDocumentClient } =
-    getDynamoEndpoints({
-      environment,
-    });
-
-  if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = {
-      batchGet: fallbackHandler({
-        dynamoMethod: 'batchGet',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      batchWrite: fallbackHandler({
-        dynamoMethod: 'batchWrite',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      delete: fallbackHandler({
-        dynamoMethod: 'delete',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      get: fallbackHandler({
-        dynamoMethod: 'get',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      put: fallbackHandler({
-        dynamoMethod: 'put',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      query: fallbackHandler({
-        dynamoMethod: 'query',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      scan: fallbackHandler({
-        dynamoMethod: 'scan',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-      update: fallbackHandler({
-        dynamoMethod: 'update',
-        fallbackRegionDocumentClient,
-        mainRegionDocumentClient,
-      }),
-    };
-  }
-
-  return dynamoClientCache[type];
-};
-
-let dynamoClientCache: Record<string, any> = {};
 let s3Cache;
 let sesCache;
 let sqsCache;
