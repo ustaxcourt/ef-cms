@@ -56,6 +56,7 @@ export const PendingReport = connect(
                     link
                     aria-label="print pending report"
                     className="margin-top-2"
+                    data-testid="print-pending-report"
                     href={formattedPendingItemsHelper.printUrl}
                     icon="print"
                   >
