@@ -5,18 +5,22 @@ export const aggregateStatisticsErrors = ({ errors, get }: ActionProps) => {
   let newErrorStatistics;
   let statisticsErrorMessages = [];
 
-  Object.keys(errors).forEach(key => {
-    if (/statistics\[\d+\]/.test(errors[key])) {
-      delete errors[key];
-    }
-  });
-  if (errors.statistics) {
+  const purgedErrors = omit(errors, [
+    'irsDeficiencyAmount',
+    'irsTotalPenalties',
+    'penalties',
+    'year',
+  ]);
+
+  if (purgedErrors.statistics) {
     newErrorStatistics = [];
     const formStatistics = get(state.form.statistics);
 
     if (formStatistics.length) {
       formStatistics.forEach((formStatistic, index) => {
-        const errorStatistic = errors.statistics.find(s => s.index === index);
+        const errorStatistic = purgedErrors.statistics.find(
+          s => s.index === index,
+        );
         if (errorStatistic) {
           const messageYearOrPeriod =
             formStatistic.yearOrPeriod === 'Year' ? 'year' : 'period';
@@ -33,12 +37,12 @@ export const aggregateStatisticsErrors = ({ errors, get }: ActionProps) => {
         }
       });
 
-      errors.statistics = newErrorStatistics;
+      purgedErrors.statistics = newErrorStatistics;
     } else {
-      statisticsErrorMessages = [errors.statistics];
+      statisticsErrorMessages = [purgedErrors.statistics];
     }
   }
-  return { errors, statisticsErrorMessages };
+  return { errors: purgedErrors, statisticsErrorMessages };
 };
 
 export const aggregatePetitionerErrors = ({ errors }) => {
@@ -68,21 +72,13 @@ export const validatePetitionFromPaperAction = ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
-  const { petitionPaymentDate, petitionPaymentWaivedDate, receivedAt } = props;
-
   const form = get(state.form);
 
   let errors = applicationContext
     .getUseCases()
     .validatePetitionFromPaperInteractor(applicationContext, {
-      petition: {
-        ...form,
-        petitionPaymentDate,
-        petitionPaymentWaivedDate,
-        receivedAt,
-      },
+      petition: form,
     });
 
   if (!errors) {

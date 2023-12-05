@@ -1,18 +1,21 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const StatisticsForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     addStatisticToFormSequence: sequences.addStatisticToFormSequence,
     checkForNegativeValueSequence: sequences.checkForNegativeValueSequence,
     confirmationText: state.confirmationText,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     statisticsFormHelper: state.statisticsFormHelper,
@@ -26,7 +29,9 @@ export const StatisticsForm = connect(
     addStatisticToFormSequence,
     checkForNegativeValueSequence,
     confirmationText,
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     showCalculatePenaltiesModalSequence,
     statisticsFormHelper,
     updateStatisticsFormValueSequence,
@@ -40,7 +45,7 @@ export const StatisticsForm = connect(
         </label>
         <DollarsInput
           className="usa-input usa-input-inline"
-          data-cy={`deficiency-amount-${index}`}
+          data-testid={`deficiency-amount-${index}`}
           id={`deficiency-amount-${index}`}
           name={`statistics.${index}.irsDeficiencyAmount`}
           value={form.statistics[index].irsDeficiencyAmount || ''}
@@ -146,21 +151,19 @@ export const StatisticsForm = connect(
 
           {statisticsFormHelper.statisticOptions[index].showPeriodInput && (
             <>
-              <DateInput
+              <DateSelector
+                defaultValue={form.statistics[index].lastDateOfPeriod}
+                errorText={validationErrors.lastDateOfPeriod}
                 id={`last-date-of-period-${index}`}
                 label="Last date of period"
-                names={{
-                  day: `statistics.${index}.lastDateOfPeriodDay`,
-                  month: `statistics.${index}.lastDateOfPeriodMonth`,
-                  year: `statistics.${index}.lastDateOfPeriodYear`,
+                onChange={e => {
+                  formatAndUpdateDateFromDatePickerSequence({
+                    key: `statistics.${index}.lastDateOfPeriod`,
+                    toFormat: DATE_FORMATS.ISO,
+                    value: e.target.value,
+                  });
+                  validatePetitionFromPaperSequence();
                 }}
-                values={{
-                  day: form.statistics[index].lastDateOfPeriodDay,
-                  month: form.statistics[index].lastDateOfPeriodMonth,
-                  year: form.statistics[index].lastDateOfPeriodYear,
-                }}
-                onBlur={() => validatePetitionFromPaperSequence()}
-                onChange={updateStatisticsFormValueSequence}
               />
               <div className="grid-row grid-gap-2">
                 <div className="grid-col-4">

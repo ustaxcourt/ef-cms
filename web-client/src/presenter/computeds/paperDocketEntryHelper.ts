@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const paperDocketEntryHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);

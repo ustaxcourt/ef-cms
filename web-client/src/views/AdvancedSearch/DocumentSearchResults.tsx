@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { WarningNotificationComponent } from '../WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -52,7 +52,7 @@ export const DocumentSearchResults = connect(
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th>Date</th>
+                  <th>Filed Date</th>
                   <th aria-hidden="true" className="small-column"></th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Case Title</th>
@@ -86,6 +86,7 @@ export const DocumentSearchResults = connect(
                         <Button
                           link
                           className="padding-0"
+                          data-testid={`docket-number-link-${result.docketNumber}`}
                           onClick={() => {
                             openCaseDocumentDownloadUrlSequence({
                               docketEntryId: result.docketEntryId,

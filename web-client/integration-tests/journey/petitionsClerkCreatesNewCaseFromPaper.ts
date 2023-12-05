@@ -1,8 +1,11 @@
-import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-
-const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
-  applicationContext.getConstants();
+import {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  DEFAULT_PROCEDURE_TYPE,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
@@ -24,18 +27,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   };
 
   let formValues = [
-    {
-      key: 'receivedAtMonth',
-      value: receivedAtMonth,
-    },
-    {
-      key: 'receivedAtDay',
-      value: receivedAtDay,
-    },
-    {
-      key: 'receivedAtYear',
-      value: receivedAtYear,
-    },
     {
       key: 'mailingDate',
       value: 'Some Day',
@@ -134,18 +125,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       value: paymentStatus,
     },
     {
-      key: 'paymentDateWaivedDay',
-      value: '05',
-    },
-    {
-      key: 'paymentDateWaivedMonth',
-      value: '05',
-    },
-    {
-      key: 'paymentDateWaivedYear',
-      value: '2005',
-    },
-    {
       key: 'orderForRatification',
       value: true,
     },
@@ -165,6 +144,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
 
   it('should default to parties tab when creating a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
+
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
@@ -203,14 +183,34 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
         value: true,
       },
     );
+
     await cerebralTest.runSequence(
       'updateFormValueAndCaseCaptionSequence',
       primaryContactName,
     );
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: `${receivedAtMonth}/${receivedAtDay}/${receivedAtYear}`,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'petitionPaymentWaivedDate',
+        toFormat: FORMATS.ISO,
+        value: '5/5/2005',
+      },
+    );
+
     await cerebralTest.runSequence('validatePetitionFromPaperSequence');
 
     expect(cerebralTest.getState('form.caseCaption')).toBe(
-      'Shawn Johnson & Julius Lenhart, Deceased, Shawn Johnson, Surviving Spouse, Petitioners',
+      'Shawn Johnson & Julius Lenhart, Deceased, Petitioners',
     );
     expect(cerebralTest.getState('form.contactSecondary.address1')).toBe(
       cerebralTest.getState('form.contactPrimary.address1'),
@@ -244,7 +244,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     });
 
     expect(cerebralTest.getState('form.caseCaption')).toBe(
-      'Ada Lovelace & Julius Lenhart, Deceased, Ada Lovelace, Surviving Spouse, Petitioners',
+      'Ada Lovelace & Julius Lenhart, Deceased, Petitioners',
     );
 
     await cerebralTest.runSequence('updateFormValueSequence', {

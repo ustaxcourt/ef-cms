@@ -32,22 +32,12 @@ export const combineContactErrors = ({ errors }) => {
   }
 };
 
-/**
- * validates the add practitioner user form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @returns {object} providers.path the next path based on if validation was successful or error
- * @param {object} providers.props the props passed in to the action
- */
 export const validateAddPractitionerAction = ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
   const practitioner = get(state.form);
-  practitioner.admissionsDate = props.computedDate;
 
   const errors = applicationContext
     .getUseCases()

@@ -12,12 +12,12 @@ describe('preparePrintableFormattedCasesAction', () => {
         formattedCases: [
           { docketNumber: '131-22' },
           {
-            consolidatedCases: [
+            docketNumber: '111-22',
+            isLeadCase: true,
+            nestedConsolidatedCases: [
               { docketNumber: '112-22' },
               { docketNumber: '113-22' },
             ],
-            docketNumber: '111-22',
-            isLeadCase: true,
           },
           { docketNumber: '101-22' },
         ],
@@ -27,12 +27,12 @@ describe('preparePrintableFormattedCasesAction', () => {
     expect(result.output.formattedCases).toEqual([
       { docketNumber: '131-22' },
       {
-        consolidatedCases: [
+        docketNumber: '111-22',
+        isLeadCase: true,
+        nestedConsolidatedCases: [
           { docketNumber: '112-22' },
           { docketNumber: '113-22' },
         ],
-        docketNumber: '111-22',
-        isLeadCase: true,
       },
       { docketNumber: '112-22' },
       { docketNumber: '113-22' },

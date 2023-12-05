@@ -1,4 +1,4 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryMetaCourtIssued = (
@@ -50,29 +50,15 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[2],
+      date: 'Enter a date',
     });
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'month',
-        value: '4',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: '4',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2050',
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '4/4/2050',
       },
     );
 

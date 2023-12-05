@@ -1,7 +1,7 @@
 import { InternalDocumentSearchResult } from './InternalDocumentSearchResult';
 
-describe('Internal Document Search Result entity', () => {
-  it('returns validation errors for required fields when no data is passed in', () => {
+describe('InternalDocumentSearchResult', () => {
+  it('should return validation errors for required fields when no data is passed in', () => {
     const searchResult = new InternalDocumentSearchResult({});
 
     const validationErrors = searchResult.getFormattedValidationErrors();
@@ -14,7 +14,7 @@ describe('Internal Document Search Result entity', () => {
     ]);
   });
 
-  it('needs only a case caption, docketEntryId, docketNumber, and documentTitle to be valid', () => {
+  it('should needs only a case caption, docketEntryId, docketNumber, and documentTitle to be valid', () => {
     const searchResult = new InternalDocumentSearchResult({
       caseCaption: 'This is a case caption',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -34,7 +34,7 @@ describe('Internal Document Search Result entity', () => {
     expect(validationErrors).toBeNull();
   });
 
-  it('succeeds validation if the search result is stricken', () => {
+  it('should be valid when the search result is a stricken docket entry', () => {
     const searchResult = new InternalDocumentSearchResult({
       caseCaption: 'This is a case caption',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -48,7 +48,7 @@ describe('Internal Document Search Result entity', () => {
     expect(validationErrors).toBeNull();
   });
 
-  it('succeeds validation if the search result is sealed but is not of type opinion', () => {
+  it('should be valid when the search result is sealed but is not of type opinion', () => {
     const searchResult = new InternalDocumentSearchResult({
       caseCaption: 'This is a case caption',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -58,12 +58,13 @@ describe('Internal Document Search Result entity', () => {
       eventCode: 'O', // O
       isDocketEntrySealed: true, // the event code MUST be an opinion type
     });
+
     const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
   });
 
-  it('passes validation if the search result is for a sealed opinion', () => {
+  it('should be valid when the search result is an opinion that is sealed', () => {
     const searchResult = new InternalDocumentSearchResult({
       caseCaption: 'This is a case caption',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -79,23 +80,7 @@ describe('Internal Document Search Result entity', () => {
     expect(validationErrors).toBeNull();
   });
 
-  it('passes validation if the search result is for a sealed opinion', () => {
-    const searchResult = new InternalDocumentSearchResult({
-      caseCaption: 'This is a case caption',
-      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-      docketNumber: '12345-67',
-      documentTitle: 'This is a matching document',
-      documentType: 'Memorandum Opinion',
-      eventCode: 'MOP',
-      isDocketEntrySealed: true,
-    });
-
-    const validationErrors = searchResult.getFormattedValidationErrors();
-
-    expect(validationErrors).toBeNull();
-  });
-
-  it('passes validation if optional numberOfPages, judge, and signedJudgeName are all null', () => {
+  it('should be valid when optional fields are all null', () => {
     const searchResult = new InternalDocumentSearchResult({
       caseCaption: 'This is a case caption',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -106,9 +91,9 @@ describe('Internal Document Search Result entity', () => {
       isCaseSealed: false,
       isDocketEntrySealed: true,
       isFileAttached: false,
-      judge: null,
-      numberOfPages: null,
-      signedJudgeName: null,
+      judge: null, // Optional
+      numberOfPages: null, // Optional
+      signedJudgeName: null, // Optional
     });
 
     const validationErrors = searchResult.getFormattedValidationErrors();

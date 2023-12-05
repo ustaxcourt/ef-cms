@@ -3,12 +3,39 @@ import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 import { get } from 'lodash';
+import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
+import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
 import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
+export type SearchClientResultsType = {
+  aggregations?: {
+    [x: string]: {
+      buckets: {
+        doc_count: number;
+        key: string;
+      }[];
+    };
+  };
+  expected?: number;
+  total: number;
+  results: any;
+};
+export type SearchAllParametersType = {
+  index?: string;
+  body?: {
+    _source?: string[];
+    query?: any;
+    sort?: any;
+  };
+  size?: number;
+};
+
+export type SearchClientCountResultsType = number;
 
 export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
+  const aggregations = get(body, 'aggregations');
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
@@ -18,15 +45,15 @@ export const formatResults = <T>(body: Record<string, any>) => {
     sourceUnmarshalled['_score'] = hit['_score'];
 
     const isDocketEntryResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-docket-entry' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-docket-entry') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
     const isMessageResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-message' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-message') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
     const isWorkItemResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-work-item' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-work-item') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
 
@@ -42,9 +69,29 @@ export const formatResults = <T>(body: Record<string, any>) => {
   });
 
   return {
+    aggregations,
     results,
     total,
   };
+};
+
+export const count = async ({
+  applicationContext,
+  searchParameters,
+}: {
+  applicationContext: IApplicationContext;
+  searchParameters: Search;
+}): Promise<SearchClientCountResultsType> => {
+  updateIndex({ searchParameters });
+  try {
+    const response = await applicationContext
+      .getSearchClient()
+      .count(searchParameters);
+    return get(response.body, 'count', 0);
+  } catch (searchError) {
+    applicationContext.logger.error(searchError);
+    throw new Error('Search client encountered an error.');
+  }
 };
 
 export const search = async <T>({
@@ -53,7 +100,8 @@ export const search = async <T>({
 }: {
   applicationContext: IApplicationContext;
   searchParameters: Search;
-}) => {
+}): Promise<SearchClientResultsType> => {
+  updateIndex({ searchParameters });
   try {
     const response = await applicationContext
       .getSearchClient()
@@ -65,7 +113,14 @@ export const search = async <T>({
   }
 };
 
-export const searchAll = async ({ applicationContext, searchParameters }) => {
+export const searchAll = async ({
+  applicationContext,
+  searchParameters,
+}: {
+  applicationContext: IApplicationContext;
+  searchParameters: SearchAllParametersType;
+}): Promise<SearchClientResultsType> => {
+  updateIndex({ searchParameters });
   const index = searchParameters.index || '';
   const query = searchParameters.body?.query || {};
   const size = searchParameters.size || CHUNK_SIZE;

@@ -16,6 +16,9 @@ const config: Config = {
     '!src/routerPublic.ts',
     '!src/index-public.ts',
     '!src/index-public.prod.ts',
+    '!src/**/getScannerMockInterface.ts',
+    '!src/**/localStorage/',
+    '!src/**/shared.cerebral.ts',
     '!src/ustc-ui/Utils/types.ts',
   ],
   coverageDirectory: './coverage-unit',
@@ -27,15 +30,20 @@ const config: Config = {
     presenter: { providers: { applicationContext: {} } },
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>/../',
-  }),
-  testEnvironment: 'jsdom',
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>/../',
+    }),
+    uuid: require.resolve('uuid'),
+  },
+  setupFiles: ['core-js'],
+  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
   // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
   },
+  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
 };
 

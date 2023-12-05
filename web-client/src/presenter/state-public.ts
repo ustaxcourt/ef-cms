@@ -2,7 +2,8 @@ import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/busines
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
+import { createAccountHelper } from './computeds/Public/createAccountHelper';
+import { headerPublicHelper } from '@web-client/presenter/computeds/headerPublicHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
@@ -17,7 +18,8 @@ const computeds = {
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,
-  featureFlagHelper,
+  createAccountHelper,
+  headerPublicHelper,
   loadingHelper,
   menuHelper,
   publicCaseDetailHeaderHelper,
@@ -30,13 +32,20 @@ const computeds = {
 export const baseState = {
   advancedSearchForm: {},
   advancedSearchTab: 'case',
+  alertError: null,
+  alertSuccess: null,
   caseDetail: {} as RawPublicCase,
+  cognito: { email: '' },
+  cognitoLoginUrl: '',
+  cognitoRequestPasswordResetUrl: '',
+  cognitoResendVerificationLinkUrl: '',
   commonUI: {
     showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
+  form: {} as Record<string, any>,
   header: {
     searchTerm: '',
     showBetaBar: true, // default state
@@ -54,6 +63,8 @@ export const baseState = {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},
   },
+  showConfirmPassword: false,
+  showPassword: false,
   todaysOpinions: [],
   todaysOrders: {
     results: [],

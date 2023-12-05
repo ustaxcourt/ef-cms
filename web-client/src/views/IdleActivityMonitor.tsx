@@ -1,5 +1,5 @@
 import { AppTimeoutModal } from './AppTimeoutModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { useIdleTimer } from 'react-idle-timer';
@@ -10,30 +10,46 @@ export const IdleActivityMonitor = connect(
     broadcastIdleStatusActiveSequence:
       sequences.broadcastIdleStatusActiveSequence,
     constants: state.constants,
-    setIdleStatusActiveSequence: sequences.setIdleStatusActiveSequence,
-    setIdleStatusIdleSequence: sequences.setIdleStatusIdleSequence,
-    setIdleTimerRefSequence: sequences.setIdleTimerRefSequence,
+    handleIdleLogoutSequence: sequences.handleIdleLogoutSequence,
+    lastIdleAction: state.lastIdleAction,
     showAppTimeoutModalHelper: state.showAppTimeoutModalHelper,
+    user: state.user,
   },
   function IdleActivityMonitor({
     broadcastIdleStatusActiveSequence,
     constants,
-    setIdleStatusIdleSequence,
-    setIdleTimerRefSequence,
+    handleIdleLogoutSequence,
+    lastIdleAction,
     showAppTimeoutModalHelper,
   }) {
-    const ref = useIdleTimer({
+    useIdleTimer({
       debounce: constants.SESSION_DEBOUNCE,
+      // eslint-disable-next-line spellcheck/spell-checker
+      // we do not want 'visibilitychange', so we override the defaults
+      events: [
+        'mousemove',
+        'keydown',
+        'wheel',
+        'DOMMouseScroll',
+        'mousewheel',
+        'mousedown',
+        'touchstart',
+        'touchmove',
+        'MSPointerDown',
+        'MSPointerMove',
+      ],
       onAction: broadcastIdleStatusActiveSequence,
-      onIdle: setIdleStatusIdleSequence,
-      timeout: constants.SESSION_TIMEOUT,
     });
 
     useEffect(() => {
-      if (showAppTimeoutModalHelper.beginIdleMonitor) {
-        setIdleTimerRefSequence({ ref });
-      }
-    }, [showAppTimeoutModalHelper.beginIdleMonitor]);
+      const interval = setInterval(() => {
+        handleIdleLogoutSequence();
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }, [lastIdleAction]);
 
     return <>{showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}</>;
   },

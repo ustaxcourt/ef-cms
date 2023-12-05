@@ -6,7 +6,7 @@
 # with user testing whenever they needs a bunch of cases for seed data.
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 
 ( ! command -v jq > /dev/null ) && echo "jq was not found on your path. Please install jq." && exit 1
 ( ! command -v aws > /dev/null ) && echo "aws was not found on your path. Please install aws." && exit 1

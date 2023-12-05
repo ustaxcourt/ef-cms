@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   createCaseFromPaperAction,
   setupPercentDone,
@@ -28,14 +28,10 @@ describe('createCaseFromPaperAction', () => {
     applicationContext
       .getUseCases()
       .filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
-    const receivedAt = '2019-11-05';
 
     await runAction(createCaseFromPaperAction, {
       modules: {
         presenter,
-      },
-      props: {
-        receivedAt,
       },
       state: {
         form: {
@@ -63,13 +59,7 @@ describe('createCaseFromPaperAction', () => {
       applicationForWaiverOfFilingFeeFile: {},
       corporateDisclosureFile: {},
       petitionFile: {},
-      petitionMetadata: {
-        ...MOCK_CASE,
-        receivedAt: applicationContext
-          .getUtilities()
-          .prepareDateFromString(receivedAt)
-          .toISOString(),
-      },
+      petitionMetadata: MOCK_CASE,
       requestForPlaceOfTrialFile: {},
       stinFile: {},
     });
@@ -110,10 +100,7 @@ describe('createCaseFromPaperAction', () => {
     ).toMatchObject({
       corporateDisclosureFile: {},
       petitionFile: {},
-      petitionMetadata: {
-        ...MOCK_CASE,
-        receivedAt: null,
-      },
+      petitionMetadata: MOCK_CASE,
       stinFile: {},
     });
     expect(errorStub).toHaveBeenCalled();

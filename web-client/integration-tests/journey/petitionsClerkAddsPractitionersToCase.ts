@@ -9,7 +9,7 @@ const formattedCaseDetail = withAppContextDecorator(
 
 export const petitionsClerkAddsPractitionersToCase = (
   cerebralTest,
-  skipAddingPractitionerToSecondaryPetitioner: boolean,
+  skipAddingPractitionerToSecondaryPetitioner?: boolean,
   caseDocketNumber?: string,
 ) => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {

@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
   getFormattedDocumentQCMyOutbox,

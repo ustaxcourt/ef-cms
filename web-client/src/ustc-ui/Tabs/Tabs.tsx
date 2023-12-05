@@ -1,5 +1,5 @@
 import { camelCase } from 'lodash';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   decorateWithPostCallback,
   useCerebralStateFactory,
@@ -8,7 +8,7 @@ import { getDefaultAttribute, map } from '../Utils/ElementChildren';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
 const renderTabFactory = ({
@@ -61,7 +61,7 @@ const renderTabFactory = ({
 
     return (
       <li {...tabProps}>
-        <button {...buttonProps}>
+        <button {...buttonProps} data-testid={child.props['data-testid']}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
           {icon}
         </button>
@@ -103,6 +103,19 @@ export function TabsComponent({
   onSelect,
   simpleSetter,
   value,
+}: {
+  asSwitch?: boolean;
+  bind?: string;
+  boxed?: any;
+  children: ReactNode;
+  className?: string;
+  defaultActiveTab?: string;
+  headingLevel?: string;
+  id?: string;
+  marginBottom?: boolean;
+  onSelect?: any;
+  simpleSetter?: any;
+  value?: any;
 }) {
   // TODO - Refactor how tab selection sets documentSelectedForScan
   let activeKey, setTab;

@@ -7,6 +7,7 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     'switch-environment-color.{js,ts}',
+    'elasticsearch/*.test.{js,ts}',
     'src/**/*.{js,ts}',
     'workflow-terraform/migration/main/lambdas/migrations/*.{js,ts}',
     '!src/applicationContext.{js,ts}',

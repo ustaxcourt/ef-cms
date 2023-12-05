@@ -256,7 +256,7 @@ Solution:
   ```
 
   ```bash
-  ENV=exp5 FILE_NAME=judge_users.csv ./scripts/bulk-import-judge-users.sh
+  ENV=exp5 FILE_NAME=judge_users.csv ./scripts/circleci/judge/bulk-import-judge-users.sh
   ```
 
 ## AxiosError: Request failed with status code 403 on Test Users Setup
@@ -267,7 +267,7 @@ Problem:
 
 Solution:
 
-- In `createDawsonUser`, make sure that the url that is passed to axios includes the DEPLOYING_COLOR. For example, `https://api-green.${EFCMS_DOMAIN}/users` instead of `https://api.${EFCMS_DOMAIN}/users`.
+- In `createDawsonUser`, make sure that the url that is passed to axios includes the DEPLOYING_COLOR. For example, `https://api-green.${EFCMS_DOMAIN}/users`.
 
 ## Docker Image Deploy
 

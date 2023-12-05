@@ -1,4 +1,4 @@
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -19,6 +19,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid="trial-session-meeting-id"
             id="meeting-id"
             name="meetingId"
             type="text"
@@ -39,6 +40,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid="trial-session-password"
             id="password"
             name="password"
             type="text"
@@ -66,6 +68,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid="trial-session-join-phone-number"
             id="join-phone-number"
             name="joinPhoneNumber"
             type="text"
@@ -86,6 +89,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid="trial-session-chambers-phone-number"
             id="chambers-phone-number"
             name="chambersPhoneNumber"
             type="text"

@@ -1,3 +1,4 @@
+import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { put } from '../../dynamodbClientService';
 
 export const createCaseDeadline = ({

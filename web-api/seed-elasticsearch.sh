@@ -1,11 +1,11 @@
 #!/bin/bash
 
-curl -X DELETE "$ELASTICSEARCH_HOST:9200/efcms-case"
-curl -X DELETE "$ELASTICSEARCH_HOST:9200/efcms-case-deadline"
-curl -X DELETE "$ELASTICSEARCH_HOST:9200/efcms-docket-entry"
-curl -X DELETE "$ELASTICSEARCH_HOST:9200/efcms-user"
-curl -X DELETE "$ELASTICSEARCH_HOST:9200/efcms-message"
-curl -X DELETE "$ELASTICSEARCH_HOST:9200/efcms-work-item"
+for ELASTICSEARCH_INDEX in $(curl -s -X GET "$ELASTICSEARCH_ENDPOINT/_cat/indices" | awk -F' ' '{print $3}'); do
+  curl -X DELETE "${ELASTICSEARCH_ENDPOINT}/${ELASTICSEARCH_INDEX}"
+done
+
 ELASTICSEARCH_PORT=9200 \
   ELASTICSEARCH_PROTOCOL="http" \
-  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT}"
+  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT}"
+
+npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts "${ELASTICSEARCH_ENDPOINT}"

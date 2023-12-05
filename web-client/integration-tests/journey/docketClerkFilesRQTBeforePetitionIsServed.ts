@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
 
 export const docketClerkFilesRQTBeforePetitionIsServed = (
@@ -13,18 +14,14 @@ export const docketClerkFilesRQTBeforePetitionIsServed = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',

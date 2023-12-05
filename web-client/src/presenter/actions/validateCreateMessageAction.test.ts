@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateCreateMessageAction } from './validateCreateMessageAction';
@@ -44,9 +44,10 @@ describe('validateCreateMessageAction', () => {
         },
       },
     });
+
     expect(
       applicationContext.getUseCases().validateCreateMessageInteractor.mock
-        .calls[0][1].message,
+        .calls[0][0].message,
     ).toMatchObject({
       docketNumber: '123-45',
       from: 'yup',
@@ -85,6 +86,7 @@ describe('validateCreateMessageAction', () => {
         },
       },
     });
+
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

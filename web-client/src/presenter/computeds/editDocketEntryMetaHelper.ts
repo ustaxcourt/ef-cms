@@ -7,7 +7,7 @@ import { Get } from 'cerebral';
 export const editDocketEntryMetaHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
 
   const caseDetail = get(state.caseDetail);

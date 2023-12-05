@@ -4,8 +4,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
-import { User } from '../../entities/User';
+import { RawUser, User } from '../../entities/User';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { createPractitionerUser } from '../../utilities/createPractitionerUser';
 
 /**

@@ -1,5 +1,5 @@
 import { PDFDocument, PDFFont } from 'pdf-lib';
-import { applicationContextForClient as applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
 import { setupPdfDocument } from './setupPdfDocument';
 import { testPdfDoc } from '../test/getFakeFile';
 

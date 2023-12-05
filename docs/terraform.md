@@ -139,7 +139,7 @@ At this point, if you have a decent understanding of how the web-api terraform d
 
 ### Environment Specific Terraform
 
-The `./iam/terraform/environment-specific` directory contains the definitions used for creating the roles and policies needed for our deployed application to AWS, hince the reason it is nested in an `iam` directory.  IAM is the AWS tool used for managing permissions on AWS.  
+The `./iam/terraform/environment-specific` directory contains the definitions used for creating the roles and policies needed for our deployed application to AWS, hence the reason it is nested in an `iam` directory.  IAM is the AWS tool used for managing permissions on AWS.  
 
 Due to a security requirement by the court, no AWS roles or policies were allowed to be created or modified in our CI/CD process.  Due to this, we were required to separate our policies into a isolated terraform directory which an administrator can manually deploy when permissions need to be changed.
 

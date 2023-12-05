@@ -3,7 +3,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { WarningNotificationComponent } from '../WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -52,9 +52,9 @@ export const SearchResults = connect(
                   <NonMobile>
                     <th>Petitioner(s)</th>
                   </NonMobile>
-                  <th>Docket Number</th>
+                  <th>Docket No.</th>
                   <NonMobile>
-                    <th>Date Filed</th>
+                    <th>Filed Date</th>
                     <th>Case Title</th>
                     <th>State</th>
                   </NonMobile>
@@ -75,7 +75,7 @@ export const SearchResults = connect(
                           ))}
                         </td>
                       </NonMobile>
-                      <td>
+                      <td data-testid={`case-result-${result.docketNumber}`}>
                         <CaseLink formattedCase={result} />
                       </td>
                       <NonMobile>

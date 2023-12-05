@@ -9,7 +9,7 @@ import { MessagesSectionInbox } from './MessagesSectionInbox';
 import { MessagesSectionOutbox } from './MessagesSectionOutbox';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -79,7 +79,7 @@ export const Messages = connect(
               tabName="inbox"
               title={`Inbox (${messagesHelper.inboxCount})`}
             >
-              <div id="inbox-tab-content">
+              <div data-testid="inbox-tab-content" id="inbox-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <MessagesIndividualInbox />
                 )}

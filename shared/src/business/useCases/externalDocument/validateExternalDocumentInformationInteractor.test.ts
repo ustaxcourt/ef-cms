@@ -1,4 +1,4 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
+import { ExternalDocumentInformationFactory } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
 import { validateExternalDocumentInformationInteractor } from './validateExternalDocumentInformationInteractor';
 
 describe('validateExternalDocumentInformationInteractor', () => {
@@ -8,10 +8,17 @@ describe('validateExternalDocumentInformationInteractor', () => {
     });
 
     expect(errors).toEqual({
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
-      filers: VALIDATION_ERROR_MESSAGES.filers,
-      hasSupportingDocuments: VALIDATION_ERROR_MESSAGES.hasSupportingDocuments,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      certificateOfService:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .certificateOfService,
+      filers:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.filers,
+      hasSupportingDocuments:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .hasSupportingDocuments,
+      primaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
     });
   });
 

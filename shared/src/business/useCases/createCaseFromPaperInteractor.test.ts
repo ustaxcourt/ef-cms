@@ -9,7 +9,7 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';

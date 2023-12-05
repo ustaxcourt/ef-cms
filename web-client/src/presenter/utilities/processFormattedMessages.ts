@@ -4,7 +4,12 @@ import { map, uniq } from 'lodash';
 
 const { CASE_SERVICES_SUPERVISOR_SECTION, DESCENDING } = getConstants();
 
-export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
+type TableSort = { sortField: string; sortOrder?: string };
+
+export const sortFormattedMessages = (
+  formattedCaseMessages,
+  tableSort: null | TableSort = null,
+) => {
   const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
     let sortNumber = 0;
     if (!tableSort) {
@@ -35,7 +40,10 @@ export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   return sortedFormattedMessages;
 };
 
-export const sortCompletedMessages = (sortedMessages, tableSort) => {
+export const sortCompletedMessages = (
+  sortedMessages,
+  tableSort: null | TableSort = null,
+) => {
   const completedMessages = sortedMessages.filter(
     message => message.isCompleted,
   );
@@ -57,7 +65,7 @@ let lastCacheKey = null;
 export const getFormattedMessages = ({
   applicationContext,
   messages,
-  tableSort,
+  tableSort = null,
   cacheKey = applicationContext.getUniqueId(),
 }) => {
   // We cache these results because recalculating these dates takes a lot of time.
@@ -154,11 +162,11 @@ export const applyFiltersToMessages = ({ messages, screenMetadata }) => {
     )
     .filter(message => (toUserFilter ? message.to === toUserFilter : true));
 
-  const caseStatuses = uniq(map(filteredMessages, 'caseStatus'));
-  const toUsers = uniq(map(filteredMessages, 'to'));
-  const fromUsers = uniq(map(filteredMessages, 'from'));
-  const fromSections = uniq(map(filteredMessages, 'fromSection'));
-  const toSections = uniq(map(filteredMessages, 'toSection'));
+  const caseStatuses = uniq(map(filteredMessages, 'caseStatus')).sort();
+  const toUsers = uniq(map(filteredMessages, 'to')).sort();
+  const fromUsers = uniq(map(filteredMessages, 'from')).sort();
+  const fromSections = uniq(map(filteredMessages, 'fromSection')).sort();
+  const toSections = uniq(map(filteredMessages, 'toSection')).sort();
 
   return {
     filterValues: {
@@ -182,7 +190,9 @@ export const applyFiltersToCompletedMessages = ({
     completedByFilter ? message.completedBy === completedByFilter : true,
   );
 
-  const completedByUsers = uniq(map(filteredCompletedMessages, 'completedBy'));
+  const completedByUsers = uniq(
+    map(filteredCompletedMessages, 'completedBy'),
+  ).sort();
 
   return {
     filterValues: {

@@ -7,7 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const addTrialSessionInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { SESSION_TYPES, TRIAL_SESSION_PROCEEDING_TYPES } =
     applicationContext.getConstants();
 

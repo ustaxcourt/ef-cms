@@ -1,5 +1,5 @@
-import { TDynamoRecord } from './dynamo/dynamoTypes';
-import { chunk, isEmpty } from 'lodash';
+import { DeleteRequest, PutRequest, TDynamoRecord } from './dynamo/dynamoTypes';
+import { chunk, isEmpty, uniqBy } from 'lodash';
 import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
 
 /**
@@ -57,11 +57,6 @@ export const describeDeployTable = async ({ applicationContext }) => {
   return await dynamoClient.describeTable(params).promise();
 };
 
-/**
- *
- * @param {object} params the params to put
- * @returns {object} the item that was put
- */
 export const put = ({
   applicationContext,
   Item,
@@ -81,11 +76,6 @@ export const put = ({
     .then(() => Item);
 };
 
-/**
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
 export const update = ({
   applicationContext,
   ConditionExpression,
@@ -169,7 +159,9 @@ export const updateConsistent = params => {
  */
 export const get = params => {
   return params.applicationContext
-    .getDocumentClient()
+    .getDocumentClient({
+      useMasterRegion: !!params.ConsistentRead,
+    })
     .get({
       TableName: getTableName({
         applicationContext: params.applicationContext,
@@ -205,14 +197,26 @@ export const getFromDeployTable = params => {
     });
 };
 
-/**
- * GET for aws-sdk dynamodb client
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
+export const putInDeployTable = async (
+  applicationContext: IApplicationContext,
+  item: TDynamoRecord,
+): Promise<void> => {
+  await applicationContext
+    .getDocumentClient({
+      useMasterRegion: true,
+    })
+    .put({
+      Item: item,
+      TableName: getDeployTableName({
+        applicationContext,
+      }),
+    })
+    .promise();
+};
+
 export const query = ({
   applicationContext,
+  ConsistentRead = false,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
   FilterExpression,
@@ -221,6 +225,7 @@ export const query = ({
   Limit,
   ...params
 }: {
+  ConsistentRead?: boolean;
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string | number>;
   IndexName?: string;
@@ -233,6 +238,7 @@ export const query = ({
   return applicationContext
     .getDocumentClient()
     .query({
+      ConsistentRead,
       ExpressionAttributeNames,
       ExpressionAttributeValues,
       FilterExpression,
@@ -277,27 +283,25 @@ export const scan = async params => {
   return allItems;
 };
 
-/**
- * GET for aws-sdk dynamodb client
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
-export const queryFull = async ({
+export const queryFull = async <T>({
   applicationContext,
+  ConsistentRead = false,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
+  FilterExpression,
   IndexName,
   KeyConditionExpression,
   ...params
 }: {
+  ConsistentRead?: boolean;
   applicationContext: IApplicationContext;
   params?: Record<string, any>;
   IndexName?: string;
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
+  FilterExpression?: string;
   KeyConditionExpression: string;
-}): Promise<TDynamoRecord[]> => {
+}): Promise<TDynamoRecord<T>[]> => {
   let hasMoreResults = true;
   let lastKey = null;
   let allResults = [];
@@ -307,9 +311,11 @@ export const queryFull = async ({
     const subsetResults = await applicationContext
       .getDocumentClient()
       .query({
+        ConsistentRead,
         ExclusiveStartKey: lastKey,
         ExpressionAttributeNames,
         ExpressionAttributeValues,
+        FilterExpression,
         IndexName,
         KeyConditionExpression,
         TableName: getTableName({
@@ -338,9 +344,18 @@ export const queryFull = async ({
  * @param {Array} providers.keys the keys to get
  * @returns {Array} the results retrieved
  */
-export const batchGet = async ({ applicationContext, keys }) => {
+export const batchGet = async ({
+  applicationContext,
+  keys,
+}: {
+  applicationContext: IApplicationContext;
+  keys: Pick<TDynamoRecord, 'pk' | 'sk'>[];
+}): Promise<TDynamoRecord[]> => {
   if (!keys.length) return [];
-  const chunks = chunk(keys, 100);
+  const uniqueKeys = uniqBy(keys, key => {
+    return key.pk + key.sk;
+  });
+  const chunks = chunk(uniqueKeys, 100);
 
   let results = [];
   for (let chunkOfKeys of chunks) {
@@ -407,6 +422,29 @@ export const batchDelete = ({ applicationContext, items }) => {
       );
     }
   }
+};
+
+export const batchWrite = async (
+  commands: (DeleteRequest | PutRequest)[],
+  applicationContext: IApplicationContext,
+): Promise<void> => {
+  commands.forEach(command => filterEmptyStrings(command));
+  const documentClient = applicationContext.getDocumentClient();
+  const chunks = chunk(commands, 25);
+
+  await Promise.all(
+    chunks.map(commandChunk =>
+      documentClient
+        .batchWrite({
+          RequestItems: {
+            [applicationContext.environment.dynamoDbTableName]: commandChunk,
+          },
+        })
+        .promise(),
+    ),
+  );
+
+  return;
 };
 
 export const remove = ({

@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -56,6 +56,7 @@ export const petitionsClerkForwardsMessageWithAttachment = cerebralTest => {
     cerebralTest.testMessageDocumentId = messageDocument.docketEntryId;
 
     await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
       documentId: messageDocument.docketEntryId,
     });
 

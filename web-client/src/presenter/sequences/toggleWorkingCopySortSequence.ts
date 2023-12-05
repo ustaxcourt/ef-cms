@@ -4,4 +4,7 @@ import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/upd
 export const toggleWorkingCopySortSequence = [
   toggleWorkingCopySortAction,
   updateTrialSessionWorkingCopyAction,
-];
+] as unknown as (props: {
+  sortField: string;
+  sortOrder: 'asc' | 'desc';
+}) => void;

@@ -1,4 +1,4 @@
-const { refreshElasticsearchIndex } = require('../helpers');
+import { refreshElasticsearchIndex } from '../helpers';
 
 export const admissionsClerkEditsPractitionerInfo = cerebralTest => {
   return it('admissions clerk edits practitioner information', async () => {

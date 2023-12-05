@@ -3,7 +3,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -296,7 +296,7 @@ describe('formattedTrialSessions', () => {
     expect(result.sessionsByTerm).toEqual([
       {
         caseOrder: [],
-        formattedEstimatedEndDate: undefined,
+        formattedEstimatedEndDate: '',
         formattedNoticeIssuedDate: '07/25/2019',
         formattedStartDate: '11/27/19',
         isCalendared: false,
@@ -305,6 +305,7 @@ describe('formattedTrialSessions', () => {
         proceedingType: 'In Person',
         sessionStatus: 'New',
         sessionType: SESSION_TYPES.regular,
+        showAlertForNOTTReminder: undefined,
         startDate: '2019-11-27T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -316,15 +317,14 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
-        formattedEstimatedEndDate: undefined,
-        formattedNoticeIssuedDate: undefined,
+        formattedEstimatedEndDate: '',
+        formattedNoticeIssuedDate: '',
         formattedStartDate: '11/25/19',
         isCalendared: false,
         judge: { name: '2', userId: '2' },
         proceedingType: 'Remote',
         sessionStatus: 'New',
         sessionType: SESSION_TYPES.small,
-        showAlertForNOTTReminder: undefined,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -353,14 +353,14 @@ describe('formattedTrialSessions', () => {
     expect(formatTrialSessionDisplayOptions).toHaveBeenCalled();
   });
 
-  it('removes the current trial session from the sessionsByTerm when state.trialSessionId is defined', () => {
+  it('removes the current trial session from the sessionsByTerm when state.trialSession.trialSessionId is defined', () => {
     const { sessionsByTerm } = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
         form: {
           term: 'Winter',
         },
-        trialSessionId: TRIAL_SESSIONS_LIST[1].trialSessionId,
+        trialSession: { trialSessionId: TRIAL_SESSIONS_LIST[1].trialSessionId },
         trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
       },

@@ -5,7 +5,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { SpousePermissionConfirmModal } from './SpousePermissionConfirmModal';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -86,6 +86,7 @@ export const StartCaseStep3 = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-testid={`filing-type-${idx}`}
                         htmlFor={filingType}
                         id={`filing-type-${idx}`}
                       >
@@ -135,6 +136,7 @@ export const StartCaseStep3 = connect(
                     />
                     <label
                       className="usa-radio__label"
+                      data-testid={`is-spouse-deceased-${idx}`}
                       htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
                       id={`is-spouse-deceased-${idx}`}
                     >
@@ -355,10 +357,16 @@ export const StartCaseStep3 = connect(
           <>
             <h2 className="margin-top-4">Corporate Disclosure Statement</h2>
             <Hint>
-              Tax Court Rules of Practice and Procedure (Rule 60) requires a
-              corporation, partnership, or limited liability company, filing a
-              Petition with the Court to also file a Corporate Disclosure
-              Statement (CDS).
+              <a
+                href="https://ustaxcourt.gov/rules.html"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Tax Court Rule 60
+              </a>{' '}
+              requires a corporation, partnership, or limited liability company
+              filing a Petition with the Court to also file a Corporate
+              Disclosure Statement (CDS).
             </Hint>
             <div className="blue-container">
               <FormGroup
@@ -394,7 +402,9 @@ export const StartCaseStep3 = connect(
                   >
                     Download Corporate Disclosure Statement (T.C. Form 6)
                   </Button>
-                  <p className="margin-top-0">if you haven’t already done so</p>
+                  <span className="margin-top-0 display-block">
+                    if you haven’t already done so
+                  </span>
                 </p>
                 <StateDrivenFileInput
                   aria-describedby="corporate-disclosure-file-label"
@@ -410,6 +420,7 @@ export const StartCaseStep3 = connect(
 
         <div className="margin-top-5">
           <Button
+            data-testid="complete-step-3"
             id="submit-case"
             onClick={() => {
               completeStartCaseWizardStepSequence({ nextStep: 4 });

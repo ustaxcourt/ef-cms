@@ -1,4 +1,6 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { TRANSCRIPT_EVENT_CODE } from '@shared/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -8,8 +10,6 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
   draftOrderIndex,
   date,
 ) => {
-  const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
-
   return it('Docket Clerk adds a docket entry for a transcript from the given order', async () => {
     let caseDetailFormatted;
 
@@ -71,48 +71,23 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
     );
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'month',
-        value: date.month,
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: `${date.month}/${date.day}/${date.year}`,
       },
     );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: date.day,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: date.year,
-      },
-    );
+
+    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
 
     const today = applicationContext.getUtilities().getMonthDayYearInETObj();
-
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateMonth',
-        value: today.month,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: today.day,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: today.year,
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: `${today.month}/${today.day}/${today.year}`,
       },
     );
 

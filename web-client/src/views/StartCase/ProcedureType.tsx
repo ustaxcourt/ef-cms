@@ -1,5 +1,5 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -44,6 +44,7 @@ export const ProcedureType = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid={`procedure-type-${idx}`}
                 htmlFor={procedureType}
                 id={`procedure-type-${idx}`}
               >

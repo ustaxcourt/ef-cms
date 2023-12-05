@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRSNotice } from '../IRSNotice';
 import { PartyInformation } from './PartyInformation';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -31,10 +31,20 @@ export const CaseDetailEdit = connect(
           <Tab id="tab-parties" tabName="partyInfo" title="Parties">
             <PartyInformation />
           </Tab>
-          <Tab id="tab-case-info" tabName="caseInfo" title="Case Info">
+          <Tab
+            data-testid="tab-case-info"
+            id="tab-case-info"
+            tabName="caseInfo"
+            title="Case Info"
+          >
             <CaseInfo />
           </Tab>
-          <Tab id="tab-irs-notice" tabName="irsNotice" title="IRS Notice">
+          <Tab
+            data-testid="tab-irs-notice"
+            id="tab-irs-notice"
+            tabName="irsNotice"
+            title="IRS Notice"
+          >
             <div className="blue-container">
               <IRSNotice validationName="validateCaseDetailSequence" />
             </div>
@@ -42,6 +52,7 @@ export const CaseDetailEdit = connect(
         </Tabs>
 
         <Button
+          data-testid="submit-case"
           id="submit-case"
           type="button"
           onClick={() => {

@@ -1,7 +1,6 @@
 import { PublicDocumentSearchResult } from './PublicDocumentSearchResult';
 
 describe('Public Document Search Result entity', () => {
-  const errorMessages = PublicDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
   it('returns validation errors for required fields when no data is passed in', () => {
     const searchResult = new PublicDocumentSearchResult(undefined as any);
     const validationErrors = searchResult.getFormattedValidationErrors();
@@ -35,7 +34,9 @@ describe('Public Document Search Result entity', () => {
     const searchResult = new PublicDocumentSearchResult({ isStricken: true });
     const validationErrors = searchResult.getFormattedValidationErrors();
 
-    expect(validationErrors!.isStricken).toEqual(errorMessages.isStricken);
+    expect(validationErrors!.isStricken).toEqual(
+      'Stricken documents cannot be returned in public searches.',
+    );
   });
 
   it('fails validation if the search result is sealed but is not of type opinion', () => {
@@ -50,7 +51,9 @@ describe('Public Document Search Result entity', () => {
     });
     const validationErrors = searchResult.getFormattedValidationErrors();
 
-    expect(validationErrors!.eventCode).toEqual(errorMessages.eventCode);
+    expect(validationErrors!.eventCode).toEqual(
+      'Sealed documents cannot be returned in public searches unless they are of type opinion',
+    );
   });
 
   it('passes validation if the search result is for a sealed opinion', () => {

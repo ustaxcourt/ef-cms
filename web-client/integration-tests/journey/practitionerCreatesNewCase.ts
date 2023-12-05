@@ -1,4 +1,5 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
@@ -161,18 +162,14 @@ export const practitionerCreatesNewCase = (
       value: CASE_TYPES_MAP.whistleblower,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: '2001',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'irsNoticeDate',
+        toFormat: FORMATS.ISO,
+        value: '01/01/2001',
+      },
+    );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',

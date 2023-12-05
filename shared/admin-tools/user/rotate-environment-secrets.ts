@@ -29,7 +29,7 @@ const makeNewPassword = (): string => {
   // get number between 12 and 20
   const passwordLength = 12 + Math.floor(Math.random() * 9);
   const charSets = {
-    characters: '^*.()"@#%&/,><\':;_~`=+-',
+    characters: '^*.()@#%&/,><:;_~=+-',
     lowercase: 'abcdefghijklmnopqrstuvwxyz',
     numbers: '0123456789',
     uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -74,6 +74,7 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
 
   const USTC_ADMIN_PASS = makeNewPassword();
 
+  // for local use only!
   console.log({
     DEFAULT_ACCOUNT_PASS,
     USTC_ADMIN_PASS,
@@ -99,7 +100,7 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   console.log('✅ Secrets updated');
 };
 
-rotateSecrets(ENV).then(() => {
+rotateSecrets(ENV!).then(() => {
   console.log(
     '🏁 All done. Be sure to run setup-test-users.sh or wait for the next deploy',
   );

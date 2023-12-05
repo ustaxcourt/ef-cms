@@ -1,28 +1,16 @@
 import { ModalDialog } from './ModalDialog';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export const AppTimeoutModal = connect(
   {
     confirmSequence: sequences.broadcastStayLoggedInSequence,
-    idleLogoutSequence: sequences.gotoIdleLogoutSequence,
-    shouldIdleLogout: state.shouldIdleLogout,
   },
-  function AppTimeoutModal({
-    confirmSequence,
-    idleLogoutSequence,
-    shouldIdleLogout,
-  }) {
-    useEffect(() => {
-      if (shouldIdleLogout === true) {
-        idleLogoutSequence();
-      }
-    });
-
+  function AppTimeoutModal({ confirmSequence }) {
     return (
       <ModalDialog
+        preventCancelOnBlur
         className="app-timeout-modal"
         confirmLabel="Yes!"
         confirmSequence={confirmSequence}

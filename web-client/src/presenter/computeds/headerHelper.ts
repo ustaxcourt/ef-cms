@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const headerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const user = applicationContext.getCurrentUser();
   const userRole = user && user.role;
   const isLoggedIn = !!user;

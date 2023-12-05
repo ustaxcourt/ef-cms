@@ -1,3 +1,4 @@
+import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { get } from '../../dynamodbClientService';
 import { getCaseByDocketNumber } from '../cases/getCaseByDocketNumber';
 import { map } from 'lodash';
@@ -8,7 +9,7 @@ export const getCalendaredCasesForTrialSession = async ({
 }: {
   applicationContext: IApplicationContext;
   trialSessionId: string;
-}) => {
+}): Promise<(RawCase & TCaseOrder)[]> => {
   const trialSession = await get({
     Key: {
       pk: `trial-session|${trialSessionId}`,
@@ -25,6 +26,7 @@ export const getCalendaredCasesForTrialSession = async ({
       getCaseByDocketNumber({
         applicationContext,
         docketNumber,
+        includeConsolidatedCases: false,
       }),
     ),
   );

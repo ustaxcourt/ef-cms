@@ -4,10 +4,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * updateCounselOnCaseInteractor
+ * updateCounselOnCase
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -16,7 +17,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.userId the id of the user to be updated on the case
  * @returns {Promise} the promise of the update case call
  */
-export const updateCounselOnCaseInteractor = async (
+export const updateCounselOnCase = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -53,7 +54,6 @@ export const updateCounselOnCaseInteractor = async (
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
-      representing: editableFields.representing,
       userId,
       ...editableFields,
     });
@@ -88,3 +88,10 @@ export const updateCounselOnCaseInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const updateCounselOnCaseInteractor = withLocking(
+  updateCounselOnCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

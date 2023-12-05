@@ -1,12 +1,12 @@
+import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { get } from './requests';
 
-/**
- * getCasesForUserInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {Promise<*>} the promise of the api call
- */
-export const getCasesForUserInteractor = applicationContext => {
+export const getCasesForUserInteractor = (
+  applicationContext,
+): Promise<{
+  openCaseList: TAssociatedCase[];
+  closedCaseList: TAssociatedCase[];
+}> => {
   return get({
     applicationContext,
     endpoint: '/cases',

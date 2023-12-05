@@ -1,5 +1,4 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
@@ -41,12 +40,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
-
-    applicationContext
-      .getUseCases()
-      .getAllFeatureFlagsInteractor.mockReturnValue({
-        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: true,
-      });
 
     applicationContext
       .getUseCaseHelpers()
@@ -348,30 +341,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
   });
 
-  it('should only serve the docket entry on the subjectCase when the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is disabled', async () => {
-    const mockMemberCaseDocketNumber = '999-15';
-    applicationContext
-      .getUseCases()
-      .getAllFeatureFlagsInteractor.mockReturnValue({
-        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: false,
-      });
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockMemberCaseDocketNumber],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].caseEntity.docketNumber,
-    ).toBe(mockCase.docketNumber);
-  });
-
   it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
     const mockMemberCaseDocketNumber = '999-15';
 
@@ -433,33 +402,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].caseEntity.docketNumber,
     ).toBe(mockCase.docketNumber);
-  });
-
-  it('should serve the docket entry on each case provided in the docketNumbers list when the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is enabled', async () => {
-    const mockMemberCaseDocketNumber = '999-15';
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-          },
-        ],
-      });
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockMemberCaseDocketNumber],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
-    ).toHaveBeenCalledTimes(2);
   });
 
   it('should add a coversheet to the docket entry', async () => {

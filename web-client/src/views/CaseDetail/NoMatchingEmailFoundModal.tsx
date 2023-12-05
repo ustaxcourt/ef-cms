@@ -1,5 +1,5 @@
 import { ModalDialog } from '../ModalDialog';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -24,7 +24,7 @@ export const NoMatchingEmailFoundModal = connect(
         confirmSequence={confirmSequence}
         title="No Matching Email"
       >
-        <div id="no-matching-email-modal">
+        <div data-testId="no-matching-email-modal" id="no-matching-email-modal">
           <p>
             {form.contact.name}
             <br />

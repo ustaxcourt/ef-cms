@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { docketClerkAddsDocketEntryFromMessage } from './journey/docketClerkAddsDocketEntryFromMessage';
 import { docketClerkAppliesSignatureFromMessage } from './journey/docketClerkAppliesSignatureFromMessage';
@@ -8,7 +8,12 @@ import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRem
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
 import { petitionsClerk1VerifiesCaseStatusOnMessage } from './journey/petitionsClerk1VerifiesCaseStatusOnMessage';
@@ -31,7 +36,6 @@ describe('messages journey', () => {
   const cerebralTest = setupTest();
 
   beforeAll(() => {
-    jest.setTimeout(40000);
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',
@@ -166,6 +170,7 @@ describe('messages journey', () => {
     ]);
 
     await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
       documentId: docketEntryWithLongTitle.docketEntryId,
     });
 
@@ -175,5 +180,71 @@ describe('messages journey', () => {
     );
 
     await cerebralTest.runSequence('clearModalFormSequence');
+  });
+
+  it('attaches a document to a message and adds an attachment, but changes mind and removes it', async () => {
+    const testMessageSubject = 'once more into the breach';
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('openCreateMessageModalSequence');
+
+    await cerebralTest.runSequence(
+      'updateSectionInCreateMessageModalSequence',
+      {
+        key: 'toSection',
+        value: PETITIONS_SECTION,
+      },
+    );
+
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
+      key: 'toUserId',
+      value: '4805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    const currentDocketEntries = cerebralTest.getState(
+      'caseDetail.docketEntries',
+    );
+
+    await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
+      documentId: currentDocketEntries[0].docketEntryId,
+    });
+
+    await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'remove',
+      documentId: currentDocketEntries[0].docketEntryId,
+    });
+
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
+      key: 'message',
+      value: testMessageSubject,
+    });
+
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
+      key: 'subject',
+      value: testMessageSubject,
+    });
+
+    await cerebralTest.runSequence('createMessageSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await refreshElasticsearchIndex();
+
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+
+    const messages = cerebralTest.getState('messages');
+
+    const foundMessage = messages.find(
+      message => message.subject === testMessageSubject,
+    );
+
+    expect(foundMessage).toBeDefined();
+    expect(foundMessage.attachments).toEqual([]);
   });
 });

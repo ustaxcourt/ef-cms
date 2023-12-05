@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setDocketEntryMetaFormForEditAction } from './setDocketEntryMetaFormForEditAction';
@@ -102,15 +102,9 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     expect(result.state.form).toMatchObject({
       certificateOfService: true,
       certificateOfServiceDate: '2020-02-02',
-      certificateOfServiceDay: '2',
-      certificateOfServiceMonth: '2',
-      certificateOfServiceYear: '2020',
       docketEntryId: '234',
       eventCode: 'A',
       filingDate: '2020-01-01',
-      filingDateDay: '1',
-      filingDateMonth: '1',
-      filingDateYear: '2020',
       index: 3,
       lodged: false,
     });

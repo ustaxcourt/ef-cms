@@ -81,28 +81,19 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to add multiple docket entries to an order is disabled.',
     key: 'consolidated-cases-add-docket-numbers',
   },
-  CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER: {
-    disabledMessage:
-      'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
-    key: 'consolidated-cases-group-access-petitioner',
-  },
   DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'document-visibility-policy-change-date',
   },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
-  MULTI_DOCKETABLE_PAPER_FILINGS: {
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
+  },
+  USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
-      'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
-    key: 'multi-docketable-paper-filings',
-  },
-  REDACTION_ACKNOWLEDGEMENT_ENABLED: {
-    key: 'redaction-acknowledgement-enabled',
-  },
-  UPDATED_TRIAL_STATUS_TYPES: {
-    disabledMessage: 'Currently using legacy trial status types.',
-    key: 'updated-trial-status-types',
+      'A flag to know when to use the change of address lambda for processing.',
+    key: 'use-change-of-address-lambda',
   },
   USE_EXTERNAL_PDF_GENERATION: {
     disabledMessage:
@@ -183,9 +174,19 @@ export const CASE_STATUS_TYPES = {
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
+  submittedRule122: 'Submitted - Rule 122', // Case submitted for decision without requiring a trial
 } as const;
 export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
 export type CaseStatus = (typeof CASE_STATUSES)[number];
+
+export const CAV_AND_SUBMITTED_CASE_STATUS = [
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
+];
+
+export type CAV_AND_SUBMITTED_CASE_STATUS_TYPES =
+  typeof CAV_AND_SUBMITTED_CASE_STATUS;
 
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
@@ -208,6 +209,15 @@ export const DOCUMENT_SERVED_MESSAGES = {
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
 
+export const VALIDATION_ERROR_MESSAGES = {
+  END_DATE_IN_THE_FUTURE_ERROR:
+    'End date cannot be in the future. Enter a valid date.',
+  END_DATE_PRIOR_TO_START_DATE_ERROR:
+    'End date cannot be prior to start date. Enter a valid date.',
+  START_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
+    'Start date cannot be in the future. Enter a valid date.',
+};
+
 export const DOCUMENT_SEARCH_SORT = {
   FILING_DATE_ASC: 'FILING_DATE_ASC',
   FILING_DATE_DESC: 'FILING_DATE_DESC',
@@ -227,7 +237,7 @@ export const STIN_DOCKET_ENTRY_TYPE = {
   eventCode: 'STIN',
 };
 
-const pickEventCode = d => d.eventCode;
+const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
 
 export const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
@@ -344,7 +354,7 @@ export const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
 
 export const GENERIC_ORDER_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Order',
-).eventCode;
+)!.eventCode;
 
 export const DOCUMENT_NOTICE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isNotice,
@@ -380,6 +390,13 @@ export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
   EVENT_CODES_REQUIRING_SIGNATURE,
   'NTD',
   'NOT',
+);
+
+export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
+  eventCode => {
+    const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+    return !excludedOrderEventCodes.includes(eventCode);
+  },
 );
 
 export const EXTERNAL_DOCUMENT_TYPES = flatten(
@@ -653,10 +670,11 @@ export const MINUTE_ENTRIES_MAP = {
 
 export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPTO',
-);
+)!;
+
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
-);
+)!;
 
 export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
@@ -674,7 +692,7 @@ const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
     content:
       '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_30], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_30], may result in dismissal of this case.',
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')!
       .documentType,
     eventCode: 'OF',
     documentTitle: 'Order',
@@ -683,7 +701,7 @@ const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForAmendedPetition: {
     content:
       '&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_60], petitioner(s) shall file a proper amended petition. If, by [ORDER_PLUS_60], petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.',
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'OAP')
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OAP')!
       .documentType,
     eventCode: 'OAP',
     documentTitle: 'Order',
@@ -706,7 +724,7 @@ const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
       If, by [ORDER_PLUS_30], petitioner(s) do not file an Amended Petition and either pay the Court's
       $60.00 filing fee or submit an Application for Waiver of the Filing Fee, the case will be dismissed or
       other action taken as the Court deems appropriate.`,
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'OAPF')
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OAPF')!
       .documentType,
     eventCode: 'OAPF',
     documentTitle: 'Order',
@@ -719,14 +737,14 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'NOT',
     content:
       '&nbsp;&nbsp;&nbsp;&nbsp;Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')!
       .documentType,
     documentTitle: 'Notice of Attachments in the Nature of Evidence',
   },
   orderDesignatingPlaceOfTrial: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
     <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'O')
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'O')!
       .documentType,
     eventCode: 'O',
     documentTitle: 'Order',
@@ -742,7 +760,7 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [ORDER_DATE_PLUS_60] petitioners shall show cause in writing why
       the Court should not issue an Order directing that the small tax case designation be removed in this case and the
       proceedings not be conducted under the Small Tax Case Rules.`,
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'OSCP')
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OSCP')!
       .documentType,
     eventCode: 'OSCP',
     // Title for PDF only
@@ -797,10 +815,10 @@ export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
 
 export const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
-).find(d => d.documentType === 'Proposed Stipulated Decision').eventCode;
+).find(d => d.documentType === 'Proposed Stipulated Decision')!.eventCode;
 export const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Stipulated Decision',
-).eventCode;
+)!.eventCode;
 
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
   {
@@ -861,6 +879,8 @@ export const PAYMENT_STATUS = {
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
 };
+const PAYMENT_TYPES = Object.values(PAYMENT_STATUS);
+export type PaymentStatusTypes = (typeof PAYMENT_TYPES)[number];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
@@ -879,6 +899,7 @@ export const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
   CASE_STATUS_TYPES.jurisdictionRetained,
   CASE_STATUS_TYPES.rule155,
   CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
 ];
 
 export const STATUS_TYPES_MANUAL_UPDATE = [
@@ -893,6 +914,7 @@ export const STATUS_TYPES_MANUAL_UPDATE = [
   CASE_STATUS_TYPES.onAppeal,
   CASE_STATUS_TYPES.rule155,
   CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
 ];
 
 export const ANSWER_DOCUMENT_CODES = [
@@ -918,7 +940,7 @@ export const AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
-export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+export const CUSTOM_CASE_REPORT_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
@@ -1087,7 +1109,7 @@ export const US_STATES_OTHER = {
   FM: 'Federated States of Micronesia',
   GU: 'Guam',
   MH: 'Marshall Islands',
-  MP: 'Norther Mariana Islands',
+  MP: 'Northern Mariana Islands',
   PR: 'Puerto Rico',
   PW: 'Palau',
   VI: 'Virgin Islands',
@@ -1109,8 +1131,7 @@ export const PARTY_TYPES = {
   nextFriendForMinor:
     'Next friend for a minor (without a guardian, conservator, or other like fiduciary)',
   partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
-  partnershipBBA:
-    'Partnership (as a partnership representative under the BBA regime)',
+  partnershipBBA: 'Partnership (as a partnership representative under BBA)',
   partnershipOtherThanTaxMatters:
     'Partnership (as a partner other than Tax Matters Partner)',
   petitioner: 'Petitioner',
@@ -1336,35 +1357,30 @@ export const SECTIONS = sortBy([
   TRIAL_CLERKS_SECTION,
 ]);
 
-export const TRIAL_STATUS_TYPES = {
+export const TRIAL_STATUS_TYPES: TrialStatusOption = {
   basisReached: {
     deprecated: false,
     displayOrder: 1,
-    legacyLabel: 'A Basis Reached',
     label: 'Basis Reached',
   },
   probableSettlement: {
     deprecated: false,
     displayOrder: 3,
-    new: true,
     label: 'Probable Settlement',
   },
   probableTrial: {
     deprecated: false,
     displayOrder: 5,
-    new: true,
     label: 'Probable Trial',
   },
   definiteTrial: {
     deprecated: false,
     displayOrder: 7,
-    new: true,
     label: 'Definite Trial',
   },
   motionToDismiss: {
     deprecated: false,
     displayOrder: 9,
-    new: true,
     label: 'Motion',
   },
   recall: {
@@ -1385,9 +1401,10 @@ export const TRIAL_STATUS_TYPES = {
   submittedCAV: {
     deprecated: false,
     displayOrder: 8,
-    legacyLabel: 'Taken Under Advisement',
     label: 'Submitted/CAV',
   },
+};
+export const DEPRECATED_TRIAL_STATUS_TYPES: TrialStatusOption = {
   setForTrial: {
     deprecated: true,
     displayOrder: 999,
@@ -1403,6 +1420,17 @@ export const TRIAL_STATUS_TYPES = {
     displayOrder: 999,
     label: 'Settled',
   },
+};
+export const ALL_TRIAL_STATUS_TYPES: TrialStatusOption = {
+  ...TRIAL_STATUS_TYPES,
+  ...DEPRECATED_TRIAL_STATUS_TYPES,
+};
+export type TrialStatusOption = {
+  [key: string]: {
+    deprecated: boolean;
+    displayOrder: number;
+    label: string;
+  };
 };
 
 export const SCAN_MODES = {
@@ -1555,3 +1583,11 @@ export const isDocumentBriefType = (documentType: string) => {
   return !!documents.find(document => document.documentType === documentType)
     ?.eventCode;
 };
+
+export const JUDGE_TITLES = [
+  'Judge',
+  'Special Trial Judge',
+  'Chief Special Trial Judge',
+  'Chief Judge',
+] as const;
+export type JudgeTitle = (typeof JUDGE_TITLES)[number];

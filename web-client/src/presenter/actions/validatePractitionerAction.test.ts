@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validatePractitionerAction } from './validatePractitionerAction';
@@ -29,11 +29,9 @@ describe('validatePractitionerAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
-      },
       state: {
         form: {
+          admissionsDate: '2019-03-01T21:40:46.415Z',
           barNumber: 'BN001',
           contact: {
             address1: '123 Some St.',
@@ -65,11 +63,9 @@ describe('validatePractitionerAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
-      },
       state: {
         form: {
+          admissionsDate: '2019-03-01T21:40:46.415Z',
           barNumber: 'BN001',
           contact: {
             address1: '123 Some St.',
@@ -98,11 +94,9 @@ describe('validatePractitionerAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
-      },
       state: {
         form: {
+          admissionsDate: '2019-03-01T21:40:46.415Z',
           barNumber: 'BN001',
           contact: {
             address1: '123 Some St.',

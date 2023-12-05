@@ -1,6 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { map } from 'lodash';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -42,6 +42,7 @@ export const CreateOrderChooseTypeModal = connect(
 
             <select
               className="usa-select"
+              data-testid="event-code-select"
               id="eventCode"
               name="eventCode"
               onChange={e => {

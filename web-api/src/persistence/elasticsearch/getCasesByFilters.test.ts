@@ -1,12 +1,12 @@
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
-  CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+  CUSTOM_CASE_REPORT_PAGE_SIZE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import {
-  CustomCaseInventoryReportFilters,
-  GetCaseInventoryReportRequest,
-} from 'shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+  CustomCaseReportFilters,
+  GetCustomCaseReportRequest,
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   emptyResults,
@@ -23,7 +23,7 @@ const mockFormatResults = formatResults as jest.Mock;
 describe('getCasesByFilters', () => {
   const defaultStartDate = '2000-06-13T12:00:00.000Z';
   const defaultEndDate = '2023-06-13T12:00:00.000Z';
-  const defaultParams: CustomCaseInventoryReportFilters = {
+  const defaultParams: CustomCaseReportFilters = {
     caseStatuses: [],
     caseTypes: [],
     endDate: defaultEndDate,
@@ -34,9 +34,9 @@ describe('getCasesByFilters', () => {
     procedureType: 'All',
     startDate: defaultStartDate,
   };
-  const defaultRequest: GetCaseInventoryReportRequest = {
+  const defaultRequest: GetCustomCaseReportRequest = {
     ...defaultParams,
-    pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+    pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
     searchAfter: { pk: '', receivedAt: 0 },
   };
 
@@ -53,7 +53,7 @@ describe('getCasesByFilters', () => {
 
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].size,
-    ).toEqual(CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+    ).toEqual(CUSTOM_CASE_REPORT_PAGE_SIZE);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
     ).toMatchObject({
@@ -74,7 +74,7 @@ describe('getCasesByFilters', () => {
   });
 
   it('should apply selected filters to search query', async () => {
-    const requestWithFilters: GetCaseInventoryReportRequest = {
+    const requestWithFilters: GetCustomCaseReportRequest = {
       ...defaultRequest,
       caseStatuses: [CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.generalDocket],
       caseTypes: [CASE_TYPES_MAP.deficiency, CASE_TYPES_MAP.whistleblower],

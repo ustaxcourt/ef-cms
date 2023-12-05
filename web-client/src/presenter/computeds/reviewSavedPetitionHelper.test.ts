@@ -1,5 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   ordersAndNoticesInDraftsCodes,
   ordersAndNoticesNeededCodes,
@@ -34,7 +34,6 @@ describe('reviewSavedPetitionHelper', () => {
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: 'No requested place of trial',
-      receivedAtFormatted: undefined,
       requestForPlaceOfTrialFile: undefined,
       shouldShowIrsNoticeDate: false,
       stinFile: undefined,
@@ -162,7 +161,6 @@ describe('reviewSavedPetitionHelper', () => {
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: 'No requested place of trial',
-      receivedAtFormatted: undefined,
       requestForPlaceOfTrialFile: undefined,
       shouldShowIrsNoticeDate: false,
       stinFile: undefined,
@@ -189,7 +187,6 @@ describe('reviewSavedPetitionHelper', () => {
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
       preferredTrialCityFormatted: mockCity,
-      receivedAtFormatted: undefined,
       requestForPlaceOfTrialFile: undefined,
       shouldShowIrsNoticeDate: false,
       stinFile: undefined,

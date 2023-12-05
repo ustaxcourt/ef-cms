@@ -3,7 +3,7 @@ import {
   MOCK_TRIAL_REGULAR,
 } from '../../../test/mockTrial';
 import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getTrialSessionsInteractor } from './getTrialSessionsInteractor';
 import { omit } from 'lodash';

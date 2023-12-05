@@ -11,8 +11,9 @@ describe('getJudgeInSectionHelper', () => {
 
   it('Fetches the judge associated with a given section', async () => {
     const expectedJudgeUser = {
+      isSeniorJudge: false,
       judgeFullName: 'judge',
-      judgeTitle: 'judge',
+      judgeTitle: 'Judge',
       name: 'judge',
       role: ROLES.judge,
       section: 'judgesChambers',

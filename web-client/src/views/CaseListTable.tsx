@@ -1,12 +1,14 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
-import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
+import { NonPhone, Phone } from '../ustc-ui/Responsive/Responsive';
+import { TAssociatedCaseFormatted } from '@web-client/presenter/computeds/Dashboard/externalUserCasesHelper';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from './WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
 
 export const CaseListTable = connect(
   {
@@ -42,6 +44,7 @@ export const CaseListTable = connect(
       <Button
         aria-describedby=""
         className="margin-top-1 margin-right-0"
+        data-testid="file-a-petition"
         href={
           dashboardExternalHelper.showFileACase
             ? '/file-a-petition/step-1'
@@ -58,17 +61,36 @@ export const CaseListTable = connect(
 
     const renderCaseListTable = ({
       cases = [],
+      isMobile,
       showLoadMore,
       showMoreResultsSequence,
       tabName,
+    }: {
+      cases: TAssociatedCaseFormatted[];
+      showLoadMore: boolean;
+      showMoreResultsSequence: boolean;
+      tabName: string;
+      isMobile: boolean;
     }) => {
       return (
         <>
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
           {cases?.length > 0 && (
             <>
+              {dashboardExternalHelper.showFilingFee && (
+                <span className="float-right margin-bottom-1">
+                  *Filing fee status may take 2-3 business days from payment
+                  received date or approval of waiver to update
+                </span>
+              )}
+
               <table
-                className="usa-table responsive-table dashboard"
+                className={classNames({
+                  'usa-table responsive-table dashboard': !isMobile,
+                  'usa-table usa-table--stacked-header usa-table--borderless':
+                    isMobile,
+                })}
+                data-testid="case-list-table"
                 id="case-list"
               >
                 <thead>
@@ -76,9 +98,12 @@ export const CaseListTable = connect(
                     <th>
                       <span className="usa-sr-only">Lead Case Indicator</span>
                     </th>
-                    <th>Docket number</th>
-                    <th>Case title</th>
-                    <th>Date filed</th>
+                    <th>Docket No.</th>
+                    <th>Case Title</th>
+                    <th>Filed Date</th>
+                    {dashboardExternalHelper.showFilingFee && (
+                      <th data-testid="filing-fee">Filing Fee*</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -86,7 +111,10 @@ export const CaseListTable = connect(
                     <CaseListRowExternal
                       onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
+                      isNestedCase={false}
                       key={item.docketNumber}
+                      onlyText={false}
+                      showFilingFee={dashboardExternalHelper.showFilingFee}
                     />
                   ))}
                 </tbody>
@@ -112,7 +140,8 @@ export const CaseListTable = connect(
     return (
       <>
         <WarningNotification />
-        <NonMobile>
+
+        <NonPhone>
           <div className="grid-container padding-x-0">
             <div className="grid-row">
               <div className="grid-column-auto">
@@ -122,12 +151,14 @@ export const CaseListTable = connect(
                   defaultActiveTab={openTab}
                 >
                   <Tab
+                    data-testid="open-cases-count"
                     id="tab-open"
                     tabName={openTab}
                     title={`Open Cases (${externalUserCasesHelper.openCasesCount})`}
                   >
                     {renderCaseListTable({
                       cases: externalUserCasesHelper.openCaseResults,
+                      isMobile: false,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreOpenCases,
                       showMoreResultsSequence: showMoreOpenCasesSequence,
@@ -135,12 +166,14 @@ export const CaseListTable = connect(
                     })}
                   </Tab>
                   <Tab
+                    data-testid="closed-cases-count"
                     id="tab-closed"
                     tabName={closedTab}
                     title={`Closed Cases (${externalUserCasesHelper.closedCasesCount})`}
                   >
                     {renderCaseListTable({
                       cases: externalUserCasesHelper.closedCaseResults,
+                      isMobile: false,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreClosedCases,
                       showMoreResultsSequence: showMoreClosedCasesSequence,
@@ -155,15 +188,15 @@ export const CaseListTable = connect(
               </div>
             </div>
           </div>
-        </NonMobile>
-        <Mobile>
+        </NonPhone>
+
+        <Phone>
           <div className="grid-container padding-x-0">
             <div className="grid-row">{renderStartButton()}</div>
             <div className="grid-row">
               <select
                 aria-label="additional case info"
-                className="usa-select"
-                id="mobile-case-type-tab-selector"
+                className="usa-select margin-bottom-2"
                 onChange={e => {
                   setCaseTypeToDisplaySequence({ tabName: e.target.value });
                 }}
@@ -180,6 +213,7 @@ export const CaseListTable = connect(
               {caseType === closedTab &&
                 renderCaseListTable({
                   cases: externalUserCasesHelper.closedCaseResults,
+                  isMobile: true,
                   showLoadMore: externalUserCasesHelper.showLoadMoreClosedCases,
                   showMoreResultsSequence: showMoreClosedCasesSequence,
                   tabName: closedTab,
@@ -187,13 +221,14 @@ export const CaseListTable = connect(
               {caseType === openTab &&
                 renderCaseListTable({
                   cases: externalUserCasesHelper.openCaseResults,
+                  isMobile: true,
                   showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
                   showMoreResultsSequence: showMoreOpenCasesSequence,
                   tabName: openTab,
                 })}
             </div>
           </div>
-        </Mobile>
+        </Phone>
       </>
     );
   },

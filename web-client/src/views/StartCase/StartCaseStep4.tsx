@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { ProcedureType } from './ProcedureType';
 import { TrialCity } from './TrialCity';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -51,11 +51,8 @@ export const StartCaseStep4 = connect(
         </Focus>
 
         <p>
-          Tax law allows you to choose between a “regular“ or “small“ case
-          procedure if your case goes to trial. Each case procedure is handled
-          differently by the Court and has its own benefits. If your case
-          qualifies, you can choose whether to have it handled as a small case
-          or not.
+          If your case qualifies, you may choose to have it handled as a small
+          tax case. The Court handles small tax cases differently.
         </p>
         <div className="usa-accordion start-a-case">
           <NonMobile>
@@ -124,8 +121,7 @@ export const StartCaseStep4 = connect(
           <>
             <h3 className="margin-top-4">U.S. Tax Court Trial Locations</h3>
             <p>
-              This is the place your case will be held if it goes to trial. Keep
-              in mind that the nearest location may not be in your state.
+              This is the place your case will be heard if it goes to trial.
             </p>
             <div className="blue-container">
               <TrialCity
@@ -154,6 +150,7 @@ export const StartCaseStep4 = connect(
 
         <div className="margin-top-5">
           <Button
+            data-testid="complete-step-4"
             id="submit-case"
             onClick={() => {
               completeStartCaseWizardStepSequence({

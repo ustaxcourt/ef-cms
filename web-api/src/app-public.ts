@@ -51,21 +51,25 @@ app.use(async (req, res, next) => {
 app.use(logger());
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
-import { casePublicSearchLambda } from './public-api/casePublicSearchLambda';
-import { generatePublicDocketRecordPdfLambda } from './public-api/generatePublicDocketRecordPdfLambda';
-import { getAllFeatureFlagsLambda } from './featureFlag/getAllFeatureFlagsLambda';
-import { getCaseForPublicDocketSearchLambda } from './public-api/getCaseForPublicDocketSearchLambda';
-import { getHealthCheckLambda } from './health/getHealthCheckLambda';
-import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
-import { getPublicCaseExistsLambda } from './public-api/getPublicCaseExistsLambda';
-import { getPublicCaseLambda } from './public-api/getPublicCaseLambda';
-import { getPublicDocumentDownloadUrlLambda } from './public-api/getPublicDocumentDownloadUrlLambda';
-import { getPublicJudgesLambda } from './public-api/getPublicJudgesLambda';
+import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
+import { confirmSignUpLocalLambda } from '@web-api/auth/confirmSignUpLocalLambda';
+import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
+import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
+import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
+import { getCaseForPublicDocketSearchLambda } from './lambdas/public-api/getCaseForPublicDocketSearchLambda';
+import { getHealthCheckLambda } from './lambdas/health/getHealthCheckLambda';
+import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
+import { getPublicCaseExistsLambda } from './lambdas/public-api/getPublicCaseExistsLambda';
+import { getPublicCaseLambda } from './lambdas/public-api/getPublicCaseLambda';
+import { getPublicDocumentDownloadUrlLambda } from './lambdas/public-api/getPublicDocumentDownloadUrlLambda';
+import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambda';
 import { ipLimiter } from './middleware/ipLimiter';
-import { opinionPublicSearchLambda } from './public-api/opinionPublicSearchLambda';
-import { orderPublicSearchLambda } from './public-api/orderPublicSearchLambda';
-import { todaysOpinionsLambda } from './public-api/todaysOpinionsLambda';
-import { todaysOrdersLambda } from './public-api/todaysOrdersLambda';
+import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
+import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
+import { resendVerificationLinkLambda } from '@web-api/lambdas/public-api/resendVerificationLinkLambda';
+import { signUpUserLambda } from '@web-api/users/signUpUserLambda';
+import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
+import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
 
 /**
  * public-api
@@ -125,10 +129,21 @@ app.get(
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
-
+app.get('/public-api/cached-health', lambdaWrapper(getCachedHealthCheckLambda));
 app.get(
   '/public-api/maintenance-mode',
   lambdaWrapper(getMaintenanceModeLambda),
 );
 
 app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+
+app.post('/public-api/account/create', lambdaWrapper(signUpUserLambda));
+
+app.post(
+  '/account/resend-verification',
+  lambdaWrapper(resendVerificationLinkLambda),
+);
+
+// This following endpoint is used only by cognito-local
+
+app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));

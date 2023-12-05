@@ -1,5 +1,5 @@
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { defaultCaseSearchDatesAction } from './defaultCaseSearchDatesAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';

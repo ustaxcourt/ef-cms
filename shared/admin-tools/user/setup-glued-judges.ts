@@ -1,37 +1,55 @@
 import { requireEnvVars } from '../util';
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
+  'DESTINATION_TABLE',
   'ELASTICSEARCH_ENDPOINT',
   'ENV',
-  'REGION',
 ]);
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DynamoDB } from 'aws-sdk';
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../src/business/entities/EntityConstants';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
-import { getUserPoolId, getVersion } from '../util';
-import { search } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import {
+  SearchClientResultsType,
+  formatResults,
+} from '@web-api/persistence/elasticsearch/searchClient';
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { getUserPoolId } from '../util';
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-const dynamo = new DynamoDB({ region: process.env.REGION });
+const dynamoClient = new DynamoDBClient({
+  region: 'us-east-1',
+});
+const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
+const esClient = new Client({
+  ...AwsSigv4Signer({
+    getCredentials: () => {
+      const credentialsProvider = defaultProvider();
+      return credentialsProvider();
+    },
+    region: 'us-east-1',
+  }),
+  node: `https://${elasticsearchEndpoint}:443`,
+});
 
-/**
- * Creates a cognito user
- *
- * @param {object} applicationContext the application context
- * @param {string} email              the cognito user's email address
- * @param {string} name               the cognito user's name
- * @param {string} role               the cognito user's role
- * @param {string} userId             the cognito user's userId
- * @returns {Promise<void>}
- */
 const createOrUpdateCognitoUser = async ({
   email,
   name,
   role,
   userId,
   userPoolId,
-}) => {
+}: {
+  email: string;
+  name: string;
+  role: string;
+  userId: string;
+  userPoolId: string;
+}): Promise<void> => {
+  if (role === 'legacyJudge') {
+    return;
+  }
+
   let userExists = false;
   try {
     await cognito.adminGetUser({
@@ -41,11 +59,13 @@ const createOrUpdateCognitoUser = async ({
 
     userExists = true;
   } catch (err) {
-    if (err.code !== 'UserNotFoundException') {
+    const { code }: any = err;
+    if (code !== 'UserNotFoundException') {
       console.error(`ERROR checking for cognito user for ${name}:`, err);
       return;
     }
   }
+
   if (!userExists) {
     try {
       await cognito.adminCreateUser({
@@ -88,36 +108,27 @@ const createOrUpdateCognitoUser = async ({
   console.log(`Enabled login for ${name}`);
 };
 
-/**
- * Deletes a judge user and chambers section mapping
- *   - intended to be used only if a judge has both an imported user and a glued user
- *
- * @param {string} bulkImportedUserId bulk imported user id
- * @param {object} dynamo             DynamoDB object
- * @param {string} name               Judge name
- * @param {string} section            Judge's chambers section
- * @param {string} version            database version
- * @returns {Promise<void>}
- */
 const deleteDuplicateImportedJudgeUser = async ({
   bulkImportedUserId,
   name,
   section,
-  version,
-}) => {
-  const TableName = `efcms-${process.env.ENV}-${version}`;
+}: {
+  bulkImportedUserId: string;
+  name: string;
+  section: string;
+}): Promise<void> => {
+  const TableName = process.env.DESTINATION_TABLE!;
 
   const sectionMappingKey = {
     pk: { S: `section|${section}` },
     sk: { S: `user|${bulkImportedUserId}` },
   };
+  const deleteMappingItemCommand = new DeleteItemCommand({
+    Key: sectionMappingKey,
+    TableName,
+  });
   try {
-    await dynamo
-      .deleteItem({
-        Key: sectionMappingKey,
-        TableName,
-      })
-      .promise();
+    await dynamoClient.send(deleteMappingItemCommand);
   } catch (err) {
     console.error(
       `ERROR deleting duplicate chambers section mapping for ${name}:`,
@@ -129,47 +140,47 @@ const deleteDuplicateImportedJudgeUser = async ({
     pk: { S: `user|${bulkImportedUserId}` },
     sk: { S: `user|${bulkImportedUserId}` },
   };
+  const deleteUserItemCommand = new DeleteItemCommand({
+    Key: userKey,
+    TableName,
+  });
   try {
-    await dynamo
-      .deleteItem({
-        Key: userKey,
-        TableName,
-      })
-      .promise();
+    await dynamoClient.send(deleteUserItemCommand);
   } catch (err) {
     console.error(`ERROR deleting duplicate ${name}:`, err);
   }
   console.log(`Deleted duplicate ${name}`);
 };
 
-/**
- * Retrieves all judge users and formats them in an object structure that reveals duplicates
- *
- * @returns {object} object containing all users for each judge
- */
-
-const getJudgeUsersByName = async applicationContext => {
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        from: 0,
-        query: {
-          bool: {
-            must: {
-              term: {
-                'role.S': {
-                  value: 'judge',
-                },
+const getJudgeUsersByName = async (): Promise<{
+  [key: string]: {
+    bulkImportedUserId?: string;
+    email: string;
+    gluedUserId?: string;
+    name: string;
+    role: string;
+    section: string;
+  };
+}> => {
+  const queryResults = await esClient.search({
+    body: {
+      from: 0,
+      query: {
+        bool: {
+          filter: [
+            {
+              terms: {
+                'role.S': ['judge', 'legacyJudge'],
               },
             },
-          },
+          ],
         },
-        size: MAX_SEARCH_CLIENT_RESULTS,
       },
-      index: 'efcms-user',
+      size: MAX_ELASTICSEARCH_PAGINATION,
     },
+    index: 'efcms-user',
   });
+  const { results }: SearchClientResultsType = formatResults(queryResults.body);
 
   let judgeUsers = {};
   for (const judge of results) {
@@ -180,6 +191,7 @@ const getJudgeUsersByName = async applicationContext => {
           judge.judgeTitle.indexOf('Special Trial') !== -1 ? 'st' : ''
         }judge.${judge.name.toLowerCase()}@example.com`,
         name: `${judge.judgeTitle} ${judge.name}`,
+        role: judge.role,
         section: judge.section,
       };
     }
@@ -198,21 +210,17 @@ const getJudgeUsersByName = async applicationContext => {
   return judgeUsers;
 };
 
-/**
- * Updates the userId of a cognito user created via bulk import
- *
- * @param {object} applicationContext the application context
- * @param {string} bulkImportedUserId bulk imported user id
- * @param {string} gluedUserId        glued user id
- * @param {string} name               Judge name
- * @returns {Promise<void>}
- */
 const updateCognitoUserId = async ({
   bulkImportedUserId,
   gluedUserId,
   name,
   userPoolId,
-}) => {
+}: {
+  bulkImportedUserId: string;
+  gluedUserId: string;
+  name: string;
+  userPoolId: string;
+}): Promise<void> => {
   try {
     await cognito.adminUpdateUserAttributes({
       UserAttributes: [
@@ -231,18 +239,15 @@ const updateCognitoUserId = async ({
 };
 
 (async () => {
-  const version = await getVersion();
-  const applicationContext = createApplicationContext({});
   const userPoolId = await getUserPoolId();
-
-  const judgeUsers = await getJudgeUsersByName(applicationContext);
+  const judgeUsers = await getJudgeUsersByName();
 
   for (const judge in judgeUsers) {
     if (!judgeUsers[judge].gluedUserId) {
       continue;
     }
 
-    const { bulkImportedUserId, email, gluedUserId, name, section } =
+    const { bulkImportedUserId, email, gluedUserId, name, role, section } =
       judgeUsers[judge];
 
     if (bulkImportedUserId) {
@@ -250,17 +255,20 @@ const updateCognitoUserId = async ({
         bulkImportedUserId,
         name,
         section,
-        version,
       });
     }
 
-    await createOrUpdateCognitoUser({
-      email,
-      name,
-      role: 'judge',
-      userId: gluedUserId,
-      userPoolId,
-    });
+    if (role === 'legacyJudge') continue;
+
+    if (gluedUserId) {
+      await createOrUpdateCognitoUser({
+        email,
+        name,
+        role,
+        userId: gluedUserId,
+        userPoolId: userPoolId!,
+      });
+    }
 
     await cognito.adminSetUserPassword({
       Password: process.env.DEFAULT_ACCOUNT_PASS,

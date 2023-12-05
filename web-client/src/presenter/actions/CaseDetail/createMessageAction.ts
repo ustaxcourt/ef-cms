@@ -13,6 +13,7 @@ export const createMessageAction = async ({
     .createMessageInteractor(applicationContext, {
       docketNumber,
       ...form,
+      attachments: [...form.attachments, ...form.draftAttachments],
     });
 
   return {

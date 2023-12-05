@@ -3,7 +3,7 @@ import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { RespondentExistsModal } from './RespondentExistsModal';
 import { RespondentSearch } from './RespondentSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -38,7 +38,10 @@ export const RespondentCounsel = connect(
               >
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper parties-card">
-                    <h3 className="text-wrap">
+                    <h3
+                      className="text-wrap"
+                      data-testid="respondent-counsel-name"
+                    >
                       {irsPractitioner.name} {`(${irsPractitioner.barNumber})`}
                     </h3>
                     <div className="bg-primary text-white padding-1 margin-bottom-2">

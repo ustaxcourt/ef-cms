@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '../test.cerebral';
 import { serveThirtyDayNoticeModalHelper as serveThirtyDayNoticeModalHelperComputed } from './serveThirtyDayNoticeModalHelper';
 import { withAppContextDecorator } from '@web-client/withAppContext';

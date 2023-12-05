@@ -4,6 +4,35 @@ import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
 
+const REPORT_PATHS_DICTIONARY: {
+  [key: string]: { pageTitle: string; sequence: string };
+} = {
+  'blocked-cases': {
+    pageTitle: 'Blocked cases',
+    sequence: 'gotoBlockedCasesReportSequence',
+  },
+  'case-deadlines': {
+    pageTitle: 'Case deadlines',
+    sequence: 'gotoCaseDeadlineReportSequence',
+  },
+  'case-inventory-report': {
+    pageTitle: 'Case Inventory Report',
+    sequence: 'gotoCaseInventoryReportSequence',
+  },
+  'custom-case': {
+    pageTitle: 'Custom Case Report',
+    sequence: 'gotoCustomCaseReportSequence',
+  },
+  'judge-activity-report': {
+    pageTitle: 'Activity Report',
+    sequence: 'gotoJudgeActivityReportSequence',
+  },
+  'pending-report': {
+    pageTitle: 'Pending report',
+    sequence: 'gotoPendingReportSequence',
+  },
+};
+
 const BASE_ROUTE = '/';
 
 route.base(BASE_ROUTE);
@@ -828,6 +857,18 @@ const router = {
       }),
     );
 
+    registerRoute('/change-password-local', () => {
+      return app.getSequence('gotoChangePasswordLocalSequence')();
+    });
+
+    registerRoute('/confirm-signup-local?..', () => {
+      const { confirmationCode, email } = route.query();
+      return app.getSequence('confirmSignUpLocalSequence')({
+        confirmationCode,
+        userEmail: email,
+      });
+    });
+
     registerRoute(
       '/users/create-practitioner',
       ifHasAccess({ app }, () => {
@@ -1026,6 +1067,17 @@ const router = {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
         return app.getSequence('gotoPrintPaperServiceSequence')({
           docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/trial-session-detail/*/print-paper-trial-notices/*',
+      ifHasAccess({ app }, (trialSessionId, fileId) => {
+        setPageTitle('Print Paper Trial Notices');
+        return app.getSequence('gotoPrintPaperTrialNoticesSequence')({
+          fileId,
+          trialSessionId,
         });
       }),
     );
@@ -1255,54 +1307,6 @@ const router = {
     );
 
     registerRoute(
-      '/reports/judge-activity-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Activity Report');
-        return app.getSequence('gotoJudgeActivityReportSequence')();
-      }),
-    );
-
-    registerRoute(
-      '/reports/case-inventory-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Case Inventory Report');
-        return app.getSequence('gotoCaseInventoryReportSequence')();
-      }),
-    );
-
-    registerRoute(
-      '/reports/case-deadlines',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Case deadlines');
-        return app.getSequence('gotoCaseDeadlineReportSequence')();
-      }),
-    );
-
-    registerRoute(
-      '/reports/custom-case',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Custom Case Report');
-        return app.getSequence('gotoCustomCaseReportSequence')();
-      }),
-    );
-
-    registerRoute(
-      '/reports/blocked-cases',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Blocked cases');
-        return app.getSequence('gotoBlockedCasesReportSequence')();
-      }),
-    );
-
-    registerRoute(
-      '/reports/pending-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Pending report');
-        return app.getSequence('gotoPendingReportSequence')();
-      }),
-    );
-
-    registerRoute(
       '/reports/pending-report/printable..',
       ifHasAccess({ app }, () => {
         const { judgeFilter } = route.query();
@@ -1310,6 +1314,16 @@ const router = {
         return app.getSequence('gotoPrintablePendingReportSequence')({
           judgeFilter: decodeURIComponent(judgeFilter),
         });
+      }),
+    );
+
+    registerRoute(
+      '/reports/*',
+      ifHasAccess({ app }, path => {
+        app.getSequence('fetchUserNotificationsSequence')();
+        const currentPathDetails = REPORT_PATHS_DICTIONARY[path];
+        setPageTitle(currentPathDetails.pageTitle);
+        return app.getSequence(currentPathDetails.sequence)();
       }),
     );
 

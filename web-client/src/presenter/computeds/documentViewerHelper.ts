@@ -9,7 +9,7 @@ import { Get } from 'cerebral';
 export const documentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,

@@ -29,11 +29,10 @@ export const submitEditPaperFilingAction = async ({
 
   const documentMetadata = {
     ...formDataWithoutPdf,
-    createdAt: formDataWithoutPdf.dateReceived,
+    createdAt: formDataWithoutPdf.receivedAt,
     docketNumber,
     isFileAttached,
     isPaper: true,
-    receivedAt: formDataWithoutPdf.dateReceived,
   };
 
   await applicationContext

@@ -1,5 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -27,7 +27,7 @@ export const CaseSearchBox = connect(
           }}
         >
           <div className="case-search margin-bottom-4">
-            <div className="card">
+            <div className="card" data-testid="search-for-a-case-card">
               <div className="content-wrapper gray">
                 <div className="grid-row underlined">
                   <div className="grid-col-8">
@@ -37,6 +37,7 @@ export const CaseSearchBox = connect(
                     {caseSearchBoxHelper.showAdvancedSearch && (
                       <a
                         className="usa-link float-right"
+                        data-testid="advanced-search-link"
                         href="/search"
                         id="advanced-search-button"
                       >
@@ -71,6 +72,7 @@ export const CaseSearchBox = connect(
                     </label>
                     <input
                       className="usa-input"
+                      data-testid="docket-search-field"
                       id="docket-search-field"
                       name="searchTerm"
                       placeholder="Enter docket number (e.g., 123-19)"
@@ -85,7 +87,11 @@ export const CaseSearchBox = connect(
                   </div>
                 </div>
 
-                <Button secondary type="submit">
+                <Button
+                  secondary
+                  data-testid="search-by-docket-number"
+                  type="submit"
+                >
                   <span className="usa-search-submit-text">Search</span>
                 </Button>
               </div>

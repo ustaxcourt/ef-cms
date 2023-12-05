@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setupCurrentPageAction } from './setupCurrentPageAction';
@@ -9,7 +9,6 @@ describe('setupCurrentPageAction', () => {
     'consolidated-cases-group-access-petitioner': true,
     'document-visibility-policy-change-date': '2023-05-01',
     'e-consent-fields-enabled-feature-flag': true,
-    'multi-docketable-paper-filings': true,
   };
 
   beforeAll(() => {

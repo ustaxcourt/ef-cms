@@ -10,26 +10,17 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
-  props,
-}: ActionProps<{ fileAcrossConsolidatedGroup: boolean }>) => {
-  const { consolidatedCases, docketNumber } = get(
-    state.caseDetail,
-  ) as RawCase & { consolidatedCases: RawCase[] };
-  const user = applicationContext.getCurrentUser();
-  const { USER_ROLES } = applicationContext.getConstants();
-  const { fileAcrossConsolidatedGroup } = props;
+}: ActionProps) => {
+  const { docketNumber } = get(state.caseDetail);
 
-  const consolidatedCasesDocketNumbers = fileAcrossConsolidatedGroup
-    ? consolidatedCases?.map(aCase => {
-        return aCase.docketNumber;
-      })
-    : undefined;
+  const user = applicationContext.getCurrentUser();
+
+  const { USER_ROLES } = applicationContext.getConstants();
 
   if (user.role === USER_ROLES.irsPractitioner) {
     return await applicationContext
       .getUseCases()
       .submitCaseAssociationRequestInteractor(applicationContext, {
-        consolidatedCasesDocketNumbers,
         docketNumber,
       });
   }

@@ -1,4 +1,5 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { contactSecondaryFromState } from '../helpers';
 import { fileDocumentHelper as fileDocumentHelperComputed } from '../../src/presenter/computeds/fileDocumentHelper';
@@ -101,24 +102,11 @@ export const respondentFilesFirstIRSDocumentOnCase = (
     );
 
     await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'certificateOfServiceMonth',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceDay',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceYear',
-        value: '2000',
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/2000',
       },
     );
 

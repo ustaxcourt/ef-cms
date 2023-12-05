@@ -5,14 +5,14 @@ describe('HearingNote', () => {
     it('should have errors if note is undefined', () => {
       const entity = new HearingNote({});
       expect(entity.getFormattedValidationErrors()).toEqual({
-        note: HearingNote.VALIDATION_ERROR_MESSAGES.note[1],
+        note: 'Add a note',
       });
     });
 
     it('should have errors if note is an empty string', () => {
       const entity = new HearingNote({ note: '' });
       expect(entity.getFormattedValidationErrors()).toEqual({
-        note: HearingNote.VALIDATION_ERROR_MESSAGES.note[1],
+        note: 'Add a note',
       });
     });
 
@@ -21,7 +21,7 @@ describe('HearingNote', () => {
         note: new Array(201).fill('A').join(''),
       });
       expect(entity.getFormattedValidationErrors()).toEqual({
-        note: HearingNote.VALIDATION_ERROR_MESSAGES.note[0].message,
+        note: 'Limit is 200 characters. Enter 200 or fewer characters.',
       });
     });
 

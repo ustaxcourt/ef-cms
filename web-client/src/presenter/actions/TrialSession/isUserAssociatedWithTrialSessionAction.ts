@@ -32,7 +32,7 @@ export const isUserAssociatedWithTrialSessionAction = ({
     );
 
     const isJudgeAssociatedWithTrialSession =
-      trialSession?.judge?.userId === judgeUser.userId;
+      trialSession?.judge?.userId === judgeUser!.userId;
 
     if (isJudgeAssociatedWithTrialSession) {
       return path.yes();

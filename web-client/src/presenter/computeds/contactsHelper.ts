@@ -11,10 +11,11 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+
 export const contactsHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const form = get(state.form);
   const user = applicationContext.getCurrentUser();
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
@@ -197,7 +198,7 @@ const contactHelperForPetitioner = ({ PARTY_TYPES, partyType }) => {
       },
     },
   };
-  return contactTypes[partyType];
+  return contactTypes[partyType] ?? {};
 };
 
 const contactHelperForNonPetitioner = ({ PARTY_TYPES, partyType }) => {
@@ -354,5 +355,5 @@ const contactHelperForNonPetitioner = ({ PARTY_TYPES, partyType }) => {
       },
     },
   };
-  return contactTypes[partyType];
+  return contactTypes[partyType] ?? {};
 };

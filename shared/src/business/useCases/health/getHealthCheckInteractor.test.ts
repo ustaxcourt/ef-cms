@@ -1,7 +1,7 @@
 import { getHealthCheckInteractor } from './getHealthCheckInteractor';
 
 describe('getHealthCheckInteractor', () => {
-  it('should return the expected true statues for all services', async () => {
+  it('should return the expected true statuses for all services', async () => {
     const statusResult = await getHealthCheckInteractor({
       environment: {
         stage: 'dev',
@@ -39,7 +39,6 @@ describe('getHealthCheckInteractor', () => {
     } as any);
 
     expect(statusResult).toEqual({
-      allChecksHealthy: 'pass',
       cognito: true,
       dynamo: {
         efcms: true,
@@ -111,7 +110,6 @@ describe('getHealthCheckInteractor', () => {
     } as any);
 
     expect(status).toEqual({
-      allChecksHealthy: 'fail',
       cognito: false,
       dynamo: {
         efcms: false,

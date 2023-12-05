@@ -13,7 +13,7 @@ import { Get } from 'cerebral';
 export const startCaseInternalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
   const partyType = get(state.form.partyType);
   const petitionPaymentStatus = get(state.form.petitionPaymentStatus);

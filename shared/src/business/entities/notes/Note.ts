@@ -1,32 +1,25 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity } from '../JoiValidationEntity';
 
-/**
- * Note entity
- *
- * @param {object} rawProps the raw note data
- * @constructor
- */
-function Note() {
-  this.entityName = 'Note';
+export class Note extends JoiValidationEntity {
+  public notes: string;
+
+  constructor(rawNote: { notes: string }) {
+    super('Note');
+    this.notes = rawNote.notes?.trim();
+  }
+
+  static VALIDATION_RULES = {
+    notes: JoiValidationConstants.STRING.required().messages({
+      '*': 'Add note',
+    }),
+  };
+
+  getValidationRules() {
+    return Note.VALIDATION_RULES;
+  }
 }
 
-Note.prototype.init = function (rawProps) {
-  this.notes = rawProps.notes;
-};
-
-Note.VALIDATION_ERROR_MESSAGES = {
-  notes: 'Add note',
-};
-
-Note.schema = joi.object().keys({
-  notes: JoiValidationConstants.STRING.required(),
-});
-
-joiValidationDecorator(Note, Note.schema, Note.VALIDATION_ERROR_MESSAGES);
-
-module.exports = { Note: validEntityDecorator(Note) };
+declare global {
+  type RawNote = ExcludeMethods<Note>;
+}

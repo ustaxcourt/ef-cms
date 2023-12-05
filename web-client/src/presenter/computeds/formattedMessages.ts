@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import {
   applyFiltersToCompletedMessages,
   applyFiltersToMessages,
@@ -5,12 +7,10 @@ import {
 } from '../utilities/processFormattedMessages';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedMessages = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const tableSort = get(state.tableSort);
 
   const { completedMessages, messages } = getFormattedMessages({
@@ -20,18 +20,16 @@ export const formattedMessages = (
     tableSort,
   });
 
-  const { STATUS_TYPES } = applicationContext.getConstants();
-
   messages.forEach(message => {
-    message.showTrialInformation =
-      message.caseStatus === STATUS_TYPES.calendared;
-
-    if (message.showTrialInformation) {
-      setTrialInformationOnMessage({
+    const statusWithTrialInfo = applicationContext
+      .getUtilities()
+      .caseStatusWithTrialInformation({
         applicationContext,
-        message,
+        caseStatus: message.caseStatus,
+        trialDate: message.trialDate,
+        trialLocation: message.trialLocation,
       });
-    }
+    message.caseStatus = statusWithTrialInfo;
   });
 
   const { box } = get(state.messageBoxToDisplay);
@@ -74,23 +72,4 @@ export const formattedMessages = (
   }
 
   return sharedComputedResult;
-};
-
-export const setTrialInformationOnMessage = ({
-  applicationContext,
-  message,
-}) => {
-  const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
-
-  if (message.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-    message.formattedTrialLocation = applicationContext
-      .getUtilities()
-      .abbreviateState(message.trialLocation);
-  } else {
-    message.formattedTrialLocation = message.trialLocation;
-  }
-
-  message.formattedTrialDate = applicationContext
-    .getUtilities()
-    .formatDateString(message.trialDate, 'MMDDYY');
 };

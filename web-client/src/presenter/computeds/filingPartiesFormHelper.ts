@@ -6,7 +6,7 @@ import { Get } from 'cerebral';
 export const filingPartiesFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { partyType } = get(state.caseDetail);
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);

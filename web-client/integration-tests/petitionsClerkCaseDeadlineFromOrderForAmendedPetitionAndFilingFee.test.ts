@@ -3,6 +3,7 @@ import {
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkGetsDocketEntryByEventCode } from './journey/docketClerkGetsDocketEntryByEventCode';
 import { docketClerkServesASavedCourtIssuedDocumentFromDocumentView } from './journey/docketClerkServesASavedCourtIssuedDocumentFromDocumentView';
@@ -13,14 +14,10 @@ import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkC
 import { petitionsClerkReviewsPaperCaseBeforeServing } from './journey/petitionsClerkReviewsPaperCaseBeforeServing';
 import { petitionsClerkServesPaperCaseToIRS } from './petitionsClerkServesPaperCaseToIRS';
 
-let formOverrides = [{ key: 'orderForFilingFee', value: false }];
-
 describe('Autogenerate Deadline when Order For Amended Petition and Filing Fee (OAPF) is served', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
+  let formOverrides = [{ key: 'orderForFilingFee', value: false }];
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -72,21 +69,14 @@ describe('Autogenerate Deadline when Order For Amended Petition and Filing Fee (
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const docketEntryFormData = {
-        day: '2',
-        month: '2',
-        year: '2050',
-      };
-
-      for (const [key, value] of Object.entries(docketEntryFormData)) {
-        await cerebralTest.runSequence(
-          'updateCourtIssuedDocketEntryFormValueSequence',
-          {
-            key,
-            value,
-          },
-        );
-      }
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'date',
+          toFormat: FORMATS.ISO,
+          value: '2/2/2050',
+        },
+      );
 
       await cerebralTest.runSequence(
         'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
@@ -158,21 +148,14 @@ describe('Autogenerate Deadline when Order For Amended Petition and Filing Fee (
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const docketEntryFormData = {
-        day: '2',
-        month: '2',
-        year: '2050',
-      };
-
-      for (const [key, value] of Object.entries(docketEntryFormData)) {
-        await cerebralTest.runSequence(
-          'updateCourtIssuedDocketEntryFormValueSequence',
-          {
-            key,
-            value,
-          },
-        );
-      }
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'date',
+          toFormat: FORMATS.ISO,
+          value: '2/2/2050',
+        },
+      );
 
       await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
@@ -237,9 +220,6 @@ describe('Autogenerate Deadline when Order For Amended Petition and Filing Fee (
         docketNumber: cerebralTest.docketNumber,
       });
 
-      /* eslint-disable sort-keys-fix/sort-keys-fix */
-      // Sorting object keys must be disabled, otherwise the date values
-      // bubble to the top during sorting and cause the test to fail
       const docketEntryFormData = {
         documentType:
           SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
@@ -248,9 +228,6 @@ describe('Autogenerate Deadline when Order For Amended Petition and Filing Fee (
           SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
             .eventCode,
         scenario: 'Type D',
-        day: '2',
-        month: '2',
-        year: '2050',
       };
 
       for (const [key, value] of Object.entries(docketEntryFormData)) {
@@ -262,6 +239,15 @@ describe('Autogenerate Deadline when Order For Amended Petition and Filing Fee (
           },
         );
       }
+
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'date',
+          toFormat: FORMATS.ISO,
+          value: '2/2/2050',
+        },
+      );
 
       await cerebralTest.runSequence(
         'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',

@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Icon } from '../../ustc-ui/Icon/Icon';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -68,6 +68,7 @@ export const RecentMessagesInbox = connect(
                           'padding-0',
                           item.isRead ? '' : 'text-bold',
                         )}
+                        data-testid="message-header-link"
                         href={item.messageDetailLink}
                       >
                         {item.subject}
@@ -80,14 +81,7 @@ export const RecentMessagesInbox = connect(
                   <td className="message-queue-row">
                     <span>{item.caseTitle}</span>
                   </td>
-                  {item.showTrialInformation ? (
-                    <td className="message-queue-row">
-                      {item.caseStatus} - {item.formattedTrialDate}{' '}
-                      {item.formattedTrialLocation}
-                    </td>
-                  ) : (
-                    <td className="message-queue-row">{item.caseStatus}</td>
-                  )}
+                  <td className="message-queue-row">{item.caseStatus}</td>
                   <td>{item.from}</td>
                   <td>{item.fromSectionFormatted}</td>
                 </tr>

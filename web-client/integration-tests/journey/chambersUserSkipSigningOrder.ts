@@ -1,7 +1,3 @@
-import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
-
-const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
-
 export const chambersUserSkipSigningOrder = cerebralTest => {
   return it('Chambers user adds order and skips signing', async () => {
     await cerebralTest.runSequence('openCreateOrderChooseTypeModalSequence');
@@ -9,9 +5,9 @@ export const chambersUserSkipSigningOrder = cerebralTest => {
     await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitle: errorMessages.documentTitle[0].message,
-      documentType: errorMessages.documentType,
-      eventCode: errorMessages.eventCode,
+      documentTitle: 'Enter the title of this order',
+      documentType: 'Select an order type',
+      eventCode: 'Select an order type',
     });
 
     await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {

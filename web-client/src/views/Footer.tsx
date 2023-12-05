@@ -2,7 +2,7 @@
 
 import { Button } from '../ustc-ui/Button/Button';
 import { DeployedDate } from './DeployedDate';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from 'cerebral';
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';

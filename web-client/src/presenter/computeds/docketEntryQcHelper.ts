@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const docketEntryQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();

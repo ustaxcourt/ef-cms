@@ -1,14 +1,9 @@
 import { CerebralTest } from 'cerebral/test';
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoDashboardSequence } from '../sequences/gotoDashboardSequence';
 import { presenter } from '../presenter-mock';
 
 describe('gotoDashboardSequence', () => {
-  const user = {
-    role: ROLES.petitioner,
-    userId: '9bd4b89c-d46e-434d-9268-5d98904b40d6',
-  };
   const openCases = [{ docketNumber: '111-22' }];
   const closedCases = [{ docketNumber: '333-44' }];
 
@@ -23,8 +18,6 @@ describe('gotoDashboardSequence', () => {
       gotoDashboardSequence,
     };
     cerebralTest = CerebralTest(presenter);
-
-    applicationContext.getUseCases().getUserInteractor.mockReturnValue(user);
 
     applicationContext.getUseCases().getCasesForUserInteractor.mockReturnValue({
       closedCaseList: closedCases,
@@ -41,7 +34,6 @@ describe('gotoDashboardSequence', () => {
     expect(cerebralTest.getState()).toMatchObject({
       closedCases,
       openCases,
-      user,
     });
   });
 

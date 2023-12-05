@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { waitForLoadingComponentToHide } from '../helpers';
@@ -64,26 +65,11 @@ export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
     );
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'month',
-        value: '2',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: '2',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2050',
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '2/2/2050',
       },
     );
 

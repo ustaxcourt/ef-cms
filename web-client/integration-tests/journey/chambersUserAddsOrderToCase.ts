@@ -1,18 +1,15 @@
-import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../src/applicationContext';
 
 export const chambersUserAddsOrderToCase = cerebralTest => {
-  const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
-
   return it('Chambers user adds order to case', async () => {
     await cerebralTest.runSequence('openCreateOrderChooseTypeModalSequence');
 
     await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitle: errorMessages.documentTitle[0].message,
-      documentType: errorMessages.documentType,
-      eventCode: errorMessages.eventCode,
+      documentTitle: 'Enter the title of this order',
+      documentType: 'Select an order type',
+      eventCode: 'Select an order type',
     });
 
     const createdOrderEventCode = 'ODD';

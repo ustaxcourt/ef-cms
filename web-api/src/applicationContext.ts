@@ -18,6 +18,7 @@ import {
   MAX_SEARCH_RESULTS,
   ORDER_TYPES,
   SESSION_STATUS_GROUPS,
+  TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 
 // eslint-disable-next-line import/no-unresolved
@@ -42,6 +43,7 @@ import {
   getEnvironment,
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
+import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
@@ -59,13 +61,13 @@ import { isAuthorized } from '../../shared/src/authorization/authorizationClient
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
 import { scan } from './persistence/dynamodbClientService';
-import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
+import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
-import { sendNotificationOfSealing } from '../../shared/src/dispatchers/sns/sendNotificationOfSealing';
+import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
 import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
 import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
-import { sendSlackNotification } from '../../shared/src/dispatchers/slack/sendSlackNotification';
+import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
@@ -192,7 +194,10 @@ export const createApplicationContext = (
     user = new User(appContextUser);
   }
 
-  const getCurrentUser = () => {
+  const getCurrentUser = (): {
+    role: string;
+    userId: string;
+  } => {
     return user;
   };
 
@@ -224,50 +229,69 @@ export const createApplicationContext = (
     },
     getCognito: () => {
       if (environment.stage === 'local') {
-        return {
-          adminCreateUser: () => ({
-            promise: () => ({
-              User: {
-                Username: uuidv4(),
+        if (process.env.USE_COGNITO_LOCAL === 'true') {
+          return cognitoLocalWrapper(
+            new CognitoIdentityServiceProvider({
+              endpoint: 'http://localhost:9229/',
+              httpOptions: {
+                connectTimeout: 3000,
+                timeout: 5000,
+              },
+              maxRetries: 3,
+              region: 'local',
+            }),
+          );
+        } else {
+          return {
+            adminCreateUser: () => ({
+              promise: () => ({
+                User: {
+                  Username: uuidv4(),
+                },
+              }),
+            }),
+            adminDisableUser: () => ({
+              promise: () => {},
+            }),
+            adminGetUser: ({ Username }) => ({
+              promise: async () => {
+                // TODO: this scan might become REALLY slow while doing a full integration
+                // test run.
+                const items = await scan({
+                  applicationContext: {
+                    environment,
+                    getDocumentClient,
+                  },
+                });
+                const users = items.filter(
+                  ({ pk, sk }) =>
+                    pk.startsWith('user|') && sk.startsWith('user|'),
+                );
+                const foundUser = users.find(({ email }) => email === Username);
+                if (foundUser) {
+                  return {
+                    UserAttributes: [],
+                    Username: foundUser.userId,
+                  };
+                } else {
+                  const error = new Error();
+                  error.code = 'UserNotFoundException';
+                  throw error;
+                }
               },
             }),
-          }),
-          adminDisableUser: () => ({
-            promise: () => {},
-          }),
-          adminGetUser: ({ Username }) => ({
-            promise: async () => {
-              // TODO: this scan might become REALLY slow while doing a full integration
-              // test run.
-              const items = await scan({
-                applicationContext: {
-                  environment,
-                  getDocumentClient,
-                },
-              });
-              const users = items.filter(
-                ({ pk, sk }) =>
-                  pk.startsWith('user|') && sk.startsWith('user|'),
-              );
-
-              const foundUser = users.find(({ email }) => email === Username);
-
-              if (foundUser) {
-                return {
-                  UserAttributes: [],
-                  Username: foundUser.userId,
-                };
-              } else {
-                const error = new Error();
-                error.code = 'UserNotFoundException';
-                throw error;
-              }
-            },
-          }),
-          adminUpdateUserAttributes: () => ({
-            promise: () => {},
-          }),
-        };
+            adminUpdateUserAttributes: () => ({
+              promise: () => {},
+            }),
+            listUsers: () => ({
+              promise: () => {
+                throw new Error(
+                  'Please use cognito locally by running npm run start:api:cognito-local',
+                );
+              },
+            }),
+          };
+        }
       } else {
         return new CognitoIdentityServiceProvider({
           httpOptions: {
@@ -285,6 +309,9 @@ export const createApplicationContext = (
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
+      CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
+        ? parseInt(process.env.CHANGE_OF_ADDRESS_CONCURRENCY)
+        : undefined,
       CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
@@ -296,6 +323,8 @@ export const createApplicationContext = (
       PENDING_ITEMS_PAGE_SIZE: 100,
       SES_CONCURRENCY_LIMIT: process.env.SES_CONCURRENCY_LIMIT || 6,
       SESSION_STATUS_GROUPS,
+      STATUS_TYPES: CASE_STATUS_TYPES,
+      TRIAL_SESSION_SCOPE_TYPES,
     }),
     getCurrentUser,
     getDispatchers: () => ({

@@ -1,4 +1,4 @@
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -38,13 +38,13 @@ export const SessionAssignments = connect(
             >
               <div className="grid-col-6">
                 <p className="label">Court reporter</p>
-                <p className="margin-bottom-0">
+                <p className="margin-bottom-0 word-wrap-break-word">
                   {formattedTrialSessionDetails.formattedCourtReporter}
                 </p>
               </div>
               <div className="grid-col-6">
                 <p className="label">IRS calendar administrator</p>
-                <p className="margin-bottom-0">
+                <p className="margin-bottom-0 word-wrap-break-word">
                   {
                     formattedTrialSessionDetails.formattedIrsCalendarAdministrator
                   }

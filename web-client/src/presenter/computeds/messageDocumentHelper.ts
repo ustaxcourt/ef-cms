@@ -9,7 +9,7 @@ import { Get } from 'cerebral';
 export const messageDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const viewerDocumentIdToDisplay = get(
     state.messageViewerDocumentToDisplay.documentId,
   );

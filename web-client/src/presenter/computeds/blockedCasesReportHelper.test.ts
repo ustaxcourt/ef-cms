@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { blockedCasesReportHelper as blockedCasesReportHelperComputed } from './blockedCasesReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -103,12 +103,13 @@ describe('blockedCasesReportHelper', () => {
           caseCaption:
             'Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)',
           caseTitle: 'Tatum Craig, Wayne Obrien, Partnership Representative',
-          consolidatedIconTooltipText: null,
+          consolidatedIconTooltipText: '',
           docketNumber: '103-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           docketNumberWithSuffix: '103-18S',
           inConsolidatedGroup: false,
-          inLeadCase: false,
+          isLeadCase: false,
+          shouldIndent: false,
         },
         {
           automaticBlocked: true,
@@ -122,8 +123,9 @@ describe('blockedCasesReportHelper', () => {
           docketNumber: '102-19',
           docketNumberWithSuffix: '102-19',
           inConsolidatedGroup: true,
-          inLeadCase: true,
+          isLeadCase: true,
           leadDocketNumber: '102-19',
+          shouldIndent: false,
         },
         {
           automaticBlocked: true,
@@ -135,8 +137,9 @@ describe('blockedCasesReportHelper', () => {
           docketNumber: '104-19',
           docketNumberWithSuffix: '104-19',
           inConsolidatedGroup: true,
-          inLeadCase: false,
+          isLeadCase: false,
           leadDocketNumber: '102-19',
+          shouldIndent: false,
         },
         {
           blocked: true,
@@ -148,8 +151,9 @@ describe('blockedCasesReportHelper', () => {
           docketNumber: '105-19',
           docketNumberWithSuffix: '105-19',
           inConsolidatedGroup: true,
-          inLeadCase: false,
+          isLeadCase: false,
           leadDocketNumber: '102-19',
+          shouldIndent: false,
         },
       ],
     });

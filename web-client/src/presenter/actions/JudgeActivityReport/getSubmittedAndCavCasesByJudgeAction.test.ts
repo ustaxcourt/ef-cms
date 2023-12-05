@@ -1,15 +1,37 @@
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
+import { GetCasesByStatusAndByJudgeRequest } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
-import { presenter } from '../../presenter-mock';
+import { judgeUser } from '@shared/test/mockUsers';
+import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getSubmittedAndCavCasesByJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return it to props', async () => {
-    const mockJudgeName = 'Sotomayor';
-    const mockReturnedCases = [
+  const mockEndDate = '2022-04-13';
+  const mockStartDate = '12/12/1923';
+  const mockTotalCountOfSubmittedAndCavCases = 15;
+  const pageNumber = 0;
+
+  const judgeActivityReportStateFilters = {
+    endDate: mockEndDate,
+    judgeName: judgeUser.name,
+    judges: [judgeUser.name],
+    startDate: mockStartDate,
+  };
+
+  const getCasesByStatusAndByJudgeRequestParams: GetCasesByStatusAndByJudgeRequest =
+    {
+      judges: [judgeUser.name],
+      statuses: CAV_AND_SUBMITTED_CASE_STATUS,
+    };
+
+  let mockReturnedCases;
+  let mockCustomCaseReportResponse;
+
+  beforeEach(() => {
+    mockReturnedCases = [
       {
         docketNumber: '101-22',
         leadDocketNumber: '101-22',
@@ -18,42 +40,40 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       { docketNumber: '111-11', status: 'Submitted' },
       { docketNumber: '134-21', status: 'CAV' },
     ];
-    (
-      applicationContext.getUseCases()
-        .getCasesByStatusAndByJudgeInteractor as jest.Mock
-    ).mockReturnValue({
-      cases: mockReturnedCases,
-      consolidatedCasesGroupCountMap: { '101-22': 3 },
-    });
 
-    const { output } = await runAction(
-      getSubmittedAndCavCasesByJudgeAction as any,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            judgeName: mockJudgeName,
-          },
+    mockCustomCaseReportResponse = {
+      cases: mockReturnedCases,
+      totalCount: mockTotalCountOfSubmittedAndCavCases,
+    };
+
+    applicationContext
+      .getUseCases()
+      .getCaseWorksheetsByJudgeInteractor.mockReturnValueOnce(
+        mockCustomCaseReportResponse,
+      );
+  });
+
+  it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return items as props', async () => {
+    const result = await runAction(getSubmittedAndCavCasesByJudgeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        selectedPage: pageNumber,
+      },
+      state: {
+        judgeActivityReport: {
+          filters: judgeActivityReportStateFilters,
         },
       },
-    );
+    });
 
     expect(
       (
         applicationContext.getUseCases()
-          .getCasesByStatusAndByJudgeInteractor as jest.Mock
+          .getCaseWorksheetsByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
-    ).toMatchObject({
-      judgeName: mockJudgeName,
-      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
-    });
-    expect(output.submittedAndCavCasesByJudge).toBe(mockReturnedCases);
-    expect(
-      output.consolidatedCasesGroupCountMap.get(
-        mockReturnedCases[0].leadDocketNumber,
-      ),
-    ).toBe(3);
+    ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
+    expect(result.output.cases).toBe(mockReturnedCases);
   });
 });

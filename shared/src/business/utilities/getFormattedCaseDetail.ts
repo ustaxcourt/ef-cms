@@ -10,6 +10,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   FORMATS,
@@ -132,7 +133,7 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     !formattedEntry.isUnservable &&
     formattedEntry.isOnDocketRecord
   ) {
-    formattedEntry.createdAtFormatted = undefined;
+    formattedEntry.createdAtFormatted = '';
   } else if (formattedEntry.isOnDocketRecord) {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
@@ -174,8 +175,8 @@ export const getFilingsAndProceedings = formattedDocketEntry => {
       formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
         : formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.NO
-        ? '(No Objection)'
-        : ''
+          ? '(No Objection)'
+          : ''
     }`,
     `${formattedDocketEntry.lodged ? '(Lodged)' : ''}`,
   ];
@@ -498,6 +499,10 @@ export const getFormattedCaseDetail = ({
   applicationContext,
   caseDetail,
   docketRecordSort,
+}: {
+  applicationContext: ClientApplicationContext;
+  caseDetail: RawCase;
+  docketRecordSort?: string;
 }) => {
   const result = {
     ...applicationContext

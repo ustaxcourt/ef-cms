@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const messageModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
     CASE_SERVICES_SUPERVISOR_SECTION,
@@ -19,25 +19,44 @@ export const messageModalHelper = (
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
   const attachments = get(state.modal.form.attachments);
+  const draftAttachments = get(state.modal.form.draftAttachments);
+  const currentAttachments = [...attachments, ...draftAttachments];
+
+  const computeIsAlreadyAttached = doc =>
+    currentAttachments.some(
+      attachment => attachment.documentId === doc.docketEntryId,
+    );
 
   const { correspondence, draftDocuments, formattedDocketEntries } =
     applicationContext
       .getUtilities()
       .getFormattedCaseDetail({ applicationContext, caseDetail });
 
-  const documents: RawDocketEntry[] = [];
-  formattedDocketEntries.forEach(entry => {
+  const documents: (RawDocketEntry & {
+    isAlreadyAttached: boolean;
+    title: string;
+  })[] = [];
+  for (let entry of formattedDocketEntries) {
     if (entry.isFileAttached && entry.isOnDocketRecord) {
       entry.title = entry.descriptionDisplay || entry.documentType;
+      entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
+
       documents.push(entry);
     }
-  });
+  }
 
-  draftDocuments.forEach(entry => {
+  for (let entry of draftDocuments) {
     entry.title = entry.documentTitle || entry.documentType;
-  });
+    entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
+  }
 
-  const currentAttachmentCount = attachments.length;
+  for (let corr of correspondence) {
+    corr.isAlreadyAttached = currentAttachments.some(
+      attachment => attachment.docketEntryId === corr.correspondenceId,
+    );
+  }
+
+  const currentAttachmentCount = currentAttachments.length;
   const canAddDocument =
     currentAttachmentCount < CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT;
   const shouldShowAddDocumentForm =
@@ -84,6 +103,6 @@ export const messageModalHelper = (
     sectionListWithoutSupervisorRole,
     showAddDocumentForm: canAddDocument && shouldShowAddDocumentForm,
     showAddMoreDocumentsButton: canAddDocument && !shouldShowAddDocumentForm,
-    showMessageAttachments: attachments.length > 0,
+    showMessageAttachments: currentAttachmentCount > 0,
   };
 };

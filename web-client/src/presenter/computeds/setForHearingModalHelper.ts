@@ -6,7 +6,7 @@ import { Get } from 'cerebral';
 export const setForHearingModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const caseDetail = get(state.caseDetail);
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
   let excludedTrialSessionIds: String[] = [];

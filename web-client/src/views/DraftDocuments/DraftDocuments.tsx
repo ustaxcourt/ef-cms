@@ -3,7 +3,7 @@ import { ConfirmEditModal } from './ConfirmEditModal';
 import { ConfirmRemoveSignatureModal } from '../Messages/ConfirmRemoveSignatureModal';
 import { DocketEntryHasAlreadyBeenServedModal } from './DocketEntryHasAlreadyBeenServedModal';
 import { DraftDocumentViewer } from '../DocketRecord/DraftDocumentViewer';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 

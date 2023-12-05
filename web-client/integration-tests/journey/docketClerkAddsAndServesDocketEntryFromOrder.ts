@@ -154,9 +154,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
       expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
       expect(cerebralTest.getState('form.freeText')).toBeFalsy();
       expect(nonstandardHelperComputed.showDateFirst).toBeTruthy();
-      expect(cerebralTest.getState('form.month')).toBeFalsy();
-      expect(cerebralTest.getState('form.day')).toBeFalsy();
-      expect(cerebralTest.getState('form.year')).toBeFalsy();
+      expect(cerebralTest.getState('form.date')).toBeFalsy();
 
       // eventCode: OODS
       await cerebralTest.runSequence(
@@ -176,9 +174,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
 
       expect(nonstandardHelperComputed.showFreeText).toBeFalsy();
       expect(nonstandardHelperComputed.showDateFirst).toBeTruthy();
-      expect(cerebralTest.getState('form.month')).toBeFalsy();
-      expect(cerebralTest.getState('form.day')).toBeFalsy();
-      expect(cerebralTest.getState('form.year')).toBeFalsy();
+      expect(cerebralTest.getState('form.date')).toBeFalsy();
     }
 
     // test defined

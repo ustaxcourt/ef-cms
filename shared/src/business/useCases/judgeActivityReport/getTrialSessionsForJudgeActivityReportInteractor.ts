@@ -1,4 +1,5 @@
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -8,28 +9,25 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../entities/EntityConstants';
+import { sum } from 'lodash';
 
-/**
- * getTrialSessionsForJudgeActivityReportInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers.endDate the report end date
- * @param {object} providers.judgeId the judgeId to query for
- * @param {object} providers.startDate the report start date
- * @returns {Object} the counts of the different session types held for the judge
- */
+export type TrialSessionTypes = {
+  [SESSION_TYPES.regular]: number;
+  [SESSION_TYPES.small]: number;
+  [SESSION_TYPES.hybrid]: number;
+  [SESSION_TYPES.special]: number;
+  [SESSION_TYPES.motionHearing]: number;
+};
+
+export type TrialSessionReturnType = {
+  aggregations: TrialSessionTypes;
+  total: number;
+};
+
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
-  {
-    endDate,
-    judgeId,
-    startDate,
-  }: {
-    judgeId: string;
-    endDate: string;
-    startDate: string;
-  },
-) => {
+  { endDate, judges, startDate }: JudgeActivityReportFilters,
+): Promise<TrialSessionReturnType> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -38,12 +36,14 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
-    judgeId,
+    judges,
     startDate,
   });
 
   if (!searchEntity.isValid()) {
-    throw new InvalidRequest();
+    throw new InvalidRequest(
+      'the judge activity report search entity was invalid',
+    );
   }
 
   const trialSessions = await applicationContext
@@ -52,9 +52,16 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       applicationContext,
     });
 
-  const judgeSessionsInDateRange = trialSessions.filter(
+  const trialSessionsForSelectedJudges = trialSessions.filter(session => {
+    if (judges && session.judge) {
+      return searchEntity.judges.includes(session.judge.name);
+    } else {
+      return true;
+    }
+  });
+
+  const judgeSessionsInDateRange = trialSessionsForSelectedJudges.filter(
     session =>
-      session.judge?.userId === searchEntity.judgeId &&
       session.startDate <= searchEntity.endDate &&
       session.startDate >= searchEntity.startDate,
   );
@@ -114,12 +121,19 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     isTypeOf(SESSION_TYPES.special)(session),
   ).length;
 
-  return {
+  const aggregatedSessionTypes = {
     [SESSION_TYPES.regular]: regularSwingSessions + regularNonSwingSessions,
     [SESSION_TYPES.small]: smallNonSwingSessions + smallSwingSessions,
     [SESSION_TYPES.hybrid]: hybridSwingSessions + hybridNonSwingSessions,
     [SESSION_TYPES.special]: specialSessions,
     [SESSION_TYPES.motionHearing]: motionHearingSessions,
+  };
+
+  const trialSessionsHeldTotal = sum(Object.values(aggregatedSessionTypes));
+
+  return {
+    aggregations: aggregatedSessionTypes,
+    total: trialSessionsHeldTotal,
   };
 };
 

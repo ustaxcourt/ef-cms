@@ -6,7 +6,12 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  FORMATS,
+  dateStringsCompared,
+  formatDateString,
+} from '../../utilities/DateHandler';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -14,15 +19,11 @@ import {
 import { User } from '../../entities/User';
 import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import {
-  dateStringsCompared,
-  formatDateString,
-} from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { withLocking } from '../../../../../web-api/src/persistence/dynamo/locks/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -325,8 +326,8 @@ const completeDocketEntryQC = async (
       .promise();
 
     const serviceStampDate = formatDateString(
-      noticeUpdatedDocketEntry.servedAt,
-      'MMDDYY',
+      noticeUpdatedDocketEntry.servedAt!,
+      FORMATS.MMDDYY,
     );
 
     const newPdfData = await addServedStampToDocument({
@@ -379,7 +380,8 @@ const completeDocketEntryQC = async (
 
 export const completeDocketEntryQCInteractor = withLocking(
   completeDocketEntryQC,
-  ({ entryMetadata }) =>
-    `complete-${entryMetadata.docketNumber}-${entryMetadata.docketEntryId}`,
+  (_applicationContext: IApplicationContext, { entryMetadata }) => ({
+    identifiers: [`docket-entry|${entryMetadata.docketEntryId}`],
+  }),
   new InvalidRequest('The document is currently being updated'),
 );

@@ -1,50 +1,79 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
-/**
- * getDocketNumbersByStatusAndByJudge
- * @param {object} providers the providers object containing applicationContext
- * @param {string} providers.applicationContext application context
- * @param {string} providers.judgeName judge
- * @param {string} providers.statuses case statuses
- * @returns {array} array of docketNumbers with field based on source
- */
+export type DocketNumberByStatusRequest = {
+  statuses: string[];
+  judges?: string[];
+  excludeMemberCases?: boolean;
+};
+
+const source = [
+  'caseCaption',
+  'caseStatusHistory',
+  'docketNumber',
+  'docketNumberWithSuffix',
+  'associatedJudge',
+  'leadDocketNumber',
+  'petitioners',
+  'status',
+] as const;
+
+type CaseFields = (typeof source)[number];
+
+export type SubmittedCAVTableFields = Pick<RawCase, CaseFields>;
+
 export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
-  judgeName,
-  statuses,
-}) => {
-  const source = ['docketNumber'];
-
-  const searchParameters = {
-    body: {
-      _source: source,
-      query: {
-        bool: {
-          must: [
-            {
-              match_phrase: { 'associatedJudge.S': `${judgeName}` },
-            },
-            {
-              terms: { 'status.S': statuses },
-            },
-          ],
-        },
-      },
-      size: 10000,
-      sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
-      track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
-    },
-    index: 'efcms-case',
-  };
-
-  const {
-    results,
-  }: { results: Array<{ docketNumber: string }>; total: number } = await search(
+  params,
+}: {
+  applicationContext: IApplicationContext;
+  params: DocketNumberByStatusRequest;
+}): Promise<SubmittedCAVTableFields[]> => {
+  const shouldFilters: QueryDslQueryContainer[] = [];
+  const filters: QueryDslQueryContainer[] = [
     {
-      applicationContext,
-      searchParameters,
+      terms: { 'status.S': params.statuses },
     },
-  );
+  ];
+
+  if (params.judges) {
+    params.judges.forEach(judge => {
+      const associatedJudgeFilters = {
+        match_phrase: {
+          'associatedJudge.S': judge,
+        },
+      };
+      shouldFilters.push(associatedJudgeFilters);
+    });
+  }
+
+  const { results } = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        _source: source,
+        query: {
+          bool: {
+            filter: filters,
+            minimum_should_match: 1,
+            should: shouldFilters,
+          },
+        },
+        sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
+      },
+      index: 'efcms-case',
+      size: MAX_ELASTICSEARCH_PAGINATION,
+    },
+  });
+
+  if (params.excludeMemberCases) {
+    return results.filter(
+      caseInfo =>
+        !caseInfo.leadDocketNumber ||
+        caseInfo.docketNumber === caseInfo.leadDocketNumber,
+    );
+  }
 
   return results;
 };

@@ -1,6 +1,6 @@
 const {
   sendMaintenanceNotificationsLambda,
-} = require('../web-api/src/cases/sendMaintenanceNotificationsLambda');
+} = require('../web-api/src/lambdas/cases/sendMaintenanceNotificationsLambda');
 
 const maintenanceMode = process.argv[2];
 

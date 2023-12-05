@@ -264,7 +264,7 @@ export const getFormattedDocketEntry = ({
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
     .getUtilities()

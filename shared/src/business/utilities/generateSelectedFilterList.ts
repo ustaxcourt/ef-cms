@@ -1,24 +1,8 @@
-import { TRIAL_STATUS_TYPES } from '../entities/EntityConstants';
+import { ALL_TRIAL_STATUS_TYPES } from '../entities/EntityConstants';
 
-export const generateCaseStatus = (
-  trialStatus,
-  areUpdatedTrialSessionTypesEnabled,
-) => {
+export const generateCaseStatus = trialStatus => {
   if (!trialStatus) return 'Unassigned';
-
-  let foundTrialStatusFromConstant;
-
-  Object.keys(TRIAL_STATUS_TYPES).forEach(key => {
-    if (key === trialStatus) {
-      foundTrialStatusFromConstant =
-        !areUpdatedTrialSessionTypesEnabled &&
-        TRIAL_STATUS_TYPES[trialStatus].legacyLabel
-          ? TRIAL_STATUS_TYPES[trialStatus].legacyLabel
-          : TRIAL_STATUS_TYPES[trialStatus].label;
-    }
-  });
-
-  return foundTrialStatusFromConstant;
+  return ALL_TRIAL_STATUS_TYPES[trialStatus]?.label;
 };
 
 export const isMemberCase = formattedCase => {

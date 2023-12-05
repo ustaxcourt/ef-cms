@@ -1,27 +1,34 @@
 import { ModalDialog } from './ModalDialog';
-import { connect } from '@cerebral/react';
-import { sequences } from '@web-client/presenter/app.cerebral';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const FileUploadErrorModal = connect(
   {
-    cancelSequence: sequences.cancelFileUploadSequence,
+    MAX_FILE_SIZE_MB: state.constants.MAX_FILE_SIZE_MB,
+    cancelSequence: sequences.clearModalSequence,
   },
-  function FileUploadErrorModal({ cancelSequence, confirmSequence }) {
+  function FileUploadErrorModal({ cancelSequence, MAX_FILE_SIZE_MB }) {
     return (
       <ModalDialog
-        cancelLabel="Cancel Upload"
         cancelSequence={cancelSequence}
-        className="file-upload-error"
-        confirmLabel="Try Again"
-        confirmSequence={confirmSequence}
+        confirmLabel="Close"
+        confirmSequence={cancelSequence}
+        title={'Your Request Was Not Completed'}
       >
-        <div>
-          <div className="uh-oh">Uh-oh!</div>
-          <div className="message">
-            An error occurred while uploading your document and it wasn’t
-            completed.
-          </div>
+        <div className="file-upload-error">
+          There was a problem with your submission. Ensure that your uploaded
+          files:
+          <ul>
+            <li>Are in PDF format (.pdf)</li>
+            <li>Have a file size of {MAX_FILE_SIZE_MB}MB or less</li>
+            <li>Are not encrypted or password protected</li>
+          </ul>
+          If you still have a problem after troubleshooting your files, email{' '}
+          <a href="mailto:dawson.support@ustaxcourt.gov">
+            dawson.support@ustaxcourt.gov
+          </a>
+          .
         </div>
       </ModalDialog>
     );

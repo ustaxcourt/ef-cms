@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
-import { connect } from '@cerebral/react';
+import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -12,12 +12,14 @@ export const MessagesIndividualCompleted = connect(
     formattedMessages: state.formattedMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
+    tableSort: state.tableSort,
   },
   function MessagesIndividualCompleted({
     constants,
     formattedMessages,
     showSortableHeaders,
     sortTableSequence,
+    tableSort,
   }) {
     return (
       <>
@@ -27,9 +29,11 @@ export const MessagesIndividualCompleted = connect(
               <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.DESCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
@@ -45,9 +49,11 @@ export const MessagesIndividualCompleted = connect(
               )}
               {showSortableHeaders && (
                 <th className="medium">
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.ASCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="completedAt"
@@ -59,9 +65,11 @@ export const MessagesIndividualCompleted = connect(
               {!showSortableHeaders && <th className="medium">Completed</th>}
               {showSortableHeaders && (
                 <th>
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.ALPHABETICALLY_ASCENDING}
-                    defaultSort={constants.ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="subject"

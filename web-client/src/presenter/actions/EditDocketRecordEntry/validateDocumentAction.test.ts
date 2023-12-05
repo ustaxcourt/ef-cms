@@ -1,9 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateDocumentAction } from './validateDocumentAction';
-
-presenter.providers.applicationContext = applicationContext;
 
 describe('validateDocumentAction', () => {
   let successStub;
@@ -21,6 +19,8 @@ describe('validateDocumentAction', () => {
       filingDate: '1990-01-01T05:00:00.000Z',
       index: 1,
     };
+
+    presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
       error: errorStub,
@@ -222,27 +222,6 @@ describe('validateDocumentAction', () => {
   });
 
   describe('filingDate', () => {
-    it('returns an error message if the user enters a two-digit year', async () => {
-      await runAction(validateDocumentAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            ...mockDocument,
-            filingDateYear: '20',
-          },
-          screenMetadata: {
-            editType: 'CourtIssued',
-          },
-        },
-      });
-
-      expect(errorStub.mock.calls[0][0].errors.filingDate).toEqual(
-        'Enter a four-digit year',
-      );
-    });
-
     it('does not overwrite errors returned from the validateDocumentInteractor if the user enters a two-digit year', async () => {
       applicationContext
         .getUseCases()
@@ -257,7 +236,7 @@ describe('validateDocumentAction', () => {
         state: {
           form: {
             ...mockDocument,
-            filingDateYear: '20',
+            filingDate: '12-12-20',
           },
           screenMetadata: {
             editType: 'CourtIssued',

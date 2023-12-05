@@ -25,7 +25,8 @@ describe('Order', () => {
       });
 
       expect(order.getFormattedValidationErrors()).toEqual({
-        documentTitle: Order.VALIDATION_ERROR_MESSAGES.documentTitle[1].message,
+        documentTitle:
+          'Limit is 100 characters. Enter 100 or fewer characters.',
       });
     });
   });

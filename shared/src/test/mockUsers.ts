@@ -1,12 +1,17 @@
 import {
   ADC_SECTION,
+  ADMISSIONS_SECTION,
   CASE_SERVICES_SUPERVISOR_SECTION,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
 export const adcUser = {
@@ -16,7 +21,7 @@ export const adcUser = {
   userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const chambersUser = {
+export const colvinsChambersUser = {
   name: 'Chandler Chambers',
   role: ROLES.chambers,
   section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
@@ -33,12 +38,25 @@ export const generalUser = {
   userId: '2806fccc-1432-4fcc-8a8d-5943edf07284',
 };
 
-export const irsPractitionerUser = {
+export const irsPractitionerUser: RawIrsPractitioner = {
   barNumber: 'BN2345',
-  contact: {},
+  contact: {
+    address1: '234 Main St',
+    address2: 'Apartment 4',
+    address3: 'Under the stairs',
+    city: 'Chicago',
+    country: COUNTRY_TYPES.DOMESTIC,
+    countryType: COUNTRY_TYPES.DOMESTIC,
+    phone: '+1 (555) 555-5555',
+    postalCode: '61234',
+    state: 'IL',
+  },
+  email: 'irsPractitioner@example.com',
+  entityName: 'IrsPractitioner',
   name: 'IRS Practitioner',
   role: ROLES.irsPractitioner,
   section: 'irsPractitioner',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
@@ -49,11 +67,26 @@ export const irsSuperuserUser = {
   userId: '2eee98ac-613f-46bc-afd5-2574d1b15664',
 };
 
-export const judgeUser = {
+export const judgeUser: RawUser = {
+  email: 'judgeSotomayor@example.com',
+  entityName: 'User',
+  isSeniorJudge: false,
   judgeFullName: 'Sonia Sotomayor',
+  judgeTitle: 'Judge',
   name: 'Sotomayor',
   role: ROLES.judge,
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+};
+
+export const judgeColvin: RawUser = {
+  email: 'judgeColvin@example.com',
+  entityName: 'User',
+  isSeniorJudge: true,
+  judgeFullName: 'John O. Colvin',
+  name: 'Colvin',
+  role: ROLES.judge,
+  section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
+  userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6a',
 };
 
 export const petitionerUser = {
@@ -71,7 +104,10 @@ export const privatePractitionerUser = {
   userId: '330d4b65-620a-489d-8414-6623653ebc4f',
 };
 
-export const trialClerkUser = {
+export const trialClerkUser: RawUser = {
+  email: 'kason.marzena@example.com',
+  entityName: 'User',
+  name: 'Kason Marzena',
   role: ROLES.trialClerk,
   section: TRIAL_CLERKS_SECTION,
   userId: '4b1bb9ca-c997-4356-9682-2bca88fb048d',
@@ -107,6 +143,13 @@ export const petitionsClerkUser = {
   userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
+export const admissionsClerkUser = {
+  name: 'AdmissionsClerk',
+  role: ROLES.admissionsClerk,
+  section: ADMISSIONS_SECTION,
+  userId: '07d90c05-f6cd-442c-a168-202db587f16f',
+};
+
 export const MOCK_USERS = {
   [irsSuperuserUser.userId]: irsSuperuserUser,
   [privatePractitionerUser.userId]: privatePractitionerUser,
@@ -131,16 +174,17 @@ export const MOCK_EXTERNAL_USERS = {
   [irsPractitionerUser.userId]: irsPractitionerUser,
 };
 
-export const MOCK_PRACTITIONER = {
+export const MOCK_PRACTITIONER: TPractitioner = {
   admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
   barNumber: 'AB1111',
-  birthYear: 2019,
+  birthYear: '2019',
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',
     address3: 'Under the stairs',
     city: 'Chicago',
+    country: 'USA',
     countryType: COUNTRY_TYPES.DOMESTIC,
     phone: '+1 (555) 555-5555',
     postalCode: '61234',
@@ -148,6 +192,7 @@ export const MOCK_PRACTITIONER = {
   },
   email: 'ab@example.com',
   employer: 'Private',
+  entityName: 'Practitioner',
   firmName: 'GW Law Offices',
   firstName: 'Test',
   lastName: 'Attorney',
@@ -155,10 +200,12 @@ export const MOCK_PRACTITIONER = {
   originalBarState: 'OK',
   practitionerType: 'Attorney',
   role: ROLES.privatePractitioner,
+  section: 'privatePractitioner',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
 };
 
-export const validUser = {
+export const validUser: RawUser = {
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',
@@ -170,7 +217,27 @@ export const validUser = {
     postalCode: '61234',
     state: 'IL',
   },
+  email: 'user@example.com',
+  entityName: 'User',
   name: 'Saul Goodman',
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+};
+
+export const casePetitioner: TPetitioner = {
+  address1: '234 Main St',
+  address2: 'Apartment 4',
+  address3: 'Under the stairs',
+  city: 'Chicago',
+  contactId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  contactType: CONTACT_TYPES.primary,
+  countryType: COUNTRY_TYPES.DOMESTIC,
+  entityName: 'Petitioner',
+  isAddressSealed: false,
+  name: 'Jingo Bjango',
+  phone: '+1 (555) 555-5555',
+  postalCode: '61234',
+  sealedAndUnavailable: false,
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  state: 'IL',
 };

@@ -13,7 +13,7 @@ import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { limitFileSize } from './limitFileSize';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -232,6 +232,7 @@ export const ScanBatchPreviewer = connect(
                   />
                   <label
                     className="usa-radio__label"
+                    data-testid="button-upload-pdf"
                     htmlFor="uploadMode"
                     id="upload-mode-upload"
                   >
@@ -275,6 +276,7 @@ export const ScanBatchPreviewer = connect(
             <Button
               link
               className="red-warning push-right margin-bottom-1 padding-top-0"
+              data-testid="remove-pdf"
               onClick={() => {
                 openConfirmDeletePDFModalSequence();
               }}

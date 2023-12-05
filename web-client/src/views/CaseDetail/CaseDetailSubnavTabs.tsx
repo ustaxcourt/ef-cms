@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -74,6 +74,7 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showCaseInformationTab && (
               <Tab
+                data-testid="tab-case-information"
                 id="tab-case-information"
                 tabName="caseInformation"
                 title="Case Information"
@@ -88,11 +89,13 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showNotesTab && (
               <Tab
+                data-testid="tab-notes"
                 icon={
                   caseDetailSubnavHelper.showNotesIcon && (
                     <FontAwesomeIcon
                       className="icon-case-notes"
                       color="#ffbe2e"
+                      data-testid="notes-icon"
                       icon="sticky-note"
                     />
                   )

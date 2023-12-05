@@ -4,6 +4,7 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -126,7 +127,7 @@ export const isUserAlreadyCreated = async ({
       .promise();
     return true;
   } catch (e) {
-    if (e.code === 'UserNotFoundException') {
+    if (e.code.includes('UserNotFoundException')) {
       return false;
     } else {
       throw e;
@@ -154,37 +155,40 @@ export const createOrUpdateUser = async ({
   const userExists = await isUserAlreadyCreated({
     applicationContext,
     email: user.email,
-    userPoolId,
+    userPoolId: userPoolId as string,
   });
 
   if (!userExists) {
+    const params = {
+      MessageAction: 'SUPPRESS',
+      TemporaryPassword: password,
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: user.email,
+        },
+        {
+          Name: 'custom:role',
+          Value: user.role,
+        },
+        {
+          Name: 'name',
+          Value: user.name,
+        },
+      ],
+      UserPoolId: userPoolId,
+      Username: user.email,
+    };
+
     const response = await applicationContext
       .getCognito()
-      .adminCreateUser({
-        MessageAction: 'SUPPRESS',
-        TemporaryPassword: password,
-        UserAttributes: [
-          {
-            Name: 'email_verified',
-            Value: 'True',
-          },
-          {
-            Name: 'email',
-            Value: user.email,
-          },
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-          {
-            Name: 'name',
-            Value: user.name,
-          },
-        ],
-        UserPoolId: userPoolId,
-        Username: user.email,
-      })
+      .adminCreateUser(params)
       .promise();
+
     userId = response.User.Username;
   } else {
     const response = await applicationContext

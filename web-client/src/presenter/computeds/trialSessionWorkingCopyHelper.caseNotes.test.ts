@@ -77,7 +77,7 @@ describe('trial session working copy computed', () => {
       formattedCases.find(
         ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
       ).calendarNotes,
-    ).toBeUndefined();
+    ).toEqual('');
   });
 
   it('should set userNotes on cases that are calendared on the trial session when they have them', () => {
@@ -121,6 +121,6 @@ describe('trial session working copy computed', () => {
       formattedCases.find(
         ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
       ).userNotes,
-    ).toBeUndefined();
+    ).toEqual('');
   });
 });

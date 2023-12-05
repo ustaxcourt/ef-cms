@@ -39,7 +39,7 @@ module.exports = [
     actions: [
       'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
       'click element .usa-radio__label[for=payment-status-waived]',
-      'wait for element #payment-date-waived-date to be visible',
+      'wait for element #payment-date-waived-picker to be visible',
     ],
     notes:
       'checks a11y of form when petition fee payment status waived is selected',
@@ -74,7 +74,7 @@ module.exports = [
     actions: [
       'wait for element #certificate-of-service-label to be visible',
       'click element #certificate-of-service-label',
-      'wait for element #service-date-date to be visible',
+      'wait for element #service-date-picker to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/add-paper-filing&info=show-cos-inputs',
@@ -153,8 +153,8 @@ module.exports = [
       'wait for element #document-type to be visible',
       'set field #free-text to Anything',
       'check field #free-text',
-      'set field #date-received-date to 01/01/2022',
-      'check field #date-received-date',
+      'set field #date-received-picker to 01/01/2022',
+      'check field #date-received-picker',
       'wait for #save-entry-button to be visible',
       'click element #save-entry-button',
       'wait for .confirm-initiate-save-modal to be visible',
@@ -273,7 +273,7 @@ module.exports = [
   {
     actions: [
       'wait for #docket-record-table to be visible',
-      'click element button[data-test="seal-docket-entry-button-1"]',
+      'click element button[data-testid="seal-docket-entry-button-1"]',
       'wait for .modal-dialog to be visible',
     ],
     notes: 'checks the seal modal opens on a docket entry',
@@ -283,9 +283,9 @@ module.exports = [
   {
     actions: [
       'wait for #docket-record-table to be visible',
-      'wait for button[data-test="document-viewer-link-A"] to be visible',
-      'click element button[data-test="document-viewer-link-A"]',
-      'click element button[data-test="serve-paper-filed-document"]',
+      'wait for button[data-testid="document-viewer-link-A"] to be visible',
+      'click element button[data-testid="document-viewer-link-A"]',
+      'click element button[data-testid="serve-paper-filed-document"]',
       'wait for .modal-dialog to be visible',
     ],
     notes:

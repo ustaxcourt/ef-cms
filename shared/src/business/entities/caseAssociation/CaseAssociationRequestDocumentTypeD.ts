@@ -1,7 +1,9 @@
 import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument';
 import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { SupportingDocumentInformationFactory } from '../externalDocument/SupportingDocumentInformationFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import joi from 'joi';
 
 export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestDocument {
   public attachments?: boolean;
@@ -19,6 +21,7 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
   public primaryDocumentFile: any;
   public scenario: string;
   public supportingDocuments?: any[];
+  public generationType: string;
 
   constructor(rawProps) {
     super('CaseAssociationRequestDocumentTypeD');
@@ -38,21 +41,27 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
     this.filers = rawProps.filers || [];
     this.scenario = rawProps.scenario;
     this.supportingDocuments = rawProps.supportingDocuments;
+    this.generationType = rawProps.generationType;
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return SupportingDocumentInformationFactory(
-          item,
-          CaseAssociationRequestDocumentTypeD.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
   }
 
-  static VALIDATION_RULES = CaseAssociationRequestDocumentBase.VALIDATION_RULES;
+  static VALIDATION_RULES = {
+    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES,
+    primaryDocumentFile: joi.when('generationType', {
+      is: GENERATION_TYPES.AUTO,
+      otherwise: joi.object().required().messages({ '*': 'Upload a document' }),
+      then: joi.object().optional(),
+    }),
+  };
 
-  static VALIDATION_ERROR_MESSAGES =
-    CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES;
+  }
 
   getDocumentTitle = petitioners => {
     let petitionerNames;
@@ -73,14 +82,6 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
 
     return replaceBracketed(this.documentTitleTemplate, petitionerNames);
   };
-
-  getValidationRules() {
-    return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CaseAssociationRequestDocumentTypeD.VALIDATION_ERROR_MESSAGES;
-  }
 }
 
 export type RawCaseAssociationRequestDocumentTypeD =

@@ -1,8 +1,9 @@
 import * as client from '../../dynamodbClientService';
 import { type AdminCreateUserRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 
-const createUserRecords = async ({
+export const createUserRecords = async ({
   applicationContext,
   newUser,
   userId,
@@ -59,8 +60,8 @@ export const createNewPetitionerUser = async ({
         Value: user.userId,
       },
     ],
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: user.pendingEmail,
+    UserPoolId: process.env.USER_POOL_ID!,
+    Username: user.pendingEmail!,
   };
 
   if (process.env.STAGE !== 'prod') {

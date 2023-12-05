@@ -7,8 +7,16 @@ jobs:
   e2e_cypress:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [2]
+        ci_node_index: [0, 1]
+
     env:
       CI: true
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -36,10 +44,19 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          npm run cypress:integration
+          export TESTFILES=$(npx ts-node split-tests-cypress.ts)
+          npm run cypress:integration:file $TESTFILES
+      - name: Move Videos
+        if: always()
+        run: |
+          mkdir -p cypress/cypress-integration/videos-${{ matrix.ci_node_index }}/
+          cp cypress/cypress-integration/videos/* cypress/cypress-integration/videos-${{ matrix.ci_node_index }}/
+          ls cypress/cypress-integration/
+          ls cypress/cypress-integration/videos/
+          ls cypress/cypress-integration/videos-${{ matrix.ci_node_index }}
       - name: Store Cypress Failure Videos
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: cypress-videos
-          path: ${{ github.workspace }}/cypress/cypress-integration/videos
+          name: cypress-videos-${{ matrix.ci_node_index }}
+          path: ${{ github.workspace }}/cypress/cypress-integration/videos-${{ matrix.ci_node_index }}

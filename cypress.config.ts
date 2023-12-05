@@ -7,6 +7,7 @@ export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
     baseUrl: 'http://localhost:1234',
+    experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
         getEmailVerificationToken({ userId }) {
@@ -24,7 +25,7 @@ export default defineConfig({
     toConsole: true,
   },
   requestTimeout: 60000,
-  retries: 4,
+  retries: 0,
   screenshotsFolder: 'cypress/cypress-integration/screenshots',
   video: true,
   videosFolder: 'cypress/cypress-integration/videos',

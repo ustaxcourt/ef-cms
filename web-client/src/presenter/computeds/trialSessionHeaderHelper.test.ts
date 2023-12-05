@@ -1,9 +1,7 @@
-import {
-  ROLES,
-  TRIAL_SESSION_SCOPE_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../shared/src/business/entities/User';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeUser, trialClerkUser } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -11,34 +9,17 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('trialSessionHeaderHelper', () => {
   const trialSessionHeaderHelper = withAppContextDecorator(
     trialSessionHeaderHelperComputed,
-    {
-      ...applicationContext,
-    },
+    applicationContext,
   );
-
-  const mockJudgeUser = new User({
-    name: 'Trial Judge',
-    role: ROLES.judge,
-    userId: '8979ce01-bb0f-43ec-acee-fb3c0e967f0d',
-  });
-
-  const mockTrialClerkUser = new User({
-    name: 'Trial Clerk',
-    role: ROLES.trialClerk,
-    userId: '6a2bc4a9-6cd0-44bb-92e0-b7cd7404fa0d',
-  });
 
   const baseState = { trialSession: {} };
 
-  let mockFormattedTrialSession: any = {
-    formattedJudge: 'Trial Judge',
-    sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-  };
+  let mockFormattedTrialSession;
 
   beforeEach(() => {
     mockFormattedTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
       formattedJudge: 'Trial Judge',
-      sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
     };
 
     applicationContext
@@ -49,7 +30,7 @@ describe('trialSessionHeaderHelper', () => {
   });
 
   it('should not throw an error when state.trialSession is undefined', () => {
-    expect(() => runCompute(trialSessionHeaderHelper, {})).not.toThrow();
+    expect(() => runCompute(trialSessionHeaderHelper, {} as any)).not.toThrow();
   });
 
   describe('isStandaloneSession', () => {
@@ -69,7 +50,7 @@ describe('trialSessionHeaderHelper', () => {
 
   describe('nameToDisplay', () => {
     it("should be the assigned judge's name when the current user is NOT a trial clerk", () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockJudgeUser);
+      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
       const result = runCompute(trialSessionHeaderHelper, {
         state: baseState,
@@ -81,13 +62,13 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it("should be the current user's name when the current user is a trial clerk", () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
 
       const result = runCompute(trialSessionHeaderHelper, {
         state: baseState,
       });
 
-      expect(result.nameToDisplay).toBe(mockTrialClerkUser.name);
+      expect(result.nameToDisplay).toBe(trialClerkUser.name);
     });
   });
 
@@ -119,13 +100,48 @@ describe('trialSessionHeaderHelper', () => {
     });
   });
 
+  describe('showPrintCalendarButton', () => {
+    it('should be true when the trial session is calendared', () => {
+      mockFormattedTrialSession = {
+        ...mockFormattedTrialSession,
+        isCalendared: true,
+      };
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: baseState,
+      });
+
+      expect(result.showPrintCalendarButton).toBe(true);
+    });
+  });
+
+  describe('showPrintPaperServicePDFsButton', () => {
+    it('should be true when the trial session has at least one paper service pdf that can be reprinted and the user has permissions', () => {
+      mockFormattedTrialSession = {
+        ...mockFormattedTrialSession,
+        paperServicePdfs: [
+          {
+            documentId: '4a65b373-0014-431f-bf9e-7d13c9a2b368',
+            title: 'Initial Calendaring',
+          },
+        ],
+      };
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: { ...baseState, permissions: { TRIAL_SESSIONS: true } },
+      });
+
+      expect(result.showPrintPaperServicePDFsButton).toBe(true);
+    });
+  });
+
   describe('showSwitchToSessionDetail', () => {
     it('should be false when the user is a judge, they are on the TrialSessionWorkingCopy screen, but they are not assigned to the trial session', () => {
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
           currentPage: 'TrialSessionWorkingCopy',
-          judgeUser: { userId: mockJudgeUser.userId },
+          judgeUser: { userId: judgeUser.userId },
           trialSession: {
             judge: { userId: 'NOT_ASSIGNED' },
           },
@@ -136,7 +152,7 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be false when the user is a trial clerk, they are on the TrialSessionWorkingCopy screen, but they are not assigned to the trial session', () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
 
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
@@ -152,14 +168,14 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be false when the user is assigned to the session but they are already on the TrialSessionDetail screen', () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
 
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
           currentPage: 'TrialSessionDetail',
           trialSession: {
-            trialClerk: { userId: mockTrialClerkUser.userId },
+            trialClerk: { userId: trialClerkUser.userId },
           },
         },
       });
@@ -168,14 +184,14 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be true when the user is assigned to the session and they are on the TrialSessionWorkingCopy screen', () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
 
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
           currentPage: 'TrialSessionWorkingCopy',
           trialSession: {
-            trialClerk: { userId: mockTrialClerkUser.userId },
+            trialClerk: { userId: trialClerkUser.userId },
           },
         },
       });
@@ -188,9 +204,9 @@ describe('trialSessionHeaderHelper', () => {
         state: {
           ...baseState,
           currentPage: 'TrialSessionWorkingCopy',
-          judgeUser: { userId: mockJudgeUser.userId },
+          judgeUser: { userId: judgeUser.userId },
           trialSession: {
-            judge: { userId: mockJudgeUser.userId },
+            judge: { userId: judgeUser.userId },
           },
         },
       });
@@ -205,7 +221,7 @@ describe('trialSessionHeaderHelper', () => {
         state: {
           ...baseState,
           currentPage: 'TrialSessionDetail',
-          judgeUser: { userId: mockJudgeUser.userId },
+          judgeUser: { userId: judgeUser.userId },
           trialSession: {
             judge: { userId: 'NOT_ASSIGNED' },
           },
@@ -216,7 +232,7 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be false when the user is a trial clerk, they are on the TrialSessionDetail screen, but they are not assigned to the trial session', () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
 
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
@@ -232,14 +248,14 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be false when the user is assigned to the session but they are already on the TrialSessionWorkingCopy screen', () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
 
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
           currentPage: 'TrialSessionWorkingCopy',
           trialSession: {
-            trialClerk: { userId: mockTrialClerkUser.userId },
+            trialClerk: { userId: trialClerkUser.userId },
           },
         },
       });
@@ -248,14 +264,14 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be true when the user is a trial clerk assigned to the session and they are on the TrialSessionDetail screen', () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
 
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
           currentPage: 'TrialSessionDetail',
           trialSession: {
-            trialClerk: { userId: mockTrialClerkUser.userId },
+            trialClerk: { userId: trialClerkUser.userId },
           },
         },
       });
@@ -268,9 +284,9 @@ describe('trialSessionHeaderHelper', () => {
         state: {
           ...baseState,
           currentPage: 'TrialSessionDetail',
-          judgeUser: { userId: mockJudgeUser.userId },
+          judgeUser: { userId: judgeUser.userId },
           trialSession: {
-            judge: { userId: mockJudgeUser.userId },
+            judge: { userId: judgeUser.userId },
           },
         },
       });

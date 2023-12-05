@@ -10,6 +10,7 @@ describe('getJudgesForPublicSearchInteractor', () => {
         {
           barNumber: 'should be filtered out',
           email: 'should be filtered out',
+          isSeniorJudge: false,
           judgeFullName: 'Lila A. Fenwick',
           judgeTitle: 'Special Trial Judge',
           name: 'Lila A. Fenwick',
@@ -19,6 +20,7 @@ describe('getJudgesForPublicSearchInteractor', () => {
         {
           barNumber: 'should be filtered out',
           email: 'should be filtered out',
+          isSeniorJudge: false,
           judgeFullName: 'Stephanie Kulp Seymour',
           judgeTitle: 'Special Trial Judge',
           name: 'Stephanie Kulp Seymour',

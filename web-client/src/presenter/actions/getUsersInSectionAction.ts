@@ -1,8 +1,12 @@
+import { RawUser } from '@shared/business/entities/User';
 import { sortBy } from 'lodash';
 
 export const getUsersInSectionAction =
   ({ section }: { section?: string }) =>
-  async ({ applicationContext, props }: ActionProps) => {
+  async ({
+    applicationContext,
+    props,
+  }: ActionProps): Promise<{ users: RawUser[] }> => {
     const caseServicesSupervisorSelectedSection = props.section;
     const { CASE_SERVICES_SUPERVISOR_SECTION } =
       applicationContext.getConstants();
@@ -24,7 +28,7 @@ export const getUsersInSectionAction =
     const users = await applicationContext
       .getUseCases()
       .getUsersInSectionInteractor(applicationContext, {
-        section: sectionToGet,
+        section: sectionToGet!,
       });
 
     return {

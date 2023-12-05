@@ -1,9 +1,9 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TrialSessionTypes,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
 
 type CreateTrialSessionOverrides = {
   maxCases?: number;
@@ -41,34 +41,27 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      maxCases: TrialSession.VALIDATION_ERROR_MESSAGES.maxCases,
-      sessionType: TrialSession.VALIDATION_ERROR_MESSAGES.sessionType,
-      startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
-      term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
-      termYear: TrialSession.VALIDATION_ERROR_MESSAGES.termYear,
-      trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
+      maxCases: 'Enter a valid number of maximum cases',
+      sessionType: 'Select a session type',
+      startDate: 'Enter a valid start date',
+      term: 'Term session is not valid',
+      termYear: 'Term year is required',
+      trialLocation: 'Select a trial session location',
     });
 
-    /* eslint-disable sort-keys-fix/sort-keys-fix */
     const createTrialSessionForm = {
-      maxCases,
-      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      sessionType,
-      startDateDay: trialDay,
-      startDateMonth: '13',
-      startDateYear: trialYear,
-      estimatedEndDateMonth: '01',
-      estimatedEndDateDay: '01',
-      estimatedEndDateYear: '1995',
       address1: '123 Flavor Ave',
-      city: 'Seattle',
-      state: 'WA',
-      postalCode: '98101',
       chambersPhoneNumber: '1234567890',
+      city: 'Seattle',
       judge: judge || {
         name: 'Cohen',
         userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
       },
+      maxCases,
+      postalCode: '98101',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      sessionType,
+      state: 'WA',
       trialClerk,
     };
 
@@ -79,18 +72,42 @@ export const docketClerkCreatesATrialSession = (
       });
     }
 
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'startDate',
+        toFormat: FORMATS.ISO,
+        value: `13/${trialDay}/${trialYear}`,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'estimatedEndDate',
+        toFormat: FORMATS.ISO,
+        value: '01/01/1995',
+      },
+    );
+
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
-      term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
-      trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
+      startDate: 'Enter a valid start date',
+      term: 'Term session is not valid',
+      trialLocation: 'Select a trial session location',
     });
 
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateMonth',
-      value: trialMonth,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'startDate',
+        toFormat: FORMATS.ISO,
+        value: `${trialMonth}/${trialDay}/${trialYear}`,
+      },
+    );
+
+    await cerebralTest.runSequence('validateTrialSessionSequence');
 
     if (!trialMonth) {
       expect(cerebralTest.getState('form.term')).toEqual('Fall');
@@ -106,14 +123,17 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      estimatedEndDate:
-        TrialSession.VALIDATION_ERROR_MESSAGES.estimatedEndDate[1],
+      estimatedEndDate: 'Enter a valid estimated end date',
     });
 
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'estimatedEndDateYear',
-      value: '2050',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'estimatedEndDate',
+        toFormat: FORMATS.ISO,
+        value: '01/01/2050',
+      },
+    );
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'swingSession',

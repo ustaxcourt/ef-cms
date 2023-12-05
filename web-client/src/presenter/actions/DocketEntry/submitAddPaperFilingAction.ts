@@ -35,11 +35,10 @@ export const submitAddPaperFilingAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    createdAt: documentMetadata.dateReceived,
+    createdAt: documentMetadata.receivedAt,
     docketNumber,
     isFileAttached: !!isFileAttached,
     isPaper: true,
-    receivedAt: documentMetadata.dateReceived,
   };
 
   await applicationContext

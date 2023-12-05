@@ -1,6 +1,5 @@
 import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { Statistic } from '../../../shared/src/business/entities/Statistic';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
   return it('petitions clerk adds deficiency statistic to case after QCing', async () => {
@@ -90,8 +89,7 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
     await cerebralTest.runSequence('submitAddDeficiencyStatisticsSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsDeficiencyAmount:
-        Statistic.VALIDATION_ERROR_MESSAGES.irsDeficiencyAmount,
+      irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
       irsTotalPenalties:
         'Use IRS Penalty Calculator to calculate total penalties.',
     });

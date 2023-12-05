@@ -16,6 +16,7 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
 ) => {
   return it('Petitions clerk views deadline report for a single case', async () => {
     await cerebralTest.runSequence('gotoCaseDeadlineReportSequence');
+
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDeadlines');
     expect(cerebralTest.getState('judges').length).toBeGreaterThan(0);
 

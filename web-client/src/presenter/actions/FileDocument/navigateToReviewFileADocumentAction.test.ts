@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { navigateToReviewFileADocumentAction } from './navigateToReviewFileADocumentAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -32,7 +32,7 @@ describe('navigateToReviewFileADocumentAction', () => {
     );
   });
 
-  it('should set form.redactionAcknowledgement to false when the REDACTION_ACKNOWLEDGEMENT_ENABLED flag is true (and not do so if the flag is not true)', async () => {
+  it('should set form.redactionAcknowledgement to false', async () => {
     let result = await runAction(navigateToReviewFileADocumentAction, {
       modules: {
         presenter,
@@ -41,24 +41,9 @@ describe('navigateToReviewFileADocumentAction', () => {
         caseDetail: {
           docketNumber: mockDocketNumber,
         },
-        featureFlags: { 'redaction-acknowledgement-enabled': true },
       },
     });
 
     expect(result.state.form.redactionAcknowledgement).toEqual(false);
-
-    result = await runAction(navigateToReviewFileADocumentAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: mockDocketNumber,
-        },
-        featureFlags: {},
-      },
-    });
-
-    expect(result.state.form).toEqual(undefined);
   });
 });

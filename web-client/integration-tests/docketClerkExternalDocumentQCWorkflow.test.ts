@@ -1,5 +1,8 @@
-import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  COUNTRY_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   assignWorkItems,
   findWorkItemByDocketNumber,
@@ -19,13 +22,8 @@ import {
   wait,
 } from './helpers';
 
-const cerebralTest = setupTest();
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 describe('Create a work item', () => {
-  beforeEach(() => {
-    jest.setTimeout(40000);
-  });
+  const cerebralTest = setupTest();
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -38,7 +36,6 @@ describe('Create a work item', () => {
   let decisionWorkItem;
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-
   it('login as the docketclerk and cache the initial inbox counts', async () => {
     await getFormattedDocumentQCMyInbox(cerebralTest);
     qcMyInboxCountBefore = getIndividualInboxCount(cerebralTest);

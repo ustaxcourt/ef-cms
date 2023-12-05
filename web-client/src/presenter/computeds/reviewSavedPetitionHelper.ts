@@ -34,7 +34,7 @@ import { Get } from 'cerebral';
 export const reviewSavedPetitionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   let irsNoticeDateFormatted;
 
   const {

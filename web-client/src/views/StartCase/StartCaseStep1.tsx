@@ -3,7 +3,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -42,8 +42,8 @@ export const StartCaseStep1 = connect(
           The Statement of Taxpayer Identification is the only document that
           should include personal information (such as Social Security Numbers,
           Taxpayer Identification Numbers, or Employer Identification Numbers).
-          It’s sent to the IRS to help identify you, but is never viewed by the
-          Court or stored as part of the public record.
+          It’s sent to the IRS to help identify you but is never visible as part
+          of the case record.
         </Hint>
 
         <div className="blue-container margin-bottom-5">
@@ -58,14 +58,15 @@ export const StartCaseStep1 = connect(
                 'usa-label ustc-upload-stin with-hint',
                 startCaseHelper.showStinFileValid && 'validated',
               )}
+              data-testid="stin-file-label"
               htmlFor="stin-file"
               id="stin-file-label"
             >
-              Upload your Statement of Taxpayer Identification Number
+              Upload your Statement of Taxpayer Identification Number PDF (.pdf)
             </label>
             <span className="usa-hint">
-              File must be in PDF format (.pdf). Max file size{' '}
-              {constants.MAX_FILE_SIZE_MB}MB.
+              Make sure file is not encrypted or password protected. Max file
+              size {constants.MAX_FILE_SIZE_MB}MB.
             </span>
             <div className="margin-top-0">
               <Button
@@ -81,10 +82,13 @@ export const StartCaseStep1 = connect(
                 Download Statement of Taxpayer Identification Number (T.C. Form
                 4)
               </Button>
-              <p className="margin-top-0">if you haven’t already done so</p>
+              <p className="margin-top-05 usa-hint display-block">
+                if you haven’t already done so
+              </p>
             </div>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"
+              data-testid="stin-file"
               id="stin-file"
               name="stinFile"
               updateFormValueSequence="updateStartCaseFormValueSequence"
@@ -94,6 +98,7 @@ export const StartCaseStep1 = connect(
         </div>
 
         <Button
+          data-testid="complete-step-1"
           id="submit-case"
           onClick={() => {
             completeStartCaseWizardStepSequence({ nextStep: 2 });

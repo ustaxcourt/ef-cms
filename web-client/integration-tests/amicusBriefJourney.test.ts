@@ -2,6 +2,7 @@ import {
   AMICUS_BRIEF_EVENT_CODE,
   PARTIES_CODES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   fakeFile,
   loginAs,
@@ -15,9 +16,6 @@ describe('Amicus Brief Journey', () => {
   const cerebralTest = setupTest();
 
   const amicusBriefMissingFormFields = {
-    dateReceivedDay: 1,
-    dateReceivedMonth: 1,
-    dateReceivedYear: 2018,
     freeText: 'Amicus brief filed by an integration test',
     otherFilingParty: 'Marie Curie',
   };
@@ -61,9 +59,9 @@ describe('Amicus Brief Journey', () => {
 
   it('fix validation errors by providing required, missing fields', async () => {
     expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual([
-      'dateReceived',
       'freeText',
       'otherFilingParty',
+      'receivedAt',
     ]);
 
     for (const [key, value] of Object.entries(amicusBriefMissingFormFields)) {
@@ -72,6 +70,15 @@ describe('Amicus Brief Journey', () => {
         value,
       });
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
+      },
+    );
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,

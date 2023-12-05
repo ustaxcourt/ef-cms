@@ -1,29 +1,14 @@
-import {
-  PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
+import { privatePractitionerUser } from '@shared/test/mockUsers';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitCaseAssociationRequestAction } from './submitCaseAssociationRequestAction';
 
 describe('submitCaseAssociationRequestAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  applicationContext.getCurrentUser.mockReturnValue(
-    new User({
-      email: 'practitioner1@example.com',
-      name: 'richard',
-      role: ROLES.privatePractitioner,
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-    }),
-  );
-
-  const testCaseDetail = {
-    consolidatedCases: [{ docketNumber: '101-23' }, { docketNumber: '102-23' }],
-    docketNumber: '101-23',
-  };
+  applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
 
   it("should call submitCaseAssociationRequestInteractor when the document's event code allows for the user to be immediately associated with the case", async () => {
     const eventCodeAllowingImmediateAssociation =
@@ -42,40 +27,6 @@ describe('submitCaseAssociationRequestAction', () => {
         caseDetail: {},
         form: {
           eventCode: eventCodeAllowingImmediateAssociation,
-          fileAcrossConsolidatedGroup: undefined,
-          primaryDocumentFile: {},
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().submitCaseAssociationRequestInteractor
-        .mock.calls.length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getUseCases().submitCaseAssociationRequestInteractor
-        .mock.calls[0][1],
-    ).toEqual(expect.objectContaining({ consolidatedCasesDocketNumbers: [] }));
-  });
-
-  it("should call submitCaseAssociationRequestInteractor with an array of consolidated case numbers when the document's event code allows for the user to be immediately associated with the case", async () => {
-    const eventCodeAllowingImmediateAssociation =
-      PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
-        item => item.allowImmediateAssociation,
-      )[0].eventCode;
-
-    await runAction(submitCaseAssociationRequestAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        documentsFiled: { primaryDocumentId: applicationContext.getUniqueId() },
-      },
-      state: {
-        caseDetail: testCaseDetail,
-        form: {
-          eventCode: eventCodeAllowingImmediateAssociation,
-          fileAcrossConsolidatedGroup: true,
           primaryDocumentFile: {},
         },
       },
@@ -83,15 +34,7 @@ describe('submitCaseAssociationRequestAction', () => {
 
     expect(
       applicationContext.getUseCases().submitCaseAssociationRequestInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().submitCaseAssociationRequestInteractor
-        .mock.calls[0][1],
-    ).toEqual(
-      expect.objectContaining({
-        consolidatedCasesDocketNumbers: ['101-23', '102-23'],
-      }),
-    );
+    ).toHaveBeenCalledTimes(1);
   });
 
   it("should call submitPendingCaseAssociationRequest when the document's event code does not allow for the user to be immediately associated with the case", async () => {

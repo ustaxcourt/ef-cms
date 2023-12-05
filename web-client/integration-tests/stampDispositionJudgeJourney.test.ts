@@ -1,5 +1,6 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -45,8 +46,8 @@ describe('Stamp disposition judge journey test', () => {
     });
 
     const paperFilingValidationErrors = [
-      'dateReceived',
       'eventCode',
+      'receivedAt',
       'documentType',
       'filers',
     ];
@@ -65,18 +66,14 @@ describe('Stamp disposition judge journey test', () => {
       paperFilingValidationErrors,
     );
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',

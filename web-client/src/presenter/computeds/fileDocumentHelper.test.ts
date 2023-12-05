@@ -1,32 +1,31 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   CONTACT_TYPES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../test/createClientTestApplicationContext';
 import { capitalize } from 'lodash';
+import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const state = {
-  caseDetail: MOCK_CASE,
-  featureFlags: {},
-  form: {},
-  validationErrors: {},
-};
-
-applicationContext.getCurrentUser = () =>
-  MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
-
-const fileDocumentHelper = withAppContextDecorator(
-  fileDocumentHelperComputed,
-  applicationContext,
-);
-
 describe('fileDocumentHelper', () => {
+  const state = {
+    caseDetail: MOCK_CASE,
+    featureFlags: {},
+    form: {},
+    validationErrors: {},
+  };
+
+  applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+  const fileDocumentHelper = withAppContextDecorator(
+    fileDocumentHelperComputed,
+    applicationContext,
+  );
+
   beforeEach(() => {
     state.form = {};
   });
@@ -202,20 +201,6 @@ describe('fileDocumentHelper', () => {
     state.validationErrors = { filers: 'You did something bad.' };
     const result: any = runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
-  });
-
-  it('passes the value of the REDACTION_ACKNOWLEDGEMENT_ENABLED flag', () => {
-    state.featureFlags = {
-      [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
-    };
-    let result: any = runCompute(fileDocumentHelper, { state });
-    expect(result.redactionAcknowledgementEnabled).toEqual(true);
-
-    state.featureFlags = {
-      [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: false,
-    };
-    result = runCompute(fileDocumentHelper, { state });
-    expect(result.redactionAcknowledgementEnabled).toEqual(false);
   });
 
   describe('supporting documents', () => {
@@ -491,6 +476,47 @@ describe('fileDocumentHelper', () => {
         `rick, ${capitalize(CONTACT_TYPES.intervenor)}`,
         'bob, Petitioner',
       ]);
+    });
+  });
+
+  describe('EARedactionAcknowledgement', () => {
+    it('should set EARedactionAcknowledgement to true when document type is EA and the generation type is manual', () => {
+      state.form = {
+        eventCode: 'EA',
+        generationType: GENERATION_TYPES.MANUAL,
+      };
+
+      const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(EARedactionAcknowledgement).toEqual(true);
+    });
+
+    it('should set EARedactionAcknowledgement to false when document type is EA and generation type is auto', () => {
+      state.form = {
+        eventCode: 'EA',
+        generationType: GENERATION_TYPES.AUTO,
+      };
+
+      const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(EARedactionAcknowledgement).toEqual(false);
+    });
+
+    it('should set EARedactionAcknowledgement to false when document type is not EA and generation type is manual', () => {
+      state.form = {
+        eventCode: 'A',
+        generationType: GENERATION_TYPES.MANUAL,
+      };
+
+      const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(EARedactionAcknowledgement).toEqual(false);
     });
   });
 });

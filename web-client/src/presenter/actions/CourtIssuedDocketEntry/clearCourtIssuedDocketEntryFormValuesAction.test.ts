@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { clearCourtIssuedDocketEntryFormValuesAction } from './clearCourtIssuedDocketEntryFormValuesAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -10,7 +10,6 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
     const result = await runAction(
       clearCourtIssuedDocketEntryFormValuesAction,
       {
-        applicationContext,
         modules: {
           presenter,
         },
@@ -20,13 +19,11 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
         },
         state: {
           form: {
-            day: '12',
+            date: '12/12/2012',
             docketNumbers: '123-19',
             freeText: 'something',
             judge: 'Judge Colvin',
-            month: '12',
             trialLocation: 'Boise, Idaho',
-            year: '2012',
           },
         },
       },
@@ -39,7 +36,6 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
     const result = await runAction(
       clearCourtIssuedDocketEntryFormValuesAction,
       {
-        applicationContext,
         modules: {
           presenter,
         },
@@ -49,13 +45,11 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
         },
         state: {
           form: {
-            day: '12',
+            date: '12/12/2012',
             docketNumbers: '123-19',
             freeText: 'something',
             judge: 'Judge Colvin',
-            month: '12',
             trialLocation: 'Boise, Idaho',
-            year: '2012',
           },
         },
       },
@@ -70,7 +64,6 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
     const result = await runAction(
       clearCourtIssuedDocketEntryFormValuesAction,
       {
-        applicationContext,
         modules: {
           presenter,
         },
@@ -80,11 +73,9 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
         },
         state: {
           form: {
-            day: '12',
+            date: '12/12/2012',
             freeText: 'Order',
-            month: '12',
             trialLocation: 'Boise, Idaho',
-            year: '2012',
           },
         },
       },
@@ -97,7 +88,6 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
     const result = await runAction(
       clearCourtIssuedDocketEntryFormValuesAction,
       {
-        applicationContext,
         modules: {
           presenter,
         },
@@ -107,11 +97,9 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
         },
         state: {
           form: {
-            day: '12',
+            date: '12/12/2012',
             freeText: 'Notice',
-            month: '12',
             trialLocation: 'Boise, Idaho',
-            year: '2012',
           },
         },
       },
@@ -122,19 +110,16 @@ describe('clearCourtIssuedDocketEntryFormValuesAction', () => {
 
   it('should not clear any form values if props.key is not eventCode', async () => {
     const currentForm = {
-      day: '12',
+      date: '12/12/2012',
       docketNumbers: '123-19',
       freeText: 'something',
       judge: 'Judge Colvin',
-      month: '12',
       trialLocation: 'Boise, Idaho',
-      year: '2012',
     };
 
     const result = await runAction(
       clearCourtIssuedDocketEntryFormValuesAction,
       {
-        applicationContext,
         modules: {
           presenter,
         },

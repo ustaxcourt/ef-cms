@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitAddPaperFilingAction } from './submitAddPaperFilingAction';
@@ -62,7 +62,7 @@ describe('submitAddPaperFilingAction', () => {
     const mockConsolidatedGroupDocketNumbers = ['105-32', '106-32', '107-32'];
     const mockIsSavingForLater = false;
     const mockFormData = {
-      dateReceived: '2020-12-11T17:05:28Z',
+      receivedAt: '2020-12-11T17:05:28Z',
     };
 
     await runAction(submitAddPaperFilingAction, {
@@ -92,11 +92,11 @@ describe('submitAddPaperFilingAction', () => {
       consolidatedGroupDocketNumbers: mockConsolidatedGroupDocketNumbers,
       docketEntryId: mockDocketEntryId,
       documentMetadata: {
-        createdAt: mockFormData.dateReceived,
+        createdAt: mockFormData.receivedAt,
         docketNumber: mockCaseDetail.docketNumber,
         isFileAttached: true,
         isPaper: true,
-        receivedAt: mockFormData.dateReceived,
+        receivedAt: mockFormData.receivedAt,
       },
       isSavingForLater: mockIsSavingForLater,
     });

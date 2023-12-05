@@ -1,3 +1,4 @@
+import { RawUserCase } from '@shared/business/entities/UserCase';
 import { put } from '../../dynamodbClientService';
 
 export const associateUserWithCase = ({

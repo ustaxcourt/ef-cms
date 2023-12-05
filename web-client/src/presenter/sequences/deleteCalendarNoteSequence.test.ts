@@ -1,5 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { deleteCalendarNoteSequence } from './deleteCalendarNoteSequence';
 import { presenter } from '../presenter-mock';
 

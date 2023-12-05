@@ -1,22 +1,23 @@
 import { Case } from '../../entities/cases/Case';
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * addCaseToTrialSessionInteractor
- *
+ * addCaseToTrialSession
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.calendarNotes notes for why the trial session/hearing was added
  * @param {string} providers.trialSessionId the id of the trial session
  * @param {string} providers.docketNumber the docket number of the case
- * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
+ * @returns {Promise} the promise of the addCaseToTrialSession call
  */
-export const addCaseToTrialSessionInteractor = async (
+export const addCaseToTrialSession = async (
   applicationContext: IApplicationContext,
   {
     calendarNotes,
@@ -40,6 +41,10 @@ export const addCaseToTrialSessionInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const caseDetails = await applicationContext
     .getPersistenceGateway()
@@ -98,3 +103,10 @@ export const addCaseToTrialSessionInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const addCaseToTrialSessionInteractor = withLocking(
+  addCaseToTrialSession,
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

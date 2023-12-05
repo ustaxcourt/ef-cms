@@ -4,6 +4,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -37,9 +38,6 @@ describe('E-Consent journey', () => {
         caseCaption: 'Margo Albert, Petitioner',
         mailingDate: '12/27/1999',
         preferredTrialCity: 'Seattle, Washington',
-        receivedAtDay: '01',
-        receivedAtMonth: '01',
-        receivedAtYear: '2001',
         procedureType: 'Small',
         caseType: CASE_TYPES_MAP.whistleblower,
         partyType: PARTY_TYPES.petitioner,
@@ -50,9 +48,6 @@ describe('E-Consent journey', () => {
         ['contactPrimary.state']: 'WA',
         ['contactPrimary.postalCode']: '45755',
         ['contactPrimary.phone']: '231-845-2215',
-        paymentDateDay: '01',
-        paymentDateMonth: '01',
-        paymentDateYear: '2001',
         petitionFile: fakeFile,
         petitionFileSize: 5,
         stinFile: fakeFile,
@@ -67,6 +62,24 @@ describe('E-Consent journey', () => {
           value,
         });
       }
+
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'receivedAt',
+          toFormat: FORMATS.ISO,
+          value: '01/01/2001',
+        },
+      );
+
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'petitionPaymentDate',
+          toFormat: FORMATS.ISO,
+          value: '01/01/2001',
+        },
+      );
 
       await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
         key: 'petitionPaymentStatus',

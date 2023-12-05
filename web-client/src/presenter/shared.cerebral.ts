@@ -1,21 +1,8 @@
-import { FunctionComponent } from 'react';
-import { IReactComponent, connect as cerebralConnect } from '@cerebral/react';
+import { connect as cerebralConnect } from '@cerebral/react';
+import type { FunctionComponent } from 'react';
 
-type FunctionKeys<T> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
-}[keyof T];
-
-type FunctionsOnly<T> = {
-  [K in FunctionKeys<T>]: T[K] extends (...args: any[]) => infer R ? R : never;
-};
-
-type NonFunctionKeys<T> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => any ? never : K;
-}[keyof T];
-
-type NonFunctionsOnly<T> = Pick<T, NonFunctionKeys<T>>;
-
-export const connect = cerebralConnect as unknown as <Deps>(
+type FakeConnectType = <PassedProps, Deps>(
   depsMap: Deps,
-  component: FunctionComponent<FunctionsOnly<Deps> & NonFunctionsOnly<Deps>>,
-) => IReactComponent;
+  component: FunctionComponent<Deps & PassedProps>,
+) => FunctionComponent<PassedProps>;
+export const connect = cerebralConnect as unknown as FakeConnectType;

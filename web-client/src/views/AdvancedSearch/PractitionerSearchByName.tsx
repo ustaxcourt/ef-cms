@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -41,6 +41,7 @@ export const PractitionerSearchByName = connect(
                   </label>
                   <input
                     className="usa-input"
+                    data-testid="practitioner-name"
                     id="practitioner-name"
                     name="practitionerName"
                     type="text"
@@ -67,6 +68,7 @@ export const PractitionerSearchByName = connect(
               <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
+                  data-testid="practitioner-search-by-name-button"
                   id="practitioner-search-by-name-button"
                   onClick={e => {
                     e.preventDefault();

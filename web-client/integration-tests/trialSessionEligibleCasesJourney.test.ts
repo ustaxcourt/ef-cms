@@ -290,7 +290,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         trialLocation,
       );
       expect(cerebralTest.getState('caseDetail.trialDate')).toEqual(
-        '2025-12-12T05:00:00.000Z',
+        '2025-12-12T00:00:00.000-05:00',
       );
       expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
         'Cohen',

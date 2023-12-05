@@ -1,19 +1,14 @@
-/**
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.key the key of the document to get
- * @returns {Promise<any>} the promise of the call to the storage client
- */
 export const getDownloadPolicyUrl = ({
   applicationContext,
   filename,
   key,
+  urlTtl = 120,
   useTempBucket = false,
 }: {
   applicationContext: IApplicationContext;
   filename?: string;
   key: string;
+  urlTtl?: number;
   useTempBucket?: boolean;
 }): Promise<{ url: string }> => {
   const bucketName = useTempBucket
@@ -25,7 +20,7 @@ export const getDownloadPolicyUrl = ({
       'getObject',
       {
         Bucket: bucketName,
-        Expires: 120,
+        Expires: urlTtl,
         Key: key,
         ResponseContentDisposition: filename
           ? `inline;filename="${filename}"`

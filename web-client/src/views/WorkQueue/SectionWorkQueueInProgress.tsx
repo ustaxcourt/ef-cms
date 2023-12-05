@@ -1,7 +1,7 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
@@ -16,6 +16,7 @@ const SectionWorkQueueInProgressRow = React.memo(
     showSelectColumn,
   }: {
     item: {
+      docketNumber: string;
       selected: boolean;
       workItemId: string;
       consolidatedIconTooltipText: string;

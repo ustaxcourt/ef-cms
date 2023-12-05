@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -32,14 +32,19 @@ const BetaBar = toggleBetaBarSequence => {
 
 export const HeaderPublic = connect(
   {
+    headerPublicHelper: state.headerPublicHelper,
     isTerminalUser: state.isTerminalUser,
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
+    navigateToCreatePetitionerAccountSequence:
+      sequences.navigateToCreatePetitionerAccountSequence,
     showBetaBar: state.templateHelper.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
   function HeaderPublic({
+    headerPublicHelper,
     isTerminalUser,
     navigateToCognitoSequence,
+    navigateToCreatePetitionerAccountSequence,
     showBetaBar,
     toggleBetaBarSequence,
   }) {
@@ -52,7 +57,7 @@ export const HeaderPublic = connect(
             role="banner"
           >
             <div className="usa-nav-container">
-              <div className="usa-navbar">
+              <div className="usa-navbar usa-navbar-public">
                 <div className="usa-logo">
                   <a href="/">
                     <img alt="USTC Seal" src={seal} />
@@ -62,23 +67,52 @@ export const HeaderPublic = connect(
                   Welcome to DAWSON{' '}
                   {isTerminalUser && ': US Tax Court Terminal'}
                 </h1>
-                <div className="login-container">
-                  <Button
-                    className="usa-button--unstyled"
-                    icon={['far', 'user']}
-                    onClick={() => navigateToCognitoSequence()}
-                  >
-                    Log In
-                  </Button>
-                </div>
-                <div className="login-container mobile">
-                  <button
-                    className="usa-menu-btn"
-                    onClick={() => navigateToCognitoSequence()}
-                  >
-                    Log In
-                  </button>
-                </div>
+                {!headerPublicHelper.onCreationPage && (
+                  <>
+                    <div className="login-container">
+                      <Button
+                        className="usa-button--unstyled"
+                        icon={['far', 'user']}
+                        onClick={() => navigateToCognitoSequence()}
+                      >
+                        Log In
+                      </Button>
+                    </div>
+                    <div className="login-container mobile">
+                      <button
+                        className="usa-menu-btn"
+                        onClick={() => navigateToCognitoSequence()}
+                      >
+                        Log In
+                      </button>
+                    </div>
+                  </>
+                )}
+                {!headerPublicHelper.onCreationPage &&
+                  !headerPublicHelper.onVerificationSentPage && (
+                    <>
+                      <div className="create-container">
+                        <Button
+                          className="usa-button--unstyled"
+                          onClick={() =>
+                            navigateToCreatePetitionerAccountSequence()
+                          }
+                        >
+                          Create Account
+                        </Button>
+                      </div>
+                      <div className="create-container mobile">
+                        <button
+                          className="usa-menu-btn"
+                          onClick={() =>
+                            navigateToCreatePetitionerAccountSequence()
+                          }
+                        >
+                          Create Account
+                        </button>
+                      </div>
+                    </>
+                  )}
               </div>
             </div>
           </header>

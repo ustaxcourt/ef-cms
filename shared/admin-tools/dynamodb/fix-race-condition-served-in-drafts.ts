@@ -2,11 +2,11 @@
  * due to a race condition, a document that had been served, was returned to the drafts folder. this resolves that.
  */
 
-import { Case } from '../../src/business/entities/cases/Case';
-import { DocketEntry } from '../../src/business/entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
-import { aggregatePartiesForService } from '../../src/business/utilities/aggregatePartiesForService';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { createApplicationContext } from '@web-api/applicationContext';
 import { readFileSync } from 'fs';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
@@ -16,7 +16,7 @@ export const getDocumentFromDynamo = async ({
 }: {
   docketEntryId: string;
   docketNumber: string;
-}): Promise<RawDocketEntry | undefined> => {
+}): Promise<Record<string, any> | undefined> => {
   const dynamoClient = new DynamoDBClient({
     region: 'us-east-1',
   });
@@ -76,6 +76,13 @@ export const fixRaceConditionServedInDrafts = async (
     docketEntryId,
     docketNumber,
   });
+
+  if (!rawDocketEntry) {
+    console.log(
+      `could not find record for case|${docketNumber} docket-entry|${docketEntryId}`,
+    );
+    return;
+  }
 
   // might need to update number of page
   const numberOfPages = await applicationContext

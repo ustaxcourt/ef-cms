@@ -6,7 +6,6 @@ import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWith
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/generateTitlePreviewAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { initCourtIssuedOrderFormPropsFromEventCodeAction } from '../actions/EditDocketRecordEntry/initCourtIssuedOrderFormPropsFromEventCodeAction';
@@ -41,7 +40,6 @@ export const gotoEditDocketEntryMeta =
         getFilterCurrentJudgeUsersAction,
         setUsersByKeyAction('judges'),
         computeJudgeNameWithTitleAction,
-        getComputedFormDateFactoryAction(null, true),
         generateCourtIssuedDocumentTitleAction,
       ],
       document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],

@@ -1,17 +1,20 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const DeficiencyStatisticsForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     checkForNegativeValueSequence: sequences.checkForNegativeValueSequence,
     confirmationText: state.confirmationText,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     updateAddDeficiencyFormValueSequence:
@@ -24,7 +27,9 @@ export const DeficiencyStatisticsForm = connect(
   function DeficiencyStatisticsForm({
     checkForNegativeValueSequence,
     confirmationText,
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     showCalculatePenaltiesModalSequence,
     updateAddDeficiencyFormValueSequence,
     updateFormValueSequence,
@@ -92,29 +97,20 @@ export const DeficiencyStatisticsForm = connect(
               )}
 
               {form.yearOrPeriod === 'Period' && (
-                <FormGroup errorText={validationErrors.lastDateOfPeriod}>
-                  <DateInput
-                    id="last-date-of-period"
-                    label="Last date of period"
-                    names={{
-                      day: 'lastDateOfPeriodDay',
-                      month: 'lastDateOfPeriodMonth',
-                      year: 'lastDateOfPeriodYear',
-                    }}
-                    values={{
-                      day: form.lastDateOfPeriodDay,
-                      month: form.lastDateOfPeriodMonth,
-                      year: form.lastDateOfPeriodYear,
-                    }}
-                    onBlur={() => validateAddDeficiencyStatisticsSequence()}
-                    onChange={({ key, value }) => {
-                      updateFormValueSequence({
-                        key,
-                        value,
-                      });
-                    }}
-                  />
-                </FormGroup>
+                <DateSelector
+                  defaultValue={form.lastDateOfPeriod}
+                  errorText={validationErrors.lastDateOfPeriod}
+                  id="last-date-of-period"
+                  label="Last date of period"
+                  onChange={e => {
+                    formatAndUpdateDateFromDatePickerSequence({
+                      key: 'lastDateOfPeriod',
+                      toFormat: DATE_FORMATS.ISO,
+                      value: e.target.value,
+                    });
+                    validateAddDeficiencyStatisticsSequence();
+                  }}
+                />
               )}
             </div>
           </div>

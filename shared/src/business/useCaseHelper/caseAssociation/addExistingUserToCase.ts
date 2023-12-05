@@ -3,7 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserCase } from '../../entities/UserCase';
 
 /**

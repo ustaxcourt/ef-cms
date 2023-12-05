@@ -1,5 +1,5 @@
 import { ROLES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateUserPendingEmailInteractor } from './updateUserPendingEmailInteractor';
 import { validUser } from '../../../test/mockUsers';
@@ -16,6 +16,7 @@ describe('updateUserPendingEmailInteractor', () => {
       barNumber: 'RA3333',
       birthYear: '1950',
       employer: 'Private',
+      entityName: 'Practitioner',
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',

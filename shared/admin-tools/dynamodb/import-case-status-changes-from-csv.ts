@@ -19,10 +19,10 @@ import {
 import {
   FORMATS,
   prepareDateFromEST,
-} from '../../src/business/utilities/DateHandler';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
+} from '@shared/business/utilities/DateHandler';
+import { createApplicationContext } from '@web-api/applicationContext';
 // eslint-disable-next-line import/no-unresolved
-import { SYSTEM_ROLE } from '../../src/business/entities/EntityConstants';
+import { SYSTEM_ROLE } from '@shared/business/entities/EntityConstants';
 import { parse } from 'csv-parse/sync';
 import fs from 'fs';
 
@@ -107,7 +107,7 @@ const parseCsv = (): Array<any> => {
       applicationContext,
       docketNumber,
     });
-    if (caseRecord) {
+    if (caseRecord && date) {
       const caseStatusHistoryUpdated = await putCaseStatusHistoryRecord({
         applicationContext,
         caseRecord,

@@ -1,8 +1,7 @@
-import { testPdfDoc } from '../../test/getFakeFile';
-
 import { PDFDocument } from 'pdf-lib';
 import { appendPaperServiceAddressPageToPdf } from './appendPaperServiceAddressPageToPdf';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('appendPaperServiceAddressPageToPdf', () => {
   applicationContext

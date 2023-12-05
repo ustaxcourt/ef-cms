@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -40,6 +40,7 @@ export const PractitionerSearchByBarNumber = connect(
                   </label>
                   <input
                     className="usa-input"
+                    data-testid="bar-number"
                     id="bar-number"
                     name="barNumber"
                     type="text"
@@ -66,6 +67,7 @@ export const PractitionerSearchByBarNumber = connect(
               <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
+                  data-testid="practitioner-search-by-bar-number-button"
                   id="practitioner-search-by-bar-number-button"
                   onClick={e => {
                     e.preventDefault();
@@ -77,6 +79,7 @@ export const PractitionerSearchByBarNumber = connect(
                 <Button
                   link
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  data-testid="clear-practitioner-search"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({

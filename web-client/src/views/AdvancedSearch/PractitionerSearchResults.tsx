@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { WarningNotificationComponent } from '../WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -42,7 +42,11 @@ export const PractitionerSearchResults = connect(
               </thead>
               <tbody>
                 {advancedSearchHelper.formattedSearchResults.map(result => (
-                  <tr className="search-result" key={result.barNumber}>
+                  <tr
+                    className="search-result"
+                    data-testid={`practitioner-row-${result.barNumber}`}
+                    key={result.barNumber}
+                  >
                     <td>
                       <a href={`/practitioner-detail/${result.barNumber}`}>
                         {result.barNumber}

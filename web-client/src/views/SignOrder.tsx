@@ -2,7 +2,7 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PDFSignerPageButtons } from './PDFSignerPageButtons';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -194,6 +194,7 @@ export const SignOrder = connect(
 
                   <Button
                     className="margin-right-0"
+                    data-testid="save-signature-button"
                     id="save-signature-button"
                     onClick={() => saveDocumentSigningSequence()}
                   >
@@ -230,6 +231,7 @@ export const SignOrder = connect(
                       ? 'cursor-grabbing'
                       : 'cursor-grab'
                   }
+                  data-testid="sign-pdf-canvas"
                   id="sign-pdf-canvas"
                   ref={canvasRef}
                 ></canvas>

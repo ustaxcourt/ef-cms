@@ -5,7 +5,7 @@ import { MessagesMenu } from './MessagesMenu';
 import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
 import { VerifyEmailWarningNotification } from '../VerifyEmailWarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -67,7 +67,10 @@ const NavigationItems = (
       {headerHelper.showMessages && (
         <li className={classNames('usa-nav__primary-item')}>
           {headerHelper.unreadMessageCount > 0 && (
-            <div className="icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center">
+            <div
+              className="icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center"
+              data-testid="header-message-count"
+            >
               {headerHelper.unreadMessageCount}
             </div>
           )}
@@ -120,6 +123,7 @@ const NavigationItems = (
               'usa-nav__link',
               headerHelper.pageIsDocumentQC && 'usa-current',
             )}
+            data-testid="document-qc-nav-item"
             href={headerHelper.defaultQCBoxPath}
             onClick={() => toggleMobileMenuSequence()}
           >
@@ -162,6 +166,7 @@ const NavigationItems = (
               'usa-nav__link',
               headerHelper.pageIsTrialSessions && 'usa-current',
             )}
+            data-testid="trial-session-link"
             href="/trial-sessions"
             onClick={() => toggleMobileMenuSequence()}
           >

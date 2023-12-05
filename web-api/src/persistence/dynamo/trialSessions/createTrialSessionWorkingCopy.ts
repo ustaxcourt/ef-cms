@@ -1,3 +1,4 @@
+import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { put } from '../../dynamodbClientService';
 
 /**

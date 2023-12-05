@@ -3,8 +3,9 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
+import { cloneDeep } from 'lodash';
 
-const mockDynamoUsers = {
+const mockDynamoRecords = {
   ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']:
     {
       email: 'docketclerk@example.com',
@@ -52,7 +53,7 @@ export const createMockDocumentClient = () => {
       const { Keys } = RequestItems['efcms-local'];
       const arr = [];
       for (let { pk, sk } of Keys) {
-        arr.push(mockDynamoUsers[`${pk} ${sk}`]);
+        arr.push(cloneDeep(mockDynamoRecords[`${pk} ${sk}`]));
       }
       return {
         promise: () =>
@@ -69,7 +70,7 @@ export const createMockDocumentClient = () => {
       };
     }),
     delete: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
-      delete mockDynamoUsers[`${pk} ${sk}`];
+      delete mockDynamoRecords[`${pk} ${sk}`];
       return {
         promise: () => Promise.resolve(null),
       };
@@ -78,21 +79,21 @@ export const createMockDocumentClient = () => {
       return {
         promise: () =>
           Promise.resolve({
-            Item: mockDynamoUsers[`${pk} ${sk}`],
+            Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
           }),
       };
     }),
-    getData: () => mockDynamoUsers,
+    getData: () => mockDynamoRecords,
     getFromDeployTable: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       return {
         promise: () =>
           Promise.resolve({
-            Item: mockDynamoUsers[`${pk} ${sk}`],
+            Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
           }),
       };
     }),
     put: jest.fn().mockImplementation(({ Item }) => {
-      mockDynamoUsers[`${Item.pk} ${Item.sk}`] = Item;
+      mockDynamoRecords[`${Item.pk} ${Item.sk}`] = Item;
       return {
         promise: () => Promise.resolve(null),
       };
@@ -101,11 +102,11 @@ export const createMockDocumentClient = () => {
       .fn()
       .mockImplementation(({ ExpressionAttributeValues, IndexName }) => {
         const arr = [];
-        for (let key in mockDynamoUsers) {
+        for (let key in mockDynamoRecords) {
           if (IndexName === 'gsi1') {
             const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
-            if (mockDynamoUsers[key].gsi1pk === gsi1pk) {
-              arr.push(mockDynamoUsers[key]);
+            if (mockDynamoRecords[key].gsi1pk === gsi1pk) {
+              arr.push(cloneDeep(mockDynamoRecords[key]));
             }
           } else {
             const value = ExpressionAttributeValues[':pk'];
@@ -114,10 +115,10 @@ export const createMockDocumentClient = () => {
 
             if (prefix) {
               if (pk === value && sk.indexOf(prefix) === 0) {
-                arr.push(mockDynamoUsers[key]);
+                arr.push(cloneDeep(mockDynamoRecords[key]));
               }
             } else if (pk.includes(value)) {
-              arr.push(mockDynamoUsers[key]);
+              arr.push(cloneDeep(mockDynamoRecords[key]));
             }
           }
         }
@@ -132,11 +133,11 @@ export const createMockDocumentClient = () => {
       .fn()
       .mockImplementation(({ ExpressionAttributeValues, IndexName }) => {
         const arr = [];
-        for (let key in mockDynamoUsers) {
+        for (let key in mockDynamoRecords) {
           if (IndexName === 'gsi1') {
             const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
-            if (mockDynamoUsers[key].gsi1pk === gsi1pk) {
-              arr.push(mockDynamoUsers[key]);
+            if (mockDynamoRecords[key].gsi1pk === gsi1pk) {
+              arr.push(cloneDeep(mockDynamoRecords[key]));
             }
           } else {
             const value = ExpressionAttributeValues[':pk'];
@@ -145,10 +146,10 @@ export const createMockDocumentClient = () => {
 
             if (prefix) {
               if (pk === value && sk.indexOf(prefix) === 0) {
-                arr.push(mockDynamoUsers[key]);
+                arr.push(cloneDeep(mockDynamoRecords[key]));
               }
             } else if (pk.includes(value)) {
-              arr.push(mockDynamoUsers[key]);
+              arr.push(cloneDeep(mockDynamoRecords[key]));
             }
           }
         }
@@ -163,7 +164,7 @@ export const createMockDocumentClient = () => {
       return {
         promise: () =>
           Promise.resolve({
-            Item: mockDynamoUsers[`${pk} ${sk}`],
+            Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
           }),
       };
     }),
@@ -194,7 +195,7 @@ export const createMockDocumentClient = () => {
               obj[k] = v === 'true';
             } else {
               if (k.includes('workItem')) {
-                obj = mockDynamoUsers[`${Key.pk} ${Key.sk}`];
+                obj = mockDynamoRecords[`${Key.pk} ${Key.sk}`];
                 // eslint-disable-next-line security/detect-eval-with-expression
                 eval(`obj.${k} = ${JSON.stringify(v)};`);
               } else {
@@ -204,20 +205,20 @@ export const createMockDocumentClient = () => {
           }
 
           if (hasSet) {
-            mockDynamoUsers[`${Key.pk} ${Key.sk}`] = {
-              ...mockDynamoUsers[`${Key.pk} ${Key.sk}`],
+            mockDynamoRecords[`${Key.pk} ${Key.sk}`] = {
+              ...mockDynamoRecords[`${Key.pk} ${Key.sk}`],
               ...obj,
             };
           } else {
-            let { id } = mockDynamoUsers[`${Key.pk} ${Key.sk}`] || {};
-            mockDynamoUsers[`${Key.pk} ${Key.sk}`] = {
+            let { id } = mockDynamoRecords[`${Key.pk} ${Key.sk}`] || {};
+            mockDynamoRecords[`${Key.pk} ${Key.sk}`] = {
               id: (id || 0) + 1,
             };
           }
           return {
             promise: () =>
               Promise.resolve({
-                Attributes: mockDynamoUsers[`${Key.pk} ${Key.sk}`],
+                Attributes: cloneDeep(mockDynamoRecords[`${Key.pk} ${Key.sk}`]),
               }),
           };
         },

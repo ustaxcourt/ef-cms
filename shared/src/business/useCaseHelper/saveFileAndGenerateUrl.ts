@@ -1,23 +1,27 @@
-/**
- *
- * Save provided file to temp s3 bucket and return file url
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.file the file to save
- * @returns {string} the url to the file
- */
 export const saveFileAndGenerateUrl = async ({
   applicationContext,
   file,
+  fileNamePrefix,
+  urlTtl,
   useTempBucket = false,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  file: Buffer;
+  fileNamePrefix?: string;
+  useTempBucket?: boolean;
+  urlTtl?: number; // time to live of link in seconds
+}): Promise<{
+  fileId: string;
+  url: string;
+}> => {
   const fileId = applicationContext.getUniqueId();
+
+  const fileName = fileNamePrefix ? `${fileNamePrefix}${fileId}` : fileId;
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: file,
-    key: fileId,
+    key: fileName,
     useTempBucket,
   });
 
@@ -25,8 +29,10 @@ export const saveFileAndGenerateUrl = async ({
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
       applicationContext,
-      key: fileId,
+      key: fileName,
+      urlTtl,
       useTempBucket,
     });
+
   return { fileId, url };
 };

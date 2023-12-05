@@ -1,5 +1,6 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { faker } from '@faker-js/faker';
 import {
   loginAs,
   setupTest as setupTestClient,
@@ -8,7 +9,6 @@ import {
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
-const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 const testClient = setupTestClient();

@@ -1,8 +1,8 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { TrialCity } from '../StartCase/TrialCity';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { get } from 'lodash';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -12,8 +12,11 @@ import classNames from 'classnames';
 
 export const NonstandardForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     caseDetail: state.caseDetail,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     getOrdinalValuesForUploadIteration:
       state.getOrdinalValuesForUploadIteration,
     helper: state[props.helper],
@@ -26,7 +29,9 @@ export const NonstandardForm = connect(
   },
   function NonstandardForm({
     caseDetail,
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     getOrdinalValuesForUploadIteration,
     helper,
     level,
@@ -75,7 +80,6 @@ export const NonstandardForm = connect(
             />
           </FormGroup>
         )}
-
         {helper[level].showTextInput2 && (
           <FormGroup errorText={validationErrors?.freeText2}>
             <label className="usa-label" htmlFor={`${namespace}free-text2`}>
@@ -100,7 +104,6 @@ export const NonstandardForm = connect(
             />
           </FormGroup>
         )}
-
         {helper[level].previousDocumentSelectLabel && (
           <FormGroup errorText={validationErrors?.previousDocument}>
             <label
@@ -145,27 +148,26 @@ export const NonstandardForm = connect(
             </select>
           </FormGroup>
         )}
-
         {helper[level].showDateFields && (
-          <DateInput
+          <DateSelector
+            defaultValue={form[`${namespace}serviceDate`]}
             errorText={validationErrors?.serviceDate}
             id="date-of-service"
             label="Service date"
-            names={{
-              day: `${namespace}serviceDateDay`,
-              month: `${namespace}serviceDateMonth`,
-              year: `${namespace}serviceDateYear`,
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key: `${namespace}serviceDate`,
+                toFormat: DATE_FORMATS.ISO,
+                value: e.target.value,
+              });
+              updateSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+              validateSequence();
             }}
-            values={{
-              day: get(form, `${namespace}serviceDateDay`, ''),
-              month: get(form, `${namespace}serviceDateMonth`, ''),
-              year: get(form, `${namespace}serviceDateYear`, ''),
-            }}
-            onBlur={validateSequence}
-            onChange={updateSequence}
           />
         )}
-
         {helper[level].showTrialLocationSelect && (
           <FormGroup errorText={validationErrors?.trialLocation}>
             <TrialCity
@@ -185,7 +187,6 @@ export const NonstandardForm = connect(
             />
           </FormGroup>
         )}
-
         {helper[level].ordinalField && (
           <>
             <NonMobile>

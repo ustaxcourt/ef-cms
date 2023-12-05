@@ -3,7 +3,7 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../entities/EntityConstants';
 import { Case, isSealedCase } from '../../entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { PublicCase } from '../../entities/cases/PublicCase';
 
 export const getPublicDownloadPolicyUrlInteractor = async (

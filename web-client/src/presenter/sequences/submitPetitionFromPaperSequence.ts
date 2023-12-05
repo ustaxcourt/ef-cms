@@ -12,7 +12,6 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setPaperPetitionDatesSequence } from './setPaperPetitionDatesSequence';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -29,7 +28,6 @@ export const submitPetitionFromPaperSequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      setPaperPetitionDatesSequence,
       filterEmptyStatisticsAction,
       validatePetitionFromPaperAction,
       {

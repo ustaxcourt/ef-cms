@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { generateCourtIssuedDocumentTitleAction } from './generateCourtIssuedDocumentTitleAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -8,17 +8,18 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
     applicationContext
       .getUtilities()
       .generateCourtIssuedDocumentTitle.mockReturnValue('Order for something');
+
     presenter.providers.applicationContext = applicationContext;
     const results = await runAction(generateCourtIssuedDocumentTitleAction, {
       modules: {
         presenter,
       },
       props: {
-        computedDate: '12-12-2019',
         judgeWithTitle: 'Judge Fieri',
       },
       state: {
         form: {
+          date: '12-12-2019',
           documentTitle: '[Anything]',
           documentType: 'Order',
           freeText: 'for something',
@@ -35,7 +36,6 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       applicationContext.getUtilities().generateCourtIssuedDocumentTitle.mock
         .calls[0][0].documentMetadata,
     ).toMatchObject({
-      date: '12-12-2019',
       documentType: 'Order',
       judgeWithTitle: 'Judge Fieri',
     });
@@ -53,12 +53,10 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '12-12-2019',
-      },
       state: {
         form: {
           attachments: true,
+          date: '12-12-2019',
           documentTitle: '[Anything]',
           documentType: 'Order',
           freeText: 'for something',
@@ -92,11 +90,9 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '12-12-2019',
-      },
       state: {
         form: {
+          date: '12-12-2019',
           documentTitle: '[Anything]',
           documentType: 'Order',
           freeText: 'for something',

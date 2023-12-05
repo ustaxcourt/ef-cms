@@ -13,18 +13,14 @@ export const getCaseAssociationAction = async ({
   get,
 }: ActionProps) => {
   const user = applicationContext.getCurrentUser();
+
   const { USER_ROLES } = applicationContext.getConstants();
+
+  const caseDetail = get(state.caseDetail);
+
   let isAssociated = false;
   let isDirectlyAssociated = false;
   let pendingAssociation = false;
-  const caseDetail = get(state.caseDetail);
-
-  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
-  const isConsolidatedGroupAccessEnabled = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
-    ],
-  );
 
   if (
     user.role === USER_ROLES.irsSuperuser ||
@@ -42,9 +38,7 @@ export const getCaseAssociationAction = async ({
 
     return {
       isAssociated,
-      isDirectlyAssociated: isConsolidatedGroupAccessEnabled
-        ? isDirectlyAssociated
-        : isAssociated,
+      isDirectlyAssociated,
       pendingAssociation,
     };
   }
@@ -56,7 +50,7 @@ export const getCaseAssociationAction = async ({
   ];
   const idName = user.role === USER_ROLES.petitioner ? 'contactId' : 'userId';
 
-  if (isConsolidatedGroupAccessEnabled && caseDetail.leadDocketNumber) {
+  if (caseDetail.leadDocketNumber) {
     isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
       consolidatedCases: caseDetail.consolidatedCases,
       userId: user[`${idName}`],
@@ -74,15 +68,12 @@ export const getCaseAssociationAction = async ({
       .getUseCases()
       .verifyPendingCaseForUserInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
-        userId: user.userId,
       });
   }
 
   return {
     isAssociated,
-    isDirectlyAssociated: isConsolidatedGroupAccessEnabled
-      ? isDirectlyAssociated
-      : isAssociated,
+    isDirectlyAssociated,
     pendingAssociation,
   };
 };

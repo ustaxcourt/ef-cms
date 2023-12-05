@@ -4,7 +4,7 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_USERS } from '../../../test/mockUsers';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   calculateAfterDate,

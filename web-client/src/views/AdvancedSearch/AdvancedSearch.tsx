@@ -12,7 +12,7 @@ import { SearchResults } from './SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from '../WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -90,6 +90,7 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
+                data-testid="tab-opinion"
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
                 title={'Opinion'}
@@ -107,6 +108,7 @@ export const AdvancedSearch = connect(
               </Tab>
               {advancedSearchHelper.showPractitionerSearch && (
                 <Tab
+                  data-testid="tab-practitioner"
                   id="tab-practitioner"
                   tabName={searchTabs.PRACTITIONER}
                   title="Practitioner"
@@ -130,7 +132,7 @@ export const AdvancedSearch = connect(
               <select
                 aria-label="advanced search type"
                 className="usa-select"
-                id="advanced-search-type-mobile-selector"
+                data-testid="advanced-search-type-mobile-selector"
                 value={advancedSearchTab}
                 onChange={e => {
                   cerebralBindSimpleSetStateSequence({
@@ -142,7 +144,9 @@ export const AdvancedSearch = connect(
                 <option value={searchTabs.CASE}>Case</option>
                 <option value={searchTabs.ORDER}>Order</option>
                 <option value={searchTabs.OPINION}>Opinion</option>
-                <option value={searchTabs.PRACTITIONER}>Practitioner</option>
+                {advancedSearchHelper.showPractitionerSearch && (
+                  <option value={searchTabs.PRACTITIONER}>Practitioner</option>
+                )}
               </select>
             </div>
             {(!advancedSearchTab || advancedSearchTab === searchTabs.CASE) && (

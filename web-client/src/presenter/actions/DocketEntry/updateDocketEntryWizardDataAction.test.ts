@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { updateDocketEntryWizardDataAction } from './updateDocketEntryWizardDataAction';
@@ -59,18 +59,12 @@ describe('updateDocketEntryWizardDataAction', () => {
         },
         state: {
           form: {
-            certificateOfServiceDate: '12-12-1212',
-            certificateOfServiceDay: 12,
-            certificateOfServiceMonth: 12,
-            certificateOfServiceYear: 12,
+            certificateOfServiceDate: '12-12-2012',
           },
         },
       });
 
       expect(result.state.form.certificateOfServiceDate).toEqual(undefined);
-      expect(result.state.form.certificateOfServiceDay).toEqual(undefined);
-      expect(result.state.form.certificateOfServiceMonth).toEqual(undefined);
-      expect(result.state.form.certificateOfServiceYear).toEqual(undefined);
     });
   });
 

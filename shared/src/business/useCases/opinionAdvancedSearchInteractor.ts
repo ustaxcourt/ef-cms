@@ -6,7 +6,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { omit } from 'lodash';
 
 export const opinionAdvancedSearchInteractor = async (
@@ -59,7 +59,7 @@ export const opinionAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('private opinion search', {
+  applicationContext.logger.info('private opinion search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
     totalCount,

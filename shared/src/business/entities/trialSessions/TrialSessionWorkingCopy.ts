@@ -4,7 +4,7 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
 export class TrialSessionWorkingCopy extends JoiValidationEntity {
-  public caseMetadata: object;
+  public caseMetadata: { [docketNumber: string]: { trialStatus: string } };
   public filters: {
     basisReached: boolean;
     continued: boolean;
@@ -27,8 +27,9 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
   public trialSessionId: string;
   public userId: string;
 
-  constructor(rawSession: RawTrialSessionWorkingCopy) {
+  constructor(rawSession) {
     super('TrialSessionWorkingCopy');
+
     this.caseMetadata = rawSession.caseMetadata || {};
     this.filters = rawSession.filters || {
       basisReached: true,
@@ -51,10 +52,6 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
     this.sortOrder = rawSession.sortOrder;
     this.trialSessionId = rawSession.trialSessionId;
     this.userId = rawSession.userId;
-  }
-
-  getErrorToMessageMap() {
-    return {};
   }
 
   getValidationRules() {
@@ -99,6 +96,5 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
   }
 }
 
-declare global {
-  type RawTrialSessionWorkingCopy = ExcludeMethods<TrialSessionWorkingCopy>;
-}
+export type RawTrialSessionWorkingCopy =
+  ExcludeMethods<TrialSessionWorkingCopy>;

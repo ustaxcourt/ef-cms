@@ -1,10 +1,9 @@
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { Practitioner } from './Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from './EntityConstants';
-import { USER_CONTACT_VALIDATION_RULES, User } from './User';
+import { User } from './User';
 import joi from 'joi';
-
-export const entityName = 'PrivatePractitioner';
 
 export class PrivatePractitioner extends User {
   public entityName: string;
@@ -15,7 +14,7 @@ export class PrivatePractitioner extends User {
 
   constructor(rawUser, options?) {
     super(rawUser, options);
-    this.entityName = entityName;
+    this.entityName = PrivatePractitioner.ENTITY_NAME;
     this.barNumber = rawUser.barNumber;
     this.firmName = rawUser.firmName;
     this.representing = rawUser.representing || [];
@@ -24,13 +23,15 @@ export class PrivatePractitioner extends User {
       Practitioner.getDefaultServiceIndicator(rawUser);
   }
 
+  static ENTITY_NAME = 'PrivatePractitioner';
+
   static VALIDATION_RULES = joi.object().keys({
     barNumber: JoiValidationConstants.STRING.max(100)
       .required()
       .description(
         'A unique identifier comprising of the practitioner initials, date, and series number.',
       ),
-    contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
+    contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
     email: JoiValidationConstants.EMAIL.optional(),
     entityName: JoiValidationConstants.STRING.valid(
       'PrivatePractitioner',
@@ -39,7 +40,9 @@ export class PrivatePractitioner extends User {
       .optional()
       .allow(null)
       .description('The firm name for the practitioner.'),
-    name: JoiValidationConstants.STRING.max(100).required(),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({ '*': 'Enter name' }),
     representing: joi
       .array()
       .items(JoiValidationConstants.UUID)
@@ -55,15 +58,13 @@ export class PrivatePractitioner extends User {
     userId: JoiValidationConstants.UUID.required(),
   });
 
+  getValidationRules() {
+    return PrivatePractitioner.VALIDATION_RULES;
+  }
+
   isRepresenting(petitionerContactId) {
     return this.representing.includes(petitionerContactId);
   }
-
-  getValidationRules() {
-    return PrivatePractitioner.VALIDATION_RULES as any;
-  }
 }
 
-declare global {
-  type RawPrivatePractitioner = ExcludeMethods<PrivatePractitioner>;
-}
+export type RawPrivatePractitioner = ExcludeMethods<PrivatePractitioner>;

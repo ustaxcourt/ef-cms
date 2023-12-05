@@ -1,21 +1,24 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setFormDateAction } from '../actions/setFormDateAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { shouldValidateAction } from '@web-client/presenter/actions/shouldValidateAction';
 import { validateStampAction } from '../actions/StampMotion/validateStampAction';
 
 export const validateStampSequence = [
-  getComputedFormDateFactoryAction(null),
-  setFormDateAction,
-  validateStampAction,
+  shouldValidateAction,
   {
-    error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      setValidationAlertErrorsAction,
+    ignore: [],
+    validate: [
+      validateStampAction,
+      {
+        error: [
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+        ],
+        success: [clearAlertsAction],
+      },
     ],
-    success: [clearAlertsAction],
   },
 ];

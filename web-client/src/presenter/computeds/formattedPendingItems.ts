@@ -1,43 +1,22 @@
-import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
-import { formatSearchResultRecord } from './AdvancedSearch/advancedSearchHelper';
+import { Get } from 'cerebral';
+import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const formatPendingItem = (item, { applicationContext }) => {
-  let result = formatSearchResultRecord(item, { applicationContext });
-
-  if (result.leadDocketNumber) {
-    result = addConsolidatedProperties({
-      applicationContext,
-      consolidatedObject: result,
-    });
-  }
-
-  result.formattedFiledDate = applicationContext
-    .getUtilities()
-    .formatDateString(result.receivedAt, 'MMDDYY');
-
-  result.associatedJudgeFormatted = applicationContext
-    .getUtilities()
-    .formatJudgeName(result.associatedJudge);
-
-  result.formattedName = result.documentTitle || result.documentType;
-
-  result.documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
-
-  return result;
-};
-
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
-export const formattedPendingItems = (
+export const formattedPendingItemsHelper = (
   get: Get,
-  applicationContext: ClientApplicationContext,
-) => {
+  applicationContext: IApplicationContext,
+): {
+  printUrl: string;
+  judges: string[];
+  items: PendingItemFormatted[];
+} => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
-  let items = (get(state.pendingReports.pendingItems) || []).map(item =>
-    formatPendingItem(item, { applicationContext }),
+  const items = get(state.pendingReports.pendingItems).map(item =>
+    applicationContext
+      .getUtilities()
+      .formatPendingItem(item, { applicationContext }),
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
   const judges = get(state.judges)

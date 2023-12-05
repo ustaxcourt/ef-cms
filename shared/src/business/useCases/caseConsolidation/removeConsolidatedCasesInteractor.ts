@@ -1,12 +1,13 @@
 import { Case } from '../../entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * removeConsolidatedCasesInteractor
+ * removeConsolidatedCases
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +15,7 @@ import {
  * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
  * @returns {object} the updated case data
  */
-export const removeConsolidatedCasesInteractor = async (
+export const removeConsolidatedCases = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -35,7 +36,7 @@ export const removeConsolidatedCasesInteractor = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const updateCasePromises = [];
+  const updateCasePromises: Promise<any>[] = [];
 
   const { leadDocketNumber } = caseToUpdate;
 
@@ -112,3 +113,21 @@ export const removeConsolidatedCasesInteractor = async (
 
   await Promise.all(updateCasePromises);
 };
+
+const determineEntitiesToLock = (
+  _applicationContext,
+  { docketNumber, docketNumbersToRemove = [] },
+) => {
+  const docketNumbers = [docketNumber, ...docketNumbersToRemove].map(
+    item => `case|${item}`,
+  );
+
+  return {
+    identifiers: docketNumbers,
+  };
+};
+
+export const removeConsolidatedCasesInteractor = withLocking(
+  removeConsolidatedCases,
+  determineEntitiesToLock,
+);

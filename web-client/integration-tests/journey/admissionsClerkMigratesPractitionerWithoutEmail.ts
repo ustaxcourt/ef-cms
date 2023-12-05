@@ -1,7 +1,8 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { faker } from '@faker-js/faker';
 import { refreshElasticsearchIndex } from '../helpers';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
-const { faker } = require('@faker-js/faker');
 
 const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
@@ -17,7 +18,7 @@ const axiosInstance = axios.create({
   timeout: 2000,
 });
 
-const mockUserId = faker.string.uuid();
+const mockUserId = uuidv4();
 const mockBarNumber = `ZZ${faker.number.int({ max: 9999, min: 1000 })}`;
 
 const practitionerWithoutEmail = {

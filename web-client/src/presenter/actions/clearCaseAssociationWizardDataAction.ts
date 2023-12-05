@@ -12,9 +12,6 @@ export const clearCaseAssociationWizardDataAction = ({
   switch (props.key) {
     case 'certificateOfService':
       store.unset(state.form.certificateOfServiceDate);
-      store.unset(state.form.certificateOfServiceMonth);
-      store.unset(state.form.certificateOfServiceDay);
-      store.unset(state.form.certificateOfServiceYear);
       break;
     case 'documentType':
       store.unset(state.form.objections);

@@ -1,24 +1,11 @@
 import {
   IrsPractitioner,
-  entityName as irsPractitionerEntityName,
+  RawIrsPractitioner,
 } from '../entities/IrsPractitioner';
-import { NotFoundError } from '../../errors/errors';
-import {
-  Practitioner,
-  entityName as practitionerEntityName,
-} from '../entities/Practitioner';
-import {
-  PrivatePractitioner,
-  entityName as privatePractitionerEntityName,
-} from '../entities/PrivatePractitioner';
-import { User } from '../entities/User';
-
-/**
- * getUserInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {User} the retrieved user
- */
+import { NotFoundError } from '../../../../web-api/src/errors/errors';
+import { Practitioner, RawPractitioner } from '../entities/Practitioner';
+import { PrivatePractitioner } from '../entities/PrivatePractitioner';
+import { RawUser, User } from '../entities/User';
 
 export const getUserInteractor = async (
   applicationContext: IApplicationContext,
@@ -35,11 +22,11 @@ export const getUserInteractor = async (
     );
   }
 
-  if (user.entityName === privatePractitionerEntityName) {
+  if (user.entityName === PrivatePractitioner.ENTITY_NAME) {
     return new PrivatePractitioner(user).validate().toRawObject();
-  } else if (user.entityName === irsPractitionerEntityName) {
+  } else if (user.entityName === IrsPractitioner.ENTITY_NAME) {
     return new IrsPractitioner(user).validate().toRawObject();
-  } else if (user.entityName === practitionerEntityName) {
+  } else if (user.entityName === Practitioner.ENTITY_NAME) {
     return new Practitioner(user).validate().toRawObject();
   } else {
     return new User(user).validate().toRawObject();

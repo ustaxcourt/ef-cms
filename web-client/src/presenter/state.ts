@@ -1,8 +1,17 @@
-import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
+/* eslint-disable max-lines */
+import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import {
+  JudgeActivityReportState,
+  initialJudgeActivityReportState,
+} from './judgeActivityReportState';
+import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { RawUser } from '@shared/business/entities/User';
+import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
+import { addEditCaseWorksheetModalHelper } from '@web-client/presenter/computeds/CaseWorksheets/addEditCaseWorksheetModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -25,6 +34,7 @@ import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByN
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { caseWorksheetsHelper } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -33,7 +43,7 @@ import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelp
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
-import { customCaseInventoryReportHelper } from './computeds/customCaseInventoryReportHelper';
+import { customCaseReportHelper } from './computeds/customCaseReportHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
@@ -46,7 +56,6 @@ import { editPetitionerInformationHelper } from './computeds/editPetitionerInfor
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
@@ -63,15 +72,17 @@ import { formattedDocument } from './computeds/formattedDocument';
 import { formattedEligibleCasesHelper } from './computeds/formattedEligibleCasesHelper';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
-import { formattedPendingItems } from './computeds/formattedPendingItems';
+import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
-import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
-import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialCustomCaseReportState } from './customCaseReportState';
+import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
+import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
+import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -109,7 +120,6 @@ import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
-import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
@@ -131,134 +141,398 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
 export const computeds = {
-  addCourtIssuedDocketEntryHelper,
-  addCourtIssuedDocketEntryNonstandardHelper,
-  addDocketEntryHelper,
-  addDocketNumbersModalHelper,
-  addToTrialSessionModalHelper,
-  addTrialSessionInformationHelper,
-  advancedDocumentSearchHelper,
-  advancedSearchHelper,
-  alertHelper,
-  appInstanceManagerHelper,
-  applyStampFormHelper,
-  batchDownloadHelper,
-  blockedCasesReportHelper,
-  caseDeadlineReportHelper,
-  caseDetailEditHelper,
-  caseDetailHeaderHelper,
-  caseDetailHelper,
-  caseDetailPractitionerSearchHelper,
-  caseDetailSubnavHelper,
-  caseInformationHelper,
-  caseInventoryReportHelper,
-  caseSearchBoxHelper,
-  caseSearchByNameHelper,
-  caseSearchNoMatchesHelper,
-  caseStatusHistoryHelper,
-  caseTypeDescriptionHelper,
-  completeDocumentTypeSectionHelper,
-  confirmInitiateServiceModalHelper,
-  contactsHelper,
-  correspondenceViewerHelper,
-  createMessageModalHelper,
-  createOrderHelper,
-  createPractitionerUserHelper,
-  customCaseInventoryReportHelper,
-  dashboardExternalHelper,
-  docketEntryQcHelper,
-  docketRecordHelper,
-  documentSigningHelper,
-  documentViewerHelper,
-  documentViewerLinksHelper,
-  draftDocumentViewerHelper,
-  editDocketEntryMetaHelper,
-  editPetitionerInformationHelper,
-  editStatisticFormHelper,
-  externalConsolidatedCaseGroupHelper,
-  externalUserCasesHelper,
-  featureFlagHelper,
-  fileDocumentHelper,
-  fileUploadStatusHelper,
-  filingPartiesFormHelper,
-  formattedCaseDeadlines,
-  formattedCaseDetail,
-  formattedCaseMessages,
-  formattedClosedCases,
-  formattedDashboardTrialSessions,
-  formattedDocketEntries,
-  formattedDocument,
-  formattedEligibleCasesHelper,
-  formattedMessageDetail,
-  formattedMessages,
-  formattedOpenCases,
-  formattedPendingItems,
-  formattedTrialSessionDetails,
-  formattedTrialSessions,
-  formattedWorkQueue,
-  getOrdinalValuesForUploadIteration,
-  getTrialCityName,
-  headerHelper,
-  internalPetitionPartiesHelper,
-  internalTypesHelper,
-  judgeActivityReportHelper,
-  loadingHelper,
-  menuHelper,
-  messageDocumentHelper,
-  messageModalHelper,
-  messagesHelper,
-  myAccountHelper,
-  noticeStatusHelper,
-  orderTypesHelper,
-  paperDocketEntryHelper,
-  paperServiceStatusHelper,
-  partiesInformationHelper,
-  pdfPreviewModalHelper,
-  pdfSignerHelper,
-  pendingReportListHelper,
-  petitionQcHelper,
-  practitionerDetailHelper,
-  practitionerDocumentationFormHelper,
-  practitionerDocumentationHelper,
-  practitionerInformationHelper,
-  practitionerSearchFormHelper,
-  printPaperServiceHelper,
-  recentMessagesHelper,
-  removeFromTrialSessionModalHelper,
-  reportMenuHelper,
-  requestAccessHelper,
-  reviewSavedPetitionHelper,
-  scanBatchPreviewerHelper,
-  scanHelper,
-  sealedCaseDetailHelper,
-  serveThirtyDayNoticeModalHelper,
-  sessionAssignmentHelper,
-  setForHearingModalHelper,
-  showAppTimeoutModalHelper,
-  showSortableHeaders,
-  sortableColumnHelper,
-  startCaseHelper,
-  startCaseInternalHelper,
-  statisticsFormHelper,
-  statisticsHelper,
-  templateHelper,
-  trialCitiesHelper,
-  trialSessionDetailsHelper,
-  trialSessionHeaderHelper,
-  trialSessionWorkingCopyHelper,
-  trialSessionsHelper,
-  trialSessionsSummaryHelper,
-  updateCaseModalHelper,
-  userContactEditHelper,
-  userContactEditProgressHelper,
-  viewAllDocumentsHelper,
-  viewCounselHelper,
-  workQueueHelper,
+  addCourtIssuedDocketEntryHelper:
+    addCourtIssuedDocketEntryHelper as unknown as ReturnType<
+      typeof addCourtIssuedDocketEntryHelper
+    >,
+  addCourtIssuedDocketEntryNonstandardHelper:
+    addCourtIssuedDocketEntryNonstandardHelper as unknown as ReturnType<
+      typeof addCourtIssuedDocketEntryNonstandardHelper
+    >,
+  addDocketEntryHelper: addDocketEntryHelper as unknown as ReturnType<
+    typeof addDocketEntryHelper
+  >,
+  addDocketNumbersModalHelper:
+    addDocketNumbersModalHelper as unknown as ReturnType<
+      typeof addDocketNumbersModalHelper
+    >,
+  addEditCaseWorksheetModalHelper:
+    addEditCaseWorksheetModalHelper as unknown as ReturnType<
+      typeof addEditCaseWorksheetModalHelper
+    >,
+  addToTrialSessionModalHelper:
+    addToTrialSessionModalHelper as unknown as ReturnType<
+      typeof addToTrialSessionModalHelper
+    >,
+  addTrialSessionInformationHelper:
+    addTrialSessionInformationHelper as unknown as ReturnType<
+      typeof addTrialSessionInformationHelper
+    >,
+  advancedDocumentSearchHelper:
+    advancedDocumentSearchHelper as unknown as ReturnType<
+      typeof advancedDocumentSearchHelper
+    >,
+  advancedSearchHelper: advancedSearchHelper as unknown as ReturnType<
+    typeof advancedSearchHelper
+  >,
+  alertHelper: alertHelper as unknown as ReturnType<typeof alertHelper>,
+  appInstanceManagerHelper: appInstanceManagerHelper as unknown as ReturnType<
+    typeof appInstanceManagerHelper
+  >,
+  applyStampFormHelper: applyStampFormHelper as unknown as ReturnType<
+    typeof applyStampFormHelper
+  >,
+  batchDownloadHelper: batchDownloadHelper as unknown as ReturnType<
+    typeof batchDownloadHelper
+  >,
+  blockedCasesReportHelper: blockedCasesReportHelper as unknown as ReturnType<
+    typeof blockedCasesReportHelper
+  >,
+  caseDeadlineReportHelper: caseDeadlineReportHelper as unknown as ReturnType<
+    typeof caseDeadlineReportHelper
+  >,
+  caseDetailEditHelper: caseDetailEditHelper as unknown as ReturnType<
+    typeof caseDetailEditHelper
+  >,
+  caseDetailHeaderHelper: caseDetailHeaderHelper as unknown as ReturnType<
+    typeof caseDetailHeaderHelper
+  >,
+  caseDetailHelper: caseDetailHelper as unknown as ReturnType<
+    typeof caseDetailHelper
+  >,
+  caseDetailPractitionerSearchHelper:
+    caseDetailPractitionerSearchHelper as unknown as ReturnType<
+      typeof caseDetailPractitionerSearchHelper
+    >,
+  caseDetailSubnavHelper: caseDetailSubnavHelper as unknown as ReturnType<
+    typeof caseDetailSubnavHelper
+  >,
+  caseInformationHelper: caseInformationHelper as unknown as ReturnType<
+    typeof caseInformationHelper
+  >,
+  caseInventoryReportHelper: caseInventoryReportHelper as unknown as ReturnType<
+    typeof caseInventoryReportHelper
+  >,
+  caseSearchBoxHelper: caseSearchBoxHelper as unknown as ReturnType<
+    typeof caseSearchBoxHelper
+  >,
+  caseSearchByNameHelper: caseSearchByNameHelper as unknown as ReturnType<
+    typeof caseSearchByNameHelper
+  >,
+  caseSearchNoMatchesHelper: caseSearchNoMatchesHelper as unknown as ReturnType<
+    typeof caseSearchNoMatchesHelper
+  >,
+  caseStatusHistoryHelper: caseStatusHistoryHelper as unknown as ReturnType<
+    typeof caseStatusHistoryHelper
+  >,
+  caseTypeDescriptionHelper: caseTypeDescriptionHelper as unknown as ReturnType<
+    typeof caseTypeDescriptionHelper
+  >,
+  caseWorksheetsHelper: caseWorksheetsHelper as unknown as ReturnType<
+    typeof caseWorksheetsHelper
+  >,
+  completeDocumentTypeSectionHelper:
+    completeDocumentTypeSectionHelper as unknown as ReturnType<
+      typeof completeDocumentTypeSectionHelper
+    >,
+  confirmInitiateServiceModalHelper:
+    confirmInitiateServiceModalHelper as unknown as ReturnType<
+      typeof confirmInitiateServiceModalHelper
+    >,
+  contactsHelper: contactsHelper as unknown as ReturnType<
+    typeof contactsHelper
+  >,
+  correspondenceViewerHelper:
+    correspondenceViewerHelper as unknown as ReturnType<
+      typeof correspondenceViewerHelper
+    >,
+  createMessageModalHelper: createMessageModalHelper as unknown as ReturnType<
+    typeof createMessageModalHelper
+  >,
+  createOrderHelper: createOrderHelper as unknown as ReturnType<
+    typeof createOrderHelper
+  >,
+  createPractitionerUserHelper:
+    createPractitionerUserHelper as unknown as ReturnType<
+      typeof createPractitionerUserHelper
+    >,
+  customCaseReportHelper: customCaseReportHelper as unknown as ReturnType<
+    typeof customCaseReportHelper
+  >,
+  dashboardExternalHelper: dashboardExternalHelper as unknown as ReturnType<
+    typeof dashboardExternalHelper
+  >,
+  docketEntryQcHelper: docketEntryQcHelper as unknown as ReturnType<
+    typeof docketEntryQcHelper
+  >,
+  docketRecordHelper: docketRecordHelper as unknown as ReturnType<
+    typeof docketRecordHelper
+  >,
+  documentSigningHelper: documentSigningHelper as unknown as ReturnType<
+    typeof documentSigningHelper
+  >,
+  documentViewerHelper: documentViewerHelper as unknown as ReturnType<
+    typeof documentViewerHelper
+  >,
+  documentViewerLinksHelper: documentViewerLinksHelper as unknown as ReturnType<
+    typeof documentViewerLinksHelper
+  >,
+  draftDocumentViewerHelper: draftDocumentViewerHelper as unknown as ReturnType<
+    typeof draftDocumentViewerHelper
+  >,
+  editDocketEntryMetaHelper: editDocketEntryMetaHelper as unknown as ReturnType<
+    typeof editDocketEntryMetaHelper
+  >,
+  editPetitionerInformationHelper:
+    editPetitionerInformationHelper as unknown as ReturnType<
+      typeof editPetitionerInformationHelper
+    >,
+  editStatisticFormHelper: editStatisticFormHelper as unknown as ReturnType<
+    typeof editStatisticFormHelper
+  >,
+  externalConsolidatedCaseGroupHelper:
+    externalConsolidatedCaseGroupHelper as unknown as ReturnType<
+      typeof externalConsolidatedCaseGroupHelper
+    >,
+  externalUserCasesHelper: externalUserCasesHelper as unknown as ReturnType<
+    typeof externalUserCasesHelper
+  >,
+  fileDocumentHelper: fileDocumentHelper as unknown as ReturnType<
+    typeof fileDocumentHelper
+  >,
+  fileUploadStatusHelper: fileUploadStatusHelper as unknown as ReturnType<
+    typeof fileUploadStatusHelper
+  >,
+  filingPartiesFormHelper: filingPartiesFormHelper as unknown as ReturnType<
+    typeof filingPartiesFormHelper
+  >,
+  formattedCaseDeadlines: formattedCaseDeadlines as unknown as ReturnType<
+    typeof formattedCaseDeadlines
+  >,
+  formattedCaseDetail: formattedCaseDetail as unknown as ReturnType<
+    typeof formattedCaseDetail
+  >,
+  formattedCaseMessages: formattedCaseMessages as unknown as ReturnType<
+    typeof formattedCaseMessages
+  >,
+  formattedClosedCases: formattedClosedCases as unknown as ReturnType<
+    typeof formattedClosedCases
+  >,
+  formattedDashboardTrialSessions:
+    formattedDashboardTrialSessions as unknown as ReturnType<
+      typeof formattedDashboardTrialSessions
+    >,
+  formattedDocketEntries: formattedDocketEntries as unknown as ReturnType<
+    typeof formattedDocketEntries
+  >,
+  formattedDocument: formattedDocument as unknown as ReturnType<
+    typeof formattedDocument
+  >,
+  formattedEligibleCasesHelper:
+    formattedEligibleCasesHelper as unknown as ReturnType<
+      typeof formattedEligibleCasesHelper
+    >,
+  formattedMessageDetail: formattedMessageDetail as unknown as ReturnType<
+    typeof formattedMessageDetail
+  >,
+  formattedMessages: formattedMessages as unknown as ReturnType<
+    typeof formattedMessages
+  >,
+  formattedOpenCases: formattedOpenCases as unknown as ReturnType<
+    typeof formattedOpenCases
+  >,
+  formattedPendingItemsHelper:
+    formattedPendingItemsHelper as unknown as ReturnType<
+      typeof formattedPendingItemsHelper
+    >,
+  formattedTrialSessionDetails:
+    formattedTrialSessionDetails as unknown as ReturnType<
+      typeof formattedTrialSessionDetails
+    >,
+  formattedTrialSessions: formattedTrialSessions as unknown as ReturnType<
+    typeof formattedTrialSessions
+  >,
+  formattedWorkQueue: formattedWorkQueue as unknown as ReturnType<
+    typeof formattedWorkQueue
+  >,
+  getOrdinalValuesForUploadIteration:
+    getOrdinalValuesForUploadIteration as unknown as ReturnType<
+      typeof getOrdinalValuesForUploadIteration
+    >,
+  headerHelper: headerHelper as unknown as ReturnType<typeof headerHelper>,
+  internalPetitionPartiesHelper:
+    internalPetitionPartiesHelper as unknown as ReturnType<
+      typeof internalPetitionPartiesHelper
+    >,
+  internalTypesHelper: internalTypesHelper as unknown as ReturnType<
+    typeof internalTypesHelper
+  >,
+  judgeActivityReportHelper: judgeActivityReportHelper as unknown as ReturnType<
+    typeof judgeActivityReportHelper
+  >,
+  loadingHelper: loadingHelper as unknown as ReturnType<typeof loadingHelper>,
+  menuHelper: menuHelper as unknown as ReturnType<typeof menuHelper>,
+  messageDocumentHelper: messageDocumentHelper as unknown as ReturnType<
+    typeof messageDocumentHelper
+  >,
+  messageModalHelper: messageModalHelper as unknown as ReturnType<
+    typeof messageModalHelper
+  >,
+  messagesHelper: messagesHelper as unknown as ReturnType<
+    typeof messagesHelper
+  >,
+  myAccountHelper: myAccountHelper as unknown as ReturnType<
+    typeof myAccountHelper
+  >,
+  noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
+    typeof noticeStatusHelper
+  >,
+  orderTypesHelper: orderTypesHelper as unknown as ReturnType<
+    typeof orderTypesHelper
+  >,
+  paperDocketEntryHelper: paperDocketEntryHelper as unknown as ReturnType<
+    typeof paperDocketEntryHelper
+  >,
+  paperServiceStatusHelper: paperServiceStatusHelper as unknown as ReturnType<
+    typeof paperServiceStatusHelper
+  >,
+  partiesInformationHelper: partiesInformationHelper as unknown as ReturnType<
+    typeof partiesInformationHelper
+  >,
+  pdfPreviewModalHelper: pdfPreviewModalHelper as unknown as ReturnType<
+    typeof pdfPreviewModalHelper
+  >,
+  pdfSignerHelper: pdfSignerHelper as unknown as ReturnType<
+    typeof pdfSignerHelper
+  >,
+  pendingReportListHelper: pendingReportListHelper as unknown as ReturnType<
+    typeof pendingReportListHelper
+  >,
+  petitionQcHelper: petitionQcHelper as unknown as ReturnType<
+    typeof petitionQcHelper
+  >,
+  practitionerDetailHelper: practitionerDetailHelper as unknown as ReturnType<
+    typeof practitionerDetailHelper
+  >,
+  practitionerDocumentationFormHelper:
+    practitionerDocumentationFormHelper as unknown as ReturnType<
+      typeof practitionerDocumentationFormHelper
+    >,
+  practitionerDocumentationHelper:
+    practitionerDocumentationHelper as unknown as ReturnType<
+      typeof practitionerDocumentationHelper
+    >,
+  practitionerInformationHelper:
+    practitionerInformationHelper as unknown as ReturnType<
+      typeof practitionerInformationHelper
+    >,
+  practitionerSearchFormHelper:
+    practitionerSearchFormHelper as unknown as ReturnType<
+      typeof practitionerSearchFormHelper
+    >,
+  printPaperServiceHelper: printPaperServiceHelper as unknown as ReturnType<
+    typeof printPaperServiceHelper
+  >,
+  recentMessagesHelper: recentMessagesHelper as unknown as ReturnType<
+    typeof recentMessagesHelper
+  >,
+  removeFromTrialSessionModalHelper:
+    removeFromTrialSessionModalHelper as unknown as ReturnType<
+      typeof removeFromTrialSessionModalHelper
+    >,
+  reportMenuHelper: reportMenuHelper as unknown as ReturnType<
+    typeof reportMenuHelper
+  >,
+  requestAccessHelper: requestAccessHelper as unknown as ReturnType<
+    typeof requestAccessHelper
+  >,
+  reviewSavedPetitionHelper: reviewSavedPetitionHelper as unknown as ReturnType<
+    typeof reviewSavedPetitionHelper
+  >,
+  scanBatchPreviewerHelper: scanBatchPreviewerHelper as unknown as ReturnType<
+    typeof scanBatchPreviewerHelper
+  >,
+  scanHelper: scanHelper as unknown as ReturnType<typeof scanHelper>,
+  sealedCaseDetailHelper: sealedCaseDetailHelper as unknown as ReturnType<
+    typeof sealedCaseDetailHelper
+  >,
+  serveThirtyDayNoticeModalHelper:
+    serveThirtyDayNoticeModalHelper as unknown as ReturnType<
+      typeof serveThirtyDayNoticeModalHelper
+    >,
+  sessionAssignmentHelper: sessionAssignmentHelper as unknown as ReturnType<
+    typeof sessionAssignmentHelper
+  >,
+  setForHearingModalHelper: setForHearingModalHelper as unknown as ReturnType<
+    typeof setForHearingModalHelper
+  >,
+  showAppTimeoutModalHelper: showAppTimeoutModalHelper as unknown as ReturnType<
+    typeof showAppTimeoutModalHelper
+  >,
+  showSortableHeaders: showSortableHeaders as unknown as ReturnType<
+    typeof showSortableHeaders
+  >,
+  startCaseHelper: startCaseHelper as unknown as ReturnType<
+    typeof startCaseHelper
+  >,
+  startCaseInternalHelper: startCaseInternalHelper as unknown as ReturnType<
+    typeof startCaseInternalHelper
+  >,
+  statisticsFormHelper: statisticsFormHelper as unknown as ReturnType<
+    typeof statisticsFormHelper
+  >,
+  statisticsHelper: statisticsHelper as unknown as ReturnType<
+    typeof statisticsHelper
+  >,
+  templateHelper: templateHelper as unknown as ReturnType<
+    typeof templateHelper
+  >,
+  trialCitiesHelper: trialCitiesHelper as unknown as ReturnType<
+    typeof trialCitiesHelper
+  >,
+  trialSessionDetailsHelper: trialSessionDetailsHelper as unknown as ReturnType<
+    typeof trialSessionDetailsHelper
+  >,
+  trialSessionHeaderHelper: trialSessionHeaderHelper as unknown as ReturnType<
+    typeof trialSessionHeaderHelper
+  >,
+  trialSessionWorkingCopyHelper:
+    trialSessionWorkingCopyHelper as unknown as ReturnType<
+      typeof trialSessionWorkingCopyHelper
+    >,
+  trialSessionsHelper: trialSessionsHelper as unknown as ReturnType<
+    typeof trialSessionsHelper
+  >,
+  trialSessionsSummaryHelper:
+    trialSessionsSummaryHelper as unknown as ReturnType<
+      typeof trialSessionsSummaryHelper
+    >,
+  updateCaseModalHelper: updateCaseModalHelper as unknown as ReturnType<
+    typeof updateCaseModalHelper
+  >,
+  userContactEditHelper: userContactEditHelper as unknown as ReturnType<
+    typeof userContactEditHelper
+  >,
+  userContactEditProgressHelper:
+    userContactEditProgressHelper as unknown as ReturnType<
+      typeof userContactEditProgressHelper
+    >,
+  viewAllDocumentsHelper: viewAllDocumentsHelper as unknown as ReturnType<
+    typeof viewAllDocumentsHelper
+  >,
+  viewCounselHelper: viewCounselHelper as unknown as ReturnType<
+    typeof viewCounselHelper
+  >,
+  workQueueHelper: workQueueHelper as unknown as ReturnType<
+    typeof workQueueHelper
+  >,
 };
 
 export const baseState = {
   advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
+  alertError: undefined,
+  alertSuccess: undefined,
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
@@ -274,8 +548,11 @@ export const baseState = {
     totalCount: number;
     page: number;
   },
+  caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
-  closedCases: [],
+  clientConnectionId: '',
+  closedCases: [] as TAssociatedCase[],
+  cognito: {} as any,
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
@@ -307,9 +584,7 @@ export const baseState = {
       tab: null,
     },
   },
-
-  customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
-  // needs its own object because it's present when other forms are on screen
+  customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
@@ -319,8 +594,8 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-
   form: {} as any,
+  fromPage: '',
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -328,29 +603,44 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  health: undefined as any,
+  idleLogoutState: {
+    logoutAt: undefined,
+    state: 'INITIAL' as 'INITIAL' | 'MONITORING' | 'COUNTDOWN',
+  },
   idleStatus: IDLE_STATUS.ACTIVE,
-  idleTimerRef: null,
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
-  judgeActivityReportData: {},
+  judgeActivityReport: cloneDeep(
+    initialJudgeActivityReportState,
+  ) as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
+  lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
+  login: {} as any,
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
+    docketEntry: undefined,
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
-  },
+  } as Record<string, any>,
   navigation: {},
   noticeStatusState: {
     casesProcessed: 0,
     totalCases: 0,
   },
-  notifications: {},
-  openCases: [],
+  notifications: {} as {
+    qcSectionInboxCount: number;
+    qcSectionInProgressCount: number;
+    qcIndividualInboxCount: number;
+    qcIndividualInProgressCount: number;
+    unreadMessageCount?: number;
+  },
+  openCases: [] as TAssociatedCase[],
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
@@ -358,6 +648,7 @@ export const baseState = {
   pdfForSigning: {
     docketEntryId: null,
     nameForSigning: '',
+    nameForSigningLine2: '',
     pageNumber: 1,
     pdfjsObj: null,
     signatureApplied: false,
@@ -366,8 +657,8 @@ export const baseState = {
     stampData: null,
   },
   pdfPreviewUrl: '',
-  pendingReports: {},
-  permissions: null,
+  pendingReports: cloneDeep(initialPendingReportsState),
+  permissions: {} as Record<string, boolean>,
   practitionerDetail: {},
   previewPdfFile: null,
   progressIndicator: {
@@ -385,7 +676,7 @@ export const baseState = {
     isScanning: false,
     selectedBatchIndex: 0,
   },
-  screenMetadata: {},
+  screenMetadata: {} as any,
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
@@ -396,20 +687,22 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   showValidation: false,
+  submittedAndCavCases: {
+    submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
+  },
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
-  trialSession: {} as RawTrialSession,
+  trialSession: cloneDeep(initialTrialSessionState),
   trialSessionJudge: {
     name: '',
   },
-
+  trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
   user: null,
-  // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
-  users: [],
-  validationErrors: {},
+  users: [] as RawUser[],
+  validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,
   workItem: {},
   workItemActions: {},

@@ -4,10 +4,11 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { Statistic } from '../../entities/Statistic';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * updateDeficiencyStatisticInteractor
+ * updateDeficiencyStatistic
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -22,7 +23,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {object} the updated case
  */
-export const updateDeficiencyStatisticInteractor = async (
+export const updateDeficiencyStatistic = async (
   applicationContext: IApplicationContext,
   {
     determinationDeficiencyAmount,
@@ -90,3 +91,10 @@ export const updateDeficiencyStatisticInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const updateDeficiencyStatisticInteractor = withLocking(
+  updateDeficiencyStatistic,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

@@ -4,9 +4,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-export const createCaseDeadlineInteractor = async (
+export const createCaseDeadline = async (
   applicationContext: IApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
 ) => {
@@ -50,3 +51,10 @@ export const createCaseDeadlineInteractor = async (
 
   return newCaseDeadline;
 };
+
+export const createCaseDeadlineInteractor = withLocking(
+  createCaseDeadline,
+  (_applicationContext, { caseDeadline }) => ({
+    identifiers: [`case|${caseDeadline.docketNumber}`],
+  }),
+);

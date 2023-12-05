@@ -1,4 +1,4 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeG = (
@@ -57,31 +57,20 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[2],
-      trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
+      date: 'Enter a date',
+      trialLocation: 'Select a trial location',
     });
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'month',
-        value: '1',
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2002',
       },
     );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2002',
-      },
-    );
+
+    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
 
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
@@ -103,7 +92,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2002-01-01T05:00:00.000Z',
+      date: '2002-01-01T00:00:00.000-05:00',
       documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
       documentType: 'Notice of Trial',
       eventCode: 'NTD',
@@ -116,15 +105,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2002-01-01T05:00:00.000Z',
-      day: '1',
+      date: '2002-01-01T00:00:00.000-05:00',
       documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
       documentType: 'Notice of Trial',
       eventCode: 'NTD',
       generatedDocumentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
-      month: '1',
       trialLocation: 'Boise, Idaho',
-      year: '2002',
     });
   });
 };

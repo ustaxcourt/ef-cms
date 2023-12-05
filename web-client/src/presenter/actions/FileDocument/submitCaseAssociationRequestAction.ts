@@ -16,36 +16,24 @@ export const submitCaseAssociationRequestAction = async ({
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 
-  const { primaryDocumentId } = props.documentsFiled;
-  const { consolidatedCases, docketNumber } = get(
-    state.caseDetail,
-  ) as RawCase & { consolidatedCases: RawCase[] };
   const user = applicationContext.getCurrentUser();
 
-  let documentMetadata = get(state.form);
+  const { primaryDocumentId } = props.documentsFiled;
 
-  documentMetadata = {
-    ...documentMetadata,
+  const { docketNumber } = get(state.caseDetail);
+  const form = get(state.form);
+
+  const documentMetadata = {
+    ...form,
     docketNumber,
     primaryDocumentId,
     privatePractitioners: [
       {
         ...user,
-        partyPrivatePractitioner: documentMetadata.partyPrivatePractitioner,
+        partyPrivatePractitioner: form.partyPrivatePractitioner,
       },
     ],
   };
-
-  let consolidatedCasesDocketNumbers: string[] = [];
-
-  if (
-    documentMetadata.fileAcrossConsolidatedGroup &&
-    consolidatedCases.length > 0
-  ) {
-    consolidatedCasesDocketNumbers = consolidatedCases.map(
-      individualCase => individualCase.docketNumber,
-    );
-  }
 
   const isDocumentWithImmediateAssociation =
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
@@ -65,7 +53,6 @@ export const submitCaseAssociationRequestAction = async ({
     await applicationContext
       .getUseCases()
       .submitCaseAssociationRequestInteractor(applicationContext, {
-        consolidatedCasesDocketNumbers,
         docketNumber,
         filers: documentMetadata.filers,
       });

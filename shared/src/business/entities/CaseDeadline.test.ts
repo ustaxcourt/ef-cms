@@ -1,23 +1,56 @@
 import { CaseDeadline } from './CaseDeadline';
 import { applicationContext } from '../test/createTestApplicationContext';
 
-const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
-
-const DOCKET_NUMBER = '123-19';
 describe('CaseDeadline', () => {
+  const DOCKET_NUMBER = '123-19';
+
+  it('should generate a sortable docket number using the docket number provided', () => {
+    const caseDeadline = new CaseDeadline(
+      {
+        associatedJudge: 'Judge Buch',
+        deadlineDate: '2019-03-01T21:42:29.073Z',
+        description: 'One small step',
+        docketNumber: DOCKET_NUMBER,
+        sortableDocketNumber: undefined,
+      },
+      { applicationContext },
+    );
+
+    expect(caseDeadline.sortableDocketNumber).toEqual(2019000123);
+  });
+
+  describe('constructor', () => {
+    it('should throw an error when application context is not provided', () => {
+      expect(
+        () =>
+          new CaseDeadline(
+            {
+              associatedJudge: 'Judge Buch',
+              deadlineDate: '2019-03-01T21:42:29.073Z',
+              description: 'One small step',
+              docketNumber: DOCKET_NUMBER,
+              sortableDocketNumber: undefined,
+            },
+            {} as any,
+          ),
+      ).toThrow('applicationContext must be defined');
+    });
+  });
+
   describe('validation', () => {
-    it('should have error messages for missing fields', () => {
+    it('should be invalid when required fields that are not defaulted in the constructor are not provided', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
+
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
-        associatedJudge: VALIDATION_ERROR_MESSAGES.associatedJudge,
-        deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
-        description: VALIDATION_ERROR_MESSAGES.description[1],
-        docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
-        sortableDocketNumber: VALIDATION_ERROR_MESSAGES.sortableDocketNumber,
+        associatedJudge: 'Associated judge is required',
+        deadlineDate: 'Enter a valid deadline date',
+        description: 'Enter a description of this deadline',
+        docketNumber: 'You must have a docket number.',
+        sortableDocketNumber: 'Sortable docket number is required',
       });
     });
 
-    it('should be valid when all fields are present', () => {
+    it('should be valid when required fields are all provided', () => {
       const caseDeadline = new CaseDeadline(
         {
           associatedJudge: 'Judge Buch',
@@ -28,54 +61,46 @@ describe('CaseDeadline', () => {
         },
         { applicationContext },
       );
+
       expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should be valid when all fields are present except for leadDocketNumber', () => {
+    it('should be valid when all required fields are present and optional fields are not', () => {
       const caseDeadline = new CaseDeadline(
         {
           associatedJudge: 'Judge Buch',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: DOCKET_NUMBER,
+          leadDocketNumber: undefined, /// Optional property
         },
         { applicationContext },
       );
+
       expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should generate a sortableDocketNumber from the docketNumber passed in', () => {
-      const caseDeadline = new CaseDeadline(
-        {
-          associatedJudge: 'Judge Buch',
-          deadlineDate: '2019-03-01T21:42:29.073Z',
-          description: 'One small step',
-          docketNumber: DOCKET_NUMBER,
-        },
-        { applicationContext },
-      );
-      expect(caseDeadline.sortableDocketNumber).toEqual(2019000123);
-    });
-
-    it('should have error messages for invalid fields', () => {
+    it('should be invalid and return a helpful message when the user provides a description that is too long', () => {
       const caseDeadline = new CaseDeadline(
         {
           associatedJudge: 'Judge Buch',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: `I got the horses in the back
-Horse tack is attached
-Hat is matte black
-Got the boots that's black to match
-Ridin' on a horse, ha
-You can whip your Porsche
-I been in the valley
-You ain't been up off that porch, now`,
+            Horse tack is attached
+            Hat is matte black
+            Got the boots that's black to match
+            Ridin' on a horse, ha
+            You can whip your Porsche
+            I been in the valley
+            You ain't been up off that porch, now`, // Description can be at most 120 characters
           docketNumber: DOCKET_NUMBER,
         },
         { applicationContext },
       );
+
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
-        description: (VALIDATION_ERROR_MESSAGES.description[0] as any).message,
+        description:
+          'The description is too long. Please enter a valid description.',
       });
     });
   });

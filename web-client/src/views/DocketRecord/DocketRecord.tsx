@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -39,6 +39,7 @@ export const DocketRecord = connect(
             <table
               aria-label="docket record"
               className="usa-table ustc-table usa-table--stacked"
+              data-testid="docket-record-table"
               id="docket-record-table"
             >
               <thead>
@@ -65,7 +66,7 @@ export const DocketRecord = connect(
               </thead>
               <tbody>
                 {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
-                  (entry, arrayIndex) => {
+                  entry => {
                     return (
                       <tr
                         className={classNames(
@@ -99,10 +100,7 @@ export const DocketRecord = connect(
                           ))}
                         </td>
                         <td>
-                          <FilingsAndProceedings
-                            arrayIndex={arrayIndex}
-                            entry={entry}
-                          />
+                          <FilingsAndProceedings entry={entry} />
                         </td>
                         <td className="hide-on-mobile number-of-pages">
                           {entry.numberOfPages}
@@ -137,7 +135,7 @@ export const DocketRecord = connect(
                               <Button
                                 link
                                 className={entry.isSealed && 'red-warning'}
-                                data-test={`seal-docket-entry-button-${arrayIndex}`}
+                                data-testid={`seal-docket-entry-button-${entry.index}`}
                                 icon={entry.sealIcon}
                                 tooltip={entry.sealButtonTooltip}
                                 onClick={() => {

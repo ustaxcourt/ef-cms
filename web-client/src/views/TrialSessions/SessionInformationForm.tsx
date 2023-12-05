@@ -1,6 +1,6 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -8,11 +8,13 @@ import classNames from 'classnames';
 
 export const SessionInformationForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
     addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     formattedTrialSessions: state.formattedTrialSessions,
-    updateFormValueSequence: sequences.updateFormValueSequence,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
@@ -21,10 +23,11 @@ export const SessionInformationForm = connect(
   function SessionInformationForm({
     addingTrialSession,
     addTrialSessionInformationHelper,
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     formattedTrialSessions,
     TRIAL_SESSION_SCOPE_TYPES,
-    updateFormValueSequence,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
@@ -73,7 +76,8 @@ export const SessionInformationForm = connect(
 
           <div className="grid-row grid-gap-6">
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
-              <DateInput
+              <DateSelector
+                defaultValue={form.startDate}
                 errorText={validationErrors.startDate}
                 hintText={
                   addTrialSessionInformationHelper.isStandaloneSession
@@ -83,22 +87,15 @@ export const SessionInformationForm = connect(
                 id="start-date"
                 label="Start date"
                 minDate={addTrialSessionInformationHelper.today}
-                names={{
-                  day: 'startDateDay',
-                  month: 'startDateMonth',
-                  year: 'startDateYear',
+                showDateHint={true}
+                onChange={e => {
+                  formatAndUpdateDateFromDatePickerSequence({
+                    key: 'startDate',
+                    toFormat: DATE_FORMATS.ISO,
+                    value: e.target.value,
+                  });
+                  validateTrialSessionSequence();
                 }}
-                placeholder="MM/DD/YYYY"
-                showDateHint={false}
-                titleHintText="(MM/DD/YYYY)"
-                useHintNoWrap={true}
-                values={{
-                  day: form.startDateDay,
-                  month: form.startDateMonth,
-                  year: form.startDateYear,
-                }}
-                onBlur={validateTrialSessionSequence}
-                onChange={updateTrialSessionFormDataSequence}
               />
             </div>
 
@@ -193,7 +190,9 @@ export const SessionInformationForm = connect(
 
           <div className="grid-row grid-gap-6">
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
-              <DateInput
+              <DateSelector
+                defaultValue={form.estimatedEndDate}
+                displayOptionalHintText={true}
                 errorText={validationErrors.estimatedEndDate}
                 hintText={
                   addTrialSessionInformationHelper.isStandaloneSession
@@ -203,29 +202,12 @@ export const SessionInformationForm = connect(
                 id="estimated-end-date"
                 label="Estimated end date"
                 minDate={addTrialSessionInformationHelper.today}
-                names={{
-                  day: 'estimatedEndDateDay',
-                  month: 'estimatedEndDateMonth',
-                  year: 'estimatedEndDateYear',
-                }}
-                optional={true}
-                placeholder="MM/DD/YYYY"
-                showDateHint={false}
-                useHintNoWrap={true}
-                values={{
-                  day: form.estimatedEndDateDay,
-                  month: form.estimatedEndDateMonth,
-                  year: form.estimatedEndDateYear,
-                }}
-                onBlur={validateTrialSessionSequence}
-                onChange={opts => {
-                  updateTrialSessionFormDataSequence(opts);
-                  validateTrialSessionSequence();
-                }}
-                onValueChange={value => {
-                  updateFormValueSequence({
-                    key: 'estimatedEndDateText',
-                    value,
+                showDateHint={true}
+                onChange={e => {
+                  formatAndUpdateDateFromDatePickerSequence({
+                    key: 'estimatedEndDate',
+                    toFormat: DATE_FORMATS.ISO,
+                    value: e.target.value,
                   });
                   validateTrialSessionSequence();
                 }}
@@ -300,7 +282,10 @@ export const SessionInformationForm = connect(
               </>
             )}
           <FormGroup errorText={validationErrors.sessionType}>
-            <fieldset className="usa-fieldset margin-bottom-0">
+            <fieldset
+              className="usa-fieldset margin-bottom-0"
+              data-testid="session-type-options"
+            >
               <legend className="usa-legend" id="session-type-legend">
                 Session type
               </legend>
@@ -324,6 +309,7 @@ export const SessionInformationForm = connect(
                   />
                   <label
                     className="usa-radio__label"
+                    data-testid={`session-type-${option}`}
                     htmlFor={`session-type-${option}`}
                   >
                     {option}
@@ -340,6 +326,7 @@ export const SessionInformationForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input usa-input--small"
+                data-testid="trial-session-number-of-cases-allowed"
                 id="max-cases"
                 name="maxCases"
                 type="text"

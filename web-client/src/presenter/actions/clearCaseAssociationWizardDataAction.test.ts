@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { clearCaseAssociationWizardDataAction } from './clearCaseAssociationWizardDataAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -15,9 +15,6 @@ describe('clearCaseAssociationWizardDataAction', () => {
           certificateOfServiceDate: applicationContext
             .getUtilities()
             .createISODateString(),
-          certificateOfServiceDay: 23,
-          certificateOfServiceMonth: 4,
-          certificateOfServiceYear: 2020,
         },
       },
     });

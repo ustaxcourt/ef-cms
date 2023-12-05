@@ -1,3 +1,6 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { GENERATION_TYPES } from '@web-client/getConstants';
+import { Get } from 'cerebral';
 import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -8,22 +11,15 @@ export const supportingDocumentFreeTextTypes = [
   'Unsworn Declaration under Penalty of Perjury in Support',
 ];
 
-export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
+const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const fileDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
-  const {
-    ALLOWLIST_FEATURE_FLAGS,
-    AMENDMENT_EVENT_CODES,
-    CATEGORY_MAP,
-    PARTY_TYPES,
-  } = applicationContext.getConstants();
+): any => {
+  const { AMENDMENT_EVENT_CODES, CATEGORY_MAP, PARTY_TYPES } =
+    applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
-
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
 
@@ -50,6 +46,18 @@ export const fileDocumentHelper = (
       .formatDateString(secondaryDocumentCertificateOfServiceDate, 'MMDDYY');
   }
 
+  const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
+  const isMultiDocketableEventCode = !!applicationContext
+    .getConstants()
+    .MULTI_DOCKET_FILING_EVENT_CODES.includes(form.eventCode);
+
+  let allowExternalConsolidatedGroupFiling = false;
+  if (isMultiDocketableEventCode && isInConsolidatedGroup) {
+    allowExternalConsolidatedGroupFiling = true;
+  } else {
+    allowExternalConsolidatedGroupFiling = false;
+  }
+
   const showFilingIncludes = form.certificateOfService || form.attachments;
 
   const supportingDocumentFlags = getSupportingDocumentFlags(form);
@@ -73,20 +81,18 @@ export const fileDocumentHelper = (
     filersMap: form.filersMap,
   });
 
-  const redactionAcknowledgementEnabled = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key
-    ],
-  );
+  const EARedactionAcknowledgement =
+    form.generationType === GENERATION_TYPES.MANUAL && form.eventCode === 'EA';
 
   const exported = {
+    EARedactionAcknowledgement,
+    allowExternalConsolidatedGroupFiling,
     certificateOfServiceDateFormatted,
     formattedFilingParties,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
     primaryDocument,
-    redactionAcknowledgementEnabled,
     secondaryDocument,
     showFilingIncludes,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,

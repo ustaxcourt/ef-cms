@@ -1,7 +1,7 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { MessageModalAttachments } from './MessageModalAttachments';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -151,7 +151,7 @@ export const ForwardMessageModalDialog = connect(
             Add message
           </label>
           <textarea
-            className="usa-textarea"
+            className="usa-textarea ustc-message-modal-text-area"
             id="message"
             name="message"
             onChange={e => {

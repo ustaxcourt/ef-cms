@@ -21,6 +21,7 @@
 
 ./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
+./web-api/setup-elasticsearch-aliases.sh "${ENV}"
 
 pushd web-api
 node reindex-dynamodb-records.js "${DYNAMODB_TABLE_NAME}"

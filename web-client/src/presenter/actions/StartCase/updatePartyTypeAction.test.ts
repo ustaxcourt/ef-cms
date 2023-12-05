@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
@@ -33,6 +33,27 @@ describe('updatePartyTypeAction', () => {
       }),
     );
     expect(state.form.partyType).toEqual(PARTY_TYPES.petitioner);
+    expect(state.form.otherType).toBeUndefined();
+    expect(state.form.isSpouseDeceased).toBeUndefined();
+    expect(state.form.businessType).toBeUndefined();
+    expect(state.form.estateType).toBeUndefined();
+    expect(state.form.minorIncompetentType).toBeUndefined();
+  });
+
+  it('sets the partyType to Petitioner when filingType is updated to Individual petitioner', async () => {
+    const { state } = await runAction(
+      updatePartyTypeAction,
+      getFixtures({
+        key: 'filingType',
+        value: 'Individual petitioner',
+      }),
+    );
+    expect(state.form.partyType).toEqual(PARTY_TYPES.petitioner);
+    expect(state.form.otherType).toBeUndefined();
+    expect(state.form.isSpouseDeceased).toBeUndefined();
+    expect(state.form.businessType).toBeUndefined();
+    expect(state.form.estateType).toBeUndefined();
+    expect(state.form.minorIncompetentType).toBeUndefined();
   });
 
   it('sets the partyType to "Petitioner & Deceased Spouse" when "isSpouseDeceased" is updated to "Yes"', async () => {
@@ -115,6 +136,11 @@ describe('updatePartyTypeAction', () => {
       ),
     );
     expect(state.form.partyType).toBeUndefined();
+    expect(state.form.otherType).toBeUndefined();
+    expect(state.form.isSpouseDeceased).toBeUndefined();
+    expect(state.form.businessType).toBeUndefined();
+    expect(state.form.estateType).toBeUndefined();
+    expect(state.form.minorIncompetentType).toBeUndefined();
   });
 
   it('sets the partyType to the props.value passed in when the key is "estateType" and set form.otherType to "An estate or trust"', async () => {
@@ -143,13 +169,13 @@ describe('updatePartyTypeAction', () => {
     );
   });
 
-  it('resets the state.form.corporateDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
+  it('resets the state.form.corporateDisclosureFile and state.form.businessType when form.filingType is anything other than "A business"', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,
       getFixtures(
         {
-          key: 'anything',
-          value: 'Any Value',
+          key: 'filingType',
+          value: 'Myself',
         },
         {
           constants: {

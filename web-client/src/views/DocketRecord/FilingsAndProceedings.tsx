@@ -1,28 +1,44 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { connect } from '@cerebral/react';
-import { props } from 'cerebral';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const FilingsAndProceedings = connect(
-  {
-    arrayIndex: props.arrayIndex,
-    caseDetail: state.caseDetail,
-    caseDetailHelper: state.caseDetailHelper,
-    changeTabAndSetViewerDocumentToDisplaySequence:
-      sequences.changeTabAndSetViewerDocumentToDisplaySequence,
-    entry: props.entry,
-    openCaseDocumentDownloadUrlSequence:
-      sequences.openCaseDocumentDownloadUrlSequence,
-    showDocketRecordDetailModalSequence:
-      sequences.showDocketRecordDetailModalSequence,
-  },
+type FilingsAndProceedingsProps = {
+  entry: {
+    descriptionDisplay: string;
+    isStricken: boolean;
+    docketEntryId: string;
+    showDocumentProcessing: boolean;
+    showLinkToDocument: boolean;
+    showDocumentViewerLink: boolean;
+    eventCode: string;
+    showDocumentDescriptionWithoutLink: boolean;
+    signatory: string;
+    isPaper: boolean;
+  };
+};
+
+const filingsAndProceedingsDeps = {
+  caseDetail: state.caseDetail,
+  caseDetailHelper: state.caseDetailHelper,
+  changeTabAndSetViewerDocumentToDisplaySequence:
+    sequences.changeTabAndSetViewerDocumentToDisplaySequence,
+  openCaseDocumentDownloadUrlSequence:
+    sequences.openCaseDocumentDownloadUrlSequence,
+  showDocketRecordDetailModalSequence:
+    sequences.showDocketRecordDetailModalSequence,
+};
+
+export const FilingsAndProceedings = connect<
+  FilingsAndProceedingsProps,
+  typeof filingsAndProceedingsDeps
+>(
+  filingsAndProceedingsDeps,
   function FilingsAndProceedings({
-    arrayIndex,
     caseDetail,
     caseDetailHelper,
     changeTabAndSetViewerDocumentToDisplaySequence,
@@ -41,6 +57,7 @@ export const FilingsAndProceedings = connect(
                 'text-left',
                 entry.isStricken && 'stricken-docket-record',
               )}
+              data-testid={`document-download-link-${entry.eventCode}`}
               onClick={() =>
                 openCaseDocumentDownloadUrlSequence({
                   docketEntryId: entry.docketEntryId,
@@ -55,10 +72,15 @@ export const FilingsAndProceedings = connect(
             <Button
               link
               aria-roledescription="button to view document details"
-              className="padding-0 border-0"
+              className={classNames(
+                'text-left',
+                'padding-0',
+                'border-0',
+                entry.isStricken && 'stricken-docket-record',
+              )}
               onClick={() => {
                 showDocketRecordDetailModalSequence({
-                  docketRecordIndex: arrayIndex,
+                  entry,
                   showModal: 'DocketRecordOverlay',
                   useSameTab: true,
                 });
@@ -78,7 +100,10 @@ export const FilingsAndProceedings = connect(
         {entry.showDocumentProcessing && (
           <>
             {caseDetailHelper.showDocketRecordInProgressState && (
-              <span aria-label="document uploading marker" className="usa-tag">
+              <span
+                aria-description="document uploading marker"
+                className="usa-tag"
+              >
                 <span aria-hidden="true">Processing</span>
               </span>
             )}
@@ -103,7 +128,7 @@ export const FilingsAndProceedings = connect(
                 entry.isStricken && 'stricken-docket-record',
                 'view-pdf-link',
               )}
-              data-test={`document-viewer-link-${entry.eventCode}`}
+              data-testid={`document-viewer-link-${entry.eventCode}`}
               onClick={() =>
                 changeTabAndSetViewerDocumentToDisplaySequence({
                   docketRecordTab: 'documentView',

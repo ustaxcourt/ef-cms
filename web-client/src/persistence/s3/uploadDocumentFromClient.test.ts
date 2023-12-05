@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { uploadDocumentFromClient } from './uploadDocumentFromClient';
 
 describe('uploadDocument', () => {

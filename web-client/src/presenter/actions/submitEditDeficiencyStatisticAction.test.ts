@@ -1,15 +1,16 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitEditDeficiencyStatisticAction } from './submitEditDeficiencyStatisticAction';
 
-presenter.providers.applicationContext = applicationContext;
-presenter.providers.path = {
-  error: jest.fn(),
-  success: jest.fn(),
-};
-
 describe('submitEditDeficiencyStatisticAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  presenter.providers.path = {
+    error: jest.fn(),
+    success: jest.fn(),
+  };
+
   it('calls the deficiency statistics update interactor, returning the success path', async () => {
     const statistic = {
       determinationDeficiencyAmount: '1',
@@ -57,9 +58,7 @@ describe('submitEditDeficiencyStatisticAction', () => {
       determinationTotalPenalties: '2',
       irsDeficiencyAmount: '3',
       irsTotalPenalties: '4',
-      lastDateOfPeriodDay: '01',
-      lastDateOfPeriodMonth: '03',
-      lastDateOfPeriodYear: '2019',
+      lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
       penalties: [
         {
           name: 'Penalty 1 (IRS)',
@@ -95,7 +94,7 @@ describe('submitEditDeficiencyStatisticAction', () => {
   });
 
   it('returns the error path if an error is encountered when calling the interactor', async () => {
-    presenter.providers.applicationContext
+    applicationContext
       .getUseCases()
       .updateDeficiencyStatisticInteractor.mockImplementationOnce(() => {
         throw new Error('error');

@@ -1,5 +1,5 @@
 import { BindedSelect } from '../../../ustc-ui/BindedSelect/BindedSelect';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
 

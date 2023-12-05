@@ -1,4 +1,3 @@
-import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
 import { PETITIONS_SECTION } from '../../../shared/src/business/entities/EntityConstants';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
@@ -57,6 +56,7 @@ export const createNewMessageOnCase = (
     cerebralTest.testMessageDocumentId = messageDocument.docketEntryId;
 
     await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
       documentId: cerebralTest.testMessageDocumentId,
     });
 
@@ -75,7 +75,7 @@ export const createNewMessageOnCase = (
     await cerebralTest.runSequence('createMessageSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
+      message: 'Enter a message',
     });
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {

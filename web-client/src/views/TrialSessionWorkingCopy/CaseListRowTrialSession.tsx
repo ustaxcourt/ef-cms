@@ -1,28 +1,24 @@
+import { ALL_TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextView } from '../../ustc-ui/Text/TextView';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const getCaseRow = ({
   formattedCase,
-  indentMemberCase = false,
   trialSequences,
   trialSessionWorkingCopyStatus,
-  trialStatusOptions,
-  unassignedLabel,
-  updatedTrialSessionTypesEnabled,
 }) => {
   return (
     <React.Fragment key={formattedCase.docketNumber}>
       <tr className="hoverable vertical-align-middle-row">
         <td className="consolidated-case-column">
-          <div className={indentMemberCase ? 'margin-left-2' : ''}>
+          <div className={formattedCase.shouldIndent ? 'margin-left-2' : ''}>
             <ConsolidatedCaseIcon
               consolidatedIconTooltipText={
                 formattedCase.consolidatedIconTooltipText
@@ -33,7 +29,7 @@ const getCaseRow = ({
           </div>
         </td>
         <td>
-          <div className={indentMemberCase ? 'margin-left-2' : ''}>
+          <div className={formattedCase.shouldIndent ? 'margin-left-2' : ''}>
             <CaseLink formattedCase={formattedCase} />
           </div>
         </td>
@@ -68,24 +64,15 @@ const getCaseRow = ({
               });
             }}
           >
-            <option value="">-{unassignedLabel}-</option>
-            {Object.keys(trialStatusOptions).map(key => {
-              if (updatedTrialSessionTypesEnabled) {
-                if (
-                  !trialStatusOptions[key].deprecated ||
-                  trialSessionWorkingCopyStatus === key
-                )
-                  return (
-                    <option key={key} value={key}>
-                      {trialStatusOptions[key].label}
-                    </option>
-                  );
-              } else
+            <option value="">-Unassigned-</option>
+            {Object.keys(ALL_TRIAL_STATUS_TYPES).map(key => {
+              if (
+                !ALL_TRIAL_STATUS_TYPES[key].deprecated ||
+                trialSessionWorkingCopyStatus === key
+              )
                 return (
                   <option key={key} value={key}>
-                    {trialStatusOptions[key].legacyLabel
-                      ? trialStatusOptions[key].legacyLabel
-                      : trialStatusOptions[key].label}
+                    {ALL_TRIAL_STATUS_TYPES[key].label}
                   </option>
                 );
             })}
@@ -164,16 +151,12 @@ const getCaseRow = ({
           </td>
         </tr>
       )}
-      {formattedCase.consolidatedCases &&
-        formattedCase.consolidatedCases.map(memberCase =>
+      {formattedCase.nestedConsolidatedCases &&
+        formattedCase.nestedConsolidatedCases.map(memberCase =>
           getCaseRow({
             formattedCase: memberCase,
-            indentMemberCase: true,
             trialSequences,
             trialSessionWorkingCopyStatus,
-            trialStatusOptions,
-            unassignedLabel,
-            updatedTrialSessionTypesEnabled,
           }),
         )}
     </React.Fragment>
@@ -188,10 +171,6 @@ export const CaseListRowTrialSession = connect(
       sequences.openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
-    trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
-    unassignedLabel: state.trialSessionWorkingCopyHelper.unassignedLabel,
-    updatedTrialSessionTypesEnabled:
-      state.trialSessionWorkingCopyHelper.updatedTrialSessionTypesEnabled,
   },
   ({
     autoSaveTrialSessionWorkingCopySequence,
@@ -199,9 +178,6 @@ export const CaseListRowTrialSession = connect(
     openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     trialSessionWorkingCopy,
-    trialStatusOptions,
-    unassignedLabel,
-    updatedTrialSessionTypesEnabled,
   }) => {
     return getCaseRow({
       formattedCase,
@@ -213,9 +189,6 @@ export const CaseListRowTrialSession = connect(
       trialSessionWorkingCopyStatus:
         trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber]
           ?.trialStatus,
-      trialStatusOptions,
-      unassignedLabel,
-      updatedTrialSessionTypesEnabled,
     });
   },
 );

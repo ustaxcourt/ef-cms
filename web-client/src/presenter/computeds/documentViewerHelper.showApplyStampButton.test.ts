@@ -2,7 +2,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
   STAMPED_DOCUMENTS_ALLOWLIST,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { petitionsClerkUser } from '../../../../shared/src/test/mockUsers';

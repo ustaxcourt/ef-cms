@@ -1,0 +1,20 @@
+#entry-of-appearance-pdf {
+    margin-bottom: 2cm;
+    
+    .appearance-grid {
+        display: flex;
+        margin-top: 60px;
+    }
+
+    .grow {
+        flex-grow: 1;
+    }
+
+    .entry-of-appearance-info {
+        position: relative;
+        width: 100%;
+        margin-top: 300px;
+        font-size: 16px;
+        text-align: center;
+    }
+}

@@ -1,25 +1,26 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateTrialSessionAction } from './validateTrialSessionAction';
 
-const MOCK_TRIAL = {
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '2019-12-01T00:00:00.000Z',
-  term: 'Fall',
-  trialLocation: 'Birmingham, Alabama',
-};
-
 describe('validateTrialSessionAction', () => {
   let successStub;
   let errorStub;
+
+  const MOCK_TRIAL = {
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '2019-12-01T00:00:00.000Z',
+    term: 'Fall',
+    trialLocation: 'Birmingham, Alabama',
+  };
 
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
     presenter.providers.applicationContext = applicationContext;
+
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -80,102 +81,6 @@ describe('validateTrialSessionAction', () => {
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 
-  it('should pass the expected estimatedEndDate from props into the validation function', async () => {
-    applicationContext
-      .getUseCases()
-      .validateTrialSessionInteractor.mockReturnValue(null);
-
-    await runAction(validateTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        computedEstimatedEndDate: undefined,
-      },
-      state: {
-        form: { ...MOCK_TRIAL, term: 'Summer' },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().validateTrialSessionInteractor.mock
-        .calls[0][1],
-    ).toMatchObject({
-      trialSession: {
-        estimatedEndDate: null,
-      },
-    });
-  });
-
-  it('removes the estimatedEndDateMonth, Day, Year from the trialSession', async () => {
-    await runAction(validateTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        computedEstimatedEndDate: '2020-12-01T00:00:00.000Z',
-        computedStartDate: '2019-12-01T00:00:00.000Z',
-      },
-      state: {
-        form: {
-          ...MOCK_TRIAL,
-          estimatedEndDateDay: '02',
-          estimatedEndDateMonth: '01',
-          estimatedEndDateYear: '2002',
-          startDateDay: '04',
-          startDateMonth: '04',
-          startDateYear: '2000',
-        },
-      },
-    });
-    const sentTrialSession =
-      applicationContext.getUseCases().validateTrialSessionInteractor.mock
-        .calls[0][1].trialSession;
-
-    expect(sentTrialSession.estimatedEndDateDay).not.toBeDefined();
-    expect(sentTrialSession.estimatedEndDateMonth).not.toBeDefined();
-    expect(sentTrialSession.estimatedEndDateYear).not.toBeDefined();
-    expect(sentTrialSession.startDateDay).not.toBeDefined();
-    expect(sentTrialSession.startDateMonth).not.toBeDefined();
-    expect(sentTrialSession.startDateYear).not.toBeDefined();
-    expect(sentTrialSession).toMatchObject({
-      estimatedEndDate: '2020-12-01T00:00:00.000Z',
-      startDate: '2019-12-01T00:00:00.000Z',
-    });
-  });
-
-  it('displays an error if estaimtedEndDateYear is undefined but month and day are filled in', async () => {
-    applicationContext
-      .getUseCases()
-      .validateTrialSessionInteractor.mockReturnValue(null);
-
-    await runAction(validateTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        computedEstimatedEndDate: '2020-12-01T00:00:00.000Z',
-        computedStartDate: '2019-12-01T00:00:00.000Z',
-      },
-      state: {
-        form: {
-          ...MOCK_TRIAL,
-          estimatedEndDateDay: '02',
-          estimatedEndDateMonth: '01',
-          estimatedEndDateText: 'ab',
-          estimatedEndDateYear: '50',
-          startDateDay: '04',
-          startDateMonth: '04',
-          startDateYear: '2020',
-        },
-      },
-    });
-
-    expect(errorStub.mock.calls[0][0].errors.estimatedEndDate).toEqual(
-      'Please enter a valid estimated end date.',
-    );
-  });
-
   it('should consider the form valid with valid data', async () => {
     applicationContext
       .getUseCases()
@@ -185,19 +90,11 @@ describe('validateTrialSessionAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedEstimatedEndDate: '2020-12-01T00:00:00.000Z',
-        computedStartDate: '2019-12-01T00:00:00.000Z',
-      },
       state: {
         form: {
           ...MOCK_TRIAL,
-          estimatedEndDateDay: '02',
-          estimatedEndDateMonth: '01',
-          estimatedEndDateYear: '3050',
-          startDateDay: '04',
-          startDateMonth: '04',
-          startDateYear: '2020',
+          estimatedEndDate: '3050-01-02',
+          startDate: '2020-04-04',
         },
       },
     });

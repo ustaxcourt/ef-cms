@@ -1,7 +1,7 @@
 import {
   CaseInventory,
-  GetCaseInventoryReportRequest,
-} from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+  GetCustomCaseReportRequest,
+} from '../../business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 // eslint-disable-next-line import/no-unresolved
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';
@@ -11,7 +11,7 @@ export const getCasesByFilters = async ({
   params,
 }: {
   applicationContext: IApplicationContext;
-  params: GetCaseInventoryReportRequest;
+  params: GetCustomCaseReportRequest;
 }): Promise<{
   totalCount: number;
   foundCases: CaseInventory[];

@@ -1,5 +1,6 @@
 import * as client from '../../dynamodbClientService';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { isUserAlreadyCreated } from './createOrUpdateUser';
 
 export const createUserRecords = async ({
@@ -85,35 +86,38 @@ export const createOrUpdatePractitionerUser = async ({
   const userExists = await isUserAlreadyCreated({
     applicationContext,
     email: userEmail,
-    userPoolId: process.env.USER_POOL_ID,
+    userPoolId: process.env.USER_POOL_ID as string,
   });
 
   if (!userExists) {
+    let params = {
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: userEmail,
+        },
+        {
+          Name: 'custom:role',
+          Value: user.role,
+        },
+        {
+          Name: 'name',
+          Value: user.name,
+        },
+      ],
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: userEmail,
+    };
+
     const response = await applicationContext
       .getCognito()
-      .adminCreateUser({
-        UserAttributes: [
-          {
-            Name: 'email_verified',
-            Value: 'True',
-          },
-          {
-            Name: 'email',
-            Value: userEmail,
-          },
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-          {
-            Name: 'name',
-            Value: user.name,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: userEmail,
-      })
+      .adminCreateUser(params)
       .promise();
+
     if (response && response.User && response.User.Username) {
       userId = response.User.Username;
     }

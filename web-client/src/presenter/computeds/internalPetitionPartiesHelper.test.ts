@@ -2,7 +2,7 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from './internalPetitionPartiesHelper';
 import {
   petitionerUser,
@@ -196,7 +196,7 @@ describe('internalPetitionPartiesHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime)', () => {
+  it('should validate form view information for party type Partnership (as a partnership representative under BBA)', () => {
     const result = runCompute(internalPetitionPartiesHelper, {
       state: {
         constants: {

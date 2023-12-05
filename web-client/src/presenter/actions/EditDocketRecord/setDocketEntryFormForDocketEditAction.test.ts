@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setDocketEntryFormForDocketEditAction } from './setDocketEntryFormForDocketEditAction';
@@ -44,16 +44,13 @@ describe('setDocketEntryFormForDocketEditAction', () => {
 
     const expectedResult = {
       date: '2020-01-01T05:00:00.000Z',
-      day: '1',
       docketEntryId: '123-abc-123-abc',
       docketNumber: '123-45',
       eventCode: 'OPP',
       filers: [],
       filersMap: {},
       lodged: true,
-      month: '1',
       testKey: 'testValue',
-      year: '2020',
     };
 
     expect(result.state.form).toEqual(expectedResult);

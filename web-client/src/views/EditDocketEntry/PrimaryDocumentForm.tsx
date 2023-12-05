@@ -1,11 +1,11 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   docketEntryOnChange,
   onInputChange,
@@ -16,9 +16,11 @@ import React from 'react';
 
 export const PrimaryDocumentForm = connect(
   {
-    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
     addDocketEntryHelper: state.addDocketEntryHelper,
+    constants: state.constants,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
@@ -28,9 +30,10 @@ export const PrimaryDocumentForm = connect(
   },
   function PrimaryDocumentForm({
     addDocketEntryHelper,
+    constants,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
-    OBJECTIONS_OPTIONS,
     updateDocketEntryFormValueSequence,
     updateScreenMetadataSequence,
     validateDocketEntrySequence,
@@ -68,26 +71,22 @@ export const PrimaryDocumentForm = connect(
               ))}
             </fieldset>
           </FormGroup>
-
           {addDocketEntryHelper.showDateReceivedEdit && (
-            <DateInput
-              errorText={validationErrors.dateReceived}
+            <DateSelector
+              defaultValue={form.receivedAt}
+              errorText={validationErrors.receivedAt}
               id="date-received"
               label="Date received"
-              names={{
-                day: 'dateReceivedDay',
-                month: 'dateReceivedMonth',
-                year: 'dateReceivedYear',
+              onChange={e => {
+                formatAndUpdateDateFromDatePickerSequence({
+                  key: 'receivedAt',
+                  toFormat: constants.DATE_FORMATS.ISO,
+                  value: e.target.value,
+                });
+                validateDocketEntrySequence();
               }}
-              values={{
-                day: form.dateReceivedDay,
-                month: form.dateReceivedMonth,
-                year: form.dateReceivedYear,
-              }}
-              onChange={updateDocketEntryFormValueSequence}
             />
           )}
-
           <FormGroup errorText={validationErrors.eventCode}>
             <label
               className="usa-label"
@@ -126,7 +125,6 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </FormGroup>
-
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <FormGroup
               errorText={
@@ -177,7 +175,6 @@ export const PrimaryDocumentForm = connect(
               />
             </FormGroup>
           )}
-
           {addDocketEntryHelper.primary.showNonstandardForm && (
             <NonstandardForm
               helper="addDocketEntryHelper"
@@ -187,9 +184,7 @@ export const PrimaryDocumentForm = connect(
               validationErrors="validationErrors"
             />
           )}
-
           {form.secondaryDocument && <SecondaryDocumentForm />}
-
           <FormGroup errorText={validationErrors.additionalInfo}>
             <label
               className="usa-label"
@@ -237,7 +232,6 @@ export const PrimaryDocumentForm = connect(
               </label>
             </div>
           </div>
-
           <FormGroup errorText={validationErrors.additionalInfo2}>
             <label
               className="usa-label"
@@ -262,23 +256,20 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </FormGroup>
-
           <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
-
           {addDocketEntryHelper.showFilingPartiesForm && (
             <FilingPartiesForm
               updateSequence={updateDocketEntryFormValueSequence}
               validateSequence={validateDocketEntrySequence}
             />
           )}
-
           {addDocketEntryHelper.showObjection && (
             <FormGroup errorText={validationErrors.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="objections-legend">
                   Are there any objections to the granting of this document?
                 </legend>
-                {OBJECTIONS_OPTIONS.map(option => (
+                {constants.OBJECTIONS_OPTIONS.map(option => (
                   <div className="usa-radio" key={option}>
                     <input
                       aria-describedby="objections-legend"

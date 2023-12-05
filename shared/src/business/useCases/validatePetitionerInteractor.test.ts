@@ -3,9 +3,6 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { Contact } from '../entities/contacts/Contact';
-import { Petitioner } from '../entities/contacts/Petitioner';
-import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validatePetitionerInteractor } from './validatePetitionerInteractor';
 
@@ -28,15 +25,16 @@ describe('validatePetitionerInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       state: 'MN',
       updatedEmail: 'night@example.com',
-    } as any;
+    };
   });
 
-  it('runs validation on a contact with no invalid properties', () => {
+  it('should not return any validation errors when the updated petitioner is valid', () => {
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
-    } as any);
+      existingPetitioners: [],
+    });
 
-    expect(errors).toBeFalsy();
+    expect(errors).toBeUndefined();
   });
 
   it('should not return validation errors when contact is valid and updatedEmail and confirmEmail are not present', () => {
@@ -48,12 +46,13 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
-    } as any);
+      existingPetitioners: [],
+    });
 
-    expect(errors).toBeFalsy();
+    expect(errors).toBeUndefined();
   });
 
-  it('runs validation on a contact with invalid properties', () => {
+  it('should return validation errors when the updated petitioner is valid', () => {
     mockContact = {
       ...mockContact,
       confirmEmail: undefined, // required when updatedEmail is present
@@ -63,17 +62,17 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
-    } as any);
+      existingPetitioners: [],
+    });
 
     expect(errors).toEqual({
-      confirmEmail:
-        UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
-      serviceIndicator: Petitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator,
+      confirmEmail: 'Enter a valid email address',
+      postalCode: 'Enter ZIP code',
+      serviceIndicator: 'Select a service indicator',
     });
   });
 
-  it('runs validation on a secondary contact with invalid properties', () => {
+  it('should return validation errors when the secondary contact is invalid', () => {
     const contact = {
       ...mockContact,
       confirmEmail: undefined,
@@ -82,16 +81,16 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
-    } as any);
+      existingPetitioners: [],
+    });
 
     expect(errors).toEqual({
-      confirmEmail:
-        UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
+      confirmEmail: 'Enter a valid email address',
+      postalCode: 'Enter ZIP code',
     });
   });
 
-  it('returns a validation error when confirmEmail is present without updatedEmail', () => {
+  it('should return validation errors when confirmEmail is present without updatedEmail', () => {
     const contact = {
       ...mockContact,
       confirmEmail: 'night@example.com',
@@ -101,56 +100,57 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
-    } as any);
+      existingPetitioners: [],
+    });
 
     expect(errors).toEqual({
-      confirmEmail:
-        UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-      email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
+      confirmEmail: 'Email addresses do not match',
+      email: 'Enter a valid email address',
+      postalCode: 'Enter ZIP code',
     });
   });
 
-  it('should return an error when second intervenor is added', () => {
+  it('should return validation errors when second intervenor is added', () => {
     const contact = {
       ...mockContact,
       contactType: CONTACT_TYPES.intervenor,
     };
+
+    const errors = validatePetitionerInteractor(applicationContext, {
+      contactInfo: contact,
+      existingPetitioners: [
+        {
+          ...contact,
+          contactId: 'bbe5de3e-81b7-4354-bd9b-270717164a5f',
+          contactType: CONTACT_TYPES.intervenor,
+        },
+      ],
+    });
+
+    expect(errors).toEqual({
+      contactType:
+        'Only one (1) Intervenor is allowed per case. Please select a different Role.',
+    });
+  });
+
+  it('should NOT return a validation error when first intervenor is edited', () => {
     const mockExistingPetitioners = [
       {
-        contactId: 'bbe5de3e-81b7-4354-bd9b-270717164a5f',
+        ...mockContact,
         contactType: CONTACT_TYPES.intervenor,
       },
     ];
 
     const errors = validatePetitionerInteractor(applicationContext, {
-      contactInfo: contact,
-      existingPetitioners: mockExistingPetitioners,
-    } as any);
-
-    expect(errors).toEqual({
-      contactType:
-        Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor,
-    });
-  });
-
-  it('should not return an error when first intervenor is edited', () => {
-    const contact = {
-      ...mockContact,
-      contactType: CONTACT_TYPES.intervenor,
-    };
-    const mockExistingPetitioners = [
-      {
-        ...contact,
+      contactInfo: {
+        ...mockContact,
+        address1: '9820 Another Street Place', // Updated address
+        contactType: CONTACT_TYPES.intervenor,
       },
-    ];
-
-    const errors = validatePetitionerInteractor(applicationContext, {
-      contactInfo: contact,
       existingPetitioners: mockExistingPetitioners,
     });
 
-    expect(errors).toBeFalsy();
+    expect(errors).toBeUndefined();
   });
 
   it('should not edit the first intervenor when the contactType is not intervenor', () => {
@@ -169,6 +169,6 @@ describe('validatePetitionerInteractor', () => {
       existingPetitioners: mockExistingPetitioners,
     });
 
-    expect(errors).toBeFalsy();
+    expect(errors).toBeUndefined();
   });
 });

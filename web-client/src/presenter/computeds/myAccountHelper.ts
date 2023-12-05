@@ -3,7 +3,7 @@ import { Get } from 'cerebral';
 export const myAccountHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 

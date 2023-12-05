@@ -1,5 +1,5 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
-import { connect } from '@cerebral/react';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -8,14 +8,19 @@ import classNames from 'classnames';
 
 export const Inclusions = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     marginClass: props.marginClass,
     updateSequence: sequences[props.updateSequence],
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   function Inclusions({
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     marginClass,
     updateSequence,
     validateDocketEntrySequence,
@@ -68,25 +73,22 @@ export const Inclusions = connect(
             >
               Certificate of Service
             </label>
+
             {form.certificateOfService && (
-              <DateInput
-                className="service-date margin-top-2"
+              <DateSelector
+                defaultValue={form.certificateOfServiceDate}
                 errorText={validationErrors.certificateOfServiceDate}
-                hideLegend={true}
+                formGroupClassNames="service-date margin-top-2"
                 id="service-date"
                 label="Certificate of Service"
-                names={{
-                  day: 'certificateOfServiceDay',
-                  month: 'certificateOfServiceMonth',
-                  year: 'certificateOfServiceYear',
+                onChange={e => {
+                  formatAndUpdateDateFromDatePickerSequence({
+                    key: 'certificateOfServiceDate',
+                    toFormat: DATE_FORMATS.ISO,
+                    value: e.target.value,
+                  });
+                  validateDocketEntrySequence();
                 }}
-                values={{
-                  day: form.certificateOfServiceDay,
-                  month: form.certificateOfServiceMonth,
-                  year: form.certificateOfServiceYear,
-                }}
-                onBlur={validateDocketEntrySequence}
-                onChange={updateSequence}
               />
             )}
           </div>

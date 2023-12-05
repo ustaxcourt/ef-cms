@@ -61,9 +61,8 @@ describe('creation form', () => {
   });
 
   it('shows validation check mark when Statement of Taxpayer Identification Number file is selected', () => {
-    cy.get('label#stin-file-label')
-      .scrollIntoView()
-      .should('not.have.class', 'validated');
+    cy.get('label#stin-file-label').scrollIntoView();
+    cy.get('label#stin-file-label').should('not.have.class', 'validated');
 
     cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
     cy.get('label#stin-file-label').should('have.class', 'validated');
@@ -79,9 +78,8 @@ describe('creation form', () => {
   });
 
   it('shows validation check mark when Petition file is selected', () => {
-    cy.get('label#petition-file-label')
-      .scrollIntoView()
-      .should('not.have.class', 'validated');
+    cy.get('label#petition-file-label').scrollIntoView();
+    cy.get('label#petition-file-label').should('not.have.class', 'validated');
 
     cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
 
@@ -94,7 +92,8 @@ describe('creation form', () => {
   });
 
   it('selects the Notice of Deficiency case type', () => {
-    cy.get('#case-type').scrollIntoView().select('Notice of Deficiency');
+    cy.get('#case-type').scrollIntoView();
+    cy.get('#case-type').select('Notice of Deficiency');
   });
 
   it('continues to wizard step 3', () => {
@@ -102,47 +101,52 @@ describe('creation form', () => {
   });
 
   it('selects on behalf of myself and my spouse', () => {
-    cy.get('label#filing-type-1').scrollIntoView().click();
-    cy.get('label#is-spouse-deceased-1').scrollIntoView().click();
-    cy.get('button#confirm').scrollIntoView().click();
+    cy.get('label#filing-type-1').scrollIntoView();
+    cy.get('label#filing-type-1').click();
+    cy.get('label#is-spouse-deceased-1').scrollIntoView();
+    cy.get('label#is-spouse-deceased-1').click();
+    cy.get('button#confirm').scrollIntoView();
+    cy.get('button#confirm').click();
   });
 
   it('fill in name', () => {
-    cy.get('input#name').scrollIntoView().type('John');
+    cy.get('input#name').scrollIntoView();
+    cy.get('input#name').type('John');
   });
 
   it("fill in my spouse's name", () => {
-    cy.get('input#secondaryName').scrollIntoView().type('Sally');
+    cy.get('input#secondaryName').scrollIntoView();
+    cy.get('input#secondaryName').type('Sally');
   });
 
   it('fill in contactPrimary.address1', () => {
-    cy.get('input[name="contactPrimary.address1"]')
-      .scrollIntoView()
-      .type('111 South West St.');
+    cy.get('input[name="contactPrimary.address1"]').scrollIntoView();
+    cy.get('input[name="contactPrimary.address1"]').type('111 South West St.');
   });
 
   it('fill in contactPrimary.city', () => {
-    cy.get('input[name="contactPrimary.city"]')
-      .scrollIntoView()
-      .type('Orlando');
+    cy.get('input[name="contactPrimary.city"]').scrollIntoView();
+    cy.get('input[name="contactPrimary.city"]').type('Orlando');
   });
 
   it('selects state', () => {
-    cy.get('select[name="contactPrimary.state"]').scrollIntoView().select('AL');
+    cy.get('select[name="contactPrimary.state"]').scrollIntoView();
+    cy.get('select[name="contactPrimary.state"]').select('AL');
   });
 
   it('fills in zipcode', () => {
-    cy.get('input[name="contactPrimary.postalCode"]')
-      .scrollIntoView()
-      .type('12345');
+    cy.get('input[name="contactPrimary.postalCode"]').scrollIntoView();
+    cy.get('input[name="contactPrimary.postalCode"]').type('12345');
   });
 
   it('fills in phone', () => {
-    cy.get('input#phone').scrollIntoView().type('1111111111');
+    cy.get('input#phone').scrollIntoView();
+    cy.get('input#phone').type('1111111111');
   });
 
   it("should copy the primary contact's address to the secondary contact's address when the checkbox is selected", () => {
-    cy.get('label#use-same-address-above-label').scrollIntoView().click();
+    cy.get('label#use-same-address-above-label').scrollIntoView();
+    cy.get('label#use-same-address-above-label').click();
     cy.get('input[name="contactPrimary.address1"]').should(
       'have.value',
       '111 South West St.',
@@ -159,7 +163,8 @@ describe('creation form', () => {
   });
 
   it('select a city', () => {
-    cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
+    cy.get('#preferred-trial-city').scrollIntoView();
+    cy.get('#preferred-trial-city').select('Mobile, Alabama');
   });
 
   it('click the small radio button', () => {
@@ -169,7 +174,8 @@ describe('creation form', () => {
 
   it('select a city', () => {
     cy.get('#preferred-trial-city').should('have.value', '');
-    cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
+    cy.get('#preferred-trial-city').scrollIntoView();
+    cy.get('#preferred-trial-city').select('Mobile, Alabama');
   });
 
   it('reviews information before filing', () => {
@@ -180,9 +186,9 @@ describe('creation form', () => {
   });
 
   it('submits forms and redirects to the file petition success page', () => {
-    cy.get('button#submit-case').scrollIntoView().click();
-
     cy.intercept('POST', '**/cases').as('postCase');
+    cy.get('button#submit-case').scrollIntoView();
+    cy.get('button#submit-case').click();
     cy.wait('@postCase').then(({ response }) => {
       expect(response.body).to.have.property('docketNumber');
       createdDocketNumber = response.body.docketNumber;

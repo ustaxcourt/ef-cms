@@ -1,13 +1,12 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { OBJECTIONS_OPTIONS_MAP } from '@shared/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
 export const practitionerFilesDocumentForOwnedCase = (
   cerebralTest,
   fakeFile,
-  caseDocketNumber,
+  caseDocketNumber?,
 ) => {
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('Practitioner files document for owned case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDocketNumber || cerebralTest.docketNumber,
@@ -79,24 +78,11 @@ export const practitionerFilesDocumentForOwnedCase = (
     );
 
     await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'certificateOfServiceMonth',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceDay',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceYear',
-        value: '2000',
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/2000',
       },
     );
 

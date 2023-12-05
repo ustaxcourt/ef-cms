@@ -2,7 +2,7 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -65,6 +65,7 @@ export const CaseSearchByName = connect(
                   <input
                     aria-describedby="case-search-by-name"
                     className="usa-input"
+                    data-testid="petitioner-name"
                     id="petitioner-name"
                     name="petitionerName"
                     type="text"
@@ -186,6 +187,7 @@ export const CaseSearchByName = connect(
                 <Button
                   aria-describedby="case-search-by-name"
                   className="advanced-search__button"
+                  data-testid="case-search-by-name"
                   id="advanced-search-button"
                   onClick={e => {
                     e.preventDefault();
@@ -198,6 +200,7 @@ export const CaseSearchByName = connect(
                   link
                   aria-describedby="case-search-by-name"
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  data-testid="clear-search-by-name"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({

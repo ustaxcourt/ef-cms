@@ -14,7 +14,7 @@ export const deleteTrialSessionAction = async ({
   get,
   path,
 }: ActionProps) => {
-  const trialSessionId = get(state.trialSessionId);
+  const trialSessionId = get(state.trialSession.trialSessionId);
 
   let result;
   try {

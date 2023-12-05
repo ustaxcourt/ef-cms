@@ -14,17 +14,17 @@ export const setSignatureNameForPdfSigningAction = async ({
   const { ALLOWLIST_FEATURE_FLAGS, CHIEF_JUDGE } =
     applicationContext.getConstants();
 
-  let nameForPdfSigning;
-  let nameForSigningLine2;
+  let nameForPdfSigning = '';
+  let nameForSigningLine2 = '';
 
-  if (user.section.includes('Chambers')) {
+  if (user.section!.includes('Chambers')) {
     const judgeUser = await applicationContext
       .getUseCases()
       .getJudgeInSectionInteractor(applicationContext, {
         section: user.section,
       });
-    nameForPdfSigning = judgeUser.judgeFullName;
-    nameForSigningLine2 = judgeUser.judgeTitle;
+    nameForPdfSigning = judgeUser.judgeFullName!;
+    nameForSigningLine2 = judgeUser.judgeTitle!;
   } else {
     const featureFlags = await applicationContext
       .getUseCases()

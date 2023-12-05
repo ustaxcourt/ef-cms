@@ -1,29 +1,15 @@
+import { CasesClosedReturnType } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { post } from '../requests';
 
-/**
- * getCasesClosedByJudgeInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the end date for the report query
- * @param {string} providers.judgeName the judge name for the report query
- * @param {string} providers.startDate the start date for the report query
- * @returns {Promise<*>} the promise of the api call
- */
 export const getCasesClosedByJudgeInteractor = (
-  applicationContext,
-  {
-    endDate,
-    judgeName,
-    startDate,
-  }: { startDate: string; endDate: string; judgeName: string },
-) => {
+  applicationContext: ClientApplicationContext,
+  params: JudgeActivityReportFilters,
+): Promise<CasesClosedReturnType> => {
   return post({
     applicationContext,
-    body: {
-      endDate,
-      judgeName,
-      startDate,
-    },
+    body: params,
     endpoint: '/judge-activity-report/closed-cases',
   });
 };

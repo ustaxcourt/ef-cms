@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createTrialSessionAction } from './createTrialSessionAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -60,42 +60,5 @@ describe('createTrialSessionAction', () => {
     });
 
     expect(errorStub.mock.calls.length).toEqual(1);
-  });
-
-  it('removes the estimatedEndDateMonth, Day, Year from the trialSession', async () => {
-    await runAction(createTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        computedEstimatedEndDate: '2020-12-01T00:00:00.000Z',
-        computedStartDate: '2019-12-01T00:00:00.000Z',
-      },
-      state: {
-        form: {
-          ...MOCK_TRIAL,
-          estimatedEndDateDay: '02',
-          estimatedEndDateMonth: '01',
-          estimatedEndDateYear: '2002',
-          startDateDay: '04',
-          startDateMonth: '04',
-          startDateYear: '2000',
-        },
-      },
-    });
-    const sentTrialSession =
-      applicationContext.getUseCases().createTrialSessionInteractor.mock
-        .calls[0][1].trialSession;
-
-    expect(sentTrialSession.estimatedEndDateDay).not.toBeDefined();
-    expect(sentTrialSession.estimatedEndDateMonth).not.toBeDefined();
-    expect(sentTrialSession.estimatedEndDateYear).not.toBeDefined();
-    expect(sentTrialSession.startDateDay).not.toBeDefined();
-    expect(sentTrialSession.startDateMonth).not.toBeDefined();
-    expect(sentTrialSession.startDateYear).not.toBeDefined();
-    expect(sentTrialSession).toMatchObject({
-      estimatedEndDate: '2020-12-01T00:00:00.000Z',
-      startDate: '2019-12-01T00:00:00.000Z',
-    });
   });
 });

@@ -1,4 +1,3 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -7,7 +6,7 @@ import {
   isAssociatedUser,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { NotFoundError } from '../../errors/errors';
+import { NotFoundError } from '@web-api/errors/errors';
 import { PublicCase } from '../entities/cases/PublicCase';
 import {
   ROLE_PERMISSIONS,
@@ -108,15 +107,6 @@ export const getCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
-
-  const isConsolidatedGroupAccessEnabled =
-    featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
-    ];
-
   const caseRecord = decorateForCaseStatus(
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
@@ -134,15 +124,6 @@ export const getCaseInteractor = async (
 
   const currentUser = applicationContext.getCurrentUser();
 
-  let consolidatedCases;
-  if (isConsolidatedGroupAccessEnabled && caseRecord.leadDocketNumber) {
-    consolidatedCases = await applicationContext
-      .getUseCases()
-      .getConsolidatedCasesByCaseInteractor(applicationContext, {
-        docketNumber: caseRecord.leadDocketNumber,
-      });
-  }
-
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
@@ -155,12 +136,9 @@ export const getCaseInteractor = async (
         ROLE_PERMISSIONS.GET_CASE,
         getPetitionerById(caseRecord, currentUser.userId).contactId,
       );
-    } else if (
-      isConsolidatedGroupAccessEnabled &&
-      caseRecord.leadDocketNumber
-    ) {
+    } else if (caseRecord.leadDocketNumber) {
       isAuthorizedToGetCase = isUserPartOfGroup({
-        consolidatedCases,
+        consolidatedCases: caseRecord.consolidatedCases,
         userId: currentUser.userId,
       });
     }
@@ -171,11 +149,11 @@ export const getCaseInteractor = async (
     user: currentUser,
   });
 
-  if (isConsolidatedGroupAccessEnabled && caseRecord.leadDocketNumber) {
+  if (caseRecord.leadDocketNumber) {
     isAssociatedWithCase =
       isAssociatedWithCase ||
       isUserPartOfGroup({
-        consolidatedCases,
+        consolidatedCases: caseRecord.consolidatedCases,
         userId: currentUser.userId,
       });
   }
@@ -212,6 +190,5 @@ export const getCaseInteractor = async (
   }
 
   caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
-
   return caseDetailRaw;
 };

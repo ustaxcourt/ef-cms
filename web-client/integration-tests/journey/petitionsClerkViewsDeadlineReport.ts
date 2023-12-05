@@ -7,14 +7,14 @@ import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '..
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseDeadlineReportHelper = withAppContextDecorator(
-  caseDeadlineReportHelperComputed,
-);
-
 export const petitionsClerkViewsDeadlineReport = (
   cerebralTest,
   options = {},
 ) => {
+  const caseDeadlineReportHelper = withAppContextDecorator(
+    caseDeadlineReportHelperComputed,
+  );
+
   return it('Petitions clerk views deadline report', async () => {
     await cerebralTest.runSequence('gotoCaseDeadlineReportSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDeadlines');
@@ -60,32 +60,32 @@ export const petitionsClerkViewsDeadlineReport = (
     expect(deadlines).toMatchObject([
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
+        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
+        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
         docketNumber: cerebralTest.createdDocketNumbers[1],
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
+        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
         docketNumber: cerebralTest.createdDocketNumbers[2],
       },
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
+        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
+        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
         docketNumber: cerebralTest.createdDocketNumbers[1],
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
+        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
         docketNumber: cerebralTest.createdDocketNumbers[2],
       },
     ]);
@@ -114,12 +114,12 @@ export const petitionsClerkViewsDeadlineReport = (
     expect(deadlines).toMatchObject([
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
+        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
+        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
     ]);

@@ -4,7 +4,8 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 describe('Petitions clerk creates Estate case with long additionalName', () => {
@@ -18,19 +19,14 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
   it('login as a petitions clerk and create a case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtMonth',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtDay',
-      value: '01',
-    });
-    const receivedAtYear = '2001';
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtYear',
-      value: receivedAtYear,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '01/01/2001',
+      },
+    );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'mailingDate',

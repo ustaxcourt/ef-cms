@@ -15,8 +15,7 @@ export const generateCourtIssuedDocumentTitleAction = ({
   store,
 }: ActionProps) => {
   const documentMetadata = get(state.form);
-  const { computedDate, judgeWithTitle } = props;
-  documentMetadata.date = computedDate;
+  const { judgeWithTitle } = props;
   documentMetadata.judgeWithTitle = judgeWithTitle;
 
   let documentTitle = applicationContext
@@ -28,6 +27,6 @@ export const generateCourtIssuedDocumentTitleAction = ({
   if (documentTitle) {
     store.set(state.form.generatedDocumentTitle, documentTitle);
   } else {
-    store.unset(state.form.generatedDocumentTitle, documentTitle);
+    store.unset(state.form.generatedDocumentTitle);
   }
 };

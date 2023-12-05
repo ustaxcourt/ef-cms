@@ -29,7 +29,7 @@ describe('checkForReadyForTrial', () => {
       {
         docketEntries: [
           {
-            createdAt: prepareDateFromString().toISOString(),
+            createdAt: prepareDateFromString().toISO(),
             eventCode: 'A',
           },
         ],

@@ -20,12 +20,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const addDocketEntryForPaymentStatus = ({
   applicationContext,
@@ -450,17 +451,13 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
 };
 
 /**
- * serveCaseToIrsInteractor
- *
+ * serveCaseToIrs
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-export const serveCaseToIrsInteractor = async (
-  applicationContext,
-  { docketNumber },
-) => {
+export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
@@ -616,3 +613,10 @@ export const serveCaseToIrsInteractor = async (
 
   return urlToReturn;
 };
+
+export const serveCaseToIrsInteractor = withLocking(
+  serveCaseToIrs,
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

@@ -1,5 +1,5 @@
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
@@ -49,6 +49,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
   describe('Happy Path', () => {
     const mockPdfUrl = 'www.blahdeebloop.com';
+    const mockFileId = '66bac560-1b85-4e64-9316-3f4d2b17f7bc';
 
     let mockCase: RawCase;
 
@@ -66,7 +67,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       applicationContext
         .getUseCaseHelpers()
         .saveFileAndGenerateUrl.mockResolvedValue({
-          fileId: '',
+          fileId: mockFileId,
           url: mockPdfUrl,
         });
     });
@@ -99,7 +100,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         caseCaptionExtension: expect.anything(),
         caseTitle: expect.anything(),
         dateServed: '02/23/2023',
-        docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
+        docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix!,
         judgeName: trialSession.judge!.name,
         proceedingType: trialSession.proceedingType,
         scopeType: trialSession.sessionScope,
@@ -184,7 +185,20 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ).toHaveBeenCalledWith({
         applicationContext: expect.anything(),
         file: expect.anything(),
-        useTempBucket: true,
+        fileNamePrefix: 'paper-service-pdf/',
+      });
+      expect(
+        applicationContext.getPersistenceGateway().updateTrialSession,
+      ).toHaveBeenCalledWith({
+        applicationContext: expect.anything(),
+        trialSessionToUpdate: expect.objectContaining({
+          paperServicePdfs: [
+            {
+              fileId: mockFileId,
+              title: expect.stringContaining('30 Day Notice of Trial on'),
+            },
+          ],
+        }),
       });
       expect(
         applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -192,6 +206,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         applicationContext: expect.anything(),
         message: {
           action: 'thirty_day_notice_paper_service_complete',
+          fileId: mockFileId,
           hasPaper: true,
           pdfUrl: mockPdfUrl,
         },

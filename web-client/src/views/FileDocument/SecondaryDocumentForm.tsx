@@ -3,7 +3,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
 import { ObjectionsForm } from './ObjectionsForm';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -34,7 +34,7 @@ export const SecondaryDocumentForm = connect(
               htmlFor="secondary-document"
               id="secondary-document-label"
             >
-              Upload your document{' '}
+              Upload supporting document PDF (.pdf){' '}
               <span className="success-message padding-left-1">
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>{' '}
@@ -43,8 +43,8 @@ export const SecondaryDocumentForm = connect(
               )}
             </label>
             <span className="usa-hint">
-              File must be in PDF format (.pdf). Max file size{' '}
-              {constants.MAX_FILE_SIZE_MB}MB.
+              Make sure file is not encrypted or password protected. Max file
+              size {constants.MAX_FILE_SIZE_MB}MB.
             </span>
             <StateDrivenFileInput
               aria-describedby="secondary-document-label"

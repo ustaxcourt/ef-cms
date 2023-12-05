@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setPaperPetitionDatesSequence } from './setPaperPetitionDatesSequence';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
@@ -12,7 +11,6 @@ export const validatePetitionFromPaperSequence = [
   {
     ignore: [],
     validate: [
-      setPaperPetitionDatesSequence,
       validatePetitionFromPaperAction,
       {
         error: [

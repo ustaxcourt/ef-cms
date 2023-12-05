@@ -1,4 +1,4 @@
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { PETITIONS_SECTION, ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getUsersInSectionInteractor } from './getUsersInSectionInteractor';
@@ -19,6 +19,7 @@ describe('Get users in section', () => {
 
   const MOCK_JUDGE_SECTION = [
     {
+      isSeniorJudge: false,
       judgeFullName: 'Test Judge 1',
       judgeTitle: 'Judge',
       name: 'Test Judge 1',
@@ -26,6 +27,7 @@ describe('Get users in section', () => {
       userId: 'ce5add74-1559-448d-a67d-c887c8351b2e',
     },
     {
+      isSeniorJudge: false,
       judgeFullName: 'Test Judge 1',
       judgeTitle: 'Judge',
       name: 'Test Judge 2',

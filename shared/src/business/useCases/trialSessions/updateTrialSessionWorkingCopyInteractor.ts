@@ -2,8 +2,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  RawTrialSessionWorkingCopy,
+  TrialSessionWorkingCopy,
+} from '../../entities/trialSessions/TrialSessionWorkingCopy';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * updateTrialSessionWorkingCopyInteractor

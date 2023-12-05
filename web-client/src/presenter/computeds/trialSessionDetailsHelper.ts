@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const trialSessionDetailsHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { DOCKET_NUMBER_SUFFIXES, HYBRID_SESSION_TYPES } =
     applicationContext.getConstants();
 

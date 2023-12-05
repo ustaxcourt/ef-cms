@@ -2,7 +2,7 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkChecksDocketEntryEditLink = (
   cerebralTest,
-  data = {},
+  data: { index?: number; value?: boolean } = {},
 ) => {
   return it('Docket Clerk checks docket entry edit link', async () => {
     const { formattedDocketEntriesOnDocketRecord } =

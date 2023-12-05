@@ -27,14 +27,7 @@ describe('getCasesMetadataByLeadDocketNumber', () => {
     applicationContext.getDocumentClient().query.mockReturnValueOnce({
       promise: () =>
         Promise.resolve({
-          Items: [
-            {
-              docketNumber: mockLeadCase.docketNumber,
-            },
-            {
-              docketNumber: mockMemberCase.docketNumber,
-            },
-          ],
+          Items: [mockLeadCase, mockMemberCase],
         }),
     });
 

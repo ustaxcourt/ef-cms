@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -34,6 +34,7 @@ export const AccountMenu = connect(
               className={classNames(
                 'usa-accordion__button usa-nav__link hidden-underline',
               )}
+              data-testid="account-menu-button"
               title={`Hello, ${headerHelper.userName}`}
               onClick={() => {
                 toggleMenuSequence({ openMenu: 'AccountMenu' });
@@ -52,6 +53,7 @@ export const AccountMenu = connect(
                   <li className="usa-nav__submenu-item">
                     <Button
                       className="account-menu-item usa-button usa-button--unstyled font-body-2xs"
+                      data-testid="my-account-link"
                       id="my-account"
                       overrideMargin="margin-right-0"
                       onClick={() =>

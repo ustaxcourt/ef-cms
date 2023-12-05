@@ -11,7 +11,7 @@ import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -73,7 +73,7 @@ export const PaperFiling = connect(
 
             <div className="grid-col-7">
               {paperDocketEntryHelper.showAddDocumentWarning && (
-                <Hint exclamation fullWidth>
+                <Hint fullWidth>
                   This docket entry is incomplete. Add a document and save to
                   complete this entry.
                 </Hint>
@@ -86,7 +86,7 @@ export const PaperFiling = connect(
                 <div className="margin-top-5">
                   {paperDocketEntryHelper.canAllowDocumentServiceForCase && (
                     <Button
-                      id="save-and-serve"
+                      data-testid="save-and-serve"
                       type="submit"
                       onClick={() => {
                         openConfirmPaperServiceModalSequence();

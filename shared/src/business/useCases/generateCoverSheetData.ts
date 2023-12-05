@@ -18,6 +18,10 @@ export const formatCaseTitle = ({
   applicationContext,
   caseEntity,
   useInitialData,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: Case;
+  useInitialData?: boolean;
 }) => {
   const caseCaption = useInitialData
     ? caseEntity.initialCaption
@@ -54,7 +58,7 @@ export const generateCoverSheetData = async ({
   docketEntryEntity: DocketEntry;
   filingDateUpdated: boolean;
   stampData?: any;
-  useInitialData: boolean;
+  useInitialData?: boolean;
 }) => {
   const dateServedFormatted = docketEntryEntity.servedAt
     ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
@@ -68,10 +72,6 @@ export const generateCoverSheetData = async ({
   const dateFiledFormatted = docketEntryEntity.filingDate
     ? formatDateString(docketEntryEntity.filingDate, FORMATS.MMDDYY)
     : '';
-
-  if (stampData && stampData.date) {
-    stampData.date = formatDateString(stampData.date, FORMATS.MMDDYYYY);
-  }
 
   const { caseCaptionExtension, caseTitle } = formatCaseTitle({
     applicationContext,

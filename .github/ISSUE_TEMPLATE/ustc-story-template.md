@@ -36,7 +36,7 @@ Flexion developers and designers will test if the story meets acceptance criteri
 
 ## Definition of Done (Updated 5-19-22)
 **Product Owner**
- - [ ]  Acceptance criteria have been met and validated on the Court's migration environment
+ - [ ] Acceptance criteria have been met and validated on the Court's test environment
  - [ ] Add scenario to testing document, if applicable (https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA/edit?usp=sharing)
 
 **UX**
@@ -48,14 +48,15 @@ Flexion developers and designers will test if the story meets acceptance criteri
 **Engineering**
  - [ ] Automated test scripts have been written, including visual tests for newly added PDFs.
  - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning.
- - [ ] Verify that language for docket record for internal users and external users is identical.
  - [ ] New screens have been added to pa11y scripts.
  - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html.
- - [ ] READMEs, other appropriate docs, and swagger/APIs fully updated.
- - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required).
+ - [ ] Swagger docs have been updated if API endpoints have been added or updated.
+ - [ ] UI should be touch optimized and responsive for external users.
  - [ ] Interactors should validate entities before calling persistence methods.
+ - [ ] Features have been optimized where possible to reduce response times. For example, reducing api response times, parallelizing client network calls, optimizing database reads, etc.
+ - [ ] Types have been added to all added and updated functions.
  - [ ] Code refactored for clarity and to remove any known technical debt.
- - [ ] If new docket entries have been added as seed data to `efcms-local.json`, 3 local s3 files corresponding to that docketEntryId have been added to `web-api/storage/fixtures/s3/noop-documents-local-us-east-1`
+ - [ ] If new docket entries have been added as seed data to `efcms-local.json`, 3 local s3 files corresponding to that docketEntryId have been added to `web-api/storage/fixtures/s3/noop-documents-local-us-east-1`.
  - [ ] Acceptance criteria for the story has been met.
  - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story.
  - [ ] If the work completed for the story requires a reindex without a migration, or any other special deploy steps, apply these changes to the following flexion branches:
@@ -64,9 +65,3 @@ Flexion developers and designers will test if the story meets acceptance criteri
    - [ ] experimental3
    - [ ] experimental4
    - [ ] experimental5
-   - [ ] experimental6
-   - [ ] develop
- - [ ] Reviewed by UX on a deployed environment.
- - [ ] Reviewed by PO on a deployed environment. Can be deployed to the Court's `test` environment if prod-like data is required. Otherwise deployed to any `experimental` environment.
- - [ ] Deployed to the Court's `staging` environment.
-

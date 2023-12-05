@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -10,9 +10,11 @@ import classNames from 'classnames';
 
 export const InclusionsForm = connect(
   {
-    DOCUMENT_RELATIONSHIPS: state.constants.DOCUMENT_RELATIONSHIPS,
+    constants: state.constants,
     data: state[props.bind],
     fileDocumentHelper: state.fileDocumentHelper,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
     type: props.type,
     updateFileDocumentWizardFormValueSequence:
@@ -22,9 +24,10 @@ export const InclusionsForm = connect(
     validationData: state[props.validationBind],
   },
   function InclusionsForm({
+    constants,
     data,
-    DOCUMENT_RELATIONSHIPS,
     fileDocumentHelper,
+    formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence,
     type,
     updateFileDocumentWizardFormValueSequence,
@@ -66,7 +69,7 @@ export const InclusionsForm = connect(
                 className="usa-checkbox__input"
                 id={`${type}-attachments`}
                 name={`${
-                  type === DOCUMENT_RELATIONSHIPS.PRIMARY
+                  type === constants.DOCUMENT_RELATIONSHIPS.PRIMARY
                     ? 'attachments'
                     : `${type}.attachments`
                 }`}
@@ -93,7 +96,7 @@ export const InclusionsForm = connect(
                 className="usa-checkbox__input"
                 id={`${type}-certificateOfService`}
                 name={`${
-                  type === DOCUMENT_RELATIONSHIPS.PRIMARY
+                  type === constants.DOCUMENT_RELATIONSHIPS.PRIMARY
                     ? 'certificateOfService'
                     : `${type}.certificateOfService`
                 }`}
@@ -117,35 +120,22 @@ export const InclusionsForm = connect(
           </fieldset>
         </div>
         {data.certificateOfService && (
-          <DateInput
-            className={`${type}-service-date`}
+          <DateSelector
+            defaultValue={data.certificateOfServiceDate}
             errorText={validationData?.certificateOfServiceDate}
             id={`${type}-service-date`}
             label="Service date"
-            names={{
-              day: `${
-                type === DOCUMENT_RELATIONSHIPS.PRIMARY
-                  ? 'certificateOfServiceDay'
-                  : `${type}.certificateOfServiceDay`
-              }`,
-              month: `${
-                type === DOCUMENT_RELATIONSHIPS.PRIMARY
-                  ? 'certificateOfServiceMonth'
-                  : `${type}.certificateOfServiceMonth`
-              }`,
-              year: `${
-                type === DOCUMENT_RELATIONSHIPS.PRIMARY
-                  ? 'certificateOfServiceYear'
-                  : `${type}.certificateOfServiceYear`
-              }`,
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key:
+                  type === constants.DOCUMENT_RELATIONSHIPS.PRIMARY
+                    ? 'certificateOfServiceDate'
+                    : `${type}.certificateOfServiceDate`,
+                toFormat: constants.DATE_FORMATS.ISO,
+                value: e.target.value,
+              });
+              validateExternalDocumentInformationSequence();
             }}
-            values={{
-              day: data.certificateOfServiceDay,
-              month: data.certificateOfServiceMonth,
-              year: data.certificateOfServiceYear,
-            }}
-            onBlur={validateExternalDocumentInformationSequence}
-            onChange={updateFileDocumentWizardFormValueSequence}
           />
         )}
       </>

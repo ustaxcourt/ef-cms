@@ -1,4 +1,5 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { faker } from '@faker-js/faker';
 import { practitionerDetailHelper } from '../../src/presenter/computeds/practitionerDetailHelper';
 import {
   refreshElasticsearchIndex,
@@ -6,7 +7,6 @@ import {
 } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
-const { faker } = require('@faker-js/faker');
 
 export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();

@@ -1,11 +1,11 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const addCourtIssuedDocketEntryHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     COURT_ISSUED_EVENT_CODES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,

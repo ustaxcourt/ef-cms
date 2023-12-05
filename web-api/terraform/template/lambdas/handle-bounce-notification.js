@@ -1,5 +1,5 @@
 const {
   handleBounceNotificationsLambda,
-} = require('../../../src/email/handleBounceNotificationsLambda');
+} = require('../../../src/lambdas/email/handleBounceNotificationsLambda');
 
 exports.handler = handleBounceNotificationsLambda;

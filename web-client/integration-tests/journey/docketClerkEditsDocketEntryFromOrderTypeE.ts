@@ -1,4 +1,4 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeE = (
@@ -56,30 +56,19 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[2],
+      date: 'Enter a date',
     });
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'month',
-        value: '1',
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2002',
       },
     );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2002',
-      },
-    );
+
+    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
 
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
@@ -93,7 +82,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2002-01-01T05:00:00.000Z',
+      date: '2002-01-01T00:00:00.000-05:00',
       documentTitle:
         'Order time is extended to 01-01-2002 for petr(s) to pay the filing fee',
       documentType: 'Order time is extended for petr(s) to pay the filing fee',
@@ -106,16 +95,13 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2002-01-01T05:00:00.000Z',
-      day: '1',
+      date: '2002-01-01T00:00:00.000-05:00',
       documentTitle:
         'Order time is extended to 01-01-2002 for petr(s) to pay the filing fee',
       documentType: 'Order time is extended for petr(s) to pay the filing fee',
       eventCode: 'OFFX',
       generatedDocumentTitle:
         'Order time is extended to 01-01-2002 for petr(s) to pay the filing fee',
-      month: '1',
-      year: '2002',
     });
   });
 };

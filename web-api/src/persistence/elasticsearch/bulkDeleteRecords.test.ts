@@ -4,6 +4,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { bulkDeleteRecords } from './bulkDeleteRecords';
+import { efcmsMessageIndex } from '../../../elasticsearch/efcms-message-mappings';
 
 describe('bulkDeleteRecords', () => {
   const oldImageRecord = {
@@ -73,9 +74,9 @@ describe('bulkDeleteRecords', () => {
       items: [
         {
           delete: {
-            _index: 'efcms-message',
+            _index: efcmsMessageIndex,
             error: {
-              index: 'efcms-message',
+              index: efcmsMessageIndex,
               index_uuid: 'aAsFqTI0Tc2W0LCWgPNrOA',
               reason: 'document missing',
               shard: '0',
@@ -96,7 +97,7 @@ describe('bulkDeleteRecords', () => {
     expect(result.failedRecords).toEqual([
       {
         _id: `${oldImageRecord.pk.S}_${oldImageRecord.sk.S}`,
-        _index: 'efcms-message',
+        _index: efcmsMessageIndex,
       },
     ]);
   });

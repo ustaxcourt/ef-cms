@@ -56,4 +56,14 @@ module.exports = [
     notes: 'checks a11y of print trial session working copy modal',
     url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
   },
+  {
+    actions: [
+      'wait for button[data-testid="add-edit-case-worksheet"] to be visible',
+      'click element button[data-testid="add-edit-case-worksheet"]',
+      'wait for .modal-screen to be visible',
+      'click element #confirm',
+    ],
+    notes: 'checks a11y of add/edit case worksheet modal',
+    url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
+  },
 ];

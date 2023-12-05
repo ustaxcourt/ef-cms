@@ -4,7 +4,7 @@ import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateSaveModal } from '../ConfirmInitiateSaveModal';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -13,7 +13,7 @@ import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   courtIssuedDocketEntryOnChange,
   onInputChange,
@@ -32,6 +32,8 @@ export const CourtIssuedDocketEntry = connect(
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
       sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
@@ -52,6 +54,7 @@ export const CourtIssuedDocketEntry = connect(
     constants,
     fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
     openConfirmInitiateCourtIssuedFilingServiceModalSequence,
@@ -71,7 +74,7 @@ export const CourtIssuedDocketEntry = connect(
 
           {!addCourtIssuedDocketEntryHelper.showServiceWarning &&
             isEditingDocketEntry && (
-              <Hint exclamation fullWidth>
+              <Hint fullWidth>
                 This docket entry has not been served on the parties.
               </Hint>
             )}
@@ -202,6 +205,7 @@ export const CourtIssuedDocketEntry = connect(
                           />
                           <label
                             className="usa-radio__label"
+                            data-testid={`service-stamp-${option}`}
                             htmlFor={`service-stamp-${idx}`}
                           >
                             {option}
@@ -238,23 +242,21 @@ export const CourtIssuedDocketEntry = connect(
                 )}
 
                 {addCourtIssuedDocketEntryHelper.showReceivedDate && (
-                  <DateInput
-                    className="margin-top-4"
+                  <DateSelector
+                    showDateHint
+                    defaultValue={form.filingDate}
                     errorText={validationErrors.filingDate}
+                    formGroupClassNames="margin-top-4"
                     id="date-received"
                     label="Filed date"
-                    names={{
-                      day: 'filingDateDay',
-                      month: 'filingDateMonth',
-                      year: 'filingDateYear',
+                    onChange={e => {
+                      formatAndUpdateDateFromDatePickerSequence({
+                        key: 'filingDate',
+                        toFormat: constants.DATE_FORMATS.ISO,
+                        value: e.target.value,
+                      });
+                      validateCourtIssuedDocketEntrySequence();
                     }}
-                    values={{
-                      day: form.filingDateDay,
-                      month: form.filingDateMonth,
-                      year: form.filingDateYear,
-                    }}
-                    onBlur={validateCourtIssuedDocketEntrySequence}
-                    onChange={updateCourtIssuedDocketEntryFormValueSequence}
                   />
                 )}
               </div>
@@ -263,6 +265,7 @@ export const CourtIssuedDocketEntry = connect(
                 <div className="margin-top-5">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
                     <Button
+                      data-testid="serve-to-parties-btn"
                       id="serve-to-parties-btn"
                       onClick={() => {
                         openConfirmInitiateCourtIssuedFilingServiceModalSequence();
@@ -317,7 +320,6 @@ export const CourtIssuedDocketEntry = connect(
         {showModal === 'CancelDraftDocumentModal' && (
           <CancelDraftDocumentModal />
         )}
-
         {showModal === 'WorkItemAlreadyCompletedModal' && (
           <WorkItemAlreadyCompletedModal
             confirmSequence={confirmWorkItemAlreadyCompleteSequence}

@@ -11,23 +11,21 @@ export class NewTrialSession extends TrialSession {
     this.trialClerkId = rawSession.trialClerkId;
   }
 
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      alternateTrialClerkName:
-        'A valid alternate trial clerk name must be provided if "Other" is selected',
-    };
-  }
-
   getValidationRules() {
     return {
       ...TrialSession.validationRules.COMMON,
-      alternateTrialClerkName: joi.when('trialClerkId', {
-        is: 'Other',
-        otherwise: joi.optional(),
-        then: JoiValidationConstants.STRING.max(100).required(),
-      }),
-      startDate: JoiValidationConstants.ISO_DATE.min('now').required(),
+      alternateTrialClerkName: joi
+        .when('trialClerkId', {
+          is: 'Other',
+          otherwise: joi.optional(),
+          then: JoiValidationConstants.STRING.max(100).required(),
+        })
+        .messages({
+          '*': 'A valid alternate trial clerk name must be provided if "Other" is selected',
+        }),
+      startDate: JoiValidationConstants.ISO_DATE.min('now')
+        .required()
+        .messages({ '*': 'Enter a valid start date' }),
     };
   }
 }

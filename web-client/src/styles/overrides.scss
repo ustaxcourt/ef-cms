@@ -58,6 +58,10 @@ option:first-child {
 .usa-alert {
   margin-bottom: 2rem;
 
+  p {
+    font-weight: normal;
+  }
+
   &.usa-alert-paragraph {
     width: unset;
 
@@ -273,7 +277,7 @@ option:first-child {
   }
 
   #file-a-petition {
-    margin-bottom: 70px;
+    margin-bottom: 20px;
   }
 
   .mobile-text-wrap {
@@ -307,6 +311,10 @@ option:first-child {
 
 .margin-right-50 {
   margin-right: 50px;
+}
+
+.margin-top-2pt4rem {
+  margin-top: 2.4rem;
 }
 
 p {
@@ -390,4 +398,8 @@ td.message-select-control {
   .usa-checkbox {
     padding-bottom: 5px;
   }
+}
+
+.display-block {
+  display: block;
 }

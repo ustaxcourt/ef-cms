@@ -1,5 +1,6 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { clearPendingReportsAction } from './clearPendingReportsAction';
+import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -16,6 +17,6 @@ describe('clearPendingReportsAction', () => {
       },
     });
 
-    expect(state.pendingReports).toEqual({});
+    expect(state.pendingReports).toEqual(initialPendingReportsState);
   });
 });

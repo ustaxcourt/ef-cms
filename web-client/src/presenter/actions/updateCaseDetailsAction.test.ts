@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { updateCaseDetailsAction } from './updateCaseDetailsAction';
@@ -22,11 +22,11 @@ describe('updateCaseDetailsAction', () => {
       modules: {
         presenter,
       },
-      props: { petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z' },
       state: {
         caseDetail: { docketNumber: '123-20' },
         form: {
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
         },
       },
     });
@@ -58,12 +58,10 @@ describe('updateCaseDetailsAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        petitionPaymentDate: '2001-01-01T05:00:00.000Z',
-      },
       state: {
         caseDetail: { docketNumber: '123-20' },
         form: {
+          petitionPaymentDate: '2001-01-01T05:00:00.000Z',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
       },
@@ -96,13 +94,10 @@ describe('updateCaseDetailsAction', () => {
       modules: {
         presenter,
       },
-      props: { irsNoticeDate: '2001-01-01T05:00:00.000Z' },
       state: {
         caseDetail: { docketNumber: '123-20' },
         form: {
-          irsDay: '01',
-          irsMonth: '01',
-          irsYear: '2001',
+          irsNoticeDate: '2001-01-01T05:00:00.000Z',
         },
       },
     });

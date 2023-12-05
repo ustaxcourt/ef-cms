@@ -2,25 +2,13 @@ import { aggregateStatisticsErrors } from './validatePetitionFromPaperAction';
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * validates the edit case details inputs
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context needed for getting the use case
- * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
- * @param {object} providers.get the cerebral get function used for getting state.form
- * @returns {object} the next path based on if validation was successful or error
- */
-
 export const validateCaseDetailsAction = ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
-  const { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate } =
-    props;
 
   let errors = applicationContext
     .getUseCases()
@@ -28,9 +16,6 @@ export const validateCaseDetailsAction = ({
       caseDetail: {
         ...caseDetail,
         ...form,
-        irsNoticeDate,
-        petitionPaymentDate,
-        petitionPaymentWaivedDate,
         preferredTrialCity: form.preferredTrialCity
           ? form.preferredTrialCity
           : null,

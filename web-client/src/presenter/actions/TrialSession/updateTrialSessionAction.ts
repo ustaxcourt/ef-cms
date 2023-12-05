@@ -1,51 +1,18 @@
-import { omit } from 'lodash';
-import { preparedDateToISOString } from '../../../utilities/preparedDateToISOString';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * update a trial session
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get helper function
- * @param {object} providers.path the next object in the path
- * @param {object} providers.props the cerebral props object
- * @returns {Promise<object>} the next path based on if creation was successful or error
- */
 export const updateTrialSessionAction = async ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
-  const startDate = preparedDateToISOString(
-    applicationContext,
-    props.computedStartDate,
-  );
-
-  const estimatedEndDate = preparedDateToISOString(
-    applicationContext,
-    props.computedEstimatedEndDate,
-  );
-
-  const trialSession = omit(
-    {
-      ...get(state.form),
-    },
-    [
-      'startDateYear',
-      'startDateMonth',
-      'startDateDay',
-      'estimatedEndDateYear',
-      'estimatedEndDateMonth',
-      'estimatedEndDateDay',
-    ],
-  );
+  const clientConnectionId = get(state.clientConnectionId);
 
   try {
     await applicationContext
       .getUseCases()
       .updateTrialSessionInteractor(applicationContext, {
-        trialSession: { ...trialSession, estimatedEndDate, startDate },
+        clientConnectionId,
+        trialSession: get(state.form),
       });
   } catch (err) {
     return path.error({

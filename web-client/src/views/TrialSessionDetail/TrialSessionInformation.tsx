@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeleteTrialSessionModal } from './DeleteTrialSessionModal';
 import { SessionAssignments } from '../TrialSessionWorkingCopy/SessionAssignments';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -74,15 +73,16 @@ export const TrialSessionInformation = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openConfirmDeleteTrialSessionModalSequence:
       sequences.openConfirmDeleteTrialSessionModalSequence,
+    openPrintGeneratedPaperServiceSequence:
+      sequences.openPrintGeneratedPaperServiceSequence,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
-    showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
   function TrialSessionInformation({
     formattedTrialSessionDetails,
     openConfirmDeleteTrialSessionModalSequence,
+    openPrintGeneratedPaperServiceSequence,
     printTrialCalendarSequence,
-    showModal,
     TRIAL_SESSION_PROCEEDING_TYPES,
     trialSessionHeaderHelper,
   }) {
@@ -90,7 +90,7 @@ export const TrialSessionInformation = connect(
       <>
         <div className="grid-container padding-x-0">
           <div className="grid-row">
-            <div className="grid-col-9">
+            <div className="grid-col-auto">
               <h1>
                 Session Information
                 {trialSessionHeaderHelper.showSwitchToWorkingCopy && (
@@ -105,6 +105,7 @@ export const TrialSessionInformation = connect(
                   <Button
                     link
                     className="margin-left-2 margin-top-2"
+                    data-testid="edit-trial-session"
                     href={`/edit-trial-session/${formattedTrialSessionDetails.trialSessionId}`}
                     icon="edit"
                   >
@@ -113,8 +114,7 @@ export const TrialSessionInformation = connect(
                 )}
               </h1>
             </div>
-            <div className="grid-col-3 display-flex">
-              <span className="flex-push-right width-0 margin-left-auto" />
+            <div className="grid-col-fill display-flex flex-justify-end">
               {formattedTrialSessionDetails.canDelete && (
                 <Button
                   link
@@ -127,19 +127,25 @@ export const TrialSessionInformation = connect(
                   Delete Session
                 </Button>
               )}
-              {showModal === 'DeleteTrialSessionModal' && (
-                <DeleteTrialSessionModal />
+              {trialSessionHeaderHelper.showPrintPaperServicePDFsButton && (
+                <Button
+                  link
+                  className="margin-top-2 margin-left-4"
+                  data-testid="trial-session-open-paper-service-pdfs"
+                  icon="print"
+                  onClick={() => openPrintGeneratedPaperServiceSequence()}
+                >
+                  Print Paper Service PDF
+                </Button>
               )}
-              {formattedTrialSessionDetails.isCalendared && (
+              {trialSessionHeaderHelper.showPrintCalendarButton && (
                 <Button
                   link
                   className="margin-top-2 margin-left-4"
                   icon="print"
-                  onClick={() => {
-                    printTrialCalendarSequence();
-                  }}
+                  onClick={() => printTrialCalendarSequence()}
                 >
-                  Print
+                  Print Session Information
                 </Button>
               )}
             </div>

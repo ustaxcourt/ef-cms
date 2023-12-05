@@ -7,7 +7,6 @@ import {
 } from './helpers';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
-import { irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -46,21 +45,16 @@ const verifyCorrectFileDocumentButton = (
 
 const verifyDocumentWasFiledAcrossConsolidatedCaseGroup = cerebralTest => {
   return it('should verify docket entry was filed across the entire consolidated case group', async () => {
-    await Promise.all(
-      cerebralTest.consolidatedCaseDetailGroup.map(
-        async consolidatedCaseBefore => {
-          await cerebralTest.runSequence('gotoCaseDetailSequence', {
-            docketNumber: consolidatedCaseBefore.docketNumber,
-          });
+    for (let consolidatedCase of cerebralTest.consolidatedCaseDetailGroup) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: consolidatedCase.docketNumber,
+      });
 
-          const consolidatedCaseAfter = cerebralTest.getState('caseDetail');
-
-          expect(consolidatedCaseAfter.docketEntries.length).toEqual(
-            consolidatedCaseBefore.docketEntries.length + 1,
-          );
-        },
-      ),
-    );
+      const consolidatedCaseAfter = cerebralTest.getState('caseDetail');
+      expect(consolidatedCaseAfter.docketEntries.length).toEqual(
+        consolidatedCase.docketEntries.length + 1,
+      );
+    }
   });
 };
 
@@ -115,7 +109,6 @@ describe('External User files a document across a consolidated case group', () =
     externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
 
-    loginAs(cerebralTest, 'irspractitioner@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber2);
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber2,
@@ -136,34 +129,24 @@ describe('External User files a document across a consolidated case group', () =
       docketNumber: consolidatedCaseDocketNumber3,
       shouldShowRequestAccessToCaseButton: true,
     });
-    irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup(
-      cerebralTest,
-      {
-        docketNumber: consolidatedCaseDocketNumber3,
-        fakeFile,
-      },
-    );
-    verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
-    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
-      expectedAssociation: true,
-      practitionerRole: 'irsPractitioner',
-    });
   });
 
   describe('privatePractitioner', () => {
     loginAs(cerebralTest, 'privatepractitioner@example.com');
     getConsolidatedCasesDetails(cerebralTest, leadCaseDocketNumber);
+
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: leadCaseDocketNumber,
       shouldShowFileDocumentButton: true,
     });
+
     externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
+
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
 
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
 
     loginAs(cerebralTest, 'privatepractitioner2@example.com');
-
     verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
       expectedAssociation: false,
       practitionerRole: 'privatePractitioner',
@@ -174,7 +157,7 @@ describe('External User files a document across a consolidated case group', () =
       shouldShowRequestAccessToCaseButton: true,
     });
 
-    it('Practitioner requests access to case', async () => {
+    it('practitioner requests access to case', async () => {
       await cerebralTest.runSequence('gotoRequestAccessSequence', {
         docketNumber: consolidatedCaseDocketNumber3,
       });
@@ -223,7 +206,7 @@ describe('External User files a document across a consolidated case group', () =
       expect(createdDocketEntry.filedBy).toEqual('Lilah Gilbert');
     });
 
-    it('Practitioner verifies association only with one case in the consolidated group', () => {
+    it('practitioner verifies association only with one case in the consolidated group', () => {
       const userId: string = cerebralTest.getState('user.userId');
       const consolidatedCases = cerebralTest.getState(
         'caseDetail.consolidatedCases',
@@ -248,7 +231,9 @@ describe('External User files a document across a consolidated case group', () =
   describe('petitioner', () => {
     loginAs(cerebralTest, 'petitioner@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber1);
+
     externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
+
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
   });
 });

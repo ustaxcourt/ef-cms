@@ -170,7 +170,7 @@ The scripts containing the word `readonly` run special smoketests that rely on e
 
 #### Open
 
-The Cypress CLI runner also provides a useful `open` command which will load a browser instance locally which developers can use to watch the tests click through the UI and rewind history.
+The Cypress CLI runner also provides a useful `open` command which will load a browser instance locally, which developers can use to watch the tests click through the UI and rewind history.
 
 #### Public
 
@@ -323,6 +323,14 @@ docker run -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efc
 
 After inspecting the failed pdfs, override the existing the pdfs by running the following command:
 ```cp -r shared/test-output/*.png shared/test-pdf-expected-images/```
+
+### M1 Users
+Before running the commands above: 
+- turn on the setting for Rosetta emulation in Docker Desktop (don't forget to apply and restart)
+- add the line `export DOCKER_DEFAULT_PLATFORM=linux/amd64` to your `.zshrc`
+
+
+If you're getting errors, try running `docker system prune -af` and run the commands again. 
 
 ## Client Integration Testing
 If you want to be able to run `build-client-integration` tests within a Docker container locally for debugging purposes without deploying, you could use these commands.

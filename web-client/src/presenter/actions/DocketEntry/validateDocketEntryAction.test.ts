@@ -1,9 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateDocketEntryAction } from './validateDocketEntryAction';
-
-presenter.providers.applicationContext = applicationContext;
 
 describe('validateDocketEntryAction', () => {
   let successStub;
@@ -14,6 +12,8 @@ describe('validateDocketEntryAction', () => {
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
+
+    presenter.providers.applicationContext = applicationContext;
 
     mockDocketEntry = {
       data: 'hello world',
@@ -59,34 +59,12 @@ describe('validateDocketEntryAction', () => {
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 
-  describe('dateReceived', () => {
-    it('returns an error message if the user enters a two-digit year', async () => {
-      applicationContext
-        .getUseCases()
-        .validateDocketEntryInteractor.mockReturnValue(null);
-
-      await runAction(validateDocketEntryAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            ...mockDocketEntry,
-            dateReceivedYear: '20',
-          },
-        },
-      });
-
-      expect(errorStub.mock.calls[0][0].errors.dateReceived).toEqual(
-        'Enter a four-digit year',
-      );
-    });
-
+  describe('receivedAt', () => {
     it('does not overwrite errors returned from the validateDocketEntryInteractor if the user enters a two-digit year', async () => {
       applicationContext
         .getUseCases()
         .validateDocketEntryInteractor.mockReturnValue({
-          dateReceived: 'The date was invalid',
+          receivedAt: 'The date was invalid',
         });
 
       await runAction(validateDocketEntryAction, {
@@ -96,40 +74,18 @@ describe('validateDocketEntryAction', () => {
         state: {
           form: {
             ...mockDocketEntry,
-            dateReceivedYear: '20',
+            receivedAt: '12/12/20',
           },
         },
       });
 
-      expect(errorStub.mock.calls[0][0].errors.dateReceived).toEqual(
+      expect(errorStub.mock.calls[0][0].errors.receivedAt).toEqual(
         'The date was invalid',
       );
     });
   });
 
   describe('serviceDate', () => {
-    it('returns an error message if the user enters a two-digit year', async () => {
-      applicationContext
-        .getUseCases()
-        .validateDocketEntryInteractor.mockReturnValue(null);
-
-      await runAction(validateDocketEntryAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            ...mockDocketEntry,
-            serviceDateYear: '20',
-          },
-        },
-      });
-
-      expect(errorStub.mock.calls[0][0].errors.serviceDate).toEqual(
-        'Enter a four-digit year',
-      );
-    });
-
     it('does not overwrite errors returned from the validateDocketEntryInteractor if the user enters a two-digit year', async () => {
       applicationContext
         .getUseCases()
@@ -144,7 +100,7 @@ describe('validateDocketEntryAction', () => {
         state: {
           form: {
             ...mockDocketEntry,
-            serviceDateYear: '20',
+            serviceDate: '12/12/20',
           },
         },
       });

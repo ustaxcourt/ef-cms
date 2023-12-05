@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getDocument } from './getDocument';
 import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
 

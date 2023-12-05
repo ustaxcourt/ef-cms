@@ -1,4 +1,6 @@
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
+import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
   calculateDifferenceInDays,
   calculateISODate,
@@ -9,10 +11,10 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
+import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -21,6 +23,7 @@ import {
 } from '../../shared/src/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
 import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
@@ -43,11 +46,15 @@ import { serveCaseDocument } from '../../shared/src/business/utilities/serveCase
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 
 const utilities = {
+  abbreviateState,
+  calculateDaysElapsedSinceLastStatusChange,
   calculateDifferenceInDays,
   calculateISODate,
+  caseStatusWithTrialInformation,
   combineTwoPdfs,
   compareCasesByDocketNumber,
   compareISODateStrings,
@@ -56,10 +63,10 @@ const utilities = {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
-  formatCaseForTrialSession,
   formatDateString,
   formatJudgeName,
   formatNow,
+  formatPendingItem,
   getAddressPhoneDiff,
   getCropBox,
   getDescriptionDisplay,
@@ -79,6 +86,7 @@ const utilities = {
   setConsolidationFlagsForDisplay,
   setServiceIndicatorsForCase,
   setupPdfDocument,
+  sleep,
   uploadToS3,
 };
 

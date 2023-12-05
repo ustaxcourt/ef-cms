@@ -2,9 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
 import { ObjectionsForm } from './ObjectionsForm';
+import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
-import { WarningNotificationComponent } from '../../views/WarningNotification';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -25,16 +25,7 @@ export const PrimaryDocumentForm = connect(
     return (
       <React.Fragment>
         <h2 className="margin-top-4">{form.documentTitle}</h2>
-        {fileDocumentHelper.redactionAcknowledgementEnabled && (
-          <WarningNotificationComponent
-            alertWarning={{
-              message:
-                'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or redacted.',
-            }}
-            dismissable={false}
-            scrollToTop={false}
-          />
-        )}
+        <PIIRedactedWarning />
         <div className="blue-container">
           <FormGroup errorText={validationErrors.primaryDocumentFile}>
             <label
@@ -45,14 +36,14 @@ export const PrimaryDocumentForm = connect(
               htmlFor="primary-document"
               id="primary-document-label"
             >
-              Upload your document{' '}
+              Upload document PDF (.pdf){' '}
               <span className="success-message padding-left-1">
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>
             </label>
             <span className="usa-hint">
-              File must be in PDF format (.pdf). Max file size{' '}
-              {constants.MAX_FILE_SIZE_MB}MB.
+              Make sure file is not encrypted or password protected. Max file
+              size {constants.MAX_FILE_SIZE_MB}MB.
             </span>
             <StateDrivenFileInput
               aria-describedby="primary-document-label"
@@ -62,7 +53,6 @@ export const PrimaryDocumentForm = connect(
               validationSequence="validateExternalDocumentInformationSequence"
             />
           </FormGroup>
-
           <InclusionsForm
             bind="form"
             type="primaryDocument"

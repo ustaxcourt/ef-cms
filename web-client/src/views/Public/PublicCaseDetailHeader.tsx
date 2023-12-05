@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -31,7 +31,11 @@ export const PublicCaseDetailHeader = connect(
             <div className="grid-row">
               <div className="tablet:grid-col-8">
                 <div>
-                  <h1 className="heading-2 captioned" tabIndex={-1}>
+                  <h1
+                    className="heading-2 captioned"
+                    data-testid="header-public-case-detail"
+                    tabIndex={-1}
+                  >
                     Docket Number:{' '}
                     {publicCaseDetailHeaderHelper.docketNumberWithSuffix}
                   </h1>

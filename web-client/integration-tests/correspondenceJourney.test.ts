@@ -29,7 +29,7 @@ describe('Adds correspondence to a case', () => {
     });
   });
 
-  describe('docket clerk adds two correspondence. deletes only the first one', () => {
+  describe('docket clerk adds two correspondences and deletes only the first one', () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     userNavigatesToAddCorrespondence(cerebralTest, 'DocketClerk');
     userAddsCorrespondence(
@@ -58,7 +58,6 @@ describe('Adds correspondence to a case', () => {
     docketClerkDeletesCorrespondence(
       cerebralTest,
       `${firstCorrespondenceTitle} dc`,
-      'DocketClerk',
     );
   });
 

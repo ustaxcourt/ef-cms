@@ -4,12 +4,13 @@ import {
   ORDER_TYPES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { get } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *
@@ -19,7 +20,7 @@ import { get } from 'lodash';
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the document is updated
  */
-export const updateCourtIssuedOrderInteractor = async (
+export const updateCourtIssuedOrder = async (
   applicationContext,
   { docketEntryIdToEdit, documentMetadata },
 ) => {
@@ -133,3 +134,10 @@ export const updateCourtIssuedOrderInteractor = async (
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
+
+export const updateCourtIssuedOrderInteractor = withLocking(
+  updateCourtIssuedOrder,
+  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
+    identifiers: [`case|${documentMetadata.docketNumber}`],
+  }),
+);

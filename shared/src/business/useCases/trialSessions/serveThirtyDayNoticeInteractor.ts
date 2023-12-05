@@ -4,7 +4,11 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -14,13 +18,13 @@ import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-export type ServeThirtyDayNoticeRequest = {
-  trialSessionId: string;
-};
-
 export const serveThirtyDayNoticeInteractor = async (
   applicationContext: IApplicationContext,
-  request: ServeThirtyDayNoticeRequest,
+  {
+    trialSessionId,
+  }: {
+    trialSessionId: string;
+  },
 ): Promise<void> => {
   const currentUser = applicationContext.getCurrentUser();
 
@@ -28,7 +32,7 @@ export const serveThirtyDayNoticeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (!request.trialSessionId) {
+  if (!trialSessionId) {
     throw new InvalidRequest('No trial Session Id provided');
   }
 
@@ -36,8 +40,12 @@ export const serveThirtyDayNoticeInteractor = async (
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
-      trialSessionId: request.trialSessionId,
+      trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   if (!trialSession.caseOrder?.length) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -202,16 +210,25 @@ export const serveThirtyDayNoticeInteractor = async (
   await Promise.all(generateNottForCases);
 
   let pdfUrl: string | undefined = undefined;
+  let fileId: string | undefined = undefined;
   if (hasPaperService) {
     const paperServicePdfData = await paperServicePdf.save();
-    const { url } = await applicationContext
+    ({ fileId, url: pdfUrl } = await applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl({
         applicationContext,
         file: paperServicePdfData,
-        useTempBucket: true,
-      });
-    pdfUrl = url;
+        fileNamePrefix: 'paper-service-pdf/',
+      }));
+
+    trialSessionEntity.addPaperServicePdf(
+      fileId,
+      replaceBracketed(
+        thirtyDayNoticeDocumentInfo!.documentTitle,
+        formatDateString(trialSession.startDate, FORMATS.MMDDYYYY_DASHED),
+        trialSession.trialLocation!,
+      ),
+    );
   }
 
   trialSessionEntity.hasNOTTBeenServed = true;
@@ -225,6 +242,7 @@ export const serveThirtyDayNoticeInteractor = async (
     applicationContext,
     message: {
       action: 'thirty_day_notice_paper_service_complete',
+      fileId,
       hasPaper: hasPaperService,
       pdfUrl,
     },

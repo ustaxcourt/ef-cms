@@ -13,15 +13,18 @@ import { Get } from 'cerebral';
 export const formattedDashboardTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
   const formatSessionFn = session => formatSession(session, applicationContext);
-  const partitionFn = session =>
-    applicationContext
-      .getUtilities()
-      .prepareDateFromString(session.startDate)
-      .isBefore();
+  const partitionFn = session => {
+    return (
+      applicationContext
+        .getUtilities()
+        .prepareDateFromString(session.startDate)
+        .toISO() < applicationContext.getUtilities().createISODateString()
+    );
+  };
 
   const trialSessions = get(state.trialSessions).filter(session => {
     return session.sessionStatus === SESSION_STATUS_GROUPS.open;

@@ -1,5 +1,5 @@
 import { DOCUMENT_SERVED_MESSAGES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getFileExternalDocumentAlertSuccessAction } from './getFileExternalDocumentAlertSuccessAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -58,6 +58,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
         linkText: 'Print receipt.',
         linkUrl: 'http://example.com',
         message: DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED,
+        newTab: true,
       },
     });
   });

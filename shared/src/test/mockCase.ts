@@ -7,12 +7,18 @@ import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
+import {
+  ConsolidatedCaseSummary,
+  RawConsolidatedCaseSummary,
+} from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { MOCK_DOCUMENTS } from './mockDocketEntry';
+import { docketClerkUser, judgeUser } from './mockUsers';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
+  consolidatedCases: [],
   correspondence: [],
   createdAt: '2018-03-01T21:40:46.415Z',
   docketEntries: MOCK_DOCUMENTS,
@@ -52,6 +58,9 @@ export const MOCK_CASE: RawCase = {
   sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
 };
+
+export const MOCK_CONSOLIDATED_CASE_SUMMARY: RawConsolidatedCaseSummary =
+  new ConsolidatedCaseSummary(MOCK_CASE).toRawObject();
 
 const mockDocketEntriesWithoutStipDecision = MOCK_DOCUMENTS.slice(0, 3);
 
@@ -451,4 +460,55 @@ export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
       userId: '3bcd5fb7-434e-4354-aa08-1d10846c1867',
     },
   ],
+};
+
+export const MOCK_SUBMITTED_CASE: RawCase = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-11T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+    },
+  ],
+};
+
+export const MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [],
+  docketNumber: '115-23',
+  pk: 'case|115-23',
+  sk: 'case|115-23',
+};
+
+export const MOCK_CAV_LEAD_CASE = {
+  ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-13T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.cav,
+    },
+  ],
+  pk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
+  sk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
+  sortableDocketNumber: 2019000109,
+  status: CASE_STATUS_TYPES.cav,
+};
+
+export const MOCK_CAV_CONSOLIDATED_MEMBER_CASE = {
+  ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-13T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.cav,
+    },
+  ],
+  sortableDocketNumber: 2019000110,
+  status: CASE_STATUS_TYPES.cav,
 };

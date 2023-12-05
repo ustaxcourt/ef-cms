@@ -345,7 +345,9 @@ select[disabled] {
     padding: 30px;
     border: 1px solid color($theme-color-primary);
     margin-bottom: 2rem;
-    box-shadow: 0 4px 4px rgb(0 0 0 / 15%), inset 0 4px 4px rgb(0 0 0 / 15%);
+    box-shadow:
+      0 4px 4px rgb(0 0 0 / 15%),
+      inset 0 4px 4px rgb(0 0 0 / 15%);
   }
 
   .usa-banner__button-text {
@@ -986,6 +988,41 @@ header.usa-header {
   color: white;
 }
 
+.floating-card-pages {
+  flex: 1;
+  background-color: color($theme-color-primary-darker);
+
+  .usa-label {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+}
+
+.requirement-text{
+	line-height: 1.43;
+
+	&.valid-requirement{
+		color: $color-green
+	}
+
+	&.invalid-requirement{
+		color: color($theme-color-secondary-vivid)
+	}
+}
+
+.create-petitioner-form {
+  input.usa-input {
+    width: 100%;
+    max-width: unset;
+  }
+
+  h1, 
+  h2 {
+    font-family: inherit;
+  }
+}
+
 .big-blue-header {
   padding: 20px 0;
   margin-bottom: 20px;
@@ -1246,7 +1283,9 @@ hr.lighter {
   #sign-pdf-canvas {
     display: block;
     margin: auto;
-    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    box-shadow:
+      0 4px 8px 0 rgb(0 0 0 / 20%),
+      0 6px 20px 0 rgb(0 0 0 / 19%);
   }
 }
 
@@ -2018,6 +2057,10 @@ button.change-scanner-button {
   max-width: 100%;
 }
 
+.consolidated-case-padding {
+  padding-left: 2rem !important;
+}
+
 .maintenance-content {
   display: flex;
   height: 90vh;
@@ -2128,4 +2171,12 @@ button.change-scanner-button {
   &:hover {
     color: $color-white;
   }
+}
+
+.width-half {
+  width: 49%;
+}
+
+.resize-vertical-only {
+  resize: vertical;
 }

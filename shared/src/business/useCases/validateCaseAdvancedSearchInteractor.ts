@@ -5,6 +5,5 @@ export const validateCaseAdvancedSearchInteractor = ({
 }: {
   caseSearch: any;
 }) => {
-  const search = new CaseSearch(caseSearch);
-  return search.getFormattedValidationErrors();
+  return new CaseSearch(caseSearch).getFormattedValidationErrors();
 };

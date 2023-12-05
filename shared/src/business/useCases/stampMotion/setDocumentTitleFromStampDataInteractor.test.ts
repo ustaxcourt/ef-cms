@@ -1,17 +1,14 @@
-import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { setDocumentTitleFromStampDataInteractor } from './setDocumentTitleFromStampDataInteractor';
 
 describe('setDocumentTitleFromStampDataInteractor', () => {
-  const getDateISO = () =>
-    applicationContext.getUtilities().createISODateString();
+  const mockDate = '12/09/57';
 
   const testCases = [
-    [{ disposition: MOTION_DISPOSITIONS.GRANTED as string }, 'GRANTED'],
+    [{ disposition: MOTION_DISPOSITIONS.GRANTED }, 'GRANTED'],
     [
       {
-        disposition: MOTION_DISPOSITIONS.GRANTED as string,
+        disposition: MOTION_DISPOSITIONS.GRANTED,
         jurisdictionalOption: 'The case is restored to the general docket',
         strickenFromTrialSession:
           'This case is stricken from the trial session',
@@ -22,34 +19,31 @@ describe('setDocumentTitleFromStampDataInteractor', () => {
       {
         deniedAsMoot: true,
         deniedWithoutPrejudice: true,
-        disposition: MOTION_DISPOSITIONS.DENIED as string,
+        disposition: MOTION_DISPOSITIONS.DENIED,
       },
       'DENIED as moot without prejudice',
     ],
     [
       {
-        disposition: MOTION_DISPOSITIONS.DENIED as string,
+        disposition: MOTION_DISPOSITIONS.DENIED,
       },
       'DENIED',
     ],
     [
       {
         customText: 'amazing custom text',
-        disposition: MOTION_DISPOSITIONS.GRANTED as string,
+        disposition: MOTION_DISPOSITIONS.GRANTED,
       },
       'GRANTED - amazing custom text',
     ],
     [
       {
         customText: 'amazing custom text',
-        date: getDateISO(),
-        disposition: MOTION_DISPOSITIONS.GRANTED as string,
+        date: mockDate,
+        disposition: MOTION_DISPOSITIONS.GRANTED,
         dueDateMessage: 'the parties shall file a status report by',
       },
-      `GRANTED - the parties shall file a status report by ${formatDateString(
-        getDateISO(),
-        FORMATS.MMDDYYYY,
-      )} - amazing custom text`,
+      `GRANTED - the parties shall file a status report by ${mockDate} - amazing custom text`,
     ],
   ];
 

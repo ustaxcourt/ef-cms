@@ -83,7 +83,7 @@ import { Get } from 'cerebral';
 export const formattedEligibleCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const { formatCaseForTrialSession, setConsolidationFlagsForDisplay } =
     applicationContext.getUtilities();
@@ -110,7 +110,7 @@ export const formattedEligibleCasesHelper = (
         caseItem[groupKeySymbol],
       );
     })
-    .sort(compareTrialSessionEligibleCases(eligibleCases))
+    .sort(compareTrialSessionEligibleCases(formattedCases))
     .filter(eligibleCase => {
       if (filter === 'Small') {
         return (

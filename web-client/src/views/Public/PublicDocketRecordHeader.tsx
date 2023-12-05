@@ -5,7 +5,7 @@ import {
 } from '../DocketRecord/DocketRecordHeader';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app-public.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';

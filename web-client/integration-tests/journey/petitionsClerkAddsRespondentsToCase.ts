@@ -2,11 +2,11 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/pr
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
 export const petitionsClerkAddsRespondentsToCase = cerebralTest => {
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
+
   return it('Petitions clerk manually adds multiple irsPractitioners to case', async () => {
     expect(cerebralTest.docketNumber).toBeDefined();
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

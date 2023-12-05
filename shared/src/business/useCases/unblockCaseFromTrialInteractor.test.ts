@@ -1,10 +1,20 @@
 import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { unblockCaseFromTrialInteractor } from './unblockCaseFromTrialInteractor';
 
 describe('unblockCaseFromTrialInteractor', () => {
-  it('should set the blocked flag to false and remove the blockedReason', async () => {
+  let mockLock;
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
@@ -17,7 +27,8 @@ describe('unblockCaseFromTrialInteractor', () => {
           status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
         }),
       );
-
+  });
+  it('should set the blocked flag to false and remove the blockedReason', async () => {
     const result = await unblockCaseFromTrialInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -47,11 +58,6 @@ describe('unblockCaseFromTrialInteractor', () => {
   });
 
   it('should not create the trial sort mapping record if the case has no trial city', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
-    });
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -70,5 +76,40 @@ describe('unblockCaseFromTrialInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      unblockCaseFromTrialInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await unblockCaseFromTrialInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 });

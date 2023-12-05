@@ -1,23 +1,25 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 export const PetitionPaymentForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     bind: state[props.bind],
-    dateBind: state[props.dateBind],
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     paymentStatus: state.constants.PAYMENT_STATUS,
     validationErrors: state[props.validationErrorsBind],
   },
   function PetitionPaymentForm({
     bind,
-    dateBind,
+    DATE_FORMATS,
+    formatAndUpdateDateFromDatePickerSequence,
     paymentStatus,
-    updateDateSequence,
     updateSequence,
     validateSequence,
     validationErrors,
@@ -71,6 +73,7 @@ export const PetitionPaymentForm = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid="payment-status-unpaid-label"
                 htmlFor="payment-status-unpaid"
               >
                 {paymentStatus.UNPAID}
@@ -106,22 +109,19 @@ export const PetitionPaymentForm = connect(
 
         {bind.petitionPaymentStatus === paymentStatus.PAID && (
           <>
-            <DateInput
+            <DateSelector
+              defaultValue={bind.petitionPaymentDate}
               errorText={validationErrors.petitionPaymentDate}
               id="payment-date"
               label="Payment date"
-              names={{
-                day: 'paymentDateDay',
-                month: 'paymentDateMonth',
-                year: 'paymentDateYear',
+              onChange={e => {
+                formatAndUpdateDateFromDatePickerSequence({
+                  key: 'petitionPaymentDate',
+                  toFormat: DATE_FORMATS.ISO,
+                  value: e.target.value,
+                });
+                validateSequence();
               }}
-              values={{
-                day: dateBind.paymentDateDay,
-                month: dateBind.paymentDateMonth,
-                year: dateBind.paymentDateYear,
-              }}
-              onBlur={validateSequence}
-              onChange={updateDateSequence}
             />
 
             <FormGroup errorText={validationErrors.petitionPaymentMethod}>
@@ -149,22 +149,19 @@ export const PetitionPaymentForm = connect(
         )}
 
         {bind.petitionPaymentStatus === paymentStatus.WAIVED && (
-          <DateInput
+          <DateSelector
+            defaultValue={bind.petitionPaymentWaivedDate}
             errorText={validationErrors.petitionPaymentWaivedDate}
             id="payment-date-waived"
             label="Date waived"
-            names={{
-              day: 'paymentDateWaivedDay',
-              month: 'paymentDateWaivedMonth',
-              year: 'paymentDateWaivedYear',
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key: 'petitionPaymentWaivedDate',
+                toFormat: DATE_FORMATS.ISO,
+                value: e.target.value,
+              });
+              validateSequence();
             }}
-            values={{
-              day: dateBind.paymentDateWaivedDay,
-              month: dateBind.paymentDateWaivedMonth,
-              year: dateBind.paymentDateWaivedYear,
-            }}
-            onBlur={validateSequence}
-            onChange={updateDateSequence}
           />
         )}
       </>

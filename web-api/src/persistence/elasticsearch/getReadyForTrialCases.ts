@@ -1,4 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  ANSWER_DOCUMENT_CODES,
+  CASE_STATUS_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { search } from './searchClient';
 
 /**
@@ -25,8 +28,8 @@ export const getReadyForTrialCases = async ({ applicationContext }) => {
             ],
             must: [
               {
-                term: {
-                  'documentType.S': 'Answer',
+                terms: {
+                  'eventCode.S': ANSWER_DOCUMENT_CODES,
                 },
               },
               {

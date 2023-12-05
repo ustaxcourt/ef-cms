@@ -9,7 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../entities/User';
 import { caseSearchFilter } from '../utilities/caseFilter';
 import { omit } from 'lodash';
@@ -67,7 +67,7 @@ export const orderAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('private order search', {
+  applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
     totalCount,

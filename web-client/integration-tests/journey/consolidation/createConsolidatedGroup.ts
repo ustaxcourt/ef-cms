@@ -1,19 +1,28 @@
 import { docketClerkConsolidatesCases } from '../docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from '../docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from '../docketClerkSearchesForCaseToConsolidateWith';
+import { docketClerkUpdatesCaseStatusTo } from '../docketClerkUpdatesCaseStatusTo';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from '../docketClerkUpdatesCaseStatusToReadyForTrial';
 import { loginAs, uploadPetition } from '../../helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from '../petitionsClerkServesElectronicCaseToIrs';
 
 export const createConsolidatedGroup = (
   cerebralTest,
-  caseOverrides = {},
-  numberOfMemberCases = 1,
+  caseOverrides: {
+    caseStatus?: string;
+    caseType?: string;
+    contactPrimary?: object;
+    contactSecondary?: object;
+    partyType?: string;
+    preferredTrialCity?: string;
+    procedureType?: string;
+    corporateDisclosureFileId?: string;
+  } = {},
+  numberOfMemberCases: number = 1,
 ) => {
   return describe('Create a consolidated group of cases', () => {
-    cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
     it('login as a petitioner and create the lead case', async () => {
+      cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
       const { docketNumber } = await uploadPetition(
         cerebralTest,
         caseOverrides,
@@ -31,8 +40,16 @@ export const createConsolidatedGroup = (
     petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
     loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
+    if (caseOverrides.caseStatus) {
+      docketClerkUpdatesCaseStatusTo(
+        cerebralTest,
+        caseOverrides.caseStatus,
+        'Colvin',
+      );
+    } else {
+      docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+    }
     for (let i = 1; i <= numberOfMemberCases; i++) {
       it('login as a petitioner and create a case to consolidate with', async () => {
         const { docketNumber } = await uploadPetition(
@@ -53,7 +70,15 @@ export const createConsolidatedGroup = (
       petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
       loginAs(cerebralTest, 'docketclerk@example.com');
-      docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+      if (caseOverrides.caseStatus) {
+        docketClerkUpdatesCaseStatusTo(
+          cerebralTest,
+          caseOverrides.caseStatus,
+          'Colvin',
+        );
+      } else {
+        docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+      }
       docketClerkOpensCaseConsolidateModal(cerebralTest);
       docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
       docketClerkConsolidatesCases(cerebralTest, i + 1);

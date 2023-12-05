@@ -4,7 +4,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -20,8 +20,7 @@ export const StartCaseStep2 = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     startCaseHelper: state.startCaseHelper,
-    updateStartCaseFormValueSequence:
-      sequences.updateStartCaseFormValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
     validationErrors: state.validationErrors,
   },
@@ -33,7 +32,7 @@ export const StartCaseStep2 = connect(
     formCancelToggleCancelSequence,
     navigateBackSequence,
     startCaseHelper,
-    updateStartCaseFormValueSequence,
+    updateFormValueSequence,
     validateStartCaseWizardSequence,
     validationErrors,
   }) {
@@ -45,60 +44,59 @@ export const StartCaseStep2 = connect(
           </h2>
         </Focus>
         <Hint>
-          Don’t forget to remove or redact your personal information on all your
-          documents, including any IRS notice(s).
+          Don’t forget to remove or block out (redact) your personal information
+          on all your documents, including any IRS notice(s).
         </Hint>
         <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
-        <div className="blue-container grid-container padding-x-0">
-          <div className="grid-row grid-gap">
-            <div className="mobile-lg:grid-col-6">
-              <FormGroup
-                errorText={
-                  validationErrors.petitionFile ||
-                  validationErrors.petitionFileSize
-                }
+        <div className="blue-container padding-x-0">
+          <FormGroup
+            errorText={
+              validationErrors.petitionFile || validationErrors.petitionFileSize
+            }
+          >
+            <label
+              className={classNames(
+                'usa-label ustc-upload-petition with-hint',
+                startCaseHelper.showPetitionFileValid && 'validated',
+              )}
+              data-testid="petition-file-label"
+              htmlFor="petition-file"
+              id="petition-file-label"
+            >
+              Upload Petition PDF (.pdf)
+            </label>
+            <span className="usa-hint">
+              Make sure file is not encrypted or password protected. Max file
+              size {constants.MAX_FILE_SIZE_MB}MB.
+            </span>
+            <div className="margin-top-0">
+              <Button
+                link
+                className="usa-link--external text-left mobile-text-wrap"
+                href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
+                icon="file-pdf"
+                iconColor="blue"
+                overrideMargin="margin-right-1"
+                rel="noopener noreferrer"
+                target="_blank"
               >
-                <label
-                  className={classNames(
-                    'usa-label ustc-upload-petition with-hint',
-                    startCaseHelper.showPetitionFileValid && 'validated',
-                  )}
-                  htmlFor="petition-file"
-                  id="petition-file-label"
-                >
-                  Upload your Petition
-                </label>
-                <span className="usa-hint">
-                  File must be in PDF format (.pdf). Max file size{' '}
-                  {constants.MAX_FILE_SIZE_MB}MB.
-                </span>
-                <div className="margin-top-0">
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
-                    icon="file-pdf"
-                    iconColor="blue"
-                    overrideMargin="margin-right-1"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Download Petition form (T.C. Form 2)
-                  </Button>
-                  <p className="margin-top-0">if you haven’t already done so</p>
-                </div>
-                <StateDrivenFileInput
-                  aria-describedby="petition-file-label"
-                  id="petition-file"
-                  name="petitionFile"
-                  updateFormValueSequence="updateStartCaseFormValueSequence"
-                  validationSequence="validateStartCaseWizardSequence"
-                />
-              </FormGroup>
+                Download Petition form (T.C. Form 2)
+              </Button>
+              <p className="margin-top-05 usa-hint display-block">
+                if you haven’t already done so
+              </p>
             </div>
-          </div>
+            <StateDrivenFileInput
+              aria-describedby="petition-file-label"
+              data-testid="petition-file"
+              id="petition-file"
+              name="petitionFile"
+              updateFormValueSequence="updateStartCaseFormValueSequence"
+              validationSequence="validateStartCaseWizardSequence"
+            />
+          </FormGroup>
         </div>
 
         <h3 className="margin-top-4">Why Are You Filing This Petition?</h3>
@@ -121,7 +119,7 @@ export const StartCaseStep2 = connect(
                         type="radio"
                         value={option === 'Yes'}
                         onChange={e => {
-                          updateStartCaseFormValueSequence({
+                          updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.value === 'true',
                           });
@@ -130,6 +128,7 @@ export const StartCaseStep2 = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-testid={`irs-notice-${option}`}
                         htmlFor={`hasIrsNotice-${option}`}
                         id={`hasIrsNotice-${idx}`}
                       >
@@ -167,6 +166,7 @@ export const StartCaseStep2 = connect(
         </div>
 
         <Button
+          data-testid="complete-step-2"
           id="submit-case"
           onClick={() => {
             completeStartCaseWizardStepSequence({ nextStep: 3 });

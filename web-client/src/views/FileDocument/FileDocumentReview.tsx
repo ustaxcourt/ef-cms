@@ -5,10 +5,9 @@ import { ExternalConsolidatedGroupCards } from './ExternalConsolidatedGroupCards
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
-import { WarningNotificationComponent } from '../WarningNotification';
-import { connect } from '@cerebral/react';
+import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -207,22 +206,7 @@ export const FileDocumentReview = connect(
           You can’t edit your filing once you submit it. Please make sure your
           information appears the way you want it to.
         </p>
-        {fileDocumentHelper.redactionAcknowledgementEnabled ? (
-          <WarningNotificationComponent
-            alertWarning={{
-              message:
-                'Don’t forget to check your PDF(s) to ensure all personal information has been removed or redacted.',
-            }}
-            dismissable={false}
-            scrollToTop={false}
-          />
-        ) : (
-          <Hint>
-            Don’t forget to check your PDF(s) to ensure all personal information
-            has been removed or redacted.
-          </Hint>
-        )}
-
+        <PIIRedactedWarning />
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-7 margin-bottom-4">
@@ -349,57 +333,52 @@ export const FileDocumentReview = connect(
             </div>
           </div>
         </div>
-        {fileDocumentHelper.redactionAcknowledgementEnabled && (
-          <div className="grid-row grid-gap">
-            <span className="margin-bottom-1 font-sans-pro">
-              <b>Please read and acknowledge before submitting your filing</b>
-            </span>
-            <div className="tablet:grid-col-12">
-              <div className="card">
-                <div className="content-wrapper usa-checkbox">
-                  <input
-                    aria-describedby="redaction-acknowledgement-label"
-                    checked={form.redactionAcknowledgement || false}
-                    className="usa-checkbox__input"
-                    id="redaction-acknowledgement"
-                    name="redactionAcknowledgement"
-                    type="checkbox"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="redaction-acknowledgement"
-                    id="redaction-acknowledgement-label"
-                  >
-                    <b>
-                      All documents I am filing have been redacted in accordance
-                      with{' '}
-                      <a
-                        href="https://ustaxcourt.gov/resources/ropp/Rule-27_Amended_03202023.pdf"
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        Rule 27
-                      </a>
-                      .
-                    </b>
-                  </label>
-                </div>
+        <div className="grid-row grid-gap">
+          <span className="margin-bottom-1 font-sans-pro">
+            <b>Please read and acknowledge before submitting your filing</b>
+          </span>
+          <div className="tablet:grid-col-12">
+            <div className="card">
+              <div className="content-wrapper usa-checkbox">
+                <input
+                  aria-describedby="redaction-acknowledgement-label"
+                  checked={form.redactionAcknowledgement || false}
+                  className="usa-checkbox__input"
+                  id="redaction-acknowledgement"
+                  name="redactionAcknowledgement"
+                  type="checkbox"
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="redaction-acknowledgement"
+                  id="redaction-acknowledgement-label"
+                >
+                  <b>
+                    All documents I am filing have been redacted in accordance
+                    with{' '}
+                    <a
+                      href="https://ustaxcourt.gov/resources/ropp/Rule-27_Amended_03202023.pdf"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      Rule 27
+                    </a>
+                    .
+                  </b>
+                </label>
               </div>
             </div>
           </div>
-        )}
+        </div>
         <Button
           className="margin-bottom-1"
-          disabled={
-            fileDocumentHelper.redactionAcknowledgementEnabled &&
-            !form.redactionAcknowledgement
-          }
+          disabled={!form.redactionAcknowledgement}
           id="submit-document"
           type="submit"
           onClick={() => {

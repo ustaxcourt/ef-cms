@@ -1,10 +1,10 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
+import { irsSuperuserUser } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -19,10 +19,7 @@ describe('getCaseAssociation', () => {
 
   describe('IRS SuperUser', () => {
     it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and service is not allowed on the case', async () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.irsSuperuser,
-        userId: '123',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
 
       const results = await runAction(getCaseAssociationAction, {
         modules: {
@@ -43,11 +40,9 @@ describe('getCaseAssociation', () => {
         pendingAssociation: false,
       });
     });
+
     it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and service is allowed for the case', async () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.irsSuperuser,
-        userId: '123',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
 
       const results = await runAction(getCaseAssociationAction, {
         modules: {
@@ -69,7 +64,7 @@ describe('getCaseAssociation', () => {
 
       expect(results.output).toEqual({
         isAssociated: true,
-        isDirectlyAssociated: true,
+        isDirectlyAssociated: false,
         pendingAssociation: false,
       });
     });
@@ -96,7 +91,7 @@ describe('getCaseAssociation', () => {
 
       expect(results.output).toEqual({
         isAssociated: true,
-        isDirectlyAssociated: true,
+        isDirectlyAssociated: false,
         pendingAssociation: false,
       });
     });
@@ -361,10 +356,6 @@ describe('getCaseAssociation', () => {
                 },
               ],
             },
-            featureFlags: {
-              [ALLOWLIST_FEATURE_FLAGS
-                .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key]: true,
-            },
           },
         });
 
@@ -392,10 +383,6 @@ describe('getCaseAssociation', () => {
                   contactId: petitionerContactId,
                 },
               ],
-            },
-            featureFlags: {
-              [ALLOWLIST_FEATURE_FLAGS
-                .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key]: true,
             },
           },
         });
@@ -427,58 +414,10 @@ describe('getCaseAssociation', () => {
                 },
               ],
             },
-            featureFlags: {
-              [ALLOWLIST_FEATURE_FLAGS
-                .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key]: true,
-            },
           },
         });
 
         expect(results.output.isDirectlyAssociated).toBe(true);
-      });
-    });
-
-    describe('Feature Flag Off', () => {
-      it('isAssociated should be false when the petitioners userId does not exist on the current case, and the feature flag is off', async () => {
-        const petitionerContactId = '123';
-
-        applicationContext.getCurrentUser.mockReturnValue({
-          role: ROLES.petitioner,
-          userId: petitionerContactId,
-        });
-
-        const results = await runAction(getCaseAssociationAction, {
-          modules: {
-            presenter,
-          },
-          props: {},
-          state: {
-            caseDetail: {
-              consolidatedCases: [
-                {
-                  petitioners: [
-                    {
-                      contactId: petitionerContactId,
-                    },
-                  ],
-                },
-              ],
-              leadDocketNumber: '101-20',
-              petitioners: [
-                {
-                  contactId: 'not-petitioner-contact-id',
-                },
-              ],
-            },
-            featureFlags: {
-              [ALLOWLIST_FEATURE_FLAGS
-                .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key]: false,
-            },
-          },
-        });
-
-        expect(results.output.isAssociated).toBe(false);
-        expect(results.output.isDirectlyAssociated).toBe(false);
       });
     });
   });

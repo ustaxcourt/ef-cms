@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { generatePrintableTrialSessionCopyReportAction } from './generatePrintableTrialSessionCopyReportAction';
 import { omit } from 'lodash';
 import { presenter } from '../../presenter-mock';

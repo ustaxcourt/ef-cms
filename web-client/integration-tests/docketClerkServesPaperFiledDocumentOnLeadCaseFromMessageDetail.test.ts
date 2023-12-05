@@ -3,6 +3,7 @@ import {
   DOCUMENT_RELATIONSHIPS,
   OBJECTIONS_OPTIONS_MAP,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import {
   contactPrimaryFromState,
@@ -26,9 +27,6 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
   const cerebralTest = setupTest();
 
   const motionForLeaveToFileForm = {
-    dateReceivedDay: 1,
-    dateReceivedMonth: 1,
-    dateReceivedYear: 2018,
     eventCode: 'M115',
     objections: OBJECTIONS_OPTIONS_MAP.NO,
     primaryDocumentFile: fakeFile,
@@ -107,6 +105,15 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
       });
     }
 
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
+      },
+    );
+
     const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: `filersMap.${contactId}`,
@@ -150,11 +157,13 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     );
 
     await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
       documentId: cerebralTest.docketEntryId,
     });
 
     cerebralTest.testMessageSubject =
       motionForLeaveToFileCaseMessageForm.subject;
+
     for (const [key, value] of Object.entries(
       motionForLeaveToFileCaseMessageForm,
     )) {

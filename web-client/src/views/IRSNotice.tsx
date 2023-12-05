@@ -1,9 +1,9 @@
 import { CalculatePenaltiesModal } from './StartCaseInternal/CalculatePenaltiesModal';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
-import { DateInput } from '../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { StatisticsForm } from './StartCaseInternal/StatisticsForm';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -11,9 +11,11 @@ import React from 'react';
 
 export const IRSNotice = connect(
   {
-    CASE_TYPES: state.constants.CASE_TYPES,
     caseDetailEditHelper: state.caseDetailEditHelper,
+    constants: state.constants,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     refreshStatisticsSequence: sequences.refreshStatisticsSequence,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     showModal: state.modal.showModal,
@@ -23,9 +25,10 @@ export const IRSNotice = connect(
     validationErrors: state.validationErrors,
   },
   function IRSNotice({
-    CASE_TYPES,
     caseDetailEditHelper,
+    constants,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     refreshStatisticsSequence,
     setIrsNoticeFalseSequence,
     shouldStartWithBlankStatistic = true,
@@ -87,6 +90,7 @@ export const IRSNotice = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid="has-irs-verified-notice-no"
                 htmlFor="hasVerifiedIrsNotice-no"
                 id="has-irs-verified-notice-no"
               >
@@ -100,23 +104,21 @@ export const IRSNotice = connect(
 
     const renderIrsNoticeDate = () => {
       return (
-        <DateInput
+        <DateSelector
+          defaultValue={form.irsNoticeDate}
+          displayOptionalHintText={true}
           errorText={validationErrors.irsNoticeDate}
+          formGroupClassNames={''}
           id="date-of-notice"
           label="Date of notice"
-          names={{
-            day: 'irsDay',
-            month: 'irsMonth',
-            year: 'irsYear',
+          onChange={e => {
+            formatAndUpdateDateFromDatePickerSequence({
+              key: 'irsNoticeDate',
+              toFormat: constants.DATE_FORMATS.ISO,
+              value: e.target.value,
+            });
+            validation();
           }}
-          optional={true}
-          values={{
-            day: form.irsDay,
-            month: form.irsMonth,
-            year: form.irsYear,
-          }}
-          onBlur={validation}
-          onChange={updateFormValueSequence}
         />
       );
     };
@@ -127,7 +129,7 @@ export const IRSNotice = connect(
 
         <CaseTypeSelect
           allowDefaultOption={true}
-          caseTypes={CASE_TYPES}
+          caseTypes={constants.CASE_TYPES}
           legend="Type of case"
           validation={validationName}
           value={form.caseType}

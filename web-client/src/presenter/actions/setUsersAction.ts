@@ -1,11 +1,9 @@
+import { RawUser } from '@shared/business/entities/User';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * sets the state.users to the props.users passed in.
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store used for setting state.users
- * @param {object} providers.props the cerebral props object used for getting the props.users
- */
-export const setUsersAction = ({ props, store }: ActionProps) => {
+export const setUsersAction = ({
+  props,
+  store,
+}: ActionProps<{ users: RawUser[] }>) => {
   store.set(state.users, props.users);
 };

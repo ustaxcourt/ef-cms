@@ -45,11 +45,18 @@ else
   exitCode=$?
 
   if [ "${exitCode}" != 0 ]; then                   
-    echo "Seed data is invalid!". 1>&2 && exit 1
+    echo "Failed to seed data!". 1>&2 && exit 1
   fi
 fi
 
-nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
+if [ -n "${USE_COGNITO_LOCAL}" ]; then
+  echo "Starting local lambda for cognito triggers"
+  npm run start:cognito-triggers-local &
+  echo "Starting cognito-local"
+  CODE=123456 npx cognito-local &
+fi
+
+nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress/helpers/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
 if [[ -z "$CI" ]]; then
   echo "Stopping dynamodb, elasticsearch, and s3rver"

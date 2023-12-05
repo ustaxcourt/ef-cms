@@ -1,18 +1,9 @@
 import { setupPercentDone } from './createCaseFromPaperAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * takes the state.caseDetail and updates it via the updateCase use case.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context needed for getting the updateCase use case
- * @param {object} providers.get the cerebral store used for getting state.caseDetail
- * @param {object} providers.props the cerebral store used for getting props.formWithComputedDates
- * @returns {object} the alertSuccess and the caseDetail
- */
 export const saveCaseDetailInternalEditAction = async ({
   applicationContext,
   get,
-  props,
   store,
 }: ActionProps) => {
   const {
@@ -21,7 +12,7 @@ export const saveCaseDetailInternalEditAction = async ({
     STATUS_TYPES,
   } = applicationContext.getConstants();
   const originalCase = get(state.caseDetail);
-  const caseToUpdate = props.formWithComputedDates;
+  const caseToUpdate = get(state.form);
 
   const keys = Object.keys(INITIAL_DOCUMENT_TYPES);
 

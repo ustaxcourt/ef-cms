@@ -3,10 +3,10 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
   PARTY_TYPES,
 } from '../EntityConstants';
 import { CaseExternalInformationFactory } from './CaseExternalInformationFactory';
-import { Contact } from '../contacts/Contact';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternalInformationFactory entity', () => {
@@ -34,7 +34,7 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!.stinFile).toEqual(
-        CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.stinFile,
+        'Upload a Statement of Taxpayer Identification Number (STIN)',
       );
     });
 
@@ -64,11 +64,11 @@ describe('CaseExternalInformationFactory entity', () => {
             applicationContext,
           },
         );
+
         expect(
           caseExternal.getFormattedValidationErrors()!.stinFileSize,
         ).toEqual(
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .stinFileSize[0].message,
+          `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
         );
       });
 
@@ -85,10 +85,7 @@ describe('CaseExternalInformationFactory entity', () => {
         );
         expect(
           caseExternal.getFormattedValidationErrors()!.stinFileSize,
-        ).toEqual(
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .stinFileSize[1],
-        );
+        ).toEqual('Your STIN file size is empty');
       });
 
       it('should not error on stinFileSize when stinFile is undefined', () => {
@@ -117,10 +114,7 @@ describe('CaseExternalInformationFactory entity', () => {
         );
         expect(
           caseExternal.getFormattedValidationErrors()!.stinFileSize,
-        ).toEqual(
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .stinFileSize[1],
-        );
+        ).toEqual('Your STIN file size is empty');
       });
     });
   });
@@ -136,12 +130,9 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        hasIrsNotice:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        petitionFile:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.petitionFile,
-        stinFile:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.stinFile,
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        petitionFile: 'Upload a Petition',
+        stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
       });
 
       caseExternal = new CaseExternalInformationFactory(
@@ -154,13 +145,9 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        hasIrsNotice:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        petitionFile:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.petitionFile,
-        stinFileSize:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .stinFileSize[1],
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        petitionFile: 'Upload a Petition',
+        stinFileSize: 'Your STIN file size is empty',
       });
     });
 
@@ -176,10 +163,8 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        hasIrsNotice:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        petitionFile:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.petitionFile,
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        petitionFile: 'Upload a Petition',
       });
     });
 
@@ -198,8 +183,7 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        caseType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.caseType,
+        caseType: 'Select a case type',
       });
     });
 
@@ -257,16 +241,11 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        filingType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.filingType,
-        hasIrsNotice:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        partyType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.petitionFile,
-        stinFile:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.stinFile,
+        filingType: 'Select on whose behalf you are filing',
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        partyType: 'Select a party type',
+        petitionFile: 'Upload a Petition',
+        stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
       });
 
       caseExternal = new CaseExternalInformationFactory(
@@ -281,18 +260,11 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        caseType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.caseType,
-        filingType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.filingType,
-        partyType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFileSize:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .petitionFileSize[1],
-        stinFileSize:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .stinFileSize[1],
+        caseType: 'Select a case type',
+        filingType: 'Select on whose behalf you are filing',
+        partyType: 'Select a party type',
+        petitionFileSize: 'Your Petition file size is empty',
+        stinFileSize: 'Your STIN file size is empty',
       });
     });
 
@@ -312,10 +284,8 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        filingType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.filingType,
-        partyType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.partyType,
+        filingType: 'Select on whose behalf you are filing',
+        partyType: 'Select a party type',
       });
     });
 
@@ -338,10 +308,7 @@ describe('CaseExternalInformationFactory entity', () => {
       );
       expect(
         caseExternal.getFormattedValidationErrors()!.corporateDisclosureFile,
-      ).toEqual(
-        CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-          .corporateDisclosureFile,
-      );
+      ).toEqual('Upload a Corporate Disclosure Statement');
     });
 
     it('does not require corporateDisclosureFile if filingType is not A business', () => {
@@ -386,14 +353,14 @@ describe('CaseExternalInformationFactory entity', () => {
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
         petitioners: [
           {
-            address1: Contact.DOMESTIC_VALIDATION_MESSAGES.address1,
-            city: Contact.DOMESTIC_VALIDATION_MESSAGES.city,
-            countryType: Contact.DOMESTIC_VALIDATION_MESSAGES.countryType,
+            address1: 'Enter mailing address',
+            city: 'Enter city',
+            countryType: 'Enter country type',
             index: 0,
-            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
-            phone: Contact.DOMESTIC_VALIDATION_MESSAGES.phone,
-            postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[1],
-            state: Contact.DOMESTIC_VALIDATION_MESSAGES.state,
+            name: 'Enter name',
+            phone: 'Enter phone number',
+            postalCode: 'Enter ZIP code',
+            state: 'Enter state',
           },
         ],
       });
@@ -433,22 +400,13 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        filingType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.filingType,
-        hasIrsNotice:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        partyType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.petitionFile,
-        preferredTrialCity:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .preferredTrialCity,
-        procedureType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .procedureType,
-        stinFile:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.stinFile,
+        filingType: 'Select on whose behalf you are filing',
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        partyType: 'Select a party type',
+        petitionFile: 'Upload a Petition',
+        preferredTrialCity: 'Select a trial location',
+        procedureType: 'Select a case procedure',
+        stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
       });
 
       caseExternal = new CaseExternalInformationFactory(
@@ -465,42 +423,33 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
-        caseType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES.caseType,
-        petitionFileSize:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .petitionFileSize[1],
+        caseType: 'Select a case type',
+        petitionFileSize: 'Your Petition file size is empty',
         petitioners: [
           {
-            address1: Contact.DOMESTIC_VALIDATION_MESSAGES.address1,
-            city: Contact.DOMESTIC_VALIDATION_MESSAGES.city,
-            countryType: Contact.DOMESTIC_VALIDATION_MESSAGES.countryType,
+            address1: 'Enter mailing address',
+            city: 'Enter city',
+            countryType: 'Enter country type',
             index: 0,
-            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
-            phone: Contact.DOMESTIC_VALIDATION_MESSAGES.phone,
-            postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[1],
-            state: Contact.DOMESTIC_VALIDATION_MESSAGES.state,
+            name: 'Enter name',
+            phone: 'Enter phone number',
+            postalCode: 'Enter ZIP code',
+            state: 'Enter state',
           },
           {
-            address1: Contact.DOMESTIC_VALIDATION_MESSAGES.address1,
-            city: Contact.DOMESTIC_VALIDATION_MESSAGES.city,
-            countryType: Contact.DOMESTIC_VALIDATION_MESSAGES.countryType,
+            address1: 'Enter mailing address',
+            city: 'Enter city',
+            countryType: 'Enter country type',
             index: 1,
-            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
-            phone: Contact.DOMESTIC_VALIDATION_MESSAGES.phone,
-            postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[1],
-            state: Contact.DOMESTIC_VALIDATION_MESSAGES.state,
+            name: 'Enter name',
+            phone: 'Enter phone number',
+            postalCode: 'Enter ZIP code',
+            state: 'Enter state',
           },
         ],
-        preferredTrialCity:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .preferredTrialCity,
-        procedureType:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .procedureType,
-        stinFileSize:
-          CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES
-            .stinFileSize[1],
+        preferredTrialCity: 'Select a trial location',
+        procedureType: 'Select a case procedure',
+        stinFileSize: 'Your STIN file size is empty',
       });
     });
 

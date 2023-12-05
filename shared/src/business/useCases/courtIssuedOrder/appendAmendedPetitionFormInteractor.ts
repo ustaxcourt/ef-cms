@@ -1,5 +1,5 @@
 import { AMENDED_PETITION_FORM_NAME } from '../../entities/EntityConstants';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

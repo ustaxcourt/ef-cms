@@ -1,8 +1,8 @@
 import { CourtIssuedNonstandardForm } from '../CourtIssuedDocketEntry/CourtIssuedNonstandardForm';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   courtIssuedDocketEntryOnChange,
   onInputChange,
@@ -14,8 +14,11 @@ import React from 'react';
 
 export const EditDocketEntryMetaFormCourtIssued = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence:
@@ -25,7 +28,9 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
   },
   function EditDocketEntryMetaFormCourtIssued({
     addCourtIssuedDocketEntryHelper,
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
     validateDocumentSequence,
@@ -33,22 +38,19 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
   }) {
     return (
       <div className="blue-container">
-        <DateInput
+        <DateSelector
+          defaultValue={form.filingDate}
           errorText={validationErrors.filingDate}
           id="filing-date"
           label="Filed date"
-          names={{
-            day: 'filingDateDay',
-            month: 'filingDateMonth',
-            year: 'filingDateYear',
+          onChange={e => {
+            formatAndUpdateDateFromDatePickerSequence({
+              key: 'filingDate',
+              toFormat: DATE_FORMATS.ISO,
+              value: e.target.value,
+            });
+            validateDocumentSequence();
           }}
-          values={{
-            day: form.filingDateDay,
-            month: form.filingDateMonth,
-            year: form.filingDateYear,
-          }}
-          onBlur={validateDocumentSequence}
-          onChange={updateCourtIssuedDocketEntryFormValueSequence}
         />
 
         <FormGroup errorText={validationErrors.documentType}>

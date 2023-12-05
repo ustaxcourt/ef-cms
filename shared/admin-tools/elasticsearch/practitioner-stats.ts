@@ -4,18 +4,26 @@ import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
-import { computeDate } from '../../src/business/utilities/DateHandler';
 import { createApplicationContext } from '../../../web-api/src/applicationContext';
 import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+import { validateDateAndCreateISO } from '../../src/business/utilities/DateHandler';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
 
-const fromDate = computeDate({ day: 1, month: 1, year });
-const toDate = computeDate({ day: 1, month: 1, year: year + 1 });
+const fromDate = validateDateAndCreateISO({
+  day: '1',
+  month: '1',
+  year: `${year}`,
+});
+const toDate = validateDateAndCreateISO({
+  day: '1',
+  month: '1',
+  year: `${year + 1}`,
+});
 
-const getAllPractitioners = async ({
-  applicationContext,
-}): Promise<Array<Object>> => {
+const getAllPractitioners = async (
+  applicationContext: IApplicationContext,
+): Promise<Array<RawPractitioner>> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
@@ -36,7 +44,13 @@ const getAllPractitioners = async ({
   return results;
 };
 
-const getUniqueValues = ({ arrayOfObjects, keyToFilter }) => {
+const getUniqueValues = ({
+  arrayOfObjects,
+  keyToFilter,
+}: {
+  arrayOfObjects: {}[];
+  keyToFilter: string;
+}) => {
   const uniqueValues = {};
   for (const someObj of arrayOfObjects) {
     if (keyToFilter in someObj) {
@@ -52,9 +66,10 @@ const getUniqueValues = ({ arrayOfObjects, keyToFilter }) => {
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  const allPractitioners = await getAllPractitioners({ applicationContext });
+  const allPractitioners: RawPractitioner[] =
+    await getAllPractitioners(applicationContext);
   const admittedInYear = allPractitioners.filter(p => {
-    return p.admissionsDate >= fromDate && p.admissionsDate < toDate;
+    return p.admissionsDate >= fromDate! && p.admissionsDate < toDate!;
   });
   const uniqueEmployers = getUniqueValues({
     arrayOfObjects: admittedInYear,

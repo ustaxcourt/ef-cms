@@ -1,3 +1,4 @@
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { put } from '../../dynamodbClientService';
 
 /**

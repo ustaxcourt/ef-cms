@@ -9,10 +9,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * fileExternalDocumentInteractor
@@ -21,7 +22,7 @@ import { pick } from 'lodash';
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
-export const fileExternalDocumentInteractor = async (
+export const fileExternalDocument = async (
   applicationContext: IApplicationContext,
   { documentMetadata }: { documentMetadata: any },
 ) => {
@@ -120,7 +121,7 @@ export const fileExternalDocumentInteractor = async (
     documentMetadataForConsolidatedCases.push(documentMetadata);
   }
 
-  let consolidatedCaseEntities: Promise<TCase>[] = [];
+  let consolidatedCaseEntities: Promise<RawCase>[] = [];
 
   consolidatedCaseEntities = documentMetadataForConsolidatedCases.map(
     async individualDocumentMetadata => {
@@ -225,10 +226,17 @@ export const fileExternalDocumentInteractor = async (
     },
   );
 
-  const resolvedCaseEntities: TCase[] = await Promise.all(
+  const resolvedCaseEntities: RawCase[] = await Promise.all(
     consolidatedCaseEntities,
   );
   return resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );
 };
+
+export const fileExternalDocumentInteractor = withLocking(
+  fileExternalDocument,
+  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
+    identifiers: [`case|${documentMetadata.docketNumber}`],
+  }),
+);

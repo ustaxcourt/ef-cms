@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -10,7 +10,11 @@ import classNames from 'classnames';
 
 export const SupportingDocumentInclusionsForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     data: state[props.bind],
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
+    index: props.index,
     openCleanModalSequence: sequences.openCleanModalSequence,
     type: props.type,
     updateFileDocumentWizardFormValueSequence:
@@ -21,6 +25,9 @@ export const SupportingDocumentInclusionsForm = connect(
   },
   function SupportingDocumentInclusionsForm({
     data,
+    DATE_FORMATS,
+    formatAndUpdateDateFromDatePickerSequence,
+    index,
     openCleanModalSequence,
     type,
     updateFileDocumentWizardFormValueSequence,
@@ -36,7 +43,7 @@ export const SupportingDocumentInclusionsForm = connect(
           )}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
-            <legend id={`${type}-extra-items-legend`}>
+            <legend id={`${type}-${index}-extra-items-legend`}>
               Select extra items to include with your document
               <Button
                 link
@@ -59,8 +66,8 @@ export const SupportingDocumentInclusionsForm = connect(
               <input
                 checked={data.attachments || false}
                 className="usa-checkbox__input"
-                id={`${type}-attachments`}
-                name={`${type}.attachments`}
+                id={`${type}-${index}-attachments`}
+                name={`${type}.${index}.attachments`}
                 type="checkbox"
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
@@ -72,7 +79,7 @@ export const SupportingDocumentInclusionsForm = connect(
               />
               <label
                 className="usa-checkbox__label"
-                htmlFor={`${type}-attachments`}
+                htmlFor={`${type}-${index}-attachments`}
               >
                 Attachment(s)
               </label>
@@ -82,8 +89,8 @@ export const SupportingDocumentInclusionsForm = connect(
               <input
                 checked={data.certificateOfService || false}
                 className="usa-checkbox__input"
-                id={`${type}-certificateOfService`}
-                name={`${type}.certificateOfService`}
+                id={`${type}-${index}-certificateOfService`}
+                name={`${type}.${index}.certificateOfService`}
                 type="checkbox"
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
@@ -95,7 +102,7 @@ export const SupportingDocumentInclusionsForm = connect(
               />
               <label
                 className="inline-block supporting-document-certificate-of-service usa-checkbox__label"
-                htmlFor={`${type}-certificateOfService`}
+                htmlFor={`${type}-${index}-certificateOfService`}
               >
                 Certificate Of Service
               </label>
@@ -103,23 +110,19 @@ export const SupportingDocumentInclusionsForm = connect(
           </fieldset>
         </div>
         {data.certificateOfService && (
-          <DateInput
-            className="supporting-document-certificate-of-service-date"
+          <DateSelector
+            defaultValue={data.certificateOfServiceDate}
             errorText={validationData?.certificateOfServiceDate}
-            id={`${type}-service-date`}
+            id={`${type}-${index}-service-date`}
             label="Service date"
-            names={{
-              day: `${type}.certificateOfServiceDay`,
-              month: `${type}.certificateOfServiceMonth`,
-              year: `${type}.certificateOfServiceYear`,
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key: `${type}.${index}.certificateOfServiceDate`,
+                toFormat: DATE_FORMATS.ISO,
+                value: e.target.value,
+              });
+              validateExternalDocumentInformationSequence();
             }}
-            values={{
-              day: data.certificateOfServiceDay,
-              month: data.certificateOfServiceMonth,
-              year: data.certificateOfServiceYear,
-            }}
-            onBlur={validateExternalDocumentInformationSequence}
-            onChange={updateFileDocumentWizardFormValueSequence}
           />
         )}
       </>

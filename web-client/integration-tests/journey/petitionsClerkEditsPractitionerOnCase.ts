@@ -1,4 +1,3 @@
-import { EditPetitionerCounsel } from '../../../shared/src/business/entities/caseAssociation/EditPetitionerCounsel';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
 export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
@@ -40,8 +39,7 @@ export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
     await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      representing:
-        EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES.representing,
+      representing: 'Select a representing party',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

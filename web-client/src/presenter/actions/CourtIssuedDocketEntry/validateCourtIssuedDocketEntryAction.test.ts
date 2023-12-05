@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateCourtIssuedDocketEntryAction } from './validateCourtIssuedDocketEntryAction';
@@ -60,28 +60,6 @@ describe('validateCourtIssuedDocketEntryAction', () => {
   });
 
   describe('date', () => {
-    it('returns an error message if the user enters a two-digit year', async () => {
-      applicationContext
-        .getUseCases()
-        .validateCourtIssuedDocketEntryInteractor.mockReturnValue(null);
-
-      await runAction(validateCourtIssuedDocketEntryAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            ...mockDocketEntry,
-            year: '20',
-          },
-        },
-      });
-
-      expect(errorStub.mock.calls[0][0].errors.date).toEqual(
-        'Enter a four-digit year',
-      );
-    });
-
     it('does not overwrite errors returned from the validateCourtIssuedDocketEntryInteractor if the user enters a two-digit year', async () => {
       applicationContext
         .getUseCases()
@@ -96,7 +74,7 @@ describe('validateCourtIssuedDocketEntryAction', () => {
         state: {
           form: {
             ...mockDocketEntry,
-            year: '20',
+            filingDate: '12/12/20',
           },
         },
       });
@@ -108,28 +86,6 @@ describe('validateCourtIssuedDocketEntryAction', () => {
   });
 
   describe('filingDate', () => {
-    it('returns an error message if the user enters a two-digit year', async () => {
-      applicationContext
-        .getUseCases()
-        .validateCourtIssuedDocketEntryInteractor.mockReturnValue(null);
-
-      await runAction(validateCourtIssuedDocketEntryAction, {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            ...mockDocketEntry,
-            filingDateYear: '20',
-          },
-        },
-      });
-
-      expect(errorStub.mock.calls[0][0].errors.filingDate).toEqual(
-        'Enter a four-digit year',
-      );
-    });
-
     it('should not overwrite errors returned from the validateCourtIssuedDocketEntryInteractor if the user enters a two-digit year', async () => {
       applicationContext
         .getUseCases()
@@ -144,7 +100,7 @@ describe('validateCourtIssuedDocketEntryAction', () => {
         state: {
           form: {
             ...mockDocketEntry,
-            filingDateYear: '20',
+            filingDate: '12/12/20',
           },
         },
       });

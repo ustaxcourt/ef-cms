@@ -57,21 +57,28 @@ export const generatePrintableFilingReceiptInteractor = async (
       applicationContext,
       docketNumber,
     });
+
   let caseEntity = new Case(caseRecord, { applicationContext }).validate();
+
+  if (fileAcrossConsolidatedGroup && !caseRecord.leadDocketNumber) {
+    throw new Error(
+      'you can not file across a consolidated group because this case is not part of one',
+    );
+  }
 
   let consolidatedCasesDocketNumbers: string[] = [];
 
   if (fileAcrossConsolidatedGroup) {
-    const consolidatedCases = await applicationContext
+    const leadCase = await applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
+      .getCaseByDocketNumber({
         applicationContext,
-        leadDocketNumber: caseEntity.leadDocketNumber!,
+        docketNumber: caseEntity.leadDocketNumber!,
       });
-    consolidatedCasesDocketNumbers = consolidatedCases
+    consolidatedCasesDocketNumbers = leadCase.consolidatedCases
       .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
       .map(consolidatedCaseRecord => consolidatedCaseRecord.docketNumber);
-    caseEntity = new Case(consolidatedCases[0], {
+    caseEntity = new Case(leadCase, {
       applicationContext,
     }).validate();
   }

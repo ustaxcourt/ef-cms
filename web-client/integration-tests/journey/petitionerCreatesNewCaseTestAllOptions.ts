@@ -1,20 +1,21 @@
+import {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
-
-const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
-
-const { VALIDATION_ERROR_MESSAGES } = Case;
-const { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } =
-  applicationContext.getConstants();
 
 export const petitionerCreatesNewCaseTestAllOptions = (
   cerebralTest,
   fakeFile,
   overrides = {},
 ) => {
+  const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
+
   return it('petitioner creates a new case, testing all form options', async () => {
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
@@ -249,7 +250,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     await cerebralTest.runSequence('submitFilePetitionSequence');
 
     expect(cerebralTest.getState('alertError').messages).toContain(
-      VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
+      Case.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
     );
 
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
@@ -259,7 +260,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await cerebralTest.runSequence('submitFilePetitionSequence');
     expect(cerebralTest.getState('alertError').messages[0]).not.toContain(
-      VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
+      Case.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
     );
 
     // Partnership other than tax matters party type primary contact
@@ -646,10 +647,14 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       'Please correct the following errors on the page:',
     );
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: '01',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '/01/',
+      },
+    );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',

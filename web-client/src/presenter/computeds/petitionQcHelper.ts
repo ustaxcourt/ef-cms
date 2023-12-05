@@ -28,7 +28,7 @@ import { Get } from 'cerebral';
 export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);

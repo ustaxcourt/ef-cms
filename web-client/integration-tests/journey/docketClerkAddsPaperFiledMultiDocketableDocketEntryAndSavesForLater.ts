@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -7,18 +8,6 @@ import {
 export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater =
   (cerebralTest, eventCode) => {
     const answerFilingOptions = [
-      {
-        key: 'dateReceivedMonth',
-        value: 4,
-      },
-      {
-        key: 'dateReceivedDay',
-        value: 30,
-      },
-      {
-        key: 'dateReceivedYear',
-        value: 2001,
-      },
       {
         key: 'primaryDocumentFile',
         value: fakeFile,
@@ -48,6 +37,15 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater
           option,
         );
       }
+
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'receivedAt',
+          toFormat: FORMATS.ISO,
+          value: '4/30/2001',
+        },
+      );
 
       const contactPrimary = contactPrimaryFromState(cerebralTest);
       await cerebralTest.runSequence(

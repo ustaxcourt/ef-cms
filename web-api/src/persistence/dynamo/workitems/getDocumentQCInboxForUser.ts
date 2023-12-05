@@ -1,3 +1,4 @@
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { queryFull } from '../../dynamodbClientService';
 
 export const getDocumentQCInboxForUser = async ({

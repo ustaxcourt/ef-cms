@@ -1,5 +1,5 @@
 import { ROLES } from '../entities/EntityConstants';
-import { User } from '../entities/User';
+import { RawUser, User } from '../entities/User';
 
 /**
  * getJudgeInSectionHelper - returns the judge user for a given section
@@ -13,7 +13,7 @@ import { User } from '../entities/User';
 export const getJudgeInSectionHelper = async (
   applicationContext,
   { section },
-) => {
+): Promise<RawUser> => {
   const rawUsers = await applicationContext
     .getPersistenceGateway()
     .getUsersInSection({
@@ -29,5 +29,5 @@ export const getJudgeInSectionHelper = async (
     sectionUser => sectionUser.role === ROLES.judge,
   );
 
-  return judgeUser;
+  return judgeUser!;
 };

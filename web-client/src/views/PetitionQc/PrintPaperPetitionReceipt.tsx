@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -24,6 +24,7 @@ export const PrintPaperPetitionReceipt = connect(
             <div className="grid-col-4">
               <Button
                 className="push-right margin-right-0 margin-bottom-4"
+                data-testid="done-viewing-paper-petition-receipt-button"
                 id="done-viewing-paper-petition-receipt-button"
                 onClick={() => {
                   completePrintPaperPetitionReceiptSequence();

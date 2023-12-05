@@ -1,6 +1,10 @@
-const { faker } = require('@faker-js/faker');
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { faker } from '@faker-js/faker';
 
-export const admissionsClerkAddsNewPractitioner = cerebralTest => {
+export const admissionsClerkAddsNewPractitioner = (
+  cerebralTest,
+  email = 'caroleBaskinH8r@example.com',
+) => {
   return it('admissions clerk adds a new practitioner', async () => {
     cerebralTest.fakeName = faker.person.fullName();
 
@@ -27,20 +31,18 @@ export const admissionsClerkAddsNewPractitioner = cerebralTest => {
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'email',
-      value: 'caroleBaskinH8r@example.com',
+      value: email,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: '1',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: '1',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: '2010',
-    });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'admissionsDate',
+        toFormat: FORMATS.YYYYMMDD,
+        value: '1/1/2010',
+      },
+    );
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'birthYear',
       value: '1922',
@@ -90,7 +92,7 @@ export const admissionsClerkAddsNewPractitioner = cerebralTest => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'caroleBaskinH8r@example.com',
+      value: email,
     });
 
     await cerebralTest.runSequence('submitAddPractitionerSequence');

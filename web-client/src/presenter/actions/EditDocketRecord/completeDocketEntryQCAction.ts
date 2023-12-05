@@ -25,17 +25,16 @@ export const completeDocketEntryQCAction = async ({
     {
       ...get(state.form),
     },
-    ['workitem', 'dateReceivedMonth', 'dateReceivedDay', 'dateReceivedYear'],
+    ['workitem'],
   );
 
   entryMetadata = {
     ...entryMetadata,
-    createdAt: entryMetadata.dateReceived,
+    createdAt: entryMetadata.receivedAt,
     docketEntryId,
     docketNumber,
     leadDocketNumber,
     overridePaperServiceAddress,
-    receivedAt: entryMetadata.dateReceived,
     selectedSection,
   };
 

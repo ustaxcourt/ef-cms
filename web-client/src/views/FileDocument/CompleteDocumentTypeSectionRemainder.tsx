@@ -1,7 +1,7 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { NonstandardForm } from './NonstandardForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   fileDocumentSecondaryOnChange,
   onInputChange,

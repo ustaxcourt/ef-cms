@@ -1,26 +1,20 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { CaseListRowTrialSession } from './CaseListRowTrialSession';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const WorkingCopySessionList = connect(
   {
-    casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
-    sort: state.trialSessionWorkingCopy.sort,
-    sortOrder: state.trialSessionWorkingCopy.sortOrder,
+    constants: state.constants,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
     trialSessionWorkingCopy: state.trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
   },
   function WorkingCopySessionList({
-    casesShownCount,
-    sort,
-    sortOrder,
+    constants,
     toggleWorkingCopySortSequence,
     trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper,
@@ -42,68 +36,34 @@ export const WorkingCopySessionList = connect(
                 aria-label="Docket Number"
                 className="padding-left-2px no-wrap"
               >
-                <Button
-                  link
-                  className="sortable-header-button margin-right-0"
-                  onClick={() => {
-                    toggleWorkingCopySortSequence({
-                      sort: 'docket',
-                    });
-                  }}
-                >
-                  <span
-                    className={classNames(
-                      'margin-right-105',
-                      sort === 'docket' && 'sortActive',
-                    )}
-                  >
-                    Docket No.
-                  </span>
-                  {(sort === 'docket' && sortOrder === 'desc' && (
-                    <FontAwesomeIcon
-                      icon="caret-up"
-                      title="in ascending order"
-                    />
-                  )) || (
-                    <FontAwesomeIcon
-                      icon="caret-down"
-                      title="in descending order"
-                    />
-                  )}
-                </Button>
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={trialSessionWorkingCopy.sort}
+                  currentlySortedOrder={trialSessionWorkingCopy.sortOrder}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={
+                    trialSessionWorkingCopyHelper.formattedCases.length > 0
+                  }
+                  sortField="docket"
+                  title="Docket No."
+                  onClickSequence={toggleWorkingCopySortSequence}
+                />
               </th>
               <th aria-label="manually added indicator"></th>
               <th>Case Title</th>
               <th>
-                <Button
-                  link
-                  className="sortable-header-button margin-right-0"
-                  onClick={() => {
-                    toggleWorkingCopySortSequence({
-                      sort: 'practitioner',
-                    });
-                  }}
-                >
-                  <span
-                    className={classNames(
-                      'margin-right-105',
-                      sort === 'practitioner' && 'sortActive',
-                    )}
-                  >
-                    Petitioner Counsel
-                  </span>
-                  {(sort === 'practitioner' && sortOrder === 'desc' && (
-                    <FontAwesomeIcon
-                      icon="caret-up"
-                      title="in ascending order"
-                    />
-                  )) || (
-                    <FontAwesomeIcon
-                      icon="caret-down"
-                      title="in descending order"
-                    />
-                  )}
-                </Button>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={trialSessionWorkingCopy.sort}
+                  currentlySortedOrder={trialSessionWorkingCopy.sortOrder}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={
+                    trialSessionWorkingCopyHelper.formattedCases.length > 0
+                  }
+                  sortField="practitioner"
+                  title="Petitioner Counsel"
+                  onClickSequence={toggleWorkingCopySortSequence}
+                />
               </th>
               <th>Respondent Counsel</th>
               <th>PTM</th>
@@ -122,7 +82,7 @@ export const WorkingCopySessionList = connect(
             })}
           </tbody>
         </table>
-        {casesShownCount === 0 && (
+        {trialSessionWorkingCopyHelper.casesShownCount === 0 && (
           <p>Please select a trial status to show cases.</p>
         )}
       </div>

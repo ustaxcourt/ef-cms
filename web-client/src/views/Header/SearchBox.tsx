@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -33,6 +33,7 @@ export const SearchBox = connect(
           </label>
           <input
             className="usa-input"
+            data-testid="docket-number-search-input"
             id="search-field"
             name="searchTerm"
             placeholder="Enter docket no. (123-19)"
@@ -44,13 +45,18 @@ export const SearchBox = connect(
               });
             }}
           />
-          <Button className="ustc-search-button" type="submit">
+          <Button
+            className="ustc-search-button"
+            data-testid="search-docket-number"
+            type="submit"
+          >
             <span className="usa-search-submit-text">Search</span>
             <span className="usa-sr-only">Search</span>
           </Button>
           <a
             aria-label="advanced search"
             className="usa-link advanced margin-left-105"
+            data-testid="search-link"
             href="/search"
             onClick={() => toggleMobileMenuSequence()}
           >

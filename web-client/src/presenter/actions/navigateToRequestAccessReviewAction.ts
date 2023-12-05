@@ -1,3 +1,4 @@
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -10,7 +11,18 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const navigateToRequestAccessReviewAction = async ({
   get,
   router,
+  store,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
+
+  if (
+    get(state.form.generationType) === GENERATION_TYPES.MANUAL &&
+    get(state.form.eventCode) === 'EA'
+  ) {
+    store.set(state.form.redactionAcknowledgement, false);
+  } else {
+    store.unset(state.form.redactionAcknowledgement);
+  }
+
   await router.route(`/case-detail/${docketNumber}/request-access/review`);
 };

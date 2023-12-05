@@ -1,12 +1,8 @@
-/**
- * gets the associated judge for the current user
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext
- * @returns {object} Associated Judge user object if found
- */
+import { RawUser } from '@shared/business/entities/User';
+
 export const getJudgeForCurrentUserAction = async ({
   applicationContext,
-}: ActionProps) => {
+}: ActionProps): Promise<{ judgeUser: RawUser }> => {
   const judgeUser = await applicationContext
     .getUseCases()
     .getJudgeInSectionInteractor(applicationContext, {

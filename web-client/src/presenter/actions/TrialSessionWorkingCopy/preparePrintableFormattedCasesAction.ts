@@ -15,7 +15,7 @@ export const preparePrintableFormattedCasesAction = ({
     temporaryFormattedCases.push(formattedCase);
     if (formattedCase.isLeadCase) {
       temporaryFormattedCases = temporaryFormattedCases.concat(
-        formattedCase.consolidatedCases,
+        formattedCase.nestedConsolidatedCases,
       );
     }
   });

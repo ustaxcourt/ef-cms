@@ -51,33 +51,29 @@ export class PublicDocumentSearchResult extends JoiValidationEntity {
     docketNumberWithSuffix: JoiValidationConstants.STRING,
     documentTitle: JoiValidationConstants.DOCUMENT_TITLE.required(),
     documentType: JoiValidationConstants.STRING,
-    eventCode: joi.when('isSealed', {
-      is: true,
-      otherwise: JoiValidationConstants.STRING,
-      then: JoiValidationConstants.STRING.valid(
-        ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      ),
-    }),
+    eventCode: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: JoiValidationConstants.STRING,
+        then: JoiValidationConstants.STRING.valid(
+          ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+        ),
+      })
+      .messages({
+        '*': 'Sealed documents cannot be returned in public searches unless they are of type opinion',
+      }),
     isSealed: joi.boolean(),
-    isStricken: joi.boolean().invalid(true),
+    isStricken: joi.boolean().invalid(true).messages({
+      '*': 'Stricken documents cannot be returned in public searches.',
+    }),
     judge: JoiValidationConstants.STRING.optional(),
     numberOfPages: joi.number().integer().optional().allow(null),
     sealedDate: JoiValidationConstants.ISO_DATE,
     signedJudgeName: JoiValidationConstants.STRING.optional(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {
-    eventCode:
-      'Sealed documents cannot be returned in public searches unless they are of type opinion',
-    isStricken: 'Stricken documents cannot be returned in public searches.',
-  };
-
   getValidationRules() {
     return PublicDocumentSearchResult.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return PublicDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
   }
 }
 

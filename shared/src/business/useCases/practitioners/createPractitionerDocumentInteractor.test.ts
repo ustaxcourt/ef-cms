@@ -1,4 +1,4 @@
-import { InvalidEntityError, UnauthorizedError } from '../../../errors/errors';
+import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createPractitionerDocumentInteractor } from './createPractitionerDocumentInteractor';

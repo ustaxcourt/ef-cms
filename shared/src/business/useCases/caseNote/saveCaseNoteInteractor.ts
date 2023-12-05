@@ -3,10 +3,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * saveCaseNoteInteractor
+ * saveCaseNote
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +15,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.caseNote the note to update
  * @returns {object} the updated case note returned from persistence
  */
-export const saveCaseNoteInteractor = async (
+export const saveCaseNote = async (
   applicationContext: IApplicationContext,
   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
 ) => {
@@ -48,3 +49,10 @@ export const saveCaseNoteInteractor = async (
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
+
+export const saveCaseNoteInteractor = withLocking(
+  saveCaseNote,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

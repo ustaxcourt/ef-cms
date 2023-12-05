@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createMessageAction } from './createMessageAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -9,6 +9,9 @@ describe('createMessageAction', () => {
   });
 
   it('should call createMessageInteractor with the expected parameters and return the alertSuccess', async () => {
+    const docIdOne = 'b1130321-0a76-43bc-b3eb-64a18f079873';
+    const docIdTwo = 'b100000-0a76-43bc-b3eb-64a18f079873';
+
     const result = await runAction(createMessageAction, {
       modules: {
         presenter,
@@ -21,8 +24,14 @@ describe('createMessageAction', () => {
           form: {
             attachments: [
               {
-                documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+                documentId: docIdOne,
                 documentTitle: 'Petition',
+              },
+            ],
+            draftAttachments: [
+              {
+                documentId: docIdTwo,
+                documentTitle: 'Petition Title',
               },
             ],
             message: 'You there!',
@@ -40,8 +49,12 @@ describe('createMessageAction', () => {
     ).toMatchObject({
       attachments: [
         {
-          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+          documentId: docIdOne,
           documentTitle: 'Petition',
+        },
+        {
+          documentId: docIdTwo,
+          documentTitle: 'Petition Title',
         },
       ],
       docketNumber: '101-20',

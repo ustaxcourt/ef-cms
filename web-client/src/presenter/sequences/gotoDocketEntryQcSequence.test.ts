@@ -1,6 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoDocketEntryQcSequence } from './gotoDocketEntryQcSequence';
 import { presenter } from '../presenter-mock';
 

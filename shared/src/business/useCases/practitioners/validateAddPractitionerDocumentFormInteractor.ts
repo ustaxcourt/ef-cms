@@ -1,18 +1,10 @@
 import { PractitionerDocument } from '../../entities/PractitionerDocument';
 
-/**
- * validateAddPractitionerDocumentFormInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.stampMotionForm the stamp motion form
- * @returns {object} errors if there are any, otherwise null
- */
 export const validateAddPractitionerDocumentFormInteractor = (
-  applicationContext,
+  applicationContext: IApplicationContext,
   form,
 ) => {
-  const errors = new PractitionerDocument(
+  return new PractitionerDocument(
     {
       categoryName: form.categoryName,
       categoryType: form.categoryType,
@@ -23,6 +15,4 @@ export const validateAddPractitionerDocumentFormInteractor = (
       applicationContext,
     },
   ).getFormattedValidationErrors();
-
-  return errors || null;
 };

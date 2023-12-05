@@ -14,14 +14,11 @@ export class PetitionerGuardianContact extends Contact {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      secondaryName: JoiValidationConstants.STRING.max(500).required(),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      secondaryName: 'Enter name of guardian',
+      secondaryName: JoiValidationConstants.STRING.max(500)
+        .required()
+        .messages({
+          '*': 'Enter name of guardian',
+        }),
     };
   }
 }

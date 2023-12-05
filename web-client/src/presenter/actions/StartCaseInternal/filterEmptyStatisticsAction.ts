@@ -18,9 +18,7 @@ export const filterEmptyStatisticsAction = ({
   statistics = statistics.filter(
     statistic =>
       statistic.year ||
-      statistic.lastDateOfPeriodDay ||
-      statistic.lastDateOfPeriodMonth ||
-      statistic.lastDateOfPeriodYear ||
+      statistic.lastDateOfPeriod ||
       statistic.irsDeficiencyAmount ||
       statistic.irsTotalPenalties,
   );

@@ -1,5 +1,5 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
 export const SpousePermissionConfirmModal = connect(
@@ -15,12 +15,12 @@ export const SpousePermissionConfirmModal = connect(
         onConfirmSequence="clearModalSequence"
       >
         <p>
-          To file on behalf of your spouse, you must have their consent. Both
-          you and your spouse must sign the Petition form.
+          To file on behalf of your spouse, you must have consent. Both you and
+          your spouse should sign the Petition.
         </p>
         <p>
-          If you do not have their consent, select “Myself” as the person who is
-          filing.
+          If you do not have your spouse’s consent, select “Myself” as the
+          person who is filing.
         </p>
       </ConfirmModal>
     );

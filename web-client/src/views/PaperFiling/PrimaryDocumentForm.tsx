@@ -1,11 +1,11 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   docketEntryOnChange,
   onInputChange,
@@ -17,9 +17,11 @@ import React from 'react';
 
 export const PrimaryDocumentForm = connect(
   {
-    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
     addDocketEntryHelper: state.addDocketEntryHelper,
+    constants: state.constants,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
@@ -29,9 +31,10 @@ export const PrimaryDocumentForm = connect(
   },
   function PrimaryDocumentForm({
     addDocketEntryHelper,
+    constants,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
-    OBJECTIONS_OPTIONS,
     updateDocketEntryFormValueSequence,
     updateScreenMetadataSequence,
     validateDocketEntrySequence,
@@ -70,23 +73,22 @@ export const PrimaryDocumentForm = connect(
               ))}
             </fieldset>
           </FormGroup>
-          <DateInput
-            errorText={validationErrors.dateReceived}
+
+          <DateSelector
+            defaultValue={form.receivedAt}
+            errorText={validationErrors.receivedAt}
             id="date-received"
             label="Date received"
-            names={{
-              day: 'dateReceivedDay',
-              month: 'dateReceivedMonth',
-              year: 'dateReceivedYear',
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key: 'receivedAt',
+                toFormat: constants.DATE_FORMATS.ISO,
+                value: e.target.value,
+              });
+              validateDocketEntrySequence();
             }}
-            values={{
-              day: form.dateReceivedDay,
-              month: form.dateReceivedMonth,
-              year: form.dateReceivedYear,
-            }}
-            onBlur={validateDocketEntrySequence}
-            onChange={updateDocketEntryFormValueSequence}
           />
+
           <FormGroup errorText={validationErrors.mailingDate}>
             <label className="usa-label" htmlFor="mailing-date">
               Mailing date <span className="usa-hint">(optional)</span>
@@ -300,7 +302,7 @@ export const PrimaryDocumentForm = connect(
                 <legend className="usa-legend" id="objections-legend">
                   Are there any objections to the granting of this document?
                 </legend>
-                {OBJECTIONS_OPTIONS.map(option => (
+                {constants.OBJECTIONS_OPTIONS.map(option => (
                   <div className="usa-radio" key={option}>
                     <input
                       aria-describedby="objections-legend"

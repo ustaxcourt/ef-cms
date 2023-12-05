@@ -1,41 +1,58 @@
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { put } from '../../dynamodbClientService';
 
-export const updateIrsPractitionerOnCase = ({
+export const updateIrsPractitionerOnCase = async ({
   applicationContext,
   docketNumber,
+  leadDocketNumber,
   practitioner,
   userId,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  practitioner: TPractitioner;
+  leadDocketNumber?: string;
+  practitioner: RawIrsPractitioner;
   userId: string;
-}) =>
-  put({
-    Item: {
-      ...practitioner,
-      pk: `case|${docketNumber}`,
-      sk: `irsPractitioner|${userId}`,
-    },
-    applicationContext,
-  });
+}): Promise<void> => {
+  const item: any = {
+    ...practitioner,
+    pk: `case|${docketNumber}`,
+    sk: `irsPractitioner|${userId}`,
+  };
+  if (leadDocketNumber) {
+    item.gsi1pk = `leadCase|${leadDocketNumber}`;
+  }
 
-export const updatePrivatePractitionerOnCase = ({
+  await put({
+    Item: item,
+    applicationContext,
+  });
+};
+
+export const updatePrivatePractitionerOnCase = async ({
   applicationContext,
   docketNumber,
+  leadDocketNumber,
   practitioner,
   userId,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
+  leadDocketNumber?: string;
   practitioner: TPractitioner;
   userId: string;
-}) =>
-  put({
-    Item: {
-      ...practitioner,
-      pk: `case|${docketNumber}`,
-      sk: `privatePractitioner|${userId}`,
-    },
+}): Promise<void> => {
+  const item: any = {
+    ...practitioner,
+    pk: `case|${docketNumber}`,
+    sk: `privatePractitioner|${userId}`,
+  };
+  if (leadDocketNumber) {
+    item.gsi1pk = `leadCase|${leadDocketNumber}`;
+  }
+
+  await put({
+    Item: item,
     applicationContext,
   });
+};

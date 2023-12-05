@@ -1,5 +1,5 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -41,6 +41,7 @@ export const CaseTypeSelect = connect(
             <select
               aria-labelledby="case-type-select-legend"
               className="usa-select"
+              data-testid="case-type-select"
               id="case-type"
               name="caseType"
               value={value}

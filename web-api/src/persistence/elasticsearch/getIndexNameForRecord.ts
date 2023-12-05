@@ -1,3 +1,9 @@
+import { efcmsCaseDeadlineIndex } from '../../../elasticsearch/efcms-case-deadline-mappings';
+import { efcmsCaseIndex } from '../../../elasticsearch/efcms-case-mappings';
+import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
+import { efcmsMessageIndex } from '../../../elasticsearch/efcms-message-mappings';
+import { efcmsUserIndex } from '../../../elasticsearch/efcms-user-mappings';
+import { efcmsWorkItemIndex } from '../../../elasticsearch/efcms-work-item-mappings';
 import { isObject, isString } from 'lodash';
 
 const userEntityNames = [
@@ -51,20 +57,20 @@ const isRecordOfType = (record, type) => {
  * @returns {object} the index the record belongs to
  */
 export const getIndexNameForRecord = record => {
-  let index = null;
+  let index: string = '';
 
   if (isRecordOfType(record, 'Case')) {
-    index = 'efcms-case';
+    index = efcmsCaseIndex;
   } else if (isRecordOfType(record, 'DocketEntry')) {
-    index = 'efcms-docket-entry';
+    index = efcmsDocketEntryIndex;
   } else if (isRecordOfType(record, 'User')) {
-    index = 'efcms-user';
+    index = efcmsUserIndex;
   } else if (isRecordOfType(record, 'Message')) {
-    index = 'efcms-message';
+    index = efcmsMessageIndex;
   } else if (isRecordOfType(record, 'CaseDeadline')) {
-    index = 'efcms-case-deadline';
+    index = efcmsCaseDeadlineIndex;
   } else if (isRecordOfType(record, 'WorkItem')) {
-    index = 'efcms-work-item';
+    index = efcmsWorkItemIndex;
   }
 
   return index;

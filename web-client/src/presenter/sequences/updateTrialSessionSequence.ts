@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { computeSubmitTrialSessionDataAction } from '../actions/TrialSession/computeSubmitTrialSessionDataAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -15,12 +14,6 @@ export const updateTrialSessionSequence = [
   clearPdfPreviewUrlAction,
   clearAlertsAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction('startDate', null, 'computedStartDate'),
-  getComputedFormDateFactoryAction(
-    'estimatedEndDate',
-    null,
-    'computedEstimatedEndDate',
-  ),
   computeSubmitTrialSessionDataAction,
   validateTrialSessionAction,
   {

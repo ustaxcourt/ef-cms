@@ -1,8 +1,8 @@
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
 import { loginAs, setupTest, waitForExpectedItemToExist } from './helpers';
-const AdmZip = require('adm-zip');
-const fs = require('fs');
-const http = require('http');
+import AdmZip from 'adm-zip';
+import fs from 'fs';
+import http from 'http';
 
 describe('Judge downloads all cases from trial session', () => {
   const cerebralTest = setupTest();

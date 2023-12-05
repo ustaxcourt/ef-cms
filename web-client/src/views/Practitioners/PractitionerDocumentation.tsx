@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeletePractitionerDocumentConfirmModal } from './DeletePractitionerDocumentConfirmModal';
-import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
-import { connect } from '@cerebral/react';
+import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -17,6 +17,7 @@ export const PractitionerDocumentation = connect(
     practitionerDocumentationHelper: state.practitionerDocumentationHelper,
     showModal: state.modal.showModal,
     sortTableSequence: sequences.sortTableSequence,
+    tableSort: state.tableSort,
   },
   function PractitionerDocumentation({
     barNumber,
@@ -26,6 +27,7 @@ export const PractitionerDocumentation = connect(
     practitionerDocumentationHelper,
     showModal,
     sortTableSequence,
+    tableSort,
   }) {
     return (
       <>
@@ -50,9 +52,11 @@ export const PractitionerDocumentation = connect(
           <thead>
             <tr>
               <th aria-label="Date Uploaded">
-                <SortableColumnHeaderButton
+                <SortableColumn
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                  defaultSort={constants.ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  defaultSortOrder={constants.ASCENDING}
                   descText={constants.ALPHABETICALLY_DESCENDING}
                   hasRows={
                     practitionerDocumentationHelper
@@ -64,9 +68,11 @@ export const PractitionerDocumentation = connect(
                 />
               </th>
               <th>
-                <SortableColumnHeaderButton
+                <SortableColumn
                   ascText={constants.ALPHABETICALLY_ASCENDING}
-                  defaultSort={constants.ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  defaultSortOrder={constants.ASCENDING}
                   descText={constants.ALPHABETICALLY_DESCENDING}
                   hasRows={
                     practitionerDocumentationHelper
@@ -78,9 +84,11 @@ export const PractitionerDocumentation = connect(
                 />
               </th>
               <th>
-                <SortableColumnHeaderButton
+                <SortableColumn
                   ascText={constants.ALPHABETICALLY_ASCENDING}
-                  defaultSort={constants.ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  defaultSortOrder={constants.ASCENDING}
                   descText={constants.ALPHABETICALLY_DESCENDING}
                   hasRows={
                     practitionerDocumentationHelper
@@ -92,9 +100,11 @@ export const PractitionerDocumentation = connect(
                 />
               </th>
               <th>
-                <SortableColumnHeaderButton
+                <SortableColumn
                   ascText={constants.ALPHABETICALLY_ASCENDING}
-                  defaultSort={constants.ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  defaultSortOrder={constants.ASCENDING}
                   descText={constants.ALPHABETICALLY_DESCENDING}
                   hasRows={
                     practitionerDocumentationHelper

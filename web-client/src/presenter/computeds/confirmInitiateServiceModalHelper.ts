@@ -13,7 +13,7 @@ import { Get } from 'cerebral';
 export const confirmInitiateServiceModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const {
     CONTACT_TYPE_TITLES,
     NON_MULTI_DOCKETABLE_EVENT_CODES,
@@ -41,13 +41,6 @@ export const confirmInitiateServiceModalHelper = (
     !isOnMessageDetailPage;
 
   if (!isCourtIssued(eventCode)) {
-    const { areMultiDocketablePaperFilingsEnabled } = get(
-      state.featureFlagHelper,
-    );
-
-    showConsolidatedCasesForService =
-      showConsolidatedCasesForService && areMultiDocketablePaperFilingsEnabled;
-
     if (
       SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
       documentTitle.includes('Simultaneous')

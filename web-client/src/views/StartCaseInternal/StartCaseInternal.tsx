@@ -9,7 +9,7 @@ import { IRSNotice } from '../IRSNotice';
 import { Parties } from './Parties';
 import { ScanBatchPreviewer } from './../ScanBatchPreviewer';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -53,10 +53,16 @@ export const StartCaseInternal = connect(
                   <Tab id="tab-parties" tabName="partyInfo" title="Parties">
                     <Parties />
                   </Tab>
-                  <Tab id="tab-case-info" tabName="caseInfo" title="Case Info">
+                  <Tab
+                    data-testid="tab-case-info"
+                    id="tab-case-info"
+                    tabName="caseInfo"
+                    title="Case Info"
+                  >
                     <CaseInformation />
                   </Tab>
                   <Tab
+                    data-testid="tab-irs-notice"
                     id="tab-irs-notice"
                     tabName="irsNotice"
                     title="IRS Notice"
@@ -100,6 +106,7 @@ export const StartCaseInternal = connect(
             <div className="grid-row grid-gap margin-top-3">
               <div className="grid-col-5">
                 <Button
+                  data-testid="submit-paper-petition"
                   id="submit-case"
                   type="button"
                   onClick={() => {

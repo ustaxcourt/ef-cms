@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createPractitionerUserAction } from './createPractitionerUserAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -39,31 +39,6 @@ describe('createPractitionerUserAction', () => {
         .calls[0][1].user,
     ).toMatchObject({
       confirmEmail: undefined,
-    });
-  });
-
-  it('should set admissions date on the practitioner user from props', async () => {
-    const mockComputedAdmissionsDate = '2019-03-01T21:40:46.415Z';
-
-    await runAction(createPractitionerUserAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        computedDate: mockComputedAdmissionsDate,
-      },
-      state: {
-        form: {
-          user: {},
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().createPractitionerUserInteractor.mock
-        .calls[0][1].user,
-    ).toMatchObject({
-      admissionsDate: mockComputedAdmissionsDate,
     });
   });
 

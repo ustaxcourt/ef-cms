@@ -1,9 +1,9 @@
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerContactForm } from './PractitionerContactForm';
 import { PractitionerLoginServiceEmailForm } from './PractitionerLoginServiceEmailForm';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -11,26 +11,21 @@ import React from 'react';
 
 export const PractitionerForm = connect(
   {
-    ADMISSIONS_STATUS_OPTIONS: state.constants.ADMISSIONS_STATUS_OPTIONS,
-    EMPLOYER_OPTIONS: state.constants.EMPLOYER_OPTIONS,
-    PRACTITIONER_TYPE_OPTIONS: state.constants.PRACTITIONER_TYPE_OPTIONS,
+    constants: state.constants,
     createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    usStates: state.constants.US_STATES,
-    usStatesOther: state.constants.US_STATES_OTHER,
     validateSequence: sequences[props.validateSequenceName],
     validationErrors: state.validationErrors,
   },
   function PractitionerForm({
-    ADMISSIONS_STATUS_OPTIONS,
+    constants,
     createPractitionerUserHelper,
-    EMPLOYER_OPTIONS,
     form,
-    PRACTITIONER_TYPE_OPTIONS,
+    formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence,
-    usStates,
-    usStatesOther,
     validateSequence,
     validateSequenceName,
     validationErrors,
@@ -178,7 +173,7 @@ export const PractitionerForm = connect(
                   <FormGroup errorText={validationErrors.practitionerType}>
                     <fieldset className="usa-fieldset">
                       <legend className="usa-legend">Practitioner type</legend>
-                      {PRACTITIONER_TYPE_OPTIONS.map(type => (
+                      {constants.PRACTITIONER_TYPE_OPTIONS.map(type => (
                         <div className="usa-radio usa-radio__inline" key={type}>
                           <input
                             checked={form.practitionerType === type}
@@ -208,7 +203,7 @@ export const PractitionerForm = connect(
                   <FormGroup errorText={validationErrors.employer}>
                     <fieldset className="usa-fieldset">
                       <legend className="usa-legend">Employer</legend>
-                      {EMPLOYER_OPTIONS.map(option => (
+                      {constants.EMPLOYER_OPTIONS.map(option => (
                         <div
                           className="usa-radio usa-radio__inline"
                           key={option}
@@ -318,8 +313,8 @@ export const PractitionerForm = connect(
                       <option value="">- Select -</option>
                       <option value="N/A">N/A</option>
                       <optgroup label="State">
-                        {Object.keys(usStates).map(abbrev => {
-                          const fullStateName = usStates[abbrev];
+                        {Object.keys(constants.US_STATES).map(abbrev => {
+                          const fullStateName = constants.US_STATES[abbrev];
                           return (
                             <option key={fullStateName} value={abbrev}>
                               {fullStateName}
@@ -328,8 +323,9 @@ export const PractitionerForm = connect(
                         })}
                       </optgroup>
                       <optgroup label="Other">
-                        {Object.keys(usStatesOther).map(abbrev => {
-                          const fullStateName = usStatesOther[abbrev];
+                        {Object.keys(constants.US_STATES_OTHER).map(abbrev => {
+                          const fullStateName =
+                            constants.US_STATES_OTHER[abbrev];
                           return (
                             <option key={fullStateName} value={abbrev}>
                               {fullStateName}
@@ -359,7 +355,7 @@ export const PractitionerForm = connect(
                         }}
                       >
                         <option value="">- Select -</option>
-                        {ADMISSIONS_STATUS_OPTIONS.map(status => (
+                        {constants.ADMISSIONS_STATUS_OPTIONS.map(status => (
                           <option key={status} value={status}>
                             {status}
                           </option>
@@ -375,29 +371,26 @@ export const PractitionerForm = connect(
                       <p id="admissionStatus">Active</p>
                     </FormGroup>
                   )}
-
-                  <DateInput
+                  <DateSelector
+                    defaultValue={form.admissionsDate}
                     errorText={validationErrors.admissionsDate}
-                    id="admissionsDate"
+                    id="admissions-date"
                     label="Admissions date"
-                    names={{
-                      day: 'day',
-                      month: 'month',
-                      year: 'year',
+                    onChange={e => {
+                      formatAndUpdateDateFromDatePickerSequence({
+                        key: 'admissionsDate',
+                        toFormat: constants.DATE_FORMATS.YYYYMMDD,
+                        value: e.target.value,
+                      });
+                      validateSequence();
                     }}
-                    values={{
-                      day: form.day,
-                      month: form.month,
-                      year: form.year,
-                    }}
-                    onBlur={validateSequence}
-                    onChange={updateFormValueSequence}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
+
         <div className="grid-row margin-bottom-4">
           <div className="grid-col-12">
             <h2>Practitioner Notes</h2>

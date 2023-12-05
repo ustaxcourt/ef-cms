@@ -10,7 +10,7 @@
 #   - AWS credentials must be setup on your machine
 #
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 #   - $2 - the elasticsearch endpoint to clear
 
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1

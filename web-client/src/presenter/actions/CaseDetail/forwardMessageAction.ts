@@ -1,12 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * forwards the message
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @returns {object} contains the alert success message
- */
 export const forwardMessageAction = async ({
   applicationContext,
   get,
@@ -15,17 +8,20 @@ export const forwardMessageAction = async ({
 
   const docketNumber = get(state.caseDetail.docketNumber);
 
+  const computedAttachments = [...form.attachments, ...form.draftAttachments];
+
   const { parentMessageId } = await applicationContext
     .getUseCases()
     .forwardMessageInteractor(applicationContext, {
       docketNumber,
       ...form,
+      attachments: computedAttachments,
     });
 
   let messageViewerDocumentToDisplay;
-  if (form.attachments.length) {
+  if (computedAttachments.length) {
     messageViewerDocumentToDisplay = {
-      documentId: form.attachments[0].documentId,
+      documentId: computedAttachments[0].documentId,
     };
   }
 

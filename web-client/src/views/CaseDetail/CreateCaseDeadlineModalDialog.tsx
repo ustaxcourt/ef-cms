@@ -1,24 +1,29 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CreateCaseDeadlineModalDialog = connect(
   {
-    cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.createCaseDeadlineSequence,
+    DATE_FORMATS: state.constants.DATE_FORMATS,
+    createCaseDeadlineSequence: sequences.createCaseDeadlineSequence,
+    dismissModalSequence: sequences.dismissModalSequence,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDeadlineSequence: sequences.validateCaseDeadlineSequence,
     validationErrors: state.validationErrors,
   },
   function CreateCaseDeadlineModalDialog({
-    cancelSequence,
-    confirmSequence,
+    createCaseDeadlineSequence,
+    DATE_FORMATS,
+    dismissModalSequence,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence,
     validateCaseDeadlineSequence,
     validationErrors,
@@ -26,19 +31,26 @@ export const CreateCaseDeadlineModalDialog = connect(
     return (
       <ModalDialog
         cancelLabel="Cancel"
-        cancelSequence={cancelSequence}
+        cancelSequence={dismissModalSequence}
         confirmLabel="Save"
-        confirmSequence={confirmSequence}
+        confirmSequence={createCaseDeadlineSequence}
         title="Add Deadline"
       >
         <div className="ustc-create-order-modal">
-          <DateInput
+          <DateSelector
+            defaultValue={form.deadlineDate}
             errorText={validationErrors.deadlineDate}
+            formGroupClassNames={''}
             id="deadline-date"
             label="Due date"
-            values={form}
-            onBlur={validateCaseDeadlineSequence}
-            onChange={updateFormValueSequence}
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key: 'deadlineDate',
+                toFormat: DATE_FORMATS.ISO,
+                value: e.target.value,
+              });
+              validateCaseDeadlineSequence();
+            }}
           />
 
           <FormGroup errorText={validationErrors.description}>

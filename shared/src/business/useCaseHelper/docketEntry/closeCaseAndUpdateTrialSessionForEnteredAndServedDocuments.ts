@@ -2,6 +2,7 @@ import {
   CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
 } from '../../entities/EntityConstants';
+import { NotFoundError } from '@web-api/errors/errors';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
@@ -31,6 +32,12 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
           applicationContext,
           trialSessionId: caseEntity.trialSessionId,
         });
+
+      if (!trialSession) {
+        throw new NotFoundError(
+          `Trial session ${caseEntity.trialSessionId} was not found.`,
+        );
+      }
 
       const trialSessionEntity = new TrialSession(trialSession, {
         applicationContext,

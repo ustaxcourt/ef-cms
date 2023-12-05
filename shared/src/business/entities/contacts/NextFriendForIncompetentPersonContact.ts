@@ -14,14 +14,9 @@ export class NextFriendForIncompetentPersonContact extends Contact {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      secondaryName: JoiValidationConstants.STRING.max(500).required(),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      secondaryName: 'Enter name of next friend',
+      secondaryName: JoiValidationConstants.STRING.max(500)
+        .required()
+        .messages({ '*': 'Enter name of next friend' }),
     };
   }
 }

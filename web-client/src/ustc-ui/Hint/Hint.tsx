@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -20,13 +20,6 @@ export const Hint = connect(function Hint(props) {
           <FontAwesomeIcon
             className="fa-icon-blue-vivid"
             icon="info-circle"
-            size="lg"
-          />
-        )}
-        {exclamation && (
-          <FontAwesomeIcon
-            className="fa-icon-blue-vivid"
-            icon={['fas', 'exclamation-circle']}
             size="lg"
           />
         )}

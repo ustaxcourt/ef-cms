@@ -1,17 +1,12 @@
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
-export const showAppTimeoutModalHelper = (get: Get) => {
-  const appTimeoutModalName = 'AppTimeoutModal';
-
-  const showModalState = get(state.modal.showModal);
+export const showAppTimeoutModalHelper = (get: Get): any => {
+  const modalState = get(state.idleLogoutState.state);
   const currentUser = get(state.user);
-  const hasCurrentUser = !!currentUser;
-  const isUploading = get(state.fileUploadProgress.isUploading);
 
   return {
-    beginIdleMonitor: hasCurrentUser && !isUploading,
     currentUser,
-    showModal: showModalState === appTimeoutModalName && hasCurrentUser,
+    showModal: modalState === 'COUNTDOWN',
   };
 };

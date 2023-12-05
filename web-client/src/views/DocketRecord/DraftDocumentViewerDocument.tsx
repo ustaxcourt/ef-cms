@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -131,6 +131,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showAddDocketEntryButton && (
                 <Button
                   link
+                  data-testid="add-court-issued-docket-entry-button"
                   href={draftDocumentViewerHelper.addDocketEntryLink}
                   icon="plus-circle"
                   id="add-court-issued-docket-entry-button"

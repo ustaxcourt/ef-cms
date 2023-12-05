@@ -1,8 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
-import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
-import { connect } from '@cerebral/react';
+import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
+import { TableFilters } from '../../ustc-ui/Table/TableFilters';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -14,6 +14,7 @@ export const MessagesIndividualOutbox = connect(
     screenMetadata: state.screenMetadata,
     showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
+    tableSort: state.tableSort,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesIndividualOutbox({
@@ -22,6 +23,7 @@ export const MessagesIndividualOutbox = connect(
     screenMetadata,
     showSortableHeaders,
     sortTableSequence,
+    tableSort,
     updateScreenMetadataSequence,
   }) {
     return (
@@ -57,9 +59,11 @@ export const MessagesIndividualOutbox = connect(
               <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.DESCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
@@ -75,9 +79,11 @@ export const MessagesIndividualOutbox = connect(
               )}
               {showSortableHeaders && (
                 <th className="small">
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.DESCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
@@ -89,9 +95,11 @@ export const MessagesIndividualOutbox = connect(
               {!showSortableHeaders && <th className="small">Sent</th>}
               {showSortableHeaders && (
                 <th>
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.ALPHABETICALLY_ASCENDING}
-                    defaultSort={constants.ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="subject"
@@ -146,15 +154,7 @@ export const MessagesIndividualOutbox = connect(
                   <td className="message-queue-row max-width-25">
                     {message.caseTitle}
                   </td>
-                  {!message.showTrialInformation && (
-                    <td className="message-queue-row">{message.caseStatus}</td>
-                  )}
-                  {message.showTrialInformation && (
-                    <td className="message-queue-row">
-                      {message.caseStatus} - {message.formattedTrialDate}{' '}
-                      {message.formattedTrialLocation}
-                    </td>
-                  )}
+                  <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row small">
                     {message.toSection}

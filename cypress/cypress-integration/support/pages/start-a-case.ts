@@ -15,12 +15,7 @@ export const fillInAndSubmitForm = () => {
 
       // wizard step 1
       cy.get('input#stin-file').should('be.enabled').selectFile(fileOptions);
-
-      // Fix flaky test
-      // https://github.com/ustaxcourt/ef-cms/issues/3866
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(0);
-
+      cy.get('[data-testid="upload-file-success"]');
       cy.get('button#submit-case').trigger('click');
 
       // wizard step 2

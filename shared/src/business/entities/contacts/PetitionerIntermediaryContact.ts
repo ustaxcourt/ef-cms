@@ -14,14 +14,9 @@ export class PetitionerIntermediaryContact extends Contact {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      inCareOf: JoiValidationConstants.STRING.max(100).optional(),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      inCareOf: 'In care of has errors.',
+      inCareOf: JoiValidationConstants.STRING.max(100)
+        .optional()
+        .messages({ '*': 'In care of has errors.' }),
     };
   }
 }

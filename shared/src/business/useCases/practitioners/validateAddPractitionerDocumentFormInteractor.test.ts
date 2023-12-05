@@ -3,7 +3,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateAddPractitionerDocumentFormInteractor } from './validateAddPractitionerDocumentFormInteractor';
 
 describe('validateAddPractitionerInteractor', () => {
-  it('returns the expected errors object on an empty form', () => {
+  it('should return validations errors when the form is empty', () => {
     const errors = validateAddPractitionerDocumentFormInteractor(
       applicationContext,
       {
@@ -13,14 +13,14 @@ describe('validateAddPractitionerInteractor', () => {
       },
     );
 
-    expect(Object.keys(errors)).toEqual([
-      'categoryName',
-      'categoryType',
-      'fileName',
-    ]);
+    expect(errors).toEqual({
+      categoryName: expect.anything(),
+      categoryType: expect.anything(),
+      fileName: expect.anything(),
+    });
   });
 
-  it('should return null when the practitioner object is valid', () => {
+  it('should return null when the practitioner document is valid', () => {
     const errors = validateAddPractitionerDocumentFormInteractor(
       applicationContext,
       {
@@ -33,7 +33,7 @@ describe('validateAddPractitionerInteractor', () => {
     expect(errors).toBeNull();
   });
 
-  it('should return null when then form data for good standing documents is valid', () => {
+  it('should return null when the form data for a good standing document is valid', () => {
     const errors = validateAddPractitionerDocumentFormInteractor(
       applicationContext,
       {

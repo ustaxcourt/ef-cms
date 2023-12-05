@@ -1,5 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -32,6 +32,7 @@ export const SuccessNotification = connect(
               'usa-alert--success',
               isMessageOnly && 'usa-alert-success-message-only',
             )}
+            data-testid="success-alert"
             ref={notificationRef}
             role="alert"
           >
@@ -48,7 +49,7 @@ export const SuccessNotification = connect(
                         className="padding-0 margin-top-2 ustc-button--mobile-inline"
                         href={alertSuccess.linkUrl}
                         rel="noopener noreferrer"
-                        target="_blank"
+                        target={alertSuccess.newTab ? '_blank' : '_self'}
                       >
                         {alertSuccess.linkText || alertSuccess.linkUrl}
                       </Button>

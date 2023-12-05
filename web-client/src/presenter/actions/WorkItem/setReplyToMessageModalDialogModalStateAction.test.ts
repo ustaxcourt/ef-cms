@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setReplyToMessageModalDialogModalStateAction } from './setReplyToMessageModalDialogModalStateAction';
@@ -60,6 +60,7 @@ describe('setReplyToMessageModalDialogModalStateAction', () => {
             documentTitle: 'Petition',
           },
         ],
+        draftAttachments: [],
         parentMessageId: '530f9b43-4934-4b2f-9aa4-50dcbe8064fa',
         subject: 'the subject',
         to: 'test user 1',

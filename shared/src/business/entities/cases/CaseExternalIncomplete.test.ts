@@ -36,6 +36,7 @@ describe('CaseExternalIncomplete entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(
         null,
       );
@@ -71,6 +72,7 @@ describe('CaseExternalIncomplete entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(
         null,
       );
@@ -118,6 +120,7 @@ describe('CaseExternalIncomplete entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(
         null,
       );
@@ -150,6 +153,7 @@ describe('CaseExternalIncomplete entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(
         null,
       );
@@ -192,6 +196,7 @@ describe('CaseExternalIncomplete entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(
         null,
       );

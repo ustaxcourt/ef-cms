@@ -1,16 +1,15 @@
-import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { PETITIONS_SECTION } from '@shared/business/entities/EntityConstants';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const { PETITIONS_SECTION } = applicationContext.getConstants();
-
-const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
-
 export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
   cerebralTest => {
+    const messageModalHelper = withAppContextDecorator(
+      messageModalHelperComputed,
+    );
+
     expect(cerebralTest.getState('messagesSectionCount')).toBe(0);
     expect(cerebralTest.getState('messagesInboxCount')).toBe(0);
 
@@ -44,6 +43,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
       cerebralTest.testMessageDocumentId = messageDocument.docketEntryId;
 
       await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+        action: 'add',
         documentId: cerebralTest.testMessageDocumentId,
       });
 
@@ -57,6 +57,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
         await cerebralTest.runSequence(
           'updateMessageModalAttachmentsSequence',
           {
+            action: 'add',
             documentId: cerebralTest.testMessageDocumentId,
           },
         );
@@ -75,7 +76,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
       await cerebralTest.runSequence('createMessageSequence');
 
       expect(cerebralTest.getState('validationErrors')).toEqual({
-        message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
+        message: 'Enter a message',
       });
 
       await cerebralTest.runSequence('updateModalFormValueSequence', {

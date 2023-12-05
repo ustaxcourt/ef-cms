@@ -1,5 +1,4 @@
 /* istanbul ignore file */
-
 import {
   ADC_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
@@ -126,7 +125,9 @@ import {
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
+  VALIDATION_ERROR_MESSAGES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
   SERVICE_STAMP_OPTIONS,
@@ -141,6 +142,11 @@ const EXTERNAL_USER_DASHBOARD_TABS = {
   CLOSED: 'Closed',
   OPEN: 'Open',
 };
+
+export const GENERATION_TYPES = Object.freeze({
+  AUTO: 'auto',
+  MANUAL: 'manual',
+});
 
 const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
 const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
@@ -221,6 +227,7 @@ export const getConstants = () => ({
     qcSectionInProgress: 'qc-section-in-progress',
     qcSectionInbox: 'qc-section-inbox',
   },
+  GENERATION_TYPES,
   GENERIC_ORDER_EVENT_CODE,
   HYBRID_SESSION_TYPES,
   IDLE_STATUS: { ACTIVE: 'active', IDLE: 'idle' },
@@ -290,6 +297,7 @@ export const getConstants = () => ({
   SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   STAMPED_DOCUMENTS_ALLOWLIST,
   STANDING_PRETRIAL_EVENT_CODES,
+  STATUS_OF_MATTER_OPTIONS: CaseWorksheet.STATUS_OF_MATTER_OPTIONS,
   STATUS_TYPES: CASE_STATUS_TYPES,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
@@ -306,4 +314,5 @@ export const getConstants = () => ({
   US_STATES,
   US_STATES_OTHER,
   USER_ROLES: ROLES,
+  VALIDATION_ERROR_MESSAGES,
 });

@@ -4,7 +4,7 @@
 #   creates the IRS user in the IRS user pool
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 ( ! command -v curl > /dev/null ) && echo "curl was not found on your path. Please install curl." && exit 1
@@ -43,6 +43,8 @@ generate_post_data() {
 EOF
 }
 
+aws cognito-idp admin-enable-user --user-pool-id "${USER_POOL_ID}" --username "${USTC_ADMIN_USER}"
+
 response=$(aws cognito-idp admin-initiate-auth \
   --user-pool-id "${USER_POOL_ID}" \
   --client-id "${CLIENT_ID}" \
@@ -50,8 +52,6 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-flow ADMIN_NO_SRP_AUTH \
   --auth-parameters USERNAME="${USTC_ADMIN_USER}"',PASSWORD'="${USTC_ADMIN_PASS}")
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
-
-aws cognito-idp admin-enable-user --user-pool-id "${USER_POOL_ID}" --username "${USTC_ADMIN_USER}"
 
 curl --header "Content-Type: application/json" \
   --header "Authorization: Bearer ${adminToken}" \

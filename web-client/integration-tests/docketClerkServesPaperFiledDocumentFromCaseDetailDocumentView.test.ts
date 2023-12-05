@@ -6,11 +6,8 @@ import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents View', () => {
   const cerebralTest = setupTest();
-  cerebralTest.draftOrders = [];
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
+  cerebralTest.draftOrders = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();

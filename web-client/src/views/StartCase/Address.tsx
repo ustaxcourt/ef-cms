@@ -1,7 +1,7 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -42,6 +42,7 @@ export const Address = connect(
             <input
               autoCapitalize="none"
               className="usa-input"
+              data-testid={`${type}.city`}
               id={`${type}.city`}
               name={`${type}.city`}
               type="text"
@@ -98,6 +99,7 @@ export const Address = connect(
                 <input
                   autoCapitalize="none"
                   className="usa-input usa-input--inline"
+                  data-testid={`${type}.city`}
                   id={`${type}.city`}
                   name={`${type}.city`}
                   type="text"
@@ -157,6 +159,7 @@ export const Address = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid={`${type}.address1`}
             id={`${type}.address1`}
             name={`${type}.address1`}
             type="text"
@@ -232,6 +235,7 @@ export const Address = connect(
             aria-label="zip code"
             autoCapitalize="none"
             className="usa-input max-width-200 tablet:usa-input--medium"
+            data-testid={`${type}.postalCode`}
             id={`${type}.postalCode`}
             name={`${type}.postalCode`}
             type="text"

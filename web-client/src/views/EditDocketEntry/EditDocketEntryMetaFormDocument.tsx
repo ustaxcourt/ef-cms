@@ -1,11 +1,11 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   docketEntryOnChange,
   onInputChange,
@@ -17,9 +17,11 @@ import React from 'react';
 
 export const EditDocketEntryMetaFormDocument = connect(
   {
-    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
+    constants: state.constants,
     editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryMetaDocumentFormValueSequence:
       sequences.updateDocketEntryMetaDocumentFormValueSequence,
@@ -27,10 +29,11 @@ export const EditDocketEntryMetaFormDocument = connect(
     validationErrors: state.validationErrors,
   },
   function EditDocketEntryMetaFormDocument({
+    constants,
     editDocketEntryMetaHelper,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
-    OBJECTIONS_OPTIONS,
     updateDocketEntryMetaDocumentFormValueSequence,
     validateDocumentSequence,
     validationErrors,
@@ -67,22 +70,19 @@ export const EditDocketEntryMetaFormDocument = connect(
             ))}
           </fieldset>
         </FormGroup>
-        <DateInput
+        <DateSelector
+          defaultValue={form.filingDate}
           errorText={validationErrors.filingDate}
           id="filing-date"
           label="Filed date"
-          names={{
-            day: 'filingDateDay',
-            month: 'filingDateMonth',
-            year: 'filingDateYear',
+          onChange={e => {
+            formatAndUpdateDateFromDatePickerSequence({
+              key: 'filingDate',
+              toFormat: constants.DATE_FORMATS.ISO,
+              value: e.target.value,
+            });
+            validateDocumentSequence();
           }}
-          values={{
-            day: form.filingDateDay,
-            month: form.filingDateMonth,
-            year: form.filingDateYear,
-          }}
-          onBlur={validateDocumentSequence}
-          onChange={updateDocketEntryMetaDocumentFormValueSequence}
         />
         <FormGroup errorText={validationErrors.eventCode}>
           <label
@@ -271,7 +271,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               <legend className="usa-legend" id="objections-legend">
                 Are there any objections to the granting of this document?
               </legend>
-              {OBJECTIONS_OPTIONS.map(option => (
+              {constants.OBJECTIONS_OPTIONS.map(option => (
                 <div className="usa-radio" key={option}>
                   <input
                     aria-describedby="objections-legend"

@@ -2,7 +2,7 @@ import {
   CASE_TYPES_MAP,
   PENALTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { statisticsFormHelper as statisticsFormHelperComputed } from './statisticsFormHelper';
 import { withAppContextDecorator } from '../../withAppContext';

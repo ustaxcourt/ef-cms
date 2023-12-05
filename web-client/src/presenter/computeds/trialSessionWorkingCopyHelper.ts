@@ -1,177 +1,185 @@
-import { omitBy, partition, pickBy } from 'lodash';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import {
+  FormattedTrialSessionCase,
+  compareCasesByDocketNumber,
+} from '@shared/business/utilities/getFormattedTrialSessionDetails';
+import { Get } from 'cerebral';
+import { TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
+import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
+import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
+import { partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-const compareCasesByPractitioner = (a, b) => {
+export type TrialSessionWorkingCopyCase = FormattedTrialSessionCase & {
+  userNotes: string;
+  calendarNotes: string;
+  nestedConsolidatedCases: TrialSessionWorkingCopyCase[];
+};
+
+export const trialSessionWorkingCopyHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): {
+  casesShownCount: number;
+  formattedCases: TrialSessionWorkingCopyCase[];
+  showPrintButton: boolean;
+  trialStatusFilters: { key: string; label: string }[];
+} => {
+  const trialSession = get(state.trialSession);
+  const {
+    caseMetadata,
+    filters,
+    sort,
+    sortOrder,
+    userNotes = {},
+  } = get(state.trialSessionWorkingCopy);
+
+  //get an array of strings of the trial statuses that are set to true
+  const enabledTrialStatusFilters = Object.keys(pickBy(filters));
+
+  const formattedCases = (trialSession.calendaredCases || [])
+    .slice()
+    .filter(isOpenCaseInATrial)
+    .filter(calendaredCase =>
+      isCaseTrialStatusEnabledInFilters(
+        calendaredCase,
+        caseMetadata,
+        enabledTrialStatusFilters,
+      ),
+    )
+    .map(caseItem =>
+      applicationContext.getUtilities().formatCaseForTrialSession({
+        applicationContext,
+        caseItem,
+        eligibleCases: trialSession.calendaredCases,
+        setFilingPartiesCode: true,
+      }),
+    )
+    .sort(compareCasesByDocketNumber)
+    .map(aCase => appendUserNotes(aCase, userNotes))
+    .map(aCase => appendCalendarNotes(aCase, trialSession))
+    .map(aCase => {
+      const nestedConsolidatedCases: TrialSessionWorkingCopyCase[] = [];
+      return { ...aCase, nestedConsolidatedCases };
+    });
+
+  const [topLevelCases, memberConsolidatedCases] = partition(
+    formattedCases,
+    aCase => isTopLevelCase(aCase, formattedCases),
+  );
+
+  memberConsolidatedCases.forEach(mCase => {
+    const topCase = topLevelCases.find(
+      c => c.docketNumber === mCase.leadDocketNumber,
+    )!;
+
+    topCase.nestedConsolidatedCases.push(mCase);
+  });
+
+  if (sort === 'practitioner') {
+    topLevelCases.sort(compareCasesByPractitioner);
+  }
+
+  if (sortOrder === 'desc') {
+    topLevelCases.reverse();
+  }
+
+  const trialStatusFilters = Object.keys(TRIAL_STATUS_TYPES)
+    .sort((a, b) => {
+      return (
+        TRIAL_STATUS_TYPES[a].displayOrder - TRIAL_STATUS_TYPES[b].displayOrder
+      );
+    })
+    .map(option => {
+      return {
+        key: option,
+        label: TRIAL_STATUS_TYPES[option].label,
+      };
+    })
+    .concat({
+      key: 'statusUnassigned',
+      label: 'Unassigned',
+    });
+
+  return {
+    casesShownCount: formattedCases.length,
+    formattedCases: topLevelCases,
+    showPrintButton: formattedCases.length > 0,
+    trialStatusFilters,
+  };
+};
+
+function compareCasesByPractitioner(a, b) {
   const aCount =
     (a.privatePractitioners && a.privatePractitioners.length && 1) || 0;
   const bCount =
     (b.privatePractitioners && b.privatePractitioners.length && 1) || 0;
 
   return aCount - bCount;
-};
+}
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
-export const trialSessionWorkingCopyHelper = (
-  get: Get,
-  applicationContext: ClientApplicationContext,
-) => {
-  const { ALLOWLIST_FEATURE_FLAGS, TRIAL_STATUS_TYPES } =
-    applicationContext.getConstants();
+function isMemberCaseWithoutCalendaredLead(
+  aCase: RawCase,
+  scheduledCases: RawCase[],
+): boolean {
+  const leadCase = scheduledCases.find(
+    scheduledCase => scheduledCase.docketNumber === aCase.leadDocketNumber,
+  );
+  return !leadCase;
+}
 
-  const trialSession = get(state.trialSession);
-  const { caseMetadata, filters, sort, sortOrder, userNotes } = get(
-    state.trialSessionWorkingCopy,
+function isSoloCase(aCase: RawCase): boolean {
+  return !aCase.leadDocketNumber;
+}
+
+function isTopLevelCase(aCase: RawCase, scheduledCases: RawCase[]): boolean {
+  return (
+    isLeadCase(aCase) ||
+    isSoloCase(aCase) ||
+    isMemberCaseWithoutCalendaredLead(aCase, scheduledCases)
+  );
+}
+
+function isOpenCaseInATrial(aCase: RawCase): boolean {
+  return !isClosed(aCase) && aCase.removedFromTrial !== true;
+}
+
+function isCaseTrialStatusEnabledInFilters(
+  calendaredCase: RawCase,
+  caseMetadata: { [docketNumber: string]: { trialStatus: string } },
+  enabledTrialStatusFilters: string[],
+): boolean {
+  const isCaseWithoutTrialStatus =
+    enabledTrialStatusFilters.includes('statusUnassigned') &&
+    !caseMetadata[calendaredCase.docketNumber]?.trialStatus;
+
+  const isCaseTrialStatusFilterEnabled = enabledTrialStatusFilters.includes(
+    caseMetadata[calendaredCase.docketNumber]?.trialStatus,
   );
 
-  //get an array of strings of the trial statuses that are set to true
-  const trueFilters = Object.keys(pickBy(filters));
+  return isCaseWithoutTrialStatus || isCaseTrialStatusFilterEnabled;
+}
 
-  let formattedCases = (trialSession.calendaredCases || [])
-    .slice()
-    .filter(
-      calendaredCase =>
-        !applicationContext.getUtilities().isClosed(calendaredCase) &&
-        calendaredCase.removedFromTrial !== true,
-    )
-    .filter(
-      calendaredCase =>
-        (trueFilters.includes('statusUnassigned') &&
-          (!caseMetadata[calendaredCase.docketNumber] ||
-            !caseMetadata[calendaredCase.docketNumber].trialStatus)) ||
-        (caseMetadata[calendaredCase.docketNumber] &&
-          trueFilters.includes(
-            caseMetadata[calendaredCase.docketNumber].trialStatus,
-          )),
-    )
-    .map(caseItem =>
-      applicationContext
-        .getUtilities()
-        .formatCaseForTrialSession({ applicationContext, caseItem }),
-    )
-    .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
+function appendUserNotes<T>(
+  aCase: { docketNumber: string } & T,
+  userNotesDictionary: {
+    [docketNumber: string]: UserCaseNote;
+  },
+): T & { userNotes: string } {
+  const userNotes: string = userNotesDictionary[aCase.docketNumber]
+    ? userNotesDictionary[aCase.docketNumber].notes
+    : '';
+  return { ...aCase, userNotes };
+}
 
-  Object.keys(userNotes || {}).forEach(docketNumber => {
-    const caseToUpdate = formattedCases.find(
-      aCase => aCase.docketNumber === docketNumber,
-    );
-    if (caseToUpdate) {
-      caseToUpdate.userNotes = userNotes[docketNumber].notes;
-    }
-  });
-
-  trialSession.caseOrder.forEach(aCase => {
-    if (aCase.calendarNotes) {
-      const caseToUpdate = formattedCases.find(
-        theCase => theCase.docketNumber === aCase.docketNumber,
-      );
-      if (caseToUpdate) {
-        caseToUpdate.calendarNotes = aCase.calendarNotes;
-      }
-    }
-  });
-
-  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
-    formattedCases,
-    calendaredCase => {
-      return (
-        !calendaredCase.leadDocketNumber ||
-        applicationContext.getUtilities().isLeadCase(calendaredCase)
-      );
-    },
+function appendCalendarNotes<T>(
+  aCase: { docketNumber: string } & T,
+  trialSession: TrialSessionState,
+): T & { calendarNotes: string } {
+  const trialSessionCase = trialSession.caseOrder?.find(
+    orderCase => orderCase.docketNumber === aCase.docketNumber,
   );
-
-  leadAndUnconsolidatedCases.forEach(caseToUpdate => {
-    if (caseToUpdate.isLeadCase) {
-      caseToUpdate.consolidatedCases = memberConsolidatedCases.filter(
-        memberCase => {
-          return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;
-        },
-      );
-
-      caseToUpdate.consolidatedCases.sort(
-        applicationContext.getUtilities().compareCasesByDocketNumber,
-      );
-    }
-  });
-
-  let casesAssociatedWithTrialSession = leadAndUnconsolidatedCases;
-
-  memberConsolidatedCases.forEach(memberCase => {
-    const leadCaseAssociatedWithTrialSession = leadAndUnconsolidatedCases.find(
-      c => c.docketNumber === memberCase.leadDocketNumber,
-    );
-    if (!leadCaseAssociatedWithTrialSession) {
-      casesAssociatedWithTrialSession.push(memberCase);
-    }
-  });
-
-  casesAssociatedWithTrialSession.sort(
-    applicationContext.getUtilities().compareCasesByDocketNumber,
-  );
-
-  if (sort === 'practitioner') {
-    casesAssociatedWithTrialSession.sort(compareCasesByPractitioner);
-  }
-
-  if (sortOrder === 'desc') {
-    casesAssociatedWithTrialSession.reverse();
-  }
-
-  const updatedTrialSessionTypesEnabled = get(
-    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key],
-  );
-
-  const unassignedLabel = updatedTrialSessionTypesEnabled
-    ? 'Unassigned'
-    : 'Trial Status';
-
-  const trialStatusOptions = omitBy(TRIAL_STATUS_TYPES, statusType => {
-    if (updatedTrialSessionTypesEnabled !== true) {
-      return statusType.new === true;
-    }
-  });
-
-  const trialStatusFilters = Object.keys(trialStatusOptions)
-    .filter(option => {
-      if (updatedTrialSessionTypesEnabled) {
-        return !trialStatusOptions[option].deprecated;
-      }
-      return option;
-    })
-    .sort((a, b) => {
-      if (updatedTrialSessionTypesEnabled) {
-        return (
-          trialStatusOptions[a].displayOrder -
-          trialStatusOptions[b].displayOrder
-        );
-      }
-      return 0;
-    })
-    .map(option => {
-      return {
-        key: option,
-        label:
-          !updatedTrialSessionTypesEnabled &&
-          trialStatusOptions[option].legacyLabel
-            ? trialStatusOptions[option].legacyLabel
-            : trialStatusOptions[option].label,
-      };
-    })
-    .concat({
-      key: 'statusUnassigned',
-      label: updatedTrialSessionTypesEnabled
-        ? 'Unassigned'
-        : 'Status unassigned',
-    });
-
-  return {
-    casesShownCount: formattedCases.length,
-    formattedCases: casesAssociatedWithTrialSession,
-    showPrintButton: formattedCases.length > 0,
-    trialStatusFilters,
-    trialStatusOptions,
-    unassignedLabel,
-    updatedTrialSessionTypesEnabled,
-  };
-};
+  const calendarNotes = trialSessionCase ? trialSessionCase.calendarNotes : '';
+  return { ...aCase, calendarNotes: calendarNotes || '' };
+}

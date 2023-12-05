@@ -1,4 +1,3 @@
-import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -9,27 +8,9 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setPractitionerDetailOnFormAction = ({
-  applicationContext,
   props,
   store,
 }: ActionProps) => {
   store.set(state.form, props.practitionerDetail);
   store.set(state.form.originalEmail, props.practitionerDetail.email);
-
-  const admissionsDate = applicationContext
-    .getUtilities()
-    .prepareDateFromString(
-      props.practitionerDetail.admissionsDate,
-      FORMATS.YYYYMMDD,
-    );
-
-  const deconstructedDate = applicationContext
-    .getUtilities()
-    .deconstructDate(admissionsDate);
-
-  if (deconstructedDate) {
-    store.set(state.form.month, deconstructedDate.month);
-    store.set(state.form.day, deconstructedDate.day);
-    store.set(state.form.year, deconstructedDate.year);
-  }
 };

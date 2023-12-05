@@ -21,13 +21,20 @@ USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcm
 
 CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}" --output text)
 
+# suppressing error output from cognito to avoid exposing unparsable passwords
+
 response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}")
+    --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}" 2>/dev/null)
+exitcode=$?
 
-PETITIONS_CLERK_TOKEN=$(echo "${response}" | jq -r '.AuthenticationResult.IdToken')
+if [ $exitcode -eq 0 ]; then
+          PETITIONS_CLERK_TOKEN=$(echo "${response}" | jq -r '.AuthenticationResult.IdToken')
+    export PETITIONS_CLERK_TOKEN
 
-export PETITIONS_CLERK_TOKEN
+else
+    echo "Error: cognito-idp admin-initiate-auth failed; unable to set PETITIONS_CLERK_TOKEN"
+fi

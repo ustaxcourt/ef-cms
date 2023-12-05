@@ -1,5 +1,5 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -26,7 +26,7 @@ export const PartiesRepresenting = connect(
         <h2 className="margin-top-4">
           Tell Us About the Parties You’re Representing
         </h2>
-        <div className="blue-container">
+        <div>
           <FormGroup errorText={validationErrors.filers}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">

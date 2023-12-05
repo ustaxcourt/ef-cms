@@ -2,7 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/deconstructDatesToFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -32,7 +31,6 @@ export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
   getCaseAction,
   setCaseAction,
   setDocketEntryFormForDocketEditAction,
-  deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
   setDocketEntryIdAction,
   isWorkItemAlreadyCompletedAction,

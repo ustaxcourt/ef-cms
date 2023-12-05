@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FocusLock } from '../../ustc-ui/FocusLock/FocusLock';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
@@ -12,16 +12,14 @@ export const DocketRecordOverlay = connect(
   {
     caseDetail: state.caseDetail,
     dismissModalSequence: sequences.dismissModalSequence,
-    docketRecordIndex: state.docketRecordIndex,
-    formattedDocketEntries: state.formattedDocketEntries,
+    docketEntry: state.modal.docketEntry,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
   },
   function DocketRecordOverlay({
     caseDetail,
     dismissModalSequence,
-    docketRecordIndex,
-    formattedDocketEntries,
+    docketEntry,
     openCaseDocumentDownloadUrlSequence,
     runCancelSequence,
   }) {
@@ -76,10 +74,7 @@ export const DocketRecordOverlay = connect(
 
     const renderModalContent = () => {
       const closeFunc = dismissModalSequence;
-      const entry =
-        formattedDocketEntries.formattedDocketEntriesOnDocketRecord[
-          docketRecordIndex
-        ];
+
       return (
         <FocusLock>
           <dialog
@@ -102,14 +97,14 @@ export const DocketRecordOverlay = connect(
                 Document Details
               </Button>
               <hr className="margin-top-1 margin-bottom-2" />
-              <h3 tabIndex={-1}>{entry.descriptionDisplay}</h3>
+              <h3 tabIndex={-1}>{docketEntry.descriptionDisplay}</h3>
               <Button
                 link
                 aria-label={'View PDF'}
                 className="view-pdf-button tablet-full-width"
                 onClick={() => {
                   openCaseDocumentDownloadUrlSequence({
-                    docketEntryId: entry.docketEntryId,
+                    docketEntryId: docketEntry.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
                     useSameTab: true,
                   });
@@ -118,7 +113,7 @@ export const DocketRecordOverlay = connect(
                 <FontAwesomeIcon icon={['fas', 'file-pdf']} />
                 View PDF
               </Button>
-              {entry.isLegacySealed && (
+              {docketEntry.isLegacySealed && (
                 <p className="sealed-address">
                   <FontAwesomeIcon
                     className="margin-right-1"
@@ -128,22 +123,24 @@ export const DocketRecordOverlay = connect(
                 </p>
               )}
               <p className="semi-bold label margin-top-3">Date</p>
-              <p className="margin-top-0">{entry.createdAtFormatted}</p>
+              <p className="margin-top-0">{docketEntry.createdAtFormatted}</p>
               <p className="semi-bold label margin-top-3">Pages</p>
-              <p className="margin-top-0">{entry.numberOfPages}</p>
+              <p className="margin-top-0">{docketEntry.numberOfPages}</p>
               <p className="semi-bold label margin-top-3">Filed By</p>
-              <p className="margin-top-0">{entry.filedBy}</p>
+              <p className="margin-top-0">{docketEntry.filedBy}</p>
               <p className="semi-bold label margin-top-3">Action</p>
-              <p className="margin-top-0">{entry.action}</p>
+              <p className="margin-top-0">{docketEntry.action}</p>
               <p className="semi-bold label margin-top-3">Served</p>
               <p className="margin-top-0">
-                {entry.showNotServed && (
+                {docketEntry.showNotServed && (
                   <span className="text-semibold not-served">Not served</span>
                 )}
-                {entry.showServed && <span>{entry.servedAtFormatted}</span>}
+                {docketEntry.showServed && (
+                  <span>{docketEntry.servedAtFormatted}</span>
+                )}
               </p>
               <p className="semi-bold label margin-top-3">Parties</p>
-              <p className="margin-top-0">{entry.servedPartiesCode}</p>
+              <p className="margin-top-0">{docketEntry.servedPartiesCode}</p>
             </div>
           </dialog>
         </FocusLock>

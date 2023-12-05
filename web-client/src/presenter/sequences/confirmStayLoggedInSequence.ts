@@ -1,7 +1,3 @@
-import { cancelDelayedLogoutAction } from '../actions/cancelDelayedLogoutAction';
-import { clearModalAction } from '../actions/clearModalAction';
+import { resetIdleTimerAction } from '@web-client/presenter/actions/resetIdleTimerAction';
 
-export const confirmStayLoggedInSequence = [
-  cancelDelayedLogoutAction,
-  clearModalAction,
-];
+export const confirmStayLoggedInSequence = [resetIdleTimerAction];

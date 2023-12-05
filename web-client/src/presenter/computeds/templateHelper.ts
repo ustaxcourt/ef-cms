@@ -5,7 +5,7 @@ import { Get } from 'cerebral';
 export const templateHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const initialBetaBarState = get(state.header.showBetaBar);
   const isProduction = applicationContext.getEnvironment().stage === 'prod';
 

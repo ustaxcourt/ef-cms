@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   applyFiltersToCompletedMessages,
   applyFiltersToMessages,
@@ -451,7 +451,8 @@ describe('processFormattedMessages', () => {
 
       expect(result.inProgressMessages).toEqual([
         {
-          completedAtFormatted: undefined,
+          completedAtFormatted: '',
+          consolidatedIconTooltipText: '',
           createdAt: '2019-01-01T16:29:13.122Z',
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
@@ -460,9 +461,11 @@ describe('processFormattedMessages', () => {
           message: 'This is a test message one',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
+          shouldIndent: false,
         },
         {
-          completedAtFormatted: undefined,
+          completedAtFormatted: '',
+          consolidatedIconTooltipText: '',
           createdAt: '2019-01-01T17:29:13.122Z',
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
@@ -471,6 +474,7 @@ describe('processFormattedMessages', () => {
           message: 'This is a test message three',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
+          shouldIndent: false,
         },
       ]);
     });
@@ -618,6 +622,74 @@ describe('processFormattedMessages', () => {
       expect(result.filteredCompletedMessages.length).toEqual(1);
       expect(result.filterValues.completedByUsers).toEqual(['rick']);
     });
+
+    it('should sort the completed by filter options alphabetically by default', () => {
+      const result = applyFiltersToCompletedMessages({
+        completedMessages: [
+          {
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            completedBy: 'rick',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: PETITIONS_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+          {
+            caseStatus: 'Closed',
+            completedAt: '2009-05-01T17:29:13.122Z',
+            completedBy: 'stacey',
+            createdAt: '2008-01-01T17:29:13.122Z',
+            docketNumber: '999-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender 2',
+            fromSection: PETITIONS_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message FOR THE AGES',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: DOCKET_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+          {
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            completedBy: 'bob',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'petitionsclerk',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+        ],
+        screenMetadata: {},
+      });
+
+      expect(result.filterValues.completedByUsers).toEqual([
+        'bob',
+        'rick',
+        'stacey',
+      ]);
+    });
   });
 
   describe('applyFiltersToMessages', () => {
@@ -676,6 +748,83 @@ describe('processFormattedMessages', () => {
       expect(result.filterValues.fromUsers).toEqual(['Test Sender']);
       expect(result.filterValues.toSections).toEqual([PETITIONS_SECTION]);
       expect(result.filterValues.toUsers).toEqual(['Test Recipient']);
+    });
+
+    it('should sort all the filters alphabetically by default', () => {
+      const result = applyFiltersToMessages({
+        messages: [
+          {
+            caseStatus: 'Ready for trial',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: PETITIONS_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+          {
+            caseStatus: 'Closed',
+            createdAt: '2008-01-01T17:29:13.122Z',
+            docketNumber: '999-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender 2',
+            fromSection: PETITIONS_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message FOR THE AGES',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: DOCKET_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+          {
+            caseStatus: 'Ready for trial',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'petitionsclerk',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+        ],
+        screenMetadata: {},
+      });
+
+      expect(result.filterValues.caseStatuses).toEqual([
+        'Closed',
+        'Ready for trial',
+      ]);
+      expect(result.filterValues.fromSections).toEqual([
+        DOCKET_SECTION,
+        PETITIONS_SECTION,
+      ]);
+      expect(result.filterValues.fromUsers).toEqual([
+        'Test Sender',
+        'Test Sender 2',
+      ]);
+      expect(result.filterValues.toSections).toEqual([
+        DOCKET_SECTION,
+        PETITIONS_SECTION,
+      ]);
+      expect(result.filterValues.toUsers).toEqual([
+        'Test Recipient',
+        'petitionsclerk',
+      ]);
     });
   });
 });

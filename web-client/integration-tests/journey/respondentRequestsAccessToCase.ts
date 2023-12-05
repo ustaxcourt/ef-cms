@@ -1,4 +1,5 @@
-import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -26,19 +27,11 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitleTemplate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentTitleTemplate,
-      documentType:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
-      eventCode:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.eventCode,
-      primaryDocumentFile:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      scenario:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.scenario,
+      documentTitleTemplate: 'Select a document',
+      documentType: 'Select a document type',
+      eventCode: 'Select a document',
+      primaryDocumentFile: 'Upload a document',
+      scenario: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -58,11 +51,14 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
       value: 'Standard',
     });
 
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'generationType',
+      value: GENERATION_TYPES.MANUAL,
+    });
+
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
+      primaryDocumentFile: 'Upload a document',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -77,35 +73,32 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      certificateOfServiceDate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[1],
+      certificateOfServiceDate: 'Enter date of service',
     });
 
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceMonth',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceDay',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '5000',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/5000',
+      },
+    );
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[0].message,
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
     });
 
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '2000',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/2000',
+      },
+    );
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
@@ -119,6 +112,18 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    await cerebralTest.runSequence('openPdfPreviewModalSequence', {
+      file: fakeFile,
+      modalId: 'PDFPreviewModal-Entry of Appearance for Respondent',
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'redactionAcknowledgement',
+      value: true,
+    });
+
     await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 };

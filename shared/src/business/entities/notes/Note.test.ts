@@ -1,13 +1,13 @@
-const { Note } = require('./Note');
-
-const { VALIDATION_ERROR_MESSAGES } = Note;
+import { Note } from './Note';
 
 describe('Note', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const entity = new Note({});
+      // typing arguments of Note as any to avoid ts errors
+      const notesConfiguration: any = {};
+      const entity = new Note(notesConfiguration);
       expect(entity.getFormattedValidationErrors()).toEqual({
-        notes: VALIDATION_ERROR_MESSAGES.notes,
+        notes: 'Add note',
       });
     });
 
@@ -15,10 +15,8 @@ describe('Note', () => {
       const entity = new Note({
         notes: '  some notes   ', // with spaces all around it
       });
-      entity.something = '    baz';
       expect(entity.getFormattedValidationErrors()).toEqual(null);
       expect(entity.notes).toEqual('some notes');
-      expect(entity.something).toEqual('baz');
     });
   });
 });

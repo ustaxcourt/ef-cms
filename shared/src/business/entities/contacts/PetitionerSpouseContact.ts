@@ -13,7 +13,4 @@ export class PetitionerSpouseContact extends Contact {
   getValidationRules() {
     return super.getValidationRules();
   }
-  getErrorToMessageMap() {
-    return super.getErrorToMessageMap();
-  }
 }

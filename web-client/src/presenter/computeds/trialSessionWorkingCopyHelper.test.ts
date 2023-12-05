@@ -1,5 +1,8 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { PARTIES_CODES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
+import { cloneDeep } from 'lodash';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -24,6 +27,38 @@ describe('trial session working copy computed', () => {
     trialClerk: { name: 'Test Trial Clerk' },
     trialLocation: 'Hartford, Connecticut',
   };
+
+  describe('filingPartiesCode', () => {
+    it('should add Filing parties code onto cases that have a preTrialMemorandum', () => {
+      const petitionerId = '3e85260e-9d45-481d-8092-7d732df6ee78';
+      const ptmCase = cloneDeep(MOCK_CASE);
+      ptmCase.docketEntries = [MOCK_DOCUMENTS];
+      ptmCase.docketEntries[0].eventCode = 'PMT';
+      ptmCase.docketEntries[0].filers = [petitionerId];
+      ptmCase.petitioners[0].contactId = petitionerId;
+
+      const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          trialSession: {
+            ...MOCK_TRIAL_SESSION,
+            calendaredCases: [ptmCase],
+            caseOrder: [],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: true },
+            sort: 'docket',
+            sortOrder: 'asc',
+            userNotes: {},
+          },
+        },
+      });
+
+      expect(formattedCases[0]).toMatchObject({
+        filingPartiesCode: PARTIES_CODES.PETITIONER,
+      });
+    });
+  });
 
   describe('sorting', () => {
     it('should sort cases by docket number ascending when sort is set to "docket" and sortOrder is "asc"', () => {
@@ -259,7 +294,7 @@ describe('trial session working copy computed', () => {
         { docketNumber: '101-18' },
         { docketNumber: '115-20' },
       ]);
-      expect(formattedCases[0].consolidatedCases).toMatchObject([
+      expect(formattedCases[0].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '5000-17' },
         { docketNumber: '90-18' },
         { docketNumber: '102-19' },
@@ -352,7 +387,7 @@ describe('trial session working copy computed', () => {
         { docketNumber: '115-20' },
       ]);
 
-      expect(formattedCases[0].consolidatedCases).toMatchObject([
+      expect(formattedCases[0].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '122-17' },
       ]);
     });
@@ -425,13 +460,13 @@ describe('trial session working copy computed', () => {
         { docketNumber: '90-18' },
         { docketNumber: '500-17' },
       ]);
-      expect(formattedCases[0].consolidatedCases).toMatchObject([
+      expect(formattedCases[0].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '101-21' },
       ]);
-      expect(formattedCases[1].consolidatedCases).toMatchObject([
+      expect(formattedCases[1].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '102-19' },
       ]);
-      expect(formattedCases[2].consolidatedCases).toMatchObject([
+      expect(formattedCases[2].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '5000-17' },
         { docketNumber: '111-22' },
       ]);

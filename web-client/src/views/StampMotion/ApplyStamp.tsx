@@ -1,28 +1,25 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
 export const ApplyStamp = connect(
   {
-    JURISDICTIONAL_OPTIONS: state.constants.JURISDICTIONAL_OPTIONS,
-    MAX_STAMP_CUSTOM_TEXT_CHARACTERS:
-      state.constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
-    MOTION_DISPOSITIONS: state.constants.MOTION_DISPOSITIONS,
-    STRICKEN_FROM_TRIAL_SESSION_MESSAGE:
-      state.constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
     clearDueDateSequence: sequences.clearDueDateSequence,
     clearOptionalFieldsStampFormSequence:
       sequences.clearOptionalFieldsStampFormSequence,
+    constants: state.constants,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
@@ -38,15 +35,13 @@ export const ApplyStamp = connect(
     applyStampFormHelper,
     clearDueDateSequence,
     clearOptionalFieldsStampFormSequence,
+    constants,
     form,
-    JURISDICTIONAL_OPTIONS,
-    MAX_STAMP_CUSTOM_TEXT_CHARACTERS,
-    MOTION_DISPOSITIONS,
+    formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence,
     pdfForSigning,
     pdfObj,
     setPDFStampDataSequence,
-    STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
     submitStampMotionSequence,
     updateFormValueSequence,
     validateStampSequence,
@@ -128,12 +123,12 @@ export const ApplyStamp = connect(
                     errorText={validationErrors.disposition}
                   >
                     {[
-                      MOTION_DISPOSITIONS.GRANTED,
-                      MOTION_DISPOSITIONS.DENIED,
+                      constants.MOTION_DISPOSITIONS.GRANTED,
+                      constants.MOTION_DISPOSITIONS.DENIED,
                     ].map(option => (
                       <div
                         className={`usa-radio ${
-                          option === MOTION_DISPOSITIONS.DENIED
+                          option === constants.MOTION_DISPOSITIONS.DENIED
                             ? 'margin-bottom-0'
                             : ''
                         }`}
@@ -168,7 +163,8 @@ export const ApplyStamp = connect(
                           checked={form.deniedAsMoot || false}
                           className="usa-checkbox__input"
                           disabled={
-                            form.disposition !== MOTION_DISPOSITIONS.DENIED
+                            form.disposition !==
+                            constants.MOTION_DISPOSITIONS.DENIED
                           }
                           id="deniedAsMoot"
                           name="deniedAsMoot"
@@ -193,7 +189,8 @@ export const ApplyStamp = connect(
                           checked={form.deniedWithoutPrejudice || false}
                           className="usa-checkbox__input"
                           disabled={
-                            form.disposition !== MOTION_DISPOSITIONS.DENIED
+                            form.disposition !==
+                            constants.MOTION_DISPOSITIONS.DENIED
                           }
                           id="deniedWithoutPrejudice"
                           name="deniedWithoutPrejudice"
@@ -233,7 +230,7 @@ export const ApplyStamp = connect(
                         id="stricken-from-trial-session"
                         name="strickenFromTrialSession"
                         type="radio"
-                        value={STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
+                        value={constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -245,13 +242,13 @@ export const ApplyStamp = connect(
                         className="usa-radio__label"
                         htmlFor={'stricken-from-trial-session'}
                       >
-                        {STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
+                        {constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
                       </label>
                     </div>
                   </FormGroup>
                   <hr className="narrow-hr" />
                   <FormGroup className="stamp-form-group">
-                    {Object.entries(JURISDICTIONAL_OPTIONS).map(
+                    {Object.entries(constants.JURISDICTIONAL_OPTIONS).map(
                       ([key, value]) => (
                         <div className="usa-radio" key={key}>
                           <input
@@ -341,37 +338,28 @@ export const ApplyStamp = connect(
                       />
                       <label
                         className="usa-radio__label"
+                        data-testid="status-report-or-stip-decision-due-date"
                         htmlFor="dueDateMessage-statusReportOrStipDecisionDueDate"
-                        id="dueDateMessage-statusReportOrStipDecisionDueDate-label"
                       >
                         The parties shall file a status report or proposed
                         stipulated decision by:
                       </label>
                     </div>
-                    <DateInput
-                      className="display-inline-block padding-0 margin-left-5"
+
+                    <DateSelector
+                      defaultValue={form.date}
                       disabled={!form.dueDateMessage}
+                      formGroupClassNames="display-inline-block padding-0 margin-left-5"
                       id="due-date-input-statusReportDueDate"
                       minDate={applyStampFormHelper.minDate}
-                      names={{
-                        day: 'day',
-                        month: 'month',
-                        year: 'year',
-                      }}
-                      placeholder={'MM/DD/YYYY'}
-                      shouldClearHiddenInput={true}
-                      showDateHint={false}
-                      values={{
-                        day: form.day,
-                        month: form.month,
-                        year: form.year,
-                      }}
-                      onBlur={validateStampSequence}
-                      onChange={({ key, value }) => {
-                        updateFormValueSequence({
-                          key,
-                          value,
+                      placeHolderText="MM/DD/YYYY"
+                      onChange={e => {
+                        formatAndUpdateDateFromDatePickerSequence({
+                          key: 'date',
+                          toFormat: constants.DATE_FORMATS.MMDDYY,
+                          value: e.target.value,
                         });
+                        validateStampSequence();
                       }}
                     />
                   </FormGroup>
@@ -395,7 +383,7 @@ export const ApplyStamp = connect(
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="custom-text"
-                        maxLength={MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
+                        maxLength={constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
                         name="customText"
                         type="text"
                         value={form.customText}
@@ -407,7 +395,9 @@ export const ApplyStamp = connect(
                         }}
                       ></textarea>
                       <CharactersRemainingHint
-                        maxCharacters={MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
+                        maxCharacters={
+                          constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS
+                        }
                         stringToCount={form.customText}
                       />
                     </div>
@@ -415,7 +405,7 @@ export const ApplyStamp = connect(
                   <Button
                     link
                     className="margin-left-205"
-                    id="clear-optional-fields"
+                    data-testid="clear-optional-fields"
                     onClick={e => {
                       e.preventDefault();
                       clearOptionalFieldsStampFormSequence();
@@ -430,6 +420,7 @@ export const ApplyStamp = connect(
               <div className="margin-bottom-1 display-flex flex-justify-end">
                 <Button
                   className="margin-right-0"
+                  data-testid="save-signature-button"
                   disabled={!applyStampFormHelper.canSaveStampOrder}
                   id="save-signature-button"
                   onClick={() => submitStampMotionSequence()}
@@ -455,11 +446,11 @@ export const ApplyStamp = connect(
                         </span>
                         {(form.strickenFromTrialSession ||
                           form.jurisdictionalOption ||
-                          (form.dueDateMessage && form.day) ||
+                          (form.dueDateMessage && form.date) ||
                           form.customText) && <hr className="narrow-hr" />}
                         {form.strickenFromTrialSession && (
                           <>
-                            - {STRICKEN_FROM_TRIAL_SESSION_MESSAGE} -
+                            - {constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE} -
                             <br />
                           </>
                         )}
@@ -469,10 +460,9 @@ export const ApplyStamp = connect(
                           </>
                         )}
                         <span>
-                          {form.day && (
+                          {form.date && (
                             <>
-                              - {form.dueDateMessage} {form.month}/{form.day}/
-                              {form.year} -
+                              - {form.dueDateMessage} {form.date} -
                               <br />
                             </>
                           )}

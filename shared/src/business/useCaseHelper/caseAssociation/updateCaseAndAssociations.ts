@@ -6,7 +6,6 @@ import { IrsPractitioner } from '../../entities/IrsPractitioner';
 import { Message } from '../../entities/Message';
 import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
 import { WorkItem } from '../../entities/WorkItem';
-import { pick } from 'lodash';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -213,11 +212,21 @@ const updateIrsPractitioners = ({
   const {
     added: addedIrsPractitioners,
     removed: deletedIrsPractitioners,
+    same: unchangedIrsPractitioners,
     updated: updatedIrsPractitioners,
   } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
+  const currentIrsPractitioners = [
+    ...addedIrsPractitioners,
+    ...updatedIrsPractitioners,
+  ];
+
+  if (caseToUpdate.leadDocketNumber && unchangedIrsPractitioners.length) {
+    currentIrsPractitioners.push(...unchangedIrsPractitioners);
+  }
+
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
-    [...addedIrsPractitioners, ...updatedIrsPractitioners],
+    currentIrsPractitioners,
     { applicationContext },
   );
 
@@ -242,6 +251,7 @@ const updateIrsPractitioners = ({
           .updateIrsPractitionerOnCase({
             applicationContext,
             docketNumber: caseToUpdate.docketNumber,
+            leadDocketNumber: caseToUpdate.leadDocketNumber,
             practitioner,
             userId: practitioner.userId,
           });
@@ -268,6 +278,7 @@ const updatePrivatePractitioners = ({
   const {
     added: addedPrivatePractitioners,
     removed: deletedPrivatePractitioners,
+    same: unchangedPrivatePractitioners,
     updated: updatedPrivatePractitioners,
   } = diff(
     oldCase.privatePractitioners,
@@ -275,8 +286,17 @@ const updatePrivatePractitioners = ({
     'userId',
   );
 
+  const currentPrivatePractitioners = [
+    ...addedPrivatePractitioners,
+    ...updatedPrivatePractitioners,
+  ];
+
+  if (caseToUpdate.leadDocketNumber && unchangedPrivatePractitioners.length) {
+    currentPrivatePractitioners.push(...unchangedPrivatePractitioners);
+  }
+
   const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
-    [...addedPrivatePractitioners, ...updatedPrivatePractitioners],
+    currentPrivatePractitioners,
     { applicationContext },
   );
 
@@ -301,6 +321,7 @@ const updatePrivatePractitioners = ({
           .updatePrivatePractitionerOnCase({
             applicationContext,
             docketNumber: caseToUpdate.docketNumber,
+            leadDocketNumber: caseToUpdate.leadDocketNumber,
             practitioner,
             userId: practitioner.userId,
           });
@@ -377,56 +398,6 @@ const updateCaseWorkItems = async ({
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
  * @returns {Array<function>} the persistence functions required to complete this action
  */
-const updateUserCaseMappings = async ({
-  applicationContext,
-  caseToUpdate,
-  oldCase,
-}) => {
-  const userCaseMappingsRequireUpdate =
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber;
-
-  if (!userCaseMappingsRequireUpdate) {
-    return [];
-  }
-
-  const userCaseMappings = await applicationContext
-    .getPersistenceGateway()
-    .getUserCaseMappingsByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
-
-  const updatedAttributeValues = pick(caseToUpdate, [
-    'caseCaption',
-    'closedDate',
-    'docketNumberSuffix',
-    'docketNumberWithSuffix',
-    'leadDocketNumber',
-    'status',
-  ]);
-
-  return userCaseMappings.map(
-    ucItem =>
-      function updateUserCaseMappings_cb() {
-        applicationContext.getPersistenceGateway().updateUserCaseMapping({
-          applicationContext,
-          userCaseItem: { ...ucItem, ...updatedAttributeValues },
-        });
-      },
-  );
-};
-
-/**
- * Identifies user case mappings which require updates and issues persistence calls
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated document data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<function>} the persistence functions required to complete this action
- */
 const updateCaseDeadlines = async ({
   applicationContext,
   caseToUpdate,
@@ -475,7 +446,7 @@ export const updateCaseAndAssociations = async ({
 }: {
   applicationContext: IApplicationContext;
   caseToUpdate: any;
-}) => {
+}): Promise<RawCase> => {
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, { applicationContext });
@@ -502,7 +473,6 @@ export const updateCaseAndAssociations = async ({
     updateHearings,
     updateIrsPractitioners,
     updatePrivatePractitioners,
-    updateUserCaseMappings,
   ];
 
   const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>

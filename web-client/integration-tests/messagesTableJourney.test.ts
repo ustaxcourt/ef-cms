@@ -1,13 +1,11 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { userSendsMessage } from './journey/userSendsMessage';
 import { withAppContextDecorator } from '../src/withAppContext';
-
-const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
 describe('messages table journey', () => {
   const cerebralTest = setupTest();
@@ -25,8 +23,9 @@ describe('messages table journey', () => {
     .getJudgesChambers();
   const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
 
+  const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
+
   beforeAll(() => {
-    jest.setTimeout(40000);
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',

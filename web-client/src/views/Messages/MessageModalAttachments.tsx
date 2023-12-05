@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -10,7 +10,11 @@ const getDocumentOption = doc => {
   const documentTitle = doc.title.substr(0, 100);
 
   return (
-    <option key={doc.docketEntryId} value={`${doc.docketEntryId}`}>
+    <option
+      disabled={doc.isAlreadyAttached}
+      key={doc.docketEntryId}
+      value={`${doc.docketEntryId}`}
+    >
       {doc.createdAtFormatted} - {documentTitle}
     </option>
   );
@@ -20,7 +24,11 @@ const getCorrespondenceOption = doc => {
   const title = doc.documentTitle || doc.documentType;
   const documentTitle = title.substr(0, 100);
   return (
-    <option key={doc.correspondenceId} value={`${doc.correspondenceId}`}>
+    <option
+      disabled={doc.isAlreadyAttached}
+      key={doc.correspondenceId}
+      value={`${doc.correspondenceId}`}
+    >
       {documentTitle}
     </option>
   );
@@ -58,7 +66,35 @@ export const MessageModalAttachments = connect(
             {form.attachments.map(doc => {
               return (
                 <div className="margin-top-1" key={doc.documentId}>
-                  {doc.documentTitle}
+                  <div className="grid-row">
+                    <div className="grid-col-9">{doc.documentTitle}</div>
+                  </div>
+                </div>
+              );
+            })}
+            {form.draftAttachments.map(doc => {
+              return (
+                <div className="margin-top-1" key={doc.documentId}>
+                  <div className="grid-row">
+                    <div className="grid-col-10">{doc.documentTitle}</div>
+                    <div className="grid-col-2">
+                      <Button
+                        link
+                        aria-label={`remove ${doc.documentTitle} selection`}
+                        className="modal-button-link"
+                        icon="times"
+                        style={{ lineHeight: '0', padding: '0' }}
+                        onClick={() => {
+                          updateMessageModalAttachmentsSequence({
+                            action: 'remove',
+                            documentId: doc.documentId,
+                          });
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               );
             })}
@@ -76,6 +112,7 @@ export const MessageModalAttachments = connect(
               name="document"
               onChange={e => {
                 updateMessageModalAttachmentsSequence({
+                  action: 'add',
                   documentId: e.target.value,
                 });
                 updateScreenMetadataSequence({

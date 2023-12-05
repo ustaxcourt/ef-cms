@@ -1,5 +1,4 @@
 import { batchGet } from '../../dynamodbClientService';
-import { uniq } from 'lodash';
 
 /**
  * getCasesByDocketNumbers
@@ -15,7 +14,7 @@ export const getCasesByDocketNumbers = ({
 }) =>
   batchGet({
     applicationContext,
-    keys: uniq(docketNumbers).map(docketNumber => ({
+    keys: docketNumbers.map(docketNumber => ({
       pk: `case|${docketNumber}`,
       sk: `case|${docketNumber}`,
     })),
