@@ -82,7 +82,13 @@ export const PendingMotion = connect(
                     <td>{motion.consolidatedGroupCount}</td>
                     <td>{motion.caseCaption}</td>
                     <td>
-                      <a href={motion.documentLink}>{motion.documentTitle}</a>
+                      <a
+                        href={motion.documentLink}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {motion.documentTitle}
+                      </a>
                     </td>
                     <td>{motion.daysSinceCreated}</td>
                     <td>{motion.finalBriefDueDateFormatted}</td>
