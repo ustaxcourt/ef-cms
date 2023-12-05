@@ -188,4 +188,25 @@ describe('logger', () => {
       ).not.toBeDefined();
     }
   });
+
+  it('does not log a password if it was included in the body of the request', () => {
+    process.env.NODE_ENV = 'production';
+    const body = {
+      confirmPassword: 'Password1!',
+      password: 'Password1!',
+      username: 'Usern4me',
+    };
+    req.body = body;
+    subject(req, res);
+
+    const bodyToBeLogged = JSON.parse(
+      req.locals.logger.defaultMeta.request.body,
+    );
+
+    expect(bodyToBeLogged.username).toBe(body.username);
+    expect(bodyToBeLogged.password).not.toBe(body.password);
+    expect(bodyToBeLogged.password).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.confirmPassword).not.toBe(body.confirmPassword);
+    expect(bodyToBeLogged.confirmPassword).toBe('*** REDACTED ***');
+  });
 });

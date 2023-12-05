@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
 
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const caseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
