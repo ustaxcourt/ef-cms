@@ -48,6 +48,8 @@ describe('validateDocketEntryWorksheetAction', () => {
       .getUseCases()
       .validateDocketEntryWorksheetInteractor.mockReturnValue(mockErrors);
 
+    const NOT_VALID_FINAL_BRIEF_DATE = 'abcdef';
+
     await runAction(validateDocketEntryWorksheetAction, {
       modules: {
         presenter,
@@ -55,7 +57,7 @@ describe('validateDocketEntryWorksheetAction', () => {
       state: {
         form: {
           docketNumber: MOCK_CASE.docketNumber,
-          finalBriefDueDate: 'abcdef', // this is not a valid due date
+          finalBriefDueDate: NOT_VALID_FINAL_BRIEF_DATE,
           primaryIssue: 'This is a primary issue.',
           statusOfMatter: undefined,
         },

@@ -1,4 +1,3 @@
-import { MOTION_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -35,51 +34,52 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const docketNumbers = await getDocketNumbersOfCasesWithStatusType(
-    applicationContext,
-    judge,
-  );
+  const { results: allDocketEntries } = await applicationContext
+    .getPersistenceGateway()
+    .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judge });
 
-  const allCasesByJudge = await Promise.all(
-    docketNumbers.map(docketNumber =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-        includeConsolidatedCases: true,
+  const currentDate = prepareDateFromString().toISO()!;
+
+  const batchCases = (
+    await Promise.all(
+      allDocketEntries.map(async (docketEntry: RawDocketEntry) => {
+        const fullCase: RawCase = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber: docketEntry.docketNumber,
+            includeConsolidatedCases: true,
+          });
+
+        const latestDocketEntry: RawDocketEntry = fullCase.docketEntries.find(
+          de => de.docketEntryId === docketEntry.docketEntryId,
+        );
+
+        const dayDifference = calculateDifferenceInDays(
+          currentDate,
+          docketEntry.createdAt,
+        );
+
+        const updatedDocketEntry: RawDocketEntry & {
+          daysSinceCreated: number;
+          caseCaption: string;
+          consolidatedGroupCount: number;
+          leadDocketNumber?: string;
+        } = {
+          ...docketEntry,
+          ...fullCase,
+          ...latestDocketEntry,
+          consolidatedGroupCount: fullCase.consolidatedCases.length || 1,
+          daysSinceCreated: dayDifference,
+        };
+
+        return updatedDocketEntry;
       }),
-    ),
-  );
-  const pendingMotionDocketEntries = allCasesByJudge.reduce(
-    (accumulator, aCase) => {
-      const currentCasePendingMotionDocketEntries = (
-        aCase.docketEntries as RawDocketEntry[]
-      )
-        .map(docketEntry => {
-          const currentDate = prepareDateFromString().toISO()!;
-          const dayDifference = calculateDifferenceInDays(
-            currentDate,
-            docketEntry.createdAt,
-          );
-
-          return {
-            ...docketEntry,
-            caseCaption: aCase.caseCaption,
-            consolidatedGroupCount: aCase.consolidatedCases.length || 1,
-            daysSinceCreated: dayDifference,
-            leadDocketNumber: aCase.leadDocketNumber,
-          };
-        })
-        .filter(docketEntry => filterPendingMotionDocketEntry(docketEntry));
-      return [...accumulator, ...currentCasePendingMotionDocketEntries];
-    },
-    [] as FormattedPendingMotionDocketEntry[],
-  );
+    )
+  ).filter(de => de.pending);
 
   const pendingMotionsDocketEntriesWithWorksheet: DocketEntryWithWorksheet[] =
-    await attachDocketEntryWorkSheets(
-      applicationContext,
-      pendingMotionDocketEntries,
-    );
+    await attachDocketEntryWorkSheets(applicationContext, batchCases);
 
   const uniquePendingMotions: DocketEntryWithWorksheet[] =
     removeDuplicateDocketEntries(pendingMotionsDocketEntriesWithWorksheet);
@@ -88,32 +88,6 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     docketEntries: uniquePendingMotions,
   };
 };
-
-async function getDocketNumbersOfCasesWithStatusType(
-  applicationContext: IApplicationContext,
-  judge: string,
-): Promise<string[]> {
-  return (
-    await applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge({
-        applicationContext,
-        params: {
-          judges: [judge],
-        },
-      })
-  ).map(c => c.docketNumber);
-}
-
-function filterPendingMotionDocketEntry(
-  docketEntry: FormattedPendingMotionDocketEntry,
-): boolean {
-  return (
-    !!docketEntry.pending &&
-    MOTION_EVENT_CODES.includes(docketEntry.eventCode) &&
-    docketEntry.daysSinceCreated >= 180
-  );
-}
 
 async function attachDocketEntryWorkSheets(
   applicationContext: IApplicationContext,

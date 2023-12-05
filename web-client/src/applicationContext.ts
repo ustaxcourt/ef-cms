@@ -32,6 +32,7 @@ import {
 } from '../../shared/src/sharedAppContext';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser, User } from '../../shared/src/business/entities/User';
 import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
