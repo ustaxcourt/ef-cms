@@ -7,14 +7,15 @@ export const getDocumentClient = (
 ): DynamoDBDocument => {
   const type = useMainRegion ? 'master' : 'region';
 
-  const mainRegionDb = applicationContext.getDynamoClient({
-    environment: applicationContext.environment,
+  const mainRegionDb = applicationContext.getDynamoClient(applicationContext, {
     useMainRegion: true,
   });
-  const fallbackRegionDb = applicationContext.getDynamoClient({
-    environment: applicationContext.environment,
-    useMainRegion: false,
-  });
+  const fallbackRegionDb = applicationContext.getDynamoClient(
+    applicationContext,
+    {
+      useMainRegion: false,
+    },
+  );
 
   if (!dynamoClientCache[type]) {
     const mainRegionDocumentClient = DynamoDBDocument.from(mainRegionDb, {
