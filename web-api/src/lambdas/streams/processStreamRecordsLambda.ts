@@ -16,7 +16,7 @@ async function putEventHistory(
 
   await applicationContext
     .getDocumentClient(applicationContext, {
-      useMasterRegion: true,
+      useMainRegion: true,
     })
     .put({
       Item: {

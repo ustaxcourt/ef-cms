@@ -30,7 +30,7 @@ export async function createLock({
 
   await applicationContext
     .getDocumentClient(applicationContext, {
-      useMasterRegion: true,
+      useMainRegion: true,
     })
     .put({
       Item: item,
@@ -54,7 +54,7 @@ export async function removeLock({
     identifiers.map(identifierToUnlock =>
       applicationContext
         .getDocumentClient(applicationContext, {
-          useMasterRegion: true,
+          useMainRegion: true,
         })
         .delete({
           Key: {
@@ -82,7 +82,7 @@ export async function getLock({
   const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const res = await applicationContext
     .getDocumentClient(applicationContext, {
-      useMasterRegion: true,
+      useMainRegion: true,
     })
     .get({
       ConsistentRead: true,

@@ -3,17 +3,17 @@ import { fallbackHandler } from '@web-api/fallbackHandler';
 
 export const getDocumentClient = (
   applicationContext: IApplicationContext,
-  { useMasterRegion = false } = {},
+  { useMainRegion = false } = {},
 ): DynamoDBDocument => {
-  const type = useMasterRegion ? 'master' : 'region';
+  const type = useMainRegion ? 'master' : 'region';
 
   const mainRegionDb = applicationContext.getDynamoClient({
     environment: applicationContext.environment,
-    useMasterRegion: true,
+    useMainRegion: true,
   });
   const fallbackRegionDb = applicationContext.getDynamoClient({
     environment: applicationContext.environment,
-    useMasterRegion: false,
+    useMainRegion: false,
   });
 
   if (!dynamoClientCache[type]) {

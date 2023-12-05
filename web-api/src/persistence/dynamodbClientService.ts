@@ -46,7 +46,7 @@ export const describeTable = async ({
 }): Promise<DescribeTableCommandOutput> => {
   const dynamoClient = applicationContext.getDynamoClient({
     environment: applicationContext.environment,
-    useMasterRegion: false,
+    useMainRegion: false,
   });
 
   const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
@@ -63,7 +63,7 @@ export const describeDeployTable = async ({
 }): Promise<DescribeTableCommandOutput> => {
   const dynamoClient = applicationContext.getDynamoClient({
     environment: applicationContext.environment,
-    useMasterRegion: true,
+    useMainRegion: true,
   });
 
   const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
@@ -131,7 +131,7 @@ export const updateToDeployTable = params => {
   const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient(params.applicationContext, {
-      useMasterRegion: true,
+      useMainRegion: true,
     })
     .update({
       TableName: getDeployTableName({
@@ -152,7 +152,7 @@ export const updateConsistent = params => {
   const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient(params.applicationContext, {
-      useMasterRegion: true,
+      useMainRegion: true,
     })
     .update({
       TableName: getTableName({
@@ -172,7 +172,7 @@ export const updateConsistent = params => {
 export const get = params => {
   return params.applicationContext
     .getDocumentClient(params.applicationContext, {
-      useMasterRegion: !!params.ConsistentRead,
+      useMainRegion: !!params.ConsistentRead,
     })
     .get({
       TableName: getTableName({
@@ -194,7 +194,7 @@ export const get = params => {
 export const getFromDeployTable = params => {
   return params.applicationContext
     .getDocumentClient(params.applicationContext, {
-      useMasterRegion: true,
+      useMainRegion: true,
     })
     .get({
       TableName: getDeployTableName({
@@ -213,7 +213,7 @@ export const putInDeployTable = async (
 ): Promise<void> => {
   await applicationContext
     .getDocumentClient(applicationContext, {
-      useMasterRegion: true,
+      useMainRegion: true,
     })
     .put({
       Item: item,
