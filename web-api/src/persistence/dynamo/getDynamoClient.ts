@@ -5,21 +5,26 @@ import AWSXRay from 'aws-xray-sdk';
 
 let dynamoCache: Record<string, DynamoDBClient> = {};
 
-export const getDynamoClient = ({
-  environment,
-  useMasterRegion = false,
-}: {
-  environment: any;
-  useMasterRegion: boolean;
-}): DynamoDBClient => {
-  const type = useMasterRegion ? 'master' : 'region';
+export const getDynamoClient = (
+  applicationContext: IApplicationContext,
+  {
+    useMainRegion = false,
+  }: {
+    useMainRegion: boolean;
+  },
+): DynamoDBClient => {
+  const type = useMainRegion ? 'master' : 'region';
 
   if (!dynamoCache[type]) {
     const dynamoClient = new DynamoDBClient({
       endpoint:
-        environment.stage === 'local' ? 'http://localhost:8000' : undefined,
+        applicationContext.environment.stage === 'local'
+          ? 'http://localhost:8000'
+          : undefined,
       maxAttempts: 5,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
+      region: useMainRegion
+        ? applicationContext.environment.masterRegion
+        : applicationContext.environment.region,
       requestHandler: new NodeHttpHandler({
         connectionTimeout: 3000,
         httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
@@ -27,7 +32,7 @@ export const getDynamoClient = ({
       }),
     });
     dynamoCache[type] =
-      environment.stage === 'local'
+      applicationContext.environment.stage === 'local'
         ? dynamoClient
         : AWSXRay.captureAWSv3Client(dynamoClient);
   }
