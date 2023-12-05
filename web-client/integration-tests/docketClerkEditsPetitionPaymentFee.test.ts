@@ -52,7 +52,7 @@ describe('docket clerk edits a petition payment fee', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       hasVerifiedIrsNotice: 'Select an option',
-      petitionPaymentDate: 'Enter payment status',
+      petitionPaymentDate: 'Enter a valid payment date',
       petitionPaymentMethod: 'Enter payment method',
     });
 

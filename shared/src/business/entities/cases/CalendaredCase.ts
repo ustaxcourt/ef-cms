@@ -3,6 +3,7 @@ import {
   CaseStatus,
   DOCKET_NUMBER_SUFFIXES,
 } from '../EntityConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
