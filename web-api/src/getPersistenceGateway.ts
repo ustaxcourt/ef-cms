@@ -210,7 +210,7 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
     };
   }
 
-  Object.keys(persistenceGatewayMethods).forEach(key => {
+  Object.keys(persistenceGatewayMethods as object).forEach(key => {
     persistenceGatewayMethods[key] = decorate(persistenceGatewayMethods[key]);
   });
   return persistenceGatewayMethods;
