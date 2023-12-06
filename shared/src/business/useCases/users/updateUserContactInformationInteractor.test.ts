@@ -104,6 +104,11 @@ describe('updateUserContactInformationInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[1][0].message.action,
     ).toEqual('user_contact_full_update_complete');
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[1][0].message.user,
+    ).toBeDefined();
   });
 
   it('should throw an error when updateUser throws an error', async () => {
@@ -225,6 +230,55 @@ describe('updateUserContactInformationInteractor', () => {
     } as any);
 
     expect(generateChangeOfAddress).toHaveBeenCalled();
+  });
+
+  it('should clean up DB and send websocket message if "generateChangeOfAddress" returns empty array', async () => {
+    (generateChangeOfAddress as jest.Mock).mockReturnValue([]);
+
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      userId: mockUser.userId,
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
+        .isUpdatingInformation,
+    ).not.toBeDefined();
+
+    const notificatsionCalls =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls;
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.action,
+    ).toEqual('user_contact_full_update_complete');
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.user,
+    ).toMatchObject({
+      contact: contactInfo,
+    });
+  });
+
+  it('should not clean up DB and send websocket message if "generateChangeOfAddress" returns undefined', async () => {
+    (generateChangeOfAddress as jest.Mock).mockReturnValue(undefined);
+
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      userId: mockUser.userId,
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls.length,
+    ).toEqual(1);
+
+    const notificatsionCalls =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls;
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.action,
+    ).not.toEqual('user_contact_full_update_complete');
   });
 
   it('should update the firmName if user is a practitioner and firmName is passed in', async () => {

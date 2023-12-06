@@ -1,5 +1,6 @@
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
+import { FormattedTrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
 
@@ -7,7 +8,16 @@ export const NoticeOfTrialIssuedInPerson = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
+  nameOfClerk,
+  titleOfClerk,
   trialInfo,
+}: {
+  nameOfClerk: string;
+  titleOfClerk: string;
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  trialInfo: FormattedTrialInfoType;
 }) => {
   return (
     <div id="notice-of-trial-pdf">
@@ -71,7 +81,10 @@ export const NoticeOfTrialIssuedInPerson = ({
           given detailed instructions for accessing your remote proceeding.
         </p>
 
-        <ClerkOfTheCourtSignature />
+        <ClerkOfTheCourtSignature
+          nameOfClerk={nameOfClerk}
+          titleOfClerk={titleOfClerk}
+        />
       </div>
     </div>
   );

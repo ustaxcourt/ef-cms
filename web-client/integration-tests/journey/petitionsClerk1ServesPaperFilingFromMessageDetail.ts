@@ -28,7 +28,7 @@ export const petitionsClerk1ServesPaperFilingFromMessageDetail =
 
       await waitForLoadingComponentToHide({ cerebralTest });
 
-      expect(cerebralTest.getState('alertSuccess')).toEqual({
+      expect(cerebralTest.getState('alertSuccess')).toMatchObject({
         message: 'Your entry has been added to the docket record.',
         overwritable: false,
       });

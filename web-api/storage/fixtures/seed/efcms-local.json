@@ -39455,6 +39455,14 @@
     "pk": "chief-judge-name"
   },
   {
+    "sk": "clerk-of-court-configuration",
+    "current": {
+      "name": "Stephanie A. Servoss",
+      "title": "Clerk of the Court"
+    },
+    "pk": "clerk-of-court-configuration"
+  },
+  {
     "endpoint": "ws://localhost:3011",
     "clientConnectionId": "812669f6-3d73-4ecb-85cb-62e3003d5335",
     "sk": "connection|101fc20d-f76e-41bc-a498-f837040d3892",
