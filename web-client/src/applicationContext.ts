@@ -105,6 +105,7 @@ import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadl
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
+import { deleteDocketEntryWorksheetInteractor } from '@shared/proxies/pendingMotion/deleteDocketEntryWorksheetProxy';
 import { deletePractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/deletePractitionerDocumentProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
@@ -425,6 +426,7 @@ const allUseCases = {
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
+  deleteDocketEntryWorksheetInteractor,
   deletePractitionerDocumentInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,

@@ -11,7 +11,7 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
   applicationContext: IApplicationContext;
   judge: string;
 }): Promise<{ results: RawDocketEntry[]; total: number }> => {
-  const filterDate = calculateISODate({ howMuch: -180 });
+  const filterDate = calculateISODate({ howMuch: -179 });
 
   const hasParentParam: QueryDslQueryContainer = {
     has_parent: {

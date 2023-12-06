@@ -1,7 +1,10 @@
+import {
+  FormattedPendingMotionWithWorksheet,
+  getPendingMotionDocketEntriesForCurrentJudgeInteractor,
+} from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { judgeColvin, petitionsClerkUser } from '@shared/test/mockUsers';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
@@ -97,6 +100,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         {
           createdAt: '2000-04-29T15:52:05.725Z',
           docketEntryId: DOCKET_ENTRY_ID,
+          documentTitle: 'TEST_DOCUMENT_TITLE',
           eventCode: 'M218',
           pending: true,
         },
@@ -107,6 +111,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
           pending: true,
         },
       ],
+      docketNumber: DOCKET_NUMBER,
     };
 
     const results =
@@ -118,63 +123,39 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       );
 
     expect(results.docketEntries.length).toEqual(1);
-    expect(results.docketEntries).toEqual([
-      {
-        caseCaption: 'TEST_CASE_CAPTION',
-        consolidatedCases: [],
-        consolidatedGroupCount: 1,
-        createdAt: '2000-04-29T15:52:05.725Z',
-        daysSinceCreated: 8607,
-        docketEntries: [
-          {
-            createdAt: '2000-04-29T15:52:05.725Z',
-            docketEntryId: '123',
-            eventCode: 'NOT A MOTION EVENT CODE',
-            pending: true,
-          },
-          {
-            createdAt: '2000-04-29T15:52:05.725Z',
-            docketEntryId: DOCKET_ENTRY_ID,
-            eventCode: 'M218',
-            pending: true,
-          },
-          {
-            createdAt: '3000-04-29T15:52:05.725Z',
-            docketEntryId: '12345767',
-            eventCode: 'M218',
-            pending: true,
-          },
-        ],
+
+    const expectedDocketEntry: FormattedPendingMotionWithWorksheet = {
+      caseCaption: 'TEST_CASE_CAPTION',
+      consolidatedGroupCount: 1,
+      daysSinceCreated: 8607,
+      docketEntryId: '1234-5678-9123-4567-8912',
+      docketEntryWorksheet: {
         docketEntryId: '1234-5678-9123-4567-8912',
-        docketEntryWorksheet: {
-          docketEntryId: '1234-5678-9123-4567-8912',
-          finalBriefDueDate: 'SOME FINAL BRIEF DUE DATE',
-          primaryIssue: 'SOME PRIMARY ISSUE',
-          statusOfMatter: 'SOME STATUS OF MATTER',
-        },
-        docketNumber: DOCKET_NUMBER,
-        eventCode: 'M218',
-        pending: true,
+        finalBriefDueDate: 'SOME FINAL BRIEF DUE DATE',
+        primaryIssue: 'SOME PRIMARY ISSUE',
+        statusOfMatter: 'SOME STATUS OF MATTER',
       },
-    ]);
+      docketNumber: DOCKET_NUMBER,
+      eventCode: 'M218',
+      pending: true,
+    };
+    expect(results.docketEntries).toEqual([expectedDocketEntry]);
   });
 
   it('should only return the lead case when a motion is mass sent using consolidated cases', async () => {
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
       createdAt: '2000-04-29T15:52:05.725Z',
       docketEntryId: LEAD_DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
+      docketNumber: LEAD_DOCKET_NUMBER,
       eventCode: 'M218',
-      leadDocketNumber: LEAD_DOCKET_NUMBER,
       pending: true,
     });
 
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
       createdAt: '2000-04-29T15:52:05.725Z',
       docketEntryId: LEAD_DOCKET_ENTRY_ID,
-      docketNumber: LEAD_DOCKET_NUMBER,
+      docketNumber: DOCKET_NUMBER,
       eventCode: 'M218',
-      leadDocketNumber: LEAD_DOCKET_NUMBER,
       pending: true,
     });
 
@@ -204,7 +185,8 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         },
         {
           createdAt: '2000-04-29T15:52:05.725Z',
-          docketEntryId: DOCKET_ENTRY_ID,
+          docketEntryId: LEAD_DOCKET_ENTRY_ID,
+          documentTitle: 'TEST_DOCUMENT_TITLE',
           eventCode: 'M218',
           pending: true,
         },
@@ -215,6 +197,8 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
           pending: true,
         },
       ],
+      docketNumber: DOCKET_NUMBER,
+      leadDocketNumber: LEAD_DOCKET_NUMBER,
     };
 
     CASE_BY_DOCKET_NUMBER[LEAD_DOCKET_NUMBER] = {
@@ -230,6 +214,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         {
           createdAt: '2000-04-29T15:52:05.725Z',
           docketEntryId: LEAD_DOCKET_ENTRY_ID,
+          documentTitle: 'TEST_DOCUMENT_TITLE',
           eventCode: 'M218',
           pending: true,
         },
@@ -240,6 +225,8 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
           pending: true,
         },
       ],
+      docketNumber: LEAD_DOCKET_NUMBER,
+      leadDocketNumber: LEAD_DOCKET_NUMBER,
     };
 
     const results =
@@ -251,45 +238,22 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       );
 
     expect(results.docketEntries.length).toEqual(1);
-    expect(results.docketEntries).toEqual([
-      {
-        caseCaption: 'TEST_CASE_CAPTION',
-        consolidatedCases: [],
-        consolidatedGroupCount: 1,
-        createdAt: '2000-04-29T15:52:05.725Z',
-        daysSinceCreated: 8607,
-        docketEntries: [
-          {
-            createdAt: '2000-04-29T15:52:05.725Z',
-            docketEntryId: '123',
-            eventCode: 'NOT A MOTION EVENT CODE',
-            pending: true,
-          },
-          {
-            createdAt: '2000-04-29T15:52:05.725Z',
-            docketEntryId: LEAD_DOCKET_ENTRY_ID,
-            eventCode: 'M218',
-            pending: true,
-          },
-          {
-            createdAt: '3000-04-29T15:52:05.725Z',
-            docketEntryId: '12345767',
-            eventCode: 'M218',
-            pending: true,
-          },
-        ],
+    const expectedDocketEntry: FormattedPendingMotionWithWorksheet = {
+      caseCaption: 'TEST_CASE_CAPTION',
+      consolidatedGroupCount: 1,
+      daysSinceCreated: 8607,
+      docketEntryId: LEAD_DOCKET_ENTRY_ID,
+      docketEntryWorksheet: {
         docketEntryId: LEAD_DOCKET_ENTRY_ID,
-        docketEntryWorksheet: {
-          docketEntryId: LEAD_DOCKET_ENTRY_ID,
-          finalBriefDueDate: 'LEAD SOME FINAL BRIEF DUE DATE',
-          primaryIssue: 'LEAD SOME PRIMARY ISSUE',
-          statusOfMatter: 'LEAD SOME STATUS OF MATTER',
-        },
-        docketNumber: LEAD_DOCKET_NUMBER,
-        eventCode: 'M218',
-        leadDocketNumber: LEAD_DOCKET_NUMBER,
-        pending: true,
+        finalBriefDueDate: 'LEAD SOME FINAL BRIEF DUE DATE',
+        primaryIssue: 'LEAD SOME PRIMARY ISSUE',
+        statusOfMatter: 'LEAD SOME STATUS OF MATTER',
       },
-    ]);
+      docketNumber: LEAD_DOCKET_NUMBER,
+      eventCode: 'M218',
+      leadDocketNumber: LEAD_DOCKET_NUMBER,
+      pending: true,
+    };
+    expect(results.docketEntries).toEqual([expectedDocketEntry]);
   });
 });
