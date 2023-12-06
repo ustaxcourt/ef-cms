@@ -48,6 +48,13 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
       });
 
     applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockResolvedValue({
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      });
+
+    applicationContext
       .getUseCases()
       .generatePdfFromHtmlInteractor.mockImplementation(
         ({ contentHtml }) => contentHtml,
@@ -149,6 +156,23 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
         trialInfo: {
           trialLocationAndProceedingType: 'Mobile, Alabama, In Person',
         },
+      },
+    });
+  });
+
+  it('should set the name and title of the clerk when calling the pdf generator', async () => {
+    await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
+      docketNumber: '123-45',
+      trialSessionInformation: mockTrialSessionInformation,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        nameOfClerk: 'James Bond',
+        titleOfClerk: 'Clerk of the Court (Interim)',
       },
     });
   });

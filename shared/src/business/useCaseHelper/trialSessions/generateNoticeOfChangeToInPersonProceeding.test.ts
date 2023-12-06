@@ -25,6 +25,13 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
+    applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockResolvedValue({
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      });
+
     await generateNoticeOfChangeToInPersonProceeding(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionInformation: mockTrialSessionInformation,
@@ -37,6 +44,8 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
       caseCaptionExtension: 'Petitioner',
       caseTitle: 'Test Petitioner',
       docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
+      nameOfClerk: 'James Bond',
+      titleOfClerk: 'Clerk of the Court (Interim)',
       trialInfo: mockTrialSessionInformation,
     });
   });

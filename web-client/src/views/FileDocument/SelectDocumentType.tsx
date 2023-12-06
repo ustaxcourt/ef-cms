@@ -31,6 +31,7 @@ export const SelectDocumentType = connect(
                 <CompleteDocumentTypeSection />
               </div>
               <Button
+                data-testid="submit-document"
                 id="submit-document"
                 type="submit"
                 onClick={() => {

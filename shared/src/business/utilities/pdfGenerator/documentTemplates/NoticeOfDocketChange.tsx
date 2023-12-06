@@ -7,7 +7,20 @@ export const NoticeOfDocketChange = ({
   docketEntryIndex,
   filingParties,
   filingsAndProceedings,
+  nameOfClerk,
   options,
+  titleOfClerk,
+}: {
+  docketEntryIndex: string;
+  filingParties: { after: string | undefined; before: string | undefined };
+  filingsAndProceedings: { after: string; before: string };
+  options: {
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+  };
+  nameOfClerk: string;
+  titleOfClerk: string;
 }) => {
   const showFilingsAndProceedingsChange =
     filingsAndProceedings &&
@@ -48,7 +61,10 @@ export const NoticeOfDocketChange = ({
         </div>
       </div>
 
-      <ClerkOfTheCourtSignature />
+      <ClerkOfTheCourtSignature
+        nameOfClerk={nameOfClerk}
+        titleOfClerk={titleOfClerk}
+      />
     </div>
   );
 };
