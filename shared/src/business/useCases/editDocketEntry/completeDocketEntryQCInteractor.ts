@@ -172,6 +172,14 @@ const completeDocketEntryQC = async (
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+    });
+
   const docketChangeInfo = {
     caseCaptionExtension,
     caseTitle,
@@ -187,6 +195,8 @@ const completeDocketEntryQC = async (
       after: updatedDocumentTitle,
       before: currentDocumentTitle,
     },
+    nameOfClerk: name,
+    titleOfClerk: title,
   };
 
   caseEntity.updateDocketEntry(updatedDocketEntry);
