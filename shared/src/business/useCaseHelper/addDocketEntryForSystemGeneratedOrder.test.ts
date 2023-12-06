@@ -17,6 +17,15 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     orderForFilingFee,
   } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockResolvedValue({
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      });
+  });
+
   it('should add a draft docket entry for a system generated order', async () => {
     const newDocketEntriesFromNewCaseCount =
       caseEntity.docketEntries.length + 1;
@@ -57,36 +66,34 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     expect('freeText' in mostRecentDocketEntry.draftOrderState).toEqual(true);
   });
 
-  it('should apply a signature for notices', async () => {
-    applicationContext.getClerkOfCourtNameForSigning.mockReturnValue(
-      'Antonia Lafaso',
-    );
-
+  it('should set the title and the name of clerk for notices', async () => {
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
       caseEntity,
       systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
     });
 
-    const mockSignatureText =
-      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
-        .signatureText;
-
-    expect(mockSignatureText.length).toBeGreaterThan(0);
+    expect(
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data,
+    ).toMatchObject({
+      nameOfClerk: 'James Bond',
+      titleOfClerk: 'Clerk of the Court (Interim)',
+    });
   });
 
-  it('should not apply a signature for orders', async () => {
+  it('should not set a title or the name of clerk for orders', async () => {
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
       caseEntity,
       systemGeneratedDocument: orderForFilingFee,
     });
 
-    const mockSignatureText =
-      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
-        .signatureText;
-
-    expect(mockSignatureText.length).toEqual(0);
+    expect(
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data,
+    ).toMatchObject({
+      nameOfClerk: '',
+      titleOfClerk: '',
+    });
   });
 
   it('should upload a generated pdf for the provided document', async () => {
