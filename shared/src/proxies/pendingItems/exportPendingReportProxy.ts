@@ -3,9 +3,9 @@ import qs from 'qs';
 
 export const exportPendingReportInteractor = (
   applicationContext,
-  { judge, method },
+  { judge },
 ) => {
-  const queryString = qs.stringify({ judge, method });
+  const queryString = qs.stringify({ judge });
 
   return get({
     applicationContext,
