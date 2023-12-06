@@ -55,7 +55,12 @@ export const TrialSessions = connect(
               </Button>
             )}
             {showNewTrialSession && (
-              <Tab id="new-trial-sessions-tab" tabName="new" title="New">
+              <Tab
+                data-testid="new-trial-sessions-tab"
+                id="new-trial-sessions-tab"
+                tabName="new"
+                title="New"
+              >
                 <TrialSessionsTable filter="New" />
               </Tab>
             )}
