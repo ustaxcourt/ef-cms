@@ -68,18 +68,18 @@ export const compute24HrTimeAndUpdateState = (
   store.set(state.form.startTime, `${hours}:${minutes}`);
 };
 
-/**
- * computes the trial session form data based on user input
- * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store function
- */
 export const computeTrialSessionFormDataAction = ({
   applicationContext,
   get,
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{
+  key: string;
+  value: {
+    userId: string;
+    section: string;
+  };
+}>) => {
   const form = get(state.form);
 
   computeTermAndUpdateState(
@@ -100,8 +100,26 @@ export const computeTrialSessionFormDataAction = ({
   );
 
   if (props.key === 'judgeId') {
-    store.set(state.form.judgeId, props.value.userId);
-    store.set(state.form.judge, props.value);
+    const selectedJudge = props.value;
+
+    store.set(state.form.judgeId, selectedJudge.userId);
+    store.set(state.form.judge, selectedJudge);
+
+    const JUDGES_CHAMBERS = applicationContext
+      .getUtilities()
+      .getJudgesChambers();
+
+    const judge = Object.values(JUDGES_CHAMBERS).find(
+      ({ section }) => section === selectedJudge.section,
+    );
+
+    if (!judge) {
+      throw new Error(
+        'could not find an expected chambers section associated with the selected judge',
+      );
+    }
+
+    store.set(state.form.chambersPhoneNumber, judge.phoneNumber);
   }
 
   if (props.key === 'trialClerkId') {
