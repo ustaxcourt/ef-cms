@@ -47,7 +47,7 @@ const generateChangeOfAddressForPractitioner = async ({
   updatedName?: string;
   user: any;
   websocketMessagePrefix?: string;
-}) => {
+}): Promise<any[] | undefined> => {
   const associatedUserCases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
