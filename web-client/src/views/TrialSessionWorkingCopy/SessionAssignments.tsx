@@ -19,7 +19,7 @@ export const SessionAssignments = connect(
                 <p className="margin-bottom-0">
                   {formattedTrialSessionDetails.formattedJudge}
                 </p>
-                <p>
+                <p data-testid="assignments-sessions-chambers-phone-number">
                   {formattedTrialSessionDetails.formattedChambersPhoneNumber}
                 </p>
               </div>

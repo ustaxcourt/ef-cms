@@ -4,26 +4,24 @@ import {
   formatDateString,
 } from '../../utilities/DateHandler';
 import { NotFoundError } from '@web-api/errors/errors';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
 
-/**
- * generateNoticeOfTrialIssuedInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docketNumber for the case
- * @param {string} providers.trialSessionId the id for the trial session
- * @returns {Uint8Array} notice of trial session pdf
- */
+export type FormattedTrialInfoType = RawTrialSession & {
+  formattedStartDate: string;
+  formattedStartTime: string;
+  formattedJudge: string;
+};
+
 export const generateNoticeOfTrialIssuedInteractor = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
     trialSessionId,
   }: { docketNumber: string; trialSessionId: string },
-) => {
+): Promise<Buffer> => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
@@ -61,7 +59,15 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     judgeUserName: trialSession.judge.name,
   });
 
-  const trialInfo = {
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+    });
+
+  const trialInfo: FormattedTrialInfoType = {
     formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,
@@ -77,6 +83,8 @@ export const generateNoticeOfTrialIssuedInteractor = async (
           caseCaptionExtension,
           caseTitle,
           docketNumberWithSuffix,
+          nameOfClerk: name,
+          titleOfClerk: title,
           trialInfo,
         },
       });
@@ -89,6 +97,8 @@ export const generateNoticeOfTrialIssuedInteractor = async (
           caseCaptionExtension,
           caseTitle,
           docketNumberWithSuffix,
+          nameOfClerk: name,
+          titleOfClerk: title,
           trialInfo,
         },
       });
