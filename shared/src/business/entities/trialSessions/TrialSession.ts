@@ -1,10 +1,13 @@
+/* eslint-disable complexity */
 import {
-  IValidationEntity,
-  TStaticValidationMethods,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from '../JoiValidationDecorator';
+  FORMATS,
+  createISODateString,
+  formatDateString,
+  isTodayWithinGivenInterval,
+  prepareDateFromString,
+} from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity } from '../JoiValidationEntity';
 import {
   SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
@@ -14,10 +17,11 @@ import {
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
+  TrialSessionProceedingType,
+  TrialSessionScope,
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
-import { createISODateString } from '../../utilities/DateHandler';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
 
@@ -61,43 +65,49 @@ export type TCaseOrder = {
   removedFromTrialDate?: string;
 };
 
-export class TrialSessionClass {
-  public entityName: string;
-  public address1: string;
-  public address2: string;
-  public alternateTrialClerkName: string;
-  public caseOrder: TCaseOrder[];
-  public chambersPhoneNumber: string;
-  public city: string;
-  public courtReporter: string;
-  public courthouseName: string;
-  public createdAt: string;
-  public estimatedEndDate: string;
-  public irsCalendarAdministrator: string;
+export class TrialSession extends JoiValidationEntity {
+  public address1?: string;
+  public address2?: string;
+  public alternateTrialClerkName?: string;
+  public caseOrder?: TCaseOrder[];
+  public chambersPhoneNumber?: string;
+  public city?: string;
+  public courthouseName?: string;
+  public courtReporter?: string;
+  public createdAt?: string;
+  public dismissedAlertForNOTT?: boolean;
+  public hasNOTTBeenServed: boolean;
+  public estimatedEndDate?: string;
+  public irsCalendarAdministrator?: string;
   public isCalendared: boolean;
-  public isClosed: boolean;
-  public joinPhoneNumber: string;
-  public maxCases: number;
-  public meetingId: string;
-  public notes: string;
-  public noticeIssuedDate: string;
-  public password: string;
-  public postalCode: string;
-  public sessionScope: string;
+  public isClosed?: boolean;
+  public isStartDateWithinNOTTReminderRange?: boolean;
+  public joinPhoneNumber?: string;
+  public judge?: TJudge;
+  public maxCases?: number;
+  public meetingId?: string;
+  public notes?: string;
+  public noticeIssuedDate?: string;
+  public password?: string;
+  public postalCode?: string;
+  public proceedingType: TrialSessionProceedingType;
+  public sessionScope: TrialSessionScope;
+  public sessionStatus: string;
   public sessionType: string;
   public startDate: string;
-  public startTime: string;
-  public state: string;
-  public swingSession: boolean;
-  public swingSessionId: string;
+  public startTime?: string;
+  public state?: string;
+  public swingSession?: boolean;
+  public swingSessionId?: string;
   public term: string;
   public termYear: string;
-  public trialLocation: string;
-  public sessionStatus: string;
-  public proceedingType: string;
-  public trialSessionId: string;
-  public judge: TJudge;
-  public trialClerk: TTrialClerk;
+  public thirtyDaysBeforeTrialFormatted?: string;
+  public trialClerk?: TTrialClerk;
+  public trialLocation?: string;
+  public trialSessionId?: string;
+  public paperServicePdfs: { fileId: string; title: string }[];
+
+  public static PAPER_SERVICE_PDF_TTL = 60 * 60 * 24 * 3; // 3 days
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
@@ -117,136 +127,12 @@ export class TrialSessionClass {
     ],
   };
 
-  static VALIDATION_ERROR_MESSAGES = {
-    estimatedEndDate: [
-      {
-        contains: 'must be greater than or equal to',
-        message: 'Enter a valid estimated end date',
-      },
-      'Enter a valid estimated end date',
-    ],
-    maxCases: 'Enter a valid number of maximum cases',
-    postalCode: [
-      {
-        contains: 'match',
-        message: 'Enter ZIP code',
-      },
-    ],
-    proceedingType: 'Enter a valid proceeding type',
-    sessionType: 'Select a session type',
-    startDate: [
-      {
-        contains: 'must be greater than or equal to',
-        message: 'Enter a valid start date',
-      },
-      'Enter a valid start date',
-    ],
-    startTime: 'Enter a valid start time',
-    swingSessionId: 'You must select a swing session',
-    term: 'Term session is not valid',
-    termYear: 'Term year is required',
-    trialLocation: 'Select a trial session location',
-  };
-
-  static validationRules = {
-    COMMON: {
-      address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
-      address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
-      alternateTrialClerkName: joi.when('trialClerk', {
-        is: joi.exist(),
-        otherwise: JoiValidationConstants.STRING.max(100).allow('').optional(),
-        then: joi.any().forbidden(),
-      }),
-      chambersPhoneNumber: stringRequiredForRemoteProceedings,
-      city: JoiValidationConstants.STRING.max(100).allow('').optional(),
-      courtReporter: JoiValidationConstants.STRING.max(100).optional(),
-      courthouseName: JoiValidationConstants.STRING.max(100)
-        .allow('')
-        .optional(),
-      createdAt: JoiValidationConstants.ISO_DATE.optional(),
-      entityName:
-        JoiValidationConstants.STRING.valid('TrialSession').required(),
-      estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
-        .min(joi.ref('startDate'))
-        .allow(null),
-      irsCalendarAdministrator:
-        JoiValidationConstants.STRING.max(100).optional(),
-      isCalendared: joi.boolean().required(),
-      joinPhoneNumber: stringRequiredForRemoteProceedings,
-      judge: joi
-        .object({
-          name: JoiValidationConstants.STRING.max(100).required(),
-          userId: JoiValidationConstants.UUID.required(),
-        })
-        .optional(),
-      maxCases: joi.when('sessionScope', {
-        is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-        otherwise: joi.number().greater(0).integer().required(),
-        then: joi.optional(),
-      }),
-      meetingId: stringRequiredForRemoteProceedings,
-      notes: JoiValidationConstants.STRING.max(400).optional(),
-      noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
-      password: stringRequiredForRemoteProceedings,
-      postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
-      proceedingType: JoiValidationConstants.STRING.valid(
-        ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
-      ).required(),
-      sessionScope: JoiValidationConstants.STRING.valid(
-        ...Object.values(TRIAL_SESSION_SCOPE_TYPES),
-      ).required(),
-      sessionStatus: JoiValidationConstants.STRING.valid(
-        ...Object.values(SESSION_STATUS_TYPES),
-      ).required(),
-      sessionType: JoiValidationConstants.STRING.valid(
-        ...Object.values(SESSION_TYPES),
-      ).required(),
-      startDate: JoiValidationConstants.ISO_DATE.required(),
-      startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
-      state: JoiValidationConstants.STRING.valid(
-        ...Object.keys(US_STATES),
-        ...Object.keys(US_STATES_OTHER),
-      )
-        .allow('')
-        .optional(),
-      swingSession: joi.boolean().optional(),
-      swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
-        is: true,
-        otherwise: JoiValidationConstants.STRING.optional(),
-        then: joi.required(),
-      }),
-      term: JoiValidationConstants.STRING.valid(...SESSION_TERMS).required(),
-      termYear: JoiValidationConstants.STRING.max(4).required(),
-      trialClerk: joi
-        .object({
-          name: JoiValidationConstants.STRING.max(100).required(),
-          userId: JoiValidationConstants.UUID.required(),
-        })
-        .optional(),
-      trialLocation: joi.when('sessionScope', {
-        is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-        otherwise: joi
-          .alternatives()
-          .try(
-            JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
-            JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-          )
-          .required(),
-        then: joi.optional(),
-      }),
-      trialSessionId: JoiValidationConstants.UUID.optional(),
-    },
-  };
-
   constructor(rawSession, { applicationContext }) {
-    this.init(rawSession, { applicationContext });
-  }
+    super('TrialSession');
 
-  init(rawSession, { applicationContext }) {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
-    this.entityName = 'TrialSession';
 
     this.address1 = rawSession.address1;
     this.address2 = rawSession.address2;
@@ -265,6 +151,7 @@ export class TrialSessionClass {
     this.courtReporter = rawSession.courtReporter;
     this.courthouseName = rawSession.courthouseName;
     this.createdAt = rawSession.createdAt || createISODateString();
+    this.dismissedAlertForNOTT = rawSession.dismissedAlertForNOTT || false;
     this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
     this.estimatedEndDate = rawSession.estimatedEndDate || null;
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
@@ -277,11 +164,12 @@ export class TrialSessionClass {
     this.noticeIssuedDate = rawSession.noticeIssuedDate;
     this.password = rawSession.password;
     this.postalCode = rawSession.postalCode;
+    this.hasNOTTBeenServed = rawSession.hasNOTTBeenServed || false;
     this.sessionScope =
       rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
     this.sessionType = rawSession.sessionType;
     this.startDate = rawSession.startDate;
-    if (isStandaloneRemoteSession(rawSession.sessionScope)) {
+    if (this.isStandaloneRemote()) {
       this.startTime = '13:00';
     } else {
       this.startTime = rawSession.startTime || '10:00';
@@ -291,20 +179,27 @@ export class TrialSessionClass {
     this.swingSessionId = rawSession.swingSessionId;
     this.term = rawSession.term;
     this.termYear = rawSession.termYear;
-    this.trialLocation = isStandaloneRemoteSession(rawSession.sessionScope)
+    this.trialLocation = this.isStandaloneRemote()
       ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
       : rawSession.trialLocation;
-    this.proceedingType = isStandaloneRemoteSession(rawSession.sessionScope)
+    this.proceedingType = this.isStandaloneRemote()
       ? TRIAL_SESSION_PROCEEDING_TYPES.remote
       : rawSession.proceedingType;
     this.trialSessionId =
       rawSession.trialSessionId || applicationContext.getUniqueId();
+    this.paperServicePdfs = rawSession.paperServicePdfs || [];
 
-    if (rawSession.judge && rawSession.judge.name) {
+    if (rawSession.judge?.name) {
       this.judge = {
         name: rawSession.judge.name,
         userId: rawSession.judge.userId,
       };
+    }
+
+    if (rawSession.isCalendared && rawSession.startDate) {
+      this.setNoticeOfTrialReminderAlert();
+    } else {
+      this.isStartDateWithinNOTTReminderRange = false;
     }
 
     if (rawSession.trialClerk && rawSession.trialClerk.name) {
@@ -314,22 +209,183 @@ export class TrialSessionClass {
       };
     }
   }
-  /**
-   *
-   * @param {string} swingSessionId the id of the swing session to associate with the session
-   * @returns {TrialSession} the trial session entity
-   */
+
+  static isStandaloneRemote(sessionScope) {
+    return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+  }
+
+  static validationRules = {
+    COMMON: {
+      address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
+      address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
+      alternateTrialClerkName: joi.when('trialClerk', {
+        is: joi.exist(),
+        otherwise: JoiValidationConstants.STRING.max(100).allow('').optional(),
+        then: joi.any().forbidden(),
+      }),
+      chambersPhoneNumber: stringRequiredForRemoteProceedings,
+      city: JoiValidationConstants.STRING.max(100).allow('').optional(),
+      courtReporter: JoiValidationConstants.STRING.max(100).optional(),
+      courthouseName: JoiValidationConstants.STRING.max(100)
+        .allow('')
+        .optional(),
+      createdAt: JoiValidationConstants.ISO_DATE.optional(),
+      dismissedAlertForNOTT: joi.boolean().optional(),
+      entityName:
+        JoiValidationConstants.STRING.valid('TrialSession').required(),
+      estimatedEndDate: joi
+        .when('startDate', {
+          is: JoiValidationConstants.ISO_DATE.required(),
+          otherwise: joi.optional(),
+          then: JoiValidationConstants.ISO_DATE.min(joi.ref('startDate'))
+            .optional()
+            .allow(null),
+        })
+        .messages({
+          '*': 'Enter a valid estimated end date',
+          'date.max': 'Enter a valid estimated end date',
+        }),
+      hasNOTTBeenServed: joi.boolean().required(),
+      irsCalendarAdministrator:
+        JoiValidationConstants.STRING.max(100).optional(),
+      isCalendared: joi.boolean().required(),
+      joinPhoneNumber: stringRequiredForRemoteProceedings,
+      judge: joi
+        .object({
+          name: JoiValidationConstants.STRING.max(100).required(),
+          userId: JoiValidationConstants.UUID.required(),
+        })
+        .optional(),
+      maxCases: joi
+        .when('sessionScope', {
+          is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          otherwise: joi.number().greater(0).integer().required(),
+          then: joi.optional(),
+        })
+        .messages({ '*': 'Enter a valid number of maximum cases' }),
+      meetingId: stringRequiredForRemoteProceedings,
+      notes: JoiValidationConstants.STRING.max(400).optional(),
+      noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
+      paperServicePdfs: joi
+        .array()
+        .items(
+          joi.object().keys({
+            fileId: JoiValidationConstants.UUID.required(),
+            title: JoiValidationConstants.STRING.required(),
+          }),
+        )
+        .required(),
+      password: stringRequiredForRemoteProceedings,
+      postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('')
+        .optional()
+        .messages({
+          'string.pattern.base': 'Enter ZIP code',
+        }),
+      proceedingType: JoiValidationConstants.STRING.valid(
+        ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
+      )
+        .required()
+        .messages({ '*': 'Enter a valid proceeding type' }),
+      sessionScope: JoiValidationConstants.STRING.valid(
+        ...Object.values(TRIAL_SESSION_SCOPE_TYPES),
+      ).required(),
+      sessionStatus: JoiValidationConstants.STRING.valid(
+        ...Object.values(SESSION_STATUS_TYPES),
+      ).required(),
+      sessionType: JoiValidationConstants.STRING.valid(
+        ...Object.values(SESSION_TYPES),
+      )
+        .required()
+        .messages({ '*': 'Select a session type' }),
+      startDate: JoiValidationConstants.ISO_DATE.required().messages({
+        '*': 'Enter a valid start date',
+      }),
+      startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES.messages({
+        '*': 'Enter a valid start time',
+      }),
+      state: JoiValidationConstants.STRING.valid(
+        ...Object.keys(US_STATES),
+        ...Object.keys(US_STATES_OTHER),
+      )
+        .allow('')
+        .optional(),
+      swingSession: joi.boolean().optional(),
+      swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
+        is: true,
+        otherwise: JoiValidationConstants.STRING.optional(),
+        then: joi.required(),
+      }).messages({ '*': 'You must select a swing session' }),
+      term: JoiValidationConstants.STRING.valid(...SESSION_TERMS)
+        .required()
+        .messages({ '*': 'Term session is not valid' }),
+      termYear: JoiValidationConstants.STRING.max(4)
+        .required()
+        .messages({ '*': 'Term year is required' }),
+      trialClerk: joi
+        .object({
+          name: JoiValidationConstants.STRING.max(100).required(),
+          userId: JoiValidationConstants.UUID.required(),
+        })
+        .optional(),
+      trialLocation: joi
+        .when('sessionScope', {
+          is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          otherwise: joi
+            .alternatives()
+            .try(
+              JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+              JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+            )
+            .required(),
+          then: joi.optional(),
+        })
+        .messages({ '*': 'Select a trial session location' }),
+      trialSessionId: JoiValidationConstants.UUID.optional(),
+    },
+  };
+
+  getValidationRules() {
+    return {
+      ...TrialSession.validationRules.COMMON,
+      caseOrder: joi.array().items(
+        joi.object().keys({
+          calendarNotes: JoiValidationConstants.STRING.optional().allow(
+            '',
+            null,
+          ),
+          disposition: JoiValidationConstants.STRING.max(100).when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+          docketNumber:
+            JoiValidationConstants.DOCKET_NUMBER.required().description(
+              'Docket number of the case.',
+            ),
+          isManuallyAdded: joi.boolean().optional(),
+          removedFromTrial: joi.boolean().optional(),
+          removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+        }),
+      ),
+    } as object;
+  }
+
   setAsSwingSession(swingSessionId) {
     this.swingSessionId = swingSessionId;
     this.swingSession = true;
     return this;
   }
 
-  /**
-   * generate sort key prefix
-   *
-   * @returns {string} the sort key prefix
-   */
   generateSortKeyPrefix() {
     const { sessionType, trialLocation } = this;
     const caseProcedureSymbol =
@@ -338,30 +394,45 @@ export class TrialSessionClass {
         Small: 'S',
       }[sessionType] || 'H';
 
-    const formattedTrialCity = trialLocation.replace(/[\s.,]/g, '');
+    const formattedTrialCity = trialLocation?.replace(/[\s.,]/g, '');
 
     const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
 
     return skPrefix;
   }
 
-  /**
-   * set as calendared
-   *
-   * @returns {TrialSession} the trial session entity
-   */
+  setNoticeOfTrialReminderAlert() {
+    const formattedStartDate = formatDateString(this.startDate, FORMATS.MMDDYY);
+    const trialStartDateString: any = prepareDateFromString(
+      formattedStartDate,
+      FORMATS.MMDDYY,
+    );
+
+    this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
+      intervalEndDate: trialStartDateString.minus({
+        ['days']: 24, // luxon's interval end date is not inclusive
+      }),
+      intervalStartDate: trialStartDateString.minus({
+        ['days']: 34,
+      }),
+    });
+
+    const thirtyDaysBeforeTrialInclusive: any = trialStartDateString.minus({
+      ['days']: 29,
+    });
+
+    this.thirtyDaysBeforeTrialFormatted = formatDateString(
+      thirtyDaysBeforeTrialInclusive,
+      FORMATS.MMDDYY,
+    );
+  }
+
   setAsCalendared() {
     this.isCalendared = true;
     this.sessionStatus = SESSION_STATUS_TYPES.open;
     return this;
   }
 
-  /**
-   * add case to calendar
-   *
-   * @param {object} caseEntity the case entity to add to the calendar
-   * @returns {TrialSession} the trial session entity
-   */
   addCaseToCalendar(caseEntity) {
     const { docketNumber } = caseEntity;
 
@@ -376,13 +447,6 @@ export class TrialSessionClass {
     return this;
   }
 
-  /**
-   * manually add case to calendar
-   *
-   * @param {object} caseEntity the case entity to add to the calendar
-   * @param {string} calendarNotes calendar notes for the case
-   * @returns {TrialSession} the trial session entity
-   */
   manuallyAddCaseToCalendar({ calendarNotes, caseEntity }) {
     const { docketNumber } = caseEntity;
     this.caseOrder.push({
@@ -394,26 +458,12 @@ export class TrialSessionClass {
     return this;
   }
 
-  /**
-   * checks if a case is already on the session
-   *
-   * @param {object} caseEntity the case entity to check if already on the case
-   * @returns {boolean} if the case is already on the trial session
-   */
   isCaseAlreadyCalendared(caseEntity) {
     return !!this.caseOrder
       .filter(order => order.docketNumber === caseEntity.docketNumber)
       .filter(order => order.removedFromTrial !== true).length;
   }
 
-  /**
-   * set case as removedFromTrial
-   *
-   * @param {object} arguments the arguments object
-   * @param {string} arguments.docketNumber the docketNumber of the case to remove from the calendar
-   * @param {string} arguments.disposition the reason the case is being removed from the calendar
-   * @returns {TrialSession} the trial session entity
-   */
   removeCaseFromCalendar({ disposition, docketNumber }) {
     const caseToUpdate = this.caseOrder.find(
       trialCase => trialCase.docketNumber === docketNumber,
@@ -444,10 +494,6 @@ export class TrialSessionClass {
 
   /**
    * removes the case totally from the trial session
-   *
-   * @param {object} arguments the arguments object
-   * @param {string} arguments.docketNumber the docketNumber of the case to remove from the calendar
-   * @returns {TrialSession} the trial session entity
    */
   deleteCaseFromCalendar({ docketNumber }) {
     const index = this.caseOrder.findIndex(
@@ -462,110 +508,40 @@ export class TrialSessionClass {
   /**
    * checks certain properties of the trial session for emptiness.
    * if one field is empty (via lodash.isEmpty), the method returns false
-   *
-   * @returns {boolean} TRUE if can set as calendared (properties were all not empty), FALSE otherwise
    */
   canSetAsCalendared() {
     return isEmpty(this.getEmptyFields());
   }
 
-  /**
-   * checks the trial session's proceedingType and returns true if it's remote
-   *
-   * @returns {boolean} TRUE if the proceedingType is remote; false otherwise
-   */
   isRemote() {
     return this.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote;
   }
 
-  /**
-   * Returns certain properties of the trial session that are empty as a list.
-   *
-   * @returns {Array} A list of property names of the trial session that are empty
-   */
+  isStandaloneRemote() {
+    return TrialSession.isStandaloneRemote(this.sessionScope);
+  }
+
   getEmptyFields() {
-    const missingProperties =
-      TrialSessionClass.PROPERTIES_REQUIRED_FOR_CALENDARING[
-        this.proceedingType
-      ].filter(property => isEmpty(this[property]));
+    const missingProperties = TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING[
+      this.proceedingType
+    ].filter(property => isEmpty(this[property]));
 
     return missingProperties;
   }
 
-  /**
-   * Sets the notice issued date on the trial session
-   *
-   * @returns {TrialSession} the trial session entity
-   */
   setNoticesIssued() {
     this.noticeIssuedDate = createISODateString();
     return this;
   }
 
-  /**
-   * set as closed
-   *
-   * @returns {TrialSession} the trial session entity
-   */
   setAsClosed() {
     this.sessionStatus = SESSION_STATUS_TYPES.closed;
     return this;
   }
+
+  addPaperServicePdf(fileId: string, title: string): void {
+    this.paperServicePdfs.push({ fileId, title });
+  }
 }
 
-joiValidationDecorator(
-  TrialSessionClass,
-  joi.object().keys({
-    ...TrialSessionClass.validationRules.COMMON,
-    caseOrder: joi.array().items(
-      joi.object().keys({
-        calendarNotes: JoiValidationConstants.STRING.max(200)
-          .optional()
-          .allow('', null),
-        disposition: JoiValidationConstants.STRING.max(100).when(
-          'removedFromTrial',
-          {
-            is: true,
-            otherwise: joi.optional().allow(null),
-            then: joi.required(),
-          },
-        ),
-        docketNumber:
-          JoiValidationConstants.DOCKET_NUMBER.required().description(
-            'Docket number of the case.',
-          ),
-        isManuallyAdded: joi.boolean().optional(),
-        removedFromTrial: joi.boolean().optional(),
-        removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
-          'removedFromTrial',
-          {
-            is: true,
-            otherwise: joi.optional().allow(null),
-            then: joi.required(),
-          },
-        ),
-      }),
-    ),
-  }),
-  TrialSessionClass.VALIDATION_ERROR_MESSAGES,
-);
-
-/**
- * Determines if the scope of the trial session is standalone remote
- *
- * @param {object} arguments.sessionScope the session scope
- * @returns {Boolean} if the scope is a standalone remote session
- */
-export const isStandaloneRemoteSession = function (sessionScope) {
-  return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
-};
-
-export type TRawTrialSession = ExcludeMethods<TrialSessionClass>;
-
-export const TrialSession: typeof TrialSessionClass &
-  TStaticValidationMethods<TRawTrialSession> =
-  validEntityDecorator(TrialSessionClass);
-
-// eslint-disable-next-line no-redeclare
-export interface TrialSessionClass
-  extends IValidationEntity<TrialSessionClass> {}
+export type RawTrialSession = ExcludeMethods<TrialSession>;

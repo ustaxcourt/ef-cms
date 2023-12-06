@@ -8,7 +8,7 @@
  * @returns {Promise<object>} the document data
  */
 export const loadPDFForPreviewInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext,
   {
     docketEntryId,
     docketNumber,

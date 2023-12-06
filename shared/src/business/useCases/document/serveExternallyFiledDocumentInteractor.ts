@@ -1,20 +1,19 @@
+import { Case } from '../../entities/cases/Case';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { addCoverToPdf } from '../addCoverToPdf';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * serveExternallyFiledDocumentInteractor
- *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
  * @param {object} providers.clientConnectionId the client connection Id
@@ -22,7 +21,7 @@ import { addCoverToPdf } from '../addCoverToPdf';
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  */
-export const serveExternallyFiledDocumentInteractor = async (
+export const serveExternallyFiledDocument = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -103,17 +102,15 @@ export const serveExternallyFiledDocumentInteractor = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let paperServiceResult;
-  let pdfWithCoversheet;
-  let caseEntities = [];
+  let caseEntities: Case[] = [];
   const coversheetLength = 1;
 
-  const consolidateCaseDuplicateDocketEntries = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-    });
+  const subjectCaseIsSimultaneousDocType =
+    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+      originalSubjectDocketEntry.eventCode,
+    ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
-  if (!consolidateCaseDuplicateDocketEntries) {
+  if (subjectCaseIsSimultaneousDocType) {
     docketNumbers = [subjectCaseDocketNumber];
   } else {
     docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
@@ -141,14 +138,17 @@ export const serveExternallyFiledDocumentInteractor = async (
             ...originalSubjectDocketEntry,
             docketNumber: caseEntity.docketNumber,
             draftOrderState: null,
-            filingDate: applicationContext.getUtilities().createISODateString(),
+            ...(!subjectCaseIsSimultaneousDocType && {
+              filingDate: applicationContext
+                .getUtilities()
+                .createISODateString(),
+            }),
             isDraft: false,
             isFileAttached: true,
             isOnDocketRecord: true,
             isPendingService: isSubjectCase,
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-            userId: user.userId,
           },
           { applicationContext },
         );
@@ -169,14 +169,15 @@ export const serveExternallyFiledDocumentInteractor = async (
       c => c.docketNumber === subjectCaseDocketNumber,
     );
     const updatedSubjectDocketEntry =
-      updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
+      updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
-    ({ pdfData: pdfWithCoversheet } = await addCoverToPdf({
-      applicationContext,
-      caseEntity: updatedSubjectCaseEntity,
-      docketEntryEntity: updatedSubjectDocketEntry,
-      pdfData,
-    }));
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        caseEntity: updatedSubjectCaseEntity,
+        docketEntryId: updatedSubjectDocketEntry.docketEntryId,
+        docketNumber: updatedSubjectCaseEntity!.docketNumber,
+      });
 
     paperServiceResult = await applicationContext
       .getUseCaseHelpers()
@@ -195,12 +196,6 @@ export const serveExternallyFiledDocumentInteractor = async (
         status: false,
       });
   }
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: pdfWithCoversheet,
-    key: docketEntryId,
-  });
 
   const successMessage =
     docketNumbers.length > 1
@@ -221,3 +216,43 @@ export const serveExternallyFiledDocumentInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    docketNumbers = [],
+    subjectCaseDocketNumber,
+  }: {
+    docketNumbers?: string[];
+    subjectCaseDocketNumber: string;
+  },
+) => ({
+  identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
+    item => `case|${item}`,
+  ),
+  ttl: 900,
+});
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'serve_externally_filed_document',
+    },
+    userId: user.userId,
+  });
+};
+
+export const serveExternallyFiledDocumentInteractor = withLocking(
+  serveExternallyFiledDocument,
+  determineEntitiesToLock,
+  handleLockError,
+);

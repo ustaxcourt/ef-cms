@@ -305,11 +305,10 @@ module.exports = [
       'click #submit-document',
       'wait for element #primary-document to be visible',
       'click #primaryDocument-certificateOfService-label',
-      'wait for element .primaryDocument-service-date to be visible',
+      'wait for element #primaryDocument-service-date-picker to be visible',
       'wait for element #secondary-document to be visible',
     ],
     notes: ['File a document, step 2'],
-    timeout: 60000,
     url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
   },
   {

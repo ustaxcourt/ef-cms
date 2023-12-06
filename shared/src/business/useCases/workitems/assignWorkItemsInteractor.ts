@@ -2,7 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { WorkItem } from '../../entities/WorkItem';
 
@@ -51,7 +51,7 @@ export const assignWorkItemsInteractor = async (
       workItemId,
     });
 
-  const workItemEntity: WorkItem = new WorkItem(workItemRecord, {
+  const workItemEntity = new WorkItem(workItemRecord, {
     applicationContext,
   });
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });

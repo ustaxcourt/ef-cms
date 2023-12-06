@@ -5,9 +5,12 @@ describe('generateExternalDocumentTitle', () => {
   it('generates a document title from passed metadata', async () => {
     const title = await generateExternalDocumentTitle(applicationContext, {
       documentMetadata: {
+        category: 'Motion',
         documentTitle: 'abc',
+        documentType: 'Motion for Leave to File',
         previousDocument: {
           documentTitle: 'TITLE',
+          documentType: 'Motion for Leave to File',
         },
         scenario: 'nonstandard a',
       },
@@ -19,8 +22,12 @@ describe('generateExternalDocumentTitle', () => {
   it('generates a document title if previous document is undefined', async () => {
     const title = await generateExternalDocumentTitle(applicationContext, {
       documentMetadata: {
+        category: 'Motion',
         documentTitle: 'abc',
-        previousDocument: undefined,
+        documentType: 'Motion for Leave to File',
+        previousDocument: {
+          documentType: 'Motion for Leave to File',
+        },
         scenario: 'nonstandard a',
       },
     });
@@ -31,11 +38,14 @@ describe('generateExternalDocumentTitle', () => {
   it('generate the full document title for the previousDocument when documentMetadata.previousDocument exists', async () => {
     const title = await generateExternalDocumentTitle(applicationContext, {
       documentMetadata: {
+        category: 'Motion',
         documentTitle: 'abc [Document Name]',
+        documentType: 'Motion for Leave to File',
         previousDocument: {
           addToCoversheet: true,
           additionalInfo: 'Cool',
           documentTitle: 'Title',
+          documentType: 'Motion for Leave to File',
         },
         scenario: 'nonstandard a',
       },
@@ -63,11 +73,14 @@ describe('generateExternalDocumentTitle', () => {
   it('should not overwrite the origrinal metadata previousDocument title passed as an argument', async () => {
     const metadata = {
       documentMetadata: {
+        category: 'Motion',
         documentTitle: 'abc [Document Name]',
+        documentType: 'Motion for Leave to File',
         previousDocument: {
           addToCoversheet: true,
           additionalInfo: 'Cool',
           documentTitle: 'Title',
+          documentType: 'Motion for Leave to File',
         },
         scenario: 'nonstandard a',
       },

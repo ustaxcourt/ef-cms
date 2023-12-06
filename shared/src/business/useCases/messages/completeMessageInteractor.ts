@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 
 /**
@@ -43,7 +43,7 @@ export const completeMessageInteractor = async (
 
   const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-  const updatedMessage: TMessageEntity = new Message(mostRecentMessage, {
+  const updatedMessage = new Message(mostRecentMessage, {
     applicationContext,
   }).validate();
 

@@ -7,13 +7,11 @@ import {
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
+import { testPdfDoc } from '../../test/getFakeFile';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('consolidated cases', () => {

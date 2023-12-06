@@ -1,5 +1,5 @@
 const {
   sendMaintenanceNotificationsLambda,
-} = require('../../../src/cases/sendMaintenanceNotificationsLambda');
+} = require('../../../src/lambdas/cases/sendMaintenanceNotificationsLambda');
 
 exports.handler = sendMaintenanceNotificationsLambda;

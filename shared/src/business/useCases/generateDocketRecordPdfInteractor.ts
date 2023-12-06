@@ -1,18 +1,13 @@
-import {
-  Case,
-  getPractitionersRepresenting,
-  isSealedCase,
-} from '../entities/cases/Case';
+import { Case, getPractitionersRepresenting } from '../entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
 /**
  * generateDocketRecordPdfInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number for the docket record to be generated
@@ -24,14 +19,16 @@ export const generateDocketRecordPdfInteractor = async (
     docketNumber,
     docketRecordSort,
     includePartyDetail = false,
+    isIndirectlyAssociated = false,
   }: {
     docketNumber: string;
     docketRecordSort?: string;
     includePartyDetail: boolean;
+    isIndirectlyAssociated?: boolean;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
-  const isAssociated = await applicationContext
+  const isDirectlyAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
       applicationContext,
@@ -47,14 +44,23 @@ export const generateDocketRecordPdfInteractor = async (
     });
 
   let caseEntity;
-  if (isSealedCase(caseSource)) {
+
+  const isSealedCase = applicationContext
+    .getUtilities()
+    .isSealedCase(caseSource);
+
+  if (isSealedCase) {
     if (user.userId) {
       const isAuthorizedToViewSealedCase = isAuthorized(
         user,
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,
       );
 
-      if (isAuthorizedToViewSealedCase || isAssociated) {
+      if (
+        isAuthorizedToViewSealedCase ||
+        isDirectlyAssociated ||
+        isIndirectlyAssociated
+      ) {
         caseEntity = new Case(caseSource, { applicationContext });
       } else {
         // unassociated user viewing sealed case

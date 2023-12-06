@@ -4,6 +4,7 @@ import {
   formatDateString,
   formatNow,
 } from '../../utilities/DateHandler';
+import { NotFoundError } from '@web-api/errors/errors';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
@@ -31,6 +32,10 @@ export const generateStandingPretrialOrderForSmallCaseInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const caseDetail = await applicationContext
     .getPersistenceGateway()

@@ -2,9 +2,9 @@ import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   MULTI_DOCKET_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
-import { DocketEntryClass } from '../entities/DocketEntry';
+import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
-import { isLeadCase } from '../entities/cases/Case';
 import { omit } from 'lodash';
 
 const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
@@ -14,9 +14,30 @@ const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
     : '';
 };
 
+export const formatCaseTitle = ({
+  applicationContext,
+  caseEntity,
+  useInitialData,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: Case;
+  useInitialData?: boolean;
+}) => {
+  const caseCaption = useInitialData
+    ? caseEntity.initialCaption
+    : caseEntity.caseCaption;
+
+  let caseTitle = applicationContext.getCaseTitle(caseCaption);
+  let caseCaptionExtension = '';
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
+  }
+  return { caseCaptionExtension, caseTitle };
+};
+
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
- *
  * @param {object} options the providers object
  * @param {object} options.applicationContext the application context
  * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
@@ -33,11 +54,11 @@ export const generateCoverSheetData = async ({
   useInitialData = false,
 }: {
   applicationContext: IApplicationContext;
-  caseEntity: TCaseEntity;
-  docketEntryEntity: DocketEntryClass;
+  caseEntity: Case;
+  docketEntryEntity: DocketEntry;
   filingDateUpdated: boolean;
   stampData?: any;
-  useInitialData: boolean;
+  useInitialData?: boolean;
 }) => {
   const dateServedFormatted = docketEntryEntity.servedAt
     ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
@@ -52,30 +73,21 @@ export const generateCoverSheetData = async ({
     ? formatDateString(docketEntryEntity.filingDate, FORMATS.MMDDYY)
     : '';
 
-  if (stampData && stampData.date) {
-    stampData.date = formatDateString(stampData.date, FORMATS.MMDDYYYY);
-  }
-
-  const caseCaption = useInitialData
-    ? caseEntity.initialCaption
-    : caseEntity.caseCaption;
-
-  const docketNumberSuffixToUse = useInitialData
-    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
-    : caseEntity.docketNumberSuffix;
-
-  let caseTitle = applicationContext.getCaseTitle(caseCaption);
-  let caseCaptionExtension = '';
-  if (caseTitle !== caseCaption) {
-    caseTitle += ', ';
-    caseCaptionExtension = caseCaption.replace(caseTitle, '');
-  }
+  const { caseCaptionExtension, caseTitle } = formatCaseTitle({
+    applicationContext,
+    caseEntity,
+    useInitialData,
+  });
 
   let documentTitle =
     docketEntryEntity.documentTitle || docketEntryEntity.documentType;
   if (docketEntryEntity.additionalInfo && docketEntryEntity.addToCoversheet) {
     documentTitle += ` ${docketEntryEntity.additionalInfo}`;
   }
+
+  const docketNumberSuffixToUse = useInitialData
+    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
+    : caseEntity.docketNumberSuffix;
 
   const docketNumberWithSuffix =
     caseEntity.docketNumber + (docketNumberSuffixToUse || '');
@@ -118,7 +130,7 @@ export const generateCoverSheetData = async ({
     docketEntryEntity.eventCode,
   );
   if (
-    isLeadCase(caseEntity) &&
+    caseEntity.leadDocketNumber &&
     (isMultiDocketableCourtIssued || isMultiDocketablePaperFiled)
   ) {
     coverSheetData = await applicationContext
@@ -128,6 +140,7 @@ export const generateCoverSheetData = async ({
         caseEntity,
         coverSheetData,
         docketEntryEntity,
+        useInitialData,
       });
   }
 

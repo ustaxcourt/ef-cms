@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
@@ -19,12 +20,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
-import { remove } from 'lodash';
+import { random, remove } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const addDocketEntryForPaymentStatus = ({
   applicationContext,
@@ -32,39 +34,41 @@ export const addDocketEntryForPaymentStatus = ({
   user,
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    caseEntity.addDocketEntry(
-      new DocketEntry(
-        {
-          documentTitle: 'Filing Fee Paid',
-          documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
-          eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
-          filingDate: caseEntity.petitionPaymentDate,
-          isFileAttached: false,
-          isMinuteEntry: true,
-          isOnDocketRecord: true,
-          processingStatus: 'complete',
-          userId: user.userId,
-        },
-        { applicationContext },
-      ),
+    const paymentStatusDocketEntry = new DocketEntry(
+      {
+        documentTitle: 'Filing Fee Paid',
+        documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+        eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
+        filingDate: caseEntity.petitionPaymentDate,
+        isFileAttached: false,
+        isMinuteEntry: true,
+        isOnDocketRecord: true,
+        processingStatus: 'complete',
+      },
+      { applicationContext },
     );
+
+    paymentStatusDocketEntry.setFiledBy(user);
+
+    caseEntity.addDocketEntry(paymentStatusDocketEntry);
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    caseEntity.addDocketEntry(
-      new DocketEntry(
-        {
-          documentTitle: 'Filing Fee Waived',
-          documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
-          eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
-          filingDate: caseEntity.petitionPaymentWaivedDate,
-          isFileAttached: false,
-          isMinuteEntry: true,
-          isOnDocketRecord: true,
-          processingStatus: 'complete',
-          userId: user.userId,
-        },
-        { applicationContext },
-      ),
+    const petitionPaymentStatusDocketEntry = new DocketEntry(
+      {
+        documentTitle: 'Filing Fee Waived',
+        documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+        eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
+        filingDate: caseEntity.petitionPaymentWaivedDate,
+        isFileAttached: false,
+        isMinuteEntry: true,
+        isOnDocketRecord: true,
+        processingStatus: 'complete',
+      },
+      { applicationContext },
     );
+
+    petitionPaymentStatusDocketEntry.setFiledBy(user);
+
+    caseEntity.addDocketEntry(petitionPaymentStatusDocketEntry);
   }
 };
 
@@ -125,10 +129,16 @@ const createPetitionWorkItems = async ({
   });
 };
 
+const generateAccessCode = () => {
+  const randomNumber = random(0, 999999);
+  const accessCode = ('000000' + randomNumber).slice(-6);
+  return accessCode;
+};
+
 const generateNoticeOfReceipt = async ({
   applicationContext,
   caseEntity,
-  userIdServingPetition,
+  userServingPetition,
 }) => {
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
@@ -141,15 +151,27 @@ const generateNoticeOfReceipt = async ({
 
   const contactPrimary = caseEntity.getContactPrimary();
 
+  let accessCode = generateAccessCode();
+
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+    });
+
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address: contactPrimary,
+        accessCode,
         caseCaptionExtension,
         caseTitle,
+        contact: contactPrimary,
         docketNumberWithSuffix,
+        nameOfClerk: name,
         preferredTrialCity,
         receivedAtFormatted: applicationContext
           .getUtilities()
@@ -157,6 +179,7 @@ const generateNoticeOfReceipt = async ({
         servedDate: applicationContext
           .getUtilities()
           .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
+        titleOfClerk: title,
       },
     });
 
@@ -166,16 +189,40 @@ const generateNoticeOfReceipt = async ({
     applicationContext,
     caseEntity,
   });
-  if (contactSecondary && addressesAreDifferent) {
+
+  const isSetupForEService = contactInfo => {
+    return (
+      contactInfo.hasConsentedToEService && !!contactInfo.paperPetitionEmail
+    );
+  };
+
+  const petitionerIsSetupForEService =
+    contactSecondary &&
+    [contactPrimary, contactSecondary].some(contact => {
+      return isSetupForEService(contact) === true;
+    });
+
+  const shouldGenerateNotrForSecondary =
+    addressesAreDifferent || petitionerIsSetupForEService;
+
+  if (shouldGenerateNotrForSecondary) {
+    if (
+      contactPrimary.paperPetitionEmail !== contactSecondary.paperPetitionEmail
+    ) {
+      accessCode = generateAccessCode();
+    }
+
     secondaryContactNotrPdfData = await applicationContext
       .getDocumentGenerators()
       .noticeOfReceiptOfPetition({
         applicationContext,
         data: {
-          address: contactSecondary,
+          accessCode,
           caseCaptionExtension,
           caseTitle,
+          contact: contactSecondary,
           docketNumberWithSuffix,
+          nameOfClerk: name,
           preferredTrialCity,
           receivedAtFormatted: applicationContext
             .getUtilities()
@@ -183,20 +230,19 @@ const generateNoticeOfReceipt = async ({
           servedDate: applicationContext
             .getUtilities()
             .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
+          titleOfClerk: title,
         },
       });
   }
 
   let clinicLetter;
-  const isPrimaryContactProSe =
-    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      contactPrimary.contactId,
-    );
+  const isPrimaryContactProSe = !Case.isPetitionerRepresented(
+    caseEntity,
+    contactPrimary.contactId,
+  );
   const isSecondaryContactProSe =
     !!contactSecondary &&
-    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      contactSecondary.contactId,
-    );
+    !Case.isPetitionerRepresented(caseEntity, contactSecondary.contactId);
 
   if (
     shouldIncludeClinicLetter(
@@ -225,7 +271,6 @@ const generateNoticeOfReceipt = async ({
         .getDocument({
           applicationContext,
           key: clinicLetterKey,
-          protocol: 'S3',
           useTempBucket: false,
         });
     }
@@ -291,10 +336,11 @@ const generateNoticeOfReceipt = async ({
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.eventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
-      userId: userIdServingPetition,
     },
     { applicationContext, petitioners: caseEntity.petitioners },
   );
+
+  notrDocketEntry.setFiledBy(userServingPetition);
 
   const servedParties = aggregatePartiesForService(caseEntity);
   notrDocketEntry.setAsServed(servedParties.all);
@@ -417,17 +463,13 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
 };
 
 /**
- * serveCaseToIrsInteractor
- *
+ * serveCaseToIrs
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-export const serveCaseToIrsInteractor = async (
-  applicationContext,
-  { docketNumber },
-) => {
+export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
@@ -573,7 +615,7 @@ export const serveCaseToIrsInteractor = async (
   const urlToReturn = await generateNoticeOfReceipt({
     applicationContext,
     caseEntity,
-    userIdServingPetition: user.userId,
+    userServingPetition: user,
   });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
@@ -583,3 +625,10 @@ export const serveCaseToIrsInteractor = async (
 
   return urlToReturn;
 };
+
+export const serveCaseToIrsInteractor = withLocking(
+  serveCaseToIrs,
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

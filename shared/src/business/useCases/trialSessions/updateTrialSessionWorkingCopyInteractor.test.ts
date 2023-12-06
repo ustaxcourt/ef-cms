@@ -1,5 +1,6 @@
 import { ROLES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
+import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { omit } from 'lodash';
 import { updateTrialSessionWorkingCopyInteractor } from './updateTrialSessionWorkingCopyInteractor';
@@ -38,7 +39,7 @@ describe('Update trial session working copy', () => {
     await expect(
       updateTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionWorkingCopyToUpdate:
-          MOCK_WORKING_COPY as TTrialSessionWorkingCopyData,
+          MOCK_WORKING_COPY as RawTrialSessionWorkingCopy,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -58,7 +59,7 @@ describe('Update trial session working copy', () => {
     await expect(
       updateTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionWorkingCopyToUpdate:
-          MOCK_WORKING_COPY as TTrialSessionWorkingCopyData,
+          MOCK_WORKING_COPY as RawTrialSessionWorkingCopy,
       }),
     ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
   });
@@ -77,7 +78,7 @@ describe('Update trial session working copy', () => {
       applicationContext,
       {
         trialSessionWorkingCopyToUpdate:
-          MOCK_WORKING_COPY as TTrialSessionWorkingCopyData,
+          MOCK_WORKING_COPY as RawTrialSessionWorkingCopy,
       },
     );
     expect(result).toMatchObject(MOCK_WORKING_COPY);

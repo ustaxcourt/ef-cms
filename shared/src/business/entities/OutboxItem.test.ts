@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES, DOCKET_SECTION } from './EntityConstants';
-import { OutboxItem } from './OutboxItem';
+import { OutboxItem, RawOutboxItem } from './OutboxItem';
 import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('OutboxItem', () => {
@@ -13,13 +13,14 @@ describe('OutboxItem', () => {
     createdAt: '2018-11-21T20:49:28.192Z',
     docketEntry: {} as any,
     docketNumber: '101-18',
+    entityName: 'OutboxItem',
     highPriority: false,
     inProgress: false,
     leadDocketNumber: '101-20',
     section: DOCKET_SECTION,
     trialDate: '2018-11-21T20:49:28.192Z',
     workItemId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-  } as TOutboxItem;
+  } as RawOutboxItem;
 
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {

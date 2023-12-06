@@ -1,16 +1,16 @@
 import {
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
 import { addCoverToPdf } from './addCoverToPdf';
 import { addCoversheetInteractor } from './addCoversheetInteractor';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { testPdfDoc } from '../test/getFakeFile';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
@@ -33,7 +33,7 @@ describe('addCoversheetInteractor', () => {
         eventCode: 'A',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: false,
-        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.pending,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
       },
     ],
   };
@@ -56,6 +56,7 @@ describe('addCoversheetInteractor', () => {
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: true,
         lodged: true,
+        objections: OBJECTIONS_OPTIONS_MAP.NO,
       },
     ],
     docketNumber: '102-19',
@@ -283,6 +284,120 @@ describe('addCoversheetInteractor', () => {
     expect(firstCase).toMatchObject({
       docketNumber: MOCK_CASE.docketNumber,
       numberOfPages: 5,
+    });
+  });
+
+  it('should not update the processing status of a non-subject case, simultaneous doc type docket entry entity on a consolidated case', async () => {
+    const mockProcessingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING;
+    const mockConsolidatedCaseNonSubjectCase = '102-20';
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      consolidatedCases: [
+        {
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          documentNumber: 2,
+        },
+      ],
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...testingCaseData,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            createdAt: '2019-04-19T14:45:15.595Z',
+            documentType: 'Simultaneous Answering Brief',
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+            processingStatus: mockProcessingStatus,
+          },
+        ],
+        docketNumber: mockConsolidatedCaseNonSubjectCase,
+      });
+
+    await addCoversheetInteractor(applicationContext, {
+      caseEntity: new Case(
+        {
+          ...testingCaseData,
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        },
+        { applicationContext },
+      ),
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
+    } as any);
+
+    const calls = applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntry.mock.calls.map(call => ({
+        docketNumber: call[0].docketNumber,
+        processingStatus: call[0].document.processingStatus,
+      }));
+
+    const firstCase = calls.find(
+      call => call.docketNumber === mockConsolidatedCaseNonSubjectCase,
+    );
+
+    expect(firstCase).toMatchObject({
+      docketNumber: mockConsolidatedCaseNonSubjectCase,
+      processingStatus: mockProcessingStatus,
+    });
+  });
+
+  it('should not update the processing status of a non-subject case, simultaneous document title docket entry entity on a consolidated case', async () => {
+    const mockProcessingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING;
+    const mockConsolidatedCaseNonSubjectCase = '102-20';
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      consolidatedCases: [
+        {
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          documentNumber: 2,
+        },
+      ],
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...testingCaseData,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            createdAt: '2019-04-19T14:45:15.595Z',
+            documentTitle: 'Super Duper Simultaneous but not really',
+            documentType: 'Answer',
+            processingStatus: mockProcessingStatus,
+          },
+        ],
+        docketNumber: mockConsolidatedCaseNonSubjectCase,
+      });
+
+    await addCoversheetInteractor(applicationContext, {
+      caseEntity: new Case(
+        {
+          ...testingCaseData,
+          documentTitle: 'Super Duper Simultaneous but not really',
+        },
+        { applicationContext },
+      ),
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
+    } as any);
+
+    const calls = applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntry.mock.calls.map(call => ({
+        docketNumber: call[0].docketNumber,
+        processingStatus: call[0].document.processingStatus,
+      }));
+
+    const firstCase = calls.find(
+      call => call.docketNumber === mockConsolidatedCaseNonSubjectCase,
+    );
+
+    expect(firstCase).toMatchObject({
+      docketNumber: mockConsolidatedCaseNonSubjectCase,
+      processingStatus: mockProcessingStatus,
     });
   });
 });

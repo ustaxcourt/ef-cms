@@ -3,7 +3,7 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getMessageThreadInteractor } from './getMessageThreadInteractor';
 

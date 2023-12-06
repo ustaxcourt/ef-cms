@@ -8,13 +8,14 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
 } from '../entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const getIsUserAuthorized = ({
   oldCase,
@@ -60,10 +61,10 @@ const updateCaseEntityAndGenerateChange = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const privatePractitionersRepresentingContact =
-    caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      petitionerOnCase.contactId,
-    );
+  const privatePractitionersRepresentingContact = Case.isPetitionerRepresented(
+    caseEntity,
+    petitionerOnCase.contactId,
+  );
 
   if (!privatePractitionersRepresentingContact) {
     petitionerOnCase.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
@@ -93,7 +94,7 @@ const updateCaseEntityAndGenerateChange = async ({
 };
 
 /**
- * updatePetitionerInformationInteractor
+ * updatePetitionerInformation
  *
  * this interactor is invoked when an internal user updates the petitioner information from the parties tab.
  *
@@ -103,7 +104,7 @@ const updateCaseEntityAndGenerateChange = async ({
  * @param {string} providers.updatedPetitionerData the updatedPetitionerData to update
  * @returns {object} the updated case data
  */
-export const updatePetitionerInformationInteractor = async (
+export const updatePetitionerInformation = async (
   applicationContext,
   { docketNumber, updatedPetitionerData },
 ) => {
@@ -182,8 +183,10 @@ export const updatePetitionerInformationInteractor = async (
     contactId: oldCaseContact.contactId,
     contactType: oldCaseContact.contactType,
     email: oldCaseContact.email,
+    hasConsentedToEService: oldCaseContact.hasConsentedToEService,
     hasEAccess: oldCaseContact.hasEAccess,
     isAddressSealed: oldCaseContact.isAddressSealed,
+    paperPetitionEmail: oldCaseContact.paperPetitionEmail,
     sealedAndUnavailable: oldCaseContact.sealedAndUnavailable,
     ...editableFields,
   });
@@ -213,9 +216,7 @@ export const updatePetitionerInformationInteractor = async (
 
   if (updateAddressOrPhone) {
     const privatePractitionersRepresentingContact =
-      caseEntity.isUserIdRepresentedByPrivatePractitioner(
-        oldCaseContact.contactId,
-      );
+      Case.isPetitionerRepresented(caseEntity, oldCaseContact.contactId);
 
     const newData = editableFields;
     const oldData = oldCaseContact;
@@ -301,3 +302,10 @@ export const updatePetitionerInformationInteractor = async (
     updatedCase,
   };
 };
+
+export const updatePetitionerInformationInteractor = withLocking(
+  updatePetitionerInformation,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

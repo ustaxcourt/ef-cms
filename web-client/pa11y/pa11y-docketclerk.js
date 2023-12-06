@@ -2,8 +2,8 @@ module.exports = [
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/',
   {
     actions: [
-      'wait for td.message-select-control>label to be visible',
-      'click element td.message-select-control>label',
+      'wait for td.message-select-control .usa-checkbox>label to be visible',
+      'click element td.message-select-control .usa-checkbox>label',
       'wait for .action-section to be visible',
     ],
     notes: 'checks a11y of section queue tab panel',
@@ -39,7 +39,7 @@ module.exports = [
     actions: [
       'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
       'click element .usa-radio__label[for=payment-status-waived]',
-      'wait for element #payment-date-waived-date to be visible',
+      'wait for element #payment-date-waived-picker to be visible',
     ],
     notes:
       'checks a11y of form when petition fee payment status waived is selected',
@@ -47,7 +47,7 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #has-other-filing-party to be visible',
+      'wait for #has-other-filing-party-label to be visible',
       'click element label#has-other-filing-party-label',
       'wait for input#other-filing-party to be visible',
     ],
@@ -68,14 +68,13 @@ module.exports = [
       'wait for element table.case-inventory to be visible',
     ],
     notes: 'checks a11y of case inventory report builder',
-    timeout: 60000,
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/case-inventory-report',
   },
   {
     actions: [
-      'wait for element #certificate-of-service to be visible',
-      'click element #certificate-of-service+label',
-      'wait for element #service-date-date to be visible',
+      'wait for element #certificate-of-service-label to be visible',
+      'click element #certificate-of-service-label',
+      'wait for element #service-date-picker to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/add-paper-filing&info=show-cos-inputs',
@@ -92,6 +91,18 @@ module.exports = [
     ],
     notes: 'checks a11y of case context edit dialog',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/102-19&info=case-context-edit',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #tab-case-information',
+      'wait for #tab-history to be visible',
+      'click element #tab-history',
+      'wait for .case-status-history to be visible',
+    ],
+    notes: 'checks a11y on the case status history table',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/102-22&info=case-status-history-table',
   },
   {
     actions: [
@@ -142,8 +153,8 @@ module.exports = [
       'wait for element #document-type to be visible',
       'set field #free-text to Anything',
       'check field #free-text',
-      'set field #date-received-date to 01/01/2022',
-      'check field #date-received-date',
+      'set field #date-received-picker to 01/01/2022',
+      'check field #date-received-picker',
       'wait for #save-entry-button to be visible',
       'click element #save-entry-button',
       'wait for .confirm-initiate-save-modal to be visible',
@@ -261,8 +272,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for table.case-detail to be visible',
-      'click element button[data-test="seal-docket-entry-button-1"]',
+      'wait for #docket-record-table to be visible',
+      'click element button[data-testid="seal-docket-entry-button-1"]',
       'wait for .modal-dialog to be visible',
     ],
     notes: 'checks the seal modal opens on a docket entry',
@@ -271,14 +282,25 @@ module.exports = [
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/maintenance',
   {
     actions: [
-      'wait for table.case-detail to be visible',
-      'wait for button[data-test="document-viewer-link-A"] to be visible',
-      'click element button[data-test="document-viewer-link-A"]',
-      'click element button[data-test="serve-paper-filed-document"]',
+      'wait for #docket-record-table to be visible',
+      'wait for button[data-testid="document-viewer-link-A"] to be visible',
+      'click element button[data-testid="document-viewer-link-A"]',
+      'click element button[data-testid="serve-paper-filed-document"]',
       'wait for .modal-dialog to be visible',
     ],
     notes:
       'checks a11y of ConfirmInitiatePaperFilingServiceModal on paper filing for a consolidated group',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/111-19',
+  },
+  {
+    actions: [
+      'wait for table#custom-case-report-table to be visible',
+      'set field #caseCreationStartDate-date-start to 04/19/1980',
+      'set field #caseCreationEndDate-date-end to 04/19/2023',
+      'click element #run-custom-case-report',
+      'wait for #custom-case-report-table-body to be visible',
+    ],
+    notes: 'checks a11y of Custom Case Inventory Report',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/custom-case',
   },
 ];

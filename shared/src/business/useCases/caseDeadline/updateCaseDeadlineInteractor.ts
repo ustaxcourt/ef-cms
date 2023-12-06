@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * updateCaseDeadlineInteractor
@@ -15,7 +15,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const updateCaseDeadlineInteractor = async (
   applicationContext: IApplicationContext,
-  { caseDeadline }: { caseDeadline: TCaseDeadline },
+  { caseDeadline }: { caseDeadline: CaseDeadline },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -25,8 +25,9 @@ export const updateCaseDeadlineInteractor = async (
 
   let caseDeadlineToUpdate = new CaseDeadline(caseDeadline, {
     applicationContext,
-  });
-  caseDeadlineToUpdate = caseDeadlineToUpdate.validate().toRawObject();
+  })
+    .validate()
+    .toRawObject();
 
   await applicationContext.getPersistenceGateway().deleteCaseDeadline({
     applicationContext,

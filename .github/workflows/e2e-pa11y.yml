@@ -2,26 +2,18 @@ name: E2E Pa11y
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   e2e_pa11y:
     runs-on: ubuntu-latest
+
     env:
       CI: true
-      SKIP_CACHE_INVALIDATION: true
-      TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-      QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
-      DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-      S3_ENDPOINT: http://localhost:9000
-      MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-      AWS_ACCESS_KEY_ID: S3RVER
-      AWS_SECRET_ACCESS_KEY: S3RVER
-      CIRCLECI: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
       - name: Configure sysctl limits
         run: |
           sudo swapoff -a
@@ -34,24 +26,30 @@ jobs:
           stack-version: 7.10.2
           security-enabled: false
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v2.0.1
+        uses: rrainn/dynamodb-action@v3.0.0
         with:
           port: 8000
           cors: '*'
-      - name: Run E2E Pa11y
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
+        with:
+          comment_on_pr: false
+      - name: Install Node Dependencies
+        run: npm ci
+      - name: Start API and Client
         run: |
-          npm ci
           mkdir -p /tmp/pa11y/
-          npm run start:all >> /tmp/pa11y/pa11y-server.txt &
+          npm run start:all:ci >> /tmp/pa11y/pa11y-server.txt &
           URL=http://localhost:1234 ./wait-until.sh
-          URL=http://localhost:4000/api/swagger ./wait-until.sh
-          URL=http://localhost:8000/shell ./wait-until.sh
-          URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
           sleep 20
-          npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-          npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-          npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-          npm run test:pa11y:4 --node-flags --max-old-space-size=1024
+      - name: Run E2E Pa11y 1
+        run: npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+      - name: Run E2E Pa11y 2
+        run: npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+      - name: Run E2E Pa11y 3
+        run: npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+      - name: Run E2E Pa11y 4
+        run: npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - name: Store Screenshots Artifacts
         uses: actions/upload-artifact@v3
         with:

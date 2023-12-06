@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { partition } from 'lodash';
 
 /**
@@ -17,7 +17,7 @@ import { partition } from 'lodash';
 export const generatePractitionerCaseListPdfInteractor = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
-): Promise<void> => {
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_PRACTITIONER_CASE_LIST)) {

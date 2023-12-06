@@ -1,7 +1,12 @@
 const CopyPlugin = require('copy-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-  externals: ['aws-sdk', '@sparticuz/chrome-aws-lambda', 'pug'],
+  externals: {
+    '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
+    'aws-crt': 'commonjs aws-crt',
+    'puppeteer-core': 'commonjs puppeteer-core',
+  },
   mode: 'production',
   module: {
     rules: [
@@ -20,7 +25,14 @@ module.exports = {
         exclude: /node_modules/,
         // eslint-disable-next-line
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
       },
     ],
   },
@@ -38,6 +50,7 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    plugins: [new TsconfigPathsPlugin()], // Allows us to use the tsconfig path alias + basePath
   },
   target: 'node',
 };

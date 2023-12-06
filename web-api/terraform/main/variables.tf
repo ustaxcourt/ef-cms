@@ -105,3 +105,30 @@ variable "should_es_alpha_exist" {
 variable "should_es_beta_exist" {
   type = bool
 }
+
+variable "blue_node_version" {
+  type = string
+}
+
+variable "green_node_version" {
+  type = string
+}
+
+variable "blue_use_layers" {
+  type    = bool
+  default = true
+}
+
+variable "green_use_layers" {
+  type    = bool
+  default = true
+}
+
+variable "default_account_pass" {
+  type = string
+}
+
+variable "enable_health_checks" {
+  // e.g. "1" or "0"
+  type = string
+}

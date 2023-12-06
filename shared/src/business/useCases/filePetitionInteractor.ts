@@ -2,21 +2,21 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const filePetitionInteractor = async (
   applicationContext: any,
   {
-    ownershipDisclosureFile,
-    ownershipDisclosureUploadProgress,
+    corporateDisclosureFile,
+    corporateDisclosureUploadProgress,
     petitionFile,
     petitionMetadata,
     petitionUploadProgress,
     stinFile,
     stinUploadProgress,
   }: {
-    ownershipDisclosureFile: any;
-    ownershipDisclosureUploadProgress: any;
+    corporateDisclosureFile: any;
+    corporateDisclosureUploadProgress: any;
     petitionFile: any;
     petitionMetadata: any;
     petitionUploadProgress: any;
@@ -37,13 +37,13 @@ export const filePetitionInteractor = async (
       onUploadProgress: petitionUploadProgress,
     });
 
-  let ownershipDisclosureFileUpload;
-  if (ownershipDisclosureFile) {
-    ownershipDisclosureFileUpload = applicationContext
+  let corporateDisclosureFileUpload;
+  if (corporateDisclosureFile) {
+    corporateDisclosureFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: ownershipDisclosureFile,
-        onUploadProgress: ownershipDisclosureUploadProgress,
+        document: corporateDisclosureFile,
+        onUploadProgress: corporateDisclosureUploadProgress,
       });
   }
 
@@ -57,9 +57,9 @@ export const filePetitionInteractor = async (
       });
   }
 
-  const [ownershipDisclosureFileId, petitionFileId, stinFileId] =
+  const [corporateDisclosureFileId, petitionFileId, stinFileId] =
     await Promise.all([
-      ownershipDisclosureFileUpload,
+      corporateDisclosureFileUpload,
       petitionFileUpload,
       stinFileUpload,
     ]);
@@ -67,7 +67,7 @@ export const filePetitionInteractor = async (
   const caseDetail = await applicationContext
     .getUseCases()
     .createCaseInteractor(applicationContext, {
-      ownershipDisclosureFileId,
+      corporateDisclosureFileId,
       petitionFileId,
       petitionMetadata,
       stinFileId,

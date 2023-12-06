@@ -19,7 +19,7 @@
     "eventCode": "SPOS",
     "documentType": "Standing Pretrial Order for Small Case",
     "documentTitle": "Standing Pretrial Order for Small Case",
-    "scenario": "Type A",
+    "scenario": "Type B",
     "isOrder": true,
     "requiresSignature": false
   },
@@ -27,7 +27,7 @@
     "eventCode": "SPTO",
     "documentType": "Standing Pretrial Order",
     "documentTitle": "Standing Pretrial Order",
-    "scenario": "Type A",
+    "scenario": "Type B",
     "isOrder": true,
     "requiresSignature": false
   },
@@ -38,6 +38,13 @@
     "scenario": "Type A",
     "isOrder": false,
     "requiresSignature": false
+  },
+  {
+    "eventCode": "TCRP",
+    "documentType": "Tax Court Report Pamphlet",
+    "documentTitle": "[Anything]",
+    "scenario": "Type A",
+    "isUnservable": true
   },
   {
     "eventCode": "OAL",
@@ -241,8 +248,8 @@
   },
   {
     "eventCode": "OODS",
-    "documentType": "Order for Ownership Disclosure Statement",
-    "documentTitle": "Order for Ownership Disclosure Statement by [Date]",
+    "documentType": "Order for Corporate Disclosure Statement",
+    "documentTitle": "Order for Corporate Disclosure Statement by [Date]",
     "scenario": "Type E",
     "isOrder": true,
     "requiresSignature": true
@@ -398,6 +405,14 @@
     "isNotice": true,
     "scenario": "Type G",
     "requiresSignature": true
+  },
+  {
+    "eventCode": "NOTT",
+    "documentType": "30-Day Notice of Trial",
+    "documentTitle": "30 Day Notice of Trial on [Date] at [Place]",
+    "isNotice": true,
+    "scenario": "Type G",
+    "requiresSignature": false
   },
   {
     "eventCode": "PTRL",

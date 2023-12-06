@@ -1,3 +1,10 @@
+@use '../uswds' as *;
+@use '../variables' as *;
+
+button:disabled {
+  cursor: default;
+}
+
 .usa-button {
   &.red-warning {
     &:not(.usa-button--unstyled) {
@@ -16,7 +23,7 @@
     }
   }
 
-  &:not(.usa-button--unstyled) {
+  &:not(.usa-button--unstyled, .scroll-to-top) {
     min-width: 132px;
   }
 
@@ -24,7 +31,7 @@
     width: auto;
   }
 
-  .svg-inline--fa {
+  .svg-inline--fa:not(.fa-chevron-up) {
     margin-right: 10px;
 
     &.fa-1x {
@@ -54,7 +61,7 @@
     }
 
     &:disabled {
-      color: color($theme-color-base);
+      color: #c9c9c9;
     }
 
     /* little screens */
@@ -185,6 +192,15 @@ table.ustc-table .ustc-button--unstyled {
     box-shadow: 10px 0 0 0 color($theme-color-primary) inset;
     color: color($theme-color-base-darkest);
     text-decoration: none;
+
+    &:disabled {
+      border-bottom: 1px solid color($theme-color-base-lighter);
+      text-decoration: none;
+    }
+  }
+
+  &:disabled {
+    text-decoration: none;
   }
 }
 
@@ -223,4 +239,71 @@ table.ustc-table .ustc-button--unstyled {
 
 #tab-tracked-items.tracked-items-padding-right {
   padding-right: 10px;
+}
+
+.scroll-to-top {
+  position: fixed;
+  z-index: 2001;
+  right: 40px;
+  bottom: 40px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  line-height: 40px;
+
+  .fa-chevron-up {
+    height: 11px;
+    vertical-align: -0.03em;
+  }
+}
+
+.bounce-out-down {
+  animation-name: bounce-out-down;
+}
+
+.bounce-in-up {
+  display: block;
+  animation-name: bounce-in-up;
+}
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+@keyframes bounce-out-down {
+  20% {
+    transform: translate3d(0, 10px, 0) scaleY(0.985);
+  }
+
+  40%,
+  45% {
+    opacity: 1;
+    transform: translate3d(0, -20px, 0) scaleY(0.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 2000px, 0) scaleY(3);
+  }
+}
+
+@keyframes bounce-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(2000px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(-30px);
+  }
+
+  80% {
+    transform: translateY(10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }

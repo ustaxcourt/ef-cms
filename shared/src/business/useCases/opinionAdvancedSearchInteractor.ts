@@ -6,17 +6,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { omit } from 'lodash';
 
-/**
- * opinionAdvancedSearchInteractor
- *
- * @param {object} applicationContext api applicationContext
- * @param {object} providers providers object
- * @param {object} providers.keyword keyword used for searching opinions
- * @returns {object} the opinions data
- */
 export const opinionAdvancedSearchInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -35,7 +27,7 @@ export const opinionAdvancedSearchInteractor = async (
     endDate: string;
     judge: string;
     keyword: string;
-    opinionTypes: string;
+    opinionTypes: string[];
     startDate: string;
   },
 ) => {
@@ -67,7 +59,7 @@ export const opinionAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('private opinion search', {
+  applicationContext.logger.info('private opinion search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
     totalCount,

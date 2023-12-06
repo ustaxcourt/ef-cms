@@ -2,17 +2,21 @@ name: Node.js CI - Lint
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   Lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: NPM Install
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
+        with:
+          comment_on_pr: false
+      - name: Install Node Dependencies
         run: npm ci
       - name: Lint
         run: npm run lint

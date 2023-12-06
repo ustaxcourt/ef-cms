@@ -4,11 +4,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * deleteCounselFromCaseInteractor
+ * deleteCounselFromCase
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -16,7 +17,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
  * @param {string} providers.userId the id of the user to be removed from the case
  * @returns {Promise} the promise of the update case call
  */
-export const deleteCounselFromCaseInteractor = async (
+export const deleteCounselFromCase = async (
   applicationContext: IApplicationContext,
   { docketNumber, userId }: { docketNumber: string; userId: string },
 ) => {
@@ -71,15 +72,20 @@ export const deleteCounselFromCaseInteractor = async (
 };
 
 export const setupServiceIndicatorForUnrepresentedPetitioners = (
-  caseEntity: TCaseEntity,
+  caseEntity: Case,
 ) => {
   caseEntity.petitioners.forEach(petitioner => {
-    if (
-      !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
-    ) {
-      petitioner.serviceIndicator = null;
+    if (!Case.isPetitionerRepresented(caseEntity, petitioner.contactId)) {
+      petitioner.serviceIndicator = undefined;
     }
   });
 
   return caseEntity;
 };
+
+export const deleteCounselFromCaseInteractor = withLocking(
+  deleteCounselFromCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

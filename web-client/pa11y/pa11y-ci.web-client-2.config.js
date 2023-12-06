@@ -13,5 +13,5 @@ const urls = [
 
 module.exports = {
   defaults,
-  urls: setTimeouts()(getOnly(urls)),
+  urls: getOnly(urls).map(setTimeouts),
 };

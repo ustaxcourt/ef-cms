@@ -10,7 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserCase } from '../entities/UserCase';
 import { WorkItem } from '../entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
@@ -38,8 +38,11 @@ const addPetitionDocketEntryToCase = ({
       section: PETITIONS_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,
+      trialDate: caseToAdd.trialDate,
+      trialLocation: caseToAdd.trialLocation,
     },
     { applicationContext },
+    caseToAdd,
   );
 
   docketEntryEntity.setWorkItem(workItemEntity);
@@ -52,7 +55,7 @@ const addPetitionDocketEntryToCase = ({
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.ownershipDisclosureFileId the id of the ownership disclosure file
+ * @param {string} providers.corporateDisclosureFileId the id of the corporate disclosure file
  * @param {string} providers.petitionFileId the id of the petition file
  * @param {object} providers.petitionMetadata the petition metadata
  * @param {string} providers.stinFileId the id of the stin file
@@ -61,12 +64,12 @@ const addPetitionDocketEntryToCase = ({
 export const createCaseInteractor = async (
   applicationContext: IApplicationContext,
   {
-    ownershipDisclosureFileId,
+    corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     stinFileId,
   }: {
-    ownershipDisclosureFileId: string;
+    corporateDisclosureFileId: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
@@ -129,6 +132,7 @@ export const createCaseInteractor = async (
     },
     {
       applicationContext,
+      isNewCase: true,
     },
   );
 
@@ -163,10 +167,11 @@ export const createCaseInteractor = async (
       isFileAttached: true,
       isOnDocketRecord: true,
       privatePractitioners,
-      userId: user.userId,
     },
     { applicationContext, petitioners: caseToAdd.petitioners },
   );
+
+  petitionDocketEntryEntity.setFiledBy(user);
 
   const newWorkItem = addPetitionDocketEntryToCase({
     applicationContext,
@@ -175,23 +180,26 @@ export const createCaseInteractor = async (
     user,
   });
 
-  caseToAdd.addDocketEntry(
-    new DocketEntry(
-      {
-        documentTitle: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
-        documentType:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        filingDate: caseToAdd.createdAt,
-        isFileAttached: false,
-        isMinuteEntry: true,
-        isOnDocketRecord: true,
-        processingStatus: 'complete',
-        userId: user.userId,
-      },
-      { applicationContext, petitioners: caseToAdd.petitioners },
-    ),
+  const requestPlaceOfTrialDocketEntry = new DocketEntry(
+    {
+      documentTitle: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
+      documentType: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+      eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+      filingDate: caseToAdd.createdAt,
+      isFileAttached: false,
+      isMinuteEntry: true,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+    },
+    {
+      applicationContext,
+      petitioners: caseToAdd.petitioners,
+    },
   );
+
+  requestPlaceOfTrialDocketEntry.setFiledBy(user);
+
+  caseToAdd.addDocketEntry(requestPlaceOfTrialDocketEntry);
 
   const stinDocketEntryEntity = new DocketEntry(
     {
@@ -206,33 +214,35 @@ export const createCaseInteractor = async (
       index: 0,
       isFileAttached: true,
       privatePractitioners,
-      userId: user.userId,
     },
     { applicationContext, petitioners: caseToAdd.petitioners },
   );
 
+  stinDocketEntryEntity.setFiledBy(user);
+
   caseToAdd.addDocketEntry(stinDocketEntryEntity);
 
-  if (ownershipDisclosureFileId) {
-    const odsDocketEntryEntity = new DocketEntry(
+  if (corporateDisclosureFileId) {
+    const cdsDocketEntryEntity = new DocketEntry(
       {
         contactPrimary: caseToAdd.getContactPrimary(),
         contactSecondary: caseToAdd.getContactSecondary(),
-        docketEntryId: ownershipDisclosureFileId,
-        documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-        documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        docketEntryId: corporateDisclosureFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
         filers,
         filingDate: caseToAdd.createdAt,
         isFileAttached: true,
         isOnDocketRecord: true,
         privatePractitioners,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
-    caseToAdd.addDocketEntry(odsDocketEntryEntity);
+    cdsDocketEntryEntity.setFiledBy(user);
+
+    caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({

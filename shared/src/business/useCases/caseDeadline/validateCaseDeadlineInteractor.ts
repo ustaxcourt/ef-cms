@@ -1,19 +1,12 @@
-import { CaseDeadline } from '../../entities/CaseDeadline';
+import { CaseDeadline, RawCaseDeadline } from '../../entities/CaseDeadline';
 
-/**
- * validateCaseDeadlineInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseDeadline the case deadline data
- * @returns {object} errors if there are any, otherwise null
- */
 export const validateCaseDeadlineInteractor = (
   applicationContext,
-  { caseDeadline }: { caseDeadline: TCaseDeadline },
-) => {
+  { caseDeadline }: { caseDeadline: RawCaseDeadline },
+): Record<string, string> | null => {
   const errors = new CaseDeadline(caseDeadline, {
     applicationContext,
   }).getFormattedValidationErrors();
-  return errors || null;
+
+  return errors;
 };

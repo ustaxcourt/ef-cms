@@ -9,7 +9,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   let mockTrialSession;
 
   const interactorProps = {
-    areUpdatedTrialSessionTypesEnabled: false,
     filters: {
       aBasisReached: true,
       continued: true,
@@ -38,10 +37,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'https://example.com' });
-
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(false);
   });
 
   beforeEach(() => {

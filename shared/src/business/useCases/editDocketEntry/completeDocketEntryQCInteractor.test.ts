@@ -5,24 +5,37 @@ import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_ACTIVE_LOCK } from '../../../test/mockLock';
 import { MOCK_CASE } from '../../../test/mockCase';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
   docketClerkUser,
 } from '../../../test/mockUsers';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
 
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+    applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockImplementation(() => ({
+        name: 'bob',
+        title: 'clerk of court',
+      }));
+  });
 
   beforeEach(() => {
+    mockLock = undefined;
     const workItem = {
       docketEntry: {
         docketEntryId: mockDocketEntryId,
@@ -106,7 +119,10 @@ describe('completeDocketEntryQCInteractor', () => {
 
     await expect(
       completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: {},
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          leadDocketNumber: caseRecord.docketNumber,
+        },
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -177,6 +193,26 @@ describe('completeDocketEntryQCInteractor', () => {
     ).toEqual({
       after: 'Answer 123 abc',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
+    });
+  });
+
+  it('should generate a notice of docket change with the name and title of the clerk of the court', async () => {
+    await completeDocketEntryQCInteractor(applicationContext, {
+      entryMetadata: {
+        ...caseRecord.docketEntries[0],
+        addToCoversheet: true,
+        additionalInfo: '123',
+        additionalInfo2: 'abc',
+        certificateOfService: false,
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data,
+    ).toMatchObject({
+      nameOfClerk: 'bob',
+      titleOfClerk: 'clerk of court',
     });
   });
 
@@ -487,6 +523,11 @@ describe('completeDocketEntryQCInteractor', () => {
         hasOtherFilingParty: true,
         isPaper: true,
         otherFilingParty: 'Bert Brooks',
+        scenario: 'Nonstandard H',
+        secondaryDocument: {
+          documentType: 'Notice of Change of Address',
+          eventCode: 'A',
+        },
       },
     });
 
@@ -500,6 +541,10 @@ describe('completeDocketEntryQCInteractor', () => {
       freeText: 'Some text about this document',
       hasOtherFilingParty: true,
       otherFilingParty: 'Bert Brooks',
+      secondaryDocument: {
+        documentType: 'Notice of Change of Address',
+        eventCode: 'A',
+      },
     });
   });
 
@@ -588,5 +633,22 @@ describe('completeDocketEntryQCInteractor', () => {
         .workItem;
 
     expect(assignedWorkItem.section).toEqual(CASE_SERVICES_SUPERVISOR_SECTION);
+  });
+
+  it('throws the expected error if the lock is already acquired by another process', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      caseServicesSupervisorUser,
+    );
+
+    mockLock = MOCK_ACTIVE_LOCK;
+
+    await expect(() =>
+      completeDocketEntryQCInteractor(applicationContext, {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          selectedSection: undefined,
+        },
+      }),
+    ).rejects.toThrow('The document is currently being updated');
   });
 });

@@ -8,6 +8,28 @@ import { docketClerkUser } from '../../../test/mockUsers';
 import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
+  beforeEach(() => {
+    const workItem = {
+      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+      assigneeName: 'bob',
+      caseStatus: 'New',
+      caseTitle: 'Johnny Joe Jacobson',
+      docketEntry: {},
+      docketNumber: '101-18',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      section: DOCKET_SECTION,
+      sentBy: 'bob',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForUser.mockReturnValue([workItem]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(docketClerkUser);
+  });
+
   it('should throw an error when the user does not have access retrieve work items', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -48,37 +70,10 @@ describe('getDocumentQCInboxForUserInteractor', () => {
   });
 
   it('should filter the workItems for the provided user', async () => {
-    const workItem = {
-      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-      assigneeName: 'bob',
-      caseStatus: 'New',
-      caseTitle: 'Johnny Joe Jacobson',
-      docketEntry: {},
-      docketNumber: '101-18',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      section: DOCKET_SECTION,
-      sentBy: 'bob',
-    };
-
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocumentQCInboxForUser.mockReturnValue([workItem]);
-
-    applicationContext
-      .getUtilities()
-      .filterWorkItemsForUser.mockImplementation(({ workItems }) => workItems);
 
     await getDocumentQCInboxForUserInteractor(applicationContext, {
       userId: docketClerkUser.userId,
     });
-
-    expect(
-      applicationContext.getUtilities().filterWorkItemsForUser,
-    ).toHaveBeenCalled();
   });
 });

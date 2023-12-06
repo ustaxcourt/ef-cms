@@ -15,7 +15,7 @@ Help()
    echo "It defaults to running integration tests with a headless browser."
    echo "Adding one or more of the options listed below allows running different tests and/or running them differently."
    echo
-   echo "Syntax: ./scripts/run-cypress.sh [-c|h|l|o|p|r|s]"
+   echo "Syntax: ./scripts/run-cypress.sh [-c|h|l|o|p|r|s|t <FILE>]"
    echo "options:"
    echo "c     Run smoketests against the currently deployed color rather than the deploying color. -s or -r should also be used."
    echo "h     Print this Help."
@@ -24,6 +24,7 @@ Help()
    echo "p     Run tests of the public client."
    echo "r     Run readonly smoketests instead of integration tests. Should not be used with -s."
    echo "s     Run smoketests instead of integration tests. Should not be used with -r option."
+   echo "t     Run a specific test file. (e.g: ./scripts/run-cypress.sh -t path/to/test-file.spec.ts)"
    echo
 }
 
@@ -37,9 +38,10 @@ INTEGRATION=true
 PORT=1234
 NON_PUBLIC=app-
 BROWSER=edge
+RUN_SPECIFIC_TEST=""
 
 # Get the options
-while getopts ":chloprs" option; do
+while getopts ":chloprst:" option; do
    case $option in
       c) # run against currently deployed color
          CURRENT=true
@@ -68,7 +70,10 @@ while getopts ":chloprs" option; do
          unset INTEGRATION
          SMOKETESTS=-smoketests
          ;;
-     \?) # Invalid option
+      t) # run a speecific test
+         RUN_SPECIFIC_TEST=$OPTARG
+         ;;
+      \?) # Invalid option
          echo "An unsupported option was used. Run with the -h option to see supported options."
          ;;
    esac
@@ -80,7 +85,7 @@ else
   echo "Executing ${0}. For information about available options, run this script again with the -h option for help."
 fi
 
-CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.js"
+CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.ts"
 echo "${CONFIG_FILE}"
 
 if [ -n "${INTEGRATION}" ]; then
@@ -88,12 +93,11 @@ if [ -n "${INTEGRATION}" ]; then
   export CYPRESS_TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
   export CYPRESS_QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1
   export CYPRESS_DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
-  export CYPRESS_S3_ENDPOINT=http://localhost:9000
+  export CYPRESS_S3_ENDPOINT=http://0.0.0.0:9000
   export CYPRESS_MASTER_DYNAMODB_ENDPOINT=http://localhost:8000
   export CYPRESS_SLS_DEPLOYMENT_BUCKET=noop
   export CYPRESS_AWS_ACCESS_KEY_ID=S3RVER
   export CYPRESS_AWS_SECRET_ACCESS_KEY=S3RVER
-  export CYPRESS_SKIP_CACHE_INVALIDATION=true
   export CYPRESS_CHECK_DEPLOY_DATE_INTERVAL=5000
 elif [ -n "${CYPRESS_SMOKETESTS_LOCAL}" ]; then
   export CYPRESS_BASE_URL="http://localhost:${PORT}"
@@ -118,10 +122,18 @@ else
   export CYPRESS_EFCMS_DOMAIN=$EFCMS_DOMAIN
   export CYPRESS_USTC_ADMIN_PASS=$USTC_ADMIN_PASS
   export CYPRESS_BASE_URL="https://${NON_PUBLIC}${CYPRESS_DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+  DYNAMODB_TABLE_NAME=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
+  export DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
+  CYPRESS_MIGRATE=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
+  export CYPRESS_MIGRATE=$CYPRESS_MIGRATE
 fi
 
 if [ -n "${OPEN}" ]; then
-  cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
+  ./node_modules/.bin/cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
 else
-  cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
+  if [ -n "${RUN_SPECIFIC_TEST}" ]; then
+    ./node_modules/.bin/cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV" --spec "${RUN_SPECIFIC_TEST}"
+  else 
+    ./node_modules/.bin/cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
+  fi    
 fi

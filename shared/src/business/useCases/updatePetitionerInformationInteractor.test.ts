@@ -9,20 +9,22 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { Case, getOtherFilers } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
+import { MOCK_LOCK } from '../../test/mockLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../entities/User';
 import { UserCase } from '../entities/UserCase';
+import { addCoverToPdf } from './addCoverToPdf';
 import { addExistingUserToCase } from '../useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { calculateISODate } from '../utilities/DateHandler';
 import { docketClerkUser } from '../../test/mockUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
 jest.mock('./addCoverToPdf');
-import { DocketEntry } from '../entities/DocketEntry';
-import { addCoverToPdf } from './addCoverToPdf';
-import { calculateISODate } from '../utilities/DateHandler';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockUser;
@@ -42,6 +44,7 @@ describe('updatePetitionerInformationInteractor', () => {
       name: 'Test Secondary Petitioner',
     },
   ];
+  let mockLock;
 
   beforeAll(() => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({});
@@ -57,9 +60,13 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .createUserForContact.mockImplementation(() => new UserCase(mockCase));
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
+    mockLock = undefined;
     mockUser = docketClerkUser;
 
     mockCase = {
@@ -338,6 +345,26 @@ describe('updatePetitionerInformationInteractor', () => {
     ).not.toBe('test2@example.com');
   });
 
+  it("should not update the user's paper petition email and e-service consent information", async () => {
+    mockPetitioners[0].paperPetitionEmail = 'paperPetitionEmail@example.com';
+    mockPetitioners[0].hasConsentedToEService = true;
+
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.petitioners[0],
+    ).toMatchObject({
+      hasConsentedToEService: true,
+      paperPetitionEmail: 'paperPetitionEmail@example.com',
+    });
+  });
+
   it('should update petitioner additionalName when it is passed in', async () => {
     const mockAdditionalName = 'Tina Belcher';
 
@@ -607,6 +634,7 @@ describe('updatePetitionerInformationInteractor', () => {
               documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
               eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
               filedBy: 'Test Petitioner',
+              filedByRole: ROLES.petitioner,
               filingDate: '2018-03-01T05:00:00.000Z',
               index: 1,
               isFileAttached: true,
@@ -692,6 +720,49 @@ describe('updatePetitionerInformationInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().addExistingUserToCase,
       ).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          updatedEmail: 'changed-email@example.com',
+        },
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        updatedEmail: 'changed-email@example.com',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
   });
 });

@@ -1,8 +1,5 @@
-import { OrderWithoutBody } from '../../entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateOrderWithoutBodyInteractor } from './validateOrderWithoutBodyInteractor';
-
-const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
 describe('validateOrderWithoutBodyInteractor', () => {
   it('returns the expected errors object on an empty order object', () => {
@@ -11,9 +8,9 @@ describe('validateOrderWithoutBodyInteractor', () => {
     });
 
     expect(errors).toEqual({
-      documentTitle: errorMessages.documentTitle[0].message,
-      documentType: errorMessages.documentType,
-      eventCode: errorMessages.eventCode,
+      documentTitle: 'Enter the title of this order',
+      documentType: 'Select an order type',
+      eventCode: 'Select an order type',
     });
   });
 

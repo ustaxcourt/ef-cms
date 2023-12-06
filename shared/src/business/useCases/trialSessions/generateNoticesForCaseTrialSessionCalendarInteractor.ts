@@ -5,7 +5,7 @@ import {
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
-  TRawTrialSession,
+  RawTrialSession,
   TrialSession,
 } from '../../entities/trialSessions/TrialSession';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
@@ -15,7 +15,6 @@ import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLett
 /**
  * serves a notice of trial session and standing pretrial document on electronic
  * recipients and generates paper notices for those that get paper service
- *
  * @param {object} deconstructed.applicationContext the applicationContext
  * @param {object} deconstructed.appendClinicLetter true if the clinic letter has been appended to the notice
  * @param {object} deconstructed.caseEntity the case entity
@@ -64,7 +63,7 @@ const serveNoticesForCase = async ({
       const userId = party.userId || party.contactId;
       if (
         !caseEntity.isPractitioner(userId) &&
-        !caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId) &&
+        !Case.isPetitionerRepresented(caseEntity, party.contactId) &&
         appendClinicLetter
       ) {
         noticeDocumentPdf = await PDFDocument.load(
@@ -111,14 +110,13 @@ const serveNoticesForCase = async ({
 
 /**
  * generates a notice of trial session and adds to the case
- *
  * @param {object} deconstructed.applicationContext the applicationContext
  * @param {object} deconstructed.caseRecord true if the clinic letter has been appended to the notice
  * @param {string} deconstructed.docketNumber the case entity
  * @param {string} deconstructed.jobId the pdf we are generating
  * @param {object} deconstructed.trialSession the pdf data for the notice
  * @param {object} deconstructed.trialSessionEntity pdf-lib object
- * @param {string} deconstructed.userId the parties this document will be served to
+ * @param {object} deconstructed.user the person that initiated generation of notices
  */
 const setNoticeForCase = async ({
   applicationContext,
@@ -127,7 +125,7 @@ const setNoticeForCase = async ({
   jobId,
   trialSession,
   trialSessionEntity,
-  userId,
+  user,
 }) => {
   const caseEntity = new Case(caseRecord, { applicationContext });
   const { procedureType } = caseRecord;
@@ -159,7 +157,6 @@ const setNoticeForCase = async ({
       .getDocument({
         applicationContext,
         key: clinicLetterKey,
-        protocol: 'S3',
         useTempBucket: false,
       });
     noticeOfTrialIssuedWithClinicLetter = await applicationContext
@@ -201,10 +198,11 @@ const setNoticeForCase = async ({
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
-      userId,
     },
     { applicationContext },
   );
+
+  noticeOfTrialDocketEntry.setFiledBy(user);
 
   noticeOfTrialDocketEntry.numberOfPages = await applicationContext
     .getUseCaseHelpers()
@@ -266,14 +264,13 @@ const setNoticeForCase = async ({
       eventCode: standingPretrialDocumentEventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      signedAt: applicationContext.getUtilities().createISODateString(),
-      signedByUserId: trialSessionEntity.judge.userId,
-      signedJudgeName: trialSessionEntity.judge.name,
-      userId,
     },
     { applicationContext },
   );
+
+  standingPretrialDocketEntry.setFiledBy(user);
 
   standingPretrialDocketEntry.numberOfPages = await applicationContext
     .getUseCaseHelpers()
@@ -312,7 +309,7 @@ const setNoticeForCase = async ({
     caseToUpdate: caseEntity,
   });
 
-  const hasPages = newPdfDoc.getPages().length > 0;
+  const hasPages = newPdfDoc.getPageCount() > 0;
 
   if (hasPages) {
     const pdfData = await newPdfDoc.save();
@@ -336,7 +333,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
   }: {
     docketNumber: string;
     jobId: string;
-    trialSession: TRawTrialSession;
+    trialSession: RawTrialSession;
     userId: string;
   },
 ) => {
@@ -353,6 +350,11 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     );
     return;
   }
+
+  const user = await applicationContext.getPersistenceGateway().getUserById({
+    applicationContext,
+    userId,
+  });
 
   await applicationContext
     .getPersistenceGateway()
@@ -381,7 +383,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     jobId,
     trialSession,
     trialSessionEntity,
-    userId,
+    user,
   });
 
   await applicationContext.getPersistenceGateway().decrementJobCounter({
@@ -397,4 +399,12 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
       jobId,
       status: 'processed',
     });
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_updated',
+    },
+    userId,
+  });
 };

@@ -4,7 +4,9 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase.js';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   deleteCounselFromCaseInteractor,
@@ -61,7 +63,15 @@ describe('deleteCounselFromCaseInteractor', () => {
     },
   ];
 
+  let mockLock;
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
   beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: 'fb39f224-7985-438d-8327-2df162c20c8e',
@@ -97,6 +107,43 @@ describe('deleteCounselFromCaseInteractor', () => {
         userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      deleteCounselFromCaseInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await deleteCounselFromCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 
   it('deletes a practitioner with the given userId from the associated case', async () => {
@@ -324,7 +371,7 @@ describe('deleteCounselFromCaseInteractor', () => {
         new Case(mockCase, { applicationContext }),
       );
 
-      expect(result.petitioners[0].serviceIndicator).toEqual(null);
+      expect(result.petitioners[0].serviceIndicator).toBeUndefined();
     });
 
     it("should set the petitioner's serviceIndicator to null when the peitioner is not represented", () => {

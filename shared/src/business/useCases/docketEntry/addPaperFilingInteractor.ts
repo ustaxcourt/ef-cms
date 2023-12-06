@@ -1,18 +1,18 @@
+import { Case, isLeadCase } from '../../entities/cases/Case';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   ROLES,
 } from '../../entities/EntityConstants';
-import { Case, isLeadCase } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *
@@ -25,7 +25,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
  * @returns {object} the updated case after the documents are added
  */
-export const addPaperFilingInteractor = async (
+export const addPaperFiling = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -36,7 +36,7 @@ export const addPaperFilingInteractor = async (
   }: {
     clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
-    documentMetadata: any;
+    documentMetadata: DocumentMetadata;
     isSavingForLater: boolean;
     docketEntryId: string;
   },
@@ -58,13 +58,7 @@ export const addPaperFilingInteractor = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
-  const isCaseConsolidationFeatureOn = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-    });
-
-  if (!isCaseConsolidationFeatureOn || isSavingForLater) {
+  if (isSavingForLater) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   } else {
     consolidatedGroupDocketNumbers = [
@@ -83,7 +77,7 @@ export const addPaperFilingInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let caseEntities = [];
+  let caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
@@ -107,12 +101,13 @@ export const addPaperFilingInteractor = async (
         isOnDocketRecord: true,
         mailingDate: documentMetadata.mailingDate,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
     );
 
-    const servedParties = aggregatePartiesForService(caseEntity);
+    docketEntryEntity.setFiledBy(user);
+
+    const servedParties: any = aggregatePartiesForService(caseEntity);
 
     if (isLeadCase(caseEntity)) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
@@ -137,13 +132,15 @@ export const addPaperFilingInteractor = async (
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         inProgress: isSavingForLater,
         isRead: user.role !== ROLES.privatePractitioner,
-        leadDocketNumber: caseEntity.leadDocketNumber,
         section: user.section,
         sentBy: user.name,
         sentBySection: user.section,
         sentByUserId: user.userId,
+        trialDate: caseEntity.trialDate,
+        trialLocation: caseEntity.trialLocation,
       },
       { applicationContext },
+      caseEntity,
     );
 
     if (isReadyForService) {
@@ -169,6 +166,7 @@ export const addPaperFilingInteractor = async (
         .countPagesInDocument({
           applicationContext,
           docketEntryId,
+          documentBytes: undefined,
         });
     }
 
@@ -198,6 +196,7 @@ export const addPaperFilingInteractor = async (
         applicationContext,
         caseEntities,
         docketEntryId,
+        stampedPdf: undefined,
       });
 
     paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
@@ -227,7 +226,6 @@ export const addPaperFilingInteractor = async (
 
 /**
  * Helper function to save any work items required when filing this docket entry
- *
  * @param {object} providers  The providers Object
  * @param {object} providers.applicationContext The application Context
  * @param {boolean} providers.isSavingForLater Whether or not we are saving these work items for later
@@ -254,3 +252,56 @@ const saveWorkItem = async ({
     workItem: workItemRaw,
   });
 };
+
+type DocumentMetadata = {
+  docketNumber: string;
+  isFileAttached: boolean;
+  documentTitle: string;
+  documentType: string;
+  eventCode: string;
+  filedBy: string;
+  isPaper: boolean;
+  receivedAt?: string;
+  mailingDate?: string;
+  category?: string;
+};
+
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    consolidatedGroupDocketNumbers = [],
+    documentMetadata,
+  }: {
+    consolidatedGroupDocketNumbers?: string[];
+    documentMetadata: DocumentMetadata;
+  },
+) => ({
+  identifiers: [
+    ...new Set([
+      ...consolidatedGroupDocketNumbers,
+      documentMetadata?.docketNumber,
+    ]),
+  ].map(item => `case|${item}`),
+  ttl: 900,
+});
+
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'add_paper_filing',
+    },
+    userId: user.userId,
+  });
+};
+
+export const addPaperFilingInteractor = withLocking(
+  addPaperFiling,
+  determineEntitiesToLock,
+  handleLockError,
+);

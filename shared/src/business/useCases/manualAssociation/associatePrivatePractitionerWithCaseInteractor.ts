@@ -2,12 +2,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} params the params object
  * @param {string} params.docketNumber the docket number of the case
@@ -16,7 +16,7 @@ import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAsso
  * @param {string} params.userId the user id
  * @returns {*} the result
  */
-export const associatePrivatePractitionerWithCaseInteractor = async (
+export const associatePrivatePractitionerWithCase = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
@@ -50,3 +50,10 @@ export const associatePrivatePractitionerWithCaseInteractor = async (
     user,
   });
 };
+
+export const associatePrivatePractitionerWithCaseInteractor = withLocking(
+  associatePrivatePractitionerWithCase,
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

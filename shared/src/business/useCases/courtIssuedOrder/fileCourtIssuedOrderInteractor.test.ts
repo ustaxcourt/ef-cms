@@ -7,6 +7,8 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
@@ -24,6 +26,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         userId: mockUserId,
       },
       {
@@ -32,6 +35,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         userId: mockUserId,
       },
       {
@@ -40,6 +44,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         userId: mockUserId,
       },
     ],
@@ -66,8 +71,16 @@ describe('fileCourtIssuedOrderInteractor', () => {
     status: CASE_STATUS_TYPES.new,
     userId: 'ddd6c900-388b-4151-8014-b3378076bfb0',
   };
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
 
   beforeEach(() => {
+    mockLock = undefined;
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -439,5 +452,58 @@ describe('fileCourtIssuedOrderInteractor', () => {
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('error parsing pdf');
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      fileCourtIssuedOrderInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentContents: 'I am some document contents',
+          documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await fileCourtIssuedOrderInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentContents: 'I am some document contents',
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${caseRecord.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${caseRecord.docketNumber}`],
+    });
   });
 });

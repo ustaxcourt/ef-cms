@@ -4,7 +4,11 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
-import { UnauthorizedError } from '../../../errors/errors';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';
@@ -13,12 +17,20 @@ describe('createCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
-    docketNumber: '123-19',
+    docketNumber: MOCK_CASE.docketNumber,
   };
   let user;
   let mockCase;
+  let mockLock;
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
 
   beforeEach(() => {
+    mockLock = undefined;
+
     user = new User({
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
@@ -103,5 +115,51 @@ describe('createCaseDeadlineInteractor', () => {
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockCase = MOCK_CASE;
+    mockCase.associatedJudge = 'Judge Buch';
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      createCaseDeadlineInteractor(applicationContext, {
+        caseDeadline: mockCaseDeadline as any,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the cases', async () => {
+    mockCase = MOCK_CASE;
+    mockCase.associatedJudge = 'Judge Buch';
+    await createCaseDeadlineInteractor(applicationContext, {
+      caseDeadline: mockCaseDeadline as any,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledTimes(1);
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 });

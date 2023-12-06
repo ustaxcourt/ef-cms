@@ -1,3 +1,6 @@
+@use '../uswds' as *;
+@use '../variables' as *;
+
 table,
 .usa-table {
   * {
@@ -23,7 +26,6 @@ table,
     padding-top: 18px;
     padding-bottom: 15px;
     background-color: transparent;
-    vertical-align: top;
   }
 
   p {
@@ -37,6 +39,12 @@ table,
       background-color: transparent;
       vertical-align: top;
     }
+  }
+}
+
+.usa-table.ustc-table table {
+  td {
+    padding: 0;
   }
 }
 
@@ -667,4 +675,15 @@ table.case-list tbody tr:nth-child(even) td {
   tr td .usa-button.ustc-button--unstyled {
     padding-top: 0;
   }
+}
+
+.case-status-history {
+  .date-changed {
+    width: 220px;
+  }
+}
+
+.table-caption-serif {
+  font-family: $font-serif !important;
+  font-size: 20px !important;
 }

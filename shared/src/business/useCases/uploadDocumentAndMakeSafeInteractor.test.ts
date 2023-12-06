@@ -1,4 +1,4 @@
-import { MOCK_DOCUMENTS } from '../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { uploadDocumentAndMakeSafeInteractor } from './uploadDocumentAndMakeSafeInteractor';
 

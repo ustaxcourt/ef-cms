@@ -4,21 +4,38 @@
     "noImplicitAny": false,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true,
     "esModuleInterop": true,
+    "inlineSourceMap": true,
+    "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["jest", "node"],
-    "target": "es6"
+    "target": "es6",
+    "jsx": "react",
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "@web-client/*": ["web-client/src/*"],
+      "@web-api/*": ["web-api/src/*"],
+      "@shared/*": ["shared/src/*"]
+    }
   },
   "ts-node": {
-    "files": true
+    "files": true,
+    "require": ["tsconfig-paths/register"]
   },
   "include": [
-    "./types/**/*.d.ts",
-    "./web-api/src/**/*",
+    "./shared/admin-tools/**/*",
     "./shared/src/**/*",
+    "./types/**/*.d.ts",
+    "./web-api/elasticsearch/index-types.ts",
+    "./web-api/src/**/*",
+    "./web-api/storage/fixtures/seed/cav-submitted-cases.ts",
+    "./web-api/workflow-terraform/migration/main/lambdas/**/*",
+    "./web-client/integration-tests/**/*",
+    "./web-client/integration-tests/fixtures/consolidated-cases.ts",
+    "./web-client/integration-tests-public/**/*",
     "./web-client/src/**/*",
-    "./web-client/integration-tests/fixtures/consolidated-cases.ts"
+    "./scripts/**/*"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "./scripts/run-once-scripts/**/*", "./cognito-triggers-sls/node_modules/**/*"]
 }

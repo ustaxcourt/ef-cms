@@ -1,3 +1,6 @@
+@use '../uswds' as *;
+@use '../variables' as *;
+
 .grid-container {
   max-width: 1440px;
 }
@@ -35,13 +38,15 @@ option:first-child {
   &.ustc-form-hint-with-svg {
     position: relative;
     padding-right: 2rem;
-    padding-left: 2rem;
+    padding-left: 2.45rem;
     color: color($theme-color-base-darkest);
     font-size: 17px;
 
     svg {
       position: absolute;
       left: 0;
+      color: black;
+      font-size: 30px;
     }
   }
 }
@@ -52,6 +57,10 @@ option:first-child {
 
 .usa-alert {
   margin-bottom: 2rem;
+
+  p {
+    font-weight: normal;
+  }
 
   &.usa-alert-paragraph {
     width: unset;
@@ -89,6 +98,22 @@ option:first-child {
   }
 }
 
+.ustc-unstyled-consolidated-case-list {
+  list-style-type: none;
+
+  &.without-margins {
+    margin-bottom: 0;
+
+    li {
+      margin-bottom: 0;
+    }
+  }
+
+  li:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
 .usa-memorable-date {
   label {
     margin: 0 0 5px;
@@ -102,6 +127,11 @@ option:first-child {
   .usa-form-group--year {
     margin-bottom: 0;
   }
+}
+
+.usa-form-group--year {
+  width: 4.5rem;
+  margin-right: 1rem;
 }
 
 .usa-input--error {
@@ -158,7 +188,7 @@ option:first-child {
 .usa-alert--success,
 .usa-alert--info,
 .usa-alert--warning {
-  max-width: 45em;
+  max-width: 48em;
   min-height: 50px;
 
   .usa-alert__heading {
@@ -172,6 +202,7 @@ option:first-child {
 
   .usa-alert__body {
     display: block;
+    padding-right: unset;
   }
 
   .usa-alert__action {
@@ -222,6 +253,10 @@ option:first-child {
   width: calc(100% + 1.9rem);
 }
 
+.usa-checkbox__input {
+  position: fixed;
+}
+
 .no-bottom-margin {
   margin-bottom: 0;
 }
@@ -242,7 +277,7 @@ option:first-child {
   }
 
   #file-a-petition {
-    margin-bottom: 70px;
+    margin-bottom: 20px;
   }
 
   .mobile-text-wrap {
@@ -276,6 +311,10 @@ option:first-child {
 
 .margin-right-50 {
   margin-right: 50px;
+}
+
+.margin-top-2pt4rem {
+  margin-top: 2.4rem;
 }
 
 p {
@@ -345,4 +384,22 @@ input[type='file']::-webkit-file-upload-button {
   .margin-right-mobile {
     margin-right: 20px;
   }
+}
+
+.background-none {
+  background: none;
+}
+
+.border-none {
+  border: none;
+}
+
+td.message-select-control {
+  .usa-checkbox {
+    padding-bottom: 5px;
+  }
+}
+
+.display-block {
+  display: block;
 }

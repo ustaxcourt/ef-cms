@@ -4,7 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * updateCorrespondenceDocumentInteractor
@@ -38,13 +38,10 @@ export const updateCorrespondenceDocumentInteractor = async (
     correspondenceId: documentMetadata.correspondenceId,
   });
 
-  const updatedCorrespondenceEntity = new Correspondence(
-    {
-      ...currentCorrespondenceDocument,
-      documentTitle: documentMetadata.documentTitle,
-    },
-    { applicationContext },
-  );
+  const updatedCorrespondenceEntity = new Correspondence({
+    ...currentCorrespondenceDocument,
+    documentTitle: documentMetadata.documentTitle,
+  });
 
   caseEntity.updateCorrespondence(updatedCorrespondenceEntity);
 

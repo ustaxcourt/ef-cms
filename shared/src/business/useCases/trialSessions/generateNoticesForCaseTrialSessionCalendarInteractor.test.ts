@@ -8,12 +8,10 @@ import {
   SERVICE_INDICATOR_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import {
-  applicationContext,
-  fakeData,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { combineTwoPdfs } from '../../utilities/documentGenerators/combineTwoPdfs';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { fakeData, testPdfDoc } from '../../test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
 import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
 
@@ -46,6 +44,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       clinicLetterKey,
     });
 
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(fakeData);
@@ -388,5 +389,24 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext.getPersistenceGateway().setTrialSessionJobStatusForCase
         .mock.calls[1][0].status,
     ).toEqual('processed');
+  });
+
+  it('should set the presiding judge on the generated SPTO and persist it to the case', async () => {
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    const generatedTrialNotice = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'SPTO',
+      );
+    expect(generatedTrialNotice).toMatchObject({
+      judge: 'Judge Yggdrasil',
+      signedAt: undefined,
+      signedByUserId: undefined,
+      signedJudgeName: undefined,
+    });
   });
 });

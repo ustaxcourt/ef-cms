@@ -5,6 +5,15 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   tags = {
     environment = var.environment
   }
+
+  server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
@@ -20,6 +29,9 @@ data "archive_file" "zip_api" {
   excludes = [
     "api-public.js",
     "websockets.js",
+    "trial-session.js",
+    "send-emails.js",
+    "websockets.js",
     "maintenance-notify.js",
     "cron.js",
     "streams.js",
@@ -28,6 +40,51 @@ data "archive_file" "zip_api" {
     "public-api-authorizer.js",
     "handle-bounced-service-email.js",
     "seal-in-lower-environment.js",
+    "pdf-generation.js",
+    "report.html"
+  ]
+}
+
+data "archive_file" "zip_send_emails" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/send_emails.js.zip"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = [
+    "api-public.js",
+    "api.js",
+    "trial-session.js",
+    "websockets.js",
+    "maintenance-notify.js",
+    "cron.js",
+    "streams.js",
+    "cognito-triggers.js",
+    "cognito-authorizer.js",
+    "public-api-authorizer.js",
+    "handle-bounced-service-email.js",
+    "seal-in-lower-environment.js",
+    "pdf-generation.js",
+    "report.html"
+  ]
+}
+
+data "archive_file" "zip_trial_session" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/trial_session.js.zip"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = [
+    "api-public.js",
+    "api.js",
+    "websockets.js",
+    "send-emails.js",
+    "maintenance-notify.js",
+    "cron.js",
+    "streams.js",
+    "cognito-triggers.js",
+    "cognito-authorizer.js",
+    "public-api-authorizer.js",
+    "handle-bounced-service-email.js",
+    "seal-in-lower-environment.js",
+    "pdf-generation.js",
     "report.html"
   ]
 }
@@ -49,8 +106,42 @@ data "archive_file" "zip_triggers" {
     "cognito-authorizer.js",
     "public-api-authorizer.js",
     "handle-bounced-service-email.js",
+    "pdf-generation.js",
     "report.html"
   ]
+}
+
+
+data "archive_file" "pdf_generation" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/pdf-generation.js.zip"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = [
+    "api.js",
+    "api-public.js",
+    "websockets.js",
+    "maintenance-notify.js",
+    "trial-session.js",
+    "send-emails.js",
+    "seal-in-lower-environment.js",
+    "cron.js",
+    "streams.js",
+    "cognito-authorizer.js",
+    "public-api-authorizer.js",
+    "handle-bounced-service-email.js",
+    "report.html"
+  ]
+}
+
+resource "null_resource" "pdf_generation_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.pdf_generation.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/pdf_generation_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
 }
 
 resource "null_resource" "api_east_object" {
@@ -74,6 +165,29 @@ resource "null_resource" "triggers_east_object" {
     always_run = timestamp()
   }
 }
+
+resource "null_resource" "send_emails_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_send_emails.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/send_emails_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
+resource "null_resource" "trial_session_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_trial_session.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/trial_session_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 
 data "archive_file" "zip_websockets" {
   type        = "zip"
@@ -244,6 +358,18 @@ resource "aws_acm_certificate_validation" "wildcard_dns_validation_east" {
 }
 
 
+data "aws_s3_bucket_object" "pdf_generation_blue_east_object" {
+  depends_on = [null_resource.pdf_generation_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "pdf_generation_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "pdf_generation_green_east_object" {
+  depends_on = [null_resource.pdf_generation_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "pdf_generation_green.js.zip"
+}
+
 data "aws_s3_bucket_object" "api_public_blue_east_object" {
   depends_on = [null_resource.api_public_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
@@ -346,6 +472,31 @@ data "aws_s3_bucket_object" "triggers_green_east_object" {
   key        = "triggers_green.js.zip"
 }
 
+data "aws_s3_bucket_object" "send_emails_green_east_object" {
+  depends_on = [null_resource.send_emails_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "send_emails_green.js.zip"
+}
+
+data "aws_s3_bucket_object" "send_emails_blue_east_object" {
+  depends_on = [null_resource.send_emails_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "send_emails_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "trial_session_blue_east_object" {
+  depends_on = [null_resource.trial_session_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "trial_session_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "trial_session_green_east_object" {
+  depends_on = [null_resource.trial_session_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "trial_session_green.js.zip"
+}
+
+
 data "aws_s3_bucket_object" "triggers_blue_east_object" {
   depends_on = [null_resource.triggers_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
@@ -446,10 +597,14 @@ module "api-east-green" {
   api_object                = null_resource.api_east_object
   api_public_object         = null_resource.api_public_east_object
   websockets_object         = null_resource.websockets_east_object
+  send_emails_object        = null_resource.send_emails_east_object
+  trial_session_object      = null_resource.trial_session_east_object
   maintenance_notify_object = null_resource.maintenance_notify_east_object
+  pdf_generation_object     = null_resource.pdf_generation_east_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
+  node_version              = var.green_node_version
   create_maintenance_notify = 1
   source                    = "../api/"
   environment               = var.environment
@@ -471,23 +626,32 @@ module "api-east-green" {
   validate = 1
   providers = {
     aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
   deploying_color                = var.deploying_color
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_east.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_green_east_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_green_east_object.etag
+  pdf_generation_object_hash     = data.aws_s3_bucket_object.pdf_generation_green_east_object.etag
+  send_emails_object_hash        = data.aws_s3_bucket_object.send_emails_green_east_object.etag
+  trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_green_east_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_east_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_east_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_east_object.etag
   cron_object_hash               = data.aws_s3_bucket_object.cron_green_east_object.etag
   streams_object_hash            = data.aws_s3_bucket_object.streams_green_east_object.etag
-  create_cron                    = 1
+  use_layers                     = var.green_use_layers
+  create_check_case_cron         = 1
+  create_health_check_cron       = 1
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.green_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
+
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = null_resource.seal_in_lower_east_object
@@ -505,6 +669,9 @@ module "api-east-green" {
 module "api-east-blue" {
   api_object                = null_resource.api_east_object
   api_public_object         = null_resource.api_public_east_object
+  send_emails_object        = null_resource.send_emails_east_object
+  trial_session_object      = null_resource.trial_session_east_object
+  pdf_generation_object     = null_resource.pdf_generation_east_object
   websockets_object         = null_resource.websockets_east_object
   maintenance_notify_object = null_resource.maintenance_notify_east_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
@@ -512,6 +679,7 @@ module "api-east-blue" {
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
   pool_arn                  = aws_cognito_user_pool.pool.arn
+  node_version              = var.blue_node_version
   source                    = "../api/"
   environment               = var.environment
   dns_domain                = var.dns_domain
@@ -531,23 +699,32 @@ module "api-east-blue" {
   validate = 1
   providers = {
     aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
   deploying_color                = var.deploying_color
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_east.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_blue_east_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_blue_east_object.etag
+  send_emails_object_hash        = data.aws_s3_bucket_object.send_emails_blue_east_object.etag
+  trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_blue_east_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_blue_east_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_east_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_blue_east_object.etag
+  pdf_generation_object_hash     = data.aws_s3_bucket_object.pdf_generation_blue_east_object.etag
   cron_object_hash               = data.aws_s3_bucket_object.cron_blue_east_object.etag
   streams_object_hash            = data.aws_s3_bucket_object.streams_blue_east_object.etag
-  create_cron                    = 1
+  use_layers                     = var.blue_use_layers
+  create_check_case_cron         = 1
+  create_health_check_cron       = 1
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
+
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = null_resource.seal_in_lower_east_object

@@ -1,10 +1,11 @@
 import { Case, isClosed } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 
@@ -32,6 +33,10 @@ const batchDownloadTrialSessionInteractorHelper = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSessionDetails) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   let allSessionCases = await applicationContext
     .getPersistenceGateway()
@@ -120,9 +125,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
 
     const doc = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
-      docketNumber: sessionCase.docketNumber,
       key: result.fileId,
-      protocol: 'S3',
       useTempBucket: true,
     });
 

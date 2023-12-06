@@ -1,4 +1,5 @@
 import {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -8,26 +9,36 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';
+import { createISODateString } from '../utilities/DateHandler';
+
+jest.mock('../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    createISODateString: jest.fn(),
+  };
+});
 
 describe('createCaseFromPaperInteractor', () => {
-  const DATE = '2018-11-21T20:49:28.192Z';
-
+  const date = '2018-11-21T20:49:28.192Z';
+  let user = new User({
+    name: 'Test Petitionsclerk',
+    role: ROLES.petitionsClerk,
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  });
+  const mockCreateIsoDateString = createISODateString as jest.Mock;
+  mockCreateIsoDateString.mockReturnValue(date);
   beforeEach(() => {
     applicationContext.docketNumberGenerator.createDocketNumber.mockResolvedValue(
       '00101-00',
     );
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'Test Petitionsclerk',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValue(user);
 
     applicationContext
       .getUseCaseHelpers()
@@ -62,19 +73,19 @@ describe('createCaseFromPaperInteractor', () => {
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
-  it('creates a case from paper', async () => {
+  it('creates a new case from paper and returns a case with a history of case statuses', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor(
       applicationContext,
       {
         archivedDocketEntries: [],
-        ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -107,11 +118,18 @@ describe('createCaseFromPaperInteractor', () => {
           stinFileSize: 1,
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       } as any,
     );
 
-    expect(caseFromPaper).toBeDefined();
+    const expectedCaseStatus = {
+      changedBy: user.name,
+      date: createISODateString(),
+      updatedCaseStatus: CASE_STATUS_TYPES.new,
+    };
+
+    expect(caseFromPaper).toMatchObject({
+      caseStatusHistory: [expectedCaseStatus],
+    });
   });
 
   it('adds a applicationForWaiverOfFilingFee docket entry to the case', async () => {
@@ -128,7 +146,7 @@ describe('createCaseFromPaperInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -177,7 +195,7 @@ describe('createCaseFromPaperInteractor', () => {
       applicationContext,
       {
         archivedDocketEntries: [],
-        ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
@@ -185,7 +203,7 @@ describe('createCaseFromPaperInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -233,7 +251,7 @@ describe('createCaseFromPaperInteractor', () => {
       applicationContext,
       {
         archivedDocketEntries: [],
-        ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
@@ -241,7 +259,7 @@ describe('createCaseFromPaperInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -289,7 +307,7 @@ describe('createCaseFromPaperInteractor', () => {
       applicationContext,
       {
         archivedDocketEntries: [],
-        ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
@@ -308,7 +326,7 @@ describe('createCaseFromPaperInteractor', () => {
           },
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'test',
           partyType: PARTY_TYPES.petitionerSpouse,
           petitionFile: new File([], 'petitionFile.pdf'),
@@ -353,7 +371,7 @@ describe('createCaseFromPaperInteractor', () => {
       applicationContext,
       {
         archivedDocketEntries: [],
-        ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
@@ -361,7 +379,7 @@ describe('createCaseFromPaperInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          irsNoticeDate: DATE,
+          irsNoticeDate: date,
           mailingDate: 'testing',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),

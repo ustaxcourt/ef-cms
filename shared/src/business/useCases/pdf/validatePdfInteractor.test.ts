@@ -1,9 +1,6 @@
-import {
-  applicationContext,
-  testInvalidPdfDoc,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { removePdf, validatePdfInteractor } from './validatePdfInteractor';
+import { testInvalidPdfDoc, testPdfDoc } from '../../test/getFakeFile';
 
 describe('validatePdfInteractor', () => {
   const getPagesMock = jest.fn();

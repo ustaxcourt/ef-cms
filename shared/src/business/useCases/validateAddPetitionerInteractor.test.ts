@@ -3,9 +3,6 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
-import { ContactFactory } from '../entities/contacts/ContactFactory';
-import { Petitioner } from '../entities/contacts/Petitioner';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validateAddPetitionerInteractor } from './validateAddPetitionerInteractor';
 
@@ -49,8 +46,8 @@ describe('validateAddPetitionerInteractor', () => {
     });
 
     expect(errors).toEqual({
-      address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
-      caseCaption: Case.VALIDATION_ERROR_MESSAGES.caseCaption,
+      address1: 'Enter mailing address',
+      caseCaption: 'Enter a case caption',
     });
   });
 
@@ -72,7 +69,7 @@ describe('validateAddPetitionerInteractor', () => {
 
     expect(errors).toEqual({
       contactType:
-        Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor,
+        'Only one (1) Intervenor is allowed per case. Please select a different Role.',
     });
   });
 });

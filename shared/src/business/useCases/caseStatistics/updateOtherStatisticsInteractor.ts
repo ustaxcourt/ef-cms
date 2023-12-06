@@ -3,10 +3,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * updateOtherStatisticsInteractor
+ * updateOtherStatistics
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -15,7 +16,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {number} providers.litigationCosts litigation costs statistic to add to the case
  * @returns {object} the updated case
  */
-export const updateOtherStatisticsInteractor = async (
+export const updateOtherStatistics = async (
   applicationContext: IApplicationContext,
   {
     damages,
@@ -47,3 +48,10 @@ export const updateOtherStatisticsInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const updateOtherStatisticsInteractor = withLocking(
+  updateOtherStatistics,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

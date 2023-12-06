@@ -1,9 +1,7 @@
 import { PDFDocument } from 'pdf-lib';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
 import { loadPDFForSigningInteractor } from './loadPDFForSigningInteractor';
+import { testPdfDoc } from '../test/getFakeFile';
 
 const removePageMock = jest.fn();
 const saveMock = jest.fn();

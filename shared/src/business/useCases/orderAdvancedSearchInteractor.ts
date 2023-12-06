@@ -9,24 +9,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../entities/User';
 import { caseSearchFilter } from '../utilities/caseFilter';
 import { omit } from 'lodash';
 
-/**
- * orderAdvancedSearchInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.caseTitleOrPetitioner case title or petitioner to search for
- * @param {string} providers.docketNumber docket number
- * @param {string} providers.endDate ending date for date range
- * @param {string} providers.judge judge name to filter by
- * @param {string} providers.keyword keyword to search for
- * @param {string} providers.startDate start date for date range
- * @returns {object} the orders data
- */
 export const orderAdvancedSearchInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -80,7 +67,7 @@ export const orderAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('private order search', {
+  applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
     totalCount,

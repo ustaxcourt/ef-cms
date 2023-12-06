@@ -5,25 +5,25 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { addCoverToPdf } from './addCoverToPdf';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * updateContactInteractor
+ * updateContact
  *
  * this interactor is invoked when a petitioner updates a case they are associated with from the parties tab.
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update the primary contact
  * @param {object} providers.contactInfo the contact info to update on the case
  * @returns {object} the updated case
  */
-export const updateContactInteractor = async (
+export const updateContact = async (
   applicationContext,
   { contactInfo, docketNumber },
 ) => {
@@ -135,19 +135,20 @@ export const updateContactInteractor = async (
         isOnDocketRecord: true,
         partyPrimary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
     );
+
+    changeOfAddressDocketEntry.setFiledBy(user);
 
     const servedParties = aggregatePartiesForService(caseEntity);
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    const isContactRepresented =
-      caseEntity.isUserIdRepresentedByPrivatePractitioner(
-        contactInfo.contactId,
-      );
+    const isContactRepresented = Case.isPetitionerRepresented(
+      caseEntity,
+      contactInfo.contactId,
+    );
 
     const partyWithPaperService = caseEntity.hasPartyWithServiceType(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -170,8 +171,11 @@ export const updateContactInteractor = async (
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,
+          trialDate: caseEntity.trialDate,
+          trialLocation: caseEntity.trialLocation,
         },
         { applicationContext },
+        caseEntity,
       );
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
@@ -228,3 +232,10 @@ export const updateContactInteractor = async (
 
   return caseEntity.toRawObject();
 };
+
+export const updateContactInteractor = withLocking(
+  updateContact,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

@@ -1,5 +1,4 @@
 import {
-  CASE_CAPTION_POSTFIX,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
@@ -7,7 +6,12 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  FORMATS,
+  dateStringsCompared,
+  formatDateString,
+} from '../../utilities/DateHandler';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -15,14 +19,11 @@ import {
 import { User } from '../../entities/User';
 import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import {
-  dateStringsCompared,
-  formatDateString,
-} from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -52,13 +53,12 @@ export const needsNewCoversheet = ({
 
 /**
  * completeDocketEntryQCInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {object} the updated case after the documents are added
  */
-export const completeDocketEntryQCInteractor = async (
+const completeDocketEntryQC = async (
   applicationContext: IApplicationContext,
   { entryMetadata }: { entryMetadata: any },
 ) => {
@@ -123,10 +123,12 @@ export const completeDocketEntryQCInteractor = async (
     objections: entryMetadata.objections,
     ordinalValue: entryMetadata.ordinalValue,
     otherFilingParty: entryMetadata.otherFilingParty,
+    otherIteration: entryMetadata.otherIteration,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
+    secondaryDocument: entryMetadata.secondaryDocument,
     serviceDate: entryMetadata.serviceDate,
   };
 
@@ -137,10 +139,11 @@ export const completeDocketEntryQCInteractor = async (
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      userId: user.userId,
       workItem: {
         ...currentDocketEntry.workItem,
         leadDocketNumber,
+        trialDate: caseEntity.trialDate,
+        trialLocation: caseEntity.trialLocation,
       },
     },
     { applicationContext, petitioners: caseToUpdate.petitioners },
@@ -169,9 +172,16 @@ export const completeDocketEntryQCInteractor = async (
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+    });
+
   const docketChangeInfo = {
     caseCaptionExtension,
-    caseCaptionWithPostfix: `${caseToUpdate.caseCaption} ${CASE_CAPTION_POSTFIX}`,
     caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
     docketNumber: `${caseToUpdate.docketNumber}${
@@ -185,6 +195,8 @@ export const completeDocketEntryQCInteractor = async (
       after: updatedDocumentTitle,
       before: currentDocumentTitle,
     },
+    nameOfClerk: name,
+    titleOfClerk: title,
   };
 
   caseEntity.updateDocketEntry(updatedDocketEntry);
@@ -298,10 +310,11 @@ export const completeDocketEntryQCInteractor = async (
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToUpdate.petitioners },
     );
+
+    noticeUpdatedDocketEntry.setFiledBy(user);
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext
       .getUseCaseHelpers()
@@ -323,8 +336,8 @@ export const completeDocketEntryQCInteractor = async (
       .promise();
 
     const serviceStampDate = formatDateString(
-      noticeUpdatedDocketEntry.servedAt,
-      'MMDDYY',
+      noticeUpdatedDocketEntry.servedAt!,
+      FORMATS.MMDDYY,
     );
 
     const newPdfData = await addServedStampToDocument({
@@ -374,3 +387,11 @@ export const completeDocketEntryQCInteractor = async (
     paperServicePdfUrl,
   };
 };
+
+export const completeDocketEntryQCInteractor = withLocking(
+  completeDocketEntryQC,
+  (_applicationContext: IApplicationContext, { entryMetadata }) => ({
+    identifiers: [`docket-entry|${entryMetadata.docketEntryId}`],
+  }),
+  new InvalidRequest('The document is currently being updated'),
+);

@@ -1,20 +1,17 @@
-import {
-  Practitioner,
-  entityName as practitionerEntityName,
-} from '../../entities/Practitioner';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { Practitioner } from '../../entities/Practitioner';
+import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
-import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
-import { isEqual } from 'lodash';
-import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
+import { isArray, isEqual } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * updateUserContactInformationHelper
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
@@ -30,15 +27,15 @@ const updateUserContactInformationHelper = async (
     userId,
   }: { contactInfo: any; firmName: string; userId: string },
 ) => {
-  const user: any = await applicationContext
+  const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
   const isPractitioner = u => {
     return (
-      u.entityName === privatePractitionerEntityName ||
-      u.entityName === irsPractitionerEntityName ||
-      u.entityName === practitionerEntityName
+      u.entityName === PrivatePractitioner.ENTITY_NAME ||
+      u.entityName === IrsPractitioner.ENTITY_NAME ||
+      u.entityName === Practitioner.ENTITY_NAME
     );
   };
 
@@ -62,6 +59,7 @@ const updateUserContactInformationHelper = async (
       applicationContext,
       message: {
         action: 'user_contact_full_update_complete',
+        user,
       },
       userId: user.userId,
     });
@@ -70,9 +68,9 @@ const updateUserContactInformationHelper = async (
 
   let userEntity;
   if (
-    user.entityName === privatePractitionerEntityName ||
-    user.entityName === irsPractitionerEntityName ||
-    user.entityName === practitionerEntityName
+    user.entityName === PrivatePractitioner.ENTITY_NAME ||
+    user.entityName === IrsPractitioner.ENTITY_NAME ||
+    user.entityName === Practitioner.ENTITY_NAME
   ) {
     userEntity = new Practitioner({
       ...user,
@@ -98,39 +96,40 @@ const updateUserContactInformationHelper = async (
     userId: user.userId,
   });
 
-  // prevent the progress bar component from showing when updating ONLY the firmName
-  await generateChangeOfAddress({
+  const results = await generateChangeOfAddress({
     applicationContext,
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
+    websocketMessagePrefix: 'user',
   });
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'user_contact_full_update_complete',
-    },
-    userId: user.userId,
-  });
+  if (isArray(results) && !results.length) {
+    userEntity.setIsUpdatingInformation(undefined);
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: userEntity.validate().toRawObject(),
+    });
 
-  userEntity.isUpdatingInformation = false;
-
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
-  });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_full_update_complete',
+        user: userEntity.validate().toRawObject(),
+      },
+      userId: user.userId,
+    });
+  }
 };
 
 /**
  * updateUserContactInformationInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  */
-export const updateUserContactInformationInteractor = async (
+export const updateUserContactInformation = async (
   applicationContext: IApplicationContext,
   {
     contactInfo,
@@ -159,10 +158,50 @@ export const updateUserContactInformationInteractor = async (
       applicationContext,
       message: {
         action: 'user_contact_update_error',
-        error: error.toString(),
+        error: (error as Error).toString(),
       },
       userId: authenticatedUser.userId,
     });
     throw error;
   }
 };
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_user_contact_information',
+    },
+    userId: user.userId,
+  });
+};
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { userId }: { userId: string },
+) => {
+  const cases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesForUser({
+      applicationContext,
+      userId,
+    });
+
+  return {
+    identifiers: cases?.map(item => `case|${item.docketNumber}`),
+    ttl: 900,
+  };
+};
+
+export const updateUserContactInformationInteractor = withLocking(
+  updateUserContactInformation,
+  determineEntitiesToLock,
+  handleLockError,
+);

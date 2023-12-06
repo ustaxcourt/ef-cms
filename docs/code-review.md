@@ -12,7 +12,7 @@ Here are the Deliverables and Performance Standards for the U.S. Tax Court’s E
 | Properly Styled Code | [GSA 18F Front End Guide](https://frontend.18f.gov/#js-style) | 0 linting errors and 0 warnings | Combination of manual review and automated testing |
 | Accessible | Web Content Accessibility Guidelines 2.1 AA (WCAG 2.1 AA) standards | 0 errors reported for WCAG 2.1 AA standards using an automated scanner and 0 errors reported in manual testing | [http://squizlabs.github.io/HTML\_CodeSniffer/](http://squizlabs.github.io/HTML_CodeSniffer/) or [https://github.com/pa11y/pa11y](https://github.com/pa11y/pa11y) |
 | Deployed | Code must successfully build and deploy into staging environment. | Successful build with a single command | Combination of manual review and automated testing |
-| Documentation | All dependencies are listed and the licenses are documented. Major functionality in the software/source code is documented. Individual methods are documented inline using comments that permit the use tools such as JsDoc. System diagram is provided. | Combination of manual review and automated testing, if available | Manual review |
+| Documentation | All dependencies are listed and the licenses are documented. Major functionality in the software/source code is documented. Individual methods are documented inline using Typescript. System diagram is provided. | Combination of manual review and automated testing, if available | Manual review |
 | Secure | OWASP Application Security Verification Standard 3.0 | Code submitted must be free of medium- and high-level static and dynamic security vulnerabilities | Clean tests from a static testing SaaS (such as Gemnasium) and from OWASP ZAP, along with documentation explaining any false positives |
 
 ## Approach
@@ -64,7 +64,7 @@ With good version control, it should be unnecessary to comment-out blocks of cod
 Comments in the code should describe complex bits of logic that aren’t easily glanceable — if someone new to the code can’t skim it and understand it, a comment might be in order. As we’re reviewing the code, if we find a bit we can’t understand quickly from the code and context, we’ll be looking for a comment that explains it. Comments should appear with the code they’re describing.
 
 ### Documented APIs
-If code exposes a public API — whether that’s public methods on a class or HTTP endpoints in a REST service — those public methods should be documented.  We like documentation that can be extracted into some pretty markup (e.g., .NET’s XML comments, jsdoc, OAS, Swagger). We’ll check that any public-facing methods have useful documentation.
+If code exposes a public API — whether that’s public methods on a class or HTTP endpoints in a REST service — those public methods should be documented.  We like documentation that can be extracted into some pretty markup (e.g., .NET’s XML comments, OAS, Swagger). We’ll check that any public-facing methods have useful documentation.
 
 ### Adherence to the project’s style guide
 The project should adopt a code style guide and code should conform. Which guide the team chooses is less important than the consistency that comes from actually using it. We’ll check to make sure there’s a linter configured to check code style, that it passes, and that any exceptions are documented and explained in the code.

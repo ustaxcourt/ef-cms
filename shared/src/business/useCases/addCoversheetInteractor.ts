@@ -1,9 +1,9 @@
 import { Case } from '../entities/cases/Case';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../entities/EntityConstants';
 import { addCoverToPdf } from './addCoverToPdf';
 
 /**
  * addCoversheetInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketEntryId the docket entry id
@@ -16,19 +16,19 @@ import { addCoverToPdf } from './addCoverToPdf';
 export const addCoversheetInteractor = async (
   applicationContext: IApplicationContext,
   {
-    caseEntity = null,
+    caseEntity,
     docketEntryId,
     docketNumber,
-    filingDateUpdated,
-    replaceCoversheet,
-    useInitialData,
+    filingDateUpdated = false,
+    replaceCoversheet = false,
+    useInitialData = false,
   }: {
-    caseEntity?: TCaseEntity;
+    caseEntity?: Case;
     docketEntryId: string;
     docketNumber: string;
-    filingDateUpdated: boolean;
-    replaceCoversheet: boolean;
-    useInitialData: boolean;
+    filingDateUpdated?: boolean;
+    replaceCoversheet?: boolean;
+    useInitialData?: boolean;
   },
 ) => {
   if (!caseEntity) {
@@ -53,7 +53,10 @@ export const addCoversheetInteractor = async (
       .promise();
     pdfData = Body;
   } catch (err) {
-    err.message = `${err.message} docket entry id is ${docketEntryId}`;
+    applicationContext.logger.error(
+      `Failed to get document for docket entry id ${docketEntryId} `,
+      err,
+    );
     throw err;
   }
 
@@ -106,12 +109,28 @@ export const addCoversheetInteractor = async (
       }
 
       const consolidatedCaseDocketEntryEntity =
-        consolidatedCaseEntity.getDocketEntryById({
+        consolidatedCaseEntity!.getDocketEntryById({
           docketEntryId,
         });
 
       if (consolidatedCaseDocketEntryEntity) {
-        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        const isSimultaneousDocType =
+          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+            consolidatedCaseDocketEntryEntity.eventCode,
+          ) ||
+          consolidatedCaseDocketEntryEntity.documentTitle?.includes(
+            'Simultaneous',
+          );
+
+        if (
+          !isSimultaneousDocType ||
+          (isSimultaneousDocType &&
+            caseEntity &&
+            caseDocketNumber === docketNumber)
+        ) {
+          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        }
+
         consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
 
         const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity

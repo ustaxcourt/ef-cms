@@ -4,7 +4,7 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createMessageInteractor } from './createMessageInteractor';
 
@@ -28,12 +28,16 @@ describe('createMessageInteractor', () => {
   });
 
   it('creates the message', async () => {
+    const mockAttachments = [
+      {
+        documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+      },
+      {
+        documentId: 'b1130321-0a69-43bc-b3eb-64a18f079873',
+      },
+    ];
+
     const messageData = {
-      attachments: [
-        {
-          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
-        },
-      ],
       docketNumber: '101-20',
       isRepliedTo: false,
       message: "How's it going?",
@@ -70,6 +74,7 @@ describe('createMessageInteractor', () => {
 
     await createMessageInteractor(applicationContext, {
       ...messageData,
+      attachments: mockAttachments,
     });
 
     expect(
@@ -80,6 +85,7 @@ describe('createMessageInteractor', () => {
         .message,
     ).toMatchObject({
       ...messageData,
+      attachments: mockAttachments,
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Guy Fieri',
       docketNumber: '101-20',

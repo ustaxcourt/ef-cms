@@ -1,14 +1,12 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
   canAllowPrintableDocketRecord,
   getPetitionerById,
   isAssociatedUser,
-  isPetitionerPartOfGroup,
-  isSealedCase,
+  isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { NotFoundError } from '../../errors/errors';
+import { NotFoundError } from '@web-api/errors/errors';
 import { PublicCase } from '../entities/cases/PublicCase';
 import {
   ROLE_PERMISSIONS,
@@ -26,9 +24,9 @@ const getSealedCase = ({
   isAssociatedWithCase,
 }: {
   applicationContext: IApplicationContext;
-  caseRecord: TCase;
+  caseRecord: Case;
   isAssociatedWithCase: boolean;
-}): TCase => {
+}): Case => {
   const currentUser = applicationContext.getCurrentUser();
 
   let isAuthorizedToViewSealedCase = isAuthorized(
@@ -84,11 +82,10 @@ const getCaseForExternalUser = ({
 /**
  * Decorate a case with some calculations based on the attributes of the case that may be
  * obfuscated to the client
- *
  * @param {Object} caseRecord the original caseRecord
  * @returns {Object} decorated caseRecord
  */
-export const decorateForCaseStatus = (caseRecord: TCase) => {
+export const decorateForCaseStatus = (caseRecord: RawCase) => {
   // allow document service
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);
@@ -101,7 +98,6 @@ export const decorateForCaseStatus = (caseRecord: TCase) => {
 
 /**
  * getCaseInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to get
@@ -111,13 +107,6 @@ export const getCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
-  const isConsolidatedGroupAccessEnabled = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
-    });
-
   const caseRecord = decorateForCaseStatus(
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
@@ -135,15 +124,6 @@ export const getCaseInteractor = async (
 
   const currentUser = applicationContext.getCurrentUser();
 
-  let consolidatedCases;
-  if (isConsolidatedGroupAccessEnabled && caseRecord.leadDocketNumber) {
-    consolidatedCases = await applicationContext
-      .getUseCases()
-      .getConsolidatedCasesByCaseInteractor(applicationContext, {
-        docketNumber: caseRecord.leadDocketNumber,
-      });
-  }
-
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
@@ -156,13 +136,9 @@ export const getCaseInteractor = async (
         ROLE_PERMISSIONS.GET_CASE,
         getPetitionerById(caseRecord, currentUser.userId).contactId,
       );
-    } else if (
-      isConsolidatedGroupAccessEnabled &&
-      caseRecord.leadDocketNumber
-    ) {
-      isAuthorizedToGetCase = isPetitionerPartOfGroup({
-        consolidatedCases,
-        isPartyOfCase: getPetitionerById,
+    } else if (caseRecord.leadDocketNumber) {
+      isAuthorizedToGetCase = isUserPartOfGroup({
+        consolidatedCases: caseRecord.consolidatedCases,
         userId: currentUser.userId,
       });
     }
@@ -173,19 +149,23 @@ export const getCaseInteractor = async (
     user: currentUser,
   });
 
-  if (isConsolidatedGroupAccessEnabled && caseRecord.leadDocketNumber) {
+  if (caseRecord.leadDocketNumber) {
     isAssociatedWithCase =
       isAssociatedWithCase ||
-      isPetitionerPartOfGroup({
-        consolidatedCases,
-        isPartyOfCase: getPetitionerById,
+      isUserPartOfGroup({
+        consolidatedCases: caseRecord.consolidatedCases,
         userId: currentUser.userId,
       });
   }
 
   let caseDetailRaw;
-  caseRecord.isSealed = isSealedCase(caseRecord);
-  if (isSealedCase(caseRecord)) {
+  const isSealedCase = applicationContext
+    .getUtilities()
+    .isSealedCase(caseRecord);
+
+  caseRecord.isSealed = isSealedCase;
+
+  if (isSealedCase) {
     caseDetailRaw = await getSealedCase({
       applicationContext,
       caseRecord,
@@ -210,6 +190,5 @@ export const getCaseInteractor = async (
   }
 
   caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
-
   return caseDetailRaw;
 };

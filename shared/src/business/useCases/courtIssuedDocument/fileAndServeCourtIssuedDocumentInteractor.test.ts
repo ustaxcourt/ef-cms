@@ -6,12 +6,10 @@ import {
   TRANSCRIPT_EVENT_CODE,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 let MOCK_DATE;
 
@@ -408,6 +406,33 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.isOnDocketRecord).toBe(true);
+  });
+
+  it('should set trialLocation on the created docketEntry', async () => {
+    const mockForm = {
+      attachments: true,
+      date: '2009-03-01T21:40:46.415Z',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Hurry! This is urgent',
+      generatedDocumentTitle: 'Important Filing',
+      scenario: 'Standard',
+      serviceStamp: 'Blah blah blah',
+      trialLocation: 'San Diego, CA',
+    };
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [],
+      form: mockForm,
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    const expectedDocketEntry =
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity;
+    expect(expectedDocketEntry.trialLocation).toBeDefined();
   });
 
   it('should set the filingDate to be today even if it was already set on the past', async () => {

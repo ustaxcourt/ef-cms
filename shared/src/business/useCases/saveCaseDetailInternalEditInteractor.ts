@@ -7,20 +7,20 @@ import {
 import {
   UnauthorizedError,
   UnprocessableEntityError,
-} from '../../errors/errors';
+} from '@web-api/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { isEmpty } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * saveCaseDetailInternalEditInteractor
- *
+ * saveCaseDetailInternalEdit
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.caseToUpdate the updated case data
  * @returns {object} the updated case data
  */
-export const saveCaseDetailInternalEditInteractor = async (
+export const saveCaseDetailInternalEdit = async (
   applicationContext,
   { caseToUpdate, docketNumber },
 ) => {
@@ -61,8 +61,8 @@ export const saveCaseDetailInternalEditInteractor = async (
     orderForAmendedPetition: caseToUpdate.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:
       caseToUpdate.orderForAmendedPetitionAndFilingFee,
+    orderForCds: caseToUpdate.orderForCds,
     orderForFilingFee: caseToUpdate.orderForFilingFee,
-    orderForOds: caseToUpdate.orderForOds,
     orderForRatification: caseToUpdate.orderForRatification,
     orderToShowCause: caseToUpdate.orderToShowCause,
     partyType: caseToUpdate.partyType,
@@ -146,8 +146,11 @@ export const saveCaseDetailInternalEditInteractor = async (
         assigneeId: user.userId,
         assigneeName: user.name,
         caseIsInProgress: true,
+        trialDate: caseEntity.trialDate,
+        trialLocation: caseEntity.trialLocation,
       },
       { applicationContext },
+      caseEntity,
     );
 
     await applicationContext.getPersistenceGateway().saveWorkItem({
@@ -165,3 +168,10 @@ export const saveCaseDetailInternalEditInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
+
+export const saveCaseDetailInternalEditInteractor = withLocking(
+  saveCaseDetailInternalEdit,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

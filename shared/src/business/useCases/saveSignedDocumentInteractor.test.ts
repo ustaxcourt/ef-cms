@@ -4,7 +4,7 @@ import {
   SIGNED_DOCUMENT_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
 

@@ -5,7 +5,6 @@ import {
   MULTI_DOCKET_FILING_EVENT_CODES,
   PARTY_TYPES,
 } from '../entities/EntityConstants';
-import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generateCoverSheetData } from './generateCoverSheetData';
@@ -420,24 +419,22 @@ describe('generateCoverSheetData', () => {
     expect(result.documentTitle).toBe(mockDocumentType);
   });
 
-  it('should append the formatted stamp date as "MM/DD/YYYY" to the coversheet when stampData.date is defined', async () => {
-    const mockDate = applicationContext.getUtilities().createISODateString();
-
-    const result = await generateCoverSheetData({
+  it('should not call formatConsolidatedCaseCoversheetData if the document is not in a case in a consolidated group', async () => {
+    await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
-      docketEntryEntity: testingCaseData.docketEntries[0],
-      stampData: {
-        date: mockDate,
+      docketEntryEntity: {
+        ...testingCaseData.docketEntries[0],
       },
     } as any);
 
-    expect(result.stamp.date).toEqual(
-      formatDateString(mockDate, FORMATS.MMDDYYYY),
-    );
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .formatConsolidatedCaseCoversheetData,
+    ).not.toHaveBeenCalled();
   });
 
-  it("should append consolidated group information to the coversheet when the document filed is a multi-docketable court-issued document and it's being filed on the lead case", async () => {
+  it("should append consolidated group information to the coversheet when the document filed is a multi-docketable court-issued document and it's being filed in a case in a consolidated group", async () => {
     await generateCoverSheetData({
       applicationContext,
       caseEntity: {
@@ -456,7 +453,7 @@ describe('generateCoverSheetData', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed on a lead case', async () => {
+  it('should append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed in a case in a consolidated group', async () => {
     await generateCoverSheetData({
       applicationContext,
       caseEntity: {

@@ -1,8 +1,16 @@
-import { Case } from '../../entities/cases/Case';
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { clone } from 'lodash';
-import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
+
+export type TUserContact = {
+  address1: string;
+  address2: string;
+  address3: string;
+  city: string;
+  country: string;
+  countryType: string;
+  phone: string;
+  postalCode: string;
+  state: string;
+};
 
 /**
  * Update an address on a case. This performs a search to get all of the cases associated with the user,
@@ -39,15 +47,15 @@ const generateChangeOfAddressForPractitioner = async ({
   updatedName?: string;
   user: any;
   websocketMessagePrefix?: string;
-}) => {
-  const docketNumbers = await applicationContext
+}): Promise<any[] | undefined> => {
+  const associatedUserCases = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUserId({
+    .getCasesForUser({
       applicationContext,
       userId: user.userId,
     });
 
-  if (docketNumbers.length === 0) {
+  if (associatedUserCases.length === 0) {
     return [];
   }
 
@@ -57,147 +65,77 @@ const generateChangeOfAddressForPractitioner = async ({
     message: {
       action: `${websocketMessagePrefix}_contact_update_progress`,
       completedCases,
-      totalCases: docketNumbers.length,
+      totalCases: associatedUserCases.length,
     },
     userId: requestUserId || user.userId,
   });
 
-  const updatedCases = [];
+  const featureFlags = await applicationContext
+    .getUseCases()
+    .getAllFeatureFlagsInteractor(applicationContext);
 
-  for (let caseInfo of docketNumbers) {
-    try {
-      const { docketNumber } = caseInfo;
-      const newData = contactInfo;
+  const isChangeOfAddressLambdaEnabled =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_CHANGE_OF_ADDRESS_LAMBDA.key];
 
-      const userCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
-      let caseEntity = new Case(userCase, { applicationContext });
+  const jobId = applicationContext.getUniqueId();
 
-      const practitionerName = updatedName || user.name;
-      const practitionerObject = caseEntity.privatePractitioners
-        .concat(caseEntity.irsPractitioners)
-        .find(practitioner => practitioner.userId === user.userId);
-
-      if (!practitionerObject) {
-        throw new Error(
-          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
-        );
-      }
-
-      const oldData = clone(practitionerObject.contact);
-
-      // This updates the case by reference!
-      practitionerObject.contact = contactInfo;
-      practitionerObject.firmName = firmName;
-      practitionerObject.name = practitionerName;
-
-      if (!oldData.email && updatedEmail) {
-        practitionerObject.serviceIndicator =
-          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-        practitionerObject.email = updatedEmail;
-      }
-
-      // TODO: is this even needed any more?
-      // we new up another case from the existing case convert '' to null
-      caseEntity = new Case(caseEntity, { applicationContext });
-
-      if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
-        await prepareToGenerateAndServeDocketEntry({
-          applicationContext,
-          caseEntity,
-          newData,
-          oldData,
-          practitionerName,
-          user,
-        });
-      }
-
-      const updatedCase = await applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        });
-      updatedCases.push(updatedCase);
-    } catch (error) {
-      applicationContext.logger.error(error);
-    }
-
-    completedCases++;
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: `${websocketMessagePrefix}_contact_update_progress`,
-        completedCases,
-        totalCases: docketNumbers.length,
-      },
-      userId: requestUserId || user.userId,
-    });
-  }
-
-  return updatedCases;
-};
-
-/**
- * This function prepares data to be passed to generateAndServeDocketEntry
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseEntity the instantiated Case class
- * @param {object} providers.newData the new practitioner contact information
- * @param {object} providers.oldData the old practitioner contact information (for comparison)
- * @param {object} providers.practitionerName the name of the practitioner
- * @param {object} providers.user the user object that includes userId, barNumber etc.
- * @returns {Promise<*>} resolves upon completion of docket entry service
- */
-const prepareToGenerateAndServeDocketEntry = async ({
-  applicationContext,
-  caseEntity,
-  newData,
-  oldData,
-  practitionerName,
-  user,
-}) => {
-  const documentType = applicationContext
-    .getUtilities()
-    .getDocumentTypeForAddressChange({
-      newData,
-      oldData,
-    });
-
-  if (!documentType) return;
-
-  const servedParties = aggregatePartiesForService(caseEntity);
-
-  const docketMeta = {} as any;
-  if (user.role === ROLES.privatePractitioner) {
-    docketMeta.privatePractitioners = [
-      {
-        name: practitionerName,
-      },
-    ];
-  } else if (user.role === ROLES.irsPractitioner) {
-    docketMeta.partyIrsPractitioner = true;
-  }
-
-  newData.name = practitionerName;
-  const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
+  await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
     applicationContext,
-    barNumber: user.barNumber,
-    caseEntity,
-    docketMeta,
-    documentType,
-    newData,
-    oldData,
-    servedParties,
-    user,
+    docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
+    jobId,
   });
 
-  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
+  applicationContext.logger.info(`creating change of address job of ${jobId}`);
+
+  if (isChangeOfAddressLambdaEnabled) {
+    const sqs = await applicationContext.getMessagingClient();
+
+    await Promise.all(
+      associatedUserCases.map(caseInfo => {
+        return sqs
+          .sendMessage({
+            MessageBody: JSON.stringify({
+              bypassDocketEntry,
+              contactInfo,
+              docketNumber: caseInfo.docketNumber,
+              firmName,
+              jobId,
+              requestUser: {
+                ...applicationContext.getCurrentUser(),
+                token: undefined,
+              },
+              requestUserId,
+              updatedEmail,
+              updatedName,
+              user,
+              websocketMessagePrefix,
+            }),
+            QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/change_of_address_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+          })
+          .promise();
+      }),
+    );
+  } else {
+    await Promise.all(
+      associatedUserCases.map(async caseInfo => {
+        return await applicationContext
+          .getUseCaseHelpers()
+          .generateChangeOfAddressHelper({
+            applicationContext,
+            bypassDocketEntry,
+            contactInfo,
+            docketNumber: caseInfo.docketNumber,
+            firmName,
+            jobId,
+            requestUserId,
+            updatedEmail,
+            updatedName,
+            user,
+            websocketMessagePrefix,
+          });
+      }),
+    );
+  }
 };
 
 export { generateChangeOfAddressForPractitioner as generateChangeOfAddress };

@@ -1,18 +1,4 @@
-@import './fonts/fonts';
-@import './styles/variables'; // must be imported before uswds-required
-@import './uswds-required';
-@import './styles/buttons';
-@import './styles/cards';
-@import './styles/custom';
-@import './styles/forms';
-@import './styles/icons';
-@import './styles/modals';
-@import './styles/nav';
-@import './styles/overrides';
-@import './styles/progress';
-@import './styles/tables';
-@import './styles/tabs';
-@import './styles/menus';
-@import './styles/typography';
-@import './styles/print';
-@import './styles/public';
+@use './fonts/fonts';
+@use './variables' as *; 
+@use './uswds' as *;
+@use './styles' as *;

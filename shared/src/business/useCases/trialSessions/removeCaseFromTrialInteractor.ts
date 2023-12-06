@@ -1,22 +1,14 @@
 import { Case } from '../../entities/cases/Case';
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-/**
- * removeCaseFromTrialInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to remove from trial
- * @param {string} providers.disposition the reason the case is being removed from trial
- * @param {string} providers.trialSessionId the id of the trial session containing the case to set to removedFromTrial
- * @returns {Promise} the promise of the getCalendaredCasesForTrialSession call
- */
-export const removeCaseFromTrialInteractor = async (
+export const removeCaseFromTrial = async (
   applicationContext: IApplicationContext,
   {
     associatedJudge,
@@ -33,6 +25,7 @@ export const removeCaseFromTrialInteractor = async (
   },
 ) => {
   const user = applicationContext.getCurrentUser();
+
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -43,6 +36,10 @@ export const removeCaseFromTrialInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
@@ -69,7 +66,11 @@ export const removeCaseFromTrialInteractor = async (
   const caseEntity = new Case(myCase, { applicationContext });
 
   if (!caseEntity.isHearing(trialSessionId)) {
-    caseEntity.removeFromTrial(caseStatus, associatedJudge);
+    caseEntity.removeFromTrial({
+      associatedJudge,
+      changedBy: user.name,
+      updatedCaseStatus: caseStatus,
+    });
 
     await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
       applicationContext,
@@ -103,3 +104,13 @@ export const removeCaseFromTrialInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const removeCaseFromTrialInteractor = withLocking(
+  removeCaseFromTrial,
+  (
+    _applicationContext: IApplicationContext,
+    { docketNumber }: { docketNumber: string },
+  ) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

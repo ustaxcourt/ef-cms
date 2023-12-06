@@ -2,7 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 
 /**
@@ -34,12 +34,10 @@ export const getDocumentQCInboxForUserInteractor = async (
       userId,
     });
 
-  const filteredWorkItems = applicationContext
-    .getUtilities()
-    .filterWorkItemsForUser({
-      user,
-      workItems,
-    });
+  const filteredWorkItems = workItems.filter(
+    workItem =>
+      workItem.assigneeId === user.userId && workItem.section === user.section,
+  );
 
   return WorkItem.validateRawCollection(filteredWorkItems, {
     applicationContext,

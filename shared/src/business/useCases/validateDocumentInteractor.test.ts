@@ -1,3 +1,4 @@
+import { ROLES } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validateDocumentInteractor } from './validateDocumentInteractor';
 
@@ -7,7 +8,7 @@ describe('validateDocumentInteractor', () => {
       document: {},
     });
 
-    expect(Object.keys(errors).length).toBeGreaterThan(0);
+    expect(Object.keys(errors!).length).toBeGreaterThan(0);
   });
 
   it('returns null when there are no errors', () => {
@@ -18,6 +19,7 @@ describe('validateDocumentInteractor', () => {
         documentType: 'Administrative Record',
         eventCode: 'ADMR',
         filedBy: 'Test User',
+        filedByRole: ROLES.docketClerk,
         filingDate: '2020-01-01T02:04:06.007Z',
         index: '1',
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',

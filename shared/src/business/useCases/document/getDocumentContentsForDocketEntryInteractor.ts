@@ -2,7 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * getDocumentContentsForDocketEntryInteractor
@@ -28,7 +28,6 @@ export const getDocumentContentsForDocketEntryInteractor = async (
       .getDocument({
         applicationContext,
         key: documentContentsId,
-        protocol: 'S3',
         useTempBucket: false,
       });
 

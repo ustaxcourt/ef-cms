@@ -1,47 +1,52 @@
-import { ROLES } from '../../entities/EntityConstants';
+import {
+  MOCK_TRIAL_INPERSON,
+  MOCK_TRIAL_REGULAR,
+} from '../../../test/mockTrial';
+import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getTrialSessionsInteractor } from './getTrialSessionsInteractor';
 import { omit } from 'lodash';
+import { petitionerUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-const MOCK_TRIAL_SESSION = {
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '3000-03-01T00:00:00.000Z',
-  term: 'Fall',
-  trialLocation: 'Birmingham, Alabama',
-};
+describe('getTrialSessionsInteractor', () => {
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+  });
 
-describe('Get trial sessions', () => {
-  it('throws error if user is unauthorized', async () => {
-    applicationContext.getUniqueId.mockReturnValue(
-      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
+  it('should throw an unauthorized error when the user does not have permission to view trial sessions', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     await expect(
       getTrialSessionsInteractor(applicationContext),
-    ).rejects.toThrow();
+    ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
-  it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext.getCurrentUser.mockImplementation(() => {
-      return {
-        role: ROLES.petitionsClerk,
-        userId: 'petitionsclerk',
-      };
-    });
+  it('should throw an error when the entity returned from persistence is invalid', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessions.mockImplementation(() =>
-        Promise.resolve([omit(MOCK_TRIAL_SESSION, 'maxCases')]),
-      );
-    let error;
+      .getTrialSessions.mockResolvedValue([
+        omit(MOCK_TRIAL_INPERSON, 'maxCases'),
+      ]);
 
-    try {
+    await expect(
+      getTrialSessionsInteractor(applicationContext),
+    ).rejects.toThrow('The TrialSession entity was invalid.');
+  });
+
+  it('should return a list of validated trial sessions', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessions.mockResolvedValue([
+        MOCK_TRIAL_INPERSON,
+        MOCK_TRIAL_REGULAR,
+      ]);
+
+    const trialSessionDTOs =
       await getTrialSessionsInteractor(applicationContext);
-    } catch (err) {
-      error = err;
-    }
 
-    expect(error.message).toContain('The TrialSession entity was invalid');
+    trialSessionDTOs.forEach(trialSessionDTO => {
+      expect(trialSessionDTO instanceof TrialSessionInfoDTO).toBe(true);
+    });
   });
 });

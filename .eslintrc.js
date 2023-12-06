@@ -11,10 +11,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:cypress/recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
     'plugin:jest/recommended',
-    'plugin:jsdoc/recommended',
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'plugin:react/recommended',
@@ -26,13 +23,11 @@ module.exports = {
   ignorePatterns: '**/*_.js',
   overrides: [
     {
-      files: [
-        'cypress-integration/**/*.js',
-        'cypress-smoketests/**/*.js',
-        'cypress-readonly/**/*.js',
-      ],
+      files: ['cypress/**/*.ts'],
       rules: {
+        'cypress/unsafe-to-chain-command': 'warn',
         'jest/expect-expect': 'off',
+        'jest/valid-describe-callback': 'off',
         'jest/valid-expect': 'off',
         'jest/valid-expect-in-promise': 'off',
         'no-underscore-dangle': 'off',
@@ -79,7 +74,6 @@ module.exports = {
     'cypress',
     'import',
     'jest',
-    'jsdoc',
     'jsx-a11y',
     '@miovision/disallow-date',
     '@typescript-eslint',
@@ -101,29 +95,12 @@ module.exports = {
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
     'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
-    'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
     'jest/expect-expect': 'off',
     'jest/no-conditional-expect': 'off',
     'jest/no-export': 'off',
     'jest/no-identical-title': 'off', // todo: warn
-    'jsdoc/check-alignment': 'error',
-    'jsdoc/check-param-names': 'off', // todo: warn
-    'jsdoc/check-tag-names': 'off', // todo: warn
-    'jsdoc/check-types': 'off', // todo: warn
-    'jsdoc/newline-after-description': 'warn',
-    'jsdoc/no-undefined-types': 'off', // todo: warn
-    'jsdoc/require-jsdoc': 'warn',
-    'jsdoc/require-param': 'off', // todo: warn
-    'jsdoc/require-param-description': 'warn',
-    'jsdoc/require-param-name': 'warn',
-    'jsdoc/require-param-type': 'warn',
-    'jsdoc/require-returns': 'warn',
-    'jsdoc/require-returns-check': 'warn',
-    'jsdoc/require-returns-description': 'warn',
-    'jsdoc/require-returns-type': 'warn',
-    'jsdoc/valid-types': 'warn',
     'jsx-a11y/anchor-is-valid': [
       'error',
       {
@@ -379,6 +356,7 @@ module.exports = {
           'semibold',
           'seriatim',
           'serverless',
+          'servable',
           'servoss',
           'sisqo',
           'skipnav',

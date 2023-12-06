@@ -10,7 +10,9 @@ import { ExternalDocumentInformationFactory } from '../../entities/externalDocum
 export const validateExternalDocumentInformationInteractor = ({
   documentMetadata,
 }) => {
-  const externalDocument = ExternalDocumentInformationFactory(documentMetadata);
+  const externalDocument = new ExternalDocumentInformationFactory(
+    documentMetadata,
+  );
 
   return externalDocument.getFormattedValidationErrors();
 };

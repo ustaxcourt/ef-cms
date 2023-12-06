@@ -3,10 +3,10 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import {
-  TRawTrialSession,
+  RawTrialSession,
   TrialSession,
 } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * canSetTrialSessionAsCalendaredInteractor
@@ -18,7 +18,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const canSetTrialSessionAsCalendaredInteractor = (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: TRawTrialSession },
+  { trialSession }: { trialSession: RawTrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 

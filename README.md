@@ -10,7 +10,7 @@
 
 ## Documentation
 
-**To get a better understanding of Dawson, head over to the [main documentation page](ustaxcourt.github.io/ef-cms/).**
+**To get a better understanding of Dawson, head over to the [main documentation page](https://ustaxcourt.github.io/ef-cms/#/).**
 Our documentation should help give you a better understanding of what Dawson is and how you can contribute.
 
 ### Project status
@@ -18,7 +18,7 @@ Our documentation should help give you a better understanding of what Dawson is 
 DAWSON is in active use and is continually updated to deploy enhancements and new features.
 
 - [Release notes](https://www.ustaxcourt.gov/release_notes.html) for DAWSON
-- [How we work](./docs/additional-resources/how-we-work.md) has our principles, product team, technical strategy, meetings cadence, tools, etc.
+- [Team Charter](./docs/additional-resources/DAWSON-team-charter.md) has our principles, product team, technical strategy, meetings cadence, tools, etc.
 - [Onboard](https://github.com/ustaxcourt/ef-cms/issues/new?template=onboarding.md) or [offboard](https://github.com/ustaxcourt/ef-cms/issues/new?template=offboarding.md) a teammate
 - [Ongoing development documentation](./docs/wiki/README.md) such as designs, research data, user workflows, etc.
 - [Product roadmap](https://docs.google.com/document/d/1g3D1zPNQqVsWhJ6uGIVcHA04IdBHgYcOCm9roaSfFNk/edit) 🔒

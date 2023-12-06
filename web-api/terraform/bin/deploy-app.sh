@@ -2,6 +2,7 @@
 
 ENV=$1
 
+
 DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 
@@ -17,10 +18,12 @@ if [ -z "${SECRETS_LOADED}" ]; then
 fi
 
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
+[ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
+[ -z "${ENABLE_HEALTH_CHECKS}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
 [ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
@@ -31,6 +34,7 @@ fi
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 echo "  - BOUNCE_ALERT_RECIPIENTS=${BOUNCE_ALERT_RECIPIENTS}"
+echo "  - DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
@@ -38,6 +42,7 @@ echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
+echo "  - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}"
 echo "  - ENV=${ENV}"
 echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
@@ -81,7 +86,6 @@ if [ -z "${CIRCLE_BRANCH}" ]; then
   popd
 fi
 
-
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
   GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
@@ -116,6 +120,24 @@ else
   fi
 fi
 
+
+# // 1. fetch current node version (16.x) from dynamo 
+#   // pass that to terraform (current_color <- current_node_version)
+# // 2. fetch deploying node version (18.x) from dynamo 
+#   // pass that to terraform (deploing_color <- deploying_node_version)
+
+if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
+  GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
+  BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+  GREEN_USE_LAYERS=$(../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
+  BLUE_USE_LAYERS=$(../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
+else
+  BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
+  GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+  BLUE_USE_LAYERS=$(../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
+  GREEN_USE_LAYERS=$(../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
+fi
+
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
   SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 else
@@ -147,6 +169,12 @@ export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
 export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_zone_name=$ZONE_NAME
+export TF_VAR_green_node_version=$GREEN_NODE_VERSION
+export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
+export TF_VAR_green_use_layers=$GREEN_USE_LAYERS
+export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
+export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
+export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan

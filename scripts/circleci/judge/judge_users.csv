@@ -1,0 +1,87 @@
+name,judgeTitle,judgeFullName,email,role,section,isSeniorJudge
+Aarons,Judge,Aarons,legacy.judge.aarons@example.com,legacyJudge,legacyJudgesChambers,false
+Armen,Special Trial Judge,Armen,legacy.judge.armen@example.com,legacyJudge,legacyJudgesChambers,false
+Ashford,Judge,Tamara W. Ashford,judge.ashford@example.com,judge,ashfordsChambers,false
+Beghe,Judge,Beghe,legacy.judge.beghe@example.com,legacyJudge,legacyJudgesChambers,false
+Buch,Judge,Ronald L. Buch,judge.buch@example.com,judge,buchsChambers,false
+Buckley,Special Trial Judge,Buckley,legacy.judge.buckley@example.com,legacyJudge,legacyJudgesChambers,false
+Cantrel,Judge,Cantrel,legacy.judge.cantrel@example.com,legacyJudge,legacyJudgesChambers,false
+Carluzzo,Chief Special Trial Judge,Lewis R. Carluzzo,stjudge.carluzzo@example.com,judge,carluzzosChambers,false
+Chabot,Judge,Chabot,legacy.judge.chabot@example.com,legacyJudge,legacyJudgesChambers,false
+Chiechi,Judge,Chiechi,legacy.judge.chiechi@example.com,legacyJudge,legacyJudgesChambers,false
+Choi,Special Trial Judge,Eunkyong Choi,legacy.stjudge.choi@example.com,legacyJudge,legacyJudgesChambers,false
+Clapp,Judge,Clapp,legacy.judge.clapp@example.com,legacyJudge,legacyJudgesChambers,false
+Cohen,Judge,Mary Ann Cohen,judge.cohen@example.com,judge,cohensChambers,true
+Colvin,Judge,John O. Colvin,judge.colvin@example.com,judge,colvinsChambers,true
+Copeland,Judge,Elizabeth A. Copeland,judge.copeland@example.com,judge,copelandsChambers,false
+Couvillion,Special Trial Judge,Couvillion,legacy.judge.couvillion@example.com,legacyJudge,legacyJudgesChambers,false
+Dawson,Judge,Dawson,legacy.judge.dawson@example.com,legacyJudge,legacyJudgesChambers,false
+Dean,Special Trial Judge,Dean,legacy.judge.dean@example.com,legacyJudge,legacyJudgesChambers,false
+Dinan,Special Trial Judge,Dinan,legacy.judge.dinan@example.com,legacyJudge,legacyJudgesChambers,false
+Drennen,Judge,Drennen,legacy.judge.drennen@example.com,legacyJudge,legacyJudgesChambers,false
+Fay,Judge,Fay,legacy.judge.fay@example.com,legacyJudge,legacyJudgesChambers,false
+Featherston,Judge,Featherston,legacy.judge.featherston@example.com,legacyJudge,legacyJudgesChambers,false
+Fried,Special Trial Judge,Zachary S. Fried,stjudge.fried@example.com,judge,friedsChambers,false
+Foley,Chief Judge,Maurice B. Foley,judge.foley@example.com,judge,foleysChambers,false
+Gale,Judge,Joseph H. Gale,judge.gale@example.com,judge,galesChambers,true
+Galloway,Special Trial Judge,Galloway,legacy.judge.galloway@example.com,legacyJudge,legacyJudgesChambers,false
+Gerber,Judge,Gerber,legacy.judge.gerber@example.com,legacyJudge,legacyJudgesChambers,false
+Goeke,Judge,Joseph Robert Goeke,judge.goeke@example.com,judge,goekesChambers,true
+Goffe,Judge,Goffe,legacy.judge.goffe@example.com,legacyJudge,legacyJudgesChambers,false
+Goldberg,Special Trial Judge,Goldberg,legacy.judge.goldberg@example.com,legacyJudge,legacyJudgesChambers,false
+Greaves,Judge,Travis A. Greaves,judge.greaves@example.com,judge,greavesChambers,false
+Gussis,Special Trial Judge,Gussis,legacy.judge.gussis@example.com,legacyJudge,legacyJudgesChambers,false
+Gustafson,Judge,David Gustafson,judge.gustafson@example.com,judge,gustafsonsChambers,true
+Guy,Special Trial Judge,"Daniel A. Guy, Jr.",stjudge.guy@example.com,legacyJudge,legacyJudgesChambers,false
+Haines,Judge,Haines,legacy.judge.haines@example.com,legacyJudge,legacyJudgesChambers,false
+Halpern,Judge,James S. Halpern,judge.halpern@example.com,judge,halpernsChambers,true
+Hamblen,Judge,Hamblen,legacy.judge.hamblen@example.com,legacyJudge,legacyJudgesChambers,false
+Holmes,Judge,Mark V. Holmes,judge.holmes@example.com,judge,holmesChambers,true
+Jacobs,Judge,Jacobs,legacy.judge.jacobs@example.com,legacyJudge,legacyJudgesChambers,false
+Jones,Judge,Courtney D. Jones,judge.jones@example.com,judge,jonesChambers,false
+Kerrigan,Judge,Kathleen Kerrigan,judge.kerrigan@example.com,judge,kerrigansChambers,false
+Korner,Judge,Korner,legacy.judge.korner@example.com,legacyJudge,legacyJudgesChambers,false
+Kroupa,Judge,Kroupa,legacy.judge.kroupa@example.com,legacyJudge,legacyJudgesChambers,false
+Landy,Special Trial Judge,Adam B. Landy,stjudge.landy@example.com,judge,landysChambers,false
+Laro,Judge,Laro,legacy.judge.laro@example.com,legacyJudge,legacyJudgesChambers,false
+Lauber,Judge,Albert G. Lauber,judge.lauber@example.com,judge,laubersChambers,true
+Leyden,Special Trial Judge,Diana L. Leyden,stjudge.leyden@example.com,judge,leydensChambers,false
+Marshall,Judge,Alina I. Marshall,judge.marshall@example.com,judge,marshallsChambers,false
+Marvel,Judge,L. Paige Marvel,judge.marvel@example.com,judge,marvelsChambers,true
+Morrison,Judge,Richard T. Morrison,judge.morrison@example.com,judge,morrisonsChambers,true
+Nameroff,Judge,Nameroff,legacy.judge.nameroff@example.com,legacyJudge,legacyJudgesChambers,false
+Nega,Judge,Joseph W. Nega,judge.nega@example.com,judge,negasChambers,false
+Nims,Judge,Nims,legacy.judge.nims@example.com,legacyJudge,legacyJudgesChambers,false
+Pajak,Special Trial Judge,Pajak,legacy.judge.pajak@example.com,legacyJudge,legacyJudgesChambers,false
+Panuthos,Special Trial Judge,Peter J. Panuthos,stjudge.panuthos@example.com,judge,panuthosChambers,false
+Paris,Judge,Elizabeth Crewson Paris,judge.paris@example.com,judge,parisChambers,true
+Parker,Judge,Parker,legacy.judge.parker@example.com,legacyJudge,legacyJudgesChambers,false
+Parr,Judge,Parr,legacy.judge.parr@example.com,legacyJudge,legacyJudgesChambers,false
+Pate,Judge,Pate,legacy.judge.pate@example.com,legacyJudge,legacyJudgesChambers,false
+Peterson,Special Trial Judge,Peterson,legacy.judge.peterson@example.com,legacyJudge,legacyJudgesChambers,false
+Powell,Special Trial Judge,Powell,legacy.judge.powell@example.com,legacyJudge,legacyJudgesChambers,false
+Pugh,Judge,Cary Douglas Pugh,judge.pugh@example.com,judge,pughsChambers,false
+Raum,Judge,Raum,legacy.judge.raum@example.com,legacyJudge,legacyJudgesChambers,false
+Ruwe,Judge,Robert P. Ruwe,legacy.judge.ruwe@example.com,legacyJudge,legacyJudgesChambers,false
+Scott,Judge,Scott,legacy.judge.scott@example.com,legacyJudge,legacyJudgesChambers,false
+Shields,Judge,Shields,legacy.judge.shields@example.com,legacyJudge,legacyJudgesChambers,false
+Siegel,Special Trial Judge,Jennifer E. Siegel,stjudge.siegel@example.com,judge,siegelsChambers,false
+Simpson,Judge,Simpson,legacy.judge.simpson@example.com,legacyJudge,legacyJudgesChambers,false
+Sterrett,Judge,Sterrett,legacy.judge.sterrett@example.com,legacyJudge,legacyJudgesChambers,false
+Swift,Judge,Swift,legacy.judge.swift@example.com,legacyJudge,legacyJudgesChambers,false
+Tannenwald,Judge,Tannenwald,legacy.judge.tannenwald@example.com,legacyJudge,legacyJudgesChambers,false
+Thornton,Judge,Michael B. Thornton,judge.thornton@example.com,judge,thorntonsChambers,true
+Toro,Judge,Emin Toro,judge.toro@example.com,judge,torosChambers,false
+Urda,Judge,Patrick J. Urda,judge.urda@example.com,judge,urdasChambers,false
+Vandervort,Special Trial Judge,Vandervort,legacy.judge.vandervort@example.com,legacyJudge,legacyJudgesChambers,false
+Vasquez,Judge,Juan F. Vasquez,judge.vasquez@example.com,judge,vasquezsChambers,true
+Weiler,Judge,Christian N. Weiler,judge.weiler@example.com,judge,weilersChambers,false
+Wells,Judge,Thomas B. Wells,judge.wells@example.com,judge,wellsChambers,false
+Whalen,Judge,Whalen,legacy.judge.whalen@example.com,legacyJudge,legacyJudgesChambers,false
+Wherry,Judge,Wherry,legacy.judge.wherry@example.com,legacyJudge,legacyJudgesChambers,false
+Whitaker,Judge,Whitaker,legacy.judge.whitaker@example.com,legacyJudge,legacyJudgesChambers,false
+Wilbur,Judge,Wilbur,legacy.judge.wilbur@example.com,legacyJudge,legacyJudgesChambers,false
+Wiles,Judge,Wiles,legacy.judge.wiles@example.com,legacyJudge,legacyJudgesChambers,false
+Williams,Judge,Williams,legacy.judge.williams@example.com,legacyJudge,legacyJudgesChambers,false
+Wolfe,Special Trial Judge,Wolfe,legacy.judge.wolfe@example.com,legacyJudge,legacyJudgesChambers,false
+Wright,Judge,Wright,legacy.judge.wright@example.com,legacyJudge,legacyJudgesChambers,false

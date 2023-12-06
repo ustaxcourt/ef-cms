@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-returns */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable security/detect-non-literal-regexp */
 /**
@@ -72,8 +71,8 @@ function getConnectionReferenceCount(sequenceName, fileContents) {
 function collectConnectionData(fileContents) {
   let connectionMap;
   ({ connectionMap, fileContents } = getConnectedCerebral(fileContents));
-  const reportUnused = ([connectionType, connectionMap]) => {
-    Object.keys(connectionMap).forEach(connectionReference => {
+  const reportUnused = ([connectionType, connectionMap1]) => {
+    Object.keys(connectionMap1).forEach(connectionReference => {
       const result = getConnectionReferenceCount(
         connectionReference,
         fileContents,

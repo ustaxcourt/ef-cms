@@ -1,17 +1,11 @@
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+} from '../../entities/EntityConstants';
 import { Case, isSealedCase } from '../../entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
-import { isPrivateDocument } from '../../entities/cases/PublicCase';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import { PublicCase } from '../../entities/cases/PublicCase';
 
-/**
- * getPublicDownloadPolicyUrlInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case containing the document
- * @param {string} providers.key the key of the document to get
- * @returns {Promise<string>} the document download url
- */
 export const getPublicDownloadPolicyUrlInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -19,7 +13,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     isTerminalUser,
     key,
   }: { docketNumber: string; isTerminalUser: boolean; key: string },
-) => {
+): Promise<{ url: string }> => {
   const caseToCheck: any = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -46,7 +40,21 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     );
   }
 
-  const isPrivate = isPrivateDocument(docketEntryEntity);
+  const featureFlags = await applicationContext
+    .getUseCases()
+    .getAllFeatureFlagsInteractor(applicationContext);
+
+  const documentVisibilityChangeDate =
+    featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ];
+
+  const isPrivate = PublicCase.isPrivateDocument(
+    docketEntryEntity,
+    applicationContext
+      .getUtilities()
+      .createISODateString(documentVisibilityChangeDate, 'yyyy-MM-dd'),
+  );
 
   if (!isTerminalUser && isPrivate) {
     throw new UnauthorizedError('Unauthorized to access private document');

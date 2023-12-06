@@ -1,6 +1,6 @@
 import { MOCK_PRACTITIONER } from '../../../test/mockUsers';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
 jest.mock('../users/generateChangeOfAddress');
@@ -8,7 +8,7 @@ import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
-  let mockPractitioner = MOCK_PRACTITIONER as TPractitioner;
+  let mockPractitioner = MOCK_PRACTITIONER;
 
   beforeEach(() => {
     testUser = {
@@ -16,6 +16,9 @@ describe('updatePractitionerUserInteractor', () => {
       userId: 'admissionsclerk',
     };
     mockPractitioner = { ...MOCK_PRACTITIONER };
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockReturnValue(['123-23']);
 
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext
@@ -44,6 +47,25 @@ describe('updatePractitionerUserInteractor', () => {
         user: mockPractitioner,
       }),
     ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('throws a NotFoundError if the barNumber passed in does not find a user in the database', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getPractitionerByBarNumber.mockResolvedValue(undefined);
+
+    await expect(
+      updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'AB1111',
+        bypassDocketEntry: false,
+        user: {
+          ...mockPractitioner,
+          barNumber: 'AB1111',
+          updatedEmail: 'bc@example.com',
+          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+        },
+      }),
+    ).rejects.toThrow(NotFoundError);
   });
 
   it('throws an error if the barNumber/userId combo passed in does not match the user retrieved from getPractitionerByBarNumber', async () => {
@@ -113,7 +135,30 @@ describe('updatePractitionerUserInteractor', () => {
     ).toMatchObject({ user: mockPractitioner });
   });
 
-  it('updates the practitioner user and adds a pending email when the original user did not have an email', async () => {
+  it('updates the practitioner user and does NOT override a bar number when the original user has a pending email', async () => {
+    mockPractitioner.email = undefined;
+    mockPractitioner.pendingEmail = 'pendingEmail@example.com';
+
+    await updatePractitionerUserInteractor(applicationContext, {
+      barNumber: 'AB1111',
+      user: {
+        ...mockPractitioner,
+        barNumber: 'AB2222',
+        confirmEmail: 'bc@example.com',
+        updatedEmail: 'bc@example.com',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updatePractitionerUser,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
+        .calls[0][0],
+    ).toMatchObject({ user: mockPractitioner });
+  });
+
+  it('creates and updates the practitioner user and adds a pending email when the original user did not have an email', async () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockResolvedValue({
@@ -301,7 +346,7 @@ describe('updatePractitionerUserInteractor', () => {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
           contact: {
-            ...mockPractitioner.contact,
+            ...mockPractitioner.contact!,
             address1: 'yeahhhhh',
           },
           updatedEmail: 'free-email-to-use@example.com',

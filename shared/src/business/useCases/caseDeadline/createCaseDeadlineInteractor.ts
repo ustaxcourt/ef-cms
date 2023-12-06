@@ -4,19 +4,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-/**
- * createCaseDeadlineInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseDeadline the case deadline data
- * @returns {CaseDeadline} the created case deadline
- */
-export const createCaseDeadlineInteractor = async (
+export const createCaseDeadline = async (
   applicationContext: IApplicationContext,
-  { caseDeadline }: { caseDeadline: TCaseDeadline },
+  { caseDeadline }: { caseDeadline: CaseDeadline },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -58,3 +51,10 @@ export const createCaseDeadlineInteractor = async (
 
   return newCaseDeadline;
 };
+
+export const createCaseDeadlineInteractor = withLocking(
+  createCaseDeadline,
+  (_applicationContext, { caseDeadline }) => ({
+    identifiers: [`case|${caseDeadline.docketNumber}`],
+  }),
+);

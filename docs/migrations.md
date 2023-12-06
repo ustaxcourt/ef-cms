@@ -15,7 +15,7 @@ Our team invested a lot of time designing and implementing something we call the
 We are going to do a walkthrough tutorial in this section to explain how you can write a migration script.  For the sake of this walk through, let's pretend we need to write a migration script which adds a new required field to a Case adjourned.
 
 
-First, we'd want to create a new migration script called `0005-add-case-adjourned-field.js` and put it in the `web-api/migration-terraform/main/lambdas/migrations` directory.  Note that the `0005` numeric prefix is just for us developers to understand the ordering of these scripts; our system doesn't automatically sort these scripts by that prefix.  We will name the script with a numeric prefix and also a descriptive name.
+First, we'd want to create a new migration script called `0005-add-case-adjourned-field.js` and put it in the `web-api/workflow-terraform/migration/main/lambdas/migrations` directory.  Note that the `0005` numeric prefix is just for us developers to understand the ordering of these scripts; our system doesn't automatically sort these scripts by that prefix.  We will name the script with a numeric prefix and also a descriptive name.
 
 Second, we will need to implement a `migrateItems` function which will take in an array of dynamo records and modify them based on certain criteria.  In this scenario, we only care about modifying the records that are cases.  Often when dealing with case migrations we want to fetch the entire case and aggregate the items together into a single case object so we can validate the entity.  
 
@@ -29,7 +29,7 @@ const createApplicationContext = require('../../../../src/applicationContext');
 // a utility function for combining all the separate case dynamo records into a single case object
 const {
   aggregateCaseItems,
-} = require('../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
+} = require('../../../../../web-api/src/persistence/dynamo/helpers/aggregateCaseItems');
 
 // since we will be adding a field to the case, we need to bring in the case entity to validate our data.
 const {
@@ -87,14 +87,14 @@ exports.migrateItems = migrateItems;
 
 Keep in mind this migration script processes each dynamo record individually; therefore, any item put into that `itemsAfter` array must be a dynamodb record containing a `pk`, `sk`.  The main reason we fetch the entire case is so we can validate the case after modifying it's properties.
 
-After you write your migration script, there is one more additional step you must do to get everything setup.  There is a file called `web-api/migration-terraform/main/lambdas/migrationsToRun.js` which contains an array of objects that must be in the order of which you want the migration scripts invoked.  Be sure to add your new migration script to this file so that the blue-green migration knows what to run.
+After you write your migration script, there is one more additional step you must do to get everything setup.  There is a file called `web-api/workflow-terraform/migration/main/lambdas/migrationsToRun.ts` which contains an array of objects that must be in the order of which you want the migration scripts invoked.  Be sure to add your new migration script to this file so that the blue-green migration knows what to run.
 
 Here is an example of that file:
 
-```javascript
-const {
+```typescript
+import {
   migrateItems: migration0003,
-} = require('./migrations/0003-case-has-sealed-documents');
+} from './migrations/0003-case-has-sealed-documents';
 
 // MODIFY THIS ARRAY TO ADD NEW MIGRATIONS OR REMOVE OLD ONES
 const migrationsToRun = [
@@ -104,7 +104,7 @@ const migrationsToRun = [
 exports.migrationsToRun = migrationsToRun;
 ```
 
-After doing these two main steps, writing a migration and adding it to the migrationsToRun.js file, our CI/CD process will automatically start the setup for running a blue-green migration.
+After doing these two main steps, writing a migration and adding it to the migrationsToRun.ts file, our CI/CD process will automatically start the setup for running a blue-green migration.
 
 If learning via a video if more your style, we have a short recording explaining how you can write a migration script below.
 

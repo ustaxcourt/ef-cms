@@ -8,6 +8,8 @@ import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
 
@@ -20,8 +22,16 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     section: DOCKET_SECTION,
     userId: mockUserId,
   };
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
 
   beforeEach(() => {
+    mockLock = undefined;
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -36,6 +46,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Order',
           documentType: 'Order',
           eventCode: 'O',
+          filedByRole: ROLES.docketClerk,
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
@@ -47,6 +58,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Order to Show Cause',
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
+          filedByRole: ROLES.docketClerk,
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
@@ -58,6 +70,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'Transcript',
           eventCode: TRANSCRIPT_EVENT_CODE,
+          filedByRole: ROLES.docketClerk,
           userId: mockUserId,
         },
       ],
@@ -275,6 +288,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Some Title',
           documentType: 'Trial Exhibits',
           eventCode: 'TE',
+          filedByRole: ROLES.docketClerk,
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
@@ -325,6 +339,99 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(docketEntryOnLead).toMatchObject({
       docketNumber: LEAD_CASE.docketNumber,
       freeText: 'free text testing',
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      fileCourtIssuedDocketEntryInteractor(applicationContext, {
+        docketNumbers: [],
+        documentMeta: {
+          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+          documentTitle: 'Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          generatedDocumentTitle: 'Generated Order Document Title',
+        },
+        subjectDocketNumber: caseRecord.docketNumber,
+      } as any),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [],
+      documentMeta: {
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        documentTitle: 'Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        generatedDocumentTitle: 'Generated Order Document Title',
+      },
+      subjectDocketNumber: caseRecord.docketNumber,
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${caseRecord.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${caseRecord.docketNumber}`],
+    });
+  });
+
+  it('should acquire and remove the lock for every case', async () => {
+    const docketNumbers = ['888-88', '999-99'];
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers,
+      documentMeta: {
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        documentTitle: 'Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        generatedDocumentTitle: 'Generated Order Document Title',
+      },
+      subjectDocketNumber: caseRecord.docketNumber,
+    } as any);
+
+    const expectedIdentifiers = docketNumbers.map(
+      docketNumber => `case|${docketNumber}`,
+    );
+    expectedIdentifiers.unshift(`case|${caseRecord.docketNumber}`);
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: expectedIdentifiers,
+    });
+
+    [caseRecord.docketNumber, '888-88', '999-99'].forEach(docketNumber => {
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: `case|${docketNumber}`,
+        ttl: 30,
+      });
     });
   });
 });

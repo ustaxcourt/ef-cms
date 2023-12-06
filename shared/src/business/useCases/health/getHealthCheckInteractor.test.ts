@@ -1,7 +1,7 @@
 import { getHealthCheckInteractor } from './getHealthCheckInteractor';
 
 describe('getHealthCheckInteractor', () => {
-  it('should return the expected true statues for all services', async () => {
+  it('should return the expected true statuses for all services', async () => {
     const statusResult = await getHealthCheckInteractor({
       environment: {
         stage: 'dev',

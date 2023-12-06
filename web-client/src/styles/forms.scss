@@ -1,6 +1,9 @@
+@use '../uswds' as *;
+@use '../variables' as *;
+
 .usa-form-group,
 .usa-fieldset {
-  max-width: 30rem;
+  max-width: 40rem;
   margin-top: 0;
   margin-bottom: 35px;
 }
@@ -60,6 +63,11 @@ legend {
   /* little screens */
   @media only screen and (max-width: $medium-screen) {
     line-height: 1.1em;
+  }
+
+  &#redaction-acknowledgement-label {
+    max-width: 580px;
+    margin-top: 0;
   }
 }
 
@@ -323,6 +331,10 @@ label.validated::after {
   }
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 .document-detail-one-third {
   max-height: 890px;
   overflow-y: auto;
@@ -398,7 +410,7 @@ label.validated::after {
 label.ustc-upload-petition,
 label.ustc-upload-stin,
 label.ustc-upload-rpt,
-label.ustc-upload-ods,
+label.ustc-upload-cds,
 label.ustc-upload {
   .success-message {
     display: none;
@@ -558,6 +570,8 @@ label.ustc-upload {
 }
 
 .usa-date-picker {
+  min-width: 245px;
+
   * {
     animation: none;
   }
@@ -587,4 +601,31 @@ label.ustc-upload {
   .no-shrink {
     min-width: 480px;
   }
+}
+
+#other-iteration-field {
+  margin-top: 35px;
+}
+
+.ustc-confirmation-message {
+  display: block;
+  padding: 0;
+  margin: 15px 0 0 0;
+  color: #0050d8;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.ustc-form-group--confirmation {
+  position: relative;
+  max-width: 31.25rem;
+  padding-left: 1rem;
+  border-left: 0.25rem solid #0050d8;
+  margin-top: 0;
+  margin-bottom: 35px;
+  margin-left: -1.25rem;
+}
+
+.ustc-message-modal-text-area {
+  resize: vertical;
 }

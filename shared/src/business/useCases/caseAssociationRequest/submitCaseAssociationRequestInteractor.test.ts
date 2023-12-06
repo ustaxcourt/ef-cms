@@ -1,5 +1,5 @@
 import { COUNTRY_TYPES, ROLES } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase.js';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactPrimary } from '../../entities/cases/Case';
 import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';
@@ -101,10 +101,7 @@ describe('submitCaseAssociationRequest', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      applicationContext.getUseCaseHelpers().associatePrivatePractitionerToCase,
     ).toHaveBeenCalled();
   });
 
@@ -141,10 +138,7 @@ describe('submitCaseAssociationRequest', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      applicationContext.getUseCaseHelpers().associateIrsPractitionerToCase,
     ).toHaveBeenCalled();
   });
 });

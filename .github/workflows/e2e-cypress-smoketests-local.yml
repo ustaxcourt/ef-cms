@@ -2,26 +2,18 @@ name: E2E Cypress Smoketests Local
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   e2e_cypress_smoketests_local:
     runs-on: ubuntu-latest
+
     env:
       CI: true
-      SKIP_CACHE_INVALIDATION: true
-      TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-      QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
-      DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-      S3_ENDPOINT: http://localhost:9000
-      MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-      AWS_ACCESS_KEY_ID: S3RVER
-      AWS_SECRET_ACCESS_KEY: S3RVER
-      CIRCLECI: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
       - name: Configure sysctl limits
         run: |
           sudo swapoff -a
@@ -34,24 +26,29 @@ jobs:
           stack-version: 7.10.2
           security-enabled: false
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v2.0.1
+        uses: rrainn/dynamodb-action@v3.0.0
         with:
           port: 8000
           cors: '*'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
+        with:
+          comment_on_pr: false
+      - name: Install Node Dependencies
+        run: npm ci
       - name: Run E2E Cypress Smoketests
         run: |
-          npm ci
           mkdir -p /tmp/cypress/
-          npm run start:all >> /tmp/cypress/cypress-output.txt &
+          npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
-          URL=http://localhost:4000/api/swagger ./wait-until.sh
           sleep 5
           npm run cypress:smoketests:local
-      - name: Store Video Artifacts
+      - name: Store Cypress Failure Videos
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
-          path: ${{ github.workspace }}/cypress-smoketests/videos
+          path: ${{ github.workspace }}/cypress/cypress-smoketests/videos
       - name: Store Logs
         uses: actions/upload-artifact@v3
         with:

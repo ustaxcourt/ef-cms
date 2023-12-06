@@ -1,0 +1,147 @@
+{
+  "Users": {
+    "admin@example.com": {
+      "Username": "admin@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "182da85f-6c0d-44da-8512-45e07cdeefcb"
+        },
+        {
+          "Name": "email",
+          "Value": "admin@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "admin"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    }
+  },
+  "Options": {
+    "Policies": {
+      "PasswordPolicy": {
+        "MinimumLength": 8,
+        "RequireUppercase": true,
+        "RequireLowercase": true,
+        "RequireNumbers": true,
+        "RequireSymbols": true,
+        "TemporaryPasswordValidityDays": 7
+      }
+    },
+    "LambdaConfig": {
+      "endpoint": "http://localhost:9991"
+    },
+    "TriggerFunctions": {
+      "PostConfirmation": "PostConfirmation_ConfirmSignUp",
+      "PostAuthentication": "PostAuthentication_Authentication"
+    },
+    "SchemaAttributes": [
+      {
+        "Name": "sub",
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": false,
+        "Required": true,
+        "StringAttributeConstraints": {
+          "MinLength": "1",
+          "MaxLength": "2048"
+        }
+      },
+      {
+        "Name": "name",
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MinLength": "0",
+          "MaxLength": "2048"
+        }
+      },
+      {
+        "Name": "email",
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MinLength": "0",
+          "MaxLength": "2048"
+        }
+      },
+      {
+        "Name": "email_verified",
+        "AttributeDataType": "Boolean",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Required": false
+      },
+      {
+        "Name": "updated_at",
+        "AttributeDataType": "Number",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Required": false,
+        "NumberAttributeConstraints": {
+          "MinValue": "0"
+        }
+      },
+      {
+        "Name": "custom:role",
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Required": false,
+        "NumberAttributeConstraints": {
+          "MinValue": "0"
+        },
+        "StringAttributeConstraints": {
+          "MinLength": "0",
+          "MaxLength": "255"
+        }
+      },
+      {
+        "Name": "userId",
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MinLength": "0",
+          "MaxLength": "255"
+        }
+      }
+    ],
+    "VerificationMessageTemplate": {
+      "DefaultEmailOption": "CONFIRM_WITH_CODE"
+    },
+    "MfaConfiguration": "OFF",
+    "EstimatedNumberOfUsers": 0,
+    "EmailConfiguration": {
+      "EmailSendingAccount": "COGNITO_DEFAULT"
+    },
+    "AdminCreateUserConfig": {
+      "AllowAdminCreateUserOnly": false,
+      "UnusedAccountValidityDays": 7
+    },
+    "UsernameAttributes": ["email"],
+    "Arn": "arn:aws:cognito-idp:local:local:userpool/local_2pHzece7",
+    "CreationDate": "2023-01-24T22:34:48.100Z",
+    "Id": "local_2pHzece7",
+    "LastModifiedDate": "2023-01-24T22:34:48.100Z",
+    "Name": "MyUserPool"
+  }
+}

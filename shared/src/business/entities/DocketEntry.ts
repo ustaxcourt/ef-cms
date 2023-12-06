@@ -4,6 +4,7 @@ import {
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
+  MINUTE_ENTRIES_MAP,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   PARTIES_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
@@ -12,27 +13,22 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
-import {
-  IValidationEntity,
-  joiValidationDecorator,
-  validEntityDecorator,
-} from './JoiValidationDecorator';
-import { User } from './User';
+import { JoiValidationEntity } from './JoiValidationEntity';
+import { RawUser, User } from './User';
 import { WorkItem } from './WorkItem';
 import {
   createISODateAtStartOfDayEST,
   createISODateString,
 } from '../utilities/DateHandler';
 
-export class DocketEntryClass {
-  public entityName: string;
+export class DocketEntry extends JoiValidationEntity {
   public action?: string;
   public additionalInfo?: string;
   public additionalInfo2?: string;
   public addToCoversheet?: boolean;
   public archived?: boolean;
   public attachments?: string;
-  public certificateOfService?: string;
+  public certificateOfService?: boolean;
   public certificateOfServiceDate?: string;
   public createdAt: string;
   public date?: string;
@@ -45,6 +41,7 @@ export class DocketEntryClass {
   public documentType: string;
   public eventCode: string;
   public filedBy?: string;
+  public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
   public freeText2?: string;
@@ -70,13 +67,16 @@ export class DocketEntryClass {
   public sealedTo?: string;
   public filers: string[];
   public ordinalValue?: string;
+  public otherIteration?: string;
   public otherFilingParty?: string;
-  public partyIrsPractitioner?: string;
+  public partyIrsPractitioner?: boolean;
   public processingStatus: string;
   public receivedAt: string;
   public relationship?: string;
   public scenario?: string;
-  public secondaryDocument?: string;
+  public secondaryDocument?: {
+    secondaryDocumentInfo: string;
+  };
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;
@@ -84,16 +84,17 @@ export class DocketEntryClass {
   public strickenAt?: string;
   public trialLocation?: string;
   public supportingDocument?: string;
-  public userId: string;
+  public userId?: string;
   public privatePractitioners?: any[];
   public servedParties?: any[];
   public signedAt?: string;
-  public draftOrderState: object;
-  public stampData: object;
+  public draftOrderState?: object;
+  public stampData!: object;
   public isDraft?: boolean;
+  public redactionAcknowledgement?: boolean;
   public judge?: string;
   public judgeUserId?: string;
-  public pending: boolean;
+  public pending?: boolean;
   public previousDocument?: {
     docketEntryId: string;
     documentTitle: string;
@@ -111,30 +112,19 @@ export class DocketEntryClass {
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
   constructor(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    rawDocketEntry: any,
-    {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      applicationContext,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      petitioners,
-    }: { applicationContext: IApplicationContext; petitioners?: any[] },
-  ) {
-    this.entityName = 'DocketEntry';
-  }
-
-  init(
     rawDocketEntry,
     {
       applicationContext,
-      petitioners = [],
       filtered = false,
+      petitioners = [],
     }: {
       applicationContext: IApplicationContext;
-      petitioners: any[];
+      petitioners?: any[];
       filtered?: boolean;
     },
   ) {
+    super('DocketEntry');
+
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -167,6 +157,7 @@ export class DocketEntryClass {
     this.documentType = rawDocketEntry.documentType;
     this.eventCode = rawDocketEntry.eventCode;
     this.filedBy = rawDocketEntry.filedBy;
+    this.filedByRole = rawDocketEntry.filedByRole;
     this.filingDate = rawDocketEntry.filingDate || createISODateString();
     this.freeText = rawDocketEntry.freeText;
     this.freeText2 = rawDocketEntry.freeText2;
@@ -188,9 +179,11 @@ export class DocketEntryClass {
     this.mailingDate = rawDocketEntry.mailingDate;
     this.numberOfPages = rawDocketEntry.numberOfPages;
     this.objections = rawDocketEntry.objections;
+    this.redactionAcknowledgement = rawDocketEntry.redactionAcknowledgement;
     this.sealedTo = rawDocketEntry.sealedTo;
     this.filers = rawDocketEntry.filers || [];
     this.ordinalValue = rawDocketEntry.ordinalValue;
+    this.otherIteration = rawDocketEntry.otherIteration;
     this.otherFilingParty = rawDocketEntry.otherFilingParty;
     this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
     this.processingStatus = rawDocketEntry.processingStatus || 'pending';
@@ -207,7 +200,6 @@ export class DocketEntryClass {
     this.strickenAt = rawDocketEntry.strickenAt;
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
-
     // only share the userId with an external user if it is the logged in user
     if (applicationContext.getCurrentUser().userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
@@ -294,13 +286,12 @@ export class DocketEntryClass {
 
   /**
    * Mark a docket entry as served
-   *
    * @param {Array} servedParties the list of parties to serve the docket entry on
    * @returns {DocketEntry} the docket entry that was marked as served
    */
-  setAsServed(servedParties = null) {
+  setAsServed(servedParties: any[] | null = null) {
     this.servedAt = createISODateString();
-    this.draftOrderState = null;
+    this.draftOrderState = undefined;
 
     if (servedParties) {
       this.servedParties = servedParties;
@@ -311,7 +302,6 @@ export class DocketEntryClass {
 
   /**
    * Determines if the deadline should be auto-generated for the docket entry
-   *
    * @returns {Boolean} true or false if the deadline should be auto-generated
    */
   shouldAutoGenerateDeadline() {
@@ -322,19 +312,17 @@ export class DocketEntryClass {
 
   /**
    * Gets the auto-generated deadline description for the docket entry
-   *
    * @returns {String} the deadline description
    */
   getAutoGeneratedDeadlineDescription() {
     return AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES.find(
       item => item.eventCode === this.eventCode,
-    ).deadlineDescription;
+    )!.deadlineDescription;
   }
 
   /**
    * generates the filedBy string from parties selected for the document
-and contact info from the raw docket entry
-   *
+   * and contact info from the raw docket entry
    * @param {Array} petitioners the petitioners on the case the docket entry belongs
    * to
    */
@@ -343,10 +331,11 @@ and contact info from the raw docket entry
       NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(this.eventCode);
 
     const shouldGenerateFiledBy =
-      !(isNoticeOfContactChange && this.isAutoGenerated) && !isServed(this);
+      !(isNoticeOfContactChange && this.isAutoGenerated) &&
+      !DocketEntry.isServed(this);
 
     if (shouldGenerateFiledBy) {
-      let partiesArray = [];
+      let partiesArray: string[] = [];
       const privatePractitionerIsFiling = this.privatePractitioners?.some(
         practitioner => practitioner.partyPrivatePractitioner,
       );
@@ -360,7 +349,7 @@ and contact info from the raw docket entry
       } else {
         this.partyIrsPractitioner && partiesArray.push('Resp.');
 
-        const petitionersArray = [];
+        const petitionersArray: string[] = [];
         this.filers.forEach(contactId =>
           petitioners.forEach(p => {
             if (p.contactId === contactId) {
@@ -376,7 +365,7 @@ and contact info from the raw docket entry
         }
       }
 
-      const filedByArray = [];
+      const filedByArray: string[] = [];
       if (partiesArray.length) {
         filedByArray.push(partiesArray.join(' & '));
       }
@@ -393,7 +382,6 @@ and contact info from the raw docket entry
 
   /**
    * attaches a signedAt date to the document
-   *
    * @param {string} signByUserId the user id of the user who signed the document
    * @param {string} signedJudgeName the judge's signature for the document
    */
@@ -405,7 +393,6 @@ and contact info from the raw docket entry
 
   /**
    * attaches a qc date and a user to the document
-   *
    * @param {object} user the user completing QC process
    */
   setQCed(user) {
@@ -417,10 +404,10 @@ and contact info from the raw docket entry
    * Unsets signature related fields on the docket entry
    */
   unsignDocument() {
-    this.signedAt = null;
-    this.signedJudgeName = null;
-    this.signedJudgeUserId = null;
-    this.signedByUserId = null;
+    this.signedAt = undefined;
+    this.signedJudgeName = undefined;
+    this.signedJudgeUserId = undefined;
+    this.signedByUserId = undefined;
   }
 
   /**
@@ -433,7 +420,6 @@ and contact info from the raw docket entry
   /**
    * Determines whether or not the docket entry is of a document
    * type that is automatically served
-   *
    * @returns {boolean} true if the docket entry should be automatically served,
    *  otherwise false
    */
@@ -456,13 +442,8 @@ and contact info from the raw docket entry
     );
   }
 
-  /**
-   * Determines if the docket entry is a court issued document
-   *
-   * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
-   */
-  isCourtIssued() {
-    return DocketEntryClass.isCourtIssued(this.eventCode);
+  isCourtIssued(): boolean {
+    return DocketEntry.isCourtIssued(this.eventCode);
   }
 
   static isCourtIssued(eventCode: string): boolean {
@@ -473,16 +454,19 @@ and contact info from the raw docket entry
 
   /**
    * sets the number of pages for the docket entry
-   *
    * @param {Number} numberOfPages the number of pages
    */
   setNumberOfPages(numberOfPages) {
     this.numberOfPages = numberOfPages;
   }
 
+  setFiledBy(user: RawUser) {
+    this.userId = user.userId;
+    this.filedByRole = user.role;
+  }
+
   /**
    * strikes this docket entry
-   *
    * @param {object} obj param
    * @param {string} obj.name user name
    * @param {string} obj.userId user id
@@ -502,7 +486,6 @@ and contact info from the raw docket entry
 
   /**
    * Seal this docket entry
-   *
    * @param {object} obj param
    * @param {string} obj.sealedTo the type of user to seal this docket entry from
    */
@@ -531,39 +514,69 @@ and contact info from the raw docket entry
    * The pending boolean on the DocketEntry just represents if the user checked the
    * add to pending report checkbox.  This is a computed that uses that along with
    * eventCodes and servedAt to determine if the docket entry is pending.
-   *
    * @param {DocketEntryClass} docketEntry the docket entry to check pending state
    * @returns {boolean} is the docket entry is pending or not
    */
   static isPending(docketEntry) {
     return (
       docketEntry.pending &&
-      (isServed(docketEntry) ||
+      (DocketEntry.isServed(docketEntry) ||
         UNSERVABLE_EVENT_CODES.find(
           unservedCode => unservedCode === docketEntry.eventCode,
         ))
     );
   }
+
+  getValidationRules() {
+    return DOCKET_ENTRY_VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return {
+      filedBy: [
+        {
+          contains: 'must be less than or equal to',
+          message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+        },
+        'Enter a filed by',
+      ],
+      filingDate: [
+        {
+          contains: 'must be less than or equal to',
+          message: 'Filing date cannot be in the future. Enter a valid date.',
+        },
+        'Enter a valid filing date',
+      ],
+    };
+  }
+
+  static isMinuteEntry(rawDocketEntry: RawDocketEntry): boolean {
+    const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
+      key => MINUTE_ENTRIES_MAP[key].eventCode,
+    );
+
+    return MINUTE_ENTRIES_EVENT_CODES.includes(rawDocketEntry.eventCode);
+  }
+
+  static isServed(rawDocketEntry: RawDocketEntry): boolean {
+    return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
+  }
+
+  static isUnservable(rawDocketEntry: RawDocketEntry): boolean {
+    return (
+      DocketEntry.isMinuteEntry(rawDocketEntry) ||
+      UNSERVABLE_EVENT_CODES.includes(rawDocketEntry.eventCode)
+    );
+  }
 }
 
 /**
- * Determines if the docket entry has been served
- *
- * @param {object} rawDocketEntry Docket entry object
- * @returns {Boolean} true if the docket entry has been served, false otherwise
- */
-export const isServed = function (rawDocketEntry) {
-  return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
-};
-
-/**
  * Determines the servedPartiesCode based on the given servedParties
- *
  * @param {Array} servedParties List of parties that have been served
  * @returns {String} served parties code
  */
-export const getServedPartiesCode = servedParties => {
-  let servedPartiesCode = undefined;
+export const getServedPartiesCode = (servedParties?: any[]) => {
+  let servedPartiesCode: string | undefined = undefined;
   if (servedParties && servedParties.length > 0) {
     if (
       servedParties.length === 1 &&
@@ -577,21 +590,6 @@ export const getServedPartiesCode = servedParties => {
   return servedPartiesCode;
 };
 
-joiValidationDecorator(DocketEntryClass, DOCKET_ENTRY_VALIDATION_RULES, {
-  filedBy: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
-    },
-    'Enter a filed by',
-  ],
-});
-
-export const DocketEntry: typeof DocketEntryClass =
-  validEntityDecorator(DocketEntryClass);
-
 declare global {
-  type RawDocketEntry = ExcludeMethods<DocketEntryClass>;
+  type RawDocketEntry = ExcludeMethods<DocketEntry>;
 }
-// eslint-disable-next-line no-redeclare
-export interface DocketEntryClass extends IValidationEntity<DocketEntryClass> {}

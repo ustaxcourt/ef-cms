@@ -13,5 +13,5 @@ resource "aws_lambda_function" "strip_basepath_lambda" {
   publish          = true
 
   # Lambda@Edge do not yet support nodejs 16.0
-  runtime = "nodejs16.x"
+  runtime = "nodejs18.x"
 }

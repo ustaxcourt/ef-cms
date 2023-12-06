@@ -2,15 +2,15 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const filePetitionFromPaperInteractor = async (
   applicationContext: any,
   {
     applicationForWaiverOfFilingFeeFile,
     applicationForWaiverOfFilingFeeUploadProgress,
-    ownershipDisclosureFile,
-    ownershipDisclosureUploadProgress,
+    corporateDisclosureFile,
+    corporateDisclosureUploadProgress,
     petitionFile,
     petitionMetadata,
     petitionUploadProgress,
@@ -21,8 +21,8 @@ export const filePetitionFromPaperInteractor = async (
   }: {
     applicationForWaiverOfFilingFeeFile: string;
     applicationForWaiverOfFilingFeeUploadProgress: string;
-    ownershipDisclosureFile: string;
-    ownershipDisclosureUploadProgress: string;
+    corporateDisclosureFile: string;
+    corporateDisclosureUploadProgress: string;
     petitionFile: string;
     petitionMetadata: any;
     petitionUploadProgress: string;
@@ -55,13 +55,13 @@ export const filePetitionFromPaperInteractor = async (
       onUploadProgress: petitionUploadProgress,
     });
 
-  let ownershipDisclosureFileUpload;
-  if (ownershipDisclosureFile) {
-    ownershipDisclosureFileUpload = applicationContext
+  let corporateDisclosureFileUpload;
+  if (corporateDisclosureFile) {
+    corporateDisclosureFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: ownershipDisclosureFile,
-        onUploadProgress: ownershipDisclosureUploadProgress,
+        document: corporateDisclosureFile,
+        onUploadProgress: corporateDisclosureUploadProgress,
       });
   }
 
@@ -87,7 +87,7 @@ export const filePetitionFromPaperInteractor = async (
 
   await Promise.all([
     applicationForWaiverOfFilingFeeUpload,
-    ownershipDisclosureFileUpload,
+    corporateDisclosureFileUpload,
     petitionFileUpload,
     requestForPlaceOfTrialFileUpload,
     stinFileUpload,
@@ -98,7 +98,7 @@ export const filePetitionFromPaperInteractor = async (
     .createCaseFromPaperInteractor(applicationContext, {
       applicationForWaiverOfFilingFeeFileId:
         await applicationForWaiverOfFilingFeeUpload,
-      ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
+      corporateDisclosureFileId: await corporateDisclosureFileUpload,
       petitionFileId: await petitionFileUpload,
       petitionMetadata,
       requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,

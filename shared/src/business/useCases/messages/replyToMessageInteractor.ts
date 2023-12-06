@@ -1,25 +1,12 @@
 import { Case } from '../../entities/cases/Case';
-import { Message } from '../../entities/Message';
+import { Message, RawMessage } from '../../entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
-/**
- * calls persistence methods to create a reply state for a message
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {array} providers.attachments array of objects containing documentId and documentTitle
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.message the message text
- * @param {string} providers.parentMessageId the id of the parent message for the thread
- * @param {string} providers.subject the message subject
- * @param {string} providers.toSection the section of the user receiving the message
- * @param {string} providers.toUserId the user id of the user receiving the message
- * @returns {object} validated raw message object
- */
 export const replyToMessage = async (
   applicationContext: IApplicationContext,
   {
@@ -30,16 +17,8 @@ export const replyToMessage = async (
     subject,
     toSection,
     toUserId,
-  }: {
-    attachments: any;
-    docketNumber: string;
-    message: string;
-    parentMessageId: string;
-    subject: string;
-    toSection: string;
-    toUserId: string;
-  },
-) => {
+  }: ReplyMessageType,
+): Promise<RawMessage> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
@@ -91,23 +70,9 @@ export const replyToMessage = async (
     message: validatedRawMessage,
   });
 
-  return validatedRawMessage as TMessageData[];
+  return validatedRawMessage;
 };
 
-/**
- * replies to a message
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {array} providers.attachments array of objects containing documentId and documentTitle
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.message the message text
- * @param {string} providers.parentMessageId the id of the parent message for the thread
- * @param {string} providers.subject the message subject
- * @param {string} providers.toSection the section of the user receiving the message
- * @param {string} providers.toUserId the user id of the user receiving the message
- * @returns {object} the message
- */
 export const replyToMessageInteractor = (
   applicationContext: IApplicationContext,
   {
@@ -118,16 +83,8 @@ export const replyToMessageInteractor = (
     subject,
     toSection,
     toUserId,
-  }: {
-    attachments: any;
-    docketNumber: string;
-    message: string;
-    parentMessageId: string;
-    subject: string;
-    toSection: string;
-    toUserId: string;
-  },
-) => {
+  }: ReplyMessageType,
+): Promise<RawMessage> => {
   return replyToMessage(applicationContext, {
     attachments,
     docketNumber,

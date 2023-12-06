@@ -32,11 +32,11 @@ const getDocumentInfo = ({
 
 /**
  * generatePrintableFilingReceiptInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case the documents were filed in
  * @param {object} providers.documentsFiled object containing the docketNumber and documents for the filing receipt to be generated
+ * @param {boolean} providers.fileAcrossConsolidatedGroup flag to determine whether the document should be filed across the consolidated cases group
  * @returns {string} url for the generated document on the storage client
  */
 export const generatePrintableFilingReceiptInteractor = async (
@@ -44,7 +44,12 @@ export const generatePrintableFilingReceiptInteractor = async (
   {
     docketNumber,
     documentsFiled,
-  }: { docketNumber: string; documentsFiled: any },
+    fileAcrossConsolidatedGroup,
+  }: {
+    docketNumber: string;
+    documentsFiled: any;
+    fileAcrossConsolidatedGroup: boolean;
+  },
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -52,7 +57,31 @@ export const generatePrintableFilingReceiptInteractor = async (
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseRecord, { applicationContext }).validate();
+
+  let caseEntity = new Case(caseRecord, { applicationContext }).validate();
+
+  if (fileAcrossConsolidatedGroup && !caseRecord.leadDocketNumber) {
+    throw new Error(
+      'you can not file across a consolidated group because this case is not part of one',
+    );
+  }
+
+  let consolidatedCasesDocketNumbers: string[] = [];
+
+  if (fileAcrossConsolidatedGroup) {
+    const leadCase = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: caseEntity.leadDocketNumber!,
+      });
+    consolidatedCasesDocketNumbers = leadCase.consolidatedCases
+      .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
+      .map(consolidatedCaseRecord => consolidatedCaseRecord.docketNumber);
+    caseEntity = new Case(leadCase, {
+      applicationContext,
+    }).validate();
+  }
 
   const primaryDocument = getDocumentInfo({
     applicationContext,
@@ -96,7 +125,9 @@ export const generatePrintableFilingReceiptInteractor = async (
     data: {
       caseCaptionExtension,
       caseTitle,
+      consolidatedCasesDocketNumbers,
       docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+      fileAcrossConsolidatedGroup,
       filedAt: applicationContext
         .getUtilities()
         .formatDateString(primaryDocument.filingDate, 'DATE_TIME_TZ'),

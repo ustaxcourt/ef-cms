@@ -1,11 +1,33 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { ROLES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
 
 describe('deleteCaseNoteInteractor', () => {
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
+  beforeEach(() => {
+    mockLock = undefined;
+    const mockUser = new User({
+      name: 'Judge Colvin',
+      role: ROLES.judge,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+  });
+
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
@@ -22,14 +44,6 @@ describe('deleteCaseNoteInteractor', () => {
   });
 
   it('deletes a procedural note', async () => {
-    const mockUser = new User({
-      name: 'Judge Colvin',
-      role: ROLES.judge,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({
@@ -64,5 +78,40 @@ describe('deleteCaseNoteInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(result.caseNote).not.toBeDefined();
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      deleteCaseNoteInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await deleteCaseNoteInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 });

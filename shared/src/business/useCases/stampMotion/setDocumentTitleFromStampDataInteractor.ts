@@ -1,4 +1,3 @@
-import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
 
 /**
@@ -59,11 +58,9 @@ export const setDocumentTitleFromStampDataInteractor = ({
     );
   }
 
-  let dateFormatted;
   if (date) {
-    dateFormatted = formatDateString(date, FORMATS.MMDDYYYY);
     formattedDraftDocumentTitle = formattedDraftDocumentTitle.concat(
-      ` - ${dueDateMessage?.toLowerCase()} ${dateFormatted}`,
+      ` - ${dueDateMessage?.toLowerCase()} ${date}`,
     );
   }
 

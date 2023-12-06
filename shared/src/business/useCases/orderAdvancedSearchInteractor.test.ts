@@ -6,12 +6,11 @@ import {
 } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { orderAdvancedSearchInteractor } from './orderAdvancedSearchInteractor';
+import { petitionerUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('orderAdvancedSearchInteractor', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-    });
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -44,9 +43,7 @@ describe('orderAdvancedSearchInteractor', () => {
   });
 
   it('returns an unauthorized error on petitioner user role', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-    });
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     await expect(
       orderAdvancedSearchInteractor(applicationContext, {} as any),

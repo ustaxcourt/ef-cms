@@ -8,10 +8,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * updateCaseDetailsInteractor
+ * updateCaseDetails
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -19,7 +20,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {object} providers.caseDetails the case details to update on the case
  * @returns {object} the updated case data
  */
-export const updateCaseDetailsInteractor = async (
+export const updateCaseDetails = async (
   applicationContext: IApplicationContext,
   { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
 ) => {
@@ -54,6 +55,9 @@ export const updateCaseDetailsInteractor = async (
     {
       ...oldCase,
       ...editableFields,
+      irsNoticeDate: editableFields.hasVerifiedIrsNotice
+        ? editableFields.irsNoticeDate
+        : undefined,
       petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
       petitionPaymentMethod: isPaid
         ? editableFields.petitionPaymentMethod
@@ -67,39 +71,41 @@ export const updateCaseDetailsInteractor = async (
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
-      newCaseEntity.addDocketEntry(
-        new DocketEntry(
-          {
-            documentTitle: 'Filing Fee Paid',
-            documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
-            eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
-            filingDate: newCaseEntity.petitionPaymentDate,
-            isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            processingStatus: 'complete',
-            userId: user.userId,
-          },
-          { applicationContext },
-        ),
+      const filingFeePaidEntry = new DocketEntry(
+        {
+          documentTitle: 'Filing Fee Paid',
+          documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
+          filingDate: newCaseEntity.petitionPaymentDate,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+        },
+        { applicationContext },
       );
+
+      filingFeePaidEntry.setFiledBy(user);
+
+      newCaseEntity.addDocketEntry(filingFeePaidEntry);
     } else if (isWaived) {
-      newCaseEntity.addDocketEntry(
-        new DocketEntry(
-          {
-            documentTitle: 'Filing Fee Waived',
-            documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
-            eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
-            filingDate: newCaseEntity.petitionPaymentWaivedDate,
-            isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            processingStatus: 'complete',
-            userId: user.userId,
-          },
-          { applicationContext },
-        ),
+      const filingFeeWaivedEntry = new DocketEntry(
+        {
+          documentTitle: 'Filing Fee Waived',
+          documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
+          filingDate: newCaseEntity.petitionPaymentWaivedDate,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+        },
+        { applicationContext },
       );
+
+      filingFeeWaivedEntry.setFiledBy(user);
+
+      newCaseEntity.addDocketEntry(filingFeeWaivedEntry);
     }
   }
 
@@ -133,3 +139,10 @@ export const updateCaseDetailsInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const updateCaseDetailsInteractor = withLocking(
+  updateCaseDetails,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

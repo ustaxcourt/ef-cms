@@ -3,18 +3,18 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * used for setting a case as high priority
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.reason the reason the case is being set as high priority
  * @param {string} providers.docketNumber the docket number of the case to set as high priority
  * @returns {object} the case data
  */
-export const prioritizeCaseInteractor = async (
+export const prioritizeCase = async (
   applicationContext,
   { docketNumber, reason },
 ) => {
@@ -61,3 +61,10 @@ export const prioritizeCaseInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const prioritizeCaseInteractor = withLocking(
+  prioritizeCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

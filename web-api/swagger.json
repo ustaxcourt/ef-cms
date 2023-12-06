@@ -923,6 +923,50 @@
         }
       }
     },
+    "/case-worksheets": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "search for case worksheets by judge",
+        "description": "Search for case worksheets by judge.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case-worksheet"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/reports/blocked/{trialLocation}": {
       "parameters": [
         {
@@ -1778,59 +1822,6 @@
         "tags": ["cases"],
         "summary": "Unconsolidates the cases passed in the query string.",
         "description": "Unconsolidates the cases passed in the query string.\n",
-        "produces": ["application/json"],
-        "consumes": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/cases/{docketNumber}/consolidated-cases": {
-      "parameters": [
-        {
-          "name": "docketNumber",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["cases"],
-        "summary": "Returns all consolidated cases associated with the given docket number.",
-        "description": "Returns all consolidated cases associated with the given docket number.\n",
         "produces": ["application/json"],
         "consumes": ["application/json"],
         "responses": {
@@ -4008,6 +3999,38 @@
         }
       }
     },
+    "/users/{userId}/case/{docketNumber}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "submit a case association request for a private or IRS practitioner",
+        "description": "Submit a case association request for a private or IRS practitioner..\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      }
+    },
     "/users/{userId}/case/{docketNumber}/pending": {
       "parameters": [
         {
@@ -4788,6 +4811,58 @@
         ]
       }
     },
+    "/trial-sessions/paper-service-pdf/{key}": {
+      "parameters": [
+        {
+          "name": "key",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trial-sessions"],
+        "summary": "get download url for a previously generated paper service document",
+        "description": "Get download url for a previously generated paper service document.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/trial-sessions": {
       "get": {
         "tags": ["trialsessions"],
@@ -4883,58 +4958,6 @@
         "tags": ["trialsessions"],
         "summary": "gets a trial session",
         "description": "gets a trial session.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/trialSession"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/trial-sessions/{trialSessionId}/set-swing-session": {
-      "parameters": [
-        {
-          "name": "trialSessionId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "post": {
-        "tags": ["trialsessions"],
-        "summary": "sets a trial session as a swing session",
-        "description": "sets a trial session as a swing session.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -7583,6 +7606,57 @@
           }
         }
       }
+    },
+    "/cases/{docketNumber}/case-worksheet": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "summary": "update a case worksheet",
+        "description": "Update a case worksheet.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case-worksheet"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -8056,6 +8130,28 @@
         }
       },
       "description": "a case procedural note"
+    },
+    "case-worksheet": {
+      "type": "object",
+      "properties": {
+        "primaryIssue": {
+          "type": "string",
+          "description": "the primary issue noted for the case in Submitted/CAV status to which the worksheet belongs"
+        },
+        "finalBriefDueDate": {
+          "type": "string",
+          "description": "the date the final briefs are due for the case to which the worksheet belongs"
+        },
+        "statusOfMatter": {
+          "type": "string",
+          "description": ""
+        },
+        "entityName": {
+          "type": "string",
+          "description": "the name of the entity - CaseWorksheet"
+        }
+      },
+      "description": "a case deadline"
     },
     "message": {
       "type": "object",

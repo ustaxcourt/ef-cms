@@ -6,12 +6,7 @@ const general = require('./pa11y-general');
 const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
 
 const userUrls = [...chambers, ...floater, ...general];
-
-const initialUrls = [
-  'http://localhost:1234/',
-  'http://localhost:1234/request-for-page-that-doesnt-exist',
-  'http://localhost:1234/idle-logout',
-];
+const initialUrls = [];
 
 if (process.env.CI) {
   initialUrls.push({
@@ -25,5 +20,5 @@ const urls = [...initialUrls, ...userUrls].map(jsCheckDecorator);
 
 module.exports = {
   defaults,
-  urls: setTimeouts()(getOnly(urls)),
+  urls: getOnly(urls).map(setTimeouts),
 };

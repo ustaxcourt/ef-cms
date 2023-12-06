@@ -24,7 +24,7 @@ echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
 npm run start:s3rver &
 S3RVER_PID=$!
-URL=http://localhost:9000/ ./wait-until.sh
+URL=http://0.0.0.0:9000/ ./wait-until.sh
 npm run seed:s3
 
 
@@ -38,8 +38,8 @@ else
   exitCode=$?
 fi
 
-if [ ${exitCode} != 0 ]; then                   
-  echo "Seed data is invalid!". 1>&2 && exit 1
+if [ "${exitCode}" != 0 ]; then                   
+  echo "Failed to seed data!". 1>&2 && exit 1
 fi
 
 
@@ -47,12 +47,9 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/streams-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/websockets-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-public-local.js"
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
-if [ ! -e "$CIRCLECI" ]; then
+if [ ! -e "$CI" ]; then
   echo "killing dynamodb local"
   pkill -P "${DYNAMO_PID}"
   pkill -P "${ESEARCH_PID}"

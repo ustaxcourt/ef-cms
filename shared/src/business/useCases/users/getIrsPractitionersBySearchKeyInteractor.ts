@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * getIrsPractitionersBySearchKeyInteractor
@@ -33,5 +33,7 @@ export const getIrsPractitionersBySearchKeyInteractor = async (
       type: 'irsPractitioner',
     });
 
-  return IrsPractitioner.validateRawCollection(users, { applicationContext });
+  return IrsPractitioner.validateRawCollection(users, {
+    applicationContext,
+  });
 };

@@ -3,44 +3,25 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
-import { DocketEntry, isServed } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
-
-export const shouldGenerateCoversheetForDocketEntry = ({
-  certificateOfServiceUpdated,
-  documentTitleUpdated,
-  entryRequiresCoverSheet,
-  filingDateUpdated,
-  originalDocketEntry,
-  servedAtUpdated,
-  shouldAddNewCoverSheet,
-}) => {
-  return (
-    (servedAtUpdated ||
-      filingDateUpdated ||
-      certificateOfServiceUpdated ||
-      shouldAddNewCoverSheet ||
-      documentTitleUpdated) &&
-    (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
-    !originalDocketEntry.isMinuteEntry
-  );
-};
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.docketNumber the docket number of the case to be updated
  * @param {object} providers.docketEntryMeta the docket entry metadata
+ * @param {object} providers.docketNumber the docket number of the case to be updated
  * @returns {object} the updated case after the documents are added
  */
-export const updateDocketEntryMetaInteractor = async (
+export const updateDocketEntryMeta = async (
   applicationContext: IApplicationContext,
   {
     docketEntryMeta,
@@ -66,7 +47,7 @@ export const updateDocketEntryMetaInteractor = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const originalDocketEntry = caseEntity.getDocketEntryById({
+  const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 
@@ -77,7 +58,7 @@ export const updateDocketEntryMetaInteractor = async (
   }
 
   if (
-    !isServed(originalDocketEntry) &&
+    !DocketEntry.isServed(originalDocketEntry) &&
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
     !originalDocketEntry.isMinuteEntry
   ) {
@@ -108,6 +89,7 @@ export const updateDocketEntryMetaInteractor = async (
     objections: docketEntryMeta.objections,
     ordinalValue: docketEntryMeta.ordinalValue,
     otherFilingParty: docketEntryMeta.otherFilingParty,
+    otherIteration: docketEntryMeta.otherIteration,
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
     pending: docketEntryMeta.pending,
     previousDocument: docketEntryMeta.previousDocument,
@@ -123,7 +105,7 @@ export const updateDocketEntryMetaInteractor = async (
   const servedAtUpdated =
     editableFields.servedAt &&
     editableFields.servedAt !== originalDocketEntry.servedAt;
-  const filingDateUpdated =
+  const filingDateUpdated: boolean =
     editableFields.filingDate &&
     editableFields.filingDate !== originalDocketEntry.filingDate;
 
@@ -191,20 +173,15 @@ export const updateDocketEntryMetaInteractor = async (
 
     caseEntity.updateDocketEntry(updatedDocketEntry);
   } else if (shouldRemoveExistingCoverSheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
-    const updatedDocketEntry = await applicationContext
+    const { numberOfPages } = await applicationContext
       .getUseCaseHelpers()
       .removeCoversheet(applicationContext, {
         docketEntryId: originalDocketEntry.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        filingDateUpdated,
       });
-    caseEntity.updateDocketEntry(updatedDocketEntry);
+
+    docketEntryEntity.setNumberOfPages(numberOfPages);
+
+    caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
   const result = await applicationContext
@@ -216,3 +193,30 @@ export const updateDocketEntryMetaInteractor = async (
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
+
+export const shouldGenerateCoversheetForDocketEntry = ({
+  certificateOfServiceUpdated,
+  documentTitleUpdated,
+  entryRequiresCoverSheet,
+  filingDateUpdated,
+  originalDocketEntry,
+  servedAtUpdated,
+  shouldAddNewCoverSheet,
+}) => {
+  return (
+    (servedAtUpdated ||
+      filingDateUpdated ||
+      certificateOfServiceUpdated ||
+      shouldAddNewCoverSheet ||
+      documentTitleUpdated) &&
+    (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
+    !originalDocketEntry.isMinuteEntry
+  );
+};
+
+export const updateDocketEntryMetaInteractor = withLocking(
+  updateDocketEntryMeta,
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

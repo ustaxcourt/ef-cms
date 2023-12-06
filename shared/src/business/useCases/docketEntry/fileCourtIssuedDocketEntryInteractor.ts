@@ -4,13 +4,14 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { WorkItem } from '../../entities/WorkItem';
 import { omit } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *
@@ -19,7 +20,7 @@ import { omit } from 'lodash';
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-export const fileCourtIssuedDocketEntryInteractor = async (
+export const fileCourtIssuedDocketEntry = async (
   applicationContext: IApplicationContext,
   {
     docketNumbers,
@@ -108,10 +109,11 @@ export const fileCourtIssuedDocketEntryInteractor = async (
           scenario: documentMeta.scenario,
           serviceStamp: documentMeta.serviceStamp,
           trialLocation: documentMeta.trialLocation,
-          userId: user.userId,
         },
         { applicationContext },
       );
+
+      docketEntryEntity.setFiledBy(user);
 
       const workItem = new WorkItem(
         {
@@ -128,12 +130,14 @@ export const fileCourtIssuedDocketEntryInteractor = async (
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           hideFromPendingMessages: true,
           inProgress: true,
-          leadDocketNumber: caseEntity.leadDocketNumber,
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,
+          trialDate: caseEntity.trialDate,
+          trialLocation: caseEntity.trialLocation,
         },
         { applicationContext },
+        caseEntity,
       );
 
       if (isUnservable) {
@@ -203,3 +207,15 @@ export const fileCourtIssuedDocketEntryInteractor = async (
   }).validate();
   return subjectCase.toRawObject();
 };
+
+export const fileCourtIssuedDocketEntryInteractor = withLocking(
+  fileCourtIssuedDocketEntry,
+  (
+    _applicationContext: IApplicationContext,
+    { docketNumbers = [], subjectDocketNumber },
+  ) => ({
+    identifiers: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
+      item => `case|${item}`,
+    ),
+  }),
+);

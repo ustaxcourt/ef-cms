@@ -1,18 +1,55 @@
-name: Node.js CI - shared
+name: Node.js CI - Shared
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   Shared:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [4]
+        ci_node_index: [0, 1, 2, 3]
+    env:
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
+        with:
+          comment_on_pr: false
+      - name: Install Node Dependencies
+        run: npm ci
       - name: Shared
         run: |
-          npm ci
-          npm run test:shared
+          export TESTFILES=$(npx ts-node split-tests-glob.ts -shared)
+          NODE_INDEX=${{ matrix.ci_node_index }} npm run test:shared:ci
+      - name: Rename coverage to shard coverage
+        run: |
+          mkdir -p coverage
+          cp shared/coverage/${{ matrix.ci_node_index }}/lcov.info coverage/lcov-${{ matrix.ci_node_index }}.info
+          cp shared/coverage/${{ matrix.ci_node_index }}/coverage-final.json coverage/coverage-${{ matrix.ci_node_index }}.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage
+  check-coverage:
+    runs-on: ubuntu-latest
+    needs: [Shared]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage
+      - name: Process Coverage
+        run: npx nyc report --check-coverage --branches 96.13 --functions 96.16 --lines 98.34 --statements 98.25 --reporter lcov --reporter text --reporter clover -t coverage
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: coverage-artifacts
+          failOnError: false

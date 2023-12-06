@@ -1,12 +1,5 @@
-import { CaseAssociationRequestFactory } from '../../entities/CaseAssociationRequestFactory';
+import { CaseAssociationRequestFactory } from '../../entities/caseAssociation/CaseAssociationRequestFactory';
 
-/**
- * validateCaseAssociationRequestInteractor
- *
- * @param {object} providers the providers object
- * @param {string} providers.caseAssociationRequest the case association request data
- * @returns {object} errors if there are any, or null
- */
 export const validateCaseAssociationRequestInteractor = ({
   caseAssociationRequest,
 }) => {

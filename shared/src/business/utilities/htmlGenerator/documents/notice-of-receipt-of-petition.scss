@@ -1,4 +1,11 @@
 #document-notice-of-receipt {
+  font-size: 14px;
+
+  .info-box {
+    border: 1px solid #ccc;
+    margin: 15px 0 20px 0;
+  }
+
   .court-stamp {
     position: absolute;
     right: 0.5in;

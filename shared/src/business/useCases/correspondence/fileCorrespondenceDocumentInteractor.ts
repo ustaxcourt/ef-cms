@@ -1,6 +1,6 @@
 import { Case } from '../../entities/cases/Case';
 import { Correspondence } from '../../entities/Correspondence';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -46,15 +46,12 @@ export const fileCorrespondenceDocumentInteractor = async (
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const correspondenceEntity = new Correspondence(
-    {
-      ...documentMetadata,
-      correspondenceId: primaryDocumentFileId,
-      filedBy: user.name,
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
+  const correspondenceEntity = new Correspondence({
+    ...documentMetadata,
+    correspondenceId: primaryDocumentFileId,
+    filedBy: user.name,
+    userId: user.userId,
+  });
 
   caseEntity.fileCorrespondence(correspondenceEntity);
 

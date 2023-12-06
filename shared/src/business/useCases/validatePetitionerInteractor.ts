@@ -1,5 +1,6 @@
 import { CONTACT_TYPES } from '../entities/EntityConstants';
 import { Petitioner } from '../entities/contacts/Petitioner';
+import { RawContact } from '../entities/contacts/Contact';
 import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 import { isEmpty } from 'lodash';
 
@@ -17,7 +18,10 @@ export const validatePetitionerInteractor = (
   {
     contactInfo,
     existingPetitioners,
-  }: { contactInfo: TContact; existingPetitioners: TPetitioner[] },
+  }: {
+    contactInfo: RawContact & { updatedEmail?: string; confirmEmail?: string };
+    existingPetitioners: TPetitioner[];
+  },
 ) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
@@ -25,10 +29,10 @@ export const validatePetitionerInteractor = (
 
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
-    updateUserEmailErrors = new UpdateUserEmail(
-      { ...contactInfo, email: contactInfo.updatedEmail },
-      { applicationContext },
-    ).getFormattedValidationErrors();
+    updateUserEmailErrors = new UpdateUserEmail({
+      ...contactInfo,
+      email: contactInfo.updatedEmail,
+    }).getFormattedValidationErrors();
   }
 
   const aggregatedErrors = {
@@ -49,7 +53,7 @@ export const validatePetitionerInteractor = (
     contactInfo.contactType === CONTACT_TYPES.intervenor
   ) {
     aggregatedErrors.contactType =
-      Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
+      'Only one (1) Intervenor is allowed per case. Please select a different Role.';
   }
 
   return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;

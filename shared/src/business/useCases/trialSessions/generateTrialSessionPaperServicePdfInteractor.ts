@@ -1,22 +1,23 @@
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
-// eslint-disable-next-line spellcheck/spell-checker
-/**
- * generateTrialSessionPaperServicePdfInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialNoticePdfsKeys the trialNoticePdfsKeys
- * @returns {object} docketEntryId, hasPaper, pdfUrl
- */
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
-  { trialNoticePdfsKeys }: { trialNoticePdfsKeys: string[] },
-) => {
+  {
+    clientConnectionId,
+    trialNoticePdfsKeys,
+    trialSessionId,
+  }: {
+    trialNoticePdfsKeys: string[];
+    trialSessionId: string;
+    clientConnectionId: string;
+  },
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -26,13 +27,24 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServiceDocumentsPdf = await PDFDocument.create();
 
-  for (let index = 0; index < trialNoticePdfsKeys.length; index++) {
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'paper_service_started',
+      totalPdfs: trialNoticePdfsKeys.length,
+    },
+    userId: user.userId,
+  });
+
+  let pdfsAppended = 0;
+
+  for (const trialNoticePdfsKey of trialNoticePdfsKeys) {
     const calendaredCasePdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        key: trialNoticePdfsKeys[index],
-        protocol: 'S3',
+        key: trialNoticePdfsKey,
         useTempBucket: true,
       });
 
@@ -42,23 +54,68 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       copyFrom: calendaredCasePdf,
       copyInto: paperServiceDocumentsPdf,
     });
+
+    pdfsAppended++;
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'paper_service_updated',
+        pdfsAppended,
+      },
+      userId: user.userId,
+    });
   }
 
-  const { docketEntryId, hasPaper, url } = await applicationContext
+  const paperServicePdfData = await paperServiceDocumentsPdf.save();
+
+  let fileId, pdfUrl;
+
+  ({ fileId, url: pdfUrl } = await applicationContext
     .getUseCaseHelpers()
-    .savePaperServicePdf({
+    .saveFileAndGenerateUrl({
       applicationContext,
-      document: paperServiceDocumentsPdf,
+      file: paperServicePdfData,
+      fileNamePrefix: 'paper-service-pdf/',
+    }));
+
+  const trialSession = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId,
     });
 
-  if (url) {
-    applicationContext.logger.info(
-      `generated the printable paper service pdf at ${url}`,
-      {
-        url,
-      },
-    );
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  return { docketEntryId, hasPaper, pdfUrl: url || null };
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
+
+  trialSessionEntity.addPaperServicePdf(fileId, 'Initial Calendaring');
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
+
+  applicationContext.logger.info(
+    `generated the printable paper service pdf at ${pdfUrl}`,
+    { pdfUrl },
+  );
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'set_trial_calendar_paper_service_complete',
+      fileId,
+      hasPaper: true,
+      pdfUrl,
+    },
+    userId: user.userId,
+  });
 };

@@ -1,9 +1,9 @@
-import { DocketEntryClass } from '../entities/DocketEntry';
+import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
 import { generateCoverSheetData } from './generateCoverSheetData';
 
 /**
  * a helper function which creates a coversheet, prepends it to a pdf, and returns the new pdf
- *
  * @param {object} options the providers object
  * @param {object} options.applicationContext the application context
  * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
@@ -18,11 +18,11 @@ export const addCoverToPdf = async ({
   filingDateUpdated,
   pdfData,
   replaceCoversheet = false,
-  useInitialData,
+  useInitialData = false,
 }: {
   applicationContext: IApplicationContext;
-  caseEntity: TCaseEntity;
-  docketEntryEntity: DocketEntryClass;
+  caseEntity: Case;
+  docketEntryEntity: DocketEntry;
   pdfData: any;
   filingDateUpdated?: any;
   replaceCoversheet?: boolean;
@@ -64,7 +64,7 @@ export const addCoverToPdf = async ({
   }
 
   const newPdfData = await pdfDoc.save();
-  const numberOfPages = pdfDoc.getPages().length;
+  const numberOfPages = pdfDoc.getPageCount();
 
   return {
     consolidatedCases: coverSheetData.consolidatedCases,

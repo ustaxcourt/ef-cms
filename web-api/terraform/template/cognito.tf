@@ -7,8 +7,35 @@ resource "aws_cognito_user_pool" "pool" {
 
   verification_message_template {
     default_email_option  = "CONFIRM_WITH_LINK"
-    email_message_by_link = "Please click the link below to verify your email address. {##Verify Email##} "
-    email_subject_by_link = "U.S. Tax Court account verification"
+    email_message_by_link = <<EMAILMESSAGE
+    <body>
+      <p>Welcome to DAWSON!</p>
+
+      <p>Your account with DAWSON has been created. Use the button below to verify your email address.</p>
+
+      <span>{##<button style="font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+          font-size: 1.06rem;
+          line-height: .9;
+          color: #fff;
+          background-color: #005ea2;
+          border: 0;
+          border-radius: 0.25rem;
+          cursor: pointer;
+          display: inline-block;
+          margin-right: 0.5rem;
+          padding: .75rem 2.25rem;
+          text-align: center;
+          text-decoration: none;">Verify Email</button>##}
+      </span>
+
+      <p>If you did not create an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</p>
+
+      <hr>
+
+      <p>This is an automated email. We are unable to respond to any messages to this email address.</p>
+    </body>
+  EMAILMESSAGE
+    email_subject_by_link = "U.S. Tax Court DAWSON Account Verification"
   }
 
   account_recovery_setting {
@@ -108,8 +135,16 @@ resource "aws_cognito_user_pool_client" "client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH"]
 
   generate_secret                      = false
-  refresh_token_validity               = 30
   allowed_oauth_flows_user_pool_client = true
+
+  token_validity_units {
+    access_token  = "hours"
+    id_token      = "hours"
+    refresh_token = "days"
+  }
+  refresh_token_validity = 1
+  access_token_validity  = 1
+  id_token_validity      = 1
 
   callback_urls = [
     "http://localhost:1234/log-in",
@@ -241,8 +276,15 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
-  refresh_token_validity               = 30
   allowed_oauth_flows_user_pool_client = true
+  token_validity_units {
+    access_token  = "hours"
+    id_token      = "hours"
+    refresh_token = "days"
+  }
+  refresh_token_validity = 30 # irs app expects 30 days
+  access_token_validity  = 1
+  id_token_validity      = 1
 
   callback_urls = [
     "http://localhost:1234/log-in",

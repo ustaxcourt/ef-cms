@@ -13,18 +13,6 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   ├── elasticsearch-indexes.js // all of the indices on the cluster
 │   ├── elasticsearch-settings.js // the main settings
 │   └── ... // other scripts
-├── migration-cron-terraform
-│   ├── bin
-│   │   ├── deploy-app.sh // used for deploying the cron lambda
-│   └── main
-│       ├── lambdas // the lambda containing the node logic
-│       ├── main.tf // the main terraform entrypoint
-├── migration-terraform
-│   ├── bin
-│   │   ├── deploy-app.sh // used for deploying the migration code
-│   └── main
-│       ├── lambdas // the lambda containing the node logic
-│       ├── main.tf  // the main terraform entrypoint
 ├── performance-testing
 │   └── find-judge.js
 ├── runtimes // used to build up the lambda layers
@@ -38,8 +26,7 @@ Before diving into the technical aspects of the backend, it might be useful just
 │       ├── package-lock.json
 │       └── package.json
 ├── src
-│   ├── app-local.js // used for running the private API locally
-│   ├── app-public-local.js // used for running the public API locally
+│   ├── app-local.ts // used for running the backend locally
 │   ├── app-public.js // the public API which contains all the endpoints
 │   ├── app.js // the private API which contains all the endpoints
 │   ├── applicationContext.js // the application context
@@ -79,12 +66,35 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   │   ├── main.tf // the main terraform entrypoint
 │   └── template
 │       ├── main.tf // the main terraform entrypoint for the template
-├── streams-local.js // sets up the dynamo streams locally
+├── workflow-terraform
+│   ├── migration
+│   │   ├── bin
+│   │   │   ├── deploy-app.sh // used for deploying the migration code
+│   │   └── main
+│   │       ├── lambdas // the lambda containing the node logic
+│   │       ├── main.tf  // the main terraform entrypoint
+│   ├── migration-cron
+│   │   ├── bin
+│   │   │   ├── deploy-app.sh // used for deploying the cron lambda
+│   │   │   └──  main
+│   │   │       ├── lambdas // the lambda containing the node logic
+│   │   │       ├── main.tf // the main terraform entrypoint
+│   ├── reindex-cron
+│   │   ├── bin
+│   │   │   ├── deploy-app.sh // used for deploying the cron lambda
+│   │   │   └──  main
+│   │   │       ├── lambdas // the lambda containing the node logic
+│   │   │       ├── main.tf // the main terraform entrypoint
+│   ├── switch-colors-cron
+│   │   ├── bin
+│   │   │   ├── deploy-app.sh // used for deploying the cron lambda
+│   │   │   └──  main
+│   │   │       ├── lambdas // the lambda containing the node logic
+│   │   │       ├── main.tf // the main terraform entrypoint
 ├── swagger.json // the swagger .json we update when api endpoints are changed or added
 ├── switch-cognito-triggers-color.js // used to switch the color of the cognito triggers
 ├── track-successful-migrations.js // tracks which migration scripts have run after doing a migration
 ├── verify-ses-email.sh // used to verify SES 
-└── websockets-local.js // used for setting up the websockets locally
 ```
 
 ## Express
@@ -166,7 +176,7 @@ Architecting a system with dynamodb can be tricky.  One recommendation from AWS 
 | add a hearing to a case                                    | case\|${CASE_ID}                                | hearing\|${TRIAL_SESSION_ID}             |                                             |
 | a work item on a case                                      | case\|${CASE_ID}                                | work-item\|${WORK_ITEM_ID}               |                                             |
 | docket number generator counter                            | docketNumberCounter-${YEAR}                     | docketNumberCounter-${YEAR}              |                                             |
-| how we store the list of trial sessions eligble for a case | eligible-for-trial-case-catalog                 | LasVegasNevada-H-B-20190816132910-107-19 | eligible-for-trial-case-catalog\|${CASE_ID} |
+| how we store the list of trial sessions eligible for a case | eligible-for-trial-case-catalog                 | LasVegasNevada-H-B-20190816132910-107-19 | eligible-for-trial-case-catalog\|${CASE_ID} |
 | associate practitioner by bar number for lookup            | privatePractitioner\|${BAR_NUMBER}              | user\|${userId}                          |                                             |
 | associate practitioner by name for lookup                  | privatePractitioner\|${NAME}                    | user\|${userId}                          |                                             |
 | save outbox workitems for a section sorted by date         | section-outbox\|                                | $datetime                                | work-item\|${WORK_ITEM_ID}                  |

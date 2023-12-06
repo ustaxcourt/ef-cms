@@ -3,10 +3,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
- * deleteDeficiencyStatisticInteractor
+ * deleteDeficiencyStatistic
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -14,7 +15,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.statisticId id of the statistic on the case to delete
  * @returns {object} the updated case
  */
-export const deleteDeficiencyStatisticInteractor = async (
+export const deleteDeficiencyStatistic = async (
   applicationContext: IApplicationContext,
   { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
 ) => {
@@ -40,3 +41,10 @@ export const deleteDeficiencyStatisticInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const deleteDeficiencyStatisticInteractor = withLocking(
+  deleteDeficiencyStatistic,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

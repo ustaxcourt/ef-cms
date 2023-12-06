@@ -178,11 +178,24 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [User Interview Mural Board - All user types](https://app.mural.co/invitation/mural/flexion6734/1646751586915?sender=u9a89dc65e6273d6559349431&key=d1201bf3-3904-4e0e-97e0-3d878568cc32)
 
+## Petition's QC Research
+
+### Petition's QC - Petition's Clerks (February-March 2023)
+
+[UX Petition's QC Research Plan - Petition's Clerks February 2023](https://docs.google.com/document/d/19b_8LaEf_BuuS3APjWNxnSBaBH1ydN2pevxaZP4CYok/edit?usp=sharing)
+
+[UX Petition's QC Findings Report - Petition's Clerks March 2023](https://drive.google.com/file/d/1k0BJjCctmidbkhuCRIZrdxR5OQFhYKBb/view?usp=sharing)
+
+[User Interview Mural Board - Petition's Clerks](https://app.mural.co/t/flexion6734/m/flexion6734/1676650484691/d7e0f4b66540cf5af851fec027276aface62083e?sender=u9a89dc65e6273d6559349431)
+
+[QC Process Flow Lucid Chart - Petition's Clerks](https://lucid.app/lucidchart/54368542-072c-44c2-9ed3-06149590268f/edit?viewport_loc=-488%2C-1745%2C8238%2C4912%2C0_0&invitationId=inv_4d57de35-151d-41b9-819a-9590b8e250c0)
+
+
 # UI Design System
 
 The complete [USTC UI Design Kit](https://www.figma.com/file/5dTOjitRz6cFmDfQW2RU5p/USTC-UI-Design-Kit?node-id=0%3A1) is available as a Figma file
 
-Generally follows the UI patterns and components established in the [U.S. Web Design System (USWDS) version 2](https://designsystem.digital.gov/) with some exceptions and additions
+Generally follows the UI patterns and components established in the [U.S. Web Design System (USWDS) version 3](https://designsystem.digital.gov/) with some exceptions and additions
 
 
 # Content Strategy

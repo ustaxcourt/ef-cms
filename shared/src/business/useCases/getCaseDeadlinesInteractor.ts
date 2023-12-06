@@ -4,21 +4,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { pick } from 'lodash';
 
-/**
- * getCaseDeadlinesInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the end date
- * @param {string} providers.startDate the start date
- * @param {number} providers.from the index to start from
- * @param {string} providers.judge the judge
- * @param {number} providers.pageSize the page size
- * @returns {Promise} the promise of the getCaseDeadlinesByDateRange call
- */
 export const getCaseDeadlinesInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -73,20 +61,13 @@ export const getCaseDeadlinesInteractor = async (
         'docketNumber',
         'docketNumberSuffix',
         'docketNumberWithSuffix',
+        'leadDocketNumber',
       ]),
     }));
 
   return { deadlines: afterCaseMapping, totalCount };
 };
 
-/**
- * Helper function to grab all of the cases from persistence; only return the valid cases
- *
- * @param {object} providers The providers
- * @param {object} providers.applicationContext the application context
- * @param {array}  providers.docketNumbers an array of docket numbers to retrieve from persistence
- * @returns {array} a validated array of cases
- */
 const getCasesByDocketNumbers = async ({
   applicationContext,
   docketNumbers,

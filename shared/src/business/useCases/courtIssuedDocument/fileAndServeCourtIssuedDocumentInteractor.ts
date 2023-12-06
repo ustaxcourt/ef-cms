@@ -1,20 +1,20 @@
 import { Case } from '../../entities/cases/Case';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_SERVED_MESSAGES,
+} from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
-const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_SERVED_MESSAGES,
-} = require('../../entities/EntityConstants');
-const { omit } = require('lodash');
+import { omit } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
- *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
  * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
@@ -24,7 +24,7 @@ const { omit } = require('lodash');
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  * @returns {Object} the URL of the document that was served
  */
-export const fileAndServeCourtIssuedDocumentInteractor = async (
+export const fileAndServeCourtIssuedDocument = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -126,7 +126,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
       status: true,
     });
 
-  let caseEntities = [];
+  let caseEntities: Case[] = [];
   let serviceResults;
 
   try {
@@ -167,10 +167,12 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
             scenario: form.scenario,
             serviceStamp: form.serviceStamp,
-            userId: user.userId,
+            trialLocation: form.trialLocation,
           },
           { applicationContext },
         );
+
+        docketEntryEntity.setFiledBy(user);
 
         const isSubjectCase =
           caseEntity.docketNumber === subjectCaseEntity.docketNumber;
@@ -250,3 +252,40 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    docketNumbers = [],
+    subjectCaseDocketNumber,
+  }: {
+    docketNumbers?: string[];
+    subjectCaseDocketNumber: string;
+  },
+) => ({
+  identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
+    item => `case|${item}`,
+  ),
+  ttl: 900,
+});
+
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'file_and_serve_court_issued_document',
+    },
+    userId: user.userId,
+  });
+};
+
+export const fileAndServeCourtIssuedDocumentInteractor = withLocking(
+  fileAndServeCourtIssuedDocument,
+  determineEntitiesToLock,
+  handleLockError,
+);

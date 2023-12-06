@@ -1,3 +1,6 @@
+@use '../uswds' as *;
+@use '../variables' as *;
+
 .ustc-header {
   /* small screens: */
   @media only screen and (max-width: $medium-screen - 1px) {
@@ -14,6 +17,10 @@
 
       .usa-navbar {
         justify-content: space-between;
+      }
+
+      .usa-navbar.usa-navbar-public {
+        justify-content: flex-start;
       }
 
       .usa-logo {
@@ -93,6 +100,10 @@
       .usa-navbar {
         width: unset;
         justify-content: space-between;
+      }
+      
+      .usa-navbar.usa-navbar-public {
+        justify-content: flex-start;
       }
 
       .usa-logo {
@@ -225,7 +236,16 @@
           }
 
           .usa-nav__submenu {
+            padding: 1rem;
             background-color: color($theme-color-primary);
+
+            .usa-nav__submenu-item:not(:first-child) {
+              margin-top: 0.75rem;
+            }
+
+            a {
+              padding: 0;
+            }
 
             /* this is for buttons in submenus that should be styled the same as links in submenus */
             .usa-nav__submenu-item button {
@@ -243,6 +263,10 @@
               right: 0;
               width: 110px;
               text-align: right;
+            }
+
+            #my-messages-btn {
+              display: inline-block;
             }
           }
         }
@@ -281,11 +305,6 @@
         justify-content: space-between;
       }
     }
-  }
-
-  #my-messages-btn,
-  #my-qc-btn {
-    font-size: 0.93rem;
   }
 }
 

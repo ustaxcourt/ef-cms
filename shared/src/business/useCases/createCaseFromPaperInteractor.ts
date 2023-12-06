@@ -1,12 +1,13 @@
 import { Case } from '../entities/cases/Case';
 import { CaseInternal } from '../entities/cases/CaseInternal';
-import { DocketEntry, DocketEntryClass } from '../entities/DocketEntry';
+import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
+import { RawUser } from '@shared/business/entities/User';
+import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { replaceBracketed } from '../utilities/replaceBracketed';
 
@@ -17,9 +18,9 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  caseToAdd: TCaseEntity;
-  docketEntryEntity: DocketEntryClass;
-  user: TUser;
+  caseToAdd: Case;
+  docketEntryEntity: DocketEntry;
+  user: RawUser;
 }) => {
   const workItemEntity = new WorkItem(
     {
@@ -40,8 +41,11 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       sentBy: user.name,
       sentBySection: user.section,
       sentByUserId: user.userId,
+      trialDate: caseToAdd.trialDate,
+      trialLocation: caseToAdd.trialLocation,
     },
     { applicationContext },
+    caseToAdd,
   );
 
   docketEntryEntity.setWorkItem(workItemEntity);
@@ -56,7 +60,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.ownershipDisclosureFileId the id of the ownership disclosure file
+ * @param {string} providers.corporateDisclosureFileId the id of the corporate disclosure file
  * @param {string} providers.petitionFileId the id of the petition file
  * @param {string} providers.petitionMetadata the petition metadata
  * @param {string} providers.requestForPlaceOfTrialFileId the id of the request for place of trial file
@@ -67,18 +71,18 @@ export const createCaseFromPaperInteractor = async (
   applicationContext: IApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
-    ownershipDisclosureFileId,
+    corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     requestForPlaceOfTrialFileId,
     stinFileId,
   }: {
-    applicationForWaiverOfFilingFeeFileId: string;
-    ownershipDisclosureFileId: string;
+    applicationForWaiverOfFilingFeeFileId?: string;
+    corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
-    requestForPlaceOfTrialFileId: string;
-    stinFileId: string;
+    requestForPlaceOfTrialFileId?: string;
+    stinFileId?: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -95,14 +99,13 @@ export const createCaseFromPaperInteractor = async (
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,
-      ownershipDisclosureFileId,
+      corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
     },
     { applicationContext },
   ).validate();
 
-  // invoke the createCase interactor
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({
       applicationContext,
@@ -119,6 +122,7 @@ export const createCaseFromPaperInteractor = async (
     },
     {
       applicationContext,
+      isNewCase: true,
     },
   );
 
@@ -147,10 +151,11 @@ export const createCaseFromPaperInteractor = async (
       isPaper: true,
       mailingDate: petitionEntity.mailingDate,
       receivedAt: caseToAdd.receivedAt,
-      userId: user.userId,
     },
     { applicationContext, petitioners: caseToAdd.petitioners },
   );
+
+  petitionDocketEntryEntity.setFiledBy(user);
 
   const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
     applicationContext,
@@ -178,10 +183,11 @@ export const createCaseFromPaperInteractor = async (
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
+
+    applicationForWaiverOfFilingFeeDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(applicationForWaiverOfFilingFeeDocketEntryEntity);
   }
@@ -189,10 +195,12 @@ export const createCaseFromPaperInteractor = async (
   if (requestForPlaceOfTrialFileId) {
     let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
 
-    documentTitle = replaceBracketed(
-      documentTitle,
-      caseToAdd.preferredTrialCity,
-    );
+    if (caseToAdd.preferredTrialCity) {
+      documentTitle = replaceBracketed(
+        documentTitle,
+        caseToAdd.preferredTrialCity,
+      );
+    }
 
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
@@ -208,10 +216,11 @@ export const createCaseFromPaperInteractor = async (
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
+
+    requestForPlaceOfTrialDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(requestForPlaceOfTrialDocketEntryEntity);
   }
@@ -231,34 +240,36 @@ export const createCaseFromPaperInteractor = async (
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
+    stinDocketEntryEntity.setFiledBy(user);
+
     caseToAdd.addDocketEntry(stinDocketEntryEntity);
   }
 
-  if (ownershipDisclosureFileId) {
-    const odsDocketEntryEntity = new DocketEntry(
+  if (corporateDisclosureFileId) {
+    const cdsDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        docketEntryId: ownershipDisclosureFileId,
-        documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-        documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        docketEntryId: corporateDisclosureFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
         filers,
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
-    caseToAdd.addDocketEntry(odsDocketEntryEntity);
+    cdsDocketEntryEntity.setFiledBy(user);
+
+    caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
   await Promise.all([

@@ -2,17 +2,23 @@ name: Build API Typescript
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   build_ts_api:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: build typescript api
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
+        with:
+          comment_on_pr: false
+      - name: Install Node Dependencies
+        run: npm ci
+      - name: Build Typescript API
         run: |
-          npm ci
           npm run build:assets
           npm run build:lambda:api

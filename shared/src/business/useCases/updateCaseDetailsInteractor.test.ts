@@ -3,41 +3,44 @@ import {
   CASE_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-  ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { UnauthorizedError } from '../../errors/errors';
+import { MOCK_LOCK } from '../../test/mockLock';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
 
 describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
+  let mockLock;
 
   beforeAll(() => {
-    applicationContext.getUniqueId.mockReturnValue(
-      '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
-    );
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
+    mockLock = undefined;
     mockCase = cloneDeep(MOCK_CASE);
     generalDocketReadyForTrialCase = cloneDeep({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
-  it('should throw an error if the user is unauthorized to update a case', async () => {
+  it('should throw an error when the user is unauthorized to update a case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
@@ -48,7 +51,7 @@ describe('updateCaseDetailsInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should throw a validation error if attempting to update caseType to undefined', async () => {
+  it('should throw a validation error when the updates to the case make it invalid', async () => {
     await expect(
       updateCaseDetailsInteractor(applicationContext, {
         caseDetails: {
@@ -57,6 +60,34 @@ describe('updateCaseDetailsInteractor', () => {
         docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('The Case entity was invalid');
+  });
+
+  it('should set irsNoticeDate when the updated case has a verified IRS notice', async () => {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        hasVerifiedIrsNotice: true,
+        irsNoticeDate: '2020-08-28T01:49:58.117Z',
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(result.hasVerifiedIrsNotice).toBe(true);
+    expect(result.irsNoticeDate).toBe('2020-08-28T01:49:58.117Z');
+  });
+
+  it('should set irsNoticeDate to undefined when the updated case does not have a verified IRS notice', async () => {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        hasVerifiedIrsNotice: false,
+        irsNoticeDate: '2020-08-28T01:49:58.117Z',
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(result.hasVerifiedIrsNotice).toBe(false);
+    expect(result.irsNoticeDate).toBe(undefined);
   });
 
   it('should call updateCase with the updated case payment information (when unpaid) and return the updated case', async () => {
@@ -97,7 +128,100 @@ describe('updateCaseDetailsInteractor', () => {
     expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.PAID);
   });
 
-  it('should call createCaseTrialSortMappingRecords if the updated case is ready for trial and preferred trial city has been changed', async () => {
+  it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+        petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(result.petitionPaymentDate).toBe(null);
+    expect(result.petitionPaymentMethod).toBe(null);
+    expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
+    expect(result.petitionPaymentWaivedDate).toEqual(
+      '2019-11-30T09:10:11.000Z',
+    );
+  });
+
+  it('should create a docket entry when the petition payment status was changed from unpaid to waived', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      });
+
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+        petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    const waivedDocument = result.docketEntries.find(
+      entry =>
+        entry.documentType === MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+    );
+
+    expect(waivedDocument).toBeTruthy();
+  });
+
+  it('should create a docket entry the petition payment status was changed from unpaid to paid', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      });
+
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        petitionPaymentDate: '2019-11-30T09:10:11.000Z',
+        petitionPaymentMethod: 'check',
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    const paidDocument = result.docketEntries.find(
+      entry =>
+        entry.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+    );
+
+    expect(paidDocument).toBeTruthy();
+  });
+
+  it('should NOT create a docket entry the petition payment status was NOT changed from unpaid', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      });
+
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(result).toMatchObject({
+      docketEntries: MOCK_CASE.docketEntries,
+    });
+  });
+
+  it('should call createCaseTrialSortMappingRecords when the updated case is ready for trial and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
@@ -120,7 +244,7 @@ describe('updateCaseDetailsInteractor', () => {
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 
-  it('should call createCaseTrialSortMappingRecords if the updated case is high priority and preferred trial city has been changed', async () => {
+  it('should call createCaseTrialSortMappingRecords when the updated case is high priority and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -148,100 +272,7 @@ describe('updateCaseDetailsInteractor', () => {
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 
-  it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
-    const result = await updateCaseDetailsInteractor(applicationContext, {
-      caseDetails: {
-        ...mockCase,
-        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-        petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
-      },
-      docketNumber: mockCase.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(result.petitionPaymentDate).toBe(null);
-    expect(result.petitionPaymentMethod).toBe(null);
-    expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
-    expect(result.petitionPaymentWaivedDate).toEqual(
-      '2019-11-30T09:10:11.000Z',
-    );
-  });
-
-  it('should create a docket entry when moved from unpaid to waived', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-      });
-
-    const result = await updateCaseDetailsInteractor(applicationContext, {
-      caseDetails: {
-        ...mockCase,
-        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-        petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
-      },
-      docketNumber: mockCase.docketNumber,
-    });
-
-    const waivedDocument = result.docketEntries.find(
-      entry =>
-        entry.documentType === MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
-    );
-
-    expect(waivedDocument).toBeTruthy();
-  });
-
-  it('should create a docket entry when moved from unpaid to paid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-      });
-
-    const result = await updateCaseDetailsInteractor(applicationContext, {
-      caseDetails: {
-        ...mockCase,
-        petitionPaymentDate: '2019-11-30T09:10:11.000Z',
-        petitionPaymentMethod: 'check',
-        petitionPaymentStatus: PAYMENT_STATUS.PAID,
-      },
-      docketNumber: mockCase.docketNumber,
-    });
-
-    const paidDocument = result.docketEntries.find(
-      entry =>
-        entry.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
-    );
-
-    expect(paidDocument).toBeTruthy();
-  });
-
-  it('should not create a docket entry when payment status remains unpaid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-      });
-
-    const result = await updateCaseDetailsInteractor(applicationContext, {
-      caseDetails: {
-        ...mockCase,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-      },
-      docketNumber: mockCase.docketNumber,
-    });
-
-    expect(result).toMatchObject({
-      docketEntries: MOCK_CASE.docketEntries,
-    });
-  });
-
-  it('should call createCaseTrialSortMappingRecords if the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
+  it('should call createCaseTrialSortMappingRecords when the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -269,7 +300,7 @@ describe('updateCaseDetailsInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call createCaseTrialSortMappingRecords if the case type is changed', async () => {
+  it('should call createCaseTrialSortMappingRecords when the case type has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -291,7 +322,7 @@ describe('updateCaseDetailsInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call createCaseTrialSortMappingRecords if the case procedure type is changed', async () => {
+  it('should call createCaseTrialSortMappingRecords when the case procedure type has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -313,7 +344,7 @@ describe('updateCaseDetailsInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call createCaseTrialSortMappingRecords if the case procedure type is changed and old case did not need trial sort mapping records because no trial location was selected', async () => {
+  it('should call createCaseTrialSortMappingRecords when the case procedure type is changed and old case did not need trial sort mapping records because no trial location was selected', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -336,7 +367,7 @@ describe('updateCaseDetailsInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should NOT call createCaseTrialSortMappingRecords if there are no changes that would alter the trial sort tags', async () => {
+  it('should NOT call createCaseTrialSortMappingRecords when there are no changes that would alter the trial sort tags', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -385,5 +416,48 @@ describe('updateCaseDetailsInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0].caseToUpdate.partyType,
     ).toEqual(MOCK_CASE.partyType); // does not change
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      updateCaseDetailsInteractor(applicationContext, {
+        caseDetails: {
+          ...mockCase,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+        },
+        docketNumber: mockCase.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 });

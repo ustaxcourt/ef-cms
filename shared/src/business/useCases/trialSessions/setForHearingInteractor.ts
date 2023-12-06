@@ -1,10 +1,11 @@
 import { Case } from '../../entities/cases/Case';
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * setForHearingInteractor
@@ -36,6 +37,10 @@ export const setForHearingInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const caseDetails = await applicationContext
     .getPersistenceGateway()

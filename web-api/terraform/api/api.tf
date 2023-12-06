@@ -9,11 +9,9 @@ resource "aws_lambda_function" "api_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment
@@ -39,6 +37,9 @@ resource "aws_api_gateway_gateway_response" "large_payload" {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
+  }
 }
 
 resource "aws_api_gateway_gateway_response" "timeout" {
@@ -50,6 +51,9 @@ resource "aws_api_gateway_gateway_response" "timeout" {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
+  }
 }
 
 resource "aws_api_gateway_gateway_response" "default5xx" {
@@ -59,6 +63,9 @@ resource "aws_api_gateway_gateway_response" "default5xx" {
   response_parameters = {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
+  }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
   }
 }
 
@@ -303,7 +310,7 @@ resource "aws_api_gateway_stage" "api_stage" {
           user-agent      = "$context.identity.userAgent"
         }
         method = "$context.httpMethod"
-        url = "$context.path"
+        url    = "$context.path"
       }
 
       authorizer = {
@@ -376,24 +383,6 @@ resource "aws_api_gateway_domain_name" "api_custom" {
   }
 }
 
-
-resource "aws_route53_record" "api_route53_regional_record" {
-  name           = aws_api_gateway_domain_name.api_custom.domain_name
-  type           = "A"
-  zone_id        = var.zone_id
-  set_identifier = "api_${var.region}_${var.current_color}"
-
-  alias {
-    name                   = aws_api_gateway_domain_name.api_custom.regional_domain_name
-    zone_id                = aws_api_gateway_domain_name.api_custom.regional_zone_id
-    evaluate_target_health = true
-  }
-
-  latency_routing_policy {
-    region = var.region
-  }
-}
-
 resource "aws_api_gateway_base_path_mapping" "api_mapping" {
   api_id      = aws_api_gateway_rest_api.gateway_for_api.id
   stage_name  = aws_api_gateway_stage.api_stage.stage_name
@@ -406,8 +395,26 @@ resource "aws_api_gateway_method_settings" "api_default" {
   method_path = "*/*"
 
   settings {
-    throttling_burst_limit = 5000 // concurrent request limit
-    throttling_rate_limit = 10000 // per second
+    throttling_burst_limit = 5000  // concurrent request limit
+    throttling_rate_limit  = 10000 // per second
+  }
+}
+
+resource "aws_route53_record" "api_route53_regional_record" {
+  name            = aws_api_gateway_domain_name.api_custom.domain_name
+  type            = "A"
+  zone_id         = var.zone_id
+  set_identifier  = "api_${var.region}_${var.current_color}"
+  health_check_id = var.health_check_id
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_custom.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_custom.regional_zone_id
+    evaluate_target_health = true
+  }
+
+  latency_routing_policy {
+    region = var.region
   }
 }
 

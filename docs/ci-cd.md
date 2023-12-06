@@ -86,25 +86,59 @@ All of our actions are defined in [.github/workflows](https://github.com/ustaxco
 Here is an example of our `test:client:unit` action:
 
 ```yml
-# client.yml
+#  client.yml
 name: Node.js CI
 on: [pull_request]
 jobs:
   Client:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [16.x]
+        ci_node_total: [4]
+        ci_node_index: [0, 1, 2, 3]
+    env:
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: NPM Install
-        run: npm ci --no-optional && npm rebuild
-      - name: API
-        run: npm run test:client:unit
+          node-version: '18.16.1'
+      - name: Collect Workflow Telemetry
+        uses: runforesight/workflow-telemetry-action@v1
+        with:
+          comment_on_pr: false
+      - name: Install Node Dependencies
+        run: npm ci
+      - name: Test Client Unit
+        run: |
+          export TESTFILES=$(npx ts-node split-tests-glob.ts -unit)
+          NODE_INDEX=${{ matrix.ci_node_index }} npm run test:client:unit:ci
+      - name: Rename coverage to shard coverage
+        run: |
+          mkdir -p coverage
+          cp web-client/coverage/${{ matrix.ci_node_index }}/lcov.info coverage/lcov-${{ matrix.ci_node_index }}.info
+          cp web-client/coverage/${{ matrix.ci_node_index }}/coverage-final.json coverage/coverage-${{ matrix.ci_node_index }}.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage
+  check-coverage:
+    runs-on: ubuntu-latest
+    needs: [Client]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage
+      - name: Process Coverage
+        run: npx nyc report --check-coverage --branches 94.56 --functions 97 --lines 97 --statements 97 --reporter lcov --reporter text --reporter clover -t coverage
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: coverage-artifacts
+          failOnError: false
 ```
 
 ## Docker

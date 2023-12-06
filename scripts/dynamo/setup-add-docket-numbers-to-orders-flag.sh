@@ -3,7 +3,7 @@
 # Sets the external opinion search enabled flag to "true" in the dynamo deploy table
 
 # Usage
-#   ENV=dev ./setup-external-opinion-search-flag.sh
+#   ENV=dev ./setup-add-docket-numbers-to-orders-flag.sh
 
 ./check-env-variables.sh \
   "ENV" \

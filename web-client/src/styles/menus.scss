@@ -1,3 +1,6 @@
+@use '../uswds' as *;
+@use '../variables' as *;
+
 #main-content .big-blue-header .case-detail-menu {
   .case-detail-menu__button {
     padding-top: 0.5rem;
@@ -11,6 +14,7 @@
   }
 
   .usa-nav__submenu {
+    padding: 1rem;
     background-color: $color-white;
     box-shadow: 3px 9px 9px rgba(0 0 0 / 20%);
 

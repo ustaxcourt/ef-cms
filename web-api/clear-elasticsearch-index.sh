@@ -10,11 +10,11 @@
 #   - AWS credentials must be setup on your machine
 #
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $1 - the environment [dev, stg, prod, exp1, etc]
 #   - $2 - the elasticsearch endpoint to clear
 
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 [ -z "${ELASTICSEARCH_ENDPOINT}" ] && echo "You must have ELASTICSEARCH_ENDPOINT set in your environment" && exit 1
 
-npx ts-node ./web-api/delete-elasticsearch-index.js
+npx ts-node --transpile-only ./web-api/delete-elasticsearch-index.js

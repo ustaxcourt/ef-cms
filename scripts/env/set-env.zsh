@@ -29,9 +29,11 @@ else
   environment="${DEFAULT_ORG}-${env}"
 fi
 
+if [[ $quiet -eq 0 ]]; then
 # load zsh colors
-autoload -Uz colors
-colors
+  autoload -Uz colors
+  colors
+fi
 
 # shellcheck disable=SC2154
 if [[ ! -f "./scripts/env/environments/${environment}.env" ]]; then
@@ -41,13 +43,21 @@ if [[ ! -f "./scripts/env/environments/${environment}.env" ]]; then
   return 1
 fi
 
+# quiet can potentially be overwritten
+sshhh=${quiet}
+
 # shellcheck disable=SC1090
 source "./scripts/env/environments/${environment}.env"
+EXIT_CODE="$?"
+if [ "${EXIT_CODE}" != "0" ]; then
+  return $EXIT_CODE
+fi
+
 
 if [[ $environment != "local" ]]; then
   source "./scripts/env/environments/00-common"
 
-  if [[ $quiet -ne 0 ]] && [[ -n "$CURRENT_COLOR" ]]; then
+  if [[ $sshhh -eq 0 ]] && [[ -n "$CURRENT_COLOR" ]]; then
     echo "  ___   ___      _____  ___  _  _ ";
     echo " |   \ /_\ \    / / __|/ _ \| \| |";
     echo " | |) / _ \ \/\/ /\__ \ (_) | .\` |";

@@ -3,8 +3,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../errors/errors';
-import { User } from '../entities/User';
+import { RawUser, User } from '../entities/User';
+import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 
 /**
  * getUserByIdInteractor
@@ -16,7 +16,7 @@ import { User } from '../entities/User';
 export const getUserByIdInteractor = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
-): Promise<TUser> => {
+): Promise<RawUser> => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {

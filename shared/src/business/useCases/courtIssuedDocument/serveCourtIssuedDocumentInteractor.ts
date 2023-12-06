@@ -1,16 +1,16 @@
 import { Case } from '../../entities/cases/Case';
+import { DOCUMENT_SERVED_MESSAGES } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
-const { DOCUMENT_SERVED_MESSAGES } = require('../../entities/EntityConstants');
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * serveCourtIssuedDocumentInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
@@ -18,7 +18,7 @@ const { DOCUMENT_SERVED_MESSAGES } = require('../../entities/EntityConstants');
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be served on
  * @param {string} providers.subjectCaseDocketNumber the docket number of the case containing the document to serve
  */
-export const serveCourtIssuedDocumentInteractor = async (
+export const serveCourtIssuedDocument = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -212,3 +212,40 @@ export const serveCourtIssuedDocumentInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    docketNumbers = [],
+    subjectCaseDocketNumber,
+  }: {
+    docketNumbers?: string[];
+    subjectCaseDocketNumber;
+  },
+) => ({
+  identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
+    item => `case|${item}`,
+  ),
+  ttl: 15 * 60,
+});
+
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'serve_court_issued_document',
+    },
+    userId: user.userId,
+  });
+};
+
+export const serveCourtIssuedDocumentInteractor = withLocking(
+  serveCourtIssuedDocument,
+  determineEntitiesToLock,
+  handleLockError,
+);

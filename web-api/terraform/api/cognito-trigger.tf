@@ -26,7 +26,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   handler          = "cognito-triggers.handler"
   timeout          = "29"
   memory_size      = "3008"
-  runtime          = "nodejs16.x"
+  runtime          = var.node_version
   count            = var.create_triggers
 
   depends_on       = [var.triggers_object]
@@ -34,9 +34,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   s3_key           = "triggers_${var.current_color}.js.zip"
   source_code_hash = var.triggers_object_hash
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   environment {
     variables = var.lambda_environment
@@ -49,16 +47,14 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   handler          = "cognito-triggers.handler"
   timeout          = "29"
   memory_size      = "3008"
-  runtime          = "nodejs16.x"
+  runtime          = var.node_version
   depends_on       = [var.triggers_object]
   s3_bucket        = var.lambda_bucket_id
   s3_key           = "triggers_${var.current_color}.js.zip"
   source_code_hash = var.triggers_object_hash
   count            = var.create_triggers
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   environment {
     variables = var.lambda_environment
@@ -73,15 +69,13 @@ resource "aws_lambda_function" "update_petitioner_cases_lambda" {
   timeout          = "29"
   count            = var.create_triggers
   memory_size      = "3008"
-  runtime          = "nodejs16.x"
+  runtime          = var.node_version
   depends_on       = [var.triggers_object]
   s3_bucket        = var.lambda_bucket_id
   s3_key           = "triggers_${var.current_color}.js.zip"
   source_code_hash = var.triggers_object_hash
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   environment {
     variables = var.lambda_environment

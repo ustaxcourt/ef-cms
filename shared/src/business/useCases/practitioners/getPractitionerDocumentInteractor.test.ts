@@ -2,7 +2,7 @@ import {
   PRACTITIONER_DOCUMENT_TYPES_MAP,
   ROLES,
 } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getPractitionerDocumentInteractor } from './getPractitionerDocumentInteractor';
 

@@ -2,7 +2,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { RawUser } from '@shared/business/entities/User';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * getJudgeInSectionInteractor - returns the judge user for a given section
@@ -16,7 +17,7 @@ import { UnauthorizedError } from '../../../errors/errors';
 export const getJudgeInSectionInteractor = async (
   applicationContext: IApplicationContext,
   { section }: { section: string },
-) => {
+): Promise<RawUser> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.GET_USERS_IN_SECTION)) {

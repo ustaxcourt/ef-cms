@@ -2,8 +2,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  RawTrialSessionWorkingCopy,
+  TrialSessionWorkingCopy,
+} from '../../entities/trialSessions/TrialSessionWorkingCopy';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * updateTrialSessionWorkingCopyInteractor
@@ -17,7 +20,7 @@ export const updateTrialSessionWorkingCopyInteractor = async (
   applicationContext: IApplicationContext,
   {
     trialSessionWorkingCopyToUpdate,
-  }: { trialSessionWorkingCopyToUpdate: TTrialSessionWorkingCopyData },
+  }: { trialSessionWorkingCopyToUpdate: RawTrialSessionWorkingCopy },
 ) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {

@@ -5,15 +5,14 @@ import {
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
 } from '../../entities/EntityConstants';
-import { MOCK_USERS } from '../../../test/mockUsers';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
-import { entityName as practitionerEntityName } from '../../entities/Practitioner';
-import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
+import { irsPractitionerUser } from '../../../test/mockUsers';
 import { updateUserContactInformationInteractor } from './updateUserContactInformationInteractor';
 
 jest.mock('./generateChangeOfAddress');
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 
 describe('updateUserContactInformationInteractor', () => {
@@ -31,14 +30,18 @@ describe('updateUserContactInformationInteractor', () => {
     state: 'IL',
   };
 
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+  });
+
   beforeEach(() => {
     mockUser = {
-      ...MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
+      ...irsPractitionerUser,
       admissionsDate: '2020-03-14',
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[2],
-      entityName: irsPractitionerEntityName,
+      entityName: IrsPractitioner.ENTITY_NAME,
       firmName: 'broken',
       firstName: 'Roy',
       lastName: 'Rogers',
@@ -47,25 +50,27 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.irsPractitioner,
     };
 
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUser);
+      .getCasesByUserId.mockReturnValue();
+
     applicationContext
       .getPersistenceGateway()
-      .updateUser.mockImplementation(() => {});
+      .getUserById.mockResolvedValue(mockUser);
+
+    applicationContext.getPersistenceGateway().updateUser.mockResolvedValue({});
   });
 
   it('should throw unauthorized error when user does not have permission to update contact information', async () => {
     mockUser = {
       role: ROLES.petitionsClerk,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: 'asdf1234-f6cd-442c-a168-202db587f16f',
     };
 
     await expect(
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
-        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+        userId: mockUser.userId,
       } as any),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -74,16 +79,16 @@ describe('updateUserContactInformationInteractor', () => {
     await expect(
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
-        userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+        userId: 'asdf1234-f6cd-442c-a168-202db587f16f',
       } as any),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should return without updating user or cases when the contact information has not changed', async () => {
     await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo: {},
+      contactInfo: mockUser.contact,
       firmName: 'broken',
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     });
 
     expect(applicationContext.getUseCases().updateUser).not.toHaveBeenCalled();
@@ -99,6 +104,11 @@ describe('updateUserContactInformationInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[1][0].message.action,
     ).toEqual('user_contact_full_update_complete');
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[1][0].message.user,
+    ).toBeDefined();
   });
 
   it('should throw an error when updateUser throws an error', async () => {
@@ -126,12 +136,12 @@ describe('updateUserContactInformationInteractor', () => {
 
   it('should update the user with the new contact information and mark it as having an update in progress', async () => {
     mockUser = {
-      ...MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
+      ...irsPractitionerUser,
       admissionsDate: '2020-03-14',
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[1],
-      entityName: irsPractitionerEntityName,
+      entityName: IrsPractitioner.ENTITY_NAME,
       firstName: 'Test',
       lastName: 'IRS Practitioner',
       originalBarState: 'OR',
@@ -140,7 +150,7 @@ describe('updateUserContactInformationInteractor', () => {
     };
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     } as any);
 
     expect(
@@ -158,98 +168,43 @@ describe('updateUserContactInformationInteractor', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      email: undefined,
-      entityName: practitionerEntityName,
+      entityName: Practitioner.ENTITY_NAME,
       isUpdatingInformation: true,
-      name: 'Test IRS Practitioner',
-      role: 'irsPractitioner',
       token: undefined,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
-  });
-
-  it('should update the user when the user being updated is a privatePractitioner', async () => {
-    mockUser = {
-      ...mockUser,
-      entityName: privatePractitionerEntityName,
-      role: ROLES.privatePractitioner,
-    };
-
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    } as any);
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[1][0].message.action,
-    ).toEqual('user_contact_full_update_complete');
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
-        .user,
-    ).toMatchObject({
-      isUpdatingInformation: false,
+      userId: mockUser.userId,
     });
   });
 
   it('should update the user when the user being updated is a irsPractitioner', async () => {
     mockUser = {
       ...mockUser,
-      entityName: irsPractitionerEntityName,
+      entityName: IrsPractitioner.ENTITY_NAME,
       role: ROLES.irsPractitioner,
     };
 
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     } as any);
 
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[1][0].message.action,
-    ).toEqual('user_contact_full_update_complete');
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
         .user,
     ).toMatchObject({
-      isUpdatingInformation: false,
+      isUpdatingInformation: true,
     });
   });
 
-  it('should update the user when the user being updated is a practitioner', async () => {
-    mockUser = {
-      ...mockUser,
-      entityName: practitionerEntityName,
-      role: ROLES.privatePractitioner,
-    };
-
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    } as any);
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[1][0].message.action,
-    ).toEqual('user_contact_full_update_complete');
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
-        .user,
-    ).toMatchObject({
-      isUpdatingInformation: false,
-    });
-  });
-
-  it('should notify and not update the user when the user being updated is not a privatePractitioner, irsPractitioner, or practitioner', async () => {
-    mockUser = {
+  it('should notify and not update the user when the user being updated is not a privatePractitioner, irsPractitioner, or petitioner', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       ...mockUser,
       entityName: 'notapractitioner',
-    };
+    });
 
     await expect(
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
-        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+        userId: mockUser.userId,
       } as any),
     ).rejects.toThrow();
 
@@ -271,38 +226,66 @@ describe('updateUserContactInformationInteractor', () => {
   it('should generate a change of address document', async () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     } as any);
 
     expect(generateChangeOfAddress).toHaveBeenCalled();
   });
 
-  it('should notify the user that the update is complete and mark the user as not having an update in progress', async () => {
+  it('should clean up DB and send websocket message if "generateChangeOfAddress" returns empty array', async () => {
+    (generateChangeOfAddress as jest.Mock).mockReturnValue([]);
+
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     } as any);
 
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[1][0].message.action,
-    ).toEqual('user_contact_full_update_complete');
-    expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
-        .user,
+        .isUpdatingInformation,
+    ).not.toBeDefined();
+
+    const notificatsionCalls =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls;
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.action,
+    ).toEqual('user_contact_full_update_complete');
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.user,
     ).toMatchObject({
-      isUpdatingInformation: false,
+      contact: contactInfo,
     });
+  });
+
+  it('should not clean up DB and send websocket message if "generateChangeOfAddress" returns undefined', async () => {
+    (generateChangeOfAddress as jest.Mock).mockReturnValue(undefined);
+
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      userId: mockUser.userId,
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls.length,
+    ).toEqual(1);
+
+    const notificatsionCalls =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls;
+
+    expect(
+      notificatsionCalls[notificatsionCalls.length - 1][0].message.action,
+    ).not.toEqual('user_contact_full_update_complete');
   });
 
   it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       firmName: 'testing',
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     });
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
@@ -323,7 +306,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       firmName: mockUser.firmName,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      userId: mockUser.userId,
     });
 
     expect(

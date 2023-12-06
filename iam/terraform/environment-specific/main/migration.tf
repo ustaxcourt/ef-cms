@@ -25,52 +25,52 @@ resource "aws_iam_role_policy" "migration_policy" {
 
   policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "logs:DescribeLogStreams"
-            ],
-            "Resource": [
-                "arn:aws:logs:*:*:*"
-            ]
-        },
-        {
-            "Action": [
-                "dynamodb:BatchWriteItem",
-                "dynamodb:DescribeStream",
-                "dynamodb:GetItem",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListShards",
-                "dynamodb:ListStreams",
-                "dynamodb:Query",
-                "dynamodb:PutItem",
-                "dynamodb:Scan",
-                "dynamodb:DeleteItem"
-            ],
-            "Resource": [
-                "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/*",
-                "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/*"
-            ],
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "sqs:DeleteMessage",
-                "sqs:SendMessage",
-                "sqs:SendMessageBatch",
-                "sqs:ReceiveMessage",
-                "sqs:GetQueueAttributes"
-            ],
-            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
-            "Effect": "Allow"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+      ]
+    },
+    {
+      "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:DescribeStream",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:ListShards",
+        "dynamodb:ListStreams",
+        "dynamodb:Query",
+        "dynamodb:PutItem",
+        "dynamodb:Scan",
+        "dynamodb:DeleteItem"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/*",
+        "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/*"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "sqs:DeleteMessage",
+        "sqs:SendMessage",
+        "sqs:SendMessageBatch",
+        "sqs:ReceiveMessage",
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
+      "Effect": "Allow"
+    }
+  ]
 }
 EOF
 }
@@ -101,68 +101,68 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
 
   policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "logs:DescribeLogStreams"
-            ],
-            "Resource": [
-                "arn:aws:logs:*:*:*"
-            ]
-        },
-        {
-            "Action": [
-                "dynamodb:BatchWriteItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:DescribeStream",
-                "dynamodb:GetItem",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListShards",
-                "dynamodb:ListStreams",
-                "dynamodb:PutItem",
-                "dynamodb:Query",
-                "dynamodb:Scan"
-            ],
-            "Resource": [
-                "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/*",
-                "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/*"
-            ],
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "sqs:DeleteMessage",
-                "sqs:SendMessage",
-                "sqs:SendMessageBatch",
-                "sqs:ReceiveMessage",
-                "sqs:GetQueueAttributes"
-            ],
-            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::${var.dns_domain}-documents-*"
-            ],
-            "Effect": "Allow"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+      ]
+    },
+    {
+      "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeStream",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:ListShards",
+        "dynamodb:ListStreams",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/*",
+        "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/*"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "sqs:DeleteMessage",
+        "sqs:SendMessage",
+        "sqs:SendMessageBatch",
+        "sqs:ReceiveMessage",
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${var.dns_domain}-documents-*"
+      ],
+      "Effect": "Allow"
+    }
+  ]
 }
 EOF
 }
 
-resource "aws_iam_role" "reindex_status_role" {
-  name = "reindex_status_role_${var.environment}"
+resource "aws_iam_role" "migration_status_role" {
+  name = "migration_status_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -181,35 +181,65 @@ resource "aws_iam_role" "reindex_status_role" {
 EOF
 }
 
-resource "aws_iam_role_policy" "reindex_status_policy" {
-  name = "reindex_status_policy_${var.environment}"
-  role = aws_iam_role.reindex_status_role.id
+resource "aws_iam_role_policy" "migration_status_policy" {
+  name = "migration_status_policy_${var.environment}"
+  role = aws_iam_role.migration_status_role.id
 
   policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "logs:DescribeLogStreams"
-            ],
-            "Resource": [
-                "arn:aws:logs:*:*:*"
-            ]
-        },
-        {
-          "Sid": "Other",
-          "Effect": "Allow",
-          "Action": [
-            "es:*"
-          ],
-          "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+      ]
+    },
+    {
+      "Sid": "Other",
+      "Effect": "Allow",
+      "Action": [
+        "es:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatch",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:GetMetricStatistics"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "SQS",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": [
+        "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:migration_segments_queue_${var.environment}",
+        "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:migration_segments_dl_queue_${var.environment}"
+      ]
+    },
+    {
+      "Sid": "DynamoDB",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}"
+      ]
+    }
+  ]
 }
 EOF
 }

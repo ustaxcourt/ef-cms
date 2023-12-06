@@ -7,14 +7,10 @@ import {
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
+import { docketClerkUser, petitionerUser } from '../../../test/mockUsers';
 import { fileCorrespondenceDocumentInteractor } from './fileCorrespondenceDocumentInteractor';
 
 describe('fileCorrespondenceDocumentInteractor', () => {
-  const mockUser = {
-    name: 'Docket Clerk',
-    role: ROLES.docketClerk,
-    userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-  };
   const mockCase = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
@@ -25,6 +21,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
+        filedByRole: ROLES.docketClerk,
         filingDate: createISODateString(),
         index: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -52,12 +49,15 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };
+  const mockDocumentTitle = 'A title';
+  const mockFilingDate = '2001-02-01T05:00:00.000Z';
+  const mockCorrespondenceId = '14bb669b-0962-4781-87a0-50718f556e2b';
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    applicationContext.getCurrentUser.mockImplementation(() => docketClerkUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
+      .getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -65,7 +65,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   });
 
   it('should throw an Unauthorized error if the user role does not have theCASE_CORRESPONDENCE permission', async () => {
-    const user = { ...mockUser, role: ROLES.petitioner };
+    const user = petitionerUser;
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
@@ -73,7 +73,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
         } as any,
-        primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
+        primaryDocumentFileId: mockCorrespondenceId,
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -86,16 +86,15 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     await expect(
       fileCorrespondenceDocumentInteractor(applicationContext, {
         documentMetadata: { docketNumber: mockCase.docketNumber } as any,
-        primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
+        primaryDocumentFileId: mockCorrespondenceId,
       }),
-    ).rejects.toThrow('Case 123-45 was not found');
+    ).rejects.toThrow(`Case ${mockCase.docketNumber} was not found`);
   });
 
   it('should add the correspondence document to the case when the case entity is valid', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
-
+      .getUserById.mockReturnValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
@@ -103,21 +102,21 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     await fileCorrespondenceDocumentInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: mockCase.docketNumber,
-        documentTitle: 'A title',
-        filingDate: '2001-02-01T05:00:00.000Z',
+        documentTitle: mockDocumentTitle,
+        filingDate: mockFilingDate,
       } as any,
-      primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
+      primaryDocumentFileId: mockCorrespondenceId,
     });
     expect(
       applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
       correspondence: {
-        correspondenceId: '14bb669b-0962-4781-87a0-50718f556e2b',
-        documentTitle: 'A title',
-        filedBy: mockUser.name,
-        filingDate: '2001-02-01T05:00:00.000Z',
-        userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+        correspondenceId: mockCorrespondenceId,
+        documentTitle: mockDocumentTitle,
+        filedBy: docketClerkUser.name,
+        filingDate: mockFilingDate,
+        userId: docketClerkUser.userId,
       },
       docketNumber: mockCase.docketNumber,
     });
@@ -133,21 +132,21 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       {
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
-          documentTitle: 'A title',
-          filingDate: '2001-02-01T05:00:00.000Z',
+          documentTitle: mockDocumentTitle,
+          filingDate: mockFilingDate,
         } as any,
-        primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
+        primaryDocumentFileId: mockCorrespondenceId,
       },
     );
     expect(result).toMatchObject({
       ...mockCase,
       correspondence: [
         {
-          correspondenceId: '14bb669b-0962-4781-87a0-50718f556e2b',
-          documentTitle: 'A title',
-          filedBy: mockUser.name,
-          filingDate: '2001-02-01T05:00:00.000Z',
-          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+          correspondenceId: mockCorrespondenceId,
+          documentTitle: mockDocumentTitle,
+          filedBy: docketClerkUser.name,
+          filingDate: mockFilingDate,
+          userId: docketClerkUser.userId,
         },
       ],
     });
