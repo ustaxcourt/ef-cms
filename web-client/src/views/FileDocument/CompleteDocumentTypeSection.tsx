@@ -52,6 +52,7 @@ export const CompleteDocumentTypeSection = connect(
 
           <SelectSearch
             aria-labelledby="document-type-label"
+            data-testid="document-type"
             id="document-type"
             name="eventCode"
             options={

@@ -13,6 +13,8 @@ describe('noticeOfChangeToRemoteProceeding', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Jerad Mayer',
           docketNumberWithSuffix: '123-45S',
+          nameOfClerk: 'Stephanie A. Servoss',
+          titleOfClerk: 'Clerk of the Court',
           trialInfo: {
             chambersPhoneNumber: '1-721-740-9885 x4239',
             formattedJudge: 'Chief Special Trial Judge Carluzzo',
