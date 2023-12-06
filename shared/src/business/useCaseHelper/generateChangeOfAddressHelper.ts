@@ -131,6 +131,7 @@ export const generateChangeOfAddressHelper = async ({
       applicationContext,
       message: {
         action: `${websocketMessagePrefix}_contact_full_update_complete`,
+        user,
       },
       userId: requestUserId || user.userId,
     });
