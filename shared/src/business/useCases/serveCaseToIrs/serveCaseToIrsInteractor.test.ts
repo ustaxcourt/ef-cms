@@ -75,6 +75,13 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockResolvedValue({
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      });
   });
 
   beforeEach(() => {
@@ -1436,6 +1443,57 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledWith({
       applicationContext,
       identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
+  });
+
+  it('should generate a notice of receipt of petition with the name and title of the clerk of the court', async () => {
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[0][0].data,
+    ).toMatchObject({
+      nameOfClerk: 'James Bond',
+      titleOfClerk: 'Clerk of the Court (Interim)',
+    });
+  });
+
+  it('should generate a second notice of receipt of petition with the name and title of the clerk of the court', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          address1: '123 Side St',
+          city: 'Somewhere Else',
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner Secondary',
+          phone: '1234547',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data,
+    ).toMatchObject({
+      nameOfClerk: 'James Bond',
+      titleOfClerk: 'Clerk of the Court (Interim)',
     });
   });
 });
