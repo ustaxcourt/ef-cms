@@ -7,7 +7,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
-import { isEqual } from 'lodash';
+import { isArray, isEqual } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
@@ -59,6 +59,7 @@ const updateUserContactInformationHelper = async (
       applicationContext,
       message: {
         action: 'user_contact_full_update_complete',
+        user,
       },
       userId: user.userId,
     });
@@ -95,13 +96,30 @@ const updateUserContactInformationHelper = async (
     userId: user.userId,
   });
 
-  await generateChangeOfAddress({
+  const results = await generateChangeOfAddress({
     applicationContext,
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
     websocketMessagePrefix: 'user',
   });
+
+  if (isArray(results) && !results.length) {
+    userEntity.setIsUpdatingInformation(undefined);
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: userEntity.validate().toRawObject(),
+    });
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_full_update_complete',
+        user: userEntity.validate().toRawObject(),
+      },
+      userId: user.userId,
+    });
+  }
 };
 
 /**
@@ -140,7 +158,7 @@ export const updateUserContactInformation = async (
       applicationContext,
       message: {
         action: 'user_contact_update_error',
-        error: error.toString(),
+        error: (error as Error).toString(),
       },
       userId: authenticatedUser.userId,
     });
