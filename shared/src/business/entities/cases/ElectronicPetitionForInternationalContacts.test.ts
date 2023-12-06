@@ -4,13 +4,13 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternal } from './CaseExternal';
+import { ElectronicPetition } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-describe('CaseExternal', () => {
+describe('ElectronicPetition', () => {
   describe('for (international) Contacts', () => {
     it('should not validate without country', () => {
-      const caseExternal = new CaseExternal(
+      const electronicPetition = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -40,7 +40,7 @@ describe('CaseExternal', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors()).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()).toEqual({
         petitioners: [
           {
             country: 'Enter a country',
@@ -51,7 +51,7 @@ describe('CaseExternal', () => {
     });
 
     it('can validate the primary contact in the petitioners array', () => {
-      const caseExternal = new CaseExternal(
+      const electronicPetition = new ElectronicPetition(
         {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
@@ -82,7 +82,7 @@ describe('CaseExternal', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+      expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

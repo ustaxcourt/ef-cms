@@ -24,7 +24,6 @@ import {
 } from '../../shared/src/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  clerkOfCourtNameForSigning,
   getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getEnvironment,
@@ -636,7 +635,6 @@ const applicationContext = {
     return broadcastChannel;
   },
   getCaseTitle: Case.getCaseTitle,
-  getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
