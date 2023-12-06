@@ -1,6 +1,6 @@
 import { Case } from '../entities/cases/Case';
-import { CaseExternalIncomplete } from '../entities/cases/CaseExternalIncomplete';
 import { DocketEntry } from '../entities/DocketEntry';
+import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
@@ -69,7 +69,7 @@ export const createCaseInteractor = async (
     petitionMetadata,
     stinFileId,
   }: {
-    corporateDisclosureFileId: string;
+    corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
@@ -84,7 +84,8 @@ export const createCaseInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-  const petitionEntity = new CaseExternalIncomplete(petitionMetadata, {
+
+  const petitionEntity = new ElectronicPetition(petitionMetadata, {
     applicationContext,
   }).validate();
 
