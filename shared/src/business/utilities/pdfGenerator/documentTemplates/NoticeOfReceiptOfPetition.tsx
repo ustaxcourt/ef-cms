@@ -1,6 +1,7 @@
 import { AddressLabel } from '../components/AddressLabel';
 import { CompressedDocketHeader } from '../components/CompressedDocketHeader';
 import { PrimaryHeader } from '../components/PrimaryHeader';
+import { RawContact } from '@shared/business/entities/contacts/Contact';
 import React from 'react';
 
 const StandardNOTRText = () => (
@@ -64,7 +65,7 @@ export const NoticeOfReceiptOfPetition = ({
   accessCode?: string;
   caseCaptionExtension: string;
   caseTitle: string;
-  contact: any; // get proper type
+  contact: RawContact;
   docketNumberWithSuffix: string;
   nameOfClerk: string;
   preferredTrialCity: string;
