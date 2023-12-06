@@ -23,7 +23,7 @@ describe('createOrderAction', () => {
     presenter.providers.applicationContext = applicationContextForClient;
   });
 
-  it('creates an order', async () => {
+  it('sets the eventCode, content html and document title for creating orders', async () => {
     const result = await runAction(createOrderAction, {
       modules: {
         presenter,
@@ -34,6 +34,7 @@ describe('createOrderAction', () => {
         },
         form: {
           documentTitle: 'Test Title',
+          eventCode: 'NOT',
           richText: '<b>Foo</b>',
         },
       },
@@ -41,33 +42,6 @@ describe('createOrderAction', () => {
 
     expect(result.output.contentHtml).toEqual('<b>Foo</b>');
     expect(result.output.documentTitle).toEqual('TEST TITLE');
-    expect(result.output.signatureText).toEqual('');
-  });
-
-  it('creates an order for a notice', async () => {
-    applicationContextForClient.getClerkOfCourtNameForSigning.mockReturnValue(
-      'Bobby Flay',
-    );
-
-    const result = await runAction(createOrderAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          caseCaption: 'Guy Fieri',
-        },
-        form: {
-          eventCode: 'NOT',
-        },
-      },
-    });
-
-    expect(
-      applicationContextForClient.getClerkOfCourtNameForSigning,
-    ).toHaveBeenCalled();
-    expect(result.output.contentHtml).toEqual('');
-    expect(result.output.documentTitle).toEqual('');
-    expect(result.output.signatureText).toEqual('Bobby Flay');
+    expect(result.output.eventCode).toEqual('NOT');
   });
 });

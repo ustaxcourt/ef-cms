@@ -14,6 +14,8 @@ describe('noticeOfTrialIssuedInPerson', () => {
           caseTitle:
             'Milton Schwartz, Deceased, Neil Schwartz, Fiduciary and Ada Schwartz, Deceased, Neil Schwartz, Fiduciary, Petitioners',
           docketNumberWithSuffix: '123-45S',
+          nameOfClerk: 'Stephanie A. Servoss',
+          titleOfClerk: 'Clerk of the Court',
           trialInfo: {
             address1: '123 Candy Cane Lane',
             address2: '22222',
