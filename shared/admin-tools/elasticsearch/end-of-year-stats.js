@@ -1,16 +1,22 @@
-const createApplicationContext = require('../../../web-api/src/applicationContext');
+const {
+  createApplicationContext,
+} = require('../../../web-api/src/applicationContext');
 const fs = require('fs');
-const { computeDate } = require('../../src/business/utilities/DateHandler');
-const { search } = require('../../src/persistence/elasticsearch/searchClient');
+const {
+  createStartOfDayISO,
+} = require('../../src/business/utilities/DateHandler');
+const {
+  search,
+} = require('../../../web-api/src/persistence/elasticsearch/searchClient');
 
 const fiscalYear = process.argv[2] || new Date().getFullYear();
 
-const startOfYear = computeDate({
+const startOfYear = createStartOfDayISO({
   day: 1,
   month: 10,
   year: parseInt(fiscalYear) - 1,
 });
-const endOfYear = computeDate({
+const endOfYear = createStartOfDayISO({
   day: 1,
   month: 10,
   year: parseInt(fiscalYear),
@@ -125,10 +131,12 @@ const getCasesFiledByType = async ({ applicationContext }) => {
     index: 'efcms-case',
   });
 
-  const rows = results.aggregations['by-suffix'].buckets.map(
+  const rows = results.body.aggregations['by-suffix'].buckets.map(
     ({ doc_count, key }) => [key, doc_count].join(','),
   );
-  rows.push(['Regular', results.aggregations['no-suffix'].doc_count].join(','));
+  rows.push(
+    ['Regular', results.body.aggregations['no-suffix'].doc_count].join(','),
+  );
   rows.unshift(['Type', 'Count'].join(','));
   fs.writeFileSync(
     `./FY-${fiscalYear}-cases-filed-by-type.csv`,
@@ -159,6 +167,7 @@ const determineDocketNumberSuffix = async ({
       index: 'efcms-case',
     },
   });
+
   return result.results[0].docketNumberSuffix;
 };
 
@@ -262,8 +271,8 @@ const getPercentageOfCasesInWhichPetitionerIsRepresented = async ({
     index: 'efcms-case',
   });
 
-  const proSeCount = results.aggregations['pro-se'].doc_count;
-  const representedCount = results.aggregations.represented.doc_count;
+  const proSeCount = results.body.aggregations['pro-se'].doc_count;
+  const representedCount = results.body.aggregations.represented.doc_count;
   const rows = [];
   rows.push(['Type', 'Count'].join(','));
   rows.push(['Pro Se', proSeCount].join(','));
@@ -427,15 +436,15 @@ const checkIfNOCIsFiled = async ({
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  await getOpinionsFiledByCaseType({
-    applicationContext,
-  });
-  await getCasesOpenedAndClosed({
-    applicationContext,
-  });
-  await getCasesFiledByType({
-    applicationContext,
-  });
+  // await getOpinionsFiledByCaseType({
+  //   applicationContext,
+  // });
+  // await getCasesOpenedAndClosed({
+  //   applicationContext,
+  // });
+  // await getCasesFiledByType({
+  //   applicationContext,
+  // });
   await getTotalOpenCasesEOY({
     applicationContext,
   });
