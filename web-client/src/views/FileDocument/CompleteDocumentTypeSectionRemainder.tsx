@@ -72,6 +72,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
               <SelectSearch
                 aria-describedby="secondary-document-type-label"
                 aria-labelledby="secondary-document-type-label"
+                data-testid="secondary-doc-secondary-document-type"
                 id="secondary-doc-secondary-document-type"
                 name="secondaryDocument.eventCode"
                 options={

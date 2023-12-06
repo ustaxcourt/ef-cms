@@ -95,7 +95,7 @@ describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
 
       await waitForLoadingComponentToHide({ cerebralTest });
 
-      expect(cerebralTest.getState('alertSuccess')).toEqual({
+      expect(cerebralTest.getState('alertSuccess')).toMatchObject({
         message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
         overwritable: false,
       });

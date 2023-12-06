@@ -114,6 +114,7 @@ export const BeforeYouFileADocument = connect(
             </div>
           </div>
           <Button
+            data-testid="ready-to-file"
             href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
           >
             OK, Iʼm Ready to File
