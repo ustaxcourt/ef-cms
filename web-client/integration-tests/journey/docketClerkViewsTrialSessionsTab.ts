@@ -8,8 +8,8 @@ const formattedTrialSessions = withAppContextDecorator(
 );
 
 export const docketClerkViewsTrialSessionsTab = (
-  cerebralTest,
-  overrides = { tab: undefined },
+  cerebralTest: any,
+  overrides: { tab?: string } = { tab: undefined },
 ) => {
   const status = overrides.tab || 'Open';
   return it(`Docket clerk views ${status} Trial Sessions tab`, async () => {
