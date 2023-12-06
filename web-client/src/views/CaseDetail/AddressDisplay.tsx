@@ -54,6 +54,7 @@ export const AddressDisplay = connect(
               noMargin ? 'no-margin' : 'margin-top-1',
               'address-line',
             )}
+            data-testid="contact-info-phone-number"
           >
             {contact.phone}
           </span>

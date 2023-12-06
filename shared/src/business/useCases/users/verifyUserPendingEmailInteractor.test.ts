@@ -264,6 +264,10 @@ describe('verifyUserPendingEmailInteractor', () => {
           .calls[2][0].message,
       ).toMatchObject({
         action: 'user_contact_full_update_complete',
+        user: {
+          email: 'other@example.com',
+          userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+        },
       });
     });
 
