@@ -1,5 +1,5 @@
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { PaperPetition } from '../../../shared/src/business/entities/cases/PaperPetition';
 
 export const petitionsClerkVerifiesOrderForCdsCheckbox = (
   cerebralTest,
@@ -39,7 +39,7 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = (
 
     expect(
       cerebralTest.getState('validationErrors.corporateDisclosureFile'),
-    ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+    ).toEqual(PaperPetition.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderForCds',
