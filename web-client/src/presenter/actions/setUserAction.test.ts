@@ -4,7 +4,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setUserAction } from './setUserAction';
 
 describe('setUserAction', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     process.env.USTC_ENV = 'dev';
     presenter.providers.applicationContext = applicationContext;
   });

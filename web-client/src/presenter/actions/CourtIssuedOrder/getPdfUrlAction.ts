@@ -6,11 +6,11 @@ export const getPdfUrlAction = async ({
   get,
   props,
 }: ActionProps<{
-  contentHtml: string;
   documentTitle: string;
-  signatureText: string;
+  contentHtml: string;
+  eventCode: string;
 }>) => {
-  const { contentHtml, documentTitle, signatureText } = props;
+  const { contentHtml, documentTitle, eventCode } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const consolidatedCasesToMultiDocketOn = get(
@@ -37,7 +37,7 @@ export const getPdfUrlAction = async ({
       contentHtml,
       docketNumber,
       documentTitle,
-      signatureText,
+      eventCode,
     });
 
   return { pdfUrl: url };

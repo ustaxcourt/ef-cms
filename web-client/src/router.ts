@@ -1206,7 +1206,7 @@ const router = {
     registerRoute(
       '/add-a-trial-session',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        { app, permissionToCheck: ROLE_PERMISSIONS.CREATE_TRIAL_SESSION },
         () => {
           setPageTitle('Add a trial session');
           return app.getSequence('gotoAddTrialSessionSequence')();

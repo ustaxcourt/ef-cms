@@ -20,6 +20,8 @@ export type ThirtyDayNoticeOfTrialRequiredInfo = {
   dateServed: string;
   proceedingType: TrialSessionProceedingType;
   scopeType: TrialSessionScope;
+  nameOfClerk: string;
+  titleOfClerk: string;
 };
 
 type TrialLocation = {
@@ -193,8 +195,10 @@ export const ThirtyDayNoticeOfTrial = ({
   caseTitle,
   docketNumberWithSuffix,
   judgeName,
+  nameOfClerk,
   proceedingType,
   scopeType,
+  titleOfClerk,
   trialDate,
   trialLocation,
 }: ThirtyDayNoticeOfTrialRequiredInfo) => {
@@ -266,7 +270,10 @@ export const ThirtyDayNoticeOfTrial = ({
           soon as possible.
         </p>
 
-        <ClerkOfTheCourtSignature />
+        <ClerkOfTheCourtSignature
+          nameOfClerk={nameOfClerk}
+          titleOfClerk={titleOfClerk}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-@use "../uswds" as *;
+@use '../uswds' as *;
 @use '../variables' as *;
 
 button:disabled {
@@ -246,7 +246,7 @@ table.ustc-table .ustc-button--unstyled {
   z-index: 2001;
   right: 40px;
   bottom: 40px;
-  width: 40px; 
+  width: 40px;
   height: 40px;
   padding: 0;
   line-height: 40px;
@@ -286,7 +286,7 @@ table.ustc-table .ustc-button--unstyled {
     opacity: 0;
     transform: translate3d(0, 2000px, 0) scaleY(3);
   }
-} 
+}
 
 @keyframes bounce-in-up {
   0% {
@@ -302,8 +302,8 @@ table.ustc-table .ustc-button--unstyled {
   80% {
     transform: translateY(10px);
   }
-  
+
   100% {
     transform: translateY(0);
   }
-} 
+}
