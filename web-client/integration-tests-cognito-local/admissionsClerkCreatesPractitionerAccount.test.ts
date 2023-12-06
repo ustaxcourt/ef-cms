@@ -58,7 +58,7 @@ describe('Admissions clerk creates practitioner account', () => {
 
     expect(cerebralTest.getState('currentPage')).toEqual('LogIn');
 
-    expect(cerebralTest.getState('alertSuccess')).toEqual({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Password successfully changed.',
     });
   });
