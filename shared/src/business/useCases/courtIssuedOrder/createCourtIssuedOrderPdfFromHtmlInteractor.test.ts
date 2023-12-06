@@ -17,6 +17,13 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockResolvedValue({
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      });
   });
 
   beforeEach(() => {
@@ -94,5 +101,47 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       }),
     );
     expect(result).toEqual(mockPdfUrl);
+  });
+
+  it('calls the generate the order pdf with the defined name and title of the clerk for NOT event codes', async () => {
+    const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
+      applicationContext,
+      {
+        eventCode: 'NOT',
+      } as any,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().order,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          nameOfClerk: 'James Bond',
+          titleOfClerk: 'Clerk of the Court (Interim)',
+        }),
+      }),
+    );
+    expect(result).toEqual(mockPdfUrl);
+  });
+
+  it('calls the generate the order pdf WITHOUT a defined name or title of the clerk for non-NOT event codes', async () => {
+    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
+      eventCode: 'O',
+    } as any);
+
+    expect(
+      applicationContext.getPersistenceGateway().getConfigurationItemValue,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getDocumentGenerators().order,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          nameOfClerk: '',
+          titleOfClerk: '',
+        }),
+      }),
+    );
   });
 });
