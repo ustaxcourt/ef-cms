@@ -1,5 +1,6 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
 import { NoticeOfChangeToRemoteProceeding } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToRemoteProceeding';
+import { TrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -7,7 +8,17 @@ import ReactDOM from 'react-dom/server';
 export const noticeOfChangeToRemoteProceeding = async ({
   applicationContext,
   data,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    nameOfClerk: string;
+    titleOfClerk: string;
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+    trialInfo: TrialInfoType;
+  };
+}): Promise<Buffer> => {
   const { docketNumberWithSuffix } = data;
 
   const noticeOfChangeToRemoteProceedingTemplate = ReactDOM.renderToString(

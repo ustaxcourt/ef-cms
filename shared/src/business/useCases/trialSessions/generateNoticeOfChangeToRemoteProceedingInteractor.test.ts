@@ -35,6 +35,13 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
+      .getConfigurationItemValue.mockImplementation(() => ({
+        name: 'bob',
+        title: 'clerk of court',
+      }));
+
+    applicationContext
+      .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
         if (docketNumber === '123-45') {
           return {
@@ -117,6 +124,27 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
       data: {
         docketNumberWithSuffix: '234-56S',
       },
+    });
+  });
+
+  it('should call the noticeOfChangeToRemoteProceeding pdf generator with the name and title of the clerk', async () => {
+    await generateNoticeOfChangeToRemoteProceedingInteractor(
+      applicationContext,
+      {
+        docketNumber: '234-56',
+        trialSessionInformation: mockTrialSessionInformation,
+      },
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators()
+        .noticeOfChangeToRemoteProceeding.mock.calls[0][0].data,
+    ).toMatchObject({
+      nameOfClerk: 'bob',
+      titleOfClerk: 'clerk of court',
     });
   });
 });

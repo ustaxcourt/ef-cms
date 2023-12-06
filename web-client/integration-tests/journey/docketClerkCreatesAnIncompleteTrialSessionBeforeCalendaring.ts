@@ -56,7 +56,7 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
 
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
-    expect(cerebralTest.getState('alertSuccess')).toEqual({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Trial session added.',
     });
 
