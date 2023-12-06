@@ -13,12 +13,15 @@ export const pendingReportListHelper = (
     state.pendingReports.hasPendingItemsResults,
   );
   const judge = get(state.pendingReports.selectedJudge);
+  console.log('judge', judge);
 
   const showLoadMore =
     get(state.pendingReports.pendingItems).length < searchResultsCount;
-
-  const showNoPendingItems = searchResultsCount === 0 && hasPendingItemsResults;
+  console.log('searchResultsCount', searchResultsCount);
+  console.log('hasPendingItemsResults', hasPendingItemsResults);
   const showSelectJudgeText = !judge;
+  const showNoPendingItems =
+    searchResultsCount === 0 && !hasPendingItemsResults && !!judge;
 
   return {
     showLoadMore,
