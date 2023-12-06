@@ -125,7 +125,6 @@ import {
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
-  VALIDATION_ERROR_MESSAGES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import {
@@ -314,5 +313,4 @@ export const getConstants = () => ({
   US_STATES,
   US_STATES_OTHER,
   USER_ROLES: ROLES,
-  VALIDATION_ERROR_MESSAGES,
 });
