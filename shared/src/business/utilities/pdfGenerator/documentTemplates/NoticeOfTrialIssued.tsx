@@ -1,13 +1,23 @@
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
 import { PrimaryHeader } from '../components/PrimaryHeader';
+import { TrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import React from 'react';
 
 export const NoticeOfTrialIssued = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
+  nameOfClerk,
+  titleOfClerk,
   trialInfo,
+}: {
+  nameOfClerk: string;
+  titleOfClerk: string;
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  trialInfo: TrialInfoType;
 }) => {
   return (
     <div id="notice-of-trial-pdf">
@@ -82,7 +92,10 @@ export const NoticeOfTrialIssued = ({
           result in dismissal of the case and entry of decision against you.
         </p>
 
-        <ClerkOfTheCourtSignature />
+        <ClerkOfTheCourtSignature
+          nameOfClerk={nameOfClerk}
+          titleOfClerk={titleOfClerk}
+        />
       </div>
     </div>
   );
