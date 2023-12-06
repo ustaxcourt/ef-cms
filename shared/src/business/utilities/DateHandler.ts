@@ -232,12 +232,12 @@ export const createISODateStringFromObject = options => {
 /**
  * @param {string} dateString a date string like YYYY-MM-DD or an ISO date retrieved from persistence
  * @param {string} formatArg the desired formatting as specified by the luxon library
- * @returns {string|void} a formatted date string
+ * @returns {string} a formatted date string
  */
 export const formatDateString = (
   dateString: string,
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
-): string | void => {
+): string => {
   if (!dateString) return '';
   let formatString = FORMATS[formatArg] || formatArg;
 
