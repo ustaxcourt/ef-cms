@@ -1,18 +1,9 @@
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
+import { FormattedTrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-
-// check if another type for FormattedTrial exists
-export type FormattedTrialInfo = RawTrialSession & {
-  chambersPhoneNumber: string | undefined; // possibly a required
-  formattedStartDate: string | void; // possibly a required
-  trialLocationAndProceedingType: string;
-  formattedJudge?: string;
-  formattedStartTime?: string;
-  joinPhoneNumber?: string | undefined;
-};
 
 export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
   applicationContext: IApplicationContext,
@@ -37,7 +28,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
     trialLocationAndProceedingType = 'standalone remote';
   }
 
-  const trialInfo: FormattedTrialInfo = {
+  const trialInfo: FormattedTrialInfoType = {
     ...trialSessionInformation,
     chambersPhoneNumber: formatPhoneNumber(
       trialSessionInformation.chambersPhoneNumber,
