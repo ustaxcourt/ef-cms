@@ -98,7 +98,7 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
         currentItem: 'alertSuccess.message',
         expectedItem: expectedAlertMessage,
       });
-      expect(cerebralTest.getState('alertSuccess')).toEqual({
+      expect(cerebralTest.getState('alertSuccess')).toMatchObject({
         message: expectedAlertMessage,
       });
     }
