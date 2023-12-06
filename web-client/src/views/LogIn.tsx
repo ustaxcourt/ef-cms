@@ -10,16 +10,12 @@ const Button = getView('Button');
 
 export const LogIn = connect(
   {
-    cognitoLocalEnabled: state.cognitoLocalEnabled,
     form: state.form,
-    loginWithCodeSequence: sequences.loginWithCodeSequence,
     loginWithCognitoLocalSequence: sequences.loginWithCognitoLocalSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function LogIn({
-    cognitoLocalEnabled,
     form,
-    loginWithCodeSequence,
     loginWithCognitoLocalSequence,
     updateFormValueSequence,
   }) {
@@ -33,15 +29,10 @@ export const LogIn = connect(
           id="log-in"
           onSubmit={event => {
             event.preventDefault();
-            !cognitoLocalEnabled &&
-              loginWithCodeSequence({
-                code: form.email,
-              });
-            cognitoLocalEnabled &&
-              loginWithCognitoLocalSequence({
-                code: form.email,
-                password: form.password,
-              });
+            loginWithCognitoLocalSequence({
+              code: form.email,
+              password: form.password,
+            });
           }}
         >
           <div className="blue-container margin-bottom-5">
@@ -63,27 +54,23 @@ export const LogIn = connect(
                   });
                 }}
               />
-              {cognitoLocalEnabled && (
-                <>
-                  <label className="usa-label margin-top-2" htmlFor="email">
-                    Password
-                  </label>
-                  <input
-                    autoCapitalize="none"
-                    className="usa-input"
-                    id="password"
-                    name="password"
-                    type="password"
-                    value={form.password}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </>
-              )}
+              <label className="usa-label margin-top-2" htmlFor="email">
+                Password
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="password"
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
             </div>
           </div>
           <Button id="log-in-button" type="submit">

@@ -43,7 +43,6 @@ import {
   getEnvironment,
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
-import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
@@ -52,6 +51,10 @@ import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
+import {
+  getCognito,
+  getLocalCognito,
+} from '@web-api/persistence/cognito/getCognito';
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
@@ -60,7 +63,6 @@ import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
-import { scan } from './persistence/dynamodbClientService';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
@@ -70,9 +72,8 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
-import { v4 as uuidv4 } from 'uuid';
 import type { ClientApplicationContext } from '../../web-client/src/applicationContext';
-const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
+const { DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -229,78 +230,9 @@ export const createApplicationContext = (
     },
     getCognito: () => {
       if (environment.stage === 'local') {
-        if (process.env.USE_COGNITO_LOCAL === 'true') {
-          return cognitoLocalWrapper(
-            new CognitoIdentityServiceProvider({
-              endpoint: 'http://localhost:9229/',
-              httpOptions: {
-                connectTimeout: 3000,
-                timeout: 5000,
-              },
-              maxRetries: 3,
-              region: 'local',
-            }),
-          );
-        } else {
-          return {
-            adminCreateUser: () => ({
-              promise: () => ({
-                User: {
-                  Username: uuidv4(),
-                },
-              }),
-            }),
-            adminDisableUser: () => ({
-              promise: () => {},
-            }),
-            adminGetUser: ({ Username }) => ({
-              promise: async () => {
-                // TODO: this scan might become REALLY slow while doing a full integration
-                // test run.
-                const items = await scan({
-                  applicationContext: {
-                    environment,
-                    getDocumentClient,
-                  },
-                });
-                const users = items.filter(
-                  ({ pk, sk }) =>
-                    pk.startsWith('user|') && sk.startsWith('user|'),
-                );
-                const foundUser = users.find(({ email }) => email === Username);
-                if (foundUser) {
-                  return {
-                    UserAttributes: [],
-                    Username: foundUser.userId,
-                  };
-                } else {
-                  const error = new Error();
-                  error.code = 'UserNotFoundException';
-                  throw error;
-                }
-              },
-            }),
-            adminUpdateUserAttributes: () => ({
-              promise: () => {},
-            }),
-            listUsers: () => ({
-              promise: () => {
-                throw new Error(
-                  'Please use cognito locally by running npm run start:api:cognito-local',
-                );
-              },
-            }),
-          };
-        }
+        return getLocalCognito();
       } else {
-        return new CognitoIdentityServiceProvider({
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
-          region: 'us-east-1',
-        });
+        return getCognito();
       }
     },
     getConstants: () => ({

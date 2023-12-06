@@ -49,12 +49,11 @@ else
   fi
 fi
 
-if [ -n "${USE_COGNITO_LOCAL}" ]; then
-  echo "Starting local lambda for cognito triggers"
-  npm run start:cognito-triggers-local &
-  echo "Starting cognito-local"
-  CODE=123456 npx cognito-local &
-fi
+echo "Starting local lambda for cognito triggers"
+npm run start:cognito-triggers-local &
+echo "Starting cognito-local"
+CODE=123456 npx cognito-local &
+
 
 nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress/helpers/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
