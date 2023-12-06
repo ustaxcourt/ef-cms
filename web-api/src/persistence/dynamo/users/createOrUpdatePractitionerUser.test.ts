@@ -318,43 +318,6 @@ describe('createOrUpdatePractitionerUser', () => {
     });
   });
 
-  it('should call adminCreateUser with the correct params when USE_COGNITO_LOCAL is true', async () => {
-    process.env.USE_COGNITO_LOCAL = 'true';
-    process.env.USER_POOL_ID = 'localUserPoolId';
-
-    // setupNonExistingUserMock();
-
-    await createOrUpdatePractitionerUser({
-      applicationContext,
-      user: privatePractitionerUser as any,
-    });
-
-    expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).toHaveBeenCalledWith({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: 'test@example.com',
-        },
-        {
-          Name: 'custom:role',
-          Value: 'privatePractitioner',
-        },
-        {
-          Name: 'name',
-          Value: 'Test Private Practitioner',
-        },
-      ],
-      UserPoolId: 'localUserPoolId',
-      Username: 'test@example.com',
-    });
-  });
-
   describe('createUserRecords', () => {
     it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
       await createUserRecords({

@@ -25,7 +25,6 @@ import {
 import {
   ERROR_MAP_429,
   clerkOfCourtNameForSigning,
-  getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getEnvironment,
   getPublicSiteUrl,
@@ -639,7 +638,6 @@ const applicationContext = {
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
-  getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getCognitoRedirectUrl: () => {
     return process.env.COGNITO_REDIRECT_URI || 'http://localhost:1234/log-in';

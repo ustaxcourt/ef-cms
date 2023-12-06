@@ -42,7 +42,6 @@ const env = {
   SESSION_TIMEOUT: process.env.SESSION_TIMEOUT,
   SKIP_VIRUS_SCAN: process.env.SKIP_VIRUS_SCAN,
   STAGE: process.env.STAGE,
-  USE_COGNITO_LOCAL: process.env.USE_COGNITO_LOCAL,
   USTC_ENV: process.env.USTC_ENV,
   WS_URL: process.env.WS_URL,
 };
