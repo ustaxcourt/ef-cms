@@ -9,7 +9,7 @@ presenter.providers.router = {
 };
 
 describe('navigateToTrialSessionAction', () => {
-  it('should go to the trials sessions route', async () => {
+  it('should go to the trial sessions route', async () => {
     await runAction(navigateToTrialSessionsAction, {
       modules: {
         presenter,
