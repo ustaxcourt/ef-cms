@@ -387,4 +387,16 @@ describe('User entity', () => {
       expect(user.isJudgeUser()).toBe(false);
     });
   });
+
+  describe('setIsUpdatingInformation', () => {
+    it('should set isUpdatingInformation correctly when calling the method', () => {
+      const user = new User(mockValidUser);
+
+      user.setIsUpdatingInformation(true);
+      expect(user.isUpdatingInformation).toBe(true);
+
+      user.setIsUpdatingInformation(false);
+      expect(user.isUpdatingInformation).toBe(false);
+    });
+  });
 });

@@ -1,40 +1,35 @@
 // usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/sealed-documents-and-cases.ts > ~/Desktop/sealed-cases.csv
 
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '../../../web-api/src/applicationContext';
 import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
-import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 const loadCaseFromInitialBlackstoneMigrationDb = async ({
   applicationContext,
   docketNumber,
 }: {
-  applicationContext: any;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }) => {
   const result = await applicationContext
-    .getDynamoClient()
-    .getItem({
+    .getDocumentClient(applicationContext)
+    .get({
       Key: {
-        pk: {
-          S: `case|${docketNumber}`,
-        },
-        sk: {
-          S: `case|${docketNumber}`,
-        },
+        pk: `case|${docketNumber}`,
+        sk: `case|${docketNumber}`,
       },
       TableName: 'efcms-prod-first',
-    })
-    .promise();
+    });
 
-  return result && 'Item' in result && result.Item
-    ? unmarshall(result.Item)
-    : {};
+  return result || {};
 };
 
 const getSealedCases = async ({
   applicationContext,
 }: {
-  applicationContext: any;
+  applicationContext: ServerApplicationContext;
 }) => {
   const searchParameters = {
     body: {
@@ -110,7 +105,7 @@ const getSealedDocketEntries = async ({
   applicationContext,
   docketNumbers,
 }: {
-  applicationContext: any;
+  applicationContext: ServerApplicationContext;
   docketNumbers: string[];
 }) => {
   const searchParameters = {
@@ -184,7 +179,7 @@ const getOrdersSinceDawson = async ({
   applicationContext,
   docketNumbers,
 }: {
-  applicationContext: any;
+  applicationContext: ServerApplicationContext;
   docketNumbers: string[];
 }) => {
   const searchParameters = {

@@ -122,4 +122,18 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
     expect(results).toEqual(expect.arrayContaining([standaloneCase, leadCase]));
     expect(results).toEqual(expect.arrayContaining([memberCase]));
   });
+
+  it('should have an empty filter array if statuses is not defined', async () => {
+    await getDocketNumbersByStatusAndByJudge({
+      applicationContext,
+      params: {
+        judges: [judgeUser.name],
+      },
+    });
+
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.query.bool
+        .filter,
+    ).toEqual([]);
+  });
 });
