@@ -28,6 +28,369 @@
       "RefreshTokens": [
         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
       ]
+    },
+    "petitioner@example.com": {
+      "Username": "petitioner@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        {
+          "Name": "email",
+          "Value": "petitioner@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "petitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "petitioner1@example.com": {
+      "Username": "petitioner1@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "b84acb19-008f-4911-bfb6-773ca4020464"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "b84acb19-008f-4911-bfb6-773ca4020464"
+        },
+        {
+          "Name": "email",
+          "Value": "petitioner1@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "petitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "petitioner2@example.com": {
+      "Username": "petitioner2@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "7805d1ab-18d0-43ec-bafb-654e83405417"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "7805d1ab-18d0-43ec-bafb-654e83405417"
+        },
+        {
+          "Name": "email",
+          "Value": "petitioner2@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "petitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "petitioner3@example.com": {
+      "Username": "petitioner3@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "7805d1ab-18d0-43ec-bafb-654e83405418"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "7805d1ab-18d0-43ec-bafb-654e83405418"
+        },
+        {
+          "Name": "email",
+          "Value": "petitioner3@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "petitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "petitioner4@example.com": {
+      "Username": "petitioner4@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "b3e1941f-230a-47bb-80ec-6b561c1765cd"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "b3e1941f-230a-47bb-80ec-6b561c1765cd"
+        },
+        {
+          "Name": "email",
+          "Value": "petitioner4@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "petitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "privatepractitioner@example.com": {
+      "Username": "privatepractitioner@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "9805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "9805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        {
+          "Name": "email",
+          "Value": "privatepractitioner@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "privatePractitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "privatepractitioner1@example.com": {
+      "Username": "privatepractitioner1@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "ad07b846-8933-4778-9fe2-b5d8ac8ad728"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "ad07b846-8933-4778-9fe2-b5d8ac8ad728"
+        },
+        {
+          "Name": "email",
+          "Value": "privatepractitioner1@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "privatePractitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "privatepractitioner2@example.com": {
+      "Username": "privatepractitioner2@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1"
+        },
+        {
+          "Name": "email",
+          "Value": "privatepractitioner2@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "privatePractitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "privatepractitioner3@example.com": {
+      "Username": "privatepractitioner3@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "9f25dc2c-764a-435c-86dd-323e53634537"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "9f25dc2c-764a-435c-86dd-323e53634537"
+        },
+        {
+          "Name": "email",
+          "Value": "privatepractitioner3@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "privatePractitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "privatepractitioner4@example.com": {
+      "Username": "privatepractitioner4@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb"
+        },
+        {
+          "Name": "email",
+          "Value": "privatepractitioner4@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "privatePractitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
+    },
+    "privatepractitioner99@example.com": {
+      "Username": "privatepractitioner99@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "a6318a31-8aa4-4002-a7b0-1192af19dbb9"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "a6318a31-8aa4-4002-a7b0-1192af19dbb9"
+        },
+        {
+          "Name": "email",
+          "Value": "privatepractitioner99@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "privatePractitioner"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": [
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+      ]
     }
   },
   "Options": {
