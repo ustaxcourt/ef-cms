@@ -11,10 +11,6 @@ import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkVi
 describe('Petitions Clerk QCs Paper Filed Petition', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

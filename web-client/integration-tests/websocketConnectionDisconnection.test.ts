@@ -8,10 +8,6 @@ import {
 const cerebralTest = setupTest();
 
 describe('websocket connections are cleaned up when disconnecting', () => {
-  beforeAll(() => {
-    jest.setTimeout(50000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

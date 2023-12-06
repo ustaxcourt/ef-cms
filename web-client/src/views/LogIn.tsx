@@ -54,7 +54,7 @@ export const LogIn = connect(
                   });
                 }}
               />
-              <label className="usa-label margin-top-2" htmlFor="email">
+              <label className="usa-label margin-top-2" htmlFor="password">
                 Password
               </label>
               <input

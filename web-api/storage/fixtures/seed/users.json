@@ -561,15 +561,26 @@
     "entityName": "User"
   },
   {
-    "role": "petitioner",
-    "name": "Test Petitioner 9",
-    "section": "petitioner",
-    "userId": "b2d1941f-230a-47bb-80ec-6b561c1765cd",
-    "email": "petitioner9@example.com",
     "address1": "123 Domestic Bliss Lane",
     "address2": "Blandtowne, AK 90210",
+    "email": "petitioner8@example.com",
+    "entityName": "User",
+    "name": "Test Petitioner 8",
     "phone": "234-234-2345",
-    "entityName": "User"
+    "role": "petitioner",
+    "section": "petitioner",
+    "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd"
+  },
+  {
+    "address1": "123 Domestic Bliss Lane",
+    "address2": "Blandtowne, AK 90210",
+    "email": "petitioner9@example.com",
+    "entityName": "User",
+    "name": "Test Petitioner 9",
+    "phone": "234-234-2345",
+    "role": "petitioner",
+    "section": "petitioner",
+    "userId": "b2d1941f-230a-47bb-80ec-6b561c1765cd"
   },
   {
     "role": "admissionsclerk",
