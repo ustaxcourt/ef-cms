@@ -101,6 +101,11 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().getCasesForUser,
+    ).toHaveBeenCalled();
+
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0].caseToUpdate,

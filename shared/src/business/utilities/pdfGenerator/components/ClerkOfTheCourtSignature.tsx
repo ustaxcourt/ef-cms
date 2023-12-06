@@ -1,11 +1,17 @@
 import React from 'react';
 
-export const ClerkOfTheCourtSignature = () => {
+export const ClerkOfTheCourtSignature = ({
+  nameOfClerk,
+  titleOfClerk,
+}: {
+  nameOfClerk: string;
+  titleOfClerk: string;
+}) => {
   return (
     <p className="float-right width-third">
-      Stephanie A. Servoss
+      {nameOfClerk}
       <br />
-      Clerk of the Court
+      {titleOfClerk}
     </p>
   );
 };

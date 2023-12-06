@@ -26,6 +26,12 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+    applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockImplementation(() => ({
+        name: 'bob',
+        title: 'clerk of court',
+      }));
   });
 
   beforeEach(() => {
@@ -187,6 +193,26 @@ describe('completeDocketEntryQCInteractor', () => {
     ).toEqual({
       after: 'Answer 123 abc',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
+    });
+  });
+
+  it('should generate a notice of docket change with the name and title of the clerk of the court', async () => {
+    await completeDocketEntryQCInteractor(applicationContext, {
+      entryMetadata: {
+        ...caseRecord.docketEntries[0],
+        addToCoversheet: true,
+        additionalInfo: '123',
+        additionalInfo2: 'abc',
+        certificateOfService: false,
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data,
+    ).toMatchObject({
+      nameOfClerk: 'bob',
+      titleOfClerk: 'clerk of court',
     });
   });
 
