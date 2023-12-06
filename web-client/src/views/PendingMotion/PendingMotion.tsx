@@ -24,7 +24,7 @@ export const PendingMotion = connect(
     return (
       <>
         <div>
-          Showing motions pending for more than 180 days. To view all, run the{' '}
+          Showing motions pending for 180 days or more. To view all, run the{' '}
           <Button
             link
             overrideMargin="margin-0"
