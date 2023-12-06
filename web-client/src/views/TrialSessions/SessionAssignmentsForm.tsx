@@ -60,6 +60,7 @@ export const SessionAssignmentsForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
+                data-testid="edit-trial-session-chambers-phone-number"
                 id="chambers-phone-number"
                 name="chambersPhoneNumber"
                 type="text"

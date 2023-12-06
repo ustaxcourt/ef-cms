@@ -48,17 +48,30 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
+  let nameOfClerk = '';
+  let titleOfClerk = '';
+  if (isNotice) {
+    const { name, title } = await applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue({
+        applicationContext,
+        configurationItemKey:
+          applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+      });
+    nameOfClerk = name;
+    titleOfClerk = title;
+  }
+
   let orderPdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
+      nameOfClerk,
       orderContent: systemGeneratedDocument.content,
       orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
-      signatureText: isNotice
-        ? applicationContext.getClerkOfCourtNameForSigning()
-        : '',
+      titleOfClerk,
     },
   });
 
