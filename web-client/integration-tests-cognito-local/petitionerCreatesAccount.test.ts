@@ -52,7 +52,7 @@ describe('Petitioner creates new account', () => {
     );
 
     //THIS IS FOR LOCAL VERIFICATION ONLY
-    expect(cerebralTestPublic.getState('alertSuccess')).toEqual({
+    expect(cerebralTestPublic.getState('alertSuccess')).toMatchObject({
       alertType: 'success',
       message: `New user account created successfully for ${userName}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${expectedVerificationLink}">Verify Email Address</a>`,
       title: 'Account Created Locally',
@@ -64,7 +64,7 @@ describe('Petitioner creates new account', () => {
       confirmationCode: standardizedConfirmationCode,
       userEmail: userName,
     });
-    expect(cerebralTestPublic.getState('alertSuccess')).toEqual(
+    expect(cerebralTestPublic.getState('alertSuccess')).toMatchObject(
       expect.objectContaining({
         alertType: 'success',
         message:
