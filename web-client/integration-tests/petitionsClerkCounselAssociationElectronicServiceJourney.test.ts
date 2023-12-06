@@ -24,10 +24,6 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     formattedCaseDetailComputed,
   );
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
