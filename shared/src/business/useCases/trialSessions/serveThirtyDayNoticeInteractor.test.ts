@@ -20,6 +20,13 @@ describe('serveThirtyDayNoticeInteractor', () => {
       caseOrder: [{ docketNumber: '101-31' }, { docketNumber: '103-20' }],
     };
 
+    applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue.mockImplementation(() => ({
+        name: 'bob',
+        title: 'clerk of court',
+      }));
+
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     applicationContext.getUtilities().formatNow.mockReturnValue('02/23/2023');
@@ -102,8 +109,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
         dateServed: '02/23/2023',
         docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix!,
         judgeName: trialSession.judge!.name,
+        nameOfClerk: 'bob',
         proceedingType: trialSession.proceedingType,
         scopeType: trialSession.sessionScope,
+        titleOfClerk: 'clerk of court',
         trialDate: trialSession.startDate,
         trialLocation: {
           address1: trialSession.address1!,
