@@ -4,19 +4,36 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-export const order = async ({ applicationContext, data }) => {
+export const order = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+    addedDocketNumbers: string[];
+    nameOfClerk: string;
+    orderContent: string;
+    orderTitle: string;
+    titleOfClerk: string;
+  };
+}) => {
   const {
     addedDocketNumbers,
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
+    nameOfClerk,
     orderContent,
     orderTitle,
-    signatureText,
+    titleOfClerk,
   } = data;
 
   const reactOrderTemplate = ReactDOM.renderToString(
     React.createElement(Order, {
+      nameOfClerk,
       options: {
         addedDocketNumbers,
         caseCaptionExtension,
@@ -25,7 +42,7 @@ export const order = async ({ applicationContext, data }) => {
       },
       orderContent,
       orderTitle,
-      signatureText,
+      titleOfClerk,
     }),
   );
 
