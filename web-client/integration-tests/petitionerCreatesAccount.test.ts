@@ -1,9 +1,8 @@
-import { setupTest as setupTestPrivate } from '../integration-tests/helpers';
+import { faker } from '@faker-js/faker';
+import { setupTest as setupTestPrivate } from './helpers';
 import { setupTest as setupTestPublic } from '../integration-tests-public/helpers';
-import { userSuccessfullyUpdatesEmailAddress } from '../integration-tests/journey/userSuccessfullyUpdatesEmailAddress';
-import { userVerifiesUpdatedEmailAddress } from '../integration-tests/journey/userVerifiesUpdatedEmailAddress';
-
-const { faker } = require('@faker-js/faker');
+import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
+import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 
 describe('Petitioner creates new account', () => {
   const cerebralTestPrivate = setupTestPrivate();
