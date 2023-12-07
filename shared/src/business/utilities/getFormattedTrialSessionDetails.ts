@@ -267,7 +267,8 @@ export const getFormattedTrialSessionDetails = ({
 
   return trialSession;
 };
-function getIrsCalendarAdministratorString(trialSession: {
+
+export function getIrsCalendarAdministratorString(trialSession: {
   irsCalendarAdministratorInfo: IrsCalendarAdministratorInfo;
   irsCalendarAdministrator: string;
 }): string {
