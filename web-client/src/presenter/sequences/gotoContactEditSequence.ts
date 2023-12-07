@@ -1,8 +1,8 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setupContactFormAction } from '../actions/setupContactFormAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -22,6 +22,6 @@ export const gotoContactEditSequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoContactEdit,
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

@@ -8,9 +8,9 @@ import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/gen
 import { getCaseAction } from '../actions/getCaseAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { initCourtIssuedOrderFormPropsFromEventCodeAction } from '../actions/EditDocketRecordEntry/initCourtIssuedOrderFormPropsFromEventCodeAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultEditDocketEntryMetaTabAction } from '../actions/setDefaultEditDocketEntryMetaTabAction';
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
@@ -53,6 +53,6 @@ export const gotoEditDocketEntryMetaSequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoEditDocketEntryMeta,
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

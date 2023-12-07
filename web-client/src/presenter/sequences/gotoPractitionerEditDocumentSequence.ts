@@ -1,8 +1,8 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
 import { getPractitionerDocumentAction } from '../actions/getPractitionerDocumentAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setPractitionerDocumentFormForEditAction } from '../actions/Practitioners/setPractitionerDocumentFormForEditAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -26,6 +26,6 @@ export const gotoPractitionerEditDocumentSequence = [
     isLoggedIn: startWebSocketConnectionSequenceDecorator(
       gotoPractitionerEditDocument,
     ),
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

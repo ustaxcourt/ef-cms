@@ -2,8 +2,8 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetAddPaperFilingAction } from '../actions/resetAddPaperFilingAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -28,6 +28,6 @@ export const gotoAddPaperFilingSequence = [
   isLoggedInAction,
   {
     isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoAddPaperFiling),
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

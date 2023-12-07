@@ -2,8 +2,8 @@ import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
 import { getUsersInSectionAction } from '../../actions/getUsersInSectionAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { isLoggedInAction } from '../../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../../actions/redirectToCognitoAction';
 import { resetJudgeActivityReportStateAction } from '../../actions/resetJudgeActivityReportStateAction';
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
 import { setJudgeLastNameOnJudgeActivityReportAction } from '../../actions/JudgeActivityReport/setJudgeLastNameOnJudgeActivityReportAction';
@@ -30,6 +30,6 @@ export const gotoJudgeActivityReportSequence = [
     isLoggedIn: startWebSocketConnectionSequenceDecorator(
       gotoJudgeActivityReport,
     ),
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

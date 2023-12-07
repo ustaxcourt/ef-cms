@@ -3,9 +3,9 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setDefaultTrialSessionFormValuesAction } from '../actions/setDefaultTrialSessionFormValuesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
@@ -34,6 +34,6 @@ export const gotoAddTrialSessionSequence = [
   isLoggedInAction,
   {
     isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoAddTrialSession),
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

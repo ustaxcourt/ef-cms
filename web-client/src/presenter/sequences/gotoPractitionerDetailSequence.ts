@@ -1,7 +1,7 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setInitialTableSortAction } from '../actions/setInitialTableSortAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setTabFromPropsAction } from '../actions/setTabFromPropsAction';
@@ -21,7 +21,7 @@ export const gotoPractitionerDetailSequence = [
         setPractitionerDetailAction,
         setupCurrentPageAction('PractitionerInformation'),
       ]),
-      unauthorized: [redirectToCognitoAction],
+      unauthorized: [gotoLoginSequence],
     },
   ]),
 ];
