@@ -165,10 +165,8 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       supportingDocuments: joi.array().optional(),
     };
 
-    const addProperty = (itemName, itemSchema, itemErrorMessage?) => {
+    const addProperty = (itemName, itemSchema) => {
       const options = {
-        errorToMessageMap: {},
-        itemErrorMessage,
         itemName,
         itemSchema,
         schema,
