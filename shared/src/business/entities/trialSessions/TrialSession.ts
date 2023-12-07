@@ -6,6 +6,10 @@ import {
   isTodayWithinGivenInterval,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
+import {
+  IrsCalendarAdministratorInfo,
+  RawIrsCalendarAdministratorInfo,
+} from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import {
@@ -79,6 +83,7 @@ export class TrialSession extends JoiValidationEntity {
   public hasNOTTBeenServed: boolean;
   public estimatedEndDate?: string;
   public irsCalendarAdministrator?: string;
+  public irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
   public isCalendared: boolean;
   public isClosed?: boolean;
   public isStartDateWithinNOTTReminderRange?: boolean;
@@ -155,6 +160,7 @@ export class TrialSession extends JoiValidationEntity {
     this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
     this.estimatedEndDate = rawSession.estimatedEndDate || null;
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
+    this.irsCalendarAdministratorInfo = rawSession.irsCalendarAdministratorInfo;
     this.isCalendared = rawSession.isCalendared || false;
     this.isClosed = rawSession.isClosed || false;
     this.joinPhoneNumber = rawSession.joinPhoneNumber;
@@ -248,6 +254,9 @@ export class TrialSession extends JoiValidationEntity {
       hasNOTTBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
         JoiValidationConstants.STRING.max(100).optional(),
+      irsCalendarAdministratorInfo: joi
+        .object(IrsCalendarAdministratorInfo.VALIDATIONS)
+        .optional(),
       isCalendared: joi.boolean().required(),
       joinPhoneNumber: stringRequiredForRemoteProceedings,
       judge: joi
