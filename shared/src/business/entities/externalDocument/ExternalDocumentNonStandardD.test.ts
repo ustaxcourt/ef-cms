@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardD } from './ExternalDocumentNonStandardD';
 import {
   calculateISODate,
   createISODateString,
@@ -14,16 +13,10 @@ describe('ExternalDocumentNonStandardD', () => {
       });
 
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        previousDocument:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES
-            .previousDocument,
-        serviceDate:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.serviceDate[1],
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
+        previousDocument: 'Select a document',
+        serviceDate: 'Provide a service date',
       });
     });
 
@@ -41,8 +34,7 @@ describe('ExternalDocumentNonStandardD', () => {
 
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
         serviceDate:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.serviceDate[0]
-            .message,
+          'Service date cannot be in the future. Enter a valid date.',
       });
     });
 
@@ -74,8 +66,7 @@ describe('ExternalDocumentNonStandardD', () => {
       });
 
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        serviceDate:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.serviceDate[1],
+        serviceDate: 'Provide a service date',
       });
     });
 
@@ -93,7 +84,7 @@ describe('ExternalDocumentNonStandardD', () => {
 
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
         documentTitle:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.documentTitle,
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });
