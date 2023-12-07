@@ -36,7 +36,6 @@ export const baseState = {
   alertSuccess: null,
   caseDetail: {} as RawPublicCase,
   cognito: { email: '' },
-  cognitoLoginUrl: '',
   cognitoRequestPasswordResetUrl: '',
   cognitoResendVerificationLinkUrl: '',
   commonUI: {

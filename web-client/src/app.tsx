@@ -144,7 +144,6 @@ const app = {
       }
       return value;
     });
-    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.constants = applicationContext.getConstants();
 
     const shouldRefreshToken =
@@ -160,7 +159,7 @@ const app = {
         presenter.state.token = response.token;
         applicationContext.setCurrentUserToken(response.token);
       } catch (err) {
-        window.location.href = presenter.state.cognitoLoginUrl;
+        // window.location.href = presenter.state.cognitoLoginUrl; TODO 10007: ROUTE TO LOGIN
       }
 
       const user = await applicationContext
@@ -177,7 +176,7 @@ const app = {
           .getMaintenanceModeInteractor(applicationContext);
         presenter.state.maintenanceMode = maintenanceMode;
       } catch (err) {
-        window.location.href = presenter.state.cognitoLoginUrl;
+        // window.location.href = presenter.state.cognitoLoginUrl; TODO 10007: redirect to login
       }
     }
 

@@ -14,7 +14,6 @@ export const createNewPetitionerUserAction = async ({
     get(state.form),
   ).toRawObject();
 
-  const cognitoLoginUrl = get(state.cognitoLoginUrl);
   const cognitoRequestPasswordResetUrl = get(
     state.cognitoRequestPasswordResetUrl,
   );
@@ -27,9 +26,7 @@ export const createNewPetitionerUserAction = async ({
     .then(authenticationResults =>
       responseHandler(authenticationResults, petitionerAccountForm.email),
     )
-    .catch(e =>
-      errorHandler(e, cognitoLoginUrl, cognitoRequestPasswordResetUrl),
-    );
+    .catch(e => errorHandler(e, cognitoRequestPasswordResetUrl));
 
   if (response.alertError) {
     return path.error(response);
@@ -37,13 +34,13 @@ export const createNewPetitionerUserAction = async ({
   return path.success(response);
 };
 
-const errorHandler = (e, cognitoLoginUrl, cognitoRequestPasswordResetUrl) => {
+const errorHandler = (e, cognitoRequestPasswordResetUrl) => {
   const originalErrorMessage = e?.originalError?.response?.data;
   if (originalErrorMessage === 'User already exists') {
     return {
       alertError: {
         alertType: 'warning',
-        message: `This email address is already associated with an account. You can <a href="${cognitoLoginUrl}">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>.`,
+        message: `This email address is already associated with an account. You can <a href="/login">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>.`,
         title: 'Email address already has an account',
       },
     };

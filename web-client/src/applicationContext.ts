@@ -24,7 +24,6 @@ import {
 } from '../../shared/src/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  getCognitoLoginUrl,
   getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
@@ -637,7 +636,6 @@ const applicationContext = {
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
-  getCognitoLoginUrl,
   getCognitoRedirectUrl: () => {
     return process.env.COGNITO_REDIRECT_URI || 'http://localhost:1234/log-in';
   },

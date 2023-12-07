@@ -69,8 +69,7 @@ const gotoMaintenancePage = app => {
   });
 };
 const gotoLoginPage = app => {
-  const path = app.getState('cognitoLoginUrl');
-  externalRoute(path);
+  return app.getSequence('gotoLoginSequence')();
 };
 const goto404 = app => {
   return app.getSequence('navigateToPathSequence')({
