@@ -44,7 +44,10 @@ export const SessionAssignments = connect(
               </div>
               <div className="grid-col-6">
                 <p className="label">IRS calendar administrator</p>
-                <p className="margin-bottom-0 word-wrap-break-word">
+                <p
+                  className="margin-bottom-0 word-wrap-break-word"
+                  style={{ whiteSpace: 'pre-line' }}
+                >
                   {
                     formattedTrialSessionDetails.formattedIrsCalendarAdministrator
                   }
