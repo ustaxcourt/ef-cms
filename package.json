@@ -101,7 +101,7 @@
     "build:all": "npm run clean && npm run build:assets && npm run build:client",
     "build:assets": "node shared/createModule.js",
     "build:client": "NODE_ENV=production USTC_ENV=prod PUBLIC_SITE_URL=$PUBLIC_SITE_URL node esbuild.config.mjs",
-    "build:lambda:api": "USTC_ENV=prod npx webpack --config webpack.config.lambda.api.ts",
+    "build:lambda:api": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.api.ts",
     "build:lambda:glue-cron": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.glue-cron.js",
     "build:lambda:migration": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.migration.js",
     "build:lambda:migration-cron": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.migration-cron.js",
