@@ -1,6 +1,9 @@
 import { NotFoundError } from '@web-api/errors/errors';
 import { compact } from 'lodash';
-import { compareCasesByDocketNumberFactory } from '../../utilities/getFormattedTrialSessionDetails';
+import {
+  compareCasesByDocketNumberFactory,
+  getIrsCalendarAdministratorString,
+} from '../../utilities/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
@@ -60,7 +63,7 @@ export const generateTrialCalendarPdfInteractor = async (
         courthouseName: trialSession.courthouseName,
         formattedCityStateZip,
         irsCalendarAdministrator:
-          trialSession.irsCalendarAdministrator || 'Not assigned',
+          getIrsCalendarAdministratorString(trialSession),
         judge: trialSession.judge?.name || 'Not assigned',
         noLocationEntered:
           !trialSession.courthouseName &&
