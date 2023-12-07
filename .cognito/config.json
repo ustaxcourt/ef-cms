@@ -11,19 +11,15 @@
     "IssuerDomain": "http://localhost:9229"
   },
   "TriggerFunctions": {
-    "PostConfirmation": "cognito-triggers-sls-dev-PostConfirmation_ConfirmSignUp",
-    "PostAuthentication": "cognito-triggers-sls-dev-PostAuthentication_Authentication"
+    "PostConfirmation": "PostConfirmation_ConfirmSignUp",
+    "PostAuthentication": "PostAuthentication_Authentication"
   },
   "LambdaConfig": {
     "endpoint": "http://localhost:9845"
   },
   "UserPoolDefaults": {
-    "UsernameAttributes": [
-      "email"
-    ],
-    "AutoVerifiedAttributes": [
-      "email"
-    ]
+    "UsernameAttributes": ["email"],
+    "AutoVerifiedAttributes": ["email"]
   },
   "KMSConfig": {
     "credentials": {
