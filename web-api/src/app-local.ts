@@ -23,7 +23,7 @@ const localPublicApiPort = 5000;
 localPublicApiApp.listen(localPublicApiPort);
 console.log(`Listening on http://localhost:${localPublicApiPort}`);
 
-// ************************ cognito-junk *********************************
+// ************************ cognito-local *********************************
 const cognitoServer = http.createServer((req, res) => {
   if (req.method === 'POST') {
     let requestBody = '';
@@ -33,15 +33,12 @@ const cognitoServer = http.createServer((req, res) => {
     });
 
     req.on('end', async () => {
-      // Parse the JSON body (assuming it's JSON)
       try {
         const data = JSON.parse(requestBody);
-        console.log('I AM DATA', { data });
         await handler(data);
       } catch (error) {
-        // If parsing fails, respond with a 400 Bad Request
         res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('400 Bad Request\n');
+        res.end('Cognito Local request failed\n');
       }
     });
   }

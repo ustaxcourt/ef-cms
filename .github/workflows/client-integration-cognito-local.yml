@@ -36,7 +36,7 @@ jobs:
           port: 8000
           cors: '*'
       - name: Install Node Dependencies
-        run: npm ci && cd cognito-triggers-sls && npm ci
+        run: npm ci
       - name: Cognito-Local Integration Tests
         run: |
           mkdir -p /tmp/web-client
