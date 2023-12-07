@@ -51,6 +51,7 @@ export const SessionAssignmentsForm = connect(
               ))}
             </select>
           </div>
+
           {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
             <div className="usa-form-group">
               <label className="usa-label" htmlFor="chambers-phone-number">
@@ -74,6 +75,7 @@ export const SessionAssignmentsForm = connect(
               />
             </div>
           )}
+
           <div className="grid-row">
             <div className="usa-form-group desktop:grid-col-6 desktop:margin-right-3 no-shrink">
               <label
@@ -134,6 +136,7 @@ export const SessionAssignmentsForm = connect(
               />
             </div>
           </div>
+
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="court-reporter">
               Court reporter <span className="usa-hint">(optional)</span>
@@ -157,7 +160,7 @@ export const SessionAssignmentsForm = connect(
 
           <div className="usa-form-group margin-bottom-0">
             <label className="usa-label" htmlFor="irs-calendar-administrator">
-              IRS calendar administrator{' '}
+              IRS calendar administratora{' '}
               <span className="usa-hint">(optional)</span>
             </label>
             <input
