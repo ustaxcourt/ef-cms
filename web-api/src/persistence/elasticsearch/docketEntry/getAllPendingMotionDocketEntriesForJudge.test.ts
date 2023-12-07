@@ -29,7 +29,7 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
 
     expect(searchParams.index).toEqual('efcms-docket-entry');
 
-    const [hasParentParam, pendingMust, createdAtMust, eventCodeMust] =
+    const [hasParentParam, pendingMust, filingDateMust, eventCodeMust] =
       searchParams.body.query.bool.must;
     expect(hasParentParam).toEqual({
       has_parent: {
@@ -70,9 +70,9 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
       },
     });
 
-    expect(createdAtMust).toEqual({
+    expect(filingDateMust).toEqual({
       range: {
-        'createdAt.S': {
+        'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
           lte: expect.anything(),
         },
