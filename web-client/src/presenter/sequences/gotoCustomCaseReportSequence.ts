@@ -1,5 +1,5 @@
 import { getSetJudgesSequence } from './getSetJudgesSequence';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { resetCustomCaseReportStateAction } from '../actions/resetCustomCaseReportStateAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';

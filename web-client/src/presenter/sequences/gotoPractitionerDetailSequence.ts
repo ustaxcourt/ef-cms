@@ -1,6 +1,6 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { setInitialTableSortAction } from '../actions/setInitialTableSortAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';

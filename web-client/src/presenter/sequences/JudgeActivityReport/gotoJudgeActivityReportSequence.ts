@@ -2,7 +2,7 @@ import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
 import { getUsersInSectionAction } from '../../actions/getUsersInSectionAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../../actions/isLoggedInAction';
 import { resetJudgeActivityReportStateAction } from '../../actions/resetJudgeActivityReportStateAction';
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';

@@ -1,7 +1,7 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
