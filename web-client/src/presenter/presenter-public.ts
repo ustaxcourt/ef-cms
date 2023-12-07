@@ -38,6 +38,7 @@ import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDec
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
+import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
@@ -106,6 +107,7 @@ export const presenterSequences = {
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
   submitCreatePetitionerAccountFormSequence,
+  submitLoginSequence,
   submitPublicCaseAdvancedSearchSequence,
   submitPublicCaseDocketNumberSearchSequence,
   submitPublicOpinionAdvancedSearchSequence,
