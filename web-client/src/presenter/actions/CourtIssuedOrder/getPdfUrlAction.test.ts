@@ -29,7 +29,7 @@ describe('getPdfUrlAction', () => {
       props: {
         contentHtml: '<p>hi</p>',
         documentTitle: 'Test Title',
-        signatureText: 'Test Signature',
+        eventCode: '0',
       },
       state: {
         caseDetail: {
@@ -52,7 +52,7 @@ describe('getPdfUrlAction', () => {
         contentHtml: '<p>hi</p>',
         docketNumber: '123-20',
         documentTitle: 'Test Title',
-        signatureText: 'Test Signature',
+        eventCode: '0',
       }),
     );
   });
@@ -70,7 +70,7 @@ describe('getPdfUrlAction', () => {
       props: {
         contentHtml: '<p>hi</p>',
         documentTitle: 'Test Title',
-        signatureText: 'Test Signature',
+        eventCode: '0',
       },
       state: {
         addedDocketNumbers: ['101-20', '102-20'],
@@ -95,7 +95,7 @@ describe('getPdfUrlAction', () => {
         contentHtml: '<p>hi</p>',
         docketNumber: '123-20',
         documentTitle: 'Test Title',
-        signatureText: 'Test Signature',
+        eventCode: '0',
       }),
     );
   });

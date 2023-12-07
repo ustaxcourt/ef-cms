@@ -28,8 +28,6 @@ export const getUniqueId = (): string => {
   return uuidv4();
 };
 
-export const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
-
 export const ERROR_MAP_429 = {
   'advanced-query-limiter': {
     message: 'Please wait 1 minute before trying your search again',

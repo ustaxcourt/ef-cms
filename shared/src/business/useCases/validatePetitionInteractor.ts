@@ -1,10 +1,10 @@
-import { CaseExternal } from '../entities/cases/CaseExternal';
+import { ElectronicPetition } from '../entities/cases/ElectronicPetition';
 
 export const validatePetitionInteractor = (
   applicationContext: IApplicationContext,
   { petition }: { petition: any },
 ) => {
-  return new CaseExternal(petition, {
+  return new ElectronicPetition(petition, {
     applicationContext,
   }).getFormattedValidationErrors();
 };

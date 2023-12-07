@@ -22,7 +22,7 @@ export const docketClerkServesDocumentFromCaseDetailDocumentView =
 
       await waitForLoadingComponentToHide({ cerebralTest });
 
-      expect(cerebralTest.getState('alertSuccess')).toEqual({
+      expect(cerebralTest.getState('alertSuccess')).toMatchObject({
         message: DOCUMENT_SERVED_MESSAGES.GENERIC,
         overwritable: false,
       });

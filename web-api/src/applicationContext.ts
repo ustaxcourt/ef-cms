@@ -12,6 +12,7 @@ import util from 'util';
 
 import {
   CASE_STATUS_TYPES,
+  CLERK_OF_THE_COURT_CONFIGURATION,
   CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
@@ -38,11 +39,6 @@ import { User } from '../../shared/src/business/entities/User';
 import { UserCase } from '../../shared/src/business/entities/UserCase';
 import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
-import {
-  clerkOfCourtNameForSigning,
-  getEnvironment,
-  getUniqueId,
-} from '../../shared/src/sharedAppContext';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
@@ -56,6 +52,7 @@ import {
   getLocalCognito,
 } from '@web-api/persistence/cognito/getCognito';
 import { getDocumentGenerators } from './getDocumentGenerators';
+import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -225,9 +222,6 @@ export const createApplicationContext = (
       process.env.NODE_ENV === 'production'
         ? getChromiumBrowserAWS
         : getChromiumBrowser,
-    getClerkOfCourtNameForSigning: () => {
-      return clerkOfCourtNameForSigning;
-    },
     getCognito: () => {
       if (environment.stage === 'local') {
         return getLocalCognito();
@@ -244,6 +238,7 @@ export const createApplicationContext = (
       CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
         ? parseInt(process.env.CHANGE_OF_ADDRESS_CONCURRENCY)
         : undefined,
+      CLERK_OF_THE_COURT_CONFIGURATION,
       CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
