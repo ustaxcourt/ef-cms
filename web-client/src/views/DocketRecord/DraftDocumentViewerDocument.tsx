@@ -62,6 +62,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showEditButtonNotSigned && (
                 <Button
                   link
+                  data-testid="draft-edit-button-not-signed"
                   href={viewerDraftDocumentToDisplay.editUrl}
                   icon="edit"
                   id="draft-edit-button-not-signed"

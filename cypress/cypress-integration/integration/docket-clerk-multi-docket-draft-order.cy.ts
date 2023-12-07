@@ -2,24 +2,32 @@ import { loginAsDocketClerk } from '../../helpers/auth/login-as-helpers';
 
 describe('Docket clerk creates and edits draft order with selected docket numbers', function () {
   const leadCase = '111-19';
-  const orderTitle = 'Order first title';
-  const orderEventCode = 'O';
-  const editedOrderTitle = 'Order edited title';
 
-  it('should create an order with selected cases', () => {
-    let draftsCount: number;
-
+  beforeEach(() => {
     loginAsDocketClerk();
+  });
+
+  it('should create an order with ALL cases selected', () => {
+    const orderTitle = 'Order first title';
+    const orderEventCode = 'O';
+    let consolidatedCases: string = '';
+    let draftsCount: number = 0;
 
     cy.get('[data-testid="docket-number-search-input"]').clear();
     cy.get('[data-testid="docket-number-search-input"]').type(
       `${leadCase}{enter}`,
     );
 
+    cy.get('[data-testid^="consolidatedCasesOfLeadCase-"]')
+      .invoke('attr', 'data-testid')
+      .then(text => {
+        consolidatedCases = text!.replace(/consolidatedCasesOfLeadCase-/g, '');
+      });
+
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
       .then(text => {
-        draftsCount = !text ? 0 : Number(text); // default count to 0 if there are no drafts
+        draftsCount = Number(text) || draftsCount;
       });
 
     cy.get('[data-testid="search-docket-number"]').click();
@@ -62,8 +70,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
     cy.get('.ql-editor').click();
     cy.get('[data-testid="save-order-button"]').click();
 
-    cy.get('[data-testid="sign-pdf-canvas"]').click();
-    cy.get('[data-testid="save-signature-button"]').click();
+    cy.get('[data-testid="skip-signature-button"]').click();
     cy.get('.usa-alert__text').should('have.text', `${orderTitle} updated.`);
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
@@ -71,10 +78,17 @@ describe('Docket clerk creates and edits draft order with selected docket number
         const draftCountAfter = Number(val);
         expect(draftCountAfter).to.equal(draftsCount + 1);
       });
+
+    //extract into its own assert helper.
+    cy.get('[data-testid="success-alert"]')
+      .invoke('attr', 'data-metadata')
+      .then(val => {
+        expect(val).to.equal(consolidatedCases);
+      });
   });
 
-  it.skip('should edit the draft order with newly selected cases', () => {
-    let draftsCount: number;
+  it('should edit the draft order with newly selected cases', () => {
+    let draftsCount: number = 0;
 
     loginAsDocketClerk();
     cy.get('[data-testid="docket-number-search-input"]').clear();
@@ -85,44 +99,40 @@ describe('Docket clerk creates and edits draft order with selected docket number
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
       .then(text => {
-        console.log('text', text);
-        draftsCount = !text ? 0 : Number(text);
-
-        console.log('draftsCount', draftsCount!);
+        draftsCount = Number(text) || draftsCount;
 
         cy.get('[data-testid="icon-tab-unread-messages-count"]').click();
         cy.get(
           `[data-testid="docket-entry-description-${draftsCount! - 1}"]`,
         ).click();
 
-        /* ==== Generated with Cypress Studio ==== */
-
-        cy.get('[data-testid="edit-order-button"]').click();
-        cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="draft-edit-button-not-signed"]').click();
         cy.get(
           '[data-testid="create-order-page-title"] > .margin-left-1',
         ).click();
+        cy.get('[data-testid="edit-order-document-title"]').click();
         cy.get('[data-testid="edit-order-document-title"]').clear();
         cy.get('[data-testid="edit-order-document-title"]').type(
           'Order edited title',
         );
         cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="create-order-page-title"]').should(
+          'have.text',
+          'Edit Order edited title Edit Title',
+        );
         cy.get('[data-testid="add-docket-number-btn"]').click();
-        // cy.get('[data-testid="consolidated-case-checkbox-all-label"]').click();
-        // cy.get('[data-testid="consolidated-case-checkbox-all"]').uncheck();
+        cy.get('[data-testid="consolidated-case-checkbox-all-label"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="save-order-button"]').click();
+        cy.get('[data-testid="skip-signature-button"]').click();
       });
 
-    // cy.get(':nth-child(4) > .usa-checkbox__label').click();
-    // cy.get('#consolidated-case-checkbox-112-19').check();
-    // cy.get('[data-testid="modal-button-confirm"]').click();
-    // cy.get('.ql-editor').click();
-    // cy.get('[data-testid="save-order-button"]').click();
-    // cy.get('[data-testid="sign-pdf-canvas"]').click();
-    // cy.get('[data-testid="save-signature-button"]').click();
-    // cy.get('.usa-alert__text').should(
-    //   'have.text',
-    //   'Order edited title updated.',
-    // );
-    /* ==== End Cypress Studio ==== */
+    //extract into its own assert helper.
+    const expectedDocketNumberSelected = `${leadCase}L`;
+    cy.get('[data-testid="success-alert"]')
+      .invoke('attr', 'data-metadata')
+      .then(val => {
+        expect(val).to.equal(expectedDocketNumberSelected);
+      });
   });
 });
