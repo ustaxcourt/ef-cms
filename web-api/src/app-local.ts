@@ -24,18 +24,39 @@ localPublicApiApp.listen(localPublicApiPort);
 console.log(`Listening on http://localhost:${localPublicApiPort}`);
 
 // ************************ cognito-junk *********************************
-const cognitoApp = express();
-cognitoApp.use(express.json({ limit: '1200kb' }));
-cognitoApp.listen(9845);
-cognitoApp.use('*', (req, res) => {
-  console.log('Cognito req.url', req.url);
-  console.log('Cognito req.method', req.method);
-  console.log('Cognito req.headers', req.headers);
-  console.log('Cognito req.body', req.body);
-  res.send();
+const cognitoServer = http.createServer((req, res) => {
+  if (req.method === 'POST') {
+    let requestBody = '';
+
+    req.on('data', chunk => {
+      requestBody += chunk;
+    });
+
+    req.on('end', async () => {
+      // Parse the JSON body (assuming it's JSON)
+      try {
+        const data = JSON.parse(requestBody);
+        console.log('I AM DATA', { data });
+        await handler(data);
+      } catch (error) {
+        // If parsing fails, respond with a 400 Bad Request
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.end('400 Bad Request\n');
+      }
+    });
+  }
+
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(
+    JSON.stringify({
+      body: '',
+      statusCode: 200,
+    }),
+  );
 });
-cognitoApp.post('/', (req, res) => {
-  res.send(handler(req));
+
+cognitoServer.listen(9845, () => {
+  console.log('Server running at http://localhost:9845/');
 });
 
 // ************************ streams-local *********************************
