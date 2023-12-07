@@ -144,7 +144,7 @@ function removeMotionsThatHaveBeenHandledInDynamo(
   return (
     docketEntry.pending &&
     MOTION_EVENT_CODES.includes(docketEntry.eventCode) &&
-    docketEntry.daysSinceCreated <= 180
+    docketEntry.daysSinceCreated >= 180
   );
 }
 
