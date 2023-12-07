@@ -1,14 +1,5 @@
-export const addPropertyHelper = ({
-  errorToMessageMap,
-  itemErrorMessage,
-  itemName,
-  itemSchema,
-  schema,
-}) => {
+export const addPropertyHelper = ({ itemName, itemSchema, schema }) => {
   schema[itemName] = itemSchema;
-  if (itemErrorMessage) {
-    errorToMessageMap[itemName] = itemErrorMessage;
-  }
 };
 
 export const makeRequiredHelper = ({
