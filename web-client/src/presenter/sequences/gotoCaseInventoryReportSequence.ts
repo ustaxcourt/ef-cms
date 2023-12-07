@@ -2,12 +2,12 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { hasCaseInventoryReportFilterSelectedAction } from '../actions/CaseInventoryReport/hasCaseInventoryReportFilterSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { openCaseInventoryReportModalSequence } from './openCaseInventoryReportModalSequence';
 import { parallel } from 'cerebral/factories';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
@@ -37,6 +37,6 @@ export const gotoCaseInventoryReportSequence = [
         ]),
       },
     ]),
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

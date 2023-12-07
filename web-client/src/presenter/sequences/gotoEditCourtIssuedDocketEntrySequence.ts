@@ -4,8 +4,8 @@ import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDo
 import { getCaseAction } from '../actions/getCaseAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -39,6 +39,6 @@ export const gotoEditCourtIssuedDocketEntrySequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoEditCourtIssuedDocketEntry,
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

@@ -3,8 +3,8 @@ import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDo
 import { getCaseAction } from '../actions/getCaseAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCourtIssuedDocumentInitialDataAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialDataAction';
 import { setDefaultServiceStampAction } from '../actions/CourtIssuedDocketEntry/setDefaultServiceStampAction';
@@ -36,6 +36,6 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       setIsEditingDocketEntryAction(false),
       setupCurrentPageAction('CourtIssuedDocketEntry'),
     ]),
-    unauthorized: [redirectToCognitoAction],
+    unauthorized: [gotoLoginSequence],
   },
 ];

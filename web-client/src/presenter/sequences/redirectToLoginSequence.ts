@@ -1,3 +1,3 @@
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 
-export const redirectToLoginSequence = [redirectToCognitoAction];
+export const redirectToLoginSequence = [gotoLoginSequence];
