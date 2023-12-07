@@ -49,8 +49,9 @@ export const ConsolidatedCasesCheckboxes = connect(
             <input
               checked={consolidatedCase.checked}
               className="usa-checkbox__input"
+              data-testid={`consolidated-case-checkbox-${consolidatedCase.docketNumber}`}
               disabled={consolidatedCase.checkboxDisabled}
-              id={'consolidated-case-checkbox-' + consolidatedCase.docketNumber}
+              id={`consolidated-case-checkbox-${consolidatedCase.docketNumber}`}
               name="consolidated-case"
               type="checkbox"
               value={consolidatedCase.docketNumber}
@@ -62,9 +63,8 @@ export const ConsolidatedCasesCheckboxes = connect(
             />
             <label
               className="usa-checkbox__label"
-              htmlFor={
-                'consolidated-case-checkbox-' + consolidatedCase.docketNumber
-              }
+              data-testid={`consolidated-case-checkbox-${consolidatedCase.docketNumber}-label`}
+              htmlFor={`consolidated-case-checkbox-${consolidatedCase.docketNumber}`}
             >
               {consolidatedCase.docketNumber}{' '}
               {consolidatedCase.formattedPetitioners}
