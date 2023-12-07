@@ -1,3 +1,4 @@
+import { CaseWithSelectionInfo } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -27,9 +28,6 @@ export const skipSigningOrderAction = ({
   const docketEntryId = get(state.docketEntryId);
   const order = docketEntries.find(d => d.docketEntryId === docketEntryId);
 
-  // TODO: unit test
-  // setting of meta data for testing
-  // should be moved to a helper
   const consolidatedCasesToMultiDocketOn = get(
     state.modal.form.consolidatedCasesToMultiDocketOn,
   );
@@ -52,6 +50,6 @@ export const skipSigningOrderAction = ({
       message: `${order.documentTitle || order.documentType} updated.`,
       metaData: addedDocketNumbers.join(', '),
     },
-    path: `/case-detail/${docketNumber}/draft-documents`, // for testing purposes
+    path: `/case-detail/${docketNumber}/draft-documents`,
   };
 };
