@@ -1,11 +1,10 @@
-const authorizer = require('./cognito-authorizer');
-const axios = require('axios');
-const fs = require('fs');
-const jwk = require('jsonwebtoken');
-const jwkToPem = require('jwk-to-pem');
-const { createLogger } = require('../../../src/createLogger');
-const { handler } = authorizer;
-const { transports } = require('winston');
+import { createLogger } from '../../../src/createLogger';
+import { handler } from './cognito-authorizer';
+import { transports } from 'winston';
+import axios from 'axios';
+import fs from 'fs';
+import jwk from 'jsonwebtoken';
+import jwkToPem from 'jwk-to-pem';
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../src/createLogger',
 );

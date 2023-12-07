@@ -1,7 +1,7 @@
-const { createAuthorizer } = require('./createAuthorizer');
+import { createAuthorizer } from './createAuthorizer';
 
 const getToken = event => {
   return event.authorizationToken.substring(7);
 };
 
-exports.handler = createAuthorizer(getToken);
+export const handler = createAuthorizer(getToken);

@@ -1,5 +1,3 @@
-const {
-  sealInLowerEnvironmentLambda,
-} = require('../../../src/lambdas/cases/sealInLowerEnvironmentLambda');
+import { sealInLowerEnvironmentLambda } from '../../../src/lambdas/cases/sealInLowerEnvironmentLambda';
 
-exports.handler = sealInLowerEnvironmentLambda;
+export const handler = sealInLowerEnvironmentLambda;

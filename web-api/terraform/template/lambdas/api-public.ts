@@ -1,4 +1,4 @@
-const awsServerlessExpress = require('@vendia/serverless-express');
-const { app } = require('../../../src/app-public');
+import { app } from '../../../src/app-public';
+import awsServerlessExpress from '@vendia/serverless-express';
 
-exports.handler = awsServerlessExpress({ app });
+export const handler = awsServerlessExpress({ app });

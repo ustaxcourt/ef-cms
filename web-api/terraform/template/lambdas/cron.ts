@@ -1,9 +1,6 @@
-const {
-  checkForReadyForTrialCasesLambda,
-} = require('../../../src/lambdas/cases/checkForReadyForTrialCasesLambda');
-const {
-  setHealthCheckCacheLambda,
-} = require('../../../src/lambdas/health/setHealthCheckCacheLambda');
+import { checkForReadyForTrialCasesLambda } from '../../../src/lambdas/cases/checkForReadyForTrialCasesLambda';
+import { setHealthCheckCacheLambda } from '../../../src/lambdas/health/setHealthCheckCacheLambda';
 
-exports.checkForReadyForTrialCasesHandler = checkForReadyForTrialCasesLambda;
-exports.setHealthCheckCacheHandler = setHealthCheckCacheLambda;
+export const checkForReadyForTrialCasesHandler =
+  checkForReadyForTrialCasesLambda;
+export const setHealthCheckCacheHandler = setHealthCheckCacheLambda;

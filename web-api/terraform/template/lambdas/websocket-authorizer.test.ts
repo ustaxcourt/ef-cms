@@ -1,14 +1,13 @@
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../src/createLogger',
 );
-const authorizer = require('./websocket-authorizer');
-const axios = require('axios');
-const fs = require('fs');
-const jwk = require('jsonwebtoken');
-const jwkToPem = require('jwk-to-pem');
-const { createLogger } = require('../../../src/createLogger');
-const { handler } = authorizer;
-const { transports } = require('winston');
+import { createLogger } from '../../../src/createLogger';
+import { handler } from './websocket-authorizer';
+import { transports } from 'winston';
+import axios from 'axios';
+import fs from 'fs';
+import jwk from 'jsonwebtoken';
+import jwkToPem from 'jwk-to-pem';
 jest.mock('jwk-to-pem', () => jest.fn());
 jest.mock('../../../src/createLogger', () => {
   return { createLogger: jest.fn() };
