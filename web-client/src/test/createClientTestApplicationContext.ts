@@ -22,7 +22,6 @@ import {
 } from '@shared/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  getCognitoLoginUrl,
   getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
@@ -567,7 +566,6 @@ const createTestApplicationContext = () => {
       }),
     }),
     getCognitoClientId: jest.fn(),
-    getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
     getCognitoRequestPasswordResetUrl,
     getCognitoTokenUrl: jest.fn(),

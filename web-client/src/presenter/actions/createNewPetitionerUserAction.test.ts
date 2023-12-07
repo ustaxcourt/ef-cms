@@ -143,7 +143,6 @@ describe('createNewPetitionerUserAction', () => {
       password: TEST_PASSWORD,
     };
 
-    const cognitoLoginUrl = 'cognitoLoginUrl';
     const cognitoRequestPasswordResetUrl = 'cognitoRequestPasswordResetUrl';
 
     await runAction(createNewPetitionerUserAction, {
@@ -151,7 +150,6 @@ describe('createNewPetitionerUserAction', () => {
         presenter,
       },
       state: {
-        cognitoLoginUrl,
         cognitoRequestPasswordResetUrl,
         form: FORM,
       },
@@ -174,7 +172,7 @@ describe('createNewPetitionerUserAction', () => {
     expect(mockErrorPath.mock.calls[0][0]).toEqual({
       alertError: {
         alertType: 'warning',
-        message: `This email address is already associated with an account. You can <a href="${cognitoLoginUrl}">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>.`,
+        message: `This email address is already associated with an account. You can <a href="/login">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>.`,
         title: 'Email address already has an account',
       },
     });
