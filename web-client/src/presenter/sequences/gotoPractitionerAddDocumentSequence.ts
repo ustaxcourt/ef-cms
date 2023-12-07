@@ -1,6 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
