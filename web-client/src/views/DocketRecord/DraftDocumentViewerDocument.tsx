@@ -73,6 +73,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showEditButtonSigned && (
                 <Button
                   link
+                  data-testid="edit-order-button"
                   icon="edit"
                   id="edit-order-button"
                   onClick={() =>

@@ -24,6 +24,7 @@ export const ConsolidatedCasesCheckboxes = connect(
           <input
             checked={consolidatedCaseAllCheckbox}
             className="usa-checkbox__input"
+            data-testid="consolidated-case-checkbox-all"
             id="consolidated-case-checkbox-all"
             name="consolidated-case"
             type="checkbox"
@@ -32,6 +33,7 @@ export const ConsolidatedCasesCheckboxes = connect(
           />
           <label
             className="usa-checkbox__label"
+            data-testid="consolidated-case-checkbox-all-label"
             htmlFor="consolidated-case-checkbox-all"
           >
             All in the consolidated group
