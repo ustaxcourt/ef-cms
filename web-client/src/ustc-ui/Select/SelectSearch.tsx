@@ -66,24 +66,26 @@ export const SelectSearch = ({
   };
 
   return (
-    <ReactSelect
-      {...aria}
-      className={classNames('select-react-element', className)}
-      classNamePrefix="select-react-element"
-      id={id}
-      isClearable={isClearable}
-      isDisabled={disabled || props['aria-disabled']}
-      name={name}
-      options={sortedOptions}
-      placeholder={placeholder}
-      value={value}
-      onBlur={resetOptions}
-      onChange={(newValue, actionMeta) => {
-        onChange(newValue, actionMeta);
-        resetOptions();
-      }}
-      onInputChange={handleOnInputChange}
-    />
+    <div data-testid={props['data-testid']}>
+      <ReactSelect
+        {...aria}
+        className={classNames('select-react-element', className)}
+        classNamePrefix="select-react-element"
+        id={id}
+        isClearable={isClearable}
+        isDisabled={disabled || props['aria-disabled']}
+        name={name}
+        options={sortedOptions}
+        placeholder={placeholder}
+        value={value}
+        onBlur={resetOptions}
+        onChange={(newValue, actionMeta) => {
+          onChange(newValue, actionMeta);
+          resetOptions();
+        }}
+        onInputChange={handleOnInputChange}
+      />
+    </div>
   );
 };
 

@@ -57,6 +57,7 @@ export const ObjectionsForm = connect(
                 />
                 <label
                   className="usa-radio__label"
+                  data-testid={`${type}-objections-${option}`}
                   htmlFor={`${type}-objections-${option}`}
                 >
                   {option}

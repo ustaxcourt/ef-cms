@@ -8,11 +8,14 @@ const formattedTrialSessions = withAppContextDecorator(
 );
 
 export const docketClerkViewsTrialSessionsTab = (
-  cerebralTest,
-  overrides = {},
+  cerebralTest: any,
+  overrides: { tab?: string } = { tab: undefined },
 ) => {
   const status = overrides.tab || 'Open';
   return it(`Docket clerk views ${status} Trial Sessions tab`, async () => {
+    // resetting view metadata to counteract the fact that state is not being reset on login as it would be outside of a test
+    cerebralTest.setState('currentViewMetadata.trialSessions.tab', undefined);
+
     await cerebralTest.runSequence('gotoTrialSessionsSequence', {
       query: {
         status,
