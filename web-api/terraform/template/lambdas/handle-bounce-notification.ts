@@ -1,5 +1,3 @@
-const {
-  handleBounceNotificationsLambda,
-} = require('../../../src/lambdas/email/handleBounceNotificationsLambda');
+import { handleBounceNotificationsLambda } from '../../../src/lambdas/email/handleBounceNotificationsLambda';
 
-exports.handler = handleBounceNotificationsLambda;
+export const handler = handleBounceNotificationsLambda;

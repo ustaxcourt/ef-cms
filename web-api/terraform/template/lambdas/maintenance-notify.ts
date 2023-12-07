@@ -1,5 +1,3 @@
-const {
-  sendMaintenanceNotificationsLambda,
-} = require('../../../src/lambdas/cases/sendMaintenanceNotificationsLambda');
+import { sendMaintenanceNotificationsLambda } from '../../../src/lambdas/cases/sendMaintenanceNotificationsLambda';
 
-exports.handler = sendMaintenanceNotificationsLambda;
+export const handler = sendMaintenanceNotificationsLambda;

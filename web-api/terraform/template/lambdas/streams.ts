@@ -1,5 +1,3 @@
-const {
-  processStreamRecordsLambda,
-} = require('../../../src/lambdas/streams/processStreamRecordsLambda');
+import { processStreamRecordsLambda } from '../../../src/lambdas/streams/processStreamRecordsLambda';
 
-exports.handler = processStreamRecordsLambda;
+export const handler = processStreamRecordsLambda;

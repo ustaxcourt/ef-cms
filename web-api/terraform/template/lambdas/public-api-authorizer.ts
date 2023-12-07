@@ -1,5 +1,5 @@
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, GetCommand } = require('@aws-sdk/lib-dynamodb');
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 const ddbClient = new DynamoDBClient({ region: 'us-east-1' });
 
 const docClient = DynamoDBDocumentClient.from(ddbClient, {
@@ -24,7 +24,7 @@ const getWhiteListIps = async () => {
   return whiteListIps?.ips ?? [];
 };
 
-const createAuthorizer = ({ getWhiteListIpsFunction }) => {
+export const createAuthorizer = ({ getWhiteListIpsFunction }) => {
   return async event => {
     const ips = await getWhiteListIpsFunction();
 
@@ -49,7 +49,6 @@ const createAuthorizer = ({ getWhiteListIpsFunction }) => {
   };
 };
 
-exports.handler = createAuthorizer({
+export const handler = createAuthorizer({
   getWhiteListIpsFunction: getWhiteListIps,
 });
-exports.createAuthorizer = createAuthorizer;
