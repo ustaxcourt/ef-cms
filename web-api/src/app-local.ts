@@ -2,6 +2,7 @@ import { server as WebSocketServer } from 'websocket';
 import { Writable } from 'stream';
 import { connectLambda } from './lambdas/notifications/connectLambda';
 import { disconnectLambda } from './lambdas/notifications/disconnectLambda';
+import { handler } from '../terraform/template/lambdas/cognito-triggers';
 import { app as localApiApp } from './app';
 import { app as localPublicApiApp } from './app-public';
 import { processStreamRecordsLambda } from './lambdas/streams/processStreamRecordsLambda';
@@ -21,6 +22,21 @@ const localPublicApiPort = 5000;
 
 localPublicApiApp.listen(localPublicApiPort);
 console.log(`Listening on http://localhost:${localPublicApiPort}`);
+
+// ************************ cognito-junk *********************************
+const cognitoApp = express();
+cognitoApp.use(express.json({ limit: '1200kb' }));
+cognitoApp.listen(9845);
+cognitoApp.use('*', (req, res) => {
+  console.log('Cognito req.url', req.url);
+  console.log('Cognito req.method', req.method);
+  console.log('Cognito req.headers', req.headers);
+  console.log('Cognito req.body', req.body);
+  res.send();
+});
+cognitoApp.post('/', (req, res) => {
+  res.send(handler(req));
+});
 
 // ************************ streams-local *********************************
 const config = {

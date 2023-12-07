@@ -5,7 +5,7 @@
       "secretAccessKey": "local"
     },
     "region": "local",
-    "endpoint": "http://localhost:9997"
+    "endpoint": "http://localhost:9845"
   },
   "TokenConfig": {
     "IssuerDomain": "http://localhost:9229"
@@ -15,7 +15,7 @@
     "PostAuthentication": "cognito-triggers-sls-dev-PostAuthentication_Authentication"
   },
   "LambdaConfig": {
-    "endpoint": "http://localhost:9997"
+    "endpoint": "http://localhost:9845"
   },
   "UserPoolDefaults": {
     "UsernameAttributes": [

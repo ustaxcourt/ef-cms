@@ -50,7 +50,6 @@ else
 fi
 
 echo "Starting local lambda for cognito triggers"
-npm run start:cognito-triggers-local &
 echo "Starting cognito-local"
 CODE=123456 npx cognito-local &
 
