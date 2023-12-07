@@ -1,11 +1,6 @@
-import { admissionsClerkAddsNewPractitioner } from '../integration-tests/journey/admissionsClerkAddsNewPractitioner';
-import {
-  loginAs,
-  setupTest,
-  waitForLoadingComponentToHide,
-} from '../integration-tests/helpers';
-
-const { faker } = require('@faker-js/faker');
+import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAddsNewPractitioner';
+import { faker } from '@faker-js/faker';
+import { loginAs, setupTest, waitForLoadingComponentToHide } from './helpers';
 
 describe('Admissions clerk creates practitioner account', () => {
   const cerebralTest = setupTest();
