@@ -45,10 +45,8 @@ resource "aws_cognito_user_pool" "pool" {
     }
   }
 
-  sms_authentication_message = "{####}"
-
   admin_create_user_config {
-    allow_admin_create_user_only = false
+    allow_admin_create_user_only = true
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
       email_subject = "An account has been set up for you with the U.S. Tax Court"
@@ -201,8 +199,6 @@ resource "aws_cognito_user_pool" "irs_pool" {
     email_message_by_link = "Please click the link below to verify your email address. {##Verify Email##} "
     email_subject_by_link = "U.S. Tax Court account verification"
   }
-
-  sms_authentication_message = "{####}"
 
   admin_create_user_config {
     allow_admin_create_user_only = true
