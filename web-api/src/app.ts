@@ -20,7 +20,6 @@ import { changePasswordLocalLambda } from './auth/changePasswordLocalLambda';
 import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabilityLambda';
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
-import { cognitoTriggersLocalLambda } from '../terraform/template/lambdas/cognitoTriggersLocalLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
@@ -1017,13 +1016,6 @@ if (process.env.IS_LOCAL) {
   app.get(
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
-  );
-  // This following endpoints are used by cognito-local
-  app.post(
-    '/cognito-triggers-local',
-    lambdaWrapper(cognitoTriggersLocalLambda, {
-      isAsync: true,
-    }),
   );
 
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
