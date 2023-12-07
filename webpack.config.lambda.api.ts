@@ -1,6 +1,8 @@
-const config = require('./webpack.config.lambda');
+/* eslint-disable import/no-default-export */
+import config from './webpack.config.lambda';
+import webpack from 'webpack';
 
-module.exports = {
+const apiConfig: webpack.Configuration = {
   ...config,
   entry: {
     api: './web-api/terraform/template/lambdas/api.ts',
@@ -32,3 +34,5 @@ module.exports = {
     path: __dirname + '/web-api/terraform/template/lambdas/dist',
   },
 };
+
+export default apiConfig;
