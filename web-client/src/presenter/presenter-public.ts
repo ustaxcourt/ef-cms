@@ -10,10 +10,10 @@ import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeMod
 import { confirmSignUpLocalSequence } from '@web-client/presenter/sequences/confirmSignUpLocalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
-import { goToLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/goToLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoPublicCaseDetailSequence } from './sequences/Public/gotoPublicCaseDetailSequence';
@@ -26,7 +26,6 @@ import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSeq
 import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
-import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/navigateToCreatePetitionerAccountSequence';
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
@@ -68,12 +67,12 @@ export const presenterSequences = {
   confirmSignUpLocalSequence,
   dismissModalSequence,
   goToCreatePetitionerAccountSequence,
-  goToLoginSequence,
   goToVerificationSentSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
   gotoHealthCheckSequence: showMaintenancePageDecorator(
     gotoHealthCheckSequence,
   ),
+  gotoLoginSequence,
   gotoMaintenanceSequence,
   gotoPrivacySequence: showMaintenancePageDecorator(gotoPrivacySequence),
   gotoPublicCaseDetailSequence: showMaintenancePageDecorator(
@@ -97,7 +96,6 @@ export const presenterSequences = {
   ),
   loadMoreTodaysOrdersSequence,
   navigateBackSequence,
-  navigateToCognitoSequence,
   navigateToCreatePetitionerAccountSequence,
   navigateToPublicSiteSequence,
   notFoundErrorSequence,

@@ -38,7 +38,7 @@ const router = {
 
     route('/login', () => {
       setPageTitle('Login');
-      app.getSequence('goToLoginSequence')();
+      app.getSequence('gotoLoginSequence')();
     });
 
     route('/create-account/verification-sent', () => {

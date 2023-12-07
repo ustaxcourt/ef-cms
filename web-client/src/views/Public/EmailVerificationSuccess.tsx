@@ -6,16 +6,16 @@ import React from 'react';
 
 export const EmailVerificationSuccess = connect(
   {
-    navigateToCognitoSequence: sequences.navigateToCognitoSequence,
+    gotoLoginSequence: sequences.gotoLoginSequence,
   },
-  function EmailVerificationSuccess({ navigateToCognitoSequence }) {
+  function EmailVerificationSuccess({ gotoLoginSequence }) {
     return (
       <>
         <BigHeader text="Your Email Has Been Verified" />
         <section className="usa-section grid-container">
           <div className="grid-container padding-x-0">
             <p>You can now log in with your new email address.</p>
-            <Button onClick={() => navigateToCognitoSequence()}>Log In</Button>
+            <Button onClick={() => gotoLoginSequence()}>Log In</Button>
           </div>
         </section>
       </>
