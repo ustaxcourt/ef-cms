@@ -305,7 +305,6 @@ import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSe
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
-import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
@@ -1069,7 +1068,6 @@ export const presenterSequences = {
     printPaperServiceForTrialCompleteSequence as unknown as Function,
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
   prioritizeCaseSequence: prioritizeCaseSequence as unknown as Function,
-  redirectToLoginSequence: redirectToLoginSequence as unknown as Function,
   refreshPdfSequence: refreshPdfSequence as unknown as Function,
   refreshStatisticsSequence: refreshStatisticsSequence as unknown as Function,
   removeBatchSequence: removeBatchSequence as unknown as Function,
