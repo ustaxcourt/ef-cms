@@ -1,3 +1,4 @@
+import { CaseWithSelectionInfo } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -35,9 +36,28 @@ export const setSuccessFromDocumentTitleAction = ({
     successMessage = 'Stipulated Decision signed and saved.';
   }
 
+  // TODO: unit test
+  const consolidatedCasesToMultiDocketOn = get(
+    state.modal.form.consolidatedCasesToMultiDocketOn,
+  );
+
+  const consolidatedCasesToMultiDocketOnMetaData: CaseWithSelectionInfo[] = (
+    consolidatedCasesToMultiDocketOn || []
+  ).map(caseInfo => ({
+    checked: caseInfo.checked,
+    docketNumberWithSuffix: caseInfo.docketNumberWithSuffix,
+  }));
+
+  const addedDocketNumbers = applicationContext
+    .getUtilities()
+    .getSelectedConsolidatedCasesToMultiDocketOn(
+      consolidatedCasesToMultiDocketOnMetaData,
+    );
+
   return {
     alertSuccess: {
       message: successMessage,
+      metaData: addedDocketNumbers.join(', '),
     },
   };
 };
