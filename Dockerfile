@@ -7,9 +7,6 @@ WORKDIR /home/app
 # needed to install jre successfully
 RUN mkdir -p /usr/share/man/man1
 
-# delete duplicate list if it exists
-RUN [ -f /etc/apt/sources.list.d/microsoft-edge.list ] && [ -f /etc/apt/sources.list.d/microsoft-edge-stable.list ] && rm /etc/apt/sources.list.d/microsoft-edge-stable.list
-
 RUN apt-get update
 
 RUN apt-get install -y \
