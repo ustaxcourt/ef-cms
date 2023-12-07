@@ -416,6 +416,7 @@ import { submitExternalDocumentSequence } from './sequences/submitExternalDocume
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitJudgeActivityReportSequence } from './sequences/JudgeActivityReport/submitJudgeActivityReportSequence';
 import { submitLocalLoginSequence } from './sequences/submitLocalLoginSequence';
+import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
 import { submitPaperFilingSequence } from './sequences/submitPaperFilingSequence';
@@ -1252,6 +1253,7 @@ export const presenterSequences = {
   submitJudgeActivityReportSequence:
     submitJudgeActivityReportSequence as unknown as Function,
   submitLocalLoginSequence: submitLocalLoginSequence as unknown as Function,
+  submitLoginSequence,
   submitOpinionAdvancedSearchSequence:
     submitOpinionAdvancedSearchSequence as unknown as Function,
   submitOrderAdvancedSearchSequence:
