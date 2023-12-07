@@ -1,3 +1,4 @@
+import { MOTION_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -18,6 +19,7 @@ export type FormattedPendingMotion = {
   daysSinceCreated: number;
   pending: boolean;
   caseCaption: string;
+  filingDate: string;
   consolidatedGroupCount: number;
   leadDocketNumber?: string;
 };
@@ -57,7 +59,6 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
       ),
     );
 
-  const removeMotionsThatHaveBeenHandledInDynamo = de => de.pending;
   const judgePendingMotions =
     pendingMotionDocketEntriesOlderThan180DaysFromDynamo.filter(
       removeMotionsThatHaveBeenHandledInDynamo,
@@ -137,6 +138,16 @@ function removeDuplicateDocketEntries(
   return [...soloDocketEntries, ...Object.values(uniqueDocketEntryDictionary)];
 }
 
+function removeMotionsThatHaveBeenHandledInDynamo(
+  docketEntry: FormattedPendingMotion,
+) {
+  return (
+    docketEntry.pending &&
+    MOTION_EVENT_CODES.includes(docketEntry.eventCode) &&
+    docketEntry.daysSinceCreated <= 180
+  );
+}
+
 async function getLatestDataForPendingMotionsFromDynamo(
   docketEntry: RawDocketEntry,
   applicationContext: IApplicationContext,
@@ -156,7 +167,7 @@ async function getLatestDataForPendingMotionsFromDynamo(
 
   const dayDifference = calculateDifferenceInDays(
     currentDate,
-    docketEntry.createdAt,
+    latestDocketEntry.filingDate,
   );
 
   const updatedDocketEntry: FormattedPendingMotion = {
@@ -166,6 +177,7 @@ async function getLatestDataForPendingMotionsFromDynamo(
     docketEntryId: latestDocketEntry.docketEntryId,
     docketNumber: fullCase.docketNumber,
     eventCode: latestDocketEntry.eventCode,
+    filingDate: latestDocketEntry.filingDate,
     leadDocketNumber: fullCase.leadDocketNumber,
     pending: latestDocketEntry.pending,
   };
