@@ -24,7 +24,7 @@ export const PendingMotion = connect(
     return (
       <>
         <div>
-          Showing motions pending for more than 180 days. To view all, run the{' '}
+          Showing motions pending for 180 days or more. To view all, run the{' '}
           <Button
             link
             overrideMargin="margin-0"
@@ -50,7 +50,7 @@ export const PendingMotion = connect(
               <th>No. of Cases</th>
               <th style={{ width: '12rem' }}>Petitioner(s)</th>
               <th>Motion</th>
-              <th>No. Days Pending</th>
+              <th>Days Pending</th>
               <th>Final Brief Due Date</th>
               <th>Status of Matter</th>
               <th aria-hidden="true"></th>
@@ -82,7 +82,13 @@ export const PendingMotion = connect(
                     <td>{motion.consolidatedGroupCount}</td>
                     <td>{motion.caseCaption}</td>
                     <td>
-                      <a href={motion.documentLink}>{motion.documentTitle}</a>
+                      <a
+                        href={motion.documentLink}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {motion.documentTitle}
+                      </a>
                     </td>
                     <td>{motion.daysSinceCreated}</td>
                     <td>{motion.finalBriefDueDateFormatted}</td>
@@ -120,7 +126,7 @@ export const PendingMotion = connect(
         </table>
 
         {pendingMotionsHelper.formattedPendingMotions.length === 0 && (
-          <div>There are no motions pending for more than 180 days.</div>
+          <div>There are no motions pending for 180 days or more.</div>
         )}
 
         {showModal === 'AddEditDocketEntryWorksheetModal' && (

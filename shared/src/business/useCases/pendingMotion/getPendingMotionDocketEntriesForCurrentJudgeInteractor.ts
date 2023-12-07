@@ -11,14 +11,18 @@ import {
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition } from 'lodash';
 
-export type FormattedPendingMotionDocketEntry = RawDocketEntry & {
+export type FormattedPendingMotion = {
+  docketNumber: string;
+  docketEntryId: string;
+  eventCode: string;
   daysSinceCreated: number;
+  pending: boolean;
   caseCaption: string;
   consolidatedGroupCount: number;
   leadDocketNumber?: string;
 };
 
-export type DocketEntryWithWorksheet = FormattedPendingMotionDocketEntry & {
+export type FormattedPendingMotionWithWorksheet = FormattedPendingMotion & {
   docketEntryWorksheet: RawDocketEntryWorksheet;
 };
 
@@ -26,7 +30,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
   applicationContext: IApplicationContext,
   params: { judge: string },
 ): Promise<{
-  docketEntries: DocketEntryWithWorksheet[];
+  docketEntries: FormattedPendingMotionWithWorksheet[];
 }> => {
   const { judge } = params;
   const authorizedUser = applicationContext.getCurrentUser();
@@ -34,55 +38,36 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { results: allDocketEntries } = await applicationContext
+  const {
+    results: allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch,
+  } = await applicationContext
     .getPersistenceGateway()
     .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judge });
 
   const currentDate = prepareDateFromString().toISO()!;
-
-  const batchCases = (
+  const pendingMotionDocketEntriesOlderThan180DaysFromDynamo =
     await Promise.all(
-      allDocketEntries.map(async (docketEntry: RawDocketEntry) => {
-        const fullCase: RawCase = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
+      allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch.map(
+        async (docketEntry: RawDocketEntry) =>
+          await getLatestDataForPendingMotionsFromDynamo(
+            docketEntry,
             applicationContext,
-            docketNumber: docketEntry.docketNumber,
-            includeConsolidatedCases: true,
-          });
+            currentDate,
+          ),
+      ),
+    );
 
-        const latestDocketEntry: RawDocketEntry = fullCase.docketEntries.find(
-          de => de.docketEntryId === docketEntry.docketEntryId,
-        );
+  const removeMotionsThatHaveBeenHandledInDynamo = de => de.pending;
+  const judgePendingMotions =
+    pendingMotionDocketEntriesOlderThan180DaysFromDynamo.filter(
+      removeMotionsThatHaveBeenHandledInDynamo,
+    );
 
-        const dayDifference = calculateDifferenceInDays(
-          currentDate,
-          docketEntry.createdAt,
-        );
+  const judgePendingMotionsWithWorksheet: FormattedPendingMotionWithWorksheet[] =
+    await attachDocketEntryWorkSheets(applicationContext, judgePendingMotions);
 
-        const updatedDocketEntry: RawDocketEntry & {
-          daysSinceCreated: number;
-          caseCaption: string;
-          consolidatedGroupCount: number;
-          leadDocketNumber?: string;
-        } = {
-          ...docketEntry,
-          ...fullCase,
-          ...latestDocketEntry,
-          consolidatedGroupCount: fullCase.consolidatedCases.length || 1,
-          daysSinceCreated: dayDifference,
-        };
-
-        return updatedDocketEntry;
-      }),
-    )
-  ).filter(de => de.pending);
-
-  const pendingMotionsDocketEntriesWithWorksheet: DocketEntryWithWorksheet[] =
-    await attachDocketEntryWorkSheets(applicationContext, batchCases);
-
-  const uniquePendingMotions: DocketEntryWithWorksheet[] =
-    removeDuplicateDocketEntries(pendingMotionsDocketEntriesWithWorksheet);
+  const uniquePendingMotions: FormattedPendingMotionWithWorksheet[] =
+    removeDuplicateDocketEntries(judgePendingMotionsWithWorksheet);
 
   return {
     docketEntries: uniquePendingMotions,
@@ -91,8 +76,8 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 
 async function attachDocketEntryWorkSheets(
   applicationContext: IApplicationContext,
-  docketEntries: FormattedPendingMotionDocketEntry[],
-): Promise<DocketEntryWithWorksheet[]> {
+  docketEntries: FormattedPendingMotion[],
+): Promise<FormattedPendingMotionWithWorksheet[]> {
   const docketEntryIds = docketEntries.map(
     docketEntry => docketEntry.docketEntryId,
   );
@@ -112,7 +97,7 @@ async function attachDocketEntryWorkSheets(
     {} as { [key: string]: RawDocketEntryWorksheet },
   );
 
-  const docketEntriesWithWorksheets: DocketEntryWithWorksheet[] =
+  const docketEntriesWithWorksheets: FormattedPendingMotionWithWorksheet[] =
     docketEntries.map(docketEntry => {
       return {
         ...docketEntry,
@@ -124,9 +109,10 @@ async function attachDocketEntryWorkSheets(
 
   return docketEntriesWithWorksheets;
 }
+
 function removeDuplicateDocketEntries(
-  docketEntries: DocketEntryWithWorksheet[],
-): DocketEntryWithWorksheet[] {
+  docketEntries: FormattedPendingMotionWithWorksheet[],
+): FormattedPendingMotionWithWorksheet[] {
   const [docketEntriesWithLead, soloDocketEntries] = partition(
     docketEntries,
     de => !!de.leadDocketNumber,
@@ -145,8 +131,44 @@ function removeDuplicateDocketEntries(
 
       return accumulator;
     },
-    {} as { [key: string]: DocketEntryWithWorksheet },
+    {} as { [key: string]: FormattedPendingMotionWithWorksheet },
   );
 
   return [...soloDocketEntries, ...Object.values(uniqueDocketEntryDictionary)];
+}
+
+async function getLatestDataForPendingMotionsFromDynamo(
+  docketEntry: RawDocketEntry,
+  applicationContext: IApplicationContext,
+  currentDate: string,
+): Promise<FormattedPendingMotion> {
+  const fullCase: RawCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: docketEntry.docketNumber,
+      includeConsolidatedCases: true,
+    });
+
+  const latestDocketEntry: RawDocketEntry = fullCase.docketEntries.find(
+    de => de.docketEntryId === docketEntry.docketEntryId,
+  );
+
+  const dayDifference = calculateDifferenceInDays(
+    currentDate,
+    docketEntry.createdAt,
+  );
+
+  const updatedDocketEntry: FormattedPendingMotion = {
+    caseCaption: fullCase.caseCaption,
+    consolidatedGroupCount: fullCase.consolidatedCases.length || 1,
+    daysSinceCreated: dayDifference,
+    docketEntryId: latestDocketEntry.docketEntryId,
+    docketNumber: fullCase.docketNumber,
+    eventCode: latestDocketEntry.eventCode,
+    leadDocketNumber: fullCase.leadDocketNumber,
+    pending: latestDocketEntry.pending,
+  };
+
+  return updatedDocketEntry;
 }

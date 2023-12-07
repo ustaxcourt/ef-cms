@@ -368,7 +368,6 @@
     "stylelint-config-idiomatic-order": "^9.0.0",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-config-standard-scss": "^11.1.0",
-    "stylelint-prettier": "^4.0.2",
     "swagger-cli": "^4.0.4",
     "tiff2pdf": "^1.0.2",
     "ts-jest": "^29.1.1",

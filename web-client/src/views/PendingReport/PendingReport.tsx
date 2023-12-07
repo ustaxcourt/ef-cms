@@ -6,7 +6,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const PendingReport = connect(
   {
@@ -19,6 +19,15 @@ export const PendingReport = connect(
     formattedPendingItemsHelper,
     hasPendingItemsResults,
   }) {
+    const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
+
+    const debounceSubmit = timeout => {
+      setIsSubmitDebounced(true);
+      setTimeout(() => {
+        setIsSubmitDebounced(false);
+      }, timeout);
+    };
+
     return (
       <>
         <BigHeader text="Reports" />
@@ -33,19 +42,11 @@ export const PendingReport = connect(
                     link
                     aria-label="export pending report"
                     className="margin-top-2"
+                    data-testid="export-pending-report"
+                    disabled={isSubmitDebounced}
                     icon="file-export"
                     onClick={() => {
-                      exportPendingReportSequence({ method: 'csvs' });
-                    }}
-                  >
-                    Export - CSVS
-                  </Button>
-                  <Button
-                    link
-                    aria-label="export pending report"
-                    className="margin-top-2"
-                    icon="file-export"
-                    onClick={() => {
+                      debounceSubmit(200);
                       exportPendingReportSequence();
                     }}
                   >
@@ -55,6 +56,7 @@ export const PendingReport = connect(
                     link
                     aria-label="print pending report"
                     className="margin-top-2"
+                    data-testid="print-pending-report"
                     href={formattedPendingItemsHelper.printUrl}
                     icon="print"
                   >

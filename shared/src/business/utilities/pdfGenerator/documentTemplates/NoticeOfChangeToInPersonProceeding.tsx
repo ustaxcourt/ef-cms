@@ -17,7 +17,7 @@ export const NoticeOfChangeToInPersonProceeding = ({
   docketNumberWithSuffix: string;
   nameOfClerk: string;
   titleOfClerk: string;
-  trialInfo: FormattedTrialInfo; // confirm
+  trialInfo: FormattedTrialInfo;
 }) => {
   return (
     <div id="notice-of-change-to-in-person-proceeding-pdf">
