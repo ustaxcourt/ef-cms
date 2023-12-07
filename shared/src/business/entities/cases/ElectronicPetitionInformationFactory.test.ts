@@ -6,26 +6,26 @@ import {
   MAX_FILE_SIZE_MB,
   PARTY_TYPES,
 } from '../EntityConstants';
-import { CaseExternalInformationFactory } from './CaseExternalInformationFactory';
+import { ElectronicPetitionInformationFactory } from './ElectronicPetitionInformationFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-describe('CaseExternalInformationFactory entity', () => {
+describe('ElectronicPetitionInformationFactory entity', () => {
   it('requires wizard step', () => {
-    const caseExternal = new CaseExternalInformationFactory(
+    const electronicPetition = new ElectronicPetitionInformationFactory(
       {},
       {
         applicationContext,
       },
     );
-    expect(caseExternal.getFormattedValidationErrors()!!.wizardStep).toEqual(
-      '"wizardStep" is required',
-    );
-    expect(caseExternal.isValid()).toBeFalsy();
+    expect(
+      electronicPetition.getFormattedValidationErrors()!!.wizardStep,
+    ).toEqual('"wizardStep" is required');
+    expect(electronicPetition.isValid()).toBeFalsy();
   });
 
   describe('wizard step 1', () => {
     it('requires stinFile', () => {
-      const caseExternal = new CaseExternalInformationFactory(
+      const electronicPetition = new ElectronicPetitionInformationFactory(
         {
           wizardStep: '1',
         },
@@ -33,13 +33,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!.stinFile).toEqual(
-        'Upload a Statement of Taxpayer Identification Number (STIN)',
-      );
+      expect(
+        electronicPetition.getFormattedValidationErrors()!.stinFile,
+      ).toEqual('Upload a Statement of Taxpayer Identification Number (STIN)');
     });
 
     it('should be valid if all step 1 and step 2 params are present', () => {
-      const caseExternal = new CaseExternalInformationFactory(
+      const electronicPetition = new ElectronicPetitionInformationFactory(
         {
           stinFile: new File([], 'test.pdf'),
           stinFileSize: 1,
@@ -49,12 +49,12 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual(null);
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual(null);
     });
 
     describe('STIN file size', () => {
       it('should inform you if stin file size is greater than the PDF max file size', () => {
-        const caseExternal = new CaseExternalInformationFactory(
+        const electronicPetition = new ElectronicPetitionInformationFactory(
           {
             stinFile: new File([], 'test.pdf'),
             stinFileSize: MAX_FILE_SIZE_BYTES + 5,
@@ -66,14 +66,14 @@ describe('CaseExternalInformationFactory entity', () => {
         );
 
         expect(
-          caseExternal.getFormattedValidationErrors()!.stinFileSize,
+          electronicPetition.getFormattedValidationErrors()!.stinFileSize,
         ).toEqual(
           `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
         );
       });
 
       it('should inform you if stin file size is zero', () => {
-        const caseExternal = new CaseExternalInformationFactory(
+        const electronicPetition = new ElectronicPetitionInformationFactory(
           {
             stinFile: new File([], 'test.pdf'),
             stinFileSize: 0,
@@ -84,12 +84,12 @@ describe('CaseExternalInformationFactory entity', () => {
           },
         );
         expect(
-          caseExternal.getFormattedValidationErrors()!.stinFileSize,
+          electronicPetition.getFormattedValidationErrors()!.stinFileSize,
         ).toEqual('Your STIN file size is empty');
       });
 
       it('should not error on stinFileSize when stinFile is undefined', () => {
-        const caseExternal = new CaseExternalInformationFactory(
+        const electronicPetition = new ElectronicPetitionInformationFactory(
           {
             wizardStep: '1',
           },
@@ -98,12 +98,12 @@ describe('CaseExternalInformationFactory entity', () => {
           },
         );
         expect(
-          caseExternal.getFormattedValidationErrors()!.stinFileSize,
+          electronicPetition.getFormattedValidationErrors()!.stinFileSize,
         ).toBeUndefined();
       });
 
       it('should error on stinFileSize when stinFile is defined', () => {
-        const caseExternal = new CaseExternalInformationFactory(
+        const electronicPetition = new ElectronicPetitionInformationFactory(
           {
             stinFile: new File([], 'testStinFile.pdf'),
             wizardStep: '1',
@@ -113,7 +113,7 @@ describe('CaseExternalInformationFactory entity', () => {
           },
         );
         expect(
-          caseExternal.getFormattedValidationErrors()!.stinFileSize,
+          electronicPetition.getFormattedValidationErrors()!.stinFileSize,
         ).toEqual('Your STIN file size is empty');
       });
     });
@@ -121,7 +121,7 @@ describe('CaseExternalInformationFactory entity', () => {
 
   describe('wizard step 2', () => {
     it('requires all wizard step 1 and 2 items', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           wizardStep: '2',
         },
@@ -129,13 +129,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         petitionFile: 'Upload a Petition',
         stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
       });
 
-      caseExternal = new CaseExternalInformationFactory(
+      electronicPetition = new ElectronicPetitionInformationFactory(
         {
           stinFile: new File([], 'test.pdf'),
           wizardStep: '2',
@@ -144,7 +144,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         petitionFile: 'Upload a Petition',
         stinFileSize: 'Your STIN file size is empty',
@@ -152,7 +152,7 @@ describe('CaseExternalInformationFactory entity', () => {
     });
 
     it('requires hasIrsNotice and petitionFile if no params from step 2 are present', () => {
-      const caseExternal = new CaseExternalInformationFactory(
+      const electronicPetition = new ElectronicPetitionInformationFactory(
         {
           stinFile: new File([], 'test.pdf'),
           stinFileSize: 1,
@@ -162,14 +162,14 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         petitionFile: 'Upload a Petition',
       });
     });
 
     it('requires caseType if hasIrsNotice is present', () => {
-      const caseExternal = new CaseExternalInformationFactory(
+      const electronicPetition = new ElectronicPetitionInformationFactory(
         {
           hasIrsNotice: true,
           petitionFile: new File([], 'test.pdf'),
@@ -182,13 +182,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         caseType: 'Select a case type',
       });
     });
 
     it('should be valid if all step 1 and step 2 params are present', () => {
-      const caseExternal = new CaseExternalInformationFactory(
+      const electronicPetition = new ElectronicPetitionInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
           hasIrsNotice: true,
@@ -202,11 +202,11 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual(null);
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual(null);
     });
 
     it('should be valid if all step 1 and step 2 params are present, but a partyType and invalid contactPrimary are present', () => {
-      const caseExternal = new CaseExternalInformationFactory(
+      const electronicPetition = new ElectronicPetitionInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
           hasIrsNotice: true,
@@ -226,13 +226,13 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual(null);
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual(null);
     });
   });
 
   describe('wizard step 3', () => {
     it('requires all wizard step 1, 2, and 3 items', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           wizardStep: '3',
         },
@@ -240,7 +240,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         filingType: 'Select on whose behalf you are filing',
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         partyType: 'Select a party type',
@@ -248,7 +248,7 @@ describe('CaseExternalInformationFactory entity', () => {
         stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
       });
 
-      caseExternal = new CaseExternalInformationFactory(
+      electronicPetition = new ElectronicPetitionInformationFactory(
         {
           hasIrsNotice: true,
           petitionFile: new File([], 'test.pdf'),
@@ -259,7 +259,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         caseType: 'Select a case type',
         filingType: 'Select on whose behalf you are filing',
         partyType: 'Select a party type',
@@ -269,7 +269,7 @@ describe('CaseExternalInformationFactory entity', () => {
     });
 
     it('requires filingType and partyType if wizard step 1 and 2 required fields are present', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
           hasIrsNotice: true,
@@ -283,14 +283,14 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         filingType: 'Select on whose behalf you are filing',
         partyType: 'Select a party type',
       });
     });
 
     it('requires corporateDisclosureFile if filingType is A business', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
           filingType: 'A business',
@@ -307,12 +307,13 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(
-        caseExternal.getFormattedValidationErrors()!.corporateDisclosureFile,
+        electronicPetition.getFormattedValidationErrors()!
+          .corporateDisclosureFile,
       ).toEqual('Upload a Corporate Disclosure Statement');
     });
 
     it('does not require corporateDisclosureFile if filingType is not A business', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
           filingType: 'something else',
@@ -329,12 +330,13 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(
-        caseExternal.getFormattedValidationErrors()!.corporateDisclosureFile,
+        electronicPetition.getFormattedValidationErrors()!
+          .corporateDisclosureFile,
       ).toBeUndefined();
     });
 
     it('requires only contactPrimary if partyType is Petitioner', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
           filingType: 'Myself',
@@ -350,7 +352,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         petitioners: [
           {
             address1: 'Enter mailing address',
@@ -367,7 +369,7 @@ describe('CaseExternalInformationFactory entity', () => {
     });
 
     it('requires contactPrimary and contactSecondary if partyType is Petitioner & Spouse', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
           filingType: 'Myself',
@@ -384,14 +386,14 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(
-        caseExternal.getFormattedValidationErrors()!.petitioners,
+        electronicPetition.getFormattedValidationErrors()!.petitioners,
       ).toBeDefined();
     });
   });
 
   describe('wizard step 4', () => {
     it('requires all wizard step 1, 2, 3, and 4 items', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           wizardStep: '4',
         },
@@ -399,7 +401,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         filingType: 'Select on whose behalf you are filing',
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         partyType: 'Select a party type',
@@ -409,7 +411,7 @@ describe('CaseExternalInformationFactory entity', () => {
         stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
       });
 
-      caseExternal = new CaseExternalInformationFactory(
+      electronicPetition = new ElectronicPetitionInformationFactory(
         {
           filingType: 'Myself',
           hasIrsNotice: true,
@@ -422,7 +424,7 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual({
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual({
         caseType: 'Select a case type',
         petitionFileSize: 'Your Petition file size is empty',
         petitioners: [
@@ -454,7 +456,7 @@ describe('CaseExternalInformationFactory entity', () => {
     });
 
     it('returns no validation errors if all required fields from all steps are present', () => {
-      let caseExternal = new CaseExternalInformationFactory(
+      let electronicPetition = new ElectronicPetitionInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
           contactSecondary: {
@@ -493,8 +495,8 @@ describe('CaseExternalInformationFactory entity', () => {
           applicationContext,
         },
       );
-      expect(caseExternal.getFormattedValidationErrors()!).toEqual(null);
-      expect(caseExternal.isValid()).toBeTruthy();
+      expect(electronicPetition.getFormattedValidationErrors()!).toEqual(null);
+      expect(electronicPetition.isValid()).toBeTruthy();
     });
   });
 });
