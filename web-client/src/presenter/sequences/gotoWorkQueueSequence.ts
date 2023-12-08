@@ -6,8 +6,8 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { parallel } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setSectionForWorkQueueAction } from '../actions/setSectionForWorkQueueAction';
@@ -73,6 +73,6 @@ export const gotoWorkQueueSequence = [
   isLoggedInAction,
   {
     isLoggedIn: goToWorkQueue,
-    unauthorized: [gotoLoginSequence],
+    unauthorized: [navigateToLoginSequence],
   },
 ];

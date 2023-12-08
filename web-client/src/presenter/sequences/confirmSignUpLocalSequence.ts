@@ -1,5 +1,5 @@
 import { confirmSignUpLocalAction } from '../actions/confirmSignUpLocalAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 
@@ -9,5 +9,5 @@ export const confirmSignUpLocalSequence = [
     no: [setAlertErrorAction],
     yes: [setAlertSuccessAction],
   },
-  gotoLoginSequence,
+  navigateToLoginSequence,
 ];

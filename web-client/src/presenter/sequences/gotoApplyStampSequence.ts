@@ -1,8 +1,8 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFStampDataAction } from '../actions/StampMotion/clearPDFStampDataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../actions/setDocketEntrySelectedFromMessageAction';
@@ -28,6 +28,6 @@ export const goToApplyStampSequence = [
       setPDFPageForSigningAction,
       setupCurrentPageAction('ApplyStamp'),
     ]),
-    unauthorized: [gotoLoginSequence],
+    unauthorized: [navigateToLoginSequence],
   },
 ];

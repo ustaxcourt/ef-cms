@@ -1,5 +1,5 @@
 import { changePasswordLocalAction } from '../actions/changePasswordLocalAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -11,7 +11,7 @@ export const changePasswordLocalSequence = showProgressSequenceDecorator([
     yes: [
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
-      gotoLoginSequence,
+      navigateToLoginSequence,
     ],
   },
 ]);

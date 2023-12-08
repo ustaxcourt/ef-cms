@@ -4,8 +4,8 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const IdleLogout = connect(
-  { gotoLoginSequence: sequences.gotoLoginSequence },
-  function IdleLogout({ gotoLoginSequence }) {
+  { navigateToLoginSequence: sequences.navigateToLoginSequence },
+  function IdleLogout({ navigateToLoginSequence }) {
     return (
       <section className="usa-section grid-container">
         <h1 tabIndex={-1}>Session Timeout</h1>
@@ -16,7 +16,7 @@ export const IdleLogout = connect(
           United States Tax Court website for information on court services and
           contact information.
         </p>
-        <Button onClick={() => gotoLoginSequence()}>Log In</Button>
+        <Button onClick={() => navigateToLoginSequence()}>Log In</Button>
         <Button link href="https://www.ustaxcourt.gov/">
           Go to the U.S. Tax Court Website
         </Button>

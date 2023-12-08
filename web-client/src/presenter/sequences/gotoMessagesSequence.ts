@@ -9,8 +9,8 @@ import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesFor
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getOutboxMessagesForSectionAction } from '../actions/getOutboxMessagesForSectionAction';
 import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForUserAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { parallel } from 'cerebral';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
@@ -50,6 +50,6 @@ export const gotoMessagesSequence = [
   isLoggedInAction,
   {
     isLoggedIn: goToMessages,
-    unauthorized: [gotoLoginSequence],
+    unauthorized: [navigateToLoginSequence],
   },
 ];

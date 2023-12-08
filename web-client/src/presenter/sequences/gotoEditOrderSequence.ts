@@ -3,8 +3,8 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getDocumentContentsAction } from '../actions/getDocumentContentsAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setAddedDocketNumbersAction } from '../actions/setAddedDocketNumbersAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
@@ -40,6 +40,6 @@ export const gotoEditOrderSequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoEditOrder,
-    unauthorized: [gotoLoginSequence],
+    unauthorized: [navigateToLoginSequence],
   },
 ];

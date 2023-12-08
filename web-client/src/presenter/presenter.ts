@@ -166,7 +166,6 @@ import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoFilePetitionSuccessSequence } from './sequences/gotoFilePetitionSuccessSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoJudgeActivityReportSequence } from './sequences/JudgeActivityReport/gotoJudgeActivityReportSequence';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
@@ -218,6 +217,7 @@ import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/naviga
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { navigateToPathAndSetRedirectUrlSequence } from './sequences/navigateToPathAndSetRedirectUrlSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
@@ -818,7 +818,6 @@ export const presenterSequences = {
   gotoIdleLogoutSequence: gotoIdleLogoutSequence as unknown as Function,
   gotoJudgeActivityReportSequence:
     gotoJudgeActivityReportSequence as unknown as Function,
-  gotoLoginSequence: gotoLoginSequence as unknown as Function,
   gotoMaintenanceSequence: gotoMaintenanceSequence as unknown as Function,
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
@@ -901,6 +900,7 @@ export const presenterSequences = {
     navigateToCaseDetailWithDraftDocumentSequence as unknown as Function,
   navigateToEditOrderSequence:
     navigateToEditOrderSequence as unknown as Function,
+  navigateToLoginSequence,
   navigateToPathAndSetRedirectUrlSequence:
     navigateToPathAndSetRedirectUrlSequence as unknown as Function,
   navigateToPathSequence: navigateToPathSequence as unknown as Function,

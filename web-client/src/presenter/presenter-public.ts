@@ -13,7 +13,7 @@ import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/seque
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
+import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/gotoLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoPublicCaseDetailSequence } from './sequences/Public/gotoPublicCaseDetailSequence';
@@ -27,6 +27,7 @@ import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/navigateToCreatePetitionerAccountSequence';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
@@ -98,6 +99,7 @@ export const presenterSequences = {
   loadMoreTodaysOrdersSequence,
   navigateBackSequence,
   navigateToCreatePetitionerAccountSequence,
+  navigateToLoginSequence,
   navigateToPublicSiteSequence,
   notFoundErrorSequence,
   openAppMaintenanceModalSequence,

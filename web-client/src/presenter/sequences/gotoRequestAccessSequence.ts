@@ -3,9 +3,9 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
@@ -51,6 +51,6 @@ export const gotoRequestAccessSequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoRequestAccess,
-    unauthorized: [gotoLoginSequence],
+    unauthorized: [navigateToLoginSequence],
   },
 ];
