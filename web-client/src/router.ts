@@ -69,7 +69,7 @@ const gotoMaintenancePage = app => {
   });
 };
 const gotoLoginPage = app => {
-  return app.getSequence('gotoLoginSequence')();
+  return app.getSequence('navigateToLoginSequence')();
 };
 const goto404 = app => {
   return app.getSequence('navigateToPathSequence')({

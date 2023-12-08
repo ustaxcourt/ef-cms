@@ -1,8 +1,8 @@
 import { clearConfirmationTextAction } from '../actions/clearConfirmationTextAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setEditDeficiencyStatisticFormAction } from '../actions/setEditDeficiencyStatisticFormAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -22,6 +22,6 @@ export const gotoEditDeficiencyStatisticSequence = [
       setEditDeficiencyStatisticFormAction,
       setupCurrentPageAction('EditDeficiencyStatistic'),
     ]),
-    unauthorized: [gotoLoginSequence],
+    unauthorized: [navigateToLoginSequence],
   },
 ];

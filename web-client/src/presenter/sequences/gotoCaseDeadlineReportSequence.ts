@@ -4,8 +4,8 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { parallel } from 'cerebral/factories';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setDefaultCaseDeadlinesReportDatesAction } from '../actions/CaseDeadline/setDefaultCaseDeadlinesReportDatesAction';
@@ -35,6 +35,6 @@ export const gotoCaseDeadlineReportSequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoCaseDeadlineReport,
-    unauthorized: [gotoLoginSequence],
+    unauthorized: [navigateToLoginSequence],
   },
 ];

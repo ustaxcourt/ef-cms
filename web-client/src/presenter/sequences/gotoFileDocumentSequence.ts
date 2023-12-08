@@ -1,8 +1,8 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/goToLoginSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultFilersMapAction } from '../actions/setDefaultFilersMapAction';
 import { setWizardStepAction } from '../actions/setWizardStepAction';
@@ -26,6 +26,6 @@ export const gotoFileDocumentSequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoFileDocument,
-    unauthorized: [gotoLoginSequence],
+    unauthorized: [navigateToLoginSequence],
   },
 ];
