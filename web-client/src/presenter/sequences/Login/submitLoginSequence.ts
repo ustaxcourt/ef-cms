@@ -1,22 +1,21 @@
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
+const cognito = new CognitoIdentityServiceProvider({
+  endpoint: 'http://localhost:9229/',
+  httpOptions: {
+    connectTimeout: 3000,
+    timeout: 5000,
+  },
+  maxRetries: 3,
+  region: 'local',
+});
+
 export const submitLoginSequence = [
-  async ({ applicationContext, get }: ActionProps) => {
+  async ({ get, router }) => {
     const { email, password } = get(state.form);
     console.log('in submitLoginSequence');
     console.log(email, password);
-
-    // Call Cognito
-    const cognito = new CognitoIdentityServiceProvider({
-      endpoint: 'http://localhost:9229/',
-      httpOptions: {
-        connectTimeout: 3000,
-        timeout: 5000,
-      },
-      maxRetries: 3,
-      region: 'local',
-    });
 
     const result = await cognito
       .initiateAuth({
@@ -25,9 +24,11 @@ export const submitLoginSequence = [
           PASSWORD: password,
           USERNAME: email,
         },
-        ClientId: applicationContext.getCognitoClientId(),
+        ClientId: 'bvjrggnd3co403c0aahscinne',
       })
       .promise();
+    const accessToken = result.AuthenticationResult?.AccessToken;
+    router.externalRoute(`http://localhost:1234/log-in?token=${accessToken}`);
 
     console.log('result from cognito: ', result);
     // Call some endpoint to get token & refresh token
