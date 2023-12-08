@@ -27,8 +27,8 @@ export const submitLoginSequence = [
         ClientId: 'bvjrggnd3co403c0aahscinne',
       })
       .promise();
-    const accessToken = result.AuthenticationResult?.AccessToken;
-    router.externalRoute(`http://localhost:1234/log-in?token=${accessToken}`);
+    const idToken = result.AuthenticationResult?.IdToken;
+    router.externalRoute(`http://localhost:1234/log-in?token=${idToken}`);
 
     console.log('result from cognito: ', result);
     // Call some endpoint to get token & refresh token
