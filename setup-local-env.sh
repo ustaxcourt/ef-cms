@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DEPLOYMENT_TIMESTAMP=$(date "+%s")
+
 export IS_LOCAL=true
 export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=S3RVER
@@ -20,3 +22,4 @@ export DYNAMODB_ENDPOINT=http://localhost:8000
 export IRS_SUPERUSER_EMAIL=irs-superuser@example.com
 export USER_POOL_ID='local_2pHzece7'
 export COGNITO_CLIENT_ID='bvjrggnd3co403c0aahscinne'
+export DEPLOYMENT_TIMESTAMP="$DEPLOYMENT_TIMESTAMP"
