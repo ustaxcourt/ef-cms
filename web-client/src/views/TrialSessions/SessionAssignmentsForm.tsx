@@ -161,7 +161,7 @@ export const SessionAssignmentsForm = connect(
           <div className="usa-form-group">
             <label
               className="usa-label"
-              htmlFor="irs-calendar-administrator-name"
+              htmlFor="irs-calendar-administrator-info-name"
             >
               IRS calendar administrator name{' '}
               <span className="usa-hint">(optional)</span>
@@ -187,7 +187,7 @@ export const SessionAssignmentsForm = connect(
             <div className="usa-form-group desktop:grid-col-6 desktop:margin-right-3 no-shrink">
               <label
                 className="usa-label"
-                htmlFor="irs-calendar-administrator-email"
+                htmlFor="irs-calendar-administrator-info-email"
               >
                 Email <span className="usa-hint">(optional)</span>
               </label>
@@ -210,7 +210,7 @@ export const SessionAssignmentsForm = connect(
             <div className="usa-form-group desktop:grid-col-6 no-shrink">
               <label
                 className="usa-label"
-                htmlFor="irs-calendar-administrator-phone"
+                htmlFor="irs-calendar-administrator-info-phone"
               >
                 Phone number <span className="usa-hint">(optional)</span>
               </label>
