@@ -16,10 +16,10 @@ describe('DateHandler', () => {
       MDYY: '7/2/18',
       MDYYYY: '7/2/2018',
       MDYYYY_DASHED: '7-2-2018',
-
       MMDDYY: '07/02/18',
       MMDDYYYY: '07/02/2018',
       MMDDYYYY_DASHED: '07-02-2018',
+      MMDDYYYY_UNDERSCORED: '07_02_2018',
       MONTH_DAY_YEAR: 'July 2, 2018',
       MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'Monday, July 2, 2018',
       SHORT_MONTH_DAY_YEAR: 'Jul 2, 2018',

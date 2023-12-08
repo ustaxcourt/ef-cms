@@ -10,7 +10,6 @@ data "null_data_source" "locals" {
     DEFAULT_ACCOUNT_PASS               = var.default_account_pass
     DISABLE_EMAILS                     = var.disable_emails
     DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
-    DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
     EFCMS_DOMAIN                       = var.dns_domain
     EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
     EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
@@ -18,7 +17,6 @@ data "null_data_source" "locals" {
     EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
     IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
     LOG_LEVEL                          = var.log_level
-    MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
     MASTER_REGION                      = "us-east-1"
     NODE_ENV                           = "production"
     PROD_ENV_ACCOUNT_ID                = var.prod_env_account_id

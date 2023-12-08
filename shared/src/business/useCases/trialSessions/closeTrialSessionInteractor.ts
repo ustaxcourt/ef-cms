@@ -1,11 +1,10 @@
-import { NotFoundError } from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { isEmpty, isEqual } from 'lodash';
 
 /**
