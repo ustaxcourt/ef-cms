@@ -2,7 +2,7 @@ import { createApplicationContext } from '../../applicationContext';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
 const applicationContext = createApplicationContext({});
-const deployedTimestamp: number = Number(process.env.DEPLOYED_TIMESTAMP!); // epoch seconds
+const deploymentTimestamp: number = Number(process.env.DEPLOYMENT_TIMESTAMP!); // epoch seconds
 
 const shouldProcessRecord = (record: DynamoDBRecord): boolean => {
   if (
@@ -21,13 +21,13 @@ const shouldProcessRecord = (record: DynamoDBRecord): boolean => {
         : Number(record.dynamodb.ApproximateCreationDateTime);
     applicationContext.logger.info(
       `${
-        approximateCreationDateTime >= deployedTimestamp
+        approximateCreationDateTime >= deploymentTimestamp
           ? 'Indexing'
           : 'Not indexing'
       } record ${record.dynamodb.Keys?.pk?.S}`,
-      { approximateCreationDateTime, deployedTimestamp },
+      { approximateCreationDateTime, deploymentTimestamp },
     );
-    return approximateCreationDateTime >= deployedTimestamp;
+    return approximateCreationDateTime >= deploymentTimestamp;
   }
   return true;
 };
