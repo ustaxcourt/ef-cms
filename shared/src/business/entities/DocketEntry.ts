@@ -88,7 +88,7 @@ export class DocketEntry extends JoiValidationEntity {
   public userId?: string;
   public privatePractitioners?: any[];
   public servedParties?: any[];
-  public signedAt?: string | null;
+  public signedAt?: string;
   public draftOrderState?: object;
   public stampData!: object;
   public isDraft?: boolean;
@@ -103,9 +103,9 @@ export class DocketEntry extends JoiValidationEntity {
   };
   public qcAt?: string;
   public qcByUserId?: string;
-  public signedByUserId?: string | null;
-  public signedJudgeName?: string | null;
-  public signedJudgeUserId?: string | null;
+  public signedByUserId?: string;
+  public signedJudgeName?: string;
+  public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
   public workItem?: any;
@@ -405,10 +405,10 @@ export class DocketEntry extends JoiValidationEntity {
    * Unsets signature related fields on the docket entry
    */
   unsignDocument() {
-    this.signedAt = null;
-    this.signedJudgeName = null;
-    this.signedJudgeUserId = null;
-    this.signedByUserId = null;
+    this.signedAt = undefined;
+    this.signedJudgeName = undefined;
+    this.signedJudgeUserId = undefined;
+    this.signedByUserId = undefined;
   }
 
   /**
