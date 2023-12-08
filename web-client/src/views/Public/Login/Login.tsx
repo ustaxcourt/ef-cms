@@ -63,7 +63,10 @@ export const Login = connect(
                 </button>
                 <Button
                   className="usa-button margin-top-3"
-                  onClick={() => submitLoginSequence()}
+                  onClick={e => {
+                    e.preventDefault();
+                    submitLoginSequence();
+                  }}
                 >
                   Log in
                 </Button>
