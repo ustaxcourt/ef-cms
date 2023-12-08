@@ -164,6 +164,9 @@ const applicationContextPublic = {
     return process.env.API_URL || 'http://localhost:5000';
   },
   getCaseTitle: Case.getCaseTitle,
+  getCognitoClientId: () => {
+    return process.env.COGNITO_CLIENT_ID || 'bvjrggnd3co403c0aahscinne';
+  },
   getCognitoRequestPasswordResetUrl,
   getConstants: () => frozenConstants,
   getCurrentUser: () => ({}),
