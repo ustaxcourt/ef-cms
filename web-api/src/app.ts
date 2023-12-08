@@ -12,7 +12,6 @@ import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocu
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
 import { associateIrsPractitionerWithCaseLambda } from './lambdas/manualAssociation/associateIrsPractitionerWithCaseLambda';
 import { associatePrivatePractitionerWithCaseLambda } from './lambdas/manualAssociation/associatePrivatePractitionerWithCaseLambda';
-import { authenticateUserLambda } from './lambdas/auth/authenticateUserLambda';
 import { batchDownloadTrialSessionLambda } from './lambdas/trialSessions/batchDownloadTrialSessionLambda';
 import { blockCaseFromTrialLambda } from './lambdas/cases/blockCaseFromTrialLambda';
 import { caseAdvancedSearchLambda } from './lambdas/cases/caseAdvancedSearchLambda';
@@ -1003,10 +1002,7 @@ app.get(
  * Authentication/Authorization
  */
 {
-  app
-    .route('/auth/login')
-    .post(lambdaWrapper(authenticateUserLambda))
-    .delete(lambdaWrapper(deleteAuthCookieLambda));
+  app.route('/auth/login').delete(lambdaWrapper(deleteAuthCookieLambda));
   app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 }
 

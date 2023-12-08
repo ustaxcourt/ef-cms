@@ -28,10 +28,11 @@ describe('Admissions clerk creates practitioner account', () => {
       value: standardizedTemporaryPassword,
     });
 
-    await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
-      code: emailAddress,
-      password: standardizedTemporaryPassword,
-    });
+    // TODO 10007
+    // await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
+    //   code: emailAddress,
+    //   password: standardizedTemporaryPassword,
+    // });
 
     await waitForLoadingComponentToHide({ cerebralTest });
 
@@ -49,9 +50,10 @@ describe('Admissions clerk creates practitioner account', () => {
       value: password,
     });
 
+    // TODO 10070
     await cerebralTest.runSequence('changePasswordLocalSequence');
 
-    expect(cerebralTest.getState('currentPage')).toEqual('LogIn');
+    expect(cerebralTest.getState('currentPage')).toEqual('Login');
 
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Password successfully changed.',
@@ -68,12 +70,13 @@ describe('Admissions clerk creates practitioner account', () => {
       value: 'invalidPassword',
     });
 
-    await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
-      code: emailAddress,
-      password: 'invalidPassword',
-    });
+    // TODO 10007: put new login sequence
+    // await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
+    //   code: emailAddress,
+    //   password: 'invalidPassword',
+    // });
 
-    expect(cerebralTest.getState('currentPage')).toEqual('LogIn');
+    expect(cerebralTest.getState('currentPage')).toEqual('Login');
     expect(cerebralTest.getState('alertError')).toEqual({
       message: 'Invalid password',
       title: 'Invalid password',

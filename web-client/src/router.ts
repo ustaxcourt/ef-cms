@@ -1137,15 +1137,8 @@ const router = {
     });
 
     registerRoute('/log-in...', () => {
-      const { code, path, token } = queryStringDecoder();
-      if (code) {
-        return app.getSequence('loginWithCodeSequence')({
-          code,
-          path,
-        });
-      } else {
-        return app.getSequence('loginWithTokenSequence')({ path, token });
-      }
+      const { path, token } = queryStringDecoder();
+      return app.getSequence('loginWithTokenSequence')({ path, token });
     });
 
     registerRoute('/login', () => {

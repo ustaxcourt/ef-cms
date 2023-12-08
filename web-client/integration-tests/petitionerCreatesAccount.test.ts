@@ -83,10 +83,11 @@ describe('Petitioner creates new account', () => {
       value: password,
     });
 
-    await cerebralTestPrivate.runSequence('loginWithCognitoLocalSequence', {
-      code: userName,
-      password,
-    });
+    // TODO 10007
+    // await cerebralTestPrivate.runSequence('loginWithCognitoLocalSequence', {
+    //   code: userName,
+    //   password,
+    // });
 
     expect(cerebralTestPrivate.getState('currentPage')).toEqual(
       'DashboardPetitioner',
@@ -114,10 +115,11 @@ describe('Petitioner creates new account', () => {
       value: password,
     });
 
-    await cerebralTestPrivate.runSequence('loginWithCognitoLocalSequence', {
-      code: updatedEmailAddress,
-      password,
-    });
+    // TODO 10007
+    // await cerebralTestPrivate.runSequence('loginWithCognitoLocalSequence', {
+    //   code: updatedEmailAddress,
+    //   password,
+    // });
 
     expect(cerebralTestPrivate.getState('currentPage')).toEqual(
       'DashboardPetitioner',
