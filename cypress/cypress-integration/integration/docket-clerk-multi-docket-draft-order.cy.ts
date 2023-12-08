@@ -1,11 +1,8 @@
 import { loginAsDocketClerk } from '../../helpers/auth/login-as-helpers';
+import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('Docket clerk creates and edits draft order with selected docket numbers', function () {
   const leadCase = '111-19';
-
-  beforeEach(() => {
-    loginAsDocketClerk();
-  });
 
   it('should create an order with ALL cases selected', () => {
     const orderTitle = 'Order first title';
@@ -13,10 +10,8 @@ describe('Docket clerk creates and edits draft order with selected docket number
     let consolidatedCases: string = '';
     let draftsCount: number = 0;
 
-    cy.get('[data-testid="docket-number-search-input"]').clear();
-    cy.get('[data-testid="docket-number-search-input"]').type(
-      `${leadCase}{enter}`,
-    );
+    loginAsDocketClerk();
+    searchByDocketNumberInHeader(leadCase);
 
     cy.get('[data-testid^="consolidatedCasesOfLeadCase-"]')
       .invoke('attr', 'data-testid')
@@ -79,7 +74,6 @@ describe('Docket clerk creates and edits draft order with selected docket number
         expect(draftCountAfter).to.equal(draftsCount + 1);
       });
 
-    //extract into its own assert helper.
     cy.get('[data-testid="success-alert"]')
       .invoke('attr', 'data-metadata')
       .then(val => {
@@ -90,11 +84,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
   it('should edit the draft order with newly selected cases', () => {
     let draftsCount: number = 0;
 
-    loginAsDocketClerk();
-    cy.get('[data-testid="docket-number-search-input"]').clear();
-    cy.get('[data-testid="docket-number-search-input"]').type(
-      `${leadCase}{enter}`,
-    );
+    searchByDocketNumberInHeader(leadCase);
 
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
@@ -127,7 +117,6 @@ describe('Docket clerk creates and edits draft order with selected docket number
         cy.get('[data-testid="skip-signature-button"]').click();
       });
 
-    //extract into its own assert helper.
     const expectedDocketNumberSelected = `${leadCase}L`;
     cy.get('[data-testid="success-alert"]')
       .invoke('attr', 'data-metadata')
