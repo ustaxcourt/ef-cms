@@ -377,11 +377,12 @@ module "api-west-green" {
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
-    REGION                 = "us-west-1"
-    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "green"
+    DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
+    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
+    REGION                 = "us-west-1"
   })
   region   = "us-west-1"
   validate = 0
@@ -392,6 +393,7 @@ module "api-west-green" {
   current_color                  = "green"
   node_version                   = var.green_node_version
   deploying_color                = var.deploying_color
+  deployment_timestamp           = var.deployment_timestamp
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_west.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_green_west_object.etag
   pdf_generation_object_hash     = data.aws_s3_bucket_object.pdf_generation_green_west_object.etag
@@ -451,11 +453,12 @@ module "api-west-blue" {
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
-    REGION                 = "us-west-1"
-    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
+    DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
+    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
+    REGION                 = "us-west-1"
   })
   region   = "us-west-1"
   validate = 0
@@ -466,6 +469,7 @@ module "api-west-blue" {
   current_color                  = "blue"
   node_version                   = var.blue_node_version
   deploying_color                = var.deploying_color
+  deployment_timestamp           = var.deployment_timestamp
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_west.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_blue_west_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_blue_west_object.etag
