@@ -34,7 +34,7 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
     cy.get('[data-testid="trial-session-trial-clerk"]').select('Other');
     cy.get('[data-testid="trial-session-trial-clerk-alternate"]').type('Abu');
     cy.get('[data-testid="trial-session-court-reporter"]').type('Fameet');
-    cy.get('[data-testid="trial-session-irs-calendar-administrator"]').type(
+    cy.get('[data-testid="irs-calendar-administrator-info-name"]').type(
       'rasta reporter',
     );
     cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
