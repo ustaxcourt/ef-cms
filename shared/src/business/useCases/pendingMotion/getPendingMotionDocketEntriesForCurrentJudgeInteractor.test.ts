@@ -73,10 +73,10 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
   it('should return the single docket entry data for a pending motion ignoring non motions and thos not over 180 days', async () => {
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
-      createdAt: '2000-04-29T15:52:05.725Z',
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
       eventCode: 'M218',
+      filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
     });
 
@@ -92,22 +92,22 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       consolidatedCases: [],
       docketEntries: [
         {
-          createdAt: '2000-04-29T15:52:05.725Z',
           docketEntryId: '123',
           eventCode: 'NOT A MOTION EVENT CODE',
+          filingDate: '2000-04-29T15:52:05.725Z',
           pending: true,
         },
         {
-          createdAt: '2000-04-29T15:52:05.725Z',
           docketEntryId: DOCKET_ENTRY_ID,
           documentTitle: 'TEST_DOCUMENT_TITLE',
           eventCode: 'M218',
+          filingDate: '2000-04-29T15:52:05.725Z',
           pending: true,
         },
         {
-          createdAt: '3000-04-29T15:52:05.725Z',
           docketEntryId: '12345767',
           eventCode: 'M218',
+          filingDate: '3000-04-29T15:52:05.725Z',
           pending: true,
         },
       ],
@@ -137,6 +137,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       },
       docketNumber: DOCKET_NUMBER,
       eventCode: 'M218',
+      filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
     };
     expect(results.docketEntries).toEqual([expectedDocketEntry]);
@@ -144,18 +145,18 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
   it('should only return the lead case when a motion is mass sent using consolidated cases', async () => {
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
-      createdAt: '2000-04-29T15:52:05.725Z',
       docketEntryId: LEAD_DOCKET_ENTRY_ID,
       docketNumber: LEAD_DOCKET_NUMBER,
       eventCode: 'M218',
+      filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
     });
 
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
-      createdAt: '2000-04-29T15:52:05.725Z',
       docketEntryId: LEAD_DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
       eventCode: 'M218',
+      filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
     });
 
@@ -178,22 +179,22 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       consolidatedCases: [],
       docketEntries: [
         {
-          createdAt: '2000-04-29T15:52:05.725Z',
           docketEntryId: '123',
           eventCode: 'NOT A MOTION EVENT CODE',
+          filingDate: '2000-04-29T15:52:05.725Z',
           pending: true,
         },
         {
-          createdAt: '2000-04-29T15:52:05.725Z',
           docketEntryId: LEAD_DOCKET_ENTRY_ID,
           documentTitle: 'TEST_DOCUMENT_TITLE',
           eventCode: 'M218',
+          filingDate: '2000-04-29T15:52:05.725Z',
           pending: true,
         },
         {
-          createdAt: '3000-04-29T15:52:05.725Z',
           docketEntryId: '12345767',
           eventCode: 'M218',
+          filingDate: '3000-04-29T15:52:05.725Z',
           pending: true,
         },
       ],
@@ -206,22 +207,22 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       consolidatedCases: [],
       docketEntries: [
         {
-          createdAt: '2000-04-29T15:52:05.725Z',
           docketEntryId: '123',
           eventCode: 'NOT A MOTION EVENT CODE',
+          filingDate: '2000-04-29T15:52:05.725Z',
           pending: true,
         },
         {
-          createdAt: '2000-04-29T15:52:05.725Z',
           docketEntryId: LEAD_DOCKET_ENTRY_ID,
           documentTitle: 'TEST_DOCUMENT_TITLE',
           eventCode: 'M218',
+          filingDate: '2000-04-29T15:52:05.725Z',
           pending: true,
         },
         {
-          createdAt: '3000-04-29T15:52:05.725Z',
           docketEntryId: '12345767',
           eventCode: 'M218',
+          filingDate: '3000-04-29T15:52:05.725Z',
           pending: true,
         },
       ],
@@ -251,6 +252,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       },
       docketNumber: LEAD_DOCKET_NUMBER,
       eventCode: 'M218',
+      filingDate: '2000-04-29T15:52:05.725Z',
       leadDocketNumber: LEAD_DOCKET_NUMBER,
       pending: true,
     };
