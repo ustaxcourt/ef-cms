@@ -57,6 +57,7 @@ module "ef-cms_apis" {
   cognito_table_name         = var.cognito_table_name
   default_account_pass       = var.default_account_pass
   deploying_color            = var.deploying_color
+  deployment_timestamp       = var.deployment_timestamp
   destination_table          = var.destination_table
   disable_emails             = var.disable_emails
   dns_domain                 = var.dns_domain
