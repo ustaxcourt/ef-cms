@@ -29,6 +29,37 @@
         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
       ]
     },
+    "docketclerk1@example.com": {
+      "Username": "docketclerk1@example.com",
+      "Password": "Pa$$word!",
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "2805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        {
+          "Name": "custom:userId",
+          "Value": "2805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        {
+          "Name": "email",
+          "Value": "docketclerk1@example.com"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "True"
+        },
+        {
+          "Name": "custom:role",
+          "Value": "docketclerk"
+        }
+      ],
+      "Enabled": false,
+      "UserStatus": "CONFIRMED",
+      "UserCreateDate": "2023-01-24T23:54:42.392Z",
+      "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
+      "RefreshTokens": []
+    },
     "petitioner@example.com": {
       "Username": "petitioner@example.com",
       "Password": "Pa$$word!",
@@ -59,8 +90,7 @@
       "UserCreateDate": "2023-01-24T23:54:42.392Z",
       "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
       "RefreshTokens": [
-        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg",
-        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoicGV0aXRpb25lckBleGFtcGxlLmNvbSIsImVtYWlsIjoicGV0aXRpb25lckBleGFtcGxlLmNvbSIsImlhdCI6MTcwMjA1NTc5NCwianRpIjoiNTI2OTI4N2QtNmRiNy00OWMwLTgzYzItYWQyNTgxNzE4Mzc3IiwiZXhwIjoxNzAyNjYwNTk0LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjkyMjkvbG9jYWxfMnBIemVjZTcifQ.wPElGk14XyDcq2HMx6tEvOs1Ht62Xyca508hE85f8M9WOZfTGWBZOH3VfgoTvo-Bjz3IdtSRHRASviP8gtttubHT-bQ4EraGzZ1yKBJ6bD0JPK-zudq0HSDUZGO73f96y479gPQb6EgmlgveqMVv1vvSUcNfHOon2U_56JzxHto9AIk_F6EQWTUZdOJLMosY6HmcXpGNstKaSMeg08Zvf9I7zeadnLVoucxwT17PWZVZHKrBdM72q5JUB9CUfzZiquDm8C3dXIoYu9vBaiHzeFolhv-CNF1ZBLQx3l1a7ul_VAoBn5_637GjB75LDscRsXET6Uibc99645RH3VY05A"
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
       ]
     },
     "petitioner1@example.com": {
@@ -93,7 +123,8 @@
       "UserCreateDate": "2023-01-24T23:54:42.392Z",
       "UserLastModifiedDate": "2023-02-21T18:41:41.466Z",
       "RefreshTokens": [
-        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg",
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoicGV0aXRpb25lcjFAZXhhbXBsZS5jb20iLCJlbWFpbCI6InBldGl0aW9uZXIxQGV4YW1wbGUuY29tIiwiaWF0IjoxNzAyMDY2OTA2LCJqdGkiOiJiNTcwMGRlYy01OTI3LTQ5ODktYjhmYy0xNGY0YjNjMDU0M2YiLCJleHAiOjE3MDI2NzE3MDYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.W3sIoVhybGPSfgRKNBiiGf1JMEM8Epnevz_Vu7NDzo-tnIY_8n6RqLmV8AA2Dw41ysWf2OHZiJmNVvZfVVuHdIlxladsfK7LRDMOy9GBeXhd6QN-lA-KRfq2XpQ7edkkp21YH3IB1yFcdAose2e-HUxAuXk3rLs1CIZhiilsrJrhqTVqzqcXyFyoPSLIf2stFCxvnuxkFx9EqBi5_m6bcuGDsA-svFiSiTe8kNZXMofGnFlLBBfSx6VFWxK1DsQja4AQwlA34c4J5np7AmOE7yvWmyLfkKwIbTHQm7In49xXbujxkQQeBJKoXP2vl8-7W0r5tEiT35TF_iBCIlxWAw"
       ]
     },
     "petitioner2@example.com": {
@@ -491,76 +522,6 @@
       "RefreshTokens": [
         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWF0IjoxNjc0NjA3NjUxLCJqdGkiOiI2YTFlNDJjMy03YjQ1LTQ2YzQtYThjNy1mNmQzYzc0ZjJiZGYiLCJleHAiOjE2NzUyMTI0NTEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8ycEh6ZWNlNyJ9.BzhL5QDiMCwQNnrFCxcOses-vXAmZ_OsHaGTiI-zlcKRue4Qrqe3nC4HeCjqMEAe-VYjiU3rfw5yColhATG0ng41G2blGvmhMFqsqfQDV0XbISJFaE25OwmVzUegnTVXBMBu5H7UKZSHuivmbznh_Zb6dcZ1Rt3OEZuQOxjP9B0qDRj6M0T3wLfNcIWOjQCZWKM4ZgGmQUiwWOsiDkJWgp1LmAOmukie_SdDyLO6xUbJnrKBFYzGJaEECgkAevBI9kFgZ9eN4E9ineZN8S8U71ClTpyOQ4bZ5PeQdeKmDYlyB0truKEv-sh-WwJtUYvvXMqLns6nSXuw_Oq3Mb3vmg"
       ]
-    },
-    "new0.4011072087502434@example.com": {
-      "Username": "new0.4011072087502434@example.com",
-      "Password": "123456",
-      "Attributes": [
-        {
-          "Name": "sub",
-          "Value": "a835229d-b8da-4c2a-b078-d5d49ae83742"
-        },
-        {
-          "Name": "email_verified",
-          "Value": "True"
-        },
-        {
-          "Name": "email",
-          "Value": "new0.4011072087502434@example.com"
-        },
-        {
-          "Name": "custom:role",
-          "Value": "petitioner"
-        },
-        {
-          "Name": "name",
-          "Value": "Mona Schultz"
-        },
-        {
-          "Name": "custom:userId",
-          "Value": "d3e1941f-230a-47bb-80ec-6b561c1765cd"
-        }
-      ],
-      "Enabled": true,
-      "UserStatus": "FORCE_CHANGE_PASSWORD",
-      "UserCreateDate": "2023-12-06T23:16:39.598Z",
-      "UserLastModifiedDate": "2023-12-06T23:16:39.598Z",
-      "RefreshTokens": []
-    },
-    "new0.9537567565459484@example.com": {
-      "Username": "new0.9537567565459484@example.com",
-      "Password": "123456",
-      "Attributes": [
-        {
-          "Name": "sub",
-          "Value": "de5433db-7f7c-43d8-8400-05a8fec34438"
-        },
-        {
-          "Name": "email_verified",
-          "Value": "True"
-        },
-        {
-          "Name": "email",
-          "Value": "new0.9537567565459484@example.com"
-        },
-        {
-          "Name": "custom:role",
-          "Value": "petitioner"
-        },
-        {
-          "Name": "name",
-          "Value": "Mona Schultz"
-        },
-        {
-          "Name": "custom:userId",
-          "Value": "d3e1941f-230a-47bb-80ec-6b561c1765cd"
-        }
-      ],
-      "Enabled": true,
-      "UserStatus": "FORCE_CHANGE_PASSWORD",
-      "UserCreateDate": "2023-12-06T23:21:55.294Z",
-      "UserLastModifiedDate": "2023-12-06T23:21:55.294Z",
-      "RefreshTokens": []
     }
   },
   "Options": {
@@ -670,9 +631,7 @@
       "AllowAdminCreateUserOnly": false,
       "UnusedAccountValidityDays": 7
     },
-    "UsernameAttributes": [
-      "email"
-    ],
+    "UsernameAttributes": ["email"],
     "Arn": "arn:aws:cognito-idp:local:local:userpool/local_2pHzece7",
     "CreationDate": "2023-01-24T22:34:48.100Z",
     "Id": "local_2pHzece7",
