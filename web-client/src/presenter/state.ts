@@ -76,6 +76,7 @@ import { formattedPendingItemsHelper } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/computeds/TrialSession/getAllIrsPractitionersForSelectHelper';
 import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { headerHelper } from './computeds/headerHelper';
@@ -355,6 +356,10 @@ export const computeds = {
   formattedWorkQueue: formattedWorkQueue as unknown as ReturnType<
     typeof formattedWorkQueue
   >,
+  getAllIrsPractitionersForSelectHelper:
+    getAllIrsPractitionersForSelectHelper as unknown as ReturnType<
+      typeof getAllIrsPractitionersForSelectHelper
+    >,
   getOrdinalValuesForUploadIteration:
     getOrdinalValuesForUploadIteration as unknown as ReturnType<
       typeof getOrdinalValuesForUploadIteration
@@ -612,7 +617,7 @@ export const baseState = {
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
-  irsPractitioners: [],
+  irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
   judgeActivityReport: cloneDeep(
     initialJudgeActivityReportState,
