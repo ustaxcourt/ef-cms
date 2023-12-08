@@ -90,10 +90,6 @@ describe('exportPendingReportInteractor', () => {
   ];
 
   beforeAll(() => {
-    applicationContext.getStorageClient.mockReturnValue({
-      upload: jest.fn((params, callback) => callback()),
-    });
-
     applicationContext
       .getPersistenceGateway()
       .fetchPendingItems.mockResolvedValue({
@@ -108,10 +104,6 @@ describe('exportPendingReportInteractor', () => {
     };
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-  });
-
-  afterEach(() => {
-    applicationContext.getDocumentGenerators().pendingReport.mockReset();
   });
 
   it('should throw an unauthorized error when the user does not have access', async () => {
