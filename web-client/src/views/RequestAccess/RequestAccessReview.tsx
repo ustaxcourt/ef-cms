@@ -10,7 +10,7 @@ import { WarningNotificationComponent } from '@web-client/views/WarningNotificat
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 export const RequestAccessReview = connect(
@@ -37,14 +37,6 @@ export const RequestAccessReview = connect(
     submitCaseAssociationRequestSequence,
     updateFormValueSequence,
   }) {
-    const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
-
-    const debounceSubmit = timeout => {
-      setIsSubmitDebounced(true);
-      setTimeout(() => {
-        setIsSubmitDebounced(false);
-      }, timeout);
-    };
     return (
       <React.Fragment>
         <Focus>
@@ -352,14 +344,12 @@ export const RequestAccessReview = connect(
         <Button
           className="margin-bottom-1"
           disabled={
-            (fileDocumentHelper.EARedactionAcknowledgement &&
-              !form.redactionAcknowledgement) ||
-            isSubmitDebounced
+            fileDocumentHelper.EARedactionAcknowledgement &&
+            !form.redactionAcknowledgement
           }
           id="submit-document"
           type="submit"
           onClick={() => {
-            debounceSubmit(300);
             submitCaseAssociationRequestSequence();
           }}
         >
