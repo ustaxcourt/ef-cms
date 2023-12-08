@@ -1,4 +1,10 @@
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import {
+  irsCalendarAdminInfoOnChange,
+  onInputChange,
+} from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -8,18 +14,27 @@ export const SessionAssignmentsForm = connect(
     TRIAL_SESSION_PROCEEDING_TYPES:
       state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     form: state.form,
+    getAllIrsPractitionersForSelectHelper:
+      state.getAllIrsPractitionersForSelectHelper,
     judges: state.judges,
     sessionAssignmentHelper: state.sessionAssignmentHelper,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
   },
   function SessionAssignmentsForm({
     form,
+    getAllIrsPractitionersForSelectHelper,
     judges,
     sessionAssignmentHelper,
     TRIAL_SESSION_PROCEEDING_TYPES,
+    updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence,
   }) {
+    console.log(
+      'getAllIrsPractitionersForSelectHelper',
+      getAllIrsPractitionersForSelectHelper,
+    );
     return (
       <>
         <h2 className="margin-top-4">Session Assignments</h2>
@@ -156,6 +171,43 @@ export const SessionAssignmentsForm = connect(
                 });
               }}
             />
+          </div>
+
+          <div className="usa-form-group">
+            <FormGroup>
+              <label
+                className="usa-label"
+                htmlFor="irs-calendar-administrator-info-name"
+              >
+                Search for IRS calendar administrator name{' '}
+                <span className="usa-hint">(optional)</span>
+              </label>
+
+              <SelectSearch
+                aria-label="document-type-label"
+                id="document-type"
+                name="eventCode"
+                options={
+                  getAllIrsPractitionersForSelectHelper.irsPractitionersContactInfo
+                }
+                placeholder="- Enter name -"
+                onChange={(inputValue, { action }) => {
+                  irsCalendarAdminInfoOnChange({
+                    action,
+                    inputValue,
+                    updateTrialSessionFormDataSequence,
+                  });
+                  return true;
+                }}
+                onInputChange={(inputText, { action }) => {
+                  onInputChange({
+                    action,
+                    inputText,
+                    updateSequence: updateScreenMetadataSequence,
+                  });
+                }}
+              />
+            </FormGroup>
           </div>
 
           <div className="usa-form-group">
