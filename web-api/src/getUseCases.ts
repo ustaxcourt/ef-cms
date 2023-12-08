@@ -71,6 +71,7 @@ import { generateStandingPretrialOrderInteractor } from '../../shared/src/busine
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor';
 import { generateTrialSessionPaperServicePdfInteractor } from '../../shared/src/business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
+import { getAllUsersByRoleInteractor } from '@shared/business/useCases/getAllUsersByRoleInteractor';
 import { getBlockedCasesInteractor } from '../../shared/src/business/useCases/getBlockedCasesInteractor';
 import { getCachedHealthCheckInteractor } from '../../shared/src/business/useCases/health/getCachedHealthCheckInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor';
@@ -280,6 +281,7 @@ const useCases = {
   generateTrialCalendarPdfInteractor,
   generateTrialSessionPaperServicePdfInteractor,
   getAllFeatureFlagsInteractor,
+  getAllUsersByRoleInteractor,
   getBlockedCasesInteractor,
   getCachedHealthCheckInteractor,
   getCalendaredCasesForTrialSessionInteractor,

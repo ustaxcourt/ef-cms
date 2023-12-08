@@ -63,6 +63,7 @@ import { generatePrintableFilingReceiptLambda } from './lambdas/documents/genera
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
+import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
 import { getCalendaredCasesForTrialSessionLambda } from './lambdas/trialSessions/getCalendaredCasesForTrialSessionLambda';
 import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDeadlinesForCaseLambda';
@@ -940,6 +941,7 @@ app.get(
     lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
   );
   app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
+  app.get('/users-by-role', lambdaWrapper(getAllUsersByRoleLambda));
   app.get('/users', lambdaWrapper(getUserLambda));
   app.post('/users', lambdaWrapper(createUserLambda));
 }

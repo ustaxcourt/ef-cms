@@ -612,6 +612,7 @@ export const baseState = {
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  irsPractitioners: [],
   isTerminalUser: false,
   judgeActivityReport: cloneDeep(
     initialJudgeActivityReportState,
