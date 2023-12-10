@@ -31,7 +31,6 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    - Increment the docker image version being used in `.circleci/config.yml` in the docker variable: 
    `define: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.0.18` -> `ef-cms-us-east-1:3.0.19`
    - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher). 
-     - If you are on an M1 Machine, make sure to set the environment variable `DOCKER_DEFAULT_PLATFORM=linux/amd64`.
      - example: `export DESTINATION_TAG=3.0.19 && npm run deploy:ci-image`
 		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
 
@@ -79,6 +78,9 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### s3-files (3.0.1)
 - (10/20/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
+
+### jsdom
+- (11/28/2023) Unable to update from 22.1.0 -> 23.0.0 as jsdom lists incorrect peer dependency for canvas as 3.0.0 which doesn't exist. see issue for more details: https://github.com/jsdom/jsdom/issues/3627. This will likely be resolved soon by jsdom.
 
 ## Incrementing the Node Cache Key Version
 

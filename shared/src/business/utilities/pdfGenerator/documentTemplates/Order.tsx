@@ -1,8 +1,25 @@
-import { OrderDocketHeader } from '../components/OrderDocketHeader.tsx';
-import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader.tsx';
+import { OrderDocketHeader } from '@shared/business/utilities/pdfGenerator/components/OrderDocketHeader';
+import { OrderPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/OrderPrimaryHeader';
 import React from 'react';
 
-export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
+export const Order = ({
+  nameOfClerk,
+  options,
+  orderContent,
+  orderTitle,
+  titleOfClerk,
+}: {
+  options: {
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+    addedDocketNumbers: string[];
+  };
+  orderContent: string;
+  orderTitle: string;
+  nameOfClerk: string;
+  titleOfClerk: string;
+}) => {
   return (
     <div className="order-pdf">
       <OrderPrimaryHeader />
@@ -17,12 +34,12 @@ export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
         dangerouslySetInnerHTML={{ __html: orderContent }}
         id="order-content"
       />
-      {signatureText && (
+      {nameOfClerk && titleOfClerk && (
         <div className="signature float-right mr-1" id="order-signature">
           <p>
-            {signatureText}
+            {nameOfClerk}
             <br />
-            Clerk of the Court
+            {titleOfClerk}
           </p>
         </div>
       )}
