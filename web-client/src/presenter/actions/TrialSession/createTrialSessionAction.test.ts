@@ -1,3 +1,7 @@
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createTrialSessionAction } from './createTrialSessionAction';
 import { presenter } from '../../presenter-mock';
@@ -6,7 +10,8 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('createTrialSessionAction', () => {
   const MOCK_TRIAL = {
     maxCases: 100,
-    sessionType: 'Regular',
+    sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+    sessionType: SESSION_TYPES.regular,
     startDate: '2019-12-01T00:00:00.000Z',
     term: 'Fall',
     trialLocation: 'Birmingham, Alabama',
@@ -41,6 +46,10 @@ describe('createTrialSessionAction', () => {
     });
 
     expect(successStub.mock.calls.length).toEqual(1);
+    expect(successStub.mock.calls[0][0]).toEqual({
+      sessionScope: MOCK_TRIAL.sessionScope,
+      trialSession: MOCK_TRIAL.trialSessionId,
+    });
   });
 
   it('goes to error path if error', async () => {
