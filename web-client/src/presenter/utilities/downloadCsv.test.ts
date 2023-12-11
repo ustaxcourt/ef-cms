@@ -1,4 +1,4 @@
-import { downloadCsv } from '@shared/business/utilities/downloadCsv';
+import { downloadCsv } from '@web-client/presenter/utilities/downloadCsv';
 
 const oldWindowUrl = window.URL;
 
