@@ -1,5 +1,5 @@
 ::: STUFF TO DELETE :::
-- 
+- cookieFormatting
 
 
 ::: STUFF TO UPDATE :::
@@ -10,10 +10,9 @@
 
 ::: STUFF TO DO :::
 - Add refresh token cookie in the browser.
-- add test accounts to cognito local
-- Figure out what to do with cognitoLocal.json
 - error handling
 - make it work for hosted envs (remove hard-coded )
+- email verification flow
 
 
 
@@ -27,10 +26,3 @@ Public/Private
 DAWSON
 - Public - irsPractitioner, privatePractitioner, petitioner
 - Private - court employee
-
-
-Local Cognito Fixes
-- Script which cleans up the .cognito/db/local_2pHzece7.json
-- research cognito-local to see if we can define our users in.
-- generate the .cognito/db/local_2pHzece7.json file everytime on startup using users.json as the seeds. gitignore .cognito/db/local_2pHzece7.json .
-- make a golden copy which populates the .cognito/db/local_2pHzece7.json

@@ -10,11 +10,11 @@ export const setTokenAction = ({
     howMuch: 29,
     units: 'days',
   });
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
-  const expires = new Date(expiresAt);
-  const path = '/auth';
+
+  const path = '/';
   const httpOnly = false; // TODO should be true if not local
-  window.document.cookie = `refreshToken=${props.refreshToken}; expires=${expires}; path=${path}; secure=true; httpOnly=${httpOnly}`;
+  // window.document.cookie = `refreshToken=${props.refreshToken}; expires=${expires}; path=${path}; secure=true; httpOnly=${httpOnly}`;
+  window.document.cookie = `refreshToken=${props.refreshToken}; path=${path}; expires=${expires};`;
 
   store.set(state.token, props.token);
   store.set(state.refreshToken, props.refreshToken || null);
