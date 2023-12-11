@@ -1,18 +1,36 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { MessageAlert } from '@web-client/views/Public/MessageAlert/MessageAlert';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
 export const Login = connect(
   {
+    alertError: state.alertError,
     form: state.form,
+    showPassword: state.showPassword,
     submitLoginSequence: sequences.submitLoginSequence,
+    toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ form, submitLoginSequence, updateFormValueSequence }) => {
+  ({
+    alertError,
+    form,
+    showPassword,
+    submitLoginSequence,
+    toggleShowPasswordSequence,
+    updateFormValueSequence,
+  }) => {
     return (
       <>
         <div className="grid-container">
+          {alertError && (
+            <MessageAlert
+              alertType={alertError.alertType}
+              message={alertError.message}
+              title={alertError.title}
+            ></MessageAlert>
+          )}
           <div className="grid-row bg-white padding-x-5 padding-y-3">
             <div className="grid-col">
               <h1 className="margin-bottom-1">Log in to DAWSON</h1>
@@ -45,6 +63,7 @@ export const Login = connect(
                   className="usa-input"
                   id="password"
                   name="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={form.password}
                   onChange={e => {
                     updateFormValueSequence({
@@ -58,8 +77,11 @@ export const Login = connect(
                   data-hide-text="Hide password"
                   data-show-text="Show password"
                   type="button"
+                  onClick={() =>
+                    toggleShowPasswordSequence({ passwordType: 'showPassword' })
+                  }
                 >
-                  Show password
+                  {showPassword ? 'Hide Password' : 'Show password'}
                 </button>
                 <Button
                   className="usa-button margin-top-3"
