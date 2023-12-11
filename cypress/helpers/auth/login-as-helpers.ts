@@ -25,3 +25,8 @@ export function loginAsDocketClerk() {
   cy.login('docketclerk1');
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
+
+export function loginAsColvinChambers() {
+  cy.login('colvinschambers');
+  cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
+}
