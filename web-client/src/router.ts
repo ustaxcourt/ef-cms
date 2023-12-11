@@ -1137,8 +1137,12 @@ const router = {
     });
 
     registerRoute('/log-in...', () => {
-      const { path, token } = queryStringDecoder();
-      return app.getSequence('loginWithTokenSequence')({ path, token });
+      const { path, refreshToken, token } = queryStringDecoder();
+      return app.getSequence('loginWithTokenSequence')({
+        path,
+        refreshToken,
+        token,
+      });
     });
 
     registerRoute(
