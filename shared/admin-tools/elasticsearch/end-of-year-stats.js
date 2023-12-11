@@ -1,7 +1,7 @@
+const fs = require('fs');
 const {
   createApplicationContext,
 } = require('../../../web-api/src/applicationContext');
-const fs = require('fs');
 const {
   createStartOfDayISO,
 } = require('../../src/business/utilities/DateHandler');
@@ -436,15 +436,15 @@ const checkIfNOCIsFiled = async ({
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  // await getOpinionsFiledByCaseType({
-  //   applicationContext,
-  // });
-  // await getCasesOpenedAndClosed({
-  //   applicationContext,
-  // });
-  // await getCasesFiledByType({
-  //   applicationContext,
-  // });
+  await getOpinionsFiledByCaseType({
+    applicationContext,
+  });
+  await getCasesOpenedAndClosed({
+    applicationContext,
+  });
+  await getCasesFiledByType({
+    applicationContext,
+  });
   await getTotalOpenCasesEOY({
     applicationContext,
   });
