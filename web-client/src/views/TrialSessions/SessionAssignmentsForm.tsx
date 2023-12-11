@@ -233,7 +233,7 @@ export const SessionAssignmentsForm = connect(
           </div>
 
           <div className="grid-row margin-bottom-0">
-            <div className="usa-form-group desktop:grid-col-6 desktop:margin-right-3 no-shrink">
+            <div className="usa-form-group desktop:grid-col-3 desktop:margin-right-3 desktop:no-shrink">
               <label
                 className="usa-label"
                 htmlFor="irs-calendar-administrator-info-email"
@@ -256,7 +256,7 @@ export const SessionAssignmentsForm = connect(
                 }}
               />
             </div>
-            <div className="usa-form-group desktop:grid-col-6 no-shrink">
+            <div className="usa-form-group desktop:grid-col-3 desktop:no-shrink">
               <label
                 className="usa-label"
                 htmlFor="irs-calendar-administrator-info-phone"
