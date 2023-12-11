@@ -31,10 +31,6 @@ export const SessionAssignmentsForm = connect(
     updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence,
   }) {
-    console.log(
-      'getAllIrsPractitionersForSelectHelper',
-      getAllIrsPractitionersForSelectHelper,
-    );
     return (
       <>
         <h2 className="margin-top-4">Session Assignments</h2>

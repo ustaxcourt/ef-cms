@@ -81,7 +81,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
     const result = await generateTrialCalendarPdfInteractor(
       applicationContext,
       {
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       },
     );
 
@@ -214,7 +214,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
     const result = await generateTrialCalendarPdfInteractor(
       applicationContext,
       {
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       },
     );
 
@@ -332,7 +332,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
 
   it('should NOT include cases that have been removed from trial on the generated PDF', async () => {
     await generateTrialCalendarPdfInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
     const casesOnPDF =
@@ -356,7 +356,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       });
 
     await generateTrialCalendarPdfInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
     const formattedTrialSession =

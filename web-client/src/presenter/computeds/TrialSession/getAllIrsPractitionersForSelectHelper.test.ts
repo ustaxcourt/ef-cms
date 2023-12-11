@@ -12,16 +12,6 @@ describe('getAllIrsPractitionersForSelectHelper', () => {
     },
   );
 
-  it('should return an object from the helper', () => {
-    const result = runCompute(getAllIrsPractitionersForSelectHelper, {
-      state: {
-        irsPractitioners: TEST_IRS_PRACTITIONERS,
-      },
-    });
-
-    expect(typeof result).toEqual('object');
-  });
-
   it('should return the formatted irs calendar admin contact info', () => {
     TEST_IRS_PRACTITIONERS.push({
       contact: {
