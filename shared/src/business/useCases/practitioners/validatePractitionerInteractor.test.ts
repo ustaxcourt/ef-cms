@@ -1,11 +1,12 @@
 import { ROLES } from '../../entities/EntityConstants';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validatePractitionerInteractor } from './validatePractitionerInteractor';
 
 describe('validatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
     const errors = validatePractitionerInteractor(applicationContext, {
-      practitioner: {} as TPractitioner,
+      practitioner: {} as RawPractitioner,
     });
 
     expect(Object.keys(errors)).toEqual([
@@ -37,7 +38,7 @@ describe('validatePractitionerInteractor', () => {
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
         userId: '195e31b6-20f7-4fa4-980e-4236b771cced',
-      } as TPractitioner,
+      } as RawPractitioner,
     });
 
     expect(errors).toBeNull();
