@@ -104,8 +104,8 @@ const RemoteParagraph1 = ({
       The parties are reminded that this case is calendared for trial or hearing
       at the Trial Session beginning at{' '}
       <span className="text-bold">
-        10:00 AM local time on {formattedTrialMonthDayYear}
-        at the location shown above,
+        10:00 AM local time on {formattedTrialMonthDayYear} at the location
+        shown above,
       </span>{' '}
       as a remote proceeding using Zoomgov. This case will remain on the Court’s
       trial calendar unless: (1) both parties sign an agreed decision and submit
@@ -126,7 +126,6 @@ const StandaloneRemoteParagraph1 = ({
       The parties are reminded that this case is calendared for trial or hearing
       at the Trial Session beginning at{' '}
       <span className="text-bold">
-        {' '}
         1:00 PM Eastern time (ET), on {formattedTrialMonthDayYear}
       </span>{' '}
       as a remote proceeding using Zoomgov. This case will remain on the Court’s
