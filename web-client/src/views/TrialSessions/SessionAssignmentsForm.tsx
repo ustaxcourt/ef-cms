@@ -174,15 +174,16 @@ export const SessionAssignmentsForm = connect(
               <label
                 className="usa-label"
                 htmlFor="irs-calendar-administrator-info-name"
+                id="irs-calendar-administrator-info-search-label"
               >
                 Search for IRS calendar administrator name{' '}
                 <span className="usa-hint">(optional)</span>
               </label>
 
               <SelectSearch
-                aria-label="document-type-label"
-                id="document-type"
-                name="eventCode"
+                aria-label="irs-calendar-administrator-info-search-label"
+                id="irs-calendar-administrator-info-search"
+                name="irsCalendarAdministratorInfoSearch "
                 options={
                   getAllIrsPractitionersForSelectHelper.irsPractitionersContactInfo
                 }
