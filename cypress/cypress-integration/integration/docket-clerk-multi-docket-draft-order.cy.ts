@@ -2,13 +2,12 @@ import { loginAsDocketClerk } from '../../helpers/auth/login-as-helpers';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('Docket clerk creates and edits draft order with selected docket numbers', function () {
-  const leadCase = '111-19';
-
   it('should create an order with ALL cases selected', () => {
     const orderTitle = 'Order first title';
     const orderEventCode = 'O';
     let consolidatedCases: string = '';
     let draftsCount: number = 0;
+    const leadCase = '111-19';
 
     loginAsDocketClerk();
     searchByDocketNumberInHeader(leadCase);
@@ -82,8 +81,11 @@ describe('Docket clerk creates and edits draft order with selected docket number
   });
 
   it('should edit the draft order with newly selected cases', () => {
-    let draftsCount: number = 0;
+    let draftsCount = 0;
+    const leadCase = '111-19';
+    const expectedDocketNumberSelected = `${leadCase}L`;
 
+    loginAsDocketClerk();
     searchByDocketNumberInHeader(leadCase);
 
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
@@ -117,7 +119,6 @@ describe('Docket clerk creates and edits draft order with selected docket number
         cy.get('[data-testid="skip-signature-button"]').click();
       });
 
-    const expectedDocketNumberSelected = `${leadCase}L`;
     cy.get('[data-testid="success-alert"]')
       .invoke('attr', 'data-metadata')
       .then(val => {

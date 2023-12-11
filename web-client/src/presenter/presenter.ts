@@ -797,7 +797,7 @@ export const presenterSequences = {
     gotoEditDeficiencyStatisticSequence as unknown as Function,
   gotoEditDocketEntryMetaSequence:
     gotoEditDocketEntryMetaSequence as unknown as Function,
-  gotoEditOrderSequence: gotoEditOrderSequence as unknown as Function,
+  gotoEditOrderSequence,
   gotoEditOtherStatisticsSequence:
     gotoEditOtherStatisticsSequence as unknown as Function,
   gotoEditPaperFilingSequence:
