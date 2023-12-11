@@ -18,9 +18,9 @@ export const getAllIrsPractitionersForSelectHelper = (
   get: Get,
 ): GetAllIrsPractitionersForSelectHelperResults => {
   const irsPractitioners = get(state.irsPractitioners);
-  const irsPractitionersContactInfo = irsPractitioners.map(irsPrac =>
-    getFormattedIrsPractitionerInfo(irsPrac),
-  );
+  const irsPractitionersContactInfo = irsPractitioners
+    .filter(irsPrac => irsPrac['admissionsStatus'] === 'Active')
+    .map(irsPrac => getFormattedIrsPractitionerInfo(irsPrac));
 
   return {
     irsPractitionersContactInfo,
