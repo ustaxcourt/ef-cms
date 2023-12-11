@@ -10,7 +10,13 @@ export type FormattedIrsCalendarAdminInfo = {
   phone?: string;
 };
 
-export const getAllIrsPractitionersForSelectHelper = (get: Get): any => {
+export type GetAllIrsPractitionersForSelectHelperResults = {
+  irsPractitionersContactInfo: FormattedIrsCalendarAdminInfo[];
+};
+
+export const getAllIrsPractitionersForSelectHelper = (
+  get: Get,
+): GetAllIrsPractitionersForSelectHelperResults => {
   const irsPractitioners = get(state.irsPractitioners);
   const irsPractitionersContactInfo = irsPractitioners.map(irsPrac =>
     getFormattedIrsPractitionerInfo(irsPrac),
