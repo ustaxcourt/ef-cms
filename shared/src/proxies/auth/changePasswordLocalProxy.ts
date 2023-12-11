@@ -10,7 +10,7 @@ import { post } from '../requests';
  * @param {string} auth.userEmail the email of the user changing passwords
  * @returns {Promise<*>} the promise of the api call
  */
-exports.changePasswordLocalInteractor = (
+export const changePasswordLocalInteractor = (
   applicationContext,
   { newPassword, sessionId, userEmail },
 ) => {

@@ -81,7 +81,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
     const result = await generateTrialCalendarPdfInteractor(
       applicationContext,
       {
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       },
     );
 
@@ -197,9 +197,142 @@ describe('generateTrialCalendarPdfInteractor', () => {
     expect(result.url).toBe(mockPdfUrl.url);
   });
 
+  it('should generate the trial session information pdf using new IrsCalendarAdministratorInfo and return the url to access it', async () => {
+    const irsCalendarAdministratorInfo = {
+      email: 'TEST_EMAIL',
+      name: 'TEST_NAME',
+      phone: 'TEST_PHONE',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        ...MOCK_TRIAL_INPERSON,
+        irsCalendarAdministratorInfo,
+      });
+
+    const result = await generateTrialCalendarPdfInteractor(
+      applicationContext,
+      {
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      },
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getCalendaredCasesForTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().trialCalendar,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      data: {
+        cases: [
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '555-13',
+            docketNumberWithSuffix: '555-13',
+            inConsolidatedGroup: true,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+            shouldIndent: false,
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '101-18',
+            docketNumberWithSuffix: '101-18',
+            inConsolidatedGroup: false,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+            shouldIndent: false,
+          },
+          {
+            calendarNotes: 'this is a test',
+            caseTitle: 'Test Petitioner',
+            docketNumber: '102-19',
+            docketNumberWithSuffix: '102-19W',
+            inConsolidatedGroup: false,
+            isLeadCase: false,
+            petitionerCounsel: ['Private Practitioner (BN1234)'],
+            respondentCounsel: ['IRS Practitioner (BN2345)'],
+            shouldIndent: false,
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '34189-21',
+            docketNumberWithSuffix: '34189-21',
+            inConsolidatedGroup: true,
+            isLeadCase: true,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+            shouldIndent: false,
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '18072-22',
+            docketNumberWithSuffix: '18072-22',
+            inConsolidatedGroup: true,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+            shouldIndent: true,
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '24529-22',
+            docketNumberWithSuffix: '24529-22',
+            inConsolidatedGroup: true,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+            shouldIndent: true,
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '8904-22',
+            docketNumberWithSuffix: '8904-22',
+            inConsolidatedGroup: false,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+            shouldIndent: false,
+          },
+        ],
+        sessionDetail: {
+          address1: MOCK_TRIAL_INPERSON.address1,
+          address2: MOCK_TRIAL_INPERSON.address2,
+          courtReporter: 'Not assigned',
+          courthouseName: MOCK_TRIAL_INPERSON.courthouseName,
+          formattedCityStateZip: 'Scottsburg, IN 47130',
+          irsCalendarAdministrator: `${irsCalendarAdministratorInfo.name}\n${irsCalendarAdministratorInfo.email}\n${irsCalendarAdministratorInfo.phone}`,
+          judge: MOCK_TRIAL_INPERSON.judge!.name,
+          noLocationEntered: false,
+          notes: MOCK_TRIAL_INPERSON.notes,
+          sessionType: MOCK_TRIAL_INPERSON.sessionType,
+          startDate: 'February 28, 3000',
+          startTime: undefined,
+          trialClerk: 'Not assigned',
+          trialLocation: MOCK_TRIAL_INPERSON.trialLocation,
+        },
+      },
+    });
+    expect(result.url).toBe(mockPdfUrl.url);
+  });
+
   it('should NOT include cases that have been removed from trial on the generated PDF', async () => {
     await generateTrialCalendarPdfInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
     const casesOnPDF =
@@ -223,7 +356,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       });
 
     await generateTrialCalendarPdfInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
     const formattedTrialSession =
