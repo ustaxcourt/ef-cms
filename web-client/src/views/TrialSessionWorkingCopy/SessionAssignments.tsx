@@ -46,6 +46,7 @@ export const SessionAssignments = connect(
                 <p className="label">IRS calendar administrator</p>
                 <p
                   className="margin-bottom-0 word-wrap-break-word"
+                  data-testid="irs-calendar-admin-info"
                   style={{ whiteSpace: 'pre-line' }}
                 >
                   {
