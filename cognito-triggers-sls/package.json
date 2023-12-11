@@ -14,12 +14,12 @@
     "axios": "^1.6.2"
   },
   "devDependencies": {
-    "@aws-sdk/client-lambda": "^3.451.0",
-    "serverless-bundle": "6.0.0",
+    "@aws-sdk/client-lambda": "^3.465.0",
+    "serverless-bundle": "6.1.0",
     "serverless-dotenv-plugin": "^6.0.0",
-    "serverless-offline": "^13.2.1"
+    "serverless-offline": "^13.3.0"
   },
   "overrides": {
-    "axios" : "$axios"
+    "axios": "$axios"
   }
 }
