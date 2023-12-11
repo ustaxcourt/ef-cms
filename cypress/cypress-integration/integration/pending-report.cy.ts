@@ -11,14 +11,13 @@ describe('Pending report', () => {
   const downloadsFolder = Cypress.config('downloadsFolder');
 
   describe('View pending report', () => {
-    it('should log in as a docket clerk and navigate to the pending report then select chief judge from the dropdown', () => {
+    it('should navigate to the pending report, select chief judge from the dropdown, verify the results, export said results as csv, and navigate to the pending report pdf page', () => {
       loginAsDocketClerk();
+
       cy.get('[data-testid="dropdown-select-report"]').click();
       cy.get('[data-testid="select-pending-report"]').click();
       cy.get('[data-testid="dropdown-select-judge"]').select('Chief Judge');
-    });
 
-    it('should have more rows in the table after clicking the "load more" button than before', () => {
       cy.get('[data-testid="display-pending-report-table"]')
         .children()
         .its('length')
@@ -31,14 +30,10 @@ describe('Pending report', () => {
               expect(afterLength).to.be.greaterThan(beforeLength);
             });
         });
-    });
 
-    it('should export pending report', () => {
       cy.get('[data-testid="export-pending-report"]').click();
       cy.readFile(path.join(downloadsFolder, fileName));
-    });
 
-    it('should display pending report pdf page', () => {
       cy.get('[data-testid="print-pending-report"]').click();
       cy.get('[data-testid="preview-pdf').should('exist');
     });
