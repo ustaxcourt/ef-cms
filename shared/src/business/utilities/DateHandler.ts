@@ -16,6 +16,7 @@ export const FORMATS = {
   MMDDYYYY_DASHED: 'MM-dd-yyyy',
   MONTH_DAY_YEAR: 'MMMM d, yyyy',
   MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'DDDD',
+  RENAME_NAME: "EEE, dd MMM yyyy HH':'mm':'ss 'GMT'",
   SHORT_MONTH_DAY_YEAR: 'MMM d, yyyy',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
@@ -98,6 +99,7 @@ export const prepareDateFromString = (
 
   if (inputFormat === FORMATS.ISO) {
     result = DateTime.fromISO(dateToFormat, { zone: 'utc' });
+    console.log('result is : ', result);
   } else if (inputFormat) {
     result = DateTime.fromFormat(dateToFormat, inputFormat, {
       zone: USTC_TZ,
@@ -577,4 +579,8 @@ export const isTodayWithinGivenInterval = ({
   );
 
   return dateRangeInterval.contains(today);
+};
+
+export const getUTCDate = (dateISO: string): string => {
+  return DateTime.fromISO(dateISO).toFormat(FORMATS.RENAME_NAME);
 };
