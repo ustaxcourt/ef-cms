@@ -378,7 +378,6 @@ module "api-west-green" {
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     REGION                 = "us-west-1"
-    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
@@ -452,7 +451,6 @@ module "api-west-blue" {
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     REGION                 = "us-west-1"
-    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint

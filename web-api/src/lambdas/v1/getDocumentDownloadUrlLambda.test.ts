@@ -53,12 +53,8 @@ describe('getDocumentDownloadUrlLambda', () => {
     });
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest.fn().mockReturnValue(
-          Promise.resolve({
-            Items: [], // no items with docket number is found
-          }),
-        ),
+      query: jest.fn().mockResolvedValue({
+        Items: [], // no items with docket number is found
       }),
     });
 
@@ -98,27 +94,23 @@ describe('getDocumentDownloadUrlLambda', () => {
     });
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest.fn().mockReturnValue(
-          Promise.resolve({
-            Items: [
-              {
-                docketNumber: '123-20',
-                judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
-                pk: 'case|123-20',
-                sk: 'case|23',
-                status: 'New',
-              },
-              {
-                archived: false,
-                // docket entry does not match the requested entry
-                docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-                pk: 'case|123-20',
-                sk: 'docket-entry|124',
-              },
-            ],
-          }),
-        ),
+      query: jest.fn().mockResolvedValue({
+        Items: [
+          {
+            docketNumber: '123-20',
+            judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+            pk: 'case|123-20',
+            sk: 'case|23',
+            status: 'New',
+          },
+          {
+            archived: false,
+            // docket entry does not match the requested entry
+            docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
+            pk: 'case|123-20',
+            sk: 'docket-entry|124',
+          },
+        ],
       }),
     });
 
@@ -158,11 +150,7 @@ describe('getDocumentDownloadUrlLambda', () => {
     });
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-      query: jest.fn().mockReturnValue({
-        promise: jest
-          .fn()
-          .mockReturnValue(Promise.reject(new Error('test error'))),
-      }),
+      query: jest.fn().mockRejectedValue(new Error('test error')),
     });
 
     const response = await getDocumentDownloadUrlLambda(request, {
@@ -194,26 +182,22 @@ describe('getDocumentDownloadUrlLambda', () => {
       });
 
       applicationContext.getDocumentClient = jest.fn().mockReturnValue({
-        query: jest.fn().mockReturnValue({
-          promise: jest.fn().mockReturnValue(
-            Promise.resolve({
-              Items: [
-                {
-                  docketNumber: '123-20',
-                  judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
-                  pk: 'case|123-20',
-                  sk: 'case|23',
-                  status: 'New',
-                },
-                {
-                  archived: false,
-                  docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
-                  pk: 'case|123-20',
-                  sk: 'docket-entry|124',
-                },
-              ],
-            }),
-          ),
+        query: jest.fn().mockResolvedValue({
+          Items: [
+            {
+              docketNumber: '123-20',
+              judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+              pk: 'case|123-20',
+              sk: 'case|23',
+              status: 'New',
+            },
+            {
+              archived: false,
+              docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
+              pk: 'case|123-20',
+              sk: 'docket-entry|124',
+            },
+          ],
         }),
       });
 
