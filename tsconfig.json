@@ -7,6 +7,7 @@
     "esModuleInterop": true,
     "inlineSourceMap": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["jest", "node"],
     "target": "es6",

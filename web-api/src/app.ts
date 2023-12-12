@@ -45,6 +45,7 @@ import { dismissNOTTReminderForTrialLambda } from './lambdas/trialSessions/dismi
 import { downloadPolicyUrlLambda } from './lambdas/documents/downloadPolicyUrlLambda';
 import { editPaperFilingLambda } from './lambdas/documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './lambdas/practitioners/editPractitionerDocumentLambda';
+import { exportPendingReportLambda } from '@web-api/lambdas/pendingItems/exportPendingReportLambda';
 import { fetchPendingItemsLambda } from './lambdas/pendingItems/fetchPendingItemsLambda';
 import { fileAndServeCourtIssuedDocumentLambda } from './lambdas/cases/fileAndServeCourtIssuedDocumentLambda';
 import { fileCorrespondenceDocumentLambda } from './lambdas/correspondence/fileCorrespondenceDocumentLambda';
@@ -759,6 +760,10 @@ app.get(
   app.get(
     '/reports/pending-report',
     lambdaWrapper(generatePrintablePendingReportLambda),
+  );
+  app.get(
+    '/reports/pending-report/export',
+    lambdaWrapper(exportPendingReportLambda),
   );
   app.post(
     '/reports/trial-calendar-pdf',
