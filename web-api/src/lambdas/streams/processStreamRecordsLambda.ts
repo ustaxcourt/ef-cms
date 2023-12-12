@@ -15,8 +15,8 @@ async function putEventHistory(
   const twentyFourHours = 24 * 60 * 60;
 
   await applicationContext
-    .getDocumentClient({
-      useMasterRegion: true,
+    .getDocumentClient(applicationContext, {
+      useMainRegion: true,
     })
     .put({
       Item: {
@@ -27,8 +27,7 @@ async function putEventHistory(
       TableName: getTableName({
         applicationContext,
       }),
-    })
-    .promise();
+    });
 }
 
 /**

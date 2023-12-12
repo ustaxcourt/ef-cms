@@ -13,6 +13,10 @@ resource "aws_lambda_function" "set_trial_session_lambda" {
 
   layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = var.lambda_environment
   }
