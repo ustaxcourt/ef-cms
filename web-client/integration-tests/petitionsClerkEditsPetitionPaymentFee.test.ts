@@ -1,4 +1,3 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   MINUTE_ENTRIES_MAP,
@@ -57,9 +56,8 @@ describe('petitions clerk edits a petition payment fee', () => {
     await cerebralTest.runSequence('updateCaseDetailsSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
-      petitionPaymentMethod:
-        Case.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+      petitionPaymentDate: 'Enter a valid payment date',
+      petitionPaymentMethod: 'Enter payment method',
     });
 
     await cerebralTest.runSequence(

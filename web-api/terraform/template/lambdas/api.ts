@@ -1,7 +1,7 @@
-const awsServerlessExpress = require('@vendia/serverless-express');
-const { app } = require('../../../src/app');
+import { app } from '../../../src/app';
+import awsServerlessExpress from '@vendia/serverless-express';
 
-exports.handler = (event, context) => {
+export const handler = (event, context) => {
   // This hack is added because serverless-express doesn't seem to work with lambda proxy integrations.
   // Without this, the deployed /auth endpoint has to be reached via /auth/auth/*
   // Bug Detail: https://github.com/vendia/serverless-express/issues/400
