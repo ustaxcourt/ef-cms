@@ -110,8 +110,10 @@ import { deletePractitionerDocumentInteractor } from '../../shared/src/proxies/p
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
+import { downloadCsv } from '@web-client/presenter/utilities/downloadCsv';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { editPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/editPractitionerDocumentProxy';
+import { exportPendingReportInteractor } from '@shared/proxies/pendingItems/exportPendingReportProxy';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../../shared/src/proxies/documents/fileAndServeCourtIssuedDocumentProxy';
 import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentProxy';
@@ -430,6 +432,7 @@ const allUseCases = {
   dismissNOTTReminderForTrialInteractor,
   editPaperFilingInteractor,
   editPractitionerDocumentInteractor,
+  exportPendingReportInteractor,
   fetchPendingItemsInteractor,
   fileAndServeCourtIssuedDocumentInteractor,
   fileCorrespondenceDocumentInteractor,
@@ -750,6 +753,7 @@ const applicationContext = {
       createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
+      downloadCsv,
       filterEmptyStrings,
       formatAttachments,
       formatCase,
