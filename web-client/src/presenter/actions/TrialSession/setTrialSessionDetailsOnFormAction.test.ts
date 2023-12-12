@@ -125,6 +125,7 @@ describe('setTrialSessionDetailsOnFormAction', () => {
     });
 
     expect(result.state.form).toMatchObject({
+      irsCalendarAdministrator: undefined,
       irsCalendarAdministratorInfo: {
         email: 'TEST_EMAIL',
         name: 'TEST_NAME',
