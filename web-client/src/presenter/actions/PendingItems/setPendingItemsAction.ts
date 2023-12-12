@@ -6,11 +6,11 @@ export const setPendingItemsAction = ({
   props,
   store,
 }: ActionProps<{ pendingItems: PendingItem[]; total: number }>) => {
-  const pendingItems = get(state.pendingReports.pendingItems);
-  store.set(state.pendingReports.pendingItems, [
-    ...pendingItems,
+  const pendingItems = [
+    ...get(state.pendingReports.pendingItems),
     ...props.pendingItems,
-  ]);
-  store.set(state.pendingReports.hasPendingItemsResults, true);
+  ];
+  store.set(state.pendingReports.pendingItems, pendingItems);
+  store.set(state.pendingReports.hasPendingItemsResults, !!pendingItems.length);
   store.set(state.pendingReports.pendingItemsTotal, props.total);
 };

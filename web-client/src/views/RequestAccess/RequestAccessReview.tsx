@@ -318,6 +318,7 @@ export const RequestAccessReview = connect(
                   />
                   <label
                     className="usa-checkbox__label"
+                    data-testid="redaction-acknowledgement-label"
                     htmlFor="redaction-acknowledgement"
                     id="redaction-acknowledgement-label"
                   >

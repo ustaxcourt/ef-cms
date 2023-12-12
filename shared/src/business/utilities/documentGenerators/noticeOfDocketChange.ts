@@ -3,7 +3,22 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-export const noticeOfDocketChange = async ({ applicationContext, data }) => {
+export const noticeOfDocketChange = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    nameOfClerk: string;
+    titleOfClerk: string;
+    docketEntryIndex: string;
+    filingParties: { after: string | undefined; before: string | undefined };
+    filingsAndProceedings: { after: string; before: string };
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+  };
+}) => {
   const {
     caseCaptionExtension,
     caseTitle,
@@ -11,6 +26,8 @@ export const noticeOfDocketChange = async ({ applicationContext, data }) => {
     docketNumberWithSuffix,
     filingParties,
     filingsAndProceedings,
+    nameOfClerk,
+    titleOfClerk,
   } = data;
 
   const NoticeOfDocketChangeTemplate = ReactDOM.renderToString(
@@ -18,11 +35,13 @@ export const noticeOfDocketChange = async ({ applicationContext, data }) => {
       docketEntryIndex,
       filingParties,
       filingsAndProceedings,
+      nameOfClerk,
       options: {
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
       },
+      titleOfClerk,
     }),
   );
 
