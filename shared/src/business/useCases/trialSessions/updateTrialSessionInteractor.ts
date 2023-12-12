@@ -352,7 +352,7 @@ export const determineEntitiesToLock = async (
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
-      trialSessionId: trialSession.trialSessionId,
+      trialSessionId: trialSession.trialSessionId || '',
     });
 
   const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];

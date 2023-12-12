@@ -167,7 +167,13 @@ describe('ExternalDocumentInformationFactory', () => {
       });
 
       it('should require supporting document type be entered', () => {
-        expect(errors()!.supportingDocuments[0].supportingDocument).toEqual(
+        expect(
+          (
+            errors()!.supportingDocuments as unknown as {
+              [key: string]: string;
+            }[]
+          )[0].supportingDocument,
+        ).toEqual(
           ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
             .supportingDocument,
         );
@@ -200,7 +206,11 @@ describe('ExternalDocumentInformationFactory', () => {
         baseDoc.supportingDocuments[0].supportingDocument = 'brief';
 
         expect(
-          errors()!.supportingDocuments[0].certificateOfServiceDate,
+          (
+            errors()!.supportingDocuments as unknown as {
+              [key: string]: string;
+            }[]
+          )[0].certificateOfServiceDate,
         ).toEqual(
           ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
             .certificateOfServiceDate[1],
@@ -225,7 +235,11 @@ describe('ExternalDocumentInformationFactory', () => {
 
         it('should require supporting document file to be selected', () => {
           expect(
-            errors()!.supportingDocuments[0].supportingDocumentFile,
+            (
+              errors()!.supportingDocuments as unknown as {
+                [key: string]: string;
+              }[]
+            )[0].supportingDocumentFile,
           ).toEqual(
             ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
               .supportingDocumentFile,
@@ -246,7 +260,11 @@ describe('ExternalDocumentInformationFactory', () => {
 
         it('should require supporting document file to be selected', () => {
           expect(
-            errors()!.supportingDocuments[0].supportingDocumentFile,
+            (
+              errors()!.supportingDocuments as unknown as {
+                [key: string]: string;
+              }[]
+            )[0].supportingDocumentFile,
           ).toEqual(
             ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
               .supportingDocumentFile,
@@ -255,13 +273,21 @@ describe('ExternalDocumentInformationFactory', () => {
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
 
           expect(
-            errors()!.supportingDocuments[0].supportingDocumentFile,
+            (
+              errors()!.supportingDocuments as unknown as {
+                [key: string]: string;
+              }[]
+            )[0].supportingDocumentFile,
           ).toEqual(undefined);
         });
 
         it('should require supporting document text to be added', () => {
           expect(
-            errors()!.supportingDocuments[0].supportingDocumentFreeText,
+            (
+              errors()!.supportingDocuments as unknown as {
+                [key: string]: string;
+              }[]
+            )[0].supportingDocumentFreeText,
           ).toEqual(
             ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
               .supportingDocumentFreeText,
@@ -271,7 +297,11 @@ describe('ExternalDocumentInformationFactory', () => {
             'Something';
 
           expect(
-            errors()!.supportingDocuments[0].supportingDocumentFreeText,
+            (
+              errors()!.supportingDocuments as unknown as {
+                [key: string]: string;
+              }[]
+            )[0].supportingDocumentFreeText,
           ).toEqual(undefined);
         });
       });
@@ -403,7 +433,11 @@ describe('ExternalDocumentInformationFactory', () => {
 
           it('should require supporting secondary document type be entered', () => {
             expect(
-              errors()!.secondarySupportingDocuments[0].supportingDocument,
+              (
+                errors()!.secondarySupportingDocuments as unknown as {
+                  [key: string]: string;
+                }[]
+              )[0].supportingDocument,
             ).toEqual(
               ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
                 .supportingDocument,
@@ -421,8 +455,11 @@ describe('ExternalDocumentInformationFactory', () => {
               'brief';
 
             expect(
-              errors()!.secondarySupportingDocuments[0]
-                .certificateOfServiceDate,
+              (
+                errors()!.secondarySupportingDocuments as unknown as {
+                  [key: string]: string;
+                }[]
+              )[0].certificateOfServiceDate,
             ).toEqual(
               ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
                 .certificateOfServiceDate[1],
@@ -447,8 +484,11 @@ describe('ExternalDocumentInformationFactory', () => {
 
             it('should require supporting secondary document file to be added', () => {
               expect(
-                errors()!.secondarySupportingDocuments[0]
-                  .supportingDocumentFile,
+                (
+                  errors()!.secondarySupportingDocuments as unknown as {
+                    [key: string]: string;
+                  }[]
+                )[0].supportingDocumentFile,
               ).toEqual(
                 ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
                   .supportingDocumentFile,
@@ -485,15 +525,21 @@ describe('ExternalDocumentInformationFactory', () => {
                 {};
 
               expect(
-                errors()!.secondarySupportingDocuments[0]
-                  .supportingDocumentFile,
+                (
+                  errors()!.secondarySupportingDocuments as unknown as {
+                    [key: string]: string;
+                  }[]
+                )[0].supportingDocumentFile,
               ).toEqual(undefined);
             });
 
             it('should require supporting secondary document text to be added', () => {
               expect(
-                errors()!.secondarySupportingDocuments[0]
-                  .supportingDocumentFreeText,
+                (
+                  errors()!.secondarySupportingDocuments as unknown as {
+                    [key: string]: string;
+                  }[]
+                )[0].supportingDocumentFreeText,
               ).toEqual(
                 ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
                   .supportingDocumentFreeText,
@@ -503,8 +549,11 @@ describe('ExternalDocumentInformationFactory', () => {
                 'Something';
 
               expect(
-                errors()!.secondarySupportingDocuments[0]
-                  .supportingDocumentFreeText,
+                (
+                  errors()!.secondarySupportingDocuments as unknown as {
+                    [key: string]: string;
+                  }[]
+                )[0].supportingDocumentFreeText,
               ).toEqual(undefined);
             });
           });
