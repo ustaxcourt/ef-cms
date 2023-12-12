@@ -6,29 +6,24 @@ describe('markMessageThreadRepliedTo', () => {
 
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
-    applicationContext.getDocumentClient().update.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
-    applicationContext.getDocumentClient().query.mockReturnValueOnce({
-      promise: () =>
-        Promise.resolve({
-          Items: [
-            {
-              docketNumber: DOCKET_NUMBER,
-              gsi1pk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
-              messageId: '28de1ba1-8518-4a7d-8075-4291eea569c7',
-              pk: `case|${DOCKET_NUMBER}`,
-              sk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
-            },
-            {
-              docketNumber: DOCKET_NUMBER,
-              gsi1pk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
-              messageId: 'badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
-              pk: `case|${DOCKET_NUMBER}`,
-              sk: 'message|badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
-            },
-          ],
-        }),
+    applicationContext.getDocumentClient().update.mockResolvedValue(null);
+    applicationContext.getDocumentClient().query.mockResolvedValueOnce({
+      Items: [
+        {
+          docketNumber: DOCKET_NUMBER,
+          gsi1pk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
+          messageId: '28de1ba1-8518-4a7d-8075-4291eea569c7',
+          pk: `case|${DOCKET_NUMBER}`,
+          sk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
+        },
+        {
+          docketNumber: DOCKET_NUMBER,
+          gsi1pk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
+          messageId: 'badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
+          pk: `case|${DOCKET_NUMBER}`,
+          sk: 'message|badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
+        },
+      ],
     });
   });
 
@@ -60,9 +55,9 @@ describe('markMessageThreadRepliedTo', () => {
   });
 
   it("doesn't update messages if there are none found", async () => {
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () => Promise.resolve({ Items: [] }),
-    });
+    applicationContext
+      .getDocumentClient()
+      .query.mockResolvedValue({ Items: [] });
 
     await markMessageThreadRepliedTo({
       applicationContext,

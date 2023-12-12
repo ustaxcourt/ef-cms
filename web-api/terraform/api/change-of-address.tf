@@ -15,6 +15,10 @@ resource "aws_lambda_function" "change_of_address_lambda" {
 
   runtime = var.node_version
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = var.lambda_environment
   }
