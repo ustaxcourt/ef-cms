@@ -172,7 +172,7 @@ export const ScanBatchPreviewer = connect(
               errorText={[
                 validationErrors[documentType],
                 documentType === 'requestForPlaceOfTrialFile' &&
-                  validationErrors.chooseAtLeastOneValue,
+                  validationErrors['object.missing'],
               ]}
             >
               <fieldset
