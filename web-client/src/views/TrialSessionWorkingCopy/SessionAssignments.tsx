@@ -60,13 +60,14 @@ export const SessionAssignments = connect(
                     className="margin-bottom-0 word-wrap-break-word"
                     data-testid="irs-calendar-admin-info"
                   >
-                    <div>
+                    <div data-testid="irs-calendar-admin-info-name">
                       {
                         formattedTrialSessionDetails
                           .formattedIrsCalendarAdministratorInfo.name
                       }
                     </div>
                     <div
+                      data-testid="irs-calendar-admin-info-email"
                       style={{
                         overflowWrap: 'break-word',
                         wordBreak: 'break-all',
@@ -77,7 +78,7 @@ export const SessionAssignments = connect(
                           .formattedIrsCalendarAdministratorInfo.email
                       }
                     </div>
-                    <div>
+                    <div data-testid="irs-calendar-admin-info-phone">
                       {
                         formattedTrialSessionDetails
                           .formattedIrsCalendarAdministratorInfo.phone

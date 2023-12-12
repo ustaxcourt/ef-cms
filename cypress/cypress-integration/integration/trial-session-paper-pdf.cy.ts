@@ -89,15 +89,19 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           cy.get('h3:contains("Trial - Scheduled")').should('exist');
           cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
 
-          cy.get('[data-testid="irs-calendar-admin-info"]')
-            .invoke('text')
-            .then(text => {
-              const lines = text.split('\n').map(line => line.trim());
-              expect(lines).to.have.lengthOf(3);
-              expect(lines[0]).to.equal('Nero West');
-              expect(lines[1]).to.equal('irspractitioner2@example.com');
-              expect(lines[2]).to.equal('+1 (555) 555-5555');
-            });
+          cy.get('[data-testid="irs-calendar-admin-info-name"]').should(
+            'have.text',
+            'Nero West',
+          );
+          cy.get('[data-testid="irs-calendar-admin-info-email"]').should(
+            'have.text',
+            'irspractitioner2@example.com',
+          );
+          cy.get('[data-testid="irs-calendar-admin-info-phone"]').should(
+            'have.text',
+            '+1 (555) 555-5555',
+          );
+
           cy.get(`label[for="${docketNumber}-complete"]`).click();
           waitForLoadingComplete();
           cy.get('#set-calendar-button').click();
