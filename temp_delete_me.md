@@ -14,15 +14,11 @@
 - make it work for hosted envs (remove hard-coded )
 - email verification flow
 
-
-
-
-
-What is public and private?
-Public/Private
-- Public - anyone that is unauthenticated and on the public website domain, localhost:5678
-- private - someone that is authenticated and on the private website domain, localhost:1234
-
-DAWSON
-- Public - irsPractitioner, privatePractitioner, petitioner
-- Private - court employee
+PROBLEM: Setting refresh token as an httpOnly cookie
+- Fire off a request with the refreshToken to the api and have the api return a cookie header
+- Find a library that can set cookies the right way
+- Instead of calling cognito directly from the browser, create a /login route on the api so that the refreshToken can be set as a header in the response back
+- Do we need HttpOnly for the cookie?
+- Use localstore with manual expires check (additional expires key, value)
+- Manually type in refresh token after an hour
+- Only request refresh token if needed
