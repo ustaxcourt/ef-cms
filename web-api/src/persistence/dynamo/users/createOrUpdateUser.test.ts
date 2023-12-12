@@ -59,9 +59,7 @@ describe('createOrUpdateUser', () => {
       promise: () => Promise.resolve(),
     });
 
-    applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    applicationContext.getDocumentClient().put.mockResolvedValue(null);
   });
 
   it('should create a user only if the user does not already exist', async () => {

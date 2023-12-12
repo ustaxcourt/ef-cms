@@ -26,11 +26,8 @@ describe('createLock', () => {
 
 describe('getLock', () => {
   it('returns a lock from persistence if it found one that expires in the future', async () => {
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Item: MOCK_ACTIVE_LOCK,
-        }),
+    applicationContext.getDocumentClient().get.mockResolvedValue({
+      Item: MOCK_ACTIVE_LOCK,
     });
 
     const result = await getLock({
@@ -40,9 +37,7 @@ describe('getLock', () => {
     expect(result).toMatchObject(MOCK_ACTIVE_LOCK);
   });
   it('returns undefined from persistence if it did not find a lock', async () => {
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () => Promise.resolve(),
-    });
+    applicationContext.getDocumentClient().get.mockResolvedValue();
 
     const result = await getLock({
       applicationContext,
@@ -52,11 +47,8 @@ describe('getLock', () => {
   });
 
   it('returns undefined from persistence if the lock it found in persistence has expired', async () => {
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Item: MOCK_EXPIRED_LOCK,
-        }),
+    applicationContext.getDocumentClient().get.mockResolvedValue({
+      Item: MOCK_EXPIRED_LOCK,
     });
 
     const result = await getLock({
