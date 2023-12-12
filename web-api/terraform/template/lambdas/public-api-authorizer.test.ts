@@ -1,4 +1,4 @@
-const { createAuthorizer } = require('./public-api-authorizer');
+import { createAuthorizer } from './public-api-authorizer';
 
 describe('public-api-authorizer', () => {
   it('should set isTerminalUser to true when the users ip is found in the whitelist', async () => {

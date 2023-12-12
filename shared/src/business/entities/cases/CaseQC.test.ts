@@ -12,15 +12,13 @@ describe('CaseQC entity', () => {
       const caseQcEntity = new CaseQC({}, { applicationContext });
 
       expect(caseQcEntity.getFormattedValidationErrors()).toEqual({
-        caseCaption: CaseQC.VALIDATION_ERROR_MESSAGES.caseCaption,
-        caseType: CaseQC.VALIDATION_ERROR_MESSAGES.caseType,
-        docketNumber: CaseQC.VALIDATION_ERROR_MESSAGES.docketNumber,
-        hasVerifiedIrsNotice:
-          CaseQC.VALIDATION_ERROR_MESSAGES.hasVerifiedIrsNotice,
-        partyType: CaseQC.VALIDATION_ERROR_MESSAGES.partyType,
-        procedureType: CaseQC.VALIDATION_ERROR_MESSAGES.procedureType,
-        sortableDocketNumber:
-          CaseQC.VALIDATION_ERROR_MESSAGES.sortableDocketNumber,
+        caseCaption: 'Enter a case caption',
+        caseType: 'Select a case type',
+        docketNumber: 'Docket number is required',
+        hasVerifiedIrsNotice: 'Select an option',
+        partyType: 'Select a party type',
+        procedureType: 'Select a case procedure',
+        sortableDocketNumber: 'Sortable docket number is required',
       });
     });
 

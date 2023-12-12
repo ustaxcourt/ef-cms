@@ -1,9 +1,7 @@
-const {
-  sendWithRetry,
-} = require('../../../src/dispatchers/ses/sendBulkTemplatedEmail');
-const { createApplicationContext } = require('../../../src/applicationContext');
+import { createApplicationContext } from '../../../src/applicationContext';
+import { sendWithRetry } from '../../../src/dispatchers/ses/sendBulkTemplatedEmail';
 
-exports.handler = async event => {
+export const handler = async event => {
   const applicationContext = createApplicationContext({});
   try {
     const { Records } = event;
