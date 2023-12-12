@@ -13,6 +13,10 @@ resource "aws_lambda_function" "api_async_lambda" {
 
   layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = var.lambda_environment
   }

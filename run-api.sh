@@ -10,7 +10,6 @@ npm run build:assets
 . ./setup-local-env.sh
 
 export ELASTICSEARCH_HOST=elasticsearch
-export DYNAMODB_ENDPOINT=http://dynamodb-local:8000
 
 URL=http://elasticsearch:9200/ ./wait-until.sh
 
@@ -27,8 +26,6 @@ S3RVER_PID=$!
 URL=http://0.0.0.0:9000/ ./wait-until.sh
 npm run seed:s3
 
-
-echo "$DYNAMODB_ENDPOINT - DYNAMODB_ENDPOINT"
 
 if [ -n "${RESUME}" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
