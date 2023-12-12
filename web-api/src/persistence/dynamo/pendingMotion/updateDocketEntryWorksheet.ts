@@ -13,7 +13,7 @@ export const updateDocketEntryWorksheet = async ({
 }): Promise<TDynamoRecord> => {
   return await put({
     Item: {
-      gsi1pk: `judge-case-worksheet|${judgeUserId}`,
+      gsi1pk: `judge-docket-entry-worksheet|${judgeUserId}`,
       pk: `docket-entry|${docketEntryWorksheet.docketEntryId}`,
       sk: `docket-entry-worksheet|${docketEntryWorksheet.docketEntryId}`,
       ...docketEntryWorksheet,
