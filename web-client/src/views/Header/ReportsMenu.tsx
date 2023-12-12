@@ -33,6 +33,7 @@ export const ReportsMenu = connect(
             'usa-accordion__button usa-nav__link',
             reportMenuHelper.pageIsReports && 'usa-current',
           )}
+          data-testid="dropdown-select-report"
           id="reports-btn"
           onClick={() => {
             toggleMenuSequence({ openMenu: 'ReportsMenu' });
@@ -106,6 +107,7 @@ export const ReportsMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
+                data-testid="select-pending-report"
                 href="/reports/pending-report"
                 id="pending-report"
                 onClick={() => {

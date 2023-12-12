@@ -1,6 +1,7 @@
 import { AddressLabel } from '../components/AddressLabel';
 import { CompressedDocketHeader } from '../components/CompressedDocketHeader';
 import { PrimaryHeader } from '../components/PrimaryHeader';
+import { RawContact } from '@shared/business/entities/contacts/Contact';
 import React from 'react';
 
 const StandardNOTRText = () => (
@@ -55,9 +56,22 @@ export const NoticeOfReceiptOfPetition = ({
   caseTitle,
   contact,
   docketNumberWithSuffix,
+  nameOfClerk,
   preferredTrialCity,
   receivedAtFormatted,
   servedDate,
+  titleOfClerk,
+}: {
+  accessCode?: string;
+  caseCaptionExtension: string;
+  caseTitle: string;
+  contact: RawContact;
+  docketNumberWithSuffix: string;
+  nameOfClerk: string;
+  preferredTrialCity: string;
+  receivedAtFormatted: string;
+  servedDate: string;
+  titleOfClerk: string;
 }) => {
   return (
     <div id="document-notice-of-receipt">
@@ -144,9 +158,9 @@ export const NoticeOfReceiptOfPetition = ({
       </div>
 
       <div className="court-stamp">
-        Stephanie A. Servoss
+        {nameOfClerk}
         <br />
-        Clerk of the Court
+        {titleOfClerk}
       </div>
 
       <div id="address-label-cover-sheet">

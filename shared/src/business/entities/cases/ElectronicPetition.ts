@@ -11,7 +11,6 @@ import {
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
 import { ContactFactory } from '../contacts/ContactFactory';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { getContactPrimary, getContactSecondary } from './Case';
@@ -21,7 +20,7 @@ import joi from 'joi';
  * Represents a Case with required documents that a Petitioner is attempting to
  * add to the system.
  */
-export class CaseExternal extends JoiValidationEntity {
+export class ElectronicPetition extends JoiValidationEntity {
   public businessType: string;
   public caseType: string;
   public corporateDisclosureFile?: object;
@@ -39,7 +38,7 @@ export class CaseExternal extends JoiValidationEntity {
   public stinFileSize?: number;
 
   constructor(rawCase, { applicationContext }) {
-    super('CaseExternal');
+    super('ElectronicPetition');
 
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
@@ -142,6 +141,10 @@ export class CaseExternal extends JoiValidationEntity {
         '*': 'Your Petition file size is empty',
         'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
+    petitioners: joi
+      .array()
+      .description('List of Contact Entities for the case.')
+      .optional(),
     preferredTrialCity: joi
       .alternatives()
       .try(
@@ -177,7 +180,7 @@ export class CaseExternal extends JoiValidationEntity {
   };
 
   getValidationRules() {
-    return CaseExternal.VALIDATION_RULES;
+    return ElectronicPetition.VALIDATION_RULES;
   }
 
   getContactPrimary() {
@@ -188,5 +191,3 @@ export class CaseExternal extends JoiValidationEntity {
     return getContactSecondary(this);
   }
 }
-
-export type RawCaseExternal = ExcludeMethods<CaseExternal>;

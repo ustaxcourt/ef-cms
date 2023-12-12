@@ -14,6 +14,7 @@ export const FORMATS = {
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
   MMDDYYYY_DASHED: 'MM-dd-yyyy',
+  MMDDYYYY_UNDERSCORED: 'MM_dd_yyyy',
   MONTH_DAY_YEAR: 'MMMM d, yyyy',
   MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'DDDD',
   SHORT_MONTH_DAY_YEAR: 'MMM d, yyyy',
@@ -231,12 +232,12 @@ export const createISODateStringFromObject = options => {
 /**
  * @param {string} dateString a date string like YYYY-MM-DD or an ISO date retrieved from persistence
  * @param {string} formatArg the desired formatting as specified by the luxon library
- * @returns {string|void} a formatted date string
+ * @returns {string} a formatted date string
  */
 export const formatDateString = (
   dateString: string,
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
-): string | void => {
+): string => {
   if (!dateString) return '';
   let formatString = FORMATS[formatArg] || formatArg;
 

@@ -6,20 +6,19 @@ import {
   PAYMENT_STATUS,
   ROLES,
 } from '../EntityConstants';
-import { CaseInternal } from './CaseInternal';
 import { Correspondence } from '../Correspondence';
+import { PaperPetition } from './PaperPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-describe('caseInternal entity', () => {
+describe('paperPetition entity', () => {
   describe('validation', () => {
     it('throws an exception when not provided an application context', () => {
-      expect(() => new CaseInternal({}, {} as any)).toThrow();
+      expect(() => new PaperPetition({}, {} as any)).toThrow();
     });
 
     it('returns the expected set of errors for an empty object', () => {
-      const caseInternal = new CaseInternal({}, { applicationContext });
-
-      expect(caseInternal.getFormattedValidationErrors()).toEqual({
+      const paperPetition = new PaperPetition({}, { applicationContext });
+      expect(paperPetition.getFormattedValidationErrors()).toEqual({
         caseCaption: 'Enter a case caption',
         caseType: 'Select a case type',
         mailingDate: 'Enter a mailing date',
@@ -34,7 +33,7 @@ describe('caseInternal entity', () => {
     });
 
     it('creates a valid petition with minimal information', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
@@ -74,12 +73,12 @@ describe('caseInternal entity', () => {
         { applicationContext },
       );
 
-      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
-      expect(caseInternal.isValid()).toEqual(true);
+      expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
+      expect(paperPetition.isValid()).toEqual(true);
     });
 
     it('creates a valid petition with archived docket entries', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           archivedDocketEntries: [
             {
@@ -129,12 +128,12 @@ describe('caseInternal entity', () => {
         { applicationContext },
       );
 
-      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
-      expect(caseInternal.isValid()).toEqual(true);
+      expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
+      expect(paperPetition.isValid()).toEqual(true);
     });
 
     it('creates a valid petition with partyType Corporation and an cds file', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -168,12 +167,12 @@ describe('caseInternal entity', () => {
         { applicationContext },
       );
 
-      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
-      expect(caseInternal.isValid()).toEqual(true);
+      expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
+      expect(paperPetition.isValid()).toEqual(true);
     });
 
     it('creates a valid petition with partyType Corporation and an order for cds instead of an cds file', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -206,12 +205,12 @@ describe('caseInternal entity', () => {
         { applicationContext },
       );
 
-      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
-      expect(caseInternal.isValid()).toEqual(true);
+      expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
+      expect(paperPetition.isValid()).toEqual(true);
     });
 
     it('fails validation if date cannot be in the future.', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: { anObject: true },
@@ -220,11 +219,11 @@ describe('caseInternal entity', () => {
         },
         { applicationContext },
       );
-      expect(caseInternal.getFormattedValidationErrors()).not.toEqual(null);
+      expect(paperPetition.getFormattedValidationErrors()).not.toEqual(null);
     });
 
     it('fails validation if petitionFile is set, but petitionFileSize is not', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: new File([], 'test.pdf'),
@@ -234,12 +233,12 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!.petitionFileSize,
+        paperPetition.getFormattedValidationErrors()!.petitionFileSize,
       ).toEqual('Your Petition file size is empty');
     });
 
     it('fails validation if petitionPaymentStatus is Waived but applicationForWaiverOfFilingFeeFile is not set', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -249,13 +248,13 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!
+        paperPetition.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFile,
       ).toEqual('Upload or scan an Application for Waiver of Filing Fee (APW)');
     });
 
     it('fails validation if partyType is Corporation and orderForCds is undefined', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           partyType: PARTY_TYPES.corporation,
         },
@@ -263,12 +262,12 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!.corporateDisclosureFile,
+        paperPetition.getFormattedValidationErrors()!.corporateDisclosureFile,
       ).toEqual('Upload or scan Corporate Disclosure Statement(CDS)');
     });
 
     it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForCds is false', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           orderForCds: false,
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
@@ -277,12 +276,12 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!.corporateDisclosureFile,
+        paperPetition.getFormattedValidationErrors()!.corporateDisclosureFile,
       ).toEqual('Upload or scan Corporate Disclosure Statement(CDS)');
     });
 
     it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -292,13 +291,13 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!
+        paperPetition.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFileSize,
       ).toEqual('Your Filing Fee Waiver file size is empty');
     });
 
     it('fails validation if stinFile is set, but stinFileSize is not', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           receivedAt: applicationContext.getUtilities().createISODateString(),
@@ -307,13 +306,13 @@ describe('caseInternal entity', () => {
         { applicationContext },
       );
 
-      expect(caseInternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        'Your STIN file size is empty',
-      );
+      expect(
+        paperPetition.getFormattedValidationErrors()!.stinFileSize,
+      ).toEqual('Your STIN file size is empty');
     });
 
     it('fails validation if corporateDisclosureFile is set, but corporateDisclosureFileSize is not', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           corporateDisclosureFile: new File([], 'test.pdf'),
@@ -323,13 +322,13 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!
+        paperPetition.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
       ).toEqual('Your Corporate Disclosure Statement file size is empty');
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but requestForPlaceOfTrialFileSize is not', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           receivedAt: applicationContext.getUtilities().createISODateString(),
@@ -339,13 +338,13 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!
+        paperPetition.getFormattedValidationErrors()!
           .requestForPlaceOfTrialFileSize,
       ).toEqual('Your Request for Place of Trial file size is empty');
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but preferredTrialCity is not', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           receivedAt: applicationContext.getUtilities().createISODateString(),
@@ -355,12 +354,12 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!.preferredTrialCity,
+        paperPetition.getFormattedValidationErrors()!.preferredTrialCity,
       ).toEqual('Select a preferred trial location');
     });
 
     it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Guy Fieri, Petitioner',
           preferredTrialCity: 'Flavortown, AR',
@@ -370,12 +369,13 @@ describe('caseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()!.requestForPlaceOfTrialFile,
+        paperPetition.getFormattedValidationErrors()!
+          .requestForPlaceOfTrialFile,
       ).toEqual('Upload or scan a Request for Place of Trial (RQT)');
     });
 
     it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -410,15 +410,15 @@ describe('caseInternal entity', () => {
         { applicationContext },
       );
 
-      expect(caseInternal.isValid()).toEqual(false);
-      expect(caseInternal.getFormattedValidationErrors()).toEqual({
+      expect(paperPetition.isValid()).toEqual(false);
+      expect(paperPetition.getFormattedValidationErrors()).toEqual({
         'object.missing':
           'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
       });
     });
 
     it('fails validation if only orderDesignatingPlaceOfTrial is present and it is false', () => {
-      const caseInternal = new CaseInternal(
+      const paperPetition = new PaperPetition(
         {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -454,8 +454,8 @@ describe('caseInternal entity', () => {
         { applicationContext },
       );
 
-      expect(caseInternal.isValid()).toEqual(false);
-      expect(caseInternal.getFormattedValidationErrors()).toEqual({
+      expect(paperPetition.isValid()).toEqual(false);
+      expect(paperPetition.getFormattedValidationErrors()).toEqual({
         'object.missing':
           'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
       });
@@ -471,7 +471,7 @@ describe('caseInternal entity', () => {
       userId: mockGuid,
     });
 
-    const caseInternal = new CaseInternal(
+    const paperPetition = new PaperPetition(
       {
         archivedCorrespondences: [mockCorrespondence],
         caseCaption: 'Dr. Leo Marvin, Petitioner',
@@ -512,8 +512,8 @@ describe('caseInternal entity', () => {
       { applicationContext },
     );
 
-    expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
-    expect(caseInternal.isValid()).toEqual(true);
-    expect(caseInternal.archivedCorrespondences.length).toBe(1);
+    expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
+    expect(paperPetition.isValid()).toEqual(true);
+    expect(paperPetition.archivedCorrespondences.length).toBe(1);
   });
 });
