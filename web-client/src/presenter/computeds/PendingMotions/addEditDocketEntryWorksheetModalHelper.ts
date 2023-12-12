@@ -10,11 +10,13 @@ export const addEditDocketEntryWorksheetModalHelper = (
 
   const { docketEntries = [] } = get(state.pendingMotions);
 
-  const subjectCase = docketEntries.find(
+  const currentDocketEntry = docketEntries.find(
     aCase => aCase.docketEntryId === docketEntryId,
   );
 
-  const caseTitle = applicationContext.getCaseTitle(subjectCase?.caseCaption);
+  const caseTitle = applicationContext.getCaseTitle(
+    currentDocketEntry?.caseCaption,
+  );
 
   const title = `Docket ${docketNumber}: ${caseTitle}`;
 
