@@ -7,30 +7,25 @@ const mockTimestamp = '2021-03-16T17:15:25.685Z';
 
 describe('deleteWorkItem', () => {
   beforeAll(() => {
-    applicationContext.getDocumentClient().batchWrite.mockReturnValue({
-      promise: () => Promise.resolve(true),
-    });
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Items: [
-            {
-              docketNumber: mockDocketNumber,
-              pk: `case|${mockDocketNumber}`,
-              sk: `work-item|${mockWorkItemId}`,
-            },
-            {
-              docketNumber: mockDocketNumber,
-              pk: 'section-outbox|docket|2021-03',
-              sk: mockTimestamp,
-            },
-            {
-              docketNumber: mockDocketNumber,
-              pk: 'section-outbox|docket',
-              sk: mockTimestamp,
-            },
-          ],
-        }),
+    applicationContext.getDocumentClient().batchWrite.mockResolvedValue(true);
+    applicationContext.getDocumentClient().query.mockResolvedValue({
+      Items: [
+        {
+          docketNumber: mockDocketNumber,
+          pk: `case|${mockDocketNumber}`,
+          sk: `work-item|${mockWorkItemId}`,
+        },
+        {
+          docketNumber: mockDocketNumber,
+          pk: 'section-outbox|docket|2021-03',
+          sk: mockTimestamp,
+        },
+        {
+          docketNumber: mockDocketNumber,
+          pk: 'section-outbox|docket',
+          sk: mockTimestamp,
+        },
+      ],
     });
   });
 

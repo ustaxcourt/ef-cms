@@ -379,7 +379,6 @@ module "api-west-green" {
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "green"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
-    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
     REGION                 = "us-west-1"
@@ -455,7 +454,6 @@ module "api-west-blue" {
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
-    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
     REGION                 = "us-west-1"
