@@ -8,11 +8,11 @@ export const getMaintenanceModeInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
   const start = Date.now();
-  console.log('Start getMaintenanceModeInteractor');
+  applicationContext.logger.info('Start getMaintenanceModeInteractor');
   const result = await applicationContext
     .getPersistenceGateway()
     .getMaintenanceMode({ applicationContext });
-  console.log(
+  applicationContext.logger.info(
     `End getMaintenanceModeInteractor. Time: ${Date.now() - start}ms`,
   );
   return !!(result && result.current);
