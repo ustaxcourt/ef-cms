@@ -5,9 +5,7 @@ import { updateTrialSession } from './updateTrialSession';
 
 describe('updateTrialSession', () => {
   beforeAll(() => {
-    applicationContext.getDocumentClient().batchWrite.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    applicationContext.getDocumentClient().batchWrite.mockResolvedValue(null);
   });
 
   it('invokes the persistence layer with pk of trial-session|{trialSessionId}, sk of trial-session|{trialSessionId} and other expected params', async () => {
@@ -49,17 +47,14 @@ describe('updateTrialSession', () => {
     };
     const trialSessionToUpdate = cloneDeep(MOCK_TRIAL_INPERSON);
     trialSessionToUpdate.paperServicePdfs = [existingPaperPdf, newPaperPdf];
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Items: [
-            {
-              ...existingPaperPdf,
-              pk: 'trial-session|123-20',
-              sk: 'paper-service|23',
-            },
-          ],
-        }),
+    applicationContext.getDocumentClient().query.mockResolvedValue({
+      Items: [
+        {
+          ...existingPaperPdf,
+          pk: 'trial-session|123-20',
+          sk: 'paper-service|23',
+        },
+      ],
     });
 
     await updateTrialSession({
