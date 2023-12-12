@@ -31,18 +31,12 @@ describe('getDocumentQCServedForSection', () => {
 
     queryStub = jest
       .fn()
-      .mockReturnValueOnce({
-        promise: () =>
-          Promise.resolve({
-            Items: itemsToReturn,
-            LastEvaluatedKey: 'last-evaluated-key',
-          }),
+      .mockResolvedValueOnce({
+        Items: itemsToReturn,
+        LastEvaluatedKey: 'last-evaluated-key',
       })
-      .mockReturnValue({
-        promise: () =>
-          Promise.resolve({
-            Items: itemsToReturn,
-          }),
+      .mockResolvedValue({
+        Items: itemsToReturn,
       });
   });
 
@@ -67,7 +61,7 @@ describe('getDocumentQCServedForSection', () => {
     expect(
       applicationContext.getDocumentClient().query.mock.calls[0][0],
     ).toMatchObject({
-      ExclusiveStartKey: null,
+      ExclusiveStartKey: undefined,
     });
     expect(items).toEqual(
       expect.arrayContaining([

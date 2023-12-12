@@ -4,17 +4,14 @@ import { getCasesByLeadDocketNumber } from './getCasesByLeadDocketNumber';
 
 describe('getCasesByLeadDocketNumber', () => {
   it('attempts to retrieve the cases by leadDocketNumber', async () => {
-    applicationContext.getDocumentClient().query.mockReturnValueOnce({
-      promise: () =>
-        Promise.resolve({
-          Items: [
-            {
-              docketNumber: '123-20',
-              pk: 'case|123-20',
-              sk: 'case|123-20',
-            },
-          ],
-        }),
+    applicationContext.getDocumentClient().query.mockResolvedValue({
+      Items: [
+        {
+          docketNumber: '123-20',
+          pk: 'case|123-20',
+          sk: 'case|123-20',
+        },
+      ],
     });
 
     applicationContext
@@ -50,11 +47,8 @@ describe('getCasesByLeadDocketNumber', () => {
   });
 
   it('returns an empty array when no items are returned', async () => {
-    applicationContext.getDocumentClient().query.mockReturnValueOnce({
-      promise: () =>
-        Promise.resolve({
-          Items: [],
-        }),
+    applicationContext.getDocumentClient().query.mockResolvedValueOnce({
+      Items: [],
     });
 
     const result = await getCasesByLeadDocketNumber({

@@ -1,6 +1,6 @@
 import { User } from '@shared/business/entities/User';
 import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME', 'DYNAMODB_ENDPOINT']);
+requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME']);
 import { createApplicationContext } from '@web-api/applicationContext';
 
 /**
