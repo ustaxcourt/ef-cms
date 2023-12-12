@@ -1,12 +1,11 @@
+import { createOrder } from '../../helpers/create-order';
 import { loginAsDocketClerk } from '../../helpers/auth/login-as-helpers';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('Docket clerk creates and edits draft order with selected docket numbers', function () {
   it('should create an order with ALL cases selected', () => {
-    const orderTitle = 'Order first title';
-    const orderEventCode = 'O';
-    let consolidatedCases: string = '';
-    let draftsCount: number = 0;
+    let consolidatedCases = '';
+    let draftsCount = 0;
     const leadCase = '111-19';
 
     loginAsDocketClerk();
@@ -24,48 +23,8 @@ describe('Docket clerk creates and edits draft order with selected docket number
         draftsCount = Number(text) || draftsCount;
       });
 
-    cy.get('[data-testid="search-docket-number"]').click();
-    cy.get('[data-testid="case-detail-menu-button"] > .svg-inline--fa').click();
-    cy.get('[data-testid="menu-button-create-order"]').click();
-    cy.get('[data-testid="event-code-select"]').select(orderEventCode);
-    cy.get('[data-testid="create-order-document-title"]').clear();
-    cy.get('[data-testid="create-order-document-title"]').type(orderTitle);
-    cy.get('[data-testid="modal-button-confirm"]')
-      .invoke('click')
-      .then(() => {
-        cy.visit(
-          `case-detail/${leadCase}/create-order?documentTitle=${orderTitle}&documentType=Order&eventCode=${orderEventCode}`,
-        );
-      });
+    createOrder(leadCase);
 
-    cy.get('[data-testid="create-order-page-title"]').should(
-      'contain',
-      `Create ${orderTitle}`,
-    );
-
-    cy.get('[data-testid="add-docket-number-btn"]').should(
-      'have.text',
-      'Add docket numbers to the caption',
-    );
-    cy.get('[data-testid="add-docket-number-btn"] > .svg-inline--fa').should(
-      'have.class',
-      'fa-plus-circle',
-    );
-    cy.get('[data-testid="add-docket-number-btn"]').click();
-    cy.get('[data-testid="modal-button-confirm"]').click();
-    cy.get('[data-testid="add-docket-number-btn"]').should(
-      'have.text',
-      'Edit docket numbers in the caption',
-    );
-    cy.get('[data-testid="add-docket-number-btn"] > .svg-inline--fa').should(
-      'have.class',
-      'fa-edit',
-    );
-    cy.get('.ql-editor').click();
-    cy.get('[data-testid="save-order-button"]').click();
-
-    cy.get('[data-testid="skip-signature-button"]').click();
-    cy.get('.usa-alert__text').should('have.text', `${orderTitle} updated.`);
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
       .then(val => {
@@ -87,6 +46,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
 
     loginAsDocketClerk();
     searchByDocketNumberInHeader(leadCase);
+    createOrder(leadCase);
 
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
