@@ -1,14 +1,13 @@
+import { createLogger } from '../../../src/createLogger';
+import { handler } from './cognito-authorizer';
+import { transports } from 'winston';
+import axios from 'axios';
+import fs from 'fs';
+import jwk from 'jsonwebtoken';
+import jwkToPem from 'jwk-to-pem';
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../src/createLogger',
 );
-const authorizer = require('./websocket-authorizer');
-const axios = require('axios');
-const fs = require('fs');
-const jwk = require('jsonwebtoken');
-const jwkToPem = require('jwk-to-pem');
-const { createLogger } = require('../../../src/createLogger');
-const { handler } = authorizer;
-const { transports } = require('winston');
 jest.mock('jwk-to-pem', () => jest.fn());
 jest.mock('../../../src/createLogger', () => {
   return { createLogger: jest.fn() };
@@ -20,7 +19,7 @@ jest.mock('jsonwebtoken', () => {
   };
 });
 
-describe('websocket-authorizer', () => {
+describe('cognito-authorizer', () => {
   const TOKEN_VALUE =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
 
@@ -55,19 +54,16 @@ describe('websocket-authorizer', () => {
     transport = new transports.Stream({
       stream: fs.createWriteStream('/dev/null'),
     });
-
     createLogger.mockImplementation(opts => {
       opts.transports = [transport];
       return actualCreateLogger(opts);
     });
 
     event = {
+      authorizationToken:
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
       methodArn:
         'arn:aws:execute-api:us-east-1:aws-account-id:api-gateway-id/stage/GET/path',
-      queryStringParameters: {
-        token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
-      },
       type: 'TOKEN',
     };
 
@@ -76,17 +72,17 @@ describe('websocket-authorizer', () => {
       logLevel: 'debug',
     };
 
-    jest.spyOn(axios, 'get');
-    jest.spyOn(transport, 'log');
-
     jwk.decode.mockReturnValue({
       header: { kid: 'key-identifier' },
       payload: { iss: `issuer-url-${Math.random()}` },
     });
+
+    jest.spyOn(axios, 'get');
+    jest.spyOn(transport, 'log');
   });
 
   it('returns unauthorized when token is missing', async () => {
-    event.queryStringParameters = null;
+    event.authorizationToken = '';
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
@@ -295,6 +291,7 @@ describe('websocket-authorizer', () => {
     jest.spyOn(jwk, 'decode').mockImplementation(() => {
       throw new Error();
     });
+
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
   });
 
@@ -307,19 +304,19 @@ describe('websocket-authorizer', () => {
         },
       },
     );
+
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
   });
 
-  it('should return a policy if the token is provided in the query string', async () => {
+  it('should return a policy if the authorization token is provided', async () => {
     setupHappyPath({ sub: 'test-sub' });
-
     event = {
+      authorizationToken: `Bearer ${TOKEN_VALUE}`,
       methodArn: 'a/b/c',
-      queryStringParameters: {
-        token: TOKEN_VALUE,
-      },
     };
+
     const policy = await handler(event, context);
+
     expect(policy).toBeDefined();
   });
 });
