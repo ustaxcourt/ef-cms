@@ -3,9 +3,7 @@ import { updateTrialSessionWorkingCopy } from './updateTrialSessionWorkingCopy';
 
 describe('updateTrialSessionWorkingCopy', () => {
   beforeAll(() => {
-    applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    applicationContext.getDocumentClient().put.mockResolvedValue(null);
   });
 
   it('invokes the persistence layer with pk of trial-session-working-copy|{trialSessionId}, sk of {userId} and other expected params', async () => {

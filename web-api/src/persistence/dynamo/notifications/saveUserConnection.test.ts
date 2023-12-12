@@ -6,9 +6,7 @@ const putMock = put as jest.Mock;
 
 describe('saveUserConnection', () => {
   beforeAll(() => {
-    putMock.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    putMock.mockResolvedValue(null);
   });
 
   it('attempts to persist the websocket connection details', async () => {
