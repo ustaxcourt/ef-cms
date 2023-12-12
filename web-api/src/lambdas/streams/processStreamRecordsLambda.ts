@@ -20,7 +20,7 @@ const shouldProcessRecord = (record: DynamoDBRecord): boolean => {
       Number(record.dynamodb.ApproximateCreationDateTime) > 9999999999
         ? Math.floor(Number(record.dynamodb.ApproximateCreationDateTime) / 1000)
         : Number(record.dynamodb.ApproximateCreationDateTime);
-    applicationContext.logger.info(
+    applicationContext.logger.debug(
       `${
         approximateCreationDateTime >= deploymentTimestamp
           ? 'Indexing'
