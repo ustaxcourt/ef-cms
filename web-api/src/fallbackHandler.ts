@@ -1,44 +1,28 @@
-import { getDynamoEndpoints } from './getDynamoEndpoints';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
 export const fallbackHandler = ({
-  fallbackRegion,
-  fallbackRegionEndpoint,
-  key,
-  mainRegion,
-  mainRegionEndpoint,
-  masterDynamoDbEndpoint,
-  masterRegion,
-  useMasterRegion,
-}) => {
-  const { fallbackRegionDB, mainRegionDB } = getDynamoEndpoints({
-    fallbackRegion,
-    fallbackRegionEndpoint,
-    key,
-    mainRegion,
-    mainRegionEndpoint,
-    masterDynamoDbEndpoint,
-    masterRegion,
-    useMasterRegion,
-  });
-
+  dynamoMethod,
+  fallbackRegionDocumentClient,
+  mainRegionDocumentClient,
+}: {
+  dynamoMethod: string;
+  fallbackRegionDocumentClient: DynamoDBDocument;
+  mainRegionDocumentClient: DynamoDBDocument;
+}): any => {
   return params => {
-    return {
-      promise: () =>
-        new Promise((resolve, reject) => {
-          mainRegionDB[key](params)
-            .promise()
-            .catch(err => {
-              if (
-                err.code === 'ResourceNotFoundException' ||
-                err.statusCode === 503
-              ) {
-                return fallbackRegionDB[key](params).promise();
-              }
-              throw err;
-            })
-            .then(resolve)
-            .catch(reject);
-        }),
-    };
+    return new Promise((resolve, reject) => {
+      mainRegionDocumentClient[dynamoMethod](params)
+        .catch(err => {
+          if (
+            err.code === 'ResourceNotFoundException' ||
+            err.statusCode === 503
+          ) {
+            return fallbackRegionDocumentClient[dynamoMethod](params);
+          }
+          throw err;
+        })
+        .then(resolve)
+        .catch(reject);
+    });
   };
 };

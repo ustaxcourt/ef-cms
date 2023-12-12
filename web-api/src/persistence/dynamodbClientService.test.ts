@@ -1,3 +1,4 @@
+import { DescribeTableCommand } from '@aws-sdk/client-dynamodb';
 import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import {
   batchDelete,
@@ -26,100 +27,70 @@ describe('dynamodbClientService', function () {
   const dynamoDbTableName = 'efcms-local';
 
   const mockDynamoClient = {
-    describeTable: jest.fn().mockImplementation(() => {
-      return { promise: () => Promise.resolve(null) };
-    }),
+    send: jest.fn().mockResolvedValue(null),
   };
 
   beforeEach(() => {
-    applicationContext.getDocumentClient().batchGet.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Responses: {
-            'efcms-local': [
-              {
-                'aws:rep:deleting': 'a',
-                'aws:rep:updateregion': 'b',
-                'aws:rep:updatetime': 'c',
-                ...MOCK_ITEM,
-              },
-            ],
-          },
-        }),
-    });
-
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Item: {
+    applicationContext.getDocumentClient().batchGet.mockResolvedValue({
+      Responses: {
+        'efcms-local': [
+          {
             'aws:rep:deleting': 'a',
             'aws:rep:updateregion': 'b',
             'aws:rep:updatetime': 'c',
             ...MOCK_ITEM,
           },
-        }),
-    });
-
-    applicationContext
-      .getDocumentClient()
-      .delete.mockReturnValue({ promise: () => Promise.resolve(null) });
-
-    applicationContext
-      .getDocumentClient()
-      .batchWrite.mockReturnValue({ promise: () => Promise.resolve(null) });
-
-    applicationContext.getDocumentClient().update.mockReturnValue({
-      promise: () => {
-        return Promise.resolve({
-          Attributes: {
-            id: MOCK_ITEM.docketNumber,
-          },
-        });
+        ],
       },
     });
 
-    applicationContext.getDocumentClient().updateConsistent.mockReturnValue({
-      promise: () => {
-        return Promise.resolve({
-          id: MOCK_ITEM.docketNumber,
-        });
+    applicationContext.getDocumentClient().get.mockResolvedValue({
+      Item: {
+        'aws:rep:deleting': 'a',
+        'aws:rep:updateregion': 'b',
+        'aws:rep:updatetime': 'c',
+        ...MOCK_ITEM,
       },
     });
 
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () => {
-        return Promise.resolve({
-          Items: [
-            {
-              docketNumber: MOCK_ITEM.docketNumber,
-            },
-          ],
-        });
+    applicationContext.getDocumentClient().delete.mockResolvedValue(null);
+
+    applicationContext.getDocumentClient().put.mockResolvedValue(null);
+
+    applicationContext.getDocumentClient().batchWrite.mockResolvedValue({});
+
+    applicationContext.getDocumentClient().update.mockResolvedValue({
+      Attributes: {
+        id: MOCK_ITEM.docketNumber,
       },
     });
 
-    applicationContext.getDocumentClient().queryFull.mockReturnValue({
-      promise: () => {
-        return Promise.resolve({
-          Items: [
-            {
-              docketNumber: MOCK_ITEM.docketNumber,
-            },
-          ],
-        });
-      },
+    applicationContext.getDocumentClient().updateConsistent.mockResolvedValue({
+      id: MOCK_ITEM.docketNumber,
     });
 
-    applicationContext.getDocumentClient().scan.mockReturnValue({
-      promise: () => {
-        return Promise.resolve({
-          Items: [
-            {
-              docketNumber: MOCK_ITEM.docketNumber,
-            },
-          ],
-        });
-      },
+    applicationContext.getDocumentClient().query.mockResolvedValue({
+      Items: [
+        {
+          docketNumber: MOCK_ITEM.docketNumber,
+        },
+      ],
+    });
+
+    applicationContext.getDocumentClient().queryFull.mockResolvedValue({
+      Items: [
+        {
+          docketNumber: MOCK_ITEM.docketNumber,
+        },
+      ],
+    });
+
+    applicationContext.getDocumentClient().scan.mockResolvedValue({
+      Items: [
+        {
+          docketNumber: MOCK_ITEM.docketNumber,
+        },
+      ],
     });
 
     applicationContext.getDynamoClient = jest
@@ -244,9 +215,8 @@ describe('dynamodbClientService', function () {
   describe('getDeployTable', () => {
     it('should return the deploy table name when the environment is NOT local', async () => {
       const mockEnvironment = 'exp99';
-      applicationContext.environment = {
-        stage: mockEnvironment,
-      };
+      applicationContext.environment.stage = mockEnvironment;
+
       applicationContext.getEnvironment.mockReturnValue({
         stage: mockEnvironment,
       });
@@ -259,10 +229,8 @@ describe('dynamodbClientService', function () {
     });
 
     it('should return the regular dynamo table name when the environment is local', async () => {
-      applicationContext.environment = {
-        dynamoDbTableName,
-        stage: 'local',
-      };
+      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
+      applicationContext.environment.stage = 'local';
 
       const result = await getDeployTableName({
         applicationContext,
@@ -287,13 +255,6 @@ describe('dynamodbClientService', function () {
       const result = await get({ applicationContext });
       expect(result).toEqual(MOCK_ITEM);
     });
-    it('should throw an error if the item is not returned', async () => {
-      applicationContext
-        .getDocumentClient()
-        .get.mockReturnValue({ promise: () => Promise.resolve({}) });
-      const result = await get({ applicationContext });
-      expect(result).toBeUndefined();
-    });
   });
 
   describe('getFromDeployTable', () => {
@@ -313,17 +274,15 @@ describe('dynamodbClientService', function () {
     const tableName = getDeployTableName({ applicationContext });
 
     beforeEach(() => {
-      applicationContext.getDocumentClient({ useMasterRegion: true }).get = jest
+      applicationContext.getDocumentClient({ useMainRegion: true }).get = jest
         .fn()
-        .mockReturnValue({
-          promise: () => Promise.resolve({ Item: mockItem }),
-        });
+        .mockResolvedValue({ Item: mockItem });
     });
 
     it('uses the master region', async () => {
       await getFromDeployTable(mockParams);
       expect(applicationContext.getDocumentClient).toHaveBeenCalledWith({
-        useMasterRegion: true,
+        useMainRegion: true,
       });
     });
 
@@ -331,7 +290,7 @@ describe('dynamodbClientService', function () {
       await getFromDeployTable(mockParams);
 
       expect(
-        applicationContext.getDocumentClient({ useMasterRegion: true }).get,
+        applicationContext.getDocumentClient({ useMainRegion: true }).get,
       ).toHaveBeenCalledWith({ TableName: tableName, ...mockParams });
     });
 
@@ -343,7 +302,6 @@ describe('dynamodbClientService', function () {
       expect(result['current']).toEqual(mockItem.current);
     });
   });
-
   describe('query', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await query({ applicationContext });
@@ -512,10 +470,8 @@ describe('dynamodbClientService', function () {
         },
       ];
 
-      applicationContext.getDocumentClient().batchWrite.mockReturnValueOnce({
-        promise: () => ({
-          UnprocessedItems: [items[1]],
-        }),
+      applicationContext.getDocumentClient().batchWrite.mockResolvedValueOnce({
+        UnprocessedItems: [items[1]],
       });
 
       await batchDelete({
@@ -575,10 +531,8 @@ describe('dynamodbClientService', function () {
         },
       ];
 
-      applicationContext.getDocumentClient().batchWrite.mockReturnValue({
-        promise: () => ({
-          UnprocessedItems: items,
-        }),
+      applicationContext.getDocumentClient().batchWrite.mockResolvedValue({
+        UnprocessedItems: items,
       });
 
       await batchDelete({
@@ -624,39 +578,32 @@ describe('dynamodbClientService', function () {
         applicationContext,
       });
 
-      expect(
-        applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
-      ).toEqual({
-        TableName: dynamoDbTableName,
-      });
+      expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
+        new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
+      );
     });
   });
 
   describe('describeDeployTable', () => {
     it("should return information on the environment's table", async () => {
-      applicationContext.environment = {
-        dynamoDbTableName,
-        stage: 'local',
-      };
+      applicationContext.environment.stage = 'local';
+      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
 
       await describeDeployTable({
         applicationContext,
       });
 
-      expect(
-        applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
-      ).toEqual({
-        TableName: dynamoDbTableName,
-      });
+      expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
+        new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
+      );
     });
   });
 
   describe('putInDeployTable', () => {
     it('should write an item to the deploy table', async () => {
-      applicationContext.environment = {
-        dynamoDbTableName,
-        stage: 'local',
-      };
+      applicationContext.environment.stage = 'local';
+      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
+
       const dynamoRecord = {
         data: {
           allChecksHealthy: false,

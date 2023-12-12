@@ -3,9 +3,7 @@ import { updateCaseHearing } from './updateCaseHearing';
 
 describe('updateCaseHearing', () => {
   beforeAll(() => {
-    applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    applicationContext.getDocumentClient().put.mockResolvedValue(null);
   });
 
   it('invokes the persistence layer with pk of case|{docketNumber}, sk of hearing|{trialSessionId} and other expected params', async () => {
