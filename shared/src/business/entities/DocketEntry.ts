@@ -13,6 +13,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { RawUser, User } from './User';
 import { WorkItem } from './WorkItem';
