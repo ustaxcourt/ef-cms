@@ -3,6 +3,7 @@ import {
   PARTIES_CODES,
 } from '../entities/EntityConstants';
 import { FORMATS } from './DateHandler';
+import { IrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { RawCalendaredCase } from '../entities/cases/CalendaredCase';
 import { RawEligibleCase } from '../entities/cases/EligibleCase';
 import { compact, partition } from 'lodash';
@@ -232,7 +233,7 @@ export const getFormattedTrialSessionDetails = ({
   trialSession.formattedCourtReporter =
     trialSession.courtReporter || 'Not assigned';
   trialSession.formattedIrsCalendarAdministrator =
-    trialSession.irsCalendarAdministrator || 'Not assigned';
+    getIrsCalendarAdministratorString(trialSession);
   trialSession.formattedChambersPhoneNumber =
     trialSession.chambersPhoneNumber || 'No phone number';
 
@@ -266,3 +267,27 @@ export const getFormattedTrialSessionDetails = ({
 
   return trialSession;
 };
+
+export function getIrsCalendarAdministratorString(trialSession: {
+  irsCalendarAdministratorInfo: IrsCalendarAdministratorInfo;
+  irsCalendarAdministrator: string;
+}): string {
+  const newIrsCalendarAdministrator = useNewPropertiesToGetString(
+    trialSession.irsCalendarAdministratorInfo,
+  );
+  return (
+    newIrsCalendarAdministrator ||
+    trialSession.irsCalendarAdministrator ||
+    'Not assigned'
+  );
+}
+
+function useNewPropertiesToGetString(
+  irsCalendarAdministrator: IrsCalendarAdministratorInfo | null,
+): string | null {
+  if (!irsCalendarAdministrator) return null;
+  return ['name', 'email', 'phone']
+    .map(key => irsCalendarAdministrator[key])
+    .filter(v => !!v)
+    .join('\n');
+}

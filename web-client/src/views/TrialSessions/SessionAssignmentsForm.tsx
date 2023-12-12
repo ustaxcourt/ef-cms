@@ -1,4 +1,10 @@
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import {
+  irsCalendarAdminInfoOnChange,
+  onInputChange,
+} from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -8,16 +14,21 @@ export const SessionAssignmentsForm = connect(
     TRIAL_SESSION_PROCEEDING_TYPES:
       state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     form: state.form,
+    getAllIrsPractitionersForSelectHelper:
+      state.getAllIrsPractitionersForSelectHelper,
     judges: state.judges,
     sessionAssignmentHelper: state.sessionAssignmentHelper,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
   },
   function SessionAssignmentsForm({
     form,
+    getAllIrsPractitionersForSelectHelper,
     judges,
     sessionAssignmentHelper,
     TRIAL_SESSION_PROCEEDING_TYPES,
+    updateScreenMetadataSequence,
     updateTrialSessionFormDataSequence,
   }) {
     return (
@@ -51,6 +62,7 @@ export const SessionAssignmentsForm = connect(
               ))}
             </select>
           </div>
+
           {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
             <div className="usa-form-group">
               <label className="usa-label" htmlFor="chambers-phone-number">
@@ -74,6 +86,7 @@ export const SessionAssignmentsForm = connect(
               />
             </div>
           )}
+
           <div className="grid-row">
             <div className="usa-form-group desktop:grid-col-6 desktop:margin-right-3 no-shrink">
               <label
@@ -134,6 +147,7 @@ export const SessionAssignmentsForm = connect(
               />
             </div>
           </div>
+
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="court-reporter">
               Court reporter <span className="usa-hint">(optional)</span>
@@ -155,19 +169,60 @@ export const SessionAssignmentsForm = connect(
             />
           </div>
 
-          <div className="usa-form-group margin-bottom-0">
-            <label className="usa-label" htmlFor="irs-calendar-administrator">
-              IRS calendar administrator{' '}
+          <div className="usa-form-group">
+            <FormGroup>
+              <label
+                className="usa-label"
+                htmlFor="irs-calendar-administrator-info-name"
+                id="irs-calendar-administrator-info-search-label"
+              >
+                Search for IRS calendar administrator name{' '}
+                <span className="usa-hint">(optional)</span>
+              </label>
+
+              <SelectSearch
+                aria-label="irs-calendar-administrator-info-search-label"
+                id="irs-calendar-administrator-info-search"
+                name="irsCalendarAdministratorInfoSearch "
+                options={
+                  getAllIrsPractitionersForSelectHelper.irsPractitionersContactInfo
+                }
+                placeholder="- Enter name -"
+                onChange={(inputValue, { action }) => {
+                  irsCalendarAdminInfoOnChange({
+                    action,
+                    inputValue,
+                    updateTrialSessionFormDataSequence,
+                  });
+                  return true;
+                }}
+                onInputChange={(inputText, { action }) => {
+                  onInputChange({
+                    action,
+                    inputText,
+                    updateSequence: updateScreenMetadataSequence,
+                  });
+                }}
+              />
+            </FormGroup>
+          </div>
+
+          <div className="usa-form-group">
+            <label
+              className="usa-label"
+              htmlFor="irs-calendar-administrator-info-name"
+            >
+              IRS calendar administrator name{' '}
               <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
               className="usa-input"
-              data-testid="trial-session-irs-calendar-administrator"
-              id="irs-calendar-administrator"
-              name="irsCalendarAdministrator"
+              data-testid="irs-calendar-administrator-info-name"
+              id="irs-calendar-administrator-info-name"
+              name="irsCalendarAdministratorInfo.name"
               type="text"
-              value={form.irsCalendarAdministrator || ''}
+              value={form.irsCalendarAdministratorInfo?.name || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
@@ -175,6 +230,55 @@ export const SessionAssignmentsForm = connect(
                 });
               }}
             />
+          </div>
+
+          <div className="grid-row margin-bottom-0">
+            <div className="usa-form-group desktop:grid-col-3 desktop:margin-right-3 desktop:no-shrink">
+              <label
+                className="usa-label"
+                htmlFor="irs-calendar-administrator-info-email"
+              >
+                Email <span className="usa-hint">(optional)</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="irs-calendar-administrator-info-email"
+                id="irs-calendar-administrator-info-email"
+                name="irsCalendarAdministratorInfo.email"
+                type="text"
+                value={form.irsCalendarAdministratorInfo?.email || ''}
+                onChange={e => {
+                  updateTrialSessionFormDataSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
+            <div className="usa-form-group desktop:grid-col-3 desktop:no-shrink">
+              <label
+                className="usa-label"
+                htmlFor="irs-calendar-administrator-info-phone"
+              >
+                Phone number <span className="usa-hint">(optional)</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="irs-calendar-administrator-info-phone"
+                id="irs-calendar-administrator-info-phone"
+                name="irsCalendarAdministratorInfo.phone"
+                type="text"
+                value={form.irsCalendarAdministratorInfo?.phone || ''}
+                onChange={e => {
+                  updateTrialSessionFormDataSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
           </div>
         </div>
       </>
