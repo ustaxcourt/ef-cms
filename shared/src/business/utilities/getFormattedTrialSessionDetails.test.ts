@@ -55,7 +55,7 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('should use the new properties to generate the irs calendar admin string', () => {
+  it('should format trial session to include irsCalendarAdministratorInfo', () => {
     const irsCalendarAdministratorInfo = {
       email: 'TEST_EMAIL',
       name: 'TEST_NAME',
@@ -70,7 +70,7 @@ describe('formattedTrialSessionDetails', () => {
     });
 
     expect(result).toMatchObject({
-      formattedIrsCalendarAdministrator: `${irsCalendarAdministratorInfo.name}\n${irsCalendarAdministratorInfo.email}\n${irsCalendarAdministratorInfo.phone}`,
+      formattedIrsCalendarAdministratorInfo: irsCalendarAdministratorInfo,
     });
   });
 
