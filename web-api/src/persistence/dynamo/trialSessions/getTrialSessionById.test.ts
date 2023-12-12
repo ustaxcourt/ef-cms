@@ -24,11 +24,8 @@ describe('getTrialSessionById', () => {
       title: 'Notice of Change of Trial Judge',
     };
 
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Items: [mockTrialSessionPdf, mockTrialSessionRecord],
-        }),
+    applicationContext.getDocumentClient().query.mockResolvedValue({
+      Items: [mockTrialSessionPdf, mockTrialSessionRecord],
     });
   });
 
