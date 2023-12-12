@@ -43,7 +43,7 @@ export const RequestAccessDocumentForm = connect(
       <>
         <h2 className="margin-top-4">Tell Us About This Document</h2>
         <PIIRedactedWarning />
-        {form.eventCode === 'EA' && (
+        {requestAccessHelper.showGenerationTypeForm && (
           <div className="usa-form-group">
             <fieldset className="usa-fieldset margin-bottom-0">
               <div className="usa-radio usa-radio__inline">
