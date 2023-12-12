@@ -5,7 +5,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getDocumentContentsAction } from '../actions/getDocumentContentsAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setAddedDocketNumbersAction } from '../actions/setAddedDocketNumbersAction';
+import { sequence } from 'cerebral';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
@@ -32,14 +32,16 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setDocumentToEditAction,
   setParentMessageIdAction,
   convertHtml2PdfSequence,
-  setAddedDocketNumbersAction,
   setupCurrentPageAction('CreateOrder'),
 ]);
 
-export const gotoEditOrderSequence = [
+export const gotoEditOrderSequence = sequence<{
+  docketEntryIdToEdit: string;
+  docketNumber: string;
+}>([
   isLoggedInAction,
   {
     isLoggedIn: gotoEditOrder,
     unauthorized: [redirectToCognitoAction],
   },
-];
+]);
