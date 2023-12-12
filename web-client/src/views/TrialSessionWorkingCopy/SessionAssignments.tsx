@@ -44,15 +44,47 @@ export const SessionAssignments = connect(
               </div>
               <div className="grid-col-6">
                 <p className="label">IRS calendar administrator</p>
-                <p
-                  className="margin-bottom-0 word-wrap-break-word"
-                  data-testid="irs-calendar-admin-info"
-                  style={{ whiteSpace: 'pre-line' }}
-                >
-                  {
-                    formattedTrialSessionDetails.formattedIrsCalendarAdministrator
-                  }
-                </p>
+                {!formattedTrialSessionDetails.formattedIrsCalendarAdministratorInfo && (
+                  <p
+                    className="margin-bottom-0 word-wrap-break-word"
+                    data-testid="irs-calendar-admin-info"
+                  >
+                    {
+                      formattedTrialSessionDetails.formattedIrsCalendarAdministrator
+                    }
+                  </p>
+                )}
+
+                {formattedTrialSessionDetails.formattedIrsCalendarAdministratorInfo && (
+                  <div
+                    className="margin-bottom-0 word-wrap-break-word"
+                    data-testid="irs-calendar-admin-info"
+                  >
+                    <div>
+                      {
+                        formattedTrialSessionDetails
+                          .formattedIrsCalendarAdministratorInfo.name
+                      }
+                    </div>
+                    <div
+                      style={{
+                        overflowWrap: 'break-word',
+                        wordBreak: 'break-all',
+                      }}
+                    >
+                      {
+                        formattedTrialSessionDetails
+                          .formattedIrsCalendarAdministratorInfo.email
+                      }
+                    </div>
+                    <div>
+                      {
+                        formattedTrialSessionDetails
+                          .formattedIrsCalendarAdministratorInfo.phone
+                      }
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
