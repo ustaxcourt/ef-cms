@@ -16,7 +16,7 @@ export const putEntries = async entries => {
       accessKeyId: 'S3RVER',
       secretAccessKey: 'S3RVER',
     },
-    endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
+    endpoint: 'http://localhost:8000',
     region: 'us-east-1',
   });
 
