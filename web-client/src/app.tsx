@@ -62,6 +62,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExcla
 import { faEye as faEyeSolid } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
+import { faFileExport } from '@fortawesome/free-solid-svg-icons/faFileExport';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
 import { faFingerprint } from '@fortawesome/free-solid-svg-icons/faFingerprint';
 import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
@@ -232,6 +233,7 @@ const app = {
       faFile,
       faFileAlt,
       faFileAltSolid,
+      faFileExport,
       faFilePdf,
       faFilePdfRegular,
       faFingerprint,
