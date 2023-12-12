@@ -16,9 +16,9 @@ export const pendingReportListHelper = (
 
   const showLoadMore =
     get(state.pendingReports.pendingItems).length < searchResultsCount;
-
-  const showNoPendingItems = searchResultsCount === 0 && hasPendingItemsResults;
   const showSelectJudgeText = !judge;
+  const showNoPendingItems =
+    searchResultsCount === 0 && !hasPendingItemsResults && !!judge;
 
   return {
     showLoadMore,
