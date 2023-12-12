@@ -99,7 +99,9 @@ export const TrialCalendar = ({
             </div>
             <div className="width-half wrap-text-content">
               <strong>IRS Calendar Admin</strong>
-              <div>{sessionDetail.irsCalendarAdministrator}</div>
+              <div style={{ whiteSpace: 'pre-line' }}>
+                {sessionDetail.irsCalendarAdministrator}
+              </div>
             </div>
             <div className="clear"></div>
           </div>
