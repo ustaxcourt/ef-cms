@@ -43,10 +43,10 @@ describe('pendingReportListHelper', () => {
     expect(showLoadMore).toBe(false);
   });
 
-  it('should set showNoPendingItems when no results come back', () => {
+  it('should set showNoPendingItems to false when a judge is selected but no results come back', () => {
     const mockState = {
       pendingReports: {
-        hasPendingItemsResults: true,
+        hasPendingItemsResults: false,
         pendingItems: [{}],
         pendingItemsPage: 0,
         pendingItemsTotal: 0,
@@ -60,7 +60,7 @@ describe('pendingReportListHelper', () => {
     expect(showNoPendingItems).toBe(true);
   });
 
-  it('should set showNoPendingItems to false when results come back', () => {
+  it('should set showNoPendingItems to false when results come back and a judge is selected', () => {
     const mockState = {
       pendingReports: {
         hasPendingItemsResults: true,
