@@ -1,4 +1,3 @@
-import { CaseQC } from '../../shared/src/business/entities/cases/CaseQC';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   MINUTE_ENTRIES_MAP,
@@ -52,11 +51,9 @@ describe('docket clerk edits a petition payment fee', () => {
     await cerebralTest.runSequence('updateCaseDetailsSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      hasVerifiedIrsNotice:
-        CaseQC.VALIDATION_ERROR_MESSAGES.hasVerifiedIrsNotice,
-      petitionPaymentDate: CaseQC.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
-      petitionPaymentMethod:
-        CaseQC.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+      hasVerifiedIrsNotice: 'Select an option',
+      petitionPaymentDate: 'Enter a valid payment date',
+      petitionPaymentMethod: 'Enter payment method',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

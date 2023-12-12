@@ -7,7 +7,6 @@ import { requireEnvVars } from '../../shared/admin-tools/util';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 requireEnvVars([
-  'DYNAMODB_ENDPOINT',
   'DYNAMODB_TABLE_NAME',
   'ELASTICSEARCH_ENDPOINT',
   'ENV',

@@ -8,7 +8,6 @@ import {
   TRANSCRIPT_EVENT_CODE,
   isDocumentBriefType,
 } from '../EntityConstants';
-import { Case, isSealedCase } from './Case';
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
@@ -17,6 +16,7 @@ import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicContact } from './PublicContact';
 import { PublicDocketEntry } from './PublicDocketEntry';
 import { compareStrings } from '../../utilities/sortFunctions';
+import { isSealedCase } from './Case';
 import { map } from 'lodash';
 import joi from 'joi';
 
@@ -110,10 +110,6 @@ export class PublicCase extends JoiValidationEntity {
       .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
   }
 
-  getErrorToMessageMap() {
-    return Case.VALIDATION_ERROR_MESSAGES;
-  }
-
   static isPrivateDocument(
     docketEntry: any,
     visibilityChangeDate: string,
@@ -152,28 +148,32 @@ export class PublicCase extends JoiValidationEntity {
   static VALIDATION_RULES = {
     canAllowDocumentService: joi.boolean().optional(),
     canAllowPrintableDocketRecord: joi.boolean().optional(),
-    caseCaption: joi.when('isSealed', {
-      is: true,
-      otherwise: JoiValidationConstants.CASE_CAPTION.optional(),
-      then: joi.any().forbidden(),
-    }),
+    caseCaption: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: JoiValidationConstants.CASE_CAPTION.optional(),
+        then: joi.any().forbidden(),
+      })
+      .messages({ '*': 'Enter a case caption' }),
     createdAt: joi.when('isSealed', {
       is: true,
       otherwise: JoiValidationConstants.ISO_DATE.optional(),
       then: joi.any().forbidden(),
     }),
-    docketEntries: joi.when('isSealed', {
-      is: true,
-      otherwise: joi
-        .array()
-        .items(PublicDocketEntry.VALIDATION_RULES)
-        .required()
-        .description('List of DocketEntry Entities for the case.'),
-      then: joi.array().max(0),
-    }),
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
-      'Unique case identifier in XXXXX-YY format.',
-    ),
+    docketEntries: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: joi
+          .array()
+          .items(PublicDocketEntry.VALIDATION_RULES) // needs new
+          .required()
+          .description('List of DocketEntry Entities for the case.'),
+        then: joi.array().max(0),
+      })
+      .messages({ '*': 'At least one valid docket entry is required' }),
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required()
+      .description('Unique case identifier in XXXXX-YY format.')
+      .messages({ '*': 'Docket number is required' }),
     docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
       .optional(),
@@ -184,25 +184,33 @@ export class PublicCase extends JoiValidationEntity {
     hasIrsPractitioner: joi.boolean().required(),
     isPaper: joi.boolean().optional(),
     isSealed: joi.boolean(),
-    partyType: joi.when('isSealed', {
-      is: true,
-      otherwise: JoiValidationConstants.STRING.valid(
-        ...Object.values(PARTY_TYPES),
-      )
-        .required()
-        .description('Party type of the case petitioner.'),
-      then: joi.any().forbidden(),
-    }),
+    partyType: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: JoiValidationConstants.STRING.valid(
+          ...Object.values(PARTY_TYPES),
+        )
+          .required()
+          .description('Party type of the case petitioner.'),
+        then: joi.any().forbidden(),
+      })
+      .messages({ '*': 'Select a party type' }),
     petitioners: joi.when('isSealed', {
       is: true,
-      otherwise: joi.array().items(PublicContact.VALIDATION_RULES).required(),
+      otherwise: joi.array().items(PublicContact.VALIDATION_RULES).required(), // needs new
       then: joi.any().forbidden(),
     }),
-    receivedAt: joi.when('isSealed', {
-      is: true,
-      otherwise: JoiValidationConstants.ISO_DATE.optional(),
-      then: joi.any().forbidden(),
-    }),
+    receivedAt: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: JoiValidationConstants.ISO_DATE.optional(),
+        then: joi.any().forbidden(),
+      })
+      .messages({
+        '*': 'Enter a valid date received',
+        'date.max':
+          'Date received cannot be in the future. Enter a valid date.',
+      }),
   };
 
   getValidationRules() {
