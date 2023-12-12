@@ -11,6 +11,7 @@ export const setTrialSessionDetailsOnFormAction = ({
 
   store.set(state.form, {
     ...props.trialSession,
+    irsCalendarAdministrator: undefined,
     irsCalendarAdministratorInfo,
     judgeId: props.trialSession.judge && props.trialSession.judge.userId,
     trialClerkId:
