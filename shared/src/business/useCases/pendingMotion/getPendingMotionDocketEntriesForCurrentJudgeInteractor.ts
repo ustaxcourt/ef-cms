@@ -36,7 +36,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 }> => {
   const { judge } = params;
   const authorizedUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_MOTIONS_TABLE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

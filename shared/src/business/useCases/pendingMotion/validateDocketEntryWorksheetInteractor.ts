@@ -3,10 +3,7 @@ import { DocketEntryWorksheet } from '@shared/business/entities/docketEntryWorks
 export const validateDocketEntryWorksheetInteractor = ({
   docketEntryWorksheet,
 }): Record<string, string> | null => {
-  const errors = new DocketEntryWorksheet(
+  return new DocketEntryWorksheet(
     docketEntryWorksheet,
   ).getFormattedValidationErrors();
-
-  if (!errors) return null;
-  return errors;
 };
