@@ -42,6 +42,7 @@ export const PendingReportList = connect(
                 aria-label="judge filter"
                 bind="screenMetadata.pendingItemsFilters.judge"
                 className="select-left inline-select width-mobile"
+                data-testid="dropdown-select-judge"
                 id="judgeFilter"
                 name="judge"
                 onChange={judge =>
@@ -61,7 +62,9 @@ export const PendingReportList = connect(
           </div>
           {hasPendingItemsResults && (
             <div className="grid-col-4 text-right margin-top-1">
-              <span className="text-semibold">Count: {pendingItemsTotal}</span>
+              <span className="text-semibold" data-testid="display-data-count">
+                Count: {pendingItemsTotal}
+              </span>
             </div>
           )}
         </div>
@@ -70,6 +73,7 @@ export const PendingReportList = connect(
           aria-describedby="judgeFilter"
           aria-label="pending items"
           className="usa-table ustc-table pending-items subsection"
+          data-testid="display-pending-report-table"
           id="pending-items"
         >
           <thead>
@@ -124,6 +128,7 @@ export const PendingReportList = connect(
           <Button
             secondary
             className="margin-bottom-20"
+            data-testid="load-more-pending-report-data"
             onClick={() => {
               loadMorePendingItemsSequence();
             }}
