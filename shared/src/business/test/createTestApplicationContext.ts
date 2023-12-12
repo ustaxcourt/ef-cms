@@ -33,6 +33,7 @@ import { aggregatePartiesForService } from '../utilities/aggregatePartiesForServ
 import { bulkDeleteRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkIndexRecords';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
+import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -206,6 +207,9 @@ export const createTestApplicationContext = ({
       .fn()
       .mockImplementation(caseHasServedDocketEntries),
     caseHasServedPetition: jest.fn().mockImplementation(caseHasServedPetition),
+    caseStatusWithTrialInformation: jest
+      .fn()
+      .mockImplementation(caseStatusWithTrialInformation),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     combineTwoPdfs: jest.fn().mockImplementation(combineTwoPdfs),
     compareCasesByDocketNumber: jest
@@ -242,7 +246,7 @@ export const createTestApplicationContext = ({
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
-    formatPendingItem,
+    formatPendingItem: jest.fn().mockImplementation(formatPendingItem),
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest

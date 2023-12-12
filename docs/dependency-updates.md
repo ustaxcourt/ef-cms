@@ -9,6 +9,12 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 ## Library Update Steps 
 
 ### Do the following for all package.json files
+
+note: we have 3 package.json files, be sure to update them all
+  - ./package.json
+  - ./cognito-triggers-sls/package.json
+  - ./web-api/runtimes/puppeteer/package.json
+
 1. `npm update --save`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
 
 2. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
@@ -31,7 +37,6 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    - Increment the docker image version being used in `.circleci/config.yml` in the docker variable: 
    `define: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.0.18` -> `ef-cms-us-east-1:3.0.19`
    - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher). 
-     - If you are on an M1 Machine, make sure to set the environment variable `DOCKER_DEFAULT_PLATFORM=linux/amd64`.
      - example: `export DESTINATION_TAG=3.0.19 && npm run deploy:ci-image`
 		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
 
