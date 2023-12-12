@@ -5,6 +5,7 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 export class PublicContact extends JoiValidationEntity {
   public contactId: string;
   public contactType?: string;
+  public serviceIndicator: string;
   public name?: string;
   public state?: string;
 
@@ -15,6 +16,7 @@ export class PublicContact extends JoiValidationEntity {
     this.contactType = rawProps.contactType;
     this.name = rawProps.name;
     this.state = rawProps.state;
+    this.serviceIndicator = rawProps.serviceIndicator;
   }
 
   static VALIDATION_RULES = {
@@ -23,6 +25,7 @@ export class PublicContact extends JoiValidationEntity {
       ...Object.values(CONTACT_TYPES),
     ).optional(),
     name: JoiValidationConstants.STRING.max(500).optional(),
+    serviceIndicator: JoiValidationConstants.STRING.required(),
     state: JoiValidationConstants.STRING.optional(),
   };
 
