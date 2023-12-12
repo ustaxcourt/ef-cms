@@ -5,9 +5,9 @@ const {
   createISODateAtStartOfDayEST,
   formatDateString,
   FORMATS,
-} = require('../../src/business/utilities/DateHandler');
+} = require('../../shared/src/business/utilities/DateHandler');
 const { DynamoDB } = require('aws-sdk');
-const { getVersion } = require('../util');
+const { getVersion } = require('../../shared/admin-tools/util');
 
 const client = new DynamoDB({ region: 'us-east-1' });
 const environmentName = process.argv[2] || 'exp1';
