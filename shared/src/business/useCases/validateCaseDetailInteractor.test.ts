@@ -5,11 +5,9 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../entities/EntityConstants';
-import { CaseQC } from '../entities/cases/CaseQC';
 import { MOCK_USERS } from '../../test/mockUsers';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validateCaseDetailInteractor } from './validateCaseDetailInteractor';
-const { VALIDATION_ERROR_MESSAGES } = CaseQC;
 
 describe('validate case detail', () => {
   const petitioners = [
@@ -38,7 +36,7 @@ describe('validate case detail', () => {
 
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
+      docketNumber: 'Docket number is required',
     });
   });
 
@@ -51,7 +49,7 @@ describe('validate case detail', () => {
 
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
+      docketNumber: 'Docket number is required',
     });
   });
 
