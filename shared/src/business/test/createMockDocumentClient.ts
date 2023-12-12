@@ -55,48 +55,33 @@ export const createMockDocumentClient = () => {
       for (let { pk, sk } of Keys) {
         arr.push(cloneDeep(mockDynamoRecords[`${pk} ${sk}`]));
       }
-      return {
-        promise: () =>
-          Promise.resolve({
-            Responses: {
-              ['efcms-local']: arr,
-            },
-          }),
-      };
+      return Promise.resolve({
+        Responses: {
+          ['efcms-local']: arr,
+        },
+      });
     }),
     batchWrite: jest.fn().mockImplementation(() => {
-      return {
-        promise: () => Promise.resolve(null),
-      };
+      return Promise.resolve(null);
     }),
     delete: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       delete mockDynamoRecords[`${pk} ${sk}`];
-      return {
-        promise: () => Promise.resolve(null),
-      };
+      return Promise.resolve(null);
     }),
     get: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
-      return {
-        promise: () =>
-          Promise.resolve({
-            Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
-          }),
-      };
+      return Promise.resolve({
+        Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
+      });
     }),
     getData: () => mockDynamoRecords,
     getFromDeployTable: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
-      return {
-        promise: () =>
-          Promise.resolve({
-            Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
-          }),
-      };
+      return Promise.resolve({
+        Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
+      });
     }),
     put: jest.fn().mockImplementation(({ Item }) => {
       mockDynamoRecords[`${Item.pk} ${Item.sk}`] = Item;
-      return {
-        promise: () => Promise.resolve(null),
-      };
+      return Promise.resolve(null);
     }),
     query: jest
       .fn()
@@ -122,12 +107,9 @@ export const createMockDocumentClient = () => {
             }
           }
         }
-        return {
-          promise: () =>
-            Promise.resolve({
-              Items: arr,
-            }),
-        };
+        return Promise.resolve({
+          Items: arr,
+        });
       }),
     queryFull: jest
       .fn()
@@ -153,20 +135,14 @@ export const createMockDocumentClient = () => {
             }
           }
         }
-        return {
-          promise: () =>
-            Promise.resolve({
-              Items: arr,
-            }),
-        };
+        return Promise.resolve({
+          Items: arr,
+        });
       }),
     scan: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
-      return {
-        promise: () =>
-          Promise.resolve({
-            Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
-          }),
-      };
+      return Promise.resolve({
+        Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
+      });
     }),
     update: jest
       .fn()
@@ -215,18 +191,13 @@ export const createMockDocumentClient = () => {
               id: (id || 0) + 1,
             };
           }
-          return {
-            promise: () =>
-              Promise.resolve({
-                Attributes: cloneDeep(mockDynamoRecords[`${Key.pk} ${Key.sk}`]),
-              }),
-          };
+          return Promise.resolve({
+            Attributes: cloneDeep(mockDynamoRecords[`${Key.pk} ${Key.sk}`]),
+          });
         },
       ),
     updateConsistent: jest.fn().mockImplementation(() => {
-      return {
-        promise: () => Promise.resolve(null),
-      };
+      return Promise.resolve(null);
     }),
   };
 };
