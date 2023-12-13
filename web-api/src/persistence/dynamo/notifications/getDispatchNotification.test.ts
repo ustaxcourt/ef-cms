@@ -3,9 +3,7 @@ import { getDispatchNotification } from './getDispatchNotification';
 
 describe('getDispatchNotification', () => {
   beforeEach(() => {
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () => Promise.resolve([]),
-    });
+    applicationContext.getDocumentClient().get.mockResolvedValue([]);
   });
 
   it('attempts to retrieve the notification for a dispatched message', async () => {

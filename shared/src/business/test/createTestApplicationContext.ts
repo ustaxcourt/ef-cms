@@ -33,6 +33,7 @@ import { aggregatePartiesForService } from '../utilities/aggregatePartiesForServ
 import { bulkDeleteRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkIndexRecords';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
+import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -84,6 +85,7 @@ import {
   getJudgesChambers,
   getJudgesChambersWithLegacy,
 } from '../../../../web-client/src/business/chambers/getJudgesChambers';
+import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConstants } from '../../../../web-client/src/getConstants';
 import { getCropBox } from '../../../src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
@@ -205,6 +207,9 @@ export const createTestApplicationContext = ({
       .fn()
       .mockImplementation(caseHasServedDocketEntries),
     caseHasServedPetition: jest.fn().mockImplementation(caseHasServedPetition),
+    caseStatusWithTrialInformation: jest
+      .fn()
+      .mockImplementation(caseStatusWithTrialInformation),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     combineTwoPdfs: jest.fn().mockImplementation(combineTwoPdfs),
     compareCasesByDocketNumber: jest
@@ -241,7 +246,7 @@ export const createTestApplicationContext = ({
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
-    formatPendingItem,
+    formatPendingItem: jest.fn().mockImplementation(formatPendingItem),
     formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getAttachmentDocumentById: jest
@@ -483,6 +488,9 @@ export const createTestApplicationContext = ({
     getChambersSectionsLabels: jest
       .fn()
       .mockImplementation(getChambersSectionsLabels),
+    getConfigurationItemValue: jest
+      .fn()
+      .mockImplementation(getConfigurationItemValue),
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn(),
@@ -593,7 +601,6 @@ export const createTestApplicationContext = ({
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
-    getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: appContextProxy({
       adminCreateUser: jest.fn().mockReturnValue({
         promise: jest.fn(),

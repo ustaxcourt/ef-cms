@@ -1,1 +1,107 @@
-.logo-customizable{max-width:60%;max-height:30%}.banner-customizable{padding:25px 0;background-color:#fff}.label-customizable{font-weight:600}.textDescription-customizable{display:block;padding-top:10px;padding-bottom:10px;font-size:17px}.idpDescription-customizable{display:block;padding-top:10px;padding-bottom:10px;font-size:16px}.legalText-customizable{color:#212121;font-size:11px}.submitButton-customizable{width:100%;height:40px;margin:20px 0 10px;background-color:#0071bc;color:#fff;font-size:14px;font-weight:700}.submitButton-customizable:hover{background-color:#205493;color:#fff}.errorMessage-customizable{width:100%;padding:5px;border:2px solid #e31c3d;background:#fff;color:#e31c3d;font-size:14px}.inputField-customizable{width:100%;height:44px;border:1px solid #5b616b;background-color:#fff;color:#212121}.inputField-customizable:focus{border-color:#66afe9;outline:0}.idpButton-customizable{width:100%;height:40px;border-color:#46b8da;margin-bottom:15px;background-color:#5bc0de;color:#fff;text-align:center}.idpButton-customizable:hover{background-color:#31b0d5;color:#fff}.socialButton-customizable{width:100%;height:40px;margin-bottom:15px;text-align:left}.redirect-customizable{text-align:center}.passwordCheck-notValid-customizable{color:#e31c3d}.passwordCheck-valid-customizable{color:#338733}.background-customizable{background-color:#fff}
+.logo-customizable {
+  max-width: 60%;
+  max-height: 30%;
+}
+
+.banner-customizable {
+  padding: 25px 0;
+  background-color: #fff;
+}
+
+.label-customizable {
+  font-weight: 600;
+}
+
+.textDescription-customizable {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 17px;
+}
+
+.idpDescription-customizable {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 16px;
+}
+
+.legalText-customizable {
+  color: #212121;
+  font-size: 11px;
+}
+
+.submitButton-customizable {
+  width: 100%;
+  height: 40px;
+  margin: 20px 0 10px;
+  background-color: #0071bc;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.submitButton-customizable:hover {
+  background-color: #205493;
+  color: #fff;
+}
+
+.errorMessage-customizable {
+  width: 100%;
+  padding: 5px;
+  border: 2px solid #e31c3d;
+  background: #fff;
+  color: #e31c3d;
+  font-size: 14px;
+}
+
+.inputField-customizable {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #5b616b;
+  background-color: #fff;
+  color: #212121;
+}
+
+.inputField-customizable:focus {
+  border-color: #66afe9;
+  outline: 0;
+}
+
+.idpButton-customizable {
+  width: 100%;
+  height: 40px;
+  border-color: #46b8da;
+  margin-bottom: 15px;
+  background-color: #5bc0de;
+  color: #fff;
+  text-align: center;
+}
+
+.idpButton-customizable:hover {
+  background-color: #31b0d5;
+  color: #fff;
+}
+
+.socialButton-customizable {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.redirect-customizable {
+  text-align: center;
+}
+
+.passwordCheck-notValid-customizable {
+  color: #e31c3d;
+}
+
+.passwordCheck-valid-customizable {
+  color: #338733;
+}
+
+.background-customizable {
+  background-color: #fff;
+}

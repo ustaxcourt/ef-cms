@@ -1,5 +1,3 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 
@@ -24,9 +22,8 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
-      petitionPaymentMethod:
-        Case.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+      petitionPaymentDate: 'Enter a valid payment date',
+      petitionPaymentMethod: 'Enter payment method',
     });
 
     await cerebralTest.runSequence(
@@ -79,10 +76,8 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
       applicationForWaiverOfFilingFeeFile:
-        CaseInternal.VALIDATION_ERROR_MESSAGES
-          .applicationForWaiverOfFilingFeeFile,
-      petitionPaymentWaivedDate:
-        Case.VALIDATION_ERROR_MESSAGES.petitionPaymentWaivedDate,
+        'Upload or scan an Application for Waiver of Filing Fee (APW)',
+      petitionPaymentWaivedDate: 'Enter a valid date waived',
     });
 
     await cerebralTest.runSequence(
