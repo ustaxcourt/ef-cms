@@ -24,6 +24,7 @@ import {
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { createEndOfDayISO } from '@shared/business/utilities/DateHandler';
 import joi from 'joi';
 
 export const SERVICE_INDICATOR_ERROR = {
@@ -473,6 +474,39 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   section: JoiValidationConstants.STRING.required(),
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
 };
+export const DATE_RANGE_VALIDATION_RULE_KEYS = {
+  endDate: joi
+    .alternatives()
+    .conditional('startDate', {
+      is: JoiValidationConstants.ISO_DATE.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+        .required()
+        .description('The end date search filter must be of valid date format'),
+      then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+        .min(joi.ref('startDate'))
+        .required()
+        .description(
+          'The end date search filter must be of valid date format and greater than or equal to the start date',
+        ),
+    })
+    .messages({
+      '*': 'Enter a valid end date.',
+      'any.required': 'Enter an end date.',
+      'date.max': 'End date cannot be in the future. Enter a valid date.',
+      'date.min':
+        'End date cannot be prior to start date. Enter a valid end date.',
+    }),
+  startDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    )
+    .messages({
+      '*': 'Enter a valid start date.',
+      'any.required': 'Enter a start date.',
+      'date.max': 'Start date cannot be in the future. Enter a valid date.',
+    }),
+};
 
 export const DOCKET_ENTRY_VALIDATION_RULES = joi
   .object()
@@ -485,6 +519,10 @@ export const OUTBOX_ITEM_VALIDATION_RULES = joi
 export const WORK_ITEM_VALIDATION_RULES = joi
   .object()
   .keys(WORK_ITEM_VALIDATION_RULE_KEYS);
+
+export const DATE_RANGE_VALIDATION_RULES = joi
+  .object()
+  .keys(DATE_RANGE_VALIDATION_RULE_KEYS);
 
 // Case shared rules
 export const CASE_CAPTION_RULE =

@@ -85,9 +85,7 @@ describe('createOrUpdatePractitionerUser', () => {
       promise: () => Promise.resolve(),
     });
 
-    applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    applicationContext.getDocumentClient().put.mockResolvedValue(null);
   });
 
   it('persists a private practitioner user with name and barNumber mapping records but does not call cognito adminCreateUser if there is no email address', async () => {

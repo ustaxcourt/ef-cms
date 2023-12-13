@@ -33,7 +33,7 @@ export const TrialCity = connect(
       <FormGroup
         errorText={[
           validationErrors.preferredTrialCity,
-          !!validationErrors.chooseAtLeastOneValue,
+          !!validationErrors['object.missing'],
         ]}
       >
         <label

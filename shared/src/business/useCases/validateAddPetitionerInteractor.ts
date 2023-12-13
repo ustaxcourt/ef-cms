@@ -1,5 +1,4 @@
 import { CONTACT_TYPES } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
 import { Petitioner } from '../entities/contacts/Petitioner';
 import { isEmpty, some } from 'lodash';
 
@@ -25,7 +24,7 @@ export const validateAddPetitionerInteractor = (
   let caseCaptionError;
   if (!contact.caseCaption) {
     caseCaptionError = {
-      caseCaption: Case.VALIDATION_ERROR_MESSAGES.caseCaption,
+      caseCaption: 'Enter a case caption',
     };
   }
 
