@@ -24,6 +24,10 @@ export const CaseDetailHeader = connect(
     formattedCaseDetail,
     hideActionButtons,
   }) {
+    const consolidatedCasesString = formattedCaseDetail.consolidatedCases
+      .map(eachCase => eachCase.docketNumberWithSuffix)
+      .join(', ');
+
     const externalNonMobileExternalButtons = () => (
       <NonMobile>
         <div className="tablet:grid-col-4">
@@ -151,6 +155,7 @@ export const CaseDetailHeader = connect(
                       <Icon
                         aria-label="consolidated case"
                         className="margin-right-1 icon-consolidated"
+                        data-testid={`consolidatedCasesOfLeadCase-${consolidatedCasesString}`}
                         icon="copy"
                         size="1x"
                       />

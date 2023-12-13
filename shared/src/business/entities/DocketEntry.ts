@@ -13,6 +13,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { RawUser, User } from './User';
 import { WorkItem } from './WorkItem';
@@ -350,10 +351,15 @@ export class DocketEntry extends JoiValidationEntity {
         this.partyIrsPractitioner && partiesArray.push('Resp.');
 
         const petitionersArray: string[] = [];
+        const intervenorsArray: string[] = [];
         this.filers.forEach(contactId =>
           petitioners.forEach(p => {
             if (p.contactId === contactId) {
-              petitionersArray.push(p.name);
+              if (p.contactType == 'intervenor') {
+                intervenorsArray.push(p.name);
+              } else {
+                petitionersArray.push(p.name);
+              }
             }
           }),
         );
@@ -362,6 +368,12 @@ export class DocketEntry extends JoiValidationEntity {
           partiesArray.push(`Petr. ${petitionersArray[0]}`);
         } else if (petitionersArray.length > 1) {
           partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
+        }
+
+        if (intervenorsArray.length === 1) {
+          partiesArray.push(`Intv. ${intervenorsArray[0]}`);
+        } else if (intervenorsArray.length > 1) {
+          partiesArray.push(`Intvs. ${intervenorsArray.join(' & ')}`);
         }
       }
 

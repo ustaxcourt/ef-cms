@@ -75,6 +75,7 @@ export const EditOrderTitleModal = connect(
               </label>
               <input
                 className="usa-input"
+                data-testid="edit-order-document-title"
                 id="documentTitle"
                 name="documentTitle"
                 type="text"

@@ -34,9 +34,14 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
     cy.get('[data-testid="trial-session-trial-clerk"]').select('Other');
     cy.get('[data-testid="trial-session-trial-clerk-alternate"]').type('Abu');
     cy.get('[data-testid="trial-session-court-reporter"]').type('Fameet');
-    cy.get('[data-testid="trial-session-irs-calendar-administrator"]').type(
-      'rasta reporter',
-    );
+    cy.get(
+      '#irs-calendar-administrator-info-search .select-react-element__input-container input',
+    ).clear();
+    cy.get(
+      '#irs-calendar-administrator-info-search .select-react-element__input-container input',
+    ).type('Nero West');
+    cy.get('#react-select-2-option-0').click({ force: true });
+
     cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
     cy.get('[data-testid="submit-trial-session"]').click();
     cy.wait('@createTrialSession').then(
@@ -83,6 +88,20 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           );
           cy.get('h3:contains("Trial - Scheduled")').should('exist');
           cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
+
+          cy.get('[data-testid="irs-calendar-admin-info-name"]').should(
+            'have.text',
+            'Nero West',
+          );
+          cy.get('[data-testid="irs-calendar-admin-info-email"]').should(
+            'have.text',
+            'irspractitioner2@example.com',
+          );
+          cy.get('[data-testid="irs-calendar-admin-info-phone"]').should(
+            'have.text',
+            '+1 (555) 555-5555',
+          );
+
           cy.get(`label[for="${docketNumber}-complete"]`).click();
           waitForLoadingComplete();
           cy.get('#set-calendar-button').click();

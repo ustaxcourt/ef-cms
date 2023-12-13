@@ -144,7 +144,6 @@ const setNoticeForCase = async ({
       applicationContext,
       caseEntity,
       procedureType,
-      servedParties,
       trialSession,
     });
 
