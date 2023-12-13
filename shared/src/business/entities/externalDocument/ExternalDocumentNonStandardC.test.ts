@@ -9,11 +9,10 @@ describe('ExternalDocumentNonStandardC', () => {
       });
 
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        category: externalDocumentC.getErrorToMessageMap().category,
-        documentType: externalDocumentC.getErrorToMessageMap().documentType[1],
-        freeText: externalDocumentC.getErrorToMessageMap().freeText[0].message,
-        previousDocument:
-          externalDocumentC.getErrorToMessageMap().previousDocument,
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
+        freeText: 'Enter name',
+        previousDocument: 'Select a document',
       });
     });
 
@@ -41,7 +40,7 @@ describe('ExternalDocumentNonStandardC', () => {
       });
 
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        freeText: externalDocumentC.getErrorToMessageMap().freeText[1].message,
+        freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
     });
 
@@ -56,7 +55,8 @@ describe('ExternalDocumentNonStandardC', () => {
       });
 
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        documentTitle: externalDocumentC.getErrorToMessageMap().documentTitle,
+        documentTitle:
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });
