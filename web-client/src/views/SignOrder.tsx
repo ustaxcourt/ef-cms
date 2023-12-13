@@ -205,6 +205,7 @@ export const SignOrder = connect(
               {pdfSignerHelper.showSkipSignatureButton && (
                 <Button
                   className="margin-right-0"
+                  data-testid="skip-signature-button"
                   id="skip-signature-button"
                   onClick={() => skipSigningOrderSequence()}
                 >
