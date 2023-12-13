@@ -92,7 +92,9 @@ export const PendingMotion = connect(
                     </td>
                     <td>{motion.daysSinceCreated}</td>
                     <td>{motion.finalBriefDueDateFormatted}</td>
-                    <td>{motion.docketEntryWorksheet.statusOfMatter}</td>
+                    <td>
+                      {motion.docketEntryWorksheet.formattedStatusOfMatter}
+                    </td>
                     <td>
                       <Button
                         link
