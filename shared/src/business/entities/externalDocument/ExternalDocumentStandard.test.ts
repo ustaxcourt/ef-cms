@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentStandard } from './ExternalDocumentStandard';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentStandard', () => {
@@ -10,9 +9,8 @@ describe('ExternalDocumentStandard', () => {
       });
 
       expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual({
-        category: ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES.documentType[1],
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
       });
     });
 
@@ -39,7 +37,7 @@ describe('ExternalDocumentStandard', () => {
 
       expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual({
         documentTitle:
-          ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES.documentTitle,
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
 
