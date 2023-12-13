@@ -83,7 +83,10 @@ export const WorkQueueAssignments = connect(
                 </select>
               )}
               {workQueueHelper.showSendToBar && (
-                <span className="assign-work-item-count-docket">
+                <span
+                  className="assign-work-item-count-docket"
+                  data-testid="assign-work-item-count-docket"
+                >
                   <Icon aria-label="selected work items count" icon="check" />
                   {selectedWorkItemsLength}
                 </span>
