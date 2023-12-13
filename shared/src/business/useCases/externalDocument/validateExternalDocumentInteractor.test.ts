@@ -1,4 +1,3 @@
-import { ExternalDocumentInformationFactory } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
 import { validateExternalDocumentInteractor } from './validateExternalDocumentInteractor';
 
 describe('validateExternalDocumentInteractor', () => {
@@ -8,11 +7,8 @@ describe('validateExternalDocumentInteractor', () => {
     });
 
     expect(errors).toEqual({
-      category:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
-      documentType:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
+      category: 'Select a Category.',
+      documentType: 'Select a document type',
     });
   });
 

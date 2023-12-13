@@ -1,3 +1,4 @@
+import { ExcludeMethods } from 'types/TEntity';
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -19,13 +20,23 @@ export class ExternalDocumentNonStandardI extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    freeText: JoiValidationConstants.STRING.max(1000).required(),
-    ordinalValue: JoiValidationConstants.STRING.required(),
-    otherIteration: joi.when('ordinalValue', {
-      is: 'Other',
-      otherwise: joi.optional().allow(null),
-      then: joi.number().max(999).required(),
+    freeText: JoiValidationConstants.STRING.max(1000).required().messages({
+      'any.required': 'Provide an answer',
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
+    ordinalValue: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select an iteration',
+    }),
+    otherIteration: joi
+      .when('ordinalValue', {
+        is: 'Other',
+        otherwise: joi.optional().allow(null),
+        then: joi.number().max(999).required(),
+      })
+      .messages({
+        '*': 'Maximum iteration value is 999.',
+        'any.required': 'Enter an iteration number.',
+      }),
   };
 
   getValidationRules() {
