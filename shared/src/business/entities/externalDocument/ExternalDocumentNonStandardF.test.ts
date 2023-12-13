@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardF } from './ExternalDocumentNonStandardF';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardF', () => {
@@ -10,16 +9,10 @@ describe('ExternalDocumentNonStandardF', () => {
       });
 
       expect(externalDocumentF.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        ordinalValue:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.ordinalValue,
-        previousDocument:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES
-            .previousDocument,
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
+        ordinalValue: 'Select an iteration',
+        previousDocument: 'Select a document',
       });
     });
 
@@ -48,7 +41,7 @@ describe('ExternalDocumentNonStandardF', () => {
 
       expect(externalDocumentF.getFormattedValidationErrors()).toEqual({
         documentTitle:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.documentTitle,
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });
