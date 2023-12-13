@@ -11,15 +11,6 @@ export class CaseQC extends Case {
     this.entityName = 'CaseQC';
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    ...Case.VALIDATION_ERROR_MESSAGES,
-    hasVerifiedIrsNotice: 'Select an option',
-  };
-
-  getErrorToMessageMap() {
-    return CaseQC.VALIDATION_ERROR_MESSAGES;
-  }
-
   getValidationRules() {
     return {
       ...super.getValidationRules(),
@@ -29,7 +20,8 @@ export class CaseQC extends Case {
         .required()
         .description(
           'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
-        ),
+        )
+        .messages({ '*': 'Select an option' }),
     };
   }
 }
