@@ -13,38 +13,12 @@ describe('external document helpers', () => {
       };
 
       addPropertyHelper({
-        errorToMessageMap: undefined,
-        itemErrorMessage: undefined,
         itemName: 'somethingElse',
         itemSchema: false,
         schema,
       });
 
       expect(schema.somethingElse).toEqual(false);
-    });
-
-    it('should add a property to the schema and a custom error message to the error message map', () => {
-      const schema = {
-        something: true,
-        somethingElse: undefined,
-      };
-      const errorToMessageMap = {
-        something: 'You had an error with something.',
-        somethingElse: undefined,
-      };
-
-      addPropertyHelper({
-        errorToMessageMap,
-        itemErrorMessage: 'You had an error with something else.',
-        itemName: 'somethingElse',
-        itemSchema: false,
-        schema,
-      });
-
-      expect(schema.somethingElse).toEqual(false);
-      expect(errorToMessageMap.somethingElse).toEqual(
-        'You had an error with something else.',
-      );
     });
   });
 
