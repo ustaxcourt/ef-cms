@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardJ } from './ExternalDocumentNonStandardJ';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardJ', () => {
@@ -10,17 +9,10 @@ describe('ExternalDocumentNonStandardJ', () => {
       });
 
       expect(exexternalDocumentJDoc.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        freeText:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.freeText[0]
-            .message,
-        freeText2:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.freeText2[0]
-            .message,
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
+        freeText: 'Provide an answer',
+        freeText2: 'Provide an answer',
       });
     });
 
@@ -48,12 +40,8 @@ describe('ExternalDocumentNonStandardJ', () => {
       });
 
       expect(externalDocumentJ.getFormattedValidationErrors()).toEqual({
-        freeText:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.freeText[1]
-            .message,
-        freeText2:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.freeText2[1]
-            .message,
+        freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+        freeText2: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
     });
 
@@ -69,7 +57,7 @@ describe('ExternalDocumentNonStandardJ', () => {
 
       expect(externalDocumentJ.getFormattedValidationErrors()).toEqual({
         documentTitle:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.documentTitle,
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });

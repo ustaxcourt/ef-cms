@@ -1,4 +1,5 @@
 import { Case } from './cases/Case';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationEntity } from './JoiValidationEntity';
 
 export class UserCase extends JoiValidationEntity {
@@ -14,10 +15,6 @@ export class UserCase extends JoiValidationEntity {
     return {
       docketNumber: Case.VALIDATION_RULES.docketNumber,
     };
-  }
-
-  getErrorToMessageMap() {
-    return Case.VALIDATION_ERROR_MESSAGES;
   }
 }
 
