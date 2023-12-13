@@ -1,4 +1,5 @@
 import { MAX_SEARCH_RESULTS, ROLES } from '../../entities/EntityConstants';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
 
@@ -17,13 +18,19 @@ describe('getPractitionersByNameInteractor', () => {
     });
 
     await expect(
-      getPractitionersByNameInteractor(applicationContext, {} as TPractitioner),
+      getPractitionersByNameInteractor(
+        applicationContext,
+        {} as RawPractitioner,
+      ),
     ).rejects.toThrow('Unauthorized for searching practitioners');
   });
 
   it('throws an error if name is not passed in', async () => {
     await expect(
-      getPractitionersByNameInteractor(applicationContext, {} as TPractitioner),
+      getPractitionersByNameInteractor(
+        applicationContext,
+        {} as RawPractitioner,
+      ),
     ).rejects.toThrow('Name must be provided to search');
   });
 
