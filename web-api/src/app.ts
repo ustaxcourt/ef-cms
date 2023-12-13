@@ -970,7 +970,7 @@ app.get(
     lambdaWrapper(v2GetDocumentDownloadUrlLambda),
   );
   app.get(
-    '/v2/reconciliation-report/:reconciliationDate',
+    '/v2/reconciliation-report/:reconciliationDate/:reconciliationDateEnd',
     lambdaWrapper(v2GetReconciliationReportLambda),
   );
 }

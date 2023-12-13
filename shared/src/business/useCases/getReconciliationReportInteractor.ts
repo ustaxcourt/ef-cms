@@ -1,11 +1,12 @@
+import { DateTime } from 'luxon';
 import { DocketEntryDynamoRecord } from '../../../../web-api/src/persistence/dynamo/dynamoTypes';
 import {
   FORMATS,
-  PATTERNS,
-  createEndOfDayISO,
-  createStartOfDayISO,
+  USTC_TZ,
   formatNow,
+  isValidISODate,
 } from '../../business/utilities/DateHandler';
+
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -14,7 +15,7 @@ import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 const isValidDate = dateString => {
-  const dateInputValid = PATTERNS.YYYYMMDD.test(dateString);
+  const dateInputValid = isValidISODate(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
   return dateInputValid && dateLessthanOrEqualToToday;
@@ -30,7 +31,10 @@ const isValidDate = dateString => {
  */
 export const getReconciliationReportInteractor = async (
   applicationContext: IApplicationContext,
-  { reconciliationDate }: { reconciliationDate: string },
+  {
+    reconciliationDate,
+    reconciliationDateEnd,
+  }: { reconciliationDate: string; reconciliationDateEnd?: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -43,15 +47,35 @@ export const getReconciliationReportInteractor = async (
   } else {
     const dateInputValid = isValidDate(reconciliationDate);
     if (!dateInputValid) {
-      throw new Error(
-        'Date must be formatted as YYYY-MM-DD and not later than today',
-      );
+      throw new Error('Date must be formatted as ISO and not later than today');
     }
   }
 
-  const [year, month, day] = reconciliationDate.split('-');
-  const reconciliationDateStart = createStartOfDayISO({ day, month, year });
-  const reconciliationDateEnd = createEndOfDayISO({ day, month, year });
+  const reconciliationDateStart = DateTime.fromISO(reconciliationDate, {
+    zone: USTC_TZ,
+  })
+    .toUTC()
+    .toISO()!;
+
+  //If no end date specified, set it to end of the same day as start date
+  if (!reconciliationDateEnd) {
+    reconciliationDateEnd = DateTime.fromISO(reconciliationDate, {
+      zone: USTC_TZ,
+    })
+      .endOf('day')
+      .toUTC()
+      .toISO()!;
+  } else {
+    reconciliationDateEnd = DateTime.fromISO(reconciliationDateEnd, {
+      zone: USTC_TZ,
+    })
+      .toUTC()
+      .toISO()!;
+  }
+
+  if (!DateTime.fromISO(reconciliationDateEnd).isValid) {
+    throw new Error('End date must be formatted as ISO');
+  }
 
   const docketEntries = await applicationContext
     .getPersistenceGateway()
@@ -69,6 +93,7 @@ export const getReconciliationReportInteractor = async (
       { applicationContext },
     ),
     reconciliationDate,
+    reconciliationDateEnd,
     reportTitle: 'Reconciliation Report',
     totalDocketEntries: docketEntries.length,
   };

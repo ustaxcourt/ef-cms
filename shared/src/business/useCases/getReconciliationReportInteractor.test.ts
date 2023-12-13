@@ -1,5 +1,7 @@
+import { DateTime } from 'luxon';
 import {
   FORMATS,
+  USTC_TZ,
   createEndOfDayISO,
   createStartOfDayISO,
   formatNow,
@@ -163,4 +165,46 @@ describe('getReconciliationReportInteractor', () => {
         .calls[0][0].docketNumbers,
     ).toEqual(['135-20']);
   });
+
+  //Given date may contain ISO time component
+  it('should accept ISO dates with a time component', async () => {
+    const startDate = '2020-01-01T01:00';
+    await expect(
+      getReconciliationReportInteractor(applicationContext, {
+        reconciliationDate: startDate,
+      }),
+    ).resolves.not.toThrow();
+  });
+
+  //Caller may provide two date arguments
+  it('should accept two arguments representing a date range', async () => {
+    const startDate = '2021-01-05';
+    const endDate = '2021-01-05T09:00';
+    const isoEndDate = DateTime.fromISO(endDate, { zone: USTC_TZ })
+      .toUTC()
+      .toISO();
+    const docketEntries = [
+      {
+        docketEntryId: '3d27e02e-6954-4595-8b3f-0e91bbc1b51e',
+        docketNumber: '135-20',
+        documentTitle: 'Petition',
+        eventCode: 'P',
+        filedBy: 'Petr. Kaitlin Chaney',
+        filingDate: '2021-01-05T21:14:09.031Z',
+        servedAt: '2021-01-05T21:14:09.031Z',
+      },
+    ] as any;
+
+    applicationContext
+      .getPersistenceGateway()
+      .getReconciliationReport.mockReturnValue(docketEntries);
+
+    const result = await getReconciliationReportInteractor(applicationContext, {
+      reconciliationDate: startDate,
+      reconciliationDateEnd: endDate,
+    });
+    expect(result.reconciliationDate).toBe(startDate);
+    expect(result.reconciliationDateEnd).toBe(isoEndDate);
+  });
+  //TODO: If given two future dates, system should throw error
 });
