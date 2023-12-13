@@ -11,9 +11,7 @@ describe('createPetitionerUserRecords', () => {
   };
 
   beforeAll(() => {
-    applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    applicationContext.getDocumentClient().put.mockResolvedValue(null);
   });
 
   it('attempts to persist a petitioner user record with an email mapping record', async () => {
