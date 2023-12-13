@@ -1,4 +1,3 @@
-import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
@@ -14,11 +13,8 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
-      documentType:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
+      category: 'Select a Category.',
+      documentType: 'Select a document type',
     });
 
     await cerebralTest.runSequence(
@@ -31,9 +27,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
+      documentType: 'Select a document type',
     });
 
     await cerebralTest.runSequence(
@@ -84,9 +78,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
+      documentType: 'Select a document type',
     });
 
     await cerebralTest.runSequence(
@@ -122,11 +114,8 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        category:
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
       },
     });
 
@@ -171,9 +160,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        freeText:
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-            .freeText[0].message,
+        freeText: 'Provide an answer',
       },
     });
 
@@ -210,14 +197,9 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     ]);
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      objections:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      secondaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .secondaryDocumentFile,
+      objections: 'Enter selection for Objections.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
     });
 
     await cerebralTest.runSequence(
@@ -236,23 +218,14 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       'validateExternalDocumentInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      certificateOfServiceDate:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[1],
-      objections:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      secondaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .secondaryDocumentFile,
+      certificateOfServiceDate: 'Enter date of service',
+      objections: 'Enter selection for Objections.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocument,
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -269,21 +242,13 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       'validateExternalDocumentInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      certificateOfServiceDate:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[1],
-      primaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      secondaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .secondaryDocumentFile,
+      certificateOfServiceDate: 'Enter date of service',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocument,
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -303,20 +268,13 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[0].message,
-      primaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      secondaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .secondaryDocumentFile,
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocument,
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -334,18 +292,12 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       'validateExternalDocumentInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      secondaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .secondaryDocumentFile,
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocument,
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -388,21 +340,13 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      secondaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .secondaryDocumentFile,
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocumentFile,
-          supportingDocumentFreeText:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocumentFreeText,
+          supportingDocumentFile: 'Upload a document',
+          supportingDocumentFreeText: 'Enter name',
         },
       ],
     });
@@ -419,18 +363,12 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       'validateExternalDocumentInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      secondaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .secondaryDocumentFile,
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocumentFile,
+          supportingDocumentFile: 'Upload a document',
         },
       ],
     });
@@ -475,9 +413,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocument:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocument,
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -526,12 +462,8 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocumentFile,
-          supportingDocumentFreeText:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocumentFreeText,
+          supportingDocumentFile: 'Upload a document',
+          supportingDocumentFreeText: 'Enter name',
         },
       ],
     });
