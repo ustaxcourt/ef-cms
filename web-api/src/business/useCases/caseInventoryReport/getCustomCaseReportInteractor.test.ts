@@ -38,6 +38,24 @@ describe('getCustomCaseReportInteractor', () => {
       ).rejects.toThrow('Unauthorized for case inventory report');
     });
 
+    it('should be valid when no arguments are passed in for getCustomCaseReportInteractor', async () => {
+      await expect(
+        getCustomCaseReportInteractor(applicationContext, {
+          caseStatuses: undefined,
+          caseTypes: undefined,
+          filingMethod: 'all',
+          judges: undefined,
+          pageSize: 10,
+          preferredTrialCities: undefined,
+          procedureType: 'All',
+          searchAfter: {
+            pk: '',
+            receivedAt: 1,
+          },
+        } as any),
+      ).resolves.not.toThrow();
+    });
+
     const testCases = [
       { missingField: 'filingMethod' },
       { missingField: 'procedureType' },

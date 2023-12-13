@@ -16,7 +16,6 @@ export IP_LIMITER_THRESHOLD='5000'
 export EFCMS_DOMAIN=localhost
 export ELASTICSEARCH_HOST=localhost
 export ELASTICSEARCH_ENDPOINT=http://localhost:9200
-export DYNAMODB_ENDPOINT=http://localhost:8000
 export IRS_SUPERUSER_EMAIL=irs-superuser@example.com
 export USER_POOL_ID='local_2pHzece7'
 export COGNITO_CLIENT_ID='bvjrggnd3co403c0aahscinne'
