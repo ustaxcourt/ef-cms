@@ -54,40 +54,38 @@ export const CaseNotes = connect(
                         Add Case Note
                       </Button>
                     )}
+                    {caseDetail.caseNote && (
+                      <div className="float-right margin-top-1">
+                        <Button
+                          link
+                          className="padding-0 margin-right-0"
+                          icon="edit"
+                          onClick={() => {
+                            openAddEditCaseNoteModalSequence();
+                          }}
+                        >
+                          Edit Note
+                        </Button>
+                        <Button
+                          link
+                          className="red-warning padding-0 margin-left-205 margin-right-0"
+                          icon="trash"
+                          id="delete-procedural-note-button"
+                          onClick={() => {
+                            openDeleteCaseNoteConfirmModalSequence({
+                              docketNumber: caseDetail.docketNumber,
+                            });
+                          }}
+                        >
+                          Delete Note
+                        </Button>
+                      </div>
+                    )}
+
                     <h3 className="underlined">Case Notes</h3>
                     <div className="margin-top-1 margin-bottom-4">
                       <TextView bind="caseDetail.caseNote" />
                     </div>
-                    {caseDetail.caseNote && (
-                      <div className="grid-row">
-                        <div className="tablet:grid-col-6">
-                          <Button
-                            link
-                            icon="edit"
-                            onClick={() => {
-                              openAddEditCaseNoteModalSequence();
-                            }}
-                          >
-                            Edit Note
-                          </Button>
-                        </div>
-                        <div className="tablet:grid-col-6 text-align-right">
-                          <Button
-                            link
-                            className="red-warning no-wrap"
-                            icon="trash"
-                            id="delete-procedural-note-button"
-                            onClick={() => {
-                              openDeleteCaseNoteConfirmModalSequence({
-                                docketNumber: caseDetail.docketNumber,
-                              });
-                            }}
-                          >
-                            Delete Note
-                          </Button>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

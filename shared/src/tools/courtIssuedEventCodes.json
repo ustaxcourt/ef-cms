@@ -415,6 +415,14 @@
     "requiresSignature": false
   },
   {
+    "eventCode": "ANTD",
+    "documentType": "Amended Notice of Trial",
+    "documentTitle": "Amended Notice of Trial on [Date] at [Place]",
+    "scenario": "Type G",
+    "isNotice": true,
+    "requiresSignature": false
+  },
+  {
     "eventCode": "PTRL",
     "documentType": "Partial Trial before",
     "documentTitle": "Partial Trial before [Judge] at [Place]. [Anything]",

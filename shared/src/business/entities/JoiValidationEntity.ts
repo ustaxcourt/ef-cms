@@ -74,7 +74,7 @@ function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
   return errors;
 }
 
-function getFormattedValidationErrors(entity): Record<string, string> | null {
+function getFormattedValidationErrors(entity): Record<string, any> | null {
   const keys = Object.keys(entity);
   const obj = {};
   let errors: {} | null = null;
