@@ -42,6 +42,8 @@ const scanTableSegment = async (
     await dynamoDbDocumentClient
       .scan({
         ExclusiveStartKey: lastKey,
+        ExpressionAttributeValues: { ':prefix': 'stream-event-id' },
+        FilterExpression: 'NOT begins_with(pk, :prefix)',
         Segment: segment,
         TableName: process.env.SOURCE_TABLE,
         TotalSegments: totalSegments,
