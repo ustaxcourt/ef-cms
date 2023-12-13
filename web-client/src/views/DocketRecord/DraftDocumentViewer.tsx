@@ -65,6 +65,7 @@ export const DraftDocumentViewer = connect(
                         </div>
                         <div
                           className="grid-col-9"
+                          data-testid={`docket-entry-description-${idx}`}
                           id={`docket-entry-description-${idx}`}
                         >
                           {draftDocument.descriptionDisplay}
