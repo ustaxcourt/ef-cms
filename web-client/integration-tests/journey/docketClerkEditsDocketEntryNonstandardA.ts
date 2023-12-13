@@ -1,4 +1,3 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
@@ -7,8 +6,6 @@ import {
   getPetitionDocumentForCase,
   waitForCondition,
 } from '../helpers';
-
-const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard A scenario', async () => {
@@ -55,8 +52,8 @@ export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
-      receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[0].message,
+      previousDocument: 'Select a document',
+      receivedAt: 'Received date cannot be in the future. Enter a valid date.',
     });
 
     await cerebralTest.runSequence(

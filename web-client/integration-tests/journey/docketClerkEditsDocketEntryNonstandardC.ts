@@ -1,13 +1,9 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   getFormattedDocketEntriesForTest,
   getPetitionDocumentForCase,
   waitForCondition,
 } from '../helpers';
-
-const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-
 export const docketClerkEditsDocketEntryNonstandardC = cerebralTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard C scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
@@ -40,8 +36,8 @@ export const docketClerkEditsDocketEntryNonstandardC = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
-      previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
+      freeText: 'Enter name',
+      previousDocument: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
