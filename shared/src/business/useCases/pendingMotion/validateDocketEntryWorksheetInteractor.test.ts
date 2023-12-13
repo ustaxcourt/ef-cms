@@ -7,7 +7,7 @@ describe('validateDocketEntryWorksheetInteractor', () => {
     docketEntryId: TEST_DOCKET_ENTRY_ID,
     finalBriefDueDate: '2023-07-29',
     primaryIssue: 'tests primaryIssue',
-    statusOfMatter: 'Awaiting Consideration',
+    statusOfMatter: 'AwaitingConsideration',
   };
 
   it('should return null when the worksheet passes validation', () => {
