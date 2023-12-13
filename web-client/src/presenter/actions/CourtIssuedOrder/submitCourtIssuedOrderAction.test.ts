@@ -1,3 +1,4 @@
+import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
@@ -47,6 +48,25 @@ describe('submitCourtIssuedOrderAction', () => {
   });
 
   it('should set document draftOrderState', async () => {
+    const consolidatedCasesToMultiDocketOn: ConsolidatedCasesWithCheckboxInfoType[] =
+      [
+        {
+          checkboxDisabled: true,
+          checked: true,
+          docketNumber: '101-20',
+          docketNumberWithSuffix: '101-20',
+          formattedPetitioners: 'Petitioner 1, Petitioner 2',
+          leadDocketNumber: '101-20',
+        },
+        {
+          checkboxDisabled: true,
+          checked: false,
+          docketNumber: '102-20',
+          docketNumberWithSuffix: '102-20L',
+          formattedPetitioners: 'Petitioner 3, Petitioner 4',
+          leadDocketNumber: '101-20',
+        },
+      ];
     await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
@@ -55,7 +75,6 @@ describe('submitCourtIssuedOrderAction', () => {
         primaryDocumentFileId: 'abc',
       },
       state: {
-        addedDocketNumbers: ['111-20'],
         caseDetail: {
           docketNumber: '111-20',
         },
@@ -64,6 +83,11 @@ describe('submitCourtIssuedOrderAction', () => {
           documentType: 'Notice of Intervention',
           primaryDocumentFile: {},
         },
+        modal: {
+          form: {
+            consolidatedCasesToMultiDocketOn,
+          },
+        },
       },
     });
 
@@ -71,7 +95,7 @@ describe('submitCourtIssuedOrderAction', () => {
       applicationContext.getUseCases().updateCourtIssuedOrderInteractor.mock
         .calls[0][1].documentMetadata.draftOrderState,
     ).toEqual({
-      addedDocketNumbers: ['111-20'],
+      addedDocketNumbers: ['101-20'],
       docketNumber: '111-20',
       documentType: 'Notice of Intervention',
     });
