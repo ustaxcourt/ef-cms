@@ -72,6 +72,7 @@ import joi from 'joi';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
+  public associatedJudgeId?: string;
   public automaticBlocked?: boolean;
   public automaticBlockedDate?: string;
   public automaticBlockedReason?: string;
@@ -284,6 +285,7 @@ export class Case extends JoiValidationEntity {
 
   assignFieldsForInternalUsers({ applicationContext, rawCase }) {
     this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
+    this.associatedJudgeId = rawCase.associatedJudgeId;
     this.automaticBlocked = rawCase.automaticBlocked;
     this.automaticBlockedDate = rawCase.automaticBlockedDate;
     this.automaticBlockedReason = rawCase.automaticBlockedReason;
@@ -331,6 +333,9 @@ export class Case extends JoiValidationEntity {
       .optional()
       .meta({ tags: ['Restricted'] })
       .description('Judge assigned to this case. Defaults to Chief Judge.'),
+    associatedJudgeId: JoiValidationConstants.UUID.optional().description(
+      'Judge ID assigned to this case.',
+    ),
     automaticBlocked: joi
       .boolean()
       .optional()
@@ -1361,14 +1366,18 @@ export class Case extends JoiValidationEntity {
 
   removeFromTrial({
     associatedJudge = CHIEF_JUDGE,
+    associatedJudgeId = undefined,
     changedBy,
     updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
   }: {
     associatedJudge?: string;
+    associatedJudgeId?: string;
     changedBy?: string;
     updatedCaseStatus?: CaseStatus;
   }): Case {
     this.setAssociatedJudge(associatedJudge);
+
+    this.setAssociatedJudgeId(associatedJudgeId);
     this.setCaseStatus({
       changedBy,
       updatedCaseStatus,
@@ -1404,6 +1413,7 @@ export class Case extends JoiValidationEntity {
     this.hearings.splice(removeIndex, 1);
   }
 
+  // TODO: Include associatedJudgeId
   removeFromTrialWithAssociatedJudge(associatedJudge?: string): Case {
     if (associatedJudge) {
       this.associatedJudge = associatedJudge;
@@ -1423,6 +1433,12 @@ export class Case extends JoiValidationEntity {
    */
   setAssociatedJudge(associatedJudge) {
     this.associatedJudge = associatedJudge;
+    console.log('this.associatedJudge', this.associatedJudge);
+    return this;
+  }
+
+  setAssociatedJudgeId(associatedJudgeId) {
+    this.associatedJudgeId = associatedJudgeId;
     return this;
   }
 
@@ -1449,6 +1465,7 @@ export class Case extends JoiValidationEntity {
       ].includes(updatedCaseStatus)
     ) {
       this.associatedJudge = CHIEF_JUDGE;
+      this.associatedJudgeId = undefined;
     }
 
     if (isClosedStatus(updatedCaseStatus)) {
@@ -1755,6 +1772,15 @@ export class Case extends JoiValidationEntity {
     ) {
       this.associatedJudge = trialSessionEntity.judge.name;
     }
+
+    if (
+      trialSessionEntity.isCalendared &&
+      trialSessionEntity.judge &&
+      trialSessionEntity.judge.userId
+    ) {
+      this.associatedJudgeId = trialSessionEntity.judge.userId;
+    }
+
     this.trialSessionId = trialSessionEntity.trialSessionId;
     this.trialDate = trialSessionEntity.startDate;
     this.trialTime = trialSessionEntity.startTime;
