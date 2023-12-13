@@ -1,12 +1,9 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   getFormattedDocketEntriesForTest,
   waitForCondition,
 } from '../helpers';
-
-const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryStandard = cerebralTest => {
   return it('docket clerk edits docket entry with Standard scenario', async () => {
@@ -45,7 +42,7 @@ export const docketClerkEditsDocketEntryStandard = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[0].message,
+      receivedAt: 'Received date cannot be in the future. Enter a valid date.',
     });
 
     await cerebralTest.runSequence(
