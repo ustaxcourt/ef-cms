@@ -11,6 +11,7 @@ import {
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
@@ -174,7 +175,7 @@ export const MOCK_EXTERNAL_USERS = {
   [irsPractitionerUser.userId]: irsPractitionerUser,
 };
 
-export const MOCK_PRACTITIONER: TPractitioner = {
+export const MOCK_PRACTITIONER: RawPractitioner = {
   admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
   barNumber: 'AB1111',
