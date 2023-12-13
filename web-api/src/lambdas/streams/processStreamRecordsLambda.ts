@@ -15,11 +15,25 @@ const shouldProcessRecord = (record: DynamoDBRecord): boolean => {
   ) {
     // StreamRecord objects from local dynamodb have an ApproximateCreationDateTime with a type of Date
     // StreamRecord objects from AWS dynamodb have an ApproximateCreationDateTime with a type of number (epoch seconds)
-    // here we'll handle both types and convert to epoch seconds if necessary
-    const approximateCreationDateTime: number =
-      Number(record.dynamodb.ApproximateCreationDateTime) > 9999999999
-        ? Math.floor(Number(record.dynamodb.ApproximateCreationDateTime) / 1000)
-        : Number(record.dynamodb.ApproximateCreationDateTime);
+    const {
+      ApproximateCreationDateTime,
+    }: { ApproximateCreationDateTime?: any } = record.dynamodb;
+
+    let approximateCreationDateTime: number;
+    if (ApproximateCreationDateTime instanceof Date) {
+      approximateCreationDateTime = Math.floor(
+        ApproximateCreationDateTime.getTime() / 1000,
+      );
+    } else if (typeof ApproximateCreationDateTime === 'number') {
+      approximateCreationDateTime = ApproximateCreationDateTime;
+    } else {
+      applicationContext.logger.error(
+        `Error handling stream event timestamp for event ${record.eventID}`,
+        { ApproximateCreationDateTime, pk: record.dynamodb.Keys?.pk?.S },
+      );
+      return true;
+    }
+
     applicationContext.logger.debug(
       `${
         approximateCreationDateTime >= deploymentTimestamp
