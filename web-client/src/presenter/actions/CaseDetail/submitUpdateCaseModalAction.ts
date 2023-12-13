@@ -13,6 +13,7 @@ export const submitUpdateCaseModalAction = async ({
 }: ActionProps) => {
   const { associatedJudge, caseCaption, caseStatus } = get(state.modal);
   let selectedAssociatedJudge = associatedJudge;
+  // TODO: include judgeId
   const caseToUpdate = get(state.caseDetail);
   const { STATUS_TYPES_WITH_ASSOCIATED_JUDGE } =
     applicationContext.getConstants();
