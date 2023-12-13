@@ -228,6 +228,7 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    downloadCsv: jest.fn(),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
@@ -558,7 +559,6 @@ const createTestApplicationContext = () => {
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
-    getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: appContextProxy({
       adminCreateUser: jest.fn().mockReturnValue({
         promise: jest.fn(),

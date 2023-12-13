@@ -7,9 +7,6 @@ WORKDIR /home/app
 # needed to install jre successfully
 RUN mkdir -p /usr/share/man/man1
 
-# delete duplicate list if it exists
-RUN [ -f /etc/apt/sources.list.d/microsoft-edge.list ] && [ -f /etc/apt/sources.list.d/microsoft-edge-stable.list ] && rm /etc/apt/sources.list.d/microsoft-edge-stable.list
-
 RUN apt-get update
 
 RUN apt-get install -y \
@@ -37,13 +34,13 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.14.1.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.14.5.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.6.4/terraform_1.6.4_linux_amd64.zip && \ 
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.6.5/terraform_1.6.5_linux_amd64.zip && \ 
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

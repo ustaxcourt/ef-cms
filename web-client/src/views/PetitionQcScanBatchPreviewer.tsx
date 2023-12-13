@@ -177,7 +177,7 @@ export const PetitionQcScanBatchPreviewer = connect(
               errorText={[
                 validationErrors[documentType],
                 documentType === 'requestForPlaceOfTrialFile' &&
-                  validationErrors.chooseAtLeastOneValue,
+                  validationErrors['object.missing'],
               ]}
             >
               <fieldset

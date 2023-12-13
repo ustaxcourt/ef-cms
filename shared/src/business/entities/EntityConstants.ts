@@ -28,6 +28,8 @@ export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
 export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
 
+export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
+
 export const LEGACY_DOCUMENT_TYPES = [
   {
     documentType: 'Designation of Counsel to Receive Service',
@@ -209,15 +211,6 @@ export const DOCUMENT_SERVED_MESSAGES = {
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
 
-export const VALIDATION_ERROR_MESSAGES = {
-  END_DATE_IN_THE_FUTURE_ERROR:
-    'End date cannot be in the future. Enter a valid date.',
-  END_DATE_PRIOR_TO_START_DATE_ERROR:
-    'End date cannot be prior to start date. Enter a valid date.',
-  START_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
-    'Start date cannot be in the future. Enter a valid date.',
-};
-
 export const DOCUMENT_SEARCH_SORT = {
   FILING_DATE_ASC: 'FILING_DATE_ASC',
   FILING_DATE_DESC: 'FILING_DATE_DESC',
@@ -321,6 +314,8 @@ export const ORDER_TYPES = [
 ];
 
 export const BENCH_OPINION_EVENT_CODE = 'OST';
+
+export const NOTICE_EVENT_CODE = 'NOT';
 
 export const ADVANCED_SEARCH_OPINION_TYPES = {
   Bench: BENCH_OPINION_EVENT_CODE,
