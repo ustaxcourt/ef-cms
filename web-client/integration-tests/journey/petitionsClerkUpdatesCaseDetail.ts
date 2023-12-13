@@ -1,8 +1,5 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-
-const { VALIDATION_ERROR_MESSAGES } = Case;
 
 const { CASE_TYPES_MAP, PAYMENT_STATUS } = applicationContext.getConstants();
 
@@ -32,7 +29,7 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[1],
+      irsNoticeDate: 'Please enter a valid IRS notice date',
     });
 
     // irsNoticeDate - valid
@@ -109,8 +106,8 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
-      petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+      petitionPaymentDate: 'Enter a valid payment date',
+      petitionPaymentMethod: 'Enter payment method',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -141,14 +138,11 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      caseType: VALIDATION_ERROR_MESSAGES.caseType,
-      procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
+      caseType: 'Select a case type',
+      procedureType: 'Select a case procedure',
     });
     expect(cerebralTest.getState('alertError')).toEqual({
-      messages: [
-        VALIDATION_ERROR_MESSAGES.caseType,
-        VALIDATION_ERROR_MESSAGES.procedureType,
-      ],
+      messages: ['Select a case type', 'Select a case procedure'],
       title: 'Please correct the following errors on the page:',
     });
 
