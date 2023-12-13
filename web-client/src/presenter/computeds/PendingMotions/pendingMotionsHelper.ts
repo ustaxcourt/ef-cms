@@ -1,18 +1,28 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DOCUMENT_INTERNAL_CATEGORIES_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  DocketEntryWorksheet,
+  RawDocketEntryWorksheet,
+} from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { Get } from 'cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
 
 type PendingMotionsHelperResults = {
-  formattedPendingMotions: (FormattedPendingMotionWithWorksheet & {
+  formattedPendingMotions: (Omit<
+    FormattedPendingMotionWithWorksheet,
+    'docketEntryWorksheet'
+  > & {
     consolidatedIconTooltipText: string;
     inConsolidatedGroup: boolean;
     isLeadCase: boolean;
     finalBriefDueDateFormatted: string;
     documentLink: string;
     documentTitle: string;
+    docketEntryWorksheet: RawDocketEntryWorksheet & {
+      formattedStatusOfMatter: string | undefined;
+    };
   })[];
 };
 
@@ -33,9 +43,19 @@ export const pendingMotionsHelper = (
               applicationContext.getConstants().DATE_FORMATS.MMDDYY,
             )
         : '';
+      const formattedStatusOfMatter = entry.docketEntryWorksheet?.statusOfMatter
+        ? DocketEntryWorksheet.STATUS_OF_MATTER_OPTIONS_DICTIONARY[
+            entry.docketEntryWorksheet?.statusOfMatter
+          ]
+        : undefined;
+
       return {
         ...entry,
         consolidatedIconTooltipText: isLeadCase(entry) ? 'Lead case' : '',
+        docketEntryWorksheet: {
+          ...entry.docketEntryWorksheet,
+          formattedStatusOfMatter,
+        },
         documentLink: `/case-detail/${entry.docketNumber}/document-view?docketEntryId=${entry.docketEntryId}`,
         documentTitle: getDocumentTitleByEventCode(entry.eventCode),
         finalBriefDueDateFormatted,

@@ -18,17 +18,17 @@ export class DocketEntryWorksheet extends JoiValidationEntity {
     this.statusOfMatter = rawProps.statusOfMatter;
   }
 
-  static STATUS_OF_MATTER_OPTIONS = [
-    'Awaiting Consideration',
-    'Awaiting Briefs',
-    'Drafting',
-    'Reviewing Draft',
-    'Submitted to Chief Judge',
-    'Revising Draft',
-    'Submitted to Reporter',
-    'Awaiting Release',
-    'Stayed',
-  ];
+  static STATUS_OF_MATTER_OPTIONS_DICTIONARY = {
+    AwaitingBriefs: 'Awaiting Briefs',
+    AwaitingConsideration: 'Awaiting Consideration',
+    AwaitingRelease: 'Awaiting Release',
+    Drafting: 'Drafting',
+    ReviewingDraft: 'Reviewing Draft',
+    RevisingDraft: 'Revising Draft',
+    Stayed: 'Stayed',
+    SubmittedToChiefJudge: 'Submitted to Chief Judge',
+    SubmittedToReporter: 'Submitted to Reporter',
+  };
 
   static VALIDATION_RULES = {
     docketEntryId: DOCKET_ENTRY_VALIDATION_RULE_KEYS.docketEntryId,
@@ -39,7 +39,7 @@ export class DocketEntryWorksheet extends JoiValidationEntity {
       }),
     primaryIssue: JoiValidationConstants.STRING.allow('').optional(),
     statusOfMatter: JoiValidationConstants.STRING.valid(
-      ...DocketEntryWorksheet.STATUS_OF_MATTER_OPTIONS,
+      ...Object.keys(DocketEntryWorksheet.STATUS_OF_MATTER_OPTIONS_DICTIONARY),
     )
       .allow(null)
       .optional(),
