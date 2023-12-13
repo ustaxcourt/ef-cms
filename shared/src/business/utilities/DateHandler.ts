@@ -94,9 +94,8 @@ export const prepareDateFromString = (
   dateString?: string,
   inputFormat?: TimeFormats,
 ): DateTime => {
-  const dateToFormat: string = dateString || createISODateString();
+  let dateToFormat: string = dateString || createISODateString();
   let result: DateTime;
-
   if (inputFormat === FORMATS.ISO) {
     result = DateTime.fromISO(dateToFormat, { zone: 'utc' });
   } else if (inputFormat) {
@@ -184,9 +183,9 @@ export const createDateAtStartOfWeekEST = (
 };
 
 export const createEndOfDayISO = (params?: {
-  day: string;
-  month: string;
-  year: string;
+  day: string | number;
+  month: string | number;
+  year: string | number;
 }): string => {
   const dateObject = params
     ? DateTime.fromObject(
@@ -203,9 +202,9 @@ export const createEndOfDayISO = (params?: {
 };
 
 export const createStartOfDayISO = (params?: {
-  day: string;
-  month: string;
-  year: string;
+  day: string | number;
+  month: string | number;
+  year: string | number;
 }): string => {
   const dateObject = params
     ? DateTime.fromObject(
@@ -268,6 +267,10 @@ export const formatNow = (formatStr?: TimeFormats | TimeFormatNames) => {
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };
+
+export function isValidISODate(isodate: string): boolean {
+  return DateTime.fromISO(isodate).isValid;
+}
 
 /**
  * @param {string} date1 the first date to be compared
