@@ -1,10 +1,11 @@
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateAddPractitionerInteractor } from './validateAddPractitionerInteractor';
 
 describe('validateAddPractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
     const errors = validateAddPractitionerInteractor(applicationContext, {
-      practitioner: {} as TPractitioner,
+      practitioner: {} as RawPractitioner,
     });
 
     expect(Object.keys(errors)).toEqual([
@@ -33,7 +34,7 @@ describe('validateAddPractitionerInteractor', () => {
         lastName: 'Practitioner',
         originalBarState: 'IL',
         practitionerType: 'Attorney',
-      } as TPractitioner,
+      } as RawPractitioner,
     });
 
     expect(errors).toBeNull();
