@@ -1,5 +1,3 @@
-import { PaperPetition } from '../../../shared/src/business/entities/cases/PaperPetition';
-
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
   cerebralTest,
   fakeFile,
@@ -24,8 +22,8 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      chooseAtLeastOneValue:
-        PaperPetition.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+      'object.missing':
+        'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
     });
 
     await cerebralTest.runSequence(

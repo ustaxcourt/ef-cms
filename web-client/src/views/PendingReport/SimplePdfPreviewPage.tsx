@@ -17,7 +17,10 @@ export const SimplePdfPreviewPage = connect(
     return (
       <>
         <BigHeader text={headerTitle} />
-        <div className="grid-container print-planning-report">
+        <div
+          className="grid-container print-planning-report"
+          data-testid="preview-pdf"
+        >
           <WarningNotification />
           <Button
             link

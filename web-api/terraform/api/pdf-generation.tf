@@ -16,6 +16,10 @@ resource "aws_lambda_function" "pdf_generation_lambda" {
 
   runtime = var.node_version
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = var.lambda_environment
   }
