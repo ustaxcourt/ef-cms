@@ -64,8 +64,9 @@ const main = async () => {
         ),
     )
     .reduce((obj, api) => {
-      obj[api.name?.replace(`_${process.env.ENV}`, '')!] =
-        `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
+      obj[
+        api.name?.replace(`_${process.env.ENV}`, '')!
+      ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
       return obj;
     }, {});
 
