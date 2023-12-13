@@ -33,5 +33,5 @@ export function loginAsColvin() {
 
 export function loginAsColvinChambers() {
   cy.login('colvinschambers');
-  cy.get('h1:contains("Trial Sessions")').should('exist');
+  cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
 }
