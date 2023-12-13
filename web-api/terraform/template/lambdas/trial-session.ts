@@ -1,6 +1,6 @@
-const { createApplicationContext } = require('../../../src/applicationContext');
+import { createApplicationContext } from '../../../src/applicationContext';
 
-exports.handler = async event => {
+export const handler = async event => {
   const applicationContext = createApplicationContext({});
   try {
     const { Records } = event;
