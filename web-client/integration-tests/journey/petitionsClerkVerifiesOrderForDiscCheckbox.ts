@@ -1,5 +1,4 @@
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { PaperPetition } from '../../../shared/src/business/entities/cases/PaperPetition';
 
 export const petitionsClerkVerifiesOrderForDiscCheckbox = (
   cerebralTest,
@@ -39,7 +38,7 @@ export const petitionsClerkVerifiesOrderForDiscCheckbox = (
 
     expect(
       cerebralTest.getState('validationErrors.corporateDisclosureFile'),
-    ).toEqual(PaperPetition.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+    ).toEqual('Upload or scan Corporate Disclosure Statement(CDS)');
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderForDisc',

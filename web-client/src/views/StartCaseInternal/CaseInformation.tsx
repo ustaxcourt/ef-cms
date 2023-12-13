@@ -149,7 +149,7 @@ export const CaseInformation = connect(
             validatePetitionFromPaperSequence();
           }}
         />
-        <FormGroup errorText={validationErrors.chooseAtLeastOneValue}>
+        <FormGroup errorText={validationErrors['object.missing']}>
           <div className="order-checkbox">
             <input
               checked={form.orderDesignatingPlaceOfTrial || false}

@@ -2,7 +2,6 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 
 export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
@@ -34,7 +33,8 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsNoticeDate: Case.VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
+      irsNoticeDate:
+        'The IRS notice date cannot be in the future. Enter a valid date.',
     });
 
     await cerebralTest.runSequence(
