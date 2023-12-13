@@ -1,3 +1,4 @@
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { getRecordsViaMapping } from '../helpers/getRecordsViaMapping';
 
 export const getPractitionerByBarNumber = async ({
@@ -6,7 +7,7 @@ export const getPractitionerByBarNumber = async ({
 }: {
   applicationContext: IApplicationContext;
   barNumber: string;
-}): Promise<TPractitioner | undefined> => {
+}): Promise<RawPractitioner | undefined> => {
   const upperCaseBarNumber = barNumber.toUpperCase();
   const users = [
     ...(await getRecordsViaMapping({
