@@ -12,6 +12,5 @@ resource "aws_lambda_function" "strip_basepath_lambda" {
   source_code_hash = data.archive_file.zip_strip_basepath_lambda.output_base64sha256
   publish          = true
 
-  # Lambda@Edge do not yet support nodejs 16.0
   runtime = "nodejs18.x"
 }

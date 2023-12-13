@@ -6,11 +6,10 @@ import {
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   MAX_FILE_SIZE_MB,
 } from '../EntityConstants';
-import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
+import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
 import { ExternalDocumentFactory } from '../externalDocument/ExternalDocumentFactory';
-import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
 
 export class DocketEntryFactory extends JoiValidationEntity {
@@ -97,31 +96,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
     this.selectedCases = rawPropsParam.selectedCases;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    ...ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
-    documentTitle:
-      'Document title must be 3000 characters or fewer. Update this document title and try again.',
-    eventCode: 'Select a document type',
-    filers: 'Select a filing party',
-    lodged: 'Enter selection for filing status.',
-    otherFilingParty: 'Enter other filing party name.',
-    primaryDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your document file size is empty.',
-    ],
-    receivedAt: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Received date cannot be in the future. Enter a valid date.',
-      },
-      'Enter a valid date received',
-    ],
-    secondaryDocumentFile: 'A file was not selected.',
-  } as const;
-
   getValidationRules() {
     const eFiledObjectionRequiredEventCodes = [
       ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
@@ -142,12 +116,12 @@ export class DocketEntryFactory extends JoiValidationEntity {
       certificateOfServiceDate:
         DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfServiceDate,
       documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
-      documentType: JoiValidationConstants.STRING.valid(
-        ...ALL_DOCUMENT_TYPES,
-      ).optional(),
-      eventCode: JoiValidationConstants.STRING.valid(
-        ...ALL_EVENT_CODES,
-      ).required(),
+      documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
+        .optional()
+        .messages({ '*': 'Select a document type' }),
+      eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
+        .required()
+        .messages({ '*': 'Select a document type' }),
       freeText: DOCKET_ENTRY_VALIDATION_RULE_KEYS.freeText,
       hasOtherFilingParty:
         DOCKET_ENTRY_VALIDATION_RULE_KEYS.hasOtherFilingParty,
@@ -172,16 +146,19 @@ export class DocketEntryFactory extends JoiValidationEntity {
           then: joi.required(),
         }),
         then: joi.optional(),
-      }),
+      }).messages({ '*': 'Enter selection for Objections.' }),
       ordinalValue: DOCKET_ENTRY_VALIDATION_RULE_KEYS.ordinalValue,
       otherFilingParty: DOCKET_ENTRY_VALIDATION_RULE_KEYS.otherFilingParty,
       otherIteration: DOCKET_ENTRY_VALIDATION_RULE_KEYS.otherIteration,
       previousDocument: joi.object().optional(),
-      primaryDocumentFile: joi.object().when('isDocumentRequired', {
-        is: true,
-        otherwise: joi.optional(),
-        then: joi.required(),
-      }),
+      primaryDocumentFile: joi
+        .object()
+        .when('isDocumentRequired', {
+          is: true,
+          otherwise: joi.optional(),
+          then: joi.required(),
+        })
+        .messages({ '*': 'Upload a document' }),
       primaryDocumentFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'primaryDocumentFile',
         {
@@ -189,21 +166,32 @@ export class DocketEntryFactory extends JoiValidationEntity {
           otherwise: joi.optional().allow(null),
           then: joi.required(),
         },
-      ),
-      receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
+      ).messages({
+        '*': 'Your document file size is empty.',
+        'number.max': `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      }),
+      receivedAt: JoiValidationConstants.ISO_DATE.max('now')
+        .required()
+        .messages({
+          '*': 'Enter a valid date received',
+          'date.max':
+            'Received date cannot be in the future. Enter a valid date.',
+        }),
       serviceDate: DOCKET_ENTRY_VALIDATION_RULE_KEYS.serviceDate,
       trialLocation: DOCKET_ENTRY_VALIDATION_RULE_KEYS.trialLocation,
     });
 
     const schemaOptionalItems = {
-      filers: joi.when('eventCode', {
-        is: joi.exist().valid(AMICUS_BRIEF_EVENT_CODE),
-        otherwise: joi
-          .array()
-          .items(JoiValidationConstants.UUID.required())
-          .required(),
-        then: joi.optional(),
-      }),
+      filers: joi
+        .when('eventCode', {
+          is: joi.exist().valid(AMICUS_BRIEF_EVENT_CODE),
+          otherwise: joi
+            .array()
+            .items(JoiValidationConstants.UUID.required())
+            .required(),
+          then: joi.optional(),
+        })
+        .messages({ '*': 'Select a filing party' }),
     };
 
     const addToSchema = itemName => {
@@ -220,7 +208,9 @@ export class DocketEntryFactory extends JoiValidationEntity {
 
     schema = schema.concat(docketEntryExternalDocumentSchema).concat(
       joi.object({
-        category: JoiValidationConstants.STRING.optional(), // omitting category
+        category: JoiValidationConstants.STRING.optional().messages({
+          '*': 'Select a Category.',
+        }), // omitting category
       }),
     );
 
@@ -234,8 +224,5 @@ export class DocketEntryFactory extends JoiValidationEntity {
       addToSchema('filers');
     }
     return schema;
-  }
-  getErrorToMessageMap() {
-    return DocketEntryFactory.VALIDATION_ERROR_MESSAGES;
   }
 }

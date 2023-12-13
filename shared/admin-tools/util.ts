@@ -1,5 +1,6 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import readline from 'readline';
 
 const { ENV } = process.env;
@@ -9,15 +10,14 @@ const UserPoolCache = {};
 export const getVersion = async (): Promise<string> => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
-  const dynamodb = new DynamoDB({ region: 'us-east-1' });
-  const result = await dynamodb.getItem({
+  const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
+  const documentClient = DynamoDBDocument.from(dynamodbClient, {
+    marshallOptions: { removeUndefinedValues: true },
+  });
+  const result = await documentClient.get({
     Key: {
-      pk: {
-        S: 'source-table-version',
-      },
-      sk: {
-        S: 'source-table-version',
-      },
+      pk: 'source-table-version',
+      sk: 'source-table-version',
     },
     TableName: `efcms-deploy-${ENV}`,
   });
@@ -26,11 +26,11 @@ export const getVersion = async (): Promise<string> => {
     !result ||
     !result.Item ||
     !('current' in result.Item) ||
-    typeof result.Item.current.S === 'undefined'
+    typeof result.Item.current === 'undefined'
   ) {
     throw 'Could not determine the current version';
   }
-  return result.Item.current.S;
+  return result.Item.current;
 };
 
 // Exit if any of the provided strings are not set as environment variables
