@@ -1,4 +1,3 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import {
@@ -11,8 +10,6 @@ export const docketClerkAddsDocketEntryWithoutFile = (
   cerebralTest,
   overrides = {},
 ) => {
-  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-
   return it('Docketclerk adds docket entry data without a file', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -27,10 +24,10 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      filers: VALIDATION_ERROR_MESSAGES.filers,
-      receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
+      documentType: 'Select a document type',
+      eventCode: 'Select a document type',
+      filers: 'Select a filing party',
+      receivedAt: 'Enter a valid date received',
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
@@ -73,9 +70,9 @@ export const docketClerkAddsDocketEntryWithoutFile = (
       {
         key: 'receivedAt',
         toFormat: FORMATS.ISO,
-        value: `${overrides.dateReceivedMonth || 1}/${
-          overrides.dateReceivedDay || 1
-        }/${overrides.dateReceivedYear || 2018}`,
+        value: `${overrides.receivedAtMonth || 1}/${
+          overrides.receivedAtDay || 1
+        }/${overrides.receivedAtYear || 2018}`,
       },
     );
 
@@ -84,7 +81,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      otherFilingParty: VALIDATION_ERROR_MESSAGES.otherFilingParty,
+      otherFilingParty: 'Enter other filing party name.',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

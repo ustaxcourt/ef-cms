@@ -3,9 +3,7 @@ import { setMessageAsRead } from './setMessageAsRead';
 
 describe('setMessageAsRead', () => {
   beforeAll(() => {
-    applicationContext.getDocumentClient().update.mockReturnValue({
-      promise: () => Promise.resolve(true),
-    });
+    applicationContext.getDocumentClient().update.mockResolvedValue(true);
   });
 
   it('invokes the persistence for setting a message as read', async () => {

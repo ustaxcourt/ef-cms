@@ -1,6 +1,6 @@
-const { createApplicationContext } = require('../../../src/applicationContext');
+import { createApplicationContext } from '../../../src/applicationContext';
 
-exports.handler = async event => {
+export const handler = async event => {
   const applicationContext = createApplicationContext({});
 
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
@@ -50,7 +50,7 @@ exports.handler = async event => {
   return event;
 };
 
-exports.updatePetitionerCasesLambda = async event => {
+export const updatePetitionerCasesLambda = async event => {
   const applicationContext = createApplicationContext({});
 
   const { Records } = event;
