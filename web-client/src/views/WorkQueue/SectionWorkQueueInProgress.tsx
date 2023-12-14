@@ -130,6 +130,7 @@ export const SectionWorkQueueInProgress = connect(
         <table
           aria-describedby="tab-work-queue"
           className="usa-table ustc-table subsection"
+          data-testid="section-work-queue-in-progress"
           id="section-work-queue"
         >
           <thead>

@@ -634,7 +634,10 @@ export const baseState = {
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
   } as Record<string, any>,
-  navigation: {},
+  navigation: {
+    caseDetailMenu: '',
+    openMenu: '',
+  },
   noticeStatusState: {
     casesProcessed: 0,
     totalCases: 0,
@@ -692,6 +695,7 @@ export const baseState = {
     docketRecordSort: [],
     todaysOrdersSort: [],
   },
+  setSelectedConsolidatedCasesToMultiDocketOn: false,
   showValidation: false,
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],

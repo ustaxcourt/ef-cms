@@ -1,4 +1,3 @@
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { Practitioner } from './Practitioner';
 import joi from 'joi';
