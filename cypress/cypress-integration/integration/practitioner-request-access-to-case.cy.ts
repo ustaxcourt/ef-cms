@@ -9,6 +9,7 @@ import {
   petitionerCreatesEletronicCaseWithDeseasedSpouse,
 } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
+import { selectRedactionAcknowledgement } from '../../helpers/select-redaction-acknowledgement';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 
 describe('Private Practitioner requests access to case', () => {
@@ -30,18 +31,16 @@ describe('Private Practitioner requests access to case', () => {
 
       selectTypeaheadInput('document-type', 'Entry of Appearance');
 
-      cy.get('[data-testid="auto-generation"]').should('not.exist');
-
       cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
       cy.get(`[data-testid="filer-${secondaryFilerName}, Petitioner"]`).click();
 
-      // upload doc
-      attachDummyFile('request-access-primary-document');
+      attachDummyFile('primary-document');
+      cy.get('[data-testid="request-access-submit-document"]').click();
+      cy.get('[data-testid="auto-generation"]').should('not.exist');
 
-      // Review Page
-      cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-      cy.get('#redaction-acknowledgement').check();
-      cy.get('#submit-document').click();
+      selectRedactionAcknowledgement();
+      cy.get('[data-testid="request-access-review-submit-document"]').click();
+
       cy.get('[data-testid="document-download-link-EA"]').should(
         'have.text',
         `Entry of Appearance for Petrs. ${primaryFilerName} & ${secondaryFilerName}`,
@@ -49,9 +48,11 @@ describe('Private Practitioner requests access to case', () => {
     });
   });
 
-  it.skip('should have access to auto generate entry of appearance if there are no parties with paper service preference', () => {
+  it('should have access to auto generate entry of appearance if there are no parties with paper service preference', () => {
+    const primaryFilerName = 'John';
+
     loginAsPetitioner();
-    petitionerCreatesEletronicCase().then(docketNumber => {
+    petitionerCreatesEletronicCase(primaryFilerName).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsPrivatePractitioner();
 
@@ -60,8 +61,19 @@ describe('Private Practitioner requests access to case', () => {
       cy.get('[data-testid="button-request-access"]').click();
 
       selectTypeaheadInput('document-type', 'Entry of Appearance');
+      cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
 
       cy.get('[data-testid="auto-generation"]').should('exist');
+
+      cy.get('[data-testid="request-access-submit-document"]').click();
+
+      cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should('exist');
+      cy.get('[data-testid="request-access-review-submit-document"]').click();
+
+      cy.get('[data-testid="document-download-link-EA"]').should(
+        'have.text',
+        `Entry of Appearance for Petr. ${primaryFilerName}`,
+      );
     });
   });
 });
