@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import { Case } from '../../entities/cases/Case';
-import { NotFoundError } from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -11,7 +11,6 @@ import {
 } from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { get } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
@@ -59,6 +58,7 @@ export const updateTrialSession = async (
     dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
     estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
+    irsCalendarAdministratorInfo: trialSession.irsCalendarAdministratorInfo,
     joinPhoneNumber: trialSession.joinPhoneNumber,
     judge: trialSession.judge,
     maxCases: trialSession.maxCases,
