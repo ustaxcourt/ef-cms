@@ -56,6 +56,7 @@ import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { JudgeActivityReport } from './JudgeActivityReport/JudgeActivityReport';
 import { Loading } from './Loading';
+import { Login } from '@web-client/views/Login/Login';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { MyAccount } from './MyAccount';
@@ -149,6 +150,7 @@ const pages = {
   Interstitial,
   JudgeActivityReport,
   Loading,
+  Login,
   MessageDetail,
   Messages,
   MyAccount,

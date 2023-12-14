@@ -13,7 +13,6 @@ import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/seque
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
-import { gotoLoginSequence } from '@web-client/presenter/sequences/Public/gotoLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoPublicCaseDetailSequence } from './sequences/Public/gotoPublicCaseDetailSequence';
@@ -74,7 +73,6 @@ export const presenterSequences = {
   gotoHealthCheckSequence: showMaintenancePageDecorator(
     gotoHealthCheckSequence,
   ),
-  gotoLoginSequence,
   gotoMaintenanceSequence,
   gotoPrivacySequence: showMaintenancePageDecorator(gotoPrivacySequence),
   gotoPublicCaseDetailSequence: showMaintenancePageDecorator(

@@ -1145,6 +1145,11 @@ const router = {
       });
     });
 
+    route('/login', () => {
+      setPageTitle('Login');
+      app.getSequence('gotoLoginSequence')();
+    });
+
     registerRoute(
       '/before-filing-a-petition',
       ifHasAccess({ app }, () => {
