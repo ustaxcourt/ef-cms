@@ -30,7 +30,10 @@ export const TrialSessionsSummary = connect(
         </h1>
         <div className="grid-row grid-gap">
           <div className="grid-col-6">
-            <div className="card height-full">
+            <div
+              className="card height-full"
+              data-testid="upcoming-trial-sessions-card"
+            >
               <div className="content-wrapper gray height-full">
                 <h3>Upcoming Trial Sessions</h3>
                 <div role="list">

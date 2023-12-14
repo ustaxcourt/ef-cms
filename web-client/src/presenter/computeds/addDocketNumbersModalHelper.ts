@@ -1,12 +1,21 @@
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
-export const addDocketNumbersModalHelper = (get: Get): any => {
-  const addedDocketNumbers = get(state.addedDocketNumbers);
+export const addDocketNumbersModalHelper = (
+  get: Get,
+): {
+  confirmLabelTitle: string;
+  modalTitle: string;
+} => {
+  const setSelectedConsolidatedCasesToMultiDocketOn = get(
+    state.setSelectedConsolidatedCasesToMultiDocketOn,
+  );
 
   return {
-    confirmLabelTitle: addedDocketNumbers ? 'Save' : 'Add Docket Numbers',
-    modalTitle: addedDocketNumbers
+    confirmLabelTitle: setSelectedConsolidatedCasesToMultiDocketOn
+      ? 'Save'
+      : 'Add Docket Numbers',
+    modalTitle: setSelectedConsolidatedCasesToMultiDocketOn
       ? 'Edit Docket Numbers'
       : 'Add Docket Numbers',
   };

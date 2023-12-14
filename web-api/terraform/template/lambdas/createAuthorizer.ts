@@ -1,8 +1,8 @@
-const axios = require('axios');
-const jwk = require('jsonwebtoken');
-const jwkToPem = require('jwk-to-pem');
-const { createLogger } = require('../../../src/createLogger');
-const { transports } = require('winston');
+import { createLogger } from '../../../src/createLogger';
+import { transports } from 'winston';
+import axios from 'axios';
+import jwk from 'jsonwebtoken';
+import jwkToPem from 'jwk-to-pem';
 
 const transport = new transports.Console({
   handleExceptions: true,
@@ -61,7 +61,7 @@ const throw401GatewayError = () => {
   throw new Error('Unauthorized');
 };
 
-exports.createAuthorizer = getToken => async (event, context) => {
+export const createAuthorizer = getToken => async (event, context) => {
   const logger = getLogger(context);
 
   let token;

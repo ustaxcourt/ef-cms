@@ -9,6 +9,7 @@ import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseT
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { setSelectedConsolidatedCasesToMultiDocketOnAction } from '@web-client/presenter/actions/setSelectedConsolidatedCasesToMultiDocketOnAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -30,6 +31,7 @@ export const gotoCreateOrderSequence = [
         proceed: [
           unsetDocumentToEditAction,
           clearModalAction,
+          setSelectedConsolidatedCasesToMultiDocketOnAction(false),
           setupCurrentPageAction('Interstitial'),
           stopShowValidationAction,
           clearFormAction,

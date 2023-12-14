@@ -18,19 +18,17 @@ describe('paperPetition entity', () => {
 
     it('returns the expected set of errors for an empty object', () => {
       const paperPetition = new PaperPetition({}, { applicationContext });
-
       expect(paperPetition.getFormattedValidationErrors()).toEqual({
-        caseCaption: PaperPetition.VALIDATION_ERROR_MESSAGES.caseCaption,
-        caseType: PaperPetition.VALIDATION_ERROR_MESSAGES.caseType,
-        chooseAtLeastOneValue:
-          PaperPetition.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
-        mailingDate: PaperPetition.VALIDATION_ERROR_MESSAGES.mailingDate,
-        partyType: PaperPetition.VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile: PaperPetition.VALIDATION_ERROR_MESSAGES.petitionFile,
-        petitionPaymentStatus:
-          PaperPetition.VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
-        procedureType: PaperPetition.VALIDATION_ERROR_MESSAGES.procedureType,
-        receivedAt: PaperPetition.VALIDATION_ERROR_MESSAGES.receivedAt[1],
+        caseCaption: 'Enter a case caption',
+        caseType: 'Select a case type',
+        mailingDate: 'Enter a mailing date',
+        'object.missing':
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
+        partyType: 'Select a party type',
+        petitionFile: 'Upload or scan a Petition',
+        petitionPaymentStatus: 'Select a filing fee option',
+        procedureType: 'Select a case procedure',
+        receivedAt: 'Enter a valid date received',
       });
     });
 
@@ -236,7 +234,7 @@ describe('paperPetition entity', () => {
 
       expect(
         paperPetition.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(PaperPetition.VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+      ).toEqual('Your Petition file size is empty');
     });
 
     it('fails validation if petitionPaymentStatus is Waived but applicationForWaiverOfFilingFeeFile is not set', () => {
@@ -252,10 +250,7 @@ describe('paperPetition entity', () => {
       expect(
         paperPetition.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFile,
-      ).toEqual(
-        PaperPetition.VALIDATION_ERROR_MESSAGES
-          .applicationForWaiverOfFilingFeeFile,
-      );
+      ).toEqual('Upload or scan an Application for Waiver of Filing Fee (APW)');
     });
 
     it('fails validation if partyType is Corporation and orderForCds is undefined', () => {
@@ -268,9 +263,7 @@ describe('paperPetition entity', () => {
 
       expect(
         paperPetition.getFormattedValidationErrors()!.corporateDisclosureFile,
-      ).toEqual(
-        PaperPetition.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
-      );
+      ).toEqual('Upload or scan Corporate Disclosure Statement(CDS)');
     });
 
     it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForCds is false', () => {
@@ -284,9 +277,7 @@ describe('paperPetition entity', () => {
 
       expect(
         paperPetition.getFormattedValidationErrors()!.corporateDisclosureFile,
-      ).toEqual(
-        PaperPetition.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
-      );
+      ).toEqual('Upload or scan Corporate Disclosure Statement(CDS)');
     });
 
     it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
@@ -302,10 +293,7 @@ describe('paperPetition entity', () => {
       expect(
         paperPetition.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFileSize,
-      ).toEqual(
-        PaperPetition.VALIDATION_ERROR_MESSAGES
-          .applicationForWaiverOfFilingFeeFileSize[1],
-      );
+      ).toEqual('Your Filing Fee Waiver file size is empty');
     });
 
     it('fails validation if stinFile is set, but stinFileSize is not', () => {
@@ -320,7 +308,7 @@ describe('paperPetition entity', () => {
 
       expect(
         paperPetition.getFormattedValidationErrors()!.stinFileSize,
-      ).toEqual(PaperPetition.VALIDATION_ERROR_MESSAGES.stinFileSize[1]);
+      ).toEqual('Your STIN file size is empty');
     });
 
     it('fails validation if corporateDisclosureFile is set, but corporateDisclosureFileSize is not', () => {
@@ -336,9 +324,7 @@ describe('paperPetition entity', () => {
       expect(
         paperPetition.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(
-        PaperPetition.VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1],
-      );
+      ).toEqual('Your Corporate Disclosure Statement file size is empty');
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but requestForPlaceOfTrialFileSize is not', () => {
@@ -354,10 +340,7 @@ describe('paperPetition entity', () => {
       expect(
         paperPetition.getFormattedValidationErrors()!
           .requestForPlaceOfTrialFileSize,
-      ).toEqual(
-        PaperPetition.VALIDATION_ERROR_MESSAGES
-          .requestForPlaceOfTrialFileSize[1],
-      );
+      ).toEqual('Your Request for Place of Trial file size is empty');
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but preferredTrialCity is not', () => {
@@ -372,7 +355,7 @@ describe('paperPetition entity', () => {
 
       expect(
         paperPetition.getFormattedValidationErrors()!.preferredTrialCity,
-      ).toEqual(PaperPetition.VALIDATION_ERROR_MESSAGES.preferredTrialCity);
+      ).toEqual('Select a preferred trial location');
     });
 
     it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
@@ -388,9 +371,7 @@ describe('paperPetition entity', () => {
       expect(
         paperPetition.getFormattedValidationErrors()!
           .requestForPlaceOfTrialFile,
-      ).toEqual(
-        PaperPetition.VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile,
-      );
+      ).toEqual('Upload or scan a Request for Place of Trial (RQT)');
     });
 
     it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
@@ -431,8 +412,8 @@ describe('paperPetition entity', () => {
 
       expect(paperPetition.isValid()).toEqual(false);
       expect(paperPetition.getFormattedValidationErrors()).toEqual({
-        chooseAtLeastOneValue:
-          PaperPetition.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        'object.missing':
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
       });
     });
 
@@ -475,8 +456,8 @@ describe('paperPetition entity', () => {
 
       expect(paperPetition.isValid()).toEqual(false);
       expect(paperPetition.getFormattedValidationErrors()).toEqual({
-        chooseAtLeastOneValue:
-          PaperPetition.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        'object.missing':
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
       });
     });
   });
