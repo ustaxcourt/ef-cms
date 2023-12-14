@@ -54,7 +54,10 @@ export const CaseDetailSubnavTabs = connect(
                 icon={
                   caseDetailSubnavHelper.draftDocketEntryCount !== 0 && (
                     <div className="icon-tab-unread-messages">
-                      <div className="icon-tab-unread-messages-count">
+                      <div
+                        className="icon-tab-unread-messages-count"
+                        data-testid="icon-tab-unread-messages-count"
+                      >
                         {caseDetailSubnavHelper.draftDocketEntryCount}
                       </div>
                     </div>

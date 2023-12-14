@@ -3,6 +3,7 @@ import {
   CaseStatus,
   DOCKET_NUMBER_SUFFIXES,
 } from '../EntityConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
@@ -84,14 +85,8 @@ export class CalendaredCase extends JoiValidationEntity {
     ),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
-
   getValidationRules() {
     return CalendaredCase.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return CalendaredCase.VALIDATION_ERROR_MESSAGES;
   }
 }
 

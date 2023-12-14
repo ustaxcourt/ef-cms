@@ -3,7 +3,6 @@ import { Country } from './StartCase/Country';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -11,50 +10,43 @@ import React from 'react';
 export const UserContactEditForm = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
-    bind: props.bind,
-    changeCountryTypeSequence: props.changeCountryTypeSequence,
     form: state.form,
-    onBlurSequenceName: props.onBlurSequenceName,
-    onBlurValidationSequence: sequences[props.onBlurSequenceName],
-    onChangeSequenceName: props.onChangeSequenceName,
-    onChangeUpdateSequence: sequences[props.onChangeSequenceName],
-    type: props.type,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    validateUserContactSequence: sequences.validateUserContactSequence,
     validationErrors: state.validationErrors,
   },
   function UserContactEditForm({
-    bind,
-    changeCountryTypeSequence,
     COUNTRY_TYPES,
     form,
-    onBlurSequenceName,
-    onBlurValidationSequence,
-    onChangeSequenceName,
-    onChangeUpdateSequence,
-    type,
+    updateFormValueSequence,
+    validateUserContactSequence,
     validationErrors,
   }) {
+    const bind = 'form';
+    const type = 'contact';
+
     return (
       <>
         <Country
           bind={bind}
           type={type}
-          onBlur={onBlurSequenceName}
-          onChange={onChangeSequenceName}
-          onChangeCountryType={changeCountryTypeSequence}
+          onBlur={'validateUserContactSequence'}
+          onChange={'updateFormValueSequence'}
+          onChangeCountryType={'changeCountryTypeSequence'}
         />
         {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
           <Address
             bind={bind}
             type={type}
-            onBlur={onBlurSequenceName}
-            onChange={onChangeSequenceName}
+            onBlur={'validateUserContactSequence'}
+            onChange={'updateFormValueSequence'}
           />
         ) : (
           <InternationalAddress
             bind={bind}
             type={type}
-            onBlur={onBlurSequenceName}
-            onChange={onChangeSequenceName}
+            onBlur={'validateUserContactSequence'}
+            onChange={'updateFormValueSequence'}
           />
         )}
         <FormGroup errorText={validationErrors?.contact?.phone}>
@@ -73,10 +65,10 @@ export const UserContactEditForm = connect(
             type="tel"
             value={form.contact.phone || ''}
             onBlur={() => {
-              onBlurValidationSequence();
+              validateUserContactSequence();
             }}
             onChange={e => {
-              onChangeUpdateSequence({
+              updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
