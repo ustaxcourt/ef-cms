@@ -23,11 +23,13 @@ export const updateCaseContext = async (
   applicationContext: IApplicationContext,
   {
     associatedJudge,
+    associatedJudgeId,
     caseCaption,
     caseStatus,
     docketNumber,
   }: {
     associatedJudge?: string;
+    associatedJudgeId?: string;
     caseCaption?: string;
     caseStatus?: string;
     docketNumber: string;
@@ -51,6 +53,10 @@ export const updateCaseContext = async (
 
   if (associatedJudge) {
     newCase.setAssociatedJudge(associatedJudge);
+  }
+
+  if (associatedJudgeId) {
+    newCase.setAssociatedJudgeId(associatedJudgeId);
   }
 
   // if this case status is changing FROM calendared
@@ -93,7 +99,10 @@ export const updateCaseContext = async (
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
 
-      newCase.removeFromTrialWithAssociatedJudge(associatedJudge);
+      newCase.removeFromTrialWithAssociatedJudge(
+        associatedJudge,
+        associatedJudgeId,
+      );
     } else if (
       oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
     ) {
