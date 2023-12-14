@@ -1,3 +1,4 @@
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { put } from '../../dynamodbClientService';
 
 export const updateUserRecords = async ({
@@ -46,7 +47,7 @@ export const createNewPractitionerUser = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TPractitioner;
+  user: RawPractitioner;
 }) => {
   const { userId } = user;
 
