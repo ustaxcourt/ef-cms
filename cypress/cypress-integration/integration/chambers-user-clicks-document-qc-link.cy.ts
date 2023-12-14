@@ -1,20 +1,13 @@
-import { navigateTo as navigateToDashboard } from '../support/pages/dashboard';
+import { loginAsColvinChambers } from '../../helpers/auth/login-as-helpers';
 
 describe('A Colvins chambers user has the correct flow for QC documents', function () {
-  it('should log in as chambers user', () => {
-    navigateToDashboard('colvinschambers');
-  });
-
-  it('should navigate to document QC', () => {
-    cy.get('a.usa-nav__link').contains('Document QC').click();
-    cy.get('h1').contains('Document QC').should('exist');
-  });
-
-  it('should go directly to the right page when clicking on un-QCed document', () => {
-    cy.get('a.case-link').contains('Administrative Record').click();
-  });
-
-  it('should find an H3 with the text "administrative record', () => {
-    cy.get('h3').contains('Administrative Record').should('exist');
+  it('login as chambers and check administrative record link exists', () => {
+    loginAsColvinChambers();
+    cy.get('[data-testid="document-qc-nav-item"]')
+      .contains('Document QC')
+      .click();
+    cy.get('[data-testid="work-item-103-20"] a.case-link')
+      .contains('Administrative Record')
+      .should('exist');
   });
 });

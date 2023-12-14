@@ -73,13 +73,7 @@ export const UserContactEdit = connect(
                 />
               </FormGroup>
             )}
-            <UserContactEditForm
-              bind="form"
-              changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
-              type="contact"
-              onBlurSequenceName="validateUserContactSequence"
-              onChangeSequenceName="updateFormValueSequence"
-            />
+            <UserContactEditForm />
           </div>
           <Button
             data-testid="save-edit-contact"

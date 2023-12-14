@@ -1,5 +1,3 @@
-import { RawUser } from '@shared/business/entities/User';
-
 /*
   The plan for this file is to slowly remove all of these manually defined types as we convert entities to typescript.
 */
@@ -32,31 +30,6 @@ type TCaseNote = {
   docketNumber: string;
   notes: string;
 };
-
-type TPractitioner = {
-  entityName: string;
-  additionalPhone?: string;
-  admissionsDate: string;
-  admissionsStatus: string;
-  representing?: string[];
-  barNumber: string;
-  birthYear: string;
-  confirmEmail?: string;
-  employer: string;
-  firmName: string;
-  firstName: string;
-  lastName: string;
-  middleName?: string;
-  name: string;
-  originalBarState: string;
-  practitionerNotes?: string;
-  practitionerType: string;
-  section: string;
-  suffix?: string;
-  serviceIndicator: string;
-  updatedEmail?: string;
-  role: string;
-} & RawUser;
 
 interface IValidateRawCollection<I> {
   (collection: I[], options: { applicationContext: IApplicationContext }): I[];
