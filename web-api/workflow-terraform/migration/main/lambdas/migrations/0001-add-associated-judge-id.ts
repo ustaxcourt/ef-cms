@@ -1,7 +1,11 @@
 import { TDynamoRecord } from '../../../../../src/persistence/dynamo/dynamoTypes';
 
 const isJudgeUserItem = item => {
-  return item.pk.startsWith('user|') && item.role === 'judge';
+  return (
+    item.pk.startsWith('user|') &&
+    item.sk.startsWith('user|') &&
+    item.role === 'judge'
+  );
 };
 
 const isCaseRecord = item => {
@@ -18,13 +22,12 @@ export const migrateItems = items => {
 
   const itemsAfter: TDynamoRecord[] = [];
 
-  for (const item of items.slice(0, 20)) {
+  for (const item of items) {
     if (
       isCaseRecord(item) &&
       item.associatedJudge &&
       item.associatedJudge !== 'Chief Judge'
     ) {
-      // TODO: do we need to throw an error if the judge name doesnt exist in the map
       item.associatedJudgeId = judgesMap[item.associatedJudge];
     }
 
