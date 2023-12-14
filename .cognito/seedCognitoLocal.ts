@@ -192,7 +192,7 @@ const cognitoLocalJSON: CognitoLocalJSON = {
 users.forEach(user => {
   cognitoLocalJSON.Users[user.email] = {
     Username: user.email,
-    Password: 'Pa$$word!',
+    Password: 'Testing1234$',
     Attributes: [
       {
         Name: 'sub',
