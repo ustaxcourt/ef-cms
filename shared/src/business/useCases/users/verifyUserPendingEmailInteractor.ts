@@ -84,6 +84,10 @@ export const updatePetitionerCases = async ({
   docketNumbersAssociatedWithUser,
   user,
 }) => {
+  applicationContext.logger.info('updatePetitionerCases', {
+    docketNumbersAssociatedWithUser,
+  });
+
   const rawCasesToUpdate = await Promise.all(
     docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({

@@ -50,6 +50,10 @@ export const getCaseByDocketNumber = async ({
       KeyConditionExpression: '#gsi1pk = :gsi1pk',
       applicationContext,
     });
+    applicationContext.logger.info('getCaseByDocketNumber', {
+      consolidatedCaseItems,
+      docketNumber,
+    });
 
     consolidatedCases = aggregateConsolidatedCaseItems(consolidatedCaseItems);
   }
