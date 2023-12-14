@@ -8,5 +8,8 @@ export const logInInteractor = (
     applicationContext,
     body: { email, password },
     endpoint: '/auth/login',
+    options: {
+      withCredentials: true,
+    },
   });
 };
