@@ -107,15 +107,15 @@ function generateRandomDate() {
 
 function getRandomElementFromArray() {
   const statusOfMatter = [
-    'Awaiting Consideration',
-    'Awaiting Briefs',
+    'AwaitingBriefs',
+    'AwaitingConsideration',
+    'AwaitingRelease',
     'Drafting',
-    'Reviewing Draft',
-    'Submitted to Chief Judge',
-    'Revising Draft',
-    'Submitted to Reporter',
-    'Awaiting Release',
+    'ReviewingDraft',
+    'RevisingDraft',
     'Stayed',
+    'SubmittedToChiefJudge',
+    'SubmittedToReporter',
   ];
   const randomIndex = Math.floor(Math.random() * statusOfMatter.length);
   return statusOfMatter[randomIndex];
