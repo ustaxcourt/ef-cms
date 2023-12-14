@@ -1,4 +1,4 @@
-import { CONTACT_TYPES } from '../EntityConstants';
+import { CONTACT_TYPES, SERVICE_INDICATOR_TYPES } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 
@@ -25,7 +25,9 @@ export class PublicContact extends JoiValidationEntity {
       ...Object.values(CONTACT_TYPES),
     ).optional(),
     name: JoiValidationConstants.STRING.max(500).optional(),
-    serviceIndicator: JoiValidationConstants.STRING.required(),
+    serviceIndicator: JoiValidationConstants.STRING.valid(
+      ...Object.values(SERVICE_INDICATOR_TYPES),
+    ).optional(),
     state: JoiValidationConstants.STRING.optional(),
   };
 
