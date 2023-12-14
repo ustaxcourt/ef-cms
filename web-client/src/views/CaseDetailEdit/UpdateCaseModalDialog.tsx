@@ -124,7 +124,10 @@ export const UpdateCaseModalDialog = connect(
                 <option value="">- Select -</option>
                 <option value="Chief Judge">Chief Judge</option>
                 {modal.judges.map(judgeUser => (
-                  <option key={judgeUser.userId} value={[judgeUser.name, judgeUser.userId]}>
+                  <option
+                    key={judgeUser.userId}
+                    value={[judgeUser.name, judgeUser.userId]}
+                  >
                     {judgeUser.name}
                   </option>
                 ))}
