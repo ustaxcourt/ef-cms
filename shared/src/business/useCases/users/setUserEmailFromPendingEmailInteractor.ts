@@ -81,7 +81,10 @@ export const setUserEmailFromPendingEmailInteractor = async (
       );
     }
   } catch (error) {
-    applicationContext.logger.error(error);
+    applicationContext.logger.error(
+      'error setUserEmailFromPendingEmailInteractor',
+      { error },
+    );
     throw error;
   }
 
