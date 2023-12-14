@@ -47,11 +47,6 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     .getPersistenceGateway()
     .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judgeId });
 
-  console.log(
-    'allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch',
-    allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch,
-  );
-
   const currentDate = prepareDateFromString().toISO()!;
   const pendingMotionDocketEntriesOlderThan180DaysFromDynamo =
     await Promise.all(
