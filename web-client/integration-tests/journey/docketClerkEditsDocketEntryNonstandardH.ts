@@ -1,4 +1,3 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   getFormattedDocketEntriesForTest,
@@ -7,7 +6,6 @@ import {
 } from '../helpers';
 
 export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
-  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard H scenario', async () => {
@@ -41,7 +39,7 @@ export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      secondaryDocument: VALIDATION_ERROR_MESSAGES.secondaryDocument,
+      secondaryDocument: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

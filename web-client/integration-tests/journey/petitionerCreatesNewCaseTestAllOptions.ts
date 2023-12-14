@@ -3,7 +3,6 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
@@ -250,7 +249,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     await cerebralTest.runSequence('submitFilePetitionSequence');
 
     expect(cerebralTest.getState('alertError').messages).toContain(
-      Case.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
+      'Upload a Corporate Disclosure Statement',
     );
 
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
@@ -260,7 +259,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await cerebralTest.runSequence('submitFilePetitionSequence');
     expect(cerebralTest.getState('alertError').messages[0]).not.toContain(
-      Case.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
+      'Upload a Corporate Disclosure Statement',
     );
 
     // Partnership other than tax matters party type primary contact

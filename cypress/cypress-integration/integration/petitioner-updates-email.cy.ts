@@ -5,7 +5,6 @@ import {
   confirmEmailPendingAlert,
   goToMyAccount,
 } from '../support/pages/my-account';
-
 import { confirmEmailVerificationSuccessful } from '../support/pages/public/email-verification';
 import { navigateTo as loginAs } from '../support/pages/maintenance';
 
