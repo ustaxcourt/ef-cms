@@ -20,7 +20,7 @@ export const ErrorView = connect(
             contact information.
           </p>
           {alertHelper.showLogIn && (
-            <Button href="/" id="home">
+            <Button data-testid="back-to-dashboard" href="/" id="home">
               Back to Dashboard
             </Button>
           )}

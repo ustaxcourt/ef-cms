@@ -4,6 +4,7 @@ import {
   MOCK_PRACTITIONER,
   admissionsClerkUser,
 } from '../../../test/mockUsers';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
@@ -13,7 +14,7 @@ import {
 } from './updatePractitionerUserInteractor';
 
 describe('determineEntitiesToLock', () => {
-  const mockPractitioner: TPractitioner = MOCK_PRACTITIONER;
+  const mockPractitioner: RawPractitioner = MOCK_PRACTITIONER;
   let mockParams;
   beforeEach(() => {
     mockParams = {
