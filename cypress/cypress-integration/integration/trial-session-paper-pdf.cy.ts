@@ -1,6 +1,5 @@
 import { fillInCreateCaseFromPaperForm } from '../support/pages/create-paper-petition';
 import { getCreateACaseButton } from '../support/pages/document-qc';
-import { waitForLoadingComplete } from '../support/generalCommands/waitForLoader';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
   it('should create a trial session, add a case, and generate a pdf for paper service', () => {
@@ -88,7 +87,6 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           );
           cy.get('h3:contains("Trial - Scheduled")').should('exist');
           cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
-
           cy.get('[data-testid="irs-calendar-admin-info-name"]').should(
             'have.text',
             'Nero West',
@@ -101,12 +99,15 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
             'have.text',
             '+1 (555) 555-5555',
           );
-
+          cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
+            'not.exist',
+          );
           cy.get(`label[for="${docketNumber}-complete"]`).click();
-          waitForLoadingComplete();
+          cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
+            'exist',
+          );
           cy.get('#set-calendar-button').click();
           cy.get('#modal-button-confirm').click();
-          waitForLoadingComplete();
           cy.url().should('include', 'print-paper-trial-notices');
           cy.get('[data-testid="printing-complete"]').click();
           cy.url().should(
