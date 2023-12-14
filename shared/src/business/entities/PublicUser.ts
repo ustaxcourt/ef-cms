@@ -1,4 +1,3 @@
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { ROLES } from './EntityConstants';

@@ -13,9 +13,7 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
   public objections: string;
   public secondaryDocumentFile?: object;
 
-  private secondaryDocumentErrorMessages: object;
-
-  constructor(rawProps, errorMessages) {
+  constructor(rawProps) {
     super('SecondaryDocumentInformationFactory');
     this.attachments = rawProps.attachments || false;
     this.category = rawProps.category;
@@ -24,18 +22,28 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
     this.documentType = rawProps.documentType;
     this.objections = rawProps.objections;
     this.secondaryDocumentFile = rawProps.secondaryDocumentFile;
-
-    this.secondaryDocumentErrorMessages = errorMessages;
   }
 
   getValidationRules() {
     let schema = {};
 
     let schemaOptionalItems = {
-      attachments: joi.boolean(),
-      certificateOfService: joi.boolean(),
-      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-      objections: JoiValidationConstants.STRING,
+      attachments: joi
+        .boolean()
+        .messages({ '*': 'Enter selection for Attachments.' }),
+      certificateOfService: joi.boolean().messages({
+        '*': 'Indicate whether you are including a Certificate of Service',
+      }),
+      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
+        'now',
+      ).messages({
+        '*': 'Enter date of service',
+        'date.max':
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
+      }),
+      objections: JoiValidationConstants.STRING.messages({
+        '*': 'Enter selection for Objections.',
+      }),
     };
 
     const makeRequired = itemName => {
@@ -69,9 +77,5 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
       }
     }
     return schema;
-  }
-
-  getErrorToMessageMap() {
-    return this.secondaryDocumentErrorMessages;
   }
 }

@@ -1,3 +1,4 @@
+import { ExcludeMethods } from 'types/TEntity';
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -16,8 +17,14 @@ export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    secondaryDocument: joi.object().required(),
-    secondaryDocumentFile: joi.object().optional(),
+    secondaryDocument: joi
+      .object()
+      .required()
+      .messages({ '*': 'Select a document' }),
+    secondaryDocumentFile: joi
+      .object()
+      .optional()
+      .messages({ '*': 'Upload a document' }),
   };
 
   getValidationRules() {
