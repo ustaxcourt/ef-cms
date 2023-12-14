@@ -87,7 +87,6 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           );
           cy.get('h3:contains("Trial - Scheduled")').should('exist');
           cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
-
           cy.get('[data-testid="irs-calendar-admin-info-name"]').should(
             'have.text',
             'Nero West',
@@ -100,7 +99,6 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
             'have.text',
             '+1 (555) 555-5555',
           );
-
           cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
             'not.exist',
           );
