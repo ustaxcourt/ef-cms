@@ -1,18 +1,23 @@
-import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const FormGroup = connect(function FormGroup(props) {
-  const {
-    children,
-    className,
-    confirmationText,
-    errorText,
-    formGroupRef,
-    id,
-    omitFormGroupClass,
-  } = props;
-
+export const FormGroup = ({
+  children,
+  className,
+  confirmationText,
+  errorText,
+  formGroupRef,
+  id,
+  omitFormGroupClass,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  confirmationText?: string;
+  errorText?: string | string[];
+  formGroupRef?: React.RefObject<HTMLInputElement>;
+  id?: string;
+  omitFormGroupClass?: boolean;
+}) => {
   let hasError = false;
   let hasConfirmation = !!confirmationText;
 
@@ -22,8 +27,8 @@ export const FormGroup = connect(function FormGroup(props) {
     hasError = !!errorText;
   }
 
-  const renderMultipleErrors = () => {
-    return errorText.map(text => {
+  const renderMultipleErrors = (errorTextArr: string[]) => {
+    return errorTextArr.map(text => {
       return (
         text && (
           <span className="usa-error-message" key={text}>
@@ -57,11 +62,11 @@ export const FormGroup = connect(function FormGroup(props) {
       ref={formGroupRef}
     >
       {children}
-      {Array.isArray(errorText) && renderMultipleErrors()}
+      {Array.isArray(errorText) && renderMultipleErrors(errorText)}
       {!Array.isArray(errorText) && renderSingleError()}
       {hasConfirmation && renderSingleConfirmation()}
     </div>
   );
-});
+};
 
 FormGroup.displayName = 'FormGroup';

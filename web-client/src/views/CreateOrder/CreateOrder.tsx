@@ -51,7 +51,11 @@ export const CreateOrder = connect(
 
         <section className="usa-section grid-container DocumentDetail">
           <div className="grid-container padding-x-0">
-            <h1 className="heading-1" id="page-title">
+            <h1
+              className="heading-1"
+              data-testid="create-order-page-title"
+              id="page-title"
+            >
               {pageTitle}{' '}
               <Button
                 link
@@ -75,6 +79,7 @@ export const CreateOrder = connect(
                   <Button
                     link
                     className="padding-top-0"
+                    data-testid="add-docket-number-btn"
                     icon={createOrderHelper.addDocketNumbersButtonIcon}
                     id="add-docket-numbers-btn"
                     onClick={() => {
