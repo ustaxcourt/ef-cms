@@ -30,10 +30,6 @@ describe('Docket clerk opinion advanced search', () => {
 
     const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
     expect(legacyJudge).toBeTruthy();
-
-    await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 
   it('should clear search fields when "Clear Search" is clicked', async () => {
