@@ -38,6 +38,7 @@ const SectionWorkQueueTable = connect(
       <table
         aria-describedby="tab-work-queue"
         className="usa-table ustc-table subsection"
+        data-testid="section-work-queue-inbox"
         id="section-work-queue"
       >
         <thead>
@@ -119,6 +120,7 @@ SectionWorkQueueTable.Row = React.memo(
                   aria-label="Select work item"
                   checked={item.selected}
                   className="usa-checkbox__input"
+                  data-testid="select-work-item"
                   id={item.workItemId}
                   type="checkbox"
                   onChange={() => {
