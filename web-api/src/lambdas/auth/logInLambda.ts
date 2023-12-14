@@ -5,7 +5,7 @@ export const logInLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      const { accessToken, refreshToken } = await applicationContext
+      const { accessToken, idToken, refreshToken } = await applicationContext
         .getUseCases()
         .logInInteractor(applicationContext, { ...JSON.parse(event.body) });
 
@@ -16,7 +16,7 @@ export const logInLambda = event =>
       });
 
       return {
-        body: { accessToken },
+        body: { accessToken, idToken, refreshToken },
         headers: {
           'Set-Cookie': createCookieString(
             'refreshToken',

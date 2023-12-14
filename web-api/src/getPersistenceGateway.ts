@@ -369,11 +369,7 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
-  refreshToken: process.env.IS_LOCAL
-    ? (applicationContext, { refreshToken: aRefreshToken }) => ({
-        token: aRefreshToken,
-      })
-    : refreshToken,
+  refreshToken,
   removeIrsPractitionerOnCase,
   removeLock,
   removePrivatePractitionerOnCase,

@@ -152,7 +152,8 @@ const app = {
       !wasLoginUsingTokenInUrl(window.location.href) &&
       !isOnMockLogin(window.location.href);
 
-    if (shouldRefreshToken) {
+    if (!window.location.href.includes('/login')) {
+      // TODO 10007: Seems like an odd thing to check for login
       try {
         const response = await applicationContext
           .getUseCases()
