@@ -9,7 +9,8 @@ import React from 'react';
 export const AddEditDocketEntryWorksheetModal = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
-    STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
+    STATUS_OF_MATTER_OPTIONS_DICTIONARY:
+      state.constants.STATUS_OF_MATTER_OPTIONS_DICTIONARY,
     addEditDocketEntryWorksheetModalHelper:
       state.addEditDocketEntryWorksheetModalHelper,
     form: state.form,
@@ -25,7 +26,7 @@ export const AddEditDocketEntryWorksheetModal = connect(
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
-    STATUS_OF_MATTER_OPTIONS,
+    STATUS_OF_MATTER_OPTIONS_DICTIONARY,
     updateFormValueSequence,
     validateDocketEntryWorksheetSequence,
     validationErrors,
@@ -82,11 +83,13 @@ export const AddEditDocketEntryWorksheetModal = connect(
             }}
           >
             <option value="">- Select -</option>
-            {STATUS_OF_MATTER_OPTIONS.map(from => (
-              <option key={from} value={from}>
-                {from}
-              </option>
-            ))}
+            {Object.entries(STATUS_OF_MATTER_OPTIONS_DICTIONARY).map(
+              ([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ),
+            )}
           </select>
         </FormGroup>
 

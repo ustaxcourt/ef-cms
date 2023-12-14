@@ -57,7 +57,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     await Promise.all(
       allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch.map(
         async (docketEntry: RawDocketEntry) =>
-          await getLatestDataForPendingMotionsFromDynamo(
+          await getLatestDataForPendingMotions(
             docketEntry,
             applicationContext,
             currentDate,
@@ -154,7 +154,7 @@ function removeMotionsThatHaveBeenHandledInDynamo(
   );
 }
 
-async function getLatestDataForPendingMotionsFromDynamo(
+async function getLatestDataForPendingMotions(
   docketEntry: RawDocketEntry,
   applicationContext: IApplicationContext,
   currentDate: string,
