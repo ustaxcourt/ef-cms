@@ -18,10 +18,10 @@ describe('Private Practitioner requests access to case', () => {
     const secondaryFilerName = 'Sally';
 
     loginAsPetitioner();
-    petitionerCreatesEletronicCaseWithDeseasedSpouse({
+    petitionerCreatesEletronicCaseWithDeseasedSpouse(
       primaryFilerName,
       secondaryFilerName,
-    }).then(docketNumber => {
+    ).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsPrivatePractitioner();
 
