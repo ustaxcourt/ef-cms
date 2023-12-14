@@ -102,6 +102,7 @@ export const RequestAccessDocumentForm = connect(
                     'usa-label ustc-upload with-hint',
                     requestAccessHelper.showPrimaryDocumentValid && 'validated',
                   )}
+                  data-testid="primary-document-label"
                   htmlFor="primary-document"
                   id="primary-document-label"
                 >
