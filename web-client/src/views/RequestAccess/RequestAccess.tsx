@@ -109,6 +109,7 @@ export const RequestAccess = connect(
 
           <div className="margin-top-5">
             <Button
+              data-testid="request-access-submit-document"
               id="submit-document"
               type="submit"
               onClick={() => {

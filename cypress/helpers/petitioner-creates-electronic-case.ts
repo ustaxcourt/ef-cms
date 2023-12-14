@@ -1,8 +1,8 @@
 import { attachDummyFile } from './attach-file';
 
 export function petitionerCreatesEletronicCaseWithDeseasedSpouse({
-  primaryFilerName,
-  secondaryFilerName,
+  primaryFilerName = 'John',
+  secondaryFilerName = 'Sally',
 }: {
   primaryFilerName: string;
   secondaryFilerName: string;
@@ -41,7 +41,7 @@ export function petitionerCreatesEletronicCaseWithDeseasedSpouse({
     });
 }
 
-export function petitionerCreatesEletronicCase() {
+export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   attachDummyFile('stin-file');
@@ -52,7 +52,7 @@ export function petitionerCreatesEletronicCase() {
   cy.get('[data-testid="complete-step-2"]').click();
   cy.get('[data-testid="filing-type-0"]').click();
 
-  cy.get('[data-testid="contact-primary-name"]').type('John');
+  cy.get('[data-testid="contact-primary-name"]').type(primaryFilerName);
   cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AL');

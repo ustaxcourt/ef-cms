@@ -102,7 +102,7 @@ export const RequestAccessDocumentForm = connect(
                     'usa-label ustc-upload with-hint',
                     requestAccessHelper.showPrimaryDocumentValid && 'validated',
                   )}
-                  data-testid="request-access-primary-document-label"
+                  data-testid="primary-document-label"
                   htmlFor="primary-document"
                   id="primary-document-label"
                 >
@@ -117,7 +117,6 @@ export const RequestAccessDocumentForm = connect(
                 </span>
                 <StateDrivenFileInput
                   aria-describedby="primary-document-label"
-                  data-testid="request-access-primary-document"
                   id="primary-document"
                   name="primaryDocumentFile"
                   updateFormValueSequence="updateCaseAssociationFormValueSequence"
