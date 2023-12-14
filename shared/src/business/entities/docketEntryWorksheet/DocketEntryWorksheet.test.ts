@@ -8,7 +8,7 @@ describe('DocketEntryWorksheet', () => {
     docketEntryId: '208a959f-9526-4db5-b262-e58c476a4604',
     finalBriefDueDate: '2023-07-29',
     primaryIssue: 'SOME PRIMARY ISSUE',
-    statusOfMatter: 'Awaiting Consideration',
+    statusOfMatter: 'AwaitingConsideration',
   };
 
   it('should create a valid Entity', () => {
