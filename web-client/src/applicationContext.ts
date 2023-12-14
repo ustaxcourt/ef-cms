@@ -217,6 +217,7 @@ import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/p
 import { getScannerInterface } from './persistence/dynamsoft/getScannerInterface';
 import { getScannerMockInterface } from './persistence/dynamsoft/getScannerMockInterface';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
+import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
@@ -780,6 +781,7 @@ const applicationContext = {
       getPetitionerById,
       getPractitionersRepresenting,
       getSealedDocketEntryTooltip,
+      getSelectedConsolidatedCasesToMultiDocketOn,
       getServedPartiesCode,
       getSortableDocketNumber: Case.getSortableDocketNumber,
       getStampBoxCoordinates,
