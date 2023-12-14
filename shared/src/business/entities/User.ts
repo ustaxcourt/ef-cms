@@ -7,7 +7,6 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from './EntityConstants';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
