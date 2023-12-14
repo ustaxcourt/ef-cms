@@ -121,6 +121,7 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logInLambda } from '@web-api/lambdas/auth/logInLambda';
 import { logger } from './logger';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
@@ -1007,7 +1008,10 @@ app.get(
  * Authentication/Authorization
  */
 {
-  app.route('/auth/login').delete(lambdaWrapper(deleteAuthCookieLambda));
+  app
+    .route('/auth/login')
+    .delete(lambdaWrapper(deleteAuthCookieLambda))
+    .post(lambdaWrapper(logInLambda));
   app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 }
 

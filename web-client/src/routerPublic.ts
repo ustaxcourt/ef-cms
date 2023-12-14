@@ -36,11 +36,6 @@ const router = {
       app.getSequence('goToCreatePetitionerAccountSequence')();
     });
 
-    route('/login', () => {
-      setPageTitle('Login');
-      app.getSequence('gotoLoginSequence')();
-    });
-
     route('/create-account/verification-sent', () => {
       setPageTitle('Verification Sent');
       app.getSequence('goToVerificationSentSequence')();

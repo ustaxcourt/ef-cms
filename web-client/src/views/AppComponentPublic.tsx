@@ -9,7 +9,6 @@ import { HeaderPublic } from './Header/HeaderPublic';
 import { HealthCheck } from './Health/HealthCheck';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
-import { Login } from '@web-client/views/Public/Login/Login';
 import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
@@ -41,7 +40,6 @@ const pages = {
 
 const floatingCards = {
   CreatePetitionerAccount,
-  Login,
   VerificationSent,
 };
 
