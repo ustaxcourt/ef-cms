@@ -1,21 +1,24 @@
-import { getClientId } from './getClientId';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 // eslint-disable-next-line no-shadow
-export const refreshToken = async (applicationContext, { refreshToken }) => {
-  const { COGNITO_SUFFIX, STAGE } = process.env;
+export const refreshToken = async (
+  applicationContext: ServerApplicationContext,
+  { rToken }: { rToken: string },
+) => {
+  const clientId = applicationContext.environment.cognitoClientId;
 
-  const clientId = await getClientId({ userPoolId: process.env.USER_POOL_ID });
-
-  const response = await applicationContext.getHttpClient().post(
-    `https://auth-${STAGE}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/oauth2/token`,
-    new URLSearchParams({
-      client_id: clientId,
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-    }),
-  );
+  const result = await applicationContext
+    .getCognito()
+    .initiateAuth({
+      AuthFlow: 'REFRESH_TOKEN_AUTH',
+      AuthParameters: {
+        REFRESH_TOKEN: rToken,
+      },
+      ClientId: clientId,
+    })
+    .promise();
 
   return {
-    token: response.data.id_token,
+    token: result.AuthenticationResult?.IdToken,
   };
 };

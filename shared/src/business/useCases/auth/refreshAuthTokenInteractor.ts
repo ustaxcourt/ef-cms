@@ -9,7 +9,7 @@ export const refreshAuthTokenInteractor = async (
   }
   const { token } = await applicationContext
     .getPersistenceGateway()
-    .refreshToken(applicationContext, { refreshToken });
+    .refreshToken(applicationContext, { rToken: refreshToken });
   return {
     token,
   };
