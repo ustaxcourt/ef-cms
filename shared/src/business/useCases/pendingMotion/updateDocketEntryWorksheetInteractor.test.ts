@@ -12,7 +12,7 @@ describe('updateDocketEntryWorksheetInteractor', () => {
     docketEntryId: TEST_DOCKET_ENTRY_ID,
     finalBriefDueDate: '2023-07-29',
     primaryIssue: 'tests primaryIssue',
-    statusOfMatter: 'Awaiting Consideration',
+    statusOfMatter: 'AwaitingConsideration',
   };
 
   beforeEach(() => {
@@ -68,7 +68,7 @@ describe('updateDocketEntryWorksheetInteractor', () => {
       entityName: 'DocketEntryWorksheet',
       finalBriefDueDate: '2023-07-29',
       primaryIssue: 'tests primaryIssue',
-      statusOfMatter: 'Awaiting Consideration',
+      statusOfMatter: 'AwaitingConsideration',
     });
     expect(judgeUserId).toEqual(TEST_JUDGE_USER_ID);
 
@@ -77,7 +77,7 @@ describe('updateDocketEntryWorksheetInteractor', () => {
       entityName: 'DocketEntryWorksheet',
       finalBriefDueDate: '2023-07-29',
       primaryIssue: 'tests primaryIssue',
-      statusOfMatter: 'Awaiting Consideration',
+      statusOfMatter: 'AwaitingConsideration',
     });
   });
 });
