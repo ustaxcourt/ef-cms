@@ -232,6 +232,7 @@ import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumb
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
 import { openAddEditCaseWorksheetModalSequence } from './sequences/openAddEditCaseWorksheetModalSequence';
+import { openAddEditDocketEntryWorksheetModalSequence } from '@web-client/presenter/sequences/openAddEditDocketEntryWorksheetModalSequence';
 import { openAddEditHearingNoteModalSequence } from './sequences/openAddEditHearingNoteModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
@@ -471,6 +472,7 @@ import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreat
 import { updateDateRangeForDeadlinesSequence } from './sequences/updateDateRangeForDeadlinesSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
+import { updateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/updateDocketEntryWorksheetSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
@@ -525,6 +527,7 @@ import { validateChangeLoginAndServiceEmailSequence } from './sequences/validate
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
+import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/validateDocketEntryWorksheetSequence';
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
@@ -929,6 +932,8 @@ export const presenterSequences = {
     openAddEditCaseNoteModalSequence as unknown as Function,
   openAddEditCaseWorksheetModalSequence:
     openAddEditCaseWorksheetModalSequence as unknown as Function,
+  openAddEditDocketEntryWorksheetModalSequence:
+    openAddEditDocketEntryWorksheetModalSequence as unknown as Function,
   openAddEditHearingNoteModalSequence:
     openAddEditHearingNoteModalSequence as unknown as Function,
   openAddEditSessionNoteModalSequence:
@@ -1346,6 +1351,8 @@ export const presenterSequences = {
     updateDocketEntryFormValueSequence as unknown as Function,
   updateDocketEntryMetaDocumentFormValueSequence:
     updateDocketEntryMetaDocumentFormValueSequence as unknown as Function,
+  updateDocketEntryWorksheetSequence:
+    updateDocketEntryWorksheetSequence as unknown as Function,
   updateDocketNumberSearchFormSequence:
     updateDocketNumberSearchFormSequence as unknown as Function,
   updateFileDocumentWizardFormValueSequence:
@@ -1446,6 +1453,8 @@ export const presenterSequences = {
     validateCreateMessageInModalSequence as unknown as Function,
   validateDocketEntrySequence:
     validateDocketEntrySequence as unknown as Function,
+  validateDocketEntryWorksheetSequence:
+    validateDocketEntryWorksheetSequence as unknown as Function,
   validateDocumentSequence: validateDocumentSequence as unknown as Function,
   validateEditPetitionerCounselSequence:
     validateEditPetitionerCounselSequence as unknown as Function,

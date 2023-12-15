@@ -339,9 +339,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -369,9 +367,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -644,9 +640,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.325Z",
@@ -684,9 +678,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.327Z",
@@ -724,9 +716,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.316Z",
@@ -905,9 +895,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.912Z",
@@ -992,9 +980,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.921Z",
@@ -1032,9 +1018,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.924Z",
@@ -1497,9 +1481,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
@@ -1527,9 +1509,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|101-20",
     "docketNumber": "101-20"
@@ -1956,9 +1936,7 @@
     "eventCode": "EVID",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -2181,9 +2159,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-21",
     "docketNumber": "101-21"
   },
@@ -2811,9 +2787,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "pending",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-21",
     "docketNumber": "101-21"
   },
@@ -3000,9 +2974,7 @@
     "eventCode": "MOTR",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -3847,9 +3819,7 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"filersMap\":{\"7805d1ab-18d0-43ec-bafb-654e83405416\":true},\"filers\":[\"7805d1ab-18d0-43ec-bafb-654e83405416\"],\"practitioner\":[],\"dateReceivedMonth\":1,\"dateReceivedDay\":1,\"dateReceivedYear\":2018,\"primaryDocumentFileSize\":100,\"eventCode\":\"A\",\"category\":\"Answer (filed by respondent only)\",\"documentType\":\"Answer\",\"documentTitle\":\"Answer\",\"scenario\":\"Standard\",\"pending\":true,\"certificateOfServiceDate\":null,\"dateReceived\":\"2018-01-01T05:00:00.000Z\",\"createdAt\":\"2018-01-01T05:00:00.000Z\",\"docketNumber\":\"101-21\",\"isFileAttached\":false,\"isPaper\":true,\"receivedAt\":\"2018-01-01T05:00:00.000Z\"}",
     "pk": "case|101-21",
@@ -10140,9 +10110,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10170,9 +10138,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10412,9 +10378,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-23",
     "docketNumber": "101-23"
   },
@@ -10443,9 +10407,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-23",
     "docketNumber": "101-23"
   },
@@ -10761,9 +10723,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
@@ -10835,9 +10795,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|102-20",
     "docketNumber": "102-20"
@@ -10866,9 +10824,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -11040,9 +10996,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -11071,9 +11025,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -11267,9 +11219,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "filers": ["5da54af1-1969-4011-8275-a949084b7928"],
     "servedPartiesCode": "R",
     "pk": "case|102-67",
     "servedAt": "2023-04-03T15:52:59.426Z",
@@ -11308,9 +11258,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "filers": ["5da54af1-1969-4011-8275-a949084b7928"],
     "servedPartiesCode": "R",
     "pk": "case|102-67",
     "servedAt": "2023-04-03T15:52:59.423Z",
@@ -11450,9 +11398,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|102-67",
-    "representing": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "representing": ["5da54af1-1969-4011-8275-a949084b7928"],
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
@@ -11728,9 +11674,7 @@
     "eventCode": "SIAB",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "23d9342c-577d-4cc4-a44d-aae2dca9a436"
-    ],
+    "filers": ["23d9342c-577d-4cc4-a44d-aae2dca9a436"],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "pk": "case|103-19",
@@ -11960,9 +11904,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "servedAt": "2020-01-23T21:45:34.521Z",
     "pk": "case|103-20",
@@ -12004,9 +11946,7 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
@@ -12081,9 +12021,7 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "NOEI",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
     "servedAt": "2020-09-21T20:55:12.840Z",
@@ -12153,9 +12091,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|103-20",
     "servedAt": "2020-09-25T19:27:16.630Z",
@@ -12183,9 +12119,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
@@ -12236,9 +12170,7 @@
       "countryType": "domestic"
     },
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "firmName": "GW Law Offices",
     "pk": "case|103-20",
@@ -12579,9 +12511,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "DISC",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.587Z",
@@ -12620,9 +12550,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.588Z",
@@ -12696,9 +12624,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.589Z",
@@ -12923,9 +12849,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-17",
@@ -12962,9 +12886,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MISC",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -12998,9 +12920,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13175,9 +13095,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-18",
@@ -13214,9 +13132,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -13250,9 +13166,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13677,9 +13591,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
@@ -13716,9 +13628,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
     "pk": "case|104-20",
@@ -13752,9 +13662,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
     "pk": "case|104-20",
@@ -13898,9 +13806,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "40eb0890-aab3-4925-8769-e056b30c502d"
-    ],
+    "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
     "servedPartiesCode": "R",
     "pk": "case|104-23",
     "servedAt": "2023-01-06T22:33:13.813Z",
@@ -13968,9 +13874,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "40eb0890-aab3-4925-8769-e056b30c502d"
-    ],
+    "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
     "servedPartiesCode": "R",
     "pk": "case|104-23",
     "servedAt": "2023-01-06T22:33:13.821Z",
@@ -14066,9 +13970,7 @@
       "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
       "eventCode": "P",
       "processingStatus": "complete",
-      "filers": [
-        "40eb0890-aab3-4925-8769-e056b30c502d"
-      ],
+      "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
       "servedPartiesCode": "R",
       "pk": "case|104-23",
       "servedAt": "2023-01-06T22:33:13.813Z",
@@ -14657,9 +14559,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "28cae029-bae2-4eef-ac54-878fbbab65e3"
-    ],
+    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -14889,9 +14789,7 @@
     "eventCode": "M000",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "freeText": "For testing Stamp Data",
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
@@ -14929,9 +14827,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "pk": "case|105-20",
@@ -14967,9 +14863,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "servedAt": "2020-04-29T15:51:29.168Z",
     "pk": "case|105-20",
@@ -15038,9 +14932,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -15306,9 +15198,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "29425430-3b75-456d-9e25-6f906b8f11d1"
-    ],
+    "filers": ["29425430-3b75-456d-9e25-6f906b8f11d1"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -15348,9 +15238,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "R",
     "pk": "case|105-23",
     "servedAt": "2023-07-26T17:04:05.684Z",
@@ -15507,9 +15395,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -15548,9 +15434,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "SIMB",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
     "docketNumber": "105-23"
@@ -15643,9 +15527,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -15838,9 +15720,7 @@
     "eventCode": "BRF",
     "processingStatus": "complete",
     "lodged": true,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -15971,9 +15851,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "SIAB",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16012,9 +15890,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "R",
     "pk": "case|105-23",
     "servedAt": "2023-07-26T17:04:05.693Z",
@@ -16063,9 +15939,7 @@
     "eventCode": "SEOB",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -16180,9 +16054,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16258,9 +16130,7 @@
         "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
         "eventCode": "AMAT",
         "processingStatus": "complete",
-        "filers": [
-          "7805d1ab-18d0-43ec-bafb-654e83405418"
-        ],
+        "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
         "servedPartiesCode": "B",
         "certificateOfServiceDate": null,
         "servedAt": "2023-07-26T17:29:33.751Z",
@@ -16288,9 +16158,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "M014",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16344,9 +16212,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16401,9 +16267,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16608,9 +16472,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "REPL",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16834,9 +16696,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "REDC",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16922,9 +16782,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "serviceIndicator": "Electronic",
@@ -17035,9 +16893,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -17173,9 +17029,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -17604,9 +17458,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -17878,9 +17730,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -18401,9 +18251,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -18685,9 +18533,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -19245,9 +19091,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "filers": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "servedPartiesCode": "R",
     "pk": "case|105-67",
     "servedAt": "2023-04-03T15:52:36.489Z",
@@ -19286,9 +19130,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "filers": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "servedPartiesCode": "R",
     "pk": "case|105-67",
     "servedAt": "2023-04-03T15:52:36.482Z",
@@ -19320,9 +19162,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|102-67",
-    "representing": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "representing": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
@@ -19542,9 +19382,7 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -19636,9 +19474,7 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -19880,9 +19716,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "servedPartiesCode": "R",
     "pk": "case|106-23",
     "servedAt": "2023-01-06T22:34:39.112Z",
@@ -19980,9 +19814,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "servedPartiesCode": "R",
     "pk": "case|106-23",
     "servedAt": "2023-01-06T22:34:39.108Z",
@@ -20021,9 +19853,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|104-23",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -20424,9 +20254,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -21124,9 +20952,7 @@
       "countryType": "domestic"
     },
     "name": "Ronald Buch Jr.",
-    "representing": [
-      "6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"
-    ],
+    "representing": ["6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"],
     "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
     "firmName": "Firmly Grasped, LLP",
     "pk": "case|110-19",
@@ -21327,9 +21153,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.564Z",
@@ -21366,9 +21190,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.554Z",
@@ -21401,9 +21223,7 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "editState": "{}",
     "pk": "case|111-19",
@@ -21476,9 +21296,7 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Guy Fieri",
       "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -21580,9 +21398,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.670Z",
@@ -21619,9 +21435,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.667Z",
@@ -21724,9 +21538,7 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Brian Earl Spilner",
       "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
@@ -21854,9 +21666,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.643Z",
@@ -21893,9 +21703,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.636Z",
@@ -22056,9 +21864,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
     "pk": "case|117-20",
@@ -22087,9 +21893,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|117-20",
     "docketNumber": "117-20"
@@ -22269,9 +22073,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
     "pk": "case|120-20",
@@ -22304,9 +22106,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|120-20",
     "docketNumber": "120-20"
@@ -22416,9 +22216,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "pk": "case|121-20",
     "docketNumber": "121-20"
@@ -22461,9 +22259,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "APW",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
@@ -22508,9 +22304,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
@@ -22644,9 +22438,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -22705,9 +22497,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -22838,9 +22628,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -22891,9 +22679,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -23034,9 +22820,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
-    ],
+    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.162Z",
@@ -23073,9 +22857,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
-    ],
+    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.222Z",
@@ -23297,9 +23079,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -23350,9 +23130,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -23482,9 +23260,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
-    ],
+    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -23511,9 +23287,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
-    ],
+    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -23667,9 +23441,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -23721,9 +23493,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -23853,9 +23623,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -23883,9 +23651,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -24090,9 +23856,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "05b98fff-e4ca-4114-b8ec-7218effc982e"
-    ],
+    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.081Z",
@@ -24129,9 +23893,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "05b98fff-e4ca-4114-b8ec-7218effc982e"
-    ],
+    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.130Z",
@@ -24926,9 +24688,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -24957,9 +24717,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -25127,9 +24885,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25158,9 +24914,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25260,9 +25014,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25291,9 +25043,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25518,9 +25268,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -25549,9 +25297,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -25719,9 +25465,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -25775,9 +25519,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -25945,9 +25687,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -26001,9 +25741,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -26196,9 +25934,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -26226,9 +25962,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -26395,9 +26129,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -26450,9 +26182,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -26644,9 +26374,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -26674,9 +26402,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -26797,9 +26523,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -26873,9 +26597,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -27067,9 +26789,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -27122,9 +26842,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -27415,9 +27133,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -27445,9 +27161,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -27712,9 +27426,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -27742,9 +27454,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -28043,9 +27753,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.976Z",
@@ -28083,9 +27791,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.967Z",
@@ -28123,9 +27829,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.979Z",
@@ -28365,9 +28069,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -28395,9 +28097,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -28662,9 +28362,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -28717,9 +28415,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -28984,9 +28680,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -29039,9 +28733,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -29306,9 +28998,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -29361,9 +29051,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -29653,9 +29341,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -29683,9 +29369,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -29950,9 +29634,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -29980,9 +29662,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -30303,9 +29983,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -30345,9 +30023,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-08T15:19:17.214Z",
@@ -30388,9 +30064,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "A",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|320-21",
@@ -30428,9 +30102,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-05T15:19:17.229Z",
@@ -30554,9 +30226,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -30690,13 +30360,16 @@
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
-    "automaticBlocked": false,
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2023-11-22T01:19:21.152Z",
+    "qcCompleteForTrial": {},
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not paid",
     "partyType": "Surviving spouse",
     "receivedAt": "2011-10-11T04:00:00.000Z",
     "caseType": "Partnership (Section 6226)",
     "orderDesignatingPlaceOfTrial": false,
+    "automaticBlockedReason": "Pending Item",
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -30706,6 +30379,7 @@
     "orderForRatification": true,
     "petitioners": [],
     "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
     "caseStatusHistory": [
       {
         "date": "2022-12-21T19:03:01.908Z",
@@ -30719,13 +30393,13 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "hasPendingItems": false,
     "initialCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
+    "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|400-22",
     "docketNumber": "400-22",
-    "hasVerifiedIrsNotice": false,
     "statistics": [],
+    "hasVerifiedIrsNotice": false,
     "status": "Submitted - Rule 122"
   },
   {
@@ -30760,6 +30434,81 @@
     "pk": "case|400-22",
     "servedAt": "2020-03-01T21:40:46.415Z",
     "docketNumber": "101-19"
+  },
+  {
+    "stampData": {},
+    "servedParties": [],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Motion for in Camera Review",
+    "filingDate": "2023-07-05T00:00:00.000-04:00",
+    "isMinuteEntry": false,
+    "pending": true,
+    "isDraft": false,
+    "objections": "No",
+    "receivedAt": "2023-07-05T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2023-07-05T00:00:00.000-04:00",
+    "numberOfPages": 5,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "5ccb9535-85e0-4d84-aea5-af94bc993cca",
+    "sk": "docket-entry|5ccb9535-85e0-4d84-aea5-af94bc993cca",
+    "documentTitle": "Motion for in Camera Review",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "filedByRole": "docketclerk",
+    "partyIrsPractitioner": true,
+    "index": 2,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "M135",
+    "processingStatus": "complete",
+    "lodged": false,
+    "filers": [],
+    "editState": "{}",
+    "pk": "case|400-22",
+    "servedAt": "2023-11-22T01:19:21.049Z",
+    "docketNumber": "400-22"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted - Rule 122",
+    "gsi1pk": "work-item|49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:19:21.048Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "docketNumberWithSuffix": "400-22",
+    "updatedAt": "2023-11-22T01:19:21.048Z",
+    "completedAt": "2023-11-22T01:19:21.048Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M135",
+      "createdAt": "2023-07-05T00:00:00.000-04:00",
+      "isPaper": true,
+      "documentType": "Motion for in Camera Review",
+      "filedBy": "Resp.",
+      "docketEntryId": "5ccb9535-85e0-4d84-aea5-af94bc993cca",
+      "documentTitle": "Motion for in Camera Review",
+      "isFileAttached": true,
+      "receivedAt": "2023-07-05T04:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|400-22",
+    "docketNumber": "400-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "associatedJudge": "Colvin",
@@ -31298,15 +31047,20 @@
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
-    "automaticBlocked": false,
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2023-11-22T01:17:49.276Z",
+    "qcCompleteForTrial": {},
+    "gsi1pk": "leadCase|404-22",
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not paid",
     "partyType": "Surviving spouse",
     "receivedAt": "2011-10-11T04:00:00.000Z",
     "caseType": "Partnership (Section 6226)",
     "orderDesignatingPlaceOfTrial": false,
+    "automaticBlockedReason": "Pending Item",
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
+    "leadDocketNumber": "404-22",
     "entityName": "Case",
     "caseCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
     "sk": "case|404-22",
@@ -31314,6 +31068,7 @@
     "orderForRatification": true,
     "petitioners": [],
     "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
     "caseStatusHistory": [
       {
         "date": "1985-12-21T19:03:01.908Z",
@@ -31327,13 +31082,13 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "hasPendingItems": false,
     "initialCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
+    "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|404-22",
     "docketNumber": "404-22",
-    "hasVerifiedIrsNotice": false,
     "statistics": [],
+    "hasVerifiedIrsNotice": false,
     "status": "Submitted"
   },
   {
@@ -31368,6 +31123,82 @@
     "pk": "case|404-22",
     "servedAt": "2020-03-01T21:40:46.415Z",
     "docketNumber": "101-19"
+  },
+  {
+    "stampData": {},
+    "servedParties": [],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Motion for Oral Argument",
+    "filingDate": "2022-12-01T00:00:00.000-05:00",
+    "isMinuteEntry": false,
+    "pending": true,
+    "isDraft": false,
+    "objections": "No",
+    "receivedAt": "2022-12-01T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2022-12-01T00:00:00.000-05:00",
+    "numberOfPages": 5,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+    "sk": "docket-entry|86aa1097-53ee-48d8-aeae-25ed4d81248a",
+    "documentTitle": "Motion for Oral Argument",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "filedByRole": "docketclerk",
+    "partyIrsPractitioner": true,
+    "index": 2,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "M018",
+    "processingStatus": "complete",
+    "lodged": false,
+    "filers": [],
+    "editState": "{}",
+    "pk": "case|404-22",
+    "servedAt": "2023-11-22T01:17:49.177Z",
+    "docketNumber": "404-22"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.176Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "docketNumberWithSuffix": "404-22",
+    "updatedAt": "2023-11-22T01:17:49.176Z",
+    "completedAt": "2023-11-22T01:17:49.176Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|404-22",
+    "docketNumber": "404-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "associatedJudge": "Colvin",
@@ -31450,15 +31281,20 @@
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
-    "automaticBlocked": false,
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2023-11-22T01:17:49.410Z",
+    "qcCompleteForTrial": {},
+    "gsi1pk": "leadCase|404-22",
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not paid",
     "partyType": "Surviving spouse",
     "receivedAt": "2011-10-11T04:00:00.000Z",
     "caseType": "Partnership (Section 6226)",
     "orderDesignatingPlaceOfTrial": false,
+    "automaticBlockedReason": "Pending Item",
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
+    "leadDocketNumber": "404-22",
     "entityName": "Case",
     "caseCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
     "sk": "case|405-22",
@@ -31466,6 +31302,7 @@
     "orderForRatification": true,
     "petitioners": [],
     "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
     "caseStatusHistory": [
       {
         "date": "1986-12-21T19:03:01.908Z",
@@ -31479,13 +31316,13 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "hasPendingItems": false,
     "initialCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
+    "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|405-22",
     "docketNumber": "405-22",
-    "hasVerifiedIrsNotice": false,
     "statistics": [],
+    "hasVerifiedIrsNotice": false,
     "status": "Submitted"
   },
   {
@@ -31520,6 +31357,82 @@
     "pk": "case|405-22",
     "servedAt": "2020-03-01T21:40:46.415Z",
     "docketNumber": "101-19"
+  },
+  {
+    "stampData": {},
+    "servedParties": [],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Motion for Oral Argument",
+    "filingDate": "2022-12-01T00:00:00.000-05:00",
+    "isMinuteEntry": false,
+    "pending": true,
+    "isDraft": false,
+    "objections": "No",
+    "receivedAt": "2022-12-01T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2022-12-01T00:00:00.000-05:00",
+    "numberOfPages": 5,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+    "sk": "docket-entry|86aa1097-53ee-48d8-aeae-25ed4d81248a",
+    "documentTitle": "Motion for Oral Argument",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "filedByRole": "docketclerk",
+    "partyIrsPractitioner": true,
+    "index": 2,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "M018",
+    "processingStatus": "complete",
+    "lodged": false,
+    "filers": [],
+    "editState": "{}",
+    "pk": "case|405-22",
+    "servedAt": "2023-11-22T01:17:49.334Z",
+    "docketNumber": "405-22"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|727f3dde-6dab-4780-affa-cecff2092ac2",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "727f3dde-6dab-4780-affa-cecff2092ac2",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.334Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|727f3dde-6dab-4780-affa-cecff2092ac2",
+    "docketNumberWithSuffix": "405-22",
+    "updatedAt": "2023-11-22T01:17:49.334Z",
+    "completedAt": "2023-11-22T01:17:49.334Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|405-22",
+    "docketNumber": "405-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "associatedJudge": "Colvin",
@@ -32058,15 +31971,20 @@
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
-    "automaticBlocked": false,
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2023-11-22T01:20:35.283Z",
+    "qcCompleteForTrial": {},
+    "gsi1pk": "leadCase|409-22",
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not paid",
     "partyType": "Surviving spouse",
     "receivedAt": "2011-10-11T04:00:00.000Z",
     "caseType": "Partnership (Section 6226)",
     "orderDesignatingPlaceOfTrial": false,
+    "automaticBlockedReason": "Pending Item",
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
+    "leadDocketNumber": "409-22",
     "entityName": "Case",
     "caseCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
     "sk": "case|409-22",
@@ -32074,6 +31992,7 @@
     "orderForRatification": true,
     "petitioners": [],
     "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
     "caseStatusHistory": [
       {
         "date": "2022-12-21T19:03:01.908Z",
@@ -32087,13 +32006,13 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "hasPendingItems": false,
     "initialCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
+    "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|409-22",
     "docketNumber": "409-22",
-    "hasVerifiedIrsNotice": false,
     "statistics": [],
+    "hasVerifiedIrsNotice": false,
     "status": "Submitted"
   },
   {
@@ -32128,6 +32047,82 @@
     "pk": "case|409-22",
     "servedAt": "2020-03-01T21:40:46.415Z",
     "docketNumber": "101-19"
+  },
+  {
+    "stampData": {},
+    "servedParties": [],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Motion for Default and Dismissal",
+    "filingDate": "2017-11-08T00:00:00.000-05:00",
+    "isMinuteEntry": false,
+    "pending": true,
+    "isDraft": false,
+    "objections": "No",
+    "receivedAt": "2017-11-08T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2017-11-08T00:00:00.000-05:00",
+    "numberOfPages": 5,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+    "sk": "docket-entry|6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+    "documentTitle": "Motion for Default and Dismissal",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "filedByRole": "docketclerk",
+    "partyIrsPractitioner": true,
+    "index": 2,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "M009",
+    "processingStatus": "complete",
+    "lodged": false,
+    "filers": [],
+    "editState": "{}",
+    "pk": "case|409-22",
+    "servedAt": "2023-11-22T01:20:35.162Z",
+    "docketNumber": "409-22"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|0753f228-7995-406c-a144-09afb8895f9f",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "0753f228-7995-406c-a144-09afb8895f9f",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.162Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|0753f228-7995-406c-a144-09afb8895f9f",
+    "docketNumberWithSuffix": "409-22",
+    "updatedAt": "2023-11-22T01:20:35.162Z",
+    "completedAt": "2023-11-22T01:20:35.162Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|409-22",
+    "docketNumber": "409-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "associatedJudge": "Colvin",
@@ -32211,6 +32206,8 @@
     "procedureType": "Regular",
     "isPaper": true,
     "automaticBlocked": false,
+    "qcCompleteForTrial": {},
+    "gsi1pk": "leadCase|409-22",
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not paid",
     "partyType": "Surviving spouse",
@@ -32219,6 +32216,7 @@
     "orderDesignatingPlaceOfTrial": false,
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
+    "leadDocketNumber": "409-22",
     "entityName": "Case",
     "caseCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
     "sk": "case|410-22",
@@ -32226,6 +32224,7 @@
     "orderForRatification": true,
     "petitioners": [],
     "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
     "caseStatusHistory": [
       {
         "date": "2022-12-21T19:03:01.908Z",
@@ -32239,13 +32238,13 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "hasPendingItems": false,
     "initialCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
+    "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|410-22",
     "docketNumber": "410-22",
-    "hasVerifiedIrsNotice": false,
     "statistics": [],
+    "hasVerifiedIrsNotice": false,
     "status": "Submitted"
   },
   {
@@ -32362,15 +32361,20 @@
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
-    "automaticBlocked": false,
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2023-11-22T01:20:35.463Z",
+    "qcCompleteForTrial": {},
+    "gsi1pk": "leadCase|409-22",
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not paid",
     "partyType": "Surviving spouse",
     "receivedAt": "2011-10-11T04:00:00.000Z",
     "caseType": "Partnership (Section 6226)",
     "orderDesignatingPlaceOfTrial": false,
+    "automaticBlockedReason": "Pending Item",
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
+    "leadDocketNumber": "409-22",
     "entityName": "Case",
     "caseCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
     "sk": "case|411-22",
@@ -32378,6 +32382,7 @@
     "orderForRatification": true,
     "petitioners": [],
     "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
     "caseStatusHistory": [
       {
         "date": "2022-12-21T19:03:01.908Z",
@@ -32391,13 +32396,13 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "hasPendingItems": false,
     "initialCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
+    "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|411-22",
     "docketNumber": "411-22",
-    "hasVerifiedIrsNotice": false,
     "statistics": [],
+    "hasVerifiedIrsNotice": false,
     "status": "Submitted"
   },
   {
@@ -32432,6 +32437,82 @@
     "pk": "case|411-22",
     "servedAt": "2020-03-01T21:40:46.415Z",
     "docketNumber": "101-19"
+  },
+  {
+    "stampData": {},
+    "servedParties": [],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Motion for Default and Dismissal",
+    "filingDate": "2017-11-08T00:00:00.000-05:00",
+    "isMinuteEntry": false,
+    "pending": true,
+    "isDraft": false,
+    "objections": "No",
+    "receivedAt": "2017-11-08T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2017-11-08T00:00:00.000-05:00",
+    "numberOfPages": 5,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+    "sk": "docket-entry|6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+    "documentTitle": "Motion for Default and Dismissal",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "filedByRole": "docketclerk",
+    "partyIrsPractitioner": true,
+    "index": 2,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "M009",
+    "processingStatus": "complete",
+    "lodged": false,
+    "filers": [],
+    "editState": "{}",
+    "pk": "case|411-22",
+    "servedAt": "2023-11-22T01:20:35.395Z",
+    "docketNumber": "411-22"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.395Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "docketNumberWithSuffix": "411-22",
+    "updatedAt": "2023-11-22T01:20:35.395Z",
+    "completedAt": "2023-11-22T01:20:35.395Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|411-22",
+    "docketNumber": "411-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "associatedJudge": "Colvin",
@@ -32515,6 +32596,8 @@
     "procedureType": "Regular",
     "isPaper": true,
     "automaticBlocked": false,
+    "qcCompleteForTrial": {},
+    "gsi1pk": "leadCase|409-22",
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not paid",
     "partyType": "Surviving spouse",
@@ -32523,6 +32606,7 @@
     "orderDesignatingPlaceOfTrial": false,
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
+    "leadDocketNumber": "409-22",
     "entityName": "Case",
     "caseCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
     "sk": "case|412-22",
@@ -32530,6 +32614,7 @@
     "orderForRatification": true,
     "petitioners": [],
     "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
     "caseStatusHistory": [
       {
         "date": "2022-12-21T19:03:01.908Z",
@@ -32543,13 +32628,13 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "hasPendingItems": false,
     "initialCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
+    "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|412-22",
     "docketNumber": "412-22",
-    "hasVerifiedIrsNotice": false,
     "statistics": [],
+    "hasVerifiedIrsNotice": false,
     "status": "Submitted"
   },
   {
@@ -32666,15 +32751,20 @@
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
-    "automaticBlocked": false,
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2023-11-22T01:20:35.581Z",
+    "qcCompleteForTrial": {},
+    "gsi1pk": "leadCase|409-22",
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not paid",
     "partyType": "Surviving spouse",
     "receivedAt": "2011-10-11T04:00:00.000Z",
     "caseType": "Partnership (Section 6226)",
     "orderDesignatingPlaceOfTrial": false,
+    "automaticBlockedReason": "Pending Item",
     "createdAt": "2021-10-29T13:41:06.778Z",
     "noticeOfAttachments": false,
+    "leadDocketNumber": "409-22",
     "entityName": "Case",
     "caseCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
     "sk": "case|413-22",
@@ -32682,6 +32772,7 @@
     "orderForRatification": true,
     "petitioners": [],
     "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
     "caseStatusHistory": [
       {
         "date": "2022-12-21T19:03:01.908Z",
@@ -32695,13 +32786,13 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Lubbock, Texas",
-    "hasPendingItems": false,
     "initialCaption": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner",
+    "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|413-22",
     "docketNumber": "413-22",
-    "hasVerifiedIrsNotice": false,
     "statistics": [],
+    "hasVerifiedIrsNotice": false,
     "status": "Submitted"
   },
   {
@@ -32736,6 +32827,82 @@
     "pk": "case|413-22",
     "servedAt": "2020-03-01T21:40:46.415Z",
     "docketNumber": "101-19"
+  },
+  {
+    "stampData": {},
+    "servedParties": [],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Motion for Default and Dismissal",
+    "filingDate": "2017-11-08T00:00:00.000-05:00",
+    "isMinuteEntry": false,
+    "pending": true,
+    "isDraft": false,
+    "objections": "No",
+    "receivedAt": "2017-11-08T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2017-11-08T00:00:00.000-05:00",
+    "numberOfPages": 5,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+    "sk": "docket-entry|6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+    "documentTitle": "Motion for Default and Dismissal",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "filedByRole": "docketclerk",
+    "partyIrsPractitioner": true,
+    "index": 2,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "M009",
+    "processingStatus": "complete",
+    "lodged": false,
+    "filers": [],
+    "editState": "{}",
+    "pk": "case|413-22",
+    "servedAt": "2023-11-22T01:20:35.518Z",
+    "docketNumber": "413-22"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.518Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "docketNumberWithSuffix": "413-22",
+    "updatedAt": "2023-11-22T01:20:35.518Z",
+    "completedAt": "2023-11-22T01:20:35.518Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|413-22",
+    "docketNumber": "413-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "associatedJudge": "Colvin",
@@ -39117,12 +39284,59 @@
     "orderToShowCause": false,
     "preferredTrialCity": "Washington, District of Columbia",
     "initialCaption": "The Sixth Migrated Case",
-    "hasPendingItems": false,
+    "hasPendingItems": true,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|999-15",
     "docketNumber": "999-15",
     "statistics": [],
     "status": "Calendared"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
+        "name": "Test Petitioner",
+        "email": "petitioner@example.com"
+      },
+      {
+        "name": "Gordon Ramsay",
+        "email": "testuser@example.com"
+      }
+    ],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Motion for Assignment of Judge",
+    "filingDate": "2020-11-14T00:00:00.000-05:00",
+    "isMinuteEntry": false,
+    "pending": true,
+    "isDraft": false,
+    "objections": "No",
+    "receivedAt": "2020-11-14T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-11-14T00:00:00.000-05:00",
+    "numberOfPages": 5,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+    "sk": "docket-entry|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+    "documentTitle": "Motion for Assignment of Judge",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "filedByRole": "docketclerk",
+    "partyIrsPractitioner": true,
+    "index": 6,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "M004",
+    "processingStatus": "complete",
+    "lodged": false,
+    "filers": [],
+    "servedPartiesCode": "B",
+    "editState": "{}",
+    "pk": "case|999-15",
+    "servedAt": "2023-11-22T01:08:04.712Z",
+    "docketNumber": "999-15"
   },
   {
     "date": null,
@@ -39402,12 +39616,50 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatepractitioner@example.com"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Calendared",
+    "gsi1pk": "work-item|3c732694-4a1b-4540-8425-4587d33a28b0",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "3c732694-4a1b-4540-8425-4587d33a28b0",
+    "sentBy": "Test Docketclerk",
+    "trialLocation": "Houston, Texas",
+    "createdAt": "2023-11-22T01:08:04.711Z",
+    "highPriority": true,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|3c732694-4a1b-4540-8425-4587d33a28b0",
+    "docketNumberWithSuffix": "999-15",
+    "updatedAt": "2023-11-22T01:08:04.711Z",
+    "completedAt": "2023-11-22T01:08:04.712Z",
+    "completedMessage": "completed",
+    "caseTitle": "The Sixth Migrated Case",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M004",
+      "createdAt": "2020-11-14T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Assignment of Judge",
+      "filedBy": "Resp.",
+      "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+      "documentTitle": "Motion for Assignment of Judge",
+      "isFileAttached": true,
+      "receivedAt": "2020-11-14T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|999-15",
+    "docketNumber": "999-15",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "associatedJudge": "Colvin",
@@ -39464,12 +39716,39 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "2bedb457-da8c-45ed-847d-408cddb89c79",
+    "sk": "connection|05c1e173-c41b-4044-a856-d4aed6c0a2ea",
+    "connectionId": "05c1e173-c41b-4044-a856-d4aed6c0a2ea",
+    "pk": "connection|05c1e173-c41b-4044-a856-d4aed6c0a2ea",
+    "ttl": 1700701809,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "812669f6-3d73-4ecb-85cb-62e3003d5335",
     "sk": "connection|101fc20d-f76e-41bc-a498-f837040d3892",
     "connectionId": "101fc20d-f76e-41bc-a498-f837040d3892",
     "pk": "connection|101fc20d-f76e-41bc-a498-f837040d3892",
     "ttl": 1680624337,
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "468842b4-b4a6-4162-9010-9c3272a56a2c",
+    "sk": "connection|37f906b5-0f7f-42bb-9e24-9c3212f67297",
+    "connectionId": "37f906b5-0f7f-42bb-9e24-9c3212f67297",
+    "pk": "connection|37f906b5-0f7f-42bb-9e24-9c3212f67297",
+    "ttl": 1700701781,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "22ee1af1-399d-4773-a328-d52065878666",
+    "sk": "connection|58379d04-3f98-40e2-b6e5-48c5bdeda157",
+    "connectionId": "58379d04-3f98-40e2-b6e5-48c5bdeda157",
+    "pk": "connection|58379d04-3f98-40e2-b6e5-48c5bdeda157",
+    "ttl": 1700702315,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
     "endpoint": "ws://localhost:3011",
@@ -39482,6 +39761,24 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "4dc56471-0e13-4c4e-aef2-e27c6fbd7b40",
+    "sk": "connection|796c62a6-5dad-485d-9f6d-516ff1849fef",
+    "connectionId": "796c62a6-5dad-485d-9f6d-516ff1849fef",
+    "pk": "connection|796c62a6-5dad-485d-9f6d-516ff1849fef",
+    "ttl": 1700702443,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "ceae6b9b-0344-4adc-9e92-c95530cd4296",
+    "sk": "connection|7ed1eb6f-5fac-4b63-a856-137f806b7016",
+    "connectionId": "7ed1eb6f-5fac-4b63-a856-137f806b7016",
+    "pk": "connection|7ed1eb6f-5fac-4b63-a856-137f806b7016",
+    "ttl": 1700702315,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "edbc99ff-2179-45c5-b8b7-a6c37c413afd",
     "sk": "connection|8218a248-790f-468c-aef9-f8503b62dd18",
     "connectionId": "8218a248-790f-468c-aef9-f8503b62dd18",
@@ -39491,12 +39788,48 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9d800c29-039a-4586-941b-ff57f18e7fe4",
+    "sk": "connection|aecbd45b-9ba7-44b3-9fac-e7dc375ae37d",
+    "connectionId": "aecbd45b-9ba7-44b3-9fac-e7dc375ae37d",
+    "pk": "connection|aecbd45b-9ba7-44b3-9fac-e7dc375ae37d",
+    "ttl": 1700701936,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "64b328ae-5029-4387-870a-da133a1b6f96",
     "sk": "connection|b165364f-d9d5-4fe3-af1b-84e97d3334b6",
     "connectionId": "b165364f-d9d5-4fe3-af1b-84e97d3334b6",
     "pk": "connection|b165364f-d9d5-4fe3-af1b-84e97d3334b6",
     "ttl": 1696968890,
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "1b796d18-d3cf-4592-b116-1f7d7ea54dc5",
+    "sk": "connection|cc0d831e-020c-4122-b9e7-ff11747e324b",
+    "connectionId": "cc0d831e-020c-4122-b9e7-ff11747e324b",
+    "pk": "connection|cc0d831e-020c-4122-b9e7-ff11747e324b",
+    "ttl": 1700701697,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "ff882596-a954-4f63-97cf-54c03e39aff2",
+    "sk": "connection|f19ad6ad-866a-4183-9e19-b5444a32e7c2",
+    "connectionId": "f19ad6ad-866a-4183-9e19-b5444a32e7c2",
+    "pk": "connection|f19ad6ad-866a-4183-9e19-b5444a32e7c2",
+    "ttl": 1700702315,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "468842b4-b4a6-4162-9010-9c3272a56a2c",
+    "sk": "connection|f316c10e-b5fe-4bca-9998-29e45b9bca48",
+    "connectionId": "f316c10e-b5fe-4bca-9998-29e45b9bca48",
+    "pk": "connection|f316c10e-b5fe-4bca-9998-29e45b9bca48",
+    "ttl": 1700701654,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "endpoint": "ws://localhost:3011",
@@ -39521,6 +39854,14 @@
     "sk": "consolidated-cases-party-association",
     "current": true,
     "pk": "consolidated-cases-party-association"
+  },
+  {
+    "sk": "docket-entry-worksheet|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+    "judgeUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "pk": "docket-entry|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+    "entityName": "DocketEntryWorksheet",
+    "gsi1pk": "judge-case-worksheet|dabbad00-18d0-43ec-bafb-654e83405416",
+    "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5"
   },
   {
     "sk": "docketNumberCounter-2011",
@@ -42419,9 +42760,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -43575,9 +43914,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -43683,9 +44020,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -43788,9 +44123,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -43901,9 +44234,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44011,9 +44342,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -44118,9 +44447,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -44247,6 +44574,286 @@
     },
     "pk": "section-outbox|docket",
     "docketNumber": "105-23",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Calendared",
+    "gsi1pk": "work-item|3c732694-4a1b-4540-8425-4587d33a28b0",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "3c732694-4a1b-4540-8425-4587d33a28b0",
+    "sentBy": "Test Docketclerk",
+    "trialLocation": "Houston, Texas",
+    "createdAt": "2023-11-22T01:08:04.711Z",
+    "highPriority": true,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:08:04.712Z",
+    "docketNumberWithSuffix": "999-15",
+    "updatedAt": "2023-11-22T01:08:04.711Z",
+    "completedAt": "2023-11-22T01:08:04.712Z",
+    "completedMessage": "completed",
+    "caseTitle": "The Sixth Migrated Case",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701306484,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M004",
+      "createdAt": "2020-11-14T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Assignment of Judge",
+      "filedBy": "Resp.",
+      "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+      "documentTitle": "Motion for Assignment of Judge",
+      "isFileAttached": true,
+      "receivedAt": "2020-11-14T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket",
+    "docketNumber": "999-15",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.176Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:17:49.176Z",
+    "docketNumberWithSuffix": "404-22",
+    "updatedAt": "2023-11-22T01:17:49.176Z",
+    "completedAt": "2023-11-22T01:17:49.176Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307069,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket",
+    "docketNumber": "404-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|727f3dde-6dab-4780-affa-cecff2092ac2",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "727f3dde-6dab-4780-affa-cecff2092ac2",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.334Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:17:49.334Z",
+    "docketNumberWithSuffix": "405-22",
+    "updatedAt": "2023-11-22T01:17:49.334Z",
+    "completedAt": "2023-11-22T01:17:49.334Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307069,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket",
+    "docketNumber": "405-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted - Rule 122",
+    "gsi1pk": "work-item|49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:19:21.048Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:19:21.048Z",
+    "docketNumberWithSuffix": "400-22",
+    "updatedAt": "2023-11-22T01:19:21.048Z",
+    "completedAt": "2023-11-22T01:19:21.048Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307161,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M135",
+      "createdAt": "2023-07-05T00:00:00.000-04:00",
+      "isPaper": true,
+      "documentType": "Motion for in Camera Review",
+      "filedBy": "Resp.",
+      "docketEntryId": "5ccb9535-85e0-4d84-aea5-af94bc993cca",
+      "documentTitle": "Motion for in Camera Review",
+      "isFileAttached": true,
+      "receivedAt": "2023-07-05T04:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket",
+    "docketNumber": "400-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|0753f228-7995-406c-a144-09afb8895f9f",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "0753f228-7995-406c-a144-09afb8895f9f",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.162Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.162Z",
+    "docketNumberWithSuffix": "409-22",
+    "updatedAt": "2023-11-22T01:20:35.162Z",
+    "completedAt": "2023-11-22T01:20:35.162Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307235,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket",
+    "docketNumber": "409-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.395Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.395Z",
+    "docketNumberWithSuffix": "411-22",
+    "updatedAt": "2023-11-22T01:20:35.395Z",
+    "completedAt": "2023-11-22T01:20:35.395Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307235,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket",
+    "docketNumber": "411-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.518Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.518Z",
+    "docketNumberWithSuffix": "413-22",
+    "updatedAt": "2023-11-22T01:20:35.518Z",
+    "completedAt": "2023-11-22T01:20:35.518Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307235,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket",
+    "docketNumber": "413-22",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
   },
@@ -45337,9 +45944,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -46481,9 +47086,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -46588,9 +47191,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -46693,9 +47294,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -46805,9 +47404,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -46913,9 +47510,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -47019,9 +47614,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -47146,6 +47739,279 @@
     },
     "pk": "section-outbox|docket|2023-07-26",
     "docketNumber": "105-23",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Calendared",
+    "gsi1pk": "work-item|3c732694-4a1b-4540-8425-4587d33a28b0",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "3c732694-4a1b-4540-8425-4587d33a28b0",
+    "sentBy": "Test Docketclerk",
+    "trialLocation": "Houston, Texas",
+    "createdAt": "2023-11-22T01:08:04.711Z",
+    "highPriority": true,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:08:04.712Z",
+    "docketNumberWithSuffix": "999-15",
+    "updatedAt": "2023-11-22T01:08:04.711Z",
+    "completedAt": "2023-11-22T01:08:04.712Z",
+    "completedMessage": "completed",
+    "caseTitle": "The Sixth Migrated Case",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M004",
+      "createdAt": "2020-11-14T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Assignment of Judge",
+      "filedBy": "Resp.",
+      "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+      "documentTitle": "Motion for Assignment of Judge",
+      "isFileAttached": true,
+      "receivedAt": "2020-11-14T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket|2023-11-21",
+    "docketNumber": "999-15",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.176Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:17:49.176Z",
+    "docketNumberWithSuffix": "404-22",
+    "updatedAt": "2023-11-22T01:17:49.176Z",
+    "completedAt": "2023-11-22T01:17:49.176Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket|2023-11-21",
+    "docketNumber": "404-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|727f3dde-6dab-4780-affa-cecff2092ac2",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "727f3dde-6dab-4780-affa-cecff2092ac2",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.334Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:17:49.334Z",
+    "docketNumberWithSuffix": "405-22",
+    "updatedAt": "2023-11-22T01:17:49.334Z",
+    "completedAt": "2023-11-22T01:17:49.334Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket|2023-11-21",
+    "docketNumber": "405-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted - Rule 122",
+    "gsi1pk": "work-item|49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:19:21.048Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:19:21.048Z",
+    "docketNumberWithSuffix": "400-22",
+    "updatedAt": "2023-11-22T01:19:21.048Z",
+    "completedAt": "2023-11-22T01:19:21.048Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M135",
+      "createdAt": "2023-07-05T00:00:00.000-04:00",
+      "isPaper": true,
+      "documentType": "Motion for in Camera Review",
+      "filedBy": "Resp.",
+      "docketEntryId": "5ccb9535-85e0-4d84-aea5-af94bc993cca",
+      "documentTitle": "Motion for in Camera Review",
+      "isFileAttached": true,
+      "receivedAt": "2023-07-05T04:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket|2023-11-21",
+    "docketNumber": "400-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|0753f228-7995-406c-a144-09afb8895f9f",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "0753f228-7995-406c-a144-09afb8895f9f",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.162Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.162Z",
+    "docketNumberWithSuffix": "409-22",
+    "updatedAt": "2023-11-22T01:20:35.162Z",
+    "completedAt": "2023-11-22T01:20:35.162Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket|2023-11-21",
+    "docketNumber": "409-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.395Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.395Z",
+    "docketNumberWithSuffix": "411-22",
+    "updatedAt": "2023-11-22T01:20:35.395Z",
+    "completedAt": "2023-11-22T01:20:35.395Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket|2023-11-21",
+    "docketNumber": "411-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.518Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.518Z",
+    "docketNumberWithSuffix": "413-22",
+    "updatedAt": "2023-11-22T01:20:35.518Z",
+    "completedAt": "2023-11-22T01:20:35.518Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket|2023-11-21",
+    "docketNumber": "413-22",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
   },
@@ -48446,6 +49312,30 @@
     "trialSessionId": "0d943468-bc2e-4631-84e3-b084cf5b1fbb"
   },
   {
+    "entityName": "TrialSessionWorkingCopy",
+    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
+    "pk": "trial-session-working-copy|111ac21b-99f9-4321-98c8-b95db00af96b",
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "caseMetadata": {},
+    "trialSessionId": "111ac21b-99f9-4321-98c8-b95db00af96b"
+  },
+  {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
     "filters": {
@@ -48620,6 +49510,54 @@
     },
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
+  },
+  {
+    "entityName": "TrialSessionWorkingCopy",
+    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
+    "pk": "trial-session-working-copy|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "caseMetadata": {},
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
+  },
+  {
+    "entityName": "TrialSessionWorkingCopy",
+    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "filters": {
+      "definiteTrial": true,
+      "probableTrial": true,
+      "motionToDismiss": true,
+      "settled": true,
+      "dismissed": true,
+      "basisReached": true,
+      "continued": true,
+      "submittedCAV": true,
+      "showAll": true,
+      "probableSettlement": true,
+      "setForTrial": true,
+      "recall": true,
+      "rule122": true,
+      "statusUnassigned": true
+    },
+    "pk": "trial-session-working-copy|959c4338-0fac-42eb-b0eb-d53b8d0195fb",
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "caseMetadata": {},
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195fb"
   },
   {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
@@ -51518,9 +52456,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -51530,6 +52466,286 @@
     },
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "320-21",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Calendared",
+    "gsi1pk": "work-item|3c732694-4a1b-4540-8425-4587d33a28b0",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "3c732694-4a1b-4540-8425-4587d33a28b0",
+    "sentBy": "Test Docketclerk",
+    "trialLocation": "Houston, Texas",
+    "createdAt": "2023-11-22T01:08:04.711Z",
+    "highPriority": true,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:08:04.712Z",
+    "docketNumberWithSuffix": "999-15",
+    "updatedAt": "2023-11-22T01:08:04.711Z",
+    "completedAt": "2023-11-22T01:08:04.712Z",
+    "completedMessage": "completed",
+    "caseTitle": "The Sixth Migrated Case",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701306484,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M004",
+      "createdAt": "2020-11-14T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Assignment of Judge",
+      "filedBy": "Resp.",
+      "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+      "documentTitle": "Motion for Assignment of Judge",
+      "isFileAttached": true,
+      "receivedAt": "2020-11-14T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "999-15",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.176Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:17:49.176Z",
+    "docketNumberWithSuffix": "404-22",
+    "updatedAt": "2023-11-22T01:17:49.176Z",
+    "completedAt": "2023-11-22T01:17:49.176Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307069,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "404-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|727f3dde-6dab-4780-affa-cecff2092ac2",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "727f3dde-6dab-4780-affa-cecff2092ac2",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.334Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:17:49.334Z",
+    "docketNumberWithSuffix": "405-22",
+    "updatedAt": "2023-11-22T01:17:49.334Z",
+    "completedAt": "2023-11-22T01:17:49.334Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307069,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "405-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted - Rule 122",
+    "gsi1pk": "work-item|49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:19:21.048Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:19:21.048Z",
+    "docketNumberWithSuffix": "400-22",
+    "updatedAt": "2023-11-22T01:19:21.048Z",
+    "completedAt": "2023-11-22T01:19:21.048Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307161,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M135",
+      "createdAt": "2023-07-05T00:00:00.000-04:00",
+      "isPaper": true,
+      "documentType": "Motion for in Camera Review",
+      "filedBy": "Resp.",
+      "docketEntryId": "5ccb9535-85e0-4d84-aea5-af94bc993cca",
+      "documentTitle": "Motion for in Camera Review",
+      "isFileAttached": true,
+      "receivedAt": "2023-07-05T04:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "400-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|0753f228-7995-406c-a144-09afb8895f9f",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "0753f228-7995-406c-a144-09afb8895f9f",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.162Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.162Z",
+    "docketNumberWithSuffix": "409-22",
+    "updatedAt": "2023-11-22T01:20:35.162Z",
+    "completedAt": "2023-11-22T01:20:35.162Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307235,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "409-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.395Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.395Z",
+    "docketNumberWithSuffix": "411-22",
+    "updatedAt": "2023-11-22T01:20:35.395Z",
+    "completedAt": "2023-11-22T01:20:35.395Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307235,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "411-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.518Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.518Z",
+    "docketNumberWithSuffix": "413-22",
+    "updatedAt": "2023-11-22T01:20:35.518Z",
+    "completedAt": "2023-11-22T01:20:35.518Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1701307235,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "413-22",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
   },
@@ -52662,9 +53878,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -52769,9 +53983,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -52874,9 +54086,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -52986,9 +54196,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -53094,9 +54302,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -53200,9 +54406,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -53327,6 +54531,279 @@
     },
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416|2023-w30",
     "docketNumber": "105-23",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Calendared",
+    "gsi1pk": "work-item|3c732694-4a1b-4540-8425-4587d33a28b0",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "3c732694-4a1b-4540-8425-4587d33a28b0",
+    "sentBy": "Test Docketclerk",
+    "trialLocation": "Houston, Texas",
+    "createdAt": "2023-11-22T01:08:04.711Z",
+    "highPriority": true,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:08:04.712Z",
+    "docketNumberWithSuffix": "999-15",
+    "updatedAt": "2023-11-22T01:08:04.711Z",
+    "completedAt": "2023-11-22T01:08:04.712Z",
+    "completedMessage": "completed",
+    "caseTitle": "The Sixth Migrated Case",
+    "trialDate": "2020-11-27T05:00:00.000Z",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M004",
+      "createdAt": "2020-11-14T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Assignment of Judge",
+      "filedBy": "Resp.",
+      "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
+      "documentTitle": "Motion for Assignment of Judge",
+      "isFileAttached": true,
+      "receivedAt": "2020-11-14T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416|2023-w47",
+    "docketNumber": "999-15",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.176Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:17:49.176Z",
+    "docketNumberWithSuffix": "404-22",
+    "updatedAt": "2023-11-22T01:17:49.176Z",
+    "completedAt": "2023-11-22T01:17:49.176Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416|2023-w47",
+    "docketNumber": "404-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|727f3dde-6dab-4780-affa-cecff2092ac2",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "727f3dde-6dab-4780-affa-cecff2092ac2",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:17:49.334Z",
+    "highPriority": false,
+    "leadDocketNumber": "404-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:17:49.334Z",
+    "docketNumberWithSuffix": "405-22",
+    "updatedAt": "2023-11-22T01:17:49.334Z",
+    "completedAt": "2023-11-22T01:17:49.334Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M018",
+      "createdAt": "2022-12-01T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Oral Argument",
+      "filedBy": "Resp.",
+      "docketEntryId": "86aa1097-53ee-48d8-aeae-25ed4d81248a",
+      "documentTitle": "Motion for Oral Argument",
+      "isFileAttached": true,
+      "receivedAt": "2022-12-01T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416|2023-w47",
+    "docketNumber": "405-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted - Rule 122",
+    "gsi1pk": "work-item|49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "49c79776-b266-4b5f-b348-4f23a9a27cac",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:19:21.048Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:19:21.048Z",
+    "docketNumberWithSuffix": "400-22",
+    "updatedAt": "2023-11-22T01:19:21.048Z",
+    "completedAt": "2023-11-22T01:19:21.048Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M135",
+      "createdAt": "2023-07-05T00:00:00.000-04:00",
+      "isPaper": true,
+      "documentType": "Motion for in Camera Review",
+      "filedBy": "Resp.",
+      "docketEntryId": "5ccb9535-85e0-4d84-aea5-af94bc993cca",
+      "documentTitle": "Motion for in Camera Review",
+      "isFileAttached": true,
+      "receivedAt": "2023-07-05T04:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416|2023-w47",
+    "docketNumber": "400-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|0753f228-7995-406c-a144-09afb8895f9f",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "0753f228-7995-406c-a144-09afb8895f9f",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.162Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.162Z",
+    "docketNumberWithSuffix": "409-22",
+    "updatedAt": "2023-11-22T01:20:35.162Z",
+    "completedAt": "2023-11-22T01:20:35.162Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416|2023-w47",
+    "docketNumber": "409-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "4ffce7b0-d947-4047-8c56-f40a446a83ca",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.395Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.395Z",
+    "docketNumberWithSuffix": "411-22",
+    "updatedAt": "2023-11-22T01:20:35.395Z",
+    "completedAt": "2023-11-22T01:20:35.395Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416|2023-w47",
+    "docketNumber": "411-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Colvin",
+    "caseStatus": "Submitted",
+    "gsi1pk": "work-item|8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "isRead": true,
+    "section": "docket",
+    "workItemId": "8b4be2af-6e7c-4c55-93d9-a150fe284b78",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2023-11-22T01:20:35.518Z",
+    "highPriority": false,
+    "leadDocketNumber": "409-22",
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2023-11-22T01:20:35.518Z",
+    "docketNumberWithSuffix": "413-22",
+    "updatedAt": "2023-11-22T01:20:35.518Z",
+    "completedAt": "2023-11-22T01:20:35.518Z",
+    "completedMessage": "completed",
+    "caseTitle": "Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "docketEntry": {
+      "eventCode": "M009",
+      "createdAt": "2017-11-08T00:00:00.000-05:00",
+      "isPaper": true,
+      "documentType": "Motion for Default and Dismissal",
+      "filedBy": "Resp.",
+      "docketEntryId": "6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d",
+      "documentTitle": "Motion for Default and Dismissal",
+      "isFileAttached": true,
+      "receivedAt": "2017-11-08T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416|2023-w47",
+    "docketNumber": "413-22",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
   },
@@ -54760,6 +56237,16 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "468842b4-b4a6-4162-9010-9c3272a56a2c",
+    "gsi1pk": "connection",
+    "sk": "connection|37f906b5-0f7f-42bb-9e24-9c3212f67297",
+    "connectionId": "37f906b5-0f7f-42bb-9e24-9c3212f67297",
+    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700701781,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "gsi1pk": "connection",
     "sk": "connection|469484ad-175f-4389-a835-db37384853fc",
     "connectionId": "469484ad-175f-4389-a835-db37384853fc",
@@ -54784,6 +56271,26 @@
     "connectionId": "8218a248-790f-468c-aef9-f8503b62dd18",
     "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
     "ttl": 1667076368,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "ff882596-a954-4f63-97cf-54c03e39aff2",
+    "gsi1pk": "connection",
+    "sk": "connection|f19ad6ad-866a-4183-9e19-b5444a32e7c2",
+    "connectionId": "f19ad6ad-866a-4183-9e19-b5444a32e7c2",
+    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700702315,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "468842b4-b4a6-4162-9010-9c3272a56a2c",
+    "gsi1pk": "connection",
+    "sk": "connection|f316c10e-b5fe-4bca-9998-29e45b9bca48",
+    "connectionId": "f316c10e-b5fe-4bca-9998-29e45b9bca48",
+    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700701654,
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
@@ -55917,12 +57424,72 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "2bedb457-da8c-45ed-847d-408cddb89c79",
+    "gsi1pk": "connection",
+    "sk": "connection|05c1e173-c41b-4044-a856-d4aed6c0a2ea",
+    "connectionId": "05c1e173-c41b-4044-a856-d4aed6c0a2ea",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700701809,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "22ee1af1-399d-4773-a328-d52065878666",
+    "gsi1pk": "connection",
+    "sk": "connection|58379d04-3f98-40e2-b6e5-48c5bdeda157",
+    "connectionId": "58379d04-3f98-40e2-b6e5-48c5bdeda157",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700702315,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "4dc56471-0e13-4c4e-aef2-e27c6fbd7b40",
+    "gsi1pk": "connection",
+    "sk": "connection|796c62a6-5dad-485d-9f6d-516ff1849fef",
+    "connectionId": "796c62a6-5dad-485d-9f6d-516ff1849fef",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700702443,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "ceae6b9b-0344-4adc-9e92-c95530cd4296",
+    "gsi1pk": "connection",
+    "sk": "connection|7ed1eb6f-5fac-4b63-a856-137f806b7016",
+    "connectionId": "7ed1eb6f-5fac-4b63-a856-137f806b7016",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700702315,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9d800c29-039a-4586-941b-ff57f18e7fe4",
+    "gsi1pk": "connection",
+    "sk": "connection|aecbd45b-9ba7-44b3-9fac-e7dc375ae37d",
+    "connectionId": "aecbd45b-9ba7-44b3-9fac-e7dc375ae37d",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700701936,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "64b328ae-5029-4387-870a-da133a1b6f96",
     "gsi1pk": "connection",
     "sk": "connection|b165364f-d9d5-4fe3-af1b-84e97d3334b6",
     "connectionId": "b165364f-d9d5-4fe3-af1b-84e97d3334b6",
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "ttl": 1696968890,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "1b796d18-d3cf-4592-b116-1f7d7ea54dc5",
+    "gsi1pk": "connection",
+    "sk": "connection|cc0d831e-020c-4122-b9e7-ff11747e324b",
+    "connectionId": "cc0d831e-020c-4122-b9e7-ff11747e324b",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1700701697,
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
