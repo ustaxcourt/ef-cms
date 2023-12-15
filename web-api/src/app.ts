@@ -973,6 +973,11 @@ app.get(
     '/v2/reconciliation-report/:reconciliationDate/:reconciliationDateEnd',
     lambdaWrapper(v2GetReconciliationReportLambda),
   );
+
+  app.get(
+    '/v2/reconciliation-report/:reconciliationDate',
+    lambdaWrapper(v2GetReconciliationReportLambda),
+  );
 }
 
 /**
