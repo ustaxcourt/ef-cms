@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
   JudgeActivityReportState,
@@ -12,6 +13,7 @@ import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourt
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
 import { addEditCaseWorksheetModalHelper } from '@web-client/presenter/computeds/CaseWorksheets/addEditCaseWorksheetModalHelper';
+import { addEditDocketEntryWorksheetModalHelper } from '@web-client/presenter/computeds/PendingMotions/addEditDocketEntryWorksheetModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -100,6 +102,7 @@ import { paperServiceStatusHelper } from './computeds/paperServiceStatusHelper';
 import { partiesInformationHelper } from './computeds/partiesInformationHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { pendingMotionsHelper } from '@web-client/presenter/computeds/PendingMotions/pendingMotionsHelper';
 import { pendingReportListHelper } from './computeds/pendingReportListHelper';
 import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
@@ -160,6 +163,10 @@ export const computeds = {
   addEditCaseWorksheetModalHelper:
     addEditCaseWorksheetModalHelper as unknown as ReturnType<
       typeof addEditCaseWorksheetModalHelper
+    >,
+  addEditDocketEntryWorksheetModalHelper:
+    addEditDocketEntryWorksheetModalHelper as unknown as ReturnType<
+      typeof addEditDocketEntryWorksheetModalHelper
     >,
   addToTrialSessionModalHelper:
     addToTrialSessionModalHelper as unknown as ReturnType<
@@ -409,6 +416,9 @@ export const computeds = {
   >,
   pdfSignerHelper: pdfSignerHelper as unknown as ReturnType<
     typeof pdfSignerHelper
+  >,
+  pendingMotionsHelper: pendingMotionsHelper as unknown as ReturnType<
+    typeof pendingMotionsHelper
   >,
   pendingReportListHelper: pendingReportListHelper as unknown as ReturnType<
     typeof pendingReportListHelper
@@ -666,6 +676,9 @@ export const baseState = {
     stampData: null,
   },
   pdfPreviewUrl: '',
+  pendingMotions: {
+    docketEntries: [] as FormattedPendingMotionWithWorksheet[],
+  },
   pendingReports: cloneDeep(initialPendingReportsState),
   permissions: {} as Record<string, boolean>,
   practitionerDetail: {},
@@ -709,7 +722,7 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
-  user: null,
+  user: null as any,
   userContactEditProgress: {},
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,

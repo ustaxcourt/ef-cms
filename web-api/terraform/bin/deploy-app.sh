@@ -2,7 +2,6 @@
 
 ENV=$1
 
-
 DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 
@@ -120,10 +119,9 @@ else
   fi
 fi
 
-
-# // 1. fetch current node version (16.x) from dynamo 
+# // 1. fetch current node version (16.x) from dynamo
 #   // pass that to terraform (current_color <- current_node_version)
-# // 2. fetch deploying node version (18.x) from dynamo 
+# // 2. fetch deploying node version (18.x) from dynamo
 #   // pass that to terraform (deploing_color <- deploying_node_version)
 
 if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
@@ -144,23 +142,32 @@ else
   SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 fi
 
+DEPLOYMENT_TIMESTAMP=$(date "+%s")
+
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
+export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
+export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
 export TF_VAR_bounce_alert_recipients=$BOUNCE_ALERT_RECIPIENTS
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
+export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
+export TF_VAR_deployment_timestamp=$DEPLOYMENT_TIMESTAMP
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
+export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 export TF_VAR_environment=$ENV
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
+export TF_VAR_green_node_version=$GREEN_NODE_VERSION
 export TF_VAR_green_table_name=$GREEN_TABLE_NAME
+export TF_VAR_green_use_layers=$GREEN_USE_LAYERS
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
@@ -169,12 +176,6 @@ export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
 export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_zone_name=$ZONE_NAME
-export TF_VAR_green_node_version=$GREEN_NODE_VERSION
-export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
-export TF_VAR_green_use_layers=$GREEN_USE_LAYERS
-export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
-export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
-export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan

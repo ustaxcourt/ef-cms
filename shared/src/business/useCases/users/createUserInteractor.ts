@@ -1,4 +1,4 @@
-import { Practitioner } from '../../entities/Practitioner';
+import { Practitioner, RawPractitioner } from '../../entities/Practitioner';
 import { ROLES } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -18,15 +18,15 @@ import { createPractitionerUser } from '../../utilities/createPractitionerUser';
  */
 export const createUserInteractor = async (
   applicationContext: IApplicationContext,
-  { user }: { user: RawUser & { barNumber: string; password: string } },
-) => {
+  { user }: { user: RawUser & { barNumber?: string; password: string } },
+): Promise<RawUser | RawPractitioner> => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.CREATE_USER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let userEntity = null;
+  let userEntity: User;
 
   if (
     [
@@ -42,6 +42,7 @@ export const createUserInteractor = async (
     if (user.barNumber === '') {
       delete user.barNumber;
     }
+
     userEntity = new User({
       ...user,
       userId: applicationContext.getUniqueId(),
