@@ -6,6 +6,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseSearchByName = connect(
   {
@@ -13,7 +14,6 @@ export const CaseSearchByName = connect(
     advancedSearchHelper: state.advancedSearchHelper,
     caseSearchByNameHelper: state.caseSearchByNameHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    constants: state.constants,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     updateCaseAdvancedSearchByNameFormValueSequence:
@@ -30,7 +30,6 @@ export const CaseSearchByName = connect(
     advancedSearchHelper,
     caseSearchByNameHelper,
     clearAdvancedSearchFormSequence,
-    constants,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     updateCaseAdvancedSearchByNameFormValueSequence,
@@ -86,28 +85,111 @@ export const CaseSearchByName = connect(
                 </FormGroup>
               </div>
             </div>
-
+            {/* TODO: CHANGE IDS AND OTHER ATTRIBUTES FOR NEW INPUTS*/}
             <div className="grid-row grid-gap">
-              <div className="tablet:grid-col-7">
+              <div className="tablet:grid-col-12">
                 <div className="grid-row grid-gap">
-                  <div className="tablet:grid-col-7">
-                    <label className="usa-label" htmlFor="country-type">
-                      Country
-                    </label>
-                    <BindedSelect
-                      aria-describedby="case-search-by-name"
-                      bind="advancedSearchForm.caseSearchByName.countryType"
-                      id="country-type"
-                      name="countryType"
+                  <FormGroup className="margin-bottom-0" errorText="">
+                    <fieldset
+                      aria-label="scan mode selection"
+                      className={classNames('usa-fieldset margin-bottom-3')}
+                      id="scan-mode-radios"
                     >
-                      <option value={constants.COUNTRY_TYPES.DOMESTIC}>
-                        - United States -
-                      </option>
-                      <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
-                        - International -
-                      </option>
-                    </BindedSelect>
-                  </div>
+                      <legend
+                        className="usa-legend with-hint margin-bottom-2"
+                        id="scan-mode-radios-legend"
+                      >
+                        Country
+                      </legend>
+                      <div className="usa-radio usa-radio__inline">
+                        <input
+                          aria-describedby="all-country-selection"
+                          aria-labelledby="all-country-selection"
+                          checked={
+                            advancedSearchForm.caseSearchByName.countryType ===
+                            'all'
+                          }
+                          className="usa-radio__input"
+                          data-testid="all-country-selection"
+                          id="all-country-selection"
+                          name="all"
+                          type="radio"
+                          value="All"
+                          onChange={e => {
+                            updateCaseAdvancedSearchByNameFormValueSequence({
+                              key: 'countryType',
+                              value: e.target.name,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-radio__label"
+                          htmlFor="all-country-selection"
+                          id="all-country-selection-label"
+                        >
+                          All
+                        </label>
+                      </div>
+
+                      <div className="usa-radio usa-radio__inline">
+                        <input
+                          aria-describedby="scan-mode-radios-legend"
+                          aria-labelledby="upload-mode-upload"
+                          checked={
+                            advancedSearchForm.caseSearchByName.countryType ===
+                            'domestic'
+                          }
+                          className="usa-radio__input"
+                          id="united-states-country-selection"
+                          name="domestic"
+                          type="radio"
+                          value="United States"
+                          onChange={e => {
+                            updateCaseAdvancedSearchByNameFormValueSequence({
+                              key: 'countryType',
+                              value: e.target.name,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-radio__label"
+                          htmlFor="united-states-country-selection"
+                          id="united-states-country-selection-label"
+                        >
+                          United States
+                        </label>
+                      </div>
+
+                      <div className="usa-radio usa-radio__inline">
+                        <input
+                          aria-describedby="scan-mode-radios-legend"
+                          aria-labelledby="upload-mode-upload"
+                          checked={
+                            advancedSearchForm.caseSearchByName.countryType ===
+                            'international'
+                          }
+                          className="usa-radio__input"
+                          id="international-country-selection"
+                          name="international"
+                          type="radio"
+                          value="international"
+                          onChange={e => {
+                            updateCaseAdvancedSearchByNameFormValueSequence({
+                              key: 'countryType',
+                              value: e.target.name,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-radio__label"
+                          htmlFor="international-country-selection"
+                          id="international-country-selection-label"
+                        >
+                          International
+                        </label>
+                      </div>
+                    </fieldset>
+                  </FormGroup>
 
                   {advancedSearchHelper.showStateSelect && (
                     <div className="tablet:grid-col-5">
