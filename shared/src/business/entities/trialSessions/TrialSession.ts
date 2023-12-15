@@ -445,7 +445,7 @@ export class TrialSession extends JoiValidationEntity {
   addCaseToCalendar(caseEntity) {
     const { docketNumber } = caseEntity;
 
-    const caseExists = this.caseOrder.find(
+    const caseExists = (this.caseOrder || []).find(
       _caseOrder => _caseOrder.docketNumber === docketNumber,
     );
 
@@ -474,7 +474,7 @@ export class TrialSession extends JoiValidationEntity {
   }
 
   removeCaseFromCalendar({ disposition, docketNumber }) {
-    const caseToUpdate = this.caseOrder.find(
+    const caseToUpdate = (this.caseOrder || []).find(
       trialCase => trialCase.docketNumber === docketNumber,
     );
 
@@ -505,11 +505,11 @@ export class TrialSession extends JoiValidationEntity {
    * removes the case totally from the trial session
    */
   deleteCaseFromCalendar({ docketNumber }) {
-    const index = this.caseOrder.findIndex(
+    const index = (this.caseOrder || []).findIndex(
       trialCase => trialCase.docketNumber === docketNumber,
     );
     if (index >= 0) {
-      this.caseOrder.splice(index, 1);
+      this.caseOrder!.splice(index, 1);
     }
     return this;
   }

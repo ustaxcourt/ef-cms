@@ -9,7 +9,7 @@ export const getAllUsersByRoleInteractor = async (
   { roles }: { roles: string[] },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_TRIAL_SESSION)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

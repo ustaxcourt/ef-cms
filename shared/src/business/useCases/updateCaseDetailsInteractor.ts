@@ -113,7 +113,7 @@ export const updateCaseDetails = async (
     const oldCaseEntity = new Case(oldCase, { applicationContext });
     const oldTrialSortTag = oldCaseEntity.getShouldHaveTrialSortMappingRecords()
       ? oldCaseEntity.generateTrialSortTags()
-      : {};
+      : { nonHybrid: undefined };
     const newTrialSortTag = newCaseEntity.generateTrialSortTags();
 
     // The nonHybrid sort tag will be comprised of the trial city, procedure type, and case type
