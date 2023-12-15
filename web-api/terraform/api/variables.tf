@@ -219,3 +219,7 @@ variable "enable_health_checks" {
 variable "health_check_id" {
   type = string
 }
+
+variable "deployment_timestamp" {
+  type = number
+}
