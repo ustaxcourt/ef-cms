@@ -6,7 +6,7 @@ import {
   formatNow,
   isValidISODate,
 } from '../../business/utilities/DateHandler';
-
+import { InvalidRequest } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -47,7 +47,9 @@ export const getReconciliationReportInteractor = async (
   } else {
     const dateInputValid = isValidDate(reconciliationDate);
     if (!dateInputValid) {
-      throw new Error('Date must be formatted as ISO and not later than today');
+      throw new InvalidRequest(
+        'Date must be formatted as ISO and not later than today',
+      );
     }
   }
 
@@ -74,7 +76,7 @@ export const getReconciliationReportInteractor = async (
   const dtReconciliationDateEnd = DateTime.fromISO(reconciliationDateEnd);
 
   if (!dtReconciliationDateEnd.isValid) {
-    throw new Error('End date must be formatted as ISO');
+    throw new InvalidRequest('End date must be formatted as ISO');
   }
 
   // make sure request doens't exceed 24 hours
@@ -83,7 +85,7 @@ export const getReconciliationReportInteractor = async (
     'hours',
   ).hours;
   if (diffHours > 24) {
-    throw new Error('Time span must not exceed 24 hours');
+    throw new InvalidRequest('Time span must not exceed 24 hours');
   }
 
   const reconciliationDateStart = dtReconciliationDateStart.toISO();

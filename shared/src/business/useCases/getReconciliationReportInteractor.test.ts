@@ -210,8 +210,8 @@ describe('getReconciliationReportInteractor', () => {
   //Don't allow durations in excess of 24 hours
   it("shouldn't allow duration that exceeds 24 hours", async () => {
     const dtStart = DateTime.fromISO('2002-01-02') as DateTime<true>;
-    const dtEndOkay = DateTime.fromISO('2002-01-02T23:00') as DateTime<true>;
     const dtEndLong = dtStart.plus({ hours: 25 });
+    const dtEndOkay = DateTime.fromISO('2002-01-02T23:00') as DateTime<true>;
 
     await expect(
       getReconciliationReportInteractor(applicationContext, {
