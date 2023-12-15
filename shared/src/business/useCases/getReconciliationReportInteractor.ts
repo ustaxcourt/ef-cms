@@ -51,12 +51,6 @@ export const getReconciliationReportInteractor = async (
     }
   }
 
-  const reconciliationDateStart = DateTime.fromISO(reconciliationDate, {
-    zone: USTC_TZ,
-  })
-    .toUTC()
-    .toISO()!;
-
   //If no end date specified, set it to end of the same day as start date
   if (!reconciliationDateEnd) {
     reconciliationDateEnd = DateTime.fromISO(reconciliationDate, {
@@ -73,10 +67,26 @@ export const getReconciliationReportInteractor = async (
       .toISO()!;
   }
 
-  if (!DateTime.fromISO(reconciliationDateEnd).isValid) {
+  const dtReconciliationDateStart = DateTime.fromISO(reconciliationDate, {
+    zone: USTC_TZ,
+  }).toUTC();
+
+  const dtReconciliationDateEnd = DateTime.fromISO(reconciliationDateEnd);
+
+  if (!dtReconciliationDateEnd.isValid) {
     throw new Error('End date must be formatted as ISO');
   }
 
+  // make sure request doens't exceed 24 hours
+  const diffHours = dtReconciliationDateEnd.diff(
+    dtReconciliationDateStart,
+    'hours',
+  ).hours;
+  if (diffHours > 24) {
+    throw new Error('Time span must not exceed 24 hours');
+  }
+
+  const reconciliationDateStart = dtReconciliationDateStart.toISO();
   const docketEntries = await applicationContext
     .getPersistenceGateway()
     .getReconciliationReport({

@@ -206,5 +206,25 @@ describe('getReconciliationReportInteractor', () => {
     expect(result.reconciliationDate).toBe(startDate);
     expect(result.reconciliationDateEnd).toBe(isoEndDate);
   });
-  //TODO: If given two future dates, system should throw error
+
+  //Don't allow durations in excess of 24 hours
+  it("shouldn't allow duration that exceeds 24 hours", async () => {
+    const dtStart = DateTime.fromISO('2002-01-02') as DateTime<true>;
+    const dtEndOkay = DateTime.fromISO('2002-01-02T23:00') as DateTime<true>;
+    const dtEndLong = dtStart.plus({ hours: 25 });
+
+    await expect(
+      getReconciliationReportInteractor(applicationContext, {
+        reconciliationDate: dtStart.toISO(),
+        reconciliationDateEnd: dtEndOkay.toISO(),
+      }),
+    ).resolves.not.toThrow();
+
+    await expect(
+      getReconciliationReportInteractor(applicationContext, {
+        reconciliationDate: dtStart.toISO(),
+        reconciliationDateEnd: dtEndLong.toISO(),
+      }),
+    ).rejects.toThrow();
+  });
 });
