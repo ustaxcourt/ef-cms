@@ -55,7 +55,7 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
           bool: {
             must: [
               {
-                match_phrase: {
+                term: {
                   'associatedJudgeId.S': 'TEST_JUDGE_ID',
                 },
               },
