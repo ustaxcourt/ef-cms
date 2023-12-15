@@ -26,7 +26,9 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         bool: {
           must: [
             {
-              match_phrase: { 'associatedJudgeId.S': judgeId },
+              term: {
+                'associatedJudgeId.S': judgeId,
+              },
             },
           ],
         },
