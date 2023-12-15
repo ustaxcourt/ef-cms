@@ -1,85 +1,57 @@
-import {
-  batchGet,
-  getTableName,
-} from '../../persistence/dynamodbClientService';
 import { createApplicationContext } from '../../applicationContext';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
-/**
- *
- */
-async function putEventHistory(
-  applicationContext: IApplicationContext,
-  eventID: string,
-) {
-  const twentyFourHours = 24 * 60 * 60;
+const applicationContext = createApplicationContext({});
+const deploymentTimestamp: number =
+  Number(process.env.DEPLOYMENT_TIMESTAMP!) || 0; // epoch seconds
 
-  await applicationContext
-    .getDocumentClient(applicationContext, {
-      useMainRegion: true,
-    })
-    .put({
-      Item: {
-        pk: `stream-event-id|${eventID}`,
-        sk: `stream-event-id|${eventID}`,
-        ttl: Math.floor(Date.now() / 1000) + twentyFourHours,
-      },
-      TableName: getTableName({
-        applicationContext,
-      }),
-    });
-}
+const shouldProcessRecord = (record: DynamoDBRecord): boolean => {
+  if (
+    record &&
+    'dynamodb' in record &&
+    record.dynamodb &&
+    'ApproximateCreationDateTime' in record.dynamodb &&
+    typeof record.dynamodb.ApproximateCreationDateTime !== 'undefined'
+  ) {
+    // StreamRecord objects from local dynamodb have an ApproximateCreationDateTime with a type of Date
+    // StreamRecord objects from AWS dynamodb have an ApproximateCreationDateTime with a type of number (epoch seconds)
+    const {
+      ApproximateCreationDateTime,
+    }: { ApproximateCreationDateTime?: any } = record.dynamodb;
 
-/**
- *
- */
-async function getEventHistories(
-  applicationContext: IApplicationContext,
-  records: DynamoDBRecord[],
-) {
-  return (await batchGet({
-    applicationContext,
-    keys: records
-      .map(record => record.eventID)
-      .map(eventID => ({
-        pk: `stream-event-id|${eventID}`,
-        sk: `stream-event-id|${eventID}`,
-      })),
-  })) as { pk: string; sk: string }[];
-}
+    let approximateCreationDateTime: number;
+    if (ApproximateCreationDateTime instanceof Date) {
+      approximateCreationDateTime = Math.floor(
+        ApproximateCreationDateTime.getTime() / 1000,
+      );
+    } else if (typeof ApproximateCreationDateTime === 'number') {
+      approximateCreationDateTime = ApproximateCreationDateTime;
+    } else {
+      applicationContext.logger.error(
+        `Error handling stream event timestamp for event ${record.eventID}`,
+        { ApproximateCreationDateTime, pk: record.dynamodb.Keys?.pk?.S },
+      );
+      return true;
+    }
 
-/**
- * used for processing stream records from persistence
- * @param {object} event the AWS event object
- * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
- */
+    applicationContext.logger.debug(
+      `${
+        approximateCreationDateTime >= deploymentTimestamp
+          ? 'Indexing'
+          : 'Not indexing'
+      } record ${record.dynamodb.Keys?.pk?.S}`,
+      { approximateCreationDateTime, deploymentTimestamp },
+    );
+    return approximateCreationDateTime >= deploymentTimestamp;
+  }
+  return true;
+};
+
 export const processStreamRecordsLambda = async (
   event: DynamoDBStreamEvent,
 ) => {
-  const applicationContext = createApplicationContext({});
-  const recordsToProcess: DynamoDBRecord[] = [];
-
-  const isStreamRecord = record =>
-    record.dynamodb?.Keys?.pk.S?.startsWith('stream-event-id');
-
-  const recordsToCheck = event.Records.filter(
-    record => !isStreamRecord(record),
-  );
-
-  const allEventHistories = await getEventHistories(
-    applicationContext,
-    recordsToCheck,
-  );
-
-  await Promise.all(
-    recordsToCheck.map(record => {
-      const isRecordProcessed = !!allEventHistories.find(
-        history => history.pk === `stream-event-id|${record.eventID}`,
-      );
-      if (!isRecordProcessed) {
-        recordsToProcess.push(record);
-      }
-    }),
+  const recordsToProcess: DynamoDBRecord[] = event.Records.filter(record =>
+    shouldProcessRecord(record),
   );
 
   if (recordsToProcess.length > 0) {
@@ -88,13 +60,5 @@ export const processStreamRecordsLambda = async (
       .processStreamRecordsInteractor(applicationContext, {
         recordsToProcess,
       });
-
-    await Promise.all(
-      recordsToProcess.map(async record => {
-        const { eventID } = record;
-        if (!eventID) return;
-        await putEventHistory(applicationContext, eventID);
-      }),
-    );
   }
 };
