@@ -8,7 +8,6 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from './EntityConstants';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { User } from './User';
 import joi from 'joi';
