@@ -787,6 +787,94 @@
         }
       }
     },
+    "/docket-entries/pending-motion": {
+      "parameters": [
+        {
+          "name": "judge",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["pending-motion"],
+        "summary": "gets the pending motions associated to a judge",
+        "description": "Gets the pending motions of a judge.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/pending-motion"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      }
+    },
+    "/docket-entry/{docketEntryId}/worksheet": {
+      "parameters": [
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "worksheet",
+          "description": "data for the updated docket entry worksheet",
+          "schema": {
+            "$ref": "#/definitions/pending-motion-worksheet"
+          }
+        }
+      ],
+      "post": {
+        "summary": "update a pending motion docket entry worksheet",
+        "description": "Update a pending motion docket entry worksheet.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/pending-motion-worksheet"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/public-api/order-search": {
       "get": {
         "tags": ["order-search"],
@@ -8138,6 +8226,75 @@
         }
       },
       "description": "a case deadline"
+    },
+    "pending-motion": {
+      "type": "object",
+      "properties": {
+        "docketEntries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "daysSinceCreated": {
+                "type": "number",
+                "description": "Number of days since the pending motion has been created"
+              },
+              "caseCaption": {
+                "type": "string",
+                "description": "Case caption from the docket entry's case"
+              },
+              "consolidatedGroupCount": {
+                "type": "number",
+                "description": "Number of consolidated cases the docket entry's case is in"
+              },
+              "leadDocketNumber": {
+                "type": "number",
+                "description": "Lead docket number"
+              },
+              "docketEntryId": {
+                "type": "string",
+                "description": "Docket entry ID"
+              },
+              "docketEntryWorksheet": {
+                "type": "object",
+                "properties": {
+                  "primaryIssue": {
+                    "type": "string",
+                    "description": "the primary issue noted for the case in Submitted/CAV status to which the worksheet belongs"
+                  },
+                  "finalBriefDueDate": {
+                    "type": "string",
+                    "description": "the date the final briefs are due for the case to which the worksheet belongs"
+                  },
+                  "statusOfMatter": {
+                    "type": "string",
+                    "description": "status of matter"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": "a judge's pending motion results with worksheets"
+    },
+    "pending-motion-worksheet": {
+      "type": "object",
+      "properties": {
+        "primaryIssue": {
+          "type": "string",
+          "description": "the primary issue noted for the case in Submitted/CAV status to which the worksheet belongs"
+        },
+        "finalBriefDueDate": {
+          "type": "string",
+          "description": "the date the final briefs are due for the case to which the worksheet belongs"
+        },
+        "statusOfMatter": {
+          "type": "string",
+          "description": "status of matter"
+        }
+      },
+      "description": "Updated docket entry worksheet"
     },
     "userNote": {
       "type": "object",

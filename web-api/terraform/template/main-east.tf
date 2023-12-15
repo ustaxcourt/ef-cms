@@ -616,11 +616,12 @@ module "api-east-green" {
   zone_id                   = data.aws_route53_zone.zone.id
   pool_arn                  = aws_cognito_user_pool.pool.arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
-    REGION                 = "us-east-1"
-    DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "green"
+    DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
+    DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
+    REGION                 = "us-east-1"
   })
   region   = "us-east-1"
   validate = 1
@@ -630,6 +631,7 @@ module "api-east-green" {
   }
   current_color                  = "green"
   deploying_color                = var.deploying_color
+  deployment_timestamp           = var.deployment_timestamp
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_east.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_green_east_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_green_east_object.etag
@@ -689,11 +691,12 @@ module "api-east-blue" {
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
-    DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
+    DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
+    DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
-    REGION                 = "us-east-1"
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
+    REGION                 = "us-east-1"
   })
   region   = "us-east-1"
   validate = 1
@@ -703,6 +706,7 @@ module "api-east-blue" {
   }
   current_color                  = "blue"
   deploying_color                = var.deploying_color
+  deployment_timestamp           = var.deployment_timestamp
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_east.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_blue_east_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_blue_east_object.etag
