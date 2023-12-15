@@ -71,6 +71,7 @@ export const CreateOrderChooseTypeModal = connect(
               </label>
               <input
                 className="usa-input"
+                data-testid="create-order-document-title"
                 id="documentTitle"
                 name="documentTitle"
                 type="text"

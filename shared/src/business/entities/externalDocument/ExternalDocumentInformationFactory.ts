@@ -3,7 +3,6 @@ import {
   ALL_EVENT_CODES,
   AMENDMENT_EVENT_CODES,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-  MAX_FILE_SIZE_MB,
 } from '../EntityConstants';
 import { ExternalDocumentBase } from '@shared/business/entities/externalDocument/ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
@@ -72,13 +71,10 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     this.freeText2 = rawProps.freeText2;
 
     if (this.secondaryDocument) {
-      this.secondaryDocument = new SecondaryDocumentInformationFactory(
-        {
-          ...this.secondaryDocument,
-          secondaryDocumentFile: this.secondaryDocumentFile,
-        },
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
-      );
+      this.secondaryDocument = new SecondaryDocumentInformationFactory({
+        ...this.secondaryDocument,
+        secondaryDocumentFile: this.secondaryDocumentFile,
+      });
     }
 
     if (this.supportingDocuments) {
@@ -96,136 +92,71 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     }
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    additionalInfo: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Limit is 500 characters. Enter 500 or fewer characters.',
-      },
-    ],
-    additionalInfo2: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Limit is 500 characters. Enter 500 or fewer characters.',
-      },
-    ],
-    attachments: 'Enter selection for Attachments.',
-    category: 'Select a Category.',
-    certificateOfService:
-      'Indicate whether you are including a Certificate of Service',
-    certificateOfServiceDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'Certificate of Service date cannot be in the future. Enter a valid date.',
-      },
-      'Enter date of service',
-    ],
-    documentTitle:
-      'Document title must be 3000 characters or fewer. Update this document title and try again.',
-    documentType: [
-      {
-        contains: 'contains an invalid value',
-        message:
-          'Proposed Stipulated Decision must be filed separately in each case',
-      },
-      'Select a document type',
-    ],
-    filers: 'Select a filing party',
-    freeText: [
-      { contains: 'is required', message: 'Provide an answer' },
-      {
-        contains: 'must be less than or equal to',
-        message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
-      },
-    ],
-    freeText2: [
-      { contains: 'is required', message: 'Provide an answer' },
-      {
-        contains: 'must be less than or equal to',
-        message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
-      },
-    ],
-    hasSecondarySupportingDocuments:
-      'Enter selection for Secondary Supporting Documents.',
-    hasSupportingDocuments: 'Enter selection for Supporting Documents.',
-    objections: 'Enter selection for Objections.',
-    ordinalValue: 'Select an iteration',
-    otherIteration: [
-      {
-        contains: 'is required',
-        message: 'Enter an iteration number.',
-      },
-      'Maximum iteration value is 999.',
-    ],
-    partyIrsPractitioner: 'Select a filing party',
-    previousDocument: 'Select a document',
-    primaryDocumentFile: 'Upload a document',
-    primaryDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Primary Document file size is empty.',
-    ],
-    secondaryDocument: 'Select a document',
-    secondaryDocumentFile: 'Upload a document',
-    secondaryDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Secondary Document file size is empty.',
-    ],
-    serviceDate: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Service date cannot be in the future. Enter a valid date.',
-      },
-      'Provide a service date',
-    ],
-    supportingDocument: 'Select a document type',
-    supportingDocumentFile: 'Upload a document',
-    supportingDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Supporting Document file size is empty.',
-    ],
-    supportingDocumentFreeText: 'Enter name',
-    trialLocation: 'Select a preferred trial location.',
-  } as const;
-
   getValidationRules() {
     let schema = {
-      attachments: joi.boolean().required(),
+      attachments: joi
+        .boolean()
+        .required()
+        .messages({ '*': 'Enter selection for Attachments.' }),
       casesParties: joi.object().optional(),
-      certificateOfService: joi.boolean().required(),
-      documentType: JoiValidationConstants.STRING.valid(
-        ...ALL_DOCUMENT_TYPES,
-      ).optional(),
+      certificateOfService: joi.boolean().required().messages({
+        '*': 'Indicate whether you are including a Certificate of Service',
+      }),
+      documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
+        .messages({ '*': 'Select a document type' })
+        .required(),
       eventCode: JoiValidationConstants.STRING.valid(
         ...ALL_EVENT_CODES,
       ).optional(),
-      freeText: JoiValidationConstants.STRING.optional(),
-      hasSupportingDocuments: joi.boolean().required(),
+      freeText: JoiValidationConstants.STRING.optional().messages({
+        'any.required': 'Provide an answer',
+        'string.max':
+          'Limit is 1000 characters. Enter 1000 or fewer characters.',
+      }),
+      hasSupportingDocuments: joi
+        .boolean()
+        .required()
+        .messages({ '*': 'Enter selection for Supporting Documents.' }),
       lodged: joi.boolean().optional(),
-      ordinalValue: JoiValidationConstants.STRING.optional(),
-      previousDocument: joi.object().optional(),
-      primaryDocumentFile: joi.object().required(),
+      ordinalValue: JoiValidationConstants.STRING.optional().messages({
+        '*': 'Select an iteration',
+      }),
+      previousDocument: joi
+        .object()
+        .optional()
+        .messages({ '*': 'Select a document' }),
+      primaryDocumentFile: joi
+        .object()
+        .required()
+        .messages({ '*': 'Upload a document' }),
     };
 
     let schemaOptionalItems = {
-      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
+      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
+        'now',
+      ).messages({
+        '*': 'Enter date of service',
+        'date.max':
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
+      }),
       filers: joi
         .array()
         .items(JoiValidationConstants.UUID.required())
-        .required(),
-      hasSecondarySupportingDocuments: joi.boolean(),
-      objections: JoiValidationConstants.STRING,
-      partyIrsPractitioner: joi.boolean(),
-      secondaryDocumentFile: joi.object(),
+        .required()
+        .messages({ '*': 'Select a filing party' }),
+      hasSecondarySupportingDocuments: joi.boolean().messages({
+        '*': 'Enter selection for Secondary Supporting Documents.',
+      }),
+
+      objections: JoiValidationConstants.STRING.messages({
+        '*': 'Enter selection for Objections.',
+      }),
+      partyIrsPractitioner: joi
+        .boolean()
+        .messages({ '*': 'Select a filing party' }),
+      secondaryDocumentFile: joi
+        .object()
+        .messages({ '*': 'Upload a document' }),
       secondarySupportingDocuments: joi.array().optional(),
       selectedCases: joi
         .array()
@@ -234,15 +165,13 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       supportingDocuments: joi.array().optional(),
     };
 
-    const addProperty = (itemName, itemSchema, itemErrorMessage?) => {
-      addPropertyHelper({
-        VALIDATION_ERROR_MESSAGES:
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
-        itemErrorMessage,
+    const addProperty = (itemName, itemSchema) => {
+      const options = {
         itemName,
         itemSchema,
         schema,
-      });
+      };
+      addPropertyHelper(options);
     };
 
     const makeRequired = itemName => {
@@ -304,7 +233,10 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
         ) {
           addProperty(
             'filers',
-            joi.array().items(joi.string().required()).required(),
+            joi
+              .array()
+              .items(joi.string().required())
+              .messages({ '*': 'Select a filing party' }),
           );
         }
       }
@@ -312,15 +244,14 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       if (this.filers.length === 0 && this.partyIrsPractitioner !== true) {
         addProperty(
           'filers',
-          joi.array().items(joi.string().required()).required(),
+          joi
+            .array()
+            .items(joi.string().required())
+            .messages({ '*': 'Select a filing party' }),
         );
       }
     }
 
     return schema;
-  }
-
-  getErrorToMessageMap() {
-    return ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES;
   }
 }
