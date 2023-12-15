@@ -10,8 +10,7 @@ export const defaultAdvancedSearchFormAction = ({
   get,
   store,
 }: ActionProps) => {
-  const { ADVANCED_SEARCH_OPINION_TYPES, COUNTRY_TYPES } =
-    applicationContext.getConstants();
+  const { ADVANCED_SEARCH_OPINION_TYPES } = applicationContext.getConstants();
   const advancedSearchForm = get(state.advancedSearchForm);
   // do not overwrite existing state so the form is still filled in when returning to the page
   if (!advancedSearchForm.caseSearchByDocketNumber) {
@@ -19,7 +18,7 @@ export const defaultAdvancedSearchFormAction = ({
   }
   if (!advancedSearchForm.caseSearchByName) {
     store.set(state.advancedSearchForm.caseSearchByName, {
-      countryType: COUNTRY_TYPES.DOMESTIC,
+      countryType: 'all', // todo: decide where to put the constant // unit test
     });
   }
   if (!advancedSearchForm.practitionerSearchByBarNumber) {

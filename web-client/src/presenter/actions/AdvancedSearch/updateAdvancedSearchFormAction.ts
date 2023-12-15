@@ -6,7 +6,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {Function} returns a callback function that sets advancedSearchForm on state
  */
 export const updateAdvancedSearchFormAction =
-  formName =>
+  (formName?: string) =>
   /**
    * sets the value of state.advancedSearchForm entry to the value passed in
    *
