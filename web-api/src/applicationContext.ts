@@ -320,32 +320,35 @@ export const createApplicationContext = (
           });
         }
       },
-      sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
+      sendSetTrialSessionCalendarEvent: async ({
+        applicationContext,
+        payload,
+      }) => {
         if (environment.stage === 'local') {
-          applicationContext
+          await applicationContext
             .getUseCases()
             .generateNoticesForCaseTrialSessionCalendarInteractor(
               applicationContext,
               payload,
             );
         } else {
-          sendSetTrialSessionCalendarEvent({
+          await sendSetTrialSessionCalendarEvent({
             applicationContext,
             payload,
           });
         }
       },
-      sendUpdatePetitionerCasesMessage: ({
+      sendUpdatePetitionerCasesMessage: async ({
         applicationContext: appContext,
         user: userToSendTo,
       }) => {
         if (environment.stage === 'local') {
-          updatePetitionerCasesInteractor({
+          await updatePetitionerCasesInteractor({
             applicationContext: appContext,
             user: userToSendTo,
           });
         } else {
-          sendUpdatePetitionerCasesMessage({
+          await sendUpdatePetitionerCasesMessage({
             applicationContext: appContext,
             user: userToSendTo,
           });
