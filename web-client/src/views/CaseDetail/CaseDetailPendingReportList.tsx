@@ -22,11 +22,11 @@ export const CaseDetailPendingReportList = connect(
   }) {
     return (
       <>
-        <div className="margin-top-neg-3 text-right">
+        <div className="margin-top-3 margin-bottom-105 text-right">
           <Button
             link
             aria-describedby="tab-pending-report"
-            className="margin-top-neg-1 margin-bottom-1 margin-right-0"
+            className="margin-right-0"
             href={`/case-detail/${formattedDocketEntries.docketNumber}/pending-report`}
             icon="print"
           >
