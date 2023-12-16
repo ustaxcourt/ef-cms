@@ -33,6 +33,7 @@ import { decrementJobCounter } from './persistence/dynamo/trialSessions/decremen
 import { deleteCaseDeadline } from './persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
+import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import {
   deleteKeyCount,
@@ -52,6 +53,7 @@ import { deleteWorkItem } from './persistence/dynamo/workitems/deleteWorkItem';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
+import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/elasticsearch/docketEntry/getAllPendingMotionDocketEntriesForJudge';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
@@ -81,6 +83,7 @@ import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
@@ -161,6 +164,7 @@ import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/u
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
+import { updateDocketEntryWorksheet } from '@web-api/persistence/dynamo/pendingMotion/updateDocketEntryWorksheet';
 import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
@@ -207,7 +211,7 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
     };
   }
 
-  Object.keys(persistenceGatewayMethods).forEach(key => {
+  Object.keys(persistenceGatewayMethods as object).forEach(key => {
     persistenceGatewayMethods[key] = decorate(persistenceGatewayMethods[key]);
   });
   return persistenceGatewayMethods;
@@ -259,6 +263,7 @@ const gatewayMethods = {
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
+    updateDocketEntryWorksheet,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updateMessage,
@@ -286,6 +291,7 @@ const gatewayMethods = {
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
+  deleteDocketEntryWorksheetRecord,
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
@@ -297,6 +303,7 @@ const gatewayMethods = {
   deleteUserFromCase,
   deleteWorkItem,
   fetchEventCodesCountForJudges,
+  getAllPendingMotionDocketEntriesForJudge,
   getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
@@ -323,6 +330,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
+  getDocketEntryWorksheetsByDocketEntryIds,
   getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
   getDocument,
