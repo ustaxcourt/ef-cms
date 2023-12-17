@@ -126,9 +126,9 @@ import {
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
-  VALIDATION_ERROR_MESSAGES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { DocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
   SERVICE_STAMP_OPTIONS,
@@ -300,6 +300,8 @@ export const getConstants = () => ({
   STAMPED_DOCUMENTS_ALLOWLIST,
   STANDING_PRETRIAL_EVENT_CODES,
   STATUS_OF_MATTER_OPTIONS: CaseWorksheet.STATUS_OF_MATTER_OPTIONS,
+  STATUS_OF_MATTER_OPTIONS_DICTIONARY:
+    DocketEntryWorksheet.STATUS_OF_MATTER_OPTIONS_DICTIONARY,
   STATUS_TYPES: CASE_STATUS_TYPES,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
@@ -316,5 +318,4 @@ export const getConstants = () => ({
   US_STATES,
   US_STATES_OTHER,
   USER_ROLES: ROLES,
-  VALIDATION_ERROR_MESSAGES,
 });

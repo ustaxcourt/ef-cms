@@ -9,6 +9,12 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 ## Library Update Steps 
 
 ### Do the following for all package.json files
+
+note: we have 3 package.json files, be sure to update them all
+  - ./package.json
+  - ./cognito-triggers-sls/package.json
+  - ./web-api/runtimes/puppeteer/package.json
+
 1. `npm update --save`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
 
 2. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
@@ -81,6 +87,9 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### jsdom
 - (11/28/2023) Unable to update from 22.1.0 -> 23.0.0 as jsdom lists incorrect peer dependency for canvas as 3.0.0 which doesn't exist. see issue for more details: https://github.com/jsdom/jsdom/issues/3627. This will likely be resolved soon by jsdom.
+
+### uswds
+- (12/13/2023) USWDS is currently locked down to 3.7.0 as 3.7.1 causes everything to shift to the left. More investigation pending.
 
 ## Incrementing the Node Cache Key Version
 

@@ -95,6 +95,7 @@ import { getFakeFile } from '@shared/business/test/getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
+import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/business/utilities/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
@@ -228,6 +229,7 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    downloadCsv: jest.fn(),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
@@ -290,6 +292,9 @@ const createTestApplicationContext = () => {
     getSealedDocketEntryTooltip: jest
       .fn()
       .mockImplementation(getSealedDocketEntryTooltip),
+    getSelectedConsolidatedCasesToMultiDocketOn: jest
+      .fn()
+      .mockImplementation(getSelectedConsolidatedCasesToMultiDocketOn),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     getSortableDocketNumber: jest
       .fn()

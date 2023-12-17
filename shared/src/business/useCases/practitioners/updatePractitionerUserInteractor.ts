@@ -1,5 +1,5 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { Practitioner } from '../../entities/Practitioner';
+import { Practitioner, RawPractitioner } from '../../entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -62,7 +62,7 @@ export const updatePractitionerUser = async (
     barNumber,
     bypassDocketEntry = false,
     user,
-  }: { barNumber: string; bypassDocketEntry?: boolean; user: TPractitioner },
+  }: { barNumber: string; bypassDocketEntry?: boolean; user: RawPractitioner },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
 
