@@ -1,15 +1,9 @@
 /* eslint-disable max-lines */
-import AWS from 'aws-sdk';
-
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import axios from 'axios';
-import pug from 'pug';
-import sass from 'sass';
-import util from 'util';
-
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
@@ -21,9 +15,6 @@ import {
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-
-// eslint-disable-next-line import/no-unresolved
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
@@ -43,12 +34,13 @@ import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
-import { fallbackHandler } from './fallbackHandler';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
+import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
+import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
@@ -68,8 +60,14 @@ import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
-import type { ClientApplicationContext } from '../../web-client/src/applicationContext';
-const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
+import AWS from 'aws-sdk';
+import axios from 'axios';
+import pug from 'pug';
+import sass from 'sass';
+import util from 'util';
+
+const { CognitoIdentityServiceProvider, S3, SES, SQS } = AWS;
+
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -78,12 +76,9 @@ const environment = {
     : 'localhost:1234',
   currentColor: process.env.CURRENT_COLOR || 'green',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
-  dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
-  masterDynamoDbEndpoint:
-    process.env.MASTER_DYNAMODB_ENDPOINT || 'http://localhost:8000',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
@@ -94,70 +89,6 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-const getDocumentClient = ({ useMasterRegion = false } = {}) => {
-  const type = useMasterRegion ? 'master' : 'region';
-  const mainRegion = environment.region;
-  const fallbackRegion =
-    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
-  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('local')
-    ? environment.dynamoDbEndpoint.includes('localhost')
-      ? 'http://localhost:8000'
-      : environment.dynamoDbEndpoint
-    : `dynamodb.${mainRegion}.amazonaws.com`;
-  const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
-    'localhost',
-  )
-    ? 'http://localhost:8000'
-    : `dynamodb.${fallbackRegion}.amazonaws.com`;
-  const { masterDynamoDbEndpoint, masterRegion } = environment;
-
-  const config = {
-    fallbackRegion,
-    fallbackRegionEndpoint,
-    mainRegion,
-    mainRegionEndpoint,
-    masterDynamoDbEndpoint,
-    masterRegion,
-    useMasterRegion,
-  };
-
-  if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = {
-      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
-      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
-      delete: fallbackHandler({ key: 'delete', ...config }),
-      get: fallbackHandler({ key: 'get', ...config }),
-      put: fallbackHandler({ key: 'put', ...config }),
-      query: fallbackHandler({ key: 'query', ...config }),
-      scan: fallbackHandler({ key: 'scan', ...config }),
-      update: fallbackHandler({ key: 'update', ...config }),
-    };
-  }
-  return dynamoClientCache[type];
-};
-
-const getDynamoClient = ({ useMasterRegion = false } = {}) => {
-  // we don't need fallback logic here because the only method we use is describeTable
-  // which is used for actually checking if the table in the same region exists.
-  const type = useMasterRegion ? 'master' : 'region';
-  if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDB({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      httpOptions: {
-        connectTimeout: 3000,
-        timeout: 5000,
-      },
-      maxRetries: 3,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-    });
-  }
-  return dynamoCache[type];
-};
-
-let dynamoClientCache = {};
-let dynamoCache = {};
 let s3Cache;
 let sesCache;
 let sqsCache;
@@ -255,6 +186,7 @@ export const createApplicationContext = (
                   applicationContext: {
                     environment,
                     getDocumentClient,
+                    getDynamoClient,
                   },
                 });
                 const users = items.filter(
@@ -390,14 +322,14 @@ export const createApplicationContext = (
       },
       sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
         if (environment.stage === 'local') {
-          applicationContext
+          return applicationContext
             .getUseCases()
             .generateNoticesForCaseTrialSessionCalendarInteractor(
               applicationContext,
               payload,
             );
         } else {
-          sendSetTrialSessionCalendarEvent({
+          return sendSetTrialSessionCalendarEvent({
             applicationContext,
             payload,
           });
@@ -408,12 +340,12 @@ export const createApplicationContext = (
         user: userToSendTo,
       }) => {
         if (environment.stage === 'local') {
-          updatePetitionerCasesInteractor({
+          return updatePetitionerCasesInteractor({
             applicationContext: appContext,
             user: userToSendTo,
           });
         } else {
-          sendUpdatePetitionerCasesMessage({
+          return sendUpdatePetitionerCasesMessage({
             applicationContext: appContext,
             user: userToSendTo,
           });
@@ -559,10 +491,6 @@ export const createApplicationContext = (
   };
 };
 
-export type IServerApplicationContext = ReturnType<
+export type ServerApplicationContext = ReturnType<
   typeof createApplicationContext
 >;
-
-export type IMergeContext =
-  | IServerApplicationContext
-  | ClientApplicationContext;

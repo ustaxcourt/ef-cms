@@ -1,3 +1,4 @@
+import { assertExists, retry } from '../../helpers/retry';
 import {
   createMessage,
   enterSubject,
@@ -7,6 +8,10 @@ import {
   selectSection,
   sendMessage,
 } from '../support/pages/document-qc';
+import {
+  loginAsColvin,
+  loginAsColvinChambers,
+} from '../../helpers/auth/login-as-helpers';
 
 describe('Message Count', () => {
   it("should display the message count on the Judge's dashboard", () => {
@@ -19,8 +24,10 @@ describe('Message Count', () => {
     fillOutMessageField();
     sendMessage();
 
-    cy.login('judgecolvin');
-    cy.get('[data-testid="header-message-count"]').should('exist');
+    retry(() => {
+      loginAsColvin();
+      return assertExists('[data-testid="header-message-count"]');
+    });
   });
 
   it("should display the message count on the Chamber's dashboard", () => {
@@ -33,7 +40,9 @@ describe('Message Count', () => {
     fillOutMessageField();
     sendMessage();
 
-    cy.login('colvinschambers');
-    cy.get('[data-testid="header-message-count"]').should('exist');
+    retry(() => {
+      loginAsColvinChambers();
+      return assertExists('[data-testid="header-message-count"]');
+    });
   });
 });

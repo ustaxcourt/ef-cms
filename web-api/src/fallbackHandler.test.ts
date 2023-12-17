@@ -1,104 +1,99 @@
 import { fallbackHandler } from './fallbackHandler';
 
-const mockGet = jest.fn();
-
-jest.mock('aws-sdk', () => {
-  return {
-    DynamoDB: {
-      DocumentClient: jest.fn(() => ({
-        get: mockGet,
-      })),
-    },
-  };
-});
-
 describe('fallbackHandler', () => {
+  const mainRegionGet = jest.fn();
+  const fallbackRegionGet = jest.fn();
+  const mainRegionDocumentClient: any = {
+    get: mainRegionGet,
+  };
+  const fallbackRegionDocumentClient: any = {
+    get: fallbackRegionGet,
+  };
   it('should not fallback if the first request was successful', async () => {
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            text: 'success',
-          },
-        }),
-    }));
+    mainRegionGet.mockResolvedValue({
+      Item: {
+        text: 'success',
+      },
+    });
 
     await fallbackHandler({
-      key: 'get',
+      dynamoMethod: 'get',
+      fallbackRegionDocumentClient,
+      mainRegionDocumentClient,
     })({
       TableName: 'testing',
-    }).promise();
-    expect(mockGet).toHaveBeenCalledTimes(1);
+    });
+
+    expect(mainRegionGet).toHaveBeenCalledTimes(1);
   });
 
   it('should fallback if the main dynamodb region is down', async () => {
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.reject({
-          code: 'ResourceNotFoundException',
-        }),
-    }));
-
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            text: 'success',
-          },
-        }),
-    }));
+    mainRegionGet.mockRejectedValue({
+      code: 'ResourceNotFoundException',
+    });
+    fallbackRegionGet.mockResolvedValue({
+      Item: {
+        text: 'success',
+      },
+    });
 
     await fallbackHandler({
-      key: 'get',
+      dynamoMethod: 'get',
+      fallbackRegionDocumentClient,
+      mainRegionDocumentClient,
     })({
       TableName: 'testing',
-    }).promise();
-    expect(mockGet).toHaveBeenCalledTimes(2);
+    });
+
+    expect(mainRegionGet).toHaveBeenCalledTimes(1);
+    expect(fallbackRegionGet).toHaveBeenCalledTimes(1);
   });
 
   it('should fallback if the main dynamodb region is throwing 503 errors', async () => {
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.reject({
-          statusCode: 503,
-        }),
-    }));
-
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.resolve({
-          Item: {
-            text: 'success',
-          },
-        }),
-    }));
+    mainRegionGet.mockRejectedValue({
+      statusCode: 503,
+    });
+    fallbackRegionGet.mockResolvedValue({
+      Item: {
+        text: 'success',
+      },
+    });
 
     await fallbackHandler({
-      key: 'get',
+      dynamoMethod: 'get',
+      fallbackRegionDocumentClient,
+      mainRegionDocumentClient,
     })({
       TableName: 'testing',
-    }).promise();
-    expect(mockGet).toHaveBeenCalledTimes(2);
+    });
+
+    expect(mainRegionGet).toHaveBeenCalledTimes(1);
+    expect(fallbackRegionGet).toHaveBeenCalledTimes(1);
   });
 
   it('should throw an error if the main dynamodb region is throwing other types of errors', async () => {
-    mockGet.mockImplementationOnce(() => ({
-      promise: () =>
-        Promise.reject({
-          statusCode: 500,
-        }),
-    }));
-
-    mockGet.mockImplementationOnce(() => ({
-      promise: () => Promise.reject({}),
-    }));
+    mainRegionGet.mockRejectedValue({
+      statusCode: 500,
+    });
+    fallbackRegionGet.mockResolvedValue({
+      Item: {
+        text: 'success',
+      },
+    });
 
     await expect(
       fallbackHandler({
-        key: 'get',
+        dynamoMethod: 'get',
+        fallbackRegionDocumentClient,
+        mainRegionDocumentClient,
       })({
         TableName: 'testing',
-      }).promise(),
-    ).rejects.toEqual({ statusCode: 500 });
+      }),
+    ).rejects.toEqual({
+      statusCode: 500,
+    });
+
+    expect(mainRegionGet).toHaveBeenCalledTimes(1);
+    expect(fallbackRegionGet).toHaveBeenCalledTimes(0);
   });
 });

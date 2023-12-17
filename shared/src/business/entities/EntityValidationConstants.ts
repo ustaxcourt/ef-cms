@@ -24,6 +24,7 @@ import {
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { createEndOfDayISO } from '@shared/business/utilities/DateHandler';
 import joi from 'joi';
 
 export const SERVICE_INDICATOR_ERROR = {
@@ -37,24 +38,34 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .allow(null)
     .description('Action taken in response to this Docket Record item.'),
   addToCoversheet: joi.boolean().optional(),
-  additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
-  additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
+  additionalInfo: JoiValidationConstants.STRING.max(500).optional().messages({
+    'string.max': 'Limit is 500 characters. Enter 500 or fewer characters.',
+  }),
+  additionalInfo2: JoiValidationConstants.STRING.max(500).optional().messages({
+    'string.max': 'Limit is 500 characters. Enter 500 or fewer characters.',
+  }),
   archived: joi
     .boolean()
     .optional()
     .description(
       'A document that was archived instead of added to the Docket Record.',
     ),
-  attachments: joi.boolean().optional(),
+  attachments: joi
+    .boolean()
+    .optional()
+    .messages({ '*': 'Enter selection for Attachments.' }),
   certificateOfService: joi.boolean().optional(),
-  certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now').when(
-    'certificateOfService',
-    {
+  certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now')
+    .when('certificateOfService', {
       is: true,
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    },
-  ),
+    })
+    .messages({
+      '*': 'Enter date of service',
+      'date.max':
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
+    }),
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the Document was added to the system.',
   ),
@@ -80,9 +91,11 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
     'The id for the original document that was uploaded.',
   ),
-  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
-    'The title of this document.',
-  ),
+  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional()
+    .description('The title of this document.')
+    .messages({
+      '*': 'Document title must be 3000 characters or fewer. Update this document title and try again.',
+    }),
   documentType: joi.when('isDraft', {
     is: true,
     otherwise: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
@@ -131,7 +144,11 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     })
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
-    ),
+    )
+    .messages({
+      '*': 'Enter a filed by',
+      'string.max': 'Limit is 500 characters. Enter 500 or fewer characters.',
+    }),
   filedByRole: joi
     .when('isDraft', {
       is: true,
@@ -148,14 +165,24 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   }),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
-    .description('Date that this Document was filed.'),
-  freeText: JoiValidationConstants.STRING.max(1000).optional(),
+    .description('Date that this Document was filed.')
+    .messages({
+      '*': 'Enter a valid filing date',
+      'date.max': 'Filing date cannot be in the future. Enter a valid date.',
+    }),
+  freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
+    'any.required': 'Provide an answer',
+    'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+  }),
   freeText2: JoiValidationConstants.STRING.max(1000).optional(),
   hasOtherFilingParty: joi
     .boolean()
     .optional()
     .description('Whether the document has other filing party.'),
-  hasSupportingDocuments: joi.boolean().optional(),
+  hasSupportingDocuments: joi
+    .boolean()
+    .optional()
+    .messages({ '*': 'Enter selection for Supporting Documents.' }),
   index: joi
     .number()
     .integer()
@@ -234,13 +261,16 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .optional()
     .description(
       'A lodged document is awaiting action by the judge to enact or refuse.',
-    ),
+    )
+    .messages({ '*': 'Enter selection for filing status.' }),
   mailingDate: JoiValidationConstants.STRING.max(100).optional(),
   numberOfPages: joi.number().integer().optional().allow(null),
   objections: JoiValidationConstants.STRING.valid(
     ...OBJECTIONS_OPTIONS,
   ).optional(),
-  ordinalValue: JoiValidationConstants.STRING.optional(),
+  ordinalValue: JoiValidationConstants.STRING.optional().messages({
+    '*': 'Select an iteration',
+  }),
   otherFilingParty: JoiValidationConstants.STRING.max(100)
     .when('hasOtherFilingParty', {
       is: true,
@@ -253,8 +283,12 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     })
     .description(
       'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
-    ),
-  otherIteration: joi.optional(),
+    )
+    .messages({ '*': 'Enter other filing party name.' }),
+  otherIteration: joi.optional().messages({
+    '*': 'Maximum iteration value is 999.',
+    'any.required': 'Enter an iteration number.',
+  }),
   partyIrsPractitioner: joi.boolean().optional(),
   pending: joi
     .boolean()
@@ -277,7 +311,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
         .description('The type of the previous document.'),
     })
     .optional(),
-  privatePractitioners: joi // TODO: limit keys
+  privatePractitioners: joi
     .array()
     .items({ name: JoiValidationConstants.STRING.max(100).required() })
     .optional()
@@ -403,7 +437,8 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .allow(null)
     .description(
       'An optional trial location used when generating a fully concatenated document title.',
-    ),
+    )
+    .messages({ '*': 'Select a preferred trial location.' }),
   userId: JoiValidationConstants.UUID.when('isDraft', {
     is: undefined,
     otherwise: joi.optional(),
@@ -473,6 +508,39 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   section: JoiValidationConstants.STRING.required(),
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
 };
+export const DATE_RANGE_VALIDATION_RULE_KEYS = {
+  endDate: joi
+    .alternatives()
+    .conditional('startDate', {
+      is: JoiValidationConstants.ISO_DATE.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+        .required()
+        .description('The end date search filter must be of valid date format'),
+      then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+        .min(joi.ref('startDate'))
+        .required()
+        .description(
+          'The end date search filter must be of valid date format and greater than or equal to the start date',
+        ),
+    })
+    .messages({
+      '*': 'Enter a valid end date.',
+      'any.required': 'Enter an end date.',
+      'date.max': 'End date cannot be in the future. Enter a valid date.',
+      'date.min':
+        'End date cannot be prior to start date. Enter a valid end date.',
+    }),
+  startDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    )
+    .messages({
+      '*': 'Enter a valid start date.',
+      'any.required': 'Enter a start date.',
+      'date.max': 'Start date cannot be in the future. Enter a valid date.',
+    }),
+};
 
 export const DOCKET_ENTRY_VALIDATION_RULES = joi
   .object()
@@ -485,6 +553,10 @@ export const OUTBOX_ITEM_VALIDATION_RULES = joi
 export const WORK_ITEM_VALIDATION_RULES = joi
   .object()
   .keys(WORK_ITEM_VALIDATION_RULE_KEYS);
+
+export const DATE_RANGE_VALIDATION_RULES = joi
+  .object()
+  .keys(DATE_RANGE_VALIDATION_RULE_KEYS);
 
 // Case shared rules
 export const CASE_CAPTION_RULE =

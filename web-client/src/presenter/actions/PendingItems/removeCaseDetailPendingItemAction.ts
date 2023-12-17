@@ -20,5 +20,5 @@ export const removeCaseDetailPendingItemAction = async ({
       docketEntryId,
       docketNumber,
     });
-  return { caseDetail };
+  return { caseDetail, docketEntryId };
 };
