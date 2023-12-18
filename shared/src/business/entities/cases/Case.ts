@@ -1773,13 +1773,6 @@ export class Case extends JoiValidationEntity {
       trialSessionEntity.judge.name
     ) {
       this.associatedJudge = trialSessionEntity.judge.name;
-    }
-
-    if (
-      trialSessionEntity.isCalendared &&
-      trialSessionEntity.judge &&
-      trialSessionEntity.judge.userId
-    ) {
       this.associatedJudgeId = trialSessionEntity.judge.userId;
     }
 
