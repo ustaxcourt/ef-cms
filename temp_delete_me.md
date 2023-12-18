@@ -21,6 +21,7 @@
 - Refactor ifHasAccess Function and delete isLoggedInAction.
 - invalidate old refreshToken and idToken upon refresh.
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
+- Make app.ts not create another webserver just to listen to incoming requests from cognito-local.
 
 ::: ON HOLD :::
 - In refreshAuthTokenInteractor we are returning the idToken. Should this be an accessToken? Are all of our requests being authed with an idToken?
