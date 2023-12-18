@@ -35,14 +35,20 @@ export const submitUpdateCaseModalAction = async ({
       caseToUpdate.associatedJudgeId !== selectedAssociatedJudgeId) ||
     (caseCaption && caseToUpdate.caseCaption !== caseCaption)
   ) {
+    const judgeData: {
+      associatedJudge: string;
+      associatedJudgeId: string;
+    } = {
+      associatedJudge: selectedAssociatedJudge,
+      associatedJudgeId: selectedAssociatedJudgeId,
+    };
     updatedCase = await applicationContext
       .getUseCases()
       .updateCaseContextInteractor(applicationContext, {
-        associatedJudge: selectedAssociatedJudge,
-        associatedJudgeId: selectedAssociatedJudgeId,
         caseCaption,
         caseStatus,
         docketNumber: caseToUpdate.docketNumber,
+        judgeData,
       });
   }
 

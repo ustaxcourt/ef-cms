@@ -1413,15 +1413,13 @@ export class Case extends JoiValidationEntity {
     this.hearings.splice(removeIndex, 1);
   }
 
-  removeFromTrialWithAssociatedJudge(
-    associatedJudge?: string,
-    associatedJudgeId?: string,
-  ): Case {
-    if (associatedJudge) {
-      this.associatedJudge = associatedJudge;
-    }
-    if (associatedJudgeId) {
-      this.associatedJudgeId = associatedJudgeId;
+  removeFromTrialWithAssociatedJudge(judgeData?: {
+    associatedJudge: string;
+    associatedJudgeId: string;
+  }): Case {
+    if (judgeData) {
+      this.associatedJudge = judgeData.associatedJudge;
+      this.associatedJudgeId = judgeData.associatedJudgeId;
     }
 
     this.trialDate = undefined;
@@ -1775,13 +1773,6 @@ export class Case extends JoiValidationEntity {
       trialSessionEntity.judge.name
     ) {
       this.associatedJudge = trialSessionEntity.judge.name;
-    }
-
-    if (
-      trialSessionEntity.isCalendared &&
-      trialSessionEntity.judge &&
-      trialSessionEntity.judge.userId
-    ) {
       this.associatedJudgeId = trialSessionEntity.judge.userId;
     }
 
