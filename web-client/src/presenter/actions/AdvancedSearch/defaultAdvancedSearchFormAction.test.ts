@@ -18,7 +18,7 @@ describe('defaultAdvancedSearchFormAction', () => {
     expect(result.state.advancedSearchForm).toMatchObject({
       caseSearchByDocketNumber: {},
       caseSearchByName: {
-        countryType: COUNTRY_TYPES.DOMESTIC,
+        countryType: 'all',
       },
       opinionSearch: {
         opinionTypes: {
