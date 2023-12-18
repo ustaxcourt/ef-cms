@@ -19,7 +19,10 @@
 - make it work for hosted envs (remove hard-coded )
 - email verification flow (just after verifying, are we going to new login with verification success message)
 - create account (move to private - client site)
+
+::: ON HOLD :::
 - In refreshAuthTokenInteractor we are returning the idToken. Should this be an accessToken? Are all of our requests being authed with an idToken?
+- Refactor ifHasAccess Function and isLogged Action
 
 ::: QUESTIONS :::
 - Refresh Token TTL? (Shouldn't live for 30 days) 
