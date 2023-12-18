@@ -13,5 +13,5 @@ export const setAdvancedSearchResultsAction = ({
   store,
 }: ActionProps) => {
   const tabName = get(state.advancedSearchTab);
-  store.set(state.searchResults[tabName], props.searchResults); // todo: type searchResults
+  store.set(state.searchResults[tabName], props.searchResults);
 };
