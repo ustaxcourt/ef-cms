@@ -31,6 +31,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 //if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
 import { config, library } from '@fortawesome/fontawesome-svg-core';
+import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -116,8 +117,6 @@ import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
-
-import { createRoot } from 'react-dom/client';
 import App from 'cerebral';
 import React from 'react';
 
@@ -148,25 +147,6 @@ const app = {
     //   !wasAppLoadedFromACognitoLogin(window.location.href) &&
     //   !wasLoginUsingTokenInUrl(window.location.href) &&
     //   !isOnMockLogin(window.location.href);
-
-    // if (!window.location.href.includes('/login')) {
-    //   // TODO 10007: Seems like an odd thing to check for login
-    //   try {
-    //     const response = await applicationContext
-    //       .getUseCases()
-    //       .refreshTokenInteractor(applicationContext);
-    //     presenter.state.token = response.token;
-    //     applicationContext.setCurrentUserToken(response.token);
-    //   } catch (err) {
-    //     // window.location.href = presenter.state.cognitoLoginUrl; TODO 10007: ROUTE TO LOGIN
-    //   }
-
-    //   const user = await applicationContext
-    //     .getUseCases()
-    //     .getUserInteractor(applicationContext);
-    //   presenter.state.user = user;
-    //   applicationContext.setCurrentUser(user);
-    // }
 
     // if (presenter.state.token) {
     //   try {
@@ -301,9 +281,7 @@ const app = {
 
     const cerebralApp = App(presenter, debugTools);
 
-    // if (shouldRefreshToken) {
-    //   await cerebralApp.getSequence('startRefreshIntervalSequence')();
-    // }
+    await cerebralApp.getSequence('startRefreshIntervalSequence')();
 
     initializeSocketProvider(cerebralApp, applicationContext);
 
