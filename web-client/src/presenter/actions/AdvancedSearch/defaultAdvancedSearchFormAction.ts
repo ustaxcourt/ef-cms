@@ -1,10 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
-/**
- * sets the default countryType on the advanced search form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.store the cerebral store function
- */
+
 export const defaultAdvancedSearchFormAction = ({
   applicationContext,
   get,
