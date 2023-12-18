@@ -23,10 +23,7 @@ export const CaseWorksheets = connect(
       <div className="margin-top-6">
         <div className="grid-container padding-0 margin-bottom-3">
           <div className="grid-row">
-            <div className="grid-col-10">
-              <h1 className="margin-bottom-0">Submitted/CAV Cases</h1>
-            </div>
-            <div className="display-flex flex-align-end flex-justify-end grid-col-2">
+            <div className="display-flex flex-align-end flex-justify-end grid-col-12">
               <span className="text-semibold">
                 Count: {caseWorksheetsHelper.caseWorksheetsFormatted.length}
               </span>
