@@ -37,10 +37,10 @@ describe('removeFromTrialWithAssociatedJudge', () => {
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
 
-    caseToUpdate.removeFromTrialWithAssociatedJudge(
-      'Judge Colvin',
-      'colvin_id',
-    );
+    caseToUpdate.removeFromTrialWithAssociatedJudge({
+      associatedJudge: 'Judge Colvin',
+      associatedJudgeId: 'colvin_id',
+    });
 
     expect(caseToUpdate.associatedJudge).toEqual('Judge Colvin');
     expect(caseToUpdate.associatedJudgeId).toEqual('colvin_id');
