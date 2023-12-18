@@ -114,7 +114,10 @@ ol {
 }
 
 .stamp-box {
-  padding: 10px;
+  position: fixed;
+  width: 90%;
+  max-width: 90%;
+  padding: 50px 0;
   border: solid 1px black;
   text-align: center;
 }
