@@ -91,27 +91,27 @@ const getOpinionsFiledByCaseType = async ({ applicationContext }) => {
 };
 
 const getCasesOpenedAndClosed = async ({ applicationContext }) => {
-  const { count: totalFiled } = await applicationContext
-    .getSearchClient()
-    .count({
-      body: {
-        query: receivedAtRange,
-      },
-      index: 'efcms-case',
-    });
+  const {
+    body: { count: totalFiled },
+  } = await applicationContext.getSearchClient().count({
+    body: {
+      query: receivedAtRange,
+    },
+    index: 'efcms-case',
+  });
 
-  const { count: totalClosed } = await applicationContext
-    .getSearchClient()
-    .count({
-      body: {
-        query: {
-          range: {
-            'closedDate.S': fiscalYearDateRange,
-          },
+  const {
+    body: { count: totalClosed },
+  } = await applicationContext.getSearchClient().count({
+    body: {
+      query: {
+        range: {
+          'closedDate.S': fiscalYearDateRange,
         },
       },
-      index: 'efcms-case',
-    });
+    },
+    index: 'efcms-case',
+  });
 
   const rows = [];
   rows.push(['Closed', totalClosed].join(','));
@@ -172,65 +172,65 @@ const determineDocketNumberSuffix = async ({
 };
 
 const getTotalOpenCasesEOY = async ({ applicationContext }) => {
-  const { count: currentOpenCount } = await applicationContext
-    .getSearchClient()
-    .count({
-      body: {
-        query: {
-          bool: {
-            must_not: {
-              term: {
-                'status.S': 'Closed',
-              },
+  const {
+    body: { count: currentOpenCount },
+  } = await applicationContext.getSearchClient().count({
+    body: {
+      query: {
+        bool: {
+          must_not: {
+            term: {
+              'status.S': 'Closed',
             },
           },
         },
       },
-      index: 'efcms-case',
-    });
+    },
+    index: 'efcms-case',
+  });
 
-  const { count: numberOpenedSinceEOY } = await applicationContext
-    .getSearchClient()
-    .count({
-      body: {
-        query: {
-          range: {
-            'receivedAt.S': {
-              gte: endOfYear,
+  const {
+    body: { count: numberOpenedSinceEOY },
+  } = await applicationContext.getSearchClient().count({
+    body: {
+      query: {
+        range: {
+          'receivedAt.S': {
+            gte: endOfYear,
+          },
+        },
+      },
+    },
+    index: 'efcms-case',
+  });
+
+  const {
+    body: { count: numberClosedSinceEOY },
+  } = await applicationContext.getSearchClient().count({
+    body: {
+      query: {
+        bool: {
+          must: [
+            {
+              range: {
+                'closedDate.S': {
+                  gte: endOfYear,
+                },
+              },
             },
-          },
-        },
-      },
-      index: 'efcms-case',
-    });
-
-  const { count: numberClosedSinceEOY } = await applicationContext
-    .getSearchClient()
-    .count({
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                range: {
-                  'closedDate.S': {
-                    gte: endOfYear,
-                  },
+            {
+              range: {
+                'receivedAt.S': {
+                  lt: endOfYear,
                 },
               },
-              {
-                range: {
-                  'receivedAt.S': {
-                    lt: endOfYear,
-                  },
-                },
-              },
-            ],
-          },
+            },
+          ],
         },
       },
-      index: 'efcms-case',
-    });
+    },
+    index: 'efcms-case',
+  });
 
   const numberOfCasesOpenAtEOY =
     currentOpenCount - numberOpenedSinceEOY + numberClosedSinceEOY;
