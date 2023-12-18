@@ -6,6 +6,5 @@ export const setTokenAction = ({
   store,
 }: ActionProps<{ idToken: string; refreshToken: string }>): void => {
   store.set(state.token, props.idToken);
-  store.set(state.refreshToken, props.refreshToken || null);
   applicationContext.setCurrentUserToken(props.idToken);
 };

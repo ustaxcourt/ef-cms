@@ -112,12 +112,9 @@ import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 import { isFunction, mapValues } from 'lodash';
-import { isOnMockLogin } from './utilities/isOnMockLogin';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
-import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACognitoLogin';
-import { wasLoginUsingTokenInUrl } from './utilities/wasLoginUsingTokenInUrl';
 import { withAppContextDecorator } from './withAppContext';
 
 import { createRoot } from 'react-dom/client';
@@ -147,40 +144,40 @@ const app = {
     });
     presenter.state.constants = applicationContext.getConstants();
 
-    const shouldRefreshToken =
-      !wasAppLoadedFromACognitoLogin(window.location.href) &&
-      !wasLoginUsingTokenInUrl(window.location.href) &&
-      !isOnMockLogin(window.location.href);
+    // const shouldRefreshToken =
+    //   !wasAppLoadedFromACognitoLogin(window.location.href) &&
+    //   !wasLoginUsingTokenInUrl(window.location.href) &&
+    //   !isOnMockLogin(window.location.href);
 
-    if (!window.location.href.includes('/login')) {
-      // TODO 10007: Seems like an odd thing to check for login
-      try {
-        const response = await applicationContext
-          .getUseCases()
-          .refreshTokenInteractor(applicationContext);
-        presenter.state.token = response.token;
-        applicationContext.setCurrentUserToken(response.token);
-      } catch (err) {
-        // window.location.href = presenter.state.cognitoLoginUrl; TODO 10007: ROUTE TO LOGIN
-      }
+    // if (!window.location.href.includes('/login')) {
+    //   // TODO 10007: Seems like an odd thing to check for login
+    //   try {
+    //     const response = await applicationContext
+    //       .getUseCases()
+    //       .refreshTokenInteractor(applicationContext);
+    //     presenter.state.token = response.token;
+    //     applicationContext.setCurrentUserToken(response.token);
+    //   } catch (err) {
+    //     // window.location.href = presenter.state.cognitoLoginUrl; TODO 10007: ROUTE TO LOGIN
+    //   }
 
-      const user = await applicationContext
-        .getUseCases()
-        .getUserInteractor(applicationContext);
-      presenter.state.user = user;
-      applicationContext.setCurrentUser(user);
-    }
+    //   const user = await applicationContext
+    //     .getUseCases()
+    //     .getUserInteractor(applicationContext);
+    //   presenter.state.user = user;
+    //   applicationContext.setCurrentUser(user);
+    // }
 
-    if (presenter.state.token) {
-      try {
-        const maintenanceMode = await applicationContext
-          .getUseCases()
-          .getMaintenanceModeInteractor(applicationContext);
-        presenter.state.maintenanceMode = maintenanceMode;
-      } catch (err) {
-        // window.location.href = presenter.state.cognitoLoginUrl; TODO 10007: redirect to login
-      }
-    }
+    // if (presenter.state.token) {
+    //   try {
+    //     const maintenanceMode = await applicationContext
+    //       .getUseCases()
+    //       .getMaintenanceModeInteractor(applicationContext);
+    //     presenter.state.maintenanceMode = maintenanceMode;
+    //   } catch (err) {
+    //     // window.location.href = presenter.state.cognitoLoginUrl; TODO 10007: redirect to login
+    //   }
+    // }
 
     presenter.state.clientConnectionId = applicationContext.getUniqueId();
 
@@ -304,9 +301,9 @@ const app = {
 
     const cerebralApp = App(presenter, debugTools);
 
-    if (shouldRefreshToken) {
-      await cerebralApp.getSequence('startRefreshIntervalSequence')();
-    }
+    // if (shouldRefreshToken) {
+    //   await cerebralApp.getSequence('startRefreshIntervalSequence')();
+    // }
 
     initializeSocketProvider(cerebralApp, applicationContext);
 

@@ -92,9 +92,14 @@ const ifHasAccess = (
   },
   cb,
 ) => {
-  return function () {
+  return async function () {
     if (!app.getState('token')) {
-      return redirect.gotoLoginPage(app);
+      try {
+        await app.getSequence('refreshTokenSequence')();
+        return cb.apply(null, arguments);
+      } catch (err) {
+        return redirect.gotoLoginPage(app);
+      }
     } else if (app.getState('maintenanceMode')) {
       if (!skipMaintenanceCheck) {
         return redirect.gotoMaintenancePage(app);
