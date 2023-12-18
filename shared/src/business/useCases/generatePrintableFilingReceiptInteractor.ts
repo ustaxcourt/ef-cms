@@ -24,7 +24,7 @@ const getDocumentInfo = ({
     filingDate: doc.filingDate,
     formattedCertificateOfServiceDate: applicationContext
       .getUtilities()
-      .formatDateString(doc.certificateOfServiceDate, 'MMDDYY'),
+      .formatDateString(doc.certificateOfServiceDate || '', 'MMDDYY'),
     objections: doc.objections,
     receivedAt: doc.receivedAt,
   };
