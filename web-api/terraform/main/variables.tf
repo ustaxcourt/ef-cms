@@ -132,3 +132,7 @@ variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string
 }
+
+variable "deployment_timestamp" {
+  type = number
+}

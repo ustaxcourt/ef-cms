@@ -57,6 +57,7 @@ describe('messageDocumentHelper', () => {
     archivedDocketEntries: [],
     correspondence: [],
     docketEntries: [],
+    docketNumber: undefined,
   };
 
   const getBaseState = user => {

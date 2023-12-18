@@ -4,13 +4,15 @@ import React from 'react';
 
 export const RecentMessages = () => {
   return (
-    <div className="margin-top-6">
-      <h1>
-        Recent Messages
-        <Button link className="margin-left-205" href="/messages/my/inbox">
-          View All Messages
-        </Button>
-      </h1>
+    <div className="margin-top-4">
+      <Button
+        link
+        className="float-right"
+        href="/messages/my/inbox"
+        overrideMargin="margin-0"
+      >
+        View All Messages
+      </Button>
 
       <RecentMessagesInbox />
     </div>
