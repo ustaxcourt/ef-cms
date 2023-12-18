@@ -11,18 +11,19 @@
 
 ::: STUFF TO DO :::
 - finish all todos
+- Handle maintenance mode on login in app.tsx
 - consistent (Login vs LogInInteractor)
-- private (client) redirect if not logged
-- fix /login route where matches on .includes()
 - error handling
 - fix tests
 - make it work for hosted envs (remove hard-coded )
 - email verification flow (just after verifying, are we going to new login with verification success message)
 - create account (move to private - client site)
+- Refactor ifHasAccess Function and delete isLoggedInAction.
+- invalidate old refreshToken and idToken upon refresh.
+- Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
 
 ::: ON HOLD :::
 - In refreshAuthTokenInteractor we are returning the idToken. Should this be an accessToken? Are all of our requests being authed with an idToken?
-- Refactor ifHasAccess Function and isLogged Action
 
 ::: QUESTIONS :::
 - Refresh Token TTL? (Shouldn't live for 30 days) 

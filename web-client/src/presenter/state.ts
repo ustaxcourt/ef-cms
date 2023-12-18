@@ -668,6 +668,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  refreshTokenInterval: undefined as unknown as NodeJS.Timeout,
   saveAlertsForNavigation: false,
   scanner: {
     batchIndexToDelete: null,
@@ -697,6 +698,7 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  token: '',
   trialSession: cloneDeep(initialTrialSessionState),
   trialSessionJudge: {
     name: '',
