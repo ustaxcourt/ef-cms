@@ -1,12 +1,7 @@
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * submit advanced search form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @returns {Promise} async action
- */
+// TODO: decide if we can set a default state for state.advancedSearchForm (AND TYPE IT)
 export const submitCaseAdvancedSearchAction = async ({
   applicationContext,
   get,
@@ -16,7 +11,18 @@ export const submitCaseAdvancedSearchAction = async ({
   const searchResults = await applicationContext
     .getUseCases()
     .caseAdvancedSearchInteractor(applicationContext, {
-      searchParams,
+      searchParams: {
+        ...searchParams,
+        countryType:
+          searchParams.countryType === 'all'
+            ? undefined
+            : searchParams.countryType,
+        petitionerState:
+          searchParams.countryType === 'all' ||
+          searchParams.countryType === COUNTRY_TYPES.INTERNATIONAL
+            ? undefined
+            : searchParams.petitionerState,
+      },
     });
 
   return { searchResults };

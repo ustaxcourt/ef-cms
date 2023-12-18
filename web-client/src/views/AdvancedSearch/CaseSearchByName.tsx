@@ -85,7 +85,6 @@ export const CaseSearchByName = connect(
                 </FormGroup>
               </div>
             </div>
-            {/* TODO: CHANGE IDS AND OTHER ATTRIBUTES FOR NEW INPUTS*/}
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-12">
                 <div className="grid-row grid-gap">
