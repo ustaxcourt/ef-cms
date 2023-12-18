@@ -99,7 +99,7 @@ export const CoverSheet = ({
       </h2>
 
       {stamp && (
-        <div className="stamp-box margin-top-140 font-sans-xs">
+        <div className="stamp-box margin-top-5 font-sans-xs">
           <span className="text-normal text-center" id="stamp-text">
             It is ORDERED as follows:
             <br />
