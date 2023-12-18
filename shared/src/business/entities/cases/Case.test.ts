@@ -278,6 +278,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           archivedDocketEntries: [...MOCK_DOCUMENTS],
           associatedJudge: CHIEF_JUDGE,
+          associatedJudgeId: 'CHIEF_JUDGE_ID',
         },
         {
           applicationContext,
@@ -286,6 +287,7 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
+      expect(Object.keys(myCase)).not.toContain('associatedJudgeId');
       expect(Object.keys(myCase)).not.toContain('archivedDocketEntries');
     });
 
@@ -297,6 +299,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           archivedDocketEntries: [...MOCK_DOCUMENTS],
           associatedJudge: CHIEF_JUDGE,
+          associatedJudgeId: 'CHIEF_JUDGE_ID',
         },
         {
           applicationContext,
@@ -305,6 +308,7 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).toContain('associatedJudge');
+      expect(Object.keys(myCase)).toContain('associatedJudgeId');
       expect(Object.keys(myCase)).toContain('archivedDocketEntries');
     });
 
@@ -312,7 +316,11 @@ describe('Case entity', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
+        {
+          ...MOCK_CASE,
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeId: 'CHIEF_JUDGE_ID',
+        },
         {
           applicationContext,
           filtered: false,
@@ -320,13 +328,18 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).toContain('associatedJudge');
+      expect(Object.keys(myCase)).toContain('associatedJudgeId');
     });
 
     it('returns private data if filtered is false and the user is internal', () => {
       applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
+        {
+          ...MOCK_CASE,
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeId: 'CHIEF_JUDGE_ID',
+        },
         {
           applicationContext,
           filtered: false,
@@ -334,6 +347,7 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).toContain('associatedJudge');
+      expect(Object.keys(myCase)).toContain('associatedJudgeId');
     });
 
     it('returns STIN docket entry if filtered is false and the user is docketclerk', () => {
