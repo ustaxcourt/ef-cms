@@ -12,7 +12,7 @@
 ::: STUFF TO DO :::
 - finish all todos
 - Handle maintenance mode on login in app.tsx
-- consistent (Login vs LogInInteractor)
+- consistent (Login vs LogInInteractor). Lets go with Login.
 - error handling
 - fix tests
 - email verification flow (just after verifying, are we going to new login with verification success message)
