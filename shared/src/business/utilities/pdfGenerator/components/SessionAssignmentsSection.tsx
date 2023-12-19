@@ -24,12 +24,9 @@ export const SessionAssignmentsSection = ({ formattedTrialSession }) => {
           <div className="assignments-row-content wrap-text-content">
             <div className="text-bold">IRS calendar administrator</div>
             {!formattedTrialSession.formattedIrsCalendarAdministratorInfo && (
-              <p
-                className="margin-bottom-0 word-wrap-break-word"
-                data-testid="irs-calendar-admin-info"
-              >
+              <div>
                 {formattedTrialSession.formattedIrsCalendarAdministrator}
-              </p>
+              </div>
             )}
             {formattedTrialSession.formattedIrsCalendarAdministratorInfo && (
               <div
