@@ -103,6 +103,10 @@ const router = {
       });
     });
 
+    route('/login', () => {
+      return app.getSequence('redirectToLoginSequence')();
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({

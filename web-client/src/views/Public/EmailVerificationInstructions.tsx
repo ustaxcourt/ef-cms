@@ -6,9 +6,9 @@ import React from 'react';
 
 export const EmailVerificationInstructions = connect(
   {
-    gotoLoginSequence: sequences.gotoLoginSequence,
+    redirectToLoginSequence: sequences.redirectToLoginSequence,
   },
-  function EmailVerificationInstructions({ gotoLoginSequence }) {
+  function EmailVerificationInstructions({ redirectToLoginSequence }) {
     return (
       <>
         <BigHeader text="You Must Be Logged In to Verify Email" />
@@ -21,7 +21,7 @@ export const EmailVerificationInstructions = connect(
                 Click the <b>Verify Email</b> link from your new email
               </li>
             </ul>
-            <Button onClick={() => gotoLoginSequence()}>Log In</Button>
+            <Button onClick={() => redirectToLoginSequence()}>Log In</Button>
           </div>
         </section>
       </>

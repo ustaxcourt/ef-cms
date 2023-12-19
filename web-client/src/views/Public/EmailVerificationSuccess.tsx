@@ -6,16 +6,16 @@ import React from 'react';
 
 export const EmailVerificationSuccess = connect(
   {
-    gotoLoginSequence: sequences.gotoLoginSequence,
+    redirectToLoginSequence: sequences.redirectToLoginSequence,
   },
-  function EmailVerificationSuccess({ gotoLoginSequence }) {
+  function EmailVerificationSuccess({ redirectToLoginSequence }) {
     return (
       <>
         <BigHeader text="Your Email Has Been Verified" />
         <section className="usa-section grid-container">
           <div className="grid-container padding-x-0">
             <p>You can now log in with your new email address.</p>
-            <Button onClick={() => gotoLoginSequence()}>Log In</Button>
+            <Button onClick={() => redirectToLoginSequence()}>Log In</Button>
           </div>
         </section>
       </>
