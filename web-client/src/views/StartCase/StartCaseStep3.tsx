@@ -230,6 +230,7 @@ export const StartCaseStep3 = connect(
                     />
                     <label
                       className="usa-radio__label"
+                      data-testid={`select-other-taxpayer-type-${otherType}`}
                       htmlFor={`otherType-${otherType}`}
                       id={`is-other-type-${idx}`}
                     >

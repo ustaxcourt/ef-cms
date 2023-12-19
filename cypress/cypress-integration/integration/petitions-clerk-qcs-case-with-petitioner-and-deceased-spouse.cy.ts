@@ -1,13 +1,15 @@
-import { loginAsPetitionsClerk } from '../../helpers/auth/login-as-helpers';
-import { petitionerCreatesEletronicCaseForSelfAndDeceasedSpouse } from '../../helpers/petitioner-creates-electronic-case-for-self-and-deceased-spouse.cy';
+import {
+  loginAsPetitioner,
+  loginAsPetitionsClerk,
+} from '../../helpers/auth/login-as-helpers';
+import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
 
 describe('Petitions clerk QCs a case with petitioner and deceased spouse', () => {
   it('should keep all case information after QC completion', () => {
-    // working title
-    petitionerCreatesEletronicCaseForSelfAndDeceasedSpouse().then(
+    loginAsPetitioner();
+    petitionerCreatesEletronicCase('petitioner and deceased spouse').then(
       docketNumber => {
         loginAsPetitionsClerk();
-
         describe('petitions clerk QCs case', () => {
           cy.get('[data-testid="docket-number-search-input"]').type(
             docketNumber,

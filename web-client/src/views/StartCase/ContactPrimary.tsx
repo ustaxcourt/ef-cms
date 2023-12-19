@@ -67,6 +67,7 @@ export const ContactPrimary = connect(
         <input
           autoCapitalize="none"
           className="usa-input"
+          data-testid="contact-primary-secondary-name"
           id="secondary-name"
           name="contactPrimary.secondaryName"
           type="text"

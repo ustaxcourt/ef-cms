@@ -1,6 +1,6 @@
 import { attachDummyFile } from './attach-file';
 
-export function petitionerCreatesEletronicCase() {
+export function petitionerCreatesEletronicCase(flow: string = 'default') {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   attachDummyFile('stin-file');
@@ -9,17 +9,18 @@ export function petitionerCreatesEletronicCase() {
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();
-  cy.get('[data-testid="filing-type-1"]').click();
-  cy.get('[data-testid="is-spouse-deceased-1"]').click();
-  cy.get('[data-testid="modal-confirm"]').click();
-  cy.get('[data-testid="contact-primary-name"]').type('John');
-  cy.get('[data-testid="contact-secondary-name"]').type('Sally');
-  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
-  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
-  cy.get('[data-testid="contactPrimary.state"]').select('AL');
-  cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get('[data-testid="phone"]').type('1111111111');
-  cy.get('[data-testid="use-same-address-above-label"]').click();
+  switch (flow) {
+    case 'petitioner and deceased spouse':
+      petitionerAndDeceasedSpouse();
+      break;
+    case 'deceased spouse':
+      deceasedSpouse();
+      break;
+    default:
+      defaultPath();
+      break;
+  }
+
   cy.get('[data-testid="complete-step-3"]').click();
   cy.get('[data-testid="procedure-type-1"]').click();
   cy.get('[data-testid="procedure-type-0"]').click();
@@ -34,3 +35,45 @@ export function petitionerCreatesEletronicCase() {
       return cy.wrap<string>(docketNumberWithSuffix);
     });
 }
+
+const petitionerAndDeceasedSpouse = () => {
+  cy.get('[data-testid="filing-type-1"]').click();
+  cy.get('[data-testid="is-spouse-deceased-0"]').click();
+  cy.get('[data-testid="contact-primary-name"]').type('John Freeman');
+  cy.get('[data-testid="contact-secondary-name"]').type('Sally Deceased');
+  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
+  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
+  cy.get('[data-testid="contactPrimary.state"]').select('AL');
+  cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
+  cy.get('[data-testid="phone"]').type('1111111111');
+  cy.get('[data-testid="use-same-address-above-label"]').click();
+  cy.get('[data-testid="contact-secondary-care-of-name"]').type('John Freeman');
+};
+
+const deceasedSpouse = () => {
+  cy.get('[data-testid="filing-type-3"]').click();
+  cy.get('[data-testid="select-other-taxpayer-type-Deceased Spouse"]').click();
+  cy.get('[data-testid="contact-primary-name"]').type('Sally Scumbag');
+  cy.get('[data-testid="contact-primary-secondary-name"]').type(
+    'John Innocent Spouse',
+  );
+  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
+  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
+  cy.get('[data-testid="contactPrimary.state"]').select('AL');
+  cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
+  cy.get('[data-testid="phone"]').type('1111111111');
+};
+
+const defaultPath = () => {
+  cy.get('[data-testid="filing-type-1"]').click();
+  cy.get('[data-testid="is-spouse-deceased-1"]').click();
+  cy.get('[data-testid="modal-confirm"]').click();
+  cy.get('[data-testid="contact-primary-name"]').type('John');
+  cy.get('[data-testid="contact-secondary-name"]').type('Sally');
+  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
+  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
+  cy.get('[data-testid="contactPrimary.state"]').select('AL');
+  cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
+  cy.get('[data-testid="phone"]').type('1111111111');
+  cy.get('[data-testid="use-same-address-above-label"]').click();
+};
