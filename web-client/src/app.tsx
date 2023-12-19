@@ -276,7 +276,7 @@ const app = {
 
     const cerebralApp = App(presenter, debugTools);
 
-    await cerebralApp.getSequence('startRefreshIntervalSequence')();
+    await cerebralApp.getSequence('initAppSequence')();
 
     initializeSocketProvider(cerebralApp, applicationContext);
 

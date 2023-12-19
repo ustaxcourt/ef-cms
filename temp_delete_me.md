@@ -5,6 +5,8 @@
 - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 - web-client/integration-tests/petitionerCreatesAccount.test.ts
+- web-client/src/presenter/sequences/loginWithTokenSequence.ts
+- web-client/src/presenter/sequences/Login/refreshTokenSequence.ts
 
 
 ::: STUFF TO DO :::
