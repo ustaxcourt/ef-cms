@@ -15,7 +15,7 @@ export const logInInteractor = async (
       },
       ClientId: applicationContext.environment.cognitoClientId,
     })
-    .promise();
+    .promise(); // TODO 10007: Update cognito to v3
 
   return {
     accessToken: result.AuthenticationResult!.AccessToken!,

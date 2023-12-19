@@ -134,12 +134,12 @@ import { markMessageThreadRepliedTo } from './persistence/dynamo/messages/markMe
 import { persistUser } from './persistence/dynamo/users/persistUser';
 import { putWorkItemInOutbox } from './persistence/dynamo/workitems/putWorkItemInOutbox';
 import { putWorkItemInUsersOutbox } from './persistence/dynamo/workitems/putWorkItemInUsersOutbox';
-import { refreshToken } from './persistence/cognito/refreshToken';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
 import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/removePractitionerOnCase';
+import { renewIdToken } from './persistence/cognito/renewIdToken';
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
@@ -369,10 +369,10 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
-  refreshToken,
   removeIrsPractitionerOnCase,
   removeLock,
   removePrivatePractitionerOnCase,
+  renewIdToken,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   verifyCaseForUser,

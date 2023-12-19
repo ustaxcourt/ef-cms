@@ -1,10 +1,9 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-// eslint-disable-next-line no-shadow
-export const refreshToken = async (
+export const renewIdToken = async (
   applicationContext: ServerApplicationContext,
-  { rToken }: { rToken: string },
-) => {
+  { refreshToken }: { refreshToken: string },
+): Promise<{ token: string }> => {
   const clientId = applicationContext.environment.cognitoClientId;
 
   const result = await applicationContext
@@ -12,13 +11,13 @@ export const refreshToken = async (
     .initiateAuth({
       AuthFlow: 'REFRESH_TOKEN_AUTH',
       AuthParameters: {
-        REFRESH_TOKEN: rToken,
+        REFRESH_TOKEN: refreshToken,
       },
       ClientId: clientId,
     })
     .promise();
 
   return {
-    token: result.AuthenticationResult?.IdToken,
+    token: result.AuthenticationResult?.IdToken!,
   };
 };

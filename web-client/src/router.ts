@@ -861,6 +861,7 @@ const router = {
       }),
     );
 
+    // TODO 10007: this can probably be unified with the other change password stuff
     registerRoute('/change-password-local', () => {
       return app.getSequence('gotoChangePasswordLocalSequence')();
     });

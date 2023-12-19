@@ -611,10 +611,7 @@ export const createTestApplicationContext = ({
         promise: jest.fn(),
       }),
     }),
-    getCognitoClientId: jest.fn(),
-    getCognitoRedirectUrl: jest.fn(),
     getCognitoRequestPasswordResetUrl,
-    getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),
