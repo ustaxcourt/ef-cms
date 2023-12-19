@@ -25,7 +25,7 @@ describe('submitCaseAdvancedSearchAction', () => {
     };
   });
 
-  it('should call caseAdvancedSearchInteractor with no state or country as searchParams if searchParams.countryType and searchParams.petitionerState are "all"', async () => {
+  it('should call caseAdvancedSearchInteractor with no state or country as searchParams if searchParams.countryType is "all"', async () => {
     await runAction(submitCaseAdvancedSearchAction, {
       modules: {
         presenter,
@@ -49,7 +49,7 @@ describe('submitCaseAdvancedSearchAction', () => {
     });
   });
 
-  it('should call caseAdvancedSearchInteractor with no state and "international" as countryType if searchParams.countryType is international', async () => {
+  it('should call caseAdvancedSearchInteractor with no state and "international" as countryType if searchParams.countryType is "international"', async () => {
     baseState.advancedSearchForm.caseSearchByName.countryType =
       COUNTRY_TYPES.INTERNATIONAL;
     await runAction(submitCaseAdvancedSearchAction, {
