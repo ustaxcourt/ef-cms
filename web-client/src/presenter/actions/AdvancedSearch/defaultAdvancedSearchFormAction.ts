@@ -1,3 +1,4 @@
+import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const defaultAdvancedSearchFormAction = ({
@@ -13,7 +14,7 @@ export const defaultAdvancedSearchFormAction = ({
   }
   if (!advancedSearchForm.caseSearchByName) {
     store.set(state.advancedSearchForm.caseSearchByName, {
-      countryType: 'all', // todo: decide where to put the constant // unit test
+      countryType: ALL_COUNTRY_TYPE,
     });
   }
   if (!advancedSearchForm.practitionerSearchByBarNumber) {
