@@ -138,24 +138,17 @@ export class PublicCase extends JoiValidationEntity {
       return true;
     }
 
-    const filedAfterPolicyChange =
-      docketEntry.filingDate >= visibilityChangeDate;
-
     const isFiledByPractitioner = [
       ROLES.privatePractitioner,
       ROLES.irsPractitioner,
     ].includes(docketEntry.filedByRole);
 
     if (['AMBR', 'SDEC'].includes(docketEntry.eventCode)) {
-      return !filedAfterPolicyChange;
+      return false;
     }
 
     if (BRIEF_EVENTCODES.includes(docketEntry.eventCode)) {
-      return !(
-        filedAfterPolicyChange &&
-        !docketEntry.isPaper &&
-        isFiledByPractitioner
-      );
+      return !(!docketEntry.isPaper && isFiledByPractitioner);
     }
 
     // TODO: need to determine if the previousDocument.filedByRole is also a practitioner
@@ -166,7 +159,6 @@ export class PublicCase extends JoiValidationEntity {
     return !(
       !docketEntry.isPaper &&
       isAmendmentToABrief &&
-      filedAfterPolicyChange &&
       isFiledByPractitioner
     );
   }
