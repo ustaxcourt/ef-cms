@@ -280,44 +280,87 @@ export const CaseSearchByName = connect(
                   </FormGroup>
 
                   {advancedSearchHelper.showStateSelect && (
-                    <div className="tablet:grid-col-5">
-                      <label className="usa-label" htmlFor="petitioner-state">
-                        State
-                      </label>
-                      <BindedSelect
-                        aria-describedby="case-search-by-name"
-                        bind="advancedSearchForm.caseSearchByName.petitionerState"
-                        id="petitioner-state"
-                        name="petitionerState"
-                      >
-                        <option value="">- Select -</option>
-                        <optgroup label="State">
-                          {Object.keys(usStates).map(abbrev => {
-                            return (
-                              <option key={abbrev} value={abbrev}>
-                                {usStates[abbrev]}
-                              </option>
-                            );
-                          })}
-                        </optgroup>
-                        <optgroup label="Other">
-                          {Object.keys(usStatesOther).map(abbrev => {
-                            return (
-                              <option key={abbrev} value={abbrev}>
-                                {usStatesOther[abbrev]}
-                              </option>
-                            );
-                          })}
-                        </optgroup>
-                      </BindedSelect>
-                    </div>
+                    <>
+                      <NonMobile>
+                        <div className="tablet:grid-col-5 margin-bottom-4">
+                          <label
+                            className="usa-label"
+                            htmlFor="petitioner-state"
+                          >
+                            State
+                          </label>
+                          <BindedSelect
+                            aria-describedby="case-search-by-name"
+                            bind="advancedSearchForm.caseSearchByName.petitionerState"
+                            id="petitioner-state"
+                            name="petitionerState"
+                          >
+                            <option value="">- Select -</option>
+                            <optgroup label="State">
+                              {Object.keys(usStates).map(abbrev => {
+                                return (
+                                  <option key={abbrev} value={abbrev}>
+                                    {usStates[abbrev]}
+                                  </option>
+                                );
+                              })}
+                            </optgroup>
+                            <optgroup label="Other">
+                              {Object.keys(usStatesOther).map(abbrev => {
+                                return (
+                                  <option key={abbrev} value={abbrev}>
+                                    {usStatesOther[abbrev]}
+                                  </option>
+                                );
+                              })}
+                            </optgroup>
+                          </BindedSelect>
+                        </div>
+                      </NonMobile>
+                      <Mobile>
+                        <div className="tablet:grid-col-5 margin-bottom-3">
+                          <label
+                            className="usa-label"
+                            htmlFor="petitioner-state"
+                          >
+                            State
+                          </label>
+                          <BindedSelect
+                            aria-describedby="case-search-by-name"
+                            bind="advancedSearchForm.caseSearchByName.petitionerState"
+                            id="petitioner-state"
+                            name="petitionerState"
+                          >
+                            <option value="">- Select -</option>
+                            <optgroup label="State">
+                              {Object.keys(usStates).map(abbrev => {
+                                return (
+                                  <option key={abbrev} value={abbrev}>
+                                    {usStates[abbrev]}
+                                  </option>
+                                );
+                              })}
+                            </optgroup>
+                            <optgroup label="Other">
+                              {Object.keys(usStatesOther).map(abbrev => {
+                                return (
+                                  <option key={abbrev} value={abbrev}>
+                                    {usStatesOther[abbrev]}
+                                  </option>
+                                );
+                              })}
+                            </optgroup>
+                          </BindedSelect>
+                        </div>
+                      </Mobile>
+                    </>
                   )}
                 </div>
               </div>
             </div>
 
             <NonMobile>
-              <div className="grid-row grid-gap margin-top-4 margin-bottom-2">
+              <div className="grid-row grid-gap margin-bottom-2">
                 <DateRangePickerComponent
                   omitFormGroupClass
                   endDateErrorText={validationErrors.endDate}
@@ -355,7 +398,7 @@ export const CaseSearchByName = connect(
             </NonMobile>
 
             <Mobile>
-              <div className="grid-row grid-gap margin-top-1 margin-bottom-2">
+              <div className="grid-row grid-gap margin-bottom-2">
                 <DateRangePickerComponent
                   omitFormGroupClass
                   endDateErrorText={validationErrors.endDate}
@@ -392,36 +435,73 @@ export const CaseSearchByName = connect(
               </div>
             </Mobile>
 
-            <div className="grid-row">
-              <div className="tablet:grid-col-6">
-                <Button
-                  aria-describedby="case-search-by-name"
-                  className="advanced-search__button"
-                  data-testid="case-search-by-name"
-                  id="advanced-search-button"
-                  onClick={e => {
-                    e.preventDefault();
-                    submitAdvancedSearchSequence();
-                  }}
-                >
-                  Search
-                </Button>
-                <Button
-                  link
-                  aria-describedby="case-search-by-name"
-                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                  data-testid="clear-search-by-name"
-                  onClick={e => {
-                    e.preventDefault();
-                    clearAdvancedSearchFormSequence({
-                      formType: 'caseSearchByName',
-                    });
-                  }}
-                >
-                  Clear Search
-                </Button>
+            <Mobile>
+              <div className="grid-row">
+                <div className="tablet:grid-col-12">
+                  <Button
+                    aria-describedby="case-search-by-name"
+                    className="advanced-search__button"
+                    data-testid="case-search-by-name"
+                    id="advanced-search-button"
+                    onClick={e => {
+                      e.preventDefault();
+                      submitAdvancedSearchSequence();
+                    }}
+                  >
+                    Search
+                  </Button>
+                  <div className="margin-top-3 text-align-center">
+                    <Button
+                      link
+                      aria-describedby="case-search-by-name"
+                      className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                      data-testid="clear-search-by-name"
+                      onClick={e => {
+                        e.preventDefault();
+                        clearAdvancedSearchFormSequence({
+                          formType: 'caseSearchByName',
+                        });
+                      }}
+                    >
+                      Clear Search
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
+            </Mobile>
+
+            <NonMobile>
+              <div className="grid-row">
+                <div className="tablet:grid-col-6">
+                  <Button
+                    aria-describedby="case-search-by-name"
+                    className="advanced-search__button"
+                    data-testid="case-search-by-name"
+                    id="advanced-search-button"
+                    onClick={e => {
+                      e.preventDefault();
+                      submitAdvancedSearchSequence();
+                    }}
+                  >
+                    Search
+                  </Button>
+                  <Button
+                    link
+                    aria-describedby="case-search-by-name"
+                    className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                    data-testid="clear-search-by-name"
+                    onClick={e => {
+                      e.preventDefault();
+                      clearAdvancedSearchFormSequence({
+                        formType: 'caseSearchByName',
+                      });
+                    }}
+                  >
+                    Clear Search
+                  </Button>
+                </div>
+              </div>
+            </NonMobile>
           </form>
         </div>
       </>
