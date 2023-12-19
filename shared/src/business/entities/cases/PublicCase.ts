@@ -138,14 +138,14 @@ export class PublicCase extends JoiValidationEntity {
       return true;
     }
 
+    if (['AMBR', 'SDEC'].includes(docketEntry.eventCode)) {
+      return false;
+    }
+
     const isFiledByPractitioner = [
       ROLES.privatePractitioner,
       ROLES.irsPractitioner,
     ].includes(docketEntry.filedByRole);
-
-    if (['AMBR', 'SDEC'].includes(docketEntry.eventCode)) {
-      return false;
-    }
 
     if (BRIEF_EVENTCODES.includes(docketEntry.eventCode)) {
       return !(!docketEntry.isPaper && isFiledByPractitioner);
