@@ -32,19 +32,16 @@ describe('PublicCase isPrivateDocument', () => {
       isOnDocketRecord: true,
     };
 
-    it(`returns false before the visibility change (${eventCode})`, () => {
+    it('returns false before the visibility change', () => {
       const isPrivate = PublicCase.isPrivateDocument(
         { ...baseDocketEntry, filingDate: beforeVisibilityChangeDate },
         visibilityChangeDate,
       );
 
-      if (isPrivate) {
-        console.log({ eventCode });
-      }
       expect(isPrivate).toEqual(false);
     });
 
-    it(`returns false after the visibility change (${eventCode})`, () => {
+    it('returns false after the visibility change', () => {
       const isPrivate = PublicCase.isPrivateDocument(
         {
           ...baseDocketEntry,
@@ -56,7 +53,7 @@ describe('PublicCase isPrivateDocument', () => {
       expect(isPrivate).toEqual(false);
     });
 
-    it(`returns true if it is not on the docket record (${eventCode})`, () => {
+    it('returns true if it is not on the docket record', () => {
       const isPrivate = PublicCase.isPrivateDocument(
         {
           ...baseDocketEntry,
@@ -68,7 +65,7 @@ describe('PublicCase isPrivateDocument', () => {
       expect(isPrivate).toEqual(true);
     });
 
-    it(`returns true if it is stricken (${eventCode})`, () => {
+    it('returns true if it is stricken', () => {
       const isPrivate = PublicCase.isPrivateDocument(
         {
           ...baseDocketEntry,
@@ -86,7 +83,7 @@ describe('PublicCase isPrivateDocument', () => {
       'before the visibility policy date change',
       eventCode => {
         const filingDate = beforeVisibilityChangeDate;
-        it(`returns true (is private) (${eventCode})`, () => {
+        it('returns true', () => {
           const isPrivate = PublicCase.isPrivateDocument(
             {
               docketEntryId: '123',
@@ -100,9 +97,6 @@ describe('PublicCase isPrivateDocument', () => {
             },
             visibilityChangeDate,
           );
-          if (!isPrivate) {
-            console.log(eventCode);
-          }
           expect(isPrivate).toEqual(true);
         });
       },
@@ -134,7 +128,7 @@ describe('PublicCase isPrivateDocument', () => {
             filingDate,
             isOnDocketRecord: true,
           };
-          it(`returns true if it is paper (${eventCode})`, () => {
+          it('returns true if it is paper', () => {
             const isPrivate = PublicCase.isPrivateDocument(
               {
                 ...baseDocketEntry,
@@ -147,7 +141,7 @@ describe('PublicCase isPrivateDocument', () => {
           });
 
           it.each(practitionerRoles)(
-            `returns false if the filing party is a practitioner and it is electronically filed (${eventCode})`,
+            'returns false if the filing party is a practitioner and it is electronically filed',
             filedByRole => {
               const isPrivate = PublicCase.isPrivateDocument(
                 {
@@ -162,7 +156,7 @@ describe('PublicCase isPrivateDocument', () => {
           );
 
           it.each(otherRoles)(
-            `returns true if the filing party is not a practitioner and it is electronically filed (${eventCode})`,
+            'returns true if the filing party is not a practitioner and it is electronically filed',
             filedByRole => {
               const isPrivate = PublicCase.isPrivateDocument(
                 {
@@ -196,7 +190,7 @@ describe('PublicCase isPrivateDocument', () => {
             },
           };
 
-          it(`returns true if it is paper (${eventCode})`, () => {
+          it('returns true if it is paper', () => {
             const isPrivate = PublicCase.isPrivateDocument(
               {
                 ...baseDocketEntry,
@@ -209,7 +203,7 @@ describe('PublicCase isPrivateDocument', () => {
           });
 
           it.each(practitionerRoles)(
-            `returns false if the filing party is a practitioner and it is electronically filed (${eventCode})`,
+            'returns false if the filing party is a practitioner and it is electronically filed',
             filedByRole => {
               const isPrivate = PublicCase.isPrivateDocument(
                 {
@@ -241,7 +235,7 @@ describe('PublicCase isPrivateDocument', () => {
           );
 
           it.each(otherRoles)(
-            `returns true if the filing party is not a practitioner  (${eventCode})`,
+            'returns true if the filing party is not a practitioner',
             filedByRole => {
               const isPrivate = PublicCase.isPrivateDocument(
                 {
@@ -284,7 +278,7 @@ describe('PublicCase isPrivateDocument', () => {
       describe.each(['SDEC', 'AMBR'])(
         'Amicus Briefs and Stip Decisions',
         eventCode => {
-          it(`returns false (${eventCode})`, () => {
+          it('returns false', () => {
             const isPrivate = PublicCase.isPrivateDocument(
               {
                 docketEntryId: '123',
@@ -342,11 +336,6 @@ describe('PublicCase isPrivateDocument', () => {
           },
           visibilityChangeDate,
         );
-
-        if (!isPrivate) {
-          console.log(`asdf: ${eventCode}`);
-        }
-
         expect(isPrivate).toEqual(true);
       },
     );
