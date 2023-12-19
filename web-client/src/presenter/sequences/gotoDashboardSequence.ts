@@ -7,6 +7,7 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
+import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -21,6 +22,7 @@ import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
+import { setPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/setPendingMotionDocketEntriesForCurrentJudgeAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setSubmittedAndCavCasesForJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
@@ -78,6 +80,10 @@ const goToDashboard = [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
                     ],
+                    [
+                      getPendingMotionDocketEntriesForCurrentJudgeAction,
+                      setPendingMotionDocketEntriesForCurrentJudgeAction,
+                    ],
                   ]),
                   setupCurrentPageAction('DashboardChambers'),
                 ],
@@ -102,6 +108,10 @@ const goToDashboard = [
                     [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
+                    ],
+                    [
+                      getPendingMotionDocketEntriesForCurrentJudgeAction,
+                      setPendingMotionDocketEntriesForCurrentJudgeAction,
                     ],
                   ]),
                   setupCurrentPageAction('DashboardJudge'),
