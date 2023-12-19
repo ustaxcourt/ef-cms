@@ -1,11 +1,4 @@
-import { DateTime } from 'luxon';
 import { DocketEntryDynamoRecord } from '../../../../web-api/src/persistence/dynamo/dynamoTypes';
-import {
-  FORMATS,
-  USTC_TZ,
-  formatNow,
-  isValidISODate,
-} from '../../business/utilities/DateHandler';
 import { InvalidRequest } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -13,13 +6,12 @@ import {
 } from '../../authorization/authorizationClientService';
 import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import {
+  calculateDifferenceInHours,
+  normalizeIsoDateRange,
+} from '../../business/utilities/DateHandler';
 
-const isValidDate = dateString => {
-  const dateInputValid = isValidISODate(dateString);
-  const todayDate = formatNow(FORMATS.YYYYMMDD);
-  const dateLessthanOrEqualToToday = dateString <= todayDate;
-  return dateInputValid && dateLessthanOrEqualToToday;
-};
+const MAX_TIMESPAN_HOURS = 24;
 
 /**
  * getReconciliationReportInteractor
@@ -42,59 +34,25 @@ export const getReconciliationReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (reconciliationDate === 'today') {
-    reconciliationDate = formatNow(FORMATS.YYYYMMDD);
-  } else {
-    const dateInputValid = isValidDate(reconciliationDate);
-    if (!dateInputValid) {
-      throw new InvalidRequest(
-        'Date must be formatted as ISO and not later than today',
-      );
-    }
+  const { end: isoEnd, start: isoStart } = normalizeIsoDateRange(
+    reconciliationDate,
+    reconciliationDateEnd,
+  );
+  // console.log(`isoEnd: ${isoEnd}`);
+  const hours = calculateDifferenceInHours(isoEnd, isoStart);
+  if (hours > MAX_TIMESPAN_HOURS) {
+    throw new InvalidRequest(
+      `Range must not exceed ${MAX_TIMESPAN_HOURS} hours`,
+    );
   }
 
-  //If no end date specified, set it to end of the same day as start date
-  if (!reconciliationDateEnd) {
-    reconciliationDateEnd = DateTime.fromISO(reconciliationDate, {
-      zone: USTC_TZ,
-    })
-      .endOf('day')
-      .toUTC()
-      .toISO()!;
-  } else {
-    reconciliationDateEnd = DateTime.fromISO(reconciliationDateEnd, {
-      zone: USTC_TZ,
-    })
-      .toUTC()
-      .toISO()!;
-  }
-
-  const dtReconciliationDateStart = DateTime.fromISO(reconciliationDate, {
-    zone: USTC_TZ,
-  }).toUTC();
-
-  const dtReconciliationDateEnd = DateTime.fromISO(reconciliationDateEnd);
-
-  if (!dtReconciliationDateEnd.isValid) {
-    throw new InvalidRequest('End date must be formatted as ISO');
-  }
-
-  // make sure request doens't exceed 24 hours
-  const diffHours = dtReconciliationDateEnd.diff(
-    dtReconciliationDateStart,
-    'hours',
-  ).hours;
-  if (diffHours > 24) {
-    throw new InvalidRequest('Time span must not exceed 24 hours');
-  }
-
-  const reconciliationDateStart = dtReconciliationDateStart.toISO();
+  // const reconciliationDateStart = dtReconciliationDateStart.toISO();
   const docketEntries = await applicationContext
     .getPersistenceGateway()
     .getReconciliationReport({
       applicationContext,
-      reconciliationDateEnd,
-      reconciliationDateStart,
+      reconciliationDateEnd: isoEnd,
+      reconciliationDateStart: isoStart,
     });
 
   await assignCaseCaptionFromPersistence(applicationContext, docketEntries);
@@ -105,7 +63,7 @@ export const getReconciliationReportInteractor = async (
       { applicationContext },
     ),
     reconciliationDate,
-    reconciliationDateEnd,
+    reconciliationDateEnd: isoEnd,
     reportTitle: 'Reconciliation Report',
     totalDocketEntries: docketEntries.length,
   };

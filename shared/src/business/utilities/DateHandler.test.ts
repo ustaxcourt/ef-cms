@@ -1,8 +1,11 @@
 /* eslint-disable max-lines */
+import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
   PATTERNS,
+  USTC_TZ,
   calculateDifferenceInDays,
+  calculateDifferenceInHours,
   calculateISODate,
   castToISO,
   checkDate,
@@ -20,11 +23,11 @@ import {
   isStringISOFormatted,
   isTodayWithinGivenInterval,
   isValidDateString,
+  normalizeIsoDateRange,
   prepareDateFromString,
   subtractISODates,
   validateDateAndCreateISO,
 } from './DateHandler';
-import { Settings } from 'luxon';
 
 describe('DateHandler', () => {
   const timeZones = [
@@ -738,6 +741,77 @@ describe('DateHandler', () => {
       });
 
       expect(result).toBe(true);
+    });
+  });
+
+  describe('ISO date range tests', () => {
+    const dcz = { zone: USTC_TZ };
+    const todayDate = DateTime.now().toFormat('yyyy-MM-dd');
+
+    //should return date range when given 'today'
+    it('should return date range when given today', () => {
+      const start = 'today';
+      const end = undefined;
+      const range = normalizeIsoDateRange(start, end);
+      // const expectedStart = DateTime.now().startOf('day').toUTC().toISO();
+      const expectedStart = DateTime.fromISO(todayDate, dcz).toUTC().toISO();
+      const expectedEnd = DateTime.fromISO(todayDate, dcz)
+        .endOf('day')
+        .toUTC()
+        .toISO();
+      expect(range.start).toBe(expectedStart);
+      expect(range.end).toBe(expectedEnd);
+    });
+
+    //should return date range if given partial iso start date
+    it('should return date range if given partial iso start date', () => {
+      const start = '2002-11-01';
+      const expectedStart = DateTime.fromISO(start, dcz).toUTC().toISO();
+      const expectedEnd = DateTime.fromISO(start, dcz)
+        .endOf('day')
+        .toUTC()
+        .toISO();
+      const range = normalizeIsoDateRange(start, undefined);
+      expect(range.start).toBe(expectedStart);
+      expect(range.end).toBe(expectedEnd);
+    });
+
+    //should return date range if given two partial iso dates
+    it('should return date range if given two partial iso dates', () => {
+      const start = '2002-11-01';
+      const end = '2002-11-01T05:00';
+      const expectedStart = DateTime.fromISO(start, dcz).toUTC().toISO();
+      const expectedEnd = DateTime.fromISO(end, dcz).toUTC().toISO();
+      const range = normalizeIsoDateRange(start, end);
+      expect(range.start).toBe(expectedStart);
+      expect(range.end).toBe(expectedEnd);
+    });
+
+    //should throw an exception if given invalid iso start/end dates
+    it('should throw an error if given invalid start', () => {
+      expect(() => {
+        normalizeIsoDateRange('taco tuesday', undefined);
+      }).toThrow();
+
+      expect(() => {
+        normalizeIsoDateRange('today', 'tomorrow');
+      }).toThrow();
+    });
+  });
+
+  describe('calculateDifferenceInHours', () => {
+    it('should calculate difference in hours', () => {
+      const dt = DateTime.now();
+      const dt2 = dt.plus({ days: 1 });
+      const diff = calculateDifferenceInHours(dt2.toISO(), dt.toISO());
+      expect(diff).toBe(24);
+    });
+
+    it('should calculate difference in hours', () => {
+      const dateStart = '2000-01-01T00:00';
+      const dateEnd = '2000-01-01T05:00';
+      const diff = calculateDifferenceInHours(dateEnd, dateStart);
+      expect(diff).toBe(5);
     });
   });
 });

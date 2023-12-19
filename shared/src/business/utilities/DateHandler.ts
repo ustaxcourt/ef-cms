@@ -582,3 +582,80 @@ export const isTodayWithinGivenInterval = ({
 
   return dateRangeInterval.contains(today);
 };
+
+export type IsoDateRange = {
+  start: string;
+  end: string;
+};
+
+/**
+ * Returns the difference in hours between two time stamps.
+ *
+ * @param {string} timestamp1 any valid ISO-8601 date string
+ * @param {string} timestamp2 any valid ISO-8601 date string
+ * @returns {number} the difference in hours (a negative number if timestamp1 occurs before timestamp2).
+ */
+export function calculateDifferenceInHours(
+  timestamp1: string,
+  timestamp2: string,
+): number {
+  const dt1 = DateTime.fromISO(timestamp1);
+  const dt2 = DateTime.fromISO(timestamp2);
+  return dt1.diff(dt2, 'hour').hours;
+}
+
+const isValidDate = dateString => {
+  const dateInputValid = isValidISODate(dateString);
+  const todayDate = formatNow(FORMATS.YYYYMMDD);
+  const dateLessthanOrEqualToToday = dateString <= todayDate;
+  return dateInputValid && dateLessthanOrEqualToToday;
+};
+
+/**
+ * Return an IsoDateRange containing start/end ISO time stamps given a starting partial ISO Date and
+ * an optional partial end date.  A "partial" ISO date may be any portion of an ISO date is still
+ * considered a valid ISO date, e.g. ("2022", "2022-01", "2022-01-02").  Additionally, the start
+ * date parameter may be the string literal 'today'.
+ *
+ * @param {string} dateStart any valid ISO-8601 date string, or 'today'.
+ * @param {string} dateEnd any valid ISO-8601 date string.
+ * @returns {IsoDateRange} date range containing fully-formed ISO date+time strings in UTC format
+ * @throws Error if start or end date strings are invalid.
+ */
+export function normalizeIsoDateRange(
+  dateStart: string,
+  dateEnd?: string,
+): IsoDateRange {
+  if (dateStart === 'today') {
+    dateStart = formatNow(FORMATS.YYYYMMDD);
+  } else {
+    const dateInputValid = isValidDate(dateStart);
+    if (!dateInputValid) {
+      throw new Error('Date must be formatted as ISO and not later than today');
+    }
+  }
+  //If no end date specified, set it to end of the same day as start date
+  if (!dateEnd) {
+    dateEnd = DateTime.fromISO(dateStart, { zone: USTC_TZ })
+      .endOf('day')
+      .toUTC()
+      .toISO()!;
+  } else {
+    dateEnd = DateTime.fromISO(dateEnd, { zone: USTC_TZ }).toUTC().toISO()!;
+  }
+
+  const dtReconciliationDateStart = DateTime.fromISO(dateStart, {
+    zone: USTC_TZ,
+  }).toUTC();
+  const dtReconciliationDateEnd = DateTime.fromISO(dateEnd, {
+    zone: USTC_TZ,
+  }).toUTC();
+
+  if (!dtReconciliationDateEnd.isValid) {
+    throw new Error('End date must be formatted as ISO');
+  }
+  return {
+    end: dtReconciliationDateEnd.toUTC().toISO(),
+    start: dtReconciliationDateStart.toUTC().toISO()!,
+  };
+}
