@@ -40,7 +40,7 @@ describe('printableWorkingCopySessionList', () => {
 
   generateAndVerifyPdfDiff({
     fileName:
-      'Printable_Trial_Session_Working_Copy_With_Case_Notes_Usin_New_Calendar_Props.pdf',
+      'Printable_Trial_Session_Working_Copy_With_Case_Notes_Using_New_Calendar_Props.pdf',
     pageNumber: 1,
     pdfGenerateFunction: () =>
       printableWorkingCopySessionList({
