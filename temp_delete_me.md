@@ -33,3 +33,8 @@
 - Revoke Refresh Token after Use
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
 
+
+
+::: IDEAS :::
+- when navigating to login sequence try and exchange idToken
+- ifHasAccess only does static checks and redirects. Create an initSequence which is responsible for doing all fetching for app. (exchange idToken, get feature flags, get maintenance mode, get user, startRefreshIntervalSequence)
