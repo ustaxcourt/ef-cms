@@ -4,5 +4,6 @@ export const refreshTokenAction = async ({
   const { token } = await applicationContext
     .getUseCases()
     .refreshTokenInteractor(applicationContext);
+
   return { idToken: token };
 };

@@ -4,8 +4,6 @@ export const logInInteractor = async (
   applicationContext: ServerApplicationContext,
   { email, password }: { email: string; password: string },
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
-  console.log('*** email and pasword: ', email, password);
-
   const cognito = applicationContext.getCognito();
 
   const result = await cognito
@@ -15,7 +13,7 @@ export const logInInteractor = async (
         PASSWORD: password,
         USERNAME: email,
       },
-      ClientId: 'bvjrggnd3co403c0aahscinne',
+      ClientId: applicationContext.environment.cognitoClientId,
     })
     .promise();
 

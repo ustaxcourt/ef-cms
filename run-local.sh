@@ -52,7 +52,6 @@ fi
 echo "Seeding cognito-local users"
 npx ts-node .cognito/seedCognitoLocal.ts --transpile-only
 
-echo "Starting local lambda for cognito triggers"
 echo "Starting cognito-local"
 npx cognito-local &
 COGNITO_PID=$!
