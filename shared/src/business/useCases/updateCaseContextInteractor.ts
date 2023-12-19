@@ -42,7 +42,7 @@ export const updateCaseContext = async (
     newCase.setCaseCaption(caseCaption);
   }
 
-  if (judgeData) {
+  if (judgeData && judgeData.associatedJudge) {
     const { associatedJudge, associatedJudgeId } = judgeData;
     newCase.setAssociatedJudge(associatedJudge);
     newCase.setAssociatedJudgeId(associatedJudgeId);

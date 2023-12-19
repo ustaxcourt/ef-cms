@@ -1417,7 +1417,7 @@ export class Case extends JoiValidationEntity {
     associatedJudge: string;
     associatedJudgeId: string;
   }): Case {
-    if (judgeData) {
+    if (judgeData && judgeData.associatedJudge) {
       this.associatedJudge = judgeData.associatedJudge;
       this.associatedJudgeId = judgeData.associatedJudgeId;
     }
