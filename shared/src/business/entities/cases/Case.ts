@@ -2191,6 +2191,7 @@ export const userIsDirectlyAssociated = function ({ aCase, userId }) {
  */
 export const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
   const contactPrimary = getContactPrimary(rawCase);
+  const contactSecondary = getContactSecondary(rawCase);
 
   if (contactPrimary && !contactPrimary.additionalName) {
     const contactPrimaryRef = obj.petitioners.find(
