@@ -133,6 +133,7 @@ export const ContactSecondary = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
+                data-testid="contact-secondary-care-of-name"
                 id="secondaryInCareOf"
                 name="contactSecondary.inCareOf"
                 type="text"
