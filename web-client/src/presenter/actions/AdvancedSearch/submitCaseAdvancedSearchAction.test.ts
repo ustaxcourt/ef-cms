@@ -75,7 +75,7 @@ describe('submitCaseAdvancedSearchAction', () => {
     });
   });
 
-  it('should call caseAdvancedSearchInteractor with a prescribed state and "domestic" as countryType if searchParams.countryType is domestic', async () => {
+  it('should call caseAdvancedSearchInteractor with the set US state and "domestic" as countryType if searchParams.countryType is domestic', async () => {
     baseState.advancedSearchForm.caseSearchByName.countryType =
       COUNTRY_TYPES.DOMESTIC;
     baseState.advancedSearchForm.caseSearchByName.petitionerState =
