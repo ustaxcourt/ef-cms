@@ -52,7 +52,7 @@ describe('Petitions clerk QCs a case with innocent spouse', () => {
       'have.text',
       '111 South West St.',
     );
-    cy.get('.no-margin > :nth-child(4)').should(
+    cy.get('[data-testid="contact-info-city-state"]').should(
       'have.text',
       'Orlando, AL 12345',
     );
@@ -60,9 +60,10 @@ describe('Petitions clerk QCs a case with innocent spouse', () => {
       'have.text',
       '111-111-1111',
     );
-    cy.get('.content-wrapper > :nth-child(4)').should(
+    cy.get('[data-testid="contact-info-email-address"]').should(
       'have.text',
       'petitioner1@example.com',
     );
+    /* ==== End Cypress Studio ==== */
   });
 });

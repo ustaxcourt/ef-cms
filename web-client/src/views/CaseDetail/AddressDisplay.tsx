@@ -39,14 +39,20 @@ export const AddressDisplay = connect(
         <span className="address-line" data-testid="address1-line">
           {contact.address1}
         </span>
-        <span className="address-line">{contact.address2}</span>
-        <span className="address-line">{contact.address3}</span>
-        <span className="address-line">
+        <span className="address-line" data-testid="address2-line">
+          {contact.address2}
+        </span>
+        <span className="address-line" data-testid="address3-line">
+          {contact.address3}
+        </span>
+        <span className="address-line" data-testid="contact-info-city-state">
           {contact.city && `${contact.city}, `}
           {contact.state} {contact.postalCode}
         </span>
         {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <span className="address-line">{contact.country}</span>
+          <span className="address-line" data-testid="contact-info-country">
+            {contact.country}
+          </span>
         )}
         {contact.phone && (
           <span
@@ -60,7 +66,10 @@ export const AddressDisplay = connect(
           </span>
         )}
         {contact.email && showEmail && (
-          <span className="address-line">
+          <span
+            className="address-line"
+            data-testid="contact-info-email-address"
+          >
             {contact.email}
             {contact.showEAccessFlag && (
               <FontAwesomeIcon
