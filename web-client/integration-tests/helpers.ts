@@ -832,9 +832,10 @@ export const loginAs = (cerebralTest, user) =>
       value: user,
     });
 
-    await cerebralTest.runSequence('submitLocalLoginSequence', {
-      path: '/',
-    });
+    // TODO 10007: We removed submitLocalLoginSequence Here. Is that Okay?
+    // await cerebralTest.runSequence('submitLocalLoginSequence', {
+    //   path: '/',
+    // });
 
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });

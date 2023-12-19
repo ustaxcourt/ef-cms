@@ -143,11 +143,6 @@ const app = {
     });
     presenter.state.constants = applicationContext.getConstants();
 
-    // const shouldRefreshToken =
-    //   !wasAppLoadedFromACognitoLogin(window.location.href) &&
-    //   !wasLoginUsingTokenInUrl(window.location.href) &&
-    //   !isOnMockLogin(window.location.href);
-
     // if (presenter.state.token) {
     //   try {
     //     const maintenanceMode = await applicationContext
