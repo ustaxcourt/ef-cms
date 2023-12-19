@@ -2,10 +2,12 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseSearchByName = connect(
   {
@@ -13,7 +15,6 @@ export const CaseSearchByName = connect(
     advancedSearchHelper: state.advancedSearchHelper,
     caseSearchByNameHelper: state.caseSearchByNameHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    constants: state.constants,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     updateCaseAdvancedSearchByNameFormValueSequence:
@@ -30,7 +31,6 @@ export const CaseSearchByName = connect(
     advancedSearchHelper,
     caseSearchByNameHelper,
     clearAdvancedSearchFormSequence,
-    constants,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     updateCaseAdvancedSearchByNameFormValueSequence,
@@ -86,28 +86,198 @@ export const CaseSearchByName = connect(
                 </FormGroup>
               </div>
             </div>
-
             <div className="grid-row grid-gap">
-              <div className="tablet:grid-col-7">
+              <div className="tablet:grid-col-12">
                 <div className="grid-row grid-gap">
-                  <div className="tablet:grid-col-7">
-                    <label className="usa-label" htmlFor="country-type">
-                      Country
-                    </label>
-                    <BindedSelect
-                      aria-describedby="case-search-by-name"
-                      bind="advancedSearchForm.caseSearchByName.countryType"
-                      id="country-type"
-                      name="countryType"
+                  <FormGroup className="margin-bottom-0" errorText="">
+                    <fieldset
+                      aria-label="scan mode selection"
+                      className={classNames('usa-fieldset margin-bottom-3')}
+                      id="scan-mode-radios"
                     >
-                      <option value={constants.COUNTRY_TYPES.DOMESTIC}>
-                        - United States -
-                      </option>
-                      <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
-                        - International -
-                      </option>
-                    </BindedSelect>
-                  </div>
+                      <legend
+                        className="usa-legend with-hint margin-bottom-2"
+                        id="scan-mode-radios-legend"
+                      >
+                        Country
+                      </legend>
+                      <NonMobile>
+                        <div className="usa-radio usa-radio__inline">
+                          <input
+                            aria-describedby="all-country-selection"
+                            aria-labelledby="all-country-selection"
+                            checked={
+                              advancedSearchForm.caseSearchByName
+                                .countryType === 'all'
+                            }
+                            className="usa-radio__input"
+                            data-testid="all-country-selection"
+                            id="all-country-selection"
+                            name="all"
+                            type="radio"
+                            value="All"
+                            onChange={e => {
+                              updateCaseAdvancedSearchByNameFormValueSequence({
+                                key: 'countryType',
+                                value: e.target.name,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="all-country-selection"
+                            id="all-country-selection-label"
+                          >
+                            All
+                          </label>
+                        </div>
+                        <div className="usa-radio usa-radio__inline">
+                          <input
+                            aria-describedby="scan-mode-radios-legend"
+                            aria-labelledby="upload-mode-upload"
+                            checked={
+                              advancedSearchForm.caseSearchByName
+                                .countryType === 'domestic'
+                            }
+                            className="usa-radio__input"
+                            id="united-states-country-selection"
+                            name="domestic"
+                            type="radio"
+                            value="United States"
+                            onChange={e => {
+                              updateCaseAdvancedSearchByNameFormValueSequence({
+                                key: 'countryType',
+                                value: e.target.name,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="united-states-country-selection"
+                            id="united-states-country-selection-label"
+                          >
+                            United States
+                          </label>
+                        </div>
+                        <div className="usa-radio usa-radio__inline">
+                          <input
+                            aria-describedby="scan-mode-radios-legend"
+                            aria-labelledby="upload-mode-upload"
+                            checked={
+                              advancedSearchForm.caseSearchByName
+                                .countryType === 'international'
+                            }
+                            className="usa-radio__input"
+                            id="international-country-selection"
+                            name="international"
+                            type="radio"
+                            value="international"
+                            onChange={e => {
+                              updateCaseAdvancedSearchByNameFormValueSequence({
+                                key: 'countryType',
+                                value: e.target.name,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="international-country-selection"
+                            id="international-country-selection-label"
+                          >
+                            International
+                          </label>
+                        </div>
+                      </NonMobile>
+
+                      <Mobile>
+                        <div className="usa-radio margin-bottom-1">
+                          <input
+                            aria-describedby="all-country-selection"
+                            aria-labelledby="all-country-selection"
+                            checked={
+                              advancedSearchForm.caseSearchByName
+                                .countryType === 'all'
+                            }
+                            className="usa-radio__input"
+                            data-testid="all-country-selection"
+                            id="all-country-selection"
+                            name="all"
+                            type="radio"
+                            value="All"
+                            onChange={e => {
+                              updateCaseAdvancedSearchByNameFormValueSequence({
+                                key: 'countryType',
+                                value: e.target.name,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="all-country-selection"
+                            id="all-country-selection-label"
+                          >
+                            All
+                          </label>
+                        </div>
+                        <div className="usa-radio margin-bottom-1">
+                          <input
+                            aria-describedby="scan-mode-radios-legend"
+                            aria-labelledby="upload-mode-upload"
+                            checked={
+                              advancedSearchForm.caseSearchByName
+                                .countryType === 'domestic'
+                            }
+                            className="usa-radio__input"
+                            id="united-states-country-selection"
+                            name="domestic"
+                            type="radio"
+                            value="United States"
+                            onChange={e => {
+                              updateCaseAdvancedSearchByNameFormValueSequence({
+                                key: 'countryType',
+                                value: e.target.name,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="united-states-country-selection"
+                            id="united-states-country-selection-label"
+                          >
+                            United States
+                          </label>
+                        </div>
+                        <div className="usa-radio margin-bottom-1">
+                          <input
+                            aria-describedby="scan-mode-radios-legend"
+                            aria-labelledby="upload-mode-upload"
+                            checked={
+                              advancedSearchForm.caseSearchByName
+                                .countryType === 'international'
+                            }
+                            className="usa-radio__input"
+                            id="international-country-selection"
+                            name="international"
+                            type="radio"
+                            value="international"
+                            onChange={e => {
+                              updateCaseAdvancedSearchByNameFormValueSequence({
+                                key: 'countryType',
+                                value: e.target.name,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="international-country-selection"
+                            id="international-country-selection-label"
+                          >
+                            International
+                          </label>
+                        </div>
+                      </Mobile>
+                    </fieldset>
+                  </FormGroup>
 
                   {advancedSearchHelper.showStateSelect && (
                     <div className="tablet:grid-col-5">
@@ -146,41 +316,81 @@ export const CaseSearchByName = connect(
               </div>
             </div>
 
-            <div className="grid-row grid-gap margin-top-4 margin-bottom-2">
-              <DateRangePickerComponent
-                omitFormGroupClass
-                endDateErrorText={validationErrors.endDate}
-                endLabel="Date filed end date"
-                endName="caseSearchByNameEndDate"
-                endPickerCls={
-                  'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
-                }
-                endValue={advancedSearchForm.caseSearchByName.endDate}
-                formGroupCls={'margin-bottom-0'}
-                maxDate={caseSearchByNameHelper.today}
-                rangePickerCls={'grid-row grid-gap-3'}
-                showDateHint={true}
-                startDateErrorText={validationErrors.startDate}
-                startLabel="Date filed start date"
-                startName="caseSearchByNameStartDate"
-                startPickerCls={
-                  'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
-                }
-                startValue={advancedSearchForm.caseSearchByName.startDate}
-                onChangeEnd={e => {
-                  updateCaseAdvancedSearchByNameFormValueSequence({
-                    key: 'endDate',
-                    value: e.target.value,
-                  });
-                }}
-                onChangeStart={e => {
-                  updateCaseAdvancedSearchByNameFormValueSequence({
-                    key: 'startDate',
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </div>
+            <NonMobile>
+              <div className="grid-row grid-gap margin-top-4 margin-bottom-2">
+                <DateRangePickerComponent
+                  omitFormGroupClass
+                  endDateErrorText={validationErrors.endDate}
+                  endLabel="Date filed end date"
+                  endName="caseSearchByNameEndDate"
+                  endPickerCls={
+                    'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                  }
+                  endValue={advancedSearchForm.caseSearchByName.endDate}
+                  formGroupCls={'margin-bottom-0'}
+                  maxDate={caseSearchByNameHelper.today}
+                  rangePickerCls={'grid-row grid-gap-3'}
+                  showDateHint={true}
+                  startDateErrorText={validationErrors.startDate}
+                  startLabel="Date filed start date"
+                  startName="caseSearchByNameStartDate"
+                  startPickerCls={
+                    'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                  }
+                  startValue={advancedSearchForm.caseSearchByName.startDate}
+                  onChangeEnd={e => {
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'endDate',
+                      value: e.target.value,
+                    });
+                  }}
+                  onChangeStart={e => {
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'startDate',
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </NonMobile>
+
+            <Mobile>
+              <div className="grid-row grid-gap margin-top-1 margin-bottom-2">
+                <DateRangePickerComponent
+                  omitFormGroupClass
+                  endDateErrorText={validationErrors.endDate}
+                  endLabel="Date filed end date"
+                  endName="caseSearchByNameEndDate"
+                  endPickerCls={
+                    'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                  }
+                  endValue={advancedSearchForm.caseSearchByName.endDate}
+                  formGroupCls={'margin-bottom-0'}
+                  maxDate={caseSearchByNameHelper.today}
+                  rangePickerCls={'grid-row grid-gap-3'}
+                  showDateHint={true}
+                  startDateErrorText={validationErrors.startDate}
+                  startLabel="Date filed start date"
+                  startName="caseSearchByNameStartDate"
+                  startPickerCls={
+                    'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                  }
+                  startValue={advancedSearchForm.caseSearchByName.startDate}
+                  onChangeEnd={e => {
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'endDate',
+                      value: e.target.value,
+                    });
+                  }}
+                  onChangeStart={e => {
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'startDate',
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </Mobile>
 
             <div className="grid-row">
               <div className="tablet:grid-col-6">

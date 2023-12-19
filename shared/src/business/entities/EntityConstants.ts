@@ -1094,7 +1094,7 @@ export const US_STATES = {
   WI: 'Wisconsin',
   WV: 'West Virginia',
   WY: 'Wyoming',
-};
+} as const;
 
 export const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
@@ -1108,7 +1108,13 @@ export const US_STATES_OTHER = {
   PR: 'Puerto Rico',
   PW: 'Palau',
   VI: 'Virgin Islands',
-};
+} as const;
+
+const statesArray = [
+  ...Object.values(US_STATES),
+  ...Object.values(US_STATES_OTHER),
+];
+export type States = (typeof statesArray)[number];
 
 export const STATE_NOT_AVAILABLE = 'N/A';
 
