@@ -49,6 +49,12 @@ const updateCaseEntityAndGenerateChange = async ({
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
 
+  applicationContext.logger.info('updateCaseEntityAndGenerateChange', {
+    documentType,
+    newData,
+    oldData,
+  });
+
   const privatePractitionersRepresentingContact = Case.isPetitionerRepresented(
     caseEntity,
     petitionerObject.contactId,
@@ -86,6 +92,8 @@ export const updatePetitionerCases = async ({
       }),
     ),
   );
+
+  applicationContext.logger.info('updatePetitionerCases', { rawCasesToUpdate });
 
   const validatedCasesToUpdateInPersistence = [];
   for (let rawCaseData of rawCasesToUpdate) {

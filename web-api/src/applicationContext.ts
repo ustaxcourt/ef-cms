@@ -254,14 +254,14 @@ export const createApplicationContext = (
       },
       sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
         if (environment.stage === 'local') {
-          applicationContext
+          return applicationContext
             .getUseCases()
             .generateNoticesForCaseTrialSessionCalendarInteractor(
               applicationContext,
               payload,
             );
         } else {
-          sendSetTrialSessionCalendarEvent({
+          return sendSetTrialSessionCalendarEvent({
             applicationContext,
             payload,
           });
@@ -272,12 +272,12 @@ export const createApplicationContext = (
         user: userToSendTo,
       }) => {
         if (environment.stage === 'local') {
-          updatePetitionerCasesInteractor({
+          return updatePetitionerCasesInteractor({
             applicationContext: appContext,
             user: userToSendTo,
           });
         } else {
-          sendUpdatePetitionerCasesMessage({
+          return sendUpdatePetitionerCasesMessage({
             applicationContext: appContext,
             user: userToSendTo,
           });
