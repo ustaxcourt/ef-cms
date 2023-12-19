@@ -2233,6 +2233,18 @@ export const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
         break;
     }
   }
+
+  if (contactSecondary && !contactSecondary.additionalName) {
+    const contactSecondaryRef = obj.petitioners.find(
+      p => p.contactId === contactSecondary.contactId,
+    );
+
+    switch (rawCase.partyType) {
+      case PARTY_TYPES.petitionerDeceasedSpouse:
+        contactSecondaryRef.additionalName = `c/o ${contactSecondaryRef.inCareOf}`;
+        delete contactSecondaryRef.inCareOf;
+    }
+  }
 };
 
 /**
