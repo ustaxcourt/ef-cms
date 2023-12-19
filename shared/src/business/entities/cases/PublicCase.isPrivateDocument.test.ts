@@ -207,17 +207,8 @@ describe('PublicCase isPrivateDocument', () => {
             filedByRole => {
               const isPrivate = PublicCase.isPrivateDocument(
                 {
-                  docketEntryId: '123',
-                  eventCode,
+                  ...baseDocketEntry,
                   filedByRole,
-                  filingDate,
-                  isOnDocketRecord: true,
-                  isPaper: false,
-                  previousDocument: {
-                    docketEntryId: '2a389787-91d2-41ba-9c6e-2a13440a928b',
-                    documentType: 'Seriatim Answering Brief',
-                    // filedByRole: 'privatePractitioner'
-                  },
                 },
                 visibilityChangeDate,
               );
@@ -239,16 +230,8 @@ describe('PublicCase isPrivateDocument', () => {
             filedByRole => {
               const isPrivate = PublicCase.isPrivateDocument(
                 {
-                  docketEntryId: '123',
-                  eventCode,
+                  ...baseDocketEntry,
                   filedByRole,
-                  filingDate,
-                  isOnDocketRecord: true,
-                  isPaper: false,
-                  previousDocument: {
-                    docketEntryId: '2a389787-91d2-41ba-9c6e-2a13440a928b',
-                    documentType: 'Seriatim Answering Brief',
-                  },
                 },
                 visibilityChangeDate,
               );
@@ -260,12 +243,8 @@ describe('PublicCase isPrivateDocument', () => {
           it('returns true when the docket entry is an amended document that does not have a previousDocument', () => {
             const isPrivate = PublicCase.isPrivateDocument(
               {
-                docketEntryId: '1451c228-49d6-44a9-ac02-d797be308661',
-                documentType: 'Amended',
-                eventCode,
-                filingDate,
-                isOnDocketRecord: true,
-                isStricken: false,
+                ...baseDocketEntry,
+                previousDocument: undefined,
               },
               visibilityChangeDate,
             );
@@ -296,46 +275,30 @@ describe('PublicCase isPrivateDocument', () => {
     });
   });
 
-  describe('All other Documents', () => {
-    const allOtherEventCodes = ALL_EVENT_CODES.filter(
-      eventCode =>
-        ![
-          'DEC',
-          ...ORDER_EVENT_CODES,
-          ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-          ...POLICY_DATE_IMPACTED_EVENTCODES,
-        ].includes(eventCode),
-    );
+  const allOtherEventCodes = ALL_EVENT_CODES.filter(
+    eventCode =>
+      ![
+        'DEC',
+        ...ORDER_EVENT_CODES,
+        ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+        ...POLICY_DATE_IMPACTED_EVENTCODES,
+      ].includes(eventCode),
+  );
 
-    it.each(allOtherEventCodes)(
-      'returns true before the visibility change',
-      eventCode => {
+  describe.each(allOtherEventCodes)('All other Documents', eventCode => {
+    it.each([beforeVisibilityChangeDate, afterVisibilityChangeDate])(
+      'returns true before and after visibility change',
+      filingDate => {
         const isPrivate = PublicCase.isPrivateDocument(
           {
             docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
             eventCode,
-            filingDate: beforeVisibilityChangeDate,
+            filingDate,
             isOnDocketRecord: true,
           },
           visibilityChangeDate,
         );
 
-        expect(isPrivate).toEqual(true);
-      },
-    );
-
-    it.each(allOtherEventCodes)(
-      'returns true after the visibility change',
-      eventCode => {
-        const isPrivate = PublicCase.isPrivateDocument(
-          {
-            docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
-            eventCode,
-            filingDate: afterVisibilityChangeDate,
-            isOnDocketRecord: true,
-          },
-          visibilityChangeDate,
-        );
         expect(isPrivate).toEqual(true);
       },
     );
