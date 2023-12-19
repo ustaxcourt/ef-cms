@@ -205,6 +205,7 @@ import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
 import { handleIdleLogoutSequence } from './sequences/handleIdleLogoutSequence';
+import { initAppSequence } from '@web-client/presenter/sequences/Init/initAppSequence';
 import { initialState } from '@web-client/presenter/state';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
@@ -885,6 +886,7 @@ export const presenterSequences = {
     gotoViewAllDocumentsSequence as unknown as Function,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
   handleIdleLogoutSequence: handleIdleLogoutSequence as unknown as Function,
+  initAppSequence,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
   loadDefaultDocketViewerDocumentToDisplaySequence:

@@ -4,9 +4,6 @@ export const refreshAuthTokenInteractor = async (
 ): Promise<{
   token: string;
 }> => {
-  if (!refreshToken) {
-    throw new Error('refreshToken is required');
-  }
   const { token } = await applicationContext
     .getPersistenceGateway()
     .renewIdToken(applicationContext, { refreshToken });
