@@ -6,6 +6,8 @@ import joiImported, { Root } from 'joi';
 
 const joi: Root = joiImported.extend(joiDate);
 
+export const ALL_COUNTRY_TYPE = 'all';
+
 export class CaseSearch extends JoiValidationEntity {
   countryType?: string;
   endDate?: string;
@@ -27,7 +29,7 @@ export class CaseSearch extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     countryType: JoiValidationConstants.STRING.valid(
-      'all',
+      ALL_COUNTRY_TYPE,
       COUNTRY_TYPES.DOMESTIC,
       COUNTRY_TYPES.INTERNATIONAL,
     ).optional(),

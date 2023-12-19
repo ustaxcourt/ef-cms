@@ -1,3 +1,4 @@
+import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
 import {
   COUNTRY_TYPES,
   CountryTypes,
@@ -7,21 +8,21 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareFormDataForCaseSearchApi = (
   form: Omit<CaseAdvancedSearchParamsRequestType, 'countryType'> & {
-    countryType: 'all' | CountryTypes;
+    countryType: typeof ALL_COUNTRY_TYPE | CountryTypes;
   },
 ): CaseAdvancedSearchParamsRequestType => {
   return {
     ...form,
-    countryType: form.countryType === 'all' ? undefined : form.countryType,
+    countryType:
+      form.countryType === ALL_COUNTRY_TYPE ? undefined : form.countryType,
     petitionerState:
-      form.countryType === 'all' ||
+      form.countryType === ALL_COUNTRY_TYPE ||
       form.countryType === COUNTRY_TYPES.INTERNATIONAL
         ? undefined
         : form.petitionerState,
   };
 };
 
-// TODO: decide if we can set a default state for state.advancedSearchForm (AND TYPE IT)
 export const submitCaseAdvancedSearchAction = async ({
   applicationContext,
   get,
