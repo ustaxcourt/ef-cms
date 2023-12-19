@@ -1,7 +1,8 @@
 import {
-  COURT_ISSUED_EVENT_CODES,
+  BRIEF_EVENTCODES,
   DOCKET_NUMBER_SUFFIXES,
-  ORDER_TYPES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+  ORDER_EVENT_CODES,
   PARTY_TYPES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
@@ -17,7 +18,6 @@ import { PublicContact } from './PublicContact';
 import { PublicDocketEntry } from './PublicDocketEntry';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { isSealedCase } from './Case';
-import { map } from 'lodash';
 import joi from 'joi';
 
 export class PublicCase extends JoiValidationEntity {
@@ -111,38 +111,64 @@ export class PublicCase extends JoiValidationEntity {
   }
 
   static isPrivateDocument(
-    docketEntry: any,
+    docketEntry: RawDocketEntry,
     visibilityChangeDate: string,
   ): boolean {
-    if (docketEntry.isStricken) return true;
-    if (docketEntry.eventCode === TRANSCRIPT_EVENT_CODE) return true;
-    if (!docketEntry.isOnDocketRecord) return true;
+    if (
+      docketEntry.isStricken ||
+      docketEntry.eventCode === TRANSCRIPT_EVENT_CODE ||
+      !docketEntry.isOnDocketRecord
+    )
+      return true;
 
-    const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
+    const isOrder = ORDER_EVENT_CODES.includes(docketEntry.eventCode);
+    const isOpinion = OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
+      docketEntry.eventCode,
+    );
+    const isDecision = docketEntry.eventCode === 'DEC';
+
+    if (isOrder || isOpinion || isDecision) {
+      return false;
+    }
+
+    if (
+      !POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntry.eventCode) ||
+      docketEntry.filingDate < visibilityChangeDate
+    ) {
+      return true;
+    }
 
     const filedAfterPolicyChange =
       docketEntry.filingDate >= visibilityChangeDate;
 
-    const hasPolicyDateImpactedEventCode =
-      POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntry.eventCode);
-    const isOrder = orderDocumentTypes.includes(docketEntry.documentType);
-    const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
-      ({ eventCode }) => eventCode,
-    ).includes(docketEntry.eventCode);
+    const isFiledByPractitioner = [
+      ROLES.privatePractitioner,
+      ROLES.irsPractitioner,
+    ].includes(docketEntry.filedByRole);
 
-    let isPublicDocumentType =
-      isOrder || isCourtIssuedDocument || hasPolicyDateImpactedEventCode;
-
-    const isAmendmentToABrief =
-      ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
-        docketEntry.eventCode,
-      ) && isDocumentBriefType(docketEntry.previousDocument.documentType);
-
-    if (isAmendmentToABrief) {
-      isPublicDocumentType = filedAfterPolicyChange;
+    if (['AMBR', 'SDEC'].includes(docketEntry.eventCode)) {
+      return !filedAfterPolicyChange;
     }
 
-    return !isPublicDocumentType;
+    if (BRIEF_EVENTCODES.includes(docketEntry.eventCode)) {
+      return !(
+        filedAfterPolicyChange &&
+        !docketEntry.isPaper &&
+        isFiledByPractitioner
+      );
+    }
+
+    // TODO: need to determine if the previousDocument.filedByRole is also a practitioner
+    const isAmendmentToABrief =
+      docketEntry.previousDocument &&
+      isDocumentBriefType(docketEntry.previousDocument.documentType);
+
+    return !(
+      !docketEntry.isPaper &&
+      isAmendmentToABrief &&
+      filedAfterPolicyChange &&
+      isFiledByPractitioner
+    );
   }
 
   static VALIDATION_RULES = {
