@@ -1,5 +1,5 @@
+import { navigateToLoginAction } from '@web-client/presenter/actions/Login/navigateToLoginAction';
+
 export const navigateToLoginSequence = [
-  ({ router }) => {
-    router.route('/login');
-  },
+  navigateToLoginAction,
 ] as unknown as () => void;

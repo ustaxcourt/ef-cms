@@ -68,15 +68,12 @@ const gotoMaintenancePage = app => {
     path: '/maintenance',
   });
 };
-const gotoLoginPage = app => {
-  return app.getSequence('navigateToLoginSequence')();
-};
 const goto404 = app => {
   return app.getSequence('navigateToPathSequence')({
     path: '404',
   });
 };
-const accessRedirects = { goto404, gotoLoginPage, gotoMaintenancePage };
+const accessRedirects = { goto404, gotoMaintenancePage };
 
 const ifHasAccess = (
   {
@@ -92,14 +89,9 @@ const ifHasAccess = (
   },
   cb,
 ) => {
-  return async function () {
+  return function () {
     if (!app.getState('token')) {
-      try {
-        await app.getSequence('refreshTokenSequence')();
-        return cb.apply(null, arguments);
-      } catch (err) {
-        return redirect.gotoLoginPage(app);
-      }
+      return app.getSequence('navigateToLoginSequence')();
     } else if (app.getState('maintenanceMode')) {
       if (!skipMaintenanceCheck) {
         return redirect.gotoMaintenancePage(app);
