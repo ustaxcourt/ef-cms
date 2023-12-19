@@ -27,6 +27,7 @@ export class CaseSearch extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     countryType: JoiValidationConstants.STRING.valid(
+      'all',
       COUNTRY_TYPES.DOMESTIC,
       COUNTRY_TYPES.INTERNATIONAL,
     ).optional(),
