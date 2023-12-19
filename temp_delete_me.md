@@ -15,7 +15,6 @@
 - consistent (Login vs LogInInteractor)
 - error handling
 - fix tests
-- make it work for hosted envs (remove hard-coded )
 - email verification flow (just after verifying, are we going to new login with verification success message)
 - create account (move to private - client site)
 - Refactor ifHasAccess Function and delete isLoggedInAction.

@@ -1,10 +1,10 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { refreshToken } from './refreshToken';
+import { renewIdToken } from './renewIdToken';
 
 jest.mock('@aws-sdk/client-cognito-identity-provider');
 
-describe('refreshToken', () => {
+describe('renewIdToken', () => {
   const expectedToken = '123';
   const mockAxios = {
     post: jest.fn().mockReturnValue({
@@ -26,7 +26,7 @@ describe('refreshToken', () => {
   });
 
   it('returns the first clientId from the list of user pool clients', async () => {
-    const result = await refreshToken(applicationContext, {
+    const result = await renewIdToken(applicationContext, {
       refreshToken: 'abc',
     });
 

@@ -637,18 +637,6 @@ const applicationContext = {
     return broadcastChannel;
   },
   getCaseTitle: Case.getCaseTitle,
-  getCognitoClientId: () => {
-    return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
-  },
-  getCognitoRedirectUrl: () => {
-    return process.env.COGNITO_REDIRECT_URI || 'http://localhost:1234/log-in';
-  },
-  getCognitoTokenUrl: () => {
-    return (
-      process.env.COGNITO_TOKEN_URL ||
-      'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token'
-    );
-  },
   getConstants: () => appConstants,
   getCurrentUser,
   getCurrentUserPermissions: () => {
