@@ -1,3 +1,4 @@
+import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { clearAdvancedSearchFormAction } from './clearAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
@@ -67,7 +68,7 @@ describe('clearAdvancedSearchFormAction', () => {
     });
 
     expect(result.state.advancedSearchForm).toEqual({
-      caseSearchByName: { countryType: 'all' },
+      caseSearchByName: { countryType: ALL_COUNTRY_TYPE },
       currentPage: 83,
       orderSearch: { keyword: '' },
       practitionerSearchByName: {
