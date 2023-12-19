@@ -1,18 +1,16 @@
 ::: STUFF TO DELETE :::
 
 
-
 ::: STUFF TO UPDATE :::
 - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 - web-client/integration-tests/petitionerCreatesAccount.test.ts
-- cookieFormatting
 
 
 ::: STUFF TO DO :::
 - finish all todos
+- ensure back works right (public to private and back)
 - Handle maintenance mode on login in app.tsx
-- consistent (Login vs LogInInteractor). Lets go with Login.
 - error handling
 - fix tests
 - email verification flow (just after verifying, are we going to new login with verification success message)
@@ -21,6 +19,10 @@
 - invalidate old refreshToken and idToken upon refresh.
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
 - Make app-local.ts not create another webserver just to listen to incoming requests from cognito-local.
+
+::: SOLO TO DO :::
+- consistent (LoginInteractor). Lets go with Login.
+
 
 ::: ON HOLD :::
 - In refreshAuthTokenInteractor we are returning the idToken. Should this be an accessToken? Are all of our requests being authed with an idToken?

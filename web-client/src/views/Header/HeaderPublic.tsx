@@ -32,19 +32,19 @@ const BetaBar = toggleBetaBarSequence => {
 
 export const HeaderPublic = connect(
   {
-    gotoLoginSequence: sequences.gotoLoginSequence,
     headerPublicHelper: state.headerPublicHelper,
     isTerminalUser: state.isTerminalUser,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
+    redirectToLoginSequence: sequences.redirectToLoginSequence,
     showBetaBar: state.templateHelper.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
   function HeaderPublic({
-    gotoLoginSequence,
     headerPublicHelper,
     isTerminalUser,
     navigateToCreatePetitionerAccountSequence,
+    redirectToLoginSequence,
     showBetaBar,
     toggleBetaBarSequence,
   }) {
@@ -73,7 +73,7 @@ export const HeaderPublic = connect(
                       <Button
                         className="usa-button--unstyled"
                         icon={['far', 'user']}
-                        onClick={() => gotoLoginSequence()}
+                        onClick={() => redirectToLoginSequence()}
                       >
                         Log In
                       </Button>
@@ -81,7 +81,7 @@ export const HeaderPublic = connect(
                     <div className="login-container mobile">
                       <button
                         className="usa-menu-btn"
-                        onClick={() => gotoLoginSequence()}
+                        onClick={() => redirectToLoginSequence()}
                       >
                         Log In
                       </button>

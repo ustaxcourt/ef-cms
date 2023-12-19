@@ -9,8 +9,8 @@ export const CreatePetitionerAccountForm = connect(
     confirmPassword: state.form.confirmPassword,
     createAccountHelper: state.createAccountHelper,
 
-    gotoLoginSequence: sequences.gotoLoginSequence,
     password: state.form.password,
+    redirectToLoginSequence: sequences.redirectToLoginSequence,
     showConfirmPassword: state.showConfirmPassword,
     showPassword: state.showPassword,
     submitCreatePetitionerAccountFormSequence:
@@ -21,8 +21,8 @@ export const CreatePetitionerAccountForm = connect(
   ({
     confirmPassword,
     createAccountHelper,
-    gotoLoginSequence,
     password,
+    redirectToLoginSequence,
     showConfirmPassword,
     showPassword,
     submitCreatePetitionerAccountFormSequence,
@@ -259,7 +259,7 @@ export const CreatePetitionerAccountForm = connect(
               Already have an account?{' '}
               <Button
                 className="usa-button--unstyled"
-                onClick={() => gotoLoginSequence()}
+                onClick={() => redirectToLoginSequence()}
               >
                 Log in
               </Button>

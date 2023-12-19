@@ -32,6 +32,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSequence';
+import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
 import { resendVerificationLinkSequence } from '@web-client/presenter/sequences/Public/resendVerificationLinkSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
@@ -103,6 +104,7 @@ export const presenterSequences = {
   openAppMaintenanceModalSequence,
   openCaseDocumentDownloadUrlSequence,
   persistFormsOnReloadSequence,
+  redirectToLoginSequence,
   resendVerificationLinkSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
