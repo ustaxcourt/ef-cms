@@ -1,4 +1,8 @@
-import { MAX_SEARCH_RESULTS } from '../entities/EntityConstants';
+import {
+  CountryTypes,
+  MAX_SEARCH_RESULTS,
+  States,
+} from '../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -11,11 +15,11 @@ import {
 } from '../utilities/DateHandler';
 
 export type CaseAdvancedSearchParamsRequestType = {
-  countryType?: string;
   petitionerName: string;
-  petitionerState: string;
-  endDate: string;
-  startDate: string;
+  countryType?: CountryTypes;
+  petitionerState?: States;
+  endDate?: string;
+  startDate?: string;
 };
 
 export const caseAdvancedSearchInteractor = async (
