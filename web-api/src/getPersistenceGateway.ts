@@ -54,6 +54,7 @@ import { editPractitionerDocument } from './persistence/dynamo/practitioners/edi
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
 import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/elasticsearch/docketEntry/getAllPendingMotionDocketEntriesForJudge';
+import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
@@ -304,6 +305,7 @@ const gatewayMethods = {
   deleteWorkItem,
   fetchEventCodesCountForJudges,
   getAllPendingMotionDocketEntriesForJudge,
+  getAllUsersByRole,
   getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
