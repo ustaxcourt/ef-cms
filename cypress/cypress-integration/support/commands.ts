@@ -33,8 +33,6 @@ Cypress.Commands.add('login', (username, route = '/') => {
 
   cy.get('[data-testid="login-button"]').click();
 
-  cy.get('[data-testid="account-menu-button"]');
-
   cy.visit(route);
 });
 
