@@ -367,6 +367,7 @@ const updateCaseWorkItems = async ({
   const updatedWorkItems = rawWorkItems.map(rawWorkItem => ({
     ...rawWorkItem,
     associatedJudge: caseToUpdate.associatedJudge,
+    associatedJudgeId: caseToUpdate.associatedJudgeId,
     caseStatus: caseToUpdate.status,
     caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
     docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
