@@ -25,12 +25,17 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
 });
 
 Cypress.Commands.add('login', (username, route = '/') => {
-  const url = `/log-in?code=${username}@example.com&path=${route}`;
-  cy.visit(url);
-  cy.waitUntilSettled(50);
-  cy.url().should('include', route);
-  cy.showsErrorMessage(false);
-  cy.url().should('not.include', '/mock-login');
+  cy.visit('/login');
+
+  cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
+
+  cy.get('[data-testid="password-input"]').type('Testing1234$', { log: false });
+
+  cy.get('[data-testid="login-button"]').click();
+
+  cy.get('[data-testid="account-menu-button"]');
+
+  cy.visit(route);
 });
 
 Cypress.Commands.add('goToRoute', (...args) => {
