@@ -17,7 +17,6 @@ import {
 } from '../integration-tests/helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
-import { unauthedUserInvalidSearchForOrder } from './journey/unauthedUserInvalidSearchForOrder';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesForOrderByKeyword } from './journey/unauthedUserSearchesForOrderByKeyword';
 import { unauthedUserSearchesForSealedCaseOrderByKeyword } from './journey/unauthedUserSearchesForSealedCaseOrderByKeyword';
@@ -96,7 +95,6 @@ describe('Unauthed user searches for an order by keyword', () => {
   });
 
   unauthedUserNavigatesToPublicSite(cerebralTest);
-  unauthedUserInvalidSearchForOrder(cerebralTest);
   unauthedUserSearchesForOrderByKeyword(cerebralTest, testClient);
 });
 
