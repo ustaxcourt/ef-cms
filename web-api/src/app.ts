@@ -123,8 +123,8 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
-import { logInLambda } from '@web-api/lambdas/auth/logInLambda';
 import { logger } from './logger';
+import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
 import { prioritizeCaseLambda } from './lambdas/cases/prioritizeCaseLambda';
@@ -1026,7 +1026,7 @@ app.get(
   app
     .route('/auth/login')
     .delete(lambdaWrapper(deleteAuthCookieLambda))
-    .post(lambdaWrapper(logInLambda));
+    .post(lambdaWrapper(loginLambda));
   app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 }
 

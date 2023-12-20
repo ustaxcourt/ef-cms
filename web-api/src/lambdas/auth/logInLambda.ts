@@ -1,7 +1,7 @@
 import { createCookieString } from '../../utilities/cookieFormatting';
 import { genericHandler } from '../../genericHandler';
 
-export const logInLambda = event =>
+export const loginLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
