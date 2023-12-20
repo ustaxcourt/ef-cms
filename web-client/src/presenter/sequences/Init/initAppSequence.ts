@@ -11,6 +11,8 @@ import { startRefreshIntervalSequence } from '@web-client/presenter/sequences/st
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const initAppSequence = [
+  refreshTokenAction,
+  setTokenAction,
   getMaintenanceModeAction,
   setMaintenanceModeAction,
   ({ get, path }: ActionProps) => {
@@ -23,8 +25,6 @@ export const initAppSequence = [
   },
   {
     maintenanceModeOff: [
-      refreshTokenAction,
-      setTokenAction,
       parallel([
         [getUserAction, setUserAction, setUserPermissionsAction],
         startRefreshIntervalSequence,
