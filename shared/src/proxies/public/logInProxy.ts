@@ -1,6 +1,6 @@
 import { post } from '@shared/proxies/requests';
 
-export const logInInteractor = (
+export const loginInteractor = (
   applicationContext,
   { email, password }: { email: string; password: string },
 ): Promise<{
