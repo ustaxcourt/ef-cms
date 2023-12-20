@@ -1,3 +1,4 @@
+import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import { Case } from './cases/Case';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
@@ -41,9 +42,13 @@ export class CaseDeadline extends JoiValidationEntity {
       .required()
       .description('Judge assigned to the case containing this Case Deadline.')
       .messages({ '*': 'Associated judge is required' }),
-    associatedJudgeId: JoiValidationConstants.UUID.optional().description(
-      'Judge ID assigned to this case.',
-    ), // is this optional or required?
+    associatedJudgeId: joi
+      .when('associatedJudge', {
+        is: CHIEF_JUDGE,
+        otherwise: JoiValidationConstants.UUID.required(),
+        then: JoiValidationConstants.UUID.optional(),
+      })
+      .description('Judge ID assigned to this case.'),
     caseDeadlineId: JoiValidationConstants.UUID.required().description(
       'Unique Case Deadline ID only used by the system.',
     ),
