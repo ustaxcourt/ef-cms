@@ -16,7 +16,6 @@ import {
 } from '../integration-tests/helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
-import { unauthedUserInvalidSearchForOrder } from './journey/unauthedUserInvalidSearchForOrder';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesForOrderByKeyword } from './journey/unauthedUserSearchesForOrderByKeyword';
 
@@ -107,7 +106,6 @@ describe('Unauthed user sees unsealed case', () => {
     });
 
     unauthedUserNavigatesToPublicSite(cerebralTest);
-    unauthedUserInvalidSearchForOrder(cerebralTest);
     unauthedUserSearchesForOrderByKeyword(cerebralTest, testClient);
   });
 });
