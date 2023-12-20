@@ -1,8 +1,6 @@
 import { clearFormAction } from '@web-client/presenter/actions/clearFormAction';
 import { decodeTokenAction } from '@web-client/presenter/actions/decodeTokenAction';
-import { getMaintenanceModeAction } from '@web-client/presenter/actions/getMaintenanceModeAction';
 import { getUserAction } from '@web-client/presenter/actions/getUserAction';
-import { navigateToMaintenanceAction } from '@web-client/presenter/actions/navigateToMaintenanceAction';
 import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
 import { setTokenAction } from '@web-client/presenter/actions/Login/setTokenAction';
 import { setUserAction } from '@web-client/presenter/actions/setUserAction';
@@ -14,14 +12,8 @@ export const submitLoginSequence = [
   clearFormAction,
   decodeTokenAction,
   setTokenAction,
-  getMaintenanceModeAction,
-  {
-    maintenanceOff: [
-      getUserAction,
-      setUserAction,
-      setUserPermissionsAction,
-      navigateToPathAction,
-    ],
-    maintenanceOn: [navigateToMaintenanceAction],
-  },
+  getUserAction,
+  setUserAction,
+  setUserPermissionsAction,
+  navigateToPathAction,
 ] as unknown as () => void;
