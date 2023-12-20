@@ -162,6 +162,7 @@ export const fileExternalDocument = async (
               assigneeId: null,
               assigneeName: null,
               associatedJudge: caseToUpdate.associatedJudge,
+              associatedJudgeId: caseToUpdate.associatedJudgeId,
               caseStatus: caseToUpdate.status,
               caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
               docketEntry: {
