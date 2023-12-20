@@ -45,7 +45,7 @@ const goToDashboard = [
   setUserPermissionsAction,
   parallel([
     [
-      getMaintenanceModeAction,
+      getMaintenanceModeAction, // TODO 10007: Move to init
       {
         maintenanceOff: [
           startWebSocketConnectionAction,

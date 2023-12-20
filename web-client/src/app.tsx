@@ -143,17 +143,6 @@ const app = {
     });
     presenter.state.constants = applicationContext.getConstants();
 
-    // if (presenter.state.token) {
-    //   try {
-    //     const maintenanceMode = await applicationContext
-    //       .getUseCases()
-    //       .getMaintenanceModeInteractor(applicationContext);
-    //     presenter.state.maintenanceMode = maintenanceMode;
-    //   } catch (err) {
-    //     // window.location.href = presenter.state.cognitoLoginUrl; TODO 10007: redirect to login
-    //   }
-    // }
-
     presenter.state.clientConnectionId = applicationContext.getUniqueId();
 
     config.autoAddCss = false;
