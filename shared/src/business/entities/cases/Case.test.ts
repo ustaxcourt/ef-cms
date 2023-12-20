@@ -1105,6 +1105,89 @@ describe('Case entity', () => {
       const errors: any = testCase.getFormattedValidationErrors();
       expect(errors.consolidatedCases).toBeDefined();
     });
+
+    it('should not throw an error when associatedJudge is set to "Chief Judge" and associatedJudgeId is not defined', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Chief Judge',
+          associatedJudgeId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual(null);
+    });
+
+    it('should not throw an error when associatedJudge is not defined and associatedJudgeId is not defined', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: undefined,
+          associatedJudgeId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual(null);
+    });
+
+    it('should not throw an error when associatedJudge is set and associatedJudgeId is defined as a valid UUID', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Colvin',
+          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual(null);
+    });
+
+    it('should throw an error when associatedJudge is set and associatedJudgeId is set but to a non valid uuid', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Colvin',
+          associatedJudgeId: 'uuid',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual({
+        associatedJudgeId: '"associatedJudgeId" must be a valid GUID',
+      });
+    });
+    it('should throw an error when associatedJudge is set and associatedJudgeId is not defined', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Colvin',
+          associatedJudgeId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual({
+        associatedJudgeId: '"associatedJudgeId" is required',
+      });
+    });
   });
 
   describe('trialDate and trialSessionId validation', () => {
