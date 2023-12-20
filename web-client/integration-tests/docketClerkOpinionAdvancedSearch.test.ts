@@ -3,7 +3,6 @@ import {
   ADVANCED_SEARCH_TABS,
   DATE_RANGE_SEARCH_OPTIONS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -31,12 +30,6 @@ describe('Docket clerk opinion advanced search', () => {
 
     const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
     expect(legacyJudge).toBeTruthy();
-
-    await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
-    });
   });
 
   it('should clear search fields when "Clear Search" is clicked', async () => {

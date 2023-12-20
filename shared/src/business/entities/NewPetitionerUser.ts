@@ -1,3 +1,4 @@
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import joi from 'joi';
@@ -141,10 +142,6 @@ export class NewPetitionerUser extends JoiValidationEntity {
 
   getValidationRules() {
     return NewPetitionerUser.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return {};
   }
 }
 
