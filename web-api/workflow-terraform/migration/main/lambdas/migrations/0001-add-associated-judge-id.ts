@@ -4,7 +4,7 @@ const isJudgeUserItem = item => {
   return (
     item.pk.startsWith('user|') &&
     item.sk.startsWith('user|') &&
-    item.role === 'judge'
+    (item.role === 'judge' || item.role === 'legacyJudge')
   );
 };
 
@@ -19,7 +19,7 @@ const isCaseDeadline = item => {
 };
 
 const isWorkItem = item => {
-  return item.pk.startsWith('case|') && item.sk.startsWith('work-item|');
+  return item.gsi1pk?.startsWith('work-item|');
 };
 
 const isRecordToUpdate = item => {
