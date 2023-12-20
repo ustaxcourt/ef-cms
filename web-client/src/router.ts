@@ -62,37 +62,32 @@ const back = () => {
   window.history.back();
 };
 
-const gotoMaintenancePage = app => {
-  return app.getSequence('navigateToPathSequence')({
-    path: '/maintenance',
-  });
-};
-const goto404 = app => {
-  return app.getSequence('navigateToPathSequence')({
-    path: '404',
-  });
-};
-const accessRedirects = { goto404, gotoMaintenancePage };
-
 const ifHasAccess = (
   {
     app,
     permissionToCheck,
-    redirect = accessRedirects,
   }: {
     app;
     permissionToCheck?: string;
-    redirect?: any;
   },
   cb,
 ) => {
   return function () {
+    if (app.getState('maintenanceMode')) {
+      // This prevents a user from hitting the back button when maintenance mode is on and being able to access a previos page in their history.
+      return app.getSequence('navigateToPathSequence')({
+        path: '/maintenance',
+      });
+    }
+
     if (!app.getState('token')) {
       return app.getSequence('navigateToLoginSequence')();
     }
 
     if (permissionToCheck && !app.getState('permissions')[permissionToCheck]) {
-      return redirect.goto404(app);
+      return app.getSequence('navigateToPathSequence')({
+        path: '404',
+      });
     }
 
     app.getSequence('clearAlertSequence')();

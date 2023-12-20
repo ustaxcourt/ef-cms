@@ -18,25 +18,20 @@ describe('Maintenance mode', () => {
     loginAs('petitionsclerk');
     engageMaintenance();
     getMaintenanceModal().should('exist');
-  });
 
-  it('should route to maintenance page on clicking cancel in the modal', () => {
-    getCancelButton().click();
+    getCancelButton().click(); // should route to maintenance page when the user clicks 'Cancel' in the modal
     getMaintenancePageContent().should('exist');
-  });
 
-  it('should route to the maintenance page if user directly routes to a URL', () => {
-    cy.goToRoute('trial-sessions');
+    cy.visit('/trial-sessions'); // should route to the maintenance page when the user directly routes to a URL
     getMaintenancePageContent().should('exist');
-  });
 
-  it('should route to the home page if maintenance mode is disengaged and the user was logged in', () => {
     disengageMaintenance();
-    getMaintenanceModal().should('not.exist');
+
+    getMaintenancePageContent().should('not.exist'); //should route to the home page if maintenance mode is disengaged and the user was logged in
     cy.url().should('include', 'messages/my/inbox');
   });
 
-  it('should logout the user on clicking logout on the modal', () => {
+  it('should log the user out when they click "Logout" on the maintenance mode modal', () => {
     loginAs('petitionsclerk');
     engageMaintenance();
     getMaintenanceModal().should('exist');
@@ -46,6 +41,8 @@ describe('Maintenance mode', () => {
   });
 
   it('should show the maintenance page when the user tries to log in and maintenance mode is engaged', () => {
+    engageMaintenance();
+
     cy.visit('/login');
     getMaintenancePageContent().should('exist');
   });
