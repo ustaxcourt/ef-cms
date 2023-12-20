@@ -451,6 +451,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
   assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
   assigneeName: JoiValidationConstants.STRING.max(100).allow(null).optional(), // should be a Message entity at some point
   associatedJudge: JoiValidationConstants.STRING.max(100).required(),
+  associatedJudgeId: JoiValidationConstants.UUID.optional(),
   caseIsInProgress: joi.boolean().optional(),
   caseStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(CASE_STATUS_TYPES),
