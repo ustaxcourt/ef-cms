@@ -1,18 +1,16 @@
-import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
 import { PublicCase } from '../../entities/cases/PublicCase';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '../../utilities/DateHandler';
-import { filterForPublic } from './publicHelpers';
 
-/**
- * casePublicSearchInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, endDate, startDate
- * @returns {object} the case data
- */
+export type CasePublicSearchRequestType = {
+  countryType?: string;
+  petitionerName: string;
+  petitionerState?: string;
+  startDate?: string;
+  endDate?: string;
+};
 
 export const casePublicSearchInteractor = async (
   applicationContext: IApplicationContext,
@@ -22,13 +20,7 @@ export const casePublicSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
-  }: {
-    countryType: string;
-    petitionerName: string;
-    petitionerState: string;
-    startDate: string;
-    endDate: string;
-  },
+  }: CasePublicSearchRequestType,
 ) => {
   let searchStartDate;
   let searchEndDate;
@@ -53,7 +45,7 @@ export const casePublicSearchInteractor = async (
     });
   }
 
-  const foundCases = await applicationContext
+  const { results: foundCases } = await applicationContext
     .getPersistenceGateway()
     .casePublicSearch({
       applicationContext,
@@ -66,14 +58,7 @@ export const casePublicSearchInteractor = async (
       },
     });
 
-  const unsealedFoundCases = (
-    await filterForPublic({
-      applicationContext,
-      unfiltered: foundCases,
-    })
-  ).slice(0, MAX_SEARCH_RESULTS);
-
-  return PublicCase.validateRawCollection(unsealedFoundCases, {
+  return PublicCase.validateRawCollection(foundCases, {
     applicationContext,
   });
 };
