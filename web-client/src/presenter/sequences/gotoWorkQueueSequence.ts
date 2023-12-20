@@ -6,8 +6,6 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { parallel } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setSectionForWorkQueueAction } from '../actions/setSectionForWorkQueueAction';
@@ -69,10 +67,4 @@ const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('WorkQueue'),
 ]);
 
-export const gotoWorkQueueSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: goToWorkQueue,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoWorkQueueSequence = [goToWorkQueue];

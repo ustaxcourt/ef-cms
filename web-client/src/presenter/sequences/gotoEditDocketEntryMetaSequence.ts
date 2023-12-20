@@ -9,8 +9,6 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { initCourtIssuedOrderFormPropsFromEventCodeAction } from '../actions/EditDocketRecordEntry/initCourtIssuedOrderFormPropsFromEventCodeAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultEditDocketEntryMetaTabAction } from '../actions/setDefaultEditDocketEntryMetaTabAction';
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
@@ -49,10 +47,4 @@ export const gotoEditDocketEntryMeta =
     setupCurrentPageAction('EditDocketEntryMeta'),
   ]);
 
-export const gotoEditDocketEntryMetaSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditDocketEntryMeta,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoEditDocketEntryMetaSequence = [gotoEditDocketEntryMeta];

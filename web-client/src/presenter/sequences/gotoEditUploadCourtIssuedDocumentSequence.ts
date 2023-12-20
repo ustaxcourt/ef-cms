@@ -1,8 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentToFormAction } from '../actions/EditUploadCourtIssuedDocument/setDocumentToFormAction';
@@ -26,9 +24,5 @@ const gotoEditUploadCourtIssuedDocument =
   ]);
 
 export const gotoEditUploadCourtIssuedDocumentSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditUploadCourtIssuedDocument,
-    unauthorized: [navigateToLoginSequence],
-  },
+  gotoEditUploadCourtIssuedDocument,
 ];

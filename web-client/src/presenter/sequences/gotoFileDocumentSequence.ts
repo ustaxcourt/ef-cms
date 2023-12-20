@@ -1,8 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultFilersMapAction } from '../actions/setDefaultFilersMapAction';
 import { setWizardStepAction } from '../actions/setWizardStepAction';
@@ -22,10 +20,4 @@ const gotoFileDocument = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('FileDocumentWizard'),
 ]);
 
-export const gotoFileDocumentSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoFileDocument,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoFileDocumentSequence = [gotoFileDocument];

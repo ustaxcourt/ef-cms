@@ -3,8 +3,6 @@ import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDo
 import { getCaseAction } from '../actions/getCaseAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCourtIssuedDocumentInitialDataAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialDataAction';
 import { setDefaultServiceStampAction } from '../actions/CourtIssuedDocketEntry/setDefaultServiceStampAction';
@@ -17,25 +15,21 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoAddCourtIssuedDocketEntrySequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator([
-      setupCurrentPageAction('Interstitial'),
-      stopShowValidationAction,
-      clearFormAction,
-      setRedirectUrlAction,
-      getUsersInSectionAction({ section: 'judge' }),
-      getFilterCurrentJudgeUsersAction,
-      setUsersByKeyAction('judges'),
-      getCaseAction,
-      setCaseAction,
-      setDocketEntryIdAction,
-      setCourtIssuedDocumentInitialDataAction,
-      setDefaultServiceStampAction,
-      generateCourtIssuedDocumentTitleAction,
-      setIsEditingDocketEntryAction(false),
-      setupCurrentPageAction('CourtIssuedDocketEntry'),
-    ]),
-    unauthorized: [navigateToLoginSequence],
-  },
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    setRedirectUrlAction,
+    getUsersInSectionAction({ section: 'judge' }),
+    getFilterCurrentJudgeUsersAction,
+    setUsersByKeyAction('judges'),
+    getCaseAction,
+    setCaseAction,
+    setDocketEntryIdAction,
+    setCourtIssuedDocumentInitialDataAction,
+    setDefaultServiceStampAction,
+    generateCourtIssuedDocumentTitleAction,
+    setIsEditingDocketEntryAction(false),
+    setupCurrentPageAction('CourtIssuedDocketEntry'),
+  ]),
 ];

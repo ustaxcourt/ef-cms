@@ -4,9 +4,7 @@ import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -48,10 +46,4 @@ export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
   },
 ]);
 
-export const gotoDocketEntryQcSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoDocketEntryQc,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoDocketEntryQcSequence = [gotoDocketEntryQc];

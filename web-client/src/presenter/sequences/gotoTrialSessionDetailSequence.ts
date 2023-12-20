@@ -3,11 +3,9 @@ import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession
 import { getEligibleCasesForTrialSessionAction } from '../actions/TrialSession/getEligibleCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
 import { mergeCaseOrderIntoEligibleCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoEligibleCasesAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { parallel } from 'cerebral/factories';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setDefaultTrialSessionDetailTabAction } from '../actions/TrialSession/setDefaultTrialSessionDetailTabAction';
@@ -46,10 +44,4 @@ const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('TrialSessionDetail'),
 ]);
 
-export const gotoTrialSessionDetailSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoTrialSessionDetails,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoTrialSessionDetailSequence = [gotoTrialSessionDetails];

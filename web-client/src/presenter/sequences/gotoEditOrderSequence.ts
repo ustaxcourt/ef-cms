@@ -3,8 +3,6 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getDocumentContentsAction } from '../actions/getDocumentContentsAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
@@ -34,13 +32,7 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('CreateOrder'),
 ]);
 
-export const gotoEditOrderSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditOrder,
-    unauthorized: [navigateToLoginSequence],
-  },
-] as unknown as (props: {
+export const gotoEditOrderSequence = [gotoEditOrder] as unknown as (props: {
   docketEntryIdToEdit: string;
   docketNumber: string;
 }) => void;

@@ -8,11 +8,9 @@ import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTri
 import { getUserCaseNoteForCasesAction } from '../actions/TrialSession/getUserCaseNoteForCasesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { gotoTrialSessionDetailSequence } from './gotoTrialSessionDetailSequence';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { isUserAssociatedWithTrialSessionAction } from '../actions/TrialSession/isUserAssociatedWithTrialSessionAction';
 import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCaseNotesOntoCalendaredCasesAction } from '../actions/TrialSession/setCaseNotesOntoCalendaredCasesAction';
@@ -83,10 +81,4 @@ const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
   },
 ]);
 
-export const gotoTrialSessionWorkingCopySequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoTrialSessionDetails,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoTrialSessionWorkingCopySequence = [gotoTrialSessionDetails];

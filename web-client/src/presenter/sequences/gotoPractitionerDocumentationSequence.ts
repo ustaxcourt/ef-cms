@@ -1,8 +1,6 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
 import { getPractitionerDocumentsAction } from '../actions/getPractitionerDocumentsAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setPractitionerDocumentsAction } from '../actions/setPractitionerDocumentsAction';
 import { setTabFromPropsAction } from '../actions/setTabFromPropsAction';
@@ -12,18 +10,14 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 
 export const gotoPractitionerDocumentationSequence = [
   showProgressSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: startWebSocketConnectionSequenceDecorator([
-        clearErrorAlertsAction,
-        setTabFromPropsAction,
-        getPractitionerDetailAction,
-        setPractitionerDetailAction,
-        getPractitionerDocumentsAction,
-        setPractitionerDocumentsAction,
-        setupCurrentPageAction('PractitionerInformation'),
-      ]),
-      unauthorized: [navigateToLoginSequence],
-    },
+    startWebSocketConnectionSequenceDecorator([
+      clearErrorAlertsAction,
+      setTabFromPropsAction,
+      getPractitionerDetailAction,
+      setPractitionerDetailAction,
+      getPractitionerDocumentsAction,
+      setPractitionerDocumentsAction,
+      setupCurrentPageAction('PractitionerInformation'),
+    ]),
   ]),
 ];
