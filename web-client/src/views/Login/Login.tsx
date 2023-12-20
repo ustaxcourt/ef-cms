@@ -44,6 +44,7 @@ export const Login = connect(
                   autoCapitalize="off"
                   autoCorrect="off"
                   className="usa-input"
+                  data-testid="email-input"
                   id="email"
                   name="email"
                   type="text"
@@ -61,6 +62,7 @@ export const Login = connect(
                 <input
                   required
                   className="usa-input"
+                  data-testid="password-input"
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
@@ -85,6 +87,7 @@ export const Login = connect(
                 </button>
                 <Button
                   className="usa-button margin-top-3"
+                  data-testid="login-button"
                   onClick={e => {
                     e.preventDefault();
                     submitLoginSequence();
