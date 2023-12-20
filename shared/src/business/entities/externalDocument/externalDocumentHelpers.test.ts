@@ -13,8 +13,6 @@ describe('external document helpers', () => {
       };
 
       addPropertyHelper({
-        errorToMessageMap: undefined,
-        itemErrorMessage: undefined,
         itemName: 'somethingElse',
         itemSchema: false,
         schema,
