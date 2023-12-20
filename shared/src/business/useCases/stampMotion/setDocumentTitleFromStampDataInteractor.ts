@@ -48,19 +48,19 @@ export const setDocumentTitleFromStampDataInteractor = ({
 
   if (strickenFromTrialSession) {
     formattedDraftDocumentTitle = formattedDraftDocumentTitle.concat(
-      ` - ${strickenFromTrialSession.toLowerCase()}`,
+      ` - ${strickenFromTrialSession}`,
     );
   }
 
   if (jurisdictionalOption) {
     formattedDraftDocumentTitle = formattedDraftDocumentTitle.concat(
-      ` - ${jurisdictionalOption.toLowerCase()}`,
+      ` - ${jurisdictionalOption}`,
     );
   }
 
   if (date) {
     formattedDraftDocumentTitle = formattedDraftDocumentTitle.concat(
-      ` - ${dueDateMessage?.toLowerCase()} ${date}`,
+      ` - ${dueDateMessage} ${date}`,
     );
   }
 
