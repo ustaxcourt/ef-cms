@@ -50,7 +50,7 @@ describe('migrateItems', () => {
     });
   });
 
-  it('should not add associatedJudgeId if the record is not a case record', () => {
+  it('should not add associatedJudgeId if the record is not a case, work item or case record', () => {
     const items = [
       {
         name: 'Colvin',
@@ -95,6 +95,55 @@ describe('migrateItems', () => {
       associatedJudge: undefined,
       pk: 'case|445-22',
       sk: 'case|445-22',
+    });
+  });
+
+  it('should add associatedJudgeId to case deadline records when there is an associated judge', () => {
+    const items = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        associatedJudge: 'Colvin',
+        pk: 'case-deadline|123-45',
+        sk: 'case-deadline|123-45',
+      },
+    ];
+    const results = migrateItems(items);
+    expect(results.length).toEqual(2);
+    expect(results[1]).toEqual({
+      associatedJudge: 'Colvin',
+      associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      pk: 'case-deadline|123-45',
+      sk: 'case-deadline|123-45',
+    });
+  });
+  it('should add associatedJudgeId to work item records when there is an associated judge', () => {
+    const items = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        associatedJudge: 'Colvin',
+        pk: 'case|445-22',
+        sk: 'work-item|123-45',
+      },
+    ];
+    const results = migrateItems(items);
+    expect(results.length).toEqual(2);
+    expect(results[1]).toEqual({
+      associatedJudge: 'Colvin',
+      associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      pk: 'case|445-22',
+      sk: 'work-item|123-45',
     });
   });
 });

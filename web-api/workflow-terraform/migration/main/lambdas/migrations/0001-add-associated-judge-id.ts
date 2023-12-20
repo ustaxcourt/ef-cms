@@ -12,6 +12,20 @@ const isCaseRecord = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('case|');
 };
 
+const isCaseDeadline = item => {
+  return (
+    item.pk.startsWith('case-deadline|') && item.sk.startsWith('case-deadline|')
+  );
+};
+
+const isWorkItem = item => {
+  return item.pk.startsWith('case|') && item.sk.startsWith('work-item|');
+};
+
+const isRecordToUpdate = item => {
+  return isCaseRecord(item) || isCaseDeadline(item) || isWorkItem(item);
+};
+
 export const migrateItems = items => {
   const judgeUserItems = items.filter(item => isJudgeUserItem(item));
 
@@ -24,7 +38,7 @@ export const migrateItems = items => {
 
   for (const item of items) {
     if (
-      isCaseRecord(item) &&
+      isRecordToUpdate(item) &&
       item.associatedJudge &&
       item.associatedJudge !== 'Chief Judge'
     ) {
