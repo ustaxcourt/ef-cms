@@ -333,9 +333,13 @@ export class Case extends JoiValidationEntity {
       .optional()
       .meta({ tags: ['Restricted'] })
       .description('Judge assigned to this case. Defaults to Chief Judge.'),
-    associatedJudgeId: JoiValidationConstants.UUID.optional().description(
-      'Judge ID assigned to this case.',
-    ),
+    associatedJudgeId: joi
+      .when('associatedJudge', {
+        is: joi.valid(CHIEF_JUDGE),
+        otherwise: JoiValidationConstants.UUID.required(),
+        then: JoiValidationConstants.UUID.optional(),
+      })
+      .description('Judge ID assigned to this case.'),
     automaticBlocked: joi
       .boolean()
       .optional()
