@@ -7,7 +7,7 @@ export const logInLambda = event =>
     async ({ applicationContext }) => {
       const { accessToken, idToken, refreshToken } = await applicationContext
         .getUseCases()
-        .logInInteractor(applicationContext, { ...JSON.parse(event.body) });
+        .loginInteractor(applicationContext, { ...JSON.parse(event.body) });
 
       const expiresAt = applicationContext.getUtilities().calculateISODate({
         dateString: applicationContext.getUtilities().createISODateString(),

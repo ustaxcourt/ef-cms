@@ -5,18 +5,19 @@
 - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 - web-client/integration-tests/petitionerCreatesAccount.test.ts
-- web-client/src/presenter/sequences/Login/refreshTokenSequence.ts
+
 
 
 ::: STUFF TO DO :::
-- finish all todos
+- finish all todos (review together - KS)
+
 - ensure back works right (public to private and back)
 - error handling
 - fix tests
 - email verification flow (just after verifying, are we going to new login with verification success message)
-- create account (move to private - client site)
+- create account (move to private - client site) 
 - Refactor ifHasAccess Function to be handled by router + initSequence 
-- delete isLoggedInAction.π
+
 - Refactor maintenance mode to be handled by router + initSequence. No other sequence needs to branch because of it.
 - invalidate old refreshToken and idToken upon refresh.
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
@@ -26,6 +27,7 @@
 
 ::: SOLO TO DO :::
 - consistent (LoginInteractor). Lets go with Login.
+- delete isLoggedInAction. (Seems to be working now - KS)
 
 
 ::: ON HOLD :::

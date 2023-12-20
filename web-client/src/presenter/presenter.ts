@@ -308,7 +308,6 @@ import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequen
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
-import { refreshTokenSequence } from '@web-client/presenter/sequences/Login/refreshTokenSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
@@ -1076,7 +1075,6 @@ export const presenterSequences = {
   prioritizeCaseSequence: prioritizeCaseSequence as unknown as Function,
   refreshPdfSequence: refreshPdfSequence as unknown as Function,
   refreshStatisticsSequence: refreshStatisticsSequence as unknown as Function,
-  refreshTokenSequence,
   removeBatchSequence: removeBatchSequence as unknown as Function,
   removeCaseDetailPendingItemSequence:
     removeCaseDetailPendingItemSequence as unknown as Function,
