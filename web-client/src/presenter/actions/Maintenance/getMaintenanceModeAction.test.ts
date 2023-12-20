@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getMaintenanceModeAction } from './getMaintenanceModeAction';
-import { presenter } from '../presenter-mock';
+import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getMaintenanceModeAction', () => {

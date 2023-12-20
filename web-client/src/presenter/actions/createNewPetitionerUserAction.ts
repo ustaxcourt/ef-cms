@@ -39,7 +39,7 @@ const errorHandler = (e, cognitoRequestPasswordResetUrl) => {
   if (originalErrorMessage === 'User already exists') {
     return {
       alertError: {
-        alertType: 'warning', // TODO 10007: Cannot use /login on public site. Maybe make /login on public side take you to private login?
+        alertType: 'warning',
         message: `This email address is already associated with an account. You can <a href="/login">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>.`,
         title: 'Email address already has an account',
       },

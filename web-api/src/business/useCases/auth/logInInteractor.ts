@@ -1,6 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-export const logInInteractor = async (
+export const loginInteractor = async (
   applicationContext: ServerApplicationContext,
   { email, password }: { email: string; password: string },
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {

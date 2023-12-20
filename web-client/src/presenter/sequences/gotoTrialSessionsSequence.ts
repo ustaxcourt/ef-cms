@@ -5,8 +5,6 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { parallel } from 'cerebral/factories';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
@@ -34,10 +32,4 @@ const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('TrialSessions'),
 ]);
 
-export const gotoTrialSessionsSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: [gotoTrialSessions],
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoTrialSessionsSequence = [gotoTrialSessions];
