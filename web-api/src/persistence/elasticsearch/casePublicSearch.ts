@@ -1,14 +1,15 @@
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
+import { CasePublicSearchRequestType } from '@shared/business/useCases/public/casePublicSearchInteractor';
+import { MAX_SEARCH_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
 import { aggregateCommonQueryParams } from '../../../../shared/src/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
 
-/**
- * casePublicSearch
- *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, endDate, startDate
- * @returns {object} the case data
- */
-export const casePublicSearch = async ({ applicationContext, searchTerms }) => {
+export const casePublicSearch = async ({
+  applicationContext,
+  searchTerms,
+}: {
+  applicationContext: IApplicationContext;
+  searchTerms: CasePublicSearchRequestType;
+}) => {
   const { commonQuery, exactMatchesQuery } =
     aggregateCommonQueryParams(searchTerms);
 
@@ -23,32 +24,45 @@ export const casePublicSearch = async ({ applicationContext, searchTerms }) => {
     'petitioners',
     'receivedAt',
     'sealedDate',
+    'isSealed',
   ];
 
-  let results;
   const query = {
     bool: {
       must: [...exactMatchesQuery, ...commonQuery],
-      must_not: {
-        exists: {
-          field: 'sealedDate',
+      must_not: [
+        {
+          exists: {
+            field: 'sealedDate',
+          },
         },
-      },
+        {
+          bool: {
+            must: [
+              {
+                term: {
+                  'isSealed.BOOL': true,
+                },
+              },
+            ],
+          },
+        },
+      ],
     },
   };
 
-  ({ results } = await search({
+  const { results } = await search({
     applicationContext,
     searchParameters: {
       body: {
         _source: sourceFields,
         min_score: 0.1,
         query,
-        size: MAX_SEARCH_CLIENT_RESULTS,
+        size: MAX_SEARCH_RESULTS,
       },
       index: 'efcms-case',
     },
-  }));
+  });
 
   return results;
 };
