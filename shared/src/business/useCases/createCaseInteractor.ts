@@ -15,6 +15,7 @@ import { UserCase } from '../entities/UserCase';
 import { WorkItem } from '../entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 
+// TODO: find usages
 const addPetitionDocketEntryToCase = ({
   applicationContext,
   caseToAdd,
@@ -26,6 +27,7 @@ const addPetitionDocketEntryToCase = ({
       assigneeId: null,
       assigneeName: null,
       associatedJudge: caseToAdd.associatedJudge,
+      associatedJudgeId: caseToAdd.associatedJudgeId,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketEntry: {
