@@ -74,7 +74,7 @@ const ifHasAccess = (
 ) => {
   return function () {
     if (app.getState('maintenanceMode')) {
-      // This prevents a user from hitting the back button when maintenance mode is on and being able to access a previos page in their history.
+      // This prevents a user from hitting the back button when maintenance mode is on and being able to access a previous page in their history.
       return app.getSequence('navigateToPathSequence')({
         path: '/maintenance',
       });
