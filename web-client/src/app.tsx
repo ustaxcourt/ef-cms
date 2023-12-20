@@ -156,11 +156,6 @@ const app = {
 
     presenter.state.clientConnectionId = applicationContext.getUniqueId();
 
-    const userPermissions = applicationContext.getCurrentUserPermissions();
-    if (userPermissions) {
-      presenter.state.permissions = userPermissions;
-    }
-
     config.autoAddCss = false;
     library.add(
       faArrowAltCircleLeftRegular,

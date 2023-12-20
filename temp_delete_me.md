@@ -21,6 +21,7 @@
 - invalidate old refreshToken and idToken upon refresh.
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
 - Make app-local.ts not create another webserver just to listen to incoming requests from cognito-local.
+- cognit to V3
 
 ::: SOLO TO DO :::
 - consistent (LoginInteractor). Lets go with Login.
