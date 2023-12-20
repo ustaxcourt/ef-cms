@@ -214,7 +214,6 @@ import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefault
 import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlinesSequence';
 import { loadMorePendingItemsSequence } from './sequences/loadMorePendingItemsSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
-import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
@@ -900,7 +899,6 @@ export const presenterSequences = {
   loadMorePendingItemsSequence:
     loadMorePendingItemsSequence as unknown as Function,
   loadPdfSequence: loadPdfSequence as unknown as Function,
-  loginWithTokenSequence: loginWithTokenSequence as unknown as Function,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
     navigateToCaseDetailFromPaperServiceSequence as unknown as Function,

@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import { forEach, set } from 'lodash';
-import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
 
@@ -1120,15 +1119,6 @@ const router = {
 
     registerRoute('/idle-logout', () => {
       return app.getSequence('gotoIdleLogoutSequence')();
-    });
-
-    registerRoute('/log-in...', () => {
-      const { path, refreshToken, token } = queryStringDecoder();
-      return app.getSequence('loginWithTokenSequence')({
-        path,
-        refreshToken,
-        token,
-      });
     });
 
     route('/login', () => {
