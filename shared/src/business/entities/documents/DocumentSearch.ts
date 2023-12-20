@@ -1,4 +1,5 @@
 import { DATE_RANGE_SEARCH_OPTIONS } from '../EntityConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import {
@@ -7,7 +8,6 @@ import {
   createStartOfDayISO,
 } from '../../utilities/DateHandler';
 import joi from 'joi';
-
 export class DocumentSearch extends JoiValidationEntity {
   public judge?: string;
   public from: number;
@@ -80,26 +80,33 @@ export class DocumentSearch extends JoiValidationEntity {
       docketNumber: JoiValidationConstants.STRING.allow('').description(
         'The docket number to filter the search results by',
       ),
-      endDate: joi.alternatives().conditional('startDate', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.ISO_DATE.format(
-          DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
-        )
-          .less(joi.ref('tomorrow'))
-          .optional()
-          .description(
-            'The end date search filter is not required if there is no start date',
-          ),
-        then: JoiValidationConstants.ISO_DATE.format(
-          DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
-        )
-          .less(joi.ref('tomorrow'))
-          .min(joi.ref('startDate'))
-          .optional()
-          .description(
-            'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
-          ),
-      }),
+      endDate: joi
+        .alternatives()
+        .conditional('startDate', {
+          is: joi.exist().not(null),
+          otherwise: JoiValidationConstants.ISO_DATE.format(
+            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+          )
+            .less(joi.ref('tomorrow'))
+            .optional()
+            .description(
+              'The end date search filter is not required if there is no start date',
+            ),
+          then: JoiValidationConstants.ISO_DATE.format(
+            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+          )
+            .less(joi.ref('tomorrow'))
+            .min(joi.ref('startDate'))
+            .optional()
+            .description(
+              'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
+            ),
+        })
+        .messages({
+          '*': 'Enter a valid end date',
+          'date.less':
+            'End date cannot be in the future. Enter valid end date.',
+        }),
       from: joi
         .number()
         .integer()
@@ -114,18 +121,25 @@ export class DocumentSearch extends JoiValidationEntity {
       keyword: JoiValidationConstants.STRING.optional()
         .allow('')
         .description('The keyword to search by'),
-      startDate: joi.alternatives().conditional('dateRange', {
-        is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        otherwise: joi.forbidden(),
-        then: JoiValidationConstants.ISO_DATE.format(
-          DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
-        )
-          .max('now')
-          .required()
-          .description(
-            'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-          ),
-      }),
+      startDate: joi
+        .alternatives()
+        .conditional('dateRange', {
+          is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+          otherwise: joi.forbidden(),
+          then: JoiValidationConstants.ISO_DATE.format(
+            DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
+          )
+            .max('now')
+            .required()
+            .description(
+              'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+            ),
+        })
+        .messages({
+          '*': 'Enter a valid start date',
+          'date.max':
+            'Start date cannot be in the future. Enter valid start date.',
+        }),
       tomorrow: joi
         .optional()
         .description(
@@ -141,29 +155,8 @@ export class DocumentSearch extends JoiValidationEntity {
         'Enter either a Docket number or a Case name/Petitioner name, not both',
     });
 
-  static VALIDATION_ERROR_MESSAGES = {
-    endDate: [
-      {
-        contains: 'must be less than',
-        message: 'End date cannot be in the future. Enter valid end date.',
-      },
-      'Enter a valid end date',
-    ],
-    startDate: [
-      {
-        contains: 'must be less than or equal to "now"',
-        message: 'Start date cannot be in the future. Enter valid start date.',
-      },
-      'Enter a valid start date',
-    ],
-  } as const;
-
   getValidationRules() {
     return DocumentSearch.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return DocumentSearch.VALIDATION_ERROR_MESSAGES;
   }
 }
 
