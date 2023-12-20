@@ -823,19 +823,21 @@ export const uploadPetition = async (
   return response.data;
 };
 
-export const loginAs = (cerebralTest, user) =>
-  it(`login as ${user}`, async () => {
+export const loginAs = (cerebralTest, email) =>
+  it(`login as ${email}`, async () => {
     await cerebralTest.runSequence('signOutSequence');
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'name',
-      value: user,
+      key: 'email',
+      value: email,
     });
 
-    // TODO 10007: We removed submitLocalLoginSequence Here. Is that Okay?
-    // await cerebralTest.runSequence('submitLocalLoginSequence', {
-    //   path: '/',
-    // });
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'password',
+      value: 'Testing1234$',
+    });
+
+    await cerebralTest.runSequence('submitLoginSequence');
 
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
