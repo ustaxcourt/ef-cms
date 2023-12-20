@@ -45,8 +45,8 @@ describe('Maintenance mode', () => {
     getLoginHeader().should('exist');
   });
 
-  it('should show the maintenance page if they log in and maintenance mode is engaged', () => {
-    loginAs('petitionsclerk');
+  it('should show the maintenance page when the user tries to log in and maintenance mode is engaged', () => {
+    cy.visit('/login');
     getMaintenancePageContent().should('exist');
   });
 });

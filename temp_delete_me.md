@@ -12,16 +12,18 @@
 ::: STUFF TO DO :::
 - finish all todos
 - ensure back works right (public to private and back)
-- Handle maintenance mode on login in app.tsx
 - error handling
 - fix tests
 - email verification flow (just after verifying, are we going to new login with verification success message)
 - create account (move to private - client site)
-- Refactor ifHasAccess Function and delete isLoggedInAction.
+- Refactor ifHasAccess Function to be handled by router + initSequence 
+- delete isLoggedInAction.π
+- Refactor maintenance mode to be handled by router + initSequence. No other sequence needs to branch because of it.
 - invalidate old refreshToken and idToken upon refresh.
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
 - Make app-local.ts not create another webserver just to listen to incoming requests from cognito-local.
 - cognit to V3
+
 
 ::: SOLO TO DO :::
 - consistent (LoginInteractor). Lets go with Login.

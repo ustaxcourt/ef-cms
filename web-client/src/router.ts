@@ -80,36 +80,24 @@ const ifHasAccess = (
     app,
     permissionToCheck,
     redirect = accessRedirects,
-    skipMaintenanceCheck,
   }: {
     app;
     permissionToCheck?: string;
     redirect?: any;
-    skipMaintenanceCheck?: boolean;
   },
   cb,
 ) => {
   return function () {
     if (!app.getState('token')) {
       return app.getSequence('navigateToLoginSequence')();
-    } else if (app.getState('maintenanceMode')) {
-      if (!skipMaintenanceCheck) {
-        return redirect.gotoMaintenancePage(app);
-      } else {
-        app.getSequence('clearAlertSequence')();
-        return cb.apply(null, arguments);
-      }
-    } else {
-      if (
-        permissionToCheck &&
-        !app.getState('permissions')[permissionToCheck]
-      ) {
-        redirect.goto404(app);
-      } else {
-        app.getSequence('clearAlertSequence')();
-        return cb.apply(null, arguments);
-      }
     }
+
+    if (permissionToCheck && !app.getState('permissions')[permissionToCheck]) {
+      return redirect.goto404(app);
+    }
+
+    app.getSequence('clearAlertSequence')();
+    return cb.apply(null, arguments);
   };
 };
 
@@ -1377,13 +1365,10 @@ const router = {
       return app.getSequence('gotoContactSequence')();
     });
 
-    registerRoute(
-      '/maintenance',
-      ifHasAccess({ app, skipMaintenanceCheck: true }, () => {
-        setPageTitle('Maintenance');
-        return app.getSequence('gotoMaintenanceSequence')();
-      }),
-    );
+    registerRoute('/maintenance', () => {
+      setPageTitle('Maintenance');
+      return app.getSequence('gotoMaintenanceSequence')();
+    });
 
     registerRoute(
       '..',

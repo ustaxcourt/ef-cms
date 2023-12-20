@@ -630,6 +630,7 @@ export const baseState = {
   lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   login: {} as any,
+  maintenanceMode: false,
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
