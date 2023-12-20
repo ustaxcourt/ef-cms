@@ -60,10 +60,9 @@ describe('Petitions clerk QCs a case with innocent spouse', () => {
       'have.text',
       '111-111-1111',
     );
-    cy.get('[data-testid="contact-info-email-address"]').should(
+    cy.get('.content-wrapper > :nth-child(4)').should(
       'have.text',
       'petitioner1@example.com',
     );
-    /* ==== End Cypress Studio ==== */
   });
 });

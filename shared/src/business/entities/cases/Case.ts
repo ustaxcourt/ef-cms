@@ -2187,7 +2187,7 @@ export const userIsDirectlyAssociated = function ({ aCase, userId }) {
 };
 
 /**
- * Computes and sets additionalName for contactPrimary depending on partyType
+ * Computes and sets additionalName for contactPrimary / contactSecondary depending on partyType
  */
 export const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
   const contactPrimary = getContactPrimary(rawCase);

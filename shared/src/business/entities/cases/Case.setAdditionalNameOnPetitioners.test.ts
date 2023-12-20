@@ -4,8 +4,11 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../EntityConstants';
-import { Case, getContactPrimary } from './Case';
-import { MOCK_CASE } from '../../../test/mockCase';
+import { Case, getContactPrimary, getContactSecondary } from './Case';
+import {
+  MOCK_CASE,
+  MOCK_CASE_WITH_PETITIONER_DECEASED_SPOUSE,
+} from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('setAdditionalNameOnPetitioners', () => {
@@ -20,7 +23,6 @@ describe('setAdditionalNameOnPetitioners', () => {
     PARTY_TYPES.nextFriendForMinor,
     PARTY_TYPES.partnershipOtherThanTaxMatters,
     PARTY_TYPES.partnershipBBA,
-    PARTY_TYPES.survivingSpouse,
     PARTY_TYPES.trust,
   ];
 
@@ -50,6 +52,28 @@ describe('setAdditionalNameOnPetitioners', () => {
 
       expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
     });
+  });
+
+  it('should set additionalName as "c/o secondaryName" when party type is Surviving spouse', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        partyType: 'Surviving spouse',
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
+            secondaryName: mockSecondaryName,
+          },
+        ],
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      { applicationContext },
+    );
+
+    expect(myCase.petitioners[0].additionalName).toBe(
+      `c/o ${mockSecondaryName}`,
+    );
   });
 
   it('should set additionalName as `name of executor, title` when partyType is estateWithExecutor', () => {
@@ -200,12 +224,14 @@ describe('setAdditionalNameOnPetitioners', () => {
   it('should set additionalName as `secondaryName` when partyType is petitionerDeceasedSpouse', () => {
     const myCase = new Case(
       {
-        ...MOCK_CASE,
+        ...MOCK_CASE_WITH_PETITIONER_DECEASED_SPOUSE,
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         petitioners: [
           {
-            ...getContactPrimary(MOCK_CASE),
-            contactType: CONTACT_TYPES.petitioner,
+            ...getContactPrimary(MOCK_CASE_WITH_PETITIONER_DECEASED_SPOUSE),
+          },
+          {
+            ...getContactSecondary(MOCK_CASE_WITH_PETITIONER_DECEASED_SPOUSE),
             inCareOf: mockInCareOf,
           },
         ],
@@ -214,7 +240,8 @@ describe('setAdditionalNameOnPetitioners', () => {
       { applicationContext },
     );
 
-    expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
+    expect(myCase.petitioners[0].additionalName).not.toBeDefined();
+    expect(myCase.petitioners[1].additionalName).toBe(`c/o ${mockInCareOf}`);
   });
 
   it('should NOT set additionalName when it has already been set', () => {
