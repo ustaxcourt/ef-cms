@@ -2,8 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { resetAddCorrespondenceAction } from '../actions/resetAddCorrespondenceAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -24,9 +22,5 @@ const gotoUploadCorrespondenceDocument =
   ]);
 
 export const gotoUploadCorrespondenceDocumentSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: [gotoUploadCorrespondenceDocument],
-    unauthorized: [navigateToLoginSequence],
-  },
+  gotoUploadCorrespondenceDocument,
 ];

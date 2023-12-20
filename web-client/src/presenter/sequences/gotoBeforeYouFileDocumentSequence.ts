@@ -1,6 +1,4 @@
 import { getCaseAction } from '../actions/getCaseAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -14,10 +12,4 @@ const gotoBeforeYouFileDocument = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('BeforeYouFileADocument'),
 ]);
 
-export const gotoBeforeYouFileDocumentSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoBeforeYouFileDocument,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoBeforeYouFileDocumentSequence = [gotoBeforeYouFileDocument];

@@ -9,8 +9,6 @@ import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesFor
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getOutboxMessagesForSectionAction } from '../actions/getOutboxMessagesForSectionAction';
 import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForUserAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { parallel } from 'cerebral';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
@@ -46,10 +44,4 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('Messages'),
 ]);
 
-export const gotoMessagesSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: goToMessages,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoMessagesSequence = [goToMessages];

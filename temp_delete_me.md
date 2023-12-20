@@ -27,7 +27,6 @@
 
 ::: SOLO TO DO :::
 - consistent (LoginInteractor). Lets go with Login.
-- delete isLoggedInAction. (Seems to be working now - KS)
 
 
 ::: ON HOLD :::

@@ -4,8 +4,6 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { parallel } from 'cerebral/factories';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setDefaultCaseDeadlinesReportDatesAction } from '../actions/CaseDeadline/setDefaultCaseDeadlinesReportDatesAction';
@@ -31,10 +29,4 @@ const gotoCaseDeadlineReport = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('CaseDeadlines'),
 ]);
 
-export const gotoCaseDeadlineReportSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoCaseDeadlineReport,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoCaseDeadlineReportSequence = [gotoCaseDeadlineReport];

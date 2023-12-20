@@ -2,8 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -33,9 +31,5 @@ export const gotoEditPaperFiling = [
 ];
 
 export const gotoEditPaperFilingSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditPaperFiling),
-    unauthorized: [navigateToLoginSequence],
-  },
+  startWebSocketConnectionSequenceDecorator(gotoEditPaperFiling),
 ];

@@ -9,8 +9,6 @@ import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpen
 import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
@@ -124,10 +122,4 @@ const goToDashboard = [
   },
 ];
 
-export const gotoDashboardSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: [goToDashboard],
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoDashboardSequence = [goToDashboard];

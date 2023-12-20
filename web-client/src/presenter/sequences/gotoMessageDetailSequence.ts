@@ -6,8 +6,6 @@ import { getJudgesCaseNoteForCaseAction } from '@web-client/presenter/actions/Tr
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { getShouldMarkMessageAsReadAction } from '../actions/getShouldMarkMessageAsReadAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setDefaultIsExpandedAction } from '../actions/setDefaultIsExpandedAction';
@@ -48,10 +46,4 @@ const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
   ]),
 );
 
-export const gotoMessageDetailSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoMessageDetail,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoMessageDetailSequence = [gotoMessageDetail];

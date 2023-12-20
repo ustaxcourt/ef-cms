@@ -4,8 +4,6 @@ import { clearPendingReportsAction } from '../actions/PendingItems/clearPendingR
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
@@ -20,10 +18,4 @@ const gotoPendingReport = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('PendingReport'),
 ]);
 
-export const gotoPendingReportSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoPendingReport,
-    unauthorized: [navigateToLoginSequence],
-  },
-];
+export const gotoPendingReportSequence = [gotoPendingReport];
