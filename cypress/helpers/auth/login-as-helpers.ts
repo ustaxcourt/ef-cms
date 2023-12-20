@@ -4,7 +4,7 @@ export function loginAsTestAdmissionsClerk() {
 }
 
 export function loginAsPrivatePractitioner() {
-  cy.login('privatePractitioner1');
+  cy.login('privatepractitioner1');
   cy.get('[data-testid="file-a-petition"]').should('exist');
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
   cy.get('[data-testid="open-cases-count"]').contains('Open Cases');

@@ -6,7 +6,7 @@ describe('Private practitioner mobile', () => {
   });
 
   it('should have access to case, order, and opinion advanced searches (and NOT practitioner advanced search)', () => {
-    navigateToDashboard('privatePractitioner');
+    navigateToDashboard('privatepractitioner');
 
     cy.get('[data-testid="advanced-search-link"]').click();
 
