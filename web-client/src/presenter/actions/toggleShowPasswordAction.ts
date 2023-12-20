@@ -1,3 +1,6 @@
-export const toggleShowPasswordAction = ({ props, store }: ActionProps) => {
+export const toggleShowPasswordAction = ({
+  props,
+  store,
+}: ActionProps<{ passwordType: string }>) => {
   store.toggle(props.passwordType);
 };

@@ -704,6 +704,7 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   setSelectedConsolidatedCasesToMultiDocketOn: false,
+  showPassword: false,
   showValidation: false,
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],

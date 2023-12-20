@@ -439,6 +439,7 @@ import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMenuStateSequence } from './sequences/toggleMenuStateSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
+import { toggleShowPasswordSequence } from './sequences/toggleShowPasswordSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { toggleUseContactPrimaryAddressSequence } from './sequences/toggleUseContactPrimaryAddressSequence';
 import { toggleUseExistingAddressSequence } from './sequences/toggleUseExistingAddressSequence';
@@ -1294,6 +1295,7 @@ export const presenterSequences = {
   toggleMobileDocketSortSequence:
     toggleMobileDocketSortSequence as unknown as Function,
   toggleMobileMenuSequence: toggleMobileMenuSequence as unknown as Function,
+  toggleShowPasswordSequence,
   toggleUsaBannerDetailsSequence:
     toggleUsaBannerDetailsSequence as unknown as Function,
   toggleUseContactPrimaryAddressSequence:
@@ -1531,6 +1533,7 @@ declare global {
     applicationContext: ApplicationContext;
     get: <T>(slice: T) => T;
     store: {
+      toggle: (key: string) => void;
       set: (key: any, value: any) => void;
       merge: (key: any, value: any) => void;
       unset: (key: any) => void;
