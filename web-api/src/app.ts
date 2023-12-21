@@ -273,10 +273,7 @@ app.use(logger());
     '/api/court-issued-order',
     lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
   );
-  app.post(
-    '/api/docket-record-pdf',
-    lambdaWrapper(generateDocketRecordPdfLambda),
-  );
+  app.post('/api/  record-pdf', lambdaWrapper(generateDocketRecordPdfLambda));
 }
 
 /**
@@ -969,11 +966,6 @@ app.get(
     '/v2/cases/:docketNumber/entries/:key/document-download-url',
     lambdaWrapper(v2GetDocumentDownloadUrlLambda),
   );
-  app.get(
-    '/v2/reconciliation-report/:reconciliationDate/:reconciliationDateEnd',
-    lambdaWrapper(v2GetReconciliationReportLambda),
-  );
-
   app.get(
     '/v2/reconciliation-report/:reconciliationDate',
     lambdaWrapper(v2GetReconciliationReportLambda),

@@ -604,7 +604,7 @@ export function calculateDifferenceInHours(
   return dt1.diff(dt2, 'hour').hours;
 }
 
-const isValidDate = dateString => {
+export const isValidReconciliationDate = dateString => {
   const dateInputValid = isValidISODate(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
@@ -614,10 +614,9 @@ const isValidDate = dateString => {
 /**
  * Return an IsoDateRange containing start/end ISO time stamps given a starting partial ISO Date and
  * an optional partial end date.  A "partial" ISO date may be any portion of an ISO date is still
- * considered a valid ISO date, e.g. ("2022", "2022-01", "2022-01-02").  Additionally, the start
- * date parameter may be the string literal 'today'.
+ * considered a valid ISO date, e.g. ("2022", "2022-01", "2022-01-02").
  *
- * @param {string} dateStart any valid ISO-8601 date string, or 'today'.
+ * @param {string} dateStart any valid ISO-8601 date string
  * @param {string} dateEnd any valid ISO-8601 date string.
  * @returns {IsoDateRange} date range containing fully-formed ISO date+time strings in UTC format
  * @throws Error if start or end date strings are invalid.
@@ -626,13 +625,8 @@ export function normalizeIsoDateRange(
   dateStart: string,
   dateEnd?: string,
 ): IsoDateRange {
-  if (dateStart === 'today') {
-    dateStart = formatNow(FORMATS.YYYYMMDD);
-  } else {
-    const dateInputValid = isValidDate(dateStart);
-    if (!dateInputValid) {
-      throw new Error('Date must be formatted as ISO and not later than today');
-    }
+  if (isValidReconciliationDate(dateStart)) {
+    throw new Error('Date must be formatted as ISO and not later than today');
   }
   //If no end date specified, set it to end of the same day as start date
   if (!dateEnd) {
@@ -658,4 +652,7 @@ export function normalizeIsoDateRange(
     end: dtReconciliationDateEnd.toUTC().toISO(),
     start: dtReconciliationDateStart.toUTC().toISO()!,
   };
+
+  //validate time string
+  //create IsoDateRange from day + time range
 }

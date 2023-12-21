@@ -133,7 +133,7 @@ describe('View and manage the deadlines of a case', () => {
     );
   });
 
-  it('gets the v2 reconciliation report for the provided date', async () => {
+  it('gets the v2 reconciliation report for the provided date "today"', async () => {
     const { data: response } = await axios.get(
       'http://localhost:4000/v2/reconciliation-report/today',
       {
@@ -149,5 +149,27 @@ describe('View and manage the deadlines of a case', () => {
       reportTitle: 'Reconciliation Report',
       totalDocketEntries: expect.any(Number),
     });
+  });
+
+  it('gets the v2 reconciliation report for the provided date', async () => {
+    //use a date that will be found in our seed data
+    // const dateArg = '2022-02-01';
+    const dateArg = '2023-04-03T15:52:36Z';
+    const { data: response } = await axios.get(
+      `http://localhost:4000/v2/reconciliation-report/${dateArg}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+    );
+
+    expect(response).toMatchObject({
+      docketEntries: expect.arrayContaining([]),
+      reconciliationDate: expect.anything(),
+      reportTitle: 'Reconciliation Report',
+      totalDocketEntries: expect.any(Number),
+    });
+    expect(response.totalDocketEntries).toBeGreaterThan(0);
   });
 });
