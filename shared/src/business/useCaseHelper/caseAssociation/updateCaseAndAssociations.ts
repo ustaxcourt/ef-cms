@@ -415,10 +415,10 @@ const updateCaseDeadlines = async ({
       docketNumber: caseToUpdate.docketNumber,
     });
 
-  deadlines.forEach(
-    caseDeadline =>
-      (caseDeadline.associatedJudge = caseToUpdate.associatedJudge),
-  );
+  deadlines.forEach(caseDeadline => {
+    caseDeadline.associatedJudge = caseToUpdate.associatedJudge;
+    caseDeadline.associatedJudgeId = caseToUpdate.associatedJudgeId;
+  });
   const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines, {
     applicationContext,
   });
