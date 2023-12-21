@@ -15,37 +15,39 @@ describe('Pending Motions Table', () => {
     cy.get('[class="modal-screen"]').should('be.visible');
 
     const finalBriefDueDate = generateRandomDate();
-    const [statusOfMatterKey, statusOfMatterLabel] =
-      selectRandomStatusOfMatterEntry();
-    const primaryIssue = finalBriefDueDate.longFormat + statusOfMatterLabel;
-    cy.get(
-      '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
-    ).clear();
+    selectRandomStatusOfMatterEntry(
+      '[data-testid^="select-status-of-matter-"]',
+    ).then(([statusOfMatterKey, statusOfMatterLabel]) => {
+      const primaryIssue = finalBriefDueDate.longFormat + statusOfMatterLabel;
+      cy.get(
+        '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
+      ).clear();
 
-    cy.get(
-      '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
-    ).type(finalBriefDueDate.longFormat);
+      cy.get(
+        '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
+      ).type(finalBriefDueDate.longFormat);
 
-    cy.get('#status-of-matter-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').select(
-      statusOfMatterKey,
-    );
+      cy.get('#status-of-matter-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').select(
+        statusOfMatterKey,
+      );
 
-    cy.get('#primary-issue-label-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').type(
-      primaryIssue,
-    );
+      cy.get('#primary-issue-label-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').type(
+        primaryIssue,
+      );
 
-    cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('[data-testid="modal-confirm"]').click();
 
-    cy.get('@firstRow')
-      .find('td')
-      .eq(6)
-      .should('contain.text', finalBriefDueDate.shortFormat);
+      cy.get('@firstRow')
+        .find('td')
+        .eq(6)
+        .should('contain.text', finalBriefDueDate.shortFormat);
 
-    cy.get('@firstRow')
-      .find('td')
-      .eq(7)
-      .should('contain.text', statusOfMatterLabel);
-    cy.get('@pendingMotions').eq(1).should('contain.text', primaryIssue);
+      cy.get('@firstRow')
+        .find('td')
+        .eq(7)
+        .should('contain.text', statusOfMatterLabel);
+      cy.get('@pendingMotions').eq(1).should('contain.text', primaryIssue);
+    });
   });
 
   it("should display the pending motion table for Judge Colvin Chamber's", () => {
@@ -64,37 +66,39 @@ describe('Pending Motions Table', () => {
     cy.get('[class="modal-screen"]').should('be.visible');
 
     const finalBriefDueDate = generateRandomDate();
-    const [statusOfMatterKey, statusOfMatterLabel] =
-      selectRandomStatusOfMatterEntry();
-    const primaryIssue = finalBriefDueDate.longFormat + statusOfMatterLabel;
-    cy.get(
-      '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
-    ).clear();
+    selectRandomStatusOfMatterEntry(
+      '[data-testid^="select-status-of-matter-"]',
+    ).then(([statusOfMatterKey, statusOfMatterLabel]) => {
+      const primaryIssue = finalBriefDueDate.longFormat + statusOfMatterLabel;
+      cy.get(
+        '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
+      ).clear();
 
-    cy.get(
-      '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
-    ).type(finalBriefDueDate.longFormat);
+      cy.get(
+        '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
+      ).type(finalBriefDueDate.longFormat);
 
-    cy.get('#status-of-matter-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').select(
-      statusOfMatterKey,
-    );
+      cy.get('#status-of-matter-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').select(
+        statusOfMatterKey,
+      );
 
-    cy.get('#primary-issue-label-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').type(
-      primaryIssue,
-    );
+      cy.get('#primary-issue-label-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').type(
+        primaryIssue,
+      );
 
-    cy.get('[data-testid="modal-confirm"]').click();
+      cy.get('[data-testid="modal-confirm"]').click();
 
-    cy.get('@firstRow')
-      .find('td')
-      .eq(6)
-      .should('contain.text', finalBriefDueDate.shortFormat);
+      cy.get('@firstRow')
+        .find('td')
+        .eq(6)
+        .should('contain.text', finalBriefDueDate.shortFormat);
 
-    cy.get('@firstRow')
-      .find('td')
-      .eq(7)
-      .should('contain.text', statusOfMatterLabel);
-    cy.get('@pendingMotions').eq(1).should('contain.text', primaryIssue);
+      cy.get('@firstRow')
+        .find('td')
+        .eq(7)
+        .should('contain.text', statusOfMatterLabel);
+      cy.get('@pendingMotions').eq(1).should('contain.text', primaryIssue);
+    });
   });
 });
 
@@ -113,20 +117,35 @@ function generateRandomDate() {
   };
 }
 
-function selectRandomStatusOfMatterEntry(): [string, string] {
-  const statusOfMatter = {
-    AwaitingBriefs: 'Awaiting Briefs',
-    AwaitingConsideration: 'Awaiting Consideration',
-    AwaitingRelease: 'Awaiting Release',
-    Drafting: 'Drafting',
-    ReviewingDraft: 'Reviewing Draft',
-    RevisingDraft: 'Revising Draft',
-    Stayed: 'Stayed',
-    SubmittedToChiefJudge: 'Submitted to Chief Judge',
-    SubmittedToReporter: 'Submitted to Reporter',
-  };
+// function selectRandomStatusOfMatterEntry(): [string, string] {
+//   const statusOfMatter = {
+//     AwaitingBriefs: 'Awaiting Briefs',
+//     AwaitingConsideration: 'Awaiting Consideration',
+//     AwaitingRelease: 'Awaiting Release',
+//     Drafting: 'Drafting',
+//     ReviewingDraft: 'Reviewing Draft',
+//     RevisingDraft: 'Revising Draft',
+//     Stayed: 'Stayed',
+//     SubmittedToChiefJudge: 'Submitted to Chief Judge',
+//     SubmittedToReporter: 'Submitted to Reporter',
+//   };
 
-  const statusOfMatterEntries = Object.entries(statusOfMatter);
-  const randomIndex = Math.floor(Math.random() * statusOfMatterEntries.length);
-  return statusOfMatterEntries[randomIndex];
+//   const statusOfMatterEntries = Object.entries(statusOfMatter);
+//   const randomIndex = Math.floor(Math.random() * statusOfMatterEntries.length);
+//   return statusOfMatterEntries[randomIndex];
+// }
+
+function selectRandomStatusOfMatterEntry(
+  selector: string,
+): Cypress.Chainable<[string, string]> {
+  return cy.get(selector).then(selectElement => {
+    const options = Cypress.$(selectElement).find('option:not(:first-child)');
+    const randomIndex = Math.floor(Math.random() * options.length);
+    const selectedOption = options[randomIndex];
+    const value: string = Cypress.$(selectedOption).val()?.toString() || '';
+    const innerText = Cypress.$(selectedOption).text();
+
+    const results: [string, string] = [value, innerText];
+    return results;
+  });
 }
