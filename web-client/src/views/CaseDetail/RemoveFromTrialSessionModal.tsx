@@ -118,9 +118,17 @@ export const RemoveFromTrialSessionModal = connect(
                 name="associatedJudge"
                 value={modal.associatedJudge}
                 onChange={e => {
+                  const selectedJudgeName = e.target.value;
+                  const selectedJudge = modal.judges.find(
+                    judge => judge.name === selectedJudgeName,
+                  );
                   updateModalValueSequence({
                     key: e.target.name,
-                    value: e.target.value,
+                    value: selectedJudge.name,
+                  });
+                  updateModalValueSequence({
+                    key: 'associatedJudgeId',
+                    value: selectedJudge.userId,
                   });
                   validateRemoveFromTrialSessionSequence();
                 }}
