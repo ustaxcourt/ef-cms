@@ -9,6 +9,7 @@ export const unauthedUserSearchesForOrderByKeyword = (
   testClient,
 ) => {
   return it('Search for order by keyword', async () => {
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
     await refreshElasticsearchIndex();
 
     cerebralTest.setState('advancedSearchForm', {
