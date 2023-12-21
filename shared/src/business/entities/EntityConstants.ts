@@ -1116,6 +1116,10 @@ const statesArray = [
 ];
 export type States = (typeof statesArray)[number];
 
+export type AbbrevatedStates =
+  | keyof typeof US_STATES
+  | keyof typeof US_STATES_OTHER;
+
 export const STATE_NOT_AVAILABLE = 'N/A';
 
 export const PARTY_TYPES = {
