@@ -51,6 +51,11 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted =
         value: 'Judge Buch',
       });
 
+      await cerebralTest.runSequence('updateModalValueSequence', {
+        key: 'associatedJudgeId',
+        value: 'dabbad02-18d0-43ec-bafb-654e83405416',
+      });
+
       await cerebralTest.runSequence('submitUpdateCaseModalSequence');
 
       expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -60,6 +65,9 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted =
       );
       expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
         'Judge Buch',
+      );
+      expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
+        'dabbad02-18d0-43ec-bafb-654e83405416',
       );
       expect(cerebralTest.getState('modal')).toEqual({});
     });
