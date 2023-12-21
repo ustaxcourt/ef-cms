@@ -5,6 +5,18 @@ jest.mock('./searchClient');
 import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
 
+jest.mock(
+  './../../../../shared/src/business/utilities/aggregateCommonQueryParams',
+  () => {
+    return {
+      aggregateCommonQueryParams: () => ({
+        commonQuery: ['commonQueryMock'],
+        exactMatchesQuery: ['exactMatchesQuery'],
+      }),
+    };
+  },
+);
+
 describe('casePublicSearch', () => {
   const searchTerms: CasePublicSearchRequestType = {
     petitionerName: 'test person',
@@ -12,69 +24,26 @@ describe('casePublicSearch', () => {
 
   search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
 
-  const mustClause = [
+  const mustNotClause = [
     {
-      bool: {
-        should: [
-          {
-            simple_query_string: {
-              boost: 20,
-              default_operator: 'and',
-              fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
-              flags: 'AND|PHRASE|PREFIX',
-              query: '"test person"',
-            },
-          },
-          {
-            simple_query_string: {
-              boost: 0.5,
-              default_operator: 'and',
-              fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
-              flags: 'AND|PHRASE|PREFIX',
-              query: 'test person',
-            },
-          },
-        ],
+      exists: {
+        field: 'sealedDate',
       },
     },
     {
-      match: {
-        'entityName.S': 'Case',
+      bool: {
+        must: [
+          {
+            term: {
+              'isSealed.BOOL': true,
+            },
+          },
+        ],
       },
     },
   ];
 
-  const mustNotClause = [
-    {
-      bool: {
-        should: [
-          {
-            simple_query_string: {
-              boost: 20,
-              default_operator: 'and',
-              fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
-              flags: 'AND|PHRASE|PREFIX',
-              query: '"test person"',
-            },
-          },
-          {
-            simple_query_string: {
-              boost: 0.5,
-              default_operator: 'and',
-              fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
-              flags: 'AND|PHRASE|PREFIX',
-              query: 'test person',
-            },
-          },
-        ],
-      },
-    },
-    {
-      match: {
-        'entityName.S': 'Case',
-      },
-    },
-  ];
+  const mustClause = ['exactMatchesQuery', 'commonQueryMock'];
 
   it('returns results from an exact-matches query', async () => {
     await casePublicSearch({
