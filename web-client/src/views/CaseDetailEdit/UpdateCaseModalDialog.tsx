@@ -110,13 +110,17 @@ export const UpdateCaseModalDialog = connect(
                 name="associatedJudge"
                 value={modal.associatedJudge}
                 onChange={e => {
+                  const selectedJudgeName = e.target.value;
+                  const selectedJudge = modal.judges.find(
+                    judge => judge.name === selectedJudgeName,
+                  );
                   updateModalValueSequence({
                     key: e.target.name,
-                    value: e.target.value[0],
+                    value: selectedJudge.name,
                   });
                   updateModalValueSequence({
                     key: 'associatedJudgeId',
-                    value: e.target.value[1],
+                    value: selectedJudge.userId,
                   });
                   validateUpdateCaseModalSequence();
                 }}
@@ -124,10 +128,7 @@ export const UpdateCaseModalDialog = connect(
                 <option value="">- Select -</option>
                 <option value="Chief Judge">Chief Judge</option>
                 {modal.judges.map(judgeUser => (
-                  <option
-                    key={judgeUser.userId}
-                    value={[judgeUser.name, judgeUser.userId]}
-                  >
+                  <option key={judgeUser.userId} value={judgeUser.name}>
                     {judgeUser.name}
                   </option>
                 ))}
