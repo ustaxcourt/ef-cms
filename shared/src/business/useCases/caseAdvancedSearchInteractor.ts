@@ -1,4 +1,8 @@
-import { MAX_SEARCH_RESULTS } from '../entities/EntityConstants';
+import {
+  CountryTypes,
+  MAX_SEARCH_RESULTS,
+  States,
+} from '../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -10,13 +14,14 @@ import {
   createStartOfDayISO,
 } from '../utilities/DateHandler';
 
-/**
- * caseAdvancedSearchInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, endDate, startDate
- * @returns {object} the case data
- */
+export type CaseAdvancedSearchParamsRequestType = {
+  petitionerName: string;
+  countryType?: CountryTypes;
+  petitionerState?: States;
+  endDate?: string;
+  startDate?: string;
+};
+
 export const caseAdvancedSearchInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -25,13 +30,7 @@ export const caseAdvancedSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
-  }: {
-    countryType: string;
-    petitionerName: string;
-    petitionerState: string;
-    endDate: string;
-    startDate: string;
-  },
+  }: CaseAdvancedSearchParamsRequestType,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
   let searchStartDate;
