@@ -1,7 +1,7 @@
 import {
+  AbbrevatedStates,
   CountryTypes,
   MAX_SEARCH_RESULTS,
-  States,
 } from '../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -17,7 +17,7 @@ import {
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
   countryType?: CountryTypes;
-  petitionerState?: States; // todo: states should be the abbrevated type
+  petitionerState?: AbbrevatedStates;
   endDate?: string;
   startDate?: string;
 };
