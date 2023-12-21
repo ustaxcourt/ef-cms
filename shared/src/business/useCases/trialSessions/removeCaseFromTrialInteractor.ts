@@ -11,12 +11,14 @@ export const removeCaseFromTrial = async (
   applicationContext: IApplicationContext,
   {
     associatedJudge,
+    associatedJudgeId,
     caseStatus,
     disposition,
     docketNumber,
     trialSessionId,
   }: {
     associatedJudge: string;
+    associatedJudgeId: string;
     caseStatus: string;
     disposition: string;
     docketNumber: string;
@@ -67,6 +69,7 @@ export const removeCaseFromTrial = async (
   if (!caseEntity.isHearing(trialSessionId)) {
     caseEntity.removeFromTrial({
       associatedJudge,
+      associatedJudgeId,
       changedBy: user.name,
       updatedCaseStatus: caseStatus,
     });
