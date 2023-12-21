@@ -82,6 +82,7 @@ export const CaseDetailInternal = connect(
             <Tabs
               bind="currentViewMetadata.caseDetail.trackedItemsTab"
               className="classic-horizontal-header3 tab-border"
+              marginBottom={false}
             >
               <Tab id="tab-deadlines" tabName="deadlines" title="Deadlines">
                 <CaseDeadlinesInternal />
