@@ -1,4 +1,12 @@
 import { DocketEntryDynamoRecord } from '../../../../web-api/src/persistence/dynamo/dynamoTypes';
+import {
+  FORMATS,
+  calculateDifferenceInHours,
+  formatNow,
+  isValidDateString,
+  isValidReconciliationDate,
+  normalizeIsoDateRange,
+} from '../../business/utilities/DateHandler';
 import { InvalidRequest } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -6,12 +14,12 @@ import {
 } from '../../authorization/authorizationClientService';
 import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import {
-  calculateDifferenceInHours,
-  normalizeIsoDateRange,
-} from '../../business/utilities/DateHandler';
 
 const MAX_TIMESPAN_HOURS = 24;
+
+function isValidTime(time: string): boolean {
+  return isValidDateString(time, [FORMATS.TIME_24_HOUR]);
+}
 
 /**
  * getReconciliationReportInteractor
@@ -25,20 +33,39 @@ export const getReconciliationReportInteractor = async (
   applicationContext: IApplicationContext,
   {
     reconciliationDate,
-    reconciliationDateEnd,
-  }: { reconciliationDate: string; reconciliationDateEnd?: string },
+    timeEnd,
+    timeStart,
+  }: {
+    reconciliationDate: string;
+    timeEnd?: string;
+    timeStart?: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVICE_SUMMARY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const effectiveTimeStart = isValidTime(timeStart!) ? timeStart : '00:00';
+  const effectiveTimeEnd = isValidTime(timeEnd!)
+    ? `${timeEnd}:59.999`
+    : '23:59:59.999';
+
+  if (!isValidReconciliationDate(reconciliationDate)) {
+    throw new InvalidRequest("Must be valid reconciliation date or 'today'");
+  }
+
+  const effectiveReconciliationDate =
+    reconciliationDate == 'today'
+      ? formatNow(FORMATS.YYYYMMDD)
+      : reconciliationDate;
+
+  //convert to full iso-8601 time stamps in utc timezone
   const { end: isoEnd, start: isoStart } = normalizeIsoDateRange(
-    reconciliationDate,
-    reconciliationDateEnd,
+    `${effectiveReconciliationDate}T${effectiveTimeStart}`,
+    `${effectiveReconciliationDate}T${effectiveTimeEnd}`,
   );
-  // console.log(`isoEnd: ${isoEnd}`);
+
   const hours = calculateDifferenceInHours(isoEnd, isoStart);
   if (hours > MAX_TIMESPAN_HOURS) {
     throw new InvalidRequest(
