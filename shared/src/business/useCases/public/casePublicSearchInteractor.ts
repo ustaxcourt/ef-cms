@@ -1,16 +1,9 @@
-import { PublicCase } from '../../entities/cases/PublicCase';
+import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
+import { CasePublicSearchResultsType } from '@web-api/persistence/elasticsearch/casePublicSearch';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '../../utilities/DateHandler';
-
-export type CasePublicSearchRequestType = {
-  countryType?: string;
-  petitionerName: string;
-  petitionerState?: string;
-  startDate?: string;
-  endDate?: string;
-};
 
 export const casePublicSearchInteractor = async (
   applicationContext: IApplicationContext,
@@ -20,8 +13,8 @@ export const casePublicSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
-  }: CasePublicSearchRequestType,
-) => {
+  }: CaseAdvancedSearchParamsRequestType,
+): Promise<{ results: CasePublicSearchResultsType }> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -45,20 +38,14 @@ export const casePublicSearchInteractor = async (
     });
   }
 
-  const { results: foundCases } = await applicationContext
-    .getPersistenceGateway()
-    .casePublicSearch({
-      applicationContext,
-      searchTerms: {
-        countryType,
-        endDate: searchEndDate,
-        petitionerName,
-        petitionerState,
-        startDate: searchStartDate,
-      },
-    });
-
-  return PublicCase.validateRawCollection(foundCases, {
+  return await applicationContext.getPersistenceGateway().casePublicSearch({
     applicationContext,
+    searchTerms: {
+      countryType,
+      endDate: searchEndDate,
+      petitionerName,
+      petitionerState,
+      startDate: searchStartDate,
+    },
   });
 };

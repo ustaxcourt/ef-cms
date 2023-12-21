@@ -1,8 +1,6 @@
-import {
-  CasePublicSearchRequestType,
-  casePublicSearchInteractor,
-} from './casePublicSearchInteractor';
+import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { casePublicSearchInteractor } from './casePublicSearchInteractor';
 
 describe('casePublicSearchInteractor', () => {
   beforeAll(() => {
@@ -14,11 +12,11 @@ describe('casePublicSearchInteractor', () => {
   });
 
   it('make a public case search request with formatted dates', async () => {
-    const requestParams: CasePublicSearchRequestType = {
+    const requestParams: CaseAdvancedSearchParamsRequestType = {
       countryType: 'domestic',
       endDate: '12/20/2023',
       petitionerName: 'test person',
-      petitionerState: 'NY',
+      petitionerState: 'New York', // check if correct state type
       startDate: '01/01/2001',
     };
 
