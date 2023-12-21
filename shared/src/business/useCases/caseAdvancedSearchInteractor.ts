@@ -17,7 +17,7 @@ import {
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
   countryType?: CountryTypes;
-  petitionerState?: States;
+  petitionerState?: States; // todo: states should be the abbrevated type
   endDate?: string;
   startDate?: string;
 };

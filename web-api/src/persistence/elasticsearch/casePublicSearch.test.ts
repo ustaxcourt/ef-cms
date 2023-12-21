@@ -1,7 +1,7 @@
-import { CasePublicSearchRequestType } from '@shared/business/useCases/public/casePublicSearchInteractor';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { casePublicSearch } from './casePublicSearch';
 jest.mock('./searchClient');
+import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
 import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
 
@@ -18,7 +18,7 @@ jest.mock(
 );
 
 describe('casePublicSearch', () => {
-  const searchTerms: CasePublicSearchRequestType = {
+  const searchTerms: CaseAdvancedSearchParamsRequestType = {
     petitionerName: 'test person',
   };
 
