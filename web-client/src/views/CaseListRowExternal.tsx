@@ -18,6 +18,13 @@ export const CaseListRowExternal = ({
   onlyText: boolean;
   showFilingFee: boolean;
 }) => {
+  console.log(formattedCase);
+  console.log(
+    'onlyText',
+    onlyText,
+    'isRequestingUserAssociated',
+    formattedCase.isRequestingUserAssociated,
+  );
   return (
     <>
       <NonPhone>
@@ -42,7 +49,12 @@ export const CaseListRowExternal = ({
             </td>
             <td>
               <div className={isNestedCase ? 'margin-left-2' : ''}>
-                <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
+                <CaseLink
+                  formattedCase={formattedCase}
+                  onlyText={
+                    onlyText || !formattedCase.isRequestingUserAssociated
+                  }
+                />
               </div>
             </td>
             <td>{formattedCase.caseTitle}</td>
