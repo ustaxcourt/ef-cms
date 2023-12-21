@@ -8,23 +8,12 @@ import classNames from 'classnames';
 export const CaseListRowExternal = ({
   formattedCase,
   isNestedCase,
-  onlyLinkIfRequestedUserAssociated,
-  onlyText,
   showFilingFee,
 }: {
   formattedCase: TAssociatedCaseFormatted;
   isNestedCase: boolean;
-  onlyLinkIfRequestedUserAssociated: boolean;
-  onlyText: boolean;
   showFilingFee: boolean;
 }) => {
-  console.log(formattedCase);
-  console.log(
-    'onlyText',
-    onlyText,
-    'isRequestingUserAssociated',
-    formattedCase.isRequestingUserAssociated,
-  );
   return (
     <>
       <NonPhone>
@@ -51,9 +40,7 @@ export const CaseListRowExternal = ({
               <div className={isNestedCase ? 'margin-left-2' : ''}>
                 <CaseLink
                   formattedCase={formattedCase}
-                  onlyText={
-                    onlyText || !formattedCase.isRequestingUserAssociated
-                  }
+                  onlyText={formattedCase.isRequestingUserAssociated === false}
                 />
               </div>
             </td>
@@ -70,13 +57,8 @@ export const CaseListRowExternal = ({
               return (
                 <CaseListRowExternal
                   isNestedCase
-                  onlyLinkIfRequestedUserAssociated
                   formattedCase={consolidatedCase}
                   key={consolidatedCase.docketNumber}
-                  onlyText={
-                    onlyLinkIfRequestedUserAssociated &&
-                    consolidatedCase.isRequestingUserAssociated === false
-                  }
                   showFilingFee={showFilingFee}
                 />
               );
@@ -104,7 +86,10 @@ export const CaseListRowExternal = ({
               />
             </span>
             <span className={isNestedCase ? 'margin-left-205' : ''}>
-              <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
+              <CaseLink
+                formattedCase={formattedCase}
+                onlyText={formattedCase.isRequestingUserAssociated === false}
+              />
             </span>
           </td>
           <td
@@ -144,13 +129,8 @@ export const CaseListRowExternal = ({
             return (
               <CaseListRowExternal
                 isNestedCase
-                onlyLinkIfRequestedUserAssociated
                 formattedCase={consolidatedCase}
                 key={consolidatedCase.docketNumber}
-                onlyText={
-                  onlyLinkIfRequestedUserAssociated &&
-                  consolidatedCase.isRequestingUserAssociated === false
-                }
                 showFilingFee={showFilingFee}
               />
             );
