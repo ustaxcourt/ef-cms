@@ -1,5 +1,4 @@
 import { DATE_RANGE_SEARCH_OPTIONS } from '../EntityConstants';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import {
