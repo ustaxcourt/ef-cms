@@ -24,7 +24,7 @@ You will only have to follow these steps once per environment. If you have alrea
      --user-pool-id "$COGNITO_IRS_USER_POOL" \
      --username "$IRS_SUPERUSER_EMAIL" \
      --temporary-password "$DEFAULT_ACCOUNT_PASS" \
-     --user-attributes "Name=name,Value=${IRS_SUPERUSER_EMAIL}"
+     --user-attributes Name="name",Value="${IRS_SUPERUSER_EMAIL}" Name="custom:role",Value="irsSuperuser"
     ```
 1. Run the `irs-super-user.ts` script to enroll your IRS test user in MFA:
     ```bash
