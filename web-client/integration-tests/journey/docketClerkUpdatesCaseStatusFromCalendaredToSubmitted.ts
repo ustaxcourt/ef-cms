@@ -66,7 +66,7 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted =
       expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
         'Judge Buch',
       );
-      expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
+      expect(cerebralTest.getState('caseDetail.associatedJudgeId')).toEqual(
         'dabbad02-18d0-43ec-bafb-654e83405416',
       );
       expect(cerebralTest.getState('modal')).toEqual({});
