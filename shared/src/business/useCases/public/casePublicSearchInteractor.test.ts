@@ -16,7 +16,7 @@ describe('casePublicSearchInteractor', () => {
       countryType: 'domestic',
       endDate: '12/20/2023',
       petitionerName: 'test person',
-      petitionerState: 'New York', // check if correct state type
+      petitionerState: 'NY',
       startDate: '01/01/2001',
     };
 

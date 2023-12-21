@@ -1,5 +1,6 @@
 import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
 import { MAX_SEARCH_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { aggregateCommonQueryParams } from '../../../../shared/src/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
 
@@ -9,7 +10,7 @@ export type CasePublicSearchResultsType = {
   docketNumber: string;
   docketNumberSuffix?: string;
   docketNumberWithSuffix: string;
-  irsPractitioners: any[]; // correct type?
+  irsPractitioners: RawIrsPractitioner[];
   partyType: string;
   petitioners: TPetitioner[];
   receivedAt: string;
