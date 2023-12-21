@@ -1,4 +1,4 @@
-import { CasePublicSearchRequestType } from '@shared/business/useCases/public/casePublicSearchInteractor';
+import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
 
 export const removeAdvancedSyntaxSymbols = text => {
   const nonWordCharacters = /[-+\s[\]{}:?!*()<>=]+/gims;
@@ -11,7 +11,7 @@ export const aggregateCommonQueryParams = ({
   petitionerName,
   petitionerState,
   startDate,
-}: CasePublicSearchRequestType) => {
+}: CaseAdvancedSearchParamsRequestType) => {
   const commonQuery: Record<string, any>[] = [];
   const exactMatchesQuery: Record<string, any>[] = [];
   const nonExactMatchesQuery: Record<string, any>[] = [];

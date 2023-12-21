@@ -1,15 +1,29 @@
-import { CasePublicSearchRequestType } from '@shared/business/useCases/public/casePublicSearchInteractor';
+import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
 import { MAX_SEARCH_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
 import { aggregateCommonQueryParams } from '../../../../shared/src/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
+
+export type CasePublicSearchResultsType = {
+  caseCaption?: string;
+  contactId?: string;
+  docketNumber: string;
+  docketNumberSuffix?: string;
+  docketNumberWithSuffix: string;
+  irsPractitioners: any[]; // correct type?
+  partyType: string;
+  petitioners: TPetitioner[];
+  receivedAt: string;
+  sealedDate?: string;
+  isSealed: boolean;
+};
 
 export const casePublicSearch = async ({
   applicationContext,
   searchTerms,
 }: {
   applicationContext: IApplicationContext;
-  searchTerms: CasePublicSearchRequestType;
-}) => {
+  searchTerms: CaseAdvancedSearchParamsRequestType;
+}): Promise<{ results: CasePublicSearchResultsType }> => {
   const { commonQuery, exactMatchesQuery } =
     aggregateCommonQueryParams(searchTerms);
 
@@ -51,7 +65,7 @@ export const casePublicSearch = async ({
     },
   };
 
-  const { results } = await search({
+  return await search({
     applicationContext,
     searchParameters: {
       body: {
@@ -63,6 +77,4 @@ export const casePublicSearch = async ({
       index: 'efcms-case',
     },
   });
-
-  return results;
 };
