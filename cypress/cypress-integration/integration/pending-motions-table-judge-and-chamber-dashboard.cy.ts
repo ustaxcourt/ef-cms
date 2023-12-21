@@ -15,8 +15,9 @@ describe('Pending Motions Table', () => {
     cy.get('[class="modal-screen"]').should('be.visible');
 
     const finalBriefDueDate = generateRandomDate();
-    const statusOfMatter = getRandomElementFromArray();
-    const primaryIssue = finalBriefDueDate.longFormat + statusOfMatter;
+    const [statusOfMatterKey, statusOfMatterLabel] =
+      selectRandomStatusOfMatterEntry();
+    const primaryIssue = finalBriefDueDate.longFormat + statusOfMatterLabel;
     cy.get(
       '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
     ).clear();
@@ -26,7 +27,7 @@ describe('Pending Motions Table', () => {
     ).type(finalBriefDueDate.longFormat);
 
     cy.get('#status-of-matter-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').select(
-      statusOfMatter,
+      statusOfMatterKey,
     );
 
     cy.get('#primary-issue-label-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').type(
@@ -40,7 +41,10 @@ describe('Pending Motions Table', () => {
       .eq(6)
       .should('contain.text', finalBriefDueDate.shortFormat);
 
-    cy.get('@firstRow').find('td').eq(7).should('contain.text', statusOfMatter);
+    cy.get('@firstRow')
+      .find('td')
+      .eq(7)
+      .should('contain.text', statusOfMatterLabel);
     cy.get('@pendingMotions').eq(1).should('contain.text', primaryIssue);
   });
 
@@ -60,8 +64,9 @@ describe('Pending Motions Table', () => {
     cy.get('[class="modal-screen"]').should('be.visible');
 
     const finalBriefDueDate = generateRandomDate();
-    const statusOfMatter = getRandomElementFromArray();
-    const primaryIssue = finalBriefDueDate.longFormat + statusOfMatter;
+    const [statusOfMatterKey, statusOfMatterLabel] =
+      selectRandomStatusOfMatterEntry();
+    const primaryIssue = finalBriefDueDate.longFormat + statusOfMatterLabel;
     cy.get(
       '#final-brief-due-date-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d-picker',
     ).clear();
@@ -71,7 +76,7 @@ describe('Pending Motions Table', () => {
     ).type(finalBriefDueDate.longFormat);
 
     cy.get('#status-of-matter-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').select(
-      statusOfMatter,
+      statusOfMatterKey,
     );
 
     cy.get('#primary-issue-label-6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d').type(
@@ -85,7 +90,10 @@ describe('Pending Motions Table', () => {
       .eq(6)
       .should('contain.text', finalBriefDueDate.shortFormat);
 
-    cy.get('@firstRow').find('td').eq(7).should('contain.text', statusOfMatter);
+    cy.get('@firstRow')
+      .find('td')
+      .eq(7)
+      .should('contain.text', statusOfMatterLabel);
     cy.get('@pendingMotions').eq(1).should('contain.text', primaryIssue);
   });
 });
@@ -105,18 +113,20 @@ function generateRandomDate() {
   };
 }
 
-function getRandomElementFromArray() {
-  const statusOfMatter = [
-    'Awaiting Consideration',
-    'Awaiting Briefs',
-    'Drafting',
-    'Reviewing Draft',
-    'Submitted to Chief Judge',
-    'Revising Draft',
-    'Submitted to Reporter',
-    'Awaiting Release',
-    'Stayed',
-  ];
-  const randomIndex = Math.floor(Math.random() * statusOfMatter.length);
-  return statusOfMatter[randomIndex];
+function selectRandomStatusOfMatterEntry(): [string, string] {
+  const statusOfMatter = {
+    AwaitingBriefs: 'Awaiting Briefs',
+    AwaitingConsideration: 'Awaiting Consideration',
+    AwaitingRelease: 'Awaiting Release',
+    Drafting: 'Drafting',
+    ReviewingDraft: 'Reviewing Draft',
+    RevisingDraft: 'Revising Draft',
+    Stayed: 'Stayed',
+    SubmittedToChiefJudge: 'Submitted to Chief Judge',
+    SubmittedToReporter: 'Submitted to Reporter',
+  };
+
+  const statusOfMatterEntries = Object.entries(statusOfMatter);
+  const randomIndex = Math.floor(Math.random() * statusOfMatterEntries.length);
+  return statusOfMatterEntries[randomIndex];
 }

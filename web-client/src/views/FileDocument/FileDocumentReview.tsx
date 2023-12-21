@@ -380,6 +380,7 @@ export const FileDocumentReview = connect(
         <div className="margin-top-2">
           <Button
             className="margin-bottom-1"
+            data-testid="file-document-review-submit-document"
             disabled={!form.redactionAcknowledgement}
             id="submit-document"
             type="submit"
