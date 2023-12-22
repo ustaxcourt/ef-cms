@@ -8,25 +8,18 @@ import {
 import { TrialSession } from '../entities/trialSessions/TrialSession';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-/**
- * updateCaseContextInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.associatedJudge the associated judge to set on the case
- * @param {string} providers.caseCaption the caption to set on the case
- * @param {string} providers.docketNumber the docket number of the case to update
- * @param {object} providers.caseStatus the status to set on the case
- * @returns {object} the updated case data
- */
 export const updateCaseContext = async (
   applicationContext: IApplicationContext,
   {
-    associatedJudge,
     caseCaption,
     caseStatus,
     docketNumber,
+    judgeData,
   }: {
-    associatedJudge?: string;
+    judgeData?: {
+      associatedJudge: string;
+      associatedJudgeId: string;
+    };
     caseCaption?: string;
     caseStatus?: string;
     docketNumber: string;
@@ -48,8 +41,10 @@ export const updateCaseContext = async (
     newCase.setCaseCaption(caseCaption);
   }
 
-  if (associatedJudge) {
+  if (judgeData && judgeData.associatedJudge) {
+    const { associatedJudge, associatedJudgeId } = judgeData;
     newCase.setAssociatedJudge(associatedJudge);
+    newCase.setAssociatedJudgeId(associatedJudgeId);
   }
 
   // if this case status is changing FROM calendared
@@ -92,7 +87,7 @@ export const updateCaseContext = async (
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
 
-      newCase.removeFromTrialWithAssociatedJudge(associatedJudge);
+      newCase.removeFromTrialWithAssociatedJudge(judgeData);
     } else if (
       oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
     ) {
