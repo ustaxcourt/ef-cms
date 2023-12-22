@@ -252,7 +252,8 @@
   },
   "overrides": {
     "axios": "$axios",
-    "jsonwebtoken": "$jsonwebtoken"
+    "jsonwebtoken": "$jsonwebtoken",
+    "semver": "7.5.4"
   },
   "devDependencies": {
     "@aws-sdk/client-iam": "3.478.0",
