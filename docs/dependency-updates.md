@@ -56,7 +56,7 @@ note: we have 3 package.json files, be sure to update them all
 	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
 	- ./web-client/terraform/main/main.tf
 
-	> aws = "latest version"
+	> aws = "<LATEST_VERSION>"
 
 6. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
 
