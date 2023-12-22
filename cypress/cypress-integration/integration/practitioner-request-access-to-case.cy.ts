@@ -1,6 +1,8 @@
+import { addIntervenorAsPartyToCase } from '../../helpers/addIntervenorToCase';
 import { attachDummyFile } from '../../helpers/attach-file';
 import { externalUserSearchesDocketNumber } from '../../helpers/external-user-searches-docket-number';
 import {
+  loginAsDocketClerk,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
@@ -9,6 +11,7 @@ import {
   petitionerCreatesEletronicCaseWithDeseasedSpouse,
 } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
+import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 import { selectRedactionAcknowledgement } from '../../helpers/select-redaction-acknowledgement';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 
@@ -54,14 +57,17 @@ describe('Private Practitioner requests access to case', () => {
     loginAsPetitioner();
     petitionerCreatesEletronicCase(primaryFilerName).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
+
+      loginAsDocketClerk();
+      searchByDocketNumberInHeader(docketNumber);
+      addIntervenorAsPartyToCase();
+
       loginAsPrivatePractitioner();
       externalUserSearchesDocketNumber(docketNumber);
       cy.get('[data-testid="button-request-access"]').click();
       selectTypeaheadInput('document-type', 'Entry of Appearance');
       cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
-
       cy.get('[data-testid="auto-generation"]').should('exist');
-
       cy.get('[data-testid="request-access-submit-document"]').click();
 
       cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should('exist');
