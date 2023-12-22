@@ -16,9 +16,5 @@
     "sass": "1.69.5"
   },
   "overrides": {
-    "bl": "4.0.3",
-    "lodash": "4.17.21",
-    "minimist": "1.2.5",
-    "path-parse": "1.0.7"
   }
 }
