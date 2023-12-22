@@ -55,11 +55,8 @@ describe('Private Practitioner requests access to case', () => {
     petitionerCreatesEletronicCase(primaryFilerName).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsPrivatePractitioner();
-
       externalUserSearchesDocketNumber(docketNumber);
-
       cy.get('[data-testid="button-request-access"]').click();
-
       selectTypeaheadInput('document-type', 'Entry of Appearance');
       cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
 
