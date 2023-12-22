@@ -15,7 +15,6 @@ import { UserCase } from '../entities/UserCase';
 import { WorkItem } from '../entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 
-// TODO: find usages
 const addPetitionDocketEntryToCase = ({
   applicationContext,
   caseToAdd,
