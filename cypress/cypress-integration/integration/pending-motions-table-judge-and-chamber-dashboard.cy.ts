@@ -117,24 +117,6 @@ function generateRandomDate() {
   };
 }
 
-// function selectRandomStatusOfMatterEntry(): [string, string] {
-//   const statusOfMatter = {
-//     AwaitingBriefs: 'Awaiting Briefs',
-//     AwaitingConsideration: 'Awaiting Consideration',
-//     AwaitingRelease: 'Awaiting Release',
-//     Drafting: 'Drafting',
-//     ReviewingDraft: 'Reviewing Draft',
-//     RevisingDraft: 'Revising Draft',
-//     Stayed: 'Stayed',
-//     SubmittedToChiefJudge: 'Submitted to Chief Judge',
-//     SubmittedToReporter: 'Submitted to Reporter',
-//   };
-
-//   const statusOfMatterEntries = Object.entries(statusOfMatter);
-//   const randomIndex = Math.floor(Math.random() * statusOfMatterEntries.length);
-//   return statusOfMatterEntries[randomIndex];
-// }
-
 function selectRandomStatusOfMatterEntry(
   selector: string,
 ): Cypress.Chainable<[string, string]> {
