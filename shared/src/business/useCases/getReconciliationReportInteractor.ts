@@ -51,14 +51,16 @@ export const getReconciliationReportInteractor = async (
     ? `${timeEnd}:59.999`
     : '23:59:59.999';
 
-  if (!isValidReconciliationDate(reconciliationDate)) {
-    throw new InvalidRequest("Must be valid reconciliation date or 'today'");
-  }
-
   const effectiveReconciliationDate =
     reconciliationDate == 'today'
       ? formatNow(FORMATS.YYYYMMDD)
       : reconciliationDate;
+
+  if (!isValidReconciliationDate(effectiveReconciliationDate)) {
+    throw new InvalidRequest(
+      'Must be valid reconciliation date and not later than today',
+    );
+  }
 
   //convert to full iso-8601 time stamps in utc timezone
   const { end: isoEnd, start: isoStart } = normalizeIsoDateRange(

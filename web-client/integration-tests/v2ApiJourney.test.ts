@@ -1,5 +1,6 @@
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+// import { seedEntries } from 'web-api/storage/fixtures/seed';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -171,5 +172,36 @@ describe('View and manage the deadlines of a case', () => {
       totalDocketEntries: expect.any(Number),
     });
     expect(response.totalDocketEntries).toBeGreaterThan(0);
+  });
+
+  describe('reconciliation report', () => {
+    const loginUsername = 'irssuperuser@example.com';
+    if (!userMap[loginUsername]) {
+      throw new Error(`Unable to log into test as ${loginUsername}`);
+    }
+    const user = {
+      ...userMap[loginUsername],
+      sub: userMap[loginUsername].userId,
+    };
+
+    userToken = jwt.sign(user, 'secret');
+    // TODO: find cases in seed data that have servedParties B or R
+    // then find a day that has multiple cases
+    // then test the following:
+    //  - all cases on that day
+    //  - filtered cases on that day with timeStart
+    //  - filtered cases on that day with timeEnd
+    //  - filtered cases on that day with timeStart and timeEnd
+
+    it.todo('should show all cases from a particular day');
+    it.todo(
+      'should show cases that occur on a particular day after a specific start time',
+    );
+    it.todo(
+      'should show cases that occur on a particular day before a specific end time',
+    );
+    it.todo(
+      'should show cases that occur on a particular day between a start and end time',
+    );
   });
 });

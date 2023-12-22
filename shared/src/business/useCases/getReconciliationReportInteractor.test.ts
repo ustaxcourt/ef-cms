@@ -1,7 +1,5 @@
-import { DateTime } from 'luxon';
 import {
   FORMATS,
-  USTC_TZ,
   createEndOfDayISO,
   createStartOfDayISO,
   formatNow,
@@ -47,7 +45,7 @@ describe('getReconciliationReportInteractor', () => {
       getReconciliationReportInteractor(applicationContext, {
         reconciliationDate: undefined,
       }),
-    ).rejects.toThrow('must be formatted');
+    ).rejects.toThrow('Must be valid reconciliation date');
   });
   it('should throw an error if date is in the future', async () => {
     await expect(
@@ -167,22 +165,22 @@ describe('getReconciliationReportInteractor', () => {
   });
 
   //Given date may contain ISO time component
-  it('should accept ISO dates with a time component', async () => {
-    const startDate = '2020-01-01T01:00';
+  it('should accept ISO dates + start time', async () => {
+    const startDate = '2020-01-01';
+    const timeStart = '05:00';
     await expect(
       getReconciliationReportInteractor(applicationContext, {
         reconciliationDate: startDate,
+        timeStart,
       }),
     ).resolves.not.toThrow();
   });
 
   //Caller may provide two date arguments
-  it('should accept two arguments representing a date range', async () => {
+  it('should accept starting date and start+end times', async () => {
     const startDate = '2021-01-05';
-    const endDate = '2021-01-05T09:00';
-    const isoEndDate = DateTime.fromISO(endDate, { zone: USTC_TZ })
-      .toUTC()
-      .toISO();
+    const timeStart = '05:00';
+    const timeEnd = '09:00';
     const docketEntries = [
       {
         docketEntryId: '3d27e02e-6954-4595-8b3f-0e91bbc1b51e',
@@ -201,30 +199,9 @@ describe('getReconciliationReportInteractor', () => {
 
     const result = await getReconciliationReportInteractor(applicationContext, {
       reconciliationDate: startDate,
-      reconciliationDateEnd: endDate,
+      timeEnd,
+      timeStart,
     });
     expect(result.reconciliationDate).toBe(startDate);
-    expect(result.reconciliationDateEnd).toBe(isoEndDate);
-  });
-
-  //Don't allow durations in excess of 24 hours
-  it("shouldn't allow duration that exceeds 24 hours", async () => {
-    const dtStart = DateTime.fromISO('2002-01-02') as DateTime<true>;
-    const dtEndLong = dtStart.plus({ hours: 25 });
-    const dtEndOkay = DateTime.fromISO('2002-01-02T23:00') as DateTime<true>;
-
-    await expect(
-      getReconciliationReportInteractor(applicationContext, {
-        reconciliationDate: dtStart.toISO(),
-        reconciliationDateEnd: dtEndOkay.toISO(),
-      }),
-    ).resolves.not.toThrow();
-
-    await expect(
-      getReconciliationReportInteractor(applicationContext, {
-        reconciliationDate: dtStart.toISO(),
-        reconciliationDateEnd: dtEndLong.toISO(),
-      }),
-    ).rejects.toThrow();
   });
 });
