@@ -8,8 +8,8 @@ import {
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 
-describe('trial sessions', () => {
-  it('a petitionsclerk should be able to create a trial session', () => {
+describe('Practitioner auto generates entry of appearance', () => {
+  it('should request access to a case and verify ability to auto generate document', () => {
     loginAsPetitionsClerk();
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       loginAsPrivatePractitioner();
