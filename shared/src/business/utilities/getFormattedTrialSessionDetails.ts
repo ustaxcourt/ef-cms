@@ -231,8 +231,13 @@ export const getFormattedTrialSessionDetails = ({
     'Not assigned';
   trialSession.formattedCourtReporter =
     trialSession.courtReporter || 'Not assigned';
+
   trialSession.formattedIrsCalendarAdministrator =
     trialSession.irsCalendarAdministrator || 'Not assigned';
+
+  trialSession.formattedIrsCalendarAdministratorInfo =
+    trialSession.irsCalendarAdministratorInfo;
+
   trialSession.formattedChambersPhoneNumber =
     trialSession.chambersPhoneNumber || 'No phone number';
 

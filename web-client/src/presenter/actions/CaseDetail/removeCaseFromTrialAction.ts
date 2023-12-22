@@ -18,6 +18,7 @@ export const removeCaseFromTrialAction = async ({
   );
   const {
     associatedJudge,
+    associatedJudgeId,
     caseStatus,
     disposition,
     trialSessionId: modalTrialSessionId,
@@ -29,6 +30,7 @@ export const removeCaseFromTrialAction = async ({
       .getUseCases()
       .removeCaseFromTrialInteractor(applicationContext, {
         associatedJudge,
+        associatedJudgeId,
         caseStatus,
         disposition,
         docketNumber,

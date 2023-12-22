@@ -32,7 +32,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
   it('looks up the practitioner by the given userId', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCasesAssociatedWithUser.mockResolvedValue([
+      .getCasesByDocketNumbers.mockResolvedValue([
         {
           ...MOCK_CASE,
           docketNumber: '108-07',
@@ -79,7 +79,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
   it('sorts open and closed cases before sending them to document generator', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCasesAssociatedWithUser.mockResolvedValue([
+      .getCasesByDocketNumbers.mockResolvedValue([
         {
           ...MOCK_CASE,
           docketNumber: '108-07',
@@ -109,7 +109,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCasesAssociatedWithUser,
+      applicationContext.getPersistenceGateway().getCasesByDocketNumbers,
     ).toHaveBeenCalled();
 
     const caseData =
@@ -134,7 +134,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
   it('generates the practitioner case list PDF', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCasesAssociatedWithUser.mockResolvedValue([
+      .getCasesByDocketNumbers.mockResolvedValue([
         {
           ...MOCK_CASE,
           status: CASE_STATUS_TYPES.closed,
@@ -151,7 +151,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCasesAssociatedWithUser,
+      applicationContext.getPersistenceGateway().getCasesByDocketNumbers,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().practitionerCaseList.mock
