@@ -608,6 +608,8 @@ export const isValidReconciliationDate = dateString => {
   const dateInputValid = isValidISODate(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
+  console.log(`dateInputValid: ${dateInputValid}`);
+  console.log(`dateLessthanOrEqualToToday: ${dateLessthanOrEqualToToday}`);
   return dateInputValid && dateLessthanOrEqualToToday;
 };
 
@@ -625,9 +627,6 @@ export function normalizeIsoDateRange(
   dateStart: string,
   dateEnd?: string,
 ): IsoDateRange {
-  if (isValidReconciliationDate(dateStart)) {
-    throw new Error('Date must be formatted as ISO and not later than today');
-  }
   //If no end date specified, set it to end of the same day as start date
   if (!dateEnd) {
     dateEnd = DateTime.fromISO(dateStart, { zone: USTC_TZ })

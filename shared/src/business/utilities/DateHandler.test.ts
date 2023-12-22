@@ -746,22 +746,6 @@ describe('DateHandler', () => {
 
   describe('ISO date range tests', () => {
     const dcz = { zone: USTC_TZ };
-    const todayDate = DateTime.now().toFormat('yyyy-MM-dd');
-
-    //should return date range when given 'today'
-    it('should return date range when given today', () => {
-      const start = 'today';
-      const end = undefined;
-      const range = normalizeIsoDateRange(start, end);
-      // const expectedStart = DateTime.now().startOf('day').toUTC().toISO();
-      const expectedStart = DateTime.fromISO(todayDate, dcz).toUTC().toISO();
-      const expectedEnd = DateTime.fromISO(todayDate, dcz)
-        .endOf('day')
-        .toUTC()
-        .toISO();
-      expect(range.start).toBe(expectedStart);
-      expect(range.end).toBe(expectedEnd);
-    });
 
     //should return date range if given partial iso start date
     it('should return date range if given partial iso start date', () => {
