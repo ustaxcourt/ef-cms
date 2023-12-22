@@ -46,7 +46,7 @@ export const getIsUserAuthorized = ({
     isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)
   );
 };
-//TODO: find usage
+
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
   caseEntity,

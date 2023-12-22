@@ -16,7 +16,6 @@ import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 
-// TODO: find usages
 const addPetitionDocketEntryToCase = ({
   applicationContext,
   caseToAdd,
