@@ -4,7 +4,7 @@ resource "aws_cloudwatch_log_group" "elasticsearch_kibana_logs" {
 
 resource "aws_opensearch_domain" "efcms-logs" {
   domain_name           = "info"
-  engine_version = "2.11"
+  engine_version        = "OpenSearch_2.11"
 
   cluster_config {
     instance_type  = var.es_logs_instance_type
