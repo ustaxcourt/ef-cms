@@ -36,7 +36,7 @@ CONFIG
 
 resource "aws_opensearch_domain" "efcms-search" {
   domain_name           = var.domain_name
-  engine_version = "2.11"
+  engine_version        = "OpenSearch_2.11"
 
   cluster_config {
     instance_type  = var.es_instance_type
