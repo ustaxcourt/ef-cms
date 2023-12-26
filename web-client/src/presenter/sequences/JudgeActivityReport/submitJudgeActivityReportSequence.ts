@@ -1,8 +1,10 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
+import { clearJudgeActivityReportFiltersAction } from '@web-client/presenter/actions/JudgeActivityReport/clearJudgeActivityReportFiltersAction';
 import { clearJudgeActivityStatisticsReportDataAction } from '@web-client/presenter/actions/JudgeActivityReport/clearJudgeActivityStatisticsReportDataAction';
 import { getSubmittedAndCavCasesByJudgeAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
 import { parallel } from 'cerebral';
+import { resetHasUserSubmittedFormAction } from '@web-client/presenter/actions/JudgeActivityReport/resetHasUserSubmittedFormAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultSubmittedAndCavSortOrderAction } from '@web-client/presenter/actions/JudgeActivityReport/setDefaultSubmittedAndCavSortOrderAction';
@@ -16,6 +18,8 @@ import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActi
 
 export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
   clearJudgeActivityStatisticsReportDataAction,
+  clearJudgeActivityReportFiltersAction,
+  resetHasUserSubmittedFormAction,
   startShowValidationAction,
   validateJudgeActivityReportSearchAction,
   {

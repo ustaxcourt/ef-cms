@@ -200,7 +200,7 @@ export const Statistics = connect(
                 startDateErrorText={validationErrors.startDate}
                 startName="deadlineStart"
                 startPickerCls={'grid-col-6 padding-right-2'}
-                startValue=""
+                startValue={judgeActivityReportFilters.startDate}
                 onChangeEnd={e => {
                   setJudgeActivityReportFiltersSequence({
                     endDate: e.target.value,
