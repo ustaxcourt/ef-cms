@@ -54,8 +54,7 @@ export const JudgeActivityReport = connect(
 
               <Tab
                 tabName="caseWorksheet"
-                title={'Submitted/CAV (10)'}
-                // title={`Submitted/CAV (${judgeActivityReportHelper.caseWorksheetsFormatted.length})`}
+                title={`Submitted/CAV (${judgeActivityReportHelper.progressDescriptionTableTotal})`}
               >
                 <CaseWorksheets />
               </Tab>
