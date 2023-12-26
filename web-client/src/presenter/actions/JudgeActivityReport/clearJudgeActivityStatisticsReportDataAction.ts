@@ -1,6 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const clearJudgeActivityReportDataAction = ({ store }: ActionProps) => {
+export const clearJudgeActivityStatisticsReportDataAction = ({
+  store,
+}: ActionProps) => {
   store.set(
     state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
     {},

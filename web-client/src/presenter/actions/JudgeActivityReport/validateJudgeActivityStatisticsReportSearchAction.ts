@@ -1,16 +1,18 @@
 import { JudgeActivityReportSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const validateJudgeActivityReportSearchAction = ({
+export const validateJudgeActivityStatisticsReportSearchAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { judges } = get(state.judgeActivityReport.filters);
+  const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
 
   const { judgeName } = get(state.judgeActivityReport);
   const errors = new JudgeActivityReportSearch({
+    endDate,
     judgeName,
     judges,
+    startDate,
   }).getFormattedValidationErrors();
 
   if (errors) {

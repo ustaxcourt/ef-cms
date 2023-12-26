@@ -12,13 +12,13 @@ import { setValidationErrorsAction } from '../../actions/setValidationErrorsActi
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
-import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
+import { validateJudgeActivityStatisticsReportSearchAction } from '@web-client/presenter/actions/JudgeActivityReport/validateJudgeActivityStatisticsReportSearchAction';
 
 export const submitJudgeActivityStatisticsReportSequence =
   showProgressSequenceDecorator([
     setHasUserSubmittedFormAction,
     startShowValidationAction,
-    validateJudgeActivityReportSearchAction,
+    validateJudgeActivityStatisticsReportSearchAction,
     {
       error: [
         setAlertErrorAction,
