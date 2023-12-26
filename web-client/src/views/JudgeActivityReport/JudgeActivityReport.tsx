@@ -1,7 +1,7 @@
 import { BigHeader } from '../BigHeader';
-import { CaseWorksheets } from '@web-client/views/JudgeActivityReport/CaseWorksheets';
 import { ErrorNotification } from '../ErrorNotification';
 import { Statistics } from '@web-client/views/JudgeActivityReport/Statistics';
+import { SubmittedAndCav } from '@web-client/views/JudgeActivityReport/SubmittedAndCav';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
@@ -56,7 +56,7 @@ export const JudgeActivityReport = connect(
                 tabName="caseWorksheet"
                 title={`Submitted/CAV (${judgeActivityReportHelper.progressDescriptionTableTotal})`}
               >
-                <CaseWorksheets />
+                <SubmittedAndCav />
               </Tab>
 
               <Tab
@@ -82,46 +82,52 @@ function JudgeDropdown({
   submitJudgeActivityReportSequence,
 }) {
   return (
-    <div className="grid-col-auto margin-x-3">
-      <label
-        className="usa-label"
-        htmlFor="judge-selection"
-        id="judge-selection-label"
-      >
-        Judge
-      </label>
-      <select
-        aria-describedby="judge-selection-label"
-        aria-label="judge"
-        className="usa-select select-left width-card-lg"
-        name="associatedJudge"
-        value={judgeName}
-        onChange={e => {
-          const selectedJudgeName = e.target.value;
-          setJudgeActivityReportFiltersSequence({
-            judgeName: selectedJudgeName,
-          });
-          submitJudgeActivityReportSequence(selectedJudgeName);
-        }}
-      >
-        <option key="all" value="All Judges">
-          All Judges
-        </option>
-        <option key="All Regular Judges" value="All Regular Judges">
-          All Regular Judges
-        </option>
-        <option key="All Senior Judges" value="All Senior Judges">
-          All Senior Judges
-        </option>
-        <option key="All Special Trial Judges" value="All Special Trial Judges">
-          All Special Trial Judges
-        </option>
-        {(judges || []).map(judge => (
-          <option key={judge.name} value={judge.name}>
-            {judge.name}
+    <div className="grid-col-auto">
+      <div className="display-flex align-items-baseline ">
+        <label
+          className="margin-right-3"
+          htmlFor="judge-selection"
+          id="judge-selection-label"
+        >
+          Show items for
+        </label>
+
+        <select
+          aria-describedby="judge-selection-label"
+          aria-label="judge"
+          className="usa-select select-left width-card-lg"
+          name="associatedJudge"
+          value={judgeName}
+          onChange={e => {
+            const selectedJudgeName = e.target.value;
+            setJudgeActivityReportFiltersSequence({
+              judgeName: selectedJudgeName,
+            });
+            submitJudgeActivityReportSequence();
+          }}
+        >
+          <option key="all" value="All Judges">
+            All Judges
           </option>
-        ))}
-      </select>
+          <option key="All Regular Judges" value="All Regular Judges">
+            All Regular Judges
+          </option>
+          <option key="All Senior Judges" value="All Senior Judges">
+            All Senior Judges
+          </option>
+          <option
+            key="All Special Trial Judges"
+            value="All Special Trial Judges"
+          >
+            All Special Trial Judges
+          </option>
+          {(judges || []).map(judge => (
+            <option key={judge.name} value={judge.name}>
+              {judge.name}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }

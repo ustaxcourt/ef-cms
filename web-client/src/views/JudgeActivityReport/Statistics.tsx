@@ -184,6 +184,36 @@ export const Statistics = connect(
       );
     };
 
+    const resultsTable = () => {
+      if (judgeActivityReportHelper.showSelectDateRangeText) {
+        return (
+          <div className="text-semibold margin-0">
+            Enter a date range to view statistics.
+          </div>
+        );
+      }
+      if (judgeActivityReportHelper.showResultsTables) {
+        return (
+          <div>
+            <div className="grid-row grid-gap">
+              <div className="grid-col-6">{closedCases()}</div>
+              <div className="grid-col-6">{trialSessionsHeld()}</div>
+            </div>
+
+            <div className="grid-row grid-gap">
+              <div className="grid-col-6">{ordersIssued()}</div>
+              <div className="grid-col-6">{opinionsIssued()}</div>
+            </div>
+          </div>
+        );
+      }
+      return (
+        <div className="text-semibold margin-bottom-30px">
+          There is no activity for the selected dates.
+        </div>
+      );
+    };
+
     return (
       <>
         <div className="blue-container margin-bottom-30px">
@@ -226,27 +256,7 @@ export const Statistics = connect(
             </div>
           </div>
         </div>
-        {judgeActivityReportHelper.showSelectDateRangeText ? (
-          <div className="text-semibold margin-0">
-            Enter a date range to view activity
-          </div>
-        ) : judgeActivityReportHelper.showResultsTables ? (
-          <>
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">{closedCases()}</div>
-              <div className="grid-col-6">{trialSessionsHeld()}</div>
-            </div>
-
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">{ordersIssued()}</div>
-              <div className="grid-col-6">{opinionsIssued()}</div>
-            </div>
-          </>
-        ) : (
-          <div className="text-semibold margin-bottom-30px">
-            There is no activity for the selected dates
-          </div>
-        )}
+        {resultsTable()}
       </>
     );
   },

@@ -6,14 +6,14 @@ import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveN
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const CaseWorksheets = connect(
+export const SubmittedAndCav = connect(
   {
     constants: state.constants,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
   },
-  function Statistics({
+  function SubmittedAndCav({
     constants,
     judgeActivityReportHelper,
     sortTableSequence,
