@@ -75,7 +75,10 @@ export const getCasesByFilters = async ({
     params.judges.forEach(judge => {
       const associatedJudgeFilters = {
         match: {
-          'associatedJudge.S': judge,
+          'associatedJudge.S': {
+            operator: 'and',
+            query: judge,
+          },
         },
       };
       shouldArray.push(associatedJudgeFilters);
