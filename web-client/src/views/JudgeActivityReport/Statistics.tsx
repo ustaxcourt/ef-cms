@@ -12,8 +12,8 @@ export const Statistics = connect(
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     setJudgeActivityReportFiltersSequence:
       sequences.setJudgeActivityReportFiltersSequence,
-    submitJudgeActivityReportSequence:
-      sequences.submitJudgeActivityReportSequence,
+    submitJudgeActivityStatisticsReportSequence:
+      sequences.submitJudgeActivityStatisticsReportSequence,
 
     validationErrors: state.validationErrors,
   },
@@ -22,7 +22,7 @@ export const Statistics = connect(
     judgeActivityReportFilters,
     judgeActivityReportHelper,
     setJudgeActivityReportFiltersSequence,
-    submitJudgeActivityReportSequence,
+    submitJudgeActivityStatisticsReportSequence,
     validationErrors,
   }) {
     const closedCases: () => JSX.Element = () => (
@@ -218,7 +218,7 @@ export const Statistics = connect(
                 className="position-relative margin-bottom-35"
                 disabled={judgeActivityReportHelper.isFormPristine}
                 onClick={() => {
-                  submitJudgeActivityReportSequence();
+                  submitJudgeActivityStatisticsReportSequence();
                 }}
               >
                 View Statistics
