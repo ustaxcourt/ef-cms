@@ -5,7 +5,11 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { judges } = get(state.judgeActivityReport.filters);
+  const filters = get(state.judgeActivityReport.filters);
+
+  const judges = filters.judges?.length
+    ? filters.judges
+    : [get(state.judgeActivityReport.judgeName)];
 
   const { cases } = await applicationContext
     .getUseCases()
