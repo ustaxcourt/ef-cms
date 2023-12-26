@@ -28,11 +28,13 @@ const isRecordToUpdate = item => {
 
 export const migrateItems = items => {
   const judgeUserItems = items.filter(item => isJudgeUserItem(item));
+  console.log('judgeUserItems.length', judgeUserItems.length);
 
   const judgesMap = judgeUserItems.reduce((accumulator, judge) => {
     accumulator[judge.name] = judge.userId;
     return accumulator;
   }, {});
+  console.log('judgesMap', judgesMap);
 
   const itemsAfter: TDynamoRecord[] = [];
 
