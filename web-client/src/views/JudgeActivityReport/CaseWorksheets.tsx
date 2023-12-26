@@ -31,7 +31,7 @@ export const CaseWorksheets = connect(
                 Submitted/CAV Cases
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Total:{' '}
+                Count:{' '}
                 {formatPositiveNumber(
                   judgeActivityReportHelper.progressDescriptionTableTotal,
                 )}
