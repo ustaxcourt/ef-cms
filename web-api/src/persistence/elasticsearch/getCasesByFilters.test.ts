@@ -113,7 +113,10 @@ describe('getCasesByFilters', () => {
               should: [
                 {
                   match: {
-                    'associatedJudge.S': 'Buch',
+                    'associatedJudge.S': {
+                      operator: 'and',
+                      query: 'Buch',
+                    },
                   },
                 },
               ],
