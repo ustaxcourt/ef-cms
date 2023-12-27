@@ -48,6 +48,7 @@ export const CaseDetailHeader = connect(
             <Button
               secondary
               className="tablet-full-width push-right margin-right-0"
+              data-testid="button-request-access"
               href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
               id="button-request-access"
             >
@@ -95,6 +96,7 @@ export const CaseDetailHeader = connect(
           {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
             <Button
               className="tablet-full-width margin-right-0"
+              data-testid="button-request-access-mobile"
               href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
               id="button-request-access"
             >
