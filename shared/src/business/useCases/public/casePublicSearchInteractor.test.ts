@@ -71,6 +71,7 @@ describe('casePublicSearchInteractor', () => {
             contactType: CONTACT_TYPES.primary,
             entityName: 'PublicContact',
             name: getContactPrimary(MOCK_CASE).name,
+            serviceIndicator: 'Electronic',
             state: getContactPrimary(MOCK_CASE).state,
           },
         ],

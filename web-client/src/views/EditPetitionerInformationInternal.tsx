@@ -74,6 +74,7 @@ export const EditPetitionerInformationInternal = connect(
               <select
                 aria-describedby="contact-type-label"
                 className="usa-select max-width-400"
+                data-testid="edit-petitioner-contact-type"
                 id="contactType"
                 name="contact.contactType"
                 value={form.contact.contactType || ''}
