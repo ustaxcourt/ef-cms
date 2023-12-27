@@ -45,7 +45,7 @@ export class CaseDeadline extends JoiValidationEntity {
     associatedJudgeId: joi
       .when('associatedJudge', {
         is: CHIEF_JUDGE,
-        otherwise: JoiValidationConstants.UUID.required(),
+        otherwise: JoiValidationConstants.UUID.optional(),
         then: JoiValidationConstants.UUID.optional(),
       })
       .description('Judge ID assigned to this case.'),

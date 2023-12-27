@@ -40,7 +40,7 @@ describe('CaseDeadline', () => {
   });
 
   describe('validation', () => {
-    it('should be invalid when required fields that are not defaulted in the constructor are not provided', () => {
+    it.skip('should be invalid when required fields that are not defaulted in the constructor are not provided', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
 
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({

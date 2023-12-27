@@ -454,7 +454,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
   associatedJudge: JoiValidationConstants.STRING.max(100).required(),
   associatedJudgeId: joi.when('associatedJudge', {
     is: CHIEF_JUDGE,
-    otherwise: JoiValidationConstants.UUID.required(),
+    otherwise: JoiValidationConstants.UUID.optional(),
     then: JoiValidationConstants.UUID.optional(),
   }),
   caseIsInProgress: joi.boolean().optional(),

@@ -336,7 +336,7 @@ export class Case extends JoiValidationEntity {
     associatedJudgeId: joi
       .when('associatedJudge', {
         is: joi.valid(CHIEF_JUDGE),
-        otherwise: JoiValidationConstants.UUID.required(),
+        otherwise: JoiValidationConstants.UUID.optional(),
         then: JoiValidationConstants.UUID.optional(),
       })
       .description('Judge ID assigned to this case.'),
