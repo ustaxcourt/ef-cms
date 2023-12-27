@@ -1,5 +1,5 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getDocketNumbersByUser } from './getDocketNumbersByUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/dynamo/users/getCasesForUser';
 import { queryFull } from '../../dynamodbClientService';
 
 jest.mock('../../dynamodbClientService');

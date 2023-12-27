@@ -1,4 +1,3 @@
-import { ExcludeMethods } from 'types/TEntity';
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
