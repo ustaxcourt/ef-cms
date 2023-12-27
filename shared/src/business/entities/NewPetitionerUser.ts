@@ -142,10 +142,6 @@ export class NewPetitionerUser extends JoiValidationEntity {
   getValidationRules() {
     return NewPetitionerUser.VALIDATION_RULES;
   }
-
-  getErrorToMessageMap() {
-    return {};
-  }
 }
 
 export type RawNewPetitionerUser = ExcludeMethods<NewPetitionerUser>;

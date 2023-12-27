@@ -13,7 +13,7 @@ describe('setDocumentTitleFromStampDataInteractor', () => {
         strickenFromTrialSession:
           'This case is stricken from the trial session',
       },
-      'GRANTED - this case is stricken from the trial session - the case is restored to the general docket',
+      'GRANTED - This case is stricken from the trial session - The case is restored to the general docket',
     ],
     [
       {
@@ -41,9 +41,9 @@ describe('setDocumentTitleFromStampDataInteractor', () => {
         customText: 'amazing custom text',
         date: mockDate,
         disposition: MOTION_DISPOSITIONS.GRANTED,
-        dueDateMessage: 'the parties shall file a status report by',
+        dueDateMessage: 'The parties shall file a status report by',
       },
-      `GRANTED - the parties shall file a status report by ${mockDate} - amazing custom text`,
+      `GRANTED - The parties shall file a status report by ${mockDate} - amazing custom text`,
     ],
   ];
 
