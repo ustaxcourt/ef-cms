@@ -95,6 +95,7 @@ export const ServiceIndicatorRadios = connect(
             />
             <label
               className="usa-radio__label"
+              data-testid={`service-type-paper-label-${bindKey}`}
               htmlFor={`service-type-paper-${bindKey}`}
               id={`service-type-paper-label-${bindKey}`}
             >
@@ -120,6 +121,7 @@ export const ServiceIndicatorRadios = connect(
             />
             <label
               className="usa-radio__label"
+              data-testid={`service-type-none-label-${bindKey}`}
               htmlFor={`service-type-none-${bindKey}`}
               id={`service-type-none-label-${bindKey}`}
             >
