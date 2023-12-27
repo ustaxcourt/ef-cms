@@ -78,8 +78,8 @@ export const migrateItems = async (
           },
           {} as { [key: string]: string },
         );
-        item.associatedJudgeId = judgesMap[item.associatedJudge];
       }
+      item.associatedJudgeId = judgesMap[item.associatedJudge];
     }
 
     itemsAfter.push(item);
