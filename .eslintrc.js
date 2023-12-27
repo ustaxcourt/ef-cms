@@ -15,8 +15,8 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'plugin:react/recommended',
-    'plugin:security/recommended',
     'prettier',
+    'plugin:security/recommended-legacy',
     'plugin:import/typescript',
     // 'plugin:jsx-a11y/recommended', // todo
   ],
@@ -80,7 +80,6 @@ module.exports = {
     'prettier',
     'promise',
     'react',
-    'security',
     'sort-destructure-keys',
     'sort-imports-es6-autofix',
     'sort-keys-fix',
