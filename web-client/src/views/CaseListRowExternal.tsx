@@ -8,14 +8,10 @@ import classNames from 'classnames';
 export const CaseListRowExternal = ({
   formattedCase,
   isNestedCase,
-  onlyLinkIfRequestedUserAssociated,
-  onlyText,
   showFilingFee,
 }: {
   formattedCase: TAssociatedCaseFormatted;
   isNestedCase: boolean;
-  onlyLinkIfRequestedUserAssociated: boolean;
-  onlyText: boolean;
   showFilingFee: boolean;
 }) => {
   return (
@@ -42,7 +38,10 @@ export const CaseListRowExternal = ({
             </td>
             <td>
               <div className={isNestedCase ? 'margin-left-2' : ''}>
-                <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
+                <CaseLink
+                  formattedCase={formattedCase}
+                  onlyText={formattedCase.isRequestingUserAssociated === false}
+                />
               </div>
             </td>
             <td>{formattedCase.caseTitle}</td>
@@ -58,13 +57,8 @@ export const CaseListRowExternal = ({
               return (
                 <CaseListRowExternal
                   isNestedCase
-                  onlyLinkIfRequestedUserAssociated
                   formattedCase={consolidatedCase}
                   key={consolidatedCase.docketNumber}
-                  onlyText={
-                    onlyLinkIfRequestedUserAssociated &&
-                    consolidatedCase.isRequestingUserAssociated === false
-                  }
                   showFilingFee={showFilingFee}
                 />
               );
@@ -92,7 +86,10 @@ export const CaseListRowExternal = ({
               />
             </span>
             <span className={isNestedCase ? 'margin-left-205' : ''}>
-              <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
+              <CaseLink
+                formattedCase={formattedCase}
+                onlyText={formattedCase.isRequestingUserAssociated === false}
+              />
             </span>
           </td>
           <td
@@ -132,13 +129,8 @@ export const CaseListRowExternal = ({
             return (
               <CaseListRowExternal
                 isNestedCase
-                onlyLinkIfRequestedUserAssociated
                 formattedCase={consolidatedCase}
                 key={consolidatedCase.docketNumber}
-                onlyText={
-                  onlyLinkIfRequestedUserAssociated &&
-                  consolidatedCase.isRequestingUserAssociated === false
-                }
                 showFilingFee={showFilingFee}
               />
             );
