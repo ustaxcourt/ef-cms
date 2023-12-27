@@ -73,6 +73,7 @@ export const RequestAccess = connect(
                 'select-react-element',
                 validationErrors.documentType && 'usa-select--error',
               )}
+              data-testid="document-type"
               id="document-type"
               name="documentType"
               options={requestAccessHelper.documentsForSelect}
@@ -108,6 +109,7 @@ export const RequestAccess = connect(
 
           <div className="margin-top-5">
             <Button
+              data-testid="request-access-submit-document"
               id="submit-document"
               type="submit"
               onClick={() => {

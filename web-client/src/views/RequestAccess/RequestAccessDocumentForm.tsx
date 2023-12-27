@@ -43,7 +43,7 @@ export const RequestAccessDocumentForm = connect(
       <>
         <h2 className="margin-top-4">Tell Us About This Document</h2>
         <PIIRedactedWarning />
-        {form.eventCode === 'EA' && (
+        {requestAccessHelper.showGenerationTypeForm && (
           <div className="usa-form-group">
             <fieldset className="usa-fieldset margin-bottom-0">
               <div className="usa-radio usa-radio__inline">
@@ -62,7 +62,11 @@ export const RequestAccessDocumentForm = connect(
                     });
                   }}
                 />
-                <label className="usa-radio__label" htmlFor="auto-generation">
+                <label
+                  className="usa-radio__label"
+                  data-testid="auto-generation"
+                  htmlFor="auto-generation"
+                >
                   Auto-generate Entry of Appearance PDF (Use only if you do not
                   need to add attachments or a Certificate of Service.)
                 </label>
@@ -98,6 +102,7 @@ export const RequestAccessDocumentForm = connect(
                     'usa-label ustc-upload with-hint',
                     requestAccessHelper.showPrimaryDocumentValid && 'validated',
                   )}
+                  data-testid="primary-document-label"
                   htmlFor="primary-document"
                   id="primary-document-label"
                 >
