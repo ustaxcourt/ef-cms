@@ -23,39 +23,6 @@ const localPublicApiPort = 5000;
 localPublicApiApp.listen(localPublicApiPort);
 console.log(`Listening on http://localhost:${localPublicApiPort}`);
 
-// ************************ cognito-local *********************************
-const cognitoServer = http.createServer((req, res) => {
-  if (req.method === 'POST') {
-    let requestBody = '';
-
-    req.on('data', chunk => {
-      requestBody += chunk;
-    });
-
-    req.on('end', async () => {
-      try {
-        const data = JSON.parse(requestBody);
-        await handler(data);
-      } catch (error) {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('Cognito Local request failed\n');
-      }
-    });
-  }
-
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(
-    JSON.stringify({
-      body: '',
-      statusCode: 200,
-    }),
-  );
-});
-
-cognitoServer.listen(9845, () => {
-  console.log('Server running at http://localhost:9845/');
-});
-
 // ************************ streams-local *********************************
 const config = {
   credentials: {
@@ -71,7 +38,7 @@ const dynamodbClient = new AWS.DynamoDB(config);
 const dynamodbStreamsClient = new AWS.DynamoDBStreams(config);
 const tableName = 'efcms-local';
 
-let chunks = [];
+let chunks: any[] = [];
 
 /**
  * This endpoint it hit to know when the streams queue is empty.  An empty queue
@@ -87,7 +54,7 @@ localStreamsApp.get('/isDone', (req, res) => {
       TableName: tableName,
     })
     .promise()
-    .then(results => results.Table.LatestStreamArn);
+    .then(results => results?.Table?.LatestStreamArn!);
 
   const { StreamDescription } = await dynamodbStreamsClient
     .describeStream({
@@ -114,7 +81,7 @@ localStreamsApp.get('/isDone', (req, res) => {
     );
   };
 
-  StreamDescription.Shards.forEach(shard => processShard(shard));
+  StreamDescription?.Shards?.forEach(shard => processShard(shard));
 })();
 
 const processChunks = async () => {
@@ -134,27 +101,47 @@ processChunks();
 
 localStreamsApp.listen(5005);
 
-// ************************ web-sockets-local *********************************
+// ************************ web-sockets-local + cognito-local-triggers *********************************
 const connections = {};
 
 const server = http.createServer((request, response) => {
-  let body = '';
+  let requestBody = '';
   request.on('data', chunk => {
-    body += chunk.toString();
+    requestBody += chunk.toString();
   });
-  request.on('end', () => {
+  request.on('end', async () => {
+    if (
+      request.url?.includes('/PostAuthentication_Authentication') ||
+      request.url?.includes('/PostConfirmation_ConfirmSignUp')
+    ) {
+      try {
+        const data = JSON.parse(requestBody);
+        await handler(data);
+        response.writeHead(200, { 'Content-Type': 'application/json' });
+        return response.end(
+          JSON.stringify({
+            body: '',
+            statusCode: 200,
+          }),
+        );
+      } catch (error) {
+        response.writeHead(400, { 'Content-Type': 'text/plain' });
+        return response.end('Cognito Local request failed\n');
+      }
+    }
+
     const split = request.url!.split('/');
     const connectionId = split[split.length - 1];
     if (connections[connectionId]) {
-      connections[connectionId].sendUTF(body);
+      connections[connectionId].sendUTF(requestBody);
       response.writeHead(200);
-      response.end();
+      return response.end();
     } else if (request.url?.includes('isDone')) {
       response.writeHead(200);
-      response.end();
+      return response.end();
     } else {
       response.writeHead(410);
-      response.end();
+      return response.end();
     }
   });
 });
