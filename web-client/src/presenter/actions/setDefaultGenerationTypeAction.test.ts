@@ -1,4 +1,4 @@
-import { GENERATION_TYPES } from '@web-client/getConstants';
+import { GENERATION_TYPES, getConstants } from '@web-client/getConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   irsPractitionerUser,
@@ -21,6 +21,9 @@ describe('setDefaultGenerationTypeAction', () => {
         value: 'EA',
       },
       state: {
+        caseDetail: {
+          petitioners: [],
+        },
         form: {
           generationType: GENERATION_TYPES.MANUAL,
         },
@@ -38,6 +41,9 @@ describe('setDefaultGenerationTypeAction', () => {
         value: 'SOC',
       },
       state: {
+        caseDetail: {
+          petitioners: [],
+        },
         form: {
           generationType: GENERATION_TYPES.AUTO,
         },
@@ -57,6 +63,9 @@ describe('setDefaultGenerationTypeAction', () => {
         value: 'SOC',
       },
       state: {
+        caseDetail: {
+          petitioners: [],
+        },
         form: {
           generationType: GENERATION_TYPES.AUTO,
         },
@@ -74,6 +83,9 @@ describe('setDefaultGenerationTypeAction', () => {
         value: 'Substitution of Counsel',
       },
       state: {
+        caseDetail: {
+          petitioners: [],
+        },
         form: {
           generationType: GENERATION_TYPES.AUTO,
         },
@@ -81,5 +93,29 @@ describe('setDefaultGenerationTypeAction', () => {
     });
 
     expect(state.form.generationType).toEqual(GENERATION_TYPES.AUTO);
+  });
+
+  it('should set the generation type to manual if code is EA but a petitioner has paper', async () => {
+    const { state } = await runAction(setDefaultGenerationTypeAction, {
+      modules: { presenter },
+      props: {
+        key: 'eventCode',
+        value: 'EA',
+      },
+      state: {
+        caseDetail: {
+          petitioners: [
+            {
+              serviceIndicator: getConstants().SERVICE_INDICATOR_TYPES.SI_PAPER,
+            },
+          ],
+        },
+        form: {
+          generationType: GENERATION_TYPES.AUTO,
+        },
+      },
+    });
+
+    expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
   });
 });
