@@ -67,6 +67,7 @@ export const AddPetitionerToCase = connect(
               <select
                 aria-label="role type dropdown"
                 className="usa-select max-width-400"
+                data-testid="add-petitioner-contact-type"
                 id="contactType"
                 name="contact.contactType"
                 value={form.contact.contactType || ''}
@@ -94,6 +95,7 @@ export const AddPetitionerToCase = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
+                data-testid="add-petitioner-name"
                 id="name"
                 name="contact.name"
                 type="text"
@@ -215,6 +217,7 @@ export const AddPetitionerToCase = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input max-width-200"
+                data-testid="add-petitioner-phone"
                 id="phone"
                 name="contact.phone"
                 type="tel"
@@ -269,6 +272,7 @@ export const AddPetitionerToCase = connect(
           </div>
 
           <Button
+            data-testid="add-petitioner-submit-button"
             id="submit-edit-petitioner-information"
             onClick={() => {
               submitAddPetitionerSequence();
