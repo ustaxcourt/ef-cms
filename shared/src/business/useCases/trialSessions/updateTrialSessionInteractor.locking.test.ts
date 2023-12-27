@@ -87,7 +87,10 @@ describe('handleLockError', () => {
 });
 
 describe('updateTrialSessionInteractor', () => {
-  let mockRequest = { trialSession: MOCK_TRIAL_INPERSON };
+  let mockRequest = {
+    clientConnectionId: '987654',
+    trialSession: MOCK_TRIAL_INPERSON,
+  };
   let mockLock;
 
   beforeEach(() => {
@@ -148,7 +151,7 @@ describe('updateTrialSessionInteractor', () => {
     it('should acquire a lock that lasts for 15 minutes', async () => {
       await updateTrialSessionInteractor(applicationContext, mockRequest);
 
-      MOCK_TRIAL_INPERSON.caseOrder.forEach(({ docketNumber }) => {
+      MOCK_TRIAL_INPERSON.caseOrder!.forEach(({ docketNumber }) => {
         expect(
           applicationContext.getPersistenceGateway().createLock,
         ).toHaveBeenCalledWith({
@@ -162,7 +165,7 @@ describe('updateTrialSessionInteractor', () => {
     it('should remove the lock', async () => {
       await updateTrialSessionInteractor(applicationContext, mockRequest);
 
-      let expectedIdentifiers = MOCK_TRIAL_INPERSON.caseOrder.map(
+      let expectedIdentifiers = MOCK_TRIAL_INPERSON.caseOrder!.map(
         ({ docketNumber }) => `case|${docketNumber}`,
       );
       expectedIdentifiers.unshift(
