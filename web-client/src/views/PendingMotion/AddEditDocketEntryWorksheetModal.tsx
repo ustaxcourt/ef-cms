@@ -72,6 +72,7 @@ export const AddEditDocketEntryWorksheetModal = connect(
           <select
             aria-labelledby="status-of-matter-label"
             className="usa-select"
+            data-testid={`select-status-of-matter-${form.docketEntryId}`}
             id={`status-of-matter-${form.docketEntryId}`}
             name="statusOfMatter"
             value={form.statusOfMatter}
