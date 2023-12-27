@@ -25,7 +25,8 @@ describe('formattedTrialSessionDetails', () => {
   };
 
   it('returns undefined if state.trialSession is undefined', () => {
-    const result = getFormattedTrialSessionDetails({ applicationContext });
+    const options: any = { applicationContext };
+    const result = getFormattedTrialSessionDetails(options);
     expect(result).toBeUndefined();
   });
 
@@ -51,6 +52,25 @@ describe('formattedTrialSessionDetails', () => {
       formattedTrialClerk: 'Test Trial Clerk',
       noLocationEntered: false,
       showSwingSession: false,
+    });
+  });
+
+  it('should format trial session to include irsCalendarAdministratorInfo', () => {
+    const irsCalendarAdministratorInfo = {
+      email: 'TEST_EMAIL',
+      name: 'TEST_NAME',
+      phone: 'TEST_PHONE',
+    };
+    const result = getFormattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...TRIAL_SESSION,
+        irsCalendarAdministratorInfo,
+      },
+    });
+
+    expect(result).toMatchObject({
+      formattedIrsCalendarAdministratorInfo: irsCalendarAdministratorInfo,
     });
   });
 
