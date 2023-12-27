@@ -65,6 +65,7 @@ export const migrateItems = async (
     accumulator[judge.name] = judge.userId;
     return accumulator;
   }, {});
+  console.log('judgesMap', judgesMap);
 
   const itemsAfter: TDynamoRecord[] = [];
 

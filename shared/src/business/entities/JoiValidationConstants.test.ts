@@ -79,7 +79,7 @@ describe('JoiValidationConstants', () => {
       for (const isoExample of iso8601Invalid) {
         it(`detects ${isoExample} as invalid`, () => {
           const result = schema.validate(isoExample);
-          expect(result.error.toString()).toMatch('ValidationError');
+          expect(result.error?.toString()).toMatch('ValidationError');
         });
       }
     });
