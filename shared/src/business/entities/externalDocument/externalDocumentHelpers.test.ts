@@ -17,7 +17,7 @@ describe('external document helpers', () => {
         schema,
       });
 
-      expect(schema.somethingElse).toEqual(false);
+      expect(schema['somethingElse']).toEqual(false);
     });
   });
 
@@ -34,7 +34,7 @@ describe('external document helpers', () => {
         schema,
         schemaOptionalItems,
       });
-      expect(schema.somethingElse).toEqual(
+      expect(schema['somethingElse']).toEqual(
         JoiValidationConstants.STRING.required(),
       );
     });
@@ -51,7 +51,7 @@ describe('external document helpers', () => {
         schema,
         schemaOptionalItems,
       });
-      expect(schema.somethingElse2).toEqual(undefined);
+      expect(schema['somethingElse2']).toEqual(undefined);
     });
   });
 });

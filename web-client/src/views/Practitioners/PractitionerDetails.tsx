@@ -33,6 +33,7 @@ export const PractitionerDetails = connect(
             <Button
               link
               className="push-right margin-bottom-1"
+              data-testid="print-practitioner-case-list"
               icon="print"
               overrideMargin={true}
               onClick={() => {
