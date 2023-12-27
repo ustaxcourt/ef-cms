@@ -1,9 +1,10 @@
+import { getPetitionerNameInput } from '../../../cypress-integration/support/pages/public/advanced-search';
 import { isValidRequest } from '../../support/helpers';
 
 describe('advanced search pages', () => {
   it('should allow the user to search for a case by petitioner name', () => {
     cy.visit('/');
-    cy.get('input#petitioner-name').type('Smith');
+    getPetitionerNameInput().type('Smith');
     cy.intercept('GET', '**/public-api/search?**').as(
       'getCaseByPetitionerName',
     );
