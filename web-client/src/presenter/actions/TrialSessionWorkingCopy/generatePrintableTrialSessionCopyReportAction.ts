@@ -77,6 +77,8 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     formattedEstimatedEndDateFull,
     formattedIrsCalendarAdministrator:
       formattedTrialSessionDetails.formattedIrsCalendarAdministrator,
+    formattedIrsCalendarAdministratorInfo:
+      formattedTrialSessionDetails.formattedIrsCalendarAdministratorInfo,
     formattedJudge: formattedTrialSessionDetails.formattedJudge,
     formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,

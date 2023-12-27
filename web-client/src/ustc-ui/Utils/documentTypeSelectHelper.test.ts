@@ -3,6 +3,7 @@ import {
   docketEntryOnChange,
   fileDocumentPrimaryOnChange,
   fileDocumentSecondaryOnChange,
+  irsCalendarAdminInfoOnChange,
   onInputChange,
   reactSelectValue,
 } from './documentTypeSelectHelper';
@@ -321,6 +322,65 @@ describe('documentTypeSelectHelper', () => {
       });
 
       expect(result).toEqual([documentTypes[0]]);
+    });
+  });
+
+  describe('irsCalendarAdminInfoOnChange', () => {
+    it('should call updateTrialSessionFormDataSequence for all properies for contactInfo when action is "select-option"', () => {
+      const action = 'select-option';
+      const inputValue = {
+        email: 'TEST_EMAIL',
+        name: 'TEST_NAME',
+        phone: 'TEST_PHONE',
+      };
+      const updateTrialSessionFormDataSequence = jest.fn();
+
+      irsCalendarAdminInfoOnChange({
+        action,
+        inputValue,
+        updateTrialSessionFormDataSequence,
+      });
+
+      const { calls } = updateTrialSessionFormDataSequence.mock;
+      expect(calls.length).toEqual(3);
+      const [nameCall, emailCall, phoneCall] = calls;
+      expect(nameCall[0]).toEqual({
+        key: 'irsCalendarAdministratorInfo.name',
+        value: 'TEST_NAME',
+      });
+
+      expect(emailCall[0]).toEqual({
+        key: 'irsCalendarAdministratorInfo.email',
+        value: 'TEST_EMAIL',
+      });
+
+      expect(phoneCall[0]).toEqual({
+        key: 'irsCalendarAdministratorInfo.phone',
+        value: 'TEST_PHONE',
+      });
+    });
+
+    it('should call updateTrialSessionFormDataSequence to clear contactInfo when action is "clear"', () => {
+      const action = 'clear';
+      const inputValue = {
+        email: 'TEST_EMAIL',
+        name: 'TEST_NAME',
+        phone: 'TEST_PHONE',
+      };
+      const updateTrialSessionFormDataSequence = jest.fn();
+
+      irsCalendarAdminInfoOnChange({
+        action,
+        inputValue,
+        updateTrialSessionFormDataSequence,
+      });
+
+      const { calls } = updateTrialSessionFormDataSequence.mock;
+      expect(calls.length).toEqual(1);
+      expect(calls[0][0]).toEqual({
+        key: 'irsCalendarAdministratorInfo',
+        value: {},
+      });
     });
   });
 });

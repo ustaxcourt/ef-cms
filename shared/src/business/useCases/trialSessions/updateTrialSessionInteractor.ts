@@ -59,6 +59,7 @@ export const updateTrialSession = async (
     dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
     estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
+    irsCalendarAdministratorInfo: trialSession.irsCalendarAdministratorInfo,
     joinPhoneNumber: trialSession.joinPhoneNumber,
     judge: trialSession.judge,
     maxCases: trialSession.maxCases,
@@ -351,7 +352,7 @@ export const determineEntitiesToLock = async (
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
-      trialSessionId: trialSession.trialSessionId,
+      trialSessionId: trialSession.trialSessionId || '',
     });
 
   const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
