@@ -42,45 +42,12 @@ function toRawObject(entity) {
   return obj;
 }
 
-/**
- * returns all of the validation errors after being converted to their formatted output
- *
- * @returns {object} the formatted errors
- */
-function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
-  const errors = entity.getValidationErrors();
-  if (!errors) return null;
-
-  if (entity.getErrorToMessageMap) {
-    for (let key of Object.keys(errors)) {
-      const errorMap = entity.getErrorToMessageMap()[key];
-      if (Array.isArray(errorMap)) {
-        for (let errorObject of errorMap) {
-          if (
-            typeof errorObject === 'object' &&
-            errors[key].includes(errorObject.contains)
-          ) {
-            errors[key] = errorObject.message;
-            break;
-          } else if (typeof errorObject !== 'object') {
-            errors[key] = errorObject;
-            break;
-          }
-        }
-      } else if (errorMap) {
-        errors[key] = errorMap;
-      }
-    }
-  }
-  return errors;
-}
-
 function getFormattedValidationErrors(entity): Record<string, any> | null {
   const keys = Object.keys(entity);
   const obj = {};
   let errors: {} | null = null;
   if (entity.getFormattedValidationErrors) {
-    errors = getFormattedValidationErrorsHelper(entity);
+    errors = entity.getValidationErrors();
   }
   if (errors) {
     for (const key of Object.keys(errors)) {
@@ -128,8 +95,6 @@ export abstract class JoiValidationEntity {
   }
 
   abstract getValidationRules(): any;
-
-  getErrorToMessageMap?(): any;
 
   getValidationErrors() {
     const rules = this.getValidationRules();

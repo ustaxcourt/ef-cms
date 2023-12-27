@@ -64,16 +64,15 @@ import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlin
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
-import {
-  getCasesAssociatedWithUser,
-  getDocketNumbersByUser,
-} from './persistence/dynamo/cases/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
 import { getCasesByFilters } from './persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
-import { getCasesForUser } from './persistence/dynamo/users/getCasesForUser';
+import {
+  getCasesForUser,
+  getDocketNumbersByUser,
+} from './persistence/dynamo/users/getCasesForUser';
 import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getCognitoUserIdByEmail } from './persistence/cognito/getCognitoUserIdByEmail';
@@ -315,7 +314,6 @@ const gatewayMethods = {
   getCaseInventoryReport,
   getCaseMetadataWithCounsel,
   getCaseWorksheetsByDocketNumber,
-  getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByFilters,
   getCasesByLeadDocketNumber,
