@@ -59,14 +59,8 @@ export const migrateItems = async (
   items: any[],
   documentClient: AWS.DynamoDB.DocumentClient,
 ) => {
-  const judgeRecords = await getAllJudgeRecords(documentClient);
-
-  const judgesMap = judgeRecords.reduce((accumulator, judge) => {
-    accumulator[judge.name] = judge.userId;
-    return accumulator;
-  }, {});
-
   const itemsAfter: TDynamoRecord[] = [];
+  let judgesMap: { [key: string]: string } | null = null;
 
   for (const item of items) {
     if (
@@ -74,7 +68,18 @@ export const migrateItems = async (
       item.associatedJudge &&
       item.associatedJudge !== 'Chief Judge'
     ) {
-      item.associatedJudgeId = judgesMap[item.associatedJudge];
+      if (!judgesMap) {
+        const judgeRecords = await getAllJudgeRecords(documentClient);
+
+        judgesMap = judgeRecords.reduce(
+          (accumulator, judge) => {
+            accumulator[judge.name] = judge.userId;
+            return accumulator;
+          },
+          {} as { [key: string]: string },
+        );
+        item.associatedJudgeId = judgesMap[item.associatedJudge];
+      }
     }
 
     itemsAfter.push(item);
