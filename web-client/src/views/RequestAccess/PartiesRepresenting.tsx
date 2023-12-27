@@ -51,6 +51,7 @@ export const PartiesRepresenting = connect(
                   />
                   <label
                     className="usa-checkbox__label"
+                    data-testid={`filer-${petitioner.displayName}`}
                     htmlFor={`filing-${petitioner.contactId}`}
                   >
                     {petitioner.displayName}

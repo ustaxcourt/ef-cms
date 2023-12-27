@@ -2,6 +2,7 @@ import { externalUserSearchesDocketNumber } from '../../helpers/external-user-se
 import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
 import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 
 describe(
   'Petitioner files external document on case',
@@ -16,9 +17,7 @@ describe(
       });
       cy.get('[data-testid="button-file-document"]').click();
       cy.get('[data-testid="ready-to-file"]').click();
-      cy.get('[data-testid="document-type"] .select-react-element__input').type(
-        'Motion for Leave to File{enter}',
-      );
+      selectTypeaheadInput('document-type', 'Motion for Leave to File');
       cy.get(
         '[data-testid="secondary-doc-secondary-document-type"] .select-react-element__input',
       ).type('Answer{enter}');
