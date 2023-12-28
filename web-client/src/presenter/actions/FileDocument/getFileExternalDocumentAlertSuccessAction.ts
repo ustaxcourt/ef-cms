@@ -25,8 +25,16 @@ export const getFileExternalDocumentAlertSuccessAction = ({
     ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
     : DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED;
 
-  const alertSuccess = {
+  const alertSuccess: {
+    linkText?: string;
+    linkUrl?: string;
+    message: string;
+    newTab?: boolean;
+  } = {
+    linkText: undefined,
+    linkUrl: undefined,
     message: alertSuccessMessage,
+    newTab: undefined,
   };
 
   if (props.documentWithPendingAssociation) {
