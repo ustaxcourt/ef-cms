@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
+import { PendingMotion } from '@web-client/views/PendingMotion/PendingMotion';
 import { Statistics } from '@web-client/views/JudgeActivityReport/Statistics';
 import { SubmittedAndCav } from '@web-client/views/JudgeActivityReport/SubmittedAndCav';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
@@ -12,6 +13,7 @@ export const JudgeActivityReport = connect(
     judgeActivityReport: state.judgeActivityReport,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     judgeActivityReportJudges: state.judges,
+    pendingMotionsHelper: state.pendingMotionsHelper,
     setJudgeActivityReportFiltersSequence:
       sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
@@ -21,6 +23,7 @@ export const JudgeActivityReport = connect(
     judgeActivityReport,
     judgeActivityReportHelper,
     judgeActivityReportJudges,
+    pendingMotionsHelper,
     setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
   }) {
@@ -61,11 +64,9 @@ export const JudgeActivityReport = connect(
 
               <Tab
                 tabName="pendingMotions"
-                title={'Pending Motions (10)'}
-                // title={`Pending Motions (${judgeActivityReportHelper.formattedPendingMotions.length})`}
+                title={`Pending Motions (${pendingMotionsHelper.formattedPendingMotions.length})`}
               >
-                <>Pending motions</>
-                {/* <PendingMotion /> */}
+                <PendingMotion isReadOnly showJudgeColumn />
               </Tab>
             </Tabs>
           </>

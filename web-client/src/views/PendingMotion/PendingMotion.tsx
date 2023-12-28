@@ -7,18 +7,25 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const PendingMotion = connect(
-  {
-    navigateToPathSequence: sequences.navigateToPathSequence,
-    openAddEditDocketEntryWorksheetModalSequence:
-      sequences.openAddEditDocketEntryWorksheetModalSequence,
-    pendingMotionsHelper: state.pendingMotionsHelper,
-    showModal: state.modal.showModal,
-  },
+const pendingMotionsDeps = {
+  navigateToPathSequence: sequences.navigateToPathSequence,
+  openAddEditDocketEntryWorksheetModalSequence:
+    sequences.openAddEditDocketEntryWorksheetModalSequence,
+  pendingMotionsHelper: state.pendingMotionsHelper,
+  showModal: state.modal.showModal,
+};
+
+export const PendingMotion = connect<
+  { isReadOnly?: boolean; showJudgeColumn?: boolean },
+  typeof pendingMotionsDeps
+>(
+  pendingMotionsDeps,
   function PendingMotion({
+    isReadOnly,
     navigateToPathSequence,
     openAddEditDocketEntryWorksheetModalSequence,
     pendingMotionsHelper,
+    showJudgeColumn,
     showModal,
   }) {
     return (
@@ -48,12 +55,13 @@ export const PendingMotion = connect(
               <th aria-hidden="true" className="consolidated-case-column"></th>
               <th>Docket No.</th>
               <th>No. of Cases</th>
+              {showJudgeColumn && <th>Judge</th>}
               <th style={{ width: '12rem' }}>Petitioner(s)</th>
               <th>Motion</th>
               <th>Days Pending</th>
               <th>Final Brief Due Date</th>
               <th>Status of Matter</th>
-              <th aria-hidden="true"></th>
+              {!isReadOnly && <th aria-hidden="true"></th>}
             </tr>
           </thead>
           <tbody>
@@ -80,6 +88,7 @@ export const PendingMotion = connect(
                       />
                     </td>
                     <td>{motion.consolidatedGroupCount}</td>
+                    {showJudgeColumn && <td>{motion.judge}</td>}
                     <td>{motion.caseCaption}</td>
                     <td>
                       <a
@@ -95,20 +104,22 @@ export const PendingMotion = connect(
                     <td>
                       {motion.docketEntryWorksheet.formattedStatusOfMatter}
                     </td>
-                    <td>
-                      <Button
-                        link
-                        data-testid="add-edit-pending-motion-worksheet"
-                        icon="edit"
-                        onClick={() =>
-                          openAddEditDocketEntryWorksheetModalSequence({
-                            docketEntryId: motion.docketEntryId,
-                          })
-                        }
-                      >
-                        Edit
-                      </Button>
-                    </td>
+                    {!isReadOnly && (
+                      <td>
+                        <Button
+                          link
+                          data-testid="add-edit-pending-motion-worksheet"
+                          icon="edit"
+                          onClick={() =>
+                            openAddEditDocketEntryWorksheetModalSequence({
+                              docketEntryId: motion.docketEntryId,
+                            })
+                          }
+                        >
+                          Edit
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                   <tr
                     data-testid={`pending-motion-row-${motion.docketEntryId}-primary-issue`}
