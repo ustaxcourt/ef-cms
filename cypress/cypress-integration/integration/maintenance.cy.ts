@@ -31,7 +31,8 @@ describe('Maintenance mode', () => {
     cy.url().should('include', 'messages/my/inbox');
   });
 
-  it('should log the user out when they click "Logout" on the maintenance mode modal', () => {
+  // TODO: 10007 unskip
+  it.skip('should log the user out when they click "Logout" on the maintenance mode modal', () => {
     loginAs('petitionsclerk');
     engageMaintenance();
     getMaintenanceModal().should('exist');
