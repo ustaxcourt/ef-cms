@@ -1,16 +1,22 @@
 import {
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
+  BRIEF_EVENTCODES,
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+  ORDER_EVENT_CODES,
   PARTIES_CODES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   ROLES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
+  TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
+  isDocumentBriefType,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { ExcludeMethods } from 'types/TEntity';
@@ -462,6 +468,73 @@ export class DocketEntry extends JoiValidationEntity {
     return COURT_ISSUED_EVENT_CODES.map(
       ({ eventCode: courtIssuedEventCode }) => courtIssuedEventCode,
     ).includes(eventCode);
+  }
+
+  isPublic({
+    caseIsSealed = false,
+    previousDocument,
+    visibilityChangeDate,
+  }: {
+    caseIsSealed?: boolean;
+    previousDocument?: DocketEntry;
+    visibilityChangeDate: string;
+  }): boolean {
+    if (
+      this.isStricken ||
+      this.eventCode === TRANSCRIPT_EVENT_CODE ||
+      !this.isOnDocketRecord
+    ) {
+      return false;
+    }
+
+    const isOpinion = OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
+      this.eventCode,
+    );
+
+    if (caseIsSealed) {
+      return isOpinion;
+    }
+
+    const isOrder = ORDER_EVENT_CODES.includes(this.eventCode);
+    const isDecision = this.eventCode === 'DEC';
+
+    if (isOrder || isDecision || isOpinion) {
+      return true;
+    }
+
+    if (
+      !POLICY_DATE_IMPACTED_EVENTCODES.includes(this.eventCode) ||
+      this.filingDate < visibilityChangeDate
+    ) {
+      return false;
+    }
+
+    if (['AMBR', 'SDEC'].includes(this.eventCode)) {
+      return true;
+    }
+
+    if (BRIEF_EVENTCODES.includes(this.eventCode)) {
+      return !this.isPaper && this.isFiledByPractitioner();
+    }
+
+    const isAmendmentToABrief = !!(
+      previousDocument && isDocumentBriefType(previousDocument.documentType)
+    );
+
+    return (
+      !this.isPaper &&
+      isAmendmentToABrief &&
+      previousDocument.isFiledByPractitioner()
+    );
+  }
+
+  isFiledByPractitioner(): boolean {
+    return (
+      !!this.filedByRole &&
+      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(
+        this.filedByRole,
+      )
+    );
   }
 
   /**
