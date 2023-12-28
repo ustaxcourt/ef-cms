@@ -10,7 +10,7 @@ import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventC
 export type JudgeActivityReportFilters = {
   endDate: string;
   startDate: string;
-  judges: string[];
+  judgeName: string;
 };
 
 export type GetCountOfCaseDocumentsFiledByJudgesRequest = {
