@@ -18,6 +18,9 @@ Environment specific:
     `cd web-api/terraform/main`
 - Update permissions so that the script is executable with the following command:
     `chmod +x ../bin/deploy-opensearch-app.sh`
-- Run the following command - replacing <SOURCE_TABLE_VERSION> (e.g. alpha or beta) with the value of that record in the environment's deploy table and replacing <ENVIRONMENT> (ex - experimental2 would be 'exp2'):
+- Open `deploy-opensearch-app.sh`, replace the following variables in the terraform commands at the end of the file:
+    - <SOURCE_TABLE_VERSION> (e.g. alpha or beta) with the value of that record in the environment's deploy table
+    - <ENVIRONMENT> (ex - experimental2 would be 'exp2')
+- Run the following command - replacing <ENVIRONMENT> (ex - experimental2 would be 'exp2'):
     `../bin/deploy-opensearch-app.sh <ENVIRONMENT>`
 - Kick off a CircleCI deploy.

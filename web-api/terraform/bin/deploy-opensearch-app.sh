@@ -179,8 +179,6 @@ export TF_VAR_zone_name=$ZONE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 # Please replace <SOURCE_TABLE_VERSION> and <ENVIRONMENT> instances
-terraform state rm module.ef-cms_apis.module.elasticsearch_beta[0].aws_elasticsearch_domain.efcms-search
-echo "I finished removal"
-terraform state list
-# terraform import module.ef-cms_apis.module.elasticsearch_beta[0].aws_opensearch_domain.efcms-search efcms-search-exp3-beta
-# terraform plan
+terraform state rm module.ef-cms_apis.module.elasticsearch_<SOURCE_TABLE_VERSION>[0].aws_elasticsearch_domain.efcms-search
+terraform import module.ef-cms_apis.module.elasticsearch_<SOURCE_TABLE_VERSION>[0].aws_opensearch_domain.efcms-search efcms-search-<ENVIRONMENT>-<SOURCE_TABLE_VERSION>
+terraform plan
