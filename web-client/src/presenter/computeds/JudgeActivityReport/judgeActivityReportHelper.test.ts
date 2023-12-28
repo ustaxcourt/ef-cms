@@ -101,7 +101,9 @@ describe('judgeActivityReportHelper', () => {
 
     baseState = {
       judgeActivityReport: {
-        filters: {},
+        filters: {
+          judgeName: 'Sotomayor',
+        },
         hasUserSubmittedForm: false,
         judgeActivityReportData: mockJudgeActivityReport,
         judgeNameToDisplayForHeader: judgeUser.name,

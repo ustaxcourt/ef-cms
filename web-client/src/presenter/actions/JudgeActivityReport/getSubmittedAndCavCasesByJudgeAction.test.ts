@@ -23,7 +23,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
 
   const getCasesByStatusAndByJudgeRequestParams: GetCasesByStatusAndByJudgeRequest =
     {
-      judges: [judgeUser.name],
+      judges: [judgeUser.userId],
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     };
 
@@ -65,6 +65,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         judgeActivityReport: {
           filters: judgeActivityReportStateFilters,
         },
+        judges: [judgeUser],
       },
     });
 
@@ -89,10 +90,11 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         judgeActivityReport: {
           filters: {
             ...judgeActivityReportStateFilters,
+            judgeName: judgeColvin.name,
             judges: undefined,
           },
-          judgeName: judgeColvin.name,
         },
+        judges: [judgeColvin],
       },
     });
 
@@ -102,7 +104,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
           .getCaseWorksheetsByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
     ).toMatchObject({
-      judges: [judgeColvin.name],
+      judges: [judgeColvin.userId],
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
     expect(result.output.cases).toBe(mockReturnedCases);
