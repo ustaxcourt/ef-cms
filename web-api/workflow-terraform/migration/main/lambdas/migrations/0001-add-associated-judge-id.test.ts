@@ -117,23 +117,23 @@ describe('migrateItems', () => {
   it('should add associatedJudgeId when the associated judge is a legacy judge', async () => {
     getAllUsersByRoleResults = [
       {
-        name: 'Fieri',
+        name: 'Colvin',
         pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-        role: 'legacyJudge',
+        role: 'judge',
         sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
       },
     ];
     const items = [
       {
-        name: 'Fieri',
+        name: 'Colvin',
         pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         role: 'legacyJudge',
         sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
       },
       {
-        associatedJudge: 'Fieri',
+        associatedJudge: 'Colvin',
         pk: 'case|445-22',
         sk: 'case|445-22',
       },
@@ -142,14 +142,14 @@ describe('migrateItems', () => {
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
-        name: 'Fieri',
+        name: 'Colvin',
         pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         role: 'legacyJudge',
         sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
       },
       {
-        associatedJudge: 'Fieri',
+        associatedJudge: 'Colvin',
         associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
         pk: 'case|445-22',
         sk: 'case|445-22',
