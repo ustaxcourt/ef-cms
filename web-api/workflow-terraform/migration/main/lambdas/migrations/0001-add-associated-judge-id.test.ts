@@ -1,34 +1,33 @@
 import { migrateItems } from './0001-add-associated-judge-id';
 
 describe('migrateItems', () => {
-  let documentClient;
-  let scanMock;
-  let promiseMock;
-  let scanResults;
+  let applicationMock;
+  let getPersistenceGatewayMock;
+  let getAllUsersByRoleMock;
+  let getAllUsersByRoleResults;
 
   beforeEach(() => {
-    promiseMock = jest.fn().mockImplementation(() => scanResults);
-    scanMock = jest.fn().mockImplementation(() => ({
-      promise: promiseMock,
-    }));
-
-    documentClient = {
-      scan: scanMock,
+    getAllUsersByRoleMock = jest
+      .fn()
+      .mockImplementation(() => getAllUsersByRoleResults);
+    getPersistenceGatewayMock = {
+      getAllUsersByRole: getAllUsersByRoleMock,
+    };
+    applicationMock = {
+      getPersistenceGateway: () => getPersistenceGatewayMock,
     };
   });
 
   it('should add associatedJudgeId to case records when there is an associated judge', async () => {
-    scanResults = {
-      Items: [
-        {
-          name: 'Colvin',
-          pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          role: 'judge',
-          sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
+    getAllUsersByRoleResults = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+    ];
     const items = [
       {
         name: 'Colvin',
@@ -42,9 +41,14 @@ describe('migrateItems', () => {
         pk: 'case|445-22',
         sk: 'case|445-22',
       },
+      {
+        associatedJudge: 'Colvin',
+        pk: 'case|446-22',
+        sk: 'case|446-22',
+      },
     ];
-    const results = await migrateItems(items, documentClient);
-    expect(results.length).toEqual(2);
+    const results = await migrateItems(items, null, applicationMock);
+    expect(results.length).toEqual(3);
     expect(results).toEqual([
       {
         name: 'Colvin',
@@ -59,21 +63,25 @@ describe('migrateItems', () => {
         pk: 'case|445-22',
         sk: 'case|445-22',
       },
+      {
+        associatedJudge: 'Colvin',
+        associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+        pk: 'case|446-22',
+        sk: 'case|446-22',
+      },
     ]);
   });
 
   it('should not add associatedJudgeId when the associated judge is set to Chief Judge', async () => {
-    scanResults = {
-      Items: [
-        {
-          name: 'Chief Judge',
-          pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          role: 'judge',
-          sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          userId: 'Chief Judge Id',
-        },
-      ],
-    };
+    getAllUsersByRoleResults = [
+      {
+        name: 'Chief Judge',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'Chief Judge Id',
+      },
+    ];
     const items = [
       {
         name: 'Chief Judge',
@@ -88,7 +96,7 @@ describe('migrateItems', () => {
         sk: 'case|445-22',
       },
     ];
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items, null, applicationMock);
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
@@ -107,44 +115,41 @@ describe('migrateItems', () => {
   });
 
   it('should add associatedJudgeId when the associated judge is a legacy judge', async () => {
-    scanResults = {
-      Items: [
-        {
-          name: 'Fieri',
-          pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          role: 'legacyJudge',
-          sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
-
+    getAllUsersByRoleResults = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+    ];
     const items = [
       {
-        name: 'Fieri',
+        name: 'Colvin',
         pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         role: 'legacyJudge',
         sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
       },
       {
-        associatedJudge: 'Fieri',
+        associatedJudge: 'Colvin',
         pk: 'case|445-22',
         sk: 'case|445-22',
       },
     ];
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items, null, applicationMock);
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
-        name: 'Fieri',
+        name: 'Colvin',
         pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         role: 'legacyJudge',
         sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
         userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
       },
       {
-        associatedJudge: 'Fieri',
+        associatedJudge: 'Colvin',
         associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
         pk: 'case|445-22',
         sk: 'case|445-22',
@@ -153,18 +158,15 @@ describe('migrateItems', () => {
   });
 
   it('should not add associatedJudgeId if the record is not a case, work item or case record', async () => {
-    scanResults = {
-      Items: [
-        {
-          name: 'Colvin',
-          pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          role: 'judge',
-          sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
-
+    getAllUsersByRoleResults = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+    ];
     const items = [
       {
         name: 'Colvin',
@@ -179,7 +181,7 @@ describe('migrateItems', () => {
         sk: 'case-worksheet|445-22',
       },
     ];
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items, null, applicationMock);
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
@@ -198,18 +200,15 @@ describe('migrateItems', () => {
   });
 
   it('should not add associatedJudgeId if the record is a case record with no associatedjudge defined', async () => {
-    scanResults = {
-      Items: [
-        {
-          name: 'Colvin',
-          pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          role: 'judge',
-          sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
-
+    getAllUsersByRoleResults = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+    ];
     const items = [
       {
         name: 'Colvin',
@@ -224,7 +223,7 @@ describe('migrateItems', () => {
         sk: 'case|445-22',
       },
     ];
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items, null, applicationMock);
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
@@ -243,18 +242,15 @@ describe('migrateItems', () => {
   });
 
   it('should add associatedJudgeId to case deadline records when there is an associated judge', async () => {
-    scanResults = {
-      Items: [
-        {
-          name: 'Colvin',
-          pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          role: 'judge',
-          sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
-
+    getAllUsersByRoleResults = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+    ];
     const items = [
       {
         name: 'Colvin',
@@ -269,7 +265,7 @@ describe('migrateItems', () => {
         sk: 'case-deadline|123-45',
       },
     ];
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items, null, applicationMock);
     expect(results.length).toEqual(2);
     expect(results[1]).toEqual({
       associatedJudge: 'Colvin',
@@ -280,18 +276,15 @@ describe('migrateItems', () => {
   });
 
   it('should add associatedJudgeId to work item records when there is an associated judge', async () => {
-    scanResults = {
-      Items: [
-        {
-          name: 'Colvin',
-          pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          role: 'judge',
-          sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-    };
-
+    getAllUsersByRoleResults = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+    ];
     const items = [
       {
         name: 'Colvin',
@@ -307,7 +300,7 @@ describe('migrateItems', () => {
         sk: 'work-item|123-45',
       },
     ];
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items, null, applicationMock);
     expect(results.length).toEqual(2);
     expect(results[1]).toEqual({
       associatedJudge: 'Colvin',

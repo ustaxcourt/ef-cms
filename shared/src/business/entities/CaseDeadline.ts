@@ -1,6 +1,5 @@
 import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import { Case } from './cases/Case';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';

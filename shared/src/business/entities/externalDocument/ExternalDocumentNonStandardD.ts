@@ -1,4 +1,3 @@
-import { ExcludeMethods } from 'types/TEntity';
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
