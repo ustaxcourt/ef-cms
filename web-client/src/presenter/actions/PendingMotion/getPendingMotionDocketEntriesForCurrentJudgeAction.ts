@@ -14,7 +14,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeAction = async ({
     .getPendingMotionDocketEntriesForCurrentJudgeInteractor(
       applicationContext,
       {
-        judge: name,
+        judges: [name],
       },
     );
 
