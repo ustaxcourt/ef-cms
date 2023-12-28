@@ -12,6 +12,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserCase } from '../entities/UserCase';
+import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 
@@ -26,6 +27,7 @@ const addPetitionDocketEntryToCase = ({
       assigneeId: null,
       assigneeName: null,
       associatedJudge: caseToAdd.associatedJudge,
+      associatedJudgeId: caseToAdd.associatedJudgeId,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketEntry: {
@@ -94,7 +96,7 @@ export const createCaseInteractor = async (
       applicationContext,
     });
 
-  let privatePractitioners = [];
+  let privatePractitioners: UserRecord[] = [];
   if (user.role === ROLES.privatePractitioner) {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()

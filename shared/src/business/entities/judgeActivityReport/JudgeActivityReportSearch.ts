@@ -13,7 +13,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 
 export class JudgeActivityReportSearch extends JoiValidationEntity {
-  private VALID_DATE_FORMAT: string = FORMATS.MMDDYYYY;
+  private VALID_DATE_FORMAT = FORMATS.MMDDYYYY;
 
   public endDate: string;
   public startDate: string;

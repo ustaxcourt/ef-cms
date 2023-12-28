@@ -1,11 +1,10 @@
 import { Case, isClosed } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
-import { NotFoundError } from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 
@@ -45,10 +44,10 @@ const batchDownloadTrialSessionInteractorHelper = async (
       trialSessionId,
     });
 
-  let s3Ids = [];
-  let fileNames = [];
+  let s3Ids: string[] = [];
+  let fileNames: string[] = [];
   let extraFiles = [];
-  let extraFileNames = [];
+  let extraFileNames: string[] = [];
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
