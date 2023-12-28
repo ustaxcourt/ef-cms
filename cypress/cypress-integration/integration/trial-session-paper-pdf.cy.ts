@@ -1,6 +1,5 @@
 import { fillInCreateCaseFromPaperForm } from '../support/pages/create-paper-petition';
 import { getCreateACaseButton } from '../support/pages/document-qc';
-import { waitForLoadingComplete } from '../support/generalCommands/waitForLoader';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
   it('should create a trial session, add a case, and generate a pdf for paper service', () => {
@@ -34,9 +33,14 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
     cy.get('[data-testid="trial-session-trial-clerk"]').select('Other');
     cy.get('[data-testid="trial-session-trial-clerk-alternate"]').type('Abu');
     cy.get('[data-testid="trial-session-court-reporter"]').type('Fameet');
-    cy.get('[data-testid="trial-session-irs-calendar-administrator"]').type(
-      'rasta reporter',
-    );
+    cy.get(
+      '#irs-calendar-administrator-info-search .select-react-element__input-container input',
+    ).clear();
+    cy.get(
+      '#irs-calendar-administrator-info-search .select-react-element__input-container input',
+    ).type('Nero West');
+    cy.get('#react-select-2-option-0').click({ force: true });
+
     cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
     cy.get('[data-testid="submit-trial-session"]').click();
     cy.wait('@createTrialSession').then(
@@ -83,11 +87,29 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           );
           cy.get('h3:contains("Trial - Scheduled")').should('exist');
           cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
+
+          cy.get('[data-testid="irs-calendar-admin-info-name"]').should(
+            'have.text',
+            'Nero West',
+          );
+          cy.get('[data-testid="irs-calendar-admin-info-email"]').should(
+            'have.text',
+            'irspractitioner2@example.com',
+          );
+          cy.get('[data-testid="irs-calendar-admin-info-phone"]').should(
+            'have.text',
+            '+1 (555) 555-5555',
+          );
+
+          cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
+            'not.exist',
+          );
           cy.get(`label[for="${docketNumber}-complete"]`).click();
-          waitForLoadingComplete();
+          cy.get(`[data-testid="${docketNumber}-complete"]:checked`).should(
+            'exist',
+          );
           cy.get('#set-calendar-button').click();
           cy.get('#modal-button-confirm').click();
-          waitForLoadingComplete();
           cy.url().should('include', 'print-paper-trial-notices');
           cy.get('[data-testid="printing-complete"]').click();
           cy.url().should(

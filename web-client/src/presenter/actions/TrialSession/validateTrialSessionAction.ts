@@ -5,10 +5,12 @@ export const validateTrialSessionAction = ({
   get,
   path,
 }: ActionProps) => {
-  let errors = applicationContext
+  const trialSessionForm = get(state.form);
+
+  const errors = applicationContext
     .getUseCases()
     .validateTrialSessionInteractor(applicationContext, {
-      trialSession: get(state.form),
+      trialSession: trialSessionForm,
     });
 
   if (!errors) {

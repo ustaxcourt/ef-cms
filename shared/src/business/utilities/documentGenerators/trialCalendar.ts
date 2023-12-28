@@ -1,4 +1,5 @@
 import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
+import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { TrialCalendar } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialCalendar';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
@@ -36,6 +37,7 @@ export const trialCalendar = async ({
       courtReporter: string;
       notes?: string;
       irsCalendarAdministrator: string;
+      irsCalendarAdministratorInfo: RawIrsCalendarAdministratorInfo;
       noLocationEntered?: boolean;
       trialLocation?: string;
     };
