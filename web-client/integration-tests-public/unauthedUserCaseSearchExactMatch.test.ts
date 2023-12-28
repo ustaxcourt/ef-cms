@@ -16,8 +16,6 @@ const { COUNTRY_TYPES } = applicationContext.getConstants();
 
 testClient.draftOrders = [];
 
-// exact match on contactPrimary.name
-
 const baseContactPrimary = {
   address1: '734 Cowley Parkway',
   city: 'Somewhere',
@@ -75,14 +73,19 @@ function createCaseUsingPrimaryContactName(name) {
 describe('Petitioner searches for exact name match', () => {
   unauthedUserNavigatesToPublicSite(cerebralTest);
 
-  it('returns search results we expect in the correct order', async () => {
-    const queryParams = {
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      currentPage: 1,
-      petitionerName: searchTerm,
-    };
+  it('should return the case results', async () => {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: searchTerm,
+    });
 
-    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'countryType',
+      value: COUNTRY_TYPES.DOMESTIC,
+    });
+
     await cerebralTest.runSequence(
       'submitPublicCaseAdvancedSearchSequence',
       {},

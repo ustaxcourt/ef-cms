@@ -44,6 +44,9 @@ describe('search page functionality', () => {
     cy.get('[data-testid="bar-number"]').type('pt1234');
     cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
     cy.url().should('include', 'pt1234');
+    cy.get('[data-testid="print-practitioner-case-list"]').click();
+    cy.get('dialog.modal-screen').should('exist');
+    cy.get('h3:contains("Printable Case List")').should('be.visible');
   });
 
   it('should be able to search for practitioners by bar number', () => {
@@ -73,9 +76,9 @@ describe('search page functionality', () => {
       cy.get('[data-testid="upload-file-success"]').should('exist');
       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
-      cy.get('#react-select-2-input').clear();
-      cy.get('#react-select-2-input').type('opinion');
-      cy.get('#react-select-2-option-57').click();
+      cy.get(
+        '[data-testid="primary-document"] .select-react-element__input',
+      ).type('Summary Opinion{enter}');
       cy.get('[data-testid="judge-select"]').select('Ashford');
       cy.get('[data-testid="serve-to-parties-btn"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();

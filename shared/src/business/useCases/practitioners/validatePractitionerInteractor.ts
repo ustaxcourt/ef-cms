@@ -1,4 +1,4 @@
-import { Practitioner } from '../../entities/Practitioner';
+import { Practitioner, RawPractitioner } from '../../entities/Practitioner';
 
 /**
  * validatePractitionerInteractor
@@ -10,7 +10,7 @@ import { Practitioner } from '../../entities/Practitioner';
  */
 export const validatePractitionerInteractor = (
   applicationContext: IApplicationContext,
-  { practitioner }: { practitioner: TPractitioner },
+  { practitioner }: { practitioner: RawPractitioner },
 ) => {
   const errors = new Practitioner(practitioner, {
     applicationContext,

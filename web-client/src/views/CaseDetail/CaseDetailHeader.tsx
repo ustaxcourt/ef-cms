@@ -24,6 +24,10 @@ export const CaseDetailHeader = connect(
     formattedCaseDetail,
     hideActionButtons,
   }) {
+    const consolidatedCasesString = formattedCaseDetail.consolidatedCases
+      .map(eachCase => eachCase.docketNumberWithSuffix)
+      .join(', ');
+
     const externalNonMobileExternalButtons = () => (
       <NonMobile>
         <div className="tablet:grid-col-4">
@@ -44,6 +48,7 @@ export const CaseDetailHeader = connect(
             <Button
               secondary
               className="tablet-full-width push-right margin-right-0"
+              data-testid="button-request-access"
               href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
               id="button-request-access"
             >
@@ -91,6 +96,7 @@ export const CaseDetailHeader = connect(
           {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
             <Button
               className="tablet-full-width margin-right-0"
+              data-testid="button-request-access-mobile"
               href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
               id="button-request-access"
             >
@@ -149,6 +155,7 @@ export const CaseDetailHeader = connect(
                       <Icon
                         aria-label="consolidated case"
                         className="margin-right-1 icon-consolidated"
+                        data-testid={`consolidatedCasesOfLeadCase-${consolidatedCasesString}`}
                         icon="copy"
                         size="1x"
                       />

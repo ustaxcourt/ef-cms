@@ -13,13 +13,13 @@ export const searchForCaseByDocketNumber = docketNumber => {
   cy.get('button#docket-search-button').click();
 };
 
-export const enterPetitionerName = name => {
+export const enterPetitionerName = (name: string) => {
   cy.waitUntilSettled();
-  cy.get('input#petitioner-name').type(name);
+  cy.get('[data-testid="petitioner-name"]').type(name);
 };
 
 export const getPetitionerNameInput = () => {
-  return cy.get('input#petitioner-name');
+  return cy.get('[data-testid="petitioner-name"]');
 };
 
 export const enterCaseTitleOrPetitionerName = name => {

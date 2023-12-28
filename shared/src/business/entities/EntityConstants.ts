@@ -211,15 +211,6 @@ export const DOCUMENT_SERVED_MESSAGES = {
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
 
-export const VALIDATION_ERROR_MESSAGES = {
-  END_DATE_IN_THE_FUTURE_ERROR:
-    'End date cannot be in the future. Enter a valid date.',
-  END_DATE_PRIOR_TO_START_DATE_ERROR:
-    'End date cannot be prior to start date. Enter a valid date.',
-  START_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
-    'Start date cannot be in the future. Enter a valid date.',
-};
-
 export const DOCUMENT_SEARCH_SORT = {
   FILING_DATE_ASC: 'FILING_DATE_ASC',
   FILING_DATE_DESC: 'FILING_DATE_DESC',
@@ -1103,7 +1094,7 @@ export const US_STATES = {
   WI: 'Wisconsin',
   WV: 'West Virginia',
   WY: 'Wyoming',
-};
+} as const;
 
 export const US_STATES_OTHER = {
   AA: 'Armed Forces Americas',
@@ -1117,7 +1108,17 @@ export const US_STATES_OTHER = {
   PR: 'Puerto Rico',
   PW: 'Palau',
   VI: 'Virgin Islands',
-};
+} as const;
+
+const statesArray = [
+  ...Object.values(US_STATES),
+  ...Object.values(US_STATES_OTHER),
+];
+export type States = (typeof statesArray)[number];
+
+export type AbbrevatedStates =
+  | keyof typeof US_STATES
+  | keyof typeof US_STATES_OTHER;
 
 export const STATE_NOT_AVAILABLE = 'N/A';
 

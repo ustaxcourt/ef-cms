@@ -23,7 +23,7 @@ describe('validate petition from paper', () => {
       'petitionPaymentStatus',
       'procedureType',
       'receivedAt',
-      'chooseAtLeastOneValue',
+      'object.missing',
     ]);
   });
 
