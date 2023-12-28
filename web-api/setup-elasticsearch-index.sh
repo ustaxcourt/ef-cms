@@ -39,10 +39,10 @@ fi
 
 popd
 
-if [[ -n "${ELASTICSEARCH_ENDPOINT_ALPHA}" ]]; then
+if [[ -n "${ELASTICSEARCH_ENDPOINT_ALPHA}"  && ( "${MIGRATE_FLAG}" == 'false' || "${DESTINATION_DOMAIN}" == *'alpha'* ) ]]; then
   npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT_ALPHA}"
 fi
 
-if [[ -n "${ELASTICSEARCH_ENDPOINT_BETA}" ]]; then
+if [[ -n "${ELASTICSEARCH_ENDPOINT_BETA}"  && ( "${MIGRATE_FLAG}" == 'false' || "${DESTINATION_DOMAIN}" == *'beta'* ) ]]; then
   npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT_BETA}"
 fi
