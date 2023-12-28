@@ -1,5 +1,5 @@
 import { EligibleCase } from '../../entities/cases/EligibleCase';
-import { NotFoundError } from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -9,7 +9,6 @@ import {
   TrialSession,
 } from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * get eligible cases for trial session
