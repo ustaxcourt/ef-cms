@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TDynamoRecord } from '../../../../../src/persistence/dynamo/dynamoTypes';
 
 const isCaseRecord = item => {
@@ -18,46 +19,10 @@ const isRecordToUpdate = item => {
   return isCaseRecord(item) || isCaseDeadline(item) || isWorkItem(item);
 };
 
-async function getAllJudgeRecords(documentClient) {
-  const scanParams = {
-    ExpressionAttributeNames: {
-      '#n': 'name',
-      '#r': 'role',
-    },
-    ExpressionAttributeValues: {
-      ':prefix': 'user|',
-      ':role1': 'judge',
-      ':role2': 'legacyJudge',
-    },
-    FilterExpression:
-      'begins_with(pk, :prefix) AND begins_with(sk, :prefix) AND (#r = :role1 OR #r = :role2)',
-    ProjectionExpression: 'pk, sk, #r, #n, userId',
-    TableName: process.env.SOURCE_TABLE!,
-  };
-
-  const items: { userId: string; name: string }[] = [];
-  let lastEvaluatedKey = null;
-
-  do {
-    const params = lastEvaluatedKey
-      ? { ...scanParams, ExclusiveStartKey: lastEvaluatedKey }
-      : scanParams;
-
-    const result = (await documentClient.scan(params).promise()) as unknown as {
-      Items: { userId: string; name: string }[];
-      LastEvaluatedKey?: any;
-    };
-
-    items.push(...result.Items);
-    lastEvaluatedKey = result.LastEvaluatedKey;
-  } while (lastEvaluatedKey);
-
-  return items;
-}
-
 export const migrateItems = async (
   items: any[],
-  documentClient: AWS.DynamoDB.DocumentClient,
+  _,
+  applicationContext: ServerApplicationContext,
 ) => {
   const itemsAfter: TDynamoRecord[] = [];
   let judgesMap: { [key: string]: string } | null = null;
@@ -69,7 +34,9 @@ export const migrateItems = async (
       item.associatedJudge !== 'Chief Judge'
     ) {
       if (!judgesMap) {
-        const judgeRecords = await getAllJudgeRecords(documentClient);
+        const judgeRecords = await applicationContext
+          .getPersistenceGateway()
+          .getAllUsersByRole(applicationContext, ['judge', 'legacyJudge']);
 
         judgesMap = judgeRecords.reduce(
           (accumulator, judge) => {
