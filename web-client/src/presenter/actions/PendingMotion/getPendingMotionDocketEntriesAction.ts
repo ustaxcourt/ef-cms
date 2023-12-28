@@ -8,15 +8,15 @@ export const getJudgesFilters = (get: ActionProps['get']) => {
   let judgesToQueryFor: string[] = [];
 
   if (judgeName === 'All Judges') {
-    judgesToQueryFor = judges.map(judge => judge.name);
+    judgesToQueryFor = judges.map(judge => judge.userId);
   } else if (judgeName === 'All Senior Judges') {
     judgesToQueryFor = judges
       .filter(judge => judge.isSeniorJudge === true)
-      .map(judge => judge.name);
+      .map(judge => judge.userId);
   } else if (judgeName === 'All Special Trial Judges') {
     judgesToQueryFor = judges
       .filter(judge => judge.judgeTitle?.includes('Special Trial Judge'))
-      .map(judge => judge.name);
+      .map(judge => judge.userId);
   } else if (judgeName === 'All Regular Judges') {
     judgesToQueryFor = judges
       .filter(judge => judge.isSeniorJudge === false)
@@ -24,9 +24,10 @@ export const getJudgesFilters = (get: ActionProps['get']) => {
         judge =>
           judge.judgeTitle === 'Judge' || judge.judgeTitle === 'Chief Judge',
       )
-      .map(judge => judge.name);
+      .map(judge => judge.userId);
   } else {
-    judgesToQueryFor = [judgeName];
+    const judge = judges.find(j => j.name === judgeName);
+    judgesToQueryFor = [judge!.userId];
   }
   return judgesToQueryFor;
 };
@@ -42,7 +43,7 @@ export const getPendingMotionDocketEntriesAction = async ({
     .getPendingMotionDocketEntriesForCurrentJudgeInteractor(
       applicationContext,
       {
-        judges: getJudgesFilters(get),
+        judgeIds: getJudgesFilters(get),
       },
     );
 
