@@ -102,7 +102,7 @@ describe('setForHearingInteractor', () => {
     await setForHearingInteractor(applicationContext, {
       calendarNotes: 'testing',
       docketNumber: mockCase.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
     });
 
     expect(
@@ -130,7 +130,7 @@ describe('setForHearingInteractor', () => {
     await setForHearingInteractor(applicationContext, {
       calendarNotes: 'this is a calendarNote',
       docketNumber: mockCase.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
     });
 
     expect(

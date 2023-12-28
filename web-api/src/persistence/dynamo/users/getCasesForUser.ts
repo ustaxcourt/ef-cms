@@ -20,3 +20,17 @@ export const getCasesForUser = ({
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   }) as unknown as Promise<RawUserCase[]>;
+
+export const getDocketNumbersByUser = async ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) => {
+  const cases = await getCasesForUser({
+    applicationContext,
+    userId,
+  });
+  return cases.map(mapping => mapping.sk.split('|')[1]);
+};
