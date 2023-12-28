@@ -1,15 +1,5 @@
-import {
-  BRIEF_EVENTCODES,
-  DOCKET_NUMBER_SUFFIXES,
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-  ORDER_EVENT_CODES,
-  PARTY_TYPES,
-  POLICY_DATE_IMPACTED_EVENTCODES,
-  ROLES,
-  TRANSCRIPT_EVENT_CODE,
-  isDocumentBriefType,
-} from '../EntityConstants';
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { DOCKET_NUMBER_SUFFIXES, PARTY_TYPES, ROLES } from '../EntityConstants';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
@@ -108,59 +98,6 @@ export class PublicCase extends JoiValidationEntity {
       )
       .map(docketEntry => new PublicDocketEntry(docketEntry))
       .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
-  }
-
-  static isPrivateDocument(
-    docketEntry: RawDocketEntry,
-    visibilityChangeDate: string,
-  ): boolean {
-    if (
-      docketEntry.isStricken ||
-      docketEntry.eventCode === TRANSCRIPT_EVENT_CODE ||
-      !docketEntry.isOnDocketRecord
-    )
-      return true;
-
-    const isOrder = ORDER_EVENT_CODES.includes(docketEntry.eventCode);
-    const isOpinion = OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
-      docketEntry.eventCode,
-    );
-    const isDecision = docketEntry.eventCode === 'DEC';
-
-    if (isOrder || isOpinion || isDecision) {
-      return false;
-    }
-
-    if (
-      !POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntry.eventCode) ||
-      docketEntry.filingDate < visibilityChangeDate
-    ) {
-      return true;
-    }
-
-    if (['AMBR', 'SDEC'].includes(docketEntry.eventCode)) {
-      return false;
-    }
-
-    const isFiledByPractitioner = [
-      ROLES.privatePractitioner,
-      ROLES.irsPractitioner,
-    ].includes(docketEntry.filedByRole);
-
-    if (BRIEF_EVENTCODES.includes(docketEntry.eventCode)) {
-      return !(!docketEntry.isPaper && isFiledByPractitioner);
-    }
-
-    // TODO: need to determine if the previousDocument.filedByRole is also a practitioner
-    const isAmendmentToABrief =
-      docketEntry.previousDocument &&
-      isDocumentBriefType(docketEntry.previousDocument.documentType);
-
-    return !(
-      !docketEntry.isPaper &&
-      isAmendmentToABrief &&
-      isFiledByPractitioner
-    );
   }
 
   static VALIDATION_RULES = {
