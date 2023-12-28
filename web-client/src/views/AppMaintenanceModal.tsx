@@ -8,9 +8,8 @@ import React from 'react';
 export const AppMaintenanceModal = connect(
   {
     cancelSequence: sequences.closeModalAndNavigateToMaintenanceSequence,
-    signOutSequence: sequences.signOutSequence,
   },
-  function AppMaintenanceModal({ cancelSequence, signOutSequence }) {
+  function AppMaintenanceModal({ cancelSequence }) {
     return (
       <ModalDialog
         className="app-maintenance-modal text-center"
@@ -29,17 +28,11 @@ export const AppMaintenanceModal = connect(
           Your work may not be saved. Check back later for updates.
         </p>
         <p className="margin-top-5">
-          <Button id="maintenance-logout-btn" onClick={() => signOutSequence()}>
-            Log Out
-          </Button>
-        </p>
-        <p className="text-center margin-top-0">
           <Button
-            link
-            id="maintenance-cancel-btn"
+            data-testid="maintenance-modal-ok-btn"
             onClick={() => cancelSequence({ path: '/maintenance' })}
           >
-            Cancel
+            OK
           </Button>
         </p>
       </ModalDialog>
