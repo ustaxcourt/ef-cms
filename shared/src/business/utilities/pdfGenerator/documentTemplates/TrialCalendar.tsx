@@ -1,4 +1,5 @@
 import { PrimaryHeader } from '../components/PrimaryHeader';
+import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { ReportsHeader } from '../components/ReportsHeader';
 import { isMemberCase } from '@shared/business/utilities/generateSelectedFilterList';
 import React from 'react';
@@ -32,6 +33,7 @@ export const TrialCalendar = ({
     courtReporter: string;
     notes?: string;
     irsCalendarAdministrator: string;
+    irsCalendarAdministratorInfo: RawIrsCalendarAdministratorInfo;
     noLocationEntered?: boolean;
     trialLocation?: string;
   };
@@ -99,7 +101,23 @@ export const TrialCalendar = ({
             </div>
             <div className="width-half wrap-text-content">
               <strong>IRS Calendar Admin</strong>
-              <div>{sessionDetail.irsCalendarAdministrator}</div>
+              {!sessionDetail.irsCalendarAdministratorInfo && (
+                <div>{sessionDetail.irsCalendarAdministrator}</div>
+              )}
+              {sessionDetail.irsCalendarAdministratorInfo && (
+                <>
+                  <div>{sessionDetail.irsCalendarAdministratorInfo.name}</div>
+                  <div
+                    style={{
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-all',
+                    }}
+                  >
+                    {sessionDetail.irsCalendarAdministratorInfo.email}
+                  </div>
+                  <div>{sessionDetail.irsCalendarAdministratorInfo.phone}</div>
+                </>
+              )}
             </div>
             <div className="clear"></div>
           </div>
