@@ -179,8 +179,8 @@ const getTotalOpenCasesEOY = async ({ applicationContext }) => {
       query: {
         bool: {
           must_not: {
-            term: {
-              'status.S': 'Closed',
+            terms: {
+              'status.S': ['Closed', 'Closed - Dismissed'],
             },
           },
         },
