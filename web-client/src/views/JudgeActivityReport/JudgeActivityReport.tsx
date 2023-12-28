@@ -70,16 +70,15 @@ export const JudgeActivityReport = connect(
 
 function JudgeDropdown({ judgeName, judges, onChange }) {
   return (
-    <div className="grid-col-auto">
-      <div className="display-flex align-items-baseline ">
+    <div className="grid-col-auto padding-y-2">
+      <div className="display-flex align-items-baseline">
         <label
-          className="margin-right-3"
+          className="dropdown-label-serif margin-right-3"
           htmlFor="judge-selection"
           id="judge-selection-label"
         >
           Show items for
         </label>
-
         <select
           aria-describedby="judge-selection-label"
           aria-label="judge"

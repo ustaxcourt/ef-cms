@@ -55,7 +55,7 @@ export const PendingMotion = connect<
               <th aria-hidden="true" className="consolidated-case-column"></th>
               <th>Docket No.</th>
               <th>No. of Cases</th>
-              {showJudgeColumn && <th>Judge</th>}
+              {showJudgeColumn && <th style={{ width: '12rem' }}>Judge</th>}
               <th style={{ width: '12rem' }}>Petitioner(s)</th>
               <th>Motion</th>
               <th>Days Pending</th>
