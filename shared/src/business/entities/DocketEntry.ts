@@ -19,7 +19,6 @@ import {
   isDocumentBriefType,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { RawUser, User } from './User';
 import { WorkItem } from './WorkItem';
