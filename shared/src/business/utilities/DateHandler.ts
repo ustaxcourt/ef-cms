@@ -608,8 +608,8 @@ export const isValidReconciliationDate = dateString => {
   const dateInputValid = isValidISODate(dateString);
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
-  console.log(`dateInputValid: ${dateInputValid}`);
-  console.log(`dateLessthanOrEqualToToday: ${dateLessthanOrEqualToToday}`);
+  // console.log(`dateInputValid: ${dateInputValid}`);
+  // console.log(`dateLessthanOrEqualToToday: ${dateLessthanOrEqualToToday}`);
   return dateInputValid && dateLessthanOrEqualToToday;
 };
 

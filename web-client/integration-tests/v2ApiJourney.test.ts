@@ -1,6 +1,14 @@
+import { DateTime } from 'luxon';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import {
+  FORMATS,
+  USTC_TZ,
+} from '../../shared/src/business/utilities/DateHandler';
+import { PARTIES_CODES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-// import { seedEntries } from 'web-api/storage/fixtures/seed';
+import { seedEntries } from '../../web-api/storage/fixtures/seed';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -155,7 +163,7 @@ describe('View and manage the deadlines of a case', () => {
   it('gets the v2 reconciliation report for the provided date', async () => {
     //use a date that will be found in our seed data
     // const dateArg = '2022-02-01';
-    const dateArg = '2023-04-03T15:52:36Z';
+    const dateArg = '2023-04-03';
     const { data: response } = await axios.get(
       `http://localhost:4000/v2/reconciliation-report/${dateArg}`,
       {
@@ -175,6 +183,44 @@ describe('View and manage the deadlines of a case', () => {
   });
 
   describe('reconciliation report', () => {
+    //return an array of all docket entries that were served to IRS
+    const getDocketEntries = () => {
+      const docketEntries = new Array<DocketEntry>();
+      for (const item of seedEntries) {
+        if (item.entityName === 'DocketEntry') {
+          const de = new DocketEntry(item, { applicationContext });
+          if (
+            [PARTIES_CODES.BOTH, PARTIES_CODES.RESPONDENT].includes(
+              de.servedPartiesCode ?? '',
+            ) &&
+            de.servedAt
+          )
+            docketEntries.push(de);
+        }
+      }
+      return docketEntries;
+    };
+
+    const docketEntries = getDocketEntries();
+    const servedAt = DateTime.fromISO(docketEntries[0].servedAt!).setZone(
+      USTC_TZ,
+    );
+    const saDate: string = servedAt.toFormat(FORMATS.YYYYMMDD);
+    const saTimeAt: string = servedAt.toFormat(FORMATS.TIME_24_HOUR);
+    const saTimeBefore: string = servedAt
+      .minus({ minutes: 1 })
+      .toFormat(FORMATS.TIME_24_HOUR);
+    const saTimeAfter: string = servedAt
+      .plus({ minutes: 1 })
+      .toFormat(FORMATS.TIME_24_HOUR);
+    console.log(
+      'date, timeBefore, timeAfter',
+      saDate,
+      saTimeBefore,
+      saTimeAt,
+      saTimeAfter,
+    );
+
     const loginUsername = 'irssuperuser@example.com';
     if (!userMap[loginUsername]) {
       throw new Error(`Unable to log into test as ${loginUsername}`);
@@ -193,7 +239,19 @@ describe('View and manage the deadlines of a case', () => {
     //  - filtered cases on that day with timeEnd
     //  - filtered cases on that day with timeStart and timeEnd
 
-    it.todo('should show all cases from a particular day');
+    it('should show all cases from a particular day', async () => {
+      const dateArg = saDate;
+      const { data: response } = await axios.get(
+        `http://localhost:4000/v2/reconciliation-report/${dateArg}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      );
+      expect(response.totalDocketEntries).toBeGreaterThan(0);
+    });
+
     it.todo(
       'should show cases that occur on a particular day after a specific start time',
     );
