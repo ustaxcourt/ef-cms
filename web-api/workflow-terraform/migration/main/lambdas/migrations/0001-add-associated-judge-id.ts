@@ -19,13 +19,14 @@ const isRecordToUpdate = item => {
   return isCaseRecord(item) || isCaseDeadline(item) || isWorkItem(item);
 };
 
+let judgesMap: { [key: string]: string } | null = null;
+
 export const migrateItems = async (
   items: any[],
   _,
   applicationContext: ServerApplicationContext,
 ) => {
   const itemsAfter: TDynamoRecord[] = [];
-  let judgesMap: { [key: string]: string } | null = null;
 
   for (const item of items) {
     if (
