@@ -47,7 +47,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeAction', () => {
         .calls[0][1];
 
     expect(params).toEqual({
-      judgeId: TEST_JUDGE_ID,
+      judgeIds: [TEST_JUDGE_ID],
     });
 
     expect(results.output.docketEntries).toEqual(PENDING_MOTION_ENTRIES);
