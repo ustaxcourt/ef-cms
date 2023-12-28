@@ -44,10 +44,10 @@ const batchDownloadTrialSessionInteractorHelper = async (
       trialSessionId,
     });
 
-  let s3Ids = [];
-  let fileNames = [];
+  let s3Ids: string[] = [];
+  let fileNames: string[] = [];
   let extraFiles = [];
-  let extraFileNames = [];
+  let extraFileNames: string[] = [];
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
