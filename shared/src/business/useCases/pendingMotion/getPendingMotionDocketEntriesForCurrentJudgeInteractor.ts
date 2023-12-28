@@ -46,7 +46,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
   } = await applicationContext
     .getPersistenceGateway()
     .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judges });
-  console.log(allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch);
+
   const currentDate = prepareDateFromString().toISO()!;
   const pendingMotionDocketEntriesOlderThan180DaysFromDynamo =
     await Promise.all(
@@ -64,8 +64,6 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     pendingMotionDocketEntriesOlderThan180DaysFromDynamo.filter(
       removeMotionsThatHaveBeenHandledInDynamo,
     );
-
-  // console.log('judgePendingMotions', judgePendingMotions);
 
   const judgePendingMotionsWithWorksheet: FormattedPendingMotionWithWorksheet[] =
     await attachDocketEntryWorkSheets(applicationContext, judgePendingMotions);
@@ -172,8 +170,6 @@ async function getLatestDataForPendingMotions(
     currentDate,
     latestDocketEntry.filingDate,
   );
-
-  console.log('judge', latestDocketEntry.judge);
 
   const updatedDocketEntry: FormattedPendingMotion = {
     caseCaption: fullCase.caseCaption,
