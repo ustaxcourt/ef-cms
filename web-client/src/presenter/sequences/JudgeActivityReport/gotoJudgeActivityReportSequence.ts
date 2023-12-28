@@ -10,7 +10,7 @@ import { redirectToCognitoAction } from '../../actions/redirectToCognitoAction';
 import { resetJudgeActivityReportStateAction } from '../../actions/resetJudgeActivityReportStateAction';
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
-import { setJudgeLastNameOnJudgeActivityReportAction } from '../../actions/JudgeActivityReport/setJudgeLastNameOnJudgeActivityReportAction';
+import { setDefaultJudgeNameBasedOnUserAction } from '../../actions/JudgeActivityReport/setDefaultJudgeNameBasedOnUserAction';
 import { setJudgeUserAction } from '@web-client/presenter/actions/setJudgeUserAction';
 import { setPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/setPendingMotionDocketEntriesForCurrentJudgeAction';
 import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
@@ -26,7 +26,7 @@ const gotoJudgeActivityReport = [
   resetJudgeActivityReportStateAction,
   getJudgeForCurrentUserAction,
   setJudgeUserAction,
-  setJudgeLastNameOnJudgeActivityReportAction,
+  setDefaultJudgeNameBasedOnUserAction,
   getUsersInSectionAction({ section: 'judge' }),
   setAllAndCurrentJudgesAction,
   setupCurrentPageAction('JudgeActivityReport'),
