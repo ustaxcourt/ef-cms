@@ -14,12 +14,18 @@ export ENVIRONMENT="${ENVIRONMENT}"
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
 
 DESTINATION_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --key '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"}}' | jq -r ".Item.current.S")
-ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name efcms-search-test-"${DESTINATION_TABLE_VERSION}" --output json | jq -r .DomainStatus.Endpoint)
+
+echo "----------COMMAND----------"
+aws es describe-elasticsearch-domain --domain-name "efcms-search-test-${DESTINATION_TABLE_VERSION}" --output json
+echo "----------END OF COMMAND----------"
+
+ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name "efcms-search-test-${DESTINATION_TABLE_VERSION}" --output json | jq -r .DomainStatus.Endpoint)
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
 echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
+echo "  - DESTINATION_TABLE_VERSION=${DESTINATION_TABLE_VERSION}"
 echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}"
