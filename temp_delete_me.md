@@ -18,8 +18,7 @@
 - Refactor maintenance mode to be handled by router + initSequence. No other sequence needs to branch because of it.
 - invalidate old refreshToken and idToken upon refresh.
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
-- Make app-local.ts not create another webserver just to listen to incoming requests from cognito-local.
-- cognit to V3
+- cognito to V3
 
 
 ::: SOLO TO DO :::
