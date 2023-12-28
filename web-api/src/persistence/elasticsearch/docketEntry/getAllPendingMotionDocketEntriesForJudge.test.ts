@@ -15,7 +15,7 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
 
     const results = await getAllPendingMotionDocketEntriesForJudge({
       applicationContext,
-      judge: TEST_JUDGE_NAME,
+      judges: [TEST_JUDGE_NAME],
     });
 
     expect(searchAll).toHaveBeenCalledTimes(1);

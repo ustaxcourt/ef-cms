@@ -40,10 +40,10 @@ describe('validateJudgeActivityStatisticsReportSearchAction', () => {
           filters: {
             endDate: '02/02/2022',
             judgeName: judgeUser.name,
-            judges: [judgeUser.name],
             startDate: '02/01/2022',
           },
         },
+        judges: [judgeUser],
       },
     });
 
@@ -58,10 +58,10 @@ describe('validateJudgeActivityStatisticsReportSearchAction', () => {
           filters: {
             endDate: futureDate,
             judgeName: judgeUser.name,
-            judges: [judgeUser.name],
             startDate: '02/01/2022',
           },
         },
+        judges: [judgeUser],
       },
     });
 
