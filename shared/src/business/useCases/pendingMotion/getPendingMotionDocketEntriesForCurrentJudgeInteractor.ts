@@ -22,6 +22,7 @@ export type FormattedPendingMotion = {
   filingDate: string;
   consolidatedGroupCount: number;
   leadDocketNumber?: string;
+  judge?: string;
 };
 
 export type FormattedPendingMotionWithWorksheet = FormattedPendingMotion & {
@@ -30,11 +31,11 @@ export type FormattedPendingMotionWithWorksheet = FormattedPendingMotion & {
 
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
   applicationContext: IApplicationContext,
-  params: { judge: string },
+  params: { judges: string[] },
 ): Promise<{
   docketEntries: FormattedPendingMotionWithWorksheet[];
 }> => {
-  const { judge } = params;
+  const { judges } = params;
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_MOTIONS_TABLE)) {
     throw new UnauthorizedError('Unauthorized');
@@ -44,8 +45,8 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     results: allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch,
   } = await applicationContext
     .getPersistenceGateway()
-    .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judge });
-
+    .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judges });
+  console.log(allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch);
   const currentDate = prepareDateFromString().toISO()!;
   const pendingMotionDocketEntriesOlderThan180DaysFromDynamo =
     await Promise.all(
@@ -63,6 +64,8 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     pendingMotionDocketEntriesOlderThan180DaysFromDynamo.filter(
       removeMotionsThatHaveBeenHandledInDynamo,
     );
+
+  // console.log('judgePendingMotions', judgePendingMotions);
 
   const judgePendingMotionsWithWorksheet: FormattedPendingMotionWithWorksheet[] =
     await attachDocketEntryWorkSheets(applicationContext, judgePendingMotions);
@@ -170,6 +173,8 @@ async function getLatestDataForPendingMotions(
     latestDocketEntry.filingDate,
   );
 
+  console.log('judge', latestDocketEntry.judge);
+
   const updatedDocketEntry: FormattedPendingMotion = {
     caseCaption: fullCase.caseCaption,
     consolidatedGroupCount: fullCase.consolidatedCases.length || 1,
@@ -178,6 +183,7 @@ async function getLatestDataForPendingMotions(
     docketNumber: fullCase.docketNumber,
     eventCode: latestDocketEntry.eventCode,
     filingDate: latestDocketEntry.filingDate,
+    judge: fullCase.associatedJudge,
     leadDocketNumber: fullCase.leadDocketNumber,
     pending: latestDocketEntry.pending,
   };
