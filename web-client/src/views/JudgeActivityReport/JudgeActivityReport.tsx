@@ -14,8 +14,6 @@ export const JudgeActivityReport = connect(
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     judgeActivityReportJudges: state.judges,
     pendingMotionsHelper: state.pendingMotionsHelper,
-    setJudgeActivityReportFiltersSequence:
-      sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
   },
@@ -24,7 +22,6 @@ export const JudgeActivityReport = connect(
     judgeActivityReportHelper,
     judgeActivityReportJudges,
     pendingMotionsHelper,
-    setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
   }) {
     return (
@@ -39,11 +36,8 @@ export const JudgeActivityReport = connect(
           </div>
 
           <JudgeDropdown
-            judgeName={judgeActivityReport.judgeName}
+            judgeName={judgeActivityReport.filters.judgeName}
             judges={judgeActivityReportJudges}
-            setJudgeActivityReportFiltersSequence={
-              setJudgeActivityReportFiltersSequence
-            }
             submitJudgeActivityReportSequence={
               submitJudgeActivityReportSequence
             }
@@ -79,7 +73,6 @@ export const JudgeActivityReport = connect(
 function JudgeDropdown({
   judgeName,
   judges,
-  setJudgeActivityReportFiltersSequence,
   submitJudgeActivityReportSequence,
 }) {
   return (
@@ -100,11 +93,9 @@ function JudgeDropdown({
           name="associatedJudge"
           value={judgeName}
           onChange={e => {
-            const selectedJudgeName = e.target.value;
-            setJudgeActivityReportFiltersSequence({
-              judgeName: selectedJudgeName,
+            submitJudgeActivityReportSequence({
+              judgeName: e.target.value,
             });
-            submitJudgeActivityReportSequence();
           }}
         >
           <option key="all" value="All Judges">

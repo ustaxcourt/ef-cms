@@ -1,20 +1,14 @@
 import { CAV_AND_SUBMITTED_CASE_STATUS } from '../../../../../shared/src/business/entities/EntityConstants';
-import { state } from '@web-client/presenter/app.cerebral';
+import { getJudgesFilters } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesAction';
 
 export const getSubmittedAndCavCasesByJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const filters = get(state.judgeActivityReport.filters);
-
-  const judges = filters.judges?.length
-    ? filters.judges
-    : [get(state.judgeActivityReport.judgeName)];
-
   const { cases } = await applicationContext
     .getUseCases()
     .getCaseWorksheetsByJudgeInteractor(applicationContext, {
-      judges,
+      judges: getJudgesFilters(get),
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
 
