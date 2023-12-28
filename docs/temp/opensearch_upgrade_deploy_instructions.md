@@ -14,7 +14,8 @@ Account specific:
 - Run the following command:
     `cd iam/terraform/account-specific/main`
 - Run the following command:
-    `.../bin/deploy-opensearch-info.sh`
+    `../bin/deploy-opensearch-info.sh`
+- Evaluate terraform command to confirm that the info cluster will not be added or destroyed.
 
 
 Environment specific: 
