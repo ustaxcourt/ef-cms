@@ -9,7 +9,7 @@ describe('change of address', () => {
     loginAsPrivatePractitioner();
     practitionerCreatesEletronicCase().then(docketNumber => {
       petitionsclerkServePetition(docketNumber);
-      cy.login('privatePractitioner1');
+      cy.login('privatepractitioner1');
       cy.get('[data-testid="case-list-table"]').should('exist');
       cy.get('[data-testid="account-menu-button"]').click();
       cy.get('[data-testid="my-account-link"]').click();

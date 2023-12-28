@@ -1,10 +1,12 @@
 import 'cypress-file-upload';
-import { getEnvironmentSpecificFunctions } from '../helpers/auth/environment-specific-factory';
-
-const { login } = getEnvironmentSpecificFunctions();
 
 Cypress.Commands.add('login', (username, route = '/') => {
-  login(`${username}@example.com`, route);
+  cy.visit('/login');
+  cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
+  cy.get('[data-testid="password-input"]').type('Testing1234$', { log: false });
+  cy.get('[data-testid="login-button"]').click();
+  cy.get('[data-testid="account-menu-button"]');
+  cy.visit(route);
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );
