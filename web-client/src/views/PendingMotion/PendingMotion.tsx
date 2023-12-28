@@ -67,7 +67,7 @@ export const PendingMotion = connect<
           <tbody>
             {pendingMotionsHelper.formattedPendingMotions.map(motion => {
               return (
-                <React.Fragment key={`info-${motion.docketNumber}`}>
+                <React.Fragment key={`info-${motion.docketEntryId}`}>
                   <tr
                     data-testid={`pending-motion-row-${motion.docketEntryId}`}
                   >
