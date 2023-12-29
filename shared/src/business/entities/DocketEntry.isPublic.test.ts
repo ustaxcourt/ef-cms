@@ -1,5 +1,6 @@
 import {
   ALL_EVENT_CODES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
@@ -31,6 +32,7 @@ describe('DocketEntry isPublic', () => {
       eventCode,
       filingDate: beforeVisibilityChangeDate,
       isOnDocketRecord: true,
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     };
 
     it.each([beforeVisibilityChangeDate, afterVisibilityChangeDate])(
@@ -60,6 +62,21 @@ describe('DocketEntry isPublic', () => {
         {
           ...baseDocketEntry,
           isOnDocketRecord: false,
+        },
+        { applicationContext },
+      );
+      const isPublic = docketEntry.isPublic({
+        visibilityChangeDate,
+      });
+
+      expect(isPublic).toEqual(false);
+    });
+
+    it('returns false if it is pending', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...baseDocketEntry,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
         { applicationContext },
       );
@@ -135,6 +152,7 @@ describe('DocketEntry isPublic', () => {
             filedByRole: ROLES.privatePractitioner,
             filingDate,
             isOnDocketRecord: true,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           };
           it('returns false if it is paper', () => {
             const docketEntry = new DocketEntry(
@@ -196,6 +214,7 @@ describe('DocketEntry isPublic', () => {
               docketEntryId: '2a389787-91d2-41ba-9c6e-2a13440a928b',
               documentType: 'Seriatim Answering Brief',
             },
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           };
 
           it('returns false if it is paper', () => {
@@ -217,7 +236,7 @@ describe('DocketEntry isPublic', () => {
                 { ...baseDocketEntry, filedByRole },
                 { applicationContext },
               );
-              const previousDocument = new DocketEntry(
+              const rootDocument = new DocketEntry(
                 {
                   docketEntryId: '2a389787-91d2-41ba-9c6e-2a13440a928b',
                   documentType: 'Seriatim Answering Brief',
@@ -227,7 +246,7 @@ describe('DocketEntry isPublic', () => {
                 { applicationContext },
               );
               const isPublic = docketEntry.isPublic({
-                previousDocument,
+                rootDocument,
                 visibilityChangeDate,
               });
 
@@ -235,12 +254,12 @@ describe('DocketEntry isPublic', () => {
             },
           );
 
-          it('returns false if the previousDocument was not filed by a Practitioner', () => {
+          it('returns false if the rootDocument was not filed by a Practitioner', () => {
             const docketEntry = new DocketEntry(
               { ...baseDocketEntry, filedByRole: ROLES.privatePractitioner },
               { applicationContext },
             );
-            const previousDocument = new DocketEntry(
+            const rootDocument = new DocketEntry(
               {
                 docketEntryId: '2a389787-91d2-41ba-9c6e-2a13440a928b',
                 documentType: 'Seriatim Answering Brief',
@@ -250,7 +269,7 @@ describe('DocketEntry isPublic', () => {
               { applicationContext },
             );
             const isPublic = docketEntry.isPublic({
-              previousDocument,
+              rootDocument,
               visibilityChangeDate,
             });
 
@@ -272,13 +291,13 @@ describe('DocketEntry isPublic', () => {
             },
           );
 
-          it('returns false when the docket entry is an amended document that does not have a previousDocument', () => {
+          it('returns false when the docket entry is an amended document that does not have a rootDocument', () => {
             const docketEntry = new DocketEntry(
               { ...baseDocketEntry },
               { applicationContext },
             );
             const isPublic = docketEntry.isPublic({
-              previousDocument: undefined,
+              rootDocument: undefined,
               visibilityChangeDate,
             });
 
@@ -297,6 +316,7 @@ describe('DocketEntry isPublic', () => {
                 eventCode,
                 filingDate,
                 isOnDocketRecord: true,
+                processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
               },
               { applicationContext },
             );
@@ -329,6 +349,7 @@ describe('DocketEntry isPublic', () => {
             eventCode,
             filingDate,
             isOnDocketRecord: true,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
           { applicationContext },
         );
