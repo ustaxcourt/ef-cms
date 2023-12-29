@@ -15,11 +15,7 @@ STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Stream
 
 DESTINATION_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --key '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"}}' | jq -r ".Item.current.S")
 
-echo "----------COMMAND----------"
-aws es describe-elasticsearch-domain --region us-east-1 --domain-name "efcms-search-test-${DESTINATION_TABLE_VERSION}" --output json
-echo "----------END OF COMMAND----------"
-
-ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --region us-east-1 --domain-name "efcms-search-test-${DESTINATION_TABLE_VERSION}" --output json | jq -r .DomainStatus.Endpoint)
+ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --region us-east-1 --domain-name "efcms-search-${ENVIRONMENT}-${DESTINATION_TABLE_VERSION}" --output json | jq -r .DomainStatus.Endpoint)
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
