@@ -310,4 +310,40 @@ describe('migrateItems', () => {
       sk: 'work-item|123-45',
     });
   });
+
+  it('should add associatedJudgeId to work item records when there is an associated judge with a title', async () => {
+    getAllUsersByRoleResults = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+    ];
+    const items = [
+      {
+        name: 'Colvin',
+        pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        role: 'judge',
+        sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        associatedJudge: 'Judge Colvin',
+        gsi1pk: 'work-item|123-45',
+        pk: 'case|445-22',
+        sk: 'work-item|123-45',
+      },
+    ];
+    const results = await migrateItems(items, null, applicationMock);
+    expect(results.length).toEqual(2);
+    expect(results[1]).toEqual({
+      associatedJudge: 'Judge Colvin',
+      associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      gsi1pk: 'work-item|123-45',
+      pk: 'case|445-22',
+      sk: 'work-item|123-45',
+    });
+  });
 });

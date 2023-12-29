@@ -1,3 +1,4 @@
+import { JUDGE_TITLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TDynamoRecord } from '../../../../../src/persistence/dynamo/dynamoTypes';
 
@@ -42,6 +43,9 @@ export const migrateItems = async (
         judgesMap = judgeRecords.reduce(
           (accumulator, judge) => {
             accumulator[judge.name] = judge.userId;
+            JUDGE_TITLES.forEach(title => {
+              accumulator[`${title} ` + judge.name] = judge.userId;
+            });
             return accumulator;
           },
           {} as { [key: string]: string },
