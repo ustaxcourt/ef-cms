@@ -1,3 +1,3 @@
-export const navigateToLoginAction = ({ router }) => {
-  router.route('/login');
+export const navigateToLoginAction = async ({ router }) => {
+  await router.route('/login');
 };
