@@ -31,7 +31,7 @@ export const JudgeActivityReport = connect(
         <section className="usa-section grid-container">
           <ErrorNotification />
 
-          <div className="title">
+          <div className="title" data-testid="activity-report-header">
             <h1>Activity - {judgeActivityReportHelper.reportHeader}</h1>
           </div>
 
@@ -48,6 +48,7 @@ export const JudgeActivityReport = connect(
               </Tab>
 
               <Tab
+                data-testid="submitted-and-cav-tab"
                 tabName="caseWorksheet"
                 title={`Submitted/CAV (${judgeActivityReportHelper.progressDescriptionTableTotal})`}
               >
@@ -83,6 +84,7 @@ function JudgeDropdown({ judgeName, judges, onChange }) {
           aria-describedby="judge-selection-label"
           aria-label="judge"
           className="usa-select select-left width-card-lg"
+          data-testid="judge-select"
           name="associatedJudge"
           value={judgeName}
           onChange={e => {

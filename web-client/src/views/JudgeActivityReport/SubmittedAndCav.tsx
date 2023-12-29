@@ -89,7 +89,7 @@ export const SubmittedAndCav = connect(
               (formattedCase, index) => {
                 return (
                   <React.Fragment key={`case-row-${index}`}>
-                    <tr>
+                    <tr data-testid={formattedCase.docketNumber}>
                       <td className="consolidated-case-column">
                         <ConsolidatedCaseIcon
                           consolidatedIconTooltipText={

@@ -246,6 +246,7 @@ export const Statistics = connect(
             <div className="grid-col-auto flex-align-center margin-top-2pt4rem margin-left-2">
               <Button
                 className="position-relative margin-bottom-35"
+                data-testid="view-statistics-button"
                 disabled={judgeActivityReportHelper.isFormPristine}
                 onClick={() => {
                   submitJudgeActivityStatisticsReportSequence();

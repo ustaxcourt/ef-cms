@@ -51,6 +51,7 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showDraftsTab && (
               <Tab
+                data-testid="tab-drafts"
                 icon={
                   caseDetailSubnavHelper.draftDocketEntryCount !== 0 && (
                     <div className="icon-tab-unread-messages">
