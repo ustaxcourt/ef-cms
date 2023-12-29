@@ -1116,7 +1116,7 @@ const router = {
       return app.getSequence('gotoIdleLogoutSequence')();
     });
 
-    route('/login', () => {
+    registerRoute('/login', () => {
       setPageTitle('Login');
       app.getSequence('gotoLoginSequence')();
     });
