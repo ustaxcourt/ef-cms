@@ -471,17 +471,18 @@ export class DocketEntry extends JoiValidationEntity {
 
   isPublic({
     caseIsSealed = false,
-    previousDocument,
+    rootDocument,
     visibilityChangeDate,
   }: {
     caseIsSealed?: boolean;
-    previousDocument?: DocketEntry;
+    rootDocument?: DocketEntry;
     visibilityChangeDate: string;
   }): boolean {
     if (
       this.isStricken ||
       this.eventCode === TRANSCRIPT_EVENT_CODE ||
-      !this.isOnDocketRecord
+      !this.isOnDocketRecord ||
+      this.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE
     ) {
       return false;
     }
@@ -517,13 +518,13 @@ export class DocketEntry extends JoiValidationEntity {
     }
 
     const isAmendmentToABrief = !!(
-      previousDocument && isDocumentBriefType(previousDocument.documentType)
+      rootDocument && isDocumentBriefType(rootDocument.documentType)
     );
 
     return (
       !this.isPaper &&
       isAmendmentToABrief &&
-      previousDocument.isFiledByPractitioner()
+      rootDocument.isFiledByPractitioner()
     );
   }
 
@@ -653,6 +654,22 @@ export const getServedPartiesCode = (servedParties?: any[]) => {
     }
   }
   return servedPartiesCode;
+};
+
+export const fetchRootDocument = (
+  entry: RawDocketEntry,
+  docketEntries: RawDocketEntry[],
+): RawDocketEntry => {
+  const { previousDocument } = entry;
+  if (!previousDocument) return entry;
+
+  const previousEntry = docketEntries.find(
+    e => e.docketEntryId === previousDocument.docketEntryId,
+  );
+
+  if (!previousEntry) return entry;
+
+  return fetchRootDocument(previousEntry, docketEntries);
 };
 
 declare global {
