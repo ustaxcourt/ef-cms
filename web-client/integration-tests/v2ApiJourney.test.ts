@@ -221,8 +221,6 @@ describe('View and manage the deadlines of a case', () => {
     );
     // the date (minus time) a docket entry was served
     const saDate: string = servedAt.toFormat(FORMATS.YYYYMMDD);
-    // the specific time (minus date) docket entry was served
-    const saTimeAt: string = servedAt.toFormat(FORMATS.TIME_24_HOUR);
     // create an instant that occurs before, after the servedAt time
     const saTimeBefore: string = servedAt
       .minus({ minutes: 1 })
@@ -230,13 +228,6 @@ describe('View and manage the deadlines of a case', () => {
     const saTimeAfter: string = servedAt
       .plus({ minutes: 1 })
       .toFormat(FORMATS.TIME_24_HOUR);
-    console.log(
-      'date, timeBefore, timeAfter',
-      saDate,
-      saTimeBefore,
-      saTimeAt,
-      saTimeAfter,
-    );
 
     const loginUsername = 'irssuperuser@example.com';
     if (!userMap[loginUsername]) {
@@ -248,51 +239,44 @@ describe('View and manage the deadlines of a case', () => {
     };
 
     userToken = jwt.sign(user, 'secret');
-    // TODO: find cases in seed data that have servedParties B or R
-    // then find a day that has multiple cases
-    // then test the following:
-    //  - all cases on that day
-    //  - filtered cases on that day with timeStart
-    //  - filtered cases on that day with timeEnd
-    //  - filtered cases on that day with timeStart and timeEnd
 
-    it('should show all cases from a particular day', async () => {
+    it('should show all docket entries from a particular day', async () => {
       const dateArg = saDate;
       const response = await executeReconciliationReport(dateArg);
       expect(response.totalDocketEntries).toBeGreaterThan(0);
     });
 
-    it('should show cases that occur on a particular day after a specific start time', async () => {
+    it('should show docket entries that were served on a particular day after a specific start time', async () => {
       const dateArg = saDate;
       const response = await executeReconciliationReport(
-        `${dateArg}?timeStart=${saTimeBefore}`,
+        `${dateArg}?start=${saTimeBefore}`,
       );
       let { totalDocketEntries } = response;
       expect(totalDocketEntries).toBeGreaterThan(0);
 
       //some docket entries should be filtered out if we choose a later time
       const response2 = await executeReconciliationReport(
-        `${dateArg}?timeStart=${saTimeAfter}`,
+        `${dateArg}?start=${saTimeAfter}`,
       );
       expect(response2.totalDocketEntries).toBeLessThan(totalDocketEntries);
     });
 
-    it('should show cases that occur on a particular day before a specific end time', async () => {
+    it('should show docket entries that were served on a particular day before a specific end time', async () => {
       const dateArg = saDate;
       const response = await executeReconciliationReport(
-        `${dateArg}?timeEnd=${saTimeAfter}`,
+        `${dateArg}?end=${saTimeAfter}`,
       );
       let { totalDocketEntries } = response;
       //some docket entries should be filtered out if we move up the timeEnd value
       const response2 = await executeReconciliationReport(
-        `${dateArg}?timeEnd=${saTimeBefore}`,
+        `${dateArg}?end=${saTimeBefore}`,
       );
       expect(response2.totalDocketEntries).toBeLessThan(totalDocketEntries);
     });
 
-    it('should show cases that occur on a particular day between a start and end time', async () => {
+    it('should show docket entries that were served on a particular day between a start and end time', async () => {
       const response = await executeReconciliationReport(
-        `${saDate}?timeStart=${saTimeBefore}&timeEnd=${saTimeAfter}`,
+        `${saDate}?start=${saTimeBefore}&end=${saTimeAfter}`,
       );
       expect(response.totalDocketEntries).toBeGreaterThan(0);
     });
