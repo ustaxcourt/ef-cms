@@ -1,6 +1,6 @@
 import users from '../web-api/storage/fixtures/seed/users.json';
 import fs from 'fs';
-import path from 'path'
+import path from 'path';
 
 type CognitoLocalJSON = {
   Users: {
@@ -103,11 +103,11 @@ const cognitoLocalJSON: CognitoLocalJSON = {
         },
       },
       {
-        Name: 'name',
+        Name: 'custom:name',
         AttributeDataType: 'String',
         DeveloperOnlyAttribute: false,
         Mutable: true,
-        Required: false,
+        Required: true,
         StringAttributeConstraints: {
           MinLength: '0',
           MaxLength: '2048',
@@ -213,6 +213,10 @@ users.forEach(user => {
       {
         Name: 'custom:role',
         Value: user.role,
+      },
+      {
+        Name: 'custom:name',
+        Value: user.name,
       },
     ],
     Enabled: false,
