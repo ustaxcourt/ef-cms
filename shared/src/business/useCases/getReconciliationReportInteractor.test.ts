@@ -171,7 +171,7 @@ describe('getReconciliationReportInteractor', () => {
     await expect(
       getReconciliationReportInteractor(applicationContext, {
         reconciliationDate: startDate,
-        timeStart,
+        start: timeStart,
       }),
     ).resolves.not.toThrow();
   });
@@ -198,9 +198,9 @@ describe('getReconciliationReportInteractor', () => {
       .getReconciliationReport.mockReturnValue(docketEntries);
 
     const result = await getReconciliationReportInteractor(applicationContext, {
+      end: timeEnd,
       reconciliationDate: startDate,
-      timeEnd,
-      timeStart,
+      start: timeStart,
     });
     expect(result.reconciliationDate).toBe(startDate);
   });

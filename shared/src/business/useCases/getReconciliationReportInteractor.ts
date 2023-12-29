@@ -32,13 +32,13 @@ function isValidTime(time: string): boolean {
 export const getReconciliationReportInteractor = async (
   applicationContext: IApplicationContext,
   {
+    end: timeEnd,
     reconciliationDate,
-    timeEnd,
-    timeStart,
+    start: timeStart,
   }: {
     reconciliationDate: string;
-    timeEnd?: string;
-    timeStart?: string;
+    end?: string;
+    start?: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

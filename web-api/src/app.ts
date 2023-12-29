@@ -276,7 +276,10 @@ app.use(logger());
     '/api/court-issued-order',
     lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
   );
-  app.post('/api/  record-pdf', lambdaWrapper(generateDocketRecordPdfLambda));
+  app.post(
+    '/api/docket-record-pdf',
+    lambdaWrapper(generateDocketRecordPdfLambda),
+  );
 }
 
 /**
