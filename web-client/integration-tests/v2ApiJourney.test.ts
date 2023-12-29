@@ -183,8 +183,21 @@ describe('View and manage the deadlines of a case', () => {
   });
 
   describe('reconciliation report', () => {
+    //execute request for reconciliation report and return response
+    const executeReconciliationReport = async qs => {
+      const { data: response } = await axios.get(
+        `http://localhost:4000/v2/reconciliation-report/${qs}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      );
+      return response;
+    };
+
     //return an array of all docket entries that were served to IRS
-    const getDocketEntries = () => {
+    const getDocketEntryData = () => {
       const docketEntries = new Array<DocketEntry>();
       for (const item of seedEntries) {
         if (item.entityName === 'DocketEntry') {
@@ -201,12 +214,16 @@ describe('View and manage the deadlines of a case', () => {
       return docketEntries;
     };
 
-    const docketEntries = getDocketEntries();
+    const docketEntries = getDocketEntryData();
+    //find a relevant case in our seed data, and extract the servedAt date to use in our tests
     const servedAt = DateTime.fromISO(docketEntries[0].servedAt!).setZone(
       USTC_TZ,
     );
+    // the date (minus time) a docket entry was served
     const saDate: string = servedAt.toFormat(FORMATS.YYYYMMDD);
+    // the specific time (minus date) docket entry was served
     const saTimeAt: string = servedAt.toFormat(FORMATS.TIME_24_HOUR);
+    // create an instant that occurs before, after the servedAt time
     const saTimeBefore: string = servedAt
       .minus({ minutes: 1 })
       .toFormat(FORMATS.TIME_24_HOUR);
@@ -241,25 +258,43 @@ describe('View and manage the deadlines of a case', () => {
 
     it('should show all cases from a particular day', async () => {
       const dateArg = saDate;
-      const { data: response } = await axios.get(
-        `http://localhost:4000/v2/reconciliation-report/${dateArg}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        },
-      );
+      const response = await executeReconciliationReport(dateArg);
       expect(response.totalDocketEntries).toBeGreaterThan(0);
     });
 
-    it.todo(
-      'should show cases that occur on a particular day after a specific start time',
-    );
-    it.todo(
-      'should show cases that occur on a particular day before a specific end time',
-    );
-    it.todo(
-      'should show cases that occur on a particular day between a start and end time',
-    );
+    it('should show cases that occur on a particular day after a specific start time', async () => {
+      const dateArg = saDate;
+      const response = await executeReconciliationReport(
+        `${dateArg}?timeStart=${saTimeBefore}`,
+      );
+      let { totalDocketEntries } = response;
+      expect(totalDocketEntries).toBeGreaterThan(0);
+
+      //some docket entries should be filtered out if we choose a later time
+      const response2 = await executeReconciliationReport(
+        `${dateArg}?timeStart=${saTimeAfter}`,
+      );
+      expect(response2.totalDocketEntries).toBeLessThan(totalDocketEntries);
+    });
+
+    it('should show cases that occur on a particular day before a specific end time', async () => {
+      const dateArg = saDate;
+      const response = await executeReconciliationReport(
+        `${dateArg}?timeEnd=${saTimeAfter}`,
+      );
+      let { totalDocketEntries } = response;
+      //some docket entries should be filtered out if we move up the timeEnd value
+      const response2 = await executeReconciliationReport(
+        `${dateArg}?timeEnd=${saTimeBefore}`,
+      );
+      expect(response2.totalDocketEntries).toBeLessThan(totalDocketEntries);
+    });
+
+    it('should show cases that occur on a particular day between a start and end time', async () => {
+      const response = await executeReconciliationReport(
+        `${saDate}?timeStart=${saTimeBefore}&timeEnd=${saTimeAfter}`,
+      );
+      expect(response.totalDocketEntries).toBeGreaterThan(0);
+    });
   });
 });
