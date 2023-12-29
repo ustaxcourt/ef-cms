@@ -46,6 +46,7 @@ export const ReportsMenu = connect(
             {reportMenuHelper.showActivityReport && (
               <li className="usa-nav__submenu-item">
                 <a
+                  data-testid="activity-report-link"
                   href="/reports/judge-activity-report"
                   onClick={() => {
                     resetHeaderAccordionsSequence();

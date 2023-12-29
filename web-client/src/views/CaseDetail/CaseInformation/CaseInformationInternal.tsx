@@ -70,6 +70,7 @@ export const CaseInformationInternal = connect(
                 <Button
                   link
                   className="margin-0"
+                  data-testid="menu-edit-case-context-button"
                   icon="edit"
                   id="menu-edit-case-context-button"
                   onClick={() => {

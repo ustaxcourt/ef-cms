@@ -75,6 +75,7 @@ export const UpdateCaseModalDialog = connect(
               </label>
               <select
                 className="case-status usa-select"
+                data-testid="case-status-select"
                 id="caseStatus"
                 name="caseStatus"
                 value={modal.caseStatus}
@@ -106,6 +107,7 @@ export const UpdateCaseModalDialog = connect(
               </label>
               <select
                 className="case-status usa-select"
+                data-testid="associated-judge-select"
                 id="associated-judge"
                 name="associatedJudge"
                 value={modal.associatedJudge}
