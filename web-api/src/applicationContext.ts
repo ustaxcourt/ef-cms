@@ -127,6 +127,8 @@ export const createApplicationContext = (
   const getCurrentUser = (): {
     role: string;
     userId: string;
+    email: string;
+    name: string;
   } => {
     return user;
   };
