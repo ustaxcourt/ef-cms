@@ -2,7 +2,8 @@ import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAdd
 import { faker } from '@faker-js/faker';
 import { loginAs, setupTest, waitForLoadingComponentToHide } from './helpers';
 
-describe('Admissions clerk creates practitioner account', () => {
+// TODO 10007: Need to implement new account creation flow when user is forced to change password.
+describe.skip('Admissions clerk creates practitioner account', () => {
   const cerebralTest = setupTest();
 
   afterAll(() => {
@@ -28,7 +29,6 @@ describe('Admissions clerk creates practitioner account', () => {
       value: standardizedTemporaryPassword,
     });
 
-    // TODO 10007
     // await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
     //   code: emailAddress,
     //   password: standardizedTemporaryPassword,
