@@ -50,10 +50,14 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should not remove the case from trial if the old and new case status match', async () => {
+    const rachaelId = 'dabbad00-18d0-43ec-bafb-654e83405416';
     const result = await updateCaseContextInteractor(applicationContext, {
-      associatedJudge: 'Judge Rachael',
       caseStatus: CASE_STATUS_TYPES.new,
       docketNumber: MOCK_CASE.docketNumber,
+      judgeData: {
+        associatedJudge: 'Judge Rachael',
+        associatedJudgeId: rachaelId,
+      },
     });
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.new);
@@ -63,6 +67,8 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
+    const rachaelId = 'dabbad00-18d0-43ec-bafb-654e83405416';
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -74,13 +80,17 @@ describe('updateCaseContextInteractor', () => {
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REMOTE);
 
     const result = await updateCaseContextInteractor(applicationContext, {
-      associatedJudge: 'Judge Rachael',
       caseStatus: CASE_STATUS_TYPES.cav,
       docketNumber: MOCK_CASE_WITH_TRIAL_SESSION.docketNumber,
+      judgeData: {
+        associatedJudge: 'Judge Rachael',
+        associatedJudgeId: rachaelId,
+      },
     });
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
     expect(result.associatedJudge).toEqual('Judge Rachael');
+    expect(result.associatedJudgeId).toEqual(rachaelId);
     expect(result.trialSessionId).toBeUndefined();
   });
 
@@ -92,6 +102,7 @@ describe('updateCaseContextInteractor', () => {
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     expect(result.associatedJudge).toEqual(CHIEF_JUDGE);
+    expect(result.associatedJudgeId).toEqual(undefined);
     expect(result.trialSessionId).toBeUndefined();
   });
 
@@ -170,26 +181,35 @@ describe('updateCaseContextInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         associatedJudge: 'Judge Buch',
+        associatedJudgeId: 'buch-id',
         status: CASE_STATUS_TYPES.submitted,
       });
 
     const result = await updateCaseContextInteractor(applicationContext, {
-      associatedJudge: 'Judge Carluzzo',
       docketNumber: MOCK_CASE.docketNumber,
+      judgeData: {
+        associatedJudge: 'Judge Carluzzo',
+        associatedJudgeId: 'carluzzo-id',
+      },
     });
     expect(result.status).toEqual(CASE_STATUS_TYPES.submitted);
     expect(result.associatedJudge).toEqual('Judge Carluzzo');
+    expect(result.associatedJudgeId).toEqual('carluzzo-id');
   });
 
   it('should only update the associated judge without changing the status if the associated judge and the same case status are passed in', async () => {
     const result = await updateCaseContextInteractor(applicationContext, {
-      associatedJudge: 'Judge Carluzzo',
       caseStatus: CASE_STATUS_TYPES.submitted,
       docketNumber: MOCK_CASE.docketNumber,
+      judgeData: {
+        associatedJudge: 'Judge Carluzzo',
+        associatedJudgeId: 'carluzzo-id',
+      },
     });
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.submitted);
     expect(result.associatedJudge).toEqual('Judge Carluzzo');
+    expect(result.associatedJudgeId).toEqual('carluzzo-id');
   });
 
   it('should call updateCase with the updated case caption and return the updated case', async () => {

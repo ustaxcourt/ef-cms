@@ -10,6 +10,9 @@ export const efcmsDocketEntryMappings = {
       },
       type: 'text',
     },
+    'associatedJudgeId.S': {
+      type: 'keyword',
+    },
     case_relations: {
       relations: {
         case: 'document',

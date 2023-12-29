@@ -10,6 +10,9 @@ export const efcmsCaseMappings = {
       },
       type: 'text',
     },
+    'associatedJudgeId.S': {
+      type: 'keyword',
+    },
     'automaticBlocked.BOOL': {
       type: 'boolean',
     },
