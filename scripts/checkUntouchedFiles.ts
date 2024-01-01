@@ -105,7 +105,7 @@ function getFilesToCheck(
   return fileToCheck;
 }
 
-const branchDirPath = './branchToBeCompared';
+const branchDirPath = './';
 const stagingDirPath = './stagingBranch';
 const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
 const stagingTypescriptErrorMap = getTypescriptErrorMap(stagingDirPath);

@@ -31,4 +31,5 @@ jobs:
         working-directory: ./stagingBranch
         run: npm ci
       - name: Check untouched files
+        working-directory: ./branchToBeCompared
         run: npx ts-node scripts/checkUntouchedFiles.ts
