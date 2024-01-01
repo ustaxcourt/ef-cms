@@ -1,6 +1,6 @@
 import { execSync, spawnSync } from 'child_process';
 
-function runTypescriptCommand(cwd?: string): { stdout: string } {
+function runTypescriptCommand(cwd: string): { stdout: string } {
   return spawnSync(
     'npx',
     ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
@@ -27,12 +27,12 @@ function createTypescriptErrorMap(stdout: string): { [key: string]: number } {
     );
 }
 
-function getTypescriptErrorMap(cwd?: string): { [key: string]: number } {
+function getTypescriptErrorMap(cwd: string): { [key: string]: number } {
   const { stdout } = runTypescriptCommand(cwd);
   return createTypescriptErrorMap(stdout);
 }
 
-function getHashForDirectory(stagingRepoPath?: string) {
+function getHashForDirectory(stagingRepoPath: string) {
   return spawnSync('git', ['log', '-n', '1', '--pretty=format:"%H"'], {
     cwd: stagingRepoPath,
     encoding: 'utf-8',
@@ -40,12 +40,14 @@ function getHashForDirectory(stagingRepoPath?: string) {
 }
 
 function getDifferencesBetweenHashes(
+  branchDirPath: string,
   currentBranchHash: string,
   stagingBranchHash: string,
 ): { [fileName: string]: boolean } {
   return execSync(
     `git diff --name-only ${currentBranchHash} ${stagingBranchHash}`,
     {
+      cwd: branchDirPath,
       encoding: 'utf-8',
     },
   )
@@ -60,13 +62,20 @@ function getDifferencesBetweenHashes(
     );
 }
 
-function getModifiedFiles(stagingRepoPath: string): {
+function getModifiedFiles(
+  branchDirPath: string,
+  stagingRepoPath: string,
+): {
   [fileName: string]: boolean;
 } {
-  const currentBranchHash = getHashForDirectory();
+  const currentBranchHash = getHashForDirectory(branchDirPath);
   const stagingBranchHash = getHashForDirectory(stagingRepoPath);
 
-  return getDifferencesBetweenHashes(currentBranchHash, stagingBranchHash);
+  return getDifferencesBetweenHashes(
+    branchDirPath,
+    currentBranchHash,
+    stagingBranchHash,
+  );
 }
 
 function getFilesToCheck(
@@ -96,10 +105,11 @@ function getFilesToCheck(
   return fileToCheck;
 }
 
-const stagingBranch = '../stagingBranch';
-const branchTypescriptErrorMap = getTypescriptErrorMap();
-const stagingTypescriptErrorMap = getTypescriptErrorMap(stagingBranch);
-const modifiedFiles = getModifiedFiles(stagingBranch);
+const branchDirPath = './branchToBeCompared';
+const stagingDirPath = './stagingBranch';
+const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
+const stagingTypescriptErrorMap = getTypescriptErrorMap(stagingDirPath);
+const modifiedFiles = getModifiedFiles(branchDirPath, stagingDirPath);
 
 const fileToCheck = getFilesToCheck(
   branchTypescriptErrorMap,
