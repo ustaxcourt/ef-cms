@@ -16,7 +16,6 @@ import {
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
-//TODO: find usage
 
 export const getIsUserAuthorized = ({
   oldCase,
