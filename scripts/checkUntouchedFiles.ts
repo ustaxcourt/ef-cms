@@ -106,7 +106,7 @@ function getFilesToCheck(
 }
 
 const branchDirPath = './';
-const stagingDirPath = './stagingBranch';
+const stagingDirPath = '../stagingBranch';
 const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
 const stagingTypescriptErrorMap = getTypescriptErrorMap(stagingDirPath);
 const modifiedFiles = getModifiedFiles(branchDirPath, stagingDirPath);
