@@ -30,6 +30,6 @@ jobs:
       - name: NPM Install in staging
         working-directory: ./stagingBranch
         run: npm ci
-      - name: Compare errors between your branch and staging
+      - name: Check untouched files
         working-directory: ./branchToBeCompared
-        run: npx ts-node scripts/compareTypescriptErrors.ts
+        run: npx ts-node scripts/checkUntouchedFiles.ts
