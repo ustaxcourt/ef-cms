@@ -1,17 +1,12 @@
+import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
 import { state } from '@web-client/presenter/app.cerebral';
-/**
- * sets the default countryType on the advanced search form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.store the cerebral store function
- */
+
 export const defaultAdvancedSearchFormAction = ({
   applicationContext,
   get,
   store,
 }: ActionProps) => {
-  const { ADVANCED_SEARCH_OPINION_TYPES, COUNTRY_TYPES } =
-    applicationContext.getConstants();
+  const { ADVANCED_SEARCH_OPINION_TYPES } = applicationContext.getConstants();
   const advancedSearchForm = get(state.advancedSearchForm);
   // do not overwrite existing state so the form is still filled in when returning to the page
   if (!advancedSearchForm.caseSearchByDocketNumber) {
@@ -19,7 +14,7 @@ export const defaultAdvancedSearchFormAction = ({
   }
   if (!advancedSearchForm.caseSearchByName) {
     store.set(state.advancedSearchForm.caseSearchByName, {
-      countryType: COUNTRY_TYPES.DOMESTIC,
+      countryType: ALL_COUNTRY_TYPE,
     });
   }
   if (!advancedSearchForm.practitionerSearchByBarNumber) {

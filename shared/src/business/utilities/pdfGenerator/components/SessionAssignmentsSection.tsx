@@ -23,7 +23,42 @@ export const SessionAssignmentsSection = ({ formattedTrialSession }) => {
           </div>
           <div className="assignments-row-content wrap-text-content">
             <div className="text-bold">IRS calendar administrator</div>
-            <div>{formattedTrialSession.formattedIrsCalendarAdministrator}</div>
+            {!formattedTrialSession.formattedIrsCalendarAdministratorInfo && (
+              <div>
+                {formattedTrialSession.formattedIrsCalendarAdministrator}
+              </div>
+            )}
+            {formattedTrialSession.formattedIrsCalendarAdministratorInfo && (
+              <div
+                className="margin-bottom-0 word-wrap-break-word"
+                data-testid="irs-calendar-admin-info"
+              >
+                <div data-testid="irs-calendar-admin-info-name">
+                  {
+                    formattedTrialSession.formattedIrsCalendarAdministratorInfo
+                      .name
+                  }
+                </div>
+                <div
+                  data-testid="irs-calendar-admin-info-email"
+                  style={{
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-all',
+                  }}
+                >
+                  {
+                    formattedTrialSession.formattedIrsCalendarAdministratorInfo
+                      .email
+                  }
+                </div>
+                <div data-testid="irs-calendar-admin-info-phone">
+                  {
+                    formattedTrialSession.formattedIrsCalendarAdministratorInfo
+                      .phone
+                  }
+                </div>
+              </div>
+            )}{' '}
           </div>
         </div>
       </div>

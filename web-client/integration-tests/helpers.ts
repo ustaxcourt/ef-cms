@@ -45,9 +45,11 @@ import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHe
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
 import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCasesForUser } from '../../web-api/src/persistence/dynamo/users/getCasesForUser';
+import {
+  getCasesForUser,
+  getDocketNumbersByUser,
+} from '../../web-api/src/persistence/dynamo/users/getCasesForUser';
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
-import { getDocketNumbersByUser } from '../../web-api/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
 import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext';

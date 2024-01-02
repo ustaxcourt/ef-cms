@@ -311,7 +311,7 @@ describe('removeCaseFromTrialInteractor', () => {
         caseStatus: CASE_STATUS_TYPES.cav,
         disposition: 'because',
         docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
       }),
     ).rejects.toThrow(ServiceUnavailableError);
 
@@ -326,7 +326,7 @@ describe('removeCaseFromTrialInteractor', () => {
       caseStatus: CASE_STATUS_TYPES.cav,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
     });
 
     expect(

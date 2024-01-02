@@ -219,7 +219,9 @@ const completeDocketEntryQC = async (
     user,
   });
 
-  const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
+  const userIsCaseServices = User.isCaseServicesUser({
+    section: user.section || '',
+  });
 
   let sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
