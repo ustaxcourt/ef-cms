@@ -8,6 +8,7 @@ export const Login = connect(
   {
     alertError: state.alertError,
     form: state.form,
+    loginHelper: state.loginHelper,
     showPassword: state.showPassword,
     submitLoginSequence: sequences.submitLoginSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
@@ -16,6 +17,7 @@ export const Login = connect(
   ({
     alertError,
     form,
+    loginHelper,
     showPassword,
     submitLoginSequence,
     toggleShowPasswordSequence,
@@ -88,6 +90,7 @@ export const Login = connect(
                 <Button
                   className="usa-button margin-top-3"
                   data-testid="login-button"
+                  disabled={loginHelper.disableLoginButton}
                   onClick={e => {
                     e.preventDefault();
                     submitLoginSequence();
@@ -114,5 +117,3 @@ export const Login = connect(
     );
   },
 );
-
-Login.displayName = 'Login';

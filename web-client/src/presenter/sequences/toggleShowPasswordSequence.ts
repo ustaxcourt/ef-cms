@@ -2,4 +2,4 @@ import { toggleShowPasswordAction } from '@web-client/presenter/actions/toggleSh
 
 export const toggleShowPasswordSequence = [
   toggleShowPasswordAction,
-] as unknown as (passwordType: string) => void;
+] as unknown as (props: { passwordType: string }) => void;
