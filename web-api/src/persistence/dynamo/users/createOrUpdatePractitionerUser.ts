@@ -1,4 +1,5 @@
 import * as client from '../../dynamodbClientService';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { isUserAlreadyCreated } from './createOrUpdateUser';
@@ -89,6 +90,8 @@ export const createOrUpdatePractitionerUser = async ({
     userPoolId: process.env.USER_POOL_ID as string,
   });
 
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
   if (!userExists) {
     let params = {
       UserAttributes: [
@@ -113,38 +116,29 @@ export const createOrUpdatePractitionerUser = async ({
       Username: userEmail,
     };
 
-    const response = await applicationContext
-      .getCognito()
-      .adminCreateUser(params)
-      .promise();
+    const response = await cognito.adminCreateUser(params);
 
     if (response && response.User && response.User.Username) {
       userId = response.User.Username;
     }
   } else {
-    const response = await applicationContext
-      .getCognito()
-      .adminGetUser({
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: userEmail,
-      })
-      .promise();
+    const response = await cognito.adminGetUser({
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: userEmail,
+    });
 
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
-        UserAttributes: [
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: response.Username,
-      })
-      .promise();
+    await cognito.adminUpdateUserAttributes({
+      UserAttributes: [
+        {
+          Name: 'custom:role',
+          Value: user.role,
+        },
+      ],
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: response.Username,
+    });
 
-    userId = response.Username;
+    userId = response.Username!;
   }
 
   return await createUserRecords({
