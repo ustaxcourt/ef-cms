@@ -12,15 +12,11 @@ export const renewIdTokenLambda = event =>
 
       const { refreshToken } = parseCookieString(event.headers.cookie);
 
-      const { token } = await applicationContext
+      return applicationContext
         .getUseCases()
         .renewIdTokenInteractor(applicationContext, {
           refreshToken,
         });
-
-      return {
-        token,
-      };
     },
     { bypassMaintenanceCheck: true },
   );

@@ -5,15 +5,15 @@ export const renewIdTokenInteractor = async (
   applicationContext: IApplicationContext,
   { refreshToken }: { refreshToken: string },
 ): Promise<{
-  token: string;
+  idToken: string;
 }> => {
   try {
-    const { token } = await applicationContext
+    const { idToken } = await applicationContext
       .getPersistenceGateway()
       .renewIdToken(applicationContext, { refreshToken });
 
     return {
-      token,
+      idToken,
     };
   } catch (err) {
     if ((err as AWSError).code === 'NotAuthorizedException') {
