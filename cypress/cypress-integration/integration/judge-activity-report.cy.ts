@@ -1,5 +1,6 @@
 import { assertDoesNotExist, assertExists, retry } from '../../helpers/retry';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { navigateToJudgeActivityReport } from '../../helpers/navigate-to-judge-activity-report';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 import { updateCaseStatus } from '../../helpers/update-case-status';
@@ -8,8 +9,7 @@ describe('Verify the activity report', () => {
   describe('Statistics table', () => {
     it('should display an error message when invalid dates are entered into the form', () => {
       cy.login('judgecolvin');
-      cy.get('[data-testid="dropdown-select-report"]').click();
-      cy.get('[data-testid="activity-report-link"]').click();
+      navigateToJudgeActivityReport('statistics');
       cy.get('[data-testid="view-statistics-button"]').should('be.disabled');
       cy.get(
         '.usa-date-picker__wrapper > [data-testid="deadlineStart-date-start-input"]',
@@ -32,8 +32,7 @@ describe('Verify the activity report', () => {
 
     it('should display statistics tables when a correct date is inputed', () => {
       cy.login('judgecolvin');
-      cy.get('[data-testid="dropdown-select-report"]').click();
-      cy.get('[data-testid="activity-report-link"]').click();
+      navigateToJudgeActivityReport('statistics');
       cy.get('[data-testid="view-statistics-button"]').should('be.disabled');
       cy.get('[data-testid="cases-closed-table"]').should('not.exist');
       cy.get('[data-testid="trial-sessions-held-table"]').should('not.exist');
@@ -70,9 +69,7 @@ describe('Verify the activity report', () => {
 
         retry(() => {
           cy.login('judgecolvin');
-          cy.get('[data-testid="dropdown-select-report"]').click();
-          cy.get('[data-testid="activity-report-link"]').click();
-          cy.get('[data-testid="submitted-and-cav-tab"]').click();
+          navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
       });
@@ -86,10 +83,7 @@ describe('Verify the activity report', () => {
 
         retry(() => {
           cy.login('judgecolvin');
-          cy.get('[data-testid="dropdown-select-report"]').click();
-          cy.get('[data-testid="activity-report-link"]').click();
-          cy.get('[data-testid="submitted-and-cav-tab"]').click();
-
+          navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
       });
@@ -103,10 +97,7 @@ describe('Verify the activity report', () => {
 
         retry(() => {
           cy.login('judgecolvin');
-          cy.get('[data-testid="dropdown-select-report"]').click();
-          cy.get('[data-testid="activity-report-link"]').click();
-          cy.get('[data-testid="submitted-and-cav-tab"]').click();
-
+          navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
       });
@@ -133,9 +124,7 @@ describe('Verify the activity report', () => {
 
         retry(() => {
           cy.login('judgecolvin');
-          cy.get('[data-testid="dropdown-select-report"]').click();
-          cy.get('[data-testid="activity-report-link"]').click();
-          cy.get('[data-testid="submitted-and-cav-tab"]').click();
+          navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
 
@@ -151,9 +140,7 @@ describe('Verify the activity report', () => {
 
         retry(() => {
           cy.login('judgecolvin');
-          cy.get('[data-testid="dropdown-select-report"]').click();
-          cy.get('[data-testid="activity-report-link"]').click();
-          cy.get('[data-testid="submitted-and-cav-tab"]').click();
+          navigateToJudgeActivityReport('submitted-and-cav');
           return assertDoesNotExist(`[data-testid="${docketNumber}"]`);
         });
       });
@@ -192,9 +179,7 @@ describe('Verify the activity report', () => {
 
         retry(() => {
           cy.login('judgecolvin');
-          cy.get('[data-testid="dropdown-select-report"]').click();
-          cy.get('[data-testid="activity-report-link"]').click();
-          cy.get('[data-testid="submitted-and-cav-tab"]').click();
+          navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
       });
@@ -223,9 +208,7 @@ describe('Verify the activity report', () => {
 
               retry(() => {
                 cy.login('judgecolvin');
-                cy.get('[data-testid="dropdown-select-report"]').click();
-                cy.get('[data-testid="activity-report-link"]').click();
-                cy.get('[data-testid="submitted-and-cav-tab"]').click();
+                navigateToJudgeActivityReport('submitted-and-cav');
                 return assertExists(`[data-testid="${leadDocketNumber}"]`).then(
                   isLeadVisible => {
                     assertDoesNotExist(
@@ -277,9 +260,7 @@ describe('Verify the activity report', () => {
           .then(docketEntryId => {
             retry(() => {
               cy.login('judgecolvin');
-              cy.get('[data-testid="dropdown-select-report"]').click();
-              cy.get('[data-testid="activity-report-link"]').click();
-              cy.get('[data-testid="pending-motions-tab"]').click();
+              navigateToJudgeActivityReport('pending-motions');
               return assertExists(
                 `[data-testid="pending-motion-row-${docketEntryId}"]`,
               );

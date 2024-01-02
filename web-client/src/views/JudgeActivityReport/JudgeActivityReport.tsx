@@ -43,7 +43,11 @@ export const JudgeActivityReport = connect(
 
           <>
             <Tabs>
-              <Tab tabName="statistics" title="Statistics">
+              <Tab
+                data-testid="statistics-tab"
+                tabName="statistics"
+                title="Statistics"
+              >
                 <Statistics />
               </Tab>
 
