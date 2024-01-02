@@ -1,4 +1,3 @@
-import { attachDummyFile } from '../../helpers/attach-file';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
@@ -202,10 +201,8 @@ describe('Verify the activity report', () => {
   });
 
   describe('Pending Motions Table', () => {
-    it.only('should display Pending Motions for judge in that report', () => {
-      //create case
+    it('should display Pending Motions for judge in that report', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        //add pending motion
         cy.login('docketclerk');
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
@@ -229,11 +226,23 @@ describe('Verify the activity report', () => {
         cy.get('[data-testid="modal-button-confirm"]').click();
         cy.get('[data-testid="print-paper-service-done-button"]').click();
 
-        cy.login('judgecolvin');
-        cy.get('[data-testid="dropdown-select-report"]').click();
-        cy.get('[data-testid="activity-report-link"]').click();
-        cy.get('[data-testid="pending-motions-tab"]').click();
-        cy.get(`[data-testid="${docketNumber}"]`).should('exist');
+        searchByDocketNumberInHeader(docketNumber);
+
+        cy.get(
+          '[data-testid="docket-record-table"] td:contains("Motion for a New Trial")',
+        )
+          .parent()
+          .invoke('attr', 'data-testid')
+          .then(docketEntryId => {
+            console.log(';docketEntryId, docketEntryId', docketEntryId);
+            cy.login('judgecolvin');
+            cy.get('[data-testid="dropdown-select-report"]').click();
+            cy.get('[data-testid="activity-report-link"]').click();
+            cy.get('[data-testid="pending-motions-tab"]').click();
+            cy.get(
+              `[data-testid="pending-motion-row-${docketEntryId}"]`,
+            ).should('exist');
+          });
       });
     });
   });

@@ -73,6 +73,7 @@ export const DocketRecord = connect(
                           entry.isInProgress && 'in-progress',
                           entry.qcWorkItemsUntouched && 'qc-untouched',
                         )}
+                        data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
                         <td className="center-column hide-on-mobile">
