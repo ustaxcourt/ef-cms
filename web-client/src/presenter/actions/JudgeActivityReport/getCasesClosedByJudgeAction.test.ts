@@ -41,7 +41,7 @@ describe('getCasesClosedByJudgeAction', () => {
         .calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judges: [judgeUser.userId],
+      judges: [judgeUser.name],
       startDate: mockStartDate,
     });
     expect(output.casesClosedByJudge).toMatchObject(mockCasesClosedByJudge);

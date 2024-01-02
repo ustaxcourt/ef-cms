@@ -23,7 +23,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
 
   const getCasesByStatusAndByJudgeRequestParams: GetCasesByStatusAndByJudgeRequest =
     {
-      judges: [judgeUser.userId],
+      judges: [judgeUser.name],
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     };
 
@@ -104,7 +104,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
           .getCaseWorksheetsByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
     ).toMatchObject({
-      judges: [judgeColvin.userId],
+      judges: [judgeColvin.name],
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
     expect(result.output.cases).toBe(mockReturnedCases);
