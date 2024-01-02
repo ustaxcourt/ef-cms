@@ -6,37 +6,30 @@ import { submitPublicCaseAdvancedSearchAction } from './submitPublicCaseAdvanced
 describe('submitPublicCaseAdvancedSearchAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContextForClient;
+    applicationContextForClient
+      .getUseCases()
+      .casePublicSearchInteractor.mockResolvedValue({
+        results: [],
+      });
   });
 
   it('gets the public case information', async () => {
-    applicationContextForClient
-      .getUseCases()
-      .casePublicSearchInteractor.mockResolvedValue([
-        { docketNumber: '123-45' },
-        { docketNumber: '678-90' },
-        { docketNumber: '000-00' },
-      ]);
-
-    const result = await runAction(submitPublicCaseAdvancedSearchAction, {
+    await runAction(submitPublicCaseAdvancedSearchAction, {
       modules: {
         presenter,
       },
       state: {
         advancedSearchForm: {
-          caseSearchByName: 'case name',
+          caseSearchByName: { petitionerName: 'case name' },
         },
       },
     });
 
-    expect(result.output).toMatchObject({
-      searchResults: [
-        { docketNumber: '123-45' },
-        { docketNumber: '678-90' },
-        { docketNumber: '000-00' },
-      ],
-    });
     expect(
-      applicationContextForClient.getUseCases().casePublicSearchInteractor,
-    ).toHaveBeenCalled();
+      applicationContextForClient.getUseCases().casePublicSearchInteractor.mock
+        .calls[0][1].searchParams,
+    ).toEqual({
+      petitionerName: 'case name',
+    });
   });
 });

@@ -2,6 +2,7 @@ import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
 import { CAV_AND_SUBMITTED_CASE_STATUS_TYPES } from '../EntityConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import {
   FORMATS,
   calculateISODate,
