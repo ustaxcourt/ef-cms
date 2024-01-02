@@ -3,9 +3,14 @@ import { marshallDocketEntry } from './marshallDocketEntry';
 const MOCK_DOCUMENT = MOCK_DOCUMENTS[0];
 
 describe('marshallDocketEntry', () => {
+  const mock = Object.assign({}, MOCK_DOCUMENT, {
+    servedAt: '2018-12-21T20:49:28.192Z',
+  });
+
   it('returns a docketEntry object with the expected properties', () => {
-    expect(Object.keys(marshallDocketEntry(MOCK_DOCUMENT)).sort()).toEqual([
+    expect(Object.keys(marshallDocketEntry(mock)).sort()).toEqual([
       'docketEntryId',
+      'documentTitle',
       'eventCode',
       'eventCodeDescription',
       'filedBy',
@@ -17,13 +22,10 @@ describe('marshallDocketEntry', () => {
   });
 
   it('marshalls from the current docketEntry format', () => {
-    const mock = Object.assign({}, MOCK_DOCUMENT, {
-      servedAt: '2018-12-21T20:49:28.192Z',
-    });
-
     expect(mock.docketEntryId).toBeDefined();
-    expect(mock.eventCode).toBeDefined();
     expect(mock.documentType).toBeDefined();
+    expect(mock.documentTitle).toBeDefined();
+    expect(mock.eventCode).toBeDefined();
     expect(mock.filedBy).toBeDefined();
     expect(mock.filingDate).toBeDefined();
     expect(mock.index).toBeDefined();
@@ -33,6 +35,7 @@ describe('marshallDocketEntry', () => {
     const marshalled = marshallDocketEntry(mock);
 
     expect(marshalled.docketEntryId).toEqual(mock.docketEntryId);
+    expect(marshalled.documentTitle).toEqual(mock.documentTitle);
     expect(marshalled.eventCode).toEqual(mock.eventCode);
     expect(marshalled.eventCodeDescription).toEqual(mock.documentType);
     expect(marshalled.filedBy).toEqual(mock.filedBy);
@@ -43,6 +46,9 @@ describe('marshallDocketEntry', () => {
   });
 
   it('sets a default value for isFileAttached if it is not specified', () => {
-    expect(marshallDocketEntry({}).isFileAttached).toBe(false);
+    expect(
+      marshallDocketEntry({ ...mock, isFileAttached: undefined })
+        .isFileAttached,
+    ).toBe(false);
   });
 });
