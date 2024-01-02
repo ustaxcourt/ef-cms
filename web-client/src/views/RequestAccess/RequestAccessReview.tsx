@@ -336,6 +336,7 @@ export const RequestAccessReview = connect(
               <div className="margin-top-2">
                 <Button
                   className="margin-bottom-1"
+                  data-testid="request-access-review-submit-document"
                   disabled={
                     fileDocumentHelper.EARedactionAcknowledgement &&
                     !form.redactionAcknowledgement
