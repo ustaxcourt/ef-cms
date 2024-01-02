@@ -6,6 +6,9 @@ const {
   createStartOfDayISO,
 } = require('../../src/business/utilities/DateHandler');
 const {
+  MAX_ELASTICSEARCH_PAGINATION,
+} = require('../../src/business/entities/EntityConstants');
+const {
   search,
 } = require('../../../web-api/src/persistence/elasticsearch/searchClient');
 
@@ -434,6 +437,63 @@ const checkIfNOCIsFiled = async ({
   return res.body.count === 0 ? 'No' : 'Yes';
 };
 
+const getBenchOpinionStatus = async ({ applicationContext }) => {
+  const docketNumberResult = await applicationContext.getSearchClient().search({
+    body: {
+      query: {
+        bool: {
+          filter: [
+            {
+              term: {
+                'eventCode.S': 'OST',
+              },
+            },
+            receivedAtRange,
+          ],
+        },
+      },
+    },
+    index: 'efcms-docket-entry',
+    size: MAX_ELASTICSEARCH_PAGINATION,
+  });
+
+  const docketNumbers = docketNumberResult.body.hits.hits.map(
+    hit => hit['_source'].docketNumber.S,
+  );
+
+  console.log(docketNumbers);
+
+  const results = await applicationContext.getSearchClient().search({
+    body: {
+      aggs: suffixAggregation,
+      query: {
+        bool: {
+          filter: [
+            {
+              terms: {
+                'docketNumber.S': docketNumbers,
+              },
+            },
+          ],
+        },
+      },
+    },
+    index: 'efcms-case',
+  });
+
+  const rows = results.body.aggregations['by-suffix'].buckets.map(
+    ({ doc_count, key }) => [key, doc_count].join(','),
+  );
+
+  console.log(results.body.aggregations);
+
+  rows.push(
+    ['Regular', results.body.aggregations['no-suffix'].doc_count].join(','),
+  );
+  rows.unshift(['Type', 'Count'].join(','));
+  fs.writeFileSync(`./FY-${fiscalYear}-ost-by-type.csv`, rows.join('\n'));
+};
+
 (async () => {
   const applicationContext = createApplicationContext({});
   await getOpinionsFiledByCaseType({
@@ -453,4 +513,5 @@ const checkIfNOCIsFiled = async ({
   });
   await getPercentageOfCasesElectronicallyFiled({ applicationContext });
   await getLimitedEntryOfAppearances({ applicationContext });
+  await getBenchOpinionStatus({ applicationContext });
 })();
