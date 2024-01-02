@@ -15,7 +15,6 @@ import { associatePrivatePractitionerWithCaseLambda } from './lambdas/manualAsso
 import { batchDownloadTrialSessionLambda } from './lambdas/trialSessions/batchDownloadTrialSessionLambda';
 import { blockCaseFromTrialLambda } from './lambdas/cases/blockCaseFromTrialLambda';
 import { caseAdvancedSearchLambda } from './lambdas/cases/caseAdvancedSearchLambda';
-import { changePasswordLocalLambda } from './auth/changePasswordLocalLambda';
 import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabilityLambda';
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
@@ -1039,8 +1038,6 @@ if (process.env.IS_LOCAL) {
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
-
-  app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 
   app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
 }

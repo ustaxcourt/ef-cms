@@ -72,7 +72,6 @@ import { canConsolidateInteractor } from '../../shared/src/business/useCases/cas
 import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/proxies/caseAdvancedSearchProxy';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
-import { changePasswordLocalInteractor } from '../../shared/src/proxies/auth/changePasswordLocalProxy';
 import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users/checkEmailAvailabilityProxy';
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
@@ -403,7 +402,6 @@ const allUseCases = {
   canConsolidateInteractor,
   canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
-  changePasswordLocalInteractor,
   checkEmailAvailabilityInteractor,
   closeTrialSessionInteractor,
   completeDocketEntryQCInteractor,
