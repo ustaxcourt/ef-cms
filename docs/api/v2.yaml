@@ -241,6 +241,9 @@ components:
         eventCode:
           type: string
           example: P
+        eventCodeDescription:
+          type: string
+          example: Order
         filedBy:
           type: string
           example: Petrs. Private practitioner & Annalise
