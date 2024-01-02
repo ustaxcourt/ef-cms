@@ -136,9 +136,6 @@ describe('Verify the activity report', () => {
       searchByDocketNumberInHeader(docketNumber);
       updateCaseStatus('Submitted', 'Colvin');
 
-      cy.login('docketclerk');
-      searchByDocketNumberInHeader(docketNumber);
-
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-create-order"]').click();
       cy.get('[data-testid="event-code-select"]').select('OAD');
@@ -149,15 +146,6 @@ describe('Verify the activity report', () => {
       cy.get('[data-testid="save-signature-button"]').click();
       cy.get('[data-testid="success-alert"]');
 
-      cy.login('judgecolvin');
-      cy.get('[data-testid="dropdown-select-report"]').click();
-      cy.get('[data-testid="activity-report-link"]').click();
-      cy.get('[data-testid="submitted-and-cav-tab"]').click();
-      cy.get(`[data-testid="${docketNumber}"]`).should('be.visible');
-
-      cy.login('docketclerk');
-      searchByDocketNumberInHeader(docketNumber);
-
       cy.get('[data-testid="tab-drafts"]').click();
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
       cy.get('[data-testid="judge-select"]').select('Colvin');
@@ -165,11 +153,50 @@ describe('Verify the activity report', () => {
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="print-paper-service-done-button"]').click();
 
+      updateCaseStatus('Submitted', 'Colvin');
+
+      cy.get('[data-testid="tab-docket-record"]').click();
+      cy.get('[data-testid="edit-OAD"]').click();
+      cy.get('[data-testid="tab-action"]').click();
+      cy.get('[data-testid="strike-entry"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+
       cy.login('judgecolvin');
       cy.get('[data-testid="dropdown-select-report"]').click();
       cy.get('[data-testid="activity-report-link"]').click();
       cy.get('[data-testid="submitted-and-cav-tab"]').click();
-      cy.get(`[data-testid="${docketNumber}"]`).should('not.exist');
+      cy.get(`[data-testid="${docketNumber}"]`).should('exist');
+    });
+  });
+
+  it('should display lead case of a consolidated group', () => {
+    createAndServePaperPetition().then(({ docketNumber: leadDocketNumber }) => {
+      cy.login('docketclerk');
+      searchByDocketNumberInHeader(leadDocketNumber);
+      updateCaseStatus('Submitted', 'Colvin');
+
+      createAndServePaperPetition().then(
+        ({ docketNumber: childDocketNumber }) => {
+          cy.login('docketclerk');
+          searchByDocketNumberInHeader(childDocketNumber);
+          updateCaseStatus('Submitted', 'Colvin');
+
+          cy.get('[data-testid="add-cases-to-group"]').click();
+          cy.get('[data-testid="consolidated-case-search"]').type(
+            leadDocketNumber,
+          );
+          cy.get('[data-testid="consolidated-search"]').click();
+          cy.get('[data-testid="found-case-label"]').click();
+          cy.get('[data-testid="modal-confirm"]').click();
+
+          cy.login('judgecolvin');
+          cy.get('[data-testid="dropdown-select-report"]').click();
+          cy.get('[data-testid="activity-report-link"]').click();
+          cy.get('[data-testid="submitted-and-cav-tab"]').click();
+          cy.get(`[data-testid="${leadDocketNumber}"]`).should('exist');
+          cy.get(`[data-testid="${childDocketNumber}"]`).should('not.exist');
+        },
+      );
     });
   });
 });

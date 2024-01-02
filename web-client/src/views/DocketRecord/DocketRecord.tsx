@@ -125,6 +125,7 @@ export const DocketRecord = connect(
                             {entry.showEditDocketRecordEntry && (
                               <Button
                                 link
+                                data-testid={`edit-${entry.eventCode}`}
                                 href={entry.editDocketEntryMetaLink}
                                 icon="edit"
                               >
