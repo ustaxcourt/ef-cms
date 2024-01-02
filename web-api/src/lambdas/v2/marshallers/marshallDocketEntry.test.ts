@@ -10,6 +10,7 @@ describe('marshallDocketEntry', () => {
   it('returns a docketEntry object with the expected properties', () => {
     expect(Object.keys(marshallDocketEntry(mock)).sort()).toEqual([
       'docketEntryId',
+      'docketNumber',
       'documentTitle',
       'eventCode',
       'eventCodeDescription',
@@ -23,6 +24,7 @@ describe('marshallDocketEntry', () => {
 
   it('marshalls from the current docketEntry format', () => {
     expect(mock.docketEntryId).toBeDefined();
+    expect(mock.docketNumber).toBeDefined();
     expect(mock.documentType).toBeDefined();
     expect(mock.documentTitle).toBeDefined();
     expect(mock.eventCode).toBeDefined();
@@ -35,6 +37,7 @@ describe('marshallDocketEntry', () => {
     const marshalled = marshallDocketEntry(mock);
 
     expect(marshalled.docketEntryId).toEqual(mock.docketEntryId);
+    expect(marshalled.docketNumber).toEqual(mock.docketNumber);
     expect(marshalled.documentTitle).toEqual(mock.documentTitle);
     expect(marshalled.eventCode).toEqual(mock.eventCode);
     expect(marshalled.eventCodeDescription).toEqual(mock.documentType);

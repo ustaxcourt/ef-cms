@@ -8,6 +8,7 @@
 export const marshallDocketEntry = (docketEntryObject: RawDocketEntry) => {
   return {
     docketEntryId: docketEntryObject.docketEntryId,
+    docketNumber: docketEntryObject.docketNumber,
     documentTitle: docketEntryObject.documentTitle,
     eventCode: docketEntryObject.eventCode,
     eventCodeDescription: docketEntryObject.documentType,
