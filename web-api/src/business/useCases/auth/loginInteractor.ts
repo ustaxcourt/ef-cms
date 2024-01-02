@@ -26,7 +26,10 @@ export const loginInteractor = async (
     };
   } catch (err: any) {
     // AWS Cognito InvalidPasswordException
-    if (err.code === 'InvalidPasswordException') {
+    if (
+      err.code === 'InvalidPasswordException' ||
+      err.code === 'NotAuthorizedException'
+    ) {
       throw new UnknownUserError('Invalid Username or Password');
     }
     throw err;
