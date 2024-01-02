@@ -182,6 +182,7 @@ export const CaseInformationInternal = connect(
                         link
                         aria-label="add cases to consolidate with this case"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
+                        data-testid="add-cases-to-group"
                         icon="plus-circle"
                         onClick={() => {
                           openCleanModalSequence({

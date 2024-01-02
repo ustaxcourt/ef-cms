@@ -27,6 +27,7 @@ export const CaseDetailSubnavTabs = connect(
           >
             <Tab
               className="padding-left-2"
+              data-testid="tab-docket-record"
               id="tab-docket-record"
               tabName="docketRecord"
               title="Docket Record"
