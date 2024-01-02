@@ -1,5 +1,7 @@
+import { attachDummyFile } from '../../helpers/attach-file';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
+import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 import { updateCaseStatus } from '../../helpers/update-case-status';
 
 describe('Verify the activity report', () => {
@@ -130,7 +132,6 @@ describe('Verify the activity report', () => {
   });
 
   it('should display a stricken decision type documents on the submitted and cav table', () => {
-    // TODO: we need to actually implement this test
     createAndServePaperPetition().then(({ docketNumber }) => {
       cy.login('docketclerk');
       searchByDocketNumberInHeader(docketNumber);
@@ -197,6 +198,43 @@ describe('Verify the activity report', () => {
           cy.get(`[data-testid="${childDocketNumber}"]`).should('not.exist');
         },
       );
+    });
+  });
+
+  describe('Pending Motions Table', () => {
+    it.only('should display Pending Motions for judge in that report', () => {
+      //create case
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        //add pending motion
+        cy.login('docketclerk');
+        searchByDocketNumberInHeader(docketNumber);
+        updateCaseStatus('Submitted', 'Colvin');
+        searchByDocketNumberInHeader(docketNumber);
+
+        cy.get('[data-testid="case-detail-menu-button"]').click();
+        cy.get('[data-testid="menu-button-add-paper-filing"]').click();
+        cy.get(
+          '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
+        ).type('01/01/2022');
+        selectTypeaheadInput('document-type', 'Motion for a New Trial');
+        cy.get('[data-testid="filed-by-option"]').click();
+        cy.get('[data-testid="objections-No"]').click();
+        cy.get('[data-testid="button-upload-pdf"]').click();
+
+        cy.get('input#primaryDocumentFile-file').attachFile(
+          '../fixtures/w3-dummy.pdf',
+        );
+
+        cy.get('[data-testid="save-and-serve"]').click();
+        cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="print-paper-service-done-button"]').click();
+
+        cy.login('judgecolvin');
+        cy.get('[data-testid="dropdown-select-report"]').click();
+        cy.get('[data-testid="activity-report-link"]').click();
+        cy.get('[data-testid="pending-motions-tab"]').click();
+        cy.get(`[data-testid="${docketNumber}"]`).should('exist');
+      });
     });
   });
 });
