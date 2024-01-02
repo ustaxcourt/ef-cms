@@ -18,6 +18,7 @@ import {
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
@@ -156,7 +157,7 @@ export const createApplicationContext = (
       process.env.NODE_ENV === 'production'
         ? getChromiumBrowserAWS
         : getChromiumBrowser,
-    getCognito: () => {
+    getCognito: (): CognitoIdentityProvider => {
       if (environment.stage === 'local') {
         return getLocalCognito();
       } else {

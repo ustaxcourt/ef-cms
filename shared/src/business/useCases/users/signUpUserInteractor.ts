@@ -1,7 +1,4 @@
-import {
-  type AdminCreateUserResponse,
-  UsersListType,
-} from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 
 export const signUpUserInteractor = async (
@@ -16,13 +13,13 @@ export const signUpUserInteractor = async (
       confirmPassword: string;
     };
   },
-): Promise<AdminCreateUserResponse> => {
+) => {
   const existingUsers = await checkUserAlreadyExists(
     applicationContext,
     user.email,
   );
 
-  if (existingUsers.length) {
+  if (existingUsers?.length) {
     const accountUnconfirmed = existingUsers.some(
       acct => acct.UserStatus === 'UNCONFIRMED',
     );
@@ -36,7 +33,9 @@ export const signUpUserInteractor = async (
 
   const newUser = new NewPetitionerUser(user).validate().toRawObject();
 
-  const params = {
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
+  return await cognito.signUp({
     ClientId: process.env.COGNITO_CLIENT_ID,
     Password: newUser.password,
     UserAttributes: [
@@ -50,25 +49,20 @@ export const signUpUserInteractor = async (
       },
     ],
     Username: newUser.email,
-  };
-
-  return await applicationContext.getCognito().signUp(params).promise();
+  });
 };
 
 const checkUserAlreadyExists = async (
   applicationContext: IApplicationContext,
   email: string,
-): Promise<UsersListType> => {
-  const filters = {
+) => {
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
+  const inCognito = await cognito.listUsers({
     AttributesToGet: ['email'],
     Filter: `email = "${email}"`,
     UserPoolId: process.env.USER_POOL_ID,
-  };
-
-  const inCognito = await applicationContext
-    .getCognito()
-    .listUsers(filters)
-    .promise();
+  });
 
   return inCognito.Users;
 };

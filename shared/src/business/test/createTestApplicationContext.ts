@@ -601,15 +601,9 @@ export const createTestApplicationContext = ({
       return mockGetChromiumBrowserReturnValue;
     }),
     getCognito: appContextProxy({
-      adminCreateUser: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
-      adminUpdateUserAttributes: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
-      initiateAuth: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
+      adminCreateUser: jest.fn(),
+      adminUpdateUserAttributes: jest.fn(),
+      initiateAuth: jest.fn(),
     }),
     getCognitoRequestPasswordResetUrl,
     getConstants: jest.fn().mockImplementation(() => {
@@ -697,5 +691,3 @@ export const createTestApplicationContext = ({
   };
   return applicationContext;
 };
-
-export const applicationContext = createTestApplicationContext();
