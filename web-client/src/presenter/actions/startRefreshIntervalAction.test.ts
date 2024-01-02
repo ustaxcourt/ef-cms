@@ -16,7 +16,7 @@ describe('startRefreshIntervalAction', () => {
   });
 
   it('starts the refresh interval for auth tokens', async () => {
-    applicationContext.getUseCases().refreshTokenInteractor.mockResolvedValue({
+    applicationContext.getUseCases().renewIdTokenInteractor.mockResolvedValue({
       token: 'token-123',
     });
 
@@ -29,7 +29,7 @@ describe('startRefreshIntervalAction', () => {
     expect(global.clearInterval).toHaveBeenCalled();
     expect(global.setInterval).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().refreshTokenInteractor,
+      applicationContext.getUseCases().renewIdTokenInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().setItemInteractor,

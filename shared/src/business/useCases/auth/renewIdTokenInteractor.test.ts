@@ -1,7 +1,7 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { refreshAuthTokenInteractor } from './refreshAuthTokenInteractor';
+import { renewIdTokenInteractor } from './renewIdTokenInteractor';
 
-describe('refreshAuthTokenInteractor', () => {
+describe('renewIdTokenInteractor', () => {
   beforeEach(() => {
     applicationContext.getPersistenceGateway().refreshToken.mockReturnValue({
       token: 'abc',
@@ -10,7 +10,7 @@ describe('refreshAuthTokenInteractor', () => {
 
   it('attempts to hit cognito and get an id token and refresh token', async () => {
     const expectedRefresh = 'sometoken';
-    const result = await refreshAuthTokenInteractor(applicationContext, {
+    const result = await renewIdTokenInteractor(applicationContext, {
       refreshToken: expectedRefresh,
     });
     expect(
@@ -23,7 +23,7 @@ describe('refreshAuthTokenInteractor', () => {
 
   it('throws an exception if not refresh token is passed in', async () => {
     await expect(
-      refreshAuthTokenInteractor(applicationContext, {
+      renewIdTokenInteractor(applicationContext, {
         refreshToken: undefined,
       }),
     ).rejects.toThrow('refreshToken is required');

@@ -1,7 +1,7 @@
 import { AWSError } from 'aws-sdk';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-export const refreshAuthTokenInteractor = async (
+export const renewIdTokenInteractor = async (
   applicationContext: IApplicationContext,
   { refreshToken }: { refreshToken: string },
 ): Promise<{

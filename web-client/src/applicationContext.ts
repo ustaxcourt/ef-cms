@@ -244,7 +244,6 @@ import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/proxies/opinionAdvancedSearchProxy';
 import { orderAdvancedSearchInteractor } from '../../shared/src/proxies/orderAdvancedSearchProxy';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
-import { refreshTokenInteractor } from '../../shared/src/proxies/auth/refreshTokenProxy';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
 import { removeCasePendingItemInteractor } from '../../shared/src/proxies/removeCasePendingItemProxy';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
@@ -253,6 +252,7 @@ import { removeItemInteractor } from '../../shared/src/business/useCases/removeI
 import { removePdfFromDocketEntryInteractor } from '../../shared/src/proxies/documents/removePdfFromDocketEntryProxy';
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/proxies/removePetitionerAndUpdateCaptionProxy';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/documents/removeSignatureFromDocumentProxy';
+import { renewIdTokenInteractor } from '../../shared/src/proxies/auth/renewIdTokenProxy';
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
@@ -522,7 +522,6 @@ const allUseCases = {
   opinionAdvancedSearchInteractor,
   orderAdvancedSearchInteractor,
   prioritizeCaseInteractor,
-  refreshTokenInteractor,
   removeCaseFromTrialInteractor,
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
@@ -530,6 +529,7 @@ const allUseCases = {
   removePdfFromDocketEntryInteractor,
   removePetitionerAndUpdateCaptionInteractor,
   removeSignatureFromDocumentInteractor,
+  renewIdTokenInteractor,
   replyToMessageInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCalendarNoteInteractor,

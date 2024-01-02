@@ -131,13 +131,13 @@ import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSear
 import { prioritizeCaseLambda } from './lambdas/cases/prioritizeCaseLambda';
 import { privatePractitionerCaseAssociationLambda } from './lambdas/cases/privatePractitionerCaseAssociationLambda';
 import { privatePractitionerPendingCaseAssociationLambda } from './lambdas/cases/privatePractitionerPendingCaseAssociationLambda';
-import { refreshAuthTokenLambda } from './lambdas/auth/refreshAuthTokenLambda';
 import { removeCaseFromTrialLambda } from './lambdas/trialSessions/removeCaseFromTrialLambda';
 import { removeCasePendingItemLambda } from './lambdas/cases/removeCasePendingItemLambda';
 import { removeConsolidatedCasesLambda } from './lambdas/cases/removeConsolidatedCasesLambda';
 import { removePdfFromDocketEntryLambda } from './lambdas/documents/removePdfFromDocketEntryLambda';
 import { removePetitionerAndUpdateCaptionLambda } from './lambdas/cases/removePetitionerAndUpdateCaptionLambda';
 import { removeSignatureFromDocumentLambda } from './lambdas/documents/removeSignatureFromDocumentLambda';
+import { renewIdTokenLambda } from './lambdas/auth/renewIdTokenLambda';
 import { replyToMessageLambda } from './lambdas/messages/replyToMessageLambda';
 import { runTrialSessionPlanningReportLambda } from './lambdas/trialSessions/runTrialSessionPlanningReportLambda';
 import { saveCalendarNoteLambda } from './lambdas/trialSessions/saveCalendarNoteLambda';
@@ -1029,7 +1029,7 @@ app.get(
     .route('/auth/login')
     .delete(lambdaWrapper(deleteAuthCookieLambda))
     .post(lambdaWrapper(loginLambda));
-  app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
+  app.post('/auth/refresh', lambdaWrapper(renewIdTokenLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the

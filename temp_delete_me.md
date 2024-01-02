@@ -10,7 +10,6 @@
 ::: STUFF TO DO :::
 - finish all todos (review together - KS)
 - ensure back works right (public to private and back)
-- error handling
 - fix tests
 - email verification flow (just after verifying, are we going to new login with verification success message)
 - create account (move to private - client site) 
