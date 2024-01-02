@@ -13,8 +13,8 @@ export const startRefreshIntervalAction = ({
         .getUseCases()
         .renewIdTokenInteractor(applicationContext);
 
-      store.set(state.token, response.token);
-      applicationContext.setCurrentUserToken(response.token);
+      store.set(state.token, response.idToken);
+      applicationContext.setCurrentUserToken(response.idToken);
     }
   };
   clearInterval(oldInterval);

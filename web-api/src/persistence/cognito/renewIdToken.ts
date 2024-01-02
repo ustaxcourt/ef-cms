@@ -3,7 +3,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 export const renewIdToken = async (
   applicationContext: ServerApplicationContext,
   { refreshToken }: { refreshToken: string },
-): Promise<{ token: string }> => {
+): Promise<{ idToken: string }> => {
   const clientId = applicationContext.environment.cognitoClientId;
 
   const result = await applicationContext
@@ -18,6 +18,6 @@ export const renewIdToken = async (
     .promise();
 
   return {
-    token: result.AuthenticationResult?.IdToken!,
+    idToken: result.AuthenticationResult?.IdToken!,
   };
 };
