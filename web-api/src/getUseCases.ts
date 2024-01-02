@@ -148,13 +148,13 @@ import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCase
 import { orderPublicSearchInteractor } from '../../shared/src/business/useCases/public/orderPublicSearchInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/business/useCases/prioritizeCaseInteractor';
 import { processStreamRecordsInteractor } from '../../shared/src/business/useCases/processStreamRecordsInteractor';
-import { refreshAuthTokenInteractor } from '../../shared/src/business/useCases/auth/refreshAuthTokenInteractor';
 import { removeCaseFromTrialInteractor } from '../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor';
 import { removeCasePendingItemInteractor } from '../../shared/src/business/useCases/removeCasePendingItemInteractor';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
 import { removePdfFromDocketEntryInteractor } from '../../shared/src/business/useCases/removePdfFromDocketEntryInteractor';
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/business/useCases/removeSignatureFromDocumentInteractor';
+import { renewIdTokenInteractor } from '../../shared/src/business/useCases/auth/renewIdTokenInteractor';
 import { replyToMessageInteractor } from '../../shared/src/business/useCases/messages/replyToMessageInteractor';
 import { resendVerificationLinkInteractor } from '@shared/business/useCases/public/resendVerificationLinkInteractor';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
@@ -362,13 +362,13 @@ const useCases = {
   orderPublicSearchInteractor,
   prioritizeCaseInteractor,
   processStreamRecordsInteractor,
-  refreshAuthTokenInteractor,
   removeCaseFromTrialInteractor,
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
   removePdfFromDocketEntryInteractor,
   removePetitionerAndUpdateCaptionInteractor,
   removeSignatureFromDocumentInteractor,
+  renewIdTokenInteractor,
   replyToMessageInteractor,
   resendVerificationLinkInteractor,
   runTrialSessionPlanningReportInteractor,

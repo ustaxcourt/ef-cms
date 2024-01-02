@@ -2,7 +2,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { genericHandler } from '../../genericHandler';
 import { parseCookieString } from '../../utilities/cookieFormatting';
 
-export const refreshAuthTokenLambda = event =>
+export const renewIdTokenLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
@@ -14,7 +14,7 @@ export const refreshAuthTokenLambda = event =>
 
       const { token } = await applicationContext
         .getUseCases()
-        .refreshAuthTokenInteractor(applicationContext, {
+        .renewIdTokenInteractor(applicationContext, {
           refreshToken,
         });
 

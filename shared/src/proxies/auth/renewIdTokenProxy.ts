@@ -1,13 +1,13 @@
 import { post } from '../requests';
 
 /**
- * refreshTokenInteractor
+ * renewIdTokenInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @returns {Promise<*>} the promise of the api call
  */
-export const refreshTokenInteractor = applicationContext => {
+export const renewIdTokenInteractor = applicationContext => {
   return post({
     applicationContext,
     endpoint: '/auth/refresh',

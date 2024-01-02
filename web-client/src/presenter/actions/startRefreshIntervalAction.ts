@@ -11,7 +11,7 @@ export const startRefreshIntervalAction = ({
     if (userIsLoggedIn) {
       const response = await applicationContext
         .getUseCases()
-        .refreshTokenInteractor(applicationContext);
+        .renewIdTokenInteractor(applicationContext);
 
       store.set(state.token, response.token);
       applicationContext.setCurrentUserToken(response.token);

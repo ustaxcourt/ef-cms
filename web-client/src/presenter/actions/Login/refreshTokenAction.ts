@@ -3,7 +3,7 @@ export const refreshTokenAction = async ({
 }: ActionProps): Promise<{ idToken: string }> => {
   const { token } = await applicationContext
     .getUseCases()
-    .refreshTokenInteractor(applicationContext);
+    .renewIdTokenInteractor(applicationContext);
 
   return { idToken: token };
 };
