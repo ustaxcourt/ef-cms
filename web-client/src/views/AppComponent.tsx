@@ -97,6 +97,7 @@ import { WorkQueue } from './WorkQueue';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
 
 const pages = {
   AccessibilityStatement,
@@ -186,11 +187,12 @@ const pages = {
   WorkQueue,
 };
 
+const pagesWithBlueBackground = {
+  Login,
+};
+
 let initialPageLoaded = false;
 
-/**
- * Root application component
- */
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
@@ -223,6 +225,7 @@ export const AppComponent = connect(
     let showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
+    const IsPageWithBlueBackground = pagesWithBlueBackground[currentPage];
 
     return (
       <>
@@ -241,10 +244,17 @@ export const AppComponent = connect(
           </>
         )}
 
-        <main id="main-content" role="main">
+        <main
+          className={classNames(
+            IsPageWithBlueBackground ? 'background-blue' : '',
+          )}
+          id="main-content"
+          role="main"
+        >
           <CurrentPage />
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
+
         <Loading />
 
         {showHeaderAndFooter && (

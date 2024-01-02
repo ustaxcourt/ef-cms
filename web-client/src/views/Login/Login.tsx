@@ -25,7 +25,7 @@ export const Login = connect(
   }) => {
     return (
       <>
-        <div className="grid-container">
+        <section className="grid-container usa-section margin-top-4">
           {alertError && (
             <MessageAlert
               alertType={alertError.alertType}
@@ -33,86 +33,102 @@ export const Login = connect(
               title={alertError.title}
             ></MessageAlert>
           )}
-          <div className="grid-row bg-white padding-x-5 padding-y-3">
-            <div className="grid-col">
-              <h1 className="margin-bottom-1">Log in to DAWSON</h1>
-              <span>Email address and password are case sensitive.</span>
-              <form className="margin-top-4">
-                <label className="usa-label" htmlFor="email">
-                  Email address
-                </label>
-                <input
-                  required
-                  autoCapitalize="off"
-                  autoCorrect="off"
-                  className="usa-input"
-                  data-testid="email-input"
-                  id="email"
-                  name="email"
-                  type="text"
-                  value={form.email}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-                <label className="usa-label" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  required
-                  className="usa-input"
-                  data-testid="password-input"
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={form.password}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-                <button
-                  className="usa-show-password"
-                  data-hide-text="Hide password"
-                  data-show-text="Show password"
-                  type="button"
-                  onClick={() =>
-                    toggleShowPasswordSequence({ passwordType: 'showPassword' })
-                  }
-                >
-                  {showPassword ? 'Hide Password' : 'Show password'}
-                </button>
-                <Button
-                  className="usa-button margin-top-3"
-                  data-testid="login-button"
-                  disabled={loginHelper.disableLoginButton}
-                  onClick={e => {
-                    e.preventDefault();
-                    submitLoginSequence();
-                  }}
-                >
-                  Log in
-                </Button>
-              </form>
-              <div>
-                <Button className="margin-top-1" link={true} type="button">
-                  Forgot password?
-                </Button>
-              </div>
-              <div>
-                <span>Don&apos;t have an account?</span>{' '}
-                <Button className="padding-top-0" link={true} type="button">
-                  Create your account now.
-                </Button>
+          <div className="grid-row flex-justify-center">
+            <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
+              <div className="grid-container bg-white padding-y-3 border border-base-lighter">
+                <div className="display-flex flex-column">
+                  <div className="flex-align-self-center">
+                    <h1 className="margin-bottom-1">Log in to DAWSON</h1>
+
+                    <span>Email address and password are case sensitive.</span>
+
+                    <form className="usa-form margin-top-4">
+                      <label className="usa-label" htmlFor="email">
+                        Email address
+                      </label>
+                      <input
+                        required
+                        autoCapitalize="off"
+                        autoCorrect="off"
+                        className="usa-input"
+                        data-testid="email-input"
+                        name="email"
+                        type="email"
+                        value={form.email}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label className="usa-label" htmlFor="password">
+                        Password
+                      </label>
+                      <input
+                        required
+                        className="usa-input"
+                        data-testid="password-input"
+                        name="password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={form.password}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <button
+                        className="usa-show-password"
+                        data-hide-text="Hide password"
+                        data-show-text="Show password"
+                        type="button"
+                        onClick={() =>
+                          toggleShowPasswordSequence({
+                            passwordType: 'showPassword',
+                          })
+                        }
+                      >
+                        {showPassword ? 'Hide Password' : 'Show password'}
+                      </button>
+                      <Button
+                        className="usa-button margin-top-3"
+                        data-testid="login-button"
+                        disabled={loginHelper.disableLoginButton}
+                        onClick={e => {
+                          e.preventDefault();
+                          submitLoginSequence();
+                        }}
+                      >
+                        Log in
+                      </Button>
+                    </form>
+                    <div>
+                      <Button
+                        className="margin-top-1"
+                        link={true}
+                        type="button"
+                      >
+                        Forgot password?
+                      </Button>
+                    </div>
+                    <div>
+                      <span>Don&apos;t have an account?</span>{' '}
+                      <Button
+                        className="padding-top-0"
+                        link={true}
+                        type="button"
+                      >
+                        Create your account now.
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </>
     );
   },
