@@ -19,7 +19,6 @@ import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
-import { ChangePasswordLocal } from './ChangePasswordLocal';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
@@ -118,7 +117,6 @@ const pages = {
   CaseInventoryReport,
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
-  ChangePasswordLocal,
   Contact,
   ContactEdit,
   CourtIssuedDocketEntry,

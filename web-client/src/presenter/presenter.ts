@@ -39,7 +39,6 @@ import { cancelRemovePetitionerSequence } from './sequences/cancelRemovePetition
 import { caseDetailPrimaryTabChangeSequence } from './sequences/caseDetailPrimaryTabChangeSequence';
 import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
-import { changePasswordLocalSequence } from './sequences/changePasswordLocalSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
 import { checkForNegativeValueSequence } from './sequences/checkForNegativeValueSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
@@ -140,7 +139,6 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoChangeLoginAndServiceEmailSequence } from './sequences/gotoChangeLoginAndServiceEmailSequence';
-import { gotoChangePasswordLocalSequence } from './sequences/gotoChangePasswordLocalSequence';
 import { gotoCompleteDocketEntryQCSequence } from './sequences/gotoCompleteDocketEntryQCSequence';
 import { gotoContactEditSequence } from './sequences/gotoContactEditSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
@@ -611,8 +609,6 @@ export const presenterSequences = {
     caseInventoryReportLoadMoreSequence as unknown as Function,
   cerebralBindSimpleSetStateSequence:
     cerebralBindSimpleSetStateSequence as unknown as Function,
-  changePasswordLocalSequence:
-    changePasswordLocalSequence as unknown as Function,
   changeTabAndSetViewerDocumentToDisplaySequence:
     changeTabAndSetViewerDocumentToDisplaySequence as unknown as Function,
   checkForNegativeValueSequence:
@@ -779,8 +775,6 @@ export const presenterSequences = {
     gotoCaseSearchNoMatchesSequence as unknown as Function,
   gotoChangeLoginAndServiceEmailSequence:
     gotoChangeLoginAndServiceEmailSequence as unknown as Function,
-  gotoChangePasswordLocalSequence:
-    gotoChangePasswordLocalSequence as unknown as Function,
   gotoCompleteDocketEntryQCSequence:
     gotoCompleteDocketEntryQCSequence as unknown as Function,
   gotoContactEditSequence: gotoContactEditSequence as unknown as Function,
