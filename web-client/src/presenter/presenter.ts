@@ -1524,7 +1524,7 @@ export const presenter = {
     [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {},
+  providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: presenterSequences,
   state: initialState,
 };
