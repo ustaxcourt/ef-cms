@@ -6,9 +6,9 @@ export const updateAdvancedSearchFormAction =
     props,
     store,
   }: ActionProps<{
+    formType: string;
     key: string;
     value: string;
-    formType: string;
   }>) => {
     const formType = formName || props.formType;
     if (props.value) {
