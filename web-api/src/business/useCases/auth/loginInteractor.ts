@@ -31,7 +31,6 @@ export const loginInteractor = async (
       refreshToken: result.AuthenticationResult!.RefreshToken!,
     };
   } catch (err: any) {
-    //TODO 10007: Test handle user does not exist on deployed env
     if (
       err.name === 'InvalidPasswordException' ||
       err.name === 'NotAuthorizedException' ||
