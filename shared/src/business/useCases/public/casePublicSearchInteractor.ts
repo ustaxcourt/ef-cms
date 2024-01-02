@@ -1,18 +1,9 @@
-import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
-import { PublicCase } from '../../entities/cases/PublicCase';
+import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
+import { CasePublicSearchResultsType } from '@web-api/persistence/elasticsearch/casePublicSearch';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '../../utilities/DateHandler';
-import { filterForPublic } from './publicHelpers';
-
-/**
- * casePublicSearchInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, endDate, startDate
- * @returns {object} the case data
- */
 
 export const casePublicSearchInteractor = async (
   applicationContext: IApplicationContext,
@@ -22,14 +13,8 @@ export const casePublicSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
-  }: {
-    countryType: string;
-    petitionerName: string;
-    petitionerState: string;
-    startDate: string;
-    endDate: string;
-  },
-) => {
+  }: CaseAdvancedSearchParamsRequestType,
+): Promise<{ results: CasePublicSearchResultsType }> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -53,27 +38,14 @@ export const casePublicSearchInteractor = async (
     });
   }
 
-  const foundCases = await applicationContext
-    .getPersistenceGateway()
-    .casePublicSearch({
-      applicationContext,
-      searchTerms: {
-        countryType,
-        endDate: searchEndDate,
-        petitionerName,
-        petitionerState,
-        startDate: searchStartDate,
-      },
-    });
-
-  const unsealedFoundCases = (
-    await filterForPublic({
-      applicationContext,
-      unfiltered: foundCases,
-    })
-  ).slice(0, MAX_SEARCH_RESULTS);
-
-  return PublicCase.validateRawCollection(unsealedFoundCases, {
+  return await applicationContext.getPersistenceGateway().casePublicSearch({
     applicationContext,
+    searchTerms: {
+      countryType,
+      endDate: searchEndDate,
+      petitionerName,
+      petitionerState,
+      startDate: searchStartDate,
+    },
   });
 };
