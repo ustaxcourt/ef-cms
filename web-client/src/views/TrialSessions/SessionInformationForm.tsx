@@ -290,7 +290,7 @@ export const SessionInformationForm = connect(
                 Session type
               </legend>
               {addTrialSessionInformationHelper.sessionTypes.map(option => (
-                <div className="usa-radio max-width-20" key={option}>
+                <div className="usa-radio max-width-150" key={option}>
                   <input
                     aria-describedby="session-type-legend"
                     checked={form.sessionType === option}
