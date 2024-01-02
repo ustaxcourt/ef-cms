@@ -1,11 +1,5 @@
-/**
- * confirmSignUpLocalInteractor
- * @param {object} applicationContext the application context
- * @param {object} auth an object
- * @param {string} auth.confirmationCode the email confirmation code provided by cognito
- * @param {string} auth.userEmail the email of the user confirming their account
- * @returns {Promise} the promise of both the refresh token and the auth token
- */
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+
 export const confirmSignUpLocalInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -13,11 +7,11 @@ export const confirmSignUpLocalInteractor = async (
     userEmail,
   }: { confirmationCode: string; userEmail: string },
 ) => {
-  const params = {
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
+  return await cognito.confirmSignUp({
     ClientId: process.env.COGNITO_CLIENT_ID,
     ConfirmationCode: confirmationCode,
     Username: userEmail,
-  };
-
-  return await applicationContext.getCognito().confirmSignUp(params).promise();
+  });
 };

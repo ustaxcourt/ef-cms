@@ -8,16 +8,14 @@ export const loginInteractor = async (
   const cognito = applicationContext.getCognito();
 
   try {
-    const result = await cognito
-      .initiateAuth({
-        AuthFlow: 'USER_PASSWORD_AUTH',
-        AuthParameters: {
-          PASSWORD: password,
-          USERNAME: email,
-        },
-        ClientId: applicationContext.environment.cognitoClientId,
-      })
-      .promise(); // TODO 10007: Update cognito to v3
+    const result = await cognito.initiateAuth({
+      AuthFlow: 'USER_PASSWORD_AUTH',
+      AuthParameters: {
+        PASSWORD: password,
+        USERNAME: email,
+      },
+      ClientId: applicationContext.environment.cognitoClientId,
+    });
 
     return {
       accessToken: result.AuthenticationResult!.AccessToken!,

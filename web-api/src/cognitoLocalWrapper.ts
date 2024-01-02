@@ -22,9 +22,7 @@ export const cognitoLocalWrapper = cognito => {
               if (methodName === 'adminCreateUser') {
                 params.DesiredDeliveryMediums = ['EMAIL'];
               }
-              const response = await originalMethod
-                .call(this, params)
-                .promise();
+              const response = await originalMethod.call(this, params);
 
               return new Promise(resolve => {
                 if (response.User) {
