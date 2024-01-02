@@ -27,7 +27,11 @@ export const Statistics = connect(
   }) {
     const closedCases: () => JSX.Element = () => (
       <>
-        <table aria-describedby="casesClosed" className="usa-table ustc-table">
+        <table
+          aria-describedby="casesClosed"
+          className="usa-table ustc-table"
+          data-testid="cases-closed-table"
+        >
           <caption id="casesClosed">
             <div className="grid-row display-flex flex-row flex-align-end">
               <div className="grid-col-9 table-caption-serif">
@@ -63,7 +67,11 @@ export const Statistics = connect(
 
     const trialSessionsHeld: () => JSX.Element = () => (
       <>
-        <table aria-describedby="sessionsHeld" className="usa-table ustc-table">
+        <table
+          aria-describedby="sessionsHeld"
+          className="usa-table ustc-table"
+          data-testid="trial-sessions-held-table"
+        >
           <caption id="sessionsHeld">
             <div className="grid-row display-flex flex-row flex-align-end">
               <div className="grid-col-9 table-caption-serif">
@@ -100,7 +108,11 @@ export const Statistics = connect(
 
     const ordersIssued: () => JSX.Element = () => (
       <>
-        <table aria-describedby="ordersIssued" className="usa-table ustc-table">
+        <table
+          aria-describedby="ordersIssued"
+          className="usa-table ustc-table"
+          data-testid="orders-issued-table"
+        >
           <caption id="ordersIssued">
             <div className="grid-row display-flex flex-row flex-align-end">
               <div className="grid-col-9 table-caption-serif">
@@ -145,6 +157,7 @@ export const Statistics = connect(
           <table
             aria-describedby="opinionsIssued"
             className="usa-table ustc-table"
+            data-testid="opinions-issued-table"
           >
             <caption id="opinionsIssued">
               <div className="grid-row display-flex flex-row flex-align-end">
