@@ -56,6 +56,7 @@ export const JudgeActivityReport = connect(
               </Tab>
 
               <Tab
+                data-testid="pending-motions-tab"
                 tabName="pendingMotions"
                 title={`Pending Motions (${pendingMotionsHelper.formattedPendingMotions.length})`}
               >
