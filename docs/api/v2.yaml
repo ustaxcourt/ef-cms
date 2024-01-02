@@ -231,16 +231,10 @@ components:
     DocketEntry:
       type: object
       properties:
-        caseCaption:
-          type: string
-          example: Joseph Smith, Petitioner
         docketEntryId:
           type: string
           format: guidv4
           example: 2621672d-cf3f-4ddd-ba50-92513b2fba76
-        docketNumber:
-          type: string
-          example: 123-22
         documentTitle:
           type: string
           example: Petition
