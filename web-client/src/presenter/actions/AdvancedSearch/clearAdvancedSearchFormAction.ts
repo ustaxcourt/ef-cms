@@ -1,3 +1,4 @@
+import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -12,16 +13,13 @@ export const clearAdvancedSearchFormAction = ({
   props,
   store,
 }: ActionProps) => {
-  const {
-    ADVANCED_SEARCH_OPINION_TYPES,
-    COUNTRY_TYPES,
-    DATE_RANGE_SEARCH_OPTIONS,
-  } = applicationContext.getConstants();
+  const { ADVANCED_SEARCH_OPINION_TYPES, DATE_RANGE_SEARCH_OPTIONS } =
+    applicationContext.getConstants();
 
   const { formType } = props;
   const defaultForm = {};
   if (formType === 'caseSearchByName') {
-    defaultForm.countryType = COUNTRY_TYPES.DOMESTIC;
+    defaultForm.countryType = ALL_COUNTRY_TYPE;
   }
   if (formType === 'orderSearch' || formType === 'opinionSearch') {
     defaultForm.keyword = '';
