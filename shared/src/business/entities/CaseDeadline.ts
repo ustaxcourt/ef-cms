@@ -1,11 +1,12 @@
+import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import { Case } from './cases/Case';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
-
 export class CaseDeadline extends JoiValidationEntity {
   public associatedJudge: string;
+  public associatedJudgeId: string;
   public caseDeadlineId: string;
   public createdAt: string;
   public deadlineDate: string;
@@ -22,6 +23,7 @@ export class CaseDeadline extends JoiValidationEntity {
     }
 
     this.associatedJudge = rawProps.associatedJudge;
+    this.associatedJudgeId = rawProps.associatedJudgeId;
     this.caseDeadlineId =
       rawProps.caseDeadlineId || applicationContext.getUniqueId();
     this.createdAt = rawProps.createdAt || createISODateString();
@@ -39,6 +41,13 @@ export class CaseDeadline extends JoiValidationEntity {
       .required()
       .description('Judge assigned to the case containing this Case Deadline.')
       .messages({ '*': 'Associated judge is required' }),
+    associatedJudgeId: joi
+      .when('associatedJudge', {
+        is: CHIEF_JUDGE,
+        otherwise: JoiValidationConstants.UUID.required(),
+        then: JoiValidationConstants.UUID.optional(),
+      })
+      .description('Judge ID assigned to this case.'),
     caseDeadlineId: JoiValidationConstants.UUID.required().description(
       'Unique Case Deadline ID only used by the system.',
     ),

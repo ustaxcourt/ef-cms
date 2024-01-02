@@ -109,11 +109,9 @@ export const CaseListTable = connect(
                 <tbody>
                   {cases.map(item => (
                     <CaseListRowExternal
-                      onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
                       isNestedCase={false}
                       key={item.docketNumber}
-                      onlyText={false}
                       showFilingFee={dashboardExternalHelper.showFilingFee}
                     />
                   ))}

@@ -38,6 +38,7 @@ describe('removeCaseFromTrialInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         associatedJudge: 'someone',
+        associatedJudgeId: 'cb8b3a61-9c52-4b1f-b68b-f725656a9a0e',
         trialDate: '2018-03-01T00:00:00.000Z',
         trialLocation: 'Boise, Idaho',
         trialSessionId: '9047d1ab-18d0-43ec-bafb-654e83405416',
@@ -50,10 +51,10 @@ describe('removeCaseFromTrialInteractor', () => {
 
   it('should throw an error when the user is unauthorized to remove a case from a trial session', async () => {
     mockUser = petitionerUser;
-
     await expect(
       removeCaseFromTrialInteractor(applicationContext, {
         associatedJudge: '123',
+        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
         caseStatus: 'new',
         disposition: 'because',
         docketNumber: MOCK_CASE.docketNumber,
@@ -67,6 +68,7 @@ describe('removeCaseFromTrialInteractor', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
+      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
       caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
@@ -120,6 +122,7 @@ describe('removeCaseFromTrialInteractor', () => {
         .caseToUpdate,
     ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
+      associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
@@ -132,6 +135,7 @@ describe('removeCaseFromTrialInteractor', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
+      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
       caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
@@ -166,6 +170,7 @@ describe('removeCaseFromTrialInteractor', () => {
         .caseToUpdate,
     ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
+      associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
@@ -178,6 +183,7 @@ describe('removeCaseFromTrialInteractor', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
+      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
       caseStatus: 'New',
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
@@ -203,6 +209,7 @@ describe('removeCaseFromTrialInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         associatedJudge: 'someone',
+        associatedJudgeId: 'cb8b3a61-9c52-4b1f-b68b-f725656a9a0e',
         preferredTrialCity: null,
         trialDate: '2018-03-01T00:00:00.000Z',
         trialLocation: 'Boise, Idaho',
@@ -211,6 +218,7 @@ describe('removeCaseFromTrialInteractor', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
+      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
       caseStatus: 'New',
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
@@ -230,6 +238,7 @@ describe('removeCaseFromTrialInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         associatedJudge: 'someone',
+        associatedJudgeId: 'cb8b3a61-9c52-4b1f-b68b-f725656a9a0e',
         hearings: [mockTrialSession],
         trialDate: '2019-08-25T05:00:00.000Z',
         trialLocation: 'Boise, Idaho',
@@ -238,6 +247,7 @@ describe('removeCaseFromTrialInteractor', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
+      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
       caseStatus: 'New',
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
@@ -292,6 +302,7 @@ describe('removeCaseFromTrialInteractor', () => {
 
     const result = await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: 'Judge Dredd',
+      associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
       caseStatus: CASE_STATUS_TYPES.cav,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
@@ -299,6 +310,9 @@ describe('removeCaseFromTrialInteractor', () => {
     });
 
     expect(result.associatedJudge).toEqual('Judge Dredd');
+    expect(result.associatedJudgeId).toEqual(
+      'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
+    );
     expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
   });
 
@@ -308,10 +322,11 @@ describe('removeCaseFromTrialInteractor', () => {
     await expect(
       removeCaseFromTrialInteractor(applicationContext, {
         associatedJudge: 'Judge Dredd',
+        associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
         caseStatus: CASE_STATUS_TYPES.cav,
         disposition: 'because',
         docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
       }),
     ).rejects.toThrow(ServiceUnavailableError);
 
@@ -323,10 +338,11 @@ describe('removeCaseFromTrialInteractor', () => {
   it('should acquire and remove the lock on the case', async () => {
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: 'Judge Dredd',
+      associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
       caseStatus: CASE_STATUS_TYPES.cav,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
     });
 
     expect(

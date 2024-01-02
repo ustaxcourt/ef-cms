@@ -9,6 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { TDocumentMetaData } from 'types/TEntity';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
@@ -162,6 +163,7 @@ export const fileExternalDocument = async (
               assigneeId: null,
               assigneeName: null,
               associatedJudge: caseToUpdate.associatedJudge,
+              associatedJudgeId: caseToUpdate.associatedJudgeId,
               caseStatus: caseToUpdate.status,
               caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
               docketEntry: {

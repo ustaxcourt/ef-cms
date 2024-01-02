@@ -134,6 +134,7 @@ export const EligibleCases = connect(
                           item.qcCompleteForTrial[trialSessionId] === true
                         }
                         className="usa-checkbox__input"
+                        data-testid={`${item.docketNumber}-complete`}
                         id={`${item.docketNumber}-complete`}
                         name={`${item.docketNumber}Complete`}
                         type="checkbox"
