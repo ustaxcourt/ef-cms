@@ -45,7 +45,7 @@ describe('getJudgeActivityReportCountsAction', () => {
         .getCountOfCaseDocumentsFiledByJudgesInteractor.mock.calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judges: [judgeUser.userId],
+      judges: [judgeUser.name],
       startDate: mockStartDate,
     });
 
@@ -79,7 +79,7 @@ describe('getJudgeActivityReportCountsAction', () => {
         .getCountOfCaseDocumentsFiledByJudgesInteractor.mock.calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judges: [judgeUser.userId],
+      judges: [judgeUser.name],
       startDate: mockStartDate,
     });
 

@@ -14,6 +14,9 @@ describe('setDefaultJudgeNameBasedOnUserAction', () => {
       modules: {
         presenter,
       },
+      state: {
+        judgeUser,
+      },
     });
 
     expect(state.judgeActivityReport.filters.judgeName).toBe(judgeUser.name);
