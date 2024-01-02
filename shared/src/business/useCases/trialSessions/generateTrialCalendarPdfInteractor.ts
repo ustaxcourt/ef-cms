@@ -61,6 +61,7 @@ export const generateTrialCalendarPdfInteractor = async (
         formattedCityStateZip,
         irsCalendarAdministrator:
           trialSession.irsCalendarAdministrator || 'Not assigned',
+        irsCalendarAdministratorInfo: trialSession.irsCalendarAdministratorInfo,
         judge: trialSession.judge?.name || 'Not assigned',
         noLocationEntered:
           !trialSession.courthouseName &&

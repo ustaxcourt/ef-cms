@@ -34,12 +34,16 @@ export const generatePractitionerCaseListPdfInteractor = async (
 
   const { barNumber, name } = practitionerUser;
 
-  const cases = await applicationContext
+  const docketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getCasesAssociatedWithUser({
+    .getDocketNumbersByUser({
       applicationContext,
       userId,
     });
+
+  const cases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByDocketNumbers({ applicationContext, docketNumbers });
 
   cases.forEach(
     aCase => (aCase.caseTitle = Case.getCaseTitle(aCase.caseCaption)),

@@ -42,6 +42,7 @@ const associatedFieldsBlocked = () => {
     contactType: CONTACT_TYPES.primary,
     entityName: 'PublicContact',
     name: expect.anything(),
+    serviceIndicator: 'Electronic',
     state: expect.anything(),
   });
   expect(contactPrimary.address1).toBeUndefined();
