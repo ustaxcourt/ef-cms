@@ -1,5 +1,4 @@
 import { Case } from './cases/Case';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationEntity } from './JoiValidationEntity';
 
 export class UserCase extends JoiValidationEntity {
