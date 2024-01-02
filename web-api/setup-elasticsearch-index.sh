@@ -39,10 +39,16 @@ fi
 
 popd
 
+echo "- ELASTICSEARCH_ENDPOINT_ALPHA: ${ELASTICSEARCH_ENDPOINT_ALPHA}"
+echo "- MIGRATE_FLAG: ${MIGRATE_FLAG}"
+echo "- DESTINATION_DOMAIN: ${DESTINATION_DOMAIN}"
+
 if [[ -n "${ELASTICSEARCH_ENDPOINT_ALPHA}"  && ( "${MIGRATE_FLAG}" == 'false' || "${DESTINATION_DOMAIN}" == *'alpha'* ) ]]; then
+  echo " ==> Setting up Alpha Cluster"
   npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT_ALPHA}"
 fi
 
 if [[ -n "${ELASTICSEARCH_ENDPOINT_BETA}"  && ( "${MIGRATE_FLAG}" == 'false' || "${DESTINATION_DOMAIN}" == *'beta'* ) ]]; then
+  echo " ==> Setting up Beta Cluster"
   npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT_BETA}"
 fi
