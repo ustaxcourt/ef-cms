@@ -1,3 +1,4 @@
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { put } from '../../dynamodbClientService';
 
@@ -51,35 +52,34 @@ export const createNewPractitionerUser = async ({
 }) => {
   const { userId } = user;
 
-  await applicationContext
-    .getCognito()
-    .adminCreateUser({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: user.pendingEmail,
-        },
-        {
-          Name: 'custom:role',
-          Value: user.role,
-        },
-        {
-          Name: 'name',
-          Value: user.name,
-        },
-        {
-          Name: 'custom:userId',
-          Value: user.userId,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: user.pendingEmail,
-    })
-    .promise();
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
+  await cognito.adminCreateUser({
+    UserAttributes: [
+      {
+        Name: 'email_verified',
+        Value: 'True',
+      },
+      {
+        Name: 'email',
+        Value: user.pendingEmail,
+      },
+      {
+        Name: 'custom:role',
+        Value: user.role,
+      },
+      {
+        Name: 'name',
+        Value: user.name,
+      },
+      {
+        Name: 'custom:userId',
+        Value: user.userId,
+      },
+    ],
+    UserPoolId: process.env.USER_POOL_ID,
+    Username: user.pendingEmail,
+  });
 
   const updatedUser = await updateUserRecords({
     applicationContext,
