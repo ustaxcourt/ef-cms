@@ -117,10 +117,63 @@ const fileToCheck = getFilesToCheck(
   modifiedFiles,
 );
 
+function logSmartTable(dataObject: {
+  [fileName: string]: {
+    stagingCount: number;
+    branchCount: number;
+  };
+}) {
+  const columnWidths = {
+    'Branch Count': 11,
+    'File Path': 9,
+    'Staging Count': 12,
+  };
+
+  Object.entries(dataObject).forEach(([filePath, counts]) => {
+    const { branchCount, stagingCount } = counts;
+    columnWidths['File Path'] = Math.max(
+      columnWidths['File Path'],
+      filePath.length,
+    );
+    columnWidths['Staging Count'] = Math.max(
+      columnWidths['Staging Count'],
+      stagingCount.toString().length,
+    );
+    columnWidths['Branch Count'] = Math.max(
+      columnWidths['Branch Count'],
+      branchCount.toString().length,
+    );
+  });
+
+  console.log(
+    `| ${'File Path'.padEnd(
+      columnWidths['File Path'],
+    )} | ${'Staging Count'.padEnd(
+      columnWidths['Staging Count'],
+    )} | ${'Branch Count'.padEnd(columnWidths['Branch Count'])} |`,
+  );
+  console.log(
+    `| ${'-'.repeat(columnWidths['File Path'])} | ${'-'.repeat(
+      columnWidths['Staging Count'],
+    )} | ${'-'.repeat(columnWidths['Branch Count'])} |`,
+  );
+
+  Object.entries(dataObject).forEach(([filePath, counts]) => {
+    const { branchCount, stagingCount } = counts;
+    console.log(
+      `| ${filePath.padEnd(columnWidths['File Path'])} | ${stagingCount
+        .toString()
+        .padEnd(columnWidths['Staging Count'])} | ${branchCount
+        .toString()
+        .padEnd(columnWidths['Branch Count'])} |`,
+    );
+  });
+}
+
 if (Object.keys(fileToCheck).length) {
   console.log(
     'Here are the files that your PR did not touch but increased in Typescript error count',
-    fileToCheck,
+    logSmartTable(fileToCheck),
   );
   process.exit(1);
 } else {
