@@ -293,26 +293,6 @@ module.exports = [
   },
   {
     actions: [
-      'wait for element #react-select-2-input to be visible',
-      'click #react-select-2-input',
-      'wait for element .select-react-element__menu to be visible',
-      'click #react-select-2-option-49', //Motion for Leave to File Out of Time
-      'wait for element #react-select-3-input to be visible',
-      'click #react-select-3-input',
-      'wait for element .select-react-element__menu to be visible',
-      'click #react-select-3-option-37', //Motion for Continuance
-      'wait for element #submit-document to be visible',
-      'click #submit-document',
-      'wait for element #primary-document to be visible',
-      'click #primaryDocument-certificateOfService-label',
-      'wait for element #primaryDocument-service-date-picker to be visible',
-      'wait for element #secondary-document to be visible',
-    ],
-    notes: ['File a document, step 2'],
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
-  },
-  {
-    actions: [
       'wait for element #case-list to be visible',
       'wait for element #pay_filing_fee to be visible',
       'click element .payment-options',
