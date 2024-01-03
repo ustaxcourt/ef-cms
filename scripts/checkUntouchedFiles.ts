@@ -118,7 +118,10 @@ const fileToCheck = getFilesToCheck(
 );
 
 if (Object.keys(fileToCheck).length) {
-  console.log('fileToCheck', fileToCheck);
+  console.log(
+    'Here are the files that your PR did not touch but increased in Typescript error count',
+    fileToCheck,
+  );
   process.exit(1);
 } else {
   process.exit(0);
