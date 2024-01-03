@@ -42,13 +42,15 @@ export const JudgeActivityReport = connect(
           />
 
           <>
-            <Tabs>
+            <Tabs marginBottom={false}>
               <Tab
                 data-testid="statistics-tab"
                 tabName="statistics"
                 title="Statistics"
               >
-                <Statistics />
+                <div className="margin-top-5">
+                  <Statistics />
+                </div>
               </Tab>
 
               <Tab
@@ -56,7 +58,9 @@ export const JudgeActivityReport = connect(
                 tabName="caseWorksheet"
                 title={`Submitted/CAV (${judgeActivityReportHelper.progressDescriptionTableTotal})`}
               >
-                <SubmittedAndCav />
+                <div className="margin-top-5">
+                  <SubmittedAndCav />
+                </div>
               </Tab>
 
               <Tab
