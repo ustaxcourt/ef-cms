@@ -29,7 +29,7 @@ export const Login = connect(
         <section className="grid-container usa-section margin-top-4">
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
-              <SuccessNotification />
+              <SuccessNotification isDismissable={false} />
               {alertError && (
                 <MessageAlert
                   alertType={alertError.alertType}

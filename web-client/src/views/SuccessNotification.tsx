@@ -5,12 +5,25 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
-export const SuccessNotification = connect(
-  {
-    alertSuccess: state.alertSuccess,
-    dismissAlertSequence: sequences.dismissAlertSequence,
-  },
-  function SuccessNotification({ alertSuccess, dismissAlertSequence }) {
+type SuccessNotificationProps = {
+  isDismissable?: boolean;
+};
+
+const successNotificationDeps = {
+  alertSuccess: state.alertSuccess,
+  dismissAlertSequence: sequences.dismissAlertSequence,
+};
+
+export const SuccessNotification = connect<
+  SuccessNotificationProps,
+  typeof successNotificationDeps
+>(
+  successNotificationDeps,
+  function SuccessNotification({
+    alertSuccess,
+    dismissAlertSequence,
+    isDismissable = true,
+  }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;
@@ -37,6 +50,9 @@ export const SuccessNotification = connect(
             role="alert"
           >
             <div className="usa-alert__body">
+              {alertSuccess.title && (
+                <h4 className="usa-alert__heading">{alertSuccess.title}</h4>
+              )}
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
                   <div className="tablet:grid-col-10 grid-col-8">
@@ -55,16 +71,18 @@ export const SuccessNotification = connect(
                       </Button>
                     )}
                   </div>
-                  <div className="tablet:grid-col-2 grid-col-4 usa-alert__action">
-                    <Button
-                      link
-                      className="no-underline padding-0"
-                      icon="times-circle"
-                      onClick={() => dismissAlertSequence()}
-                    >
-                      Clear
-                    </Button>
-                  </div>
+                  {isDismissable && (
+                    <div className="tablet:grid-col-2 grid-col-4 usa-alert__action">
+                      <Button
+                        link
+                        className="no-underline padding-0"
+                        icon="times-circle"
+                        onClick={() => dismissAlertSequence()}
+                      >
+                        Clear
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
