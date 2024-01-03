@@ -18,8 +18,8 @@ export const confirmSignUpAction = async ({
       alertSuccess: {
         alertType: 'success',
         message:
-          'Your registration has been confirmed! You will be redirected shortly!',
-        title: 'Account Confirmed Locally',
+          'Your email address is verified. You can now sign in to DAWSON.',
+        title: 'Email address verified',
       },
     });
   } catch (e) {
