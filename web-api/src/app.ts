@@ -21,7 +21,7 @@ import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessi
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
-import { confirmSignUpLocalLambda } from './auth/confirmSignUpLocalLambda';
+import { confirmSignUpLambda } from './lambdas/auth/confirmSignUpLambda';
 import { createApplicationContext } from './applicationContext';
 import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
@@ -1031,6 +1031,8 @@ app.get(
   app.post('/auth/refresh', lambdaWrapper(renewIdTokenLambda));
 }
 
+app.post('/confirm-signup', lambdaWrapper(confirmSignUpLambda));
+
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
 if (process.env.IS_LOCAL) {
@@ -1038,6 +1040,4 @@ if (process.env.IS_LOCAL) {
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
-
-  app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
 }

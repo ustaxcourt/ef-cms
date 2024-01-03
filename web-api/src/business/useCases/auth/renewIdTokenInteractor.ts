@@ -1,8 +1,9 @@
 import { NotAuthorizedException } from '@aws-sdk/client-cognito-identity-provider';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const renewIdTokenInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { refreshToken }: { refreshToken: string },
 ): Promise<{
   idToken: string;

@@ -835,9 +835,9 @@ const router = {
       }),
     );
 
-    registerRoute('/confirm-signup-local?..', () => {
+    registerRoute('/confirm-signup?..', () => {
       const { confirmationCode, email } = route.query();
-      return app.getSequence('confirmSignUpLocalSequence')({
+      return app.getSequence('confirmSignUpSequence')({
         confirmationCode,
         userEmail: email,
       });

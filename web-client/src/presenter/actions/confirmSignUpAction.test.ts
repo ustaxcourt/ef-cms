@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { confirmSignUpLocalAction } from './confirmSignUpLocalAction';
+import { confirmSignUpAction } from './confirmSignUpAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('confirmSignUpLocalAction', () => {
+describe('confirmSignUpAction', () => {
   const confirmationCode = '123456';
   const userEmail = 'someone@example.com';
 
@@ -24,7 +24,7 @@ describe('confirmSignUpLocalAction', () => {
   });
 
   it('should call the confirmSignUpLocalInteractor with the user email and confirmation code from props and return path.yes when confirmSignUpLocalInteractor returns a response', async () => {
-    await runAction(confirmSignUpLocalAction, {
+    await runAction(confirmSignUpAction, {
       modules: {
         presenter,
       },
@@ -39,7 +39,6 @@ describe('confirmSignUpLocalAction', () => {
       applicationContext.getUseCases().confirmSignUpLocalInteractor.mock
         .calls[0][1],
     ).toMatchObject({ confirmationCode, userEmail });
-
     expect(mockYes.mock.calls[0][0]).toEqual({
       alertSuccess: {
         alertType: 'success',
@@ -57,7 +56,7 @@ describe('confirmSignUpLocalAction', () => {
         throw new Error();
       });
 
-    await runAction(confirmSignUpLocalAction, {
+    await runAction(confirmSignUpAction, {
       modules: {
         presenter,
       },
