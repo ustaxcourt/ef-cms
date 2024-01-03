@@ -1,4 +1,3 @@
-import { NotAuthorizedException } from '@aws-sdk/client-cognito-identity-provider';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
@@ -16,8 +15,8 @@ export const renewIdTokenInteractor = async (
     return {
       idToken,
     };
-  } catch (err) {
-    if (err instanceof NotAuthorizedException) {
+  } catch (err: any) {
+    if (err.name === 'NotAuthorizedException') {
       throw new UnauthorizedError('Invalid refresh token');
     }
 
