@@ -20,29 +20,26 @@
 
 ENV=$1
 
-MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
 pushd ./web-api/terraform/main
 ../bin/deploy-init.sh "${ENV}"
 
-if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
-    ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output -raw elasticsearch_endpoint_alpha)"
-  else
-    ELASTICSEARCH_ENDPOINT_BETA="$(terraform output -raw elasticsearch_endpoint_beta)"
-  fi
+
+if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
+  ELASTICSEARCH_ENDPOINT="$(terraform output -raw elasticsearch_endpoint_alpha)"
 else
-  ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output -raw elasticsearch_endpoint_alpha)"
-  ELASTICSEARCH_ENDPOINT_BETA="$(terraform output -raw elasticsearch_endpoint_beta)"
+  ELASTICSEARCH_ENDPOINT="$(terraform output -raw elasticsearch_endpoint_beta)"
 fi
 
 popd
 
-if [[ -n "${ELASTICSEARCH_ENDPOINT_ALPHA}" ]]; then
-  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT_ALPHA}"
-fi
+echo "- DESTINATION_DOMAIN: ${DESTINATION_DOMAIN}"
 
-if [[ -n "${ELASTICSEARCH_ENDPOINT_BETA}" ]]; then
-  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT_BETA}"
+if [[ -n "${ELASTICSEARCH_ENDPOINT}" ]]; then
+  echo " => Setting up ${DESTINATION_DOMAIN} Cluster"
+  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT}"
+else 
+  echo "!!! Did not calculate an ELASTICSEARCH_ENDPOINT"
+  exit 1;
 fi
