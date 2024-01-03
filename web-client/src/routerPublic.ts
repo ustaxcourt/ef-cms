@@ -95,14 +95,6 @@ const router = {
       return app.getSequence('gotoMaintenanceSequence')();
     });
 
-    route('/confirm-signup?..', () => {
-      const { confirmationCode, email } = route.query();
-      return app.getSequence('confirmSignUpSequence')({
-        confirmationCode,
-        userEmail: email,
-      });
-    });
-
     route('/login', () => {
       return app.getSequence('redirectToLoginSequence')();
     });

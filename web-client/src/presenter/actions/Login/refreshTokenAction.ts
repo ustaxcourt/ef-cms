@@ -1,9 +1,14 @@
 export const refreshTokenAction = async ({
   applicationContext,
+  path,
 }: ActionProps): Promise<{ idToken: string }> => {
-  const { idToken } = await applicationContext
-    .getUseCases()
-    .renewIdTokenInteractor(applicationContext);
+  try {
+    const { idToken } = await applicationContext
+      .getUseCases()
+      .renewIdTokenInteractor(applicationContext);
 
-  return { idToken };
+    return path.userIsLoggedIn({ idToken });
+  } catch (err) {
+    return path.userIsNotLoggedIn();
+  }
 };
