@@ -17,19 +17,13 @@ jobs:
           repository: ustaxcourt/ef-cms
           ref: staging
           path: stagingBranch
-      - name: Checkout current branch
-        uses: actions/checkout@v3
-        with:
-          path: branchToBeCompared
       - uses: actions/setup-node@v3
         with:
           node-version: '18.16.1'
       - name: NPM Install in your branch
-        working-directory: ./branchToBeCompared
         run: npm ci
       - name: NPM Install in staging
         working-directory: ./stagingBranch
         run: npm ci
       - name: Check untouched files
-        working-directory: ./branchToBeCompared
         run: npx ts-node scripts/checkUntouchedFiles.ts
