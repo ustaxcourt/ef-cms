@@ -7,7 +7,7 @@ import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimp
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
-import { confirmSignUpLocalSequence } from '@web-client/presenter/sequences/confirmSignUpLocalSequence';
+import { confirmSignUpSequence } from '@web-client/presenter/sequences/confirmSignUpSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
@@ -66,7 +66,7 @@ export const presenterSequences = {
   clearAdvancedSearchFormSequence,
   clearPdfPreviewUrlSequence,
   closeModalAndNavigateToMaintenanceSequence,
-  confirmSignUpLocalSequence,
+  confirmSignUpSequence,
   dismissModalSequence,
   goToCreatePetitionerAccountSequence,
   goToVerificationSentSequence,

@@ -22,7 +22,7 @@ import { closeTrialSessionInteractor } from '../../shared/src/business/useCases/
 import { completeDocketEntryQCInteractor } from '../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor';
 import { completeMessageInteractor } from '../../shared/src/business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/business/useCases/workitems/completeWorkItemInteractor';
-import { confirmSignUpLocalInteractor } from '../../shared/src/business/useCases/auth/confirmSignUpLocalInteractor';
+import { confirmSignUpInteractor } from './business/useCases/auth/confirmSignUpInteractor';
 import { createCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/createCaseDeadlineInteractor';
 import { createCaseFromPaperInteractor } from '../../shared/src/business/useCases/createCaseFromPaperInteractor';
 import { createCaseInteractor } from '../../shared/src/business/useCases/createCaseInteractor';
@@ -153,7 +153,7 @@ import { removeConsolidatedCasesInteractor } from '../../shared/src/business/use
 import { removePdfFromDocketEntryInteractor } from '../../shared/src/business/useCases/removePdfFromDocketEntryInteractor';
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/business/useCases/removeSignatureFromDocumentInteractor';
-import { renewIdTokenInteractor } from '../../shared/src/business/useCases/auth/renewIdTokenInteractor';
+import { renewIdTokenInteractor } from './business/useCases/auth/renewIdTokenInteractor';
 import { replyToMessageInteractor } from '../../shared/src/business/useCases/messages/replyToMessageInteractor';
 import { resendVerificationLinkInteractor } from '@shared/business/useCases/public/resendVerificationLinkInteractor';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
@@ -235,7 +235,7 @@ const useCases = {
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
-  confirmSignUpLocalInteractor,
+  confirmSignUpInteractor,
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,

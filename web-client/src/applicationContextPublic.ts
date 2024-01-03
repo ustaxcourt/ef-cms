@@ -45,7 +45,7 @@ import {
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
-import { confirmSignUpLocalInteractor } from '@shared/proxies/auth/confirmSignUpLocalProxy';
+import { confirmSignUpInteractor } from '@shared/proxies/auth/confirmSignUpProxy';
 import {
   createISODateString,
   formatDateString,
@@ -89,6 +89,7 @@ import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/busine
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
+
 const ADVANCED_SEARCH_TABS = {
   CASE: 'case',
   OPINION: 'opinion',
@@ -97,7 +98,7 @@ const ADVANCED_SEARCH_TABS = {
 
 const allUseCases = {
   casePublicSearchInteractor,
-  confirmSignUpLocalInteractor,
+  confirmSignUpInteractor,
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,

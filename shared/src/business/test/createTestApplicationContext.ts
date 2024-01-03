@@ -691,3 +691,5 @@ export const createTestApplicationContext = ({
   };
   return applicationContext;
 };
+
+export const applicationContext = createTestApplicationContext();

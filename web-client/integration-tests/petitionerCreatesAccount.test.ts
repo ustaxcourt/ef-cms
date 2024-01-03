@@ -18,7 +18,7 @@ describe.skip('Petitioner creates new account', () => {
   const name = 'Test Petitioner Cognito';
   const password = 'aA1!aaaa';
   const standardizedConfirmationCode = '123456';
-  const expectedVerificationLink = `/confirm-signup-local?confirmationCode=${standardizedConfirmationCode}&email=${userName}`;
+  const expectedVerificationLink = `/confirm-signup?confirmationCode=${standardizedConfirmationCode}&email=${userName}`;
 
   it('petitioner creates a new account', async () => {
     await cerebralTestPublic.runSequence('goToCreatePetitionerAccountSequence');
@@ -60,7 +60,7 @@ describe.skip('Petitioner creates new account', () => {
   });
 
   it('petitioner follows verification link to confirm new account', async () => {
-    await cerebralTestPublic.runSequence('confirmSignUpLocalSequence', {
+    await cerebralTestPublic.runSequence('confirmSignUpSequence', {
       confirmationCode: standardizedConfirmationCode,
       userEmail: userName,
     });
