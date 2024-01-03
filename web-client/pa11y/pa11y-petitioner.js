@@ -294,19 +294,12 @@ module.exports = [
   {
     actions: [
       'wait for element #react-select-2-input to be visible',
-      'screenCapture a.png',
       'click #react-select-2-input',
-      'screenCapture b.png',
       'wait for element .select-react-element__menu to be visible',
-      'screenCapture c.png',
       'click #react-select-2-option-49', //Motion for Leave to File Out of Time
-      'screenCapture d.png',
       'wait for element #react-select-3-input to be visible',
-      'screenCapture e.png',
       'click #react-select-3-input',
-      'screenCapture f.png',
       'wait for element .select-react-element__menu to be visible',
-      'screenCapture g.png',
       'click #react-select-3-option-37', //Motion for Continuance
       'wait for element #submit-document to be visible',
       'click #submit-document',
