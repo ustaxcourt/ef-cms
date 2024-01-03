@@ -16,7 +16,6 @@ export const confirmSignUpAction = async ({
     // 10007 TODO: make path.success
     return path.yes({
       alertSuccess: {
-        alertType: 'success',
         message:
           'Your email address is verified. You can now sign in to DAWSON.',
         title: 'Email address verified',
