@@ -11,7 +11,7 @@ export const getCasesClosedByJudgeAction = async ({
     .getUseCases()
     .getCasesClosedByJudgeInteractor(applicationContext, {
       endDate,
-      judges: getJudgesFilters(get),
+      judges: getJudgesFilters(get).map(judge => judge.name),
       startDate,
     });
 
