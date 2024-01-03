@@ -323,7 +323,6 @@ module.exports = [
       'screenCapture n.png',
     ],
     notes: ['File a document, step 2'],
-    only: true,
     url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
   },
   {
