@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Fetch all history to determine the target branch
+          fetch-depth: 0
 
       - name: Determine Target Branch
         id: target_branch
@@ -33,6 +33,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18.16.1'
+
       - name: NPM Install in your branch
         run: npm ci
 
