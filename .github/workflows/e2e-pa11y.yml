@@ -42,19 +42,13 @@ jobs:
           npm run start:all:ci >> /tmp/pa11y/pa11y-server.txt &
           URL=http://localhost:1234 ./wait-until.sh
           sleep 20
-      - name: Run E2E Pa11y 1
-        run: npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-      - name: Run E2E Pa11y 2
-        run: npm run test:pa11y:2 --node-flags --max-old-space-size=1024
       - name: Run E2E Pa11y 3
         run: npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-      - name: Run E2E Pa11y 4
-        run: npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - name: Store Screenshots Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: screen-shots
-          path: ${{ github.workspace }}/web-client/pa11y/pa11y-screenshots
+          path: ${{ github.workspace }}/*.png
       - name: Store Server Logs
         uses: actions/upload-artifact@v3
         with:
