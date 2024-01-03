@@ -5,10 +5,8 @@ export const loginInteractor = async (
   applicationContext: ServerApplicationContext,
   { email, password }: { email: string; password: string },
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
-  const cognito = applicationContext.getCognito();
-
   try {
-    const result = await cognito.initiateAuth({
+    const result = await applicationContext.getCognito().initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
       AuthParameters: {
         PASSWORD: password,
@@ -23,13 +21,13 @@ export const loginInteractor = async (
       refreshToken: result.AuthenticationResult!.RefreshToken!,
     };
   } catch (err: any) {
-    // AWS Cognito InvalidPasswordException
     if (
-      err.code === 'InvalidPasswordException' ||
-      err.code === 'NotAuthorizedException'
+      err.name === 'InvalidPasswordException' ||
+      err.name === 'NotAuthorizedException'
     ) {
       throw new UnknownUserError('Invalid Username or Password');
     }
+
     throw err;
   }
 };
