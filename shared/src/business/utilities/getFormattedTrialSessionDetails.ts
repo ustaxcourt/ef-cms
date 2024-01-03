@@ -7,6 +7,7 @@ import { RawCalendaredCase } from '../entities/cases/CalendaredCase';
 import { RawEligibleCase } from '../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { compact, partition } from 'lodash';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
@@ -58,6 +59,7 @@ export type FormattedTrialSessionCase = (RawCase | RawCalendaredCase) & {
   removedFromTrialDateFormatted: string;
   filingPartiesCode: string;
   isDocketSuffixHighPriority: boolean;
+  removedFromTrial?: boolean;
 };
 
 export const formatCaseForTrialSession = ({
@@ -67,7 +69,7 @@ export const formatCaseForTrialSession = ({
   setFilingPartiesCode = false,
 }: {
   applicationContext: IApplicationContext;
-  caseItem: (RawCase | RawCalendaredCase) & { removedFromTrialDate: string };
+  caseItem: (RawCase | RawCalendaredCase) & { removedFromTrialDate?: string };
   eligibleCases?: RawEligibleCase[];
   setFilingPartiesCode?: boolean;
 }): FormattedTrialSessionCase => {
@@ -150,17 +152,25 @@ export const compareCasesByDocketNumber = (a, b) => {
   return aSortString.localeCompare(bSortString);
 };
 
+export type TrialSessionToFormatType = Omit<
+  TrialSessionState,
+  'calendaredCases'
+> & {
+  calendaredCases?: ((RawCase | RawCalendaredCase) & {
+    removedFromTrial?: boolean;
+    removedFromTrialDate?: string;
+  })[];
+  startTime: string;
+  estimatedEndDate: string;
+  swingSessionLocation?: string;
+};
+
 export const getFormattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }: {
   applicationContext: IApplicationContext;
-  trialSession?: RawTrialSession & {
-    swingSessionLocation: string;
-    calendaredCases: any;
-    startTime: string;
-    estimatedEndDate: string;
-  };
+  trialSession?: TrialSessionToFormatType;
 }):
   | (RawTrialSession & {
       allCases: any;
@@ -182,9 +192,10 @@ export const getFormattedTrialSessionDetails = ({
       openCases: any;
       showSwingSession: boolean;
       zipName: string;
+      startTime: string;
     })
   | undefined => {
-  if (!trialSession) return undefined;
+  if (!trialSession) return undefined; // TODO: do we need to remove defensiveness? should it be an empty object?
 
   const allCases = (trialSession.calendaredCases || []).map(caseItem =>
     formatCaseForTrialSession({

@@ -9,6 +9,7 @@ import {
 export type TrialSessionState = RawTrialSession & {
   calendaredCases?: RawCase[];
   eligibleCases?: RawEligibleCase[];
+  swingSessionLocation?: string;
 };
 
 export const initialTrialSessionState: TrialSessionState = {
