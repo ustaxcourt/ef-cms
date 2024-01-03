@@ -22,7 +22,7 @@ export const getJudgeActivityReportCountsAction = async ({
         .getCountOfCaseDocumentsFiledByJudgesInteractor(applicationContext, {
           documentEventCodes,
           endDate,
-          judges: getJudgesFilters(get),
+          judges: getJudgesFilters(get).map(judge => judge.name),
           startDate,
         }),
     ),

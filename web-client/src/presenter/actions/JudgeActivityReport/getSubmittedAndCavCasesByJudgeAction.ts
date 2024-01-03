@@ -8,7 +8,7 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   const { cases } = await applicationContext
     .getUseCases()
     .getCaseWorksheetsByJudgeInteractor(applicationContext, {
-      judges: getJudgesFilters(get),
+      judges: getJudgesFilters(get).map(judge => judge.name),
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
 
