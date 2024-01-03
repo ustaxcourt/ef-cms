@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
+// 10007 TODO: Do we need this? Can we use ErrorNotification?
 export const MessageAlert = ({ alertType = 'error', message, title }) => {
   const alertTypeClassName = {
     error: 'usa-alert--error',

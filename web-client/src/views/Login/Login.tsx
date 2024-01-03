@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { MessageAlert } from '@web-client/views/Public/MessageAlert/MessageAlert';
+import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -26,15 +27,16 @@ export const Login = connect(
     return (
       <>
         <section className="grid-container usa-section margin-top-4">
-          {alertError && (
-            <MessageAlert
-              alertType={alertError.alertType}
-              message={alertError.message}
-              title={alertError.title}
-            ></MessageAlert>
-          )}
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
+              <SuccessNotification />
+              {alertError && (
+                <MessageAlert
+                  alertType={alertError.alertType}
+                  message={alertError.message}
+                  title={alertError.title}
+                ></MessageAlert>
+              )}
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
