@@ -12,7 +12,7 @@ export const validateJudgeActivityStatisticsReportSearchAction = ({
   const errors = new JudgeActivityReportSearch({
     endDate,
     judgeName,
-    judges: getJudgesFilters(get),
+    judges: getJudgesFilters(get).map(judge => judge.name),
     startDate,
   }).getFormattedValidationErrors();
 
