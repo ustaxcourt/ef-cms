@@ -3,10 +3,6 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
-import {
-  fetchRootDocument,
-  getMeetsPolicyChangeRequirements,
-} from './Public/publicCaseDetailHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -56,13 +52,13 @@ export const getShowDocumentViewerLink = ({
   isInitialDocument,
   isLegacySealed,
   isPassingAgeRequirement,
+  isPublic,
   isSealed,
   isSealedToExternal,
   isServed,
   isStipDecision,
   isStricken,
   isUnservable,
-  meetsPolicyChangeRequirements,
   userHasAccessToCase,
   userHasNoAccessToDocument,
 }) => {
@@ -84,7 +80,7 @@ export const getShowDocumentViewerLink = ({
       if (isUnservable) return true;
       if (!isServed) return false;
     } else {
-      if (isServed && meetsPolicyChangeRequirements) return true;
+      if (isServed && isPublic) return true;
       if (!userHasAccessToCase) return false;
       if (isInitialDocument) return true;
       if (!isServed) return false;
@@ -197,10 +193,10 @@ export const getFormattedDocketEntry = ({
     .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
     .includes(entry.documentType);
 
-  const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
-    entry,
-    visibilityPolicyDateFormatted,
-  );
+  const isPublic = DocketEntry.isPublic(entry, {
+    rootDocument: entry.rootDocument,
+    visibilityChangeDate: visibilityPolicyDateFormatted,
+  });
 
   showDocumentLinks = getShowDocumentViewerLink({
     hasDocument: entry.isFileAttached,
@@ -210,6 +206,7 @@ export const getFormattedDocketEntry = ({
     isInitialDocument,
     isLegacySealed: entry.isLegacySealed,
     isPassingAgeRequirement: documentMeetsAgeRequirements(entry),
+    isPublic,
     isSealed: entry.isSealed,
     isSealedToExternal:
       entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
@@ -217,7 +214,6 @@ export const getFormattedDocketEntry = ({
     isStipDecision: entry.isStipDecision,
     isStricken: entry.isStricken,
     isUnservable: formattedResult.isUnservable,
-    meetsPolicyChangeRequirements,
     userHasAccessToCase,
     userHasNoAccessToDocument: !userHasAccessToDocument,
   });
@@ -277,22 +273,27 @@ export const formattedDocketEntries = (
     DOCKET_RECORD_FILTER_OPTIONS,
     EXHIBIT_EVENT_CODES,
     MOTION_EVENT_CODES,
-    ORDER_EVENT_CODES,
   } = applicationContext.getConstants();
-
-  const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
-
   const caseDetail = get(state.caseDetail);
-
   const { docketNumber } = caseDetail;
-
   let docketRecordSort;
+  const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
   if (docketNumber) {
     docketRecordSort = get(
       state.sessionMetadata.docketRecordSort[docketNumber],
     );
   }
+  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
+  );
+  const visibilityPolicyDateFormatted = applicationContext
+    .getUtilities()
+    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+    .toISO();
 
+  // now do stuff
   const result = formatCase(applicationContext, caseDetail);
 
   switch (docketRecordFilter) {
@@ -308,7 +309,7 @@ export const formattedDocketEntries = (
       break;
     case DOCKET_RECORD_FILTER_OPTIONS.orders:
       result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
+        entry => DocketEntry.isOrder(entry.eventCode) && !entry.isDraft,
       );
       break;
   }
@@ -318,20 +319,12 @@ export const formattedDocketEntries = (
     docketRecordSort,
   );
 
-  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
-    ],
-  );
-
-  const visibilityPolicyDateFormatted = applicationContext
-    .getUtilities()
-    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
-    .toISO();
-
   docketEntriesFormatted = docketEntriesFormatted
     .map((entry: any, _, array) => {
-      return { ...entry, rootDocument: fetchRootDocument(entry, array) };
+      return {
+        ...entry,
+        rootDocument: DocketEntry.fetchRootDocument(entry, array),
+      };
     })
     .map(entry => {
       return getFormattedDocketEntry({

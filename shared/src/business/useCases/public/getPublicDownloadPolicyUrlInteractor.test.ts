@@ -1,7 +1,9 @@
-import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../entities/EntityConstants';
+import {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { PublicCase } from '../../entities/cases/PublicCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getPublicDownloadPolicyUrlInteractor } from './getPublicDownloadPolicyUrlInteractor';
@@ -21,7 +23,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
   });
 
   it('should throw an error for a document that is not publicly accessible', async () => {
-    jest.spyOn(PublicCase, 'isPrivateDocument').mockReturnValueOnce(true);
+    jest.spyOn(DocketEntry, 'isPublic').mockReturnValueOnce(false);
 
     await expect(
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
@@ -116,6 +118,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           eventCode: 'MOP',
           isFileAttached: true,
           isOnDocketRecord: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
@@ -141,6 +144,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           eventCode: 'O',
           isFileAttached: true,
           isOnDocketRecord: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
