@@ -1,16 +1,19 @@
 import { JudgeActivityReportSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportSearch';
+import { getJudgesFilters } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesAction';
 import { state } from '@web-client/presenter/app.cerebral';
-
-export const validateJudgeActivityReportSearchAction = ({
+export const validateJudgeActivityStatisticsReportSearchAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { judges } = get(state.judgeActivityReport.filters);
+  const { endDate, judgeName, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
-  const { judgeName } = get(state.judgeActivityReport);
   const errors = new JudgeActivityReportSearch({
+    endDate,
     judgeName,
-    judges,
+    judges: getJudgesFilters(get).map(judge => judge.name),
+    startDate,
   }).getFormattedValidationErrors();
 
   if (errors) {
