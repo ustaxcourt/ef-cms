@@ -1,7 +1,4 @@
-import {
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-  ORDER_EVENT_CODES,
-} from '../../entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import AWS from 'aws-sdk';
 
 /**
@@ -30,9 +27,8 @@ export const processDocketEntries = async ({
       );
 
       const isSearchable =
-        OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
-          fullDocketEntry.eventCode,
-        ) || ORDER_EVENT_CODES.includes(fullDocketEntry.eventCode);
+        DocketEntry.isOpinion(fullDocketEntry.eventCode) ||
+        DocketEntry.isOrder(fullDocketEntry.eventCode);
 
       if (isSearchable && fullDocketEntry.documentContentsId) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)

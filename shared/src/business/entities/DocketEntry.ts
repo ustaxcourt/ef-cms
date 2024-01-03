@@ -2,10 +2,13 @@ import {
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
   BRIEF_EVENTCODES,
   COURT_ISSUED_EVENT_CODES,
+  DECISION_EVENT_CODE,
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
+  MOTION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
@@ -16,7 +19,6 @@ import {
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
-  isDocumentBriefType,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
@@ -469,72 +471,115 @@ export class DocketEntry extends JoiValidationEntity {
     ).includes(eventCode);
   }
 
-  isPublic({
-    caseIsSealed = false,
-    rootDocument,
-    visibilityChangeDate,
-  }: {
-    caseIsSealed?: boolean;
-    rootDocument?: DocketEntry;
-    visibilityChangeDate: string;
-  }): boolean {
+  static isPublic(
+    {
+      eventCode,
+      filedByRole,
+      filingDate,
+      isOnDocketRecord,
+      isPaper,
+      isStricken,
+      processingStatus,
+    }: RawDocketEntry,
+    {
+      caseIsSealed = false,
+      rootDocument,
+      visibilityChangeDate,
+    }: {
+      caseIsSealed?: boolean;
+      rootDocument?: RawDocketEntry;
+      visibilityChangeDate: string;
+    },
+  ): boolean {
     if (
-      this.isStricken ||
-      this.eventCode === TRANSCRIPT_EVENT_CODE ||
-      !this.isOnDocketRecord ||
-      this.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE
+      isStricken ||
+      DocketEntry.isTranscript(eventCode) ||
+      !isOnDocketRecord ||
+      processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE
     ) {
       return false;
     }
-
-    const isOpinion = OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
-      this.eventCode,
-    );
 
     if (caseIsSealed) {
-      return isOpinion;
+      return DocketEntry.isOpinion(eventCode);
     }
 
-    const isOrder = ORDER_EVENT_CODES.includes(this.eventCode);
-    const isDecision = this.eventCode === 'DEC';
-
-    if (isOrder || isDecision || isOpinion) {
+    if (
+      DocketEntry.isOrder(eventCode) ||
+      DocketEntry.isDecision(eventCode) ||
+      DocketEntry.isOpinion(eventCode)
+    ) {
       return true;
     }
 
     if (
-      !POLICY_DATE_IMPACTED_EVENTCODES.includes(this.eventCode) ||
-      this.filingDate < visibilityChangeDate
+      !POLICY_DATE_IMPACTED_EVENTCODES.includes(eventCode) ||
+      filingDate < visibilityChangeDate
     ) {
       return false;
     }
 
-    if (['AMBR', 'SDEC'].includes(this.eventCode)) {
+    if (['AMBR', 'SDEC'].includes(eventCode)) {
       return true;
     }
 
-    if (BRIEF_EVENTCODES.includes(this.eventCode)) {
-      return !this.isPaper && this.isFiledByPractitioner();
+    if (isPaper || !DocketEntry.isFiledByPractitioner(filedByRole)) {
+      return false;
+    }
+
+    if (DocketEntry.isBrief(eventCode)) {
+      return true;
     }
 
     const isAmendmentToABrief = !!(
-      rootDocument && isDocumentBriefType(rootDocument.documentType)
+      rootDocument && DocketEntry.isBriefType(rootDocument.documentType)
     );
 
     return (
-      !this.isPaper &&
+      !isPaper &&
       isAmendmentToABrief &&
-      rootDocument.isFiledByPractitioner()
+      DocketEntry.isFiledByPractitioner(rootDocument.filedByRole)
     );
   }
 
-  isFiledByPractitioner(): boolean {
+  static isFiledByPractitioner(filedByRole?: string): boolean {
     return (
-      !!this.filedByRole &&
-      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(
-        this.filedByRole,
-      )
+      !!filedByRole &&
+      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(filedByRole)
     );
+  }
+
+  static isOpinion(eventCode: string): boolean {
+    return OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(eventCode);
+  }
+
+  static isOrder(eventCode: string): boolean {
+    return ORDER_EVENT_CODES.includes(eventCode);
+  }
+
+  static isMotion(eventCode: string): boolean {
+    return MOTION_EVENT_CODES.includes(eventCode);
+  }
+
+  static isTranscript(eventCode: string): boolean {
+    return eventCode === TRANSCRIPT_EVENT_CODE;
+  }
+
+  static isDecision(eventCode: string): boolean {
+    return eventCode === DECISION_EVENT_CODE;
+  }
+
+  static isBrief(eventCode: string): boolean {
+    return BRIEF_EVENTCODES.includes(eventCode);
+  }
+
+  static isBriefType(documentType: string): boolean {
+    const documents = [
+      ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
+      ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+    ];
+    return !!documents.find(document => document.documentType === documentType)
+      ?.eventCode;
   }
 
   /**
@@ -634,6 +679,22 @@ export class DocketEntry extends JoiValidationEntity {
       UNSERVABLE_EVENT_CODES.includes(rawDocketEntry.eventCode)
     );
   }
+
+  static fetchRootDocument = (
+    entry: RawDocketEntry,
+    docketEntries: RawDocketEntry[],
+  ): RawDocketEntry => {
+    const { previousDocument } = entry;
+    if (!previousDocument) return entry;
+
+    const previousEntry = docketEntries.find(
+      e => e.docketEntryId === previousDocument.docketEntryId,
+    );
+
+    if (!previousEntry) return entry;
+
+    return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
+  };
 }
 
 /**
@@ -654,22 +715,6 @@ export const getServedPartiesCode = (servedParties?: any[]) => {
     }
   }
   return servedPartiesCode;
-};
-
-export const fetchRootDocument = (
-  entry: RawDocketEntry,
-  docketEntries: RawDocketEntry[],
-): RawDocketEntry => {
-  const { previousDocument } = entry;
-  if (!previousDocument) return entry;
-
-  const previousEntry = docketEntries.find(
-    e => e.docketEntryId === previousDocument.docketEntryId,
-  );
-
-  if (!previousEntry) return entry;
-
-  return fetchRootDocument(previousEntry, docketEntries);
 };
 
 declare global {

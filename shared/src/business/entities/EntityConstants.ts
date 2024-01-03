@@ -494,6 +494,7 @@ export const SCENARIOS = [
 export const TRANSCRIPT_EVENT_CODE = 'TRAN';
 export const CORRECTED_TRANSCRIPT_EVENT_CODE = 'CTRA';
 export const REVISED_TRANSCRIPT_EVENT_CODE = 'RTRA';
+export const DECISION_EVENT_CODE = 'DEC';
 
 export const LODGED_EVENT_CODE = 'MISCL';
 
@@ -1579,15 +1580,6 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
-
-export const isDocumentBriefType = (documentType: string) => {
-  const documents = [
-    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
-    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
-  ];
-  return !!documents.find(document => document.documentType === documentType)
-    ?.eventCode;
-};
 
 export const JUDGE_TITLES = [
   'Judge',

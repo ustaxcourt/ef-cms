@@ -1,5 +1,5 @@
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../../../shared/src/business/entities/EntityConstants';
-import courtIssuedEventCodes from '../../../../shared/src/tools/courtIssuedEventCodes.json';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import courtIssuedEventCodes from '@shared/tools/courtIssuedEventCodes.json';
 
 /**
  * get the opinion document types
@@ -8,15 +8,9 @@ import courtIssuedEventCodes from '../../../../shared/src/tools/courtIssuedEvent
  * @returns {object} the list of opinion document types
  */
 export const getOpinionTypesAction = () => {
-  const opinionDocuments = courtIssuedEventCodes.filter(courtIssuedDocument => {
-    if (
-      OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
-        courtIssuedDocument.eventCode,
-      )
-    ) {
-      return courtIssuedDocument;
-    }
-  });
+  const opinionDocuments = courtIssuedEventCodes.filter(courtIssuedDocument =>
+    DocketEntry.isOpinion(courtIssuedDocument.eventCode),
+  );
 
   const opinionDocumentTypes = opinionDocuments.map(opinionDocument =>
     opinionDocument.documentType.split('-').pop().trim(),
