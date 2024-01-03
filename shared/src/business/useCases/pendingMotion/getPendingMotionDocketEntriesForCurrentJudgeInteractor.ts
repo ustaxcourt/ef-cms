@@ -31,11 +31,11 @@ export type FormattedPendingMotionWithWorksheet = FormattedPendingMotion & {
 
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
   applicationContext: IApplicationContext,
-  params: { judges: string[] },
+  params: { judgeIds: string[] },
 ): Promise<{
   docketEntries: FormattedPendingMotionWithWorksheet[];
 }> => {
-  const { judges } = params;
+  const { judgeIds } = params;
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_MOTIONS_TABLE)) {
     throw new UnauthorizedError('Unauthorized');
@@ -45,7 +45,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     results: allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch,
   } = await applicationContext
     .getPersistenceGateway()
-    .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judges });
+    .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judgeIds });
 
   const currentDate = prepareDateFromString().toISO()!;
   const pendingMotionDocketEntriesOlderThan180DaysFromDynamo =

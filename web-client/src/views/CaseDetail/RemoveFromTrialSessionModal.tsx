@@ -116,11 +116,20 @@ export const RemoveFromTrialSessionModal = connect(
                 )}
                 id="associated-judge"
                 name="associatedJudge"
-                value={modal.associatedJudge}
+                value={modal.associatedJudgeId}
                 onChange={e => {
+                  const selectedJudgeid = e.target.value;
+                  const selectedJudge =
+                    modal.judges.find(
+                      judge => judge.userId === selectedJudgeid,
+                    ) || {};
                   updateModalValueSequence({
                     key: e.target.name,
-                    value: e.target.value,
+                    value: selectedJudge.name,
+                  });
+                  updateModalValueSequence({
+                    key: 'associatedJudgeId',
+                    value: selectedJudge.userId,
                   });
                   validateRemoveFromTrialSessionSequence();
                 }}
@@ -128,7 +137,7 @@ export const RemoveFromTrialSessionModal = connect(
                 <option value="">- Select -</option>
                 <option value="Chief Judge">Chief Judge</option>
                 {modal.judges.map(judgeUser => (
-                  <option key={judgeUser.userId} value={judgeUser.name}>
+                  <option key={judgeUser.userId} value={judgeUser.userId}>
                     {judgeUser.name}
                   </option>
                 ))}
