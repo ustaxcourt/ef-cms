@@ -1,10 +1,10 @@
-name: E2E Pa11y
+name: E2E Cypress Smoketests Local
 
 on:
   pull_request:
 
 jobs:
-  e2e_pa11y:
+  e2e_cypress_smoketests_local:
     runs-on: ubuntu-latest
 
     env:
@@ -36,27 +36,21 @@ jobs:
           comment_on_pr: false
       - name: Install Node Dependencies
         run: npm ci
-      - name: Start API and Client
+      - name: Run E2E Cypress Smoketests
         run: |
-          mkdir -p /tmp/pa11y/
-          npm run start:all:ci >> /tmp/pa11y/pa11y-server.txt &
-          URL=http://localhost:1234 ./wait-until.sh
-          sleep 20
-      - name: Run E2E Pa11y 1
-        run: npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-      - name: Run E2E Pa11y 2
-        run: npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-      - name: Run E2E Pa11y 3
-        run: npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-      - name: Run E2E Pa11y 4
-        run: npm run test:pa11y:4 --node-flags --max-old-space-size=1024
-      - name: Store Screenshots Artifacts
+          mkdir -p /tmp/cypress/
+          npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
+          ./wait-until-services.sh
+          sleep 5
+          npm run cypress:smoketests:local
+      - name: Store Cypress Failure Videos
+        if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: screen-shots
-          path: ${{ github.workspace }}/*.png
-      - name: Store Server Logs
+          name: cypress-videos
+          path: ${{ github.workspace }}/cypress/cypress-smoketests/videos
+      - name: Store Logs
         uses: actions/upload-artifact@v3
         with:
-          name: server-logs
-          path: /tmp/pa11y
+          name: cypress-logs
+          path: /tmp/cypress
