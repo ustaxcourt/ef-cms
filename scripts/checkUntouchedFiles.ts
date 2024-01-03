@@ -32,9 +32,9 @@ function getTypescriptErrorMap(cwd: string): { [key: string]: number } {
   return createTypescriptErrorMap(stdout);
 }
 
-function getHashForDirectory(stagingRepoPath: string) {
+function getHashForDirectory(cwd: string) {
   return spawnSync('git', ['log', '-n', '1', '--pretty=format:"%H"'], {
-    cwd: stagingRepoPath,
+    cwd,
     encoding: 'utf-8',
   }).stdout;
 }
@@ -42,10 +42,10 @@ function getHashForDirectory(stagingRepoPath: string) {
 function getDifferencesBetweenHashes(
   branchDirPath: string,
   currentBranchHash: string,
-  stagingBranchHash: string,
+  targetBranchHash: string,
 ): { [fileName: string]: boolean } {
   return execSync(
-    `git diff --name-only ${currentBranchHash} ${stagingBranchHash}`,
+    `git diff --name-only ${currentBranchHash} ${targetBranchHash}`,
     {
       cwd: branchDirPath,
       encoding: 'utf-8',
@@ -64,80 +64,80 @@ function getDifferencesBetweenHashes(
 
 function getModifiedFiles(
   branchDirPath: string,
-  stagingRepoPath: string,
+  targetRepoPath: string,
 ): {
   [fileName: string]: boolean;
 } {
   const currentBranchHash = getHashForDirectory(branchDirPath);
-  const stagingBranchHash = getHashForDirectory(stagingRepoPath);
+  const targetBranchHash = getHashForDirectory(targetRepoPath);
 
   return getDifferencesBetweenHashes(
     branchDirPath,
     currentBranchHash,
-    stagingBranchHash,
+    targetBranchHash,
   );
 }
 
 function getFilesToCheck(
   branchTypescriptErrorMap: { [key: string]: number },
-  stagingTypescriptErrorMap: { [key: string]: number },
+  targetTypescriptErrorMap: { [key: string]: number },
   modifiedFiles: { [key: string]: boolean },
 ): {
   [fileName: string]: {
-    stagingCount: number;
+    targetCount: number;
     branchCount: number;
   };
 } {
   const fileToCheck: {
     [fileName: string]: {
-      stagingCount: number;
+      targetCount: number;
       branchCount: number;
     };
   } = {};
   Object.entries(branchTypescriptErrorMap).forEach(
     ([fileName, branchCount]) => {
       if (modifiedFiles[fileName]) return;
-      const stagingCount = stagingTypescriptErrorMap[fileName] || 0;
-      if (stagingCount < branchCount)
-        fileToCheck[fileName] = { branchCount, stagingCount };
+      const targetCount = targetTypescriptErrorMap[fileName] || 0;
+      if (targetCount < branchCount)
+        fileToCheck[fileName] = { branchCount, targetCount };
     },
   );
   return fileToCheck;
 }
 
 const branchDirPath = './';
-const stagingDirPath = './targetBranch';
+const targetDirPath = './targetBranch';
 const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
-const stagingTypescriptErrorMap = getTypescriptErrorMap(stagingDirPath);
-const modifiedFiles = getModifiedFiles(branchDirPath, stagingDirPath);
+const targetTypescriptErrorMap = getTypescriptErrorMap(targetDirPath);
+const modifiedFiles = getModifiedFiles(branchDirPath, targetDirPath);
 
 const fileToCheck = getFilesToCheck(
   branchTypescriptErrorMap,
-  stagingTypescriptErrorMap,
+  targetTypescriptErrorMap,
   modifiedFiles,
 );
 
 function logSmartTable(dataObject: {
   [fileName: string]: {
-    stagingCount: number;
+    targetCount: number;
     branchCount: number;
   };
 }) {
   const columnWidths = {
     'Branch Count': 11,
     'File Path': 9,
-    'Staging Count': 12,
+    'Target Count': 12,
   };
 
   Object.entries(dataObject).forEach(([filePath, counts]) => {
-    const { branchCount, stagingCount } = counts;
+    const { branchCount, targetCount } = counts;
     columnWidths['File Path'] = Math.max(
       columnWidths['File Path'],
       filePath.length,
     );
-    columnWidths['Staging Count'] = Math.max(
-      columnWidths['Staging Count'],
-      stagingCount.toString().length,
+    columnWidths['Target Count'] = Math.max(
+      columnWidths['Target Count'],
+      targetCount.toString().length,
     );
     columnWidths['Branch Count'] = Math.max(
       columnWidths['Branch Count'],
@@ -148,22 +148,22 @@ function logSmartTable(dataObject: {
   console.log(
     `| ${'File Path'.padEnd(
       columnWidths['File Path'],
-    )} | ${'Staging Count'.padEnd(
-      columnWidths['Staging Count'],
+    )} | ${'Target Count'.padEnd(
+      columnWidths['Target Count'],
     )} | ${'Branch Count'.padEnd(columnWidths['Branch Count'])} |`,
   );
   console.log(
     `| ${'-'.repeat(columnWidths['File Path'])} | ${'-'.repeat(
-      columnWidths['Staging Count'],
+      columnWidths['Target Count'],
     )} | ${'-'.repeat(columnWidths['Branch Count'])} |`,
   );
 
   Object.entries(dataObject).forEach(([filePath, counts]) => {
-    const { branchCount, stagingCount } = counts;
+    const { branchCount, targetCount } = counts;
     console.log(
-      `| ${filePath.padEnd(columnWidths['File Path'])} | ${stagingCount
+      `| ${filePath.padEnd(columnWidths['File Path'])} | ${targetCount
         .toString()
-        .padEnd(columnWidths['Staging Count'])} | ${branchCount
+        .padEnd(columnWidths['Target Count'])} | ${branchCount
         .toString()
         .padEnd(columnWidths['Branch Count'])} |`,
     );
