@@ -293,6 +293,25 @@ module.exports = [
   },
   {
     actions: [
+      'wait for element #document-type to be visible',
+      'click #document-type',
+      'set field #document-type input to Motion for Leave to File Out of Time',
+      'click #document-type #react-select-2-option-0',
+      'wait for element #secondary-doc-secondary-document-type to be visible',
+      'click #secondary-doc-secondary-document-type',
+      'set field #secondary-doc-secondary-document-type input to Motion for Continuance',
+      'click #secondary-doc-secondary-document-type #react-select-3-option-0',
+      'click #submit-document',
+      'wait for element #primary-document to be visible',
+      'click #primaryDocument-certificateOfService-label',
+      'wait for element #primaryDocument-service-date-picker to be visible',
+      'wait for element #secondary-document to be visible',
+    ],
+    notes: ['File a document, step 2'],
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
+  },
+  {
+    actions: [
       'wait for element #case-list to be visible',
       'wait for element #pay_filing_fee to be visible',
       'click element .payment-options',
