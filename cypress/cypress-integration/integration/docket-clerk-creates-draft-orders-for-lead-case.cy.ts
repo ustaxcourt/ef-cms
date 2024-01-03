@@ -23,7 +23,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
         draftsCount = Number(text) || draftsCount;
       });
 
-    createOrder(leadCase);
+    createOrder();
 
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
@@ -46,7 +46,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
 
     loginAsDocketClerk();
     searchByDocketNumberInHeader(leadCase);
-    createOrder(leadCase);
+    createOrder();
 
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
