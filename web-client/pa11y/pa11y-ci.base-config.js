@@ -20,6 +20,10 @@ const defaults = {
   debug: true,
   'include-notices': true,
   'include-warnings': true,
+  onError: (error, context) => {
+    console.error(`Error during action: ${context.action}`);
+    console.error(error);
+  },
   standard: 'WCAG2AA',
   timeout: 60000,
   wait: 10000,
