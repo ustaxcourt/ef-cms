@@ -1,25 +1,17 @@
+import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
+
 export const removeAdvancedSyntaxSymbols = text => {
   const nonWordCharacters = /[-+\s[\]{}:?!*()<>=]+/gims;
   return text.replace(nonWordCharacters, ' ').trim();
 };
 
-/**
- * aggregateCommonQueryParams
- * @param {object} providers the providers object
- * @param {string} providers.countryType the country type to search cases by (domestic/international)
- * @param {string} providers.petitionerName the name of the petitioner to search cases by
- * @param {string} providers.petitionerState the state of the petitioner to search cases by
- * @param {string} providers.endDate the end filed date to search cases by
- * @param {string} providers.startDate the start filed date to search cases by
- * @returns {object} the case data
- */
 export const aggregateCommonQueryParams = ({
   countryType,
   endDate,
   petitionerName,
   petitionerState,
   startDate,
-}) => {
+}: CaseAdvancedSearchParamsRequestType) => {
   const commonQuery: Record<string, any>[] = [];
   const exactMatchesQuery: Record<string, any>[] = [];
   const nonExactMatchesQuery: Record<string, any>[] = [];
