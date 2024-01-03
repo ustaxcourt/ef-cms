@@ -3,7 +3,15 @@ import { createHash } from 'crypto';
 export const efcmsDocketEntryMappings = {
   properties: {
     'associatedJudge.S': {
+      fields: {
+        raw: {
+          type: 'keyword',
+        },
+      },
       type: 'text',
+    },
+    'associatedJudgeId.S': {
+      type: 'keyword',
     },
     case_relations: {
       relations: {
