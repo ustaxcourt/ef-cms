@@ -11,14 +11,14 @@
 - finish all todos (review together - KS)
 - ensure back works right (public to private and back)
 - fix tests
-- email verification flow (just after verifying, are we going to new login with verification success message)
++ email verification flow (just after verifying, are we going to new login with verification success message)
 - create account (move to private - client site) 
 - Refactor ifHasAccess Function to be handled by router + initSequence 
 - Refactor maintenance mode to be handled by router + initSequence. No other sequence needs to branch because of it.
 - invalidate old refreshToken and idToken upon refresh.
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
 - We need to handle temporary password changes on login screen. This happens when cognito forces a password update.
-- cognito to V3
+
 
 
 ::: SOLO TO DO :::
