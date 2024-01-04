@@ -1,9 +1,9 @@
 import { Case } from './cases/Case';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
-
 export class CaseDeadline extends JoiValidationEntity {
   public associatedJudge: string;
   public caseDeadlineId: string;

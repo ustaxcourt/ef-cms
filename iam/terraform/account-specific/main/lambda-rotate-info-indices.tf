@@ -15,7 +15,7 @@ resource "aws_lambda_function" "rotate_info_indices" {
 
   environment {
     variables = {
-      es_endpoint = aws_elasticsearch_domain.efcms-logs.endpoint
+      es_endpoint = aws_opensearch_domain.efcms-logs.endpoint
       expiration = var.number_of_days_to_keep_info_logs
     }
   }
