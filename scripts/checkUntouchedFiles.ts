@@ -122,7 +122,7 @@ function logSmartTable(dataObject: {
     targetCount: number;
     branchCount: number;
   };
-}) {
+}): void {
   const columnWidths = {
     'Branch Count': 11,
     'File Path': 9,
@@ -171,9 +171,10 @@ function logSmartTable(dataObject: {
 }
 
 if (Object.keys(fileToCheck).length) {
+  logSmartTable(fileToCheck);
   console.log(
-    'Here are the files that your PR did not touch but increased in Typescript error count',
-    logSmartTable(fileToCheck),
+    '\nHere are the files that your PR did not touch but increased in Typescript error count: ',
+    Object.keys(fileToCheck).length,
   );
   process.exit(1);
 } else {
