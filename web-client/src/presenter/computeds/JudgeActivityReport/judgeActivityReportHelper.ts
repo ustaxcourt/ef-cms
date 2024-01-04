@@ -24,7 +24,7 @@ export const judgeActivityReportHelper = (
 } => {
   const { endDate, startDate } = get(state.judgeActivityReport.filters);
 
-  const { judgeNameToDisplayForHeader } = get(state.judgeActivityReport);
+  const { judgeName } = get(state.judgeActivityReport.filters);
 
   const {
     casesClosedByJudge,
@@ -54,7 +54,7 @@ export const judgeActivityReportHelper = (
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
-  const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
+  const reportHeader: string = `${judgeName} ${currentDate}`;
 
   const submittedAndCavCasesRows = submittedAndCavCasesByJudge.map(aCase => {
     let consolidatedIconTooltipText = '';

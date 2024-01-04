@@ -15,8 +15,6 @@ type JudgeActivityReportData = {
 export type JudgeActivityReportState = {
   filters: JudgeActivityReportFilters;
   judgeActivityReportData: JudgeActivityReportData;
-  judgeNameToDisplayForHeader: string;
-  judgeName: string;
   hasUserSubmittedForm: boolean;
 };
 
@@ -49,11 +47,9 @@ const initialJudgeActivityReportData: JudgeActivityReportData = {
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
   filters: {
     endDate: '',
-    judges: [],
+    judgeName: '',
     startDate: '',
   },
   hasUserSubmittedForm: false,
   judgeActivityReportData: initialJudgeActivityReportData,
-  judgeName: '',
-  judgeNameToDisplayForHeader: '',
 };
