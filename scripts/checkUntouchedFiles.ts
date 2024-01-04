@@ -12,7 +12,9 @@ function runTypescriptCommand(cwd: string): { stdout: string } {
   );
 }
 
-function createTypescriptErrorMap(stdout: string): { [key: string]: number } {
+function createTypescriptErrorMap(stdout: string): {
+  [fileName: string]: number;
+} {
   return stdout
     .split('\n')
     .map(line => line.trim())
@@ -23,11 +25,11 @@ function createTypescriptErrorMap(stdout: string): { [key: string]: number } {
         accumulator[file] = (accumulator[file] || 0) + 1;
         return accumulator;
       },
-      {} as { [key: string]: number },
+      {} as { [fileName: string]: number },
     );
 }
 
-function getTypescriptErrorMap(cwd: string): { [key: string]: number } {
+function getTypescriptErrorMap(cwd: string): { [fileName: string]: number } {
   const { stdout } = runTypescriptCommand(cwd);
   return createTypescriptErrorMap(stdout);
 }
@@ -79,9 +81,9 @@ function getModifiedFiles(
 }
 
 function getFilesToCheck(
-  branchTypescriptErrorMap: { [key: string]: number },
-  targetTypescriptErrorMap: { [key: string]: number },
-  modifiedFiles: { [key: string]: boolean },
+  branchTypescriptErrorMap: { [fileName: string]: number },
+  targetTypescriptErrorMap: { [fileName: string]: number },
+  modifiedFiles: { [fileName: string]: boolean },
 ): {
   [fileName: string]: {
     targetCount: number;
