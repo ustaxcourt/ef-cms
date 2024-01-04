@@ -56,7 +56,7 @@ note: we have 3 package.json files, be sure to update them all
 	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
 	- ./web-client/terraform/main/main.tf
 
-	> aws = "latest version"
+	> aws = "<LATEST_VERSION>"
 
 6. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
 
@@ -84,9 +84,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### s3-files (3.0.1)
 - (10/20/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
-
-### jsdom
-- (11/28/2023) Unable to update from 22.1.0 -> 23.0.0 as jsdom lists incorrect peer dependency for canvas as 3.0.0 which doesn't exist. see issue for more details: https://github.com/jsdom/jsdom/issues/3627. This will likely be resolved soon by jsdom.
 
 ## Incrementing the Node Cache Key Version
 

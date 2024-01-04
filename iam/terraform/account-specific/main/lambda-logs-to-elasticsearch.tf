@@ -15,7 +15,7 @@ resource "aws_lambda_function" "logs_to_es" {
 
   environment {
     variables = {
-      es_endpoint = aws_elasticsearch_domain.efcms-logs.endpoint
+      es_endpoint = aws_opensearch_domain.efcms-logs.endpoint
     }
   }
 }
