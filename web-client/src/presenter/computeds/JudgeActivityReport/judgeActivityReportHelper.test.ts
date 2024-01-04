@@ -7,7 +7,6 @@ import {
 import { MOCK_SUBMITTED_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { initialJudgeActivityReportState } from '@web-client/presenter/judgeActivityReportState';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -290,8 +289,7 @@ describe('judgeActivityReportHelper', () => {
           ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
-            judgeActivityReportData:
-              initialJudgeActivityReportState.judgeActivityReportData,
+            judgeActivityReportData: {},
           },
         },
       });
