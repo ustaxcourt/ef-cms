@@ -1,4 +1,6 @@
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
+import { clearJudgeActivityReportStatisticsDataAction } from '@web-client/presenter/actions/JudgeActivityReport/clearJudgeActivityReportStatisticsDataAction';
+import { clearJudgeActivityReportStatisticsFiltersAction } from '@web-client/presenter/actions/JudgeActivityReport/clearJudgeActivityReportStatisticsFiltersAction';
 import { clearScreenMetadataAction } from '../../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
 import { getJudgeForCurrentUserAction } from '@web-client/presenter/actions/getJudgeForCurrentUserAction';
@@ -6,8 +8,8 @@ import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/
 import { getSubmittedAndCavCasesByJudgeAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
 import { getUsersInSectionAction } from '../../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../../actions/isLoggedInAction';
+import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../../actions/redirectToCognitoAction';
-import { resetJudgeActivityReportStateAction } from '../../actions/resetJudgeActivityReportStateAction';
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultJudgeNameBasedOnUserAction } from '../../actions/JudgeActivityReport/setDefaultJudgeNameBasedOnUserAction';
@@ -23,16 +25,19 @@ const gotoJudgeActivityReport = [
   stopShowValidationAction,
   clearScreenMetadataAction,
   clearErrorAlertsAction,
-  resetJudgeActivityReportStateAction,
+  clearJudgeActivityReportStatisticsDataAction,
+  clearJudgeActivityReportStatisticsFiltersAction,
   getJudgeForCurrentUserAction,
   setJudgeUserAction,
   setDefaultJudgeNameBasedOnUserAction,
   getUsersInSectionAction({ section: 'judge' }),
   setAllAndCurrentJudgesAction,
   setupCurrentPageAction('JudgeActivityReport'),
-  getSubmittedAndCavCasesByJudgeAction,
+  parallel([
+    [getSubmittedAndCavCasesByJudgeAction],
+    [getPendingMotionDocketEntriesForCurrentJudgeAction],
+  ]),
   setCavAndSubmittedCasesAction,
-  getPendingMotionDocketEntriesForCurrentJudgeAction,
   setPendingMotionDocketEntriesForCurrentJudgeAction,
 ];
 

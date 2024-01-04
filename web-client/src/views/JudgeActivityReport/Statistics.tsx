@@ -7,6 +7,7 @@ import React from 'react';
 
 export const Statistics = connect(
   {
+    judgeActivityReport: state.judgeActivityReport,
     judgeActivityReportData: state.judgeActivityReport.judgeActivityReportData,
     judgeActivityReportFilters: state.judgeActivityReport.filters,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
@@ -18,6 +19,7 @@ export const Statistics = connect(
     validationErrors: state.validationErrors,
   },
   function Statistics({
+    judgeActivityReport,
     judgeActivityReportData,
     judgeActivityReportFilters,
     judgeActivityReportHelper,
@@ -198,33 +200,35 @@ export const Statistics = connect(
     };
 
     const resultsTable = () => {
-      if (judgeActivityReportHelper.showSelectDateRangeText) {
+      if (judgeActivityReport.hasUserSubmittedForm) {
+        if (judgeActivityReportHelper.showResultsTables) {
+          return (
+            <div>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-6">{closedCases()}</div>
+                <div className="grid-col-6">{trialSessionsHeld()}</div>
+              </div>
+
+              <div className="grid-row grid-gap">
+                <div className="grid-col-6">{ordersIssued()}</div>
+                <div className="grid-col-6">{opinionsIssued()}</div>
+              </div>
+            </div>
+          );
+        } else {
+          return (
+            <div className="text-semibold margin-bottom-30px">
+              There is no activity for the selected dates.
+            </div>
+          );
+        }
+      } else {
         return (
           <div className="text-semibold margin-0">
             Enter a date range to view statistics.
           </div>
         );
       }
-      if (judgeActivityReportHelper.showResultsTables) {
-        return (
-          <div>
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">{closedCases()}</div>
-              <div className="grid-col-6">{trialSessionsHeld()}</div>
-            </div>
-
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">{ordersIssued()}</div>
-              <div className="grid-col-6">{opinionsIssued()}</div>
-            </div>
-          </div>
-        );
-      }
-      return (
-        <div className="text-semibold margin-bottom-30px">
-          There is no activity for the selected dates.
-        </div>
-      );
     };
 
     return (

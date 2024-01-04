@@ -7,7 +7,6 @@ import {
 import { MOCK_SUBMITTED_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { initialJudgeActivityReportState } from '@web-client/presenter/judgeActivityReportState';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -290,8 +289,7 @@ describe('judgeActivityReportHelper', () => {
           ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
-            judgeActivityReportData:
-              initialJudgeActivityReportState.judgeActivityReportData,
+            judgeActivityReportData: {},
           },
         },
       });
@@ -311,38 +309,6 @@ describe('judgeActivityReportHelper', () => {
       });
 
       expect(showResultsTables).toBe(true);
-    });
-  });
-
-  describe('showSelectDateRangeText', () => {
-    it('should be false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
-      baseState.judgeActivityReport.hasUserSubmittedForm = true;
-      const { showSelectDateRangeText } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(showSelectDateRangeText).toBe(false);
-    });
-
-    it('should true when form has NOT been submitted (there are orders, opinions, trial sessions or cases for the specified judge)', () => {
-      const { showSelectDateRangeText } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: {
-            ...baseState,
-            judgeActivityReport: {
-              ...baseState.judgeActivityReport,
-              judgeActivityReportData:
-                initialJudgeActivityReportState.judgeActivityReportData,
-            },
-          },
-        },
-      );
-
-      expect(showSelectDateRangeText).toBe(true);
     });
   });
 
