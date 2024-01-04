@@ -125,6 +125,7 @@ export const PrimaryDocumentForm = connect(
 
             <SelectSearch
               aria-label="document-type-label"
+              data-testid="document-type"
               id="document-type"
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
@@ -322,6 +323,7 @@ export const PrimaryDocumentForm = connect(
                     />
                     <label
                       className="usa-radio__label"
+                      data-testid={`objections-${option}`}
                       htmlFor={`objections-${option}`}
                     >
                       {option}

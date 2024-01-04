@@ -207,6 +207,7 @@ export const ScanBatchPreviewer = connect(
                   />
                   <label
                     className="usa-radio__label"
+                    data-testid="upload-mode-scan"
                     htmlFor="scanMode"
                     id="upload-mode-scan"
                   >
@@ -382,6 +383,7 @@ export const ScanBatchPreviewer = connect(
           <FormGroup>
             <label
               className="usa-label ustc-upload-stin with-hint"
+              data-testid={`${documentType}-label`}
               htmlFor={`${documentType}-file`}
               id={`${documentType}-label`}
             >
@@ -398,6 +400,7 @@ export const ScanBatchPreviewer = connect(
               accept=".pdf"
               aria-describedby={`${documentType}-hint`}
               className="usa-input"
+              data-testid={`${documentType}`}
               id={`${documentType}-file`}
               name={documentType}
               type="file"
