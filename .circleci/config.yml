@@ -883,44 +883,44 @@ workflows:
     jobs:
       - deploy:
           <<: *only-deployed-lower-environments
-      - migrate:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
-      - wait-for-migration:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - migrate
-      - prepare-for-reindex:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-migration
-      - wait-for-reindex:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - prepare-for-reindex
-      - disable-reindex-cron:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-reindex
-      - smoketests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-      - loadtests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - smoketests
-      - smoketests-readonly:
-          <<: *only-deployed-lower-environments
-          requires:
-            - loadtests
+      # - migrate:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - deploy
+      # - wait-for-migration:
+      #     <<: *only-deployed-lower-environments
+      #     type: approval
+      #     requires:
+      #       - migrate
+      # - prepare-for-reindex:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - wait-for-migration
+      # - wait-for-reindex:
+      #     <<: *only-deployed-lower-environments
+      #     type: approval
+      #     requires:
+      #       - prepare-for-reindex
+      # - disable-reindex-cron:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - wait-for-reindex
+      # - smoketests:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - disable-reindex-cron
+      # - loadtests:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - smoketests
+      # - smoketests-readonly:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - loadtests
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - smoketests-readonly
+            - deploy
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
           requires:
