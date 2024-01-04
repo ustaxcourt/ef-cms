@@ -13,7 +13,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { User } from '../entities/User';
-import { documentMeetsAgeRequirements } from '../utilities/getFormattedCaseDetail';
 
 export const getDownloadPolicyUrlInteractor = async (
   applicationContext: IApplicationContext,
@@ -90,7 +89,7 @@ export const getDownloadPolicyUrlInteractor = async (
       }
 
       const documentIsAvailable =
-        documentMeetsAgeRequirements(docketEntryEntity);
+        DocketEntry.meetsAgeRequirements(docketEntryEntity);
 
       if (!documentIsAvailable) {
         throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);

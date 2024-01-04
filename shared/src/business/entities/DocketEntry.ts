@@ -1,6 +1,7 @@
 import {
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
   BRIEF_EVENTCODES,
+  CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
   DECISION_EVENT_CODE,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
@@ -15,6 +16,7 @@ import {
   PARTIES_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  REVISED_TRANSCRIPT_EVENT_CODE,
   ROLES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -25,6 +27,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { RawUser, User } from './User';
 import { WorkItem } from './WorkItem';
 import {
+  calculateISODate,
   createISODateAtStartOfDayEST,
   createISODateString,
 } from '../utilities/DateHandler';
@@ -465,6 +468,8 @@ export class DocketEntry extends JoiValidationEntity {
     return DocketEntry.isCourtIssued(this.eventCode);
   }
 
+  static TRANSCRIPT_AGE_DAYS_MIN = 90;
+
   static isCourtIssued(eventCode: string): boolean {
     return COURT_ISSUED_EVENT_CODES.map(
       ({ eventCode: courtIssuedEventCode }) => courtIssuedEventCode,
@@ -476,8 +481,10 @@ export class DocketEntry extends JoiValidationEntity {
       eventCode,
       filedByRole,
       filingDate,
+      isLegacySealed,
       isOnDocketRecord,
       isPaper,
+      isSealed,
       isStricken,
       processingStatus,
     }: RawDocketEntry,
@@ -492,6 +499,8 @@ export class DocketEntry extends JoiValidationEntity {
     },
   ): boolean {
     if (
+      isLegacySealed ||
+      isSealed ||
       isStricken ||
       DocketEntry.isTranscript(eventCode) ||
       !isOnDocketRecord ||
@@ -562,7 +571,11 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   static isTranscript(eventCode: string): boolean {
-    return eventCode === TRANSCRIPT_EVENT_CODE;
+    return [
+      TRANSCRIPT_EVENT_CODE,
+      CORRECTED_TRANSCRIPT_EVENT_CODE,
+      REVISED_TRANSCRIPT_EVENT_CODE,
+    ].includes(eventCode);
   }
 
   static isDecision(eventCode: string): boolean {
@@ -581,6 +594,21 @@ export class DocketEntry extends JoiValidationEntity {
     return !!documents.find(document => document.documentType === documentType)
       ?.eventCode;
   }
+
+  static meetsAgeRequirements = doc => {
+    if (!DocketEntry.isTranscript(doc.eventCode)) return true;
+
+    const dateStringToCheck = doc.isLegacy ? doc.filingDate : doc.date;
+    const availableOnDate = calculateISODate({
+      dateString: dateStringToCheck,
+      howMuch: DocketEntry.TRANSCRIPT_AGE_DAYS_MIN,
+      units: 'days',
+    });
+    const rightNow = createISODateString();
+
+    const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
+    return meetsTranscriptAgeRequirements;
+  };
 
   /**
    * sets the number of pages for the docket entry

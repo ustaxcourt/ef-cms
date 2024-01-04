@@ -1,10 +1,8 @@
 import {
   CASE_STATUS_TYPES,
-  CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
-  REVISED_TRANSCRIPT_EVENT_CODE,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
@@ -15,34 +13,10 @@ import { DocketEntry } from '../entities/DocketEntry';
 import {
   FORMATS,
   calculateDifferenceInDays,
-  calculateISODate,
   combineISOandEasternTime,
-  createISODateString,
   formatDateString,
 } from './DateHandler';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
-
-export const TRANSCRIPT_AGE_DAYS_MIN = 90;
-export const documentMeetsAgeRequirements = doc => {
-  const transcriptCodes = [
-    TRANSCRIPT_EVENT_CODE,
-    CORRECTED_TRANSCRIPT_EVENT_CODE,
-    REVISED_TRANSCRIPT_EVENT_CODE,
-  ];
-  const isTranscript = transcriptCodes.includes(doc.eventCode);
-  if (!isTranscript) return true;
-
-  const dateStringToCheck = doc.isLegacy ? doc.filingDate : doc.date;
-  const availableOnDate = calculateISODate({
-    dateString: dateStringToCheck,
-    howMuch: TRANSCRIPT_AGE_DAYS_MIN,
-    units: 'days',
-  });
-  const rightNow = createISODateString();
-
-  const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
-  return meetsTranscriptAgeRequirements;
-};
 
 const computeIsInProgress = ({ formattedEntry }) => {
   return (
@@ -145,7 +119,7 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
   }
 
   formattedEntry.isAvailableToUser =
-    documentMeetsAgeRequirements(formattedEntry);
+    DocketEntry.meetsAgeRequirements(formattedEntry);
 
   formattedEntry.filingsAndProceedings =
     getFilingsAndProceedings(formattedEntry);
