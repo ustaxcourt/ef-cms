@@ -49106,6 +49106,10 @@
     "pk": "section|admissions"
   },
   {
+    "sk": "user|9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "pk": "section|admissions"
+  },
+  {
     "sk": "user|817b48c5-d4e5-4544-9e11-9ba0102918f4",
     "pk": "section|ashfordsChambers"
   },
@@ -57152,6 +57156,16 @@
     "pk": "user|9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "userId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "email": "admissionsclerk@example.com"
+  },
+  {
+    "role": "admissionsclerk",
+    "entityName": "User",
+    "sk": "user|9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "name": "Test Admissions Clerk1",
+    "section": "admissions",
+    "pk": "user|9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "userId": "9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "email": "admissionsclerk1@example.com"
   },
   {
     "role": "floater",
