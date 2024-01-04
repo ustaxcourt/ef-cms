@@ -9,7 +9,7 @@ import {
 export type TrialSessionState = RawTrialSession & {
   calendaredCases?: RawCase[];
   eligibleCases?: RawEligibleCase[];
-  swingSessionLocation?: string;
+  swingSessionLocation?: string; // confirm this?? it comes from that action setting it. Should that be refactored?
 };
 
 export const initialTrialSessionState: TrialSessionState = {
