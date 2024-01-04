@@ -17,39 +17,3 @@ export type JudgeActivityReportState = {
   judgeActivityReportData: JudgeActivityReportData;
   hasUserSubmittedForm: boolean;
 };
-
-const initialJudgeActivityReportData: JudgeActivityReportData = {
-  casesClosedByJudge: {
-    aggregations: { Closed: 0, 'Closed - Dismissed': 0 },
-    total: 0,
-  },
-  opinions: {
-    aggregations: [],
-    total: 0,
-  },
-  orders: {
-    aggregations: [],
-    total: 0,
-  },
-  submittedAndCavCasesByJudge: [],
-  trialSessions: {
-    aggregations: {
-      Hybrid: 0,
-      'Motion/Hearing': 0,
-      Regular: 0,
-      Small: 0,
-      Special: 0,
-    },
-    total: 0,
-  },
-};
-
-export const initialJudgeActivityReportState: JudgeActivityReportState = {
-  filters: {
-    endDate: '',
-    judgeName: '',
-    startDate: '',
-  },
-  hasUserSubmittedForm: false,
-  judgeActivityReportData: initialJudgeActivityReportData,
-};
