@@ -1,6 +1,7 @@
 import { PrimaryHeader } from '../components/PrimaryHeader';
-import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { ReportsHeader } from '../components/ReportsHeader';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { TrialCalendarType } from '@shared/business/utilities/documentGenerators/trialCalendar';
 import { isMemberCase } from '@shared/business/utilities/generateSelectedFilterList';
 import React from 'react';
 import classNames from 'classnames';
@@ -8,36 +9,7 @@ import classNames from 'classnames';
 export const TrialCalendar = ({
   cases = [],
   sessionDetail,
-}: {
-  cases: {
-    docketNumber: string;
-    docketNumberWithSuffix: string;
-    caseTitle: string;
-    inConsolidatedGroup: boolean;
-    respondentCounsel?: string[];
-    calendarNotes?: string;
-    isLeadCase: boolean;
-    petitionerCounsel?: string[];
-    shouldIndent?: boolean;
-  }[];
-  sessionDetail: {
-    startTime: string;
-    startDate: string;
-    sessionType: string;
-    courthouseName?: string;
-    address1?: string;
-    address2?: string;
-    formattedCityStateZip: string;
-    judge: string;
-    trialClerk: string;
-    courtReporter: string;
-    notes?: string;
-    irsCalendarAdministrator: string;
-    irsCalendarAdministratorInfo: RawIrsCalendarAdministratorInfo;
-    noLocationEntered?: boolean;
-    trialLocation?: string;
-  };
-}) => {
+}: TrialCalendarType) => {
   return (
     <div id="trial-calendar">
       <PrimaryHeader />
@@ -57,10 +29,8 @@ export const TrialCalendar = ({
             </div>
             <div className="width-half" id="location">
               <strong>Location</strong>
-              {sessionDetail.noLocationEntered && (
-                <div>No location entered</div>
-              )}
-              {!sessionDetail.noLocationEntered && (
+              {sessionDetail.proceedingType ===
+                TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
                 <>
                   {sessionDetail.courthouseName && (
                     <div>{sessionDetail.courthouseName}</div>
@@ -74,6 +44,26 @@ export const TrialCalendar = ({
                   {sessionDetail.formattedCityStateZip && (
                     <div>{sessionDetail.formattedCityStateZip}</div>
                   )}
+                </>
+              )}
+
+              {sessionDetail.proceedingType ===
+                TRIAL_SESSION_PROCEEDING_TYPES.remote && (
+                <>
+                  <div>
+                    Meeting ID: {sessionDetail.meetingId || 'Not Provided'}
+                  </div>
+                  <div>
+                    Phone Number:{' '}
+                    {sessionDetail.joinPhoneNumber || 'Not Provided'}
+                  </div>
+                  <div>
+                    Password: {sessionDetail.password || 'Not Provided'}
+                  </div>
+                  <div>
+                    Chambers Phone Number:{' '}
+                    {sessionDetail.chambersPhoneNumber || 'Not Provided'}
+                  </div>
                 </>
               )}
             </div>

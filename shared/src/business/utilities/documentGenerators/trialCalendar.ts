@@ -6,42 +6,48 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
+export type TrialCalendarType = {
+  cases: {
+    docketNumber: string;
+    docketNumberWithSuffix: string;
+    caseTitle: string;
+    inConsolidatedGroup: boolean;
+    respondentCounsel?: string[];
+    calendarNotes?: string;
+    isLeadCase: boolean;
+    petitionerCounsel?: string[];
+    shouldIndent?: boolean;
+  }[];
+  sessionDetail: {
+    startTime: string;
+    startDate: string;
+    sessionType: string;
+    courthouseName?: string;
+    address1?: string;
+    address2?: string;
+    formattedCityStateZip: string;
+    judge: string;
+    trialClerk: string;
+    courtReporter: string;
+    notes?: string;
+    irsCalendarAdministrator: string;
+    irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
+    noLocationEntered?: boolean;
+    trialLocation?: string;
+    proceedingType: string;
+    meetingId?: string;
+    joinPhoneNumber?: string;
+    password?: string;
+    chambersPhoneNumber?: string;
+  };
+};
+
 export const trialCalendar = async ({
   applicationContext,
   data,
 }: {
   applicationContext: IApplicationContext;
-  data: {
-    cases: {
-      docketNumber: string;
-      docketNumberWithSuffix: string;
-      caseTitle: string;
-      respondentCounsel?: string[];
-      inConsolidatedGroup: boolean;
-      calendarNotes?: string;
-      isLeadCase: boolean;
-      petitionerCounsel?: string[];
-      shouldIndent?: boolean;
-      leadDocketNumber?: string;
-    }[];
-    sessionDetail: {
-      startTime: string;
-      startDate: string;
-      sessionType: string;
-      courthouseName?: string;
-      address1?: string;
-      address2?: string;
-      formattedCityStateZip: string;
-      judge: string;
-      trialClerk: string;
-      courtReporter: string;
-      notes?: string;
-      irsCalendarAdministrator: string;
-      irsCalendarAdministratorInfo: RawIrsCalendarAdministratorInfo;
-      noLocationEntered?: boolean;
-      trialLocation?: string;
-    };
-  };
+  data: TrialCalendarType;
 }): Promise<Buffer> => {
   const { cases, sessionDetail } = data;
 

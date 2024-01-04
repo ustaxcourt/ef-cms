@@ -1,13 +1,14 @@
 import {
+  CalendaredCaseItemType,
+  TrialSessionState,
+} from '@web-client/presenter/state/trialSessionState';
+import {
   DOCKET_NUMBER_SUFFIXES,
   PARTIES_CODES,
 } from '../entities/EntityConstants';
 import { FORMATS } from './DateHandler';
-import { RawCalendaredCase } from '../entities/cases/CalendaredCase';
 import { RawEligibleCase } from '../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { compact, partition } from 'lodash';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
@@ -50,7 +51,7 @@ export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   return filingPartiesCode;
 };
 
-export type FormattedTrialSessionCase = (RawCase | RawCalendaredCase) & {
+export type FormattedTrialSessionCase = CalendaredCaseItemType & {
   inConsolidatedGroup: boolean;
   consolidatedIconTooltipText: string;
   shouldIndent: boolean;
@@ -59,7 +60,6 @@ export type FormattedTrialSessionCase = (RawCase | RawCalendaredCase) & {
   removedFromTrialDateFormatted: string;
   filingPartiesCode: string;
   isDocketSuffixHighPriority: boolean;
-  removedFromTrial?: boolean;
 };
 
 export const formatCaseForTrialSession = ({
@@ -69,7 +69,7 @@ export const formatCaseForTrialSession = ({
   setFilingPartiesCode = false,
 }: {
   applicationContext: IApplicationContext;
-  caseItem: (RawCase | RawCalendaredCase) & { removedFromTrialDate?: string };
+  caseItem: CalendaredCaseItemType;
   eligibleCases?: RawEligibleCase[];
   setFilingPartiesCode?: boolean;
 }): FormattedTrialSessionCase => {
@@ -152,27 +152,14 @@ export const compareCasesByDocketNumber = (a, b) => {
   return aSortString.localeCompare(bSortString);
 };
 
-export type TrialSessionToFormatType = Omit<
-  TrialSessionState,
-  'calendaredCases'
-> & {
-  calendaredCases?: ((RawCase | RawCalendaredCase) & {
-    removedFromTrial?: boolean;
-    removedFromTrialDate?: string;
-  })[];
-  startTime: string;
-  estimatedEndDate: string;
-  swingSessionLocation?: string;
-};
-
 export const getFormattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }: {
   applicationContext: IApplicationContext;
-  trialSession?: TrialSessionToFormatType;
+  trialSession?: TrialSessionState;
 }):
-  | (RawTrialSession & {
+  | (TrialSessionState & {
       allCases: any;
       formattedChambersPhoneNumber: string;
       formattedCity?: string;
@@ -183,7 +170,7 @@ export const getFormattedTrialSessionDetails = ({
       formattedIrsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
       formattedJudge: string;
       formattedStartDate: string;
-      formattedStartDateFull: string; //?
+      formattedStartDateFull: string;
       formattedStartTime: string;
       formattedTerm: string;
       formattedTrialClerk: string;
@@ -192,10 +179,9 @@ export const getFormattedTrialSessionDetails = ({
       openCases: any;
       showSwingSession: boolean;
       zipName: string;
-      startTime: string;
     })
   | undefined => {
-  if (!trialSession) return undefined; // TODO: do we need to remove defensiveness? should it be an empty object?
+  if (!trialSession) return undefined;
 
   const allCases = (trialSession.calendaredCases || []).map(caseItem =>
     formatCaseForTrialSession({
@@ -252,13 +238,13 @@ export const getFormattedTrialSessionDetails = ({
 
   const formattedEstimatedEndDate = applicationContext
     .getUtilities()
-    .formatDateString(trialSession.estimatedEndDate, 'MMDDYY');
+    .formatDateString(trialSession.estimatedEndDate!, 'MMDDYY');
 
   const formattedStartDateFull = applicationContext
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
 
-  let [hour, min] = trialSession.startTime.split(':');
+  let [hour, min] = trialSession.startTime!.split(':');
   let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
 
   if (+hour > 12) {

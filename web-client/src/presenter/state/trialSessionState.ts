@@ -1,3 +1,4 @@
+import { RawCalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
@@ -6,10 +7,15 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
 
+export type CalendaredCaseItemType = (RawCase | RawCalendaredCase) & {
+  removedFromTrial?: boolean;
+  removedFromTrialDate?: string;
+};
+
 export type TrialSessionState = RawTrialSession & {
-  calendaredCases?: RawCase[];
+  calendaredCases?: CalendaredCaseItemType[];
   eligibleCases?: RawEligibleCase[];
-  swingSessionLocation?: string; // confirm this?? it comes from that action setting it. Should that be refactored?
+  swingSessionLocation?: string;
 };
 
 export const initialTrialSessionState: TrialSessionState = {
