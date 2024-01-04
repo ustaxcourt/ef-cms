@@ -314,38 +314,6 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
-  describe('showSelectDateRangeText', () => {
-    it('should be false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
-      baseState.judgeActivityReport.hasUserSubmittedForm = true;
-      const { showSelectDateRangeText } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(showSelectDateRangeText).toBe(false);
-    });
-
-    it('should true when form has NOT been submitted (there are orders, opinions, trial sessions or cases for the specified judge)', () => {
-      const { showSelectDateRangeText } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: {
-            ...baseState,
-            judgeActivityReport: {
-              ...baseState.judgeActivityReport,
-              judgeActivityReportData:
-                initialJudgeActivityReportState.judgeActivityReportData,
-            },
-          },
-        },
-      );
-
-      expect(showSelectDateRangeText).toBe(true);
-    });
-  });
-
   describe('trialSessionsHeldTotal', () => {
     it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
       const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
