@@ -1,17 +1,20 @@
 import { DOCKET_NUMBER_SUFFIXES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
-import { RawCalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
+import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
+import { applicationContext } from '../test/createTestApplicationContext';
 import {
-  TrialSessionToFormatType,
   formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from './getFormattedTrialSessionDetails';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { omit } from 'lodash';
 
 describe('getFormattedTrialSessionDetails', () => {
-  let TRIAL_SESSION: TrialSessionToFormatType;
+  let TRIAL_SESSION: TrialSessionState;
+  let mockCase: RawCase & {
+    removedFromTrialDate?: string;
+    removedFromTrial?: boolean;
+  };
 
   beforeEach(() => {
     TRIAL_SESSION = {
@@ -28,6 +31,10 @@ describe('getFormattedTrialSessionDetails', () => {
       term: 'Fall',
       termYear: '2019',
       trialLocation: 'Hartford, Connecticut',
+    };
+    mockCase = {
+      ...MOCK_CASE,
+      removedFromTrial: false,
     };
   });
 
@@ -242,11 +249,6 @@ describe('getFormattedTrialSessionDetails', () => {
   });
 
   it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
-    const mockCase = {
-      ...MOCK_CASE,
-      removedFromTrial: false,
-    };
-
     TRIAL_SESSION = {
       ...TRIAL_SESSION,
       calendaredCases: [
@@ -278,29 +280,24 @@ describe('getFormattedTrialSessionDetails', () => {
     expect(
       applicationContext.getUtilities().setConsolidationFlagsForDisplay,
     ).toHaveBeenCalledTimes(9);
-    expect(result.allCases.length).toEqual(3);
-    expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-16S');
-    expect(result.allCases[0].caseTitle).toEqual('Someone Else');
-    expect(result.allCases[1].docketNumberWithSuffix).toEqual('102-17W');
-    expect(result.allCases[1].caseTitle).toEqual(
+    expect(result!.allCases.length).toEqual(3);
+    expect(result!.allCases[0].docketNumberWithSuffix).toEqual('101-16S');
+    expect(result!.allCases[0].caseTitle).toEqual('Someone Else');
+    expect(result!.allCases[1].docketNumberWithSuffix).toEqual('102-17W');
+    expect(result!.allCases[1].caseTitle).toEqual(
       'Daenerys Stormborn & Someone Else',
     );
-    expect(result.allCases[2].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.allCases[2].caseTitle).toEqual('Test Petitioner');
+    expect(result!.allCases[2].docketNumberWithSuffix).toEqual('101-18');
+    expect(result!.allCases[2].caseTitle).toEqual('Test Petitioner');
 
     // expect(result.openCases.length).toEqual(2);
-    expect(result.inactiveCases.length).toEqual(1);
-    expect(result.openCases[0].docketNumberWithSuffix).toEqual('102-17W');
-    expect(result.openCases[1].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.inactiveCases[0].docketNumberWithSuffix).toEqual('101-16S');
+    expect(result!.inactiveCases.length).toEqual(1);
+    expect(result!.openCases[0].docketNumberWithSuffix).toEqual('102-17W');
+    expect(result!.openCases[1].docketNumberWithSuffix).toEqual('101-18');
+    expect(result!.inactiveCases[0].docketNumberWithSuffix).toEqual('101-16S');
   });
 
   it('sorts calendared cases by docket number', () => {
-    const mockCase = {
-      ...MOCK_CASE,
-      removedFromTrial: false,
-    };
-
     TRIAL_SESSION = {
       ...TRIAL_SESSION,
       calendaredCases: [
@@ -330,11 +327,6 @@ describe('getFormattedTrialSessionDetails', () => {
   });
 
   it('should set the correct consolidated case flags', () => {
-    const mockCase = {
-      ...MOCK_CASE,
-      removedFromTrial: false,
-    };
-
     TRIAL_SESSION = {
       ...TRIAL_SESSION,
       calendaredCases: [
@@ -356,7 +348,7 @@ describe('getFormattedTrialSessionDetails', () => {
       trialSession: TRIAL_SESSION,
     });
 
-    expect(result.openCases).toMatchObject([
+    expect(result!.openCases).toMatchObject([
       expect.objectContaining({ docketNumber: '101-11' }),
       expect.objectContaining({
         consolidatedIconTooltipText: 'Consolidated case',
@@ -365,8 +357,8 @@ describe('getFormattedTrialSessionDetails', () => {
       }),
       expect.objectContaining({ docketNumber: '5000-17' }),
     ]);
-    expect(result.openCases[1].shouldIndent).toBeFalsy();
-    expect(result.inactiveCases).toMatchObject([
+    expect(result!.openCases[1].shouldIndent).toBeFalsy();
+    expect(result!.inactiveCases).toMatchObject([
       expect.objectContaining({
         consolidatedIconTooltipText: 'Lead case',
         docketNumber: '500-17',
@@ -374,7 +366,7 @@ describe('getFormattedTrialSessionDetails', () => {
       }),
       expect.objectContaining({ docketNumber: '102-19' }),
     ]);
-    expect(result.allCases).toMatchObject([
+    expect(result!.allCases).toMatchObject([
       expect.objectContaining({ docketNumber: '101-11' }),
       expect.objectContaining({ docketNumber: '500-17' }),
       expect.objectContaining({ docketNumber: '501-17' }),
@@ -385,11 +377,14 @@ describe('getFormattedTrialSessionDetails', () => {
 });
 
 describe('formatCaseForTrialSession', () => {
-  let caseItem: (RawCase | RawCalendaredCase) & {
-    removedFromTrialDate?: string;
+  let caseItem: {
+    docketNumber: string;
+    entityName: 'Case';
+    status: 'New';
+    docketNumberSuffix?: string;
   };
 
-  beforeAll(() => {
+  beforeEach(() => {
     caseItem = {
       docketNumber: '101-20',
       entityName: 'Case',
