@@ -30,6 +30,7 @@ export const initialTrialSessionState: TrialSessionState = {
     userId: '',
   },
   maxCases: 100,
+  paperServicePdfs: [],
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
   sessionStatus: SESSION_STATUS_TYPES.open,
