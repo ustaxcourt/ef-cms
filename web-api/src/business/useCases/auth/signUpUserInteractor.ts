@@ -1,7 +1,7 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SES } from 'aws-sdk';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import qs from 'qs';
 
 export type SignUpUserResponse = {
@@ -77,8 +77,9 @@ export const signUpUserInteractor = async (
     .generateAccountConfirmationCode(applicationContext, { userId });
 
   await sendAccountCreationConfirmation(applicationContext, {
-    email: newUser.email,
     confirmationCode,
+    email: newUser.email,
+    userId,
   });
 
   console.log(
@@ -87,27 +88,31 @@ export const signUpUserInteractor = async (
   );
   // TODO 10007: Only return confirmationCode locally as we cannot send an email. If we always return it then we cannot be sure we confirmed their email.
   return {
+    confirmationCode,
     email: user.email,
     userId,
-    confirmationCode,
   };
 };
 
 const sendAccountCreationConfirmation = async (
   applicationContext: ServerApplicationContext,
-  { email, confirmationCode }: { email: string; confirmationCode: string },
+  {
+    confirmationCode,
+    email,
+    userId,
+  }: { email: string; confirmationCode: string; userId: string },
 ) => {
   console.log('**** sendAccountCreationConfirmation');
 
   const queryString = qs.stringify(
-    { confirmationCode, email },
+    { confirmationCode, userId },
     { encode: false },
   );
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;
 
   const emailBody =
-    `Welcome to DAWSON! Your account with DAWSON has been created. Use the` +
-    ` button below to verify your email address.` +
+    'Welcome to DAWSON! Your account with DAWSON has been created. Use the' +
+    ' button below to verify your email address.' +
     `<button style="font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
     font-size: 1.06rem;
     line-height: .9;
@@ -121,30 +126,32 @@ const sendAccountCreationConfirmation = async (
     padding: .75rem 2.25rem;
     text-align: center;
     text-decoration: none;"><a href="${verificationLink}">Verify Email</a></button>` +
-    `<br><br><br>If you did not create an account with DAWSON, please contact support at ` +
-    `<a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.`;
+    '<br><br><br>If you did not create an account with DAWSON, please contact support at ' +
+    '<a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.';
 
-  const SES: SES = applicationContext.getEmailClient();
+  const emailClient: SES = applicationContext.getEmailClient();
 
   console.log(
     '**** sendAccountCreationConfirmation, about to send email to: ',
     email,
   );
 
-  return await SES.sendEmail({
-    Destination: {
-      ToAddresses: [email],
-    },
-    Message: {
-      Body: {
-        Html: {
-          Data: emailBody,
+  return await emailClient
+    .sendEmail({
+      Destination: {
+        ToAddresses: [email],
+      },
+      Message: {
+        Body: {
+          Html: {
+            Data: emailBody,
+          },
+        },
+        Subject: {
+          Data: 'U.S. Tax Court DAWSON Account Verification',
         },
       },
-      Subject: {
-        Data: 'U.S. Tax Court DAWSON Account Verification',
-      },
-    },
-    Source: process.env.EMAIL_SOURCE!,
-  }).promise();
+      Source: process.env.EMAIL_SOURCE!,
+    })
+    .promise();
 };
