@@ -294,7 +294,7 @@ describe('getFormattedTrialSessionDetails', () => {
     expect(result!.allCases[2].docketNumberWithSuffix).toEqual('101-18');
     expect(result!.allCases[2].caseTitle).toEqual('Test Petitioner');
 
-    // expect(result.openCases.length).toEqual(2);
+    expect(result!.openCases.length).toEqual(2);
     expect(result!.inactiveCases.length).toEqual(1);
     expect(result!.openCases[0].docketNumberWithSuffix).toEqual('102-17W');
     expect(result!.openCases[1].docketNumberWithSuffix).toEqual('101-18');
