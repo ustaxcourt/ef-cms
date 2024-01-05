@@ -112,6 +112,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         },
       ],
       docketNumber: DOCKET_NUMBER,
+      docketNumberWithSuffix: 'docketNumberWithSuffix',
     };
 
     const results =
@@ -136,6 +137,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         statusOfMatter: 'SOME STATUS OF MATTER',
       },
       docketNumber: DOCKET_NUMBER,
+      docketNumberWithSuffix: 'docketNumberWithSuffix',
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
