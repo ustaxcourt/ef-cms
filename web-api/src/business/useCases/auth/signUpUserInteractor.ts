@@ -41,7 +41,7 @@ export const signUpUserInteractor = async (
 
   const newUser = new NewPetitionerUser(user).validate().toRawObject();
 
-  await cognito.signUp({
+  const result = await cognito.signUp({
     ClientId: process.env.COGNITO_CLIENT_ID,
     Password: newUser.password,
     UserAttributes: [
@@ -57,34 +57,30 @@ export const signUpUserInteractor = async (
     Username: newUser.email,
   });
 
+  const userId = result.UserSub!;
+
   // generate a confirmation code
   // What rules do we want to apply to a code? Right now, cognito generates a 6 digit code. Are we OK with that?
   console.log(
     '**** signUpUserInteractor, done signing up, about to send email',
   );
 
-  const code = '123456';
+  const { confirmationCode } = await applicationContext
+    .getPersistenceGateway()
+    .generateAccountConfirmationCode(applicationContext, { userId });
 
-  // send confirmation email with code
-  await sendAccountCreationConfirmation({
-    applicationContext,
-    email: newUser.email,
-    code,
-  });
+    await sendAccountCreationConfirmation(applicationContext, {
+      email: newUser.email,
+      code: confirmationCode,
+    });
 
   console.log('**** signUpUserInteractor, done signing up, done sending email');
-
-  // return
-
-  // Things to think about...
-  // 1. What happens if we need to resend the user's confirmation code???
 };
 
-export const sendAccountCreationConfirmation = async ({
-  applicationContext,
-  email,
-  code,
-}) => {
+const sendAccountCreationConfirmation = async (
+  applicationContext: ServerApplicationContext,
+  { email, code }: { email: string; code: string },
+) => {
   console.log('**** sendAccountCreationConfirmation');
 
   const queryString = qs.stringify({ code, email }, { encode: false });
