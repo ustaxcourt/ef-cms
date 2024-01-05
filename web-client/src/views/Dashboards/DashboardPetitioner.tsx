@@ -3,7 +3,6 @@ import { CaseListTable } from '../CaseListTable';
 import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FilingFeeOptions } from './FilingFeeOptions';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { WhatToExpect } from '../WhatToExpect';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -37,14 +36,9 @@ export const DashboardPetitioner = connect(
                   <h3>Taxpayer Tools</h3>
                   <hr />
                   <p>
-                    <FontAwesomeIcon
-                      className="fa-icon-blue"
-                      icon="file-pdf"
-                      size="1x"
-                    />
                     <a
                       className="usa-link--external"
-                      href="https://ustaxcourt.gov/resources/dawson/how_to_efile_a_petition.pdf"
+                      href="https://www.ustaxcourt.gov/efile_a_petition.html"
                       rel="noopener noreferrer"
                       target="_blank"
                     >
