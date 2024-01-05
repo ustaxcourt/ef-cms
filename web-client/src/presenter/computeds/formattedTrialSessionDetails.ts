@@ -8,18 +8,6 @@ export const formattedTrialSessionDetails = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ):
-  | {
-      alertMessageForNOTT?: string;
-      canClose: boolean;
-      canDelete: boolean;
-      canEdit: boolean;
-      chambersPhoneNumber?: string;
-      disableHybridFilter: boolean;
-      isHybridSession: boolean;
-      showAlertForNOTTReminder: boolean;
-      showOnlyClosedCases: boolean;
-      showOpenCases: boolean;
-    }
   | (TrialSessionState & {
       alertMessageForNOTT?: string;
       canClose: boolean;
@@ -31,7 +19,19 @@ export const formattedTrialSessionDetails = (
       showAlertForNOTTReminder: boolean;
       showOnlyClosedCases: boolean;
       showOpenCases: boolean;
-    }) => {
+    })
+  | {
+      alertMessageForNOTT?: string;
+      canClose: boolean;
+      canDelete: boolean;
+      canEdit: boolean;
+      chambersPhoneNumber?: string;
+      disableHybridFilter: boolean;
+      isHybridSession: boolean;
+      showAlertForNOTTReminder: boolean;
+      showOnlyClosedCases: boolean;
+      showOpenCases: boolean;
+    } => {
   let canClose = false;
   let showOpenCases = false;
   let showOnlyClosedCases = false;
