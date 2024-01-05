@@ -156,7 +156,7 @@ export const getFormattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: any;
   trialSession?: TrialSessionState;
 }):
   | (TrialSessionState & {
