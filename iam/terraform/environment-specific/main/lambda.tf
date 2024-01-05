@@ -133,7 +133,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "ses:SendBulkTemplatedEmail"
+                "ses:SendBulkTemplatedEmail",
+                "ses:SendEmail"
             ],
             "Resource": [
                 "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}"
