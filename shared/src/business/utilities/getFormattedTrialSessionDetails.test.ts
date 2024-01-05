@@ -77,11 +77,13 @@ describe('getFormattedTrialSessionDetails', () => {
       name: 'TEST_NAME',
       phone: 'TEST_PHONE',
     };
-    TRIAL_SESSION.irsCalendarAdministratorInfo = irsCalendarAdministratorInfo;
 
     const result = getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: TRIAL_SESSION,
+      trialSession: {
+        ...TRIAL_SESSION,
+        irsCalendarAdministratorInfo,
+      },
     });
 
     expect(result).toMatchObject({
@@ -138,19 +140,17 @@ describe('getFormattedTrialSessionDetails', () => {
   });
 
   it('formats trial session when session assignments are empty', () => {
-    TRIAL_SESSION = {
-      ...omit(TRIAL_SESSION, [
-        'courtReporter',
-        'irsCalendarAdministrator',
-        'judge',
-        'trialClerk',
-      ]),
-      chambersPhoneNumber: undefined,
-    };
-
     const result = getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: TRIAL_SESSION,
+      trialSession: {
+        ...omit(TRIAL_SESSION, [
+          'courtReporter',
+          'irsCalendarAdministrator',
+          'judge',
+          'trialClerk',
+        ]),
+        chambersPhoneNumber: undefined,
+      },
     });
 
     expect(result).toMatchObject({
@@ -164,15 +164,14 @@ describe('getFormattedTrialSessionDetails', () => {
 
   it('formats trial session when trial clerk is empty and alternate trial clerk name is populated', () => {
     const alternateTrialClerkName = 'Incredible Hulk';
-    TRIAL_SESSION = {
-      ...TRIAL_SESSION,
-      alternateTrialClerkName,
-      trialClerk: undefined,
-    };
 
     const result = getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: TRIAL_SESSION,
+      trialSession: {
+        ...TRIAL_SESSION,
+        alternateTrialClerkName,
+        trialClerk: undefined,
+      },
     });
 
     expect(result).toMatchObject({
@@ -182,11 +181,12 @@ describe('getFormattedTrialSessionDetails', () => {
 
   describe('formats trial session start times', () => {
     it('formats trial session start time in the morning', () => {
-      TRIAL_SESSION.startTime = '10:00';
-
       const result = getFormattedTrialSessionDetails({
         applicationContext,
-        trialSession: TRIAL_SESSION,
+        trialSession: {
+          ...TRIAL_SESSION,
+          startTime: '10:00',
+        },
       });
 
       expect(result).toMatchObject({
@@ -195,11 +195,12 @@ describe('getFormattedTrialSessionDetails', () => {
     });
 
     it('formats trial session start time at noon', () => {
-      TRIAL_SESSION.startTime = '12:00';
-
       const result = getFormattedTrialSessionDetails({
         applicationContext,
-        trialSession: TRIAL_SESSION,
+        trialSession: {
+          ...TRIAL_SESSION,
+          startTime: '12:00',
+        },
       });
       expect(result).toMatchObject({
         formattedStartTime: '12:00 pm',
@@ -209,11 +210,12 @@ describe('getFormattedTrialSessionDetails', () => {
 
   describe('formats trial session estimated end date', () => {
     it('does not format trial session estimated end date when estimatedEndDate is an invalid DateTime', () => {
-      TRIAL_SESSION.estimatedEndDate = 'Am I an ISO8601 date string?';
-
       const result = getFormattedTrialSessionDetails({
         applicationContext,
-        trialSession: TRIAL_SESSION,
+        trialSession: {
+          ...TRIAL_SESSION,
+          estimatedEndDate: 'Am I an ISO8601 date string?',
+        },
       });
 
       expect(result).toMatchObject({
@@ -222,11 +224,12 @@ describe('getFormattedTrialSessionDetails', () => {
     });
 
     it('formats trial session estimated end date', () => {
-      TRIAL_SESSION.estimatedEndDate = '2040-11-25T15:00:00.000Z';
-
       const result = getFormattedTrialSessionDetails({
         applicationContext,
-        trialSession: TRIAL_SESSION,
+        trialSession: {
+          ...TRIAL_SESSION,
+          estimatedEndDate: '2040-11-25T15:00:00.000Z',
+        },
       });
       expect(result).toMatchObject({
         formattedEstimatedEndDate: '11/25/40',
@@ -235,16 +238,14 @@ describe('getFormattedTrialSessionDetails', () => {
   });
 
   it('displays swing session area if session is a swing session', () => {
-    TRIAL_SESSION = {
-      ...TRIAL_SESSION,
-      swingSession: true,
-      swingSessionId: '1234',
-      swingSessionLocation: 'Honolulu, Hawaii',
-    };
-
     const result = getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: TRIAL_SESSION,
+      trialSession: {
+        ...TRIAL_SESSION,
+        swingSession: true,
+        swingSessionId: '1234',
+        swingSessionLocation: 'Honolulu, Hawaii',
+      },
     });
 
     expect(result).toMatchObject({
@@ -253,32 +254,30 @@ describe('getFormattedTrialSessionDetails', () => {
   });
 
   it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
-    TRIAL_SESSION = {
-      ...TRIAL_SESSION,
-      calendaredCases: [
-        mockCase,
-        {
-          ...mockCase,
-          caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-          docketNumber: '102-17',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-          docketNumberWithSuffix: '102-17W',
-        },
-        {
-          ...mockCase,
-          caseCaption: 'Someone Else, Petitioner',
-          docketNumber: '101-16',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          docketNumberWithSuffix: '101-16S',
-          removedFromTrial: true,
-          removedFromTrialDate: '2019-03-01T21:40:46.415Z',
-        },
-      ],
-    };
-
     const result = getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: TRIAL_SESSION,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          mockCase,
+          {
+            ...mockCase,
+            caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
+            docketNumber: '102-17',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            docketNumberWithSuffix: '102-17W',
+          },
+          {
+            ...mockCase,
+            caseCaption: 'Someone Else, Petitioner',
+            docketNumber: '101-16',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+            docketNumberWithSuffix: '101-16S',
+            removedFromTrial: true,
+            removedFromTrialDate: '2019-03-01T21:40:46.415Z',
+          },
+        ],
+      },
     });
 
     expect(
@@ -302,20 +301,18 @@ describe('getFormattedTrialSessionDetails', () => {
   });
 
   it('sorts calendared cases by docket number', () => {
-    TRIAL_SESSION = {
-      ...TRIAL_SESSION,
-      calendaredCases: [
-        mockCase,
-        { ...mockCase, docketNumber: '102-19' },
-        { ...mockCase, docketNumber: '5000-17' },
-        { ...mockCase, docketNumber: '500-17' },
-        { ...mockCase, docketNumber: '190-07' },
-      ],
-    };
-
     const result = getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: TRIAL_SESSION,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          mockCase,
+          { ...mockCase, docketNumber: '102-19' },
+          { ...mockCase, docketNumber: '5000-17' },
+          { ...mockCase, docketNumber: '500-17' },
+          { ...mockCase, docketNumber: '190-07' },
+        ],
+      },
     });
 
     expect(
@@ -331,25 +328,23 @@ describe('getFormattedTrialSessionDetails', () => {
   });
 
   it('should set the correct consolidated case flags', () => {
-    TRIAL_SESSION = {
-      ...TRIAL_SESSION,
-      calendaredCases: [
-        { ...mockCase, docketNumber: '101-11' },
-        { ...mockCase, docketNumber: '102-19', removedFromTrial: true },
-        { ...mockCase, docketNumber: '5000-17' },
-        {
-          ...mockCase,
-          docketNumber: '500-17',
-          leadDocketNumber: '500-17',
-          removedFromTrial: true,
-        },
-        { ...mockCase, docketNumber: '501-17', leadDocketNumber: '500-17' },
-      ],
-    };
-
     const result = getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: TRIAL_SESSION,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          { ...mockCase, docketNumber: '101-11' },
+          { ...mockCase, docketNumber: '102-19', removedFromTrial: true },
+          { ...mockCase, docketNumber: '5000-17' },
+          {
+            ...mockCase,
+            docketNumber: '500-17',
+            leadDocketNumber: '500-17',
+            removedFromTrial: true,
+          },
+          { ...mockCase, docketNumber: '501-17', leadDocketNumber: '500-17' },
+        ],
+      },
     });
 
     expect(result!.openCases).toMatchObject([
