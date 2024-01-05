@@ -48,24 +48,37 @@ export const getCasesForUserInteractor = async (
     elapsed: new Date().getTime() - start,
   });
 
-  const allUserCases: TAssociatedCase[] = Case.validateRawCollection(
-    await applicationContext.getPersistenceGateway().getCasesByDocketNumbers({
+  const allUserCasesStart: any[] = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByDocketNumbers({
       applicationContext,
       docketNumbers,
-    }),
-    { applicationContext },
-  ).map(c => {
+    });
+
+  applicationContext.logger.info('done getting user cases', {
+    elapsed: new Date().getTime() - start,
+  });
+
+  const validatedCases = Case.validateRawCollection(allUserCasesStart, {
+    applicationContext,
+  });
+
+  applicationContext.logger.info('done validating user cases', {
+    elapsed: new Date().getTime() - start,
+  });
+
+  const allUserCasesEnd: TAssociatedCase[] = validatedCases.map(c => {
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
   });
 
   // 25,329 ms
-  applicationContext.logger.info('done getting user cases', {
+  applicationContext.logger.info('done processing user cases', {
     elapsed: new Date().getTime() - start,
   });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
-    cases: allUserCases,
+    cases: allUserCasesEnd,
     userId,
   });
 
