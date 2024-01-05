@@ -48,13 +48,8 @@ export const MOCK_TRIAL_REGULAR: RawTrialSession = {
   sessionStatus: SESSION_STATUS_TYPES.open,
   sessionType: 'Regular',
   startDate: '2001-12-01T00:00:00.000Z',
-  startTime: '12:00',
   term: 'Fall',
   termYear: '2025',
-  trialClerk: {
-    name: 'Test Trial Clerk',
-    userId: 'eeeba5a9-b37b-439d-9201-033ec6e335wb',
-  },
   trialLocation: 'Birmingham, Alabama',
   trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
 };
