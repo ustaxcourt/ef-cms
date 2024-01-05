@@ -225,6 +225,13 @@ export const createApplicationContext = (
               },
             };
           },
+          sendEmail: () => {
+            return {
+              promise: (): SES.SendEmailResponse => {
+                return { MessageId: '' };
+              },
+            };
+          },
         };
       } else {
         if (!sesCache) {

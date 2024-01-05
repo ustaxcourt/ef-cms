@@ -76,10 +76,10 @@ export const signUpUserInteractor = async (
     .getPersistenceGateway()
     .generateAccountConfirmationCode(applicationContext, { userId });
 
-  // await sendAccountCreationConfirmation(applicationContext, {
-  //   email: newUser.email,
-  //   code: confirmationCode,
-  // });
+  await sendAccountCreationConfirmation(applicationContext, {
+    email: newUser.email,
+    confirmationCode,
+  });
 
   console.log(
     '**** signUpUserInteractor, done signing up, done sending email',
@@ -95,11 +95,14 @@ export const signUpUserInteractor = async (
 
 const sendAccountCreationConfirmation = async (
   applicationContext: ServerApplicationContext,
-  { email, code }: { email: string; code: string },
+  { email, confirmationCode }: { email: string; confirmationCode: string },
 ) => {
   console.log('**** sendAccountCreationConfirmation');
 
-  const queryString = qs.stringify({ code, email }, { encode: false });
+  const queryString = qs.stringify(
+    { confirmationCode, email },
+    { encode: false },
+  );
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;
 
   const emailBody =
