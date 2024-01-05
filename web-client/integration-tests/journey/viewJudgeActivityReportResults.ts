@@ -39,9 +39,9 @@ export const viewJudgeActivityReportResults = (
       judgeName: overrides.judgeName || 'Colvin',
     });
 
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence', {
-      selectedPage: 0,
-    });
+    await cerebralTest.runSequence(
+      'submitJudgeActivityStatisticsReportSequence',
+    );
 
     await waitForLoadingComponentToHide({ cerebralTest });
 
