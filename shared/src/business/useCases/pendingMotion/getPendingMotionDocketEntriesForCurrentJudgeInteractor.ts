@@ -14,6 +14,7 @@ import { partition } from 'lodash';
 
 export type FormattedPendingMotion = {
   docketNumber: string;
+  docketNumberWithSuffix?: string;
   docketEntryId: string;
   eventCode: string;
   daysSinceCreated: number;
@@ -177,11 +178,12 @@ async function getLatestDataForPendingMotions(
     daysSinceCreated: dayDifference,
     docketEntryId: latestDocketEntry.docketEntryId,
     docketNumber: fullCase.docketNumber,
+    docketNumberWithSuffix: fullCase.docketNumberWithSuffix,
     eventCode: latestDocketEntry.eventCode,
     filingDate: latestDocketEntry.filingDate,
     judge: fullCase.associatedJudge,
     leadDocketNumber: fullCase.leadDocketNumber,
-    pending: latestDocketEntry.pending,
+    pending: latestDocketEntry.pending || false,
   };
 
   return updatedDocketEntry;
