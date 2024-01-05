@@ -204,7 +204,6 @@ describe('generateTrialCalendarPdfInteractor', () => {
           joinPhoneNumber: '1234567890',
           judge: MOCK_TRIAL_INPERSON.judge!.name,
           meetingId: 'meetingid',
-          noLocationEntered: false,
           notes: MOCK_TRIAL_INPERSON.notes,
           password: 'pass1',
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
