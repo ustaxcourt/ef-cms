@@ -56,9 +56,7 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('returns a default state of compute items if there is no trialSession info', () => {
-    applicationContext
-      .getUtilities()
-      .getFormattedTrialSessionDetails.mockReturnValue(undefined);
+    mockTrialSession = undefined;
 
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {},
@@ -169,9 +167,9 @@ describe('formattedTrialSessionDetails', () => {
       state: {},
     });
 
-    expect(result.canEdit).toBeFalsy();
-    expect(result.canDelete).toBeFalsy();
-    expect(result.canClose).toBeFalsy();
+    expect(result.canEdit).toBe(false);
+    expect(result.canDelete).toBe(false);
+    expect(result.canClose).toBe(false);
   });
 
   describe('canDelete', () => {
