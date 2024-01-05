@@ -30,6 +30,10 @@ describe('getFormattedTrialSessionDetails', () => {
       state: 'CT',
       term: 'Fall',
       termYear: '2019',
+      trialClerk: {
+        name: 'Test Trial Clerk',
+        userId: 'eeeba5a9-b37b-439d-9201-033ec6e335wb',
+      },
       trialLocation: 'Hartford, Connecticut',
     };
     mockCase = {
