@@ -5,12 +5,12 @@ export const confirmSignUpInteractor = (
   applicationContext: ClientApplicationContext,
   {
     confirmationCode,
-    userEmail,
-  }: { confirmationCode: string; userEmail: string },
+    userId,
+  }: { confirmationCode: string; userId: string },
 ) => {
   return post({
     applicationContext,
-    body: { confirmationCode, userEmail },
+    body: { confirmationCode, userId },
     endpoint: '/confirm-signup',
     options: {
       withCredentials: false,

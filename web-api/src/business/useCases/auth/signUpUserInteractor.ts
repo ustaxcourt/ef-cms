@@ -4,6 +4,12 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SES } from 'aws-sdk';
 import qs from 'qs';
 
+export type SignUpUserResponse = {
+  email: string;
+  userId: string;
+  confirmationCode: string;
+};
+
 export const signUpUserInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -16,7 +22,7 @@ export const signUpUserInteractor = async (
       confirmPassword: string;
     };
   },
-) => {
+): Promise<SignUpUserResponse> => {
   console.log('**** signUpUserInteractor');
 
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
@@ -63,18 +69,28 @@ export const signUpUserInteractor = async (
   // What rules do we want to apply to a code? Right now, cognito generates a 6 digit code. Are we OK with that?
   console.log(
     '**** signUpUserInteractor, done signing up, about to send email',
+    userId,
   );
 
   const { confirmationCode } = await applicationContext
     .getPersistenceGateway()
     .generateAccountConfirmationCode(applicationContext, { userId });
 
-    await sendAccountCreationConfirmation(applicationContext, {
-      email: newUser.email,
-      code: confirmationCode,
-    });
+  // await sendAccountCreationConfirmation(applicationContext, {
+  //   email: newUser.email,
+  //   code: confirmationCode,
+  // });
 
-  console.log('**** signUpUserInteractor, done signing up, done sending email');
+  console.log(
+    '**** signUpUserInteractor, done signing up, done sending email',
+    confirmationCode,
+  );
+  // TODO 10007: Only return confirmationCode locally as we cannot send an email. If we always return it then we cannot be sure we confirmed their email.
+  return {
+    email: user.email,
+    userId,
+    confirmationCode,
+  };
 };
 
 const sendAccountCreationConfirmation = async (

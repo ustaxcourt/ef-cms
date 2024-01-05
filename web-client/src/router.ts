@@ -836,10 +836,10 @@ const router = {
     );
 
     registerRoute('/confirm-signup?..', () => {
-      const { confirmationCode, email } = route.query();
+      const { confirmationCode, userId } = route.query();
       return app.getSequence('confirmSignUpSequence')({
         confirmationCode,
-        userEmail: email,
+        userId,
       });
     });
 

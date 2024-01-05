@@ -11,4 +11,4 @@ export const confirmSignUpSequence = [
     yes: [setAlertSuccessAction],
   },
   navigateToLoginSequence,
-];
+] as unknown as (props: {confirmationCode: string; userId: string}) => {};

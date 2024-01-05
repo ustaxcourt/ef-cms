@@ -2,15 +2,15 @@ export const confirmSignUpAction = async ({
   applicationContext,
   path,
   props,
-}: ActionProps<{ confirmationCode: string; userEmail: string }>) => {
-  const { confirmationCode, userEmail } = props;
+}: ActionProps<{ confirmationCode: string; userId: string }>) => {
+  const { confirmationCode, userId } = props;
 
   try {
     await applicationContext
       .getUseCases()
       .confirmSignUpInteractor(applicationContext, {
         confirmationCode,
-        userEmail,
+        userId,
       });
 
     // 10007 TODO: make path.success
