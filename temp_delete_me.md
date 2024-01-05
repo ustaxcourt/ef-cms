@@ -12,17 +12,18 @@
 - ensure back works right (public to private and back)
 - fix tests
 + email verification flow (just after verifying, are we going to new login with verification success message)
-- create account (move to private - client site) 
 - Refactor ifHasAccess Function to be handled by router + initSequence 
 - Refactor maintenance mode to be handled by router + initSequence. No other sequence needs to branch because of it.
 - invalidate old refreshToken and idToken upon refresh.
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
 - We need to handle temporary password changes on login screen. This happens when cognito forces a password update.
+- disable cognito emails.
+- resend confirmation code.
 
 
 
 ::: SOLO TO DO :::
-
+- create account (move to private - client site) 
 
 ::: ON HOLD :::
 - In refreshAuthTokenInteractor we are returning the idToken. Should this be an accessToken? Are all of our requests being authed with an idToken?
