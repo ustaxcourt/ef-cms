@@ -65,7 +65,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judgeIds: ['Colvin ID'],
         },
       ),
     ).rejects.toThrow(UnauthorizedError);
@@ -112,15 +112,21 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         },
       ],
       docketNumber: DOCKET_NUMBER,
+      docketNumberWithSuffix: 'docketNumberWithSuffix',
     };
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judgeIds: ['Colvin ID'],
         },
       );
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeIds,
+    ).toEqual(['Colvin ID']);
 
     expect(results.docketEntries.length).toEqual(1);
 
@@ -136,6 +142,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         statusOfMatter: 'SOME STATUS OF MATTER',
       },
       docketNumber: DOCKET_NUMBER,
+      docketNumberWithSuffix: 'docketNumberWithSuffix',
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
@@ -234,7 +241,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judgeIds: ['Colvin ID'],
         },
       );
 
