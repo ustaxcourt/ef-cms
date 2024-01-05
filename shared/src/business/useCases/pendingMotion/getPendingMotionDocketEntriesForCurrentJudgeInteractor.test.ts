@@ -65,7 +65,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judges: ['Colvin'],
         },
       ),
     ).rejects.toThrow(UnauthorizedError);
@@ -119,9 +119,14 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judges: ['Colvin'],
         },
       );
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judges,
+    ).toEqual(['Colvin']);
 
     expect(results.docketEntries.length).toEqual(1);
 
@@ -236,7 +241,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judges: ['Colvin'],
         },
       );
 
