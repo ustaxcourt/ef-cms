@@ -125,7 +125,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judges,
+        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeIds,
     ).toEqual(['Colvin ID']);
 
     expect(results.docketEntries.length).toEqual(1);
