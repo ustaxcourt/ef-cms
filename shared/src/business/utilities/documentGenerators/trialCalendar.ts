@@ -32,7 +32,6 @@ export type TrialCalendarType = {
     notes?: string;
     irsCalendarAdministrator: string;
     irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
-    noLocationEntered?: boolean;
     trialLocation?: string;
     proceedingType: string;
     meetingId?: string;

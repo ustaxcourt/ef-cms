@@ -66,11 +66,6 @@ export const generateTrialCalendarPdfInteractor = async (
         joinPhoneNumber: trialSession.joinPhoneNumber,
         judge: trialSession.judge?.name || 'Not assigned',
         meetingId: trialSession.meetingId,
-        noLocationEntered:
-          !trialSession.courthouseName &&
-          !trialSession.address1 &&
-          !trialSession.address2 &&
-          !formattedCityStateZip,
         notes: trialSession.notes,
         password: trialSession.password,
         proceedingType: trialSession.proceedingType,
