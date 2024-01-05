@@ -6,6 +6,11 @@ export const efcmsWorkItemMappings = {
       type: 'keyword',
     },
     'associatedJudge.S': {
+      fields: {
+        raw: {
+          type: 'keyword',
+        },
+      },
       type: 'text',
     },
     case_relations: {

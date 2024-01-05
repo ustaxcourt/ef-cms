@@ -40,20 +40,39 @@ export const getCasesForUserInteractor = async (
     })
   ).map(c => c.docketNumber);
 
-  const allUserCases: TAssociatedCase[] = Case.validateRawCollection(
+  const start = new Date().getTime();
+
+  applicationContext.logger.info('done getting docket numbers for user', {
+    elapsed: new Date().getTime() - start,
+  });
+
+  const allUserCasesFirst: TAssociatedCase[] = Case.validateRawCollection(
     await applicationContext.getPersistenceGateway().getCasesByDocketNumbers({
       applicationContext,
       docketNumbers,
     }),
     { applicationContext },
-  ).map(c => {
+  );
+  applicationContext.logger.info('done getting user cases', {
+    elapsed: new Date().getTime() - start,
+  });
+
+  const allUserCases: TAssociatedCase[] = allUserCasesFirst.map(c => {
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
+  });
+
+  applicationContext.logger.info('done processing user cases', {
+    elapsed: new Date().getTime() - start,
   });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
     cases: allUserCases,
     userId,
+  });
+
+  applicationContext.logger.info('done getting nestedCases', {
+    elapsed: new Date().getTime() - start,
   });
 
   const openCases = nestedCases.filter(nestedCase => {
@@ -70,6 +89,10 @@ export const getCasesForUserInteractor = async (
 
   const sortedOpenCases = sortCases(openCases, 'open');
   const sortedClosedCases = sortCases(closedCases, 'closed');
+
+  applicationContext.logger.info('done processing', {
+    elapsed: new Date().getTime() - start,
+  });
 
   return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
 };
