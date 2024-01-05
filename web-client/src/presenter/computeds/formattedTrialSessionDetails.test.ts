@@ -55,13 +55,26 @@ describe('formattedTrialSessionDetails', () => {
       );
   });
 
-  it('returns undefined if state.trialSession is undefined', () => {
-    mockTrialSession = undefined;
+  it('returns a default state of compute items if there is no trialSession info', () => {
+    applicationContext
+      .getUtilities()
+      .getFormattedTrialSessionDetails.mockReturnValue(undefined);
 
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {},
     });
-    expect(result).toBeUndefined();
+    expect(result).toEqual({
+      alertMessageForNOTT: undefined,
+      canClose: false,
+      canDelete: false,
+      canEdit: false,
+      chambersPhoneNumber: undefined,
+      disableHybridFilter: false,
+      isHybridSession: false,
+      showAlertForNOTTReminder: false,
+      showOnlyClosedCases: false,
+      showOpenCases: false,
+    });
   });
 
   it('should return false for isHybridSession when sessionType is set to Regular', () => {
@@ -149,16 +162,16 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ disableHybridFilter: true });
   });
 
-  it('should NOT set canDelete, canEdit, or can canClose when the trial session does NOT have a start date', () => {
+  it('should NOT set canDelete, canEdit, or can canClose to true when the trial session does NOT have a start date', () => {
     mockTrialSession = omit(mockTrialSession, 'startDate');
 
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {},
     });
 
-    expect(result.canEdit).toBeUndefined();
-    expect(result.canDelete).toBeUndefined();
-    expect(result.canClose).toBeUndefined();
+    expect(result.canEdit).toBeFalsy();
+    expect(result.canDelete).toBeFalsy();
+    expect(result.canClose).toBeFalsy();
   });
 
   describe('canDelete', () => {
@@ -326,7 +339,7 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   describe('canClose', () => {
-    it('should be true if the session has no open cases, is standalone remote, and the trial date is in the past', () => {
+    it('should set canClose to true if the session has no open cases, is standalone remote, and the trial date is in the past', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         caseOrder: [{ removedFromTrial: true }],
@@ -343,7 +356,7 @@ describe('formattedTrialSessionDetails', () => {
       expect(result.canClose).toBe(true);
     });
 
-    it('should not set canClose if the trial date is in the future', () => {
+    it('should not set canClose to true if the trial date is in the future', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         caseOrder: [{ removedFromTrial: true }],
@@ -357,10 +370,10 @@ describe('formattedTrialSessionDetails', () => {
         },
       });
 
-      expect(result.canClose).toBeUndefined();
+      expect(result.canClose).toBe(false);
     });
 
-    it('should not set canClose if the session has open cases', () => {
+    it('should not set canClose to true if the session has open cases', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         caseOrder: [{ removedFromTrial: false }],
@@ -373,10 +386,10 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {},
         },
       });
-      expect(result.canClose).toBeUndefined();
+      expect(result.canClose).toBe(false);
     });
 
-    it('should not set canClose if the session is not standalone remote', () => {
+    it('should not set canClose to true if the session is not standalone remote', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
         caseOrder: [],
@@ -390,7 +403,7 @@ describe('formattedTrialSessionDetails', () => {
         },
       });
 
-      expect(result.canClose).toBeUndefined();
+      expect(result.canClose).toBe(false);
     });
   });
 

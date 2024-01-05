@@ -1,33 +1,37 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { FormattedTrialSessionType } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-// TODO: type formatted trial sessions and refactor input and output of formattedTrialsession
 export const formattedTrialSessionDetails = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): FormattedTrialSessionType & {
-  canClose: boolean;
-  showOnlyClosedCases: boolean;
-  showAlertForNOTTReminder: boolean;
-  showOpenCases: boolean;
-  alertMessageForNOTT?: string;
-  chambersPhoneNumber?: string;
-  isHybridSession: boolean;
-  disableHybridFilter: boolean;
-  canDelete: boolean;
-  canEdit: boolean;
-} => {
-  const formattedTrialSession = applicationContext
-    .getUtilities()
-    .getFormattedTrialSessionDetails({
-      applicationContext,
-      trialSession: get(state.trialSession),
-    });
-
+):
+  | {
+      alertMessageForNOTT?: string;
+      canClose: boolean;
+      canDelete: boolean;
+      canEdit: boolean;
+      chambersPhoneNumber?: string;
+      disableHybridFilter: boolean;
+      isHybridSession: boolean;
+      showAlertForNOTTReminder: boolean;
+      showOnlyClosedCases: boolean;
+      showOpenCases: boolean;
+    }
+  | (TrialSessionState & {
+      alertMessageForNOTT?: string;
+      canClose: boolean;
+      canDelete: boolean;
+      canEdit: boolean;
+      chambersPhoneNumber?: string;
+      disableHybridFilter: boolean;
+      isHybridSession: boolean;
+      showAlertForNOTTReminder: boolean;
+      showOnlyClosedCases: boolean;
+      showOpenCases: boolean;
+    }) => {
   let canClose = false;
   let showOpenCases = false;
   let showOnlyClosedCases = false;
@@ -37,8 +41,15 @@ export const formattedTrialSessionDetails = (
   let canDelete = false;
   let canEdit = false;
 
-  let alertMessageForNOTT: undefined | string;
+  let alertMessageForNOTT: string | undefined;
   let chambersPhoneNumber: string | undefined;
+
+  const formattedTrialSession = applicationContext
+    .getUtilities()
+    .getFormattedTrialSessionDetails({
+      applicationContext,
+      trialSession: get(state.trialSession),
+    });
 
   if (formattedTrialSession) {
     const {
@@ -113,10 +124,23 @@ export const formattedTrialSessionDetails = (
         canClose = true;
       }
     }
+
+    return {
+      ...formattedTrialSession,
+      alertMessageForNOTT,
+      canClose,
+      canDelete,
+      canEdit,
+      chambersPhoneNumber,
+      disableHybridFilter,
+      isHybridSession,
+      showAlertForNOTTReminder,
+      showOnlyClosedCases,
+      showOpenCases,
+    };
   }
 
   return {
-    ...formattedTrialSession,
     alertMessageForNOTT,
     canClose,
     canDelete,
