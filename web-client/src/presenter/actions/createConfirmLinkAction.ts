@@ -3,13 +3,12 @@ import qs from 'qs';
 export const createConfirmLinkAction = ({ props }: ActionProps) => {
   if (!process.env.IS_LOCAL) return;
 
-  const { email } = props;
+  const { userId, confirmationCode, email } = props;
 
   // confirmation code is currently intentionally hard-coded in cognitoLocal
   // ^^ it is not, have to set process.env.CODE
-  const confirmationCode = 'COGNITO_LOCAL_CONFIRMATION_CODE';
   const queryString = qs.stringify(
-    { confirmationCode, email },
+    { confirmationCode, userId },
     { encode: false },
   );
 

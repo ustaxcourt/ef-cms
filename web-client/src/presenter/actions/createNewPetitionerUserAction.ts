@@ -6,6 +6,7 @@ export const createNewPetitionerUserAction = async ({
   get,
   path,
 }: ActionProps) => {
+  // TODO 10007: Do we need to be parsing results like this? Should we be looking directly at the cognito results?
   if (!new NewPetitionerUser(get(state.form)).isValid()) {
     throw new Error('Received invalid petitioner information');
   }
@@ -23,9 +24,6 @@ export const createNewPetitionerUserAction = async ({
     .signUpUserInteractor(applicationContext, {
       user: petitionerAccountForm,
     })
-    .then(authenticationResults =>
-      responseHandler(authenticationResults, petitionerAccountForm.email),
-    )
     .catch(e => errorHandler(e, cognitoRequestPasswordResetUrl));
 
   if (response.alertError) {
@@ -58,24 +56,6 @@ const errorHandler = (e, cognitoRequestPasswordResetUrl) => {
     alertError: {
       message:
         'Could not create user account, please contact DAWSON user support',
-      title: 'Error creating account',
-    },
-  };
-};
-
-const responseHandler = (
-  authenticationResults,
-  email,
-): { alertError?: object; email?: string } => {
-  if (Object.keys(authenticationResults).includes('UserConfirmed')) {
-    return {
-      email,
-    };
-  }
-  return {
-    alertError: {
-      message:
-        'Could not parse authentication results, please contact DAWSON user support',
       title: 'Error creating account',
     },
   };
