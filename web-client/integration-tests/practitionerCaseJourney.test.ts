@@ -11,6 +11,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { docketClerkEditsServiceIndicatorToNoneForPetitioner } from './journey/docketClerkEditsServiceIndicatorToNoneForPetitioner';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { irsPractitionerViewsPetitionerInfoForUnassociatedCase } from './journey/irsPractitionerViewsPetitionerInfoForUnassociatedCase';
@@ -20,6 +21,7 @@ import { petitionerSearchesForUnassociatedSealedCase } from './journey/petitione
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkSignsOrder } from './journey/petitionsClerkSignsOrder';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
@@ -84,6 +86,12 @@ describe('Practitioner requests access to case', () => {
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkEditsServiceIndicatorToNoneForPetitioner(cerebralTest);
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerSearchesForNonexistentCase(cerebralTest);
