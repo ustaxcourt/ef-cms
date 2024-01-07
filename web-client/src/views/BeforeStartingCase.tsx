@@ -161,9 +161,7 @@ export const BeforeStartingCase = connect(
                     <Button
                       link
                       className="usa-link--external text-left mobile-text-wrap"
-                      href="https://ustaxcourt.gov/resources/dawson/merge_files.pdf"
-                      icon="file-pdf"
-                      iconColor="blue"
+                      href="https://ustaxcourt.gov/merging_files.html"
                       overrideMargin="margin-right-1 margin-left-1"
                       rel="noopener noreferrer"
                       target="_blank"
