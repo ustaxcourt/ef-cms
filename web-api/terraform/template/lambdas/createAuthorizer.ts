@@ -69,17 +69,6 @@ export const createAuthorizer =
   getToken => async (event: APIGatewayRequestAuthorizerEvent, context) => {
     const logger = getLogger(context);
 
-    const unauthorizedPathAllowlist = [
-      '/maintenance-mode',
-      '/auth/login',
-      '/feature-flag',
-      '/confirm-signup',
-    ];
-
-    if (unauthorizedPathAllowlist.includes(event.path)) {
-      return createAllowPolicy(event, 'unauthenticated');
-    }
-
     let token;
     try {
       token = getToken(event);
