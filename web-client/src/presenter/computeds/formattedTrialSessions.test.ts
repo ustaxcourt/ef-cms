@@ -100,6 +100,20 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
+        isCalendared: false,
+        judge: { name: '88', userId: '88' },
+        noticeIssuedDate: '2020-07-26T15:00:00.000Z',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionStatus: 'New',
+        sessionType: SESSION_TYPES.regular,
+        startDate: '2020-11-26T15:00:00.000Z',
+        swingSession: true,
+        term: 'Winter',
+        trialLocation: 'Jacksonville, FL',
+        trialSessionId: '8',
+      },
+      {
+        caseOrder: [],
         isCalendared: true,
         judge: { name: '4', userId: '4' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -167,7 +181,7 @@ describe('formattedTrialSessions', () => {
     });
 
     expect(result.filteredTrialSessions).toBeDefined();
-    expect(result.formattedSessions.length).toBe(2);
+    expect(result.formattedSessions.length).toBe(3);
     expect(result.formattedSessions[0].dateFormatted).toEqual(
       'November 25, 2019',
     );
@@ -205,7 +219,7 @@ describe('formattedTrialSessions', () => {
     const flattenedSessions = result.formattedSessions.flatMap(
       week => week.sessions,
     );
-    expect(flattenedSessions.length).toBe(3);
+    expect(flattenedSessions.length).toBe(4);
   });
 
   it('returns all trial sessions if judge userId trial session filter is an empty string', () => {
@@ -217,7 +231,7 @@ describe('formattedTrialSessions', () => {
         user: testJudgeUser,
       },
     });
-    expect(result.formattedSessions.length).toBe(2);
+    expect(result.formattedSessions.length).toBe(3);
   });
 
   it('does NOT return the unassigned judge filter on trial sessions tabs other than "new"', () => {
@@ -237,7 +251,7 @@ describe('formattedTrialSessions', () => {
       },
     });
 
-    expect(result.formattedSessions.length).toBe(2);
+    expect(result.formattedSessions.length).toBe(3);
   });
 
   it('shows swing session option only if matching term and term year is found', () => {
@@ -281,7 +295,7 @@ describe('formattedTrialSessions', () => {
     expect(result.showSwingSessionOption).toBeFalsy();
   });
 
-  it('returns sessionsByTerm with only sessions in that term if form.term is set', () => {
+  it('returns sessionsByTerm with only sessions in that term sorted chronologically if form.term is set', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
@@ -304,7 +318,7 @@ describe('formattedTrialSessions', () => {
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
         proceedingType: 'In Person',
         sessionStatus: 'New',
-        sessionType: SESSION_TYPES.regular,
+        sessionType: 'Regular',
         showAlertForNOTTReminder: undefined,
         startDate: '2019-11-27T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
@@ -318,13 +332,35 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         formattedEstimatedEndDate: '',
+        formattedNoticeIssuedDate: '07/26/2020',
+        formattedStartDate: '11/26/20',
+        isCalendared: false,
+        judge: { name: '88', userId: '88' },
+        noticeIssuedDate: '2020-07-26T15:00:00.000Z',
+        proceedingType: 'In Person',
+        sessionStatus: 'New',
+        sessionType: 'Regular',
+        showAlertForNOTTReminder: undefined,
+        startDate: '2020-11-26T15:00:00.000Z',
+        startOfWeek: 'November 23, 2020',
+        startOfWeekSortable: '20201123',
+        swingSession: true,
+        term: 'Winter',
+        trialLocation: 'Jacksonville, FL',
+        trialSessionId: '8',
+        userIsAssignedToSession: false,
+      },
+      {
+        caseOrder: [],
+        formattedEstimatedEndDate: '',
         formattedNoticeIssuedDate: '',
         formattedStartDate: '11/25/19',
         isCalendared: false,
         judge: { name: '2', userId: '2' },
         proceedingType: 'Remote',
         sessionStatus: 'New',
-        sessionType: SESSION_TYPES.small,
+        sessionType: 'Small',
+        showAlertForNOTTReminder: undefined,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -383,44 +419,44 @@ describe('formattedTrialSessions', () => {
         user: { role: ROLES.petitionsClerk, userId: '1' },
       },
     });
-    expect(result.formattedSessions).toMatchObject([
-      {
-        dateFormatted: 'November 25, 2019',
-        sessions: [
-          {
-            judge: { name: '5', userId: '5' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: '1', userId: '1' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: '2', userId: '2' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: '3', userId: '3' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: '4', userId: '4' },
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-      {
-        dateFormatted: getStartOfWeek(
-          result.formattedSessions[1].sessions[0].startDate,
-        ),
-        sessions: [
-          {
-            judge: { name: '6', userId: '6' },
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-    ]);
+
+    expect(result.formattedSessions[0]).toMatchObject({
+      dateFormatted: 'November 25, 2019',
+      sessions: [
+        {
+          judge: { name: '5', userId: '5' },
+          userIsAssignedToSession: false,
+        },
+        {
+          judge: { name: '1', userId: '1' },
+          userIsAssignedToSession: false,
+        },
+        {
+          judge: { name: '2', userId: '2' },
+          userIsAssignedToSession: false,
+        },
+        {
+          judge: { name: '3', userId: '3' },
+          userIsAssignedToSession: false,
+        },
+        {
+          judge: { name: '4', userId: '4' },
+          userIsAssignedToSession: false,
+        },
+      ],
+    });
+
+    expect(result.formattedSessions[1]).toMatchObject({
+      dateFormatted: getStartOfWeek(
+        result.formattedSessions[1].sessions[0].startDate,
+      ),
+      sessions: [
+        {
+          judge: { name: '88', userId: '88' },
+          userIsAssignedToSession: false,
+        },
+      ],
+    });
   });
 
   it('sets userIsAssignedToSession true for sessions the judge user is assigned to', () => {
@@ -463,7 +499,32 @@ describe('formattedTrialSessions', () => {
         ),
         sessions: [
           {
+            judge: { name: '88', userId: '88' },
+            userIsAssignedToSession: false,
+          },
+        ],
+      },
+      {
+        dateFormatted: 'February 17, 2025',
+        sessions: [
+          {
+            caseOrder: [],
+            estimatedEndDate: '2045-02-17T15:00:00.000Z',
+            formattedEstimatedEndDate: '02/17/45',
+            formattedNoticeIssuedDate: '',
+            formattedStartDate: '02/17/25',
+            isCalendared: true,
             judge: { name: '6', userId: '6' },
+            proceedingType: 'In Person',
+            sessionStatus: 'Open',
+            sessionType: 'Regular',
+            showAlertForNOTTReminder: undefined,
+            startDate: '2025-02-17T15:00:00.000Z',
+            startOfWeek: 'February 17, 2025',
+            startOfWeekSortable: '20250217',
+            swingSession: false,
+            term: 'Spring',
+            trialLocation: 'Jacksonville, FL',
             userIsAssignedToSession: false,
           },
         ],
@@ -481,44 +542,44 @@ describe('formattedTrialSessions', () => {
         trialSessions: TRIAL_SESSIONS_LIST,
       },
     });
-    expect(result.formattedSessions).toMatchObject([
-      {
-        dateFormatted: 'November 25, 2019',
-        sessions: [
-          {
-            judge: { name: '5', userId: '5' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: '1', userId: '1' },
-            userIsAssignedToSession: false,
-          },
-          {
-            trialClerk: { name: '10', userId: '10' },
-            userIsAssignedToSession: true,
-          },
-          {
-            judge: { name: '3', userId: '3' },
-            userIsAssignedToSession: false,
-          },
-          {
-            judge: { name: '4', userId: '4' },
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-      {
-        dateFormatted: getStartOfWeek(
-          result.formattedSessions[1].sessions[0].startDate,
-        ),
-        sessions: [
-          {
-            judge: { name: '6', userId: '6' },
-            userIsAssignedToSession: false,
-          },
-        ],
-      },
-    ]);
+
+    expect(result.formattedSessions[0]).toMatchObject({
+      dateFormatted: 'November 25, 2019',
+      sessions: [
+        {
+          judge: { name: '5', userId: '5' },
+          userIsAssignedToSession: false,
+        },
+        {
+          judge: { name: '1', userId: '1' },
+          userIsAssignedToSession: false,
+        },
+        {
+          trialClerk: { name: '10', userId: '10' },
+          userIsAssignedToSession: true,
+        },
+        {
+          judge: { name: '3', userId: '3' },
+          userIsAssignedToSession: false,
+        },
+        {
+          judge: { name: '4', userId: '4' },
+          userIsAssignedToSession: false,
+        },
+      ],
+    });
+
+    expect(result.formattedSessions[1]).toMatchObject({
+      dateFormatted: getStartOfWeek(
+        result.formattedSessions[1].sessions[0].startDate,
+      ),
+      sessions: [
+        {
+          judge: { name: '88', userId: '88' },
+          userIsAssignedToSession: false,
+        },
+      ],
+    });
   });
 
   it('sets userIsAssignedToSession false if the current user and session have no associated judge', () => {
