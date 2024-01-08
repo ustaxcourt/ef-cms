@@ -163,7 +163,7 @@ resource "aws_api_gateway_integration" "api_integration_maintenance_mode" {
   resource_id = aws_api_gateway_method.api_maintenance_mode_resource.resource_id
   http_method = aws_api_gateway_method.api_maintenance_mode_method_any.http_method
 
-  integration_http_method = "ANY"
+  integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
