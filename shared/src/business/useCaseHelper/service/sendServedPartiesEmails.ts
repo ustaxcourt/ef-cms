@@ -11,9 +11,6 @@ export const sendServedPartiesEmails = async ({
   docketEntryId,
   servedParties,
   skipEmailToIrs = false,
-}: {
-  servedParties: { email: string; name: string }[];
-  [key: string]: any;
 }) => {
   const { caseCaption, docketNumber, docketNumberWithSuffix } = caseEntity;
   const partiesToServe = cloneDeep(servedParties);
@@ -38,13 +35,13 @@ export const sendServedPartiesEmails = async ({
     .formatNow('MONTH_DAY_YEAR');
 
   if (!skipEmailToIrs && caseEntity.status !== CASE_STATUS_TYPES.new) {
-    partiesToServe.push({
+    partiesToServe.electronic.push({
       email: applicationContext.getIrsSuperuserEmail(),
       name: 'IRS',
     });
   }
 
-  const destinations = partiesToServe.map(party => ({
+  const destinations = partiesToServe.electronic.map(party => ({
     email: party.email,
     templateData: {
       emailContent: ReactDOM.renderToString(

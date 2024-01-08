@@ -313,12 +313,6 @@ export class DocketEntry extends JoiValidationEntity {
     return this;
   }
 
-  getElectronicParties() {
-    return this.servedParties?.filter(
-      p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    );
-  }
-
   /**
    * Determines if the deadline should be auto-generated for the docket entry
    * @returns {Boolean} true or false if the deadline should be auto-generated
