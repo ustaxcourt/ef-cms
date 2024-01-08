@@ -139,7 +139,7 @@ export const CaseDeadlines = connect(
                   <tbody>
                     {caseDeadlineReportHelper.caseDeadlines.map(item => (
                       <tr key={item.caseDeadlineId}>
-                        <td className="smaller-column semi-bold">
+                        <td className="smaller-column">
                           {item.formattedDeadline}
                         </td>
                         <td className="consolidated-case-column">
