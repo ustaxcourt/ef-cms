@@ -293,6 +293,18 @@ export class DocketEntry extends JoiValidationEntity {
     this.servedAt = createISODateString();
     this.draftOrderState = undefined;
 
+    if (this.eventCode === 'ATP') {
+      const irsSuperUserParty = [
+        {
+          name: 'IRS',
+          role: ROLES.irsSuperuser,
+        },
+      ];
+      this.servedParties = irsSuperUserParty;
+      this.servedPartiesCode = getServedPartiesCode(irsSuperUserParty);
+      return this;
+    }
+
     if (servedParties) {
       this.servedParties = servedParties;
       this.servedPartiesCode = getServedPartiesCode(servedParties);
@@ -569,13 +581,16 @@ export class DocketEntry extends JoiValidationEntity {
  */
 export const getServedPartiesCode = (servedParties?: any[]) => {
   let servedPartiesCode: string | undefined = undefined;
+  console.log('servedParties', servedParties);
   if (servedParties && servedParties.length > 0) {
     if (
       servedParties.length === 1 &&
       servedParties[0].role === ROLES.irsSuperuser
     ) {
+      console.log('R');
       servedPartiesCode = PARTIES_CODES.RESPONDENT;
     } else {
+      console.log('BOTH');
       servedPartiesCode = PARTIES_CODES.BOTH;
     }
   }
