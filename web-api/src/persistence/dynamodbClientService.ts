@@ -363,26 +363,20 @@ export const batchGet = async ({
   });
   const chunks = chunk(uniqueKeys, 100);
 
-  const promises: Promise<BatchGetResponseMap>[] = [];
-
-  for (let chunkOfKeys of chunks) {
-    promises.push(
-      applicationContext.getDocumentClient(applicationContext).batchGet({
-        RequestItems: {
-          [getTableName({ applicationContext })]: {
-            Keys: chunkOfKeys,
-          },
+  const promises: Promise<BatchGetResponseMap>[] = chunks.map(chunkOfKeys =>
+    applicationContext.getDocumentClient(applicationContext).batchGet({
+      RequestItems: {
+        [getTableName({ applicationContext })]: {
+          Keys: chunkOfKeys,
         },
-      }),
-    );
-  }
+      },
+    }),
+  );
 
-  const results = (await Promise.all(promises)).map(result => {
-    const items = result.Responses[getTableName({ applicationContext })];
-    items.forEach(item => removeAWSGlobalFields(item));
-    return items;
-  });
-
+  const tableName = getTableName({ applicationContext });
+  const results = (await Promise.all(promises)).map(result =>
+    result.Responses[tableName].map(removeAWSGlobalFields),
+  );
   return flatten(results);
 };
 
