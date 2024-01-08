@@ -151,7 +151,7 @@ export const CaseDeadlines = connect(
                             showLeadCaseIcon={item.inLeadCase}
                           />
                         </td>
-                        <td className="smaller-column semi-bold">
+                        <td className="smaller-column">
                           <CaseLink formattedCase={item} />
                         </td>
                         <td>{item.caseTitle}</td>
