@@ -101,6 +101,20 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         isCalendared: false,
+        judge: { name: '55', userId: '55' },
+        noticeIssuedDate: '2019-07-25T15:00:00.000Z',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionStatus: 'New',
+        sessionType: SESSION_TYPES.regular,
+        startDate: '2019-10-27T15:00:00.000Z',
+        swingSession: true,
+        term: 'Winter',
+        trialLocation: 'Jacksonville, FL',
+        trialSessionId: '5',
+      },
+      {
+        caseOrder: [],
+        isCalendared: false,
         judge: { name: '88', userId: '88' },
         noticeIssuedDate: '2020-07-26T15:00:00.000Z',
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -181,7 +195,7 @@ describe('formattedTrialSessions', () => {
     });
 
     expect(result.filteredTrialSessions).toBeDefined();
-    expect(result.formattedSessions.length).toBe(3);
+    expect(result.formattedSessions.length).toBe(4);
     expect(result.formattedSessions[0].dateFormatted).toEqual(
       'November 25, 2019',
     );
@@ -219,7 +233,7 @@ describe('formattedTrialSessions', () => {
     const flattenedSessions = result.formattedSessions.flatMap(
       week => week.sessions,
     );
-    expect(flattenedSessions.length).toBe(4);
+    expect(flattenedSessions.length).toBe(5);
   });
 
   it('returns all trial sessions if judge userId trial session filter is an empty string', () => {
@@ -231,7 +245,7 @@ describe('formattedTrialSessions', () => {
         user: testJudgeUser,
       },
     });
-    expect(result.formattedSessions.length).toBe(3);
+    expect(result.formattedSessions.length).toBe(4);
   });
 
   it('does NOT return the unassigned judge filter on trial sessions tabs other than "new"', () => {
@@ -251,7 +265,7 @@ describe('formattedTrialSessions', () => {
       },
     });
 
-    expect(result.formattedSessions.length).toBe(3);
+    expect(result.formattedSessions.length).toBe(4);
   });
 
   it('shows swing session option only if matching term and term year is found', () => {
@@ -308,6 +322,27 @@ describe('formattedTrialSessions', () => {
     });
 
     expect(result.sessionsByTerm).toEqual([
+      {
+        caseOrder: [],
+        formattedEstimatedEndDate: '',
+        formattedNoticeIssuedDate: '07/25/2019',
+        formattedStartDate: '10/27/19',
+        isCalendared: false,
+        judge: { name: '55', userId: '55' },
+        noticeIssuedDate: '2019-07-25T15:00:00.000Z',
+        proceedingType: 'In Person',
+        sessionStatus: 'New',
+        sessionType: SESSION_TYPES.regular,
+        showAlertForNOTTReminder: undefined,
+        startDate: '2019-10-27T15:00:00.000Z',
+        startOfWeek: 'October 21, 2019',
+        startOfWeekSortable: '20191021',
+        swingSession: true,
+        term: 'Winter',
+        trialLocation: 'Jacksonville, FL',
+        trialSessionId: '5',
+        userIsAssignedToSession: false,
+      },
       {
         caseOrder: [],
         formattedEstimatedEndDate: '',
@@ -452,7 +487,7 @@ describe('formattedTrialSessions', () => {
       ),
       sessions: [
         {
-          judge: { name: '88', userId: '88' },
+          judge: { name: '55', userId: '55' },
           userIsAssignedToSession: false,
         },
       ],
@@ -497,6 +532,15 @@ describe('formattedTrialSessions', () => {
         dateFormatted: getStartOfWeek(
           result.formattedSessions[1].sessions[0].startDate,
         ),
+        sessions: [
+          {
+            judge: { name: '55', userId: '55' },
+            userIsAssignedToSession: false,
+          },
+        ],
+      },
+      {
+        dateFormatted: 'November 23, 2020',
         sessions: [
           {
             judge: { name: '88', userId: '88' },
@@ -575,7 +619,7 @@ describe('formattedTrialSessions', () => {
       ),
       sessions: [
         {
-          judge: { name: '88', userId: '88' },
+          judge: { name: '55', userId: '55' },
           userIsAssignedToSession: false,
         },
       ],
