@@ -301,7 +301,7 @@ export class DocketEntry extends JoiValidationEntity {
         },
       ];
       this.servedParties = irsSuperUserParty;
-      this.servedPartiesCode = getServedPartiesCode(irsSuperUserParty);
+      this.servedPartiesCode = PARTIES_CODES.RESPONDENT;
       return this;
     }
 
@@ -581,16 +581,13 @@ export class DocketEntry extends JoiValidationEntity {
  */
 export const getServedPartiesCode = (servedParties?: any[]) => {
   let servedPartiesCode: string | undefined = undefined;
-  console.log('servedParties', servedParties);
   if (servedParties && servedParties.length > 0) {
     if (
       servedParties.length === 1 &&
       servedParties[0].role === ROLES.irsSuperuser
     ) {
-      console.log('R');
       servedPartiesCode = PARTIES_CODES.RESPONDENT;
     } else {
-      console.log('BOTH');
       servedPartiesCode = PARTIES_CODES.BOTH;
     }
   }
