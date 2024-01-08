@@ -46,8 +46,7 @@ export const Correspondence = connect(
               <div className="border border-base-lighter document-viewer--documents document-viewer--documents-list-container">
                 <div className="grid-row padding-left-205 grid-header">
                   <div className="grid-col-3">Date</div>
-                  <div className="grid-col-5">Correspondence Description</div>
-                  <div className="grid-col-2"></div>
+                  <div className="grid-col-7">Correspondence Description</div>
                 </div>
                 <div className="document-viewer--documents-list">
                   {formattedCaseDetail.correspondence.map(correspondence => {
@@ -70,28 +69,12 @@ export const Correspondence = connect(
                         }}
                       >
                         <div className="grid-row margin-left-205">
-                          <div className="grid-col-2 text-align-center">
+                          <div className="grid-col-3 text-align-left">
                             {correspondence.formattedFilingDate}
                           </div>
-                          <div
-                            className={classNames(
-                              'grid-col-3',
-                              correspondence.isStricken &&
-                                'stricken-docket-record',
-                            )}
-                          >
-                            {correspondence.createdAtFormatted}
-                          </div>
-                          <div className="grid-col-5">
+                          <div className="grid-col-7">
                             {correspondence.documentTitle}
                             {correspondence.isStricken && ' (STRICKEN)'}
-                          </div>
-                          <div className="grid-col-2 padding-left-105">
-                            {correspondence.showNotServed && (
-                              <span className="text-semibold not-served">
-                                Not served
-                              </span>
-                            )}
                           </div>
                         </div>
                       </Button>
