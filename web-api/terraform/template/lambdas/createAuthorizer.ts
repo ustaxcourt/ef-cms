@@ -70,10 +70,10 @@ export const createAuthorizer =
     const logger = getLogger(context);
 
     const unauthorizedPathAllowlist = [
-      'maintenance-mode',
-      'auth/login',
-      'feature-flag',
-      'confirm-signup',
+      '/maintenance-mode',
+      '/auth/login',
+      '/feature-flag',
+      '/confirm-signup',
     ];
 
     if (unauthorizedPathAllowlist.includes(event.path)) {
