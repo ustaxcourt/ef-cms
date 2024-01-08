@@ -11,7 +11,7 @@ import { get } from '../requests';
 export const getAllFeatureFlagsInteractor = applicationContext => {
   return get({
     applicationContext,
-    endpoint: '/feature-flag/',
+    endpoint: '/system/feature-flag/',
     params: {},
   });
 };

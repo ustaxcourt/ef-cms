@@ -3,15 +3,12 @@ import { post } from '../requests';
 
 export const confirmSignUpInteractor = (
   applicationContext: ClientApplicationContext,
-  {
-    confirmationCode,
-    userId,
-  }: { confirmationCode: string; userId: string },
+  { confirmationCode, userId }: { confirmationCode: string; userId: string },
 ) => {
   return post({
     applicationContext,
     body: { confirmationCode, userId },
-    endpoint: '/confirm-signup',
+    endpoint: '/auth/confirm-signup',
     options: {
       withCredentials: false,
     },

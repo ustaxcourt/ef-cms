@@ -52,7 +52,6 @@ app.use(logger());
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
-import { confirmSignUpLambda } from '@web-api/lambdas/auth/confirmSignUpLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
@@ -168,5 +167,4 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
     '/account/resend-verification',
     lambdaWrapper(resendVerificationLinkLambda),
   );
-  app.post('/confirm-signup', lambdaWrapper(confirmSignUpLambda));
 }
