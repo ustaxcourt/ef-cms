@@ -1007,17 +1007,11 @@ app.get(
 }
 
 /**
- * maintenance-mode
+ * system
  */
 {
-  app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
-}
-
-/**
- * feature-flag
- */
-{
-  app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+  app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
+  app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 }
 
 /**
@@ -1029,9 +1023,8 @@ app.get(
     .delete(lambdaWrapper(deleteAuthCookieLambda))
     .post(lambdaWrapper(loginLambda));
   app.post('/auth/refresh', lambdaWrapper(renewIdTokenLambda));
+  app.post('/auth/confirm-signup', lambdaWrapper(confirmSignUpLambda));
 }
-
-app.post('/confirm-signup', lambdaWrapper(confirmSignUpLambda));
 
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
