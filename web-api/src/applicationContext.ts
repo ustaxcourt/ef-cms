@@ -318,15 +318,6 @@ export const createApplicationContext = (
             applicationContext,
             emailParams,
           });
-        } else {
-          applicationContext.logger.info(
-            'sending emails using',
-            JSON.stringify(
-              emailParams.Destinations.flatMap(
-                ({ Destination }) => Destination.ToAddresses,
-              ),
-            ),
-          );
         }
       },
       sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
