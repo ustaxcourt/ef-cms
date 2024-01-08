@@ -1,4 +1,3 @@
-/* eslint-disable @miovision/disallow-date/no-new-date */
 import {
   Case,
   isClosed,
@@ -34,8 +33,6 @@ export const getCasesForUserInteractor = async (
 }> => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  const start = new Date().getTime();
-
   const docketNumbers = (
     await applicationContext.getPersistenceGateway().getCasesForUser({
       applicationContext,
@@ -43,48 +40,20 @@ export const getCasesForUserInteractor = async (
     })
   ).map(c => c.docketNumber);
 
-  // 394 ms
-  applicationContext.logger.info('done getting docket numbers for user', {
-    elapsed: new Date().getTime() - start,
-  });
-
-  const allUserCasesStart: any[] = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByDocketNumbers({
+  const allUserCases: TAssociatedCase[] = Case.validateRawCollection(
+    await applicationContext.getPersistenceGateway().getCasesByDocketNumbers({
       applicationContext,
       docketNumbers,
-    });
-
-  applicationContext.logger.info('done getting user cases', {
-    elapsed: new Date().getTime() - start,
-  });
-
-  const validatedCases = Case.validateRawCollection(allUserCasesStart, {
-    applicationContext,
-  });
-
-  applicationContext.logger.info('done validating user cases', {
-    elapsed: new Date().getTime() - start,
-  });
-
-  const allUserCasesEnd: TAssociatedCase[] = validatedCases.map(c => {
+    }),
+    { applicationContext },
+  ).map(c => {
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
-  });
-
-  // 25,329 ms
-  applicationContext.logger.info('done processing user cases', {
-    elapsed: new Date().getTime() - start,
   });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
-    cases: allUserCasesEnd,
+    cases: allUserCases,
     userId,
-  });
-
-  // 26,054 ms
-  applicationContext.logger.info('done getting nestedCases', {
-    elapsed: new Date().getTime() - start,
   });
 
   const openCases = nestedCases.filter(nestedCase => {
@@ -101,11 +70,6 @@ export const getCasesForUserInteractor = async (
 
   const sortedOpenCases = sortCases(openCases, 'open');
   const sortedClosedCases = sortCases(closedCases, 'closed');
-
-  // 26,078 ms
-  applicationContext.logger.info('done processing', {
-    elapsed: new Date().getTime() - start,
-  });
 
   return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
 };
