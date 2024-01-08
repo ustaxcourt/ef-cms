@@ -9,6 +9,7 @@ import {
   PARTIES_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
@@ -310,6 +311,12 @@ export class DocketEntry extends JoiValidationEntity {
       this.servedPartiesCode = getServedPartiesCode(servedParties);
     }
     return this;
+  }
+
+  getElectronicParties() {
+    return this.servedParties?.filter(
+      p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
   }
 
   /**

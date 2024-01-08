@@ -30,12 +30,13 @@ export const serveDocumentAndGetPaperServicePdf = async ({
 
   for (const caseEntity of caseEntities) {
     const servedParties = aggregatePartiesForService(caseEntity);
+    const docketEntry = caseEntity.getDocketEntryById({ docketEntryId }); //aggregatePartiesForService(caseEntity);
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
       docketEntryId,
-      servedParties,
+      servedParties: docketEntry.getElectronicParties(),
     });
 
     if (servedParties.paper.length > 0) {
