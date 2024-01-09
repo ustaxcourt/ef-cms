@@ -154,7 +154,7 @@ resource "aws_api_gateway_resource" "api_system_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
-resource "aws_api_gateway_method" "api_system_method_any" {
+resource "aws_api_gateway_method" "api_system_method_get" {
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id   = aws_api_gateway_resource.api_system_proxy_resource.id
   http_method   = "GET"
@@ -167,7 +167,7 @@ resource "aws_api_gateway_integration" "api_integration_system" {
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_system_proxy_resource.id
-  http_method = aws_api_gateway_method.api_system_method_any.http_method
+  http_method = aws_api_gateway_method.api_system_method_get.http_method
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
