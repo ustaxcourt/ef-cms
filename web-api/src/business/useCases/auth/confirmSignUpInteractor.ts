@@ -3,7 +3,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
   { confirmationCode, userId }: { confirmationCode: string; userId: string },
-) => {
+): Promise<void> => {
   const accountConfirmationRecord = await applicationContext
     .getPersistenceGateway()
     .getAccountConfirmationCode(applicationContext, { userId });
@@ -12,18 +12,20 @@ export const confirmSignUpInteractor = async (
   }
 
   const cognito = applicationContext.getCognito();
-  const foundUsers = await cognito.listUsers({
-    AttributesToGet: ['sub', 'username'],
-    Filter: `sub = "${userId}"`,
-    UserPoolId: process.env.USER_POOL_ID,
-  });
-  const userName = foundUsers?.Users?.[0]?.Username;
-  if (!userName) {
-    throw new Error(`No user found in cognito with given ID: ${userId}`);
-  }
 
   await cognito.adminConfirmSignUp({
-    Username: userName,
     UserPoolId: process.env.USER_POOL_ID,
+    Username: userId,
+  });
+
+  await cognito.adminUpdateUserAttributes({
+    UserAttributes: [
+      {
+        Name: 'email_verified',
+        Value: 'true',
+      },
+    ],
+    UserPoolId: process.env.USER_POOL_ID,
+    Username: userId,
   });
 };
