@@ -10,5 +10,5 @@ export const showSortableHeaders = (
 
   const { USER_ROLES } = applicationContext.getConstants();
 
-  return role === USER_ROLES.adc;
+  return role === USER_ROLES.adc || role === USER_ROLES.docketClerk;
 };
