@@ -67,6 +67,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 9,
     jsx: true,
+    project: ['./tsconfig.json'],
     requireConfigFile: false,
     sourceType: 'module',
   },
@@ -90,6 +91,8 @@ module.exports = {
     '@miovision/disallow-date/no-new-date': 1,
     '@miovision/disallow-date/no-static-date': 0,
     '@miovision/disallow-date/no-to-date': 0,
+    '@typescript-eslint/no-floating-promises': 'error',
+    '@typescript-eslint/no-misused-promises': 'error',
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
