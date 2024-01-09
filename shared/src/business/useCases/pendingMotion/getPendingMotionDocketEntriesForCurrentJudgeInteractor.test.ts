@@ -43,11 +43,25 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(
+      .getCaseMetadataByDocketNumber.mockImplementation(
         ({ docketNumber }: { docketNumber: string }) => {
           return CASE_BY_DOCKET_NUMBER[docketNumber];
         },
       );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getConsolidatedCasesCount.mockResolvedValue(1);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketEntryOnCase.mockResolvedValue({
+        docketEntryId: DOCKET_ENTRY_ID,
+        documentTitle: 'TEST_DOCUMENT_TITLE',
+        eventCode: 'M218',
+        filingDate: '2000-04-29T15:52:05.725Z',
+        pending: true,
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -88,32 +102,18 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
     });
 
     CASE_BY_DOCKET_NUMBER[DOCKET_NUMBER] = {
+      associatedJudge: 'Colvin',
       caseCaption: 'TEST_CASE_CAPTION',
       consolidatedCases: [],
-      docketEntries: [
-        {
-          docketEntryId: '123',
-          eventCode: 'NOT A MOTION EVENT CODE',
-          filingDate: '2000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-        {
-          docketEntryId: DOCKET_ENTRY_ID,
-          documentTitle: 'TEST_DOCUMENT_TITLE',
-          eventCode: 'M218',
-          filingDate: '2000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-        {
-          docketEntryId: '12345767',
-          eventCode: 'M218',
-          filingDate: '3000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-      ],
       docketNumber: DOCKET_NUMBER,
       docketNumberWithSuffix: 'docketNumberWithSuffix',
+      leadDocketNumber: DOCKET_NUMBER,
     };
+
+    const EXPECTED_CONSOLIDATED_CASE = 999;
+    applicationContext
+      .getPersistenceGateway()
+      .getConsolidatedCasesCount.mockResolvedValue(EXPECTED_CONSOLIDATED_CASE);
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
@@ -132,7 +132,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     const expectedDocketEntry: FormattedPendingMotionWithWorksheet = {
       caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedGroupCount: 1,
+      consolidatedGroupCount: EXPECTED_CONSOLIDATED_CASE,
       daysSinceCreated: 8607,
       docketEntryId: '1234-5678-9123-4567-8912',
       docketEntryWorksheet: {
@@ -145,6 +145,8 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       docketNumberWithSuffix: 'docketNumberWithSuffix',
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
+      judge: 'Colvin',
+      leadDocketNumber: DOCKET_NUMBER,
       pending: true,
     };
     expect(results.docketEntries).toEqual([expectedDocketEntry]);
@@ -180,31 +182,19 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       primaryIssue: 'LEAD SOME PRIMARY ISSUE',
       statusOfMatter: 'LEAD SOME STATUS OF MATTER',
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketEntryOnCase.mockResolvedValue({
+        docketEntryId: LEAD_DOCKET_ENTRY_ID,
+        documentTitle: 'TEST_DOCUMENT_TITLE',
+        eventCode: 'M218',
+        filingDate: '2000-04-29T15:52:05.725Z',
+        pending: true,
+      });
 
     CASE_BY_DOCKET_NUMBER[DOCKET_NUMBER] = {
       caseCaption: 'TEST_CASE_CAPTION',
       consolidatedCases: [],
-      docketEntries: [
-        {
-          docketEntryId: '123',
-          eventCode: 'NOT A MOTION EVENT CODE',
-          filingDate: '2000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-        {
-          docketEntryId: LEAD_DOCKET_ENTRY_ID,
-          documentTitle: 'TEST_DOCUMENT_TITLE',
-          eventCode: 'M218',
-          filingDate: '2000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-        {
-          docketEntryId: '12345767',
-          eventCode: 'M218',
-          filingDate: '3000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-      ],
       docketNumber: DOCKET_NUMBER,
       leadDocketNumber: LEAD_DOCKET_NUMBER,
     };
@@ -212,27 +202,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
     CASE_BY_DOCKET_NUMBER[LEAD_DOCKET_NUMBER] = {
       caseCaption: 'TEST_CASE_CAPTION',
       consolidatedCases: [],
-      docketEntries: [
-        {
-          docketEntryId: '123',
-          eventCode: 'NOT A MOTION EVENT CODE',
-          filingDate: '2000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-        {
-          docketEntryId: LEAD_DOCKET_ENTRY_ID,
-          documentTitle: 'TEST_DOCUMENT_TITLE',
-          eventCode: 'M218',
-          filingDate: '2000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-        {
-          docketEntryId: '12345767',
-          eventCode: 'M218',
-          filingDate: '3000-04-29T15:52:05.725Z',
-          pending: true,
-        },
-      ],
       docketNumber: LEAD_DOCKET_NUMBER,
       leadDocketNumber: LEAD_DOCKET_NUMBER,
     };
