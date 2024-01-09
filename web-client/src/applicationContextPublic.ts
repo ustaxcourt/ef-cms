@@ -197,9 +197,9 @@ const applicationContextPublic = {
     };
   },
   getPrivateUrl: () => {
-    return process.env.STAGE
-      ? `https://app.${process.env.EFCMS_DOMAIN}`
-      : 'http://localhost:1234';
+    return process.env.ENV === 'local'
+      ? 'http://localhost:1234'
+      : `https://app.${process.env.EFCMS_DOMAIN}`;
   },
   getPublicSiteUrl,
   getUseCases: () => allUseCases,
