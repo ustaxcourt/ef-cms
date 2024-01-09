@@ -155,17 +155,14 @@ async function getLatestDataForPendingMotions(
   applicationContext: IApplicationContext,
   currentDate: string,
 ): Promise<FormattedPendingMotion> {
-  const fullCase: RawCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
+  const [caseMetadata, latestDocketEntry] = await Promise.all([
+    getCaseMetadata(applicationContext, docketEntry),
+    applicationContext.getPersistenceGateway().getDocketEntryOnCase({
       applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
       docketNumber: docketEntry.docketNumber,
-      includeConsolidatedCases: true,
-    });
-
-  const latestDocketEntry: RawDocketEntry = fullCase.docketEntries.find(
-    de => de.docketEntryId === docketEntry.docketEntryId,
-  );
+    }),
+  ]);
 
   const dayDifference = calculateDifferenceInDays(
     currentDate,
@@ -173,18 +170,44 @@ async function getLatestDataForPendingMotions(
   );
 
   const updatedDocketEntry: FormattedPendingMotion = {
-    caseCaption: fullCase.caseCaption,
-    consolidatedGroupCount: fullCase.consolidatedCases.length || 1,
+    caseCaption: caseMetadata.caseCaption,
+    consolidatedGroupCount: caseMetadata.consolidatedCaseCount,
     daysSinceCreated: dayDifference,
     docketEntryId: latestDocketEntry.docketEntryId,
-    docketNumber: fullCase.docketNumber,
-    docketNumberWithSuffix: fullCase.docketNumberWithSuffix,
+    docketNumber: caseMetadata.docketNumber,
+    docketNumberWithSuffix: caseMetadata.docketNumberWithSuffix,
     eventCode: latestDocketEntry.eventCode,
     filingDate: latestDocketEntry.filingDate,
-    judge: fullCase.associatedJudge,
-    leadDocketNumber: fullCase.leadDocketNumber,
+    judge: caseMetadata.associatedJudge,
+    leadDocketNumber: caseMetadata.leadDocketNumber,
     pending: latestDocketEntry.pending || false,
   };
 
   return updatedDocketEntry;
+}
+
+async function getCaseMetadata(
+  applicationContext: IApplicationContext,
+  docketEntry: RawDocketEntry,
+): Promise<RawCase & { consolidatedCaseCount: number }> {
+  const caseMetadata: RawCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseMetadataByDocketNumber({
+      applicationContext,
+      docketNumber: docketEntry.docketNumber,
+    });
+
+  const consolidatedCaseCount = caseMetadata.leadDocketNumber
+    ? await applicationContext
+        .getPersistenceGateway()
+        .getConsolidatedCasesCount({
+          applicationContext,
+          leadDocketNumber: caseMetadata.leadDocketNumber,
+        })
+    : 1;
+
+  return {
+    ...caseMetadata,
+    consolidatedCaseCount,
+  };
 }
