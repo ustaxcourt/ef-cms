@@ -3,9 +3,7 @@ import { get } from '../requests';
 
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = (
   applicationContext,
-  params: {
-    judges: string[];
-  },
+  params: { judgeIds: string[] },
 ): Promise<{
   docketEntries: FormattedPendingMotionWithWorksheet[];
 }> => {
