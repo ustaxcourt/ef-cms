@@ -79,7 +79,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judges: ['Colvin'],
+          judgeIds: ['Colvin ID'],
         },
       ),
     ).rejects.toThrow(UnauthorizedError);
@@ -119,14 +119,14 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judges: ['Colvin'],
+          judgeIds: ['Colvin ID'],
         },
       );
 
     expect(
       applicationContext.getPersistenceGateway()
-        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judges,
-    ).toEqual(['Colvin']);
+        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeIds,
+    ).toEqual(['Colvin ID']);
 
     expect(results.docketEntries.length).toEqual(1);
 
@@ -210,7 +210,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judges: ['Colvin'],
+          judgeIds: ['Colvin ID'],
         },
       );
 
