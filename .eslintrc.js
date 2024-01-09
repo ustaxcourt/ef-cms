@@ -92,7 +92,12 @@ module.exports = {
     '@miovision/disallow-date/no-static-date': 0,
     '@miovision/disallow-date/no-to-date': 0,
     '@typescript-eslint/no-floating-promises': 'error',
-    '@typescript-eslint/no-misused-promises': 'error',
+    '@typescript-eslint/no-misused-promises': [
+      'error',
+      {
+        checksVoidReturn: false,
+      },
+    ],
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
