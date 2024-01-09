@@ -7,7 +7,7 @@ import qs from 'qs';
 export type SignUpUserResponse = {
   email: string;
   userId: string;
-  confirmationCode: string;
+  confirmationCode?: string;
 };
 
 export const signUpUserInteractor = async (
@@ -23,8 +23,6 @@ export const signUpUserInteractor = async (
     };
   },
 ): Promise<SignUpUserResponse> => {
-  console.log('**** signUpUserInteractor');
-
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
   const { Users: existingAccounts } = await cognito.listUsers({
@@ -65,13 +63,6 @@ export const signUpUserInteractor = async (
 
   const userId = result.UserSub!;
 
-  // generate a confirmation code
-  // What rules do we want to apply to a code? Right now, cognito generates a 6 digit code. Are we OK with that?
-  console.log(
-    '**** signUpUserInteractor, done signing up, about to send email',
-    userId,
-  );
-
   const { confirmationCode } = await applicationContext
     .getPersistenceGateway()
     .generateAccountConfirmationCode(applicationContext, { userId });
@@ -82,16 +73,17 @@ export const signUpUserInteractor = async (
     userId,
   });
 
-  console.log(
-    '**** signUpUserInteractor, done signing up, done sending email',
-    confirmationCode,
-  );
-  // TODO 10007: Only return confirmationCode locally as we cannot send an email. If we always return it then we cannot be sure we confirmed their email.
-  return {
-    confirmationCode,
+  const signUpUserResponse: SignUpUserResponse = {
     email: user.email,
     userId,
   };
+
+  // Only return confirmationCode locally as we cannot send an email. Do not expose confirmation code in deployed env.
+  if (applicationContext.environment.stage === 'local') {
+    signUpUserResponse.confirmationCode = confirmationCode;
+  }
+
+  return signUpUserResponse;
 };
 
 const sendAccountCreationConfirmation = async (
@@ -102,8 +94,6 @@ const sendAccountCreationConfirmation = async (
     userId,
   }: { email: string; confirmationCode: string; userId: string },
 ) => {
-  console.log('**** sendAccountCreationConfirmation');
-
   const queryString = qs.stringify(
     { confirmationCode, userId },
     { encode: false },
@@ -130,11 +120,6 @@ const sendAccountCreationConfirmation = async (
     '<a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.';
 
   const emailClient: SES = applicationContext.getEmailClient();
-
-  console.log(
-    '**** sendAccountCreationConfirmation, about to send email to: ',
-    email,
-  );
 
   return await emailClient
     .sendEmail({
