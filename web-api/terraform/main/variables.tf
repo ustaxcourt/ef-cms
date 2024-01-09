@@ -29,7 +29,7 @@ variable "es_instance_count" {
 
 variable "es_instance_type" {
   type    = string
-  default = "t2.small.elasticsearch"
+  default = "t2.small.search"
 }
 
 variable "irs_superuser_email" {
