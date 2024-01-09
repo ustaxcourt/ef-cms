@@ -109,6 +109,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "dynamodb:GetItem",
                 "dynamodb:GetRecords",
                 "dynamodb:GetShardIterator",
+                "dynamodb:ListShards",
                 "dynamodb:ListStreams",
                 "dynamodb:PutItem",
                 "dynamodb:Query",
@@ -185,6 +186,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
             "Action": [
                 "sqs:DeleteMessage",
                 "sqs:SendMessage",
+                "sqs:SendMessageBatch",
                 "sqs:ReceiveMessage",
                 "sqs:GetQueueAttributes"
             ],

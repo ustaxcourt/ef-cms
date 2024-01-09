@@ -9,10 +9,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkViewsDeadlineReport = (
   cerebralTest,
-  options = {
-    day: undefined,
-    year: undefined,
-  },
+  options = {},
 ) => {
   const caseDeadlineReportHelper = withAppContextDecorator(
     caseDeadlineReportHelperComputed,

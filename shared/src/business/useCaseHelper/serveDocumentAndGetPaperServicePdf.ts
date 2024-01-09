@@ -15,14 +15,12 @@ export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
   caseEntities,
   docketEntryId,
-  electronicParties,
   stampedPdf,
 }: {
   applicationContext: IApplicationContext;
   caseEntities: Case[];
   docketEntryId: string;
   stampedPdf?: any;
-  electronicParties?: { email: string; name: string }[];
 }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -32,7 +30,6 @@ export const serveDocumentAndGetPaperServicePdf = async ({
 
   for (const caseEntity of caseEntities) {
     const servedParties = aggregatePartiesForService(caseEntity);
-    if (electronicParties) servedParties.electronic = electronicParties;
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,

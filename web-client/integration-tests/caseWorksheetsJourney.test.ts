@@ -27,7 +27,6 @@ describe('Case Worksheets Journey', () => {
     cerebralTest,
     CASE_STATUS_TYPES.submitted,
     'Colvin',
-    'dabbad00-18d0-43ec-bafb-654e83405416',
   );
 
   it('save docket number for later test', () => {
@@ -38,12 +37,7 @@ describe('Case Worksheets Journey', () => {
   petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusTo(
-    cerebralTest,
-    CASE_STATUS_TYPES.cav,
-    'Colvin',
-    'dabbad00-18d0-43ec-bafb-654e83405416',
-  );
+  docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
   it('should display the case worksheets table on the dashboard', async () => {

@@ -120,7 +120,6 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate: {
           ...validMockCase,
           associatedJudge: 'Judge Arnold',
-          associatedJudgeId: '98d550c5-76d5-4f3a-9ce8-689b5c4a1b36',
         },
       }),
     ).rejects.toThrow('query problem');
@@ -336,18 +335,15 @@ describe('updateCaseAndAssociations', () => {
 
     it('the associated judge has been updated', async () => {
       updatedCase.associatedJudge = 'Judge Dredd';
-      updatedCase.associatedJudgeId = '2f46a889-901c-4e8b-b2bb-c3994e2c75c1';
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: updatedCase,
       });
-      const { workItem } =
-        applicationContext.getPersistenceGateway().saveWorkItem.mock
-          .calls[0][0];
-      expect(workItem.associatedJudge).toBe('Judge Dredd');
-      expect(workItem.associatedJudgeId).toBe(
-        '2f46a889-901c-4e8b-b2bb-c3994e2c75c1',
-      );
+
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.associatedJudge,
+      ).toBe('Judge Dredd');
     });
 
     it('the docket docketNumberWithSuffix is updated because the case type has changed', async () => {
@@ -936,7 +932,6 @@ describe('updateCaseAndAssociations', () => {
       const updatedCase = {
         ...validMockCase,
         associatedJudge: 'Judge Phoebe Judge',
-        associatedJudgeId: '5f38a63a-17c9-4c02-b376-8123b0f26d9a',
       };
       await updateCaseAndAssociations({
         applicationContext,

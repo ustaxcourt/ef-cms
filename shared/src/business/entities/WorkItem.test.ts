@@ -113,7 +113,6 @@ describe('WorkItem', () => {
 
     it('should set properties on WorkItem that pertain to the Case when a Case entity is passed into the constructor', () => {
       aValidWorkItem.associatedJudge = 'This should be overwritten';
-      aValidWorkItem.associatedJudgeId = 'This Id should be overwritten';
       aValidWorkItem.caseStatus = CASE_STATUS_TYPES.closed;
       aValidWorkItem.leadDocketNumber = '100-23';
       aValidWorkItem.docketNumberWithSuffix = '123-23';
@@ -121,7 +120,6 @@ describe('WorkItem', () => {
       aValidWorkItem.trialLocation = 'This should be overwritten';
       const mockCase = cloneDeep(MOCK_CASE);
       mockCase.associatedJudge = 'Some Judge';
-      mockCase.associatedJudgeId = '71a7c6d4-3e37-4f9f-87b0-1e6714bb43a9';
       mockCase.status = CASE_STATUS_TYPES.generalDocket;
       mockCase.leadDocketNumber = undefined;
       mockCase.docketNumberWithSuffix = '123-23S';
@@ -136,7 +134,6 @@ describe('WorkItem', () => {
 
       expect(workItem.isValid()).toBeTruthy();
       expect(workItem.associatedJudge).toBe(mockCase.associatedJudge);
-      expect(workItem.associatedJudgeId).toBe(mockCase.associatedJudgeId);
       expect(workItem.caseStatus).toBe(mockCase.status);
       expect(workItem.leadDocketNumber).toBe(mockCase.leadDocketNumber);
       expect(workItem.docketNumberWithSuffix).toBe(

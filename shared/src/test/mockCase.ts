@@ -364,7 +364,6 @@ export const MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
 export const MOCK_CASE_WITH_TRIAL_SESSION = {
   archivedDocketEntries: [],
   associatedJudge: 'Judge Fieri',
-  associatedJudgeId: 'dadbad42-18d0-43ec-bafb-654e83405416',
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   correspondence: [],

@@ -17,9 +17,6 @@ export const efcmsUserMappings = {
     'indexedTimestamp.N': {
       type: 'text',
     },
-    'isUpdatingInformation.BOOL': {
-      type: 'boolean',
-    },
     'name.S': {
       type: 'text',
     },

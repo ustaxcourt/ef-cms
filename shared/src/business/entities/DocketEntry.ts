@@ -293,18 +293,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.servedAt = createISODateString();
     this.draftOrderState = undefined;
 
-    if (this.eventCode === 'ATP') {
-      const irsSuperUserParty = [
-        {
-          name: 'IRS',
-          role: ROLES.irsSuperuser,
-        },
-      ];
-      this.servedParties = irsSuperUserParty;
-      this.servedPartiesCode = PARTIES_CODES.RESPONDENT;
-      return this;
-    }
-
     if (servedParties) {
       this.servedParties = servedParties;
       this.servedPartiesCode = getServedPartiesCode(servedParties);

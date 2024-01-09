@@ -12,11 +12,9 @@ export const defaultUpdateCaseModalValuesAction = ({
   store,
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
-  let { associatedJudge, associatedJudgeId, caseCaption, status } =
-    cloneDeep(caseDetail);
+  let { associatedJudge, caseCaption, status } = cloneDeep(caseDetail);
 
   store.set(state.modal.caseCaption, caseCaption);
   store.set(state.modal.caseStatus, status);
   store.set(state.modal.associatedJudge, associatedJudge);
-  store.set(state.modal.associatedJudgeId, associatedJudgeId);
 };

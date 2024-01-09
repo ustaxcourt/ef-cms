@@ -23,7 +23,7 @@ export const updateCaseDeadlineInteractor = async (
     throw new UnauthorizedError('Unauthorized for updating case deadline');
   }
 
-  const caseDeadlineToUpdate = new CaseDeadline(caseDeadline, {
+  let caseDeadlineToUpdate = new CaseDeadline(caseDeadline, {
     applicationContext,
   })
     .validate()

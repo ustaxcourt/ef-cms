@@ -48,7 +48,7 @@ describe('updateTrialSessionInformation', () => {
     const trialSession = new TrialSession(
       {
         isCalendared: true,
-        judge: { name: 'Judge Buch', userId: 'buch_id' },
+        judge: { name: 'Judge Buch' },
         maxCases: 100,
         sessionType: 'Regular',
         startDate: '2025-03-01T00:00:00.000Z',
@@ -61,8 +61,7 @@ describe('updateTrialSessionInformation', () => {
     myCase.updateTrialSessionInformation(trialSession);
 
     expect(myCase.trialDate).toBeTruthy();
-    expect(myCase.associatedJudge).toEqual('Judge Buch');
-    expect(myCase.associatedJudgeId).toEqual('buch_id');
+    expect(myCase.associatedJudge).toBeTruthy();
     expect(myCase.trialLocation).toBeTruthy();
     expect(myCase.trialSessionId).toBeTruthy();
     expect(myCase.trialTime).toBeTruthy();
@@ -95,7 +94,6 @@ describe('updateTrialSessionInformation', () => {
     expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);
     expect(myCase.trialDate).toBeTruthy();
     expect(myCase.associatedJudge).toEqual(CHIEF_JUDGE);
-    expect(myCase.associatedJudgeId).toEqual(undefined);
     expect(myCase.trialLocation).toBeTruthy();
     expect(myCase.trialSessionId).toBeTruthy();
     expect(myCase.trialTime).toBeTruthy();

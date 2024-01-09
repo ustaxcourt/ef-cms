@@ -86,6 +86,7 @@ resource "aws_iam_role_policy" "iam_update_petitioner_cases_lambda_policy" {
                 "sqs:ListQueueTags",
                 "sqs:CreateQueue",
                 "sqs:SetQueueAttributes",
+                "sqs:SendMessageBatch",
                 "sqs:SendMessage",
                 "sqs:ReceiveMessage",
                 "sqs:DeleteMessage",

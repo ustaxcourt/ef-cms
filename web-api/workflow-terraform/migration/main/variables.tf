@@ -21,7 +21,3 @@ variable "source_table" {
 variable "documents_bucket_name" {
   type = string
 }
-
-variable "elasticsearch_domain" {
-  type = string
-}

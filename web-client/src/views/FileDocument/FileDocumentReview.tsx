@@ -377,31 +377,29 @@ export const FileDocumentReview = connect(
             </div>
           </div>
         </div>
-        <div className="margin-top-2">
-          <Button
-            className="margin-bottom-1"
-            data-testid="file-document-review-submit-document"
-            disabled={!form.redactionAcknowledgement}
-            id="submit-document"
-            type="submit"
-            onClick={() => {
-              submitExternalDocumentSequence();
-            }}
-          >
-            Submit Your Filing
-          </Button>
-          <Button secondary onClick={() => navigateBackSequence()}>
-            Back
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
+        <Button
+          className="margin-bottom-1"
+          data-testid="file-document-review-submit-document"
+          disabled={!form.redactionAcknowledgement}
+          id="submit-document"
+          type="submit"
+          onClick={() => {
+            submitExternalDocumentSequence();
+          }}
+        >
+          Submit Your Filing
+        </Button>
+        <Button secondary onClick={() => navigateBackSequence()}>
+          Back
+        </Button>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
+          Cancel
+        </Button>
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (

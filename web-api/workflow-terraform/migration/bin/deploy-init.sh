@@ -9,12 +9,6 @@ ENVIRONMENT=$1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
 [ -z "${DOCUMENTS_BUCKET_NAME}" ] && DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENVIRONMENT}-${REGION}"
 
-export ENVIRONMENT="${ENVIRONMENT}"
-
-STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
-SOURCE_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --key '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"}}' | jq -r ".Item.current.S")
-ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --region us-east-1 --domain-name "efcms-search-${ENVIRONMENT}-${SOURCE_TABLE_VERSION}" --output json | jq -r .DomainStatus.Endpoint)
-
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
@@ -22,8 +16,10 @@ echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
 echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}"
-echo "  - STREAM_ARN=${STREAM_ARN}"
-echo "  - ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}"
+
+export ENVIRONMENT="${ENVIRONMENT}"
+
+STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
 
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
@@ -31,6 +27,5 @@ export TF_VAR_documents_bucket_name=$DOCUMENTS_BUCKET_NAME
 export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_stream_arn=$STREAM_ARN
-export TF_VAR_elasticsearch_domain=$ELASTICSEARCH_ENDPOINT
 
 ../../../../shared/terraform/bin/init.sh migration --build-lambda

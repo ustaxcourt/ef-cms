@@ -46,7 +46,6 @@ export const createConsolidatedGroup = (
         cerebralTest,
         caseOverrides.caseStatus,
         'Colvin',
-        'dabbad00-18d0-43ec-bafb-654e83405416',
       );
     } else {
       docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
@@ -76,7 +75,6 @@ export const createConsolidatedGroup = (
           cerebralTest,
           caseOverrides.caseStatus,
           'Colvin',
-          'dabbad00-18d0-43ec-bafb-654e83405416',
         );
       } else {
         docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);

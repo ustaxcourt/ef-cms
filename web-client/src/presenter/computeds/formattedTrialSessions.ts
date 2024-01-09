@@ -1,17 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
-import {
-  filter,
-  find,
-  flatMap,
-  groupBy,
-  identity,
-  omit,
-  orderBy,
-  pickBy,
-} from 'lodash';
+import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -131,53 +121,6 @@ export const filterFormattedSessionsByStatus = trialTerms => {
   return filteredbyStatusType;
 };
 
-const sortSessionsByTerm = ({
-  applicationContext,
-  currentTrialSessionId,
-  selectedTerm,
-  selectedTermYear,
-  sessions,
-}: {
-  applicationContext: ClientApplicationContext;
-  selectedTermYear: string;
-  selectedTerm: string;
-  sessions: RawTrialSession[];
-  currentTrialSessionId?: string;
-}) => {
-  const sessionsByTermOrderedByTrialLocation = orderBy(
-    sessions.filter(
-      session =>
-        session.term === selectedTerm && session.termYear == selectedTermYear,
-    ),
-    'trialLocation',
-  );
-
-  const sessionsGroupedByTrialLocation = groupBy(
-    sessionsByTermOrderedByTrialLocation,
-    'trialLocation',
-  );
-
-  const sessionsOrderedChronologically = flatMap(
-    sessionsGroupedByTrialLocation,
-    group => {
-      return orderBy(group, 'startDate', 'asc');
-    },
-  );
-
-  const sessionsByTermFormatted = formatTrialSessionDisplayOptions(
-    sessionsOrderedChronologically,
-    applicationContext,
-  );
-
-  if (currentTrialSessionId) {
-    return sessionsByTermFormatted.filter(
-      session => session.trialSessionId !== currentTrialSessionId,
-    );
-  }
-
-  return sessionsByTermFormatted;
-};
-
 export const formattedTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -186,6 +129,7 @@ export const formattedTrialSessions = (
   const currentTrialSessionId = get(state.trialSession.trialSessionId);
   const currentUser = applicationContext.getCurrentUser();
 
+  // filter trial sessions
   const trialSessionFilters = pickBy(
     omit(get(state.screenMetadata.trialSessionFilters), 'status'),
     identity,
@@ -236,16 +180,26 @@ export const formattedTrialSessions = (
 
   const selectedTerm = get(state.form.term);
   let sessionsByTerm: any[] = [];
-
   if (selectedTerm) {
     const selectedTermYear = get(state.form.termYear);
-    sessionsByTerm = sortSessionsByTerm({
+    sessionsByTerm = orderBy(
+      sessions.filter(
+        session =>
+          session.term === selectedTerm && session.termYear == selectedTermYear,
+      ),
+      'trialLocation',
+    );
+
+    sessionsByTerm = formatTrialSessionDisplayOptions(
+      sessionsByTerm,
       applicationContext,
-      currentTrialSessionId,
-      selectedTerm,
-      selectedTermYear,
-      sessions,
-    });
+    );
+
+    if (currentTrialSessionId) {
+      sessionsByTerm = sessionsByTerm.filter(
+        session => session.trialSessionId !== currentTrialSessionId,
+      );
+    }
   }
 
   return {

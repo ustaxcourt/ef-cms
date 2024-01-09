@@ -17,7 +17,7 @@ describe('removeFromTrial', () => {
     const trialSession = new TrialSession(
       {
         isCalendared: true,
-        judge: { name: 'Judge Buch', userId: 'judge-user-id' },
+        judge: { name: 'Judge Buch' },
         maxCases: 100,
         sessionType: 'Regular',
         startDate: '2025-03-01T00:00:00.000Z',
@@ -34,7 +34,6 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
     expect(caseToUpdate.trialDate).toBeTruthy();
     expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
-    expect(caseToUpdate.associatedJudgeId).toEqual('judge-user-id');
     expect(caseToUpdate.trialLocation).toBeTruthy();
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
@@ -70,7 +69,7 @@ describe('removeFromTrial', () => {
     const trialSession = new TrialSession(
       {
         isCalendared: true,
-        judge: { name: 'Judge Buch', userId: 'judge-user-id' },
+        judge: { name: 'Judge Buch' },
         maxCases: 100,
         sessionType: 'Regular',
         startDate: '2025-03-01T00:00:00.000Z',
@@ -85,7 +84,6 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
     expect(caseToUpdate.trialDate).toBeTruthy();
     expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
-    expect(caseToUpdate.associatedJudgeId).toEqual('judge-user-id');
     expect(caseToUpdate.trialLocation).toBeTruthy();
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
@@ -108,7 +106,7 @@ describe('removeFromTrial', () => {
     const trialSession = new TrialSession(
       {
         isCalendared: true,
-        judge: { name: 'Judge Buch', userId: 'judge-user-id' },
+        judge: { name: 'Judge Buch' },
         maxCases: 100,
         sessionType: 'Regular',
         startDate: '2025-03-01T00:00:00.000Z',
@@ -123,7 +121,6 @@ describe('removeFromTrial', () => {
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
     expect(caseToUpdate.trialDate).toBeTruthy();
     expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
-    expect(caseToUpdate.associatedJudgeId).toEqual('judge-user-id');
     expect(caseToUpdate.trialLocation).toBeTruthy();
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();

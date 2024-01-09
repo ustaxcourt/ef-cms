@@ -46,6 +46,7 @@ resource "aws_iam_role_policy" "migration_policy" {
         "dynamodb:GetItem",
         "dynamodb:GetRecords",
         "dynamodb:GetShardIterator",
+        "dynamodb:ListShards",
         "dynamodb:ListStreams",
         "dynamodb:Query",
         "dynamodb:PutItem",
@@ -62,18 +63,11 @@ resource "aws_iam_role_policy" "migration_policy" {
       "Action": [
         "sqs:DeleteMessage",
         "sqs:SendMessage",
+        "sqs:SendMessageBatch",
         "sqs:ReceiveMessage",
         "sqs:GetQueueAttributes"
       ],
       "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
-      "Effect": "Allow"
-    },
-    {
-      "Action": [
-        "es:ESHttpGet",
-        "es:ESHttpPost"
-      ],
-      "Resource": "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*",
       "Effect": "Allow"
     }
   ]
@@ -129,6 +123,7 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
         "dynamodb:GetItem",
         "dynamodb:GetRecords",
         "dynamodb:GetShardIterator",
+        "dynamodb:ListShards",
         "dynamodb:ListStreams",
         "dynamodb:PutItem",
         "dynamodb:Query",
@@ -144,6 +139,7 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
       "Action": [
         "sqs:DeleteMessage",
         "sqs:SendMessage",
+        "sqs:SendMessageBatch",
         "sqs:ReceiveMessage",
         "sqs:GetQueueAttributes"
       ],
@@ -158,14 +154,6 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
       "Resource": [
         "arn:aws:s3:::${var.dns_domain}-documents-*"
       ],
-      "Effect": "Allow"
-    },
-    {
-      "Action": [
-        "es:ESHttpGet",
-        "es:ESHttpPost"
-      ],
-      "Resource": "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*",
       "Effect": "Allow"
     }
   ]

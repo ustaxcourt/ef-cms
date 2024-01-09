@@ -42,7 +42,7 @@ export const getPendingMotionDocketEntriesAction = async ({
     .getPendingMotionDocketEntriesForCurrentJudgeInteractor(
       applicationContext,
       {
-        judgeIds: getJudgesFilters(get).map(judge => judge.userId),
+        judges: getJudgesFilters(get).map(judge => judge.name),
       },
     );
 

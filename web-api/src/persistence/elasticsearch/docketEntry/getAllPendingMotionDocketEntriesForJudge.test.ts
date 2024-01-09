@@ -5,7 +5,7 @@ import { MOTION_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { searchAll } from '../searchClient';
 
 describe('getAllPendingMotionDocketEntriesForJudge', () => {
-  const TEST_JUDGE_ID = 'TEST_JUDGE_ID';
+  const TEST_JUDGE_NAME = 'TEST_JUDGE_NAME';
 
   it('should run the searchAll method with correct query', async () => {
     (searchAll as jest.Mock).mockReturnValue({
@@ -15,7 +15,7 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
 
     const results = await getAllPendingMotionDocketEntriesForJudge({
       applicationContext,
-      judgeIds: [TEST_JUDGE_ID],
+      judges: [TEST_JUDGE_NAME],
     });
 
     expect(searchAll).toHaveBeenCalledTimes(1);
@@ -37,7 +37,6 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
           _source: {
             includes: [
               'associatedJudge',
-              'associatedJudgeId',
               'caseCaption',
               'docketNumber',
               'docketNumberSuffix',
@@ -56,8 +55,8 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
             minimum_should_match: 1,
             should: [
               {
-                term: {
-                  'associatedJudgeId.S': 'TEST_JUDGE_ID',
+                match_phrase: {
+                  'associatedJudge.S': 'TEST_JUDGE_NAME',
                 },
               },
             ],

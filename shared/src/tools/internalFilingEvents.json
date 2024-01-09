@@ -2587,17 +2587,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Attachment to Petition",
-      "documentType": "Attachment to Petition",
-      "category": "Petition",
-      "eventCode": "ATP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Ratification of Petition",
       "documentType": "Ratification of Petition",
       "category": "Petition",

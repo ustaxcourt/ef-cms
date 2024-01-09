@@ -138,7 +138,6 @@ export const EditPetitionerCounsel = connect(
             <Button
               link
               className="red-warning no-wrap float-right"
-              data-testid="remove-petitioner-btn"
               icon="trash"
               id="remove-petitioner-btn"
               onClick={() => {

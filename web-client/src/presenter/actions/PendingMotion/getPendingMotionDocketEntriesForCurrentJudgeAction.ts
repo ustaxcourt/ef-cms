@@ -7,14 +7,14 @@ export const getPendingMotionDocketEntriesForCurrentJudgeAction = async ({
 }: ActionProps): Promise<{
   docketEntries: FormattedPendingMotionWithWorksheet[];
 }> => {
-  const { userId } = get(state.judgeUser);
+  const { name } = get(state.judgeUser);
 
   const { docketEntries } = await applicationContext
     .getUseCases()
     .getPendingMotionDocketEntriesForCurrentJudgeInteractor(
       applicationContext,
       {
-        judgeIds: [userId],
+        judges: [name],
       },
     );
 

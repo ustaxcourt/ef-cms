@@ -26,11 +26,7 @@ export const createCaseDeadline = async (
   let caseEntity = new Case(caseDetail, { applicationContext });
 
   const newCaseDeadline = new CaseDeadline(
-    {
-      ...caseDeadline,
-      associatedJudge: caseEntity.associatedJudge,
-      associatedJudgeId: caseEntity.associatedJudgeId,
-    },
+    { ...caseDeadline, associatedJudge: caseEntity.associatedJudge },
     {
       applicationContext,
     },

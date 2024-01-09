@@ -72,7 +72,6 @@ describe('createCaseDeadlineInteractor', () => {
 
     expect(caseDeadline).toBeDefined();
     expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
-    expect(caseDeadline.associatedJudgeId).toEqual(undefined); // judge is not set on the mock case, so judgeId is not set
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -93,7 +92,6 @@ describe('createCaseDeadlineInteractor', () => {
   it('creates a case deadline, marks the case as automatically blocked, and calls deleteCaseTrialSortMappingRecords when there are already pending items on the case', async () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
-    mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
 
     const caseDeadline = await createCaseDeadlineInteractor(
       applicationContext,
@@ -102,9 +100,6 @@ describe('createCaseDeadlineInteractor', () => {
 
     expect(caseDeadline).toBeDefined();
     expect(caseDeadline.associatedJudge).toEqual('Judge Buch');
-    expect(caseDeadline.associatedJudgeId).toEqual(
-      'dabbad02-18d0-43ec-bafb-654e83405416',
-    );
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -125,8 +120,6 @@ describe('createCaseDeadlineInteractor', () => {
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
-    mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
-
     mockLock = MOCK_LOCK;
 
     await expect(
@@ -143,7 +136,6 @@ describe('createCaseDeadlineInteractor', () => {
   it('should acquire and remove the lock on the cases', async () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
-    mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
     await createCaseDeadlineInteractor(applicationContext, {
       caseDeadline: mockCaseDeadline as any,
     });

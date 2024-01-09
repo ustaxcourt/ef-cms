@@ -24,7 +24,6 @@ describe('setCaseStatus', () => {
       {
         ...MOCK_CASE,
         associatedJudge: 'Judge Buch',
-        associatedJudgeId: 'judge_user_id',
       },
       {
         applicationContext,
@@ -38,7 +37,6 @@ describe('setCaseStatus', () => {
 
     expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     expect(updatedCase.associatedJudge).toEqual(CHIEF_JUDGE);
-    expect(updatedCase.associatedJudgeId).toEqual(undefined);
   });
 
   it('should update the case status and set the associated judge to the chief judge when the new status is "General Docket - Ready for Trial"', () => {
@@ -46,7 +44,6 @@ describe('setCaseStatus', () => {
       {
         ...MOCK_CASE,
         associatedJudge: 'Judge Buch',
-        associatedJudgeId: 'judge_user_id',
       },
       {
         applicationContext,
@@ -62,7 +59,6 @@ describe('setCaseStatus', () => {
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
     );
     expect(updatedCase.associatedJudge).toEqual(CHIEF_JUDGE);
-    expect(updatedCase.associatedJudgeId).toEqual(undefined);
   });
 
   it('should update the case status, leave the associated judge unchanged, and set the case status to closed"', () => {
@@ -70,7 +66,6 @@ describe('setCaseStatus', () => {
       {
         ...MOCK_CASE,
         associatedJudge: 'Judge Buch',
-        associatedJudgeId: 'judge_user_id',
       },
       {
         applicationContext,
@@ -84,7 +79,6 @@ describe('setCaseStatus', () => {
 
     expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
     expect(updatedCase.associatedJudge).toEqual('Judge Buch');
-    expect(updatedCase.associatedJudgeId).toEqual('judge_user_id');
   });
 
   it('should update the case status, leave the associated judge unchanged, and set the case status to "Closed - Dismissed"', () => {
@@ -92,7 +86,6 @@ describe('setCaseStatus', () => {
       {
         ...MOCK_CASE,
         associatedJudge: 'Judge Buch',
-        associatedJudgeId: 'judge_user_id',
       },
       {
         applicationContext,
@@ -106,7 +99,6 @@ describe('setCaseStatus', () => {
 
     expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closedDismissed);
     expect(updatedCase.associatedJudge).toEqual('Judge Buch');
-    expect(updatedCase.associatedJudgeId).toEqual('judge_user_id');
   });
 
   it('should update the case status and call reopenCase when the new status is NOT a closed case status and the previous status is a closed case status', () => {

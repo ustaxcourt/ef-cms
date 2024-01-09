@@ -92,25 +92,6 @@ export const UploadCourtIssuedDocument = connect(
                       />
                     </FormGroup>
                   </div>
-                  <div className="grid-row grid-gap margin-top-4">
-                    <div className="grid-col-8">
-                      <Button
-                        data-testid="save-uploaded-pdf-button"
-                        id="save-uploaded-pdf-button"
-                        type="submit"
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        link
-                        onClick={() => {
-                          formCancelToggleCancelSequence();
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="grid-col-7">
@@ -155,6 +136,26 @@ export const UploadCourtIssuedDocument = connect(
                       />
                     </FormGroup>
                   </div>
+                </div>
+              </div>
+
+              <div className="grid-row grid-gap margin-top-4">
+                <div className="grid-col-8">
+                  <Button
+                    data-testid="save-uploaded-pdf-button"
+                    id="save-uploaded-pdf-button"
+                    type="submit"
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    link
+                    onClick={() => {
+                      formCancelToggleCancelSequence();
+                    }}
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </div>
             </form>

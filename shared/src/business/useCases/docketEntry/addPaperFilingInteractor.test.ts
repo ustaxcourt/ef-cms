@@ -532,32 +532,4 @@ describe('addPaperFilingInteractor', () => {
       ).toHaveBeenCalledTimes(1);
     });
   });
-
-  it('should pass in an empty array for electronicParties when calling "serveDocumentAndGetPaperServicePdf" when dealing with ATP docket entry', async () => {
-    const mockdocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: mockdocketEntryId,
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'ATP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
-      },
-      isSavingForLater: false,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
-        .mock.calls[0][0].electronicParties,
-    ).toEqual([]);
-  });
 });

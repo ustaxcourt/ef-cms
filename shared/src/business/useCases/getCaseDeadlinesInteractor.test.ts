@@ -15,7 +15,6 @@ describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
     {
       associatedJudge: 'Judge Buch',
-      associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
       caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
       createdAt: '2019-01-01T21:40:46.415Z',
       deadlineDate: '2019-03-01T21:40:46.415Z',
@@ -24,7 +23,6 @@ describe('getCaseDeadlinesInteractor', () => {
     },
     {
       associatedJudge: 'Judge Carluzzo',
-      associatedJudgeId: 'dabbad03-18d0-43ec-bafb-654e83405416',
       caseDeadlineId: 'c63d6904-5314-4372-8259-9f8f65824bb7',
       createdAt: '2019-02-01T21:40:46.415Z',
       deadlineDate: '2019-04-01T21:40:46.415Z',
@@ -36,7 +34,6 @@ describe('getCaseDeadlinesInteractor', () => {
   const mockCases = [
     {
       associatedJudge: 'Judge A',
-      associatedJudgeId: 'a36a8e68-4f9a-499d-8a8c-703e21799b19',
       caseCaption: 'A caption, Petitioner',
       caseType: CASE_TYPES_MAP.cdp,
       docketNumber: '101-19',
@@ -59,7 +56,6 @@ describe('getCaseDeadlinesInteractor', () => {
     },
     {
       associatedJudge: 'Judge A',
-      associatedJudgeId: 'a36a8e68-4f9a-499d-8a8c-703e21799b19',
       caseCaption: 'Another caption, Petitioner',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -120,7 +116,6 @@ describe('getCaseDeadlinesInteractor', () => {
       deadlines: [
         {
           associatedJudge: 'Judge Buch',
-          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
           caseCaption: 'A caption, Petitioner',
           caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
           createdAt: '2019-01-01T21:40:46.415Z',
@@ -134,7 +129,6 @@ describe('getCaseDeadlinesInteractor', () => {
         },
         {
           associatedJudge: 'Judge Carluzzo',
-          associatedJudgeId: 'dabbad03-18d0-43ec-bafb-654e83405416',
           caseCaption: 'Another caption, Petitioner',
           caseDeadlineId: 'c63d6904-5314-4372-8259-9f8f65824bb7',
           createdAt: '2019-02-01T21:40:46.415Z',
@@ -227,7 +221,6 @@ describe('getCaseDeadlinesInteractor', () => {
           ...mockDeadlines,
           {
             associatedJudge: 'Judge Carluzzo',
-            associatedJudgeId: 'dabbad03-18d0-43ec-bafb-654e83405416',
             caseDeadlineId: 'c63d6904-1234-4321-8259-9f8f65824bb7',
             createdAt: '2019-02-01T21:40:46.415Z',
             deadlineDate: '2019-04-01T21:40:46.415Z',
@@ -247,7 +240,6 @@ describe('getCaseDeadlinesInteractor', () => {
       deadlines: [
         {
           associatedJudge: 'Judge Buch',
-          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
           caseCaption: 'A caption, Petitioner',
           caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
           createdAt: '2019-01-01T21:40:46.415Z',
@@ -261,7 +253,6 @@ describe('getCaseDeadlinesInteractor', () => {
         },
         {
           associatedJudge: 'Judge Carluzzo',
-          associatedJudgeId: 'dabbad03-18d0-43ec-bafb-654e83405416',
           caseCaption: 'Another caption, Petitioner',
           caseDeadlineId: 'c63d6904-5314-4372-8259-9f8f65824bb7',
           createdAt: '2019-02-01T21:40:46.415Z',

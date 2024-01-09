@@ -6,10 +6,10 @@ import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
 export const getAllPendingMotionDocketEntriesForJudge = async ({
   applicationContext,
-  judgeIds,
+  judges,
 }: {
   applicationContext: IApplicationContext;
-  judgeIds: string[];
+  judges: string[];
 }): Promise<{ results: RawDocketEntry[]; total: number }> => {
   const filterDate = calculateISODate({ howMuch: -180 });
 
@@ -25,9 +25,11 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
       query: {
         bool: {
           minimum_should_match: 1,
-          should: judgeIds.map(judgeId => ({
-            term: { 'associatedJudgeId.S': judgeId },
-          })),
+          should: judges.map(judge => {
+            return {
+              match_phrase: { 'associatedJudge.S': judge },
+            };
+          }),
         },
       },
     },

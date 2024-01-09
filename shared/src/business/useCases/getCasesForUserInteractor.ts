@@ -40,11 +40,12 @@ export const getCasesForUserInteractor = async (
     })
   ).map(c => c.docketNumber);
 
-  const allUserCases: TAssociatedCase[] = (
-    (await applicationContext.getPersistenceGateway().getCasesByDocketNumbers({
+  const allUserCases: TAssociatedCase[] = Case.validateRawCollection(
+    await applicationContext.getPersistenceGateway().getCasesByDocketNumbers({
       applicationContext,
       docketNumbers,
-    })) as unknown as RawCase[]
+    }),
+    { applicationContext },
   ).map(c => {
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
   });

@@ -139,7 +139,7 @@ export const CaseDeadlines = connect(
                   <tbody>
                     {caseDeadlineReportHelper.caseDeadlines.map(item => (
                       <tr key={item.caseDeadlineId}>
-                        <td className="smaller-column">
+                        <td className="smaller-column semi-bold">
                           {item.formattedDeadline}
                         </td>
                         <td className="consolidated-case-column">
@@ -151,7 +151,7 @@ export const CaseDeadlines = connect(
                             showLeadCaseIcon={item.inLeadCase}
                           />
                         </td>
-                        <td className="smaller-column">
+                        <td className="smaller-column semi-bold">
                           <CaseLink formattedCase={item} />
                         </td>
                         <td>{item.caseTitle}</td>
