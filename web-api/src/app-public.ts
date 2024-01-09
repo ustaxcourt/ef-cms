@@ -155,7 +155,7 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
  * Feature flags
  */
 {
-  app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+  app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 }
 
 /**

@@ -25,6 +25,7 @@ N) All tests pass (x on unit tests)
 - We need to handle temporary password changes on login screen. This happens when cognito forces a password update.
 - disable cognito emails.
 - resend confirmation code.
+- cognito srp auth flow
 
 
 
