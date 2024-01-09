@@ -1,3 +1,9 @@
+::: TODAY :::
+1) Confirm works on deployment
+2) Finish remaining flows (functionality example: password)
+N) All tests pass (x on unit tests)
+
+
 ::: STUFF TO DELETE :::
 
 
