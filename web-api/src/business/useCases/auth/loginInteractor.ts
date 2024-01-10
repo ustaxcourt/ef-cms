@@ -1,5 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnknownUserError } from '@web-api/errors/errors';
+import { UnauthorizedError, UnknownUserError } from '@web-api/errors/errors';
 import qs from 'qs';
 
 export const loginInteractor = async (
@@ -33,7 +33,7 @@ export const loginInteractor = async (
     if (err.name === 'UserNotConfirmedException') {
       await resendAccountConfirmation(applicationContext, email);
 
-      throw new Error('User is unconfirmed');
+      throw new UnauthorizedError('User is unconfirmed');
     }
 
     throw err;
