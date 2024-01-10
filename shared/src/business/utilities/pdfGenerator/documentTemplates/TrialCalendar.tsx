@@ -28,10 +28,10 @@ export const TrialCalendar = ({
               {sessionDetail.startTime}
             </div>
             <div className="width-half" id="location">
-              <strong>Location</strong>
               {sessionDetail.proceedingType ===
                 TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
                 <>
+                  <strong>Location</strong>
                   {sessionDetail.courthouseName && (
                     <div>{sessionDetail.courthouseName}</div>
                   )}
@@ -50,19 +50,23 @@ export const TrialCalendar = ({
               {sessionDetail.proceedingType ===
                 TRIAL_SESSION_PROCEEDING_TYPES.remote && (
                 <>
-                  <div>
-                    Meeting ID: {sessionDetail.meetingId || 'Not Provided'}
+                  <div className="margin-bottom-8">
+                    <div className="text-bold">Meeting ID</div>
+                    <div>{sessionDetail.meetingId || 'Not Provided'}</div>
                   </div>
-                  <div>
-                    Phone Number:{' '}
-                    {sessionDetail.joinPhoneNumber || 'Not Provided'}
+                  <div className="margin-bottom-8">
+                    <div className="text-bold">Password</div>
+                    <div>{sessionDetail.password || 'Not Provided'}</div>
                   </div>
-                  <div>
-                    Password: {sessionDetail.password || 'Not Provided'}
+                  <div className="margin-bottom-8">
+                    <div className="text-bold">Phone Number</div>
+                    <div>{sessionDetail.joinPhoneNumber || 'Not Provided'}</div>
                   </div>
-                  <div>
-                    Chambers Phone Number:{' '}
-                    {sessionDetail.chambersPhoneNumber || 'Not Provided'}
+                  <div className="margin-bottom-8">
+                    <div className="text-bold">Chambers Phone Number</div>
+                    <div>
+                      {sessionDetail.chambersPhoneNumber || 'Not Provided'}
+                    </div>
                   </div>
                 </>
               )}
