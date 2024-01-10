@@ -11,36 +11,38 @@ export const VerificationSent = connect(
   },
   ({ alertSuccess, email, resendVerificationLinkSequence }) => {
     return (
-      <div
-        className="grid-container grid-gap-lg padding-x-4"
-        id="verification-sent-message"
-      >
-        {alertSuccess && (
-          <div
-            className="grid-row margin-bottom-2"
-            style={{ width: 'fit-content' }}
-          >
-            <MessageAlert
-              alertType={alertSuccess.alertType}
-              message={alertSuccess.message}
-              title={alertSuccess.title}
-            ></MessageAlert>
-          </div>
-        )}
-        <div className={'bg-white padding-4'}>
-          <h2>Email address verification sent</h2>
-          <p>
-            An email to verify your email address was sent to {email}. If you
-            didn&apos;t receive a verification email, check your spam folder or
-            you can{' '}
-            <button
-              className="usa-button--unstyled cursor-pointer"
-              onClick={() => resendVerificationLinkSequence()}
+      <div className="display-flex flex-justify-center padding-y-5">
+        <div
+          className="grid-container grid-gap-lg padding-x-4"
+          id="verification-sent-message"
+        >
+          {alertSuccess && (
+            <div
+              className="grid-row margin-bottom-2"
+              style={{ width: 'fit-content' }}
             >
-              send the verification email again
-            </button>
-            .
-          </p>
+              <MessageAlert
+                alertType={alertSuccess.alertType}
+                message={alertSuccess.message}
+                title={alertSuccess.title}
+              ></MessageAlert>
+            </div>
+          )}
+          <div className={'bg-white padding-4'}>
+            <h2>Email address verification sent</h2>
+            <p>
+              An email to verify your email address was sent to {email}. If you
+              didn&apos;t receive a verification email, check your spam folder
+              or you can{' '}
+              <button
+                className="usa-button--unstyled cursor-pointer"
+                onClick={() => resendVerificationLinkSequence()}
+              >
+                send the verification email again
+              </button>
+              .
+            </p>
+          </div>
         </div>
       </div>
     );
