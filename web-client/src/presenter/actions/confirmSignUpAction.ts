@@ -30,7 +30,9 @@ export const confirmSignUpAction = async ({
     // 10007 TODO: make path.error
     return path.no({
       alertError: {
-        message: 'Error confirming account',
+        message:
+          'Please log in to have a new account verification email sent to you.',
+        title: 'Confirmation code expired',
       },
     });
   }

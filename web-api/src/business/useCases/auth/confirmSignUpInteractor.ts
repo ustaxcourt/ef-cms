@@ -1,3 +1,4 @@
+import { InvalidRequest } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const confirmSignUpInteractor = async (
@@ -11,8 +12,9 @@ export const confirmSignUpInteractor = async (
   const accountConfirmationRecord = await applicationContext
     .getPersistenceGateway()
     .getAccountConfirmationCode(applicationContext, { userId });
+
   if (accountConfirmationRecord.confirmationCode !== confirmationCode) {
-    throw new Error('confirmation code does not match');
+    throw new InvalidRequest('Confirmation code expired');
   }
 
   const cognito = applicationContext.getCognito();
