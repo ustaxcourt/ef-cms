@@ -9,6 +9,6 @@ export const resendVerificationLinkInteractor = (
     body: {
       email,
     },
-    endpoint: '/account/resend-verification',
+    endpoint: '/auth/account/resend-verification',
   });
 };

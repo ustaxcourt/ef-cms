@@ -8,6 +8,6 @@ export const signUpUserInteractor = (
   return post({
     applicationContext,
     body: user,
-    endpoint: '/account/create',
+    endpoint: '/auth/account/create',
   });
 };

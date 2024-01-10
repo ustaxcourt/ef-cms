@@ -10,7 +10,6 @@ import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeMod
 import { confirmSignUpSequence } from '@web-client/presenter/sequences/confirmSignUpSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
-import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
@@ -25,13 +24,13 @@ import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSeq
 import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
-import { navigateToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/navigateToCreatePetitionerAccountSequence';
 import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSequence';
+import { redirectToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/redirectToCreatePetitionerAccountSequence';
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
@@ -67,7 +66,6 @@ export const presenterSequences = {
   confirmSignUpSequence,
   dismissModalSequence,
   goToCreatePetitionerAccountSequence,
-  goToVerificationSentSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
   gotoHealthCheckSequence: showMaintenancePageDecorator(
     gotoHealthCheckSequence,
@@ -95,13 +93,13 @@ export const presenterSequences = {
   ),
   loadMoreTodaysOrdersSequence,
   navigateBackSequence,
-  navigateToCreatePetitionerAccountSequence,
   navigateToLoginSequence,
   navigateToPublicSiteSequence,
   notFoundErrorSequence,
   openAppMaintenanceModalSequence,
   openCaseDocumentDownloadUrlSequence,
   persistFormsOnReloadSequence,
+  redirectToCreatePetitionerAccountSequence,
   redirectToLoginSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,

@@ -34,8 +34,8 @@ export const HeaderPublic = connect(
   {
     headerPublicHelper: state.headerPublicHelper,
     isTerminalUser: state.isTerminalUser,
-    navigateToCreatePetitionerAccountSequence:
-      sequences.navigateToCreatePetitionerAccountSequence,
+    redirectToCreatePetitionerAccountSequence:
+      sequences.redirectToCreatePetitionerAccountSequence,
     redirectToLoginSequence: sequences.redirectToLoginSequence,
     showBetaBar: state.templateHelper.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
@@ -43,7 +43,7 @@ export const HeaderPublic = connect(
   function HeaderPublic({
     headerPublicHelper,
     isTerminalUser,
-    navigateToCreatePetitionerAccountSequence,
+    redirectToCreatePetitionerAccountSequence,
     redirectToLoginSequence,
     showBetaBar,
     toggleBetaBarSequence,
@@ -95,7 +95,7 @@ export const HeaderPublic = connect(
                         <Button
                           className="usa-button--unstyled"
                           onClick={() =>
-                            navigateToCreatePetitionerAccountSequence()
+                            redirectToCreatePetitionerAccountSequence()
                           }
                         >
                           Create Account
@@ -105,7 +105,7 @@ export const HeaderPublic = connect(
                         <button
                           className="usa-menu-btn"
                           onClick={() =>
-                            navigateToCreatePetitionerAccountSequence()
+                            redirectToCreatePetitionerAccountSequence()
                           }
                         >
                           Create Account
