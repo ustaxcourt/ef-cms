@@ -18,6 +18,7 @@ export const submitLoginAction = async ({
 
     return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
+    console.log('*** err', err);
     if (err.responseCode === 401) {
       return path.error({
         alertError: {

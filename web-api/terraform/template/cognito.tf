@@ -1,8 +1,6 @@
 resource "aws_cognito_user_pool" "pool" {
   name = "efcms-${var.environment}"
 
-  auto_verified_attributes = ["email"]
-
   username_attributes = ["email"]
 
   account_recovery_setting {
@@ -12,7 +10,7 @@ resource "aws_cognito_user_pool" "pool" {
     }
   }
 
-  admin_create_user_config {
+   admin_create_user_config {
     allow_admin_create_user_only = false
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
