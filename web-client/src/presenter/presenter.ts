@@ -319,6 +319,7 @@ import { removeSignatureSequence } from './sequences/removeSignatureSequence';
 import { removeSupportingDocumentSequence } from './sequences/removeSupportingDocumentSequence';
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
+import { resendVerificationLinkSequence } from '@web-client/presenter/sequences/CreatePetitionerAccount/resendVerificationLinkSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
@@ -402,6 +403,7 @@ import { submitChangeLoginAndServiceEmailSequence } from './sequences/submitChan
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
+import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
 import { submitEditContactSequence } from './sequences/submitEditContactSequence';
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
@@ -1091,6 +1093,8 @@ export const presenterSequences = {
     removeSupportingDocumentSequence as unknown as Function,
   replyToMessageSequence: replyToMessageSequence as unknown as Function,
   rescanBatchSequence: rescanBatchSequence as unknown as Function,
+  resendVerificationLinkSequence:
+    resendVerificationLinkSequence as unknown as Function,
   resetCaseMenuSequence: resetCaseMenuSequence as unknown as Function,
   resetHeaderAccordionsSequence:
     resetHeaderAccordionsSequence as unknown as Function,
@@ -1229,6 +1233,8 @@ export const presenterSequences = {
     submitCourtIssuedOrderSequence as unknown as Function,
   submitCreateOrderModalSequence:
     submitCreateOrderModalSequence as unknown as Function,
+  submitCreatePetitionerAccountFormSequence:
+    submitCreatePetitionerAccountFormSequence as unknown as Function,
   submitEditContactSequence: submitEditContactSequence as unknown as Function,
   submitEditDeficiencyStatisticSequence:
     submitEditDeficiencyStatisticSequence as unknown as Function,

@@ -38,7 +38,6 @@ import {
 } from '../../shared/src/business/entities/cases/Case';
 import {
   ERROR_MAP_429,
-  getCognitoRequestPasswordResetUrl,
   getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
@@ -165,7 +164,6 @@ const applicationContextPublic = {
     return process.env.API_URL || 'http://localhost:5000';
   },
   getCaseTitle: Case.getCaseTitle,
-  getCognitoRequestPasswordResetUrl,
   getConstants: () => frozenConstants,
   getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,

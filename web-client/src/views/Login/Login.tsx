@@ -1,5 +1,5 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { MessageAlert } from '@web-client/views/Public/MessageAlert/MessageAlert';
+import { MessageAlert } from '@web-client/ustc-ui/MessageAlert/MessageAlert';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';

@@ -1,6 +1,5 @@
 import { AppMaintenance } from './AppMaintenance';
 import { Contact } from './Contact';
-import { CreatePetitionerAccount } from './Public/CreatePetitionerAccount/CreatePetitionerAccount';
 import { EmailVerificationInstructions } from './Public/EmailVerificationInstructions';
 import { EmailVerificationSuccess } from './Public/EmailVerificationSuccess';
 import { ErrorView } from './Error';
@@ -16,7 +15,6 @@ import { PublicSearch } from './Public/PublicSearch';
 import { TodaysOpinions } from './Public/TodaysOpinions';
 import { TodaysOrders } from './Public/TodaysOrders';
 import { UsaBanner } from './UsaBanner';
-import { VerificationSent } from './Public/CreatePetitionerAccount/VerificationSent';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { useScript } from '../utilities/useScript';
@@ -36,11 +34,6 @@ const pages = {
   PublicSearch,
   TodaysOpinions,
   TodaysOrders,
-};
-
-const floatingCards = {
-  CreatePetitionerAccount,
-  VerificationSent,
 };
 
 let initialPageLoaded = false;
@@ -73,7 +66,6 @@ export const AppComponentPublic = connect(
     }
 
     const CurrentPage = pages[currentPage];
-    const CurrentCardPage = floatingCards[currentPage];
 
     return (
       <React.Fragment>
@@ -95,13 +87,6 @@ export const AppComponentPublic = connect(
           <main id="main-content" role="main">
             <CurrentPage />
           </main>
-        )}
-        {CurrentCardPage && (
-          <div className="floating-card-pages">
-            <div className="padding-y-5 padding-x-5 display-flex flex-justify-center">
-              <CurrentCardPage />
-            </div>
-          </div>
         )}
         <Loading />
 
