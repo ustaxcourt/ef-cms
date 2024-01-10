@@ -17,18 +17,23 @@ N) All tests pass (x on unit tests)
 - finish all todos (review together - KS)
 - ensure back works right (public to private and back)
 - fix tests
+
+- Refactor ifHasAccess Function to be handled by router + initSequence 
+- Refactor maintenance mode to be handled by router + initSequence. No other sequence needs to branch because of it.
+
+- invalidate old refreshToken and idToken upon refresh.
+- Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
+- We need to handle temporary password changes on login screen. This happens when cognito forces a password update.
+
+Confirm these..
+- disable cognito emails.
 - email verification flow (just after verifying, are we going to new login with verification success message)
+
 - Handle what happens if a user clicks an expired confirmation email: 
   - On login to an unconfirmed account immediately send an email to the user
   - Expire link after 24hours
   - If user clicks on an expired email then redirect them to the login and tell them to sign in so that we can send a new confirmation with a new confirmation code.
-- Refactor ifHasAccess Function to be handled by router + initSequence 
-- Refactor maintenance mode to be handled by router + initSequence. No other sequence needs to branch because of it.
-- invalidate old refreshToken and idToken upon refresh.
-- Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
-- We need to handle temporary password changes on login screen. This happens when cognito forces a password update.
-- disable cognito emails.
-- On login to unconfirmed account, send another confirmation email to the user.
+
 - cognito srp auth flow (review together - KS)
 - Look to see if we need to add custom:role and custom:userId when creating a user
 
