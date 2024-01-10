@@ -138,6 +138,7 @@ import { removePetitionerAndUpdateCaptionLambda } from './lambdas/cases/removePe
 import { removeSignatureFromDocumentLambda } from './lambdas/documents/removeSignatureFromDocumentLambda';
 import { renewIdTokenLambda } from './lambdas/auth/renewIdTokenLambda';
 import { replyToMessageLambda } from './lambdas/messages/replyToMessageLambda';
+import { resendVerificationLinkLambda } from '@web-api/lambdas/public-api/resendVerificationLinkLambda';
 import { runTrialSessionPlanningReportLambda } from './lambdas/trialSessions/runTrialSessionPlanningReportLambda';
 import { saveCalendarNoteLambda } from './lambdas/trialSessions/saveCalendarNoteLambda';
 import { saveCaseDetailInternalEditLambda } from './lambdas/cases/saveCaseDetailInternalEditLambda';
@@ -156,6 +157,7 @@ import { setMessageAsReadLambda } from './lambdas/messages/setMessageAsReadLambd
 import { setNoticesForCalendaredTrialSessionLambda } from './lambdas/trialSessions/setNoticesForCalendaredTrialSessionLambda';
 import { setTrialSessionCalendarLambda } from './lambdas/trialSessions/setTrialSessionCalendarLambda';
 import { setWorkItemAsReadLambda } from './lambdas/workitems/setWorkItemAsReadLambda';
+import { signUpUserLambda } from '@web-api/users/signUpUserLambda';
 import { strikeDocketEntryLambda } from './lambdas/documents/strikeDocketEntryLambda';
 import { swaggerJsonLambda } from './lambdas/swagger/swaggerJsonLambda';
 import { swaggerLambda } from './lambdas/swagger/swaggerLambda';
@@ -1024,6 +1026,11 @@ app.get(
     .post(lambdaWrapper(loginLambda));
   app.post('/auth/refresh', lambdaWrapper(renewIdTokenLambda));
   app.post('/auth/confirm-signup', lambdaWrapper(confirmSignUpLambda));
+  app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
+  app.post(
+    '/auth/account/resend-verification',
+    lambdaWrapper(resendVerificationLinkLambda),
+  );
 }
 
 // This endpoint is used for testing purpose only which exposes the

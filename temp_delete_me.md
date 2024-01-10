@@ -35,6 +35,7 @@ Confirm these..
   - If user clicks on an expired email then redirect them to the login and tell them to sign in so that we can send a new confirmation with a new confirmation code.
 
 - cognito srp auth flow (review together - KS)
+- Look to see if we need to add custom:role and custom:userId when creating a user
 
 
 
