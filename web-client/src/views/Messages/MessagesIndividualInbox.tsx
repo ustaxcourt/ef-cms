@@ -14,7 +14,6 @@ export const MessagesIndividualInbox = connect(
     constants: state.constants,
     formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -23,7 +22,6 @@ export const MessagesIndividualInbox = connect(
     constants,
     formattedMessages,
     screenMetadata,
-    showSortableHeaders,
     sortTableSequence,
     tableSort,
     updateScreenMetadataSequence,
@@ -59,59 +57,46 @@ export const MessagesIndividualInbox = connect(
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              {showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.DESCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="docketNumber"
-                    title="Docket No."
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  Docket No.
-                </th>
-              )}
-              {showSortableHeaders && (
-                <th className="medium">
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="createdAt"
-                    title="Received"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th className="small">Received</th>}
+              <th aria-label="Docket Number" className="small" colSpan={2}>
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  defaultSortOrder={constants.DESCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="docketNumber"
+                  title="Docket No."
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="createdAt"
+                  title="Received"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
               <th className="message-unread-column"></th>
-              {showSortableHeaders && (
-                <th>
-                  <SortableColumn
-                    ascText={constants.ALPHABETICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="subject"
-                    title="Message"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th>Message</th>}
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="subject"
+                  title="Message"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
               <th>Case Title</th>
               <th>Case Status</th>
               <th>From</th>
