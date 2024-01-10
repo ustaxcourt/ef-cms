@@ -30,6 +30,7 @@ N) All tests pass (x on unit tests)
 - disable cognito emails.
 - On login to unconfirmed account, send another confirmation email to the user.
 - cognito srp auth flow (review together - KS)
+- Look to see if we need to add custom:role and custom:userId when creating a user
 
 
 
