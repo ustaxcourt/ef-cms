@@ -1,6 +1,5 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
-import { SES } from 'aws-sdk';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import qs from 'qs';
 
@@ -93,7 +92,7 @@ const sendAccountCreationConfirmation = async (
     email,
     userId,
   }: { email: string; confirmationCode: string; userId: string },
-) => {
+): Promise<string> => {
   const queryString = qs.stringify(
     { confirmationCode, userId },
     { encode: false },
@@ -119,24 +118,11 @@ const sendAccountCreationConfirmation = async (
     '<br><br><br>If you did not create an account with DAWSON, please contact support at ' +
     '<a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.';
 
-  const emailClient: SES = applicationContext.getEmailClient();
-
-  return await emailClient
-    .sendEmail({
-      Destination: {
-        ToAddresses: [email],
-      },
-      Message: {
-        Body: {
-          Html: {
-            Data: emailBody,
-          },
-        },
-        Subject: {
-          Data: 'U.S. Tax Court DAWSON Account Verification',
-        },
-      },
-      Source: process.env.EMAIL_SOURCE!,
-    })
-    .promise();
+  return await applicationContext
+    .getMessageGateway()
+    .sendEmailToUser(applicationContext, {
+      body: emailBody,
+      subject: 'U.S. Tax Court DAWSON Account Verification',
+      to: email,
+    });
 };
