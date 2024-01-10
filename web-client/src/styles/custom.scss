@@ -990,12 +990,9 @@ header.usa-header {
 
 .background-blue {
   background-color: color($theme-color-primary-darker);
-
 }
 
-.floating-card-pages {
-  background-color: color($theme-color-primary-darker);
-
+.create-petitioner-account {
   .usa-label {
     margin-top: 15px;
     margin-bottom: 10px;
@@ -1003,16 +1000,16 @@ header.usa-header {
   }
 }
 
-.requirement-text{
-	line-height: 1.43;
+.requirement-text {
+  line-height: 1.43;
 
-	&.valid-requirement{
-		color: $color-green
-	}
+  &.valid-requirement {
+    color: $color-green;
+  }
 
-	&.invalid-requirement{
-		color: color($theme-color-secondary-vivid)
-	}
+  &.invalid-requirement {
+    color: color($theme-color-secondary-vivid);
+  }
 }
 
 .create-petitioner-form {
@@ -1021,7 +1018,7 @@ header.usa-header {
     max-width: unset;
   }
 
-  h1, 
+  h1,
   h2 {
     font-family: inherit;
   }

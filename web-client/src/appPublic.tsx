@@ -86,8 +86,6 @@ const appPublic = {
     );
 
     presenter.providers.applicationContext = applicationContext;
-    presenter.state.cognitoRequestPasswordResetUrl =
-      applicationContext.getCognitoRequestPasswordResetUrl();
 
     presenter.state.constants = applicationContext.getConstants();
 

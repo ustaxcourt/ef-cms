@@ -1116,6 +1116,16 @@ const router = {
       app.getSequence('gotoLoginSequence')();
     });
 
+    route('/create-account/petitioner', () => {
+      setPageTitle('Account Registration');
+      app.getSequence('goToCreatePetitionerAccountSequence')();
+    });
+
+    route('/create-account/verification-sent', () => {
+      setPageTitle('Verification Sent');
+      app.getSequence('goToVerificationSentSequence')();
+    });
+
     registerRoute(
       '/before-filing-a-petition',
       ifHasAccess({ app }, () => {

@@ -33,12 +33,10 @@ import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceM
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSequence';
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
-import { resendVerificationLinkSequence } from '@web-client/presenter/sequences/Public/resendVerificationLinkSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
-import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/submitPublicCaseDocketNumberSearchSequence';
@@ -105,10 +103,8 @@ export const presenterSequences = {
   openCaseDocumentDownloadUrlSequence,
   persistFormsOnReloadSequence,
   redirectToLoginSequence,
-  resendVerificationLinkSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
-  submitCreatePetitionerAccountFormSequence,
   submitLoginSequence,
   submitPublicCaseAdvancedSearchSequence,
   submitPublicCaseDocketNumberSearchSequence,

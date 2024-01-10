@@ -2,7 +2,6 @@ import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/busines
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
-import { createAccountHelper } from './computeds/Public/createAccountHelper';
 import { headerPublicHelper } from '@web-client/presenter/computeds/headerPublicHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
@@ -18,7 +17,6 @@ const computeds = {
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,
-  createAccountHelper,
   headerPublicHelper,
   loadingHelper,
   menuHelper,
@@ -35,8 +33,6 @@ export const baseState = {
   alertError: null,
   alertSuccess: null,
   caseDetail: {} as RawPublicCase,
-  cognito: { email: '' },
-  cognitoRequestPasswordResetUrl: '',
   cognitoResendVerificationLinkUrl: '',
   commonUI: {
     showBetaBar: true,
@@ -62,7 +58,6 @@ export const baseState = {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},
   },
-  showConfirmPassword: false,
   showPassword: false,
   todaysOpinions: [],
   todaysOrders: {

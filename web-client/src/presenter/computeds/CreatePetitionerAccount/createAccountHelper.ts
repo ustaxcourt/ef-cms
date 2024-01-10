@@ -4,7 +4,7 @@ import {
   NewPetitionerUserPasswordValidations,
   getDefaultPasswordErrors,
 } from '@shared/business/entities/NewPetitionerUser';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export type CreateAccountHelperResults = {
   confirmPassword: boolean;
