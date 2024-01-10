@@ -118,9 +118,6 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
   }
 
-  formattedEntry.isAvailableToUser =
-    DocketEntry.meetsAgeRequirements(formattedEntry);
-
   formattedEntry.filingsAndProceedings =
     getFilingsAndProceedings(formattedEntry);
 
