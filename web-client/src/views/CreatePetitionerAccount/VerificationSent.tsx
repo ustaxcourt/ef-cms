@@ -1,6 +1,6 @@
-import { MessageAlert } from '@web-client/views/Public/MessageAlert/MessageAlert';
-import { connect } from '@cerebral/react';
-import { sequences, state } from '@web-client/presenter/app-public.cerebral';
+import { MessageAlert } from '@web-client/ustc-ui/MessageAlert/MessageAlert';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const VerificationSent = connect(

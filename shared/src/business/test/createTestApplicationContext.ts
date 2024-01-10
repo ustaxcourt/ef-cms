@@ -20,7 +20,6 @@ import {
 import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../sharedAppContext';
@@ -605,7 +604,6 @@ export const createTestApplicationContext = ({
       adminUpdateUserAttributes: jest.fn(),
       initiateAuth: jest.fn(),
     }),
-    getCognitoRequestPasswordResetUrl,
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),

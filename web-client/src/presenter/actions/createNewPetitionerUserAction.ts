@@ -1,5 +1,5 @@
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const createNewPetitionerUserAction = async ({
   applicationContext,

@@ -1,8 +1,6 @@
-import { connect } from '@cerebral/react';
-
 import React from 'react';
 
-export const CreatePetitionerAccountInfo = connect({}, () => {
+export const CreatePetitionerAccountInfo = () => {
   return (
     <div className="padding-x-205 margin-top-1 grid-col-12 desktop:grid-col-6 create-petitioner-form">
       <h2>Are you filing a petition on behalf of someone else?</h2>
@@ -49,6 +47,6 @@ export const CreatePetitionerAccountInfo = connect({}, () => {
       </p>
     </div>
   );
-});
+};
 
 CreatePetitionerAccountInfo.displayName = 'CreatePetitionerAccountInfo';
