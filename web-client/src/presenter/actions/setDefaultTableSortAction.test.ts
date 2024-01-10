@@ -11,7 +11,7 @@ describe('setDefaultTableSortAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should keep the default values of tableSort for adc user with invalid box value', async () => {
+  it('should keep the default values of tableSort for internal users with invalid box value', async () => {
     const { state } = await runAction(setDefaultTableSortAction, {
       modules: {
         presenter,
@@ -34,7 +34,7 @@ describe('setDefaultTableSortAction', () => {
     expect(state.tableSort.sortOrder).toEqual(ASCENDING);
   });
 
-  it('the inbox should be sorted by createdAt ascending for adc user', async () => {
+  it('the inbox should be sorted by createdAt ascending for internal users', async () => {
     const { state } = await runAction(setDefaultTableSortAction, {
       modules: {
         presenter,
@@ -53,7 +53,7 @@ describe('setDefaultTableSortAction', () => {
     expect(state.tableSort.sortOrder).toEqual(ASCENDING);
   });
 
-  it('the outbox should be sorted by createdAt DESCENDING for adc user', async () => {
+  it('the outbox should be sorted by createdAt DESCENDING for internal users', async () => {
     const { state } = await runAction(setDefaultTableSortAction, {
       modules: {
         presenter,
@@ -72,7 +72,7 @@ describe('setDefaultTableSortAction', () => {
     expect(state.tableSort.sortOrder).toEqual(DESCENDING);
   });
 
-  it('the completed should be sorted by createdAt DESCENDING for adc user', async () => {
+  it('the completed should be sorted by createdAt DESCENDING for internal users', async () => {
     const { state } = await runAction(setDefaultTableSortAction, {
       modules: {
         presenter,
@@ -91,7 +91,7 @@ describe('setDefaultTableSortAction', () => {
     expect(state.tableSort.sortOrder).toEqual(DESCENDING);
   });
 
-  it('should not set the tableSort if role is not ADC', async () => {
+  it('should not set the tableSort for external users', async () => {
     const { state } = await runAction(setDefaultTableSortAction, {
       modules: {
         presenter,
@@ -105,7 +105,7 @@ describe('setDefaultTableSortAction', () => {
           sortOrder: 'asc',
         },
         user: {
-          role: 'docketclerk',
+          role: 'petitioner',
         },
       },
     });
