@@ -1,16 +1,15 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { RequirementsText } from '@web-client/views/Public/CreatePetitionerAccount/RequirementsText';
-import { connect } from '@cerebral/react';
-import { sequences, state } from '@web-client/presenter/app-public.cerebral';
+import { RequirementsText } from '@web-client/views/CreatePetitionerAccount/RequirementsText';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
 export const CreatePetitionerAccountForm = connect(
   {
     confirmPassword: state.form.confirmPassword,
     createAccountHelper: state.createAccountHelper,
-
+    navigateToLoginSequence: sequences.navigateToLoginSequence,
     password: state.form.password,
-    redirectToLoginSequence: sequences.redirectToLoginSequence,
     showConfirmPassword: state.showConfirmPassword,
     showPassword: state.showPassword,
     submitCreatePetitionerAccountFormSequence:
@@ -21,8 +20,8 @@ export const CreatePetitionerAccountForm = connect(
   ({
     confirmPassword,
     createAccountHelper,
+    navigateToLoginSequence,
     password,
-    redirectToLoginSequence,
     showConfirmPassword,
     showPassword,
     submitCreatePetitionerAccountFormSequence,
@@ -84,7 +83,7 @@ export const CreatePetitionerAccountForm = connect(
                 </div>
               )}
 
-              <label className="usa-label" htmlFor="name">
+              <label className="usa-label " htmlFor="name">
                 Name
               </label>
               <input
@@ -259,7 +258,7 @@ export const CreatePetitionerAccountForm = connect(
               Already have an account?{' '}
               <Button
                 className="usa-button--unstyled"
-                onClick={() => redirectToLoginSequence()}
+                onClick={() => navigateToLoginSequence()}
               >
                 Log in
               </Button>

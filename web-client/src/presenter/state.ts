@@ -42,6 +42,7 @@ import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentT
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
+import { createAccountHelper } from '@web-client/presenter/computeds/CreatePetitionerAccount/createAccountHelper';
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
@@ -255,6 +256,9 @@ export const computeds = {
     correspondenceViewerHelper as unknown as ReturnType<
       typeof correspondenceViewerHelper
     >,
+  createAccountHelper: createAccountHelper as unknown as ReturnType<
+    typeof createAccountHelper
+  >,
   createMessageModalHelper: createMessageModalHelper as unknown as ReturnType<
     typeof createMessageModalHelper
   >,
@@ -570,6 +574,8 @@ export const baseState = {
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
+  cognitoRequestPasswordResetUrl:
+    process.env.COGNITO_PASSWORD_RESET_REQUEST_URL,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
   currentJudges: [],
@@ -712,6 +718,7 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   setSelectedConsolidatedCasesToMultiDocketOn: false,
+  showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
   submittedAndCavCases: {

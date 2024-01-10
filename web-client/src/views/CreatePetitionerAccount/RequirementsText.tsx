@@ -1,7 +1,15 @@
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 
-export const RequirementsText = ({ fieldName, text, valid }) => {
+export const RequirementsText = ({
+  fieldName,
+  text,
+  valid,
+}: {
+  fieldName: string;
+  text?: string;
+  valid?: boolean;
+}) => {
   const className = valid ? 'valid-requirement' : 'invalid-requirement';
   return (
     <div

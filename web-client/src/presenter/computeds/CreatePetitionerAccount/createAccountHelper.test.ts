@@ -1,4 +1,4 @@
-import { createAccountHelper } from '@web-client/presenter/computeds/Public/createAccountHelper';
+import { createAccountHelper } from '@web-client/presenter/computeds/CreatePetitionerAccount/createAccountHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('createAccountHelper', () => {

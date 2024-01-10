@@ -23,6 +23,7 @@ import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
+import { CreatePetitionerAccount } from '@web-client/views/CreatePetitionerAccount/CreatePetitionerAccount';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
@@ -91,6 +92,7 @@ import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCou
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { UserContactEditProgress } from './UserContactEditProgress';
+import { VerificationSent } from '@web-client/views/CreatePetitionerAccount/VerificationSent';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -121,6 +123,7 @@ const pages = {
   ContactEdit,
   CourtIssuedDocketEntry,
   CreateOrder,
+  CreatePetitionerAccount,
   CreatePractitionerUser,
   CustomCaseReport,
   DashboardChambers,
@@ -182,11 +185,14 @@ const pages = {
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
+  VerificationSent,
   WorkQueue,
 };
 
 const pagesWithBlueBackground = {
+  CreatePetitionerAccount,
   Login,
+  VerificationSent,
 };
 
 let initialPageLoaded = false;
