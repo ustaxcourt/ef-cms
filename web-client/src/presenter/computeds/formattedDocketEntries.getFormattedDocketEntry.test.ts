@@ -41,7 +41,6 @@ describe('getFormattedDocketEntry', () => {
     archived: false,
     createdAt: '2019-02-28T21:14:39.488Z',
     eventCode: 'O',
-    isAvailableToUser: true,
     isCourtIssuedDocument: true,
     isDraft: false,
     isFileAttached: true,
