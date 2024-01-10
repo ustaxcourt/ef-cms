@@ -18,7 +18,6 @@ export const submitLoginAction = async ({
 
     return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
-    console.log('*** err', err);
     if (err.responseCode === 401) {
       return path.error({
         alertError: {
@@ -28,7 +27,7 @@ export const submitLoginAction = async ({
       });
     }
 
-    if (err.message === 'User is unconfirmed') {
+    if (err.responseCode === 403) {
       return path.error({
         alertError: {
           message:
