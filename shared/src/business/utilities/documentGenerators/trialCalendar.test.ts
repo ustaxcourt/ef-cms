@@ -283,15 +283,19 @@ describe('trialCalendar', () => {
           sessionDetail: {
             address1: '123 Some Street',
             address2: 'Suite B',
+            chambersPhoneNumber: '123-456-7890',
             courtReporter:
               'Lois Lane\n louise.lesley.lane@super_long_email_should_wrap.gov\n Phone: (123) 456-7890',
             courthouseName: 'Test Courthouse',
             formattedCityStateZip: 'New York, NY 10108',
             irsCalendarAdministrator:
               'Alexandria Ocasio-Cortez\n alexandria.ocasio.cortez@this_email_should_wrap_too.gov \n Phone: (098) 765-4321',
+            joinPhoneNumber: '123-456-7890',
             judge: 'Joseph Dredd',
+            meetingId: 'MEETING ID 1',
             notes:
               'The one with the velour shirt is definitely looking at me funny.',
+            password: 'Password 1',
             proceedingType: 'Remote',
             sessionType: 'Hybrid',
             startDate: 'May 1, 2020',
@@ -390,15 +394,19 @@ describe('trialCalendar', () => {
           sessionDetail: {
             address1: '123 Some Street',
             address2: 'Suite B',
+            chambersPhoneNumber: '123-456-7890',
             courtReporter:
               'Lois Lane\n louise.lesley.lane@super_long_email_should_wrap.gov\n Phone: (123) 456-7890',
             courthouseName: 'Test Courthouse',
             formattedCityStateZip: 'New York, NY 10108',
             irsCalendarAdministrator:
               'Alexandria Ocasio-Cortez\n alexandria.ocasio.cortez@this_email_should_wrap_too.gov \n Phone: (098) 765-4321',
+            joinPhoneNumber: '123-456-7890',
             judge: 'Joseph Dredd',
+            meetingId: 'MEETING ID 1',
             notes:
               'The one with the velour shirt is definitely looking at me funny.',
+            password: 'Password 1',
             proceedingType: 'Remote',
             sessionType: 'Hybrid',
             startDate: 'May 1, 2020',
