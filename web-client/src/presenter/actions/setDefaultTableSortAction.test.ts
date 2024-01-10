@@ -90,26 +90,4 @@ describe('setDefaultTableSortAction', () => {
     expect(state.tableSort.sortField).toEqual('completedAt');
     expect(state.tableSort.sortOrder).toEqual(DESCENDING);
   });
-
-  it('should not set the tableSort for external users', async () => {
-    const { state } = await runAction(setDefaultTableSortAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        box: 'inbox',
-      },
-      state: {
-        tableSort: {
-          sortField: 'createdAt',
-          sortOrder: 'asc',
-        },
-        user: {
-          role: 'petitioner',
-        },
-      },
-    });
-
-    expect(state.tableSort).toBeUndefined();
-  });
 });
