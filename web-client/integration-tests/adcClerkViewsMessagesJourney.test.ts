@@ -246,7 +246,7 @@ describe('ADC Clerk Views Messages Journey', () => {
       validateMessageOrdering(completedMessages, expected);
     });
 
-    loginAs(cerebralTest, 'docketclerk@example.com');
+    loginAs(cerebralTest, 'petitioner@example.com');
     it('verify the table headers are not clickable for non-ADC users', async () => {
       const showSortableHeaders = withAppContextDecorator(
         showSortableHeadersComputed,
