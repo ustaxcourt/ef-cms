@@ -3,8 +3,6 @@ name: Typescript Untouched File Check
 on:
   pull_request:
   push:
-    branches:
-      - dependency-updates
 
 jobs:
   CheckUntouchedFiles:
