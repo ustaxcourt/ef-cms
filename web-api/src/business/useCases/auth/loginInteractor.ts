@@ -22,7 +22,6 @@ export const loginInteractor = async (
       refreshToken: result.AuthenticationResult!.RefreshToken!,
     };
   } catch (err: any) {
-    console.log('*** api err', err);
     if (
       err.name === 'InvalidPasswordException' ||
       err.name === 'NotAuthorizedException'
@@ -51,11 +50,6 @@ async function resendAccountConfirmation(
     Filter: `email = "${email}"`,
     UserPoolId: process.env.USER_POOL_ID,
   });
-  console.log(
-    '*** user',
-    users.Users?.[0],
-    JSON.stringify(users.Users?.[0].Attributes?.[0].Value),
-  );
 
   const userId = users.Users?.[0].Attributes?.[0].Value!;
 
@@ -63,24 +57,17 @@ async function resendAccountConfirmation(
     .getPersistenceGateway()
     .getAccountConfirmationCode(applicationContext, { userId });
 
-  console.log('*** accountConfirmationRecord', accountConfirmationRecord);
-
   let newConfirmationCode = accountConfirmationRecord.confirmationCode;
 
-  // if doesn't exist regenerate new confirmation code
   if (!newConfirmationCode) {
-    console.log('*** generate new confirmation code');
     const { confirmationCode } = await applicationContext
       .getPersistenceGateway()
       .generateAccountConfirmationCode(applicationContext, { userId });
     newConfirmationCode = confirmationCode;
   }
 
-  // Assume exists and resend confirmation email
-  console.log('*** sending confirmation cod email');
-
   const queryString = qs.stringify(
-    { confirmationCode: newConfirmationCode, userId },
+    { confirmationCode: newConfirmationCode, email, userId },
     { encode: false },
   );
 
