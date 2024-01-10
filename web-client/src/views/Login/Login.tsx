@@ -10,6 +10,8 @@ export const Login = connect(
     alertError: state.alertError,
     form: state.form,
     loginHelper: state.loginHelper,
+    navigateToCreatePetitionerAccountSequence:
+      sequences.navigateToCreatePetitionerAccountSequence,
     showPassword: state.showPassword,
     submitLoginSequence: sequences.submitLoginSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
@@ -19,6 +21,7 @@ export const Login = connect(
     alertError,
     form,
     loginHelper,
+    navigateToCreatePetitionerAccountSequence,
     showPassword,
     submitLoginSequence,
     toggleShowPasswordSequence,
@@ -121,6 +124,10 @@ export const Login = connect(
                         className="padding-top-0"
                         link={true}
                         type="button"
+                        onClick={e => {
+                          e.preventDefault();
+                          navigateToCreatePetitionerAccountSequence();
+                        }}
                       >
                         Create your account now.
                       </Button>
