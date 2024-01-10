@@ -7,7 +7,11 @@ export const createConfirmLinkAction = ({
   if (!process.env.IS_LOCAL) return;
 
   const queryString = qs.stringify(
-    { confirmationCode: props.confirmationCode, userId: props.userId },
+    {
+      confirmationCode: props.confirmationCode,
+      email: props.email,
+      userId: props.userId,
+    },
     { encode: false },
   );
 

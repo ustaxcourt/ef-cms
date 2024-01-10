@@ -2,7 +2,11 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
-  { confirmationCode, userId }: { confirmationCode: string; userId: string },
+  {
+    confirmationCode,
+    email,
+    userId,
+  }: { confirmationCode: string; userId: string; email: string },
 ): Promise<void> => {
   const accountConfirmationRecord = await applicationContext
     .getPersistenceGateway()
@@ -15,7 +19,7 @@ export const confirmSignUpInteractor = async (
 
   await cognito.adminConfirmSignUp({
     UserPoolId: process.env.USER_POOL_ID,
-    Username: userId,
+    Username: email,
   });
 
   await cognito.adminUpdateUserAttributes({
@@ -24,8 +28,12 @@ export const confirmSignUpInteractor = async (
         Name: 'email_verified',
         Value: 'true',
       },
+      {
+        Name: 'email',
+        Value: email,
+      },
     ],
     UserPoolId: process.env.USER_POOL_ID,
-    Username: userId,
+    Username: email,
   });
 };

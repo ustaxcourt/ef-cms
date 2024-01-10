@@ -94,7 +94,7 @@ const sendAccountCreationConfirmation = async (
   }: { email: string; confirmationCode: string; userId: string },
 ): Promise<string> => {
   const queryString = qs.stringify(
-    { confirmationCode, userId },
+    { confirmationCode, email, userId },
     { encode: false },
   );
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;

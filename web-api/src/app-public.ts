@@ -65,8 +65,6 @@ import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambd
 import { ipLimiter } from './middleware/ipLimiter';
 import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
-import { resendVerificationLinkLambda } from '@web-api/lambdas/public-api/resendVerificationLinkLambda';
-import { signUpUserLambda } from '@web-api/users/signUpUserLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
 
@@ -156,15 +154,4 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
  */
 {
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
-}
-
-/**
- * Accounts
- */
-{
-  app.post('/public-api/account/create', lambdaWrapper(signUpUserLambda));
-  app.post(
-    '/account/resend-verification',
-    lambdaWrapper(resendVerificationLinkLambda),
-  );
 }
