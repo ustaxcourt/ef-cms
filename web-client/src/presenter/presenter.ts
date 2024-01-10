@@ -217,6 +217,7 @@ import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
+import { navigateToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/navigateToCreatePetitionerAccountSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { navigateToPathAndSetRedirectUrlSequence } from './sequences/navigateToPathAndSetRedirectUrlSequence';
@@ -905,6 +906,7 @@ export const presenterSequences = {
     navigateToCaseDetailSequence as unknown as Function,
   navigateToCaseDetailWithDraftDocumentSequence:
     navigateToCaseDetailWithDraftDocumentSequence as unknown as Function,
+  navigateToCreatePetitionerAccountSequence,
   navigateToEditOrderSequence:
     navigateToEditOrderSequence as unknown as Function,
   navigateToLoginSequence,
