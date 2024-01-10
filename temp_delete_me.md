@@ -28,7 +28,7 @@ N) All tests pass (x on unit tests)
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
 - We need to handle temporary password changes on login screen. This happens when cognito forces a password update.
 - disable cognito emails.
-- resend confirmation code.
+- On login to unconfirmed account, send another confirmation email to the user.
 - cognito srp auth flow
 
 
