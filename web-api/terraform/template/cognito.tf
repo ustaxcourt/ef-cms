@@ -1,8 +1,6 @@
 resource "aws_cognito_user_pool" "pool" {
   name = "efcms-${var.environment}"
 
-  # auto_verified_attributes = ["email"]
-
   username_attributes = ["email"]
 
   account_recovery_setting {
@@ -10,6 +8,22 @@ resource "aws_cognito_user_pool" "pool" {
       name     = "verified_email"
       priority = 1
     }
+  }
+
+   admin_create_user_config {
+    allow_admin_create_user_only = false
+    invite_message_template {
+      sms_message   = "Your username is {username} and temporary password is {####}."
+      email_subject = "An account has been set up for you with the U.S. Tax Court"
+      email_message = "Welcome to DAWSON, the new U.S. Tax Court case management system.  An account has been created for you to access your cases online.<br /><br />Please verify that your contact information is correct in the system, and make any required changes.<br /><br /><hr /><br /><br /><b>Your username:</b> {username}</br /><br /><b>Temporary password:</b> <span style=\"font-family: 'Courier New', Courier, monospace;\">{####}</span><br /><br /><b>This temporary password is valid for 7 days. </b> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a><br /><br />NOTE:<br />1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.<br />2. Please copy and paste the temporary password versus trying to retype it.<br />3. Please make sure you do not pick up an extra space at the beginning or end of the password when copying and pasting.<br />4. If your password ends with a special character or punctuation (.?,), that is part of your temporary password. <br /><br />"
+    }
+  }
+
+  email_configuration { # Use SES to send email
+    source_arn             = aws_ses_email_identity.ses_sender.arn
+    email_sending_account  = "DEVELOPER"
+    reply_to_email_address = "noreply@${var.dns_domain}"
+    from_email_address     = "U.S. Tax Court <noreply@${var.dns_domain}>"
   }
 
   schema {
