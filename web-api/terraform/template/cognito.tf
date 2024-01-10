@@ -1,7 +1,7 @@
 resource "aws_cognito_user_pool" "pool" {
   name = "efcms-${var.environment}"
 
-  auto_verified_attributes = ["email"]
+  # auto_verified_attributes = ["email"]
 
   username_attributes = ["email"]
 
