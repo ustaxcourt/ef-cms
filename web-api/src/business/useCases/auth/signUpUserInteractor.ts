@@ -86,7 +86,7 @@ export const signUpUserInteractor = async (
   return signUpUserResponse;
 };
 
-const sendAccountCreationConfirmation = async (
+export const sendAccountCreationConfirmation = async (
   applicationContext: ServerApplicationContext,
   {
     confirmationCode,
