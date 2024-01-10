@@ -55,6 +55,7 @@ import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColo
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
+import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
 import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
 import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
@@ -260,6 +261,7 @@ export const createApplicationContext = (
           });
         }
       },
+      sendEmailToUser,
       sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
         if (environment.stage === 'local') {
           return applicationContext
