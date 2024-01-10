@@ -28,6 +28,16 @@ export const submitLoginAction = async ({
       });
     }
 
+    if (err.message === 'User is unconfirmed') {
+      return path.error({
+        alertError: {
+          message:
+            'The email address is associated with an account but is not verified. We sent an email with a link to verify the email address. If you don’t see it, check your spam folder. If you’re still having trouble, email dawson.support@ustaxcourt.gov.',
+          title: 'Email address not verified',
+        },
+      });
+    }
+
     return path.error({
       alertError: {
         title:
