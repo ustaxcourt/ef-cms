@@ -134,7 +134,10 @@ export const MessagesIndividualInbox = connect(
                       />
                     )}
                   </td>
-                  <td className="message-queue-row message-subject">
+                  <td
+                    className="message-queue-row message-subject"
+                    data-testid="individual-message-inbox-subject-cell"
+                  >
                     <div className="message-document-title">
                       <Button
                         link
