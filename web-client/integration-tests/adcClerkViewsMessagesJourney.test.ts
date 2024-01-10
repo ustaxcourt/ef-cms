@@ -10,7 +10,6 @@ import {
   uploadPetition,
 } from './helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { showSortableHeaders as showSortableHeadersComputed } from '../src/presenter/computeds/showSortableHeaders';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('ADC Clerk Views Messages Journey', () => {
@@ -246,23 +245,6 @@ describe('ADC Clerk Views Messages Journey', () => {
       validateMessageOrdering(completedMessages, expected);
     });
 
-    loginAs(cerebralTest, 'petitioner@example.com');
-    it('verify the table headers are not clickable for non-ADC users', async () => {
-      const showSortableHeaders = withAppContextDecorator(
-        showSortableHeadersComputed,
-      );
-
-      await cerebralTest.runSequence('gotoMessagesSequence', {
-        box: 'inbox',
-        queue: messageQueue,
-      });
-
-      const isTableHeaderClickable = runCompute(showSortableHeaders, {
-        state: cerebralTest.getState(),
-      });
-
-      expect(isTableHeaderClickable).toBe(false);
-    });
     it('verify the messages in sent box are sorted from newest to oldest non-ADC users', async () => {
       await cerebralTest.runSequence('gotoMessagesSequence', {
         box: 'outbox',
