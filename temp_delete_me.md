@@ -25,9 +25,7 @@ N) All tests pass (x on unit tests)
 - Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
 - We need to handle temporary password changes on login screen. This happens when cognito forces a password update.
 
-Confirm these..
-- disable cognito emails.
-- email verification flow (just after verifying, are we going to new login with verification success message)
+- API Gateway requires re-deploy so that /system/* routes do not require authorizer.
 
 - Handle what happens if a user clicks an expired confirmation email: 
   - On login to an unconfirmed account immediately send an email to the user
