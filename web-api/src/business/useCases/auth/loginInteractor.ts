@@ -70,6 +70,8 @@ export const loginInteractor = async (
         email,
         userId,
       });
+
+      throw new Error('User is unconfirmed');
     }
 
     throw err;
