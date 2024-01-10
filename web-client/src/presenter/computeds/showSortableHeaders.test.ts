@@ -9,7 +9,7 @@ describe('showSortableHeaders', () => {
   );
   const { USER_ROLES } = applicationContext.getConstants();
 
-  it('should return false when user role is not an adc', () => {
+  it('should return false when user role is external', () => {
     const result = runCompute(showSortableHeaders, {
       state: {
         user: {
@@ -21,11 +21,35 @@ describe('showSortableHeaders', () => {
     expect(result).toBe(false);
   });
 
-  it('should return true when user role is an adc', () => {
+  it('should return false when user role is external (practitioner)', () => {
+    const result = runCompute(showSortableHeaders, {
+      state: {
+        user: {
+          role: USER_ROLES.privatePractitioner,
+        },
+      },
+    });
+
+    expect(result).toBe(false);
+  });
+
+  it('should return true when user role is internal', () => {
     const result = runCompute(showSortableHeaders, {
       state: {
         user: {
           role: USER_ROLES.adc,
+        },
+      },
+    });
+
+    expect(result).toBe(true);
+  });
+
+  it('should return true when user role is internal (docketclerk)', () => {
+    const result = runCompute(showSortableHeaders, {
+      state: {
+        user: {
+          role: USER_ROLES.docketClerk,
         },
       },
     });

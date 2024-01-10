@@ -1,7 +1,7 @@
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getConstants } from '../../getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 const { ASCENDING, DESCENDING } = getConstants();
+import { User } from '@shared/business/entities/User';
 
 /**
  * sets the default sort based on the section picked.
@@ -16,7 +16,8 @@ export const setDefaultTableSortAction = ({
   store,
 }: ActionProps) => {
   const userRole = get(state.user.role);
-  if (userRole !== ROLES.adc && userRole !== ROLES.docketClerk) {
+
+  if (!User.isInternalUser(userRole)) {
     store.unset(state.tableSort);
     return;
   }
