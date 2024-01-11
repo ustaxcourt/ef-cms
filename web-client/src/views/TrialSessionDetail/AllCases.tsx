@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 export const AllCases = connect(
   {
-    allCases: state.formattedTrialSessionDetails!.allCases,
+    allCases: state.formattedTrialSessionDetails.allCases,
   },
   function AllCases({ allCases }) {
     return (

@@ -70,7 +70,7 @@ export const TrialSessionInformation = connect(
   {
     TRIAL_SESSION_PROCEEDING_TYPES:
       state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
-    formattedTrialSessionDetails: state.formattedTrialSessionDetails!,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openConfirmDeleteTrialSessionModalSequence:
       sequences.openConfirmDeleteTrialSessionModalSequence,
     openPrintGeneratedPaperServiceSequence:

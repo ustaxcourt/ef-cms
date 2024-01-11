@@ -5,7 +5,7 @@ import React from 'react';
 
 export const DeleteTrialSessionModal = connect(
   {
-    formattedTrialSessionDetails: state.formattedTrialSessionDetails!,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   },
   function DeleteTrialSessionModal({ formattedTrialSessionDetails }) {
     return (

@@ -4,20 +4,18 @@ import { Get } from 'cerebral';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-type FormatTrialSessionHelperType =
-  | (FormattedTrialSessionDetailsType & {
-      alertMessageForNOTT?: string;
-      canClose?: boolean;
-      canDelete?: boolean;
-      canEdit?: boolean;
-      chambersPhoneNumber?: string;
-      disableHybridFilter?: boolean;
-      isHybridSession?: boolean;
-      showAlertForNOTTReminder?: boolean;
-      showOnlyClosedCases?: boolean;
-      showOpenCases?: boolean;
-    })
-  | undefined;
+type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
+  alertMessageForNOTT?: string;
+  canClose?: boolean;
+  canDelete?: boolean;
+  canEdit?: boolean;
+  chambersPhoneNumber?: string;
+  disableHybridFilter?: boolean;
+  isHybridSession?: boolean;
+  showAlertForNOTTReminder?: boolean;
+  showOnlyClosedCases?: boolean;
+  showOpenCases?: boolean;
+};
 
 export const formattedTrialSessionDetails = (
   get: Get,
@@ -36,8 +34,6 @@ export const formattedTrialSessionDetails = (
   let chambersPhoneNumber: string | undefined;
 
   const trialSession = get(state.trialSession);
-
-  if (!trialSession) return;
 
   const formattedTrialSession = applicationContext
     .getUtilities()

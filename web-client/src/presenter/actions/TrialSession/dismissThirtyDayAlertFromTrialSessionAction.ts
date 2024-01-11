@@ -13,7 +13,7 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
   get,
   path,
 }: ActionProps) => {
-  const { trialSessionId } = get(state.formattedTrialSessionDetails)!;
+  const { trialSessionId } = get(state.formattedTrialSessionDetails);
 
   try {
     await applicationContext

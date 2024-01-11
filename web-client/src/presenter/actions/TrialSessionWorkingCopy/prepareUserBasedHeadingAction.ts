@@ -14,7 +14,7 @@ export const prepareUserBasedHeadingAction = ({
   const currentUser = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const userRole = currentUser.role;
-  const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails)!;
+  const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);
 
   const userHeading =
     userRole === USER_ROLES.judge || userRole === USER_ROLES.chambers
