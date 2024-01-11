@@ -40,6 +40,7 @@ export const Messages = connect(
               <Button
                 link
                 className="button-switch-box"
+                data-testid="switch-to-section-messages-button"
                 href="/messages/section/inbox"
               >
                 <FontAwesomeIcon icon={['far', 'clone']} />
