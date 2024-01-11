@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 export const SessionAssignments = connect(
   {
-    formattedTrialSessionDetails: state.formattedTrialSessionDetails!,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   },
   function SessionAssignments({ formattedTrialSessionDetails }) {
     return (

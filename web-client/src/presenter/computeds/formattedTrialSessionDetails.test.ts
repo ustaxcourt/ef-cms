@@ -55,16 +55,6 @@ describe('formattedTrialSessionDetails', () => {
       );
   });
 
-  it('returns undefined if state.trialSession is undefined', () => {
-    mockTrialSession = undefined;
-
-    const result: any = runCompute(formattedTrialSessionDetails, {
-      state: {},
-    });
-
-    expect(result).toBeUndefined();
-  });
-
   it('should return false for isHybridSession when sessionType is set to Regular', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
