@@ -11,7 +11,7 @@ export const loginLambda = event =>
 
       const expiresAt = applicationContext.getUtilities().calculateISODate({
         dateString: applicationContext.getUtilities().createISODateString(),
-        howMuch: 29,
+        howMuch: 1,
         units: 'days',
       });
 
