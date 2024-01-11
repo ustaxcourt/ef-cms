@@ -28,7 +28,7 @@ import React from 'react';
 
 export const TrialSessionDetail = connect(
   {
-    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails!,
     openConfirmModalSequence: sequences.openConfirmModalSequence,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.modal.showModal,

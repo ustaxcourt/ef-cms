@@ -9,7 +9,7 @@ import classNames from 'classnames';
 
 export const PrintableTrialCalendar = connect(
   {
-    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails!,
     gotoTrialSessionDetailSequence: sequences.gotoTrialSessionDetailSequence,
     trialSessionId: state.trialSession.trialSessionId,
   },

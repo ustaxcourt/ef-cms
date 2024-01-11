@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 export const InactiveCases = connect(
   {
-    inactiveCases: state.formattedTrialSessionDetails.inactiveCases,
+    inactiveCases: state.formattedTrialSessionDetails!.inactiveCases,
   },
   function InactiveCases({ inactiveCases }) {
     return (

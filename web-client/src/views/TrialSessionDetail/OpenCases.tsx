@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 export const OpenCases = connect(
   {
-    openCases: state.formattedTrialSessionDetails.openCases,
+    openCases: state.formattedTrialSessionDetails!.openCases,
   },
   function OpenCases({ openCases }) {
     return (

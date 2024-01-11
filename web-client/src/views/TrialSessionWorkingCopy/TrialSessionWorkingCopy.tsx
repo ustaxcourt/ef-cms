@@ -19,7 +19,7 @@ export const TrialSessionWorkingCopy = connect(
   {
     batchDownloadTrialSessionSequence:
       sequences.batchDownloadTrialSessionSequence,
-    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails!,
     openPrintableTrialSessionWorkingCopyModalSequence:
       sequences.openPrintableTrialSessionWorkingCopyModalSequence,
     showModal: state.modal.showModal,
