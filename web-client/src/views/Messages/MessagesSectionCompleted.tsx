@@ -50,6 +50,7 @@ export const MessagesSectionCompleted = connect(
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-docket-number-header-button"
                   defaultSortOrder={constants.DESCENDING}
                   descText={constants.CHRONOLOGICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -63,6 +64,7 @@ export const MessagesSectionCompleted = connect(
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-completed-at-header-button"
                   defaultSortOrder={constants.ASCENDING}
                   descText={constants.CHRONOLOGICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -76,6 +78,7 @@ export const MessagesSectionCompleted = connect(
                   ascText={constants.ALPHABETICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-subject-header-button"
                   defaultSortOrder={constants.ASCENDING}
                   descText={constants.ALPHABETICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -114,14 +117,24 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
             showLeadCaseIcon={message.isLeadCase}
           />
         </td>
-        <td className="message-queue-row small" colSpan={2}>
+        <td
+          className="message-queue-row small"
+          colSpan={2}
+          data-testid="section-message-completed-docket-number-cell"
+        >
           {message.docketNumberWithSuffix}
         </td>
-        <td className="message-queue-row small">
+        <td
+          className="message-queue-row small"
+          data-testid="section-message-completed-completed-at-cell"
+        >
           <span className="no-wrap">{message.completedAtFormatted}</span>
         </td>
         <td className="message-queue-row">
-          <div className="message-document-title">
+          <div
+            className="message-document-title"
+            data-testid="section-message-completed-subject-cell"
+          >
             <Button link className="padding-0" href={message.messageDetailLink}>
               {message.subject}
             </Button>

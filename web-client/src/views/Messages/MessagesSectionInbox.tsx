@@ -66,6 +66,7 @@ export const MessagesSectionInbox = connect(
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-docket-number-header-button"
                   defaultSortOrder={constants.DESCENDING}
                   descText={constants.CHRONOLOGICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -79,6 +80,7 @@ export const MessagesSectionInbox = connect(
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-received-header-button"
                   defaultSortOrder={constants.ASCENDING}
                   descText={constants.CHRONOLOGICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -92,6 +94,7 @@ export const MessagesSectionInbox = connect(
                   ascText={constants.ALPHABETICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-subject-header-button"
                   defaultSortOrder={constants.ASCENDING}
                   descText={constants.ALPHABETICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -130,15 +133,28 @@ const MessageInboxRow = React.memo(function MessageInboxRow({ message }) {
             showLeadCaseIcon={message.isLeadCase}
           />
         </td>
-        <td className="message-queue-row small" colSpan={2}>
+        <td
+          className="message-queue-row small"
+          colSpan={2}
+          data-testid="section-message-inbox-docket-number-cell"
+        >
           {message.docketNumberWithSuffix}
         </td>
-        <td className="message-queue-row small">
+        <td
+          className="message-queue-row small"
+          data-testid="section-message-inbox-received-at-cell"
+        >
           <span className="no-wrap">{message.createdAtFormatted}</span>
         </td>
         <td className="message-queue-row message-subject">
           <div className="message-document-title">
-            <Button link className="padding-0" href={message.messageDetailLink}>
+            <Button
+              link
+              section-message-inbox-subject-cell
+              className="padding-0"
+              data-testid="section-message-inbox-subject-cell"
+              href={message.messageDetailLink}
+            >
               {message.subject}
             </Button>
           </div>
