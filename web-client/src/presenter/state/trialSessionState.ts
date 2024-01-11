@@ -13,8 +13,8 @@ export type CalendaredCaseItemType = (RawCase | RawCalendaredCase) & {
 };
 
 export type TrialSessionState = RawTrialSession & {
-  calendaredCases?: CalendaredCaseItemType[];
-  eligibleCases?: RawEligibleCase[];
+  calendaredCases: CalendaredCaseItemType[];
+  eligibleCases: RawEligibleCase[];
   swingSessionLocation?: string;
   status?: string;
 };
