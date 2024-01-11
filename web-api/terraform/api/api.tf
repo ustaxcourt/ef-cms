@@ -307,6 +307,9 @@ resource "aws_api_gateway_deployment" "api_deployment" {
       aws_api_gateway_integration.api_auth_integration_delete,
       // AUTHORIZER
       aws_api_gateway_authorizer.custom_authorizer,
+      // SYSTEM
+      aws_api_gateway_method.api_system_method_get,
+      aws_api_gateway_integration.api_integration_system
     ]))
   }
 

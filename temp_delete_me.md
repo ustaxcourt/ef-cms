@@ -1,56 +1,26 @@
-::: TODAY :::
-1) Confirm works on deployment
-2) Finish remaining flows (functionality example: password)
-N) All tests pass (x on unit tests)
-
-
-::: STUFF TO DELETE :::
-
-
-::: STUFF TO UPDATE :::
-- web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
-- web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
-- web-client/integration-tests/petitionerCreatesAccount.test.ts
-
-
 ::: STUFF TO DO :::
-- finish all todos (review together - KS)
-- ensure back works right (public to private and back)
+- finish all todos
+- Back button navigation does not work between public and private
 - fix tests
-
-- Refactor ifHasAccess Function to be handled by router + initSequence 
-- Refactor maintenance mode to be handled by router + initSequence. No other sequence needs to branch because of it.
-
-- invalidate old refreshToken and idToken upon refresh.
-- Ensure idToken lasts longer than how often we are refreshing the idToken (REFRESH_INTERVAL)
-- We need to handle temporary password changes on login screen. This happens when cognito forces a password update.
-
-- API Gateway requires re-deploy so that /system/* routes do not require authorizer.
-
-- (KS & RR - need to review with UX) Handle what happens if a user clicks an expired confirmation email: 
+  - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
+  - web-client/integration-tests/petitionerCreatesAccount.test.ts
+- We need to handle temporary password changes on login screen(when an admissions clerk creates account for practitioner. Granting e-access to a petitioner. Forgot password). This happens when cognito forces a password update.
++ (RR & ZR) API Gateway requires re-deploy so that /system/* routes do not require authorizer.
+- Handle what happens if a user clicks an expired confirmation email: 
   - On login to an unconfirmed account immediately send an email to the user
   - Expire link after 24hours
   - If user clicks on an expired email then redirect them to the login and tell them to sign in so that we can send a new confirmation with a new confirmation code.
+- cognito srp auth flow. Research.
+- userId, sub, email, username cognito . idk you figure it out.
 
-- cognito srp auth flow (review together - KS)
-- Look to see if we need to add custom:role and custom:userId when creating a user
-
-
-
-::: SOLO TO DO :::
-- create account (move to private - client site) 
-
-::: ON HOLD :::
-- In refreshAuthTokenInteractor we are returning the idToken. Should this be an accessToken? Are all of our requests being authed with an idToken?
-
+::: SOLO TO DO:::
+- Email Verification email is ugly.
 
 ::: QUESTIONS :::
-- Refresh Token TTL? (Shouldn't live for 30 days) 
-  How long does someone need to remain logged in before being logged out?
-- Revoke Refresh Token after Use
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
 
 
-::: IDEAS :::
-- when navigating to login sequence try and exchange idToken
-- ifHasAccess only does static checks and redirects. Create an initSequence which is responsible for doing all fetching for app. (exchange idToken, get feature flags, get maintenance mode, get user, startRefreshIntervalSequence)
+:::Conversations to Have:::
+- When the user hits refresh, we cannot easily revoke old ID tokens when issuing a new ID token. The threat vector is limited to 1 hour though. 
+  - This is not a problem when the user requests a new ID token because the old one has expired after an hour. 
+  - Implementing a system around this is possible, it would require more refactoring to NOT break multi-tab workflows on DAWSON.

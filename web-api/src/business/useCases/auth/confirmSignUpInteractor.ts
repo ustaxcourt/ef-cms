@@ -1,4 +1,5 @@
 import { InvalidRequest } from '@web-api/errors/errors';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const confirmSignUpInteractor = async (
@@ -33,6 +34,10 @@ export const confirmSignUpInteractor = async (
       {
         Name: 'email',
         Value: email,
+      },
+      {
+        Name: 'custom:role',
+        Value: ROLES.petitioner,
       },
     ],
     UserPoolId: process.env.USER_POOL_ID,
