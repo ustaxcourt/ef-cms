@@ -62,6 +62,7 @@ export const MessagesIndividualInbox = connect(
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-individual-docket-number-header-button"
                   defaultSortOrder={constants.DESCENDING}
                   descText={constants.CHRONOLOGICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -75,6 +76,7 @@ export const MessagesIndividualInbox = connect(
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-individual-received-header-button"
                   defaultSortOrder={constants.ASCENDING}
                   descText={constants.CHRONOLOGICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -89,6 +91,7 @@ export const MessagesIndividualInbox = connect(
                   ascText={constants.ALPHABETICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-individual-subject-header-button"
                   defaultSortOrder={constants.ASCENDING}
                   descText={constants.ALPHABETICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -116,10 +119,17 @@ export const MessagesIndividualInbox = connect(
                       showLeadCaseIcon={message.isLeadCase}
                     />
                   </td>
-                  <td className="message-queue-row small" colSpan={2}>
+                  <td
+                    className="message-queue-row small"
+                    colSpan={2}
+                    data-testid="individual-message-inbox-docket-number-cell"
+                  >
                     {message.docketNumberWithSuffix}
                   </td>
-                  <td className="message-queue-row small">
+                  <td
+                    className="message-queue-row small"
+                    data-testid="individual-message-inbox-received-at-cell"
+                  >
                     <span className="no-wrap">
                       {message.createdAtFormatted}
                     </span>
@@ -134,10 +144,7 @@ export const MessagesIndividualInbox = connect(
                       />
                     )}
                   </td>
-                  <td
-                    className="message-queue-row message-subject"
-                    data-testid="individual-message-inbox-subject-cell"
-                  >
+                  <td className="message-queue-row message-subject">
                     <div className="message-document-title">
                       <Button
                         link
@@ -145,6 +152,7 @@ export const MessagesIndividualInbox = connect(
                           'padding-0',
                           message.isRead ? '' : 'text-bold',
                         )}
+                        data-testid="individual-message-inbox-subject-cell"
                         href={message.messageDetailLink}
                       >
                         {message.subject}
