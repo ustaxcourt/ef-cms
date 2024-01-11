@@ -60,8 +60,10 @@ export const signUpUserInteractor = async (
     Username: newUser.email,
   });
 
+  // Todo: use 'new' helper function to signify that this _could_ be custom:userId
   const userId = result.UserSub!;
 
+  //TODO: ensure userId is standardized/consistent
   const { confirmationCode } = await applicationContext
     .getPersistenceGateway()
     .generateAccountConfirmationCode(applicationContext, { userId });

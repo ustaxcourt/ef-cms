@@ -46,12 +46,23 @@ async function resendAccountConfirmation(
   const cognito = applicationContext.getCognito();
 
   const users = await cognito.listUsers({
-    AttributesToGet: ['sub'],
+    AttributesToGet: ['sub', 'custom:userId'],
     Filter: `email = "${email}"`,
     UserPoolId: process.env.USER_POOL_ID,
   });
 
-  const userId = users.Users?.[0].Attributes?.[0].Value!;
+  // TODO: extract to utility
+  const userId: string =
+    (users.Users?.[0].Attributes?.find(element => {
+      if (element.Name === 'custom:userId') {
+        return element.Value;
+      }
+    }) as unknown as string) ||
+    (users.Users?.[0].Attributes?.find(element => {
+      if (element.Name === 'sub') {
+        return element.Value;
+      }
+    })! as unknown as string);
 
   const accountConfirmationRecord = await applicationContext
     .getPersistenceGateway()

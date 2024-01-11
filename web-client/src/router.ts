@@ -1117,12 +1117,12 @@ const router = {
       app.getSequence('gotoLoginSequence')();
     });
 
-    route('/create-account/petitioner', () => {
+    registerRoute('/create-account/petitioner', () => {
       setPageTitle('Account Registration');
       app.getSequence('goToCreatePetitionerAccountSequence')();
     });
 
-    route('/create-account/verification-sent', () => {
+    registerRoute('/create-account/verification-sent', () => {
       setPageTitle('Verification Sent');
       app.getSequence('goToVerificationSentSequence')();
     });
