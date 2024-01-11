@@ -24,3 +24,6 @@
 - When the user hits refresh, we cannot easily revoke old ID tokens when issuing a new ID token. The threat vector is limited to 1 hour though. 
   - This is not a problem when the user requests a new ID token because the old one has expired after an hour. 
   - Implementing a system around this is possible, it would require more refactoring to NOT break multi-tab workflows on DAWSON.
+  
+::: WIP :::
+- Create helper function to get userId from Cognito response
