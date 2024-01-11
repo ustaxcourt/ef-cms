@@ -2,10 +2,7 @@ import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/compo
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { TrialCalendar } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialCalendar';
-import {
-  TrialSessionProceedingType,
-  TrialSessionTypes,
-} from '@shared/business/entities/EntityConstants';
+import { TrialSessionProceedingType } from '@shared/business/entities/EntityConstants';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -25,7 +22,7 @@ export type TrialCalendarType = {
   sessionDetail: {
     startTime: string;
     startDate: string;
-    sessionType: TrialSessionTypes;
+    sessionType: string;
     courthouseName?: string;
     address1?: string;
     address2?: string;
