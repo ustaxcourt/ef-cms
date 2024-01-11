@@ -10,6 +10,7 @@ import {
   sendMessage,
 } from '../support/pages/document-qc';
 
+import { assertCountOfSelector, retry } from '../../helpers/retry';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import {
   getCaseStatusFilter,
@@ -175,7 +176,14 @@ function sendMessagesToCompletedTab(
     cy.get('[data-testid="complete-message-body"]').type('MARK AS COMPLETE');
     cy.get('[data-testid="modal-confirm"]').click();
     cy.get('[data-testid="message-detail-warning-alert"]').should('exist');
-    // TODO: wait for message to disappear
     cy.get('[data-testid="header-messages-link"]').click();
+    retry(() => {
+      cy.reload(true);
+      cy.get('[data-testid="inbox-tab-content"]').should('exist');
+      return assertCountOfSelector(
+        `a[href^="/messages/${docketNumber}/message-detail"]`,
+        2 - i,
+      );
+    });
   }
 }
