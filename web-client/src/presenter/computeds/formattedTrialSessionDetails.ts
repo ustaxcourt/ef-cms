@@ -1,12 +1,49 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formattedTrialSessionDetails = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+):
+  | (TrialSessionState & {
+      alertMessageForNOTT?: string;
+      canClose: boolean;
+      canDelete: boolean;
+      canEdit: boolean;
+      chambersPhoneNumber?: string;
+      disableHybridFilter: boolean;
+      isHybridSession: boolean;
+      showAlertForNOTTReminder: boolean;
+      showOnlyClosedCases: boolean;
+      showOpenCases: boolean;
+    })
+  | {
+      alertMessageForNOTT?: string;
+      canClose: boolean;
+      canDelete: boolean;
+      canEdit: boolean;
+      chambersPhoneNumber?: string;
+      disableHybridFilter: boolean;
+      isHybridSession: boolean;
+      showAlertForNOTTReminder: boolean;
+      showOnlyClosedCases: boolean;
+      showOpenCases: boolean;
+    } => {
+  let canClose = false;
+  let showOpenCases = false;
+  let showOnlyClosedCases = false;
+  let showAlertForNOTTReminder = false;
+  let isHybridSession = false;
+  let disableHybridFilter = false;
+  let canDelete = false;
+  let canEdit = false;
+
+  let alertMessageForNOTT: string | undefined;
+  let chambersPhoneNumber: string | undefined;
+
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
@@ -24,31 +61,31 @@ export const formattedTrialSessionDetails = (
       USER_ROLES,
     } = applicationContext.getConstants();
 
-    formattedTrialSession.showOpenCases =
+    showOpenCases =
       formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.open;
-    formattedTrialSession.showOnlyClosedCases =
+    showOnlyClosedCases =
       formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.closed;
 
-    formattedTrialSession.showAlertForNOTTReminder =
+    showAlertForNOTTReminder =
       !formattedTrialSession.dismissedAlertForNOTT &&
       !!formattedTrialSession.isStartDateWithinNOTTReminderRange &&
       formattedTrialSession.sessionStatus !== SESSION_STATUS_TYPES.closed;
 
-    if (formattedTrialSession.showAlertForNOTTReminder) {
-      formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due by ${formattedTrialSession.thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
+    if (showAlertForNOTTReminder) {
+      alertMessageForNOTT = `30-day trial notices are due by ${formattedTrialSession.thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
     }
 
     if (formattedTrialSession.chambersPhoneNumber) {
-      formattedTrialSession.chambersPhoneNumber = applicationContext
+      chambersPhoneNumber = applicationContext
         .getUtilities()
         .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
     }
 
-    formattedTrialSession.isHybridSession = Object.values(
-      HYBRID_SESSION_TYPES,
-    ).includes(formattedTrialSession.sessionType);
+    isHybridSession = Object.values(HYBRID_SESSION_TYPES).includes(
+      formattedTrialSession.sessionType,
+    );
 
-    formattedTrialSession.disableHybridFilter =
+    disableHybridFilter =
       (formattedTrialSession.eligibleCases ?? []).length === 0;
 
     if (formattedTrialSession.startDate) {
@@ -63,9 +100,9 @@ export const formattedTrialSessionDetails = (
       const isChambersUser = user.role === USER_ROLES.chambers;
 
       const trialDateInFuture = trialDateFormatted > nowDateFormatted;
-      formattedTrialSession.canDelete =
-        trialDateInFuture && !formattedTrialSession.isCalendared;
-      formattedTrialSession.canEdit =
+
+      canDelete = trialDateInFuture && !formattedTrialSession.isCalendared;
+      canEdit =
         trialDateInFuture &&
         formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
         !isChambersUser;
@@ -84,10 +121,35 @@ export const formattedTrialSessionDetails = (
           TRIAL_SESSION_SCOPE_TYPES.standaloneRemote &&
         formattedTrialSession.sessionStatus !== SESSION_STATUS_TYPES.closed
       ) {
-        formattedTrialSession.canClose = true;
+        canClose = true;
       }
     }
+
+    return {
+      ...formattedTrialSession,
+      alertMessageForNOTT,
+      canClose,
+      canDelete,
+      canEdit,
+      chambersPhoneNumber,
+      disableHybridFilter,
+      isHybridSession,
+      showAlertForNOTTReminder,
+      showOnlyClosedCases,
+      showOpenCases,
+    };
   }
 
-  return formattedTrialSession;
+  return {
+    alertMessageForNOTT,
+    canClose,
+    canDelete,
+    canEdit,
+    chambersPhoneNumber,
+    disableHybridFilter,
+    isHybridSession,
+    showAlertForNOTTReminder,
+    showOnlyClosedCases,
+    showOpenCases,
+  };
 };

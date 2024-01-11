@@ -1,10 +1,14 @@
 import {
+  CalendaredCaseItemType,
+  TrialSessionState,
+} from '@web-client/presenter/state/trialSessionState';
+import {
   DOCKET_NUMBER_SUFFIXES,
   PARTIES_CODES,
 } from '../entities/EntityConstants';
 import { FORMATS } from './DateHandler';
-import { RawCalendaredCase } from '../entities/cases/CalendaredCase';
 import { RawEligibleCase } from '../entities/cases/EligibleCase';
+import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { compact, partition } from 'lodash';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
@@ -47,7 +51,7 @@ export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   return filingPartiesCode;
 };
 
-export type FormattedTrialSessionCase = (RawCase | RawCalendaredCase) & {
+export type FormattedTrialSessionCase = CalendaredCaseItemType & {
   inConsolidatedGroup: boolean;
   consolidatedIconTooltipText: string;
   shouldIndent: boolean;
@@ -65,7 +69,7 @@ export const formatCaseForTrialSession = ({
   setFilingPartiesCode = false,
 }: {
   applicationContext: IApplicationContext;
-  caseItem: RawCase | RawCalendaredCase;
+  caseItem: CalendaredCaseItemType;
   eligibleCases?: RawEligibleCase[];
   setFilingPartiesCode?: boolean;
 }): FormattedTrialSessionCase => {
@@ -151,7 +155,32 @@ export const compareCasesByDocketNumber = (a, b) => {
 export const getFormattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
-}) => {
+}: {
+  applicationContext: any;
+  trialSession?: TrialSessionState;
+}):
+  | (TrialSessionState & {
+      allCases: any;
+      formattedChambersPhoneNumber: string;
+      formattedCity?: string;
+      formattedCityStateZip: string;
+      formattedCourtReporter: string;
+      formattedEstimatedEndDate: string;
+      formattedIrsCalendarAdministrator: string;
+      formattedIrsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
+      formattedJudge: string;
+      formattedStartDate: string;
+      formattedStartDateFull: string;
+      formattedStartTime: string;
+      formattedTerm: string;
+      formattedTrialClerk: string;
+      inactiveCases: any;
+      noLocationEntered: boolean;
+      openCases: any;
+      showSwingSession: boolean;
+      zipName: string;
+    })
+  | undefined => {
   if (!trialSession) return undefined;
 
   const allCases = (trialSession.calendaredCases || []).map(caseItem =>
@@ -167,7 +196,7 @@ export const getFormattedTrialSessionDetails = ({
     item => item.removedFromTrial === true,
   );
 
-  trialSession.openCases = openCases
+  const openCasesFormatted = openCases
     .map(caseItem =>
       applicationContext
         .getUtilities()
@@ -175,7 +204,7 @@ export const getFormattedTrialSessionDetails = ({
     )
     .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
 
-  trialSession.inactiveCases = inactiveCases
+  const inactiveCasesFormatted = inactiveCases
     .map(caseItem =>
       applicationContext
         .getUtilities()
@@ -187,7 +216,7 @@ export const getFormattedTrialSessionDetails = ({
       }),
     );
 
-  trialSession.allCases = allCases
+  const allCasesFormatted = allCases
     .map(caseItem =>
       applicationContext
         .getUtilities()
@@ -199,64 +228,66 @@ export const getFormattedTrialSessionDetails = ({
       }),
     );
 
-  trialSession.formattedTerm = `${
-    trialSession.term
-  } ${trialSession.termYear.substr(-2)}`;
+  const formattedTerm = `${trialSession.term} ${trialSession.termYear.substr(
+    -2,
+  )}`;
 
-  trialSession.formattedStartDate = applicationContext
+  const formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MMDDYY');
 
-  trialSession.formattedEstimatedEndDate = applicationContext
+  const formattedEstimatedEndDate = applicationContext
     .getUtilities()
-    .formatDateString(trialSession.estimatedEndDate, 'MMDDYY');
+    .formatDateString(trialSession.estimatedEndDate!, 'MMDDYY');
 
-  trialSession.formattedStartDateFull = applicationContext
+  const formattedStartDateFull = applicationContext
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
 
-  let [hour, min] = trialSession.startTime.split(':');
+  let [hour, min] = trialSession.startTime!.split(':');
   let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
 
   if (+hour > 12) {
     hour = +hour - 12;
   }
 
-  trialSession.formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
-  trialSession.formattedJudge =
+  const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
+
+  const formattedJudge =
     (trialSession.judge && trialSession.judge.name) || 'Not assigned';
-  trialSession.formattedTrialClerk =
+
+  const formattedTrialClerk =
     (trialSession.trialClerk && trialSession.trialClerk.name) ||
     trialSession.alternateTrialClerkName ||
     'Not assigned';
-  trialSession.formattedCourtReporter =
-    trialSession.courtReporter || 'Not assigned';
 
-  trialSession.formattedIrsCalendarAdministrator =
+  const formattedCourtReporter = trialSession.courtReporter || 'Not assigned';
+
+  const formattedIrsCalendarAdministrator =
     trialSession.irsCalendarAdministrator || 'Not assigned';
 
-  trialSession.formattedIrsCalendarAdministratorInfo =
+  const formattedIrsCalendarAdministratorInfo =
     trialSession.irsCalendarAdministratorInfo;
 
-  trialSession.formattedChambersPhoneNumber =
+  const formattedChambersPhoneNumber =
     trialSession.chambersPhoneNumber || 'No phone number';
 
-  trialSession.formattedCity = undefined;
-  if (trialSession.city) trialSession.formattedCity = `${trialSession.city},`;
+  let formattedCity: string | undefined;
+  if (trialSession.city) formattedCity = `${trialSession.city},`;
 
-  trialSession.formattedCityStateZip = compact([
-    trialSession.formattedCity,
+  const formattedCityStateZip = compact([
+    formattedCity,
     trialSession.state,
     trialSession.postalCode,
   ]).join(' ');
 
-  trialSession.noLocationEntered =
+  const noLocationEntered =
     !trialSession.courthouseName &&
     !trialSession.address1 &&
     !trialSession.address2 &&
-    !trialSession.formattedCityStateZip;
+    !formattedCityStateZip;
 
-  trialSession.showSwingSession =
+  const showSwingSession =
     !!trialSession.swingSession &&
     !!trialSession.swingSessionId &&
     !!trialSession.swingSessionLocation;
@@ -264,10 +295,32 @@ export const getFormattedTrialSessionDetails = ({
   const trialDate = applicationContext
     .getUtilities()
     .formatDateString(trialSession.startDate, 'FILENAME_DATE');
+
   const { trialLocation } = trialSession;
-  trialSession.zipName = `${trialDate}-${trialLocation}.zip`
+  const zipName = `${trialDate}-${trialLocation}.zip`
     .replace(/\s/g, '_')
     .replace(/,/g, '');
 
-  return trialSession;
+  return {
+    ...trialSession,
+    allCases: allCasesFormatted,
+    formattedChambersPhoneNumber,
+    formattedCity,
+    formattedCityStateZip,
+    formattedCourtReporter,
+    formattedEstimatedEndDate,
+    formattedIrsCalendarAdministrator,
+    formattedIrsCalendarAdministratorInfo,
+    formattedJudge,
+    formattedStartDate,
+    formattedStartDateFull,
+    formattedStartTime,
+    formattedTerm,
+    formattedTrialClerk,
+    inactiveCases: inactiveCasesFormatted,
+    noLocationEntered,
+    openCases: openCasesFormatted,
+    showSwingSession,
+    zipName,
+  };
 };
