@@ -87,7 +87,12 @@ export const Messages = connect(
                 {messagesHelper.showSectionMessages && <MessagesSectionInbox />}
               </div>
             </Tab>
-            <Tab id="sent-tab" tabName="outbox" title="Sent">
+            <Tab
+              data-testid="messages-outbox-tab"
+              id="sent-tab"
+              tabName="outbox"
+              title="Sent"
+            >
               <div id="sent-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <MessagesIndividualOutbox />
@@ -98,7 +103,12 @@ export const Messages = connect(
                 )}
               </div>
             </Tab>
-            <Tab id="completed-tab" tabName="completed" title="Completed">
+            <Tab
+              data-testid="messages-completed-tab"
+              id="completed-tab"
+              tabName="completed"
+              title="Completed"
+            >
               <div id="completed-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <MessagesIndividualCompleted />
