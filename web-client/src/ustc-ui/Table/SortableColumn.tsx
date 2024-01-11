@@ -10,6 +10,7 @@ export const SortableColumn = ({
   ascText = 'in ascending order',
   currentlySortedField,
   currentlySortedOrder,
+  dataTestID,
   defaultSortOrder = 'desc',
   descText = 'in descending order',
   hasRows,
@@ -22,6 +23,7 @@ export const SortableColumn = ({
   currentlySortedField: string;
   descText: string;
   hasRows: boolean;
+  dataTestID?: string;
   onClickSequence: (sort: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -44,6 +46,7 @@ export const SortableColumn = ({
     <Button
       link
       className={'sortable-header-button margin-right-0'}
+      data-testid={dataTestID}
       onClick={() => {
         if (hasRows) {
           setIsLoading(true);
