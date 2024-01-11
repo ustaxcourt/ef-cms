@@ -5,6 +5,7 @@ import { createNewPetitionerUserAction } from '@web-client/presenter/actions/cre
 import { navigateToVerificationSentAction } from '@web-client/presenter/actions/navigateToVerificationSentAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
+import { setAlertWarningAction } from '@web-client/presenter/actions/setAlertWarningAction';
 import { setNewAccountEmailInStateAction } from '@web-client/presenter/actions/setNewAccountEmailInStateAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
@@ -20,5 +21,6 @@ export const submitCreatePetitionerAccountFormSequence = [
       setNewAccountEmailInStateAction,
       navigateToVerificationSentAction,
     ]),
+    warning: [setAlertWarningAction],
   },
 ];
