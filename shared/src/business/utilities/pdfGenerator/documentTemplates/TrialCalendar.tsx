@@ -52,20 +52,20 @@ export const TrialCalendar = ({
                 <>
                   <div className="margin-bottom-8">
                     <div className="text-bold">Meeting ID</div>
-                    <div>{sessionDetail.meetingId || 'Not Provided'}</div>
+                    <div>{sessionDetail.meetingId || 'Not provided'}</div>
                   </div>
                   <div className="margin-bottom-8">
                     <div className="text-bold">Password</div>
-                    <div>{sessionDetail.password || 'Not Provided'}</div>
+                    <div>{sessionDetail.password || 'Not provided'}</div>
                   </div>
                   <div className="margin-bottom-8">
                     <div className="text-bold">Phone Number</div>
-                    <div>{sessionDetail.joinPhoneNumber || 'Not Provided'}</div>
+                    <div>{sessionDetail.joinPhoneNumber || 'Not provided'}</div>
                   </div>
                   <div className="margin-bottom-8">
                     <div className="text-bold">Chambers Phone Number</div>
                     <div>
-                      {sessionDetail.chambersPhoneNumber || 'Not Provided'}
+                      {sessionDetail.chambersPhoneNumber || 'Not provided'}
                     </div>
                   </div>
                 </>
