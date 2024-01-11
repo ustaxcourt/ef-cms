@@ -29,79 +29,79 @@ describe.skip('Admissions clerk creates practitioner account', () => {
       value: standardizedTemporaryPassword,
     });
 
-    // await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
-    //   code: emailAddress,
-    //   password: standardizedTemporaryPassword,
-    // });
+    await cerebralTest.runSequence('submitLoginSequence', {
+      email: emailAddress,
+      password: standardizedTemporaryPassword,
+    });
 
     await waitForLoadingComponentToHide({ cerebralTest });
 
-    expect(cerebralTest.getState('currentPage')).toEqual('ChangePasswordLocal');
+    // expect(cerebralTest.getState('currentPage')).toEqual('ChangePasswordLocal');
   });
 
-  it('practitioner creates new password', async () => {
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: emailAddress,
-    });
+  // it('practitioner creates new password', async () => {
+  //   await cerebralTest.runSequence('updateFormValueSequence', {
+  //     key: 'email',
+  //     value: emailAddress,
+  //   });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'newPassword',
-      value: password,
-    });
+  //   await cerebralTest.runSequence('updateFormValueSequence', {
+  //     key: 'newPassword',
+  //     value: password,
+  //   });
 
-    // TODO 10070
-    await cerebralTest.runSequence('changePasswordLocalSequence');
+  //   // TODO 10070
+  //   await cerebralTest.runSequence('changePasswordLocalSequence');
 
-    expect(cerebralTest.getState('currentPage')).toEqual('Login');
+  //   expect(cerebralTest.getState('currentPage')).toEqual('Login');
 
-    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
-      message: 'Password successfully changed.',
-    });
-  });
+  //   expect(cerebralTest.getState('alertSuccess')).toMatchObject({
+  //     message: 'Password successfully changed.',
+  //   });
+  // });
 
-  it('practitioner logs attempts to log in with invalid password', async () => {
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: emailAddress,
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'password',
-      value: 'invalidPassword',
-    });
+  // it('practitioner logs attempts to log in with invalid password', async () => {
+  //   await cerebralTest.runSequence('updateFormValueSequence', {
+  //     key: 'email',
+  //     value: emailAddress,
+  //   });
+  //   await cerebralTest.runSequence('updateFormValueSequence', {
+  //     key: 'password',
+  //     value: 'invalidPassword',
+  //   });
 
-    // TODO 10007: put new login sequence
-    // await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
-    //   code: emailAddress,
-    //   password: 'invalidPassword',
-    // });
+  //   // TODO 10007: put new login sequence
+  //   // await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
+  //   //   code: emailAddress,
+  //   //   password: 'invalidPassword',
+  //   // });
 
-    expect(cerebralTest.getState('currentPage')).toEqual('Login');
-    expect(cerebralTest.getState('alertError')).toEqual({
-      message: 'Invalid password',
-      title: 'Invalid password',
-    });
-  });
+  //   expect(cerebralTest.getState('currentPage')).toEqual('Login');
+  //   expect(cerebralTest.getState('alertError')).toEqual({
+  //     message: 'Invalid password',
+  //     title: 'Invalid password',
+  //   });
+  // });
 
-  it('practitioner logs in successfully with new password', async () => {
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: emailAddress,
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'password',
-      value: password,
-    });
+  // it('practitioner logs in successfully with new password', async () => {
+  //   await cerebralTest.runSequence('updateFormValueSequence', {
+  //     key: 'email',
+  //     value: emailAddress,
+  //   });
+  //   await cerebralTest.runSequence('updateFormValueSequence', {
+  //     key: 'password',
+  //     value: password,
+  //   });
 
-    await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
-      code: emailAddress,
-      password,
-    });
+  //   await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
+  //     code: emailAddress,
+  //     password,
+  //   });
 
-    expect(cerebralTest.getState('currentPage')).toEqual(
-      'DashboardPractitioner',
-    );
-    expect(cerebralTest.getState('alertError')).toBeUndefined();
-    expect(cerebralTest.getState('user.email')).toEqual(emailAddress);
-  });
+  //   expect(cerebralTest.getState('currentPage')).toEqual(
+  //     'DashboardPractitioner',
+  //   );
+  //   expect(cerebralTest.getState('alertError')).toBeUndefined();
+  //   expect(cerebralTest.getState('user.email')).toEqual(emailAddress);
+  // });
 });

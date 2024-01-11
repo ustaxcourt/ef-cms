@@ -188,7 +188,7 @@ export const createOrUpdateUser = async ({
       UserPoolId: userPoolId,
       Username: user.email,
     });
-
+    // replace sub here
     userId = response.User!.Username;
   } else {
     const response = await cognito.adminGetUser({
@@ -203,9 +203,10 @@ export const createOrUpdateUser = async ({
         },
       ],
       UserPoolId: userPoolId,
+      // and here
       Username: response.Username,
     });
-
+    //and here
     userId = response.Username;
   }
 
