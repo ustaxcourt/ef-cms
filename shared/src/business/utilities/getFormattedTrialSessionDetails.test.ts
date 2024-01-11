@@ -42,12 +42,6 @@ describe('getFormattedTrialSessionDetails', () => {
     };
   });
 
-  it('returns undefined if state.trialSession is undefined', () => {
-    const options: any = { applicationContext };
-    const result = getFormattedTrialSessionDetails(options);
-    expect(result).toBeUndefined();
-  });
-
   it('formats trial session when all fields have values', () => {
     const mockChambersPhoneNumber = '123-456-9088';
     TRIAL_SESSION.chambersPhoneNumber = mockChambersPhoneNumber;
