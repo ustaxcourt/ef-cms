@@ -60,6 +60,7 @@ export const MessagesIndividualOutbox = connect(
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-individual-outbox-docket-number-header-button"
                   defaultSortOrder={constants.DESCENDING}
                   descText={constants.CHRONOLOGICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -73,6 +74,7 @@ export const MessagesIndividualOutbox = connect(
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-individual-outbox-completed-at-header-button"
                   defaultSortOrder={constants.DESCENDING}
                   descText={constants.CHRONOLOGICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -86,6 +88,7 @@ export const MessagesIndividualOutbox = connect(
                   ascText={constants.ALPHABETICALLY_ASCENDING}
                   currentlySortedField={tableSort.sortField}
                   currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-individual-outbox-subject-header-button"
                   defaultSortOrder={constants.ASCENDING}
                   descText={constants.ALPHABETICALLY_DESCENDING}
                   hasRows={formattedMessages.hasMessages}
@@ -113,15 +116,25 @@ export const MessagesIndividualOutbox = connect(
                       showLeadCaseIcon={message.isLeadCase}
                     />
                   </td>
-                  <td className="message-queue-row small" colSpan={2}>
+                  <td
+                    className="message-queue-row small"
+                    colSpan={2}
+                    data-testid="individual-message-outbox-docket-number-cell"
+                  >
                     {message.docketNumberWithSuffix}
                   </td>
-                  <td className="message-queue-row small">
+                  <td
+                    className="message-queue-row small"
+                    data-testid="individual-message-outbox-completed-at-cell"
+                  >
                     <span className="no-wrap">
                       {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-subject">
+                  <td
+                    className="message-queue-row message-subject"
+                    data-testid="individual-message-outbox-subject-cell"
+                  >
                     <div className="message-document-title">
                       <Button
                         link
