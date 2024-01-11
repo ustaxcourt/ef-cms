@@ -43,7 +43,7 @@ export const formattedTrialSessionDetails = (
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: get(state.trialSession),
+      trialSession,
     });
 
   const {
