@@ -152,37 +152,35 @@ export const compareCasesByDocketNumber = (a, b) => {
   return aSortString.localeCompare(bSortString);
 };
 
+export type FormattedTrialSessionDetailsType = TrialSessionState & {
+  allCases: any;
+  formattedChambersPhoneNumber: string;
+  formattedCity?: string;
+  formattedCityStateZip: string;
+  formattedCourtReporter: string;
+  formattedEstimatedEndDate: string;
+  formattedIrsCalendarAdministrator: string;
+  formattedIrsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
+  formattedJudge: string;
+  formattedStartDate: string;
+  formattedStartDateFull: string;
+  formattedStartTime: string;
+  formattedTerm: string;
+  formattedTrialClerk: string;
+  inactiveCases: any;
+  noLocationEntered: boolean;
+  openCases: any;
+  showSwingSession: boolean;
+  zipName: string;
+};
+
 export const getFormattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }: {
   applicationContext: any;
-  trialSession?: TrialSessionState;
-}):
-  | (TrialSessionState & {
-      allCases: any;
-      formattedChambersPhoneNumber: string;
-      formattedCity?: string;
-      formattedCityStateZip: string;
-      formattedCourtReporter: string;
-      formattedEstimatedEndDate: string;
-      formattedIrsCalendarAdministrator: string;
-      formattedIrsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
-      formattedJudge: string;
-      formattedStartDate: string;
-      formattedStartDateFull: string;
-      formattedStartTime: string;
-      formattedTerm: string;
-      formattedTrialClerk: string;
-      inactiveCases: any;
-      noLocationEntered: boolean;
-      openCases: any;
-      showSwingSession: boolean;
-      zipName: string;
-    })
-  | undefined => {
-  if (!trialSession) return undefined;
-
+  trialSession: TrialSessionState;
+}): FormattedTrialSessionDetailsType => {
   const allCases = (trialSession.calendaredCases || []).map(caseItem =>
     formatCaseForTrialSession({
       applicationContext,
