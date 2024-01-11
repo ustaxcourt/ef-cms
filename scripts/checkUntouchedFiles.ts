@@ -125,58 +125,31 @@ function logSmartTable(dataObject: {
     branchCount: number;
   };
 }): void {
-  const columnWidths = {
-    'Branch Count': 11,
-    'File Path': 9,
-    'Target Count': 12,
-  };
+  const tableData: {
+    'Branch Count': number;
+    'File Path': string;
+    'Target Count': number;
+  }[] = [];
 
   Object.entries(dataObject).forEach(([filePath, counts]) => {
     const { branchCount, targetCount } = counts;
-    columnWidths['File Path'] = Math.max(
-      columnWidths['File Path'],
-      filePath.length,
-    );
-    columnWidths['Target Count'] = Math.max(
-      columnWidths['Target Count'],
-      targetCount.toString().length,
-    );
-    columnWidths['Branch Count'] = Math.max(
-      columnWidths['Branch Count'],
-      branchCount.toString().length,
-    );
+    const data = {
+      'Branch Count': branchCount,
+      'File Path': filePath,
+      'Target Count': targetCount,
+    };
+    tableData.push(data);
   });
 
-  console.log(
-    `| ${'File Path'.padEnd(
-      columnWidths['File Path'],
-    )} | ${'Target Count'.padEnd(
-      columnWidths['Target Count'],
-    )} | ${'Branch Count'.padEnd(columnWidths['Branch Count'])} |`,
-  );
-  console.log(
-    `| ${'-'.repeat(columnWidths['File Path'])} | ${'-'.repeat(
-      columnWidths['Target Count'],
-    )} | ${'-'.repeat(columnWidths['Branch Count'])} |`,
-  );
-
-  Object.entries(dataObject).forEach(([filePath, counts]) => {
-    const { branchCount, targetCount } = counts;
-    console.log(
-      `| ${filePath.padEnd(columnWidths['File Path'])} | ${targetCount
-        .toString()
-        .padEnd(columnWidths['Target Count'])} | ${branchCount
-        .toString()
-        .padEnd(columnWidths['Branch Count'])} |`,
-    );
-  });
+  console.table(tableData, ['File Path', 'Target Count', 'Branch Count']);
 }
 
-if (Object.keys(fileToCheck).length) {
+const errorCount = Object.keys(fileToCheck);
+if (errorCount.length) {
   logSmartTable(fileToCheck);
   console.log(
     '\nHere are the files that your PR did not touch but increased in Typescript error count: ',
-    Object.keys(fileToCheck).length,
+    errorCount.length,
   );
   process.exit(1);
 } else {
