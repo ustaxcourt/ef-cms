@@ -114,6 +114,7 @@ export const CaseDetailHeaderMenu = connect(
         {caseDetailHeaderHelper.showCreateMessageButton && (
           <li
             className="usa-nav__submenu-item row-button"
+            data-testid="menu-button-add-new-message"
             id="menu-button-add-new-message"
             onClick={() => {
               resetCaseMenuSequence();
