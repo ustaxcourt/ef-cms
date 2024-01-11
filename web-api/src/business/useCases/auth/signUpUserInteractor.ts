@@ -1,6 +1,5 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import qs from 'qs';
 
@@ -56,10 +55,6 @@ export const signUpUserInteractor = async (
       {
         Name: 'name',
         Value: newUser.name,
-      },
-      {
-        Name: 'custom:role',
-        Value: ROLES.petitioner,
       },
     ],
     Username: newUser.email,

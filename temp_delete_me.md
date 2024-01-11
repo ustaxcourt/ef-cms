@@ -1,6 +1,6 @@
 ::: STUFF TO DO :::
 - finish all todos
-- ensure back button works right on login
+- Back button navigation does not work between public and private
 - fix tests
   - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
   - web-client/integration-tests/petitionerCreatesAccount.test.ts
