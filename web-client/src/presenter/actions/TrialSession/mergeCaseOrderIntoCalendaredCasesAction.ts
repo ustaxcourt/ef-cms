@@ -12,7 +12,7 @@ export const mergeCaseOrderIntoCalendaredCasesAction = ({
 }: ActionProps) => {
   const { calendaredCases, caseOrder } = get(state.trialSession);
 
-  for (const calendaredCase of calendaredCases!) {
+  for (const calendaredCase of calendaredCases) {
     const order = caseOrder!.find(
       o => o.docketNumber === calendaredCase.docketNumber,
     );
