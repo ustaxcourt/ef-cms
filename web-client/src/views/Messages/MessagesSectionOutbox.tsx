@@ -12,7 +12,6 @@ export const MessagesSectionOutbox = connect(
     constants: state.constants,
     formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -21,7 +20,6 @@ export const MessagesSectionOutbox = connect(
     constants,
     formattedMessages,
     screenMetadata,
-    showSortableHeaders,
     sortTableSequence,
     tableSort,
     updateScreenMetadataSequence,
@@ -63,58 +61,48 @@ export const MessagesSectionOutbox = connect(
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              {showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.DESCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="docketNumber"
-                    title="Docket No."
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  Docket No.
-                </th>
-              )}
-              {showSortableHeaders && (
-                <th className="small">
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.DESCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="createdAt"
-                    title="Sent"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th className="small">Sent</th>}
-              {showSortableHeaders && (
-                <th>
-                  <SortableColumn
-                    ascText={constants.ALPHABETICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="subject"
-                    title="Message"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th>Message</th>}
+              <th aria-label="Docket Number" className="small" colSpan={2}>
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-outbox-docket-number-header-button"
+                  defaultSortOrder={constants.DESCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="docketNumber"
+                  title="Docket No."
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th className="small">
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-outbox-created-at-header-button"
+                  defaultSortOrder={constants.DESCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="createdAt"
+                  title="Sent"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  dataTestID="message-section-outbox-subject-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="subject"
+                  title="Message"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
@@ -145,10 +133,17 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({ message }) {
             showLeadCaseIcon={message.isLeadCase}
           />
         </td>
-        <td className="message-queue-row small" colSpan={2}>
+        <td
+          className="message-queue-row small"
+          colSpan={2}
+          data-testid="section-message-outbox-docket-number-cell"
+        >
           {message.docketNumberWithSuffix}
         </td>
-        <td className="message-queue-row small">
+        <td
+          className="message-queue-row small"
+          data-testid="section-message-outbox-created-at-cell"
+        >
           <span className="no-wrap">{message.createdAtFormatted}</span>
         </td>
         <td className="message-queue-row message-subject">
@@ -158,7 +153,12 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({ message }) {
             </Button>
           </div>
 
-          <div className="message-document-detail">{message.message}</div>
+          <div
+            className="message-document-detail"
+            data-testid="section-message-outbox-subject-cell"
+          >
+            {message.message}
+          </div>
         </td>
         <td className="message-queue-row max-width-25">{message.caseTitle}</td>
         <td className="message-queue-row">{message.caseStatus}</td>
