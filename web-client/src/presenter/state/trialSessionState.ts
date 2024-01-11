@@ -16,6 +16,7 @@ export type TrialSessionState = RawTrialSession & {
   calendaredCases?: CalendaredCaseItemType[];
   eligibleCases?: RawEligibleCase[];
   swingSessionLocation?: string;
+  status?: string;
 };
 
 export const initialTrialSessionState: TrialSessionState = {
