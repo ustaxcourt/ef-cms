@@ -16,6 +16,7 @@ export const getCognitoUserIdByEmail = async ({
         attribute => attribute.Name === 'custom:userId',
       ) || {}
     ).Value;
+    // replace with sub here
     return customUserId || userFromCognito.Username;
   } catch (e) {
     return null;

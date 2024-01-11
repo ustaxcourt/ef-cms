@@ -52,17 +52,18 @@ async function resendAccountConfirmation(
   });
 
   // TODO: extract to utility
-  const userId: string =
-    (users.Users?.[0].Attributes?.find(element => {
+  const userIdAttribute =
+    users.Users?.[0].Attributes?.find(element => {
       if (element.Name === 'custom:userId') {
-        return element.Value;
+        return element;
       }
-    }) as unknown as string) ||
-    (users.Users?.[0].Attributes?.find(element => {
+    }) ||
+    users.Users?.[0].Attributes?.find(element => {
       if (element.Name === 'sub') {
-        return element.Value;
+        return element;
       }
-    })! as unknown as string);
+    });
+  const userId = userIdAttribute?.Value!;
 
   const accountConfirmationRecord = await applicationContext
     .getPersistenceGateway()
