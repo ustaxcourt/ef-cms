@@ -16,7 +16,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
 
   const showCaseNotes = get(state.modal.showCaseNotes);
 
-  const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails)!;
+  const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);
 
   const { caseMetadata, filters, sessionNotes, sort } = get(
     state.trialSessionWorkingCopy,
