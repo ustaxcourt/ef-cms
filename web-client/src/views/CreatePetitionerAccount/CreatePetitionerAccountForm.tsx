@@ -34,12 +34,7 @@ export const CreatePetitionerAccountForm = connect(
     return (
       <>
         <div
-          className="
-							create-petitioner-form
-              padding-x-205
-              margin-bottom-4
-							flex-1
-            "
+          className="create-petitioner-account create-petitioner-form padding-x-205 margin-bottom-4 flex-1"
           style={{ width: 'fit-content' }}
         >
           <div>

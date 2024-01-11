@@ -15,6 +15,7 @@ export const confirmSignUpInteractor = async (
     .getAccountConfirmationCode(applicationContext, { userId });
 
   if (accountConfirmationRecord.confirmationCode !== confirmationCode) {
+    // TODO 10007:  log when this happens for UX
     throw new InvalidRequest('Confirmation code expired');
   }
 
