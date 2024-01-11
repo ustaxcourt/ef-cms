@@ -181,7 +181,7 @@ export const getFormattedTrialSessionDetails = ({
   applicationContext: any;
   trialSession: TrialSessionState;
 }): FormattedTrialSessionDetailsType => {
-  const allCases = trialSession.calendaredCases.map(caseItem =>
+  const allCases = (trialSession.calendaredCases || []).map(caseItem =>
     formatCaseForTrialSession({
       applicationContext,
       caseItem,
