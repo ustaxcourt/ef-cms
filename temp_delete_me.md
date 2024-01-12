@@ -4,7 +4,6 @@
 - Fix tests
   - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 - We need to handle temporary password changes on login screen(when an admissions clerk creates account for practitioner. Granting e-access to a petitioner. Forgot password). This happens when cognito forces a password update.
-+ (RR & ZR) API Gateway requires re-deploy so that /system/* routes do not require authorizer.
 - Handle what happens if a user clicks an expired confirmation email: 
   - On login to an unconfirmed account immediately send an email to the user
   - Expire link after 24hours
