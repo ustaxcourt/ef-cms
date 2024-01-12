@@ -485,7 +485,7 @@ export class DocketEntry extends JoiValidationEntity {
       servedOrUnservable &&
       !entry.isStricken &&
       entry.isOnDocketRecord &&
-      entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE
+      entry.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE
     );
   };
 
