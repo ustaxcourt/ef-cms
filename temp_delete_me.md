@@ -10,6 +10,7 @@
   - If user clicks on an expired email then redirect them to the login and tell them to sign in so that we can send a new confirmation with a new confirmation code.
 - Cognito srp auth flow. Research.
 - userId, sub, email, username cognito . idk you figure it out.
+- Ensure incorrect login message appears on hosted env, didn't see this on our last test.
 
 ::: SOLO TO DO:::
 - Email Verification email is ugly.
