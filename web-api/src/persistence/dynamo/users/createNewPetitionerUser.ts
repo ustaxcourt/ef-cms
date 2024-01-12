@@ -41,6 +41,7 @@ export const createNewPetitionerUser = async ({
   const { userId } = user;
 
   const input: AdminCreateUserCommandInput = {
+    DesiredDeliveryMediums: ['EMAIL'],
     UserAttributes: [
       {
         Name: 'email_verified',
