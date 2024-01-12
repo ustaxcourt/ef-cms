@@ -33,11 +33,10 @@ describe('requestAccessHelper', () => {
     [mockContactId3]: true,
   };
 
-  applicationContext.getCurrentUser = () => ({
-    role: ROLES.privatePractitioner,
-  });
-
   beforeEach(() => {
+    applicationContext.getCurrentUser = () => ({
+      role: ROLES.privatePractitioner,
+    });
     state.form = {
       filersMap,
     };
@@ -252,12 +251,61 @@ describe('requestAccessHelper', () => {
       };
     });
 
-    it('should set showGenerationTypeForm to false when code is EA and any petitioner has paper', () => {
+    it('should set showGenerationTypeForm to true when code is EA and no petitioner has paper and user is a irsPractitioner', () => {
+      state.caseDetail = {
+        petitioners: [
+          {
+            contactId: mockContactId1,
+            contactType: CONTACT_TYPES.primary,
+            name: 'bob',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+          {
+            contactId: mockContactId2,
+            contactType: CONTACT_TYPES.primary,
+            name: 'sally',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+      };
+      applicationContext.getCurrentUser = () => ({
+        role: ROLES.irsPractitioner,
+      });
+      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
+        state,
+      });
+      expect(showGenerationTypeForm).toBeTruthy();
+    });
+
+    it('should set showGenerationTypeForm to false when code is O and any petitioner has paper and user is a private practitioner', () => {
+      state.form = {
+        eventCode: 'O',
+      };
+      applicationContext.getCurrentUser = () => ({
+        role: ROLES.privatePractitioner,
+      });
+      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
+        state,
+      });
+      expect(showGenerationTypeForm).toBeFalsy();
+    });
+
+    it('should set showGenerationTypeForm to false when code is EA and any petitioner has paper and user is not a private practitioner', () => {
+      applicationContext.getCurrentUser = () => ({
+        role: ROLES.irsPractitioner,
+      });
+      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
+        state,
+      });
+      expect(showGenerationTypeForm).toBeFalsy();
+    });
+
+    it('should set showGenerationTypeForm to true when code is EA and user is a private practitioner with parties that have paper service', () => {
       const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
         state,
       });
 
-      expect(showGenerationTypeForm).toBeFalsy();
+      expect(showGenerationTypeForm).toBeTruthy();
     });
   });
 
