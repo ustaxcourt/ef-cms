@@ -2,7 +2,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -42,52 +41,6 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   }
 
   return iconsToDisplay;
-};
-
-export const getShowDocumentViewerLink = ({
-  hasDocument,
-  isCourtIssuedDocument,
-  isExternalUser,
-  isHiddenToPublic,
-  isInitialDocument,
-  isLegacySealed,
-  isPassingAgeRequirement,
-  isPublic,
-  isSealed,
-  isSealedToExternal,
-  isServed,
-  isStipDecision,
-  isStricken,
-  isUnservable,
-  userHasAccessToCase,
-  userHasNoAccessToDocument,
-}) => {
-  if (!hasDocument) return false;
-  if (!userHasAccessToCase && isHiddenToPublic) return false;
-
-  if (isExternalUser) {
-    if (isStricken) return false;
-    if (isLegacySealed) return false;
-    if (isSealed) {
-      if (userHasAccessToCase && !isSealedToExternal) {
-        return isPassingAgeRequirement;
-      } else {
-        return false;
-      }
-    }
-    if (userHasNoAccessToDocument) return false;
-    if (isCourtIssuedDocument && !isStipDecision) {
-      if (isUnservable) return true;
-      if (!isServed) return false;
-    } else {
-      if (isServed && isPublic) return true;
-      if (!userHasAccessToCase) return false;
-      if (isInitialDocument) return true;
-      if (!isServed) return false;
-    }
-  }
-
-  return true;
 };
 
 export const getShowEditDocketRecordEntry = ({
@@ -141,23 +94,16 @@ export const getFormattedDocketEntry = ({
   userAssociatedWithCase,
   visibilityPolicyDateFormatted,
 }) => {
-  const {
-    DOCKET_ENTRY_SEALED_TO_TYPES,
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_VISIBLE_TO_PUBLIC,
-    INITIAL_DOCUMENT_TYPES,
-  } = applicationContext.getConstants();
+  const { DOCKET_ENTRY_SEALED_TO_TYPES, DOCUMENT_PROCESSING_STATUS_OPTIONS } =
+    applicationContext.getConstants();
 
   const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
-  const userHasAccessToDocument = entry.isAvailableToUser;
 
   const formattedResult = {
     numberOfPages: 0,
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
-
-  let showDocumentLinks = false;
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =
@@ -189,33 +135,15 @@ export const getFormattedDocketEntry = ({
   formattedResult.showNotServed = entry.isNotServedDocument;
   formattedResult.showServed = entry.isStatusServed;
 
-  const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
-    .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
-    .includes(entry.documentType);
-
   const isPublic = DocketEntry.isPublic(entry, {
     rootDocument: entry.rootDocument,
     visibilityChangeDate: visibilityPolicyDateFormatted,
   });
 
-  showDocumentLinks = getShowDocumentViewerLink({
-    hasDocument: entry.isFileAttached,
-    isCourtIssuedDocument: entry.isCourtIssuedDocument,
-    isExternalUser,
-    isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode),
-    isInitialDocument,
-    isLegacySealed: entry.isLegacySealed,
-    isPassingAgeRequirement: documentMeetsAgeRequirements(entry),
+  const showDocumentLinks = DocketEntry.isDownloadable(entry, {
+    isCourtUser: !isExternalUser,
     isPublic,
-    isSealed: entry.isSealed,
-    isSealedToExternal:
-      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
-    isServed: DocketEntry.isServed(entry),
-    isStipDecision: entry.isStipDecision,
-    isStricken: entry.isStricken,
-    isUnservable: formattedResult.isUnservable,
     userHasAccessToCase,
-    userHasNoAccessToDocument: !userHasAccessToDocument,
   });
 
   formattedResult.showDocumentViewerLink = !isExternalUser && showDocumentLinks;

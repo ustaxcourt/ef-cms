@@ -4,7 +4,6 @@ import {
   INITIAL_DOCUMENT_TYPES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
-  UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -174,11 +173,10 @@ const handleIrsSuperUser = ({
 };
 
 const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
-  const isUnservable = UNSERVABLE_EVENT_CODES.includes(
-    docketEntryEntity.eventCode,
-  );
-
-  if (!DocketEntry.isServed(docketEntryEntity) && !isUnservable) {
+  if (
+    !DocketEntry.isServed(docketEntryEntity) &&
+    !DocketEntry.isUnservable(docketEntryEntity.eventCode)
+  ) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (docketEntryEntity.isStricken) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);

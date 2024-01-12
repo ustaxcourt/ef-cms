@@ -5,7 +5,6 @@ import {
   PAYMENT_STATUS,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
-  UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
@@ -80,9 +79,9 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
 
   formattedEntry.qcWorkItemsCompleted = !qcWorkItem || !!qcWorkItem.completedAt;
 
-  formattedEntry.isUnservable =
-    UNSERVABLE_EVENT_CODES.includes(formattedEntry.eventCode) ||
-    formattedEntry.isLegacyServed;
+  formattedEntry.isUnservable = DocketEntry.isUnservable(
+    formattedEntry.eventCode,
+  );
 
   formattedEntry.isInProgress = computeIsInProgress({ formattedEntry });
 
