@@ -11,9 +11,9 @@ describe('getCognitoUserIdByEmail', () => {
   };
 
   it('returns the cognito user id when there is a corresponding user with the provided email found in cognito', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => Promise.resolve(mockFoundUser),
-    });
+    applicationContext
+      .getCognito()
+      .adminGetUser.mockResolvedValue(mockFoundUser);
 
     await expect(
       getCognitoUserIdByEmail({
@@ -26,12 +26,9 @@ describe('getCognitoUserIdByEmail', () => {
   it('returns the cognito custom user id if one is present when there is a corresponding user with the provided email found in cognito', async () => {
     const customMockUserId = '84cf1080-559f-4ba4-913b-27398b475bd7';
 
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          ...mockFoundUser,
-          UserAttributes: [{ Name: 'custom:userId', Value: customMockUserId }],
-        }),
+    applicationContext.getCognito().adminGetUser.mockResolvedValue({
+      ...mockFoundUser,
+      UserAttributes: [{ Name: 'custom:userId', Value: customMockUserId }],
     });
 
     await expect(
@@ -43,9 +40,9 @@ describe('getCognitoUserIdByEmail', () => {
   });
 
   it('returns null when there is no corresponding user with the provided email found in cognito', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => Promise.reject(new Error('User does not exist')),
-    });
+    applicationContext
+      .getCognito()
+      .adminGetUser.mockRejectedValue('There was an error');
 
     await expect(
       getCognitoUserIdByEmail({
