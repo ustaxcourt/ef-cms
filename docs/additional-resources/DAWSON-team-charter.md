@@ -115,10 +115,9 @@ As a team we use multiple methods of voting for decision making within the team.
 ### Technical Working Agreements:
 
 - We default to collaborative working styles. We do this because it produces higher quality software, helps developers find defects in a shorter feedback loop, increases creativity, and strengthens knowledge sharing. Working style is determined by each story’s needs and may change due to unforeseen circumstances. Stories are self assigned and anyone can join or leave as needed. The preference is for the group to remain together until the story is completed but can be fluid. Taking breaks from cameras/mics/groups are acceptable whenever the need arises as long as it’s communicated to the group.
-    - **Ensembles:** 2+ people actively working toward a shared goal in a structured, highly-engaged environment; Utilized when tight, frequent feedback loops are needed or desired; High expectations from contributing members with regard to engagement and communication
+    - **Ensembles:** 2+ people actively working toward a shared goal in a structured, highly-engaged environment; Utilized when tight, frequent feedback loops are needed or desired; High expectations from contributing members with regard to engagement and communication; Ensembles of 3+ can merge to test without external code reviews. Groups of two or individuals require at least one code review from a team member who didn't work on the PR
     - **Swarming:** 2+ people working on independent tasks in a Zoom; Utilized when you need or desire more frequent feedback than when working independently; Relies on speaking up when you need assistance or to bounce ideas off each other
     - **Async:** 1 person working asynchronously on one task at a time; Utilized when live/in-person feedback is not needed; Small, frequent PRs expected from other team members; Design debt/devex are good examples of this type of work
-    - **Ensembles** of 3+ can merge to test without external code reviews. Groups of two or individuals require at least one code review from a team member who didn't work on the PR.
 
 - We practice human-centered design to inform technical and design decisions. UX are embedded members of the development team and perform usability tests, interviews, brainstorming sessions and collaborate with devs and the PO throughout the SDLC.
 
