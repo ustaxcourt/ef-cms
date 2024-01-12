@@ -13,7 +13,7 @@
 - Ensure incorrect login message appears on hosted env, didn't see this on our last test.
 
 ::: SOLO TO DO:::
-+ Email Verification email is ugly.
+
 
 ::: QUESTIONS :::
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
@@ -23,6 +23,7 @@
 - When the user hits refresh, we cannot easily revoke old ID tokens when issuing a new ID token. The threat vector is limited to 1 hour though. 
   - This is not a problem when the user requests a new ID token because the old one has expired after an hour. 
   - Implementing a system around this is possible, it would require more refactoring to NOT break multi-tab workflows on DAWSON.
+- DOD:  Refactor cognito so every account has and can be looked up by custom:userId.
   
 ::: WIP :::
 - Create helper function to get userId from Cognito response
