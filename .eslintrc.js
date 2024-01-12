@@ -23,6 +23,7 @@ module.exports = {
   ignorePatterns: '**/*_.js',
   overrides: [
     {
+      extends: ['plugin:@typescript-eslint/disable-type-checked'],
       files: ['cypress/**/*.ts'],
       rules: {
         'cypress/unsafe-to-chain-command': 'warn',
