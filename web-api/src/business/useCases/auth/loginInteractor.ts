@@ -1,6 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError, UnknownUserError } from '@web-api/errors/errors';
-import qs from 'qs';
 
 export const loginInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -42,7 +41,7 @@ export const loginInteractor = async (
 async function resendAccountConfirmation(
   applicationContext: ServerApplicationContext,
   email: string,
-): Promise<string> {
+): Promise<void> {
   const cognito = applicationContext.getCognito();
 
   const users = await cognito.listUsers({
@@ -65,50 +64,7 @@ async function resendAccountConfirmation(
     });
   const userId = userIdAttribute?.Value!;
 
-  const accountConfirmationRecord = await applicationContext
-    .getPersistenceGateway()
-    .getAccountConfirmationCode(applicationContext, { userId });
-
-  let newConfirmationCode = accountConfirmationRecord.confirmationCode;
-
-  if (!newConfirmationCode) {
-    const { confirmationCode } = await applicationContext
-      .getPersistenceGateway()
-      .generateAccountConfirmationCode(applicationContext, { userId });
-    newConfirmationCode = confirmationCode;
-  }
-
-  const queryString = qs.stringify(
-    { confirmationCode: newConfirmationCode, email, userId },
-    { encode: false },
-  );
-
-  const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;
-
-  const emailBody =
-    'Welcome to DAWSON! Your account with DAWSON has been created. Use the' +
-    ' button below to verify your email address.' +
-    `<button style="font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
-        font-size: 1.06rem;
-        line-height: .9;
-        color: #fff;
-        background-color: #005ea2;
-        border: 0;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        display: inline-block;
-        margin-right: 0.5rem;
-        padding: .75rem 2.25rem;
-        text-align: center;
-        text-decoration: none;"><a href="${verificationLink}">Verify Email</a></button>` +
-    '<br><br><br>If you did not create an account with DAWSON, please contact support at ' +
-    '<a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.';
-
-  return await applicationContext
-    .getMessageGateway()
-    .sendEmailToUser(applicationContext, {
-      body: emailBody,
-      subject: 'U.S. Tax Court DAWSON Account Verification',
-      to: email,
-    });
+  await applicationContext
+    .getUseCaseHelpers()
+    .createUserConfirmation(applicationContext, { email, userId });
 }
