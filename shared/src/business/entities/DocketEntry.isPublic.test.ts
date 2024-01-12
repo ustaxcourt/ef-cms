@@ -34,6 +34,7 @@ describe('DocketEntry isPublic', () => {
     isOnDocketRecord: true,
     processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     receivedAt: '',
+    servedAt: '2018-11-21T20:49:28.192Z',
     stampData: {},
   };
 

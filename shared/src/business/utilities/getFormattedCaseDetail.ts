@@ -79,9 +79,7 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
 
   formattedEntry.qcWorkItemsCompleted = !qcWorkItem || !!qcWorkItem.completedAt;
 
-  formattedEntry.isUnservable = DocketEntry.isUnservable(
-    formattedEntry.eventCode,
-  );
+  formattedEntry.isUnservable = DocketEntry.isUnservable(formattedEntry);
 
   formattedEntry.isInProgress = computeIsInProgress({ formattedEntry });
 
