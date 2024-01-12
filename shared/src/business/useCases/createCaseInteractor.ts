@@ -27,6 +27,7 @@ const addPetitionDocketEntryToCase = ({
       assigneeId: null,
       assigneeName: null,
       associatedJudge: caseToAdd.associatedJudge,
+      associatedJudgeId: caseToAdd.associatedJudgeId,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketEntry: {

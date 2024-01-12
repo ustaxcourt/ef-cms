@@ -22,6 +22,7 @@ export const CompleteMessageModalDialog = connect(
           </label>
           <textarea
             className="usa-textarea"
+            data-testid="complete-message-body"
             id="message"
             name="form.message"
             onChange={e => {

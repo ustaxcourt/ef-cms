@@ -1,9 +1,10 @@
+import { type BatchGetResponseMap } from 'aws-sdk/clients/dynamodb';
 import { DeleteRequest, PutRequest, TDynamoRecord } from './dynamo/dynamoTypes';
 import {
   DescribeTableCommand,
   DescribeTableCommandOutput,
 } from '@aws-sdk/client-dynamodb';
-import { chunk, isEmpty, uniqBy } from 'lodash';
+import { chunk, flatten, isEmpty, uniqBy } from 'lodash';
 import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
 
 /**
@@ -362,26 +363,21 @@ export const batchGet = async ({
   });
   const chunks = chunk(uniqueKeys, 100);
 
-  let results = [];
-  for (let chunkOfKeys of chunks) {
-    results = results.concat(
-      await applicationContext
-        .getDocumentClient(applicationContext)
-        .batchGet({
-          RequestItems: {
-            [getTableName({ applicationContext })]: {
-              Keys: chunkOfKeys,
-            },
-          },
-        })
-        .then(result => {
-          const items = result.Responses[getTableName({ applicationContext })];
-          items.forEach(item => removeAWSGlobalFields(item));
-          return items;
-        }),
-    );
-  }
-  return results;
+  const promises: Promise<BatchGetResponseMap>[] = chunks.map(chunkOfKeys =>
+    applicationContext.getDocumentClient(applicationContext).batchGet({
+      RequestItems: {
+        [getTableName({ applicationContext })]: {
+          Keys: chunkOfKeys,
+        },
+      },
+    }),
+  );
+
+  const tableName = getTableName({ applicationContext });
+  const results = (await Promise.all(promises)).map(result =>
+    result.Responses[tableName].map(removeAWSGlobalFields),
+  );
+  return flatten(results);
 };
 
 /**
