@@ -24,6 +24,9 @@ module.exports = {
   overrides: [
     {
       extends: ['plugin:@typescript-eslint/disable-type-checked'],
+      files: ['cypress/**/*.ts', 'webpack.config**'],
+    },
+    {
       files: ['cypress/**/*.ts'],
       rules: {
         'cypress/unsafe-to-chain-command': 'warn',
