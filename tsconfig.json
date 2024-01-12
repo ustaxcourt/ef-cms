@@ -37,7 +37,12 @@
     "./web-client/integration-tests-public/**/*",
     "./web-client/src/**/*",
     "./scripts/**/*",
-    "./.eslintrc.js"
+    "./.eslintrc.js",
+    "./web-api/storage/scripts/loadTest/loadTestPdfGeneration.ts"
   ],
-  "exclude": ["node_modules", "./scripts/run-once-scripts/**/*", "./cognito-triggers-sls/node_modules/**/*"]
+  "exclude": [
+    "node_modules",
+    "./scripts/run-once-scripts/**/*",
+    "./cognito-triggers-sls/node_modules/**/*"
+  ]
 }
