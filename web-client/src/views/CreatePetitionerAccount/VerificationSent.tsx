@@ -1,15 +1,14 @@
 import { MessageAlert } from '@web-client/ustc-ui/MessageAlert/MessageAlert';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const VerificationSent = connect(
   {
     alertSuccess: state.alertSuccess,
     email: state.cognito.email,
-    resendVerificationLinkSequence: sequences.resendVerificationLinkSequence,
   },
-  ({ alertSuccess, email, resendVerificationLinkSequence }) => {
+  ({ alertSuccess, email }) => {
     return (
       <div className="display-flex flex-justify-center padding-y-5">
         <div
@@ -32,15 +31,7 @@ export const VerificationSent = connect(
             <h2>Email address verification sent</h2>
             <p>
               An email to verify your email address was sent to {email}. If you
-              didn&apos;t receive a verification email, check your spam folder
-              or you can{' '}
-              <button
-                className="usa-button--unstyled cursor-pointer"
-                onClick={() => resendVerificationLinkSequence()}
-              >
-                send the verification email again
-              </button>
-              .
+              didn&apos;t receive a verification email, check your spam folder.
             </p>
           </div>
         </div>
