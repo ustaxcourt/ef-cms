@@ -122,6 +122,7 @@ export const addPaperFiling = async (
         assigneeId: user.userId,
         assigneeName: user.name,
         associatedJudge: caseEntity.associatedJudge,
+        associatedJudgeId: caseEntity.associatedJudgeId,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
