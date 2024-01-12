@@ -574,8 +574,8 @@ export const baseState = {
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
-  cognitoRequestPasswordResetUrl:
-    process.env.COGNITO_PASSWORD_RESET_REQUEST_URL,
+  cognitoPasswordChange: '',
+  cognitoRequestPasswordResetUrl: '',
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
   currentJudges: [],

@@ -142,6 +142,10 @@ const app = {
       return value;
     });
     presenter.state.constants = applicationContext.getConstants();
+    presenter.state.cognitoPasswordChange =
+      applicationContext.getCognitoPasswordChangeUrl();
+    presenter.state.cognitoRequestPasswordResetUrl =
+      applicationContext.getCognitoResetPasswordUrl();
 
     presenter.state.clientConnectionId = applicationContext.getUniqueId();
 
