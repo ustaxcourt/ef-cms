@@ -15,23 +15,37 @@ export const loginInteractor = async (
       ClientId: applicationContext.environment.cognitoClientId,
     });
 
+    console.log('*** result', result);
+
+    if (
+      result.ChallengeName &&
+      result.ChallengeName === 'NEW_PASSWORD_REQUIRED'
+    ) {
+      console.log('NEW_PASSWORD_REQUIRED');
+      const PasswordChangeError = new Error('NewPasswordRequired');
+      PasswordChangeError.name = 'NewPasswordRequired';
+      throw PasswordChangeError;
+    }
+
     return {
       accessToken: result.AuthenticationResult!.AccessToken!,
       idToken: result.AuthenticationResult!.IdToken!,
       refreshToken: result.AuthenticationResult!.RefreshToken!,
     };
   } catch (err: any) {
+    console.log('*** err', err);
+
     if (
       err.name === 'InvalidPasswordException' ||
       err.name === 'NotAuthorizedException'
     ) {
-      throw new UnknownUserError('Invalid Username or Password');
+      throw new UnknownUserError('Invalid Username or Password'); //401
     }
 
     if (err.name === 'UserNotConfirmedException') {
       await resendAccountConfirmation(applicationContext, email);
 
-      throw new UnauthorizedError('User is unconfirmed');
+      throw new UnauthorizedError('User is unconfirmed'); //403
     }
 
     throw err;

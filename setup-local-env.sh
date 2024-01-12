@@ -20,4 +20,5 @@ export IRS_SUPERUSER_EMAIL=irs-superuser@example.com
 export USER_POOL_ID='local_2pHzece7'
 export COGNITO_CLIENT_ID='bvjrggnd3co403c0aahscinne'
 export DISABLE_EMAILS=true
+export COGNITO_PASSWORD_CHANGE_URL='test_url'
 export ENV=local
