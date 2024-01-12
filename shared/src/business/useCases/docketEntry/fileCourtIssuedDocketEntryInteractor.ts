@@ -72,7 +72,7 @@ export const fileCourtIssuedDocketEntry = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const isUnservable = DocketEntry.isUnservable(documentMeta.eventCode);
+  const isUnservable = DocketEntry.isUnservable(documentMeta);
 
   await Promise.all(
     [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {

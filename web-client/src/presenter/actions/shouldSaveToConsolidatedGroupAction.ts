@@ -16,7 +16,7 @@ export const shouldSaveToConsolidatedGroupAction = ({
   const caseDetail = get(state.caseDetail);
   const { eventCode } = get(state.form);
 
-  const isUnservable = DocketEntry.isUnservable(eventCode);
+  const isUnservable = DocketEntry.isUnservable({ eventCode });
   const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
   const isNotTaxCourtPamphlet = eventCode !== 'TCRP';
 

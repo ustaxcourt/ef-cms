@@ -479,7 +479,7 @@ export class DocketEntry extends JoiValidationEntity {
 
   static isAvailableToExternal = (entry: RawDocketEntry): boolean => {
     const servedOrUnservable =
-      DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry.eventCode);
+      DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry);
 
     return (
       servedOrUnservable &&
@@ -633,10 +633,7 @@ export class DocketEntry extends JoiValidationEntity {
   ): boolean => {
     if (!entry.isFileAttached) return false;
     if (isCourtUser) return true;
-    if (
-      !DocketEntry.isServed(entry) &&
-      !DocketEntry.isUnservable(entry.eventCode)
-    )
+    if (!DocketEntry.isServed(entry) && !DocketEntry.isUnservable(entry))
       return false;
     if (!userHasAccessToCase || isPublic) return !!isPublic;
 
@@ -736,10 +733,17 @@ export class DocketEntry extends JoiValidationEntity {
     return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
   }
 
-  static isUnservable(eventCode: string): boolean {
+  static isUnservable({
+    eventCode,
+    isLegacyServed,
+  }: {
+    eventCode: string;
+    isLegacyServed?: boolean;
+  }): boolean {
     return (
       DocketEntry.isMinuteEntry(eventCode) ||
-      UNSERVABLE_EVENT_CODES.includes(eventCode)
+      UNSERVABLE_EVENT_CODES.includes(eventCode) ||
+      !!isLegacyServed
     );
   }
 

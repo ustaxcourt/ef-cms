@@ -175,7 +175,7 @@ const handleIrsSuperUser = ({
 const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
   if (
     !DocketEntry.isServed(docketEntryEntity) &&
-    !DocketEntry.isUnservable(docketEntryEntity.eventCode)
+    !DocketEntry.isUnservable(docketEntryEntity)
   ) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (docketEntryEntity.isStricken) {

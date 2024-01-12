@@ -23,7 +23,7 @@ export const formatDocketEntryOnDocketRecord = (
   },
 ) => {
   const isServed =
-    DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry.eventCode);
+    DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry);
 
   const isCourtIssued = DocketEntry.isCourtIssued(entry.eventCode);
 
@@ -31,7 +31,7 @@ export const formatDocketEntryOnDocketRecord = (
   if (
     isCourtIssued &&
     !DocketEntry.isServed(entry) &&
-    !DocketEntry.isUnservable(entry.eventCode) &&
+    !DocketEntry.isUnservable(entry) &&
     entry.isOnDocketRecord
   ) {
     entry.createdAtFormatted = undefined;
@@ -97,8 +97,7 @@ export const formatDocketEntryOnDocketRecord = (
     showDocumentDescriptionWithoutLink: !showLinkToDocument,
     showLinkToDocument,
     showNotServed:
-      !DocketEntry.isServed(entry) &&
-      !DocketEntry.isUnservable(entry.eventCode),
+      !DocketEntry.isServed(entry) && !DocketEntry.isUnservable(entry),
     showServed: DocketEntry.isServed(entry),
     signatory: entry.signatory,
   };
