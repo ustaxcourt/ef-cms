@@ -31,8 +31,8 @@ export const confirmSignUpAction = async ({
     return path.no({
       alertError: {
         message:
-          'Please log in to have a new account verification email sent to you.',
-        title: 'Confirmation code expired',
+          'Enter your email address and password below, then log in to be send a new verification email.',
+        title: 'Verification email link expired',
       },
     });
   }
