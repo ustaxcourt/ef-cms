@@ -165,6 +165,8 @@ export const createOrUpdateUser = async ({
 
   if (!userExists) {
     const response = await cognito.adminCreateUser({
+      //TODO: make 1000000% sure this works fine on deployed env
+      DesiredDeliveryMediums: ['EMAIL'],
       MessageAction: 'SUPPRESS',
       TemporaryPassword: password,
       UserAttributes: [
