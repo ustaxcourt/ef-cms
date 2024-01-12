@@ -17,10 +17,7 @@ export const loginInteractor = async (
 
     console.log('*** result', result);
 
-    if (
-      result.ChallengeName &&
-      result.ChallengeName === 'NEW_PASSWORD_REQUIRED'
-    ) {
+    if (result?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
       console.log('NEW_PASSWORD_REQUIRED');
       const PasswordChangeError = new Error('NewPasswordRequired');
       PasswordChangeError.name = 'NewPasswordRequired';
