@@ -101,24 +101,29 @@ const sendAccountCreationConfirmation = async (
   );
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;
 
-  const emailBody =
-    'Welcome to DAWSON! Your account with DAWSON has been created. Use the' +
-    ' button below to verify your email address.' +
-    `<button style="font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
-    font-size: 1.06rem;
-    line-height: .9;
-    color: #fff;
-    background-color: #005ea2;
-    border: 0;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    display: inline-block;
-    margin-right: 0.5rem;
-    padding: .75rem 2.25rem;
-    text-align: center;
-    text-decoration: none;"><a href="${verificationLink}">Verify Email</a></button>` +
-    '<br><br><br>If you did not create an account with DAWSON, please contact support at ' +
-    '<a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.';
+  const emailBody = `<div>
+    <span>
+      Welcome to DAWSON! Your account with DAWSON has been created. Use the button below to verify your email address. After 24 hours, this link will expire. 
+    </span>
+    <div style="margin-top: 20px;">
+      <form action="${verificationLink}">
+        <input type="submit" value="Verify Email" style="font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+        font-size: 1.06rem;
+        line-height: .9;
+        background-color: #005ea2;
+        color: #ffffff;
+        border: 0;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        padding: .75rem 2.25rem;
+        text-align: center;" />
+    </form>
+    </div>
+    <div style="margin-top: 20px;">
+      <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+    </div>
+  </div>`;
 
   return await applicationContext
     .getMessageGateway()
