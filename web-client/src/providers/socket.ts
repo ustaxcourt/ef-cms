@@ -39,11 +39,11 @@ export const socketProvider = ({ socketRouter }) => {
             return reject(error);
           };
 
-          socket.onclose = err => {
+          socket.onclose = async err => {
             stopSocket();
             if (err && err.reason !== 'Normal connection closure') {
               console.error(err);
-              start();
+              await start();
             }
           };
 
