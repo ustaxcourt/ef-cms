@@ -1,6 +1,6 @@
+import { AccountConfirmationRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { get } from '../../dynamodbClientService';
-import { AccountConfirmationRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
 export const getAccountConfirmationCode = async (
   applicationContext: ServerApplicationContext,
@@ -13,7 +13,7 @@ export const getAccountConfirmationCode = async (
   const result: AccountConfirmationRecord = await get({
     Key: {
       pk: `user|${userId}`,
-      sk: `account-confirmation-code`,
+      sk: 'account-confirmation-code',
     },
     applicationContext,
   });

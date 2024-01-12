@@ -139,6 +139,7 @@ import { markMessageThreadRepliedTo } from './persistence/dynamo/messages/markMe
 import { persistUser } from './persistence/dynamo/users/persistUser';
 import { putWorkItemInOutbox } from './persistence/dynamo/workitems/putWorkItemInOutbox';
 import { putWorkItemInUsersOutbox } from './persistence/dynamo/workitems/putWorkItemInUsersOutbox';
+import { refreshConfirmationCodeExpiration } from '@web-api/persistence/dynamo/users/refreshConfirmationCodeExpiration';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
 import {
   removeIrsPractitionerOnCase,
@@ -277,8 +278,6 @@ const gatewayMethods = {
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
-  generateAccountConfirmationCode,
-  getAccountConfirmationCode,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   createChangeOfAddressJob,
@@ -299,6 +298,8 @@ const gatewayMethods = {
   deleteUserFromCase,
   deleteWorkItem,
   fetchEventCodesCountForJudges,
+  generateAccountConfirmationCode,
+  getAccountConfirmationCode,
   getAllPendingMotionDocketEntriesForJudge,
   getAllUsersByRole,
   getAllWebSocketConnections,
@@ -381,6 +382,7 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
+  refreshConfirmationCodeExpiration,
   removeIrsPractitionerOnCase,
   removeLock,
   removePrivatePractitionerOnCase,

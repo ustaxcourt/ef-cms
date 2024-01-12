@@ -13,6 +13,7 @@ import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/co
 import { createAndServeNoticeDocketEntry } from '../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry';
 import { createCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createTrialSessionAndWorkingCopy } from '../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy';
+import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { createUserForContact } from '../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact';
 import { fileAndServeDocumentOnOneCase } from '../../shared/src/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
@@ -60,6 +61,7 @@ const useCaseHelpers = {
   createAndServeNoticeDocketEntry,
   createCaseAndAssociations,
   createTrialSessionAndWorkingCopy,
+  createUserConfirmation,
   createUserForContact,
   fileAndServeDocumentOnOneCase,
   formatConsolidatedCaseCoversheetData,
