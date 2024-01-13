@@ -55,6 +55,10 @@ export const signUpUserInteractor = async (
         Name: 'name',
         Value: newUser.name,
       },
+      {
+        Name: 'custom:userId',
+        Value: applicationContext.getUniqueId(),
+      },
     ],
     Username: newUser.email,
   });

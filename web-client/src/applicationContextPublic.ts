@@ -78,7 +78,6 @@ import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionP
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { removeItem } from './persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
-import { resendVerificationLinkInteractor } from '../../shared/src/proxies/public/resendVerificationLinkProxy';
 import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
@@ -114,7 +113,6 @@ const allUseCases = {
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   removeItemInteractor,
-  resendVerificationLinkInteractor,
   setItemInteractor,
   signUpUserInteractor,
   validateCaseAdvancedSearchInteractor,
