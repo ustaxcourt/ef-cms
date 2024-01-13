@@ -11,12 +11,14 @@
 - Cognito srp auth flow. Research.
 - userId, sub, email, username cognito . idk you figure it out.
 - Ensure incorrect login message appears on hosted env, didn't see this on our last test.
+- Add progress spinner after you hit 'Login'
 
 ::: SOLO TO DO:::
 
 
 ::: QUESTIONS :::
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
+- What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
 
 
 ::: CONVERSATIONS TO HAVE :::
