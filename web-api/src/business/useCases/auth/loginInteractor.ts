@@ -1,5 +1,9 @@
+import {
+  NotFoundError,
+  UnauthorizedError,
+  UnknownUserError,
+} from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError, UnknownUserError } from '@web-api/errors/errors';
 
 export const loginInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -56,26 +60,25 @@ async function resendAccountConfirmation(
   const cognito = applicationContext.getCognito();
 
   const users = await cognito.listUsers({
-    AttributesToGet: ['sub', 'custom:userId'],
+    AttributesToGet: ['custom:userId'],
     Filter: `email = "${email}"`,
     UserPoolId: process.env.USER_POOL_ID,
   });
 
-  // TODO: extract to utility
-  const userIdAttribute =
-    users.Users?.[0].Attributes?.find(element => {
-      if (element.Name === 'custom:userId') {
-        return element;
-      }
-    }) ||
-    users.Users?.[0].Attributes?.find(element => {
-      if (element.Name === 'sub') {
-        return element;
-      }
-    });
-  const userId = userIdAttribute?.Value!;
+  const userIdAttribute = users.Users?.[0].Attributes?.find(
+    element => element.Name === 'custom:userId',
+  );
+
+  if (!userIdAttribute?.Value) {
+    throw new NotFoundError(
+      `Could not find user to re-send confirmation code to. ${email}`,
+    );
+  }
 
   await applicationContext
     .getUseCaseHelpers()
-    .createUserConfirmation(applicationContext, { email, userId });
+    .createUserConfirmation(applicationContext, {
+      email,
+      userId: userIdAttribute.Value,
+    });
 }

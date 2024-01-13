@@ -6,6 +6,7 @@ export const handler = async event => {
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const { email, name, sub: userId } = event.request.userAttributes;
 
+    //  TODO 10007: We can replace this create petitioner account trigger and move the functionality over to our confirmSignUpInteractor.
     const user = await applicationContext
       .getUseCases()
       .createPetitionerAccountInteractor(applicationContext, {
