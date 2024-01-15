@@ -9,7 +9,8 @@
   - If user clicks on an expired email then redirect them to the login and tell them to sign in so that we can send a new confirmation with a new confirmation code.
 - Cognito srp auth flow. Research.
 - Ensure incorrect login message appears on hosted env, didn't see this on our last test.
-- Unify error handling for loginInteractor, signUpUserInteractor. err.responseCode, err.name, err.message?
+- Extract error message strings into constants OR do something else.
+- Fix redirect_url in cognito links
 
 ::: SOLO TO DO:::
 

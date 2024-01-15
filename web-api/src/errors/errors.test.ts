@@ -3,7 +3,7 @@ import {
   NotFoundError,
   ServiceUnavailableError,
   UnauthorizedError,
-  UnknownUserError,
+  UnidentifiedUserError,
   UnprocessableEntityError,
   UnsanitizedEntityError,
 } from './errors';
@@ -40,11 +40,11 @@ describe('UnauthorizedError', () => {
   });
 });
 
-describe('UnknownUserError', () => {
+describe('UnidentifiedUserError', () => {
   let error;
 
   beforeEach(() => {
-    error = new UnknownUserError('some error');
+    error = new UnidentifiedUserError('some error');
   });
 
   it('should set a status code of 401', () => {
