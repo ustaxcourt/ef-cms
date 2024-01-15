@@ -71,11 +71,10 @@ export const getCasesByFilters = async ({
   }
 
   if (params.judges.length) {
-    let judgesSelection = params.judges;
-    const shouldArray: Object[] = [];
+    if (params.judges.includes(CHIEF_JUDGE)) {
+      const shouldArray: Object[] = [];
 
-    if (judgesSelection.includes(CHIEF_JUDGE)) {
-      const associatedJudgeFilters = {
+      const associatedJudgeFilter = {
         match: {
           'associatedJudge.S': {
             operator: 'and',
@@ -83,14 +82,12 @@ export const getCasesByFilters = async ({
           },
         },
       };
-      shouldArray.push(associatedJudgeFilters);
+      shouldArray.push(associatedJudgeFilter);
 
-      const judgesSelectionIds = judgesSelection.filter(
-        judge => judge !== CHIEF_JUDGE,
-      );
+      const judgesIds = params.judges.filter(judge => judge !== CHIEF_JUDGE);
       shouldArray.push({
         terms: {
-          'associatedJudgeId.S': judgesSelectionIds,
+          'associatedJudgeId.S': judgesIds,
         },
       });
       const shouldObject: QueryDslQueryContainer = {
@@ -102,7 +99,7 @@ export const getCasesByFilters = async ({
     } else {
       mustClause.push({
         terms: {
-          'associatedJudgeId.S': judgesSelection,
+          'associatedJudgeId.S': params.judges,
         },
       });
     }
