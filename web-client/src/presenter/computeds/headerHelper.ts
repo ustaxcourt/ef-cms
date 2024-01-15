@@ -81,5 +81,6 @@ export const headerHelper = (
     showVerifyEmailWarningNotification: !!user?.pendingEmail,
     unreadMessageCount,
     userName: user && user.name,
+    ustcSealLink: isLoggedIn ? '/' : applicationContext.getPublicSiteUrl(),
   };
 };
