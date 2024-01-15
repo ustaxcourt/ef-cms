@@ -21,6 +21,7 @@ CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_I
 COGNITO_LOGIN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
 COGNITO_TOKEN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/oauth2/token"
 
+# TODO: remove/update response_type, update redirect_uri
 COGNITO_PASSWORD_RESET_REQUEST_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/forgotPassword?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
 COGNITO_PASSWORD_CHANGE_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/changePassword?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
 
