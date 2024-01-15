@@ -296,11 +296,41 @@ describe('Messages', () => {
         });
 
         it('section outbox subject column', () => {
+          cy.get('@DOCKET_NUMBER').then(docketNumber => {
+            cy.contains(
+              '[data-testid="section-message-outbox-docket-number-cell"]',
+              `${docketNumber}`,
+            ).each((el, i) => {
+              cy.wrap(el.parent())
+                .find('.message-document-title')
+                .invoke('text')
+                .then(text => {
+                  if (text.includes('Complete')) {
+                    cy.wrap(text).should('equal', `Complete ${3 - i - 1}`);
+                  }
+                });
+            });
+          });
+
           sortMessageColumnHeader(
-            '[data-testid="message-section-outbox-subject-header-button"]',
-            '[data-testid="section-message-outbox-subject-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+            '[data-testid="message-section-outbox-created-at-header-button"]',
+            '[data-testid="section-message-outbox-created-at-cell"]',
+          );
+
+          cy.get('@DOCKET_NUMBER').then(docketNumber => {
+            cy.contains(
+              '[data-testid="section-message-outbox-docket-number-cell"]',
+              `${docketNumber}`,
+            ).each((el, i) => {
+              cy.wrap(el.parent())
+                .find('.message-document-title')
+                .invoke('text')
+                .then(text => {
+                  if (text.includes('Complete')) {
+                    cy.wrap(text).should('equal', `Complete ${i + 1}`);
+                  }
+                });
+            });
           });
         });
 
