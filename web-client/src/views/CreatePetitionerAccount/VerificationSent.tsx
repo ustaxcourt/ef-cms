@@ -31,7 +31,9 @@ export const VerificationSent = connect(
             <h2>Email address verification sent</h2>
             <p>
               An email to verify your email address was sent to {email}. If you
-              didn&apos;t receive a verification email, check your spam folder.
+              didn&apos;t receive a verification email, check your spam folder
+              or you can <a href="/login">log in</a> to send the verification
+              email again.
             </p>
           </div>
         </div>
