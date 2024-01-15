@@ -7,21 +7,24 @@ import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertError
 import { setTokenAction } from '@web-client/presenter/actions/Login/setTokenAction';
 import { setUserAction } from '@web-client/presenter/actions/setUserAction';
 import { setUserPermissionsAction } from '@web-client/presenter/actions/setUserPermissionsAction';
+import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { submitLoginAction } from '@web-client/presenter/actions/Login/submitLoginAction';
 
 export const submitLoginSequence = [
-  submitLoginAction,
-  {
-    changePassword: [redirectToChangePasswordAction],
-    error: [setAlertErrorAction],
-    success: [
-      clearFormAction,
-      decodeTokenAction,
-      setTokenAction,
-      getUserAction,
-      setUserAction,
-      setUserPermissionsAction,
-      navigateToPathAction,
-    ],
-  },
+  showProgressSequenceDecorator([
+    submitLoginAction,
+    {
+      changePassword: [redirectToChangePasswordAction],
+      error: [setAlertErrorAction],
+      success: [
+        clearFormAction,
+        decodeTokenAction,
+        setTokenAction,
+        getUserAction,
+        setUserAction,
+        setUserPermissionsAction,
+        navigateToPathAction,
+      ],
+    },
+  ]),
 ] as unknown as () => void;
