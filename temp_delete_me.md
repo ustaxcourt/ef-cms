@@ -1,6 +1,5 @@
 ::: STUFF TO DO :::
 - Finish all todos
-- Back button navigation does not work between public and private
 - Fix tests
   - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 + Handle what happens if a user clicks an expired confirmation email: 
