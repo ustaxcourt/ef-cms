@@ -42,8 +42,8 @@ export const signUpUserInteractor = async (
   }
 
   const newUser = new NewPetitionerUser(user).validate().toRawObject();
-
-  const result = await cognito.signUp({
+  const userId = applicationContext.getUniqueId();
+  await cognito.signUp({
     ClientId: process.env.COGNITO_CLIENT_ID,
     Password: newUser.password,
     UserAttributes: [
@@ -57,14 +57,11 @@ export const signUpUserInteractor = async (
       },
       {
         Name: 'custom:userId',
-        Value: applicationContext.getUniqueId(),
+        Value: userId,
       },
     ],
     Username: newUser.email,
   });
-
-  // Todo: use 'new' helper function to signify that this _could_ be custom:userId
-  const userId = result.UserSub!;
 
   //TODO 10007: ensure userId is standardized/consistent
   const { confirmationCode } = await applicationContext
