@@ -12,8 +12,8 @@ export const getCustomCaseReportAction = async ({
 }: ActionProps<{ selectedPage: number }>) => {
   const filterValues = get(state.customCaseReport.filters);
   const currentJudges = get(state.judges);
-
-  console.log('filterValues', filterValues);
+  const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
+  const searchAfter = lastIdsOfPages[props.selectedPage];
 
   if (!filterValues.highPriority) {
     delete filterValues.highPriority;
@@ -36,9 +36,6 @@ export const getCustomCaseReportAction = async ({
       .getUtilities()
       .createEndOfDayISO({ day: endDay, month: endMonth, year: endYear });
   }
-
-  const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
-  const searchAfter = lastIdsOfPages[props.selectedPage];
 
   let judgesIds: string[] | undefined;
   if (filterValues.judges?.length) {
