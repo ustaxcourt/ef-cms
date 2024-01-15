@@ -33,7 +33,6 @@ type CognitoLocalJSON = {
       endpoint: string;
     };
     TriggerFunctions: {
-      PostConfirmation: string;
       PostAuthentication: string;
     };
     SchemaAttributes: Array<{
@@ -87,7 +86,6 @@ const cognitoLocalJSON: CognitoLocalJSON = {
       endpoint: 'http://localhost:9991',
     },
     TriggerFunctions: {
-      PostConfirmation: 'PostConfirmation_ConfirmSignUp',
       PostAuthentication: 'PostAuthentication_Authentication',
     },
     SchemaAttributes: [

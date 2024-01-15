@@ -3,23 +3,7 @@ import { createApplicationContext } from '../../../src/applicationContext';
 export const handler = async event => {
   const applicationContext = createApplicationContext({});
 
-  if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
-    const { email, name, sub: userId } = event.request.userAttributes;
-
-    //  TODO 10007: We can replace this create petitioner account trigger and move the functionality over to our confirmSignUpInteractor.
-    const user = await applicationContext
-      .getUseCases()
-      .createPetitionerAccountInteractor(applicationContext, {
-        email,
-        name,
-        userId,
-      });
-
-    applicationContext.logger.info('Petitioner signup processed', {
-      event,
-      user,
-    });
-  } else if (event.triggerSource === 'PostAuthentication_Authentication') {
+  if (event.triggerSource === 'PostAuthentication_Authentication') {
     const { email, sub } = event.request.userAttributes;
     const userId = event.request.userAttributes['custom:userId'] || sub;
 
