@@ -4,7 +4,7 @@ import route from 'riot-route';
 route.base('/');
 
 const externalRoute = path => {
-  window.location.replace(path);
+  window.location.href = path;
 };
 
 const back = () => {
