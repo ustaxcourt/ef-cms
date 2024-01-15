@@ -1,8 +1,8 @@
+import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import {
   CaseInventory,
   GetCustomCaseReportRequest,
 } from '../../business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-// eslint-disable-next-line import/no-unresolved
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';
 
@@ -31,7 +31,7 @@ export const getCasesByFilters = async ({
     'highPriority',
   ];
 
-  const filters: QueryDslQueryContainer[] = [];
+  const mustClause: QueryDslQueryContainer[] = [];
 
   const createDateFilter = {
     range: {
@@ -41,7 +41,7 @@ export const getCasesByFilters = async ({
       },
     },
   };
-  filters.push(createDateFilter);
+  mustClause.push(createDateFilter);
 
   if (params.caseStatuses.length) {
     const caseStatusesFilters = {
@@ -49,7 +49,7 @@ export const getCasesByFilters = async ({
         'status.S': params.caseStatuses,
       },
     };
-    filters.push(caseStatusesFilters);
+    mustClause.push(caseStatusesFilters);
   }
 
   if (params.caseTypes.length) {
@@ -58,7 +58,7 @@ export const getCasesByFilters = async ({
         'caseType.S': params.caseTypes,
       },
     };
-    filters.push(caseTypeFilters);
+    mustClause.push(caseTypeFilters);
   }
 
   if (params.preferredTrialCities.length) {
@@ -67,25 +67,42 @@ export const getCasesByFilters = async ({
         'preferredTrialCity.S': params.preferredTrialCities,
       },
     };
-    filters.push(preferredTrialCityFilters);
+    mustClause.push(preferredTrialCityFilters);
   }
 
   if (params.judges.length) {
-    const shouldArray: Object[] = [];
-    params.judges.forEach(judge => {
-      const associatedJudgeFilters = {
+    if (params.judges.includes(CHIEF_JUDGE)) {
+      const shouldArray: Object[] = [];
+
+      const associatedJudgeFilter = {
         match: {
-          'associatedJudge.S': judge,
+          'associatedJudge.S': {
+            operator: 'and',
+            query: CHIEF_JUDGE,
+          },
         },
       };
-      shouldArray.push(associatedJudgeFilters);
-    });
-    const shouldObject: QueryDslQueryContainer = {
-      bool: {
-        should: shouldArray,
-      },
-    };
-    filters.push(shouldObject);
+      shouldArray.push(associatedJudgeFilter);
+
+      const judgesIds = params.judges.filter(judge => judge !== CHIEF_JUDGE);
+      shouldArray.push({
+        terms: {
+          'associatedJudgeId.S': judgesIds,
+        },
+      });
+      const shouldObject: QueryDslQueryContainer = {
+        bool: {
+          should: shouldArray,
+        },
+      };
+      mustClause.push(shouldObject);
+    } else {
+      mustClause.push({
+        terms: {
+          'associatedJudgeId.S': params.judges,
+        },
+      });
+    }
   }
 
   if (params.filingMethod !== 'all') {
@@ -94,7 +111,7 @@ export const getCasesByFilters = async ({
         'isPaper.BOOL': params.filingMethod === 'paper',
       },
     };
-    filters.push(filingMethodFilter);
+    mustClause.push(filingMethodFilter);
   }
 
   if (params.procedureType !== 'All') {
@@ -103,7 +120,7 @@ export const getCasesByFilters = async ({
         'procedureType.S': [params.procedureType],
       },
     };
-    filters.push(procedureTypeFilter);
+    mustClause.push(procedureTypeFilter);
   }
 
   if (params.highPriority) {
@@ -112,7 +129,7 @@ export const getCasesByFilters = async ({
         'highPriority.BOOL': true,
       },
     };
-    filters.push(procedureTypeFilter);
+    mustClause.push(procedureTypeFilter);
   }
 
   const searchResults = await applicationContext.getSearchClient().search({
@@ -120,7 +137,7 @@ export const getCasesByFilters = async ({
     body: {
       query: {
         bool: {
-          must: filters,
+          must: mustClause,
         },
       },
       search_after: [params.searchAfter.receivedAt, params.searchAfter.pk],
@@ -131,7 +148,8 @@ export const getCasesByFilters = async ({
     track_total_hits: true,
   });
 
-  const { results, total } = formatResults(searchResults.body);
+  const { results, total }: { results: CaseInventory[]; total: number } =
+    formatResults(searchResults.body);
 
   const matchingCases: any[] = searchResults.body.hits.hits;
   const lastCase = matchingCases?.[matchingCases.length - 1];

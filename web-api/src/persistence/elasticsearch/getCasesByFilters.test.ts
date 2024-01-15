@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import {
@@ -40,6 +41,21 @@ describe('getCasesByFilters', () => {
     searchAfter: { pk: '', receivedAt: 0 },
   };
 
+  let requestWithFilters: GetCustomCaseReportRequest;
+
+  beforeEach(() => {
+    requestWithFilters = {
+      ...defaultRequest,
+      caseStatuses: [CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.generalDocket],
+      caseTypes: [CASE_TYPES_MAP.deficiency, CASE_TYPES_MAP.whistleblower],
+      filingMethod: 'paper',
+      highPriority: true,
+      judges: [CHIEF_JUDGE],
+      preferredTrialCities: ['Birmingham, Alabama'],
+      procedureType: 'Regular',
+    };
+  });
+
   beforeAll(() => {
     applicationContext.getSearchClient().search.mockReturnValue(emptyResults);
     mockFormatResults.mockReturnValue({ results: {}, total: 0 });
@@ -74,17 +90,6 @@ describe('getCasesByFilters', () => {
   });
 
   it('should apply selected filters to search query', async () => {
-    const requestWithFilters: GetCustomCaseReportRequest = {
-      ...defaultRequest,
-      caseStatuses: [CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.generalDocket],
-      caseTypes: [CASE_TYPES_MAP.deficiency, CASE_TYPES_MAP.whistleblower],
-      filingMethod: 'paper',
-      highPriority: true,
-      judges: ['Buch'],
-      preferredTrialCities: ['Birmingham, Alabama'],
-      procedureType: 'Regular',
-    };
-
     await getCasesByFilters({
       applicationContext,
       params: requestWithFilters,
@@ -113,10 +118,61 @@ describe('getCasesByFilters', () => {
               should: [
                 {
                   match: {
-                    'associatedJudge.S': 'Buch',
+                    'associatedJudge.S': {
+                      operator: 'and',
+                      query: 'Chief Judge',
+                    },
+                  },
+                },
+                {
+                  terms: {
+                    'associatedJudgeId.S': [],
                   },
                 },
               ],
+            },
+          },
+          { match: { 'isPaper.BOOL': true } },
+          { terms: { 'procedureType.S': ['Regular'] } },
+          { match: { 'highPriority.BOOL': true } },
+        ],
+      },
+    });
+    expect(mockFormatResults).toHaveBeenCalled();
+  });
+
+  it('should apply terms query for judges ids if "Chief Judge" is not part of the list of judge ids', async () => {
+    const judgesIds = ['judgeid1', 'judgeid2'];
+    requestWithFilters.judges = judgesIds;
+
+    await getCasesByFilters({
+      applicationContext,
+      params: requestWithFilters,
+    });
+
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
+    ).toMatchObject({
+      bool: {
+        must: [
+          {
+            range: {
+              'receivedAt.S': {
+                gte: defaultStartDate,
+                lt: defaultEndDate,
+              },
+            },
+          },
+          {
+            terms: {
+              'status.S': ['Closed', 'General Docket - Not at Issue'],
+            },
+          },
+          { terms: { 'caseType.S': ['Deficiency', 'Whistleblower'] } },
+          { terms: { 'preferredTrialCity.S': ['Birmingham, Alabama'] } },
+          {
+            terms: {
+              'associatedJudgeId.S': judgesIds,
             },
           },
           { match: { 'isPaper.BOOL': true } },
