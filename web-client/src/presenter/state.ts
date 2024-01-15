@@ -1,10 +1,7 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
-import {
-  JudgeActivityReportState,
-  initialJudgeActivityReportState,
-} from './judgeActivityReportState';
+import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
@@ -123,7 +120,6 @@ import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNotic
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
-import { showSortableHeaders } from './computeds/showSortableHeaders';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
@@ -484,9 +480,6 @@ export const computeds = {
   showAppTimeoutModalHelper: showAppTimeoutModalHelper as unknown as ReturnType<
     typeof showAppTimeoutModalHelper
   >,
-  showSortableHeaders: showSortableHeaders as unknown as ReturnType<
-    typeof showSortableHeaders
-  >,
   startCaseHelper: startCaseHelper as unknown as ReturnType<
     typeof startCaseHelper
   >,
@@ -629,9 +622,9 @@ export const baseState = {
   individualInboxCount: 0,
   irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
-  judgeActivityReport: cloneDeep(
-    initialJudgeActivityReportState,
-  ) as JudgeActivityReportState,
+  judgeActivityReport: {
+    judgeActivityReportData: {},
+  } as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
   lastIdleAction: undefined,

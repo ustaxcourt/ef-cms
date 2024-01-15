@@ -15,7 +15,7 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
 
     const results = await getAllPendingMotionDocketEntriesForJudge({
       applicationContext,
-      judgeId: TEST_JUDGE_ID,
+      judgeIds: [TEST_JUDGE_ID],
     });
 
     expect(searchAll).toHaveBeenCalledTimes(1);
@@ -53,7 +53,8 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
         parent_type: 'case',
         query: {
           bool: {
-            must: [
+            minimum_should_match: 1,
+            should: [
               {
                 term: {
                   'associatedJudgeId.S': 'TEST_JUDGE_ID',
