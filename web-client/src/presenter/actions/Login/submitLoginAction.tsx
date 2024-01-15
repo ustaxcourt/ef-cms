@@ -17,10 +17,8 @@ export const submitLoginAction = async ({
       .getUseCases()
       .loginInteractor(applicationContext, { email, password });
 
-    console.log('*** after submit login action');
     return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
-    console.log('**** err from submit login', err);
     if (err.message === 'NewPasswordRequired') {
       return path.changePassword();
     }
