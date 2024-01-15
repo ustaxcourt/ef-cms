@@ -110,10 +110,7 @@ const server = http.createServer((request, response) => {
     requestBody += chunk.toString();
   });
   request.on('end', async () => {
-    if (
-      request.url?.includes('/PostAuthentication_Authentication') ||
-      request.url?.includes('/PostConfirmation_ConfirmSignUp')
-    ) {
+    if (request.url?.includes('/PostAuthentication_Authentication')) {
       try {
         const data = JSON.parse(requestBody);
         await handler(data);

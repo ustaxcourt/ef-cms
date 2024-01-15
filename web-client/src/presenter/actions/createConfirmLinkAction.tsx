@@ -1,4 +1,5 @@
 import { SignUpUserResponse } from '@web-api/business/useCases/auth/signUpUserInteractor';
+import React from 'react';
 import qs from 'qs';
 
 export const createConfirmLinkAction = ({
@@ -20,7 +21,17 @@ export const createConfirmLinkAction = ({
   return {
     alertSuccess: {
       alertType: 'success',
-      message: `New user account created successfully for ${props.email}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${confirmationLink}">Verify Email Address</a>`,
+      message: (
+        <>
+          {' '}
+          New user account created successfully for {props.email}! Please click
+          the link below to verify your email address.
+          <br />
+          <a href={confirmationLink} rel="noopener noreferrer">
+            Verify Email Address
+          </a>
+        </>
+      ),
       title: 'Account Created Locally',
     },
   };

@@ -28,7 +28,7 @@ export const confirmSignUpInteractor = async (
     Username: email,
   });
 
-  await cognito.adminUpdateUserAttributes({
+  const updatePetitionerAttributes = cognito.adminUpdateUserAttributes({
     UserAttributes: [
       {
         Name: 'email_verified',
@@ -46,4 +46,33 @@ export const confirmSignUpInteractor = async (
     UserPoolId: process.env.USER_POOL_ID,
     Username: email,
   });
+
+  await Promise.all([
+    updatePetitionerAttributes,
+    createPetitionerUser(applicationContext, { email, userId }),
+  ]);
+};
+
+const createPetitionerUser = async (
+  applicationContext: ServerApplicationContext,
+  { email, userId }: { email: string; userId: string },
+) => {
+  const cognito = applicationContext.getCognito();
+  const users = await cognito.listUsers({
+    AttributesToGet: ['name'],
+    Filter: `email = "${email}"`,
+    UserPoolId: process.env.USER_POOL_ID,
+  });
+
+  const name = users.Users?.[0].Attributes?.find(
+    element => element.Name === 'name',
+  )?.Value!;
+
+  await applicationContext
+    .getUseCases()
+    .createPetitionerAccountInteractor(applicationContext, {
+      email,
+      name,
+      userId,
+    });
 };

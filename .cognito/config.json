@@ -11,19 +11,14 @@
     "IssuerDomain": "http://localhost:9229"
   },
   "TriggerFunctions": {
-    "PostConfirmation": "PostConfirmation_ConfirmSignUp",
     "PostAuthentication": "PostAuthentication_Authentication"
   },
   "LambdaConfig": {
     "endpoint": "http://localhost:3011"
   },
   "UserPoolDefaults": {
-    "UsernameAttributes": [
-      "email"
-    ],
-    "AutoVerifiedAttributes": [
-      "email"
-    ]
+    "UsernameAttributes": ["email"],
+    "AutoVerifiedAttributes": ["email"]
   },
   "KMSConfig": {
     "credentials": {
