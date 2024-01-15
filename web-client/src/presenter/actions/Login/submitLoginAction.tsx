@@ -19,11 +19,13 @@ export const submitLoginAction = async ({
 
     return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
-    if (err.message === 'NewPasswordRequired') {
+    const originalErrorMessage = err?.originalError?.response?.data;
+
+    if (originalErrorMessage === 'NewPasswordRequired') {
       return path.changePassword();
     }
 
-    if (err.responseCode === 401) {
+    if (originalErrorMessage === 'Invalid Username or Password') {
       return path.error({
         alertError: {
           message: 'The email address or password you entered is invalid.',
@@ -32,7 +34,7 @@ export const submitLoginAction = async ({
       });
     }
 
-    if (err.responseCode === 403) {
+    if (originalErrorMessage === 'User is unconfirmed') {
       return path.error({
         alertError: {
           message: (

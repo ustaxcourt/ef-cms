@@ -1,7 +1,7 @@
 import {
   NotFoundError,
   UnauthorizedError,
-  UnknownUserError,
+  UnidentifiedUserError,
 } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -31,11 +31,13 @@ export const loginInteractor = async (
       refreshToken: result.AuthenticationResult!.RefreshToken!,
     };
   } catch (err: any) {
+    //TODO 10007: Test handle user does not exist on deployed env
     if (
       err.name === 'InvalidPasswordException' ||
-      err.name === 'NotAuthorizedException'
+      err.name === 'NotAuthorizedException' ||
+      err.name === 'UserNotFoundException'
     ) {
-      throw new UnknownUserError('Invalid Username or Password'); //401
+      throw new UnidentifiedUserError('Invalid Username or Password'); //401
     }
 
     if (err.name === 'UserNotConfirmedException') {
