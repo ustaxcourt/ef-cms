@@ -40,12 +40,10 @@ export const getCustomCaseReportAction = async ({
   const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
 
-  console.log('filterValues.judges BEFORE', filterValues.judges);
-
-  let formattedJudgesIds: string[] | undefined = [];
-  if (filterValues.judges) {
-    formattedJudgesIds = filterValues.judges.map(judgeName => {
-      if (judgeName === CHIEF_JUDGE) return CHIEF_JUDGE;
+  let judgesIds: string[] | undefined;
+  if (filterValues.judges?.length) {
+    judgesIds = filterValues.judges.map(judgeName => {
+      if (judgeName === CHIEF_JUDGE) return judgeName;
       const foundJudge = currentJudges.find(
         judgeMeta => judgeMeta.name === judgeName,
       );
@@ -53,13 +51,12 @@ export const getCustomCaseReportAction = async ({
     });
   }
 
-  console.log('filterValues.judges AFTER', filterValues.judges);
   const reportData = await applicationContext
     .getUseCases()
     .getCustomCaseReportInteractor(applicationContext, {
       ...filterValues,
       endDate: formattedEndDate,
-      judges: formattedJudgesIds,
+      judges: judgesIds,
       pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
       searchAfter,
       startDate: formattedStartDate,
