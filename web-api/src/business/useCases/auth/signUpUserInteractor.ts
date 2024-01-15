@@ -1,5 +1,6 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type SignUpUserResponse = {
@@ -59,11 +60,14 @@ export const signUpUserInteractor = async (
         Name: 'custom:userId',
         Value: userId,
       },
+      {
+        Name: 'custom:role',
+        Value: ROLES.petitioner,
+      },
     ],
     Username: newUser.email,
   });
 
-  //TODO 10007: ensure userId is standardized/consistent
   const { confirmationCode } = await applicationContext
     .getUseCaseHelpers()
     .createUserConfirmation(applicationContext, {
