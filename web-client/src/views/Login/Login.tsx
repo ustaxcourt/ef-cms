@@ -8,6 +8,7 @@ import React from 'react';
 export const Login = connect(
   {
     alertError: state.alertError,
+    cognitoRequestPasswordResetUrl: state.cognitoRequestPasswordResetUrl,
     form: state.form,
     loginHelper: state.loginHelper,
     navigateToCreatePetitionerAccountSequence:
@@ -19,6 +20,7 @@ export const Login = connect(
   },
   ({
     alertError,
+    cognitoRequestPasswordResetUrl,
     form,
     loginHelper,
     navigateToCreatePetitionerAccountSequence,
@@ -112,6 +114,7 @@ export const Login = connect(
                     <div>
                       <Button
                         className="margin-top-1"
+                        href={cognitoRequestPasswordResetUrl}
                         link={true}
                         type="button"
                       >
