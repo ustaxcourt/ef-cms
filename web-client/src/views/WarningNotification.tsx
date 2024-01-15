@@ -18,7 +18,7 @@ export const WarningNotificationComponent =
       title?: string;
       linkUrl?: string;
       linkText?: string;
-      message: string;
+      message: string | React.ReactNode;
       dismissText?: string;
       dismissIcon?: string;
     };
