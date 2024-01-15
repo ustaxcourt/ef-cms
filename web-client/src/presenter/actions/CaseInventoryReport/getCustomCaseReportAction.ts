@@ -1,4 +1,7 @@
-import { CUSTOM_CASE_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import {
+  CHIEF_JUDGE,
+  CUSTOM_CASE_REPORT_PAGE_SIZE,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getCustomCaseReportAction = async ({
@@ -8,6 +11,9 @@ export const getCustomCaseReportAction = async ({
   store,
 }: ActionProps<{ selectedPage: number }>) => {
   const filterValues = get(state.customCaseReport.filters);
+  const currentJudges = get(state.judges);
+
+  console.log('filterValues', filterValues);
 
   if (!filterValues.highPriority) {
     delete filterValues.highPriority;
@@ -34,11 +40,26 @@ export const getCustomCaseReportAction = async ({
   const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
 
+  console.log('filterValues.judges BEFORE', filterValues.judges);
+
+  let formattedJudgesIds: string[] | undefined = [];
+  if (filterValues.judges) {
+    formattedJudgesIds = filterValues.judges.map(judgeName => {
+      if (judgeName === CHIEF_JUDGE) return CHIEF_JUDGE;
+      const foundJudge = currentJudges.find(
+        judgeMeta => judgeMeta.name === judgeName,
+      );
+      return foundJudge!.userId;
+    });
+  }
+
+  console.log('filterValues.judges AFTER', filterValues.judges);
   const reportData = await applicationContext
     .getUseCases()
     .getCustomCaseReportInteractor(applicationContext, {
       ...filterValues,
       endDate: formattedEndDate,
+      judges: formattedJudgesIds,
       pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
       searchAfter,
       startDate: formattedStartDate,
