@@ -19,10 +19,7 @@ export const loginInteractor = async (
       ClientId: applicationContext.environment.cognitoClientId,
     });
 
-    console.log('*** result', result);
-
     if (result?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-      console.log('NEW_PASSWORD_REQUIRED');
       const PasswordChangeError = new Error('NewPasswordRequired');
       PasswordChangeError.name = 'NewPasswordRequired';
       throw PasswordChangeError;
@@ -34,8 +31,6 @@ export const loginInteractor = async (
       refreshToken: result.AuthenticationResult!.RefreshToken!,
     };
   } catch (err: any) {
-    console.log('*** err', err);
-
     if (
       err.name === 'InvalidPasswordException' ||
       err.name === 'NotAuthorizedException'
@@ -65,11 +60,11 @@ async function resendAccountConfirmation(
     UserPoolId: process.env.USER_POOL_ID,
   });
 
-  const userIdAttribute = users.Users?.[0].Attributes?.find(
+  const userId = users.Users?.[0].Attributes?.find(
     element => element.Name === 'custom:userId',
-  );
+  )?.Value;
 
-  if (!userIdAttribute?.Value) {
+  if (!userId) {
     throw new NotFoundError(
       `Could not find user to re-send confirmation code to. ${email}`,
     );
@@ -79,6 +74,6 @@ async function resendAccountConfirmation(
     .getUseCaseHelpers()
     .createUserConfirmation(applicationContext, {
       email,
-      userId: userIdAttribute.Value,
+      userId,
     });
 }

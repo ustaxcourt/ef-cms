@@ -1,7 +1,7 @@
-import { AccountAlreadyExistsWarning } from '@web-client/views/CreatePetitionerAccount/AccountAlreadyExistsWarning';
 import { CreatePetitionerAccountForm } from '@web-client/views/CreatePetitionerAccount/CreatePetitionerAccountForm';
 import { CreatePetitionerAccountInfo } from '@web-client/views/CreatePetitionerAccount/CreatePetitionerAccountInfo';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
@@ -13,7 +13,7 @@ export const CreatePetitionerAccount = connect({}, () => {
           <div className="grid-row">
             <div className="grid-col-12">
               <ErrorNotification />
-              <AccountAlreadyExistsWarning />
+              <WarningNotification />
             </div>
           </div>
 

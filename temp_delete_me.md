@@ -10,6 +10,7 @@
 - Cognito srp auth flow. Research.
 - userId, sub, email, username cognito . idk you figure it out.
 - Ensure incorrect login message appears on hosted env, didn't see this on our last test.
+- Unify error handling for loginInteractor, signUpUserInteractor. err.responseCode, err.name, err.message?
 
 ::: SOLO TO DO:::
 
