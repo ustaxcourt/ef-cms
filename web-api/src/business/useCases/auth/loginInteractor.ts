@@ -19,10 +19,7 @@ export const loginInteractor = async (
       ClientId: applicationContext.environment.cognitoClientId,
     });
 
-    console.log('*** result', result);
-
     if (result?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-      console.log('NEW_PASSWORD_REQUIRED');
       const PasswordChangeError = new Error('NewPasswordRequired');
       PasswordChangeError.name = 'NewPasswordRequired';
       throw PasswordChangeError;
@@ -34,8 +31,6 @@ export const loginInteractor = async (
       refreshToken: result.AuthenticationResult!.RefreshToken!,
     };
   } catch (err: any) {
-    console.log('*** err', err);
-
     if (
       err.name === 'InvalidPasswordException' ||
       err.name === 'NotAuthorizedException'
