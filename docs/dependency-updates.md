@@ -64,13 +64,19 @@ note: we have 3 package.json files, be sure to update them all
 
 8. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
-## Caveats
-
-Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
+## Do Not Upgrade
 
 ### @fortawesome
 
 - fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
+
+## Caveats
+
+Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
+
+### eslint
+
+- As of `8.56.0` formatting on save is not working. Please investigate this issue if you have time or if there is a newer version available.
 
 ### puppeteer and @sparticuz/chromium
 
