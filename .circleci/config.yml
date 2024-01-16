@@ -881,8 +881,8 @@ workflows:
   build-and-deploy:
     when: << pipeline.parameters.run_build_and_deploy >>
     jobs:
-      - deploy:
-          <<: *only-deployed-lower-environments
+      # - deploy:
+      #     <<: *only-deployed-lower-environments
       # - migrate:
       #     <<: *only-deployed-lower-environments
       #     requires:
@@ -917,18 +917,18 @@ workflows:
       #     <<: *only-deployed-lower-environments
       #     requires:
       #       - loadtests
-      - switch-colors:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
-      - delete-api-mappings:
-          <<: *only-deployed-lower-environments
-          requires:
-            - switch-colors
-      - cleanup:
-          <<: *only-deployed-lower-environments
-          requires:
-            - switch-colors
+      # - switch-colors:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - smoketests-readonly
+      # - delete-api-mappings:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - switch-colors
+      # - cleanup:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      - switch-colors
 
   build-and-deploy-with-context:
     when: << pipeline.parameters.run_build_and_deploy_with_context >>
