@@ -402,6 +402,7 @@ import { submitCaseInventoryReportModalSequence } from './sequences/submitCaseIn
 import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitChangeLoginAndServiceEmailSequence } from './sequences/submitChangeLoginAndServiceEmailSequence';
+import { submitChangePasswordSequence } from '@web-client/presenter/sequences/Login/submitChangePasswordSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
@@ -1231,6 +1232,7 @@ export const presenterSequences = {
   submitCaseSearchSequence: submitCaseSearchSequence as unknown as Function,
   submitChangeLoginAndServiceEmailSequence:
     submitChangeLoginAndServiceEmailSequence as unknown as Function,
+  submitChangePasswordSequence,
   submitCourtIssuedDocketEntrySequence:
     submitCourtIssuedDocketEntrySequence as unknown as Function,
   submitCourtIssuedOrderSequence:

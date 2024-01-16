@@ -7,6 +7,7 @@
 - Forgot password flow.
 - Zach look at errors in submitLoginAction for 1 hr.
 + (KS & TE) Change password flow.
+- Move loginProxy out of public directory
 
 ::: SOLO TO DO:::
 

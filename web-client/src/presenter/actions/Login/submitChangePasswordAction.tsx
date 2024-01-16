@@ -1,41 +1,31 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const submitLoginAction = async ({
+export const submitChangePasswordAction = async ({
   applicationContext,
   get,
   path,
 }: ActionProps): Promise<{
-  accessToken?: string;
-  idToken?: string;
-  refreshToken?: string;
-  session?: string;
-  userEmail?: string;
+  accessToken: string;
+  idToken: string;
+  refreshToken: string;
 }> => {
-  const { email, password } = get(state.form);
+  // TODO: move userEmail and session off form.state
+  const { confirmPassword, password, session, userEmail } = get(state.form);
 
   try {
-    const result = await applicationContext
+    const { accessToken, idToken, refreshToken } = await applicationContext
       .getUseCases()
-      .loginInteractor(applicationContext, { email, password });
+      .changePasswordInteractor(applicationContext, {
+        confirmPassword,
+        password,
+        session,
+        userEmail,
+      }).AuthenticationResult;
 
-    if (result.challengeName) {
-      return path.changePassword({ session: result.session, userEmail: email });
-    } else {
-      const { accessToken, idToken, refreshToken } = result;
-      return path.success({ accessToken, idToken, refreshToken });
-    }
+    return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
     const originalErrorMessage = err?.originalError?.response?.data;
-
-    if (originalErrorMessage === 'Invalid Username or Password') {
-      return path.error({
-        alertError: {
-          message: 'The email address or password you entered is invalid.',
-          title: 'Please correct the following errors:',
-        },
-      });
-    }
 
     if (originalErrorMessage === 'User is unconfirmed') {
       return path.error({

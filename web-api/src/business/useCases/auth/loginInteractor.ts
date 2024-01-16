@@ -5,10 +5,18 @@ import {
 } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
+export type LoginInteractorResponse = {
+  idToken?: string;
+  accessToken?: string;
+  refreshToken?: string;
+  challengeName?: string;
+  session?: string;
+};
+
 export const loginInteractor = async (
   applicationContext: ServerApplicationContext,
   { email, password }: { email: string; password: string },
-): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
+): Promise<LoginInteractorResponse> => {
   try {
     const result = await applicationContext.getCognito().initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
@@ -20,9 +28,10 @@ export const loginInteractor = async (
     });
 
     if (result?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-      const PasswordChangeError = new Error('NewPasswordRequired');
-      PasswordChangeError.name = 'NewPasswordRequired';
-      throw PasswordChangeError;
+      return {
+        challengeName: 'NEW_PASSWORD_REQUIRED',
+        session: result.Session!,
+      };
     }
 
     return {
