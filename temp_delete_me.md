@@ -5,7 +5,8 @@
   - Pa11y tests. Determine strategy for how to fix.
 - Ensure incorrect login message appears on hosted env, didn't see this on our last test.
 - Extract error message strings into constants OR do something else.
-- Fix redirect_url in cognito links
+- Forgot password flow
++ (KS & TE) Change password flow
 
 ::: SOLO TO DO:::
 
@@ -27,6 +28,6 @@
   - This is not a problem when the user requests a new ID token because the old one has expired after an hour. 
   - Implementing a system around this is possible, it would require more refactoring to NOT break multi-tab workflows on DAWSON.
 - DOD:  Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
-  
+  - Chris is OK with this, wants us to chat with Mike first.
 ::: WIP :::
 - Create helper function to get userId from Cognito response
