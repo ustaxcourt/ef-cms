@@ -4,7 +4,6 @@
   - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
   - Pa11y tests. Determine strategy for how to fix.
 - Cognito srp auth flow. Research.
-- Ensure incorrect login message appears on hosted env, didn't see this on our last test.
 - Extract error message strings into constants OR do something else.
 - Fix redirect_url in cognito links
 
