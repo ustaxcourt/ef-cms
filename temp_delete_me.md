@@ -3,7 +3,6 @@
 - Fix tests
   - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
   - Pa11y tests. Determine strategy for how to fix.
-- Cognito srp auth flow. Research.
 - Ensure incorrect login message appears on hosted env, didn't see this on our last test.
 - Extract error message strings into constants OR do something else.
 - Fix redirect_url in cognito links
@@ -12,6 +11,12 @@
 
 
 ::: QUESTIONS :::
+- Cognito SRP auth flow
+  - Leaning towards not implementing
+  - Current discussion: There is a possibility we could accidentally log out plaintext passwords in CloudWatch. How can we prevent this from ever happeneing?
+    - Prevent logs from being added to endpoints that accept a password (using lint rules?).
+    - Deploy a new lambda for endpoints that accept a password and disable logs for that lambda. 
+    - We could encrypt the password on the frontend and decrypt on the backend so that we never see plaintext of their password.
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it???
 
