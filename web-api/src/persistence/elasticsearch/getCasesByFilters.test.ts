@@ -117,11 +117,8 @@ describe('getCasesByFilters', () => {
             bool: {
               should: [
                 {
-                  match: {
-                    'associatedJudge.S': {
-                      operator: 'and',
-                      query: 'Chief Judge',
-                    },
+                  term: {
+                    'associatedJudge.S.raw': 'Chief Judge',
                   },
                 },
                 {

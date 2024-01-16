@@ -70,16 +70,13 @@ export const getCasesByFilters = async ({
     mustClause.push(preferredTrialCityFilters);
   }
 
-  if (params.judges.length) {
+  if (params.judges?.length) {
     if (params.judges.includes(CHIEF_JUDGE)) {
       const shouldArray: Object[] = [];
 
       const associatedJudgeFilter = {
-        match: {
-          'associatedJudge.S': {
-            operator: 'and',
-            query: CHIEF_JUDGE,
-          },
+        term: {
+          'associatedJudge.S.raw': CHIEF_JUDGE,
         },
       };
       shouldArray.push(associatedJudgeFilter);
