@@ -1,7 +1,6 @@
 import { DocketEntryDynamoRecord } from '../../../../web-api/src/persistence/dynamo/dynamoTypes';
 import {
   FORMATS,
-  calculateDifferenceInHours,
   formatNow,
   isValidDateString,
   isValidReconciliationDate,
@@ -14,8 +13,6 @@ import {
 } from '../../authorization/authorizationClientService';
 import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
-
-const MAX_TIMESPAN_HOURS = 24;
 
 function isValidTime(time: string): boolean {
   return isValidDateString(time, [FORMATS.TIME_24_HOUR]);
@@ -67,13 +64,6 @@ export const getReconciliationReportInteractor = async (
     `${effectiveReconciliationDate}T${effectiveTimeStart}`,
     `${effectiveReconciliationDate}T${effectiveTimeEnd}`,
   );
-
-  const hours = calculateDifferenceInHours(isoEnd, isoStart);
-  if (hours > MAX_TIMESPAN_HOURS) {
-    throw new InvalidRequest(
-      `Range must not exceed ${MAX_TIMESPAN_HOURS} hours`,
-    );
-  }
 
   // const reconciliationDateStart = dtReconciliationDateStart.toISO();
   const docketEntries = await applicationContext
