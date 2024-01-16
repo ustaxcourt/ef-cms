@@ -1117,6 +1117,11 @@ const router = {
       app.getSequence('gotoLoginSequence')();
     });
 
+    registerRoute('/change-password', () => {
+      setPageTitle('Change Password');
+      app.getSequence('goToChangePasswordSequence')();
+    });
+
     registerRoute('/create-account/petitioner', () => {
       setPageTitle('Account Registration');
       app.getSequence('goToCreatePetitionerAccountSequence')();
