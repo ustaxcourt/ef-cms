@@ -45,19 +45,10 @@ describe('change of address', () => {
 
       cy.get('[data-testid="tab-case-information"] > .button-text').click();
       cy.get('[data-testid="tab-parties"] > .button-text').click();
-      // TODO: use this after deploying
-      // cy.get(
-      // eslint-disable-next-line spellcheck/spell-checker
-      //   '[data-testid="petitioner-card-John"] [data-testid="edit-petitioner-counsel"]',
-      // ).click();
-      // TODO: this needs to be replaced with the commented out code above, but I can't refactor to use a test id until after an a deployment
       cy.get(
-        '[data-testid="petitioner-card-John"] > .card > .content-wrapper > :nth-child(9) > .grid-row > .grid-col-3 > .margin-left-1',
+        '[data-testid="petitioner-card-John"] [data-testid="edit-petitioner-counsel"]',
       ).click();
-      // TODO: replace #remove-petitioner-btn with this command after deployment
-      // eslint-disable-next-line spellcheck/spell-checker
-      // cy.get('[data-testid="remove-petitioner-btn"]').click()
-      cy.get('#remove-petitioner-btn').click();
+      cy.get('[data-testid="remove-petitioner-btn"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="success-alert"]').should('be.visible');
     });
