@@ -4,8 +4,8 @@ export const setupChangePasswordFormAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { session, userEmail } = props;
+  const { tempPassword, userEmail } = props;
 
-  store.set(state.form.session, session);
+  store.set(state.form.tempPassword, tempPassword);
   store.set(state.form.userEmail, userEmail);
 };
