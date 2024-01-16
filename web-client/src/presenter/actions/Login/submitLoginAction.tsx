@@ -6,27 +6,24 @@ export const submitLoginAction = async ({
   get,
   path,
 }: ActionProps): Promise<{
-  accessToken?: string;
-  idToken?: string;
-  refreshToken?: string;
-  session?: string;
-  userEmail?: string;
+  accessToken: string;
+  idToken: string;
+  refreshToken: string;
 }> => {
   const { email, password } = get(state.form);
 
   try {
-    const result = await applicationContext
+    const { accessToken, idToken, refreshToken } = await applicationContext
       .getUseCases()
       .loginInteractor(applicationContext, { email, password });
 
-    if (result.challengeName) {
-      return path.changePassword({ session: result.session, userEmail: email });
-    } else {
-      const { accessToken, idToken, refreshToken } = result;
-      return path.success({ accessToken, idToken, refreshToken });
-    }
+    return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
     const originalErrorMessage = err?.originalError?.response?.data;
+
+    if (originalErrorMessage === 'NewPasswordRequired') {
+      return path.changePassword({ tempPassword: password, userEmail: email });
+    }
 
     if (originalErrorMessage === 'Invalid Username or Password') {
       return path.error({
