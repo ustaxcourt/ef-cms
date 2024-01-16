@@ -20,7 +20,18 @@ const setTimeouts = url => {
   };
 };
 
+const loginAs = ({ username }) => {
+  return [
+    'wait for [data-testid="email-input"] to be visible',
+    `set field [data-testid="email-input"] to ${username}`,
+    'set field [data-testid="password-input"] to Testing1234$',
+    'click element [data-testid="login-button"]',
+    'wait for [data-testid="account-menu-button"] to be visible',
+  ];
+};
+
 module.exports = {
   getOnly,
+  loginAs,
   setTimeouts,
 };
