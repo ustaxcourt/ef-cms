@@ -40,6 +40,7 @@ describe('DocketEntry isPublic', () => {
 
   describe.each([
     'DEC',
+    ...['OCS', 'TCRP', 'ODL'],
     ...ORDER_EVENT_CODES,
     ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ])('Order, Opinion, and Decision Event Codes', eventCode => {
@@ -279,10 +280,6 @@ describe('DocketEntry isPublic', () => {
                 },
               );
 
-              if (isPublic) {
-                // console.log({ eventCode, filedByRole });
-              }
-
               expect(isPublic).toEqual(false);
             },
           );
@@ -330,6 +327,7 @@ describe('DocketEntry isPublic', () => {
     eventCode =>
       ![
         'DEC',
+        ...['OCS', 'TCRP', 'ODL'],
         ...ORDER_EVENT_CODES,
         ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
         ...POLICY_DATE_IMPACTED_EVENTCODES,
