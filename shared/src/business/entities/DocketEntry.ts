@@ -543,6 +543,10 @@ export class DocketEntry extends JoiValidationEntity {
       return true;
     }
 
+    if (!DocketEntry.isFiledByPractitioner(entry.filedByRole)) {
+      return false;
+    }
+
     if (
       !entry.isPaper &&
       DocketEntry.isFiledByPractitioner(entry.filedByRole) &&
