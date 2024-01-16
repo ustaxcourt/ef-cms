@@ -3,6 +3,7 @@ describe('Petitioner Account Creation', () => {
   const TEST_EMAIL = `cypress+${GUID}@test.com`;
   const TEST_NAME = 'Cypress Test';
   const TEST_PASSWORD = 'aA1!aaaa';
+
   describe('Create Petitioner Account', () => {
     beforeEach(() => {
       cy.visit('/create-account/petitioner');
