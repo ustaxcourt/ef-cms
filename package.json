@@ -352,7 +352,7 @@
     "postcss-loader": "7.3.4",
     "postcss-preset-env": "9.3.0",
     "postcss": "8.4.33",
-    "prettier": "3.1.1",
+    "prettier": "3.2.2",
     "prop-types": "15.8.1",
     "puppeteer-core": "19.8.5",
     "puppeteer": "19.8.5",
