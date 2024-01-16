@@ -612,6 +612,11 @@ export const INITIAL_DOCUMENT_TYPES = {
     eventCode: 'RQT',
   },
   stin: STIN_DOCKET_ENTRY_TYPE,
+  atp: {
+    documentTitle: 'Attachment to Petition',
+    documentType: 'Attachment to Petition',
+    eventCode: 'ATP',
+  },
 };
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {

@@ -71,6 +71,7 @@ export const createCaseFromPaperInteractor = async (
   applicationContext: IApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
+    atpFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
@@ -83,6 +84,7 @@ export const createCaseFromPaperInteractor = async (
     petitionMetadata: any;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
+    atpFileId?: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -270,6 +272,32 @@ export const createCaseFromPaperInteractor = async (
     cdsDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
+  }
+
+  if (atpFileId) {
+    const atpDocketEntryEntity = new DocketEntry(
+      {
+        createdAt: caseToAdd.receivedAt,
+        docketEntryId: atpFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.atp.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.atp.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.atp.eventCode,
+        filers,
+        filingDate: caseToAdd.receivedAt,
+        index: 0,
+        isFileAttached: true,
+        isPaper: true,
+        mailingDate: petitionEntity.mailingDate,
+        receivedAt: caseToAdd.receivedAt,
+      },
+      { applicationContext, petitioners: caseToAdd.petitioners },
+    );
+
+    console.log('atpDocketEntryEntity', atpDocketEntryEntity);
+
+    atpDocketEntryEntity.setFiledBy(user);
+
+    caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
 
   await Promise.all([

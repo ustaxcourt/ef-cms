@@ -67,6 +67,7 @@ export const createCaseFromPaperAction = async ({
 }: ActionProps) => {
   const {
     applicationForWaiverOfFilingFeeFile,
+    attachmentToPetitionFile,
     corporateDisclosureFile,
     petitionFile,
     requestForPlaceOfTrialFile,
@@ -75,6 +76,7 @@ export const createCaseFromPaperAction = async ({
 
   const progressFunctions = setupPercentDone(
     {
+      atp: attachmentToPetitionFile,
       corporate: corporateDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
@@ -93,6 +95,8 @@ export const createCaseFromPaperAction = async ({
         applicationForWaiverOfFilingFeeFile,
         applicationForWaiverOfFilingFeeUploadProgress:
           progressFunctions.waiverOfFilingFee,
+        atpUploadProgress: progressFunctions.adp,
+        attachmentToPetitionFile,
         corporateDisclosureFile,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
         petitionFile,

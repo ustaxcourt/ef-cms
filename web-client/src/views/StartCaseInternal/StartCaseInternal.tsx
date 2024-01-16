@@ -76,6 +76,7 @@ export const StartCaseInternal = connect(
               <div className="grid-col-7">
                 <ScanBatchPreviewer
                   documentTabs={[
+                    // TODO: import/make constant
                     {
                       documentType: 'petitionFile',
                       title: 'Petition',
@@ -83,6 +84,10 @@ export const StartCaseInternal = connect(
                     {
                       documentType: 'stinFile',
                       title: 'STIN',
+                    },
+                    {
+                      documentType: 'attachmentToPetitionFile',
+                      title: 'ATP',
                     },
                     {
                       documentType: 'requestForPlaceOfTrialFile',
