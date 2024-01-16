@@ -10,7 +10,7 @@ resource "aws_cognito_user_pool" "pool" {
     }
   }
 
-   admin_create_user_config {
+  admin_create_user_config {
     allow_admin_create_user_only = false
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
@@ -110,8 +110,8 @@ resource "aws_cognito_user_pool_client" "client" {
   id_token_validity      = 1
 
   callback_urls = [
-    "http://localhost:1234/log-in",
-    "https://app.${var.dns_domain}/log-in",
+    "http://localhost:1234/login",
+    "https://app.${var.dns_domain}/login",
   ]
 
   allowed_oauth_flows          = ["code", "implicit"]
@@ -250,8 +250,8 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   id_token_validity      = 1
 
   callback_urls = [
-    "http://localhost:1234/log-in",
-    "https://app.${var.dns_domain}/log-in",
+    "http://localhost:1234/login",
+    "https://app.${var.dns_domain}/login",
   ]
 
   allowed_oauth_flows          = ["code", "implicit"]

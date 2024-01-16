@@ -206,6 +206,7 @@ const getCognitoStatus = async ({
         userPoolId: process.env.USER_POOL_ID,
       });
 
+    // TODO 10007: code will not work
     await axios.get(
       `https://auth-${process.env.STAGE}-${process.env.COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientId}&redirect_uri=https%3A//app.${process.env.EFCMS_DOMAIN}/log-in`,
       {
