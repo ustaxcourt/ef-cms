@@ -74,10 +74,6 @@ note: we have 3 package.json files, be sure to update them all
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-### eslint
-
-- As of `8.56.0` formatting on save is not working. Please investigate this issue if you have time or if there is a newer version available.
-
 ### puppeteer and @sparticuz/chromium
 
 - Keep `@sparticuz/chromium` locked to 112.0.2 and `puppeteer` locked to 19.8.5 as 114+ and 20+ were causing pdf generation timeout bugs. (https://app.zenhub.com/workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/issues/gh/flexion/ef-cms/10087).
