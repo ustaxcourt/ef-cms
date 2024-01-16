@@ -143,6 +143,17 @@ resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
   }
 }
 
+resource "opensearch_snapshot_repository" "archived-logs" {
+  name = "archived-logs"
+  type = "s3"
+  settings = {
+    bucket   = "ustc-log-snapshots"
+    region   = "us-east-1"
+    role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es-s3-snapshot-access"
+    # role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
+  }
+}
+
 locals {
   instance_size_in_mb = aws_opensearch_domain.efcms-logs.ebs_options[0].volume_size * 1000
 }

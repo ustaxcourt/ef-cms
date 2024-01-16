@@ -1,4 +1,3 @@
-
 resource "aws_iam_role" "es_s3_snapshot_access_role" {
   name = "es_s3_snapshot_access_role"
 
