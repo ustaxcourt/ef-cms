@@ -71,7 +71,12 @@ export const EditDocketEntryMeta = connect(
                 <Tab id="tab-service" tabName="service" title="Service">
                   <EditDocketEntryMetaTabService />
                 </Tab>
-                <Tab id="tab-action" tabName="action" title="Action(s)">
+                <Tab
+                  data-testid="tab-action"
+                  id="tab-action"
+                  tabName="action"
+                  title="Action(s)"
+                >
                   <EditDocketEntryMetaTabAction />
                 </Tab>
               </Tabs>
