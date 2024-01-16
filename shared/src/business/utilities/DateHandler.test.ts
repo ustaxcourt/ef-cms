@@ -785,17 +785,24 @@ describe('DateHandler', () => {
 
   describe('calculateDifferenceInHours', () => {
     it('should calculate difference in hours', () => {
-      const dt = DateTime.now();
-      const dt2 = dt.plus({ days: 1 });
-      const diff = calculateDifferenceInHours(dt2.toISO(), dt.toISO());
-      expect(diff).toBe(24);
-    });
-
-    it('should calculate difference in hours', () => {
       const dateStart = '2000-01-01T00:00';
       const dateEnd = '2000-01-01T05:00';
       const diff = calculateDifferenceInHours(dateEnd, dateStart);
       expect(diff).toBe(5);
+    });
+
+    it('should calculate 24 hours difference in a day', () => {
+      const dt = DateTime.fromISO('2024-11-01', { zone: USTC_TZ });
+      const dt2 = dt.plus({ days: 1 });
+      const diff = calculateDifferenceInHours(dt2.toISO()!, dt.toISO()!);
+      expect(diff).toBe(24);
+    });
+
+    it('should calculate 25 hours on last day of daylight savings time', () => {
+      const dt = DateTime.fromISO('2024-11-03', { zone: USTC_TZ });
+      const dt2 = dt.plus({ days: 1 });
+      const diff = calculateDifferenceInHours(dt2.toISO()!, dt.toISO()!);
+      expect(diff).toBe(25);
     });
   });
 });
