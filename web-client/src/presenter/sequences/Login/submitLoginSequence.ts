@@ -1,7 +1,7 @@
 import { clearFormAction } from '@web-client/presenter/actions/clearFormAction';
 import { decodeTokenAction } from '@web-client/presenter/actions/decodeTokenAction';
 import { getUserAction } from '@web-client/presenter/actions/getUserAction';
-import { navigateToChangePasswordAction } from '@web-client/presenter/actions/Login/navigateToChangePasswordAction';
+import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setTokenAction } from '@web-client/presenter/actions/Login/setTokenAction';
@@ -14,7 +14,7 @@ export const submitLoginSequence = [
   showProgressSequenceDecorator([
     submitLoginAction,
     {
-      changePassword: [navigateToChangePasswordAction],
+      changePassword: [goToChangePasswordSequence],
       error: [setAlertErrorAction],
       success: [
         clearFormAction,

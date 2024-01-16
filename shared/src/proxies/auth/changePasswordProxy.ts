@@ -6,18 +6,18 @@ export const changePasswordInteractor = (
   {
     confirmPassword,
     password,
-    session,
+    tempPassword,
     userEmail,
   }: {
     confirmPassword: string;
     password: string;
     userEmail: string;
-    session: string;
+    tempPassword: string;
   },
 ) => {
   return post({
     applicationContext,
-    body: { confirmPassword, password, session, userEmail },
+    body: { confirmPassword, password, tempPassword, userEmail },
     endpoint: '/auth/change-password',
     options: {
       withCredentials: false,
