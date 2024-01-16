@@ -452,6 +452,7 @@ export const BRIEF_EVENTCODES = [
 ];
 
 export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
+export const AMICUS_BRIEF_DOCUMENT_TYPE = 'Amicus Brief';
 export const SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -671,18 +672,6 @@ export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
-
-export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
-  ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
-    d => d.eventCode,
-  ),
-  ...POLICY_DATE_IMPACTED_EVENTCODES,
-  'DEC',
-  'ODL',
-  'SPTN',
-  'OCS',
-  'TCRP',
-];
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {

@@ -1,5 +1,7 @@
 /* eslint-disable max-lines */
 import {
+  AMICUS_BRIEF_DOCUMENT_TYPE,
+  AMICUS_BRIEF_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTIES_CODES,
@@ -8,18 +10,14 @@ import {
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  MOCK_ANSWER,
-  MOCK_MINUTE_ENTRY,
-} from '../../../../../shared/src/test/mockDocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_ANSWER, MOCK_MINUTE_ENTRY } from '@shared/test/mockDocketEntry';
 import { applicationContextPublic } from '../../../applicationContextPublic';
+import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import {
-  fetchRootDocument,
   formatDocketEntryOnDocketRecord,
   publicCaseDetailHelper as publicCaseDetailHelperComputed,
 } from './publicCaseDetailHelper';
-import { formatDocketEntry } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
@@ -1245,6 +1243,7 @@ describe('publicCaseDetailHelper', () => {
                 docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
                 documentTitle: 'Seriatim Answering Memorandum Brief',
                 documentType: 'Seriatim Answering Memorandum Brief',
+                filedByRole: ROLES.privatePractitioner,
               },
               servedAt: '2050-05-16T00:00:00.000-04:00',
             },
@@ -1335,7 +1334,8 @@ describe('publicCaseDetailHelper', () => {
               isCourtIssuedDocument: false,
               rootDocument: {
                 documentTitle: 'Amicus Brief',
-                documentType: 'Amicus Brief',
+                documentType: AMICUS_BRIEF_DOCUMENT_TYPE,
+                eventCode: AMICUS_BRIEF_EVENT_CODE,
                 filedByRole: ROLES.docketClerk,
               },
               servedAt: '2050-05-16T00:00:00.000-04:00',
@@ -1360,7 +1360,8 @@ describe('publicCaseDetailHelper', () => {
               isCourtIssuedDocument: false,
               rootDocument: {
                 documentTitle: 'Amicus Brief',
-                documentType: 'Amicus Brief',
+                documentType: AMICUS_BRIEF_DOCUMENT_TYPE,
+                eventCode: AMICUS_BRIEF_EVENT_CODE,
                 filedByRole: ROLES.docketClerk,
               },
               servedAt: '2050-05-16T00:00:00.000-04:00',
@@ -1410,60 +1411,6 @@ describe('publicCaseDetailHelper', () => {
         },
       });
       expect(result.showPrintableDocketRecord).toBeFalsy();
-    });
-  });
-});
-
-describe('fetchRootDocument', () => {
-  it('should set up all the previous documents for the docket entry passed in', () => {
-    const theDocketEntry: any = {
-      docketEntryId: '1',
-      documentTitle: 'booba',
-      previousDocument: {
-        docketEntryId: '2',
-      },
-    };
-    const docketEntries = [
-      theDocketEntry,
-      {
-        docketEntryId: '2',
-        documentTitle: 'fruity',
-        previousDocument: { docketEntryId: '3' },
-      },
-      { docketEntryId: '3', documentTitle: 'minions' },
-    ];
-
-    const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
-
-    expect(docketEntry).toEqual({
-      docketEntryId: '3',
-      documentTitle: 'minions',
-    });
-  });
-
-  it('should return the closest to the parent if the chain is missing an entry', () => {
-    const theDocketEntry: any = {
-      docketEntryId: '1',
-      documentTitle: 'booba',
-      previousDocument: {
-        docketEntryId: '2',
-      },
-    };
-    const docketEntries = [
-      theDocketEntry,
-      {
-        docketEntryId: '2',
-        documentTitle: 'fruity',
-        previousDocument: { docketEntryId: '3' },
-      },
-    ];
-
-    const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
-
-    expect(docketEntry).toEqual({
-      docketEntryId: '2',
-      documentTitle: 'fruity',
-      previousDocument: { docketEntryId: '3' },
     });
   });
 });

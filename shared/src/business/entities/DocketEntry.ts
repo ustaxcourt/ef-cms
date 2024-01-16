@@ -1,4 +1,6 @@
 import {
+  AMICUS_BRIEF_DOCUMENT_TYPE,
+  AMICUS_BRIEF_EVENT_CODE,
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
   BRIEF_EVENTCODES,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
@@ -489,6 +491,15 @@ export class DocketEntry extends JoiValidationEntity {
     );
   };
 
+  static isPublicEventCode(eventCode: string) {
+    return (
+      DocketEntry.isOrder(eventCode) ||
+      DocketEntry.isDecision(eventCode) ||
+      DocketEntry.isOpinion(eventCode) ||
+      ['OCS', 'TCRP', 'ODL'].includes(eventCode)
+    );
+  }
+
   static isPublic(
     entry: RawDocketEntry,
     {
@@ -513,11 +524,7 @@ export class DocketEntry extends JoiValidationEntity {
       return DocketEntry.isOpinion(entry.eventCode);
     }
 
-    if (
-      DocketEntry.isOrder(entry.eventCode) ||
-      DocketEntry.isDecision(entry.eventCode) ||
-      DocketEntry.isOpinion(entry.eventCode)
-    ) {
+    if (DocketEntry.isPublicEventCode(entry.eventCode)) {
       return true;
     }
 
@@ -528,28 +535,28 @@ export class DocketEntry extends JoiValidationEntity {
       return false;
     }
 
-    if (['AMBR', 'SDEC'].includes(entry.eventCode)) {
+    if ([AMICUS_BRIEF_EVENT_CODE, 'SDEC'].includes(entry.eventCode)) {
+      return true;
+    }
+
+    if (rootDocument && rootDocument.eventCode === AMICUS_BRIEF_EVENT_CODE) {
       return true;
     }
 
     if (
-      entry.isPaper ||
-      !DocketEntry.isFiledByPractitioner(entry.filedByRole)
+      !entry.isPaper &&
+      DocketEntry.isFiledByPractitioner(entry.filedByRole) &&
+      DocketEntry.isBrief(entry.eventCode)
     ) {
-      return false;
-    }
-
-    if (DocketEntry.isBrief(entry.eventCode)) {
       return true;
     }
 
-    const isAmendmentToABrief = !!(
-      rootDocument && DocketEntry.isBriefType(rootDocument.documentType)
-    );
+    if (!rootDocument || !DocketEntry.isBriefType(rootDocument.documentType)) {
+      return false;
+    }
 
     return (
-      !entry.isPaper &&
-      isAmendmentToABrief &&
+      !rootDocument.isPaper &&
       DocketEntry.isFiledByPractitioner(rootDocument.filedByRole)
     );
   }
@@ -590,12 +597,15 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   static isBriefType(documentType: string): boolean {
-    const documents = [
-      ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
-      ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+    const documentTypes = [
+      AMICUS_BRIEF_DOCUMENT_TYPE,
+      ...[
+        ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
+        ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+      ].map(document => document.documentType),
     ];
-    return !!documents.find(document => document.documentType === documentType)
-      ?.eventCode;
+
+    return !!documentTypes.includes(documentType);
   }
 
   static meetsAgeRequirements = doc => {

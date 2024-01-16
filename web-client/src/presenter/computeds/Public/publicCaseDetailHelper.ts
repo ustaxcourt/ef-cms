@@ -55,9 +55,15 @@ export const formatDocketEntryOnDocketRecord = (
 
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
-  const canPublicUserSeeLink = DocketEntry.isPublic(entry, {
+  const isPublic = DocketEntry.isPublic(entry, {
     rootDocument: entry.rootDocument,
     visibilityChangeDate: visibilityPolicyDate,
+  });
+
+  const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
+    isCourtUser: false,
+    isPublic,
+    userHasAccessToCase: false,
   });
 
   const canTerminalUserSeeLink =
@@ -145,7 +151,10 @@ export const publicCaseDetailHelper = (
 
   let formattedDocketEntriesOnDocketRecord = docketEntries
     .map((entry: any, _, array) => {
-      return { ...entry, rootDocument: fetchRootDocument(entry, array) };
+      return {
+        ...entry,
+        rootDocument: DocketEntry.fetchRootDocument(entry, array),
+      };
     })
     .map(entry => {
       return formatDocketEntryOnDocketRecord(applicationContext, {
