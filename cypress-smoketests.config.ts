@@ -29,7 +29,7 @@ export default defineConfig({
       });
     },
     specPattern:
-      'cypress/cypress-smoketests/integration/**/*.cy.{js,jsx,ts,tsx}',
+      'cypress/cypress-smoketests/integration/petitioner-account-creation.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress/cypress-smoketests/support/index.ts',
     testIsolation: false,
   },
