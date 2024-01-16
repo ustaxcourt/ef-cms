@@ -3,10 +3,10 @@
 - Fix tests
   - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
   - Pa11y tests. Determine strategy for how to fix.
-- Ensure incorrect login message appears on hosted env, didn't see this on our last test.
 - Extract error message strings into constants OR do something else.
-- Forgot password flow
-+ (KS & TE) Change password flow
+- Forgot password flow.
+- Zach look at errors in submitLoginAction for 1 hr.
++ (KS & TE) Change password flow.
 
 ::: SOLO TO DO:::
 
