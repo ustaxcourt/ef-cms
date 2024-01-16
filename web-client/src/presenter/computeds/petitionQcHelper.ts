@@ -1,5 +1,8 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
+// todo, question: Can this be moved to entity constants? or consolidated with others
 export const initialFilingDocumentTabs = [
   {
     documentType: 'petitionFile',
@@ -8,6 +11,10 @@ export const initialFilingDocumentTabs = [
   {
     documentType: 'stinFile',
     title: 'STIN',
+  },
+  {
+    documentType: 'attachmentToPetitionFile',
+    title: 'ATP',
   },
   {
     documentType: 'requestForPlaceOfTrialFile',
@@ -23,8 +30,6 @@ export const initialFilingDocumentTabs = [
   },
 ];
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -43,6 +48,7 @@ export const petitionQcHelper = (
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+    atpFile: INITIAL_DOCUMENT_TYPES.atp.documentType,
     corporateDisclosureFile:
       INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,

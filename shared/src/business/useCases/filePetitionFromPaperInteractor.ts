@@ -3,12 +3,15 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { log } from 'console';
 
 export const filePetitionFromPaperInteractor = async (
   applicationContext: any,
   {
     applicationForWaiverOfFilingFeeFile,
     applicationForWaiverOfFilingFeeUploadProgress,
+    atpUploadProgress,
+    attachmentToPetitionFile,
     corporateDisclosureFile,
     corporateDisclosureUploadProgress,
     petitionFile,
@@ -19,8 +22,10 @@ export const filePetitionFromPaperInteractor = async (
     stinFile,
     stinUploadProgress,
   }: {
+    attachmentToPetitionFile: string;
     applicationForWaiverOfFilingFeeFile: string;
     applicationForWaiverOfFilingFeeUploadProgress: string;
+    atpUploadProgress: string;
     corporateDisclosureFile: string;
     corporateDisclosureUploadProgress: string;
     petitionFile: string;
@@ -85,12 +90,26 @@ export const filePetitionFromPaperInteractor = async (
       });
   }
 
+  // todo: unit test
+  let atpFileUpload;
+  if (attachmentToPetitionFile) {
+    atpFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: attachmentToPetitionFile,
+        onUploadProgress: atpUploadProgress,
+      });
+  }
+
+  console.log('atpFileUpload', atpFileUpload);
+
   await Promise.all([
     applicationForWaiverOfFilingFeeUpload,
     corporateDisclosureFileUpload,
     petitionFileUpload,
     requestForPlaceOfTrialFileUpload,
     stinFileUpload,
+    atpFileUpload,
   ]);
 
   return await applicationContext
@@ -98,6 +117,7 @@ export const filePetitionFromPaperInteractor = async (
     .createCaseFromPaperInteractor(applicationContext, {
       applicationForWaiverOfFilingFeeFileId:
         await applicationForWaiverOfFilingFeeUpload,
+      atpFileId: await atpFileUpload,
       corporateDisclosureFileId: await corporateDisclosureFileUpload,
       petitionFileId: await petitionFileUpload,
       petitionMetadata,
