@@ -1,5 +1,3 @@
 export const navigateToChangePasswordAction = async ({ props, router }) => {
-  await router.route(
-    `/change-password?userEmail=${props.userEmail}?session=${props.session}`,
-  );
+  await router.route(`/change-password?userEmail=${props.userEmail}`);
 };

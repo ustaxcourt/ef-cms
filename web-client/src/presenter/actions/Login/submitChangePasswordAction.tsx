@@ -11,7 +11,11 @@ export const submitChangePasswordAction = async ({
   refreshToken: string;
 }> => {
   // TODO: move userEmail and session off form.state
-  const { confirmPassword, password, session, userEmail } = get(state.form);
+
+  //TODO: validate entity here
+  const { confirmPassword, password, tempPassword, userEmail } = get(
+    state.form,
+  );
 
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
@@ -19,7 +23,7 @@ export const submitChangePasswordAction = async ({
       .changePasswordInteractor(applicationContext, {
         confirmPassword,
         password,
-        session,
+        tempPassword,
         userEmail,
       }).AuthenticationResult;
 
