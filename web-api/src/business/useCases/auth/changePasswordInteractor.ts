@@ -1,25 +1,34 @@
+import { RespondToAuthChallengeCommandInput } from '@aws-sdk/client-cognito-identity-provider';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const changePasswordInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
-    newPassword,
-    sessionId,
+    confirmPassword,
+    password,
+    session,
     userEmail,
-  }: { newPassword: string; sessionId: string; userEmail: string },
+  }: {
+    password: string;
+    session: string;
+    userEmail: string;
+    confirmPassword: string;
+  },
 ) => {
-  const params = {
+  // confirm password = confirmPassword
+  console.log('confirmPassword', confirmPassword);
+  const params: RespondToAuthChallengeCommandInput = {
     ChallengeName: 'NEW_PASSWORD_REQUIRED',
     ChallengeResponses: {
-      NEW_PASSWORD: newPassword,
+      NEW_PASSWORD: password,
       USERNAME: userEmail,
     },
     ClientId: process.env.COGNITO_CLIENT_ID,
-    Session: sessionId,
+    Session: session,
   };
 
-  const result = await applicationContext
-    .getCognito()
-    .respondToAuthChallenge(params)
-    .promise();
+  const cognito = applicationContext.getCognito();
+  const result = await cognito.respondToAuthChallenge(params);
 
   return result;
 };

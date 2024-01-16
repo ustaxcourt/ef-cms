@@ -1,4 +1,4 @@
-import { ChangePasswordForm } from '@shared/business/entities/ChangePassword';
+import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
 import { Get } from 'cerebral';
 import { PasswordValidations } from '@shared/business/entities/NewPetitionerUser';
 import { convertErrorMessageToPasswordValidationObject } from '@web-client/presenter/computeds/CreatePetitionerAccount/createAccountHelper';

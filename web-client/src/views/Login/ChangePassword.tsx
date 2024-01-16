@@ -10,12 +10,11 @@ export const ChangePassword = connect(
   {
     alertError: state.alertError,
     changePasswordHelper: state.changePasswordHelper,
-    cognitoRequestPasswordResetUrl: state.cognitoRequestPasswordResetUrl,
     confirmPassword: state.form.confirmPassword,
     password: state.form.password,
     showConfirmPassword: state.showConfirmPassword,
     showPassword: state.showPassword,
-    submitLoginSequence: sequences.submitLoginSequence,
+    submitChangePasswordSequence: sequences.submitChangePasswordSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
@@ -26,7 +25,7 @@ export const ChangePassword = connect(
     password,
     showConfirmPassword,
     showPassword,
-    submitLoginSequence,
+    submitChangePasswordSequence,
     toggleShowPasswordSequence,
     updateFormValueSequence,
   }) => {
@@ -193,18 +192,18 @@ export const ChangePassword = connect(
                           text="Passwords must match"
                           valid={changePasswordHelper.confirmPassword}
                         ></RequirementsText>
-                        <Button
-                          className="usa-button margin-top-3"
-                          data-testid="login-button"
-                          disabled={!changePasswordHelper.formIsValid}
-                          onClick={e => {
-                            e.preventDefault();
-                            submitLoginSequence();
-                          }}
-                        >
-                          Change Password
-                        </Button>
                       </div>
+                      <Button
+                        className="usa-button margin-top-3"
+                        data-testid="login-button"
+                        disabled={!changePasswordHelper.formIsValid}
+                        onClick={e => {
+                          e.preventDefault();
+                          submitChangePasswordSequence();
+                        }}
+                      >
+                        Change Password
+                      </Button>
                     </form>
                   </div>
                 </div>
