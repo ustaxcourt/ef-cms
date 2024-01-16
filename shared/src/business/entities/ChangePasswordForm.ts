@@ -7,7 +7,7 @@ type PasswordValidation = {
   valid: boolean;
 };
 
-export type PasswordValidations = {
+export type ChangePasswordValidations = {
   hasNoLeadingOrTrailingSpace: PasswordValidation;
   hasOneLowercase: PasswordValidation;
   hasOneNumber: PasswordValidation;
@@ -15,7 +15,8 @@ export type PasswordValidations = {
   hasSpecialCharacterOrSpace: PasswordValidation;
   isProperLength: PasswordValidation;
 };
-const NewPetitionerUserPasswordValidationErrorMessages = {
+
+const ChangePasswordValidationErrorMessages = {
   hasNoLeadingOrTrailingSpace: 'Must not contain leading or trailing space',
   hasOneLowercase: 'Must contain lower case letter',
   hasOneNumber: 'Must contain number',
@@ -24,48 +25,42 @@ const NewPetitionerUserPasswordValidationErrorMessages = {
   isProperLength: 'Must be between 8-99 characters long',
 };
 
-export function getDefaultPasswordErrors(): PasswordValidations {
+export function getDefaultPasswordErrors(): ChangePasswordValidations {
   return {
     hasNoLeadingOrTrailingSpace: {
       message:
-        NewPetitionerUserPasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace,
+        ChangePasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace,
       valid: true,
     },
     hasOneLowercase: {
-      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneLowercase,
+      message: ChangePasswordValidationErrorMessages.hasOneLowercase,
       valid: true,
     },
     hasOneNumber: {
-      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneNumber,
+      message: ChangePasswordValidationErrorMessages.hasOneNumber,
       valid: true,
     },
     hasOneUppercase: {
-      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneUppercase,
+      message: ChangePasswordValidationErrorMessages.hasOneUppercase,
       valid: true,
     },
     hasSpecialCharacterOrSpace: {
-      message:
-        NewPetitionerUserPasswordValidationErrorMessages.hasSpecialCharacterOrSpace,
+      message: ChangePasswordValidationErrorMessages.hasSpecialCharacterOrSpace,
       valid: true,
     },
     isProperLength: {
-      message: NewPetitionerUserPasswordValidationErrorMessages.isProperLength,
+      message: ChangePasswordValidationErrorMessages.isProperLength,
       valid: true,
     },
   };
 }
 
-export class NewPetitionerUser extends JoiValidationEntity {
-  public email: string;
-  public name: string;
+export class ChangePasswordForm extends JoiValidationEntity {
   public password: string;
   public confirmPassword: string;
 
   constructor(rawProps) {
-    super('NewPetitionerUser');
-
-    this.email = rawProps.email;
-    this.name = rawProps.name;
+    super('ChangePasswordForm');
     this.password = rawProps.password;
     this.confirmPassword = rawProps.confirmPassword;
   }
@@ -75,21 +70,8 @@ export class NewPetitionerUser extends JoiValidationEntity {
       .valid(joi.ref('password'))
       .required()
       .messages({ '*': 'Passwords must match' }),
-    email: JoiValidationConstants.EMAIL.required()
-      .messages({
-        '*': 'Enter a valid email address',
-        'string.max': 'Email address must contain fewer than 100 characters', //todo test
-      })
-      .description('Email of user'),
     entityName:
-      JoiValidationConstants.STRING.valid('NewPetitionerUser').required(),
-    name: JoiValidationConstants.STRING.max(100)
-      .required()
-      .messages({
-        '*': 'Enter a name',
-        'string.max': 'Enter a name with fewer than 100 characters',
-      })
-      .description('Name of the user.'),
+      JoiValidationConstants.STRING.valid('ChangePasswordForm').required(),
     password: JoiValidationConstants.STRING.custom((value, helper) => {
       const errors = getDefaultPasswordErrors();
 
@@ -140,8 +122,8 @@ export class NewPetitionerUser extends JoiValidationEntity {
   });
 
   getValidationRules() {
-    return NewPetitionerUser.VALIDATION_RULES;
+    return ChangePasswordForm.VALIDATION_RULES;
   }
 }
 
-export type RawNewPetitionerUser = ExcludeMethods<NewPetitionerUser>;
+export type RawChangePasswordForm = ExcludeMethods<ChangePasswordForm>;

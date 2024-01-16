@@ -15,6 +15,7 @@ import { associatePrivatePractitionerWithCaseLambda } from './lambdas/manualAsso
 import { batchDownloadTrialSessionLambda } from './lambdas/trialSessions/batchDownloadTrialSessionLambda';
 import { blockCaseFromTrialLambda } from './lambdas/cases/blockCaseFromTrialLambda';
 import { caseAdvancedSearchLambda } from './lambdas/cases/caseAdvancedSearchLambda';
+import { changePasswordLambda } from '@web-api/lambdas/auth/changePasswordLambda';
 import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabilityLambda';
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
@@ -1026,6 +1027,7 @@ app.get(
   app.post('/auth/refresh', lambdaWrapper(renewIdTokenLambda));
   app.post('/auth/confirm-signup', lambdaWrapper(confirmSignUpLambda));
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
+  app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the

@@ -122,6 +122,7 @@ import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryRepo
 import { getCustomCaseReportSequence } from './sequences/getCustomCaseReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
+import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
@@ -401,6 +402,7 @@ import { submitCaseInventoryReportModalSequence } from './sequences/submitCaseIn
 import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitChangeLoginAndServiceEmailSequence } from './sequences/submitChangeLoginAndServiceEmailSequence';
+import { submitChangePasswordSequence } from '@web-client/presenter/sequences/Login/submitChangePasswordSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
@@ -748,6 +750,7 @@ export const presenterSequences = {
   getCustomCaseReportSequence,
   getUsersInSectionSequence: getUsersInSectionSequence as unknown as Function,
   goToApplyStampSequence: goToApplyStampSequence as unknown as Function,
+  goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
@@ -1229,6 +1232,7 @@ export const presenterSequences = {
   submitCaseSearchSequence: submitCaseSearchSequence as unknown as Function,
   submitChangeLoginAndServiceEmailSequence:
     submitChangeLoginAndServiceEmailSequence as unknown as Function,
+  submitChangePasswordSequence,
   submitCourtIssuedDocketEntrySequence:
     submitCourtIssuedDocketEntrySequence as unknown as Function,
   submitCourtIssuedOrderSequence:
