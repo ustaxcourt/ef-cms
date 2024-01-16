@@ -19,7 +19,41 @@ import {
 } from '../support/pages/dashboard';
 import { loginAsPetitionsClerk } from '../../helpers/auth/login-as-helpers';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
-import { sortMessageColumnHeader } from '../../helpers/sort-message-column-header';
+
+function verifySubjectTitleOrder({
+  boxType,
+  isAscending,
+  prefix,
+  queueType = 'section',
+}: {
+  queueType?: 'individual' | 'section';
+  boxType: 'inbox' | 'outbox' | 'completed';
+  prefix: string;
+  isAscending: boolean;
+}) {
+  cy.get('@DOCKET_NUMBER').then(docketNumber => {
+    const rows: string[] = [];
+    cy.get(
+      `[data-testid="${queueType}-message-${boxType}-docket-number-cell"]:contains("${docketNumber}")`,
+    ).each(el => {
+      cy.wrap(el.parent())
+        .find('.message-document-title')
+        .invoke('text')
+        .then(text => {
+          if (text.includes(prefix)) {
+            rows.push(text);
+          }
+        });
+    });
+    cy.wrap(rows).each((text, i) => {
+      if (isAscending) {
+        cy.wrap(text).should('equal', `${prefix} ${i + 1}`);
+      } else {
+        cy.wrap(text).should('equal', `${prefix} ${3 - i}`);
+      }
+    });
+  });
+}
 
 describe('Messages', () => {
   describe('Message filtering', () => {
@@ -106,6 +140,10 @@ describe('Messages', () => {
       });
     });
 
+    beforeEach(() => {
+      cy.keepAliases();
+    });
+
     describe('Individual Message Boxes', () => {
       describe('Sorting on the Individual Message Inbox', () => {
         beforeEach(() => {
@@ -113,29 +151,65 @@ describe('Messages', () => {
         });
 
         it('individual inbox subject column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-subject-header-button"]',
-            '[data-testid="individual-message-inbox-subject-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: true,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-subject-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+            queueType: 'individual',
           });
         });
 
         it('individual inbox received at column when defaulted to sort ascending', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-received-header-button"]',
-            '[data-testid="individual-message-inbox-received-at-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-received-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: true,
+            prefix: 'Subject Line',
+            queueType: 'individual',
           });
         });
 
         it('individual inbox docket number column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-docket-number-header-button"]',
-            '[data-testid="individual-message-inbox-docket-number-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.sort());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-docket-number-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+            queueType: 'individual',
           });
         });
       });
@@ -147,29 +221,65 @@ describe('Messages', () => {
         });
 
         it('individual completed subject column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-subject-header-button"]',
-            '[data-testid="individual-message-completed-subject-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: true,
+            prefix: 'Complete',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-subject-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: false,
+            prefix: 'Complete',
+            queueType: 'individual',
           });
         });
 
         it('individual completed completed-at column when defaulted to sort ascending', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-completed-at-header-button"]',
-            '[data-testid="individual-message-completed-completed-at-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: true,
+            prefix: 'Complete',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-completed-at-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: false,
+            prefix: 'Complete',
+            queueType: 'individual',
           });
         });
 
         it('individual completed docket number column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-docket-number-header-button"]',
-            '[data-testid="individual-message-completed-docket-number-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.sort());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: true,
+            prefix: 'Complete',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-docket-number-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: true,
+            prefix: 'Complete',
+            queueType: 'individual',
           });
         });
       });
@@ -181,29 +291,65 @@ describe('Messages', () => {
         });
 
         it('individual outbox subject column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-outbox-subject-header-button"]',
-            '[data-testid="individual-message-outbox-subject-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: true,
+            prefix: 'Complete',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-outbox-subject-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: false,
+            prefix: 'Complete',
+            queueType: 'individual',
           });
         });
 
         it('individual outbox completed-at column when defaulted to sort ascending', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-outbox-completed-at-header-button"]',
-            '[data-testid="individual-message-outbox-completed-at-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: true,
+            prefix: 'Complete',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-outbox-completed-at-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: false,
+            prefix: 'Complete',
+            queueType: 'individual',
           });
         });
 
         it('individual outbox docket number column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-individual-outbox-docket-number-header-button"]',
-            '[data-testid="individual-message-outbox-docket-number-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: true,
+            prefix: 'Complete',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-outbox-docket-number-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: false,
+            prefix: 'Complete',
+            queueType: 'individual',
           });
         });
       });
@@ -220,29 +366,59 @@ describe('Messages', () => {
         });
 
         it('Section inbox subject column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-subject-header-button"]',
-            '[data-testid="section-message-inbox-subject-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: true,
+            prefix: 'Subject Line',
+          });
+          cy.get(
+            '[data-testid="message-section-subject-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
           });
         });
 
         it('Section inbox received at column when defaulted to sort ascending', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-received-header-button"]',
-            '[data-testid="section-message-inbox-received-at-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+          });
+          cy.get(
+            '[data-testid="message-section-received-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: true,
+            prefix: 'Subject Line',
           });
         });
 
         it('Section inbox docket number column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-docket-number-header-button"]',
-            '[data-testid="section-message-inbox-docket-number-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.sort());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+          });
+          cy.get(
+            '[data-testid="message-section-docket-number-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
           });
         });
       });
@@ -258,29 +434,59 @@ describe('Messages', () => {
         });
 
         it('section completed subject column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-subject-header-button"]',
-            '[data-testid="section-message-completed-subject-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: true,
+            prefix: 'Complete',
+          });
+          cy.get(
+            '[data-testid="message-section-subject-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: false,
+            prefix: 'Complete',
           });
         });
 
         it('section completed completed-at column when defaulted to sort ascending', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-completed-at-header-button"]',
-            '[data-testid="section-message-completed-completed-at-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: true,
+            prefix: 'Complete',
+          });
+          cy.get(
+            '[data-testid="message-section-completed-at-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: false,
+            prefix: 'Complete',
           });
         });
 
         it('section completed docket number column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-docket-number-header-button"]',
-            '[data-testid="section-message-completed-docket-number-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.sort());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: true,
+            prefix: 'Complete',
+          });
+          cy.get(
+            '[data-testid="message-section-docket-number-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'completed',
+            isAscending: true,
+            prefix: 'Complete',
           });
         });
       });
@@ -296,29 +502,59 @@ describe('Messages', () => {
         });
 
         it('section outbox subject column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-outbox-subject-header-button"]',
-            '[data-testid="section-message-outbox-subject-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: true,
+            prefix: 'Subject Line',
+          });
+          cy.get(
+            '[data-testid="message-section-outbox-subject-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: false,
+            prefix: 'Subject Line',
           });
         });
 
         it('section outbox created-at column when defaulted to sort ascending', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-outbox-created-at-header-button"]',
-            '[data-testid="section-message-outbox-created-at-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: true,
+            prefix: 'Subject Line',
+          });
+          cy.get(
+            '[data-testid="message-section-outbox-created-at-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: false,
+            prefix: 'Subject Line',
           });
         });
 
         it('section outbox docket number column', () => {
-          sortMessageColumnHeader(
+          cy.get(
             '[data-testid="message-section-outbox-docket-number-header-button"]',
-            '[data-testid="section-message-outbox-docket-number-cell"]',
-          ).then(({ afterSorting, beforeSorting }) => {
-            cy.wrap(afterSorting).should('deep.equal', beforeSorting.reverse());
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: true,
+            prefix: 'Subject Line',
+          });
+          cy.get(
+            '[data-testid="message-section-outbox-docket-number-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'outbox',
+            isAscending: true,
+            prefix: 'Subject Line',
           });
         });
       });
