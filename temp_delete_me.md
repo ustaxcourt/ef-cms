@@ -6,6 +6,7 @@
 + Extract error message strings into constants OR do something else.
 - Forgot password flow.
 + (KS & TE) Change password flow.
+- Move loginProxy out of public directory
 
 ::: SOLO TO DO:::
 

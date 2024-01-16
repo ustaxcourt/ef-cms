@@ -37,6 +37,7 @@ import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { caseWorksheetsHelper } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
+import { changePasswordHelper } from '@web-client/presenter/computeds/Login/changePasswordHelper';
 import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -240,6 +241,9 @@ export const computeds = {
   >,
   caseWorksheetsHelper: caseWorksheetsHelper as unknown as ReturnType<
     typeof caseWorksheetsHelper
+  >,
+  changePasswordHelper: changePasswordHelper as unknown as ReturnType<
+    typeof changePasswordHelper
   >,
   completeDocumentTypeSectionHelper:
     completeDocumentTypeSectionHelper as unknown as ReturnType<

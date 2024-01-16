@@ -19,6 +19,7 @@ import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
+import { ChangePassword } from '@web-client/views/Login/ChangePassword';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
@@ -119,6 +120,7 @@ const pages = {
   CaseInventoryReport,
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
+  ChangePassword,
   Contact,
   ContactEdit,
   CourtIssuedDocketEntry,
@@ -190,6 +192,7 @@ const pages = {
 };
 
 const pagesWithBlueBackground = {
+  ChangePassword,
   CreatePetitionerAccount,
   Login,
   VerificationSent,

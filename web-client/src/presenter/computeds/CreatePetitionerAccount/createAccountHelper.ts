@@ -1,7 +1,7 @@
 import { Get } from 'cerebral';
 import {
   NewPetitionerUser,
-  NewPetitionerUserPasswordValidations,
+  PasswordValidations,
   getDefaultPasswordErrors,
 } from '@shared/business/entities/NewPetitionerUser';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -11,12 +11,12 @@ export type CreateAccountHelperResults = {
   email?: string;
   formIsValid: boolean;
   name?: string;
-  passwordErrors?: NewPetitionerUserPasswordValidations;
+  passwordErrors?: PasswordValidations;
 };
 
-const convertErrorMessageToPasswordValidationObject = (
+export const convertErrorMessageToPasswordValidationObject = (
   stringToParse: string | undefined,
-): NewPetitionerUserPasswordValidations => {
+): PasswordValidations => {
   const errorObjects = getDefaultPasswordErrors();
   if (!stringToParse) return errorObjects;
 
@@ -33,7 +33,7 @@ export const createAccountHelper = (get: Get): CreateAccountHelperResults => {
   const formEntity = new NewPetitionerUser(form);
   const errors = formEntity.getFormattedValidationErrors();
 
-  const passwordErrors: NewPetitionerUserPasswordValidations =
+  const passwordErrors: PasswordValidations =
     convertErrorMessageToPasswordValidationObject(errors?.password);
 
   return {

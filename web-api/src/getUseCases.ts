@@ -16,6 +16,7 @@ import { batchDownloadTrialSessionInteractor } from '../../shared/src/business/u
 import { blockCaseFromTrialInteractor } from '../../shared/src/business/useCases/blockCaseFromTrialInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/business/useCases/caseAdvancedSearchInteractor';
 import { casePublicSearchInteractor } from '../../shared/src/business/useCases/public/casePublicSearchInteractor';
+import { changePasswordInteractor } from '@web-api/business/useCases/auth/changePasswordInteractor';
 import { checkEmailAvailabilityInteractor } from '../../shared/src/business/useCases/users/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from '../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor';
@@ -228,6 +229,7 @@ const useCases = {
   blockCaseFromTrialInteractor,
   caseAdvancedSearchInteractor,
   casePublicSearchInteractor,
+  changePasswordInteractor,
   checkEmailAvailabilityInteractor,
   checkForReadyForTrialCasesInteractor,
   closeTrialSessionInteractor,
