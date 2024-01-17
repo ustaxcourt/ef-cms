@@ -49,7 +49,7 @@ export const Login = connect(
 
                     <span>Email address and password are case sensitive.</span>
 
-                    <form className="usa-form margin-top-4">
+                    <form className="usa-form margin-top-4" title="loginForm">
                       <label className="usa-label" htmlFor="email">
                         Email address
                       </label>
