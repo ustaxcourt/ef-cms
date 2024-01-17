@@ -1,9 +1,9 @@
 // import { RespondToAuthChallengeCommandInput } from '@aws-sdk/client-cognito-identity-provider';
+import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
+import { InvalidEntityError } from '@web-api/errors/errors';
+import { RespondToAuthChallengeCommandInput } from '@aws-sdk/client-cognito-identity-provider/dist-types/commands/RespondToAuthChallengeCommand';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  UnauthorizedError,
-  UnidentifiedUserError,
-} from '@web-api/errors/errors';
+import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 
 export const changePasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -20,90 +20,54 @@ export const changePasswordInteractor = async (
   },
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
   try {
-    // TODO: Validate Password === ConfirmPassword + Rules?
-    // TODO: If we decide to stick with adminUserSetPassword, remove tempPassword everywhere. Otherwise, remove `"cognito-idp:AdminSetUserPassword"` from lambda.tf
-    console.log('confirmPassword', confirmPassword);
-    console.log('tempPassword', tempPassword);
-    const setPasswordResult = await applicationContext
+    const errors = new ChangePasswordForm({
+      confirmPassword,
+      password,
+      userEmail,
+    }).getFormattedValidationErrors();
+    if (errors) {
+      throw new InvalidEntityError('Change Password Form Entity is invalid');
+    }
+
+    const initiateAuthResult = await applicationContext
       .getCognito()
-      .adminSetUserPassword({
-        Password: password,
-        Permanent: true,
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: userEmail,
+      .initiateAuth({
+        AuthFlow: 'USER_PASSWORD_AUTH',
+        AuthParameters: {
+          PASSWORD: tempPassword,
+          USERNAME: userEmail,
+        },
+        ClientId: applicationContext.environment.cognitoClientId,
       });
 
-    console.log('setPasswordResult****', setPasswordResult);
+    if (initiateAuthResult?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
+      const params: RespondToAuthChallengeCommandInput = {
+        ChallengeName: 'NEW_PASSWORD_REQUIRED',
+        ChallengeResponses: {
+          NEW_PASSWORD: password,
+          USERNAME: userEmail,
+        },
+        ClientId: process.env.COGNITO_CLIENT_ID,
+        Session: initiateAuthResult.Session,
+      };
 
-    if (setPasswordResult.$metadata.httpStatusCode === 200) {
-      const initiateAuthResult = await applicationContext
-        .getCognito()
-        .initiateAuth({
-          AuthFlow: 'USER_PASSWORD_AUTH',
-          AuthParameters: {
-            PASSWORD: password,
-            USERNAME: userEmail,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
-        });
+      const cognito = applicationContext.getCognito();
+      const result = await cognito.respondToAuthChallenge(params);
 
-      console.log('initiateAuthResult****', initiateAuthResult);
       return {
-        accessToken: initiateAuthResult.AuthenticationResult!.AccessToken!,
-        idToken: initiateAuthResult.AuthenticationResult!.IdToken!,
-        refreshToken: initiateAuthResult.AuthenticationResult!.RefreshToken!,
+        accessToken: result.AuthenticationResult!.AccessToken!,
+        idToken: result.AuthenticationResult!.IdToken!,
+        refreshToken: result.AuthenticationResult!.RefreshToken!,
       };
     }
-    throw new Error('Could not set user password');
-    // const initiateAuthResult = await applicationContext
-    //   .getCognito()
-    //   .initiateAuth({
-    //     AuthFlow: 'USER_PASSWORD_AUTH',
-    //     AuthParameters: {
-    //       PASSWORD: tempPassword,
-    //       USERNAME: userEmail,
-    //     },
-    //     ClientId: applicationContext.environment.cognitoClientId,
-    //   });
 
-    // if (initiateAuthResult?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-    //   const params: RespondToAuthChallengeCommandInput = {
-    //     ChallengeName: 'NEW_PASSWORD_REQUIRED',
-    //     ChallengeResponses: {
-    //       NEW_PASSWORD: password,
-    //       USERNAME: userEmail,
-    //     },
-    //     ClientId: process.env.COGNITO_CLIENT_ID,
-    //     Session: initiateAuthResult.Session,
-    //   };
-
-    //   const cognito = applicationContext.getCognito();
-    //   const result = await cognito.respondToAuthChallenge(params);
-
-    //   return {
-    //     accessToken: result.AuthenticationResult!.AccessToken!,
-    //     idToken: result.AuthenticationResult!.IdToken!,
-    //     refreshToken: result.AuthenticationResult!.RefreshToken!,
-    //   };
-    // }
-
-    // throw new Error('Something went wrong while changing passwords... :(');
+    throw new Error('User is not `FORCE_CHANGE_PASSWORD` state');
   } catch (err: any) {
-    console.log('changePasswordInteractorError***', err);
-
-    if (
-      err.name === 'InvalidPasswordException' ||
-      err.name === 'NotAuthorizedException' ||
-      err.name === 'UserNotFoundException' ||
-      err.name === 'UserNotFoundException'
-    ) {
-      throw new UnidentifiedUserError('Invalid Username or Password'); //401
-    }
-
-    if (err.name === 'UserNotConfirmedException') {
-      throw new UnauthorizedError('User is unconfirmed'); //403
-    }
-
+    await authErrorHandling(applicationContext, {
+      email: userEmail,
+      error: err,
+      sendAccountConfirmation: false,
+    });
     throw err;
   }
 };

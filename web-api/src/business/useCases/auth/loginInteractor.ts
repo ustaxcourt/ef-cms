@@ -32,23 +32,45 @@ export const loginInteractor = async (
       refreshToken: result.AuthenticationResult!.RefreshToken!,
     };
   } catch (err: any) {
-    if (
-      err.name === 'InvalidPasswordException' ||
-      err.name === 'NotAuthorizedException' ||
-      err.name === 'UserNotFoundException'
-    ) {
-      throw new UnidentifiedUserError('Invalid Username or Password'); //401
-    }
-
-    if (err.name === 'UserNotConfirmedException') {
-      await resendAccountConfirmation(applicationContext, email);
-
-      throw new UnauthorizedError('User is unconfirmed'); //403
-    }
-
+    await authErrorHandling(applicationContext, {
+      email,
+      error: err,
+      sendAccountConfirmation: true,
+    });
     throw err;
   }
 };
+
+export async function authErrorHandling(
+  applicationContext: ServerApplicationContext,
+  {
+    email,
+    error,
+    sendAccountConfirmation,
+  }: {
+    error: any;
+    email: string;
+    sendAccountConfirmation: boolean;
+  },
+): Promise<never> {
+  if (
+    error.name === 'InvalidPasswordException' ||
+    error.name === 'NotAuthorizedException' ||
+    error.name === 'UserNotFoundException'
+  ) {
+    throw new UnidentifiedUserError('Invalid Username or Password'); //401
+  }
+
+  if (error.name === 'UserNotConfirmedException') {
+    if (sendAccountConfirmation) {
+      await resendAccountConfirmation(applicationContext, email);
+    }
+
+    throw new UnauthorizedError('User is unconfirmed'); //403
+  }
+
+  throw error;
+}
 
 async function resendAccountConfirmation(
   applicationContext: ServerApplicationContext,
