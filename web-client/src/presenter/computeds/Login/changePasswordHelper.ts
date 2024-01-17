@@ -11,16 +11,22 @@ export type ChangePasswordHelperResults = {
 };
 
 export const changePasswordHelper = (get: Get): ChangePasswordHelperResults => {
-  const form = get(state.form);
-  const formEntity = new ChangePasswordForm(form);
-  const errors = formEntity.getFormattedValidationErrors();
+  const authenticationState = get(state.authentication);
+
+  const entity = new ChangePasswordForm({
+    confirmPassword: authenticationState.form.confirmPassword,
+    password: authenticationState.form.password,
+    userEmail: authenticationState.userEmail,
+  });
+
+  const errors = entity.getFormattedValidationErrors();
 
   const passwordErrors: PasswordValidations =
     convertErrorMessageToPasswordValidationObject(errors?.password);
 
   return {
     confirmPassword: !errors?.confirmPassword,
-    formIsValid: formEntity.isValid(),
+    formIsValid: entity.isValid(),
     passwordErrors,
   };
 };
