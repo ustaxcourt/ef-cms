@@ -23,7 +23,7 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
   };
   public sessionNotes: string;
   public sort: string;
-  public sortOrder: string;
+  public sortOrder: 'asc' | 'desc';
   public trialSessionId: string;
   public userId: string;
 
