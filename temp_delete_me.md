@@ -20,8 +20,6 @@
     - We could encrypt the password on the frontend and decrypt on the backend so that we never see plaintext of their password.
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it???
-- Should we use the initiateAuth + respondToAuthChallenge method or the adminSetUserPassword method for changing passwords?
-
 
 ::: CONVERSATIONS TO HAVE :::
 - Do we need to handle temporary password changes on login screen(when an admissions clerk creates account for practitioner. Granting e-access to a petitioner)? This happens when cognito forces a password update.
