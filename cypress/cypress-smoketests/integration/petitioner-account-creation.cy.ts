@@ -34,10 +34,17 @@ describe('Petitioner Account Creation', () => {
         'exist',
       );
 
-      cy.task('getNewAccountVerificationCode', { email: TEST_EMAIL }).should(
-        'equal',
-        'JOHN TESTING',
+      cy.task('getNewAccountVerificationCode', { email: TEST_EMAIL }).as(
+        'USER_COGNITO_INFO',
       );
+
+      cy.get('@USER_COGNITO_INFO')
+        .should('have.a.property', 'userId')
+        .and('be.truthy');
+
+      cy.get('@USER_COGNITO_INFO')
+        .should('have.a.property', 'confirmationCode')
+        .and('be.truthy');
     });
   });
 });
