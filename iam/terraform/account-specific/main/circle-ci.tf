@@ -70,7 +70,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:SetUICustomization",
         "cognito-idp:SetUserPoolMfaConfig",
         "cognito-idp:UpdateUserPool",
-        "cognito-idp:UpdateUserPoolClient"
+        "cognito-idp:UpdateUserPoolClient",
+				"cognito-idp:ListUsers"
       ],
       "Resource": "*"
     },
