@@ -399,5 +399,35 @@ describe('getCasesForUserInteractor', () => {
         }),
       ]);
     });
+
+    it('should load cases without throwing exception even if certain case records fail validation', async () => {
+      const corruptedCase = {
+        someInvalidKey: 'this is an invalid case',
+      };
+
+      //construct list of cases w/ at least one bogus/corrupted record
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesForUser.mockResolvedValue([
+          unconsolidatedCase1,
+          unconsolidatedCase2,
+          unconsolidatedClosedCase1,
+          corruptedCase,
+        ]);
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesByDocketNumbers.mockResolvedValue([
+          unconsolidatedCase1,
+          unconsolidatedCase2,
+          unconsolidatedClosedCase1,
+          corruptedCase,
+        ]);
+
+      //call validate to ensure that, yes, the case fails validation (todo)
+      //call getCasesForUser and expect that no exceptions were thrown
+      await expect(
+        getCasesForUserInteractor(applicationContext),
+      ).resolves.not.toThrow();
+    });
   });
 });
