@@ -14,7 +14,7 @@ export const changePasswordInteractor = (
     userEmail: string;
     tempPassword: string;
   },
-) => {
+): Promise<{ accessToken: string; idToken: string; refreshToken: string }> => {
   return post({
     applicationContext,
     body: { confirmPassword, password, tempPassword, userEmail },

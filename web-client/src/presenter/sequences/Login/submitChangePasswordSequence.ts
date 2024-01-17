@@ -6,22 +6,30 @@ import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertError
 import { setTokenAction } from '@web-client/presenter/actions/Login/setTokenAction';
 import { setUserAction } from '@web-client/presenter/actions/setUserAction';
 import { setUserPermissionsAction } from '@web-client/presenter/actions/setUserPermissionsAction';
+import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { submitChangePasswordAction } from '@web-client/presenter/actions/Login/submitChangePasswordAction';
+import { validateChangePasswordFormAction } from '@web-client/presenter/actions/Login/validateChangePasswordFormAction';
 
 export const submitChangePasswordSequence = [
   showProgressSequenceDecorator([
-    submitChangePasswordAction,
+    validateChangePasswordFormAction,
     {
-      error: [setAlertErrorAction],
+      error: [setValidationAlertErrorsAction],
       success: [
-        clearFormAction,
-        decodeTokenAction,
-        setTokenAction,
-        getUserAction,
-        setUserAction,
-        setUserPermissionsAction,
-        navigateToPathAction,
+        submitChangePasswordAction,
+        {
+          error: [setAlertErrorAction],
+          success: [
+            clearFormAction,
+            decodeTokenAction,
+            setTokenAction,
+            getUserAction,
+            setUserAction,
+            setUserPermissionsAction,
+            navigateToPathAction,
+          ],
+        },
       ],
     },
   ]),

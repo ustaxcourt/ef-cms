@@ -1,5 +1,5 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { MessageAlert } from '@web-client/ustc-ui/MessageAlert/MessageAlert';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { RequirementsText } from '@web-client/views/CreatePetitionerAccount/RequirementsText';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -8,7 +8,6 @@ import React from 'react';
 
 export const ChangePassword = connect(
   {
-    alertError: state.alertError,
     changePasswordHelper: state.changePasswordHelper,
     confirmPassword: state.form.confirmPassword,
     password: state.form.password,
@@ -19,7 +18,6 @@ export const ChangePassword = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
-    alertError,
     changePasswordHelper,
     confirmPassword,
     password,
@@ -35,13 +33,7 @@ export const ChangePassword = connect(
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissable={false} />
-              {alertError && (
-                <MessageAlert
-                  alertType={alertError.alertType}
-                  message={alertError.message}
-                  title={alertError.title}
-                ></MessageAlert>
-              )}
+              <ErrorNotification />
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">

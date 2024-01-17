@@ -68,6 +68,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "cognito-idp:AdminGetUser",
                 "cognito-idp:AdminUpdateUserAttributes",
                 "cognito-idp:AdminConfirmSignUp",
+                "cognito-idp:AdminSetUserPassword",
                 "cognito-idp:ListUserPoolClients",
                 "cognito-idp:ListUsers"
             ],

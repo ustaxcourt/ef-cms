@@ -14,12 +14,13 @@
 ::: QUESTIONS :::
 - Cognito SRP auth flow
   - Leaning towards not implementing
-  - Current discussion: There is a possibility we could accidentally log out plaintext passwords in CloudWatch. How can we prevent this from ever happeneing?
+  - Current discussion: There is a possibility we could accidentally log out plaintext passwords in CloudWatch. How can we prevent this from ever happening?
     - Prevent logs from being added to endpoints that accept a password (using lint rules?).
     - Deploy a new lambda for endpoints that accept a password and disable logs for that lambda. 
     - We could encrypt the password on the frontend and decrypt on the backend so that we never see plaintext of their password.
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it???
+- Should we use the initiateAuth + respondToAuthChallenge method or the adminSetUserPassword method for changing passwords?
 
 
 ::: CONVERSATIONS TO HAVE :::

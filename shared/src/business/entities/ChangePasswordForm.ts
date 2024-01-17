@@ -1,66 +1,16 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
+import { getDefaultPasswordErrors } from '@shared/business/entities/NewPetitionerUser';
 import joi from 'joi';
 
-type PasswordValidation = {
-  message: string;
-  valid: boolean;
-};
-
-export type ChangePasswordValidations = {
-  hasNoLeadingOrTrailingSpace: PasswordValidation;
-  hasOneLowercase: PasswordValidation;
-  hasOneNumber: PasswordValidation;
-  hasOneUppercase: PasswordValidation;
-  hasSpecialCharacterOrSpace: PasswordValidation;
-  isProperLength: PasswordValidation;
-};
-
-const ChangePasswordValidationErrorMessages = {
-  hasNoLeadingOrTrailingSpace: 'Must not contain leading or trailing space',
-  hasOneLowercase: 'Must contain lower case letter',
-  hasOneNumber: 'Must contain number',
-  hasOneUppercase: 'Must contain upper case letter',
-  hasSpecialCharacterOrSpace: 'Must contain special character or space',
-  isProperLength: 'Must be between 8-99 characters long',
-};
-
-export function getDefaultPasswordErrors(): ChangePasswordValidations {
-  return {
-    hasNoLeadingOrTrailingSpace: {
-      message:
-        ChangePasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace,
-      valid: true,
-    },
-    hasOneLowercase: {
-      message: ChangePasswordValidationErrorMessages.hasOneLowercase,
-      valid: true,
-    },
-    hasOneNumber: {
-      message: ChangePasswordValidationErrorMessages.hasOneNumber,
-      valid: true,
-    },
-    hasOneUppercase: {
-      message: ChangePasswordValidationErrorMessages.hasOneUppercase,
-      valid: true,
-    },
-    hasSpecialCharacterOrSpace: {
-      message: ChangePasswordValidationErrorMessages.hasSpecialCharacterOrSpace,
-      valid: true,
-    },
-    isProperLength: {
-      message: ChangePasswordValidationErrorMessages.isProperLength,
-      valid: true,
-    },
-  };
-}
-
 export class ChangePasswordForm extends JoiValidationEntity {
+  public userEmail: string;
   public password: string;
   public confirmPassword: string;
 
   constructor(rawProps) {
     super('ChangePasswordForm');
+    this.userEmail = rawProps.userEmail;
     this.password = rawProps.password;
     this.confirmPassword = rawProps.confirmPassword;
   }
@@ -119,6 +69,12 @@ export class ChangePasswordForm extends JoiValidationEntity {
     }).description(
       'Password for the account. Contains a custom validation because we want to construct a string with all the keys that failed which later we parse out to an object',
     ),
+    userEmail: JoiValidationConstants.EMAIL.required()
+      .messages({
+        '*': 'Enter a valid email address',
+        'string.max': 'Email address must contain fewer than 100 characters',
+      })
+      .description('Email of user'),
   });
 
   getValidationRules() {
