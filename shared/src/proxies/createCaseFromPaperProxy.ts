@@ -16,17 +16,27 @@ export const createCaseFromPaperInteractor = (
   applicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
+    atpFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     requestForPlaceOfTrialFileId,
     stinFileId,
+  }: {
+    applicationForWaiverOfFilingFeeFileId: string;
+    atpFileId: string;
+    corporateDisclosureFileId: string;
+    petitionFileId: string;
+    petitionMetadata: any; // TODO: add types
+    requestForPlaceOfTrialFileId: string;
+    stinFileId: string;
   },
 ) => {
   return post({
     applicationContext,
     body: {
       applicationForWaiverOfFilingFeeFileId,
+      atpFileId,
       corporateDisclosureFileId,
       petitionFileId,
       petitionMetadata,

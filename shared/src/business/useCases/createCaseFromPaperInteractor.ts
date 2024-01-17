@@ -101,6 +101,7 @@ export const createCaseFromPaperInteractor = async (
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,
+      atpFileId,
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
@@ -279,13 +280,16 @@ export const createCaseFromPaperInteractor = async (
       {
         createdAt: caseToAdd.receivedAt,
         docketEntryId: atpFileId,
-        documentTitle: INITIAL_DOCUMENT_TYPES.atp.documentType,
-        documentType: INITIAL_DOCUMENT_TYPES.atp.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.atp.eventCode,
+        documentTitle:
+          INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
+        documentType:
+          INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.eventCode,
         filers,
         filingDate: caseToAdd.receivedAt,
         index: 0,
         isFileAttached: true,
+        isOnDocketRecord: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
