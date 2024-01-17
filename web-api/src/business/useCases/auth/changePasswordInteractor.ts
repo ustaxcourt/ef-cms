@@ -1,7 +1,5 @@
-// import { RespondToAuthChallengeCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
 import { InvalidEntityError } from '@web-api/errors/errors';
-import { RespondToAuthChallengeCommandInput } from '@aws-sdk/client-cognito-identity-provider/dist-types/commands/RespondToAuthChallengeCommand';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 
@@ -41,19 +39,17 @@ export const changePasswordInteractor = async (
       });
 
     if (initiateAuthResult?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-      const params: RespondToAuthChallengeCommandInput = {
-        ChallengeName: 'NEW_PASSWORD_REQUIRED',
-        ChallengeResponses: {
-          NEW_PASSWORD: password,
-          USERNAME: userEmail,
-        },
-        ClientId: process.env.COGNITO_CLIENT_ID,
-        Session: initiateAuthResult.Session,
-      };
-
-      const cognito = applicationContext.getCognito();
-      const result = await cognito.respondToAuthChallenge(params);
-
+      const result = await applicationContext
+        .getCognito()
+        .respondToAuthChallenge({
+          ChallengeName: 'NEW_PASSWORD_REQUIRED',
+          ChallengeResponses: {
+            NEW_PASSWORD: password,
+            USERNAME: userEmail,
+          },
+          ClientId: process.env.COGNITO_CLIENT_ID,
+          Session: initiateAuthResult.Session,
+        });
       return {
         accessToken: result.AuthenticationResult!.AccessToken!,
         idToken: result.AuthenticationResult!.IdToken!,
