@@ -119,10 +119,8 @@ export const createOrUpdatePractitionerUser = async ({
     };
     //TODO: deal with type error on params
     const response = await cognito.adminCreateUser(params);
-    console.log('*** response', response.User.Attributes);
     //replace sub here
     if (response && response.User && response.User.Username) {
-      console.log('*** userId1', userId);
       const userIdAttribute = // (response.User.Attributes?.find(element => {
         //   if (element.Name === 'custom:userId') {
         //     return element.Value;
@@ -136,7 +134,6 @@ export const createOrUpdatePractitionerUser = async ({
       userId = userIdAttribute?.Value!;
     }
   } else {
-    console.log('*** wrong if statement', userId);
     const response = await cognito.adminGetUser({
       UserPoolId: process.env.USER_POOL_ID,
       Username: userEmail,
@@ -165,9 +162,7 @@ export const createOrUpdatePractitionerUser = async ({
           return element.Value;
         }
       })! as unknown as string);
-    console.log('*** wrong if statement2', userId);
   }
-  console.log('*** userId3', userId);
   return await createUserRecords({
     applicationContext,
     user,
