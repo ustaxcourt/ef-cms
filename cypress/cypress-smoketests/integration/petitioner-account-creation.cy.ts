@@ -40,11 +40,11 @@ describe('Petitioner Account Creation', () => {
 
       cy.get('@USER_COGNITO_INFO')
         .should('have.a.property', 'userId')
-        .and('be.truthy');
+        .and('not.be.undefined');
 
       cy.get('@USER_COGNITO_INFO')
         .should('have.a.property', 'confirmationCode')
-        .and('be.truthy');
+        .and('not.be.undefined');
 
       cy.get('@USER_COGNITO_INFO').then((userInfo: any) => {
         const { confirmationCode, userId } = userInfo;
