@@ -4,8 +4,8 @@
   - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
   - Pa11y tests. Determine strategy for how to fix.
 + Extract error message strings into constants OR do something else.
-- Forgot password flow.
-+ (KS & TE) Change password flow.
++ Forgot password flow.
+- Move `PostAuthentication_Authentication` from Cognito triggers to changePasswordInteractor
 - Move loginProxy out of public directory
 
 ::: SOLO TO DO:::
