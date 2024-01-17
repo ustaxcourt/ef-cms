@@ -30,7 +30,7 @@ describe('Petitioner Account Creation', () => {
         '[data-testid="petitioner-account-creation-submit-button"]',
       ).click();
 
-      cy.get('data-testid="email-address-verification-sent-message"').should(
+      cy.get('[data-testid="email-address-verification-sent-message"]').should(
         'exist',
       );
 
