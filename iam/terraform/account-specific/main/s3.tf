@@ -26,17 +26,26 @@ resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "VisualEditor0",
       "Effect": "Allow",
-      "Action": "s3:*",
-      "Resource": "*"
+      "Action": ["iam:PassRole", "s3:ListBucket"],
+      "Resource": [
+        "arn:aws:s3:::${var.log_snapshot_bucket_name}",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es-s3-snapshot-access"
+      ]
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"],
+      "Resource": "arn:aws:s3:::${var.log_snapshot_bucket_name}/*"
     }
-  ]
-}
+  ]}
 EOF
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
-  bucket = "ustc-log-snapshots"
+  bucket = "${var.log_snapshot_bucket_name}"
 #   acl    = "private"
   force_destroy = false
 }
