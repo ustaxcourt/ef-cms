@@ -5,11 +5,9 @@ describe('Petitioner Account Creation', () => {
   const TEST_PASSWORD = 'aA1!aaaa';
 
   describe('Create Petitioner Account', () => {
-    beforeEach(() => {
-      cy.visit('/create-account/petitioner');
-    });
-
     it('should create an account and verify it using the verification link', () => {
+      cy.visit('/create-account/petitioner');
+
       cy.get('[data-testid="petitioner-account-creation-email"]').type(
         TEST_EMAIL,
       );
@@ -54,6 +52,20 @@ describe('Petitioner Account Creation', () => {
       });
 
       cy.get('[data-testid="success-alert"]').should('exist');
+    });
+
+    it('should be able to login to new account', () => {
+      cy.visit('/login');
+
+      cy.get('[data-testid="email-input"]').type(TEST_EMAIL);
+
+      cy.get('[data-testid="password-input"]').type(TEST_PASSWORD, {
+        log: false,
+      });
+
+      cy.get('[data-testid="login-button"]').click();
+
+      cy.get('[data-testid="account-menu-button"]');
     });
   });
 });
