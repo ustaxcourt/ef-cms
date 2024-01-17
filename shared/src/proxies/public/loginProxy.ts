@@ -1,10 +1,13 @@
-import { LoginInteractorResponse } from '@web-api/business/useCases/auth/loginInteractor';
 import { post } from '@shared/proxies/requests';
 
 export const loginInteractor = (
   applicationContext,
   { email, password }: { email: string; password: string },
-): Promise<LoginInteractorResponse> => {
+): Promise<{
+  accessToken: string;
+  idToken: string;
+  refreshToken: string;
+}> => {
   return post({
     applicationContext,
     body: { email, password },
