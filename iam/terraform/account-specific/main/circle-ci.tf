@@ -159,6 +159,16 @@ resource "aws_iam_policy" "circle_ci_policy" {
       ]
     },
     {
+      "Sid": "DynamoGetItem",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
       "Sid": "DynamoGranular",
       "Effect": "Allow",
       "Action": [

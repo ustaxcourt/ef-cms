@@ -19,6 +19,8 @@ const cognito = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
 
+const dynamoDB = new AWS.DynamoDB();
+
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
@@ -115,5 +117,18 @@ export const getNewAccountVerificationCode = async ({
     element => element.Name === 'custom:userId',
   )?.Value;
 
-  return userId;
+  const primaryKeyValues = {
+    pk: { S: `user|${userId}` },
+    sk: { S: 'account-confirmation-code' },
+  };
+
+  const itemsAlpha = await dynamoDB.getItem({
+    Key: primaryKeyValues,
+    TableName: 'efcms-exp3-alpha',
+  });
+  const itemsBeta = await dynamoDB.getItem({
+    Key: primaryKeyValues,
+    TableName: 'efcms-exp3-beta',
+  });
+  return { itemsAlpha, itemsBeta };
 };
