@@ -98,3 +98,21 @@ async function getUserToken(password: string, username: string) {
       throw e;
     });
 }
+
+export const getNewAccountVerificationCode = async ({
+  email,
+}: {
+  email: string;
+}) => {
+  const users = await cognito.listUsers({
+    AttributesToGet: ['custom:userId'],
+    Filter: `email = "${email}"`,
+    UserPoolId: process.env.USER_POOL_ID,
+  });
+
+  const userId = users.Users?.[0].Attributes?.find(
+    element => element.Name === 'custom:userId',
+  )?.Value;
+
+  return userId;
+};
