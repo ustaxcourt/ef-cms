@@ -2,6 +2,7 @@ import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm
 import { InvalidEntityError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
+import jwt from 'jsonwebtoken';
 
 export const changePasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -50,10 +51,45 @@ export const changePasswordInteractor = async (
           ClientId: process.env.COGNITO_CLIENT_ID,
           Session: initiateAuthResult.Session,
         });
+
+      if (
+        !result.AuthenticationResult?.AccessToken ||
+        !result.AuthenticationResult?.IdToken ||
+        !result.AuthenticationResult?.RefreshToken
+      ) {
+        throw new Error('Unsuccessful change password');
+      }
+
+      const decoded = jwt.decode(result.AuthenticationResult?.IdToken);
+      const userId = decoded['custom:userId'] || decoded.sub;
+
+      const userFromPersistence = await applicationContext
+        .getPersistenceGateway()
+        .getUserById({ applicationContext, userId });
+
+      if (
+        userFromPersistence &&
+        userFromPersistence.pendingEmail &&
+        userFromPersistence.pendingEmail === userEmail
+      ) {
+        const updatedUser = await applicationContext
+          .getUseCases()
+          .setUserEmailFromPendingEmailInteractor(applicationContext, {
+            user: userFromPersistence,
+          });
+
+        applicationContext.logger.info(
+          'Petitioner post authentication processed',
+          {
+            updatedUser,
+          },
+        );
+      }
+
       return {
-        accessToken: result.AuthenticationResult!.AccessToken!,
-        idToken: result.AuthenticationResult!.IdToken!,
-        refreshToken: result.AuthenticationResult!.RefreshToken!,
+        accessToken: result.AuthenticationResult.AccessToken,
+        idToken: result.AuthenticationResult.IdToken,
+        refreshToken: result.AuthenticationResult.RefreshToken,
       };
     }
 
