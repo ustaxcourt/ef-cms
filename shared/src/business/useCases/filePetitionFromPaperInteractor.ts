@@ -4,6 +4,26 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
+export type FilePetitionFromPaperTypeDetailsType = {
+  attachmentToPetitionFile?: string;
+  applicationForWaiverOfFilingFeeFile?: string;
+  applicationForWaiverOfFilingFeeUploadProgress?: string;
+  atpUploadProgress?: string;
+  corporateDisclosureFile?: string;
+  corporateDisclosureUploadProgress?: string;
+  petitionFile: string;
+  petitionMetadata: any; // todo: find correct type
+  petitionUploadProgress?: string;
+  requestForPlaceOfTrialFile?: string;
+  requestForPlaceOfTrialUploadProgress?: string;
+  stinFile?: string;
+  stinUploadProgress?: string;
+};
+
+// DOD TODO:
+//  1.  convert to a utility or useCasehelper function
+//  it isn't not a lambda
+//  2. type return or at least type createCaseFromPaperInteractor
 export const filePetitionFromPaperInteractor = async (
   applicationContext: any,
   {
@@ -20,27 +40,20 @@ export const filePetitionFromPaperInteractor = async (
     requestForPlaceOfTrialUploadProgress,
     stinFile,
     stinUploadProgress,
-  }: {
-    attachmentToPetitionFile: string;
-    applicationForWaiverOfFilingFeeFile: string;
-    applicationForWaiverOfFilingFeeUploadProgress: string;
-    atpUploadProgress: string;
-    corporateDisclosureFile: string;
-    corporateDisclosureUploadProgress: string;
-    petitionFile: string;
-    petitionMetadata: any;
-    petitionUploadProgress: string;
-    requestForPlaceOfTrialFile: string;
-    requestForPlaceOfTrialUploadProgress: string;
-    stinFile: string;
-    stinUploadProgress: string;
-  },
+  }: FilePetitionFromPaperTypeDetailsType,
 ) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const petitionFileUpload = applicationContext
+    .getUseCases()
+    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+      document: petitionFile,
+      onUploadProgress: petitionUploadProgress,
+    });
 
   let applicationForWaiverOfFilingFeeUpload;
   if (applicationForWaiverOfFilingFeeFile) {
@@ -51,13 +64,6 @@ export const filePetitionFromPaperInteractor = async (
         onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
       });
   }
-
-  const petitionFileUpload = applicationContext
-    .getUseCases()
-    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: petitionFile,
-      onUploadProgress: petitionUploadProgress,
-    });
 
   let corporateDisclosureFileUpload;
   if (corporateDisclosureFile) {

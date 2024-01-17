@@ -24,6 +24,13 @@ jest.mock('../utilities/DateHandler', () => {
   };
 });
 
+// REMARKS:
+// 1. if most of these tests are validating docket entries were created,
+// should we test the pertinent information about the docket entries
+// example in the ATP unit test
+// 2. Can we dry up some of these tests? the attachment files are optional
+// and may not necessary
+
 describe('createCaseFromPaperInteractor', () => {
   const date = '2018-11-21T20:49:28.192Z';
   let user = new User({
@@ -296,10 +303,82 @@ describe('createCaseFromPaperInteractor', () => {
       } as any,
     );
 
-    const stinDocketEntry = caseFromPaper.docketEntries.find(
-      d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    const rqtDocketEntry = caseFromPaper.docketEntries.find(
+      d =>
+        d.eventCode === INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
     );
-    expect(stinDocketEntry.index).toEqual(0);
+    expect(rqtDocketEntry).toBeDefined(); // is this enough of a test?
+  });
+
+  it('adds an ATP docket entry to the case when an ATP file is attached', async () => {
+    const caseFromPaper = await createCaseFromPaperInteractor(
+      applicationContext,
+      {
+        archivedDocketEntries: [],
+        attachmentToPetitionFileId: '513f62ce-7c8d-446e-aeda-14a2a625a611',
+        attachmentToPetitionFileSize: '6',
+        corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
+          caseCaption: 'caseCaption',
+          caseType: CASE_TYPES_MAP.other,
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          irsNoticeDate: date,
+          mailingDate: 'testing',
+          partyType: PARTY_TYPES.petitioner,
+          petitionFile: new File([], 'petitionFile.pdf'),
+          petitionFileSize: 1,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '99 South Oak Lane',
+              address2: 'Culpa numquam saepe ',
+              address3: 'Eaque voluptates com',
+              city: 'Dignissimos voluptat',
+              contactType: CONTACT_TYPES.primary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'petitioner1@example.com',
+              name: 'Diana Prince',
+              phone: '+1 (215) 128-6587',
+              postalCode: '69580',
+              state: 'AR',
+            },
+          ],
+          preferredTrialCity: 'Fresno, California',
+          procedureType: 'Small',
+          receivedAt: applicationContext.getUtilities().createISODateString(),
+          requestForPlaceOfTrialFile: new File(
+            [],
+            'requestForPlaceOfTrialFile.pdf',
+          ),
+          requestForPlaceOfTrialFileSize: 1,
+          stinFile: new File([], 'stinFile.pdf'),
+          stinFileSize: 1,
+        },
+        requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      } as any,
+    );
+
+    const atpDocketEntry = caseFromPaper.docketEntries.find(
+      d =>
+        d.eventCode ===
+        INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.eventCode,
+    );
+    // expect(atpDocketEntry).toBeDefined();
+    expect(atpDocketEntry).toMatchObject({
+      docketEntryId: '513f62ce-7c8d-446e-aeda-14a2a625a611',
+      docketNumber: '101-00',
+      documentTitle: 'Attachment to Petition',
+      documentType: 'Attachment to Petition',
+      eventCode: 'ATP',
+      index: 2,
+      isOnDocketRecord: true,
+      isPaper: true,
+      servedAt: undefined,
+      workItem: undefined, // we may need to know that ATP aren't work items, but petition docket entry is
+    });
+    // expect(atpDocketEntr.index).toBe(0); // may not be necessary if prescribing an index for atp isn't necessary
   });
 
   it('creates a case from paper with a secondary contact', async () => {
