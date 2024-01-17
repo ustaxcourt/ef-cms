@@ -566,6 +566,16 @@ export const baseState = {
     documentTitle: null,
   },
   assigneeId: null,
+  //TODO: 10007 set these defaults back to ''
+  authentication: {
+    form: {
+      confirmPassword: undefined,
+      email: undefined,
+      password: undefined,
+    },
+    tempPassword: undefined,
+    userEmail: undefined,
+  },
   batchDownloads: {},
   caseDeadlineReport: {} as {
     caseDeadlines: RawCaseDeadline[];

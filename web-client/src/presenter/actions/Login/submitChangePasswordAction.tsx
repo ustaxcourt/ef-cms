@@ -13,9 +13,8 @@ export const submitChangePasswordAction = async ({
   // TODO: move userEmail and session off form.state
 
   //TODO: validate entity here
-  const { confirmPassword, password, tempPassword, userEmail } = get(
-    state.form,
-  );
+  const { confirmPassword, password } = get(state.authentication.form);
+  const { tempPassword, userEmail } = get(state.authentication);
 
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
