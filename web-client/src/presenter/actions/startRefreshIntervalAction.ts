@@ -6,6 +6,7 @@ export const startRefreshIntervalAction = ({
   store,
 }: ActionProps) => {
   const oldInterval = get(state.refreshTokenInterval);
+
   const refreshTokenRequest = async () => {
     const userIsLoggedIn = get(state.token);
     if (userIsLoggedIn) {
@@ -17,8 +18,11 @@ export const startRefreshIntervalAction = ({
       applicationContext.setCurrentUserToken(response.idToken);
     }
   };
+
   clearInterval(oldInterval);
+
   const time = applicationContext.getConstants().REFRESH_INTERVAL;
   const interval = setInterval(refreshTokenRequest, time);
+
   store.set(state.refreshTokenInterval, interval);
 };
