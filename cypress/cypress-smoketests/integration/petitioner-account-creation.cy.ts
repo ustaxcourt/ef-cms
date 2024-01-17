@@ -45,6 +45,15 @@ describe('Petitioner Account Creation', () => {
       cy.get('@USER_COGNITO_INFO')
         .should('have.a.property', 'confirmationCode')
         .and('be.truthy');
+
+      cy.get('@USER_COGNITO_INFO').then((userInfo: any) => {
+        const { confirmationCode, userId } = userInfo;
+        cy.visit(
+          `/confirm-signup?confirmationCode="${confirmationCode}"&email="${TEST_EMAIL}"&userId="${userId}"`,
+        );
+      });
+
+      cy.get('[data-testid="success-alert"]').should('exist');
     });
   });
 });
