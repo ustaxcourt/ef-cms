@@ -1,0 +1,43 @@
+name: Typescript Untouched File Check
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  CheckUntouchedFiles:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Determine Target Branch
+        id: target_branch
+        run: echo "::set-output name=target_branch::$(jq -r '.pull_request.base.ref' $GITHUB_EVENT_PATH)"
+
+      - name: Set Environment Variable
+        run: echo "TARGET_BRANCH=${{ steps.target_branch.outputs.target_branch }}" >> $GITHUB_ENV
+
+      - name: Checkout Target Branch
+        uses: actions/checkout@v3
+        with:
+          repository: ustaxcourt/ef-cms
+          ref: ${{ env.TARGET_BRANCH }}
+          path: targetBranch
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.1'
+
+      - name: NPM Install in your branch
+        run: npm ci
+
+      - name: NPM Install in target branch
+        working-directory: ./targetBranch
+        run: npm ci
+
+      - name: Check untouched files
+        run: npx ts-node scripts/checkUntouchedFiles.ts
