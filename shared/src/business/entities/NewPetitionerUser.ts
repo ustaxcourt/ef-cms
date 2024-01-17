@@ -15,7 +15,8 @@ export type PasswordValidations = {
   hasSpecialCharacterOrSpace: PasswordValidation;
   isProperLength: PasswordValidation;
 };
-const NewPetitionerUserPasswordValidationErrorMessages = {
+
+export const PasswordValidationErrorMessages = {
   hasNoLeadingOrTrailingSpace: 'Must not contain leading or trailing space',
   hasOneLowercase: 'Must contain lower case letter',
   hasOneNumber: 'Must contain number',
@@ -27,29 +28,27 @@ const NewPetitionerUserPasswordValidationErrorMessages = {
 export function getDefaultPasswordErrors(): PasswordValidations {
   return {
     hasNoLeadingOrTrailingSpace: {
-      message:
-        NewPetitionerUserPasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace,
+      message: PasswordValidationErrorMessages.hasNoLeadingOrTrailingSpace,
       valid: true,
     },
     hasOneLowercase: {
-      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneLowercase,
+      message: PasswordValidationErrorMessages.hasOneLowercase,
       valid: true,
     },
     hasOneNumber: {
-      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneNumber,
+      message: PasswordValidationErrorMessages.hasOneNumber,
       valid: true,
     },
     hasOneUppercase: {
-      message: NewPetitionerUserPasswordValidationErrorMessages.hasOneUppercase,
+      message: PasswordValidationErrorMessages.hasOneUppercase,
       valid: true,
     },
     hasSpecialCharacterOrSpace: {
-      message:
-        NewPetitionerUserPasswordValidationErrorMessages.hasSpecialCharacterOrSpace,
+      message: PasswordValidationErrorMessages.hasSpecialCharacterOrSpace,
       valid: true,
     },
     isProperLength: {
-      message: NewPetitionerUserPasswordValidationErrorMessages.isProperLength,
+      message: PasswordValidationErrorMessages.isProperLength,
       valid: true,
     },
   };
