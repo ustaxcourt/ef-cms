@@ -56,22 +56,11 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   };
 };
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.corporateDisclosureFileId the id of the corporate disclosure file
- * @param {string} providers.petitionFileId the id of the petition file
- * @param {string} providers.petitionMetadata the petition metadata
- * @param {string} providers.requestForPlaceOfTrialFileId the id of the request for place of trial file
- * @param {string} providers.stinFileId the id of the stin file
- * @returns {object} the created case
- */
 export const createCaseFromPaperInteractor = async (
   applicationContext: IApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
-    atpFileId,
+    attachmentToPetitionFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
@@ -84,9 +73,10 @@ export const createCaseFromPaperInteractor = async (
     petitionMetadata: any;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    atpFileId?: string;
+    attachmentToPetitionFileId?: string;
   },
-) => {
+): Promise<RawCase> => {
+  // is this the correct return type? should be!
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
@@ -101,7 +91,7 @@ export const createCaseFromPaperInteractor = async (
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,
-      atpFileId,
+      attachmentToPetitionFileId,
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
@@ -275,11 +265,11 @@ export const createCaseFromPaperInteractor = async (
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
-  if (atpFileId) {
+  if (attachmentToPetitionFileId) {
     const atpDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        docketEntryId: atpFileId,
+        docketEntryId: attachmentToPetitionFileId,
         documentTitle:
           INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
         documentType:
@@ -287,7 +277,10 @@ export const createCaseFromPaperInteractor = async (
         eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.eventCode,
         filers,
         filingDate: caseToAdd.receivedAt,
-        index: 0,
+        // QUESTION: does ATP need an index?
+        // It seems specific docket entries need to be at the top of the docket entries
+        // Also, <Case>.addDocketEntry does generate indices for docket entries so
+        // index: 0,
         isFileAttached: true,
         isOnDocketRecord: true,
         isPaper: true,
@@ -296,8 +289,6 @@ export const createCaseFromPaperInteractor = async (
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
-
-    console.log('atpDocketEntryEntity', atpDocketEntryEntity);
 
     atpDocketEntryEntity.setFiledBy(user);
 
