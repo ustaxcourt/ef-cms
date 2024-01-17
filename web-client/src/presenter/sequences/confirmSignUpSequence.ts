@@ -7,8 +7,8 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 export const confirmSignUpSequence = [
   confirmSignUpAction,
   {
-    no: [setAlertErrorAction],
-    yes: [setAlertSuccessAction],
+    error: [setAlertErrorAction],
+    success: [setAlertSuccessAction],
   },
   navigateToLoginSequence,
 ] as unknown as (props: { confirmationCode: string; userId: string }) => {};
