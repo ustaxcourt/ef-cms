@@ -3,7 +3,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { log } from 'console';
 
 export const filePetitionFromPaperInteractor = async (
   applicationContext: any,
@@ -100,8 +99,6 @@ export const filePetitionFromPaperInteractor = async (
         onUploadProgress: atpUploadProgress,
       });
   }
-
-  console.log('atpFileUpload', atpFileUpload);
 
   await Promise.all([
     applicationForWaiverOfFilingFeeUpload,

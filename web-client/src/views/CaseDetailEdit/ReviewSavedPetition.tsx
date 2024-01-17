@@ -317,6 +317,7 @@ export const ReviewSavedPetition = connect(
                   </div>
                 </div>
               </div>
+              {/* TODO: Pull out to separate component */}
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
@@ -355,6 +356,20 @@ export const ReviewSavedPetition = connect(
                                 size="1x"
                               />
                               Statement of Taxpayer Identification
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {reviewSavedPetitionHelper.attachmentToPetitionFile && (
+                        <div className="margin-top-3 margin-bottom-3">
+                          <div className="grid-row">
+                            <div className="grid-col flex-auto">
+                              <PDFPreviewButton
+                                file={
+                                  reviewSavedPetitionHelper.attachmentToPetitionFile
+                                }
+                                title="Attachment to Petition"
+                              />
                             </div>
                           </div>
                         </div>

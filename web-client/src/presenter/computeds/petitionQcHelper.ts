@@ -48,7 +48,7 @@ export const petitionQcHelper = (
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
-    atpFile: INITIAL_DOCUMENT_TYPES.atp.documentType,
+    atpFile: INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
     corporateDisclosureFile:
       INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,

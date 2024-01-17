@@ -95,7 +95,7 @@ export const createCaseFromPaperAction = async ({
         applicationForWaiverOfFilingFeeFile,
         applicationForWaiverOfFilingFeeUploadProgress:
           progressFunctions.waiverOfFilingFee,
-        atpUploadProgress: progressFunctions.adp,
+        atpUploadProgress: progressFunctions.atp,
         attachmentToPetitionFile,
         corporateDisclosureFile,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
