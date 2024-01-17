@@ -23,6 +23,7 @@ export const scanHelper = (
 
   let applicationForWaiverOfFilingFeeFileCompleted;
   let petitionFileCompleted;
+  let attachmentToPetitionFileCompleted;
   let corporateDisclosureFileCompleted;
   let stinFileCompleted;
   let requestForPlaceOfTrialFileCompleted;
@@ -39,6 +40,13 @@ export const scanHelper = (
     !!get(state.form.petitionFile) ||
     !!getCaseDocumentByDocumentType({
       documentType: INITIAL_DOCUMENT_TYPES_MAP.petitionFile,
+      documents: formCaseDocuments,
+    });
+
+  attachmentToPetitionFileCompleted =
+    !!get(state.form.attachmentToPetitionFile) ||
+    !!getCaseDocumentByDocumentType({
+      documentType: INITIAL_DOCUMENT_TYPES_MAP.attachmentToPetitionFile,
       documents: formCaseDocuments,
     });
 
@@ -73,6 +81,7 @@ export const scanHelper = (
 
   return {
     applicationForWaiverOfFilingFeeFileCompleted,
+    attachmentToPetitionFileCompleted,
     corporateDisclosureFileCompleted,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
     hasScanFeature: !!(

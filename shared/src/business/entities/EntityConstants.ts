@@ -612,7 +612,7 @@ export const INITIAL_DOCUMENT_TYPES = {
     eventCode: 'RQT',
   },
   stin: STIN_DOCKET_ENTRY_TYPE,
-  atp: {
+  attachmentToPetitionFile: {
     documentTitle: 'Attachment to Petition',
     documentType: 'Attachment to Petition',
     eventCode: 'ATP',
@@ -630,6 +630,7 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  attachmentToPetitionFile: INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile,
   corporateDisclosureFile:
     INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
   petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
