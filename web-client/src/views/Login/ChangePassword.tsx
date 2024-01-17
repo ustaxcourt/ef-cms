@@ -9,13 +9,14 @@ import React from 'react';
 export const ChangePassword = connect(
   {
     changePasswordHelper: state.changePasswordHelper,
-    confirmPassword: state.form.confirmPassword,
-    password: state.form.password,
+    confirmPassword: state.authentication.form.confirmPassword,
+    password: state.authentication.form.password,
     showConfirmPassword: state.showConfirmPassword,
     showPassword: state.showPassword,
     submitChangePasswordSequence: sequences.submitChangePasswordSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateAuthenticationFormValueSequence:
+      sequences.updateAuthenticationFormValueSequence,
   },
   ({
     changePasswordHelper,
@@ -25,7 +26,7 @@ export const ChangePassword = connect(
     showPassword,
     submitChangePasswordSequence,
     toggleShowPasswordSequence,
-    updateFormValueSequence,
+    updateAuthenticationFormValueSequence,
   }) => {
     return (
       <>
@@ -50,9 +51,8 @@ export const ChangePassword = connect(
                         name="password"
                         type={showPassword ? 'text' : 'password'}
                         onChange={e => {
-                          updateFormValueSequence({
-                            key: 'password',
-                            value: e.target.value,
+                          updateAuthenticationFormValueSequence({
+                            password: e.target.value,
                           });
                         }}
                       />
@@ -150,9 +150,8 @@ export const ChangePassword = connect(
                         name="confirmPassword"
                         type={showConfirmPassword ? 'text' : 'password'}
                         onChange={e => {
-                          updateFormValueSequence({
-                            key: 'confirmPassword',
-                            value: e.target.value,
+                          updateAuthenticationFormValueSequence({
+                            confirmPassword: e.target.value,
                           });
                         }}
                       />

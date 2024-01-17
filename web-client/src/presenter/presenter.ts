@@ -457,6 +457,7 @@ import { updateAddDeficiencyFormValueSequence } from './sequences/updateAddDefic
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
+import { updateAuthenticationFormValueSequence } from '@web-client/presenter/sequences/Login/updateAuthenticationFormValueSequence';
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCalendarNoteSequence } from './sequences/updateCalendarNoteSequence';
 import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
@@ -1325,6 +1326,7 @@ export const presenterSequences = {
     updateAdvancedOrderSearchFormValueSequence as unknown as Function,
   updateAdvancedSearchFormValueSequence:
     updateAdvancedSearchFormValueSequence as unknown as Function,
+  updateAuthenticationFormValueSequence,
   updateBatchDownloadProgressSequence:
     updateBatchDownloadProgressSequence as unknown as Function,
   updateCalendarNoteSequence: updateCalendarNoteSequence as unknown as Function,
