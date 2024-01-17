@@ -56,11 +56,13 @@ export function getDefaultPasswordErrors(): ChangePasswordValidations {
 }
 
 export class ChangePasswordForm extends JoiValidationEntity {
+  public userEmail: string;
   public password: string;
   public confirmPassword: string;
 
   constructor(rawProps) {
     super('ChangePasswordForm');
+    this.userEmail = rawProps.userEmail;
     this.password = rawProps.password;
     this.confirmPassword = rawProps.confirmPassword;
   }
@@ -119,6 +121,12 @@ export class ChangePasswordForm extends JoiValidationEntity {
     }).description(
       'Password for the account. Contains a custom validation because we want to construct a string with all the keys that failed which later we parse out to an object',
     ),
+    userEmail: JoiValidationConstants.EMAIL.required()
+      .messages({
+        '*': 'Enter a valid email address',
+        'string.max': 'Email address must contain fewer than 100 characters',
+      })
+      .description('Email of user'),
   });
 
   getValidationRules() {
