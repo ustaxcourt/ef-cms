@@ -16,10 +16,12 @@ jobs:
 
       - name: Determine Target Branch
         id: target_branch
-        run: echo "::set-output name=target_branch::$(jq -r '.pull_request.base.ref' $GITHUB_EVENT_PATH)"
-
-      - name: Console log the target branch
-        run: echo "Target Branch -> ${{ steps.target_branch.outputs.target_branch }}"
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "::set-output name=target_branch::$(jq -r '.pull_request.base.ref' $GITHUB_EVENT_PATH)"
+          else
+            echo "::set-output name=target_branch::${{ github.event.ref }}"
+          fi
 
       - name: Set Environment Variable
         run: echo "TARGET_BRANCH=${{ steps.target_branch.outputs.target_branch }}" >> $GITHUB_ENV
