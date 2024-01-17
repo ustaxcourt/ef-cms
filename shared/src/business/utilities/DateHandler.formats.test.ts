@@ -22,6 +22,7 @@ describe('DateHandler', () => {
       MMDDYYYY_UNDERSCORED: '07_02_2018',
       MONTH_DAY_YEAR: 'July 2, 2018',
       MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'Monday, July 2, 2018',
+      RENAME_NAME: 'Mon, 02 Jul 2018 03:56:47 GMT',
       SHORT_MONTH_DAY_YEAR: 'Jul 2, 2018',
       SORTABLE_CALENDAR: '2018/07/02',
       TIME: '03:56 am',
