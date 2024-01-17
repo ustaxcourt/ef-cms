@@ -89,10 +89,9 @@ export const filePetitionFromPaperInteractor = async (
       });
   }
 
-  // todo: unit test
-  let atpFileUpload;
+  let attachmentToPetitionFileUpload;
   if (attachmentToPetitionFile) {
-    atpFileUpload = applicationContext
+    attachmentToPetitionFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
         document: attachmentToPetitionFile,
@@ -106,7 +105,7 @@ export const filePetitionFromPaperInteractor = async (
     petitionFileUpload,
     requestForPlaceOfTrialFileUpload,
     stinFileUpload,
-    atpFileUpload,
+    attachmentToPetitionFileUpload,
   ]);
 
   return await applicationContext
@@ -114,7 +113,7 @@ export const filePetitionFromPaperInteractor = async (
     .createCaseFromPaperInteractor(applicationContext, {
       applicationForWaiverOfFilingFeeFileId:
         await applicationForWaiverOfFilingFeeUpload,
-      atpFileId: await atpFileUpload,
+      attachmentToPetitionFileId: await attachmentToPetitionFileUpload,
       corporateDisclosureFileId: await corporateDisclosureFileUpload,
       petitionFileId: await petitionFileUpload,
       petitionMetadata,
