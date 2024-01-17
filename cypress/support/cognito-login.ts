@@ -105,7 +105,10 @@ export const getNewAccountVerificationCode = async ({
   email,
 }: {
   email: string;
-}) => {
+}): Promise<{
+  userId: string | undefined;
+  confirmationCode: string | undefined;
+}> => {
   const userPoolId = await getUserPoolId();
   const users = await cognito.listUsers({
     AttributesToGet: ['custom:userId'],
@@ -128,14 +131,18 @@ export const getNewAccountVerificationCode = async ({
       TableName: 'efcms-exp3-alpha',
     })
     .promise();
+
   const itemsBeta = await dynamoDB
     .getItem({
       Key: primaryKeyValues,
       TableName: 'efcms-exp3-beta',
     })
     .promise();
+
   return {
-    alpha: itemsAlpha.Item?.confirmationCode?.S,
-    beta: itemsBeta.Item?.confirmationCode?.S,
+    confirmationCode:
+      itemsAlpha.Item?.confirmationCode?.S ||
+      itemsBeta.Item?.confirmationCode?.S,
+    userId,
   };
 };
