@@ -610,6 +610,8 @@ module.exports = [
     actions: [
       ...loginAs({ username: 'petitionsclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
+      // 'wait for #sign-pdf-canvas',
+      // 'click element #sign-pdf-canvas',
     ],
     notes: '',
     url: 'http://localhost:1234/',
