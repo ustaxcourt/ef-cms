@@ -5,11 +5,13 @@ export const validateChangePasswordFormAction = ({
   get,
   path,
 }: ActionProps) => {
-  const changePasswordForm = get(state.form);
+  const authenticationState = get(state.authentication);
 
-  const errors = new ChangePasswordForm(
-    changePasswordForm,
-  ).getFormattedValidationErrors();
+  const errors = new ChangePasswordForm({
+    confirmPassword: authenticationState.form.confirmPassword,
+    password: authenticationState.form.password,
+    userEmail: authenticationState.userEmail,
+  }).getFormattedValidationErrors();
 
   if (!errors) {
     return path.success();
