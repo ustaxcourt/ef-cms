@@ -20,7 +20,7 @@ export const changePasswordInteractor = (
     body: { confirmPassword, password, tempPassword, userEmail },
     endpoint: '/auth/change-password',
     options: {
-      withCredentials: false,
+      withCredentials: true,
     },
   });
 };
