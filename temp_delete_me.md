@@ -4,10 +4,6 @@
   - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
 + Extract error message strings into constants OR do something else. (On hold)
 + Forgot password flow.
-- Create helper function to get "custom:userId || sub" from Cognito response
-
-::: SOLO TO DO:::
-- Move loginProxy out of public directory
 
 ::: QUESTIONS :::
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
