@@ -46,6 +46,10 @@ EOF
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
   bucket = "${var.log_snapshot_bucket_name}"
-#   acl    = "private"
   force_destroy = false
+}
+
+resource "aws_s3_bucket_acl" "ustc_log_snapshots_bucket" {
+  bucket = aws_s3_bucket.ustc_log_snapshots_bucket.id
+  acl = "private"
 }

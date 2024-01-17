@@ -13,7 +13,6 @@ provider "aws" {
 }
 
 provider "opensearch" {
-  # url = aws_opensearch_domain.efcms-logs.url
   url = "https://${aws_opensearch_domain.efcms-logs.endpoint}"
 }
 
