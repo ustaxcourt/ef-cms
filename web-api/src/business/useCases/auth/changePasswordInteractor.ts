@@ -21,7 +21,7 @@ export const changePasswordInteractor = async (
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
   try {
     // TODO: Validate Password === ConfirmPassword + Rules?
-    // TODO: If we decide to stick with adminUserSetPassword, remove tempPassword everywhere
+    // TODO: If we decide to stick with adminUserSetPassword, remove tempPassword everywhere. Otherwise, remove `"cognito-idp:AdminSetUserPassword"` from lambda.tf
     console.log('confirmPassword', confirmPassword);
     console.log('tempPassword', tempPassword);
     const setPasswordResult = await applicationContext
