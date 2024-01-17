@@ -25,8 +25,7 @@ export const submitChangePasswordAction = async ({
         password,
         tempPassword,
         userEmail,
-      }).AuthenticationResult;
-
+      });
     return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
     const originalErrorMessage = err?.originalError?.response?.data;
