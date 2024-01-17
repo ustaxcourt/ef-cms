@@ -49,7 +49,7 @@ describe('Petitioner Account Creation', () => {
       cy.get('@USER_COGNITO_INFO').then((userInfo: any) => {
         const { confirmationCode, userId } = userInfo;
         cy.visit(
-          `/confirm-signup?confirmationCode="${confirmationCode}"&email="${TEST_EMAIL}"&userId="${userId}"`,
+          `/confirm-signup?confirmationCode=${confirmationCode}&email=${TEST_EMAIL}&userId=${userId}`,
         );
       });
 
