@@ -4,25 +4,26 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { startRefreshIntervalAction } from './startRefreshIntervalAction';
 
 describe('startRefreshIntervalAction', () => {
-  beforeAll(() => {
-    global.clearInterval = jest.fn();
-    global.setInterval = jest.fn().mockImplementation(cb => {
-      cb.apply();
+  global.clearInterval = jest.fn();
+  global.setInterval = jest.fn().mockImplementation(cb => {
+    cb.apply();
 
-      return 'new-interval';
-    });
-
-    presenter.providers.applicationContext = applicationContext;
+    return 'new-interval';
   });
 
-  it('starts the refresh interval for auth tokens', async () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  it('should start an interval timer to refresh the user`s auth tokens', async () => {
     applicationContext.getUseCases().renewIdTokenInteractor.mockResolvedValue({
-      token: 'token-123',
+      idToken: 'token-123',
     });
 
     const result = await runAction(startRefreshIntervalAction, {
       modules: {
         presenter,
+      },
+      state: {
+        token: 'c89ac2f9-f2ec-4186-8d43-e5f952d62d56',
       },
     });
 
