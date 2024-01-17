@@ -553,7 +553,7 @@ export const baseState = {
   advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   alertError: undefined,
-  alertSuccess: undefined,
+  alertSuccess: undefined as any,
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,

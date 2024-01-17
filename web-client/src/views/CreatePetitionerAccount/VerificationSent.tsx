@@ -10,7 +10,10 @@ export const VerificationSent = connect(
   },
   ({ alertSuccess, email }) => {
     return (
-      <div className="display-flex flex-justify-center padding-y-5">
+      <div
+        className="display-flex flex-justify-center padding-y-5"
+        data-testid="email-address-verification-sent-message"
+      >
         <div
           className="grid-container grid-gap-lg padding-x-4"
           id="verification-sent-message"
