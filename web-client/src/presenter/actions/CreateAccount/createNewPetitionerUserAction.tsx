@@ -7,11 +7,6 @@ export const createNewPetitionerUserAction = async ({
   get,
   path,
 }: ActionProps) => {
-  // TODO 10007: Do we need to be parsing results like this? Should we be looking directly at the cognito results?
-  if (!new NewPetitionerUser(get(state.form)).isValid()) {
-    throw new Error('Received invalid petitioner information');
-  }
-
   const petitionerAccountForm = new NewPetitionerUser(
     get(state.form),
   ).toRawObject();
@@ -26,10 +21,12 @@ export const createNewPetitionerUserAction = async ({
     return path.success(response);
   } catch (err: any) {
     const originalErrorMessage = err?.originalError?.response?.data;
+
     if (originalErrorMessage === 'User already exists') {
       const cognitoRequestPasswordResetUrl = get(
         state.cognitoRequestPasswordResetUrl,
       );
+
       return path.warning({
         alertWarning: {
           message: (
@@ -66,6 +63,7 @@ export const createNewPetitionerUserAction = async ({
         },
       });
     }
+
     return path.error({
       alertError: {
         message:
