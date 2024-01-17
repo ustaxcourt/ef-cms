@@ -122,13 +122,20 @@ export const getNewAccountVerificationCode = async ({
     sk: { S: 'account-confirmation-code' },
   };
 
-  const itemsAlpha = await dynamoDB.getItem({
-    Key: primaryKeyValues,
-    TableName: 'efcms-exp3-alpha',
-  });
-  const itemsBeta = await dynamoDB.getItem({
-    Key: primaryKeyValues,
-    TableName: 'efcms-exp3-beta',
-  });
-  return { itemsAlpha, itemsBeta };
+  const itemsAlpha = await dynamoDB
+    .getItem({
+      Key: primaryKeyValues,
+      TableName: 'efcms-exp3-alpha',
+    })
+    .promise();
+  const itemsBeta = await dynamoDB
+    .getItem({
+      Key: primaryKeyValues,
+      TableName: 'efcms-exp3-beta',
+    })
+    .promise();
+  return {
+    alpha: itemsAlpha.Item?.confirmationCode?.S,
+    beta: itemsBeta.Item?.confirmationCode?.S,
+  };
 };
