@@ -17,13 +17,10 @@ jobs:
         id: target_branch
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "TARGET_BRANCH=$(jq -r '.pull_request.base.ref' $GITHUB_EVENT_PATH)"
+            echo "TARGET_BRANCH=$(jq -r '.pull_request.base.ref' $GITHUB_EVENT_PATH) >> $GITHUB_ENV"
           else
-            echo "TARGET_BRANCH=${{ github.event.ref }}"
+            echo "TARGET_BRANCH=${{ github.event.ref }} >> $GITHUB_ENV"
           fi
-
-      - name: Set Environment Variable
-        run: echo "TARGET_BRANCH=${{ steps.target_branch.outputs.target_branch }}" >> $GITHUB_ENV
 
       - name: Checkout Target Branch
         uses: actions/checkout@v3
