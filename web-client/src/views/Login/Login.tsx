@@ -9,14 +9,15 @@ export const Login = connect(
   {
     alertError: state.alertError,
     cognitoRequestPasswordResetUrl: state.cognitoRequestPasswordResetUrl,
-    form: state.form,
+    form: state.authentication.form,
     loginHelper: state.loginHelper,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
     showPassword: state.showPassword,
     submitLoginSequence: sequences.submitLoginSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateAuthenticationFormValueSequence:
+      sequences.updateAuthenticationFormValueSequence,
   },
   ({
     alertError,
@@ -27,7 +28,7 @@ export const Login = connect(
     showPassword,
     submitLoginSequence,
     toggleShowPasswordSequence,
-    updateFormValueSequence,
+    updateAuthenticationFormValueSequence,
   }) => {
     return (
       <>
@@ -63,9 +64,8 @@ export const Login = connect(
                         type="email"
                         value={form.email}
                         onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
+                          updateAuthenticationFormValueSequence({
+                            email: e.target.value,
                           });
                         }}
                       />
@@ -80,9 +80,8 @@ export const Login = connect(
                         type={showPassword ? 'text' : 'password'}
                         value={form.password}
                         onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
+                          updateAuthenticationFormValueSequence({
+                            password: e.target.value,
                           });
                         }}
                       />

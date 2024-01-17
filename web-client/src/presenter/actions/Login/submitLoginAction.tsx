@@ -10,7 +10,7 @@ export const submitLoginAction = async ({
   idToken: string;
   refreshToken: string;
 }> => {
-  const { email, password } = get(state.form);
+  const { email, password } = get(state.authentication.form);
 
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
