@@ -29,12 +29,8 @@ describe('cognitoLocalWrapper', () => {
   };
 
   beforeAll(() => {
-    originalAdminCreateUser.mockReturnValue({
-      promise: jest.fn().mockResolvedValue(mockUserCreatedResponse),
-    });
-    originalAdminGetUser.mockReturnValue({
-      promise: jest.fn().mockResolvedValue({}),
-    });
+    originalAdminCreateUser.mockResolvedValue(mockUserCreatedResponse);
+    originalAdminGetUser.mockResolvedValue({});
   });
 
   it('should modify the params and response object correctly when calling adminCreateUser', async () => {
