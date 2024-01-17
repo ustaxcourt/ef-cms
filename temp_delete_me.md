@@ -6,9 +6,6 @@
 + Forgot password flow.
 - Create helper function to get "custom:userId || sub" from Cognito response
 
-::: SOLO TO DO:::
-- Move loginProxy out of public directory
-
 ::: QUESTIONS :::
 - How are going to make sure our auth is secure? Run scanners or pen testing? 
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it???
