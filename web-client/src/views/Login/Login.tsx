@@ -9,7 +9,6 @@ export const Login = connect(
   {
     alertError: state.alertError,
     cognitoRequestPasswordResetUrl: state.cognitoRequestPasswordResetUrl,
-    form: state.authentication.form,
     loginHelper: state.loginHelper,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
@@ -22,7 +21,6 @@ export const Login = connect(
   ({
     alertError,
     cognitoRequestPasswordResetUrl,
-    form,
     loginHelper,
     navigateToCreatePetitionerAccountSequence,
     showPassword,
@@ -62,7 +60,6 @@ export const Login = connect(
                         data-testid="email-input"
                         name="email"
                         type="email"
-                        value={form.email}
                         onChange={e => {
                           updateAuthenticationFormValueSequence({
                             email: e.target.value,
@@ -78,7 +75,6 @@ export const Login = connect(
                         data-testid="password-input"
                         name="password"
                         type={showPassword ? 'text' : 'password'}
-                        value={form.password}
                         onChange={e => {
                           updateAuthenticationFormValueSequence({
                             password: e.target.value,

@@ -39,61 +39,61 @@ export const changePasswordInteractor = async (
         ClientId: applicationContext.environment.cognitoClientId,
       });
 
-    if (initiateAuthResult?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-      const result = await applicationContext
-        .getCognito()
-        .respondToAuthChallenge({
-          ChallengeName: 'NEW_PASSWORD_REQUIRED',
-          ChallengeResponses: {
-            NEW_PASSWORD: password,
-            USERNAME: userEmail,
-          },
-          ClientId: process.env.COGNITO_CLIENT_ID,
-          Session: initiateAuthResult.Session,
-        });
-
-      if (
-        !result.AuthenticationResult?.AccessToken ||
-        !result.AuthenticationResult?.IdToken ||
-        !result.AuthenticationResult?.RefreshToken
-      ) {
-        throw new Error('Unsuccessful password change');
-      }
-
-      const decoded = jwt.decode(result.AuthenticationResult?.IdToken);
-      const userId = decoded['custom:userId'] || decoded.sub;
-
-      const userFromPersistence = await applicationContext
-        .getPersistenceGateway()
-        .getUserById({ applicationContext, userId });
-
-      if (
-        userFromPersistence &&
-        userFromPersistence.pendingEmail &&
-        userFromPersistence.pendingEmail === userEmail
-      ) {
-        const updatedUser = await applicationContext
-          .getUseCases()
-          .setUserEmailFromPendingEmailInteractor(applicationContext, {
-            user: userFromPersistence,
-          });
-
-        applicationContext.logger.info(
-          'Petitioner post authentication processed',
-          {
-            updatedUser,
-          },
-        );
-      }
-
-      return {
-        accessToken: result.AuthenticationResult.AccessToken,
-        idToken: result.AuthenticationResult.IdToken,
-        refreshToken: result.AuthenticationResult.RefreshToken,
-      };
+    if (initiateAuthResult.ChallengeName !== 'NEW_PASSWORD_REQUIRED') {
+      throw new Error('User is not `FORCE_CHANGE_PASSWORD` state');
     }
 
-    throw new Error('User is not `FORCE_CHANGE_PASSWORD` state');
+    const result = await applicationContext
+      .getCognito()
+      .respondToAuthChallenge({
+        ChallengeName: 'NEW_PASSWORD_REQUIRED',
+        ChallengeResponses: {
+          NEW_PASSWORD: password,
+          USERNAME: userEmail,
+        },
+        ClientId: process.env.COGNITO_CLIENT_ID,
+        Session: initiateAuthResult.Session,
+      });
+
+    if (
+      !result.AuthenticationResult?.AccessToken ||
+      !result.AuthenticationResult?.IdToken ||
+      !result.AuthenticationResult?.RefreshToken
+    ) {
+      throw new Error('Unsuccessful password change');
+    }
+
+    const decoded = jwt.decode(result.AuthenticationResult?.IdToken);
+    const userId = decoded['custom:userId'] || decoded.sub;
+
+    const userFromPersistence = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ applicationContext, userId });
+
+    if (
+      userFromPersistence &&
+      userFromPersistence.pendingEmail &&
+      userFromPersistence.pendingEmail === userEmail
+    ) {
+      const updatedUser = await applicationContext
+        .getUseCases()
+        .setUserEmailFromPendingEmailInteractor(applicationContext, {
+          user: userFromPersistence,
+        });
+
+      applicationContext.logger.info(
+        'Petitioner post authentication processed',
+        {
+          updatedUser,
+        },
+      );
+    }
+
+    return {
+      accessToken: result.AuthenticationResult.AccessToken,
+      idToken: result.AuthenticationResult.IdToken,
+      refreshToken: result.AuthenticationResult.RefreshToken,
+    };
   } catch (err: any) {
     await authErrorHandling(applicationContext, {
       email: userEmail,
