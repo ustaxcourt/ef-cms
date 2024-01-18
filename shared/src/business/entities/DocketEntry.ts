@@ -664,7 +664,7 @@ export class DocketEntry extends JoiValidationEntity {
     if (!userHasAccessToCase || isPublic) return !!isPublic;
 
     // user has access to the case
-    if (DocketEntry.isSealedToExternal(entry)) return false;
+    if (entry.isStricken || DocketEntry.isSealedToExternal(entry)) return false;
     return DocketEntry.meetsAgeRequirements(entry);
   };
 
