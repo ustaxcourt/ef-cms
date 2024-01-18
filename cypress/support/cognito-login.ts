@@ -101,14 +101,7 @@ async function getUserToken(password: string, username: string) {
     });
 }
 
-export const getNewAccountVerificationCode = async ({
-  email,
-}: {
-  email: string;
-}): Promise<{
-  userId: string | undefined;
-  confirmationCode: string | undefined;
-}> => {
+const getCognitoUserIdByEmail = async (email: string) => {
   const userPoolId = await getUserPoolId();
   const users = await cognito.listUsers({
     AttributesToGet: ['custom:userId'],
@@ -116,10 +109,12 @@ export const getNewAccountVerificationCode = async ({
     UserPoolId: userPoolId,
   });
 
-  const userId = users.Users?.[0].Attributes?.find(
+  return users.Users?.[0].Attributes?.find(
     element => element.Name === 'custom:userId',
   )?.Value;
+};
 
+const getUserConfirmationCodeFromDynamo = async (userId: string) => {
   const primaryKeyValues = {
     pk: { S: `user|${userId}` },
     sk: { S: 'account-confirmation-code' },
@@ -139,10 +134,30 @@ export const getNewAccountVerificationCode = async ({
     })
     .promise();
 
+  return (
+    itemsAlpha.Item?.confirmationCode?.S || itemsBeta.Item?.confirmationCode?.S
+  );
+};
+
+export const getNewAccountVerificationCode = async ({
+  email,
+}: {
+  email: string;
+}): Promise<{
+  userId: string | undefined;
+  confirmationCode: string | undefined;
+}> => {
+  const userId = await getCognitoUserIdByEmail(email);
+  if (!userId)
+    return {
+      confirmationCode: undefined,
+      userId: undefined,
+    };
+
+  const confirmationCode = await getUserConfirmationCodeFromDynamo(userId);
+
   return {
-    confirmationCode:
-      itemsAlpha.Item?.confirmationCode?.S ||
-      itemsBeta.Item?.confirmationCode?.S,
+    confirmationCode,
     userId,
   };
 };
@@ -177,11 +192,12 @@ const getAllCypressTestAccounts = async (
 
 export const deleteAllCypressTestAccounts = async () => {
   const userPoolId = await getUserPoolId();
-  if (!userPoolId) return;
+  if (!userPoolId) return null;
   const accounts = await getAllCypressTestAccounts(userPoolId);
   await Promise.all(
     accounts.map((username: string) =>
       deleteAccountByUsername(username, userPoolId),
     ),
   );
+  return null;
 };
