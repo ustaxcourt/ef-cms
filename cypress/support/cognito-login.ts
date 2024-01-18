@@ -146,3 +146,42 @@ export const getNewAccountVerificationCode = async ({
     userId,
   };
 };
+
+const deleteAccountByUsername = async (
+  username: string,
+  userPoolId: string,
+): Promise<void> => {
+  const params = {
+    UserPoolId: userPoolId,
+    Username: username,
+  };
+  await cognito.adminDeleteUser(params);
+};
+
+const getAllCypressTestAccounts = async (
+  userPoolId: string,
+): Promise<string[]> => {
+  const params = {
+    Filter: 'username ^= "cypress_test_account"',
+    UserPoolId: userPoolId,
+  };
+
+  const result = await cognito.listUsers(params);
+  if (!result) return [];
+  if (!result.Users) return [];
+  const users = result.Users.map(user => user.Username).filter(
+    username => !!username,
+  ) as string[];
+  return users;
+};
+
+export const deleteAllCypressTestAccounts = async () => {
+  const userPoolId = await getUserPoolId();
+  if (!userPoolId) return;
+  const accounts = await getAllCypressTestAccounts(userPoolId);
+  await Promise.all(
+    accounts.map((username: string) =>
+      deleteAccountByUsername(username, userPoolId),
+    ),
+  );
+};

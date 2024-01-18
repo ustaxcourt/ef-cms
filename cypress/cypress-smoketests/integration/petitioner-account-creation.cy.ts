@@ -4,6 +4,10 @@ describe('Petitioner Account Creation', () => {
   const TEST_NAME = 'Cypress Test';
   const TEST_PASSWORD = generatePassword();
 
+  after(() => {
+    cy.task('deleteAllCypressTestAccounts');
+  });
+
   describe('Create Petitioner Account', () => {
     it('should create an account and verify it using the verification link', () => {
       cy.visit('/create-account/petitioner');
