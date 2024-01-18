@@ -21,7 +21,7 @@ const [firstName, lastName] = [
 
 const nameToSearchFor = `${firstName} ${lastName}`;
 
-const createdDocketNumbers = [];
+const createdDocketNumbers: any[] = [];
 
 let notFoundDocketNumberOnContactPrimarySecondaryName;
 
@@ -76,7 +76,10 @@ describe('Create and serve a case to test contactPrimary.name', () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary({ name: nameToSearchFor }),
+        contactPrimary: getContactPrimary({
+          name: nameToSearchFor,
+          secondaryName: undefined,
+        }),
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -107,7 +110,10 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary({ secondaryName: nameToSearchFor }),
+        contactPrimary: getContactPrimary({
+          name: undefined,
+          secondaryName: nameToSearchFor,
+        }),
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -198,7 +204,10 @@ describe('Create and serve a case to test contactPrimary.name with terms out of 
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary({ name: `${lastName} ${firstName}` }),
+        contactPrimary: getContactPrimary({
+          name: `${lastName} ${firstName}`,
+          secondaryName: undefined,
+        }),
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
