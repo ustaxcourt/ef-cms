@@ -76,7 +76,6 @@ export const createCaseFromPaperInteractor = async (
     attachmentToPetitionFileId?: string;
   },
 ): Promise<RawCase> => {
-  // is this the correct return type? should be!
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
@@ -280,7 +279,6 @@ export const createCaseFromPaperInteractor = async (
         // QUESTION: does ATP need an index?
         // It seems specific docket entries need to be at the top of the docket entries
         // Also, <Case>.addDocketEntry does generate indices for docket entries so
-        // index: 0,
         isFileAttached: true,
         isOnDocketRecord: true,
         isPaper: true,
