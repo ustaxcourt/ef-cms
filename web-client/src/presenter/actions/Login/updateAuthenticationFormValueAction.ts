@@ -8,13 +8,14 @@ export const updateAuthenticationFormValueAction = ({
   email?: string;
   password?: string;
 }>) => {
-  if (props.confirmPassword) {
+  if ('confirmPassword' in props) {
     store.set(state.authentication.form.confirmPassword, props.confirmPassword);
   }
-  if (props.email) {
+  if ('email' in props) {
     store.set(state.authentication.form.email, props.email);
   }
-  if (props.password) {
+
+  if ('password' in props) {
     store.set(state.authentication.form.password, props.password);
   }
 };
