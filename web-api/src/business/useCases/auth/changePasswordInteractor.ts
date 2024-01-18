@@ -57,7 +57,7 @@ export const changePasswordInteractor = async (
         !result.AuthenticationResult?.IdToken ||
         !result.AuthenticationResult?.RefreshToken
       ) {
-        throw new Error('Unsuccessful change password');
+        throw new Error('Unsuccessful password change');
       }
 
       const decoded = jwt.decode(result.AuthenticationResult?.IdToken);

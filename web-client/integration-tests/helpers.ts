@@ -829,19 +829,18 @@ export const loginAs = (cerebralTest, email) =>
   it(`login as ${email}`, async () => {
     await cerebralTest.runSequence('signOutSequence');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: email,
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      email,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'password',
-      value: 'Testing1234$',
+    // TODO: extract password to constant
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      password: 'Testing1234$',
     });
 
     await cerebralTest.runSequence('submitLoginSequence');
 
-    expect(cerebralTest.getState('user.email')).toBeDefined();
+    expect(cerebralTest.getState('user.email')).toEqual(email);
   });
 
 export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
