@@ -1,8 +1,8 @@
 describe('Petitioner Account Creation', () => {
   const GUID = Date.now();
-  const TEST_EMAIL = `cypress+${GUID}@test.com`;
+  const TEST_EMAIL = `cypress_test_account+${GUID}@example.com`;
   const TEST_NAME = 'Cypress Test';
-  const TEST_PASSWORD = 'aA1!aaaa';
+  const TEST_PASSWORD = generatePassword();
 
   describe('Create Petitioner Account', () => {
     it('should create an account and verify it using the verification link', () => {
@@ -69,3 +69,32 @@ describe('Petitioner Account Creation', () => {
     });
   });
 });
+
+function generatePassword() {
+  const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+  const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const digitChars = '0123456789';
+  const specialChars = '!@#$';
+
+  const getRandomChar = (charSet: string) =>
+    charSet[Math.floor(Math.random() * charSet.length)];
+
+  const password = [
+    getRandomChar(lowerChars),
+    getRandomChar(upperChars),
+    getRandomChar(digitChars),
+    getRandomChar(specialChars),
+  ];
+
+  for (let i = password.length; i < 8; i++) {
+    const charSet = lowerChars + upperChars + digitChars + specialChars;
+    password.push(getRandomChar(charSet));
+  }
+
+  for (let i = password.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [password[i], password[j]] = [password[j], password[i]];
+  }
+
+  return password.join('');
+}
