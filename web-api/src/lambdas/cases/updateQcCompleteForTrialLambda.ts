@@ -7,7 +7,7 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const updateQcCompleteForTrialLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async ({ applicationContext }): Promise<RawCase> => {
     return await applicationContext
       .getUseCases()
       .updateQcCompleteForTrialInteractor(applicationContext, {

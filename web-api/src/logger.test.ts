@@ -189,7 +189,7 @@ describe('logger', () => {
     }
   });
 
-  it('does not log a password if it was included in the body of the request', () => {
+  it('does not log a password if it was included in the body of the request', async () => {
     process.env.NODE_ENV = 'production';
     const body = {
       confirmPassword: 'Password1!',
@@ -197,7 +197,7 @@ describe('logger', () => {
       username: 'Usern4me',
     };
     req.body = body;
-    subject(req, res);
+    await subject(req, res);
 
     const bodyToBeLogged = JSON.parse(
       req.locals.logger.defaultMeta.request.body,
