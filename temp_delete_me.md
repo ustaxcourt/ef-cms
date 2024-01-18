@@ -1,7 +1,6 @@
 ::: STUFF TO DO :::
 - Finish all todos
 - Fix tests
-  - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts
   - web-api/terraform/template/lambdas/cognito-triggers.ts
 + Extract error message strings into constants OR do something else. (On hold)
 + Forgot password flow.
