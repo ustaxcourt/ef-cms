@@ -75,6 +75,28 @@ describe('setDefaultGenerationTypeAction', () => {
     expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
   });
 
+  it('should set the generation type to "auto"" when the changed event code is EA and the user is an IRS Practitioner with no parties having paper service', async () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce(irsPractitionerUser);
+
+    const { state } = await runAction(setDefaultGenerationTypeAction, {
+      modules: { presenter },
+      props: {
+        key: 'eventCode',
+        value: 'EA',
+      },
+      state: {
+        caseDetail: {
+          petitioners: [],
+        },
+        form: {
+          generationType: GENERATION_TYPES.MANUAL,
+        },
+      },
+    });
+
+    expect(state.form.generationType).toEqual(GENERATION_TYPES.AUTO);
+  });
+
   it('should not modify the existing generation type when props.key is NOT one of eventCode or generationType', async () => {
     const { state } = await runAction(setDefaultGenerationTypeAction, {
       modules: { presenter },
@@ -96,6 +118,8 @@ describe('setDefaultGenerationTypeAction', () => {
   });
 
   it('should set the generation type to manual if code is EA but a petitioner has paper', async () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce(irsPractitionerUser);
+
     const { state } = await runAction(setDefaultGenerationTypeAction, {
       modules: { presenter },
       props: {
@@ -117,5 +141,30 @@ describe('setDefaultGenerationTypeAction', () => {
     });
 
     expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
+  });
+
+  it('should set the generation type to auto if code is EA ans user is private practitioner', async () => {
+    const { state } = await runAction(setDefaultGenerationTypeAction, {
+      modules: { presenter },
+      props: {
+        key: 'eventCode',
+        value: 'EA',
+      },
+      state: {
+        caseDetail: {
+          petitioners: [
+            {
+              serviceIndicator:
+                getConstants().SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        },
+        form: {
+          generationType: GENERATION_TYPES.MANUAL,
+        },
+      },
+    });
+
+    expect(state.form.generationType).toEqual(GENERATION_TYPES.AUTO);
   });
 });
