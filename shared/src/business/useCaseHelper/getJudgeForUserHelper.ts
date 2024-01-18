@@ -1,4 +1,3 @@
-import { ExcludeMethods } from 'types/TEntity';
 import { InvalidRequest } from '@web-api/errors/errors';
 import { User } from '@shared/business/entities/User';
 

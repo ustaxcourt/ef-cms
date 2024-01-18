@@ -5,6 +5,9 @@ export const efcmsDocketEntryMappings = {
     'associatedJudge.S': {
       type: 'text',
     },
+    'associatedJudgeId.S': {
+      type: 'keyword',
+    },
     case_relations: {
       relations: {
         case: 'document',
