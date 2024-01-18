@@ -1,4 +1,5 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import AWS from 'aws-sdk';
 import promiseRetry from 'promise-retry';
 
@@ -201,4 +202,35 @@ export const deleteAllCypressTestAccounts = async () => {
     ),
   );
   return null;
+};
+
+export const expireUserConfirmationCode = async (userId: string) => {
+  const resourceEnvironments = ['alpha', 'beta'];
+  for (let index = 0; index < resourceEnvironments.length; index++) {
+    const pk: DocumentClient.AttributeValue = { S: `user|${userId}` };
+    const sk: DocumentClient.AttributeValue = {
+      S: 'account-confirmation-code',
+    };
+
+    const newTtl = Date.now() / 1000;
+    const updateItemParams: AWS.DynamoDB.UpdateItemInput = {
+      ExpressionAttributeNames: {
+        '#ttlAttr': 'ttl',
+      },
+      ExpressionAttributeValues: {
+        ':newTtlValue': newTtl as unknown as DocumentClient.AttributeValue,
+      },
+      Key: {
+        pk,
+        sk,
+      },
+      TableName: `efcms-exp3-${resourceEnvironments[index]}`,
+      UpdateExpression: 'SET #ttlAttr = :newTtlValue',
+    };
+
+    await dynamoDB
+      .updateItem(updateItemParams)
+      .promise()
+      .catch(() => null);
+  }
 };
