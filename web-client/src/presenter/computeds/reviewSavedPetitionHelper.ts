@@ -128,9 +128,7 @@ export const reviewSavedPetitionHelper = (
     documentsByType[INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType];
   const stinFile = documentsByType[INITIAL_DOCUMENT_TYPES.stin.documentType];
   const attachmentToPetitionFile =
-    documentsByType[
-      INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType
-    ];
+    documentsByType[INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType];
 
   const applicationForWaiverOfFilingFeeFile =
     documentsByType[

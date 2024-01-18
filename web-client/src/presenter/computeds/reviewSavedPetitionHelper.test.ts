@@ -350,7 +350,7 @@ describe('reviewSavedPetitionHelper', () => {
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {
               documentType:
-                INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
+                INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
             },
           ],
         },
@@ -359,8 +359,7 @@ describe('reviewSavedPetitionHelper', () => {
 
     expect(result).toMatchObject({
       attachmentToPetitionFile: {
-        documentType:
-          INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
       },
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,

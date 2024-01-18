@@ -410,8 +410,7 @@ describe('createCaseFromPaperInteractor', () => {
 
     const atpDocketEntry = caseFromPaper.docketEntries.find(
       d =>
-        d.eventCode ===
-        INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.eventCode,
+        d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
     expect(atpDocketEntry).toMatchObject({
       docketEntryId: '513f62ce-7c8d-446e-aeda-14a2a625a611',
