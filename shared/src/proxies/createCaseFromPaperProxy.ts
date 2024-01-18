@@ -16,7 +16,7 @@ export const createCaseFromPaperInteractor = (
   applicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
-    atpFileId,
+    attachmentToPetitionFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
@@ -24,7 +24,7 @@ export const createCaseFromPaperInteractor = (
     stinFileId,
   }: {
     applicationForWaiverOfFilingFeeFileId: string;
-    atpFileId: string;
+    attachmentToPetitionFileId: string;
     corporateDisclosureFileId: string;
     petitionFileId: string;
     petitionMetadata: any; // TODO: add types
@@ -36,7 +36,7 @@ export const createCaseFromPaperInteractor = (
     applicationContext,
     body: {
       applicationForWaiverOfFilingFeeFileId,
-      atpFileId,
+      attachmentToPetitionFileId,
       corporateDisclosureFileId,
       petitionFileId,
       petitionMetadata,
