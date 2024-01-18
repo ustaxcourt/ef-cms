@@ -124,7 +124,8 @@ describe('Petitioner Account Creation', () => {
         );
       });
 
-      cy.wait('5000');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(5000);
     });
   });
 });
