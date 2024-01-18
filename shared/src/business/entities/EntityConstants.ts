@@ -589,7 +589,6 @@ export const FILTER_OPTIONS = Object.values(
 );
 export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
-// TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentTitle: 'Application for Waiver of Filing Fee',
