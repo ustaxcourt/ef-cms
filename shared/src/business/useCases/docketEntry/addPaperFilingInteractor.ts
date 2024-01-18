@@ -190,12 +190,19 @@ export const addPaperFiling = async (
   let paperServicePdfUrl;
 
   if (isReadyForService) {
+    const currentDocketEntry = caseEntities[0].getDocketEntryById({
+      docketEntryId,
+    });
+    const electronicParties =
+      currentDocketEntry.eventCode === 'ATP' ? [] : undefined;
+
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
         docketEntryId,
+        electronicParties,
         stampedPdf: undefined,
       });
 
