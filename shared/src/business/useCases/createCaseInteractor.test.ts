@@ -255,7 +255,8 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.privatePractitioners[0].representing).toEqual([
+    expect(result.privatePractitioners).toBeDefined();
+    expect(result.privatePractitioners![0].representing).toEqual([
       getContactPrimary(result).contactId,
     ]);
     expect(
@@ -318,7 +319,8 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.privatePractitioners[0].representing).toEqual([
+    expect(result.privatePractitioners).toBeDefined();
+    expect(result.privatePractitioners![0].representing).toEqual([
       getContactPrimary(result).contactId,
       getContactSecondary(result).contactId,
     ]);
