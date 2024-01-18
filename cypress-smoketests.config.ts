@@ -1,6 +1,7 @@
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
+  expireUserConfirmationCode,
   getNewAccountVerificationCode,
   getUserTokenWithRetry,
 } from './cypress/support/cognito-login';
@@ -22,6 +23,9 @@ export default defineConfig({
         },
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
+        },
+        expireUserConfirmationCode(userId: string) {
+          return expireUserConfirmationCode(userId);
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
