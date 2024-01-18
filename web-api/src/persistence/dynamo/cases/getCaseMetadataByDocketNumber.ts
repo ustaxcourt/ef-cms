@@ -1,6 +1,6 @@
 import { get } from '../../dynamodbClientService';
 
-export const getCaseMetadataByDocketNumber = async ({
+export const getCaseMetadataByDocketNumber = ({
   applicationContext,
   docketNumber,
 }: {

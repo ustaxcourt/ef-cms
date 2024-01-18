@@ -12,7 +12,6 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
   judgeIds: string[];
 }): Promise<{ results: RawDocketEntry[]; total: number }> => {
   const filterDate = calculateISODate({ howMuch: -180 });
-
   const hasParentParam: QueryDslQueryContainer = {
     has_parent: {
       inner_hits: {
@@ -24,10 +23,9 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
       parent_type: 'case',
       query: {
         bool: {
-          minimum_should_match: 1,
-          should: judgeIds.map(judgeId => ({
-            term: { 'associatedJudgeId.S': judgeId },
-          })),
+          filter: {
+            terms: { 'associatedJudgeId.S': judgeIds },
+          },
         },
       },
     },

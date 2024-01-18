@@ -83,9 +83,11 @@ export const SubmittedAndCav = connect(
           </thead>
           <tbody>
             {judgeActivityReportHelper.submittedAndCavCasesByJudge.map(
-              (formattedCase, index) => {
+              formattedCase => {
                 return (
-                  <React.Fragment key={`case-row-${index}`}>
+                  <React.Fragment
+                    key={`case-row-${formattedCase.docketNumber}`}
+                  >
                     <tr data-testid={formattedCase.docketNumber}>
                       <td className="consolidated-case-column">
                         <ConsolidatedCaseIcon
