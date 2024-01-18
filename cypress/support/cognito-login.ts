@@ -177,17 +177,18 @@ const getAllCypressTestAccounts = async (
   userPoolId: string,
 ): Promise<string[]> => {
   const params = {
-    Filter: 'username ^= "cypress_test_account"',
+    Filter: 'email ^= "cypress_test_account"',
     UserPoolId: userPoolId,
   };
 
   const result = await cognito.listUsers(params);
-  if (!result) return [];
-  if (!result.Users) return [];
-  const users = result.Users.map(user => user.Username).filter(
-    username => !!username,
+  if (!result || !result.Users) return [];
+
+  const usernames = result.Users.map(user => user.Username).filter(
+    Boolean,
   ) as string[];
-  return users;
+
+  return usernames;
 };
 
 export const deleteAllCypressTestAccounts = async () => {
