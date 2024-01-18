@@ -311,6 +311,22 @@ describe('paperPetition entity', () => {
       ).toEqual('Your STIN file size is empty');
     });
 
+    it('fails validation if attachmentToPetitionFile is set, but attachmentToPetitionFileSize is not', () => {
+      const paperPetition = new PaperPetition(
+        {
+          attachmentToPetitionFile: new File([], 'test.pdf'),
+          caseCaption: 'Dr. Leo Marvin, Petitioner',
+          receivedAt: applicationContext.getUtilities().createISODateString(),
+        },
+        { applicationContext },
+      );
+
+      expect(
+        paperPetition.getFormattedValidationErrors()!
+          .attachmentToPetitionFileSize,
+      ).toEqual('Your ATP file size is empty');
+    });
+
     it('fails validation if corporateDisclosureFile is set, but corporateDisclosureFileSize is not', () => {
       const paperPetition = new PaperPetition(
         {

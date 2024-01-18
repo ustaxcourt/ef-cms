@@ -404,4 +404,60 @@ describe('scanHelper', () => {
       expect(result.corporateDisclosureFileCompleted).toBeFalsy();
     });
   });
+
+  describe('attachmentToPetitionFileCompleted', () => {
+    it('should be true when document is on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            attachmentToPetitionFile: {},
+            docketEntries: [],
+          },
+        },
+      });
+
+      expect(result.attachmentToPetitionFileCompleted).toBeTruthy();
+    });
+
+    it('should be false when document is not on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            attachmentToPetitionFile: null,
+            docketEntries: [],
+          },
+        },
+      });
+      expect(result.attachmentToPetitionFileCompleted).toBeFalsy();
+    });
+
+    it('should be true when document is in form.docketEntries', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            docketEntries: [
+              {
+                documentType:
+                  INITIAL_DOCUMENT_TYPES_MAP.attachmentToPetitionFile,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.attachmentToPetitionFileCompleted).toBeTruthy();
+    });
+
+    it('should be false when document is not in form.docketEntries', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            docketEntries: [],
+          },
+        },
+      });
+
+      expect(result.attachmentToPetitionFileCompleted).toBeFalsy();
+    });
+  });
 });
