@@ -243,6 +243,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     const caseToReturn = {
       ...MOCK_CASE,
       associatedJudge: 'Buch',
+      associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
       mailingDate: '04/16/2019',
       partyType: 'Petitioner & spouse',
       petitioners: [
@@ -300,6 +301,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     const caseToReturn = {
       ...MOCK_CASE,
       associatedJudge: 'Buch',
+      associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
       mailingDate: '04/16/2019',
       partyType: 'Petitioner & spouse',
       petitioners: [
@@ -356,6 +358,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       const mockCase = {
         ...MOCK_CASE,
         associatedJudge: 'Buch',
+        associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
         mailingDate: '04/16/2019',
         partyType: 'Petitioner',
         petitioners: [
@@ -378,6 +381,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       const mockCase = {
         ...MOCK_CASE,
         associatedJudge: 'Buch',
+        associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
         mailingDate: '04/16/2019',
         partyType: 'Petitioner',
         petitioners: [
