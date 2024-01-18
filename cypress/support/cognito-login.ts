@@ -124,14 +124,14 @@ const getUserConfirmationCodeFromDynamo = async (userId: string) => {
   const itemsAlpha = await dynamoDB
     .getItem({
       Key: primaryKeyValues,
-      TableName: 'efcms-exp3-alpha',
+      TableName: `efcms-${ENV}-alpha`,
     })
     .promise();
 
   const itemsBeta = await dynamoDB
     .getItem({
       Key: primaryKeyValues,
-      TableName: 'efcms-exp3-beta',
+      TableName: `efcms-${ENV}-alpha`,
     })
     .promise();
 
@@ -226,14 +226,16 @@ export const expireUserConfirmationCode = async (email: string) => {
         pk,
         sk,
       },
-      TableName: `efcms-exp3-${resourceEnvironments[index]}`,
+      TableName: `efcms-${ENV}-${resourceEnvironments[index]}`,
       UpdateExpression: 'SET #ttlAttr = :newTtlValue',
     };
 
     await dynamoDB
       .updateItem(updateItemParams)
       .promise()
-      .catch(() => null);
+      .catch(error => {
+        console.error(error);
+      });
   }
   return null;
 };
