@@ -37,7 +37,7 @@ export const canSetTrialSessionToCalendarAction = ({
   const missingMeetingProperties = meetingProperties.filter(property =>
     emptyFields.includes(property),
   );
-  const missingFieldsForWarningMessage = [];
+  const missingFieldsForWarningMessage: string[] = [];
 
   if (missingAddressProperties.length > 0) {
     missingFieldsForWarningMessage.push('an address');
