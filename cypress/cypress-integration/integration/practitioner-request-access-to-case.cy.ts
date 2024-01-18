@@ -16,67 +16,113 @@ import { selectRedactionAcknowledgement } from '../../helpers/select-redaction-a
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 
 describe('Private Practitioner requests access to case', () => {
-  it('should NOT have access to auto generate entry of appearance if a party service preference is paper', () => {
-    const primaryFilerName = 'John';
-    const secondaryFilerName = 'Sally';
+  describe('Auto Generate Entry of Appearance', () => {
+    it('should have access to auto generate entry of appearance if a party service preference is paper', () => {
+      const primaryFilerName = 'John';
+      const secondaryFilerName = 'Sally';
 
-    loginAsPetitioner();
-    petitionerCreatesEletronicCaseWithDeseasedSpouse(
-      primaryFilerName,
-      secondaryFilerName,
-    ).then(docketNumber => {
-      petitionsClerkServesPetition(docketNumber);
-      loginAsPrivatePractitioner();
+      loginAsPetitioner();
+      petitionerCreatesEletronicCaseWithDeseasedSpouse(
+        primaryFilerName,
+        secondaryFilerName,
+      ).then(docketNumber => {
+        petitionsClerkServesPetition(docketNumber);
+        loginAsPrivatePractitioner();
 
-      externalUserSearchesDocketNumber(docketNumber);
+        externalUserSearchesDocketNumber(docketNumber);
 
-      cy.get('[data-testid="button-request-access"]').click();
+        cy.get('[data-testid="button-request-access"]').click();
 
-      selectTypeaheadInput('document-type', 'Entry of Appearance');
+        selectTypeaheadInput('document-type', 'Entry of Appearance');
 
-      cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
-      cy.get(`[data-testid="filer-${secondaryFilerName}, Petitioner"]`).click();
+        cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
+        cy.get(
+          `[data-testid="filer-${secondaryFilerName}, Petitioner"]`,
+        ).click();
 
-      attachDummyFile('primary-document');
-      cy.get('[data-testid="request-access-submit-document"]').click();
-      cy.get('[data-testid="auto-generation"]').should('not.exist');
+        cy.get('[data-testid="auto-generation"]').should('exist');
+        cy.get('[data-testid="request-access-submit-document"]').click();
 
-      selectRedactionAcknowledgement();
-      cy.get('[data-testid="request-access-review-submit-document"]').click();
+        cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
+          'exist',
+        );
+        cy.get('[data-testid="request-access-review-submit-document"]').click();
 
-      cy.get('[data-testid="document-download-link-EA"]').should(
-        'have.text',
-        `Entry of Appearance for Petrs. ${primaryFilerName} & ${secondaryFilerName}`,
-      );
+        cy.get('[data-testid="document-download-link-EA"]').should(
+          'contain.text',
+          `Entry of Appearance for Petrs. ${primaryFilerName} & ${secondaryFilerName}`,
+        );
+      });
+    });
+
+    it('should have access to auto generate entry of appearance if there are no parties with paper service preference', () => {
+      const primaryFilerName = 'John';
+
+      loginAsPetitioner();
+      petitionerCreatesEletronicCase(primaryFilerName).then(docketNumber => {
+        petitionsClerkServesPetition(docketNumber);
+
+        loginAsDocketClerk();
+        searchByDocketNumberInHeader(docketNumber);
+        addIntervenorAsPartyToCase();
+
+        loginAsPrivatePractitioner();
+        externalUserSearchesDocketNumber(docketNumber);
+        cy.get('[data-testid="button-request-access"]').click();
+        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
+        cy.get('[data-testid="auto-generation"]').should('exist');
+        cy.get('[data-testid="request-access-submit-document"]').click();
+
+        cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
+          'exist',
+        );
+        cy.get('[data-testid="request-access-review-submit-document"]').click();
+
+        cy.get('[data-testid="document-download-link-EA"]').should(
+          'have.text',
+          `Entry of Appearance for Petr. ${primaryFilerName}`,
+        );
+      });
     });
   });
 
-  it('should have access to auto generate entry of appearance if there are no parties with paper service preference', () => {
-    const primaryFilerName = 'John';
+  describe('Upload File Entry of Appearance', () => {
+    it('should have access to auto generate entry of appearance if a party service preference is paper', () => {
+      const primaryFilerName = 'John';
+      const secondaryFilerName = 'Sally';
 
-    loginAsPetitioner();
-    petitionerCreatesEletronicCase(primaryFilerName).then(docketNumber => {
-      petitionsClerkServesPetition(docketNumber);
+      loginAsPetitioner();
+      petitionerCreatesEletronicCaseWithDeseasedSpouse(
+        primaryFilerName,
+        secondaryFilerName,
+      ).then(docketNumber => {
+        petitionsClerkServesPetition(docketNumber);
+        loginAsPrivatePractitioner();
 
-      loginAsDocketClerk();
-      searchByDocketNumberInHeader(docketNumber);
-      addIntervenorAsPartyToCase();
+        externalUserSearchesDocketNumber(docketNumber);
 
-      loginAsPrivatePractitioner();
-      externalUserSearchesDocketNumber(docketNumber);
-      cy.get('[data-testid="button-request-access"]').click();
-      selectTypeaheadInput('document-type', 'Entry of Appearance');
-      cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
-      cy.get('[data-testid="auto-generation"]').should('exist');
-      cy.get('[data-testid="request-access-submit-document"]').click();
+        cy.get('[data-testid="button-request-access"]').click();
 
-      cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should('exist');
-      cy.get('[data-testid="request-access-review-submit-document"]').click();
+        selectTypeaheadInput('document-type', 'Entry of Appearance');
 
-      cy.get('[data-testid="document-download-link-EA"]').should(
-        'have.text',
-        `Entry of Appearance for Petr. ${primaryFilerName}`,
-      );
+        cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
+        cy.get(
+          `[data-testid="filer-${secondaryFilerName}, Petitioner"]`,
+        ).click();
+
+        cy.get('[data-testid="manual-generation-label"]').click();
+        attachDummyFile('primary-document');
+        cy.get('[data-testid="request-access-submit-document"]').click();
+
+        selectRedactionAcknowledgement();
+        cy.get('[data-testid="request-access-review-submit-document"]').click();
+
+        cy.get('[data-testid="document-download-link-EA"]').should(
+          'have.text',
+          `Entry of Appearance for Petrs. ${primaryFilerName} & ${secondaryFilerName}`,
+        );
+      });
     });
   });
 });

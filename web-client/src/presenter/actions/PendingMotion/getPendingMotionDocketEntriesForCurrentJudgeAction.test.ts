@@ -7,6 +7,7 @@ presenter.providers.applicationContext = applicationContext;
 
 describe('getPendingMotionDocketEntriesForCurrentJudgeAction', () => {
   const TEST_JUDGE_NAME = 'TEST_JUDGE_NAME';
+  const TEST_JUDGE_ID = 'TEST_JUDGE_ID';
   const PENDING_MOTION_ENTRIES = [];
 
   beforeEach(() => {
@@ -27,6 +28,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeAction', () => {
         state: {
           judgeUser: {
             name: TEST_JUDGE_NAME,
+            userId: TEST_JUDGE_ID,
           },
         },
       },
@@ -45,7 +47,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeAction', () => {
         .calls[0][1];
 
     expect(params).toEqual({
-      judge: TEST_JUDGE_NAME,
+      judgeId: TEST_JUDGE_ID,
     });
 
     expect(results.output.docketEntries).toEqual(PENDING_MOTION_ENTRIES);
