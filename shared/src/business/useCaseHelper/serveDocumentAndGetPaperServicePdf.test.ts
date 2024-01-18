@@ -197,4 +197,36 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).not.toHaveBeenCalled();
   });
+
+  it('should use the electronicParties array that is passed in', async () => {
+    caseEntity.petitioners.forEach(
+      p => (p.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC),
+    );
+
+    const secondCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        privatePractitioners: [
+          { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC },
+        ],
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity, secondCaseEntity],
+      docketEntryId: mockDocketEntryId,
+      electronicParties: [],
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0].servedParties.electronic,
+    ).toEqual([]);
+  });
 });
