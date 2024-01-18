@@ -45,6 +45,7 @@ export const CreateOrderChooseTypeModal = connect(
               data-testid="event-code-select"
               id="eventCode"
               name="eventCode"
+              value={modal.eventCode}
               onChange={e => {
                 updateModalValue({
                   key: e.target.name,
