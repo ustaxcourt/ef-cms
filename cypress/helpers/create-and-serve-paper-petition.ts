@@ -1,4 +1,6 @@
-export function createAndServePaperPetition() {
+export function createAndServePaperPetition(
+  options = { yearReceived: '2020' },
+) {
   const name = 'rick james ' + Date.now();
   cy.login('petitionsclerk1');
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
@@ -18,7 +20,7 @@ export function createAndServePaperPetition() {
   cy.get('[data-testid="phone"]').type('n/a');
   cy.get('#tab-case-info > .button-text').click();
   cy.get('#date-received-picker').clear();
-  cy.get('#date-received-picker').type('01/02/2020');
+  cy.get('#date-received-picker').type(`01/02/${options.yearReceived}`);
   cy.get('#mailing-date').clear();
   cy.get('#mailing-date').type('01/02/2019');
   cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
