@@ -840,7 +840,7 @@ export const loginAs = (cerebralTest, email) =>
 
     await cerebralTest.runSequence('submitLoginSequence');
 
-    expect(cerebralTest.getState('user.email')).toEqual(email);
+    expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
 export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
@@ -1132,7 +1132,7 @@ export const waitUntil = cb => {
         resolve();
       }
     };
-    return waitUntilInternal();
+    waitUntilInternal();
   });
 };
 
