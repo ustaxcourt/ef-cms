@@ -15,7 +15,7 @@ export const validateCaseDetailInteractor = (
     caseDetail,
     useCaseEntity = false,
   }: { caseDetail: any; useCaseEntity?: boolean },
-): Promise<Case> => {
+): Record<string, any> | null => {
   if (useCaseEntity) {
     return new Case(caseDetail, {
       applicationContext,
