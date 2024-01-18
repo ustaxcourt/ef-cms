@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import { getDefaultPasswordErrors } from '@shared/business/entities/NewPetitionerUser';
+import { PASSWORD_RULE } from '@shared/business/entities/EntityValidationConstants';
 import joi from 'joi';
 
 export class ChangePasswordForm extends JoiValidationEntity {
@@ -22,53 +22,7 @@ export class ChangePasswordForm extends JoiValidationEntity {
       .messages({ '*': 'Passwords must match' }),
     entityName:
       JoiValidationConstants.STRING.valid('ChangePasswordForm').required(),
-    password: JoiValidationConstants.STRING.custom((value, helper) => {
-      const errors = getDefaultPasswordErrors();
-
-      if (value.length < 8 || value.length > 99) {
-        errors.isProperLength.valid = false;
-      }
-
-      if (!/[a-z]/.test(value)) {
-        errors.hasOneLowercase.valid = false;
-      }
-
-      if (!/[A-Z]/.test(value)) {
-        errors.hasOneUppercase.valid = false;
-      }
-
-      if (!/[\^$*.[\]{}()?\-“!@#%&/,><’:;|_~`]/.test(value)) {
-        errors.hasSpecialCharacterOrSpace.valid = false;
-      }
-
-      if (!/[0-9]/.test(value)) {
-        errors.hasOneNumber.valid = false;
-      }
-
-      if (/^\s/.test(value) || /\s$/.test(value)) {
-        errors.hasNoLeadingOrTrailingSpace.valid = false;
-      }
-
-      const noErrors = Object.values(errors).reduce(
-        (accumulator, currentValue) => {
-          return accumulator && currentValue.valid;
-        },
-        true,
-      );
-
-      if (noErrors) {
-        return value;
-      } else {
-        return helper.message(
-          Object.entries(errors)
-            .filter(([, curValue]) => !curValue.valid)
-            .map(([key]) => key)
-            .join('|') as any,
-        );
-      }
-    }).description(
-      'Password for the account. Contains a custom validation because we want to construct a string with all the keys that failed which later we parse out to an object',
-    ),
+    password: PASSWORD_RULE,
     userEmail: JoiValidationConstants.EMAIL.required()
       .messages({
         '*': 'Enter a valid email address',

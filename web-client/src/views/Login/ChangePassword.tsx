@@ -72,72 +72,16 @@ export const ChangePassword = connect(
                         {showPassword ? 'Hide Password' : 'Show password'}
                       </button>
                       <div className="margin-top-1" hidden={!password}>
-                        <RequirementsText
-                          fieldName="password"
-                          text={
-                            changePasswordHelper.passwordErrors?.hasOneLowercase
-                              .message
-                          }
-                          valid={
-                            changePasswordHelper.passwordErrors?.hasOneLowercase
-                              .valid
-                          }
-                        ></RequirementsText>
-                        <RequirementsText
-                          fieldName="password"
-                          text={
-                            changePasswordHelper.passwordErrors?.hasOneUppercase
-                              .message
-                          }
-                          valid={
-                            changePasswordHelper.passwordErrors?.hasOneUppercase
-                              .valid
-                          }
-                        ></RequirementsText>
-                        <RequirementsText
-                          fieldName="password"
-                          text={
-                            changePasswordHelper.passwordErrors?.hasOneNumber
-                              .message
-                          }
-                          valid={
-                            changePasswordHelper.passwordErrors?.hasOneNumber
-                              .valid
-                          }
-                        ></RequirementsText>
-                        <RequirementsText
-                          fieldName="password"
-                          text={
-                            changePasswordHelper.passwordErrors?.isProperLength
-                              .message
-                          }
-                          valid={
-                            changePasswordHelper.passwordErrors?.isProperLength
-                              .valid
-                          }
-                        ></RequirementsText>
-                        <RequirementsText
-                          fieldName="password"
-                          text={
-                            changePasswordHelper.passwordErrors
-                              ?.hasSpecialCharacterOrSpace.message
-                          }
-                          valid={
-                            changePasswordHelper.passwordErrors
-                              ?.hasSpecialCharacterOrSpace.valid
-                          }
-                        ></RequirementsText>
-                        <RequirementsText
-                          fieldName="password"
-                          text={
-                            changePasswordHelper.passwordErrors
-                              ?.hasNoLeadingOrTrailingSpace.message
-                          }
-                          valid={
-                            changePasswordHelper.passwordErrors
-                              ?.hasNoLeadingOrTrailingSpace.valid
-                          }
-                        ></RequirementsText>
+                        {changePasswordHelper.passwordErrors.map(error => {
+                          return (
+                            <RequirementsText
+                              fieldName="password"
+                              key={error.message}
+                              text={error.message}
+                              valid={error.valid}
+                            ></RequirementsText>
+                          );
+                        })}
                       </div>
 
                       <label className="usa-label" htmlFor="confirm-password">
