@@ -204,7 +204,9 @@ export const deleteAllCypressTestAccounts = async () => {
   return null;
 };
 
-export const expireUserConfirmationCode = async (userId: string) => {
+export const expireUserConfirmationCode = async (email: string) => {
+  const userId = await getCognitoUserIdByEmail(email);
+  if (!userId) return null;
   const resourceEnvironments = ['alpha', 'beta'];
   for (let index = 0; index < resourceEnvironments.length; index++) {
     const pk: DocumentClient.AttributeValue = { S: `user|${userId}` };
@@ -233,4 +235,5 @@ export const expireUserConfirmationCode = async (userId: string) => {
       .promise()
       .catch(() => null);
   }
+  return null;
 };
