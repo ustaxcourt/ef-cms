@@ -68,7 +68,8 @@ describe('getPublicCaseInteractor', () => {
       },
     });
 
-    result.petitioners.forEach(petitioner => {
+    expect(result.petitioners).toBeDefined();
+    result.petitioners!.forEach(petitioner => {
       expect(petitioner.entityName).toEqual('PublicContact');
       expect(petitioner).not.toMatchObject({
         address1: 'address 1',
@@ -90,7 +91,8 @@ describe('getPublicCaseInteractor', () => {
       rawCaseRecord: { ...mockCase, petitioners: [sealedContactPrimary] },
     });
 
-    result.petitioners.forEach(petitioner => {
+    expect(result.petitioners).toBeDefined();
+    result.petitioners!.forEach(petitioner => {
       expect(petitioner.entityName).toEqual('PublicContact');
       expect(petitioner).not.toMatchObject({
         address1: 'address 1',
@@ -112,7 +114,8 @@ describe('getPublicCaseInteractor', () => {
       rawCaseRecord: mockCase,
     });
 
-    result.petitioners.forEach(petitioner => {
+    expect(result.petitioners).toBeDefined();
+    result.petitioners!.forEach(petitioner => {
       expect(petitioner.entityName).toEqual('PublicContact');
       expect(petitioner).not.toMatchObject({
         address1: 'address 1',
