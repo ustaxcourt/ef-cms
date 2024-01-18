@@ -66,6 +66,7 @@ export const EditDocketEntryMetaTabAction = connect(
             <Button
               link
               className="text-secondary-dark"
+              data-testid="strike-entry"
               icon={['fas', 'strikethrough']}
               iconColor="red"
               onClick={() => {
