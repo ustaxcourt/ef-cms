@@ -5,6 +5,9 @@ export const efcmsCaseMappings = {
     'associatedJudge.S': {
       type: 'text',
     },
+    'associatedJudgeId.S': {
+      type: 'keyword',
+    },
     'automaticBlocked.BOOL': {
       type: 'boolean',
     },

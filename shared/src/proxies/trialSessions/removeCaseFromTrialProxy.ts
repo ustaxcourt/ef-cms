@@ -12,11 +12,18 @@ import { put } from '../requests';
  */
 export const removeCaseFromTrialInteractor = (
   applicationContext,
-  { associatedJudge, caseStatus, disposition, docketNumber, trialSessionId },
+  {
+    associatedJudge,
+    associatedJudgeId,
+    caseStatus,
+    disposition,
+    docketNumber,
+    trialSessionId,
+  },
 ) => {
   return put({
     applicationContext,
-    body: { associatedJudge, caseStatus, disposition },
+    body: { associatedJudge, associatedJudgeId, caseStatus, disposition },
     endpoint: `/trial-sessions/${trialSessionId}/remove-case/${docketNumber}`,
   });
 };

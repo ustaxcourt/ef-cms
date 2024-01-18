@@ -2,7 +2,6 @@ name: Typescript Untouched File Check
 
 on:
   pull_request:
-  push:
 
 jobs:
   CheckUntouchedFiles:
@@ -16,10 +15,7 @@ jobs:
 
       - name: Determine Target Branch
         id: target_branch
-        run: echo "::set-output name=target_branch::$(jq -r '.pull_request.base.ref' $GITHUB_EVENT_PATH)"
-
-      - name: Set Environment Variable
-        run: echo "TARGET_BRANCH=${{ steps.target_branch.outputs.target_branch }}" >> $GITHUB_ENV
+        run: echo "TARGET_BRANCH=$(jq -r '.pull_request.base.ref' $GITHUB_EVENT_PATH) >> $GITHUB_ENV"
 
       - name: Checkout Target Branch
         uses: actions/checkout@v3
