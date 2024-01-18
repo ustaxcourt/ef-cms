@@ -65,7 +65,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judgeId: 'judgeId',
         },
       ),
     ).rejects.toThrow(UnauthorizedError);
@@ -118,10 +118,14 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judgeId: 'judgeId',
         },
       );
 
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeId,
+    ).toEqual('judgeId');
     expect(results.docketEntries.length).toEqual(1);
 
     const expectedDocketEntry: FormattedPendingMotionWithWorksheet = {
@@ -234,7 +238,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judge: 'Colvin',
+          judgeId: 'judgeId',
         },
       );
 

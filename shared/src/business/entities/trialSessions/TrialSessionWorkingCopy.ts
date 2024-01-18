@@ -1,5 +1,4 @@
 import { DOCKET_NUMBER_MATCHER } from '../EntityConstants';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
@@ -24,7 +23,7 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
   };
   public sessionNotes: string;
   public sort: string;
-  public sortOrder: string;
+  public sortOrder: 'asc' | 'desc';
   public trialSessionId: string;
   public userId: string;
 
