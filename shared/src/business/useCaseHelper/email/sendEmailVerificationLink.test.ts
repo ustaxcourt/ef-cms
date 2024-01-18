@@ -2,11 +2,11 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { sendEmailVerificationLink } from './sendEmailVerificationLink';
 
 describe('sendEmailVerificationLink', () => {
-  it('should call applicationContext.getDispatchers().sendBulkTemplatedEmail with the provided pendingEmail and templateData', () => {
+  it('should call applicationContext.getDispatchers().sendBulkTemplatedEmail with the provided pendingEmail and templateData', async () => {
     const mockPendingEmail = 'test@example.com';
     const mockEmailVerificationToken = 'abc123';
 
-    sendEmailVerificationLink({
+    await sendEmailVerificationLink({
       applicationContext,
       pendingEmail: mockPendingEmail,
       pendingEmailVerificationToken: mockEmailVerificationToken,

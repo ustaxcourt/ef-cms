@@ -38,7 +38,7 @@ export const createTrialSessionInteractor = async (
   }
 
   if (trialSessionToAdd.swingSession && trialSessionToAdd.swingSessionId) {
-    applicationContext
+    await applicationContext
       .getUseCaseHelpers()
       .associateSwingTrialSessions(applicationContext, {
         swingSessionId: trialSessionToAdd.swingSessionId,
