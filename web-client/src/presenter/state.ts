@@ -578,7 +578,13 @@ export const baseState = {
   },
   batchDownloads: {},
   caseDeadlineReport: {} as {
-    caseDeadlines: RawCaseDeadline[];
+    caseDeadlines: (RawCaseDeadline & {
+      caseCaption: string;
+      docketNumber: string;
+      docketNumberSuffix: string;
+      docketNumberWithSuffix: string;
+      leadDocketNumber: string;
+    })[];
     judgeFilter: string;
     totalCount: number;
     page: number;

@@ -319,10 +319,11 @@ describe('updateCase', () => {
       },
     );
 
-    expect(result.privatePractitioners[0].representing).toEqual([
+    expect(result.privatePractitioners).toBeDefined();
+    expect(result.privatePractitioners![0].representing).toEqual([
       mockCase.petitioners[0].contactId,
     ]);
-    expect(result.privatePractitioners[1].representing).toEqual([
+    expect(result.privatePractitioners![1].representing).toEqual([
       mockCase.petitioners[0].contactId,
     ]);
   });
