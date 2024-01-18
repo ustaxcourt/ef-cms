@@ -10,6 +10,5 @@
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
 - Manual code generation/checking vs Cognito-based codes for forgot password flow
 
-::: CONVERSATIONS TO HAVE :::
-- DOD:  Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
-  - Chris is OK with this, wants us to chat with Mike first.
+::: DOD :::
+- Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
