@@ -50,6 +50,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Effect": "Allow",
       "Action": [
         "cognito-idp:AdminCreateUser",
+				"cognito-idp:AdminDeleteUser",
         "cognito-idp:AdminDisableUser",
         "cognito-idp:AdminEnableUser",
         "cognito-idp:AdminGetUser",
