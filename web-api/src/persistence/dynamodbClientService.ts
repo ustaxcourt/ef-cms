@@ -358,6 +358,7 @@ export const batchGet = async ({
   keys: Pick<TDynamoRecord, 'pk' | 'sk'>[];
 }): Promise<TDynamoRecord[]> => {
   if (!keys.length) return [];
+  const tableName = getTableName({ applicationContext });
   const uniqueKeys = uniqBy(keys, key => {
     return key.pk + key.sk;
   });
@@ -366,14 +367,13 @@ export const batchGet = async ({
   const promises: Promise<BatchGetResponseMap>[] = chunks.map(chunkOfKeys =>
     applicationContext.getDocumentClient(applicationContext).batchGet({
       RequestItems: {
-        [getTableName({ applicationContext })]: {
+        [tableName]: {
           Keys: chunkOfKeys,
         },
       },
     }),
   );
 
-  const tableName = getTableName({ applicationContext });
   const results = (await Promise.all(promises)).map(result =>
     result.Responses[tableName].map(removeAWSGlobalFields),
   );
