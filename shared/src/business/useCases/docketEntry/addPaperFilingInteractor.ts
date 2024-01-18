@@ -122,6 +122,7 @@ export const addPaperFiling = async (
         assigneeId: user.userId,
         assigneeName: user.name,
         associatedJudge: caseEntity.associatedJudge,
+        associatedJudgeId: caseEntity.associatedJudgeId,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
@@ -190,12 +191,19 @@ export const addPaperFiling = async (
   let paperServicePdfUrl;
 
   if (isReadyForService) {
+    const currentDocketEntry = caseEntities[0].getDocketEntryById({
+      docketEntryId,
+    });
+    const electronicParties =
+      currentDocketEntry.eventCode === 'ATP' ? [] : undefined;
+
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
         docketEntryId,
+        electronicParties,
         stampedPdf: undefined,
       });
 
