@@ -31,7 +31,7 @@ resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
       "Action": ["iam:PassRole", "s3:ListBucket"],
       "Resource": [
         "arn:aws:s3:::${var.log_snapshot_bucket_name}",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es-s3-snapshot-access"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_s3_snapshot_access_role"
       ]
     },
     {
