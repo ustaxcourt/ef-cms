@@ -53,14 +53,9 @@ describe('getAllPendingMotionDocketEntriesForJudge', () => {
         parent_type: 'case',
         query: {
           bool: {
-            minimum_should_match: 1,
-            should: [
-              {
-                term: {
-                  'associatedJudgeId.S': 'TEST_JUDGE_ID',
-                },
-              },
-            ],
+            filter: {
+              terms: { 'associatedJudgeId.S': [TEST_JUDGE_ID] },
+            },
           },
         },
       },
