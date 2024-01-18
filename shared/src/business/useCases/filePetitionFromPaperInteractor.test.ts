@@ -156,7 +156,7 @@ describe('filePetitionFromPaperInteractor', () => {
     });
   });
 
-  it('makes a call to create a paper case with a Petition file and a an Attachment to Petition file', async () => {
+  it('makes a call to create a paper case with a Petition file and an Attachment to Petition file', async () => {
     await filePetitionFromPaperInteractor(applicationContext, {
       attachmentToPetitionFile: fileName,
       petitionFile: fileName,
