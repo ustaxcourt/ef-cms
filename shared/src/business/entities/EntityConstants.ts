@@ -268,8 +268,8 @@ export const MINUTE_ENTRIES_MAP = {
 };
 
 export const UNSERVABLE_EVENT_CODES = [
-  ...Object.values(MINUTE_ENTRIES_MAP),
   ...COURT_ISSUED_EVENT_CODES,
+  ...Object.values(MINUTE_ENTRIES_MAP),
 ]
   .filter(d => d.isUnservable)
   .map(pickEventCode);
