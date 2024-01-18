@@ -3,7 +3,7 @@ import config from './webpack.config.lambda';
 import webpack from 'webpack';
 
 const apiConfig: webpack.Configuration = {
-  ...config,
+  ...(config as any),
   entry: {
     api: './web-api/terraform/template/lambdas/api.ts',
     'api-public': './web-api/terraform/template/lambdas/api-public.ts',

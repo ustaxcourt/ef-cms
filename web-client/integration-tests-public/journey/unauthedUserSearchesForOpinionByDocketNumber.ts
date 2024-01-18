@@ -9,7 +9,7 @@ export const unauthedUserSearchesForOpinionByDocketNumber = cerebralTest => {
     await refreshElasticsearchIndex();
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
-    updateOpinionForm(cerebralTest, {
+    await updateOpinionForm(cerebralTest, {
       docketNumber: cerebralTest.docketNumber,
     });
 
