@@ -232,9 +232,47 @@ export const STIN_DOCKET_ENTRY_TYPE = {
 
 const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
 
-export const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
-  d => d.isUnservable,
-).map(pickEventCode);
+export const MINUTE_ENTRIES_MAP = {
+  captionOfCaseIsAmended: {
+    description:
+      'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
+    documentType: 'Caption of case is amended',
+    eventCode: 'MINC',
+    isUnservable: true,
+  },
+  dockedNumberIsAmended: {
+    description:
+      'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
+    documentType: 'Docket Number is amended',
+    eventCode: 'MIND',
+    isUnservable: true,
+  },
+  filingFeePaid: {
+    description: 'Filing Fee Paid',
+    documentType: 'Filing Fee Paid',
+    eventCode: 'FEE',
+    isUnservable: true,
+  },
+  filingFeeWaived: {
+    description: 'Filing Fee Waived',
+    documentType: 'Filing Fee Waived',
+    eventCode: 'FEEW',
+    isUnservable: true,
+  },
+  requestForPlaceOfTrial: {
+    documentTitle: 'Request for Place of Trial at [Place]',
+    documentType: 'Request for Place of Trial',
+    eventCode: 'RQT',
+    isUnservable: false,
+  },
+};
+
+export const UNSERVABLE_EVENT_CODES = [
+  ...Object.values(MINUTE_ENTRIES_MAP),
+  ...COURT_ISSUED_EVENT_CODES,
+]
+  .filter(d => d.isUnservable)
+  .map(pickEventCode);
 
 export const CASE_DISMISSAL_ORDER_TYPES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.closesAndDismissesCase,
@@ -633,36 +671,6 @@ export const INITIAL_DOCUMENT_TYPES_MAP = {
   requestForPlaceOfTrialFile:
     INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
   stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
-};
-
-export const MINUTE_ENTRIES_MAP = {
-  captionOfCaseIsAmended: {
-    description:
-      'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
-    eventCode: 'MINC',
-    documentType: 'Caption of case is amended',
-  },
-  dockedNumberIsAmended: {
-    description:
-      'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
-    eventCode: 'MIND',
-    documentType: 'Docket Number is amended',
-  },
-  filingFeePaid: {
-    description: 'Filing Fee Paid',
-    documentType: 'Filing Fee Paid',
-    eventCode: 'FEE',
-  },
-  filingFeeWaived: {
-    description: 'Filing Fee Waived',
-    documentType: 'Filing Fee Waived',
-    eventCode: 'FEEW',
-  },
-  requestForPlaceOfTrial: {
-    documentTitle: 'Request for Place of Trial at [Place]',
-    documentType: 'Request for Place of Trial',
-    eventCode: 'RQT',
-  },
 };
 
 export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
