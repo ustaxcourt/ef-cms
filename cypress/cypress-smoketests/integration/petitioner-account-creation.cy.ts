@@ -1,14 +1,14 @@
 describe('Petitioner Account Creation', () => {
-  const GUID = Date.now();
-  const TEST_EMAIL = `cypress_test_account+${GUID}@example.com`;
-  const TEST_NAME = 'Cypress Test';
-  const TEST_PASSWORD = generatePassword();
-
   after(() => {
     cy.task('deleteAllCypressTestAccounts');
   });
 
-  describe('Create Petitioner Account', () => {
+  describe('Create Petitioner Account and login', () => {
+    const GUID = Date.now();
+    const TEST_EMAIL = `cypress_test_account+${GUID}@example.com`;
+    const TEST_NAME = 'Cypress Test';
+    const TEST_PASSWORD = generatePassword();
+
     it('should create an account and verify it using the verification link', () => {
       cy.visit('/create-account/petitioner');
 
@@ -72,9 +72,62 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="account-menu-button"]');
     });
   });
+
+  describe('Expired Confirmation Code', () => {
+    const GUID = Date.now();
+    const TEST_EMAIL = `cypress_test_account+${GUID}@example.com`;
+    const TEST_NAME = 'Cypress Test Expired';
+    const TEST_PASSWORD = generatePassword();
+    it('should display error message when a user tries to confirm account with an expired confirmation code', () => {
+      cy.visit('/create-account/petitioner');
+
+      cy.get('[data-testid="petitioner-account-creation-email"]').type(
+        TEST_EMAIL,
+      );
+
+      cy.get('[data-testid="petitioner-account-creation-name"]').type(
+        TEST_NAME,
+      );
+
+      cy.get('[data-testid="petitioner-account-creation-password"]').type(
+        TEST_PASSWORD,
+      );
+
+      cy.get(
+        '[data-testid="petitioner-account-creation-confirm-password"]',
+      ).type(TEST_PASSWORD);
+
+      cy.get(
+        '[data-testid="petitioner-account-creation-submit-button"]',
+      ).click();
+
+      cy.get('[data-testid="email-address-verification-sent-message"]').should(
+        'exist',
+      );
+
+      cy.task('expireUserConfirmationCode', TEST_EMAIL);
+
+      cy.get('@USER_COGNITO_INFO')
+        .should('have.a.property', 'userId')
+        .and('not.be.undefined');
+
+      cy.get('@USER_COGNITO_INFO')
+        .should('have.a.property', 'confirmationCode')
+        .and('not.be.undefined');
+
+      cy.get('@USER_COGNITO_INFO').then((userInfo: any) => {
+        const { confirmationCode, userId } = userInfo;
+        cy.visit(
+          `/confirm-signup?confirmationCode=${confirmationCode}&email=${TEST_EMAIL}&userId=${userId}`,
+        );
+      });
+
+      cy.wait('5000');
+    });
+  });
 });
 
-function generatePassword() {
+function generatePassword(): string {
   const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
   const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const digitChars = '0123456789';

@@ -24,8 +24,8 @@ export default defineConfig({
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
         },
-        expireUserConfirmationCode(userId: string) {
-          return expireUserConfirmationCode(userId);
+        expireUserConfirmationCode(email: string) {
+          return expireUserConfirmationCode(email);
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
