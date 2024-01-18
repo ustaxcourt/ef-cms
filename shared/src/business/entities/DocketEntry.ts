@@ -766,11 +766,7 @@ export class DocketEntry extends JoiValidationEntity {
     eventCode: string;
     isLegacyServed?: boolean;
   }): boolean {
-    return (
-      DocketEntry.isMinuteEntry(eventCode) ||
-      UNSERVABLE_EVENT_CODES.includes(eventCode) ||
-      !!isLegacyServed
-    );
+    return UNSERVABLE_EVENT_CODES.includes(eventCode) || !!isLegacyServed;
   }
 
   static fetchRootDocument = (

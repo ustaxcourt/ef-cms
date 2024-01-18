@@ -4,7 +4,6 @@ export const getShowNotServedForDocument = ({
   caseDetail,
   docketEntryId,
   draftDocuments,
-  UNSERVABLE_EVENT_CODES,
 }) => {
   let showNotServed = false;
 
@@ -13,9 +12,7 @@ export const getShowNotServedForDocument = ({
   );
 
   if (caseDocument) {
-    const isUnservable = UNSERVABLE_EVENT_CODES.includes(
-      caseDocument.eventCode,
-    );
+    const isUnservable = DocketEntry.isUnservable(caseDocument);
 
     const isDraftDocument =
       draftDocuments &&
