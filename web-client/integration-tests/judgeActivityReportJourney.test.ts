@@ -79,6 +79,7 @@ describe('Judge activity report journey', () => {
       cerebralTest,
       CASE_STATUS_TYPES.cav,
       'Colvin',
+      'dabbad00-18d0-43ec-bafb-654e83405416',
     );
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -89,6 +90,7 @@ describe('Judge activity report journey', () => {
       cerebralTest,
       CASE_STATUS_TYPES.submitted,
       'Colvin',
+      'dabbad00-18d0-43ec-bafb-654e83405416',
     );
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -99,6 +101,7 @@ describe('Judge activity report journey', () => {
       cerebralTest,
       CASE_STATUS_TYPES.submittedRule122,
       'Colvin',
+      'dabbad00-18d0-43ec-bafb-654e83405416',
     );
 
     loginAs(cerebralTest, 'judgecolvin@example.com');
@@ -150,6 +153,7 @@ describe('Judge activity report journey', () => {
       cerebralTest,
       CASE_STATUS_TYPES.submitted,
       'Colvin',
+      'dabbad00-18d0-43ec-bafb-654e83405416',
     );
     docketClerkCreatesAnOrder(cerebralTest, {
       documentTitle: 'Order and Decision',
@@ -187,6 +191,7 @@ describe('Judge activity report journey', () => {
       cerebralTest,
       CASE_STATUS_TYPES.submitted,
       'Colvin',
+      'dabbad00-18d0-43ec-bafb-654e83405416',
     );
     docketClerkCreatesAnOrder(cerebralTest, {
       documentTitle: 'Order and Decision',
@@ -222,6 +227,7 @@ describe('Judge activity report journey', () => {
       cerebralTest,
       CASE_STATUS_TYPES.submitted,
       'Colvin',
+      'dabbad00-18d0-43ec-bafb-654e83405416',
     );
     docketClerkCreatesAnOrder(cerebralTest, {
       documentTitle: 'Order and Decision',
@@ -236,6 +242,7 @@ describe('Judge activity report journey', () => {
       cerebralTest,
       CASE_STATUS_TYPES.submitted,
       'Colvin',
+      'dabbad00-18d0-43ec-bafb-654e83405416',
     );
 
     docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 7);
