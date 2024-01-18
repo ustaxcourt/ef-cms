@@ -128,7 +128,7 @@ import React from 'react';
  * Instantiates the Cerebral app with React
  */
 const app = {
-  initialize: async (applicationContext, debugTools) => {
+  initialize: async applicationContext => {
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
@@ -304,7 +304,9 @@ const app = {
     });
     presenter.providers.socket = { start, stop };
 
-    const cerebralApp = App(presenter, debugTools);
+    const cerebralApp = App(presenter, {
+      returnSequencePromise: true,
+    });
 
     if (shouldRefreshToken) {
       await cerebralApp.getSequence('startRefreshIntervalSequence')();
