@@ -6,6 +6,7 @@ export const docketClerkUpdatesCaseStatusTo = (
   cerebralTest,
   caseStatusToUpdateTo,
   associatedJudge = 'Chief Judge',
+  associatedJudgeId?,
 ) => {
   return it(`Docket clerk updates case status to ${caseStatusToUpdateTo}`, async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -39,6 +40,11 @@ export const docketClerkUpdatesCaseStatusTo = (
     await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'associatedJudge',
       value: associatedJudge,
+    });
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'associatedJudgeId',
+      value: associatedJudgeId,
     });
 
     await cerebralTest.runSequence('submitUpdateCaseModalSequence');

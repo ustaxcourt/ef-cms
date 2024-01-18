@@ -185,7 +185,6 @@
     "secrets:rotate-environment": "npx ts-node shared/admin-tools/user/rotate-environment-secrets.ts",
     "seed:db": "./seed-dynamo.sh",
     "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
-    "seed:s3:lint": "pushd ./web-api/storage/fixtures && grep documentId seed/*json | ./validate-seed.js && popd",
     "seed:s3": "cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
     "seed": "run-p seed:db seed:s3",
     "shell": "docker-compose run -it shell /bin/bash",
