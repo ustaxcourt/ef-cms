@@ -82,7 +82,7 @@ exports.migrateRecords = async (
   for (let { key, script } of migrationsToRun) {
     if (!ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
-      items = await script(items, documentClient);
+      items = await script(items, documentClient, applicationContext);
     }
   }
 
