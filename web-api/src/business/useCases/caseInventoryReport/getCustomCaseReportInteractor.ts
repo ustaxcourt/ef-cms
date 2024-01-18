@@ -22,7 +22,7 @@ export type CustomCaseReportFilters = {
   preferredTrialCities: string[];
   highPriority?: boolean;
   procedureType: CustomCaseProcedureTypes;
-  judges: string[];
+  judges?: string[];
 };
 
 export type GetCustomCaseReportRequest = CustomCaseReportFilters & {

@@ -1,3 +1,4 @@
+import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
@@ -31,6 +32,9 @@ Cypress.Commands.add('login', (username, route = '/') => {
   cy.url().should('include', route);
   cy.showsErrorMessage(false);
   cy.url().should('not.include', '/mock-login');
+  cy.window().then(win =>
+    win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
+  );
 });
 
 Cypress.Commands.add('goToRoute', (...args) => {
@@ -104,6 +108,7 @@ declare global {
       showsSpinner: (shows?: boolean) => void;
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;
+      keepAliases: (args?: string[]) => void;
     }
   }
 }

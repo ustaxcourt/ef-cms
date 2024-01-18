@@ -3,6 +3,11 @@ import { createHash } from 'crypto';
 export const efcmsCaseMappings = {
   properties: {
     'associatedJudge.S': {
+      fields: {
+        raw: {
+          type: 'keyword',
+        },
+      },
       type: 'text',
     },
     'associatedJudgeId.S': {
