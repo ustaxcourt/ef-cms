@@ -1130,7 +1130,7 @@ export const waitUntil = cb => {
         resolve();
       }
     };
-    waitUntilInternal();
+    return waitUntilInternal();
   });
 };
 
