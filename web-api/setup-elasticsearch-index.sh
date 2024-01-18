@@ -35,6 +35,7 @@ fi
 popd
 
 echo "- DESTINATION_DOMAIN: ${DESTINATION_DOMAIN}"
+echo "- ELASTICSEARCH_ENDPOINT: ${ELASTICSEARCH_ENDPOINT}"
 
 if [[ -n "${ELASTICSEARCH_ENDPOINT}" ]]; then
   echo " => Setting up ${DESTINATION_DOMAIN} Cluster"

@@ -26,19 +26,31 @@ export const setupIndexes = async ({
         const { body: indexExists } = await client.indices.exists({
           index,
         });
-
+        // make up an index? could add a mapping?
         if (!indexExists) {
-          await client.indices.create({
+          const indexParams = {
             body: {
               mappings: {
                 dynamic: false,
-                ...elasticsearchMappings[index],
+                ...elasticsearchMappings[index], // isn't taking with 2.11
               },
               settings: esSettings,
             },
             index,
+          };
+
+          const result = await client.indices.create(indexParams);
+          console.log('create new index', {
+            index,
+            mappings: indexParams.body.mappings,
+            settings: indexParams.body.settings,
+            result,
           });
         } else {
+          console.log('update existing index', {
+            esSettings,
+            index,
+          });
           client.indices.putSettings({
             body: {
               index: {
