@@ -270,16 +270,11 @@ export const createCaseFromPaperInteractor = async (
       {
         createdAt: caseToAdd.receivedAt,
         docketEntryId: attachmentToPetitionFileId,
-        documentTitle:
-          INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
-        documentType:
-          INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.eventCode,
+        documentTitle: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
         filers,
         filingDate: caseToAdd.receivedAt,
-        // QUESTION: does ATP need an index?
-        // It seems specific docket entries need to be at the top of the docket entries
-        // Also, <Case>.addDocketEntry does generate indices for docket entries so
         isFileAttached: true,
         isOnDocketRecord: true,
         isPaper: true,

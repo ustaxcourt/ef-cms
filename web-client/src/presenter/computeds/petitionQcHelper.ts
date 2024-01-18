@@ -49,7 +49,7 @@ export const petitionQcHelper = (
     applicationForWaiverOfFilingFeeFile:
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
     attachmentToPetitionFile:
-      INITIAL_DOCUMENT_TYPES.attachmentToPetitionFile.documentType,
+      INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
     corporateDisclosureFile:
       INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
