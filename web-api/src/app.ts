@@ -1028,6 +1028,7 @@ app.get(
   app.post('/auth/confirm-signup', lambdaWrapper(confirmSignUpLambda));
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
+  app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the
