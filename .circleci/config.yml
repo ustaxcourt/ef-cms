@@ -881,8 +881,8 @@ workflows:
   build-and-deploy:
     when: << pipeline.parameters.run_build_and_deploy >>
     jobs:
-      - deploy:
-          <<: *only-deployed-lower-environments
+      # - deploy:
+      #     <<: *only-deployed-lower-environments
       # - migrate:
       #     <<: *only-deployed-lower-environments
       #     requires:
@@ -907,8 +907,8 @@ workflows:
       #       - wait-for-reindex
       - smoketests:
           <<: *only-deployed-lower-environments
-          requires:
-            - deploy
+          # requires:
+          #   - deploy
       # - loadtests:
       #     <<: *only-deployed-lower-environments
       #     requires:

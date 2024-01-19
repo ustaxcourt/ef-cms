@@ -123,6 +123,8 @@ else
   export CYPRESS_BASE_URL="https://${NON_PUBLIC}${CYPRESS_DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
   DYNAMODB_TABLE_NAME=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
   export DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
+	echo "${ENV}"
+	echo "${DYNAMODB_TABLE_NAME}"
   CYPRESS_MIGRATE=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
   export CYPRESS_MIGRATE=$CYPRESS_MIGRATE
 fi
