@@ -1186,11 +1186,13 @@ export class Case extends JoiValidationEntity {
     return this;
   }
 
-  getDocketEntryById({
-    docketEntryId,
-  }: {
-    docketEntryId: string;
-  }): RawDocketEntry | undefined {
+  /**
+   * gets the docketEntry with id docketEntryId from the docketEntries array
+   * @params {object} params the params object
+   * @params {string} params.docketEntryId the id of the docketEntry to retrieve
+   * @returns {object} the retrieved docketEntry
+   */
+  getDocketEntryById({ docketEntryId }) {
     return this.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );

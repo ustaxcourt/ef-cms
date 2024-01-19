@@ -103,7 +103,7 @@ export const getDownloadPolicyUrlInteractor = async (
         (selectedIsStin || !userAssociatedWithCase) &&
         !hasPolicyDateImpactedEventCode;
 
-      if (docketEntryEntity.isCourtIssued()) {
+      if (DocketEntry.isCourtIssued(docketEntryEntity.eventCode)) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
       } else {
         if (
