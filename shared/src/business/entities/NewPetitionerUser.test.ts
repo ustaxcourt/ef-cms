@@ -1,4 +1,5 @@
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
+import { PASSWORD_VALIDATION_ERROR_MESSAGES } from './EntityValidationConstants';
 
 describe('NewPetitionerUser', () => {
   const validEntity = {
@@ -76,7 +77,7 @@ describe('NewPetitionerUser', () => {
       });
     });
 
-    it('should set "hasOneLowercase" in the error message when provided a password does not contain a lower case character', () => {
+    it('should return error message provided a password that does not contain a lower case character', () => {
       const PASSWORD = '1AWD%$DNAWK';
       const formEntity = new NewPetitionerUser({
         ...validEntity,
@@ -85,11 +86,11 @@ describe('NewPetitionerUser', () => {
       });
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasOneLowercase',
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneLowercase,
       });
     });
 
-    it('should include "hasOneNumber" in the error message when provided a password does not contain a number', () => {
+    it('should return error message provided a password that does not contain a number', () => {
       const PASSWORD = 'aAWD%$DNAWK';
       const formEntity = new NewPetitionerUser({
         ...validEntity,
@@ -98,11 +99,11 @@ describe('NewPetitionerUser', () => {
       });
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasOneNumber',
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneNumber,
       });
     });
 
-    it('should include "hasOneUppercase" in the error message when provided a password does not contain an upper case character', () => {
+    it('should return error message provided a password that does not contain an upper case character', () => {
       const PASSWORD = 'aaws%$dn1awk';
       const formEntity = new NewPetitionerUser({
         ...validEntity,
@@ -111,11 +112,11 @@ describe('NewPetitionerUser', () => {
       });
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasOneUppercase',
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneUppercase,
       });
     });
 
-    it('should include "hasSpecialCharacterOrSpace" in the error message when provided a password does not contain a special character', () => {
+    it('should return error message provided a password that does not contain a special character', () => {
       const PASSWORD = 'aaWsdn1awk';
       const formEntity = new NewPetitionerUser({
         ...validEntity,
@@ -124,12 +125,12 @@ describe('NewPetitionerUser', () => {
       });
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasSpecialCharacterOrSpace',
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.hasSpecialCharacterOrSpace,
       });
     });
 
-    it('should include "isProperLength" in the error message when provided a password is fewer than 8 characters long', () => {
-      const PASSWORD = '1';
+    it('should return error message provided a password that is fewer than 8 characters long', () => {
+      const PASSWORD = '1$Ab';
       const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: PASSWORD,
@@ -137,12 +138,11 @@ describe('NewPetitionerUser', () => {
       });
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toMatchObject({
-        password:
-          'hasOneLowercase|hasOneUppercase|hasSpecialCharacterOrSpace|isProperLength',
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength,
       });
     });
 
-    it('should include "isProperLength" in the error message when provided a password is greater than 99 characters long', () => {
+    it('should return error message provided a password that is greater than 99 characters long', () => {
       const PASSWORD = '12$Azasodfkj3'.repeat(13);
       const formEntity = new NewPetitionerUser({
         ...validEntity,
@@ -151,7 +151,7 @@ describe('NewPetitionerUser', () => {
       });
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toMatchObject({
-        password: 'isProperLength',
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength,
       });
     });
   });
