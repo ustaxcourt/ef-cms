@@ -224,7 +224,3 @@ export const expireUserConfirmationCode = async (email: string) => {
 
   return null;
 };
-
-export const testTasks = () => {
-  return ALPHA_BETTA;
-};
