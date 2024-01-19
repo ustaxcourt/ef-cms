@@ -9,7 +9,6 @@
 
 REGION="us-east-1"
 API_URL="https://public-api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
-COGNITO_REDIRECT_URL="https%3A//app.${EFCMS_DOMAIN}/log-in"
 PUBLIC_SITE_URL="https://${EFCMS_DOMAIN}"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
@@ -17,7 +16,6 @@ USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcm
 CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}" --output text)
 
 STAGE="${CLIENT_STAGE}" \
-  COGNITO_LOGIN_URL="${COGNITO_LOGIN_URL}" \
   COGNITO_CLIENT_ID="${CLIENT_ID}" \
   CIRCLE_SHA1="${CIRCLE_SHA1}" \
   EFCMS_DOMAIN="${EFCMS_DOMAIN}" \
