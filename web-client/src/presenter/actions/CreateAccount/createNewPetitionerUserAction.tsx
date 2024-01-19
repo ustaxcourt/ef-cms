@@ -23,23 +23,13 @@ export const createNewPetitionerUserAction = async ({
     const originalErrorMessage = err?.originalError?.response?.data;
 
     if (originalErrorMessage === 'User already exists') {
-      // TODO 10007: Remove this
-      const cognitoRequestPasswordResetUrl = get(
-        state.cognitoRequestPasswordResetUrl,
-      );
-
       return path.warning({
         alertWarning: {
           message: (
             <>
               This email address is already associated with an account. You can{' '}
               <a href="/login">log in here</a>. If you forgot your password, you
-              can{' '}
-              <a href={cognitoRequestPasswordResetUrl}>
-                {' '}
-                request a password reset
-              </a>
-              .
+              can <a href={'/forgot-password'}> request a password reset</a>.
             </>
           ),
           title: 'Email address already has an account',

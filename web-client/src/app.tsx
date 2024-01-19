@@ -145,8 +145,6 @@ const app = {
     // TODO 10007: move to state.ts?
     presenter.state.cognitoPasswordChange =
       applicationContext.getCognitoPasswordChangeUrl();
-    presenter.state.cognitoRequestPasswordResetUrl =
-      applicationContext.getCognitoResetPasswordUrl();
 
     presenter.state.clientConnectionId = applicationContext.getUniqueId();
 
