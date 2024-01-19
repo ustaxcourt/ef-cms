@@ -30,6 +30,7 @@ export const MessageAlert = ({
     <div
       aria-live="polite"
       className={`usa-alert ${className} padding-right-3`}
+      data-testid={`${alertType}-message-alert`}
       ref={notificationRef}
       role="alert"
     >
