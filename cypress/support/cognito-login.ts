@@ -209,35 +209,26 @@ export const expireUserConfirmationCode = async (email: string) => {
   if (!userId) return null;
   const resourceEnvironments = ['alpha', 'beta'];
   const temp: any[] = [];
+
   for (let index = 0; index < resourceEnvironments.length; index++) {
     const pk: DocumentClient.AttributeValue = { S: `user|${userId}` };
     const sk: DocumentClient.AttributeValue = {
       S: 'account-confirmation-code',
     };
 
-    const updateItemParams: AWS.DynamoDB.UpdateItemInput = {
-      ExpressionAttributeNames: {
-        '#ttlAttr': 'ttl',
-      },
-      ExpressionAttributeValues: {
-        ':newTtlValue': { N: '0' },
-      },
+    const deleteItemParams: AWS.DynamoDB.DeleteItemInput = {
       Key: {
         pk,
         sk,
       },
       TableName: `efcms-${ENV}-${resourceEnvironments[index]}`,
-      UpdateExpression: 'SET #ttlAttr = :newTtlValue',
     };
 
     await dynamoDB
-      .updateItem(updateItemParams)
+      .deleteItem(deleteItemParams)
       .promise()
       .catch(error => temp.push(error));
   }
 
-  return {
-    temp,
-    userId,
-  };
+  return null;
 };
