@@ -131,7 +131,7 @@ const getUserConfirmationCodeFromDynamo = async (userId: string) => {
   const itemsBeta = await dynamoDB
     .getItem({
       Key: primaryKeyValues,
-      TableName: `efcms-${ENV}-alpha`,
+      TableName: `efcms-${ENV}-beta`,
     })
     .promise();
 
