@@ -214,13 +214,12 @@ export const expireUserConfirmationCode = async (email: string) => {
       S: 'account-confirmation-code',
     };
 
-    const newTtl = Date.now() / 1000;
     const updateItemParams: AWS.DynamoDB.UpdateItemInput = {
       ExpressionAttributeNames: {
         '#ttlAttr': 'ttl',
       },
       ExpressionAttributeValues: {
-        ':newTtlValue': newTtl as unknown as DocumentClient.AttributeValue,
+        ':newTtlValue': { N: '0' },
       },
       Key: {
         pk,
@@ -233,9 +232,7 @@ export const expireUserConfirmationCode = async (email: string) => {
     await dynamoDB
       .updateItem(updateItemParams)
       .promise()
-      .catch(error => {
-        console.error(error);
-      });
+      .catch(() => {});
   }
   return null;
 };
