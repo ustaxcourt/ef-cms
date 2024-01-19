@@ -210,7 +210,6 @@ const formatTrialSessionScheduling = ({
     Object.assign(
       formattedCase,
       formattedTrialSessionDetails({
-        applicationContext,
         judgeName: formattedCase.associatedJudge,
         trialDate: formattedCase.trialDate,
         trialLocation: formattedCase.trialLocation,
@@ -238,7 +237,6 @@ const formatTrialSessionScheduling = ({
       Object.assign(
         hearing,
         formattedTrialSessionDetails({
-          applicationContext,
           judgeName: hearing.judge && hearing.judge.name,
           trialDate: hearing.startDate,
           trialLocation: hearing.trialLocation,
