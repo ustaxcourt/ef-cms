@@ -51,7 +51,7 @@ describe('docket clerk edits a petition payment fee', () => {
     await cerebralTest.runSequence('updateCaseDetailsSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      hasVerifiedIrsNotice: 'Select an option',
+      hasVerifiedIrsNotice: 'Select an option for IRS Notice provided',
       petitionPaymentDate: 'Enter a valid payment date',
       petitionPaymentMethod: 'Enter payment method',
     });

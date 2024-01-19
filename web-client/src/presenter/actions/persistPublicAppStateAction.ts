@@ -5,15 +5,15 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} applicationContext the application context
  * @param {object} get the cerebral get object
  */
-export const persistPublicAppStateAction = ({
+export const persistPublicAppStateAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  applicationContext.getUseCases().setItemInteractor(applicationContext, {
+  await applicationContext.getUseCases().setItemInteractor(applicationContext, {
     key: 'advancedSearchTab',
     value: get(state.advancedSearchTab),
   });
-  applicationContext.getUseCases().setItemInteractor(applicationContext, {
+  await applicationContext.getUseCases().setItemInteractor(applicationContext, {
     key: 'advancedSearchForm',
     value: get(state.advancedSearchForm),
   });

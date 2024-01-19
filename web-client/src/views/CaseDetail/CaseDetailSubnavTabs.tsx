@@ -27,6 +27,7 @@ export const CaseDetailSubnavTabs = connect(
           >
             <Tab
               className="padding-left-2"
+              data-testid="tab-docket-record"
               id="tab-docket-record"
               tabName="docketRecord"
               title="Docket Record"
@@ -51,6 +52,7 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showDraftsTab && (
               <Tab
+                data-testid="tab-drafts"
                 icon={
                   caseDetailSubnavHelper.draftDocketEntryCount !== 0 && (
                     <div className="icon-tab-unread-messages">
