@@ -436,12 +436,16 @@ export const ScanBatchPreviewer = connect(
           >
             {documentTabsList.map(documentTab => (
               <Tab
+                data-testid={`tabButton-${documentTab.documentType}`}
                 icon={
                   scanHelper[`${documentTab.documentType}Completed`] && (
-                    <FontAwesomeIcon
-                      color="green"
-                      icon={['fas', 'check-circle']}
-                    />
+                    <>
+                      <FontAwesomeIcon
+                        color="green"
+                        data-testid={`icon-${documentTab.documentType}`}
+                        icon={['fas', 'check-circle']}
+                      />
+                    </>
                   )
                 }
                 key={documentTab.documentType}

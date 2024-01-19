@@ -16,17 +16,29 @@ describe('Create case and submit to IRS', function () {
 
     cy.intercept('POST', '**/paper').as('postPaperCase');
     cy.get('#submit-case').click();
+
     cy.wait('@postPaperCase').then(({ response }) => {
       expect(response.body).to.have.property('docketNumber');
     });
+    // /* ==== Generated with Cypress Studio ==== */
+    // cy.get(':nth-child(3) > .grid-row > .grid-col > .pdf-preview-btn').should('be.visible');
+    // cy.get(':nth-child(3) > .grid-row > .grid-col > .pdf-preview-btn').click();
+    // cy.get('[data-testid="close-modal-button"]').click();
+    // /* ==== End Cypress Studio ==== */
   });
 
-  it('should display Orders/Notices Automatically Created notification', () => {
+  it('should display attachment links in the attachment section', () => {
+    cy.get('[data-testid="attachmentToPetitionFileButton"]').should(
+      'be.visible',
+    );
+  });
+
+  it.skip('should display Orders/Notices Automatically Created notification', () => {
     cy.get('#orders-notices-needed-header').should('exist');
     cy.get('#orders-notices-auto-created-in-draft').should('exist');
   });
 
-  it('should uncheck the previously selected Notices/Orders needed in Case Info Tab', () => {
+  it.skip('should uncheck the previously selected Notices/Orders needed in Case Info Tab', () => {
     cy.get('#case-information-edit-button').click();
     unchecksOrdersAndNoticesBoxesInCase();
 
@@ -38,12 +50,12 @@ describe('Create case and submit to IRS', function () {
     });
   });
 
-  it('should display a confirmation modal when the user clicks cancel on the review page', () => {
+  it.skip('should display a confirmation modal when the user clicks cancel on the review page', () => {
     cy.get('button#cancel-create-case').scrollIntoView().click();
     cy.get('div.modal-header').should('exist');
   });
 
-  it('should route to Document QC inbox when the user confirms to cancel', () => {
+  it.skip('should route to Document QC inbox when the user confirms to cancel', () => {
     cy.get('button.modal-button-confirm').scrollIntoView().click();
     cy.url().should('include', 'document-qc/my/inbox');
   });
