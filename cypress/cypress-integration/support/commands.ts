@@ -31,6 +31,9 @@ Cypress.Commands.add('login', (username, route = '/') => {
   cy.url().should('include', route);
   cy.showsErrorMessage(false);
   cy.url().should('not.include', '/mock-login');
+  cy.window().then(win =>
+    win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
+  );
 });
 
 Cypress.Commands.add('goToRoute', (...args) => {
