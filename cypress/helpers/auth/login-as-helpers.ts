@@ -12,10 +12,10 @@ export function loginAsAdmissionsClerk(
 
 export function loginAsPrivatePractitioner(
   practitionerUser:
-    | 'privatePractitioner1'
-    | 'privatePractitioner2'
-    | 'privatePractitioner3'
-    | 'privatePractitioner4' = 'privatePractitioner1',
+    | 'privatepractitioner1'
+    | 'privatepractitioner2'
+    | 'privatepractitioner3'
+    | 'privatepractitioner4' = 'privatepractitioner1',
 ) {
   cy.login(practitionerUser);
   cy.get('[data-testid="file-a-petition"]').should('exist');
