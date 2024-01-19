@@ -10,19 +10,19 @@ DEPLOYING_COLOR=$2
 REGION="us-east-1"
 API_URL="https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
 WS_URL="wss://ws-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+# TODO 10007: remove these?
 COGNITO_REDIRECT_URL="https%3A//app.${EFCMS_DOMAIN}/login"
-# COGNITO_REDIRECT_URI="https://app.${EFCMS_DOMAIN}/login"
+COGNITO_REDIRECT_URI="https://app.${EFCMS_DOMAIN}/login"
 PUBLIC_SITE_URL="https://${EFCMS_DOMAIN}"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
 CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}" --output text)
 
+# TODO 10007: remove these too?
 COGNITO_LOGIN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
 COGNITO_TOKEN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/oauth2/token"
 
-# TODO: remove/update response_type, update redirect_uri
-COGNITO_PASSWORD_CHANGE_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/changePassword?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
   SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
@@ -32,7 +32,6 @@ fi
 
 STAGE="${CLIENT_STAGE}" \
   COGNITO_LOGIN_URL="${COGNITO_LOGIN_URL}" \
-  COGNITO_PASSWORD_CHANGE_URL="${COGNITO_PASSWORD_CHANGE_URL}" \
   CIRCLE_SHA1="${CIRCLE_SHA1}" \
   EFCMS_DOMAIN="${EFCMS_DOMAIN}" \
   SESSION_TIMEOUT="${SESSION_TIMEOUT}" \
