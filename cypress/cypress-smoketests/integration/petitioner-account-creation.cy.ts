@@ -126,8 +126,7 @@ describe('Petitioner Account Creation', () => {
         );
       });
 
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(5000);
+      cy.get('[data-testid="error-message-alert"]').should('be.visible');
     });
   });
 
@@ -184,8 +183,7 @@ describe('Petitioner Account Creation', () => {
         );
       });
 
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(5000);
+      cy.get('[data-testid="error-message-alert"]').should('be.visible');
     });
   });
 });
