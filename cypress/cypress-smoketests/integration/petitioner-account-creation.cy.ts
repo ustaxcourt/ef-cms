@@ -1,10 +1,11 @@
 describe('Petitioner Account Creation', () => {
+  const GUID = Date.now();
+
   after(() => {
     cy.task('deleteAllCypressTestAccounts');
   });
 
   describe('Create Petitioner Account and login', () => {
-    const GUID = Date.now();
     const TEST_EMAIL = `cypress_test_account+success_${GUID}@example.com`;
     const TEST_NAME = 'Cypress Test';
     const TEST_PASSWORD = generatePassword();
@@ -74,9 +75,8 @@ describe('Petitioner Account Creation', () => {
   });
 
   describe('Use Incorrect Confirmation Code', () => {
-    const GUID = Date.now();
     const TEST_EMAIL = `cypress_test_account+failure_${GUID}@example.com`;
-    const TEST_NAME = 'Cypress Test';
+    const TEST_NAME = 'Cypress Test Wrong Code';
     const TEST_PASSWORD = generatePassword();
 
     it('should display the error message when user tries to confirm account with wrong confirmation code', () => {
@@ -131,10 +131,10 @@ describe('Petitioner Account Creation', () => {
   });
 
   describe('Expired Confirmation Code', () => {
-    const GUID = Date.now();
     const TEST_EMAIL = `cypress_test_account+expired_${GUID}@example.com`;
     const TEST_NAME = 'Cypress Test Expired';
     const TEST_PASSWORD = generatePassword();
+
     it('should display error message when a user tries to confirm account with an expired confirmation code', () => {
       cy.visit('/create-account/petitioner');
 
@@ -162,8 +162,6 @@ describe('Petitioner Account Creation', () => {
         'exist',
       );
 
-      cy.task('expireUserConfirmationCode', TEST_EMAIL);
-
       cy.task('getNewAccountVerificationCode', { email: TEST_EMAIL }).as(
         'USER_COGNITO_INFO',
       );
@@ -175,6 +173,8 @@ describe('Petitioner Account Creation', () => {
       cy.get('@USER_COGNITO_INFO')
         .should('have.a.property', 'confirmationCode')
         .and('not.be.undefined');
+
+      cy.task('expireUserConfirmationCode', TEST_EMAIL);
 
       cy.get('@USER_COGNITO_INFO').then((userInfo: any) => {
         const { confirmationCode, userId } = userInfo;
