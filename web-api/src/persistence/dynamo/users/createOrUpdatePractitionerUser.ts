@@ -97,7 +97,6 @@ export const createOrUpdatePractitionerUser = async ({
 
   if (!userExists) {
     let params: AdminCreateUserCommandInput = {
-      //TODO: make 1000000% sure this works fine on deployed env
       DesiredDeliveryMediums: ['EMAIL'],
       UserAttributes: [
         {

@@ -3,8 +3,21 @@ export function loginAsTestAdmissionsClerk() {
   cy.get('#inbox-tab-content').should('exist');
 }
 
-export function loginAsPrivatePractitioner() {
-  cy.login('privatepractitioner1');
+export function loginAsAdmissionsClerk(
+  user: 'admissionsclerk1' = 'admissionsclerk1',
+) {
+  cy.login(user);
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+}
+
+export function loginAsPrivatePractitioner(
+  practitionerUser:
+    | 'privatepractitioner1'
+    | 'privatepractitioner2'
+    | 'privatepractitioner3'
+    | 'privatepractitioner4' = 'privatepractitioner1',
+) {
+  cy.login(practitionerUser);
   cy.get('[data-testid="file-a-petition"]').should('exist');
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
   cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
