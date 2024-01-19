@@ -142,7 +142,7 @@ const app = {
       return value;
     });
     presenter.state.constants = applicationContext.getConstants();
-    // TODO: move to state.ts?
+    // TODO 10007: move to state.ts?
     presenter.state.cognitoPasswordChange =
       applicationContext.getCognitoPasswordChangeUrl();
     presenter.state.cognitoRequestPasswordResetUrl =

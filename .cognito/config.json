@@ -17,8 +17,12 @@
     "endpoint": "http://localhost:3011"
   },
   "UserPoolDefaults": {
-    "UsernameAttributes": ["email"],
-    "AutoVerifiedAttributes": ["email"]
+    "UsernameAttributes": [
+      "email"
+    ],
+    "AutoVerifiedAttributes": [
+      "email"
+    ]
   },
   "KMSConfig": {
     "credentials": {
