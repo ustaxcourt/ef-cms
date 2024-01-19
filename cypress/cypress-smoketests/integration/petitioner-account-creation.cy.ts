@@ -105,6 +105,8 @@ describe('Petitioner Account Creation', () => {
         'exist',
       );
 
+      cy.task('expireUserConfirmationCode', TEST_EMAIL);
+
       cy.task('getNewAccountVerificationCode', { email: TEST_EMAIL }).as(
         'USER_COGNITO_INFO',
       );
