@@ -235,5 +235,9 @@ export const expireUserConfirmationCode = async (email: string) => {
       .promise()
       .catch(error => temp.push(error));
   }
-  return temp;
+
+  return {
+    temp,
+    userId,
+  };
 };
