@@ -55,7 +55,6 @@ export const createNewPractitionerUser = async ({
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
   await cognito.adminCreateUser({
-    //TODO: make 1000000% sure this works fine on deployed env
     DesiredDeliveryMediums: ['EMAIL'],
     UserAttributes: [
       {
