@@ -11,7 +11,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword();
 
     it('should test env vars', () => {
-      const myVariable = Cypress.env('CYPRESS_DESTINATION_TABLE');
+      const myVariable = Cypress.env('DYNAMODB_TABLE_NAME');
       cy.wrap(myVariable).should('not.be.undefined');
     });
 

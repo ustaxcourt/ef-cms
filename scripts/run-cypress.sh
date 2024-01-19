@@ -125,8 +125,6 @@ else
   export DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
   CYPRESS_MIGRATE=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
   export CYPRESS_MIGRATE=$CYPRESS_MIGRATE
-  CYPRESS_DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
-  export CYPRESS_DESTINATION_TABLE=$CYPRESS_DESTINATION_TABLE
 fi
 
 if [ -n "${OPEN}" ]; then
