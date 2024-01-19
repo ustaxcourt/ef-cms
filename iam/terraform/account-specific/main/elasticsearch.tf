@@ -149,8 +149,7 @@ resource "opensearch_snapshot_repository" "archived-logs" {
   settings = {
     bucket   = "${var.log_snapshot_bucket_name}"
     region   = "us-east-1"
-    role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es-s3-snapshot-access"
-    # role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
+    role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
   }
 }
 
