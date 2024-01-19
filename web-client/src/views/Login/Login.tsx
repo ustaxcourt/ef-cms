@@ -8,10 +8,11 @@ import React from 'react';
 export const Login = connect(
   {
     alertError: state.alertError,
-    cognitoRequestPasswordResetUrl: state.cognitoRequestPasswordResetUrl,
     loginHelper: state.loginHelper,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
+    navigateToForgotPasswordSequence:
+      sequences.navigateToForgotPasswordSequence,
     showPassword: state.showPassword,
     submitLoginSequence: sequences.submitLoginSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
@@ -20,9 +21,9 @@ export const Login = connect(
   },
   ({
     alertError,
-    cognitoRequestPasswordResetUrl,
     loginHelper,
     navigateToCreatePetitionerAccountSequence,
+    navigateToForgotPasswordSequence,
     showPassword,
     submitLoginSequence,
     toggleShowPasswordSequence,
@@ -109,9 +110,9 @@ export const Login = connect(
                     <div>
                       <Button
                         className="margin-top-1"
-                        href={cognitoRequestPasswordResetUrl}
                         link={true}
                         type="button"
+                        onClick={() => navigateToForgotPasswordSequence()}
                       >
                         Forgot password?
                       </Button>

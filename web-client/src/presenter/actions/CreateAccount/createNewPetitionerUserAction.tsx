@@ -23,6 +23,7 @@ export const createNewPetitionerUserAction = async ({
     const originalErrorMessage = err?.originalError?.response?.data;
 
     if (originalErrorMessage === 'User already exists') {
+      // TODO 10007: Remove this
       const cognitoRequestPasswordResetUrl = get(
         state.cognitoRequestPasswordResetUrl,
       );

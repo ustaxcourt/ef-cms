@@ -1,5 +1,4 @@
 import { clearAuthStateAction } from '@web-client/presenter/actions/Login/clearAuthStateAction';
-import { decodeTokenAction } from '@web-client/presenter/actions/decodeTokenAction';
 import { getUserAction } from '@web-client/presenter/actions/getUserAction';
 import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
@@ -18,7 +17,6 @@ export const submitLoginSequence = [
       error: [setAlertErrorAction],
       success: [
         clearAuthStateAction,
-        decodeTokenAction,
         setTokenAction,
         getUserAction,
         setUserAction,

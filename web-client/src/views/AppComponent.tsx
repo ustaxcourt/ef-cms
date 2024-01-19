@@ -51,6 +51,7 @@ import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompres
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
+import { ForgotPassword } from '@web-client/views/Login/ForgotPasword';
 import { GenericErrorModal } from './GenericErrorModal';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
@@ -150,6 +151,7 @@ const pages = {
   ErrorView,
   FileDocumentWizard,
   FilePetitionSuccess,
+  ForgotPassword,
   IdleLogout,
   Interstitial,
   JudgeActivityReport,
@@ -194,6 +196,7 @@ const pages = {
 const pagesWithBlueBackground = {
   ChangePassword,
   CreatePetitionerAccount,
+  ForgotPassword,
   Login,
   VerificationSent,
 };
