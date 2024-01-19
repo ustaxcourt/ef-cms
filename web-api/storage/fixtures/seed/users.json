@@ -591,6 +591,14 @@
     "entityName": "User"
   },
   {
+    "role": "admissionsclerk",
+    "name": "Test Admissions Clerk1",
+    "section": "admissions",
+    "userId": "9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "email": "admissionsclerk1@example.com",
+    "entityName": "User"
+  },
+  {
     "role": "clerkofcourt",
     "name": "Test Clerk of Court",
     "section": "clerkofcourt",

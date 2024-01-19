@@ -93,14 +93,11 @@ describe('createNewPetitionerUserAction', () => {
       originalError: { response: { data: 'User already exists' } },
     });
 
-    const cognitoRequestPasswordResetUrl = 'cognitoRequestPasswordResetUrl';
-
     await runAction(createNewPetitionerUserAction, {
       modules: {
         presenter,
       },
       state: {
-        cognitoRequestPasswordResetUrl,
         form: {
           confirmPassword: TEST_CONFIRM_PASSWORD,
           email: TEST_EMAIL,
