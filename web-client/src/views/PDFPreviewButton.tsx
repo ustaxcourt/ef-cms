@@ -24,6 +24,7 @@ export const PDFPreviewButton = connect(
     shouldWrapText = false,
     showModal,
     title,
+    ...props
   }) {
     const modalId = `PDFPreviewModal-${title}`;
     const fullTitle = file.name || file.documentType || title;
@@ -43,6 +44,7 @@ export const PDFPreviewButton = connect(
           <Button
             link
             className="pdf-preview-btn padding-0"
+            data-testid={props['data-testid']}
             icon={['fas', 'file-pdf']}
             iconColor="blue"
             id={id}
