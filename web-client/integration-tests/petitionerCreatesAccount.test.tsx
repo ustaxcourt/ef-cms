@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { setupTest as setupTestPrivate } from './helpers';
 import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
+import React from 'react';
 
 describe('Petitioner creates new account', () => {
   const cerebralTestPrivate = setupTestPrivate();
@@ -45,10 +46,22 @@ describe('Petitioner creates new account', () => {
     const result = await cerebralTestPrivate.runSequence(
       'submitCreatePetitionerAccountFormSequence',
     );
-    const { confirmationCode, userId } = result['1'].output;
+
+    const { confirmationCode, userId } = result['4'].props;
     testConfirmationCode = confirmationCode;
     testUserId = userId;
     const expectedVerificationLink = `http://localhost:1234/confirm-signup?confirmationCode=${confirmationCode}&email=${userName}&userId=${testUserId}`;
+    const expectedMessage = (
+      <>
+        {' '}
+        New user account created successfully for {userName}! Please click the
+        link below to verify your email address.
+        <br />
+        <a href={expectedVerificationLink} rel="noopener noreferrer">
+          Verify Email Address
+        </a>
+      </>
+    );
 
     expect(cerebralTestPrivate.getState('currentPage')).toEqual(
       'VerificationSent',
@@ -57,7 +70,7 @@ describe('Petitioner creates new account', () => {
     //THIS IS FOR LOCAL VERIFICATION ONLY
     expect(cerebralTestPrivate.getState('alertSuccess')).toMatchObject({
       alertType: 'success',
-      message: `New user account created successfully for ${userName}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${expectedVerificationLink}">Verify Email Address</a>`,
+      message: expectedMessage,
       title: 'Account Created Locally',
     });
   });
@@ -78,19 +91,20 @@ describe('Petitioner creates new account', () => {
   });
 
   it('petitioner logs in successfully', async () => {
-    await cerebralTestPrivate.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: userName,
-    });
-    await cerebralTestPrivate.runSequence('updateFormValueSequence', {
-      key: 'password',
-      value: password,
-    });
+    await cerebralTestPrivate.runSequence(
+      'updateAuthenticationFormValueSequence',
+      {
+        email: userName,
+      },
+    );
+    await cerebralTestPrivate.runSequence(
+      'updateAuthenticationFormValueSequence',
+      {
+        password,
+      },
+    );
 
-    await cerebralTestPrivate.runSequence('submitLoginSequence', {
-      email: userName,
-      password,
-    });
+    await cerebralTestPrivate.runSequence('submitLoginSequence');
 
     expect(cerebralTestPrivate.getState('currentPage')).toEqual(
       'DashboardPetitioner',
@@ -109,19 +123,20 @@ describe('Petitioner creates new account', () => {
   it('petitioner logs in with new email address', async () => {
     await cerebralTestPrivate.runSequence('signOutSequence');
 
-    await cerebralTestPrivate.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: updatedEmailAddress,
-    });
-    await cerebralTestPrivate.runSequence('updateFormValueSequence', {
-      key: 'password',
-      value: password,
-    });
+    await cerebralTestPrivate.runSequence(
+      'updateAuthenticationFormValueSequence',
+      {
+        email: updatedEmailAddress,
+      },
+    );
+    await cerebralTestPrivate.runSequence(
+      'updateAuthenticationFormValueSequence',
+      {
+        password,
+      },
+    );
 
-    await cerebralTestPrivate.runSequence('submitLoginSequence', {
-      email: updatedEmailAddress,
-      password,
-    });
+    await cerebralTestPrivate.runSequence('submitLoginSequence');
 
     expect(cerebralTestPrivate.getState('currentPage')).toEqual(
       'DashboardPetitioner',
