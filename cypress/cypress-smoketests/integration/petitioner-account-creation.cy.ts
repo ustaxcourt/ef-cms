@@ -10,10 +10,6 @@ describe('Petitioner Account Creation', () => {
     const TEST_NAME = 'Cypress Test';
     const TEST_PASSWORD = generatePassword();
 
-    it('should test env vars', () => {
-      cy.task('testTasks').should('equal', 'John test');
-    });
-
     it('should create an account and verify it using the verification link', () => {
       fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
 

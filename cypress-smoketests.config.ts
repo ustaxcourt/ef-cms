@@ -4,7 +4,6 @@ import {
   expireUserConfirmationCode,
   getNewAccountVerificationCode,
   getUserTokenWithRetry,
-  testTasks,
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
 import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
@@ -19,9 +18,6 @@ export default defineConfig({
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
-        testTasks() {
-          return testTasks();
-        },
         confirmUser({ email }) {
           return confirmUser({ email });
         },
