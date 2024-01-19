@@ -652,9 +652,6 @@ const applicationContext = {
   getCognitoPasswordChangeUrl: () => {
     return process.env.COGNITO_PASSWORD_CHANGE_URL || 'noop';
   },
-  getCognitoResetPasswordUrl: () => {
-    return process.env.COGNITO_PASSWORD_RESET_REQUEST_URL || 'noop';
-  },
   getConstants: () => appConstants,
   getCurrentUser,
   getCurrentUserPermissions: () => {
