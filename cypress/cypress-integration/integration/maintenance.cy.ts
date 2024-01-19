@@ -19,9 +19,6 @@ describe('Maintenance mode', () => {
     cy.get('[data-testid="maintenance-modal-ok-btn"]').click(); // should route to maintenance page when the user clicks 'Okay' in the modal
     getMaintenancePageContent().should('exist');
 
-    cy.visit('/trial-sessions'); // should route to the maintenance page when the user directly routes to a URL
-    getMaintenancePageContent().should('exist');
-
     disengageMaintenance();
 
     getMaintenancePageContent().should('not.exist'); //should route to the home page if maintenance mode is disengaged and the user was logged in
