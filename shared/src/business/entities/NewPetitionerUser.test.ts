@@ -53,7 +53,7 @@ describe('NewPetitionerUser', () => {
   });
 
   describe('password', () => {
-    it('should include "hasNoLeadingOrTrailingSpace" in the error message when provided a password with leading space', () => {
+    it('should return error message provided a password with leading space', () => {
       const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: ' 12$Azasodfkj3',
@@ -61,11 +61,12 @@ describe('NewPetitionerUser', () => {
       });
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasNoLeadingOrTrailingSpace',
+        password:
+          PASSWORD_VALIDATION_ERROR_MESSAGES.hasNoLeadingOrTrailingSpace,
       });
     });
 
-    it('should include "hasNoLeadingOrTrailingSpace" in the error message when provided a password with trailing space', () => {
+    it('should return error message provided a password with trailing space', () => {
       const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: '12$Azasodfkj3 ',
@@ -73,7 +74,8 @@ describe('NewPetitionerUser', () => {
       });
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasNoLeadingOrTrailingSpace',
+        password:
+          PASSWORD_VALIDATION_ERROR_MESSAGES.hasNoLeadingOrTrailingSpace,
       });
     });
 
