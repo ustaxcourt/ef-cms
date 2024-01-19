@@ -23,6 +23,10 @@ module.exports = {
   ignorePatterns: '**/*_.js',
   overrides: [
     {
+      extends: ['plugin:@typescript-eslint/disable-type-checked'], // Disables type information from needing to be output, and clashing tsconfig/eslint issues https://typescript-eslint.io/linting/typed-linting#how-can-i-disable-type-aware-linting-for-a-subset-of-files
+      files: ['cypress/**/*.ts', 'webpack.config**', '**/pa11y/*.js'],
+    },
+    {
       files: ['cypress/**/*.ts'],
       rules: {
         'cypress/unsafe-to-chain-command': 'warn',
@@ -67,6 +71,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 9,
     jsx: true,
+    project: ['./tsconfig.json'],
     requireConfigFile: false,
     sourceType: 'module',
   },
@@ -90,6 +95,13 @@ module.exports = {
     '@miovision/disallow-date/no-new-date': 1,
     '@miovision/disallow-date/no-static-date': 0,
     '@miovision/disallow-date/no-to-date': 0,
+    '@typescript-eslint/no-floating-promises': 'error',
+    '@typescript-eslint/no-misused-promises': [
+      'error',
+      {
+        checksVoidReturn: false,
+      },
+    ],
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],

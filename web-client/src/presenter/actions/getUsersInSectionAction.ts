@@ -6,7 +6,9 @@ export const getUsersInSectionAction =
   async ({
     applicationContext,
     props,
-  }: ActionProps): Promise<{ users: RawUser[] }> => {
+  }: ActionProps<{
+    section: string;
+  }>): Promise<{ users: RawUser[] }> => {
     const caseServicesSupervisorSelectedSection = props.section;
     const { CASE_SERVICES_SUPERVISOR_SECTION } =
       applicationContext.getConstants();

@@ -4,32 +4,26 @@ export const handler = async event => {
   const applicationContext = createApplicationContext({});
 
   if (event.triggerSource === 'PostAuthentication_Authentication') {
-    const { email, sub } = event.request.userAttributes;
-    const userId = event.request.userAttributes['custom:userId'] || sub;
-
-    const userFromPersistence = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId });
-
-    if (
-      userFromPersistence &&
-      userFromPersistence.pendingEmail &&
-      userFromPersistence.pendingEmail === email
-    ) {
-      const updatedUser = await applicationContext
-        .getUseCases()
-        .setUserEmailFromPendingEmailInteractor(applicationContext, {
-          user: userFromPersistence,
-        });
-
-      applicationContext.logger.info(
-        'Petitioner post authentication processed',
-        {
-          event,
-          updatedUser,
-        },
-      );
-    }
+    // const { email, sub } = event.request.userAttributes;
+    // const userId = event.request.userAttributes['custom:userId'] || sub;
+    // const userFromPersistence = await applicationContext
+    //   .getPersistenceGateway()
+    //   .getUserById({ applicationContext, userId });
+    // if (
+    //   userFromPersistence &&
+    //   userFromPersistence.pendingEmail &&
+    //   userFromPersistence.pendingEmail === email
+    // ) {
+    //   const updatedUser = await applicationContext
+    //     .getUseCases()
+    //     .setUserEmailFromPendingEmailInteractor(applicationContext, {
+    //       user: userFromPersistence,
+    //     });
+    applicationContext.logger.info('Nothing happened', {
+      event,
+      // updatedUser,
+    });
+    // }
   }
 
   return event;

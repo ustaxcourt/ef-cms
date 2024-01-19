@@ -20,6 +20,7 @@ export const PdfPreview = connect(
       <PdfViewer
         className={!heightOverride && 'pdf-preview-viewer'}
         src={pdfPreviewUrl}
+        title="pdf-preview-viewer"
       />
     );
   },

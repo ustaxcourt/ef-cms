@@ -2,8 +2,7 @@ import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAdd
 import { faker } from '@faker-js/faker';
 import { loginAs, setupTest, waitForLoadingComponentToHide } from './helpers';
 
-// TODO 10007: Need to implement new account creation flow when user is forced to change password.
-describe.skip('Admissions clerk creates practitioner account', () => {
+describe('Admissions clerk creates practitioner account', () => {
   const cerebralTest = setupTest();
 
   afterAll(() => {
@@ -11,8 +10,8 @@ describe.skip('Admissions clerk creates practitioner account', () => {
   });
 
   const emailAddress = `${faker.internet.userName()}@example.com`;
-  const standardizedTemporaryPassword = '123456';
-  const password = 'Pa$$word!';
+  const standardizedTemporaryPassword = 'Testing1234$';
+  const password = 'Pa$$w0rd!';
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   admissionsClerkAddsNewPractitioner(cerebralTest, emailAddress);
@@ -20,88 +19,71 @@ describe.skip('Admissions clerk creates practitioner account', () => {
   it('practitioner attempts to log in with temporary password', async () => {
     await cerebralTest.runSequence('signOutSequence');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: emailAddress,
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'password',
-      value: standardizedTemporaryPassword,
-    });
-
-    await cerebralTest.runSequence('submitLoginSequence', {
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
       email: emailAddress,
+    });
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
       password: standardizedTemporaryPassword,
     });
 
+    await cerebralTest.runSequence('submitLoginSequence');
+
     await waitForLoadingComponentToHide({ cerebralTest });
 
-    // expect(cerebralTest.getState('currentPage')).toEqual('ChangePasswordLocal');
+    expect(cerebralTest.getState('currentPage')).toEqual('ChangePassword');
   });
 
-  // it('practitioner creates new password', async () => {
-  //   await cerebralTest.runSequence('updateFormValueSequence', {
-  //     key: 'email',
-  //     value: emailAddress,
-  //   });
+  it('practitioner creates new password', async () => {
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      password,
+    });
 
-  //   await cerebralTest.runSequence('updateFormValueSequence', {
-  //     key: 'newPassword',
-  //     value: password,
-  //   });
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      confirmPassword: password,
+    });
 
-  //   // TODO 10070
-  //   await cerebralTest.runSequence('changePasswordLocalSequence');
+    await cerebralTest.runSequence('submitChangePasswordSequence');
 
-  //   expect(cerebralTest.getState('currentPage')).toEqual('Login');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'DashboardPractitioner',
+    );
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('user.email')).toEqual(emailAddress);
+  });
 
-  //   expect(cerebralTest.getState('alertSuccess')).toMatchObject({
-  //     message: 'Password successfully changed.',
-  //   });
-  // });
+  it('practitioner logs attempts to log in with invalid password', async () => {
+    await cerebralTest.runSequence('signOutSequence');
 
-  // it('practitioner logs attempts to log in with invalid password', async () => {
-  //   await cerebralTest.runSequence('updateFormValueSequence', {
-  //     key: 'email',
-  //     value: emailAddress,
-  //   });
-  //   await cerebralTest.runSequence('updateFormValueSequence', {
-  //     key: 'password',
-  //     value: 'invalidPassword',
-  //   });
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      email: emailAddress,
+    });
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      password: standardizedTemporaryPassword,
+    });
 
-  //   // TODO 10007: put new login sequence
-  //   // await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
-  //   //   code: emailAddress,
-  //   //   password: 'invalidPassword',
-  //   // });
+    await cerebralTest.runSequence('submitLoginSequence');
 
-  //   expect(cerebralTest.getState('currentPage')).toEqual('Login');
-  //   expect(cerebralTest.getState('alertError')).toEqual({
-  //     message: 'Invalid password',
-  //     title: 'Invalid password',
-  //   });
-  // });
+    expect(cerebralTest.getState('currentPage')).toEqual('Login');
+    expect(cerebralTest.getState('alertError')).toEqual({
+      message: 'The email address or password you entered is invalid.',
+      title: 'Please correct the following errors:',
+    });
+  });
 
-  // it('practitioner logs in successfully with new password', async () => {
-  //   await cerebralTest.runSequence('updateFormValueSequence', {
-  //     key: 'email',
-  //     value: emailAddress,
-  //   });
-  //   await cerebralTest.runSequence('updateFormValueSequence', {
-  //     key: 'password',
-  //     value: password,
-  //   });
+  it('practitioner logs in successfully with new password', async () => {
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      email: emailAddress,
+    });
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      password,
+    });
 
-  //   await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
-  //     code: emailAddress,
-  //     password,
-  //   });
+    await cerebralTest.runSequence('submitLoginSequence');
 
-  //   expect(cerebralTest.getState('currentPage')).toEqual(
-  //     'DashboardPractitioner',
-  //   );
-  //   expect(cerebralTest.getState('alertError')).toBeUndefined();
-  //   expect(cerebralTest.getState('user.email')).toEqual(emailAddress);
-  // });
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'DashboardPractitioner',
+    );
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('user.email')).toEqual(emailAddress);
+  });
 });

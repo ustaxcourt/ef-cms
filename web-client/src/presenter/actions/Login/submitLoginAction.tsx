@@ -10,7 +10,7 @@ export const submitLoginAction = async ({
   idToken: string;
   refreshToken: string;
 }> => {
-  const { email, password } = get(state.form);
+  const { email, password } = get(state.authentication.form);
 
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
@@ -22,7 +22,7 @@ export const submitLoginAction = async ({
     const originalErrorMessage = err?.originalError?.response?.data;
 
     if (originalErrorMessage === 'NewPasswordRequired') {
-      return path.changePassword();
+      return path.changePassword({ tempPassword: password, userEmail: email });
     }
 
     if (originalErrorMessage === 'Invalid Username or Password') {

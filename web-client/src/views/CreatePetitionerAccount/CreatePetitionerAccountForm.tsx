@@ -143,62 +143,16 @@ export const CreatePetitionerAccountForm = connect(
                 {showPassword ? 'Hide Password' : 'Show password'}
               </button>
               <div className="margin-top-1" hidden={!password}>
-                <RequirementsText
-                  fieldName="password"
-                  text={
-                    createAccountHelper.passwordErrors?.hasOneLowercase.message
-                  }
-                  valid={
-                    createAccountHelper.passwordErrors?.hasOneLowercase.valid
-                  }
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text={
-                    createAccountHelper.passwordErrors?.hasOneUppercase.message
-                  }
-                  valid={
-                    createAccountHelper.passwordErrors?.hasOneUppercase.valid
-                  }
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text={
-                    createAccountHelper.passwordErrors?.hasOneNumber.message
-                  }
-                  valid={createAccountHelper.passwordErrors?.hasOneNumber.valid}
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text={
-                    createAccountHelper.passwordErrors?.isProperLength.message
-                  }
-                  valid={
-                    createAccountHelper.passwordErrors?.isProperLength.valid
-                  }
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text={
-                    createAccountHelper.passwordErrors
-                      ?.hasSpecialCharacterOrSpace.message
-                  }
-                  valid={
-                    createAccountHelper.passwordErrors
-                      ?.hasSpecialCharacterOrSpace.valid
-                  }
-                ></RequirementsText>
-                <RequirementsText
-                  fieldName="password"
-                  text={
-                    createAccountHelper.passwordErrors
-                      ?.hasNoLeadingOrTrailingSpace.message
-                  }
-                  valid={
-                    createAccountHelper.passwordErrors
-                      ?.hasNoLeadingOrTrailingSpace.valid
-                  }
-                ></RequirementsText>
+                {createAccountHelper.passwordErrors.map(error => {
+                  return (
+                    <RequirementsText
+                      fieldName="password"
+                      key={error.message}
+                      text={error.message}
+                      valid={error.valid}
+                    ></RequirementsText>
+                  );
+                })}
               </div>
 
               <label className="usa-label" htmlFor="confirm-password">
