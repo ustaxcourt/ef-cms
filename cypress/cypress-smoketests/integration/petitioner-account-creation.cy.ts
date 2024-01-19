@@ -126,7 +126,9 @@ describe('Petitioner Account Creation', () => {
         );
       });
 
-      cy.get('[data-testid="error-message-alert"]').should('be.visible');
+      cy.get('[data-testid="error-message-alert"]')
+        .should('be.visible')
+        .and('contain.text', 'Verification email link expired');
     });
   });
 
@@ -183,7 +185,9 @@ describe('Petitioner Account Creation', () => {
         );
       });
 
-      cy.get('[data-testid="error-message-alert"]').should('be.visible');
+      cy.get('[data-testid="error-message-alert"]')
+        .should('be.visible')
+        .and('contain.text', 'Verification email link expired');
     });
   });
 });
