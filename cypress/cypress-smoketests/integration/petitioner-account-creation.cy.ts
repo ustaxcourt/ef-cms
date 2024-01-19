@@ -73,6 +73,64 @@ describe('Petitioner Account Creation', () => {
     });
   });
 
+  describe('Use Incorrect Confirmation Code', () => {
+    const GUID = Date.now();
+    const TEST_EMAIL = `cypress_test_account+${GUID}@example.com`;
+    const TEST_NAME = 'Cypress Test';
+    const TEST_PASSWORD = generatePassword();
+
+    it('should display the error message when user tries to confirm account with wrong confirmation code', () => {
+      cy.visit('/create-account/petitioner');
+
+      cy.get('[data-testid="petitioner-account-creation-email"]').type(
+        TEST_EMAIL,
+      );
+
+      cy.get('[data-testid="petitioner-account-creation-name"]').type(
+        TEST_NAME,
+      );
+
+      cy.get('[data-testid="petitioner-account-creation-password"]').type(
+        TEST_PASSWORD,
+      );
+
+      cy.get(
+        '[data-testid="petitioner-account-creation-confirm-password"]',
+      ).type(TEST_PASSWORD);
+
+      cy.get(
+        '[data-testid="petitioner-account-creation-submit-button"]',
+      ).click();
+
+      cy.get('[data-testid="email-address-verification-sent-message"]').should(
+        'exist',
+      );
+
+      cy.task('getNewAccountVerificationCode', { email: TEST_EMAIL }).as(
+        'USER_COGNITO_INFO',
+      );
+
+      cy.get('@USER_COGNITO_INFO')
+        .should('have.a.property', 'userId')
+        .and('not.be.undefined');
+
+      cy.get('@USER_COGNITO_INFO')
+        .should('have.a.property', 'confirmationCode')
+        .and('not.be.undefined');
+
+      cy.get('@USER_COGNITO_INFO').then((userInfo: any) => {
+        const { userId } = userInfo;
+        const WRONG_CODE = 'JOHNWRONGCODE';
+        cy.visit(
+          `/confirm-signup?confirmationCode=${WRONG_CODE}&email=${TEST_EMAIL}&userId=${userId}`,
+        );
+      });
+
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(5000);
+    });
+  });
+
   describe('Expired Confirmation Code', () => {
     const GUID = Date.now();
     const TEST_EMAIL = `cypress_test_account+${GUID}@example.com`;
