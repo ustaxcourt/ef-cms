@@ -649,9 +649,6 @@ const applicationContext = {
     return broadcastChannel;
   },
   getCaseTitle: Case.getCaseTitle,
-  getCognitoPasswordChangeUrl: () => {
-    return process.env.COGNITO_PASSWORD_CHANGE_URL || 'noop';
-  },
   getConstants: () => appConstants,
   getCurrentUser,
   getCurrentUserPermissions: () => {
