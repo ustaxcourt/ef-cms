@@ -79,13 +79,13 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judgeIds: ['Colvin ID'],
+          judgeIds: ['judgeId'],
         },
       ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should return the single docket entry data for a pending motion ignoring non motions and thos not over 180 days', async () => {
+  it('should return the single docket entry data for a pending motion ignoring non motions and those not over 180 days', async () => {
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
@@ -119,14 +119,14 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judgeIds: ['Colvin ID'],
+          judgeIds: ['judgeId'],
         },
       );
 
     expect(
       applicationContext.getPersistenceGateway()
         .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeIds,
-    ).toEqual(['Colvin ID']);
+    ).toEqual(['judgeId']);
 
     expect(results.docketEntries.length).toEqual(1);
 
@@ -210,7 +210,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
-          judgeIds: ['Colvin ID'],
+          judgeIds: ['judgeId'],
         },
       );
 
