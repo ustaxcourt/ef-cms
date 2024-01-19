@@ -51,6 +51,7 @@ import { editPractitionerDocument } from './persistence/dynamo/practitioners/edi
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
 import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
+import { generateForgotPasswordCode } from '@web-api/persistence/dynamo/users/generateForgotPasswordCode';
 import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/getAccountConfirmationCode';
 import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/elasticsearch/docketEntry/getAllPendingMotionDocketEntriesForJudge';
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
@@ -302,6 +303,7 @@ const gatewayMethods = {
   deleteWorkItem,
   fetchEventCodesCountForJudges,
   generateAccountConfirmationCode,
+  generateForgotPasswordCode,
   getAccountConfirmationCode,
   getAllPendingMotionDocketEntriesForJudge,
   getAllUsersByRole,

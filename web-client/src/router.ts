@@ -1122,6 +1122,15 @@ const router = {
       app.getSequence('goToForgotPasswordSequence')();
     });
 
+    registerRoute('/reset-password?..', () => {
+      const { email, forgotPasswordCode, userId } = route.query();
+      return app.getSequence('resetPasswordSequence')({
+        email,
+        forgotPasswordCode,
+        userId,
+      });
+    });
+
     registerRoute('/create-account/petitioner', () => {
       setPageTitle('Account Registration');
       app.getSequence('goToCreatePetitionerAccountSequence')();
