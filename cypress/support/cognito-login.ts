@@ -15,11 +15,7 @@ AWS.config.region = awsRegion;
 
 const { ENV } = process.env;
 const DEFAULT_ACCOUNT_PASS = process.env.CYPRESS_DEFAULT_ACCOUNT_PASS;
-const ALPHA_BETTA = (process.env.DYNAMODB_TABLE_NAME || '')
-  .toLocaleLowerCase()
-  .includes('alpha')
-  ? 'alpha'
-  : 'beta';
+const DYNAMODB_TABLE_NAME = process.env.DYNAMODB_TABLE_NAME || '';
 
 const cognito = new CognitoIdentityProvider({
   region: 'us-east-1',
@@ -129,7 +125,7 @@ const getUserConfirmationCodeFromDynamo = async (userId: string) => {
   const items = await dynamoDB
     .getItem({
       Key: primaryKeyValues,
-      TableName: `efcms-${ENV}-${ALPHA_BETTA}`,
+      TableName: DYNAMODB_TABLE_NAME,
     })
     .promise();
 
@@ -214,7 +210,7 @@ export const expireUserConfirmationCode = async (email: string) => {
       pk,
       sk,
     },
-    TableName: `efcms-${ENV}-${ALPHA_BETTA}`,
+    TableName: DYNAMODB_TABLE_NAME,
   };
 
   await dynamoDB
