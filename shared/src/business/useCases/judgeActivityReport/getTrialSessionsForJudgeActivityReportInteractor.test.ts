@@ -1,4 +1,4 @@
-import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
+import { JudgeActivityStatisticsRequest } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
@@ -104,7 +104,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     mockTrialSessionsForAllJudges.push(mockSmallSwingTrialSession);
   });
 
-  const mockValidRequest: JudgeActivityReportFilters = {
+  const mockValidRequest: JudgeActivityStatisticsRequest = {
     endDate: '04/01/2020',
     judges: [judgeUser.name],
     startDate: '01/01/2020',
