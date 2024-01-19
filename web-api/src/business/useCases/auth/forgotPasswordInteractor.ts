@@ -1,5 +1,9 @@
 export const forgotPasswordInteractor = async (): Promise<{
-  bad: string;
+  bad?: string;
+  good?: string;
 }> => {
-  return { bad: 'this is bad' };
+  console.log('this is good');
+  const result = { good: 'this is good?' };
+  return result;
+  // return { bad: 'this is bad' };
 };
