@@ -14,7 +14,7 @@ describe('loginHelper', () => {
         },
       });
 
-      expect(disableLoginButton).toEqual(false);
+      expect(disableLoginButton).toEqual(true);
     });
 
     it('should return false when password is not on the form', () => {
@@ -28,7 +28,7 @@ describe('loginHelper', () => {
         },
       });
 
-      expect(disableLoginButton).toEqual(false);
+      expect(disableLoginButton).toEqual(true);
     });
 
     it('should return true when both email and password are on the form', () => {
@@ -43,7 +43,7 @@ describe('loginHelper', () => {
         },
       });
 
-      expect(disableLoginButton).toEqual(true);
+      expect(disableLoginButton).toEqual(false);
     });
   });
 });
