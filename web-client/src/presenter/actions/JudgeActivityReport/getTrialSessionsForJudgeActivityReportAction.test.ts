@@ -1,6 +1,7 @@
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getTrialSessionsForJudgeActivityReportAction } from './getTrialSessionsForJudgeActivityReportAction';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -15,7 +16,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
 
   const mockStartDate = 'startDate';
   const mockEndDate = 'endDate';
-  const judges = ['Buch', 'Colvin'];
+  const judgeName = 'Sotomayor';
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
@@ -37,10 +38,11 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
           judgeActivityReport: {
             filters: {
               endDate: mockEndDate,
-              judges,
+              judgeName,
               startDate: mockStartDate,
             },
           },
+          judges: [judgeUser],
         },
       },
     );
@@ -50,7 +52,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judges,
+      judges: [judgeUser.name],
       startDate: mockStartDate,
     });
 

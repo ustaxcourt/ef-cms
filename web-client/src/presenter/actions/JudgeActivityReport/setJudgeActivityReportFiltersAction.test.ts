@@ -102,6 +102,8 @@ describe('setJudgeActivityReportFiltersAction', () => {
       },
     });
 
-    expect(result.state.judgeActivityReport.judgeName).toEqual(judgeUser.name);
+    expect(result.state.judgeActivityReport.filters.judgeName).toEqual(
+      judgeUser.name,
+    );
   });
 });
