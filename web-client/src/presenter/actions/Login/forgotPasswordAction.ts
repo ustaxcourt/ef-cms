@@ -1,6 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const forgotPasswordAction = async ({ applicationContext, get }) => {
+export const forgotPasswordAction = async ({
+  applicationContext,
+  get,
+}: ActionProps) => {
   const { email } = get(state.authentication.form);
 
   console.log('forgotPasswordAction 1', email);
@@ -10,4 +13,6 @@ export const forgotPasswordAction = async ({ applicationContext, get }) => {
     .forgotPasswordInteractor(applicationContext, { email });
 
   console.log('forgotPasswordAction 2', result);
+
+  return result;
 };

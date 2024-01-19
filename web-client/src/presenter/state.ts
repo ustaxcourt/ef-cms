@@ -564,6 +564,11 @@ export const baseState = {
   },
   assigneeId: null,
   authentication: {
+    forgotPassword: {
+      code: '',
+      email: '',
+      userId: '',
+    },
     form: {
       confirmPassword: '',
       email: '',
