@@ -17,8 +17,10 @@ export const defaultRemoveFromTrialSessionModalValuesAction = ({
 
   const { trialSessionId } = props;
   const associatedJudge = cloneDeep(get(state.caseDetail.associatedJudge));
+  const associatedJudgeId = cloneDeep(get(state.caseDetail.associatedJudgeId));
 
   store.set(state.modal.associatedJudge, associatedJudge);
+  store.set(state.modal.associatedJudgeId, associatedJudgeId);
   store.set(state.modal.trialSessionId, trialSessionId);
   store.set(state.modal.caseStatus, STATUS_TYPES.generalDocketReadyForTrial);
 };

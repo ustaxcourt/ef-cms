@@ -19,3 +19,9 @@ export function assertExists(selector: string) {
     return body.find(selector).length > 0;
   });
 }
+
+export function assertDoesNotExist(selector: string) {
+  return cy.get('body').then(body => {
+    return body.find(selector).length === 0;
+  });
+}
