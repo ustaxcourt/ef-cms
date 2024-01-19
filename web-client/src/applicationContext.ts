@@ -120,6 +120,7 @@ import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documen
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
+import { forgotPasswordInteractor } from '@shared/proxies/auth/forgotPasswordProxy';
 import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
 import {
   formatCase,
@@ -440,6 +441,7 @@ const allUseCases = {
   fileExternalDocumentInteractor,
   filePetitionFromPaperInteractor,
   filePetitionInteractor,
+  forgotPasswordInteractor,
   forwardMessageInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
