@@ -339,6 +339,7 @@ export const ReviewSavedPetition = connect(
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
+                                data-testid="petitionFileButton"
                                 file={reviewSavedPetitionHelper.petitionFile}
                                 title="Petition"
                               />
@@ -347,7 +348,10 @@ export const ReviewSavedPetition = connect(
                         </div>
                       )}
                       {reviewSavedPetitionHelper.stinFile && (
-                        <div className="margin-top-3 margin-bottom-2">
+                        <div
+                          className="margin-top-3 margin-bottom-2"
+                          data-testid="stinFileButton"
+                        >
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <FontAwesomeIcon
@@ -365,6 +369,7 @@ export const ReviewSavedPetition = connect(
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
+                                data-testid="attachmentToPetitionFileButton"
                                 file={
                                   reviewSavedPetitionHelper.attachmentToPetitionFile
                                 }
@@ -379,6 +384,7 @@ export const ReviewSavedPetition = connect(
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
+                                data-testid="requestForPlaceOfTrialFileButton"
                                 file={
                                   reviewSavedPetitionHelper.requestForPlaceOfTrialFile
                                 }
@@ -393,6 +399,7 @@ export const ReviewSavedPetition = connect(
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
+                                data-testid="corporateDisclosureFileButton"
                                 file={
                                   reviewSavedPetitionHelper.corporateDisclosureFile
                                 }
@@ -407,6 +414,7 @@ export const ReviewSavedPetition = connect(
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
+                                data-testid="applicationForWaiverOfFilingFeeFileButton"
                                 file={
                                   reviewSavedPetitionHelper.applicationForWaiverOfFilingFeeFile
                                 }
@@ -435,6 +443,7 @@ export const ReviewSavedPetition = connect(
             </Button>
             <Button
               secondary
+              data-testid="save-case-for-later"
               onClick={() => leaveCaseForLaterServiceSequence()}
             >
               Save for Later

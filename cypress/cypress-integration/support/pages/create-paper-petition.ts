@@ -1,6 +1,29 @@
 import { faker } from '@faker-js/faker';
+import {
+  getCreateACaseButton,
+  navigateTo as navigateToDocumentQC,
+} from './document-qc';
 
-export const fillInCreateCaseFromPaperForm = (testData?: any) => {
+export const createPaperPetition = () => {
+  navigateToDocumentQC('petitionsclerk');
+
+  getCreateACaseButton().click();
+  cy.get('#tab-parties').parent().should('have.attr', 'aria-selected');
+
+  fillInCreateCaseFromPaperForm();
+
+  cy.intercept('POST', '**/paper').as('postPaperCase');
+  cy.get('#submit-case').click();
+
+  return cy.wait('@postPaperCase').then(({ response }) => {
+    expect(response.body).to.have.property('docketNumber');
+    return cy.wrap({ docketNumber: response.body.docketNumber! });
+  });
+};
+
+export const fillInCreateCaseFromPaperForm = (testData?: {
+  testPetitionerName: string;
+}) => {
   const petitionerName = `${faker.person.firstName()} ${faker.person.lastName()}`;
   cy.get('#party-type').select('Petitioner');
   cy.get('#name').type(petitionerName);
@@ -55,17 +78,34 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
   cy.get('#penalty_0').type('0');
   cy.get('button#modal-button-confirm').click();
 
+  // petition
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('[data-testid="remove-pdf"]');
-  cy.get('button#tabButton-stinFile').click();
+  cy.get('[data-testid="icon-petitionFile"]');
+
+  //stin
+  cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('[data-testid="remove-pdf"]');
-  cy.get('button#tabButton-requestForPlaceOfTrialFile').click();
+  cy.get('[data-testid="icon-stinFile"]');
+
+  //rqt
+  cy.get('[data-testid="tabButton-requestForPlaceOfTrialFile"]').click();
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
   cy.get('[data-testid="remove-pdf"]');
+  cy.get('[data-testid="icon-requestForPlaceOfTrialFile"]');
+
+  //atp
+  cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
+  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('input#attachmentToPetitionFile-file').attachFile(
+    '../fixtures/w3-dummy.pdf',
+  );
+  cy.get('[data-testid="remove-pdf"]');
+  cy.get('[data-testid="icon-attachmentToPetitionFile"]');
 };
