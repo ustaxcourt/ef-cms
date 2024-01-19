@@ -15,6 +15,11 @@ AWS.config.region = awsRegion;
 
 const { ENV } = process.env;
 const DEFAULT_ACCOUNT_PASS = process.env.CYPRESS_DEFAULT_ACCOUNT_PASS;
+const ALPHA_BETTA = (process.env.DYNAMODB_TABLE_NAME || '')
+  .toLocaleLowerCase()
+  .includes('alpha')
+  ? 'alpha'
+  : 'beta';
 
 const cognito = new CognitoIdentityProvider({
   region: 'us-east-1',
@@ -121,23 +126,14 @@ const getUserConfirmationCodeFromDynamo = async (userId: string) => {
     sk: { S: 'account-confirmation-code' },
   };
 
-  const itemsAlpha = await dynamoDB
+  const items = await dynamoDB
     .getItem({
       Key: primaryKeyValues,
-      TableName: `efcms-${ENV}-alpha`,
+      TableName: `efcms-${ENV}-${ALPHA_BETTA}`,
     })
     .promise();
 
-  const itemsBeta = await dynamoDB
-    .getItem({
-      Key: primaryKeyValues,
-      TableName: `efcms-${ENV}-beta`,
-    })
-    .promise();
-
-  return (
-    itemsAlpha.Item?.confirmationCode?.S || itemsBeta.Item?.confirmationCode?.S
-  );
+  return items.Item?.confirmationCode?.S;
 };
 
 export const getNewAccountVerificationCode = async ({
@@ -207,28 +203,28 @@ export const deleteAllCypressTestAccounts = async () => {
 export const expireUserConfirmationCode = async (email: string) => {
   const userId = await getCognitoUserIdByEmail(email);
   if (!userId) return null;
-  const resourceEnvironments = ['alpha', 'beta'];
-  const temp: any[] = [];
 
-  for (let index = 0; index < resourceEnvironments.length; index++) {
-    const pk: DocumentClient.AttributeValue = { S: `user|${userId}` };
-    const sk: DocumentClient.AttributeValue = {
-      S: 'account-confirmation-code',
-    };
+  const pk: DocumentClient.AttributeValue = { S: `user|${userId}` };
+  const sk: DocumentClient.AttributeValue = {
+    S: 'account-confirmation-code',
+  };
 
-    const deleteItemParams: AWS.DynamoDB.DeleteItemInput = {
-      Key: {
-        pk,
-        sk,
-      },
-      TableName: `efcms-${ENV}-${resourceEnvironments[index]}`,
-    };
+  const deleteItemParams: AWS.DynamoDB.DeleteItemInput = {
+    Key: {
+      pk,
+      sk,
+    },
+    TableName: `efcms-${ENV}-${ALPHA_BETTA}`,
+  };
 
-    await dynamoDB
-      .deleteItem(deleteItemParams)
-      .promise()
-      .catch(error => temp.push(error));
-  }
+  await dynamoDB
+    .deleteItem(deleteItemParams)
+    .promise()
+    .catch(error => console.error(error));
 
   return null;
+};
+
+export const testTasks = () => {
+  return ALPHA_BETTA;
 };

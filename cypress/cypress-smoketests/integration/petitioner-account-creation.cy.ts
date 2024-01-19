@@ -11,8 +11,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword();
 
     it('should test env vars', () => {
-      const myVariable = Cypress.env('DYNAMODB_TABLE_NAME');
-      cy.wrap(myVariable).should('not.be.undefined');
+      cy.task('testTasks').should('not.be.undefined');
     });
 
     it('should create an account and verify it using the verification link', () => {
