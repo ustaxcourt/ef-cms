@@ -47,6 +47,7 @@ localStreamsApp.get('/isDone', (req, res) => {
   res.send(chunks.length === 0);
 });
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const streamARN = await dynamodbClient
     .describeTable({
@@ -96,6 +97,7 @@ const processChunks = async () => {
   setTimeout(processChunks, 1);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 processChunks();
 
 localStreamsApp.listen(5005);
@@ -137,7 +139,7 @@ const wsServer = new WebSocketServer({
   httpServer: server,
 });
 
-wsServer.on('request', function (request) {
+wsServer.on('request', async function (request) {
   const connection = request.accept('echo-protocol', request.origin);
   const connectionId = uuid();
   connections[connectionId] = connection;
@@ -149,17 +151,17 @@ wsServer.on('request', function (request) {
     },
     {},
   );
-  connectLambda({
+  await connectLambda({
     queryStringParameters,
     requestContext: {
       connectionId,
       domainName: `ws://localhost:${PORT}`,
     },
   });
-  connection.on('close', function () {
+  connection.on('close', async function () {
     delete connections[connectionId];
 
-    disconnectLambda({
+    await disconnectLambda({
       requestContext: {
         connectionId,
       },

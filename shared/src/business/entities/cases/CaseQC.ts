@@ -21,7 +21,7 @@ export class CaseQC extends Case {
         .description(
           'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
         )
-        .messages({ '*': 'Select an option' }),
+        .messages({ '*': 'Select an option for IRS Notice provided' }),
     };
   }
 }
