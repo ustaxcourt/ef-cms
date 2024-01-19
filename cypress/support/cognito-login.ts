@@ -208,6 +208,7 @@ export const expireUserConfirmationCode = async (email: string) => {
   const userId = await getCognitoUserIdByEmail(email);
   if (!userId) return null;
   const resourceEnvironments = ['alpha', 'beta'];
+  const temp: any[] = [];
   for (let index = 0; index < resourceEnvironments.length; index++) {
     const pk: DocumentClient.AttributeValue = { S: `user|${userId}` };
     const sk: DocumentClient.AttributeValue = {
@@ -232,7 +233,7 @@ export const expireUserConfirmationCode = async (email: string) => {
     await dynamoDB
       .updateItem(updateItemParams)
       .promise()
-      .catch(() => {});
+      .catch(error => temp.push(error));
   }
-  return null;
+  return temp;
 };
