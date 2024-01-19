@@ -2,9 +2,10 @@
 - Finish all todos
 - Fix tests
   - web-api/terraform/template/lambdas/cognito-triggers.ts
+  - cypress/cypress-integration/integration/maintenance.cy.ts
 + Extract error message strings into constants OR do something else. (On hold)
 + Forgot password flow.
-- Talk about change password refactor & password validation
+- Figure out how to avoid lack of spinner when redirecting to login from public site
 
 ::: QUESTIONS :::
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
