@@ -335,7 +335,10 @@ export const ReviewSavedPetition = connect(
                     </h3>
                     <div>
                       {reviewSavedPetitionHelper.petitionFile && (
-                        <div className="margin-top-3 margin-bottom-2">
+                        <div
+                          className="margin-top-3 margin-bottom-2"
+                          data-testid="petitionFileButton"
+                        >
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
@@ -347,7 +350,10 @@ export const ReviewSavedPetition = connect(
                         </div>
                       )}
                       {reviewSavedPetitionHelper.stinFile && (
-                        <div className="margin-top-3 margin-bottom-2">
+                        <div
+                          className="margin-top-3 margin-bottom-2"
+                          data-testid="stinFileButton"
+                        >
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <FontAwesomeIcon
@@ -361,7 +367,10 @@ export const ReviewSavedPetition = connect(
                         </div>
                       )}
                       {reviewSavedPetitionHelper.attachmentToPetitionFile && (
-                        <div className="margin-top-3 margin-bottom-3">
+                        <div
+                          className="margin-top-3 margin-bottom-3"
+                          data-testid="attachmentToPetitionFileButton"
+                        >
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
@@ -375,7 +384,10 @@ export const ReviewSavedPetition = connect(
                         </div>
                       )}
                       {reviewSavedPetitionHelper.requestForPlaceOfTrialFile && (
-                        <div className="margin-top-3 margin-bottom-3">
+                        <div
+                          className="margin-top-3 margin-bottom-3"
+                          data-testid="requestForPlaceOfTrialFileButton"
+                        >
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
@@ -389,7 +401,10 @@ export const ReviewSavedPetition = connect(
                         </div>
                       )}
                       {reviewSavedPetitionHelper.corporateDisclosureFile && (
-                        <div className="margin-top-3 margin-bottom-3">
+                        <div
+                          className="margin-top-3 margin-bottom-3"
+                          data-testid="corporateDisclosureFileButton"
+                        >
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
@@ -403,7 +418,10 @@ export const ReviewSavedPetition = connect(
                         </div>
                       )}
                       {reviewSavedPetitionHelper.applicationForWaiverOfFilingFeeFile && (
-                        <div className="margin-top-3 margin-bottom-3">
+                        <div
+                          className="margin-top-3 margin-bottom-3"
+                          data-testid="applicationForWaiverOfFilingFeeFileButton"
+                        >
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
