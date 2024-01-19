@@ -11,27 +11,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword();
 
     it('should create an account and verify it using the verification link', () => {
-      cy.visit('/create-account/petitioner');
-
-      cy.get('[data-testid="petitioner-account-creation-email"]').type(
-        TEST_EMAIL,
-      );
-
-      cy.get('[data-testid="petitioner-account-creation-name"]').type(
-        TEST_NAME,
-      );
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        TEST_PASSWORD,
-      );
-
-      cy.get(
-        '[data-testid="petitioner-account-creation-confirm-password"]',
-      ).type(TEST_PASSWORD);
-
-      cy.get(
-        '[data-testid="petitioner-account-creation-submit-button"]',
-      ).click();
+      fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
 
       cy.get('[data-testid="email-address-verification-sent-message"]').should(
         'exist',
@@ -80,27 +60,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword();
 
     it('should display the error message when user tries to confirm account with wrong confirmation code', () => {
-      cy.visit('/create-account/petitioner');
-
-      cy.get('[data-testid="petitioner-account-creation-email"]').type(
-        TEST_EMAIL,
-      );
-
-      cy.get('[data-testid="petitioner-account-creation-name"]').type(
-        TEST_NAME,
-      );
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        TEST_PASSWORD,
-      );
-
-      cy.get(
-        '[data-testid="petitioner-account-creation-confirm-password"]',
-      ).type(TEST_PASSWORD);
-
-      cy.get(
-        '[data-testid="petitioner-account-creation-submit-button"]',
-      ).click();
+      fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
 
       cy.get('[data-testid="email-address-verification-sent-message"]').should(
         'exist',
@@ -138,28 +98,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword();
 
     it('should display error message when a user tries to confirm account with an expired confirmation code', () => {
-      cy.visit('/create-account/petitioner');
-
-      cy.get('[data-testid="petitioner-account-creation-email"]').type(
-        TEST_EMAIL,
-      );
-
-      cy.get('[data-testid="petitioner-account-creation-name"]').type(
-        TEST_NAME,
-      );
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        TEST_PASSWORD,
-      );
-
-      cy.get(
-        '[data-testid="petitioner-account-creation-confirm-password"]',
-      ).type(TEST_PASSWORD);
-
-      cy.get(
-        '[data-testid="petitioner-account-creation-submit-button"]',
-      ).click();
-
+      fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
       cy.get('[data-testid="email-address-verification-sent-message"]').should(
         'exist',
       );
@@ -191,6 +130,23 @@ describe('Petitioner Account Creation', () => {
     });
   });
 });
+
+function fillAndSubmitPetitionerForm(
+  email: string,
+  name: string,
+  password: string,
+) {
+  cy.visit('/create-account/petitioner');
+
+  cy.get('[data-testid="petitioner-account-creation-email"]').type(email);
+  cy.get('[data-testid="petitioner-account-creation-name"]').type(name);
+  cy.get('[data-testid="petitioner-account-creation-password"]').type(password);
+  cy.get('[data-testid="petitioner-account-creation-confirm-password"]').type(
+    password,
+  );
+
+  cy.get('[data-testid="petitioner-account-creation-submit-button"]').click();
+}
 
 function generatePassword(): string {
   const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
