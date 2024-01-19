@@ -1,3 +1,4 @@
+import { PASSWORD_VALIDATION_ERROR_MESSAGES } from '@shared/business/entities/EntityValidationConstants';
 import { createAccountHelper } from '@web-client/presenter/computeds/CreatePetitionerAccount/createAccountHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
@@ -26,28 +27,27 @@ describe('createAccountHelper', () => {
         },
       });
 
-      expect(result.passwordErrors!.isProperLength.valid).toBeFalsy();
+      expect(
+        result.passwordErrors.find(error => {
+          return (
+            error.message === PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength
+          );
+        })?.valid,
+      ).toEqual(false);
     });
 
-    it('should return object with multiple invalid flags when "password" is not valid', () => {
+    it('should return object with invalid flags for all password validation fields', () => {
       const result = runCompute(createAccountHelper, {
         state: {
           form: {
-            password: 'aaaaaaaa',
+            password: ' ',
           },
         },
       });
 
-      expect(
-        result.passwordErrors!.hasNoLeadingOrTrailingSpace.valid,
-      ).toBeTruthy();
-      expect(result.passwordErrors!.hasOneLowercase.valid).toBeTruthy();
-      expect(result.passwordErrors!.hasOneNumber.valid).toBeFalsy();
-      expect(result.passwordErrors!.hasOneUppercase.valid).toBeFalsy();
-      expect(
-        result.passwordErrors!.hasSpecialCharacterOrSpace.valid,
-      ).toBeFalsy();
-      expect(result.passwordErrors!.isProperLength.valid).toBeTruthy();
+      result.passwordErrors.forEach(error => {
+        expect(error.valid).toEqual(false);
+      });
     });
   });
 
