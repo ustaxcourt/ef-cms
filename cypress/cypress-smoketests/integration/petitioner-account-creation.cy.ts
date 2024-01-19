@@ -11,7 +11,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword();
 
     it('should test env vars', () => {
-      cy.task('testTasks').should('not.be.undefined');
+      cy.task('testTasks').should('equal', 'John test');
     });
 
     it('should create an account and verify it using the verification link', () => {
