@@ -73,6 +73,7 @@ export const DocketRecord = connect(
                           entry.isInProgress && 'in-progress',
                           entry.qcWorkItemsUntouched && 'qc-untouched',
                         )}
+                        data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
                         <td className="center-column hide-on-mobile">
@@ -125,6 +126,7 @@ export const DocketRecord = connect(
                             {entry.showEditDocketRecordEntry && (
                               <Button
                                 link
+                                data-testid={`edit-${entry.eventCode}`}
                                 href={entry.editDocketEntryMetaLink}
                                 icon="edit"
                               >

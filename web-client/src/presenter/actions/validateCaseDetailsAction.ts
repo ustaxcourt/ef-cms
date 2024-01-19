@@ -2,7 +2,7 @@ import { aggregateStatisticsErrors } from './validatePetitionFromPaperAction';
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const validateCaseDetailsAction = ({
+export const validateCaseDetailsAction = async ({
   applicationContext,
   get,
   path,
@@ -10,7 +10,7 @@ export const validateCaseDetailsAction = ({
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  let errors = applicationContext
+  let errors = await applicationContext
     .getUseCases()
     .validateCaseDetailInteractor(applicationContext, {
       caseDetail: {

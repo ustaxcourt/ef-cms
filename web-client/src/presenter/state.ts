@@ -1,10 +1,7 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
-import {
-  JudgeActivityReportState,
-  initialJudgeActivityReportState,
-} from './judgeActivityReportState';
+import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
@@ -37,6 +34,7 @@ import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { caseWorksheetsHelper } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
+import { changePasswordHelper } from '@web-client/presenter/computeds/Login/changePasswordHelper';
 import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -240,6 +238,9 @@ export const computeds = {
   >,
   caseWorksheetsHelper: caseWorksheetsHelper as unknown as ReturnType<
     typeof caseWorksheetsHelper
+  >,
+  changePasswordHelper: changePasswordHelper as unknown as ReturnType<
+    typeof changePasswordHelper
   >,
   completeDocumentTypeSectionHelper:
     completeDocumentTypeSectionHelper as unknown as ReturnType<
@@ -562,9 +563,25 @@ export const baseState = {
     documentTitle: null,
   },
   assigneeId: null,
+  //TODO: 10007 set these defaults back to ''
+  authentication: {
+    form: {
+      confirmPassword: undefined,
+      email: undefined,
+      password: undefined,
+    },
+    tempPassword: undefined,
+    userEmail: undefined,
+  },
   batchDownloads: {},
   caseDeadlineReport: {} as {
-    caseDeadlines: RawCaseDeadline[];
+    caseDeadlines: (RawCaseDeadline & {
+      caseCaption: string;
+      docketNumber: string;
+      docketNumberSuffix: string;
+      docketNumberWithSuffix: string;
+      leadDocketNumber: string;
+    })[];
     judgeFilter: string;
     totalCount: number;
     page: number;
@@ -636,9 +653,9 @@ export const baseState = {
   individualInboxCount: 0,
   irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
-  judgeActivityReport: cloneDeep(
-    initialJudgeActivityReportState,
-  ) as JudgeActivityReportState,
+  judgeActivityReport: {
+    judgeActivityReportData: {},
+  } as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
   lastIdleAction: undefined,

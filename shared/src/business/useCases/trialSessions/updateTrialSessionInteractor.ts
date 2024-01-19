@@ -180,7 +180,7 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    applicationContext
+    await applicationContext
       .getUseCaseHelpers()
       .associateSwingTrialSessions(applicationContext, {
         swingSessionId: trialSession.swingSessionId,

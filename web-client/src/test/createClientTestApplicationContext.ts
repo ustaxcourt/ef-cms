@@ -623,6 +623,7 @@ const createTestApplicationContext = () => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
+    getPrivateUrl: jest.fn(),
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
     getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),

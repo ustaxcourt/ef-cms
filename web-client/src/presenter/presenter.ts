@@ -122,6 +122,7 @@ import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryRepo
 import { getCustomCaseReportSequence } from './sequences/getCustomCaseReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
+import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
@@ -401,6 +402,7 @@ import { submitCaseInventoryReportModalSequence } from './sequences/submitCaseIn
 import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitChangeLoginAndServiceEmailSequence } from './sequences/submitChangeLoginAndServiceEmailSequence';
+import { submitChangePasswordSequence } from '@web-client/presenter/sequences/Login/submitChangePasswordSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
@@ -417,6 +419,7 @@ import { submitEditRespondentCounselSequence } from './sequences/submitEditRespo
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitJudgeActivityReportSequence } from './sequences/JudgeActivityReport/submitJudgeActivityReportSequence';
+import { submitJudgeActivityStatisticsReportSequence } from './sequences/JudgeActivityReport/submitJudgeActivityStatisticsReportSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
@@ -455,6 +458,7 @@ import { updateAddDeficiencyFormValueSequence } from './sequences/updateAddDefic
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
+import { updateAuthenticationFormValueSequence } from '@web-client/presenter/sequences/Login/updateAuthenticationFormValueSequence';
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCalendarNoteSequence } from './sequences/updateCalendarNoteSequence';
 import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
@@ -748,6 +752,7 @@ export const presenterSequences = {
   getCustomCaseReportSequence,
   getUsersInSectionSequence: getUsersInSectionSequence as unknown as Function,
   goToApplyStampSequence: goToApplyStampSequence as unknown as Function,
+  goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
@@ -1229,6 +1234,7 @@ export const presenterSequences = {
   submitCaseSearchSequence: submitCaseSearchSequence as unknown as Function,
   submitChangeLoginAndServiceEmailSequence:
     submitChangeLoginAndServiceEmailSequence as unknown as Function,
+  submitChangePasswordSequence,
   submitCourtIssuedDocketEntrySequence:
     submitCourtIssuedDocketEntrySequence as unknown as Function,
   submitCourtIssuedOrderSequence:
@@ -1259,6 +1265,8 @@ export const presenterSequences = {
   submitFilePetitionSequence: submitFilePetitionSequence as unknown as Function,
   submitJudgeActivityReportSequence:
     submitJudgeActivityReportSequence as unknown as Function,
+  submitJudgeActivityStatisticsReportSequence:
+    submitJudgeActivityStatisticsReportSequence as unknown as Function,
   submitLoginSequence,
   submitOpinionAdvancedSearchSequence:
     submitOpinionAdvancedSearchSequence as unknown as Function,
@@ -1321,6 +1329,7 @@ export const presenterSequences = {
     updateAdvancedOrderSearchFormValueSequence as unknown as Function,
   updateAdvancedSearchFormValueSequence:
     updateAdvancedSearchFormValueSequence as unknown as Function,
+  updateAuthenticationFormValueSequence,
   updateBatchDownloadProgressSequence:
     updateBatchDownloadProgressSequence as unknown as Function,
   updateCalendarNoteSequence: updateCalendarNoteSequence as unknown as Function,
@@ -1520,7 +1529,7 @@ export const presenter = {
     [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {},
+  providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: presenterSequences,
   state: initialState,
 };

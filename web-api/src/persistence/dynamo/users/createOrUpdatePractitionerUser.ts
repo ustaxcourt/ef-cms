@@ -1,5 +1,8 @@
 import * as client from '../../dynamodbClientService';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AdminCreateUserCommandInput,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { isUserAlreadyCreated } from './createOrUpdateUser';
@@ -93,7 +96,7 @@ export const createOrUpdatePractitionerUser = async ({
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
   if (!userExists) {
-    let params = {
+    let params: AdminCreateUserCommandInput = {
       //TODO: make 1000000% sure this works fine on deployed env
       DesiredDeliveryMediums: ['EMAIL'],
       UserAttributes: [
@@ -119,15 +122,14 @@ export const createOrUpdatePractitionerUser = async ({
     };
     //TODO: deal with type error on params
     const response = await cognito.adminCreateUser(params);
-    console.log('*** response', response.User.Attributes);
     //replace sub here
     if (response && response.User && response.User.Username) {
-      console.log('*** userId1', userId);
-      const userIdAttribute = // (response.User.Attributes?.find(element => {
-        //   if (element.Name === 'custom:userId') {
-        //     return element.Value;
-        //   }
-        // }) as unknown as string) ||
+      const userIdAttribute =
+        response.User.Attributes?.find(element => {
+          if (element.Name === 'custom:userId') {
+            return element;
+          }
+        }) ||
         response.User.Attributes?.find(element => {
           if (element.Name === 'sub') {
             return element;
@@ -136,7 +138,6 @@ export const createOrUpdatePractitionerUser = async ({
       userId = userIdAttribute?.Value!;
     }
   } else {
-    console.log('*** wrong if statement', userId);
     const response = await cognito.adminGetUser({
       UserPoolId: process.env.USER_POOL_ID,
       Username: userEmail,
@@ -150,24 +151,22 @@ export const createOrUpdatePractitionerUser = async ({
         },
       ],
       UserPoolId: process.env.USER_POOL_ID,
-      // and here
-      Username: response.Username,
+      // and here?
+      Username: userEmail,
     });
     // and here
     userId =
-      (response.UserAttributes?.find(element => {
+      response.UserAttributes?.find(element => {
         if (element.Name === 'custom:userId') {
-          return element.Value;
+          return element;
         }
-      }) as unknown as string) ||
-      (response.UserAttributes?.find(element => {
+      }) ||
+      response.UserAttributes?.find(element => {
         if (element.Name === 'sub') {
-          return element.Value;
+          return element;
         }
-      })! as unknown as string);
-    console.log('*** wrong if statement2', userId);
+      });
   }
-  console.log('*** userId3', userId);
   return await createUserRecords({
     applicationContext,
     user,

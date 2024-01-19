@@ -9,25 +9,24 @@ export const Login = connect(
   {
     alertError: state.alertError,
     cognitoRequestPasswordResetUrl: state.cognitoRequestPasswordResetUrl,
-    form: state.form,
     loginHelper: state.loginHelper,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
     showPassword: state.showPassword,
     submitLoginSequence: sequences.submitLoginSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateAuthenticationFormValueSequence:
+      sequences.updateAuthenticationFormValueSequence,
   },
   ({
     alertError,
     cognitoRequestPasswordResetUrl,
-    form,
     loginHelper,
     navigateToCreatePetitionerAccountSequence,
     showPassword,
     submitLoginSequence,
     toggleShowPasswordSequence,
-    updateFormValueSequence,
+    updateAuthenticationFormValueSequence,
   }) => {
     return (
       <>
@@ -49,7 +48,7 @@ export const Login = connect(
 
                     <span>Email address and password are case sensitive.</span>
 
-                    <form className="usa-form margin-top-4">
+                    <form className="usa-form margin-top-4" title="loginForm">
                       <label className="usa-label" htmlFor="email">
                         Email address
                       </label>
@@ -61,11 +60,9 @@ export const Login = connect(
                         data-testid="email-input"
                         name="email"
                         type="email"
-                        value={form.email}
                         onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
+                          updateAuthenticationFormValueSequence({
+                            email: e.target.value,
                           });
                         }}
                       />
@@ -78,11 +75,9 @@ export const Login = connect(
                         data-testid="password-input"
                         name="password"
                         type={showPassword ? 'text' : 'password'}
-                        value={form.password}
                         onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
+                          updateAuthenticationFormValueSequence({
+                            password: e.target.value,
                           });
                         }}
                       />

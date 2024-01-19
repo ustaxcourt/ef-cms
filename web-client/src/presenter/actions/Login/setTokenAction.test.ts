@@ -4,39 +4,24 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setTokenAction } from './setTokenAction';
 
 describe('setTokenAction,', () => {
-  const mockToken = 'abc';
-  const mockRefreshToken = '123';
+  const mockToken = 'f0c63793-3aab-4023-9f9c-1fffbcd7f102';
 
   presenter.providers.applicationContext = applicationContext;
 
-  it('should set state.token and state.refresh token from props', async () => {
+  it('should set state.token from props', async () => {
     const { state } = await runAction(setTokenAction, {
       modules: {
         presenter,
       },
       props: {
-        refreshToken: mockRefreshToken,
-        token: mockToken,
+        idToken: mockToken,
       },
-      state: {},
+      state: {
+        token: undefined,
+      },
     });
 
     expect(state.token).toEqual(mockToken);
-    expect(state.refreshToken).toEqual(mockRefreshToken);
-  });
-
-  it('should set state.refresh token to null when props.refreshToken is undefined', async () => {
-    const { state } = await runAction(setTokenAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        refreshToken: undefined,
-      },
-      state: {},
-    });
-
-    expect(state.refreshToken).toEqual(null);
   });
 
   it('should call applicationContext.setCurrentUserToken with props.token', async () => {
@@ -45,8 +30,7 @@ describe('setTokenAction,', () => {
         presenter,
       },
       props: {
-        refreshToken: mockRefreshToken,
-        token: mockToken,
+        idToken: mockToken,
       },
       state: {},
     });

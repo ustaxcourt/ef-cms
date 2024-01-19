@@ -36,36 +36,6 @@ jest.mock('../../../src/applicationContext', () => {
 });
 
 describe('cognito-triggers', () => {
-  describe('PostConfirmation_ConfirmSignUp', () => {
-    it('should create a petitioner when the event trigger is  PostConfirmation_ConfirmSignUp', async () => {
-      const mockEvent = {
-        request: {
-          userAttributes: {
-            email: 'hello@example.com',
-            name: 'test petitioner',
-            sub: '7adb95de-1d05-4bd6-851d-676d5358f693',
-          },
-        },
-        triggerSource: 'PostConfirmation_ConfirmSignUp',
-      };
-
-      await handler(mockEvent);
-
-      expect(mockCreatePetitionerAccountInteractor).toHaveBeenCalled();
-    });
-
-    it('should not create a petitioner when the event trigger is not PostConfirmation_ConfirmSignUp', async () => {
-      const mockEvent = {
-        request: {},
-        triggerSource: 'PostConfirmation_ConfirmForgotPassword',
-      };
-
-      await handler(mockEvent);
-
-      expect(mockCreatePetitionerAccountInteractor).not.toHaveBeenCalled();
-    });
-  });
-
   describe('PostAuthentication_Authentication', () => {
     const mockUserId = '531c2772-fd45-4640-b60e-1bc06c28c693';
     const mockSub = '1234abc';

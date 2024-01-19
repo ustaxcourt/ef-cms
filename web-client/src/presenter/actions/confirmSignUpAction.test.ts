@@ -4,72 +4,71 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('confirmSignUpAction', () => {
-  const confirmationCode = '123456';
-  const userEmail = 'someone@example.com';
+  const mockConfirmationCode = '03588683-483b-4f37-826a-9295089c82a6';
+  const mockEmail = 'someone@example.com';
+  const mockUserId = '976f5b46-d509-4b4a-a02f-8cbc86dd3e35';
 
-  const mockYes = jest.fn();
-  const mockNo = jest.fn();
+  const mockSuccessPath = jest.fn();
+  const mockErrorPath = jest.fn();
 
-  beforeAll(() => {
-    presenter.providers.path = {
-      no: mockNo,
-      yes: mockYes,
-    };
-
-    applicationContext
-      .getUseCases()
-      .confirmSignUpLocalInteractor.mockReturnValue({});
-
+  beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
+
+    presenter.providers.path = {
+      error: mockErrorPath,
+      success: mockSuccessPath,
+    };
   });
 
-  it('should call the confirmSignUpLocalInteractor with the user email and confirmation code from props and return path.yes when confirmSignUpLocalInteractor returns a response', async () => {
+  it('should return path.success when the user is confirmed successfully', async () => {
     await runAction(confirmSignUpAction, {
       modules: {
         presenter,
       },
       props: {
-        confirmationCode,
-        userEmail,
+        confirmationCode: mockConfirmationCode,
+        email: mockEmail,
+        userId: mockUserId,
       },
-      state: {},
     });
 
     expect(
-      applicationContext.getUseCases().confirmSignUpLocalInteractor.mock
-        .calls[0][1],
-    ).toMatchObject({ confirmationCode, userEmail });
-    expect(mockYes.mock.calls[0][0]).toEqual({
+      applicationContext.getUseCases().confirmSignUpInteractor.mock.calls[0][1],
+    ).toMatchObject({
+      confirmationCode: mockConfirmationCode,
+      email: mockEmail,
+      userId: mockUserId,
+    });
+    expect(mockSuccessPath.mock.calls[0][0]).toEqual({
       alertSuccess: {
-        alertType: 'success',
         message:
-          'Your registration has been confirmed! You will be redirected shortly!',
-        title: 'Account Confirmed Locally',
+          'Your email address is verified. You can now sign in to DAWSON.',
+        title: 'Email address verified',
       },
     });
   });
 
-  it('return an alertError when the confirmSignupLocalInteractor does not return a successful response', async () => {
+  it('should return an path.error when the link the user clicked is more than 24 hours old and therefore the confirmation link has expired', async () => {
     applicationContext
       .getUseCases()
-      .confirmSignUpLocalInteractor.mockImplementationOnce(() => {
-        throw new Error();
-      });
+      .confirmSignUpInteractor.mockRejectedValue({});
 
     await runAction(confirmSignUpAction, {
       modules: {
         presenter,
       },
       props: {
-        confirmationCode: 'bad code',
-        userEmail,
+        confirmationCode: mockConfirmationCode,
+        userEmail: mockEmail,
+        userId: mockUserId,
       },
-      state: {},
     });
 
-    expect(mockNo.mock.calls[0][0]).toMatchObject({
+    expect(mockErrorPath.mock.calls[0][0]).toMatchObject({
       alertError: {
-        message: 'Error confirming account',
+        message:
+          'Enter your email address and password below, then log in to be sent a new verification email.',
+        title: 'Verification email link expired',
       },
     });
   });
