@@ -13,7 +13,7 @@ export const mergeCaseOrderIntoEligibleCasesAction = ({
   const { caseOrder, eligibleCases } = get(state.trialSession);
 
   for (const eligibleCase of eligibleCases) {
-    const order = caseOrder.find(
+    const order = caseOrder!.find(
       o => o.docketNumber === eligibleCase.docketNumber,
     );
     Object.assign(eligibleCase, order);
