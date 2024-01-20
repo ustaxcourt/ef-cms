@@ -10,10 +10,10 @@ import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-num
 describe('change of address', () => {
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
     const newAddress = faker.location.streetAddress();
-    loginAsPrivatePractitioner('privatePractitioner2');
+    loginAsPrivatePractitioner('privatepractitioner2');
     practitionerCreatesEletronicCase().then(docketNumber => {
       petitionsclerkServePetition(docketNumber);
-      cy.login('privatePractitioner2');
+      cy.login('privatepractitioner2');
       cy.get('[data-testid="case-list-table"]').should('exist');
       cy.get('[data-testid="account-menu-button"]').click();
       cy.get('[data-testid="my-account-link"]').click();
