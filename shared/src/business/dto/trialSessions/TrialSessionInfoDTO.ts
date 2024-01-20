@@ -2,12 +2,13 @@ import {
   RawTrialSession,
   TJudge,
 } from '../../entities/trialSessions/TrialSession';
+import { TrialSessionProceedingType } from '@shared/business/entities/EntityConstants';
 
 export class TrialSessionInfoDTO {
   public estimatedEndDate?: string;
   public isCalendared: boolean;
   public judge?: TJudge;
-  public proceedingType: string;
+  public proceedingType: TrialSessionProceedingType;
   public sessionType: string;
   public startDate: string;
   public startTime?: string;
