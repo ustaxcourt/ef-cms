@@ -7,17 +7,13 @@
  */
 
 const {
-  elasticsearchMappings,
-} = require('../../../web-api/elasticsearch/elasticsearch-mappings');
+  getBaseAliasFromIndexName,
+} = require('../../../web-api/elasticsearch/elasticsearch-aliases');
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const environmentName = process.argv[2] || 'exp1';
 
 console.log(environmentName);
-
-// const getCurrentColor = environmentName => {
-//   DocumentClient.query({
-//     TableName: `efcms-deploy-${environmentName}`,
 
 const getCounts = async ({ indexName, version }) => {
   const esClient = await getClient({ environmentName, version });
@@ -25,17 +21,22 @@ const getCounts = async ({ indexName, version }) => {
     index: indexName,
   });
 
-  console.log(info);
-
   return info.body.count;
 };
 
+const listIndices = async ({ version }) => {
+  const esClient = await getClient({ environmentName, version });
+  return (
+    (await esClient.cat.indices({ format: 'json' })).body
+      ?.filter(i => {
+        return i.index.includes('efcms');
+      })
+      .map(i => i.index) || []
+  );
+};
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  // const currentColor = 'green'; // gets a row from DynamoDB
-
-  // const domains = await listDomains();
-  // console.log(domains);
-
   const totals = {
     alpha: 0,
     beta: 0,
@@ -44,20 +45,29 @@ const getCounts = async ({ indexName, version }) => {
   console.log(`## ${environmentName} Index Summary`);
   const out = [];
 
-  for (const indexName of Object.keys(elasticsearchMappings)) {
-    const [countAlpha, countBeta] = await Promise.all(
-      ['alpha', 'beta'].map(version => getCounts({ indexName, version })),
-    );
+  const counts = { alpha: {}, beta: {} };
+  for (const version of Object.keys(counts)) {
+    const indices = await listIndices({ version });
+    for (const indexName of indices) {
+      counts[version][getBaseAliasFromIndexName(indexName)] = await getCounts({
+        indexName,
+        version,
+      });
+    }
+  }
 
+  for (const aliasName of Object.keys(counts.alpha)) {
+    const countAlpha = counts.alpha[aliasName];
+    const countBeta = counts.beta[aliasName];
+    totals.alpha += countAlpha;
+    totals.beta += countBeta;
     out.push({
-      indexName,
-      countAlpha, // eslint-disable-line sort-keys-fix/sort-keys-fix
+      indexName: aliasName,
+      // eslint-disable-next-line sort-keys-fix/sort-keys-fix
+      countAlpha,
       countBeta,
       diff: Math.abs(countAlpha - countBeta),
     });
-
-    totals.alpha += countAlpha;
-    totals.beta += countBeta;
   }
 
   const [nominator, denominator] = [totals.alpha, totals.beta].sort(
@@ -74,6 +84,3 @@ const getCounts = async ({ indexName, version }) => {
     }% `,
   );
 })();
-
-// console.log(indexes);
-// simply check their differences, each of them between clusters
