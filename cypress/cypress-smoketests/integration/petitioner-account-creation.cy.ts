@@ -1,3 +1,5 @@
+import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
+
 describe('Petitioner Account Creation', () => {
   const GUID = Date.now();
   const VALID_PASSWORD_CONFIG: PasswordConfig = {
@@ -26,6 +28,7 @@ describe('Petitioner Account Creation', () => {
       );
       cy.get('[data-testid="petitioner-account-creation-email"]').blur();
       cy.get('[data-testid="email-requirement-text"]').should('be.visible');
+      cy.get('[data-testid="petitioner-account-creation-email"]').clear();
       cy.get('[data-testid="petitioner-account-creation-email"]').type(
         TEST_EMAIL,
       );
@@ -38,13 +41,14 @@ describe('Petitioner Account Creation', () => {
       );
       cy.get('[data-testid="petitioner-account-creation-name"]').blur();
       cy.get('[data-testid="name-requirement-text"]').should('be.visible');
+      cy.get('[data-testid="petitioner-account-creation-name"]').clear();
       cy.get('[data-testid="petitioner-account-creation-name"]').type(
         TEST_NAME,
       );
       cy.get('[data-testid="name-requirement-text"]').should('not.exist');
 
       //password
-      const VALID_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
+      const VALID_PASSWORD = 'aA1!aaaa';
 
       //leading white space
       cy.get(
@@ -58,6 +62,7 @@ describe('Petitioner Account Creation', () => {
         .should('be.visible')
         .and('have.class', 'invalid-requirement');
 
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         VALID_PASSWORD,
       );
@@ -67,6 +72,7 @@ describe('Petitioner Account Creation', () => {
       )
         .should('be.visible')
         .and('have.class', 'valid-requirement');
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
 
       //lower case
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
@@ -83,6 +89,7 @@ describe('Petitioner Account Creation', () => {
         .should('be.visible')
         .and('have.class', 'invalid-requirement');
 
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         VALID_PASSWORD,
       );
@@ -90,6 +97,7 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="password-hasOneLowercase-requirement-text"]')
         .should('be.visible')
         .and('have.class', 'valid-requirement');
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
 
       //digit
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
@@ -106,6 +114,7 @@ describe('Petitioner Account Creation', () => {
         .should('be.visible')
         .and('have.class', 'invalid-requirement');
 
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         VALID_PASSWORD,
       );
@@ -113,6 +122,7 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="password-hasOneNumber-requirement-text"]')
         .should('be.visible')
         .and('have.class', 'valid-requirement');
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
 
       //upper case
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
@@ -129,6 +139,7 @@ describe('Petitioner Account Creation', () => {
         .should('be.visible')
         .and('have.class', 'invalid-requirement');
 
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         VALID_PASSWORD,
       );
@@ -136,6 +147,7 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="password-hasOneUppercase-requirement-text"]')
         .should('be.visible')
         .and('have.class', 'valid-requirement');
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
 
       //special characters
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
@@ -154,6 +166,7 @@ describe('Petitioner Account Creation', () => {
         .should('be.visible')
         .and('have.class', 'invalid-requirement');
 
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         VALID_PASSWORD,
       );
@@ -163,6 +176,7 @@ describe('Petitioner Account Creation', () => {
       )
         .should('be.visible')
         .and('have.class', 'valid-requirement');
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
 
       //length
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
@@ -179,6 +193,7 @@ describe('Petitioner Account Creation', () => {
         .should('be.visible')
         .and('have.class', 'invalid-requirement');
 
+      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         VALID_PASSWORD,
       );
@@ -187,19 +202,22 @@ describe('Petitioner Account Creation', () => {
         .should('be.visible')
         .and('have.class', 'valid-requirement');
 
-      //confirm
+      // confirm
       cy.get('[data-testid="confirm-password-requirement-text"]').should(
-        'not.exist',
+        'not.be.visible',
       );
       cy.get(
         '[data-testid="petitioner-account-creation-confirm-password"]',
-      ).type(' ');
+      ).type('JOHN TEST');
       cy.get(
         '[data-testid="petitioner-account-creation-confirm-password"]',
       ).blur();
       cy.get('[data-testid="confirm-password-requirement-text"]').should(
         'be.visible',
       );
+      cy.get(
+        '[data-testid="petitioner-account-creation-confirm-password"]',
+      ).clear();
       cy.get(
         '[data-testid="petitioner-account-creation-confirm-password"]',
       ).type(VALID_PASSWORD);
@@ -243,7 +261,7 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="success-alert"]').should('exist');
     });
 
-    it('should be able to login to new account', () => {
+    it('should be able to login to new account and create case', () => {
       cy.visit('/login');
 
       cy.get('[data-testid="email-input"]').type(TEST_EMAIL);
@@ -255,6 +273,8 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="login-button"]').click();
 
       cy.get('[data-testid="account-menu-button"]');
+
+      petitionerCreatesEletronicCase();
     });
   });
 
