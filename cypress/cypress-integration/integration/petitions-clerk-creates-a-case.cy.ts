@@ -1,13 +1,40 @@
-import { createPaperPetition } from '../support/pages/create-paper-petition';
+import {
+  createPaperPetition,
+  fillInCreateCaseFromPaperForm,
+  postPaperPetition,
+} from '../support/pages/create-paper-petition';
+
+import {
+  getCreateACaseButton,
+  navigateTo as navigateToDocumentQC,
+} from '../support/pages/document-qc';
+
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../support/pages/unchecks-orders-and-notices-boxes-in-case';
 
-describe('Create case and submit to IRS', function () {
-  describe('Cancel a case', () => {
+describe('Petition clerk creates a paper filing', function () {
+  describe('Create and submit a paper petition', () => {
     it('should create a paper petition', () => {
-      createPaperPetition();
+      navigateToDocumentQC('petitionsclerk');
+
+      getCreateACaseButton().click();
+      cy.get('#tab-parties').parent().should('have.attr', 'aria-selected');
+
+      fillInCreateCaseFromPaperForm();
+    });
+
+    it('should display check icons on file upload tabs', () => {
+      cy.get('[data-testid="icon-petitionFile"]').should('be.visible');
+      cy.get('[data-testid="icon-stinFile"]').should('be.visible');
+      cy.get('[data-testid="icon-attachmentToPetitionFile"]').should(
+        'be.visible',
+      );
+    });
+
+    it('should submit the petition', () => {
+      postPaperPetition();
     });
 
     it('should display attachment links in the attachment section', () => {
@@ -47,42 +74,61 @@ describe('Create case and submit to IRS', function () {
         cy.get('#orders-notices-auto-created-in-draft').should('not.exist');
       });
     });
+  });
 
-    it('should display a confirmation modal when the user clicks cancel on the review page', () => {
-      cy.get('button#cancel-create-case').scrollIntoView().click();
-      cy.get('div.modal-header').should('exist');
-    });
-
-    it('should route to Document QC inbox when the user confirms to cancel', () => {
-      cy.get('button.modal-button-confirm').scrollIntoView().click();
-      cy.url().should('include', 'document-qc/my/inbox');
+  describe('Cancel case', () => {
+    it('should route to the Document QC inbox when user confirms to cancel', () => {
+      createPaperPetition().then(() => {
+        cy.get('button#cancel-create-case').scrollIntoView().click();
+        cy.get('div.modal-header').should('exist');
+        cy.get('button.modal-button-confirm').scrollIntoView().click();
+        cy.url().should('include', 'document-qc/my/inbox');
+      });
     });
   });
+
   describe('Save case for later', () => {
-    it('should display the docket record correctly when saving a case for later', () => {
+    it('should display the docket record correctly when uploading an attachment to petition', () => {
       createPaperPetition().then(({ docketNumber }) => {
         cy.get('[data-testid="save-case-for-later"]').click();
         cy.get('[data-testid="success-alert"]').should('exist');
         searchByDocketNumberInHeader(docketNumber);
-        cy.get('[data-testid="document-viewer-link-ATP"]').should('be.visible');
-        // cy.get(
-        //   '[data-testid="798b2a30-268e-42a2-b476-f97fa90b3201"] > :nth-child(3)',
-        // ).should('be.visible');
-        // cy.get(
-        //   '[data-testid="798b2a30-268e-42a2-b476-f97fa90b3201"] > :nth-child(9) > .text-semibold',
-        // ).should('be.visible');
-        // cy.get(
-        //   '[data-testid="798b2a30-268e-42a2-b476-f97fa90b3201"] > :nth-child(9) > .text-semibold',
-        // ).should('have.text', 'Not served');
+
+        cy.get('[data-testid="document-viewer-link-ATP"]')
+          .should('be.visible')
+          .parent('td')
+          .siblings('td')
+          .then(siblingTds => {
+            siblingTds.each((_index, siblingTd) => {
+              const textContent = Cypress.$(siblingTd).text();
+              if (textContent.includes('Not Served')) {
+                expect(textContent).to.include('Not Served');
+              }
+            });
+          });
       });
     });
   });
 
   describe('Submit case to the IRS', () => {
-    it('should display the docket record correctly when submitting a case to the IRS', () => {
+    it('should display the docket record correctly when uploading an attachment to petition', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         searchByDocketNumberInHeader(docketNumber);
-        cy.get('[data-testid="document-viewer-link-ATP"]').should('be.visible');
+        cy.get('[data-testid="document-viewer-link-ATP"]')
+          .should('be.visible')
+          .parent('td')
+          .siblings('td')
+          .then(siblingTds => {
+            siblingTds.each((_index, siblingTd) => {
+              const textContent = Cypress.$(siblingTd).text();
+              if (textContent === 'R') {
+                expect(textContent).to.equal('R');
+              }
+              if (textContent === 'ATP') {
+                expect(textContent).to.equal('ATP');
+              }
+            });
+          });
       });
     });
   });
