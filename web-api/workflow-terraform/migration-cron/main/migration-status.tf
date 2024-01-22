@@ -18,12 +18,12 @@ resource "aws_lambda_function" "migration_status_lambda" {
 
   environment {
     variables = {
-      STAGE                         = var.environment
-      NODE_ENV                      = "production"
-      AWS_ACCOUNT_ID                = data.aws_caller_identity.current.account_id
-      CIRCLE_WORKFLOW_ID            = var.circle_workflow_id
-      MIGRATE_FLAG                  = var.migrate_flag
-      CIRCLE_MACHINE_USER_TOKEN     = var.circle_machine_user_token
+      STAGE                     = var.environment
+      NODE_ENV                  = "production"
+      AWS_ACCOUNT_ID            = data.aws_caller_identity.current.account_id
+      CIRCLE_WORKFLOW_ID        = var.circle_workflow_id
+      MIGRATE_FLAG              = var.migrate_flag
+      CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
     }
   }
 }
@@ -31,7 +31,7 @@ resource "aws_lambda_function" "migration_status_lambda" {
 resource "aws_cloudwatch_event_rule" "check_migration_status_cron_rule" {
   name                = "check_migration_status_cron_${var.environment}"
   schedule_expression = "rate(2 minutes)"
-  is_enabled          = "false"
+  state               = "DISABLED"
 }
 
 resource "aws_cloudwatch_event_target" "check_migration_status_cron_target" {
