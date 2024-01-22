@@ -1123,11 +1123,10 @@ const router = {
     });
 
     registerRoute('/reset-password?..', () => {
-      const { code, email, userId } = route.query();
+      const { code, email } = route.query();
       return app.getSequence('resetPasswordSequence')({
         code,
         email,
-        userId,
       });
     });
 
