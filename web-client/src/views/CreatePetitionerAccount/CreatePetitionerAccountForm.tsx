@@ -146,7 +146,7 @@ export const CreatePetitionerAccountForm = connect(
                 {createAccountHelper.passwordErrors.map(error => {
                   return (
                     <RequirementsText
-                      fieldName="password"
+                      fieldName={`password-${error.key}`}
                       key={error.message}
                       text={error.message}
                       valid={error.valid}
@@ -194,7 +194,7 @@ export const CreatePetitionerAccountForm = connect(
                 }}
               >
                 <RequirementsText
-                  fieldName="confirm password"
+                  fieldName="confirm-password"
                   text="Passwords must match"
                   valid={createAccountHelper.confirmPassword}
                 ></RequirementsText>

@@ -15,6 +15,7 @@ export const RequirementsText = ({
     <div
       aria-label={`${fieldName} validation errors`}
       className={`requirement-text ${className}`}
+      data-testid={`${fieldName}-requirement-text`}
     >
       <Icon
         className=""
