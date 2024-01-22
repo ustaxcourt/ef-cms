@@ -32,7 +32,7 @@ export const submitChangePasswordAction = async ({
     const originalErrorMessage = err?.originalError?.response?.data;
 
     if (originalErrorMessage === 'User is unconfirmed') {
-      return path.error({
+      return path.unconfirmedAccount({
         alertError: {
           message: (
             <>
@@ -47,6 +47,24 @@ export const submitChangePasswordAction = async ({
             </>
           ),
           title: 'Email address not verified',
+        },
+      });
+    }
+    if (originalErrorMessage === 'Forgot password code expired') {
+      return path.codeExpired({
+        alertError: {
+          message: (
+            <>
+              Your previous request to reset your password expired. You can
+              request a new password reset below. If you’re still having
+              trouble, contact{' '}
+              <a href="mailto:dawson.support@ustaxcourt.gov">
+                dawson.support@ustaxcourt.gov
+              </a>
+              .
+            </>
+          ),
+          title: 'Request expired',
         },
       });
     }

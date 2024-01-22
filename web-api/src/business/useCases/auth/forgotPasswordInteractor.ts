@@ -1,4 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import qs from 'qs';
 
 export type ForgotPasswordResponse = {
@@ -15,29 +17,39 @@ export const forgotPasswordInteractor = async (
     email: string;
   },
 ): Promise<ForgotPasswordResponse> => {
-  // Put forgot_pass code in dynamo
   const cognito = applicationContext.getCognito();
 
+  //TODO 10007: check for sub in the absence of custom:userId
   const users = await cognito.listUsers({
     AttributesToGet: ['custom:userId'],
     Filter: `email = "${email}"`,
     UserPoolId: process.env.USER_POOL_ID,
   });
 
-  const userId = users.Users?.[0].Attributes?.find(
+  const foundUser = users.Users?.[0];
+
+  const userId = foundUser?.Attributes?.find(
     element => element.Name === 'custom:userId',
   )?.Value;
 
   if (!userId) {
-    console.log('Could not find an account for email: ', email);
     return { email };
+  }
+
+  if (foundUser?.UserStatus === UserStatusType.UNCONFIRMED) {
+    await applicationContext
+      .getUseCaseHelpers()
+      .createUserConfirmation(applicationContext, {
+        email,
+        userId,
+      });
+
+    throw new UnauthorizedError('User is unconfirmed'); //403
   }
 
   const { code } = await applicationContext
     .getPersistenceGateway()
     .generateForgotPasswordCode(applicationContext, { userId });
-
-  console.log('**** code is : ', code);
 
   const queryString = qs.stringify({ code, email, userId }, { encode: false });
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/reset-password?${queryString}`;
