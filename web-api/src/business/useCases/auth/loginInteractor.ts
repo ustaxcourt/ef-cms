@@ -78,6 +78,7 @@ async function resendAccountConfirmation(
 ): Promise<void> {
   const cognito = applicationContext.getCognito();
 
+  // TODO 10007: Check for sub if no custom:userId
   const users = await cognito.listUsers({
     AttributesToGet: ['custom:userId'],
     Filter: `email = "${email}"`,

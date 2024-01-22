@@ -38,7 +38,6 @@ export const ChangePassword = connect(
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
-                    {/* TODO: Update this with UX? */}
                     <h1 className="margin-bottom-1">Reset Password</h1>
                     <form className="usa-form margin-top-4">
                       <label className="usa-label" htmlFor="password">

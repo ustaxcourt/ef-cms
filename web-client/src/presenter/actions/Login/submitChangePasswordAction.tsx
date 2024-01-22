@@ -14,12 +14,13 @@ export const submitChangePasswordAction = async ({
 
   //TODO: validate entity here
   const { confirmPassword, password } = get(state.authentication.form);
-  const { tempPassword, userEmail } = get(state.authentication);
+  const { code, tempPassword, userEmail } = get(state.authentication);
 
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
       .getUseCases()
       .changePasswordInteractor(applicationContext, {
+        code,
         confirmPassword,
         password,
         tempPassword,

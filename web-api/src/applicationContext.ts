@@ -87,6 +87,7 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+  userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
