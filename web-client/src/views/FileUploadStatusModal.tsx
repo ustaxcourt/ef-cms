@@ -19,7 +19,7 @@ export const FileUploadStatusModal = connect(
     percentComplete,
   }) {
     return (
-      <ModalDialog className="file-upload-status-modal">
+      <ModalDialog className="file-upload-status-modal" showButtons={false}>
         <Focus>
           <ProgressBar
             aria-labelledby="progress-description"
@@ -41,6 +41,7 @@ export const FileUploadStatusModal = connect(
               style={{ width: `${percentComplete}%` }}
             />
           </div>
+          {helper.isHavingSystemIssues && <div>Still processing...</div>}
           {helper.isCancelable && (
             <div className="cancel">
               <Button
