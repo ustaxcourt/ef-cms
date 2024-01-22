@@ -9,7 +9,7 @@ describe('isMinuteEntry', () => {
       { applicationContext },
     );
 
-    expect(DocketEntry.isMinuteEntry(minuteEntry.eventCode)).toBe(true);
+    expect(DocketEntry.isMinuteEntry(minuteEntry)).toBe(true);
   });
 
   it('should return false when the docketEntry eventCode is NOT in the list of minute entries', () => {
@@ -18,6 +18,6 @@ describe('isMinuteEntry', () => {
       { applicationContext },
     );
 
-    expect(DocketEntry.isMinuteEntry(orderDocketEntry.eventCode)).toBe(false);
+    expect(DocketEntry.isMinuteEntry(orderDocketEntry)).toBe(false);
   });
 });

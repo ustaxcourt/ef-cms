@@ -27,7 +27,7 @@ export const shouldGenerateDocketRecordIndex = ({
 
   const isMinuteEntry = DocketEntry.isMinuteEntry(docketEntry);
   const isInitialFilingType = getIsInitialFilingType(docketEntry);
-  const isCourtIssued = DocketEntry.isCourtIssued(docketEntry.eventCode);
+  const isCourtIssued = DocketEntry.isCourtIssued(docketEntry);
   const isUnservable = DocketEntry.isUnservable(docketEntry);
 
   if (!isInitialFilingType && !isMinuteEntry && !docketEntry.docketEntryId) {
