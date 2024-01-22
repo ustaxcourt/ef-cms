@@ -1,35 +1,9 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { INITIAL_FILING_DOCUMENT_TABS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-// todo, question: Can this be moved to entity constants? or consolidated with others
-export const initialFilingDocumentTabs = [
-  {
-    documentType: 'petitionFile',
-    title: 'Petition',
-  },
-  {
-    documentType: 'stinFile',
-    title: 'STIN',
-  },
-  {
-    documentType: 'attachmentToPetitionFile',
-    title: 'ATP',
-  },
-  {
-    documentType: 'requestForPlaceOfTrialFile',
-    title: 'RQT',
-  },
-  {
-    documentType: 'corporateDisclosureFile',
-    title: 'CDS',
-  },
-  {
-    documentType: 'applicationForWaiverOfFilingFeeFile',
-    title: 'APW',
-  },
-];
-
+export const initialFilingDocumentTabs = INITIAL_FILING_DOCUMENT_TABS;
 export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
