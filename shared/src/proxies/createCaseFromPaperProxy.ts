@@ -1,3 +1,4 @@
+import { CaseFromPaperType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { post } from './requests';
 
 export const createCaseFromPaperInteractor = (
@@ -15,11 +16,11 @@ export const createCaseFromPaperInteractor = (
     attachmentToPetitionFileId: string;
     corporateDisclosureFileId: string;
     petitionFileId: string;
-    petitionMetadata: any; // TODO: add types
+    petitionMetadata: CaseFromPaperType;
     requestForPlaceOfTrialFileId: string;
     stinFileId: string;
   },
-) => {
+): Promise<RawCase> => {
   return post({
     applicationContext,
     body: {

@@ -1,4 +1,5 @@
 import { Case } from '../entities/cases/Case';
+import { CaseFromPaperType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
 import { PaperPetition } from '../entities/cases/PaperPetition';
@@ -21,7 +22,9 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd: Case;
   docketEntryEntity: DocketEntry;
   user: RawUser;
-}) => {
+}): {
+  workItem: WorkItem;
+} => {
   const workItemEntity = new WorkItem(
     {
       assigneeId: user.userId,
@@ -71,7 +74,7 @@ export const createCaseFromPaperInteractor = async (
     applicationForWaiverOfFilingFeeFileId?: string;
     corporateDisclosureFileId?: string;
     petitionFileId: string;
-    petitionMetadata: any;
+    petitionMetadata: CaseFromPaperType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
     attachmentToPetitionFileId?: string;
