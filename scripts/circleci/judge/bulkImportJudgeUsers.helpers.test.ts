@@ -10,6 +10,7 @@ jest.mock('../../../web-api/importHelpers', () => ({
   readCsvFile: jest.fn(),
 }));
 jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 let mockLegacyJudge;
 let mockCurrentJudge;
@@ -60,33 +61,35 @@ describe('bulkImportJudgeUsers helpers', () => {
       ${joinRowData(mockCurrentJudge)}
       `;
 
-    readCsvFile.mockReturnValue(csvOutput);
-    axios.post.mockImplementation(() =>
+    (readCsvFile as jest.Mock).mockReturnValue(csvOutput);
+    mockedAxios.post.mockImplementation(() =>
       Promise.resolve({ data: { userId: 123 }, status: 200 }),
     );
   });
 
   describe('init', () => {
     it('imports the csv file to process records', async () => {
-      await init({});
+      await init('path/to/file', {});
       expect(readCsvFile).toHaveBeenCalled();
     });
 
     it('calls the endpoint to create a new jduge user record in persistence', async () => {
-      await init({});
-      expect(axios.post).toHaveBeenCalledTimes(2);
+      await init('path/to/file', {});
+      expect(mockedAxios.post).toHaveBeenCalledTimes(2);
     });
 
     it('invokes the local running service if env is local', async () => {
       process.env.ENV = 'local';
-      await init({});
-      expect(axios.post).toHaveBeenCalledTimes(2);
+      await init('path/to/file', {});
+      expect(mockedAxios.post).toHaveBeenCalledTimes(2);
     });
 
     it('logs an error if post request returns non 200 status code', async () => {
-      await init({});
-      axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
-      expect(axios.post).toHaveBeenCalledTimes(2);
+      await init('path/to/file', {});
+      mockedAxios.post.mockImplementation(() =>
+        Promise.resolve({ status: 200 }),
+      );
+      expect(mockedAxios.post).toHaveBeenCalledTimes(2);
     });
   });
 });
