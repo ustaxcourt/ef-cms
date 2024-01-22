@@ -5,19 +5,59 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type FilePetitionFromPaperTypeDetailsType = {
-  attachmentToPetitionFile?: string;
-  applicationForWaiverOfFilingFeeFile?: string;
+  attachmentToPetitionFile?: Blob;
+  applicationForWaiverOfFilingFeeFile?: Blob;
   applicationForWaiverOfFilingFeeUploadProgress?: string;
   atpUploadProgress?: string;
-  corporateDisclosureFile?: string;
+  corporateDisclosureFile?: Blob;
   corporateDisclosureUploadProgress?: string;
-  petitionFile: string;
-  petitionMetadata: any; // todo: find correct type
+  petitionFile: Blob;
+  petitionMetadata: CaseFromPaperType;
   petitionUploadProgress?: string;
-  requestForPlaceOfTrialFile?: string;
+  requestForPlaceOfTrialFile?: Blob;
   requestForPlaceOfTrialUploadProgress?: string;
-  stinFile?: string;
+  stinFile?: Blob;
   stinUploadProgress?: string;
+};
+
+export type CaseFromPaperType = {
+  contactPrimary: {
+    address1: string;
+    address2: string;
+    address3: string;
+    city: string;
+    countryType: string;
+    name: string;
+    paperPetitionEmail: string;
+    phone: string;
+    postalCode: string;
+    state: string;
+  };
+  caseType: string;
+  caseCaption: string;
+  attachmentToPetitionFileSize?: number;
+  attachmentToPetitionFile: Blob;
+  hasVerifiedIrsNotice: boolean;
+  isPaper: boolean;
+  mailingDate: string;
+  orderDesignatingPlaceOfTrial?: boolean;
+  orderForCds: boolean;
+  stinFile?: Blob;
+  stinFileSize?: number;
+  orderForFilingFee: boolean;
+  partyType: string;
+  petitionFile: Blob;
+  petitionFileSize: number;
+  petitionPaymentStatus: string;
+  procedureType: string;
+  receivedAt: string;
+  applicationForWaiverOfFilingFeeFile?: Blob;
+  corporateDisclosureFile?: Blob;
+  requestForPlaceOfTrialFile?: Blob;
+  status: string;
+  contactSecondary?: {
+    name: string;
+  };
 };
 
 export const filePetitionFromPaperInteractor = async (
