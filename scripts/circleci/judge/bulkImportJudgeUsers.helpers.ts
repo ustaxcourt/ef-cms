@@ -22,13 +22,15 @@ export const CSV_HEADERS = [
 
 export const init = async (csvFile, outputMap) => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
-  let output = [];
+  let output: {
+    name: string;
+  }[] = [];
 
   const token = await getToken();
   const data = readCsvFile(csvFile);
   const stream = parse(data, csvOptions);
 
-  const processCsv = new Promise(resolve => {
+  const processCsv = new Promise<void>(resolve => {
     stream.on('readable', gatherRecords(CSV_HEADERS, output));
     stream.on('end', async () => {
       for (let row of output) {
