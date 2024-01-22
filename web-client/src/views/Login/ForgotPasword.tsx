@@ -2,16 +2,21 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const ForgotPassword = connect(
   {
+    email: state.authentication.form.email,
     submitForgotPasswordSequence: sequences.submitForgotPasswordSequence,
     updateAuthenticationFormValueSequence:
       sequences.updateAuthenticationFormValueSequence,
   },
-  ({ submitForgotPasswordSequence, updateAuthenticationFormValueSequence }) => {
+  ({
+    email,
+    submitForgotPasswordSequence,
+    updateAuthenticationFormValueSequence,
+  }) => {
     return (
       <>
         <section className="grid-container usa-section margin-top-4">
@@ -23,6 +28,10 @@ export const ForgotPassword = connect(
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
                     <h1 className="margin-bottom-1">Forgot Password?</h1>
+                    <span>
+                      Enter your email address to receive an email to reset your
+                      password.
+                    </span>
                     <form className="usa-form margin-top-4">
                       <label className="usa-label" htmlFor="email">
                         Email address
@@ -44,6 +53,7 @@ export const ForgotPassword = connect(
                       <Button
                         className="usa-button margin-top-3"
                         data-testid="forgot-password-button"
+                        disabled={!email}
                         onClick={e => {
                           e.preventDefault();
                           submitForgotPasswordSequence();

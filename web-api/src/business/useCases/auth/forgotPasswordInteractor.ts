@@ -1,6 +1,10 @@
+import {
+  AdminCreateUserCommandInput,
+  CognitoIdentityProvider,
+  UserStatusType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import qs from 'qs';
 
 export type ForgotPasswordResponse = {
@@ -17,7 +21,7 @@ export const forgotPasswordInteractor = async (
     email: string;
   },
 ): Promise<ForgotPasswordResponse> => {
-  const cognito = applicationContext.getCognito();
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
   //TODO 10007: check for sub in the absence of custom:userId
   const users = await cognito.listUsers({
@@ -43,6 +47,27 @@ export const forgotPasswordInteractor = async (
         email,
         userId,
       });
+
+    throw new UnauthorizedError('User is unconfirmed'); //403
+  }
+
+  if (
+    foundUser &&
+    foundUser.UserStatus === UserStatusType.FORCE_CHANGE_PASSWORD
+  ) {
+    const input: AdminCreateUserCommandInput = {
+      DesiredDeliveryMediums: ['EMAIL'],
+      MessageAction: 'RESEND',
+      UserAttributes: foundUser.Attributes,
+      UserPoolId: applicationContext.environment.userPoolId,
+      Username: foundUser.Username,
+    };
+
+    if (process.env.STAGE !== 'prod') {
+      input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+    }
+
+    await cognito.adminCreateUser(input);
 
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
