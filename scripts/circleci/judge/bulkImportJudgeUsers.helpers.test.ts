@@ -92,4 +92,13 @@ describe('bulkImportJudgeUsers helpers', () => {
       expect(mockedAxios.post).toHaveBeenCalledTimes(2);
     });
   });
+
+  it('logs an error when something is thrown', async () => {
+    console.log = jest.fn();
+    const err = new Error('error');
+    mockedAxios.post.mockRejectedValue(err);
+    await init('path/to/file', {});
+    expect(console.log as jest.Mock).toHaveBeenCalledWith('ERROR Fieri');
+    expect(console.log as jest.Mock).toHaveBeenCalledWith(err);
+  });
 });
