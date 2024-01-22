@@ -7,17 +7,17 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export type FilePetitionFromPaperTypeDetailsType = {
   attachmentToPetitionFile?: Blob;
   applicationForWaiverOfFilingFeeFile?: Blob;
-  applicationForWaiverOfFilingFeeUploadProgress?: string;
-  atpUploadProgress?: string;
+  applicationForWaiverOfFilingFeeUploadProgress?: (progressEvent: any) => void;
+  atpUploadProgress?: (progressEvent: any) => void;
   corporateDisclosureFile?: Blob;
-  corporateDisclosureUploadProgress?: string;
+  corporateDisclosureUploadProgress?: (progressEvent: any) => void;
   petitionFile: Blob;
   petitionMetadata: CaseFromPaperType;
-  petitionUploadProgress?: string;
+  petitionUploadProgress?: (progressEvent: any) => void;
   requestForPlaceOfTrialFile?: Blob;
-  requestForPlaceOfTrialUploadProgress?: string;
+  requestForPlaceOfTrialUploadProgress?: (progressEvent: any) => void;
   stinFile?: Blob;
-  stinUploadProgress?: string;
+  stinUploadProgress?: (progressEvent: any) => void;
 };
 
 export type CaseFromPaperType = {

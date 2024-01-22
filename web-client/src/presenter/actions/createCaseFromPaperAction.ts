@@ -1,12 +1,15 @@
 import { CaseFromPaperType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setupPercentDone = (files, store) => {
-  const loadedAmounts = {};
+export const setupPercentDone = <T extends Record<string, any | undefined>>(
+  files: T,
+  store: any,
+): Record<keyof T, (progressEvent: any) => void> => {
+  const loadedAmounts: Record<string, number> = {};
   // O.K. to use Date constructor for calculating time duration
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const startTime = new Date();
-  const totalSizes = {};
+  const totalSizes: Record<string, number> = {};
 
   const calculateTotalSize = () => {
     return Object.keys(loadedAmounts).reduce((acc, key) => {
@@ -51,13 +54,17 @@ export const setupPercentDone = (files, store) => {
   store.set(state.fileUploadProgress.timeRemaining, Number.POSITIVE_INFINITY);
   store.set(state.fileUploadProgress.isUploading, true);
 
-  const uploadProgressCallbackMap = {};
+  const uploadProgressCallbackMap = {} as any;
+
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
     uploadProgressCallbackMap[key] = createOnUploadProgress(key);
   });
 
-  return uploadProgressCallbackMap;
+  return uploadProgressCallbackMap as Record<
+    keyof T,
+    (progressEvent: any) => void
+  >;
 };
 
 export const createCaseFromPaperAction = async ({
@@ -90,7 +97,6 @@ export const createCaseFromPaperAction = async ({
   );
 
   let caseDetail: RawCase;
-
   try {
     caseDetail = await applicationContext
       .getUseCases()
