@@ -5,10 +5,9 @@ export async function createUserConfirmation(
   applicationContext: ServerApplicationContext,
   { email, userId }: { email: string; userId: string },
 ): Promise<{ confirmationCode: string }> {
-  const { confirmationCode: existingConfirmationCode } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getAccountConfirmationCode(applicationContext, { userId });
+  const existingConfirmationCode = await applicationContext
+    .getPersistenceGateway()
+    .getAccountConfirmationCode(applicationContext, { userId });
 
   let code: string;
 

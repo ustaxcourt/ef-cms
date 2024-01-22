@@ -9,11 +9,11 @@ export const confirmSignUpInteractor = async (
     userId,
   }: { confirmationCode: string; userId: string; email: string },
 ): Promise<void> => {
-  const accountConfirmationRecord = await applicationContext
+  const accountConfirmationCode = await applicationContext
     .getPersistenceGateway()
     .getAccountConfirmationCode(applicationContext, { userId });
 
-  if (accountConfirmationRecord.confirmationCode !== confirmationCode) {
+  if (accountConfirmationCode !== confirmationCode) {
     applicationContext.logger.info(
       'action: user_did_not_confirm_account_within_24hr',
     );

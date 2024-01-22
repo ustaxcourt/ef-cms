@@ -99,6 +99,7 @@ import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions
 import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
 import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
 import { getFirstSingleCaseRecord } from './persistence/elasticsearch/getFirstSingleCaseRecord';
+import { getForgotPasswordCode } from '@web-api/persistence/dynamo/users/getForgotPasswordCode';
 import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
 import { getMessageById } from './persistence/dynamo/messages/getMessageById';
@@ -349,6 +350,7 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,
   getFirstSingleCaseRecord,
+  getForgotPasswordCode,
   getInternalUsers,
   getLimiterByKey,
   getLock,

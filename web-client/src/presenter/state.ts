@@ -564,6 +564,7 @@ export const baseState = {
   },
   assigneeId: null,
   authentication: {
+    code: '',
     forgotPassword: {
       code: '',
       email: '',
