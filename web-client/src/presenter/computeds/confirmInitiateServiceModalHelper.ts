@@ -58,7 +58,11 @@ export const confirmInitiateServiceModalHelper = (
   if (showConsolidatedCasesForService) {
     const { consolidatedCasesToMultiDocketOn } = get(state.modal.form);
 
-    const paperServiceParties = [];
+    const paperServiceParties: {
+      contactId: string;
+      userId: string;
+      name: string;
+    }[] = [];
 
     consolidatedCasesToMultiDocketOn.forEach(aCase => {
       if (aCase.checked) {
@@ -92,7 +96,7 @@ export const confirmInitiateServiceModalHelper = (
     parties = getPaperServiceParties(applicationContext, formattedCaseDetail);
   }
 
-  const contactsNeedingPaperService = [];
+  const contactsNeedingPaperService: { name: string }[] = [];
 
   const roleToDisplay = party => {
     if (party.role === USER_ROLES.privatePractitioner) {
