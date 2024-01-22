@@ -86,7 +86,7 @@ export const createCaseFromPaperAction = async ({
     store,
   );
 
-  let caseDetail;
+  let caseDetail: RawCase;
 
   try {
     caseDetail = await applicationContext
