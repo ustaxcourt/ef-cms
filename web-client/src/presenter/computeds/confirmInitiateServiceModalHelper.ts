@@ -43,7 +43,7 @@ export const confirmInitiateServiceModalHelper = (
   if (!isCourtIssued(eventCode)) {
     if (
       SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
-      documentTitle.includes('Simultaneous')
+      documentTitle?.includes('Simultaneous')
     ) {
       showConsolidatedCasesForService =
         showConsolidatedCasesForService && isPaper;
