@@ -4,4 +4,4 @@ import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurre
 export const resetPasswordSequence = [
   setResetPasswordAction,
   setupCurrentPageAction('ChangePassword'),
-] as unknown as () => void;
+] as unknown as (props: { code: string; email: string }) => void;
