@@ -1,5 +1,12 @@
 describe('Petitioner Account Creation', () => {
   const GUID = Date.now();
+  const VALID_PASSWORD_CONFIG: PasswordConfig = {
+    digits: 1,
+    length: 8,
+    lower: 1,
+    special: 1,
+    upper: 1,
+  };
 
   after(() => {
     cy.task('deleteAllCypressTestAccounts');
@@ -8,7 +15,7 @@ describe('Petitioner Account Creation', () => {
   describe('Create Petitioner Account and login', () => {
     const TEST_EMAIL = `cypress_test_account+success_${GUID}@example.com`;
     const TEST_NAME = 'Cypress Test';
-    const TEST_PASSWORD = generatePassword();
+    const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
     it('should create an account and verify it using the verification link', () => {
       fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
@@ -57,7 +64,7 @@ describe('Petitioner Account Creation', () => {
   describe('Use Incorrect Confirmation Code', () => {
     const TEST_EMAIL = `cypress_test_account+failure_${GUID}@example.com`;
     const TEST_NAME = 'Cypress Test Wrong Code';
-    const TEST_PASSWORD = generatePassword();
+    const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
     it('should display the error message when user tries to confirm account with wrong confirmation code', () => {
       fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
@@ -95,7 +102,7 @@ describe('Petitioner Account Creation', () => {
   describe('Expired Confirmation Code', () => {
     const TEST_EMAIL = `cypress_test_account+expired_${GUID}@example.com`;
     const TEST_NAME = 'Cypress Test Expired';
-    const TEST_PASSWORD = generatePassword();
+    const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
     it('should display error message when a user tries to confirm account with an expired confirmation code', () => {
       fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
@@ -148,25 +155,55 @@ function fillAndSubmitPetitionerForm(
   cy.get('[data-testid="petitioner-account-creation-submit-button"]').click();
 }
 
-function generatePassword(): string {
-  const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
-  const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const digitChars = '0123456789';
-  const specialChars = '!@#$';
+interface PasswordConfig {
+  length: number;
+  lower: number;
+  upper: number;
+  digits: number;
+  special: number;
+}
+
+function generatePassword(config: PasswordConfig): string {
+  const charSets: { [key: string]: string } = {
+    digits: '0123456789',
+    lower: 'abcdefghijklmnopqrstuvwxyz',
+    special: '!@#$',
+    upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  };
 
   const getRandomChar = (charSet: string) =>
     charSet[Math.floor(Math.random() * charSet.length)];
 
-  const password = [
-    getRandomChar(lowerChars),
-    getRandomChar(upperChars),
-    getRandomChar(digitChars),
-    getRandomChar(specialChars),
-  ];
+  const password: string[] = [];
 
-  for (let i = password.length; i < 8; i++) {
-    const charSet = lowerChars + upperChars + digitChars + specialChars;
-    password.push(getRandomChar(charSet));
+  const addChars = (charSet: string, count: number) => {
+    for (let i = 0; i < count; i++) {
+      password.push(getRandomChar(charSet));
+    }
+  };
+
+  const includeChars = (type: keyof PasswordConfig) => {
+    if (config[type] > 0) {
+      addChars(charSets[type], config[type]);
+    }
+  };
+
+  includeChars('lower');
+  includeChars('upper');
+  includeChars('digits');
+  includeChars('special');
+
+  const remainingLength = config.length - password.length;
+
+  if (remainingLength > 0) {
+    const remainingCharSets: string[] = [];
+    if (config.lower > 0) remainingCharSets.push(charSets.lower);
+    if (config.upper > 0) remainingCharSets.push(charSets.upper);
+    if (config.digits > 0) remainingCharSets.push(charSets.digits);
+    if (config.special > 0) remainingCharSets.push(charSets.special);
+
+    const allChars = remainingCharSets.join('');
+    addChars(allChars, remainingLength);
   }
 
   for (let i = password.length - 1; i > 0; i--) {
