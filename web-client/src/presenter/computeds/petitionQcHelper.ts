@@ -1,30 +1,9 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
-export const initialFilingDocumentTabs = [
-  {
-    documentType: 'petitionFile',
-    title: 'Petition',
-  },
-  {
-    documentType: 'stinFile',
-    title: 'STIN',
-  },
-  {
-    documentType: 'requestForPlaceOfTrialFile',
-    title: 'RQT',
-  },
-  {
-    documentType: 'corporateDisclosureFile',
-    title: 'CDS',
-  },
-  {
-    documentType: 'applicationForWaiverOfFilingFeeFile',
-    title: 'APW',
-  },
-];
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { INITIAL_FILING_DOCUMENT_TABS } from '@shared/business/entities/EntityConstants';
+import { state } from '@web-client/presenter/app.cerebral';
+
+export const initialFilingDocumentTabs = INITIAL_FILING_DOCUMENT_TABS;
 export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -43,6 +22,8 @@ export const petitionQcHelper = (
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+    attachmentToPetitionFile:
+      INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
     corporateDisclosureFile:
       INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
     petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
