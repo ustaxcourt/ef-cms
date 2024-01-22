@@ -20,10 +20,6 @@ export type FilePetitionFromPaperTypeDetailsType = {
   stinUploadProgress?: string;
 };
 
-// DOD TODO:
-//  1.  convert to a utility or useCasehelper function
-//  it isn't not a lambda
-//  2. type return or at least type createCaseFromPaperInteractor
 export const filePetitionFromPaperInteractor = async (
   applicationContext: any,
   {
