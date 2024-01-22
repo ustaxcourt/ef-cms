@@ -20,7 +20,7 @@ describe('Petitioner Account Creation', () => {
       cy.visit('/create-account/petitioner');
 
       //email
-      cy.get('[data-testid="email-requirement-text"]').should('not.be.visible');
+      cy.get('[data-testid="email-requirement-text"]').should('not.exist');
       cy.get('[data-testid="petitioner-account-creation-email"]').type(
         'NOT VALID EMAIL',
       );
@@ -29,10 +29,10 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="petitioner-account-creation-email"]').type(
         TEST_EMAIL,
       );
-      cy.get('[data-testid="email-requirement-text"]').should('not.be.visible');
+      cy.get('[data-testid="email-requirement-text"]').should('not.exist');
 
       //name
-      cy.get('[data-testid="name-requirement-text"]').should('not.be.visible');
+      cy.get('[data-testid="name-requirement-text"]').should('not.exist');
       cy.get('[data-testid="petitioner-account-creation-name"]').type(
         'A'.repeat(101),
       );
@@ -41,7 +41,7 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="petitioner-account-creation-name"]').type(
         TEST_NAME,
       );
-      cy.get('[data-testid="name-requirement-text"]').should('not.be.visible');
+      cy.get('[data-testid="name-requirement-text"]').should('not.exist');
 
       //password
       const VALID_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
@@ -189,7 +189,7 @@ describe('Petitioner Account Creation', () => {
 
       //confirm
       cy.get('[data-testid="confirm-password-requirement-text"]').should(
-        'not.be.visible',
+        'not.exist',
       );
       cy.get(
         '[data-testid="petitioner-account-creation-confirm-password"]',
