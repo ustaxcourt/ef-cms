@@ -19,7 +19,8 @@ describe('Petitioner Account Creation', () => {
     const TEST_NAME = 'Cypress Test';
 
     it('should display form validation errors', () => {
-      cy.visit('/create-account/petitioner');
+      cy.visit('/');
+      cy.get('[data-testid="create-account-button"]').click();
 
       //email
       cy.get('[data-testid="email-requirement-text"]').should('not.exist');
