@@ -25,7 +25,7 @@ export const formatDocketEntryOnDocketRecord = (
   const isServed =
     DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry);
 
-  const isCourtIssued = DocketEntry.isCourtIssued(entry.eventCode);
+  const isCourtIssued = DocketEntry.isCourtIssued(entry);
 
   let createdAtFormatted;
   if (

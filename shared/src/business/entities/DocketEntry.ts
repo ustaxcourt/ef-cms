@@ -480,12 +480,12 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   isCourtIssued(): boolean {
-    return DocketEntry.isCourtIssued(this.eventCode);
+    return DocketEntry.isCourtIssued({ eventCode: this.eventCode });
   }
 
   static TRANSCRIPT_AGE_DAYS_MIN = 90;
 
-  static isCourtIssued(eventCode: string): boolean {
+  static isCourtIssued({ eventCode }: { eventCode: string }): boolean {
     return COURT_ISSUED_EVENT_CODES.map(
       ({ eventCode: courtIssuedEventCode }) => courtIssuedEventCode,
     ).includes(eventCode);
@@ -747,7 +747,7 @@ export class DocketEntry extends JoiValidationEntity {
     return DOCKET_ENTRY_VALIDATION_RULES;
   }
 
-  static isMinuteEntry(eventCode: string): boolean {
+  static isMinuteEntry({ eventCode }: { eventCode: string }): boolean {
     const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
       key => MINUTE_ENTRIES_MAP[key].eventCode,
     );
