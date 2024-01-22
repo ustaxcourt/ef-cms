@@ -19,7 +19,7 @@ export const createCaseFromPaperInteractor = (
     requestForPlaceOfTrialFileId: string;
     stinFileId: string;
   },
-) => {
+): Promise<RawCase> => {
   return post({
     applicationContext,
     body: {

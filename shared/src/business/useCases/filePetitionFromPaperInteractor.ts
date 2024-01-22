@@ -37,7 +37,7 @@ export const filePetitionFromPaperInteractor = async (
     stinFile,
     stinUploadProgress,
   }: FilePetitionFromPaperTypeDetailsType,
-) => {
+): Promise<RawCase> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE)) {

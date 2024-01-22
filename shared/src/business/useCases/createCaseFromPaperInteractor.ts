@@ -21,7 +21,9 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd: Case;
   docketEntryEntity: DocketEntry;
   user: RawUser;
-}) => {
+}): {
+  workItem: WorkItem;
+} => {
   const workItemEntity = new WorkItem(
     {
       assigneeId: user.userId,
