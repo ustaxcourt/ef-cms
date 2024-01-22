@@ -220,7 +220,7 @@
     "test:client:integration:cognito-local:ci": "npm run test:client:_integration -- --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} ${TESTFILES}",
     "test:client:integration:ci": "npm run test:client:_integration -- --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} ${TESTFILES}",
     "test:client:unit": "jest --config web-client/jest-unit.config.ts --testMatch '**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'",
-    "test:client:unit:file": "jest --config web-client/jest-unit.config.ts --testMatch '**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)' --coverage false",
+    "test:client:unit:file": "jest --config web-client/jest-unit.config.ts --testMatch '**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)' --coverage=false",
     "test:client:unit:ci": "jest --config web-client/jest-unit.config.ts --coverageDirectory=./coverage/${NODE_INDEX} ${TESTFILES}",
     "test:scripts": "jest --config scripts/jest-scripts.config.ts",
     "test:file": "IS_LOCAL=true CI=false NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --config web-client/jest-integration.config.ts -- ",
