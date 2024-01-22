@@ -104,16 +104,19 @@ export const changePasswordInteractor = async (
         Filter: `email = "${userEmail}"`,
         UserPoolId: applicationContext.environment.userPoolId,
       });
+
       const userId = users.Users?.[0].Attributes?.find(
         element => element.Name === 'custom:userId',
       )?.Value!;
+
       const codeFromPersistence = await applicationContext
         .getPersistenceGateway()
         .getForgotPasswordCode(applicationContext, { userId });
 
       if (!codeFromPersistence || code !== codeFromPersistence) {
-        throw new InvalidRequest('Confirmation code expired');
+        throw new InvalidRequest('Forgot password code expired');
       }
+
       const adminSetUserPasswordParams: AdminSetUserPasswordCommandInput = {
         Password: password,
         Permanent: true,
