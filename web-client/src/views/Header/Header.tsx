@@ -80,6 +80,7 @@ const NavigationItems = (
               headerHelper.pageIsMessages && 'usa-current',
               'display-inline-block',
             )}
+            data-testid="header-messages-link"
             href="/messages/my/inbox"
             onClick={() => toggleMobileMenuSequence()}
           >
