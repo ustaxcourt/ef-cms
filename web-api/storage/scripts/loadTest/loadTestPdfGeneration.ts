@@ -2,6 +2,7 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { getUserToken } from './loadTestHelpers';
 import axios from 'axios';
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const cognito = new CognitoIdentityProvider({
     region: 'us-east-1',

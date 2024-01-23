@@ -25,3 +25,9 @@ export function assertCountOfSelector(selector: string, count: number) {
     return body.find(selector).length === count;
   });
 }
+
+export function assertDoesNotExist(selector: string) {
+  return cy.get('body').then(body => {
+    return body.find(selector).length === 0;
+  });
+}

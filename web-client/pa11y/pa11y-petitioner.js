@@ -293,15 +293,14 @@ module.exports = [
   },
   {
     actions: [
-      'wait for element #react-select-2-input to be visible',
-      'click #react-select-2-input',
-      'wait for element .select-react-element__menu to be visible',
-      'click #react-select-2-option-49', //Motion for Leave to File Out of Time
-      'wait for element #react-select-3-input to be visible',
-      'click #react-select-3-input',
-      'wait for element .select-react-element__menu to be visible',
-      'click #react-select-3-option-37', //Motion for Continuance
-      'wait for element #submit-document to be visible',
+      'wait for element #document-type to be visible',
+      'click #document-type',
+      'set field #document-type input to Motion for Leave to File Out of Time',
+      'click #document-type #react-select-2-option-0',
+      'wait for element #secondary-doc-secondary-document-type to be visible',
+      'click #secondary-doc-secondary-document-type',
+      'set field #secondary-doc-secondary-document-type input to Motion for Continuance',
+      'click #secondary-doc-secondary-document-type #react-select-3-option-0',
       'click #submit-document',
       'wait for element #primary-document to be visible',
       'click #primaryDocument-certificateOfService-label',
