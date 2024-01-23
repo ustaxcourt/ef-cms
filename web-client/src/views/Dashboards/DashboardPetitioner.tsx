@@ -31,7 +31,7 @@ export const DashboardPetitioner = connect(
               )}
             </div>
             <div className="tablet:grid-col-4">
-              {<CaseSearchBox />}
+              <CaseSearchBox />
               <div className="card">
                 <div className="content-wrapper gray">
                   <h3>Taxpayer Tools</h3>
