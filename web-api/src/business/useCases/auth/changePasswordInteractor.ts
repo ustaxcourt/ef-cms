@@ -98,16 +98,18 @@ export const changePasswordInteractor = async (
         refreshToken: result.AuthenticationResult.RefreshToken,
       };
     } else {
-      // TODO 10007: Check for sub if no custom:userId
       const users = await applicationContext.getCognito().listUsers({
-        AttributesToGet: ['custom:userId'],
+        AttributesToGet: ['custom:userId', 'sub'],
         Filter: `email = "${userEmail}"`,
         UserPoolId: applicationContext.environment.userPoolId,
       });
 
-      const userId = users.Users?.[0].Attributes?.find(
-        element => element.Name === 'custom:userId',
-      )?.Value!;
+      const userId =
+        users.Users?.[0].Attributes?.find(
+          element => element.Name === 'custom:userId',
+        )?.Value! ||
+        users.Users?.[0].Attributes?.find(element => element.Name === 'sub')
+          ?.Value!;
 
       const codeFromPersistence = await applicationContext
         .getPersistenceGateway()
