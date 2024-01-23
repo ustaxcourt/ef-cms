@@ -10,7 +10,6 @@
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
 - How do we make forgot password more secure? 
 - Have we covered one of two scenarios mentioned in 10007 comments by Tenille?
-- privatepractitioner vs privatePractitioner
 
 ::: DOD :::
 - Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
