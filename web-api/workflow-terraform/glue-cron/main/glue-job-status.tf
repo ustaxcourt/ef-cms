@@ -17,11 +17,11 @@ resource "aws_lambda_function" "glue_job_status_lambda" {
 
   environment {
     variables = {
-      STAGE                         = var.environment
-      NODE_ENV                      = "production"
-      ACCOUNT_ID                    = data.aws_caller_identity.current.account_id
-      CIRCLE_WORKFLOW_ID            = var.circle_workflow_id
-      CIRCLE_MACHINE_USER_TOKEN     = var.circle_machine_user_token
+      STAGE                     = var.environment
+      NODE_ENV                  = "production"
+      ACCOUNT_ID                = data.aws_caller_identity.current.account_id
+      CIRCLE_WORKFLOW_ID        = var.circle_workflow_id
+      CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
     }
   }
 }
@@ -29,7 +29,7 @@ resource "aws_lambda_function" "glue_job_status_lambda" {
 resource "aws_cloudwatch_event_rule" "check_glue_job_status_cron_rule" {
   name                = "check_glue_job_status_cron_${var.environment}"
   schedule_expression = "rate(1 minute)"
-  is_enabled          = "false"
+  state               = "DISABLED"
 }
 
 resource "aws_cloudwatch_event_target" "check_glue_job_status_cron_target" {
