@@ -26,13 +26,13 @@ const DEFAULT_ACCOUNT_PASS = process.env.CYPRESS_DEFAULT_ACCOUNT_PASS;
 const DYNAMODB_TABLE_NAME = process.env.DYNAMODB_TABLE_NAME || '';
 
 export const confirmUser = async ({ email }: { email: string }) => {
-  const userPoolId = await getUserPoolId();
+  const userPoolId = (await getUserPoolId()) || '';
   const clientId = await getClientId(userPoolId);
 
   const initAuthResponse = await cognito.adminInitiateAuth({
     AuthFlow: 'ADMIN_NO_SRP_AUTH',
     AuthParameters: {
-      PASSWORD: DEFAULT_ACCOUNT_PASS,
+      PASSWORD: DEFAULT_ACCOUNT_PASS || '',
       USERNAME: email,
     },
     ClientId: clientId,
@@ -43,7 +43,7 @@ export const confirmUser = async ({ email }: { email: string }) => {
     await cognito.adminRespondToAuthChallenge({
       ChallengeName: 'NEW_PASSWORD_REQUIRED',
       ChallengeResponses: {
-        NEW_PASSWORD: DEFAULT_ACCOUNT_PASS,
+        NEW_PASSWORD: DEFAULT_ACCOUNT_PASS || '',
         USERNAME: email,
       },
       ClientId: clientId,
@@ -60,7 +60,7 @@ const getClientId = async (userPoolId: string) => {
     MaxResults: 60,
     UserPoolId: userPoolId,
   });
-  const clientId = results.UserPoolClients[0].ClientId;
+  const clientId = (results?.UserPoolClients || [])[0].ClientId;
   return clientId;
 };
 
@@ -68,9 +68,9 @@ const getUserPoolId = async () => {
   const results = await cognito.listUserPools({
     MaxResults: 50,
   });
-  const userPoolId = results.UserPools.find(
+  const userPoolId = (results?.UserPools || []).find(
     pool => pool.Name === `efcms-${ENV}`,
-  ).Id;
+  )?.Id;
   return userPoolId;
 };
 
@@ -86,7 +86,7 @@ export const getUserTokenWithRetry = (username: string, password: string) => {
 };
 
 async function getUserToken(password: string, username: string) {
-  const userPoolId = await getUserPoolId();
+  const userPoolId = (await getUserPoolId()) || '';
   const clientId = await getClientId(userPoolId);
 
   return cognito
