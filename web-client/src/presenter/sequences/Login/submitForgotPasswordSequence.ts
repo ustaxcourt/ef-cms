@@ -2,8 +2,8 @@ import { clearAuthStateAction } from '@web-client/presenter/actions/Login/clearA
 import { createForgotPasswordLinkAction } from '@web-client/presenter/actions/Login/createForgotPasswordLinkAction';
 import { forgotPasswordAction } from '@web-client/presenter/actions/Login/forgotPasswordAction';
 import { navigateToLoginAction } from '@web-client/presenter/actions/Login/navigateToLoginAction';
-import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
+import { setAlertWarningAction } from '@web-client/presenter/actions/setAlertWarningAction';
 import { setSaveAlertsForNavigationAction } from '@web-client/presenter/actions/setSaveAlertsForNavigationAction';
 
 export const submitForgotPasswordSequence = [
@@ -15,7 +15,7 @@ export const submitForgotPasswordSequence = [
       clearAuthStateAction,
     ],
     unconfirmedAccount: [
-      setAlertErrorAction,
+      setAlertWarningAction,
       setSaveAlertsForNavigationAction,
       navigateToLoginAction,
     ],
