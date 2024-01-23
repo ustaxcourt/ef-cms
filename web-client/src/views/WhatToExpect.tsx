@@ -72,7 +72,7 @@ export const WhatToExpect = () => (
               <Button
                 link
                 className="usa-link--external text-left mobile-text-wrap"
-                href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf" // get correct link
+                href="https://www.ustaxcourt.gov/resources/ropp/Complete_Rules_of_Practice_and_Procedure_Amended_03202023.pdf"
                 icon="file-pdf"
                 iconColor="blue"
                 overrideMargin="margin-right-1"

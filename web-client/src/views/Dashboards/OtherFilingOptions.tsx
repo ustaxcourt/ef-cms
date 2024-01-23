@@ -6,13 +6,12 @@ export const OtherFilingOptions = function () {
     <div className="card">
       <div className="content-wrapper gray">
         <h3>Other Ways to File a Case</h3>
-
         <Accordion gray headingLevel="3">
           <AccordionItem
             customClassName="other-filing-option other-filing-option-mail"
             data-testid="other-filing-option-mail"
             key={'other-filing-option-mail accordion-icon'}
-            title={'To file by mail:'}
+            title={'To file by mail'}
           >
             <hr />
             Send required forms and filing fee to:
@@ -26,7 +25,7 @@ export const OtherFilingOptions = function () {
           <AccordionItem
             customClassName="other-filing-option other-filing-option-in-person"
             key={'other-filing-option-in-person accordion-icon'}
-            title={'To file in person:'}
+            title={'To file in person'}
           >
             <hr />
             Please bring your forms and filing fee to:
