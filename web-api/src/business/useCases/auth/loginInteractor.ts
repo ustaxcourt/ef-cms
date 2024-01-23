@@ -78,16 +78,17 @@ async function resendAccountConfirmation(
 ): Promise<void> {
   const cognito = applicationContext.getCognito();
 
-  // TODO 10007: Check for sub if no custom:userId
   const users = await cognito.listUsers({
-    AttributesToGet: ['custom:userId'],
+    AttributesToGet: ['custom:userId', 'sub'],
     Filter: `email = "${email}"`,
     UserPoolId: process.env.USER_POOL_ID,
   });
 
-  const userId = users.Users?.[0].Attributes?.find(
-    element => element.Name === 'custom:userId',
-  )?.Value;
+  const userId =
+    users.Users?.[0].Attributes?.find(
+      element => element.Name === 'custom:userId',
+    )?.Value ||
+    users.Users?.[0].Attributes?.find(element => element.Name === 'sub')?.Value;
 
   if (!userId) {
     throw new NotFoundError(

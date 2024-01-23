@@ -23,18 +23,18 @@ export const forgotPasswordInteractor = async (
 ): Promise<ForgotPasswordResponse> => {
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
-  //TODO 10007: check for sub in the absence of custom:userId
   const users = await cognito.listUsers({
-    AttributesToGet: ['custom:userId'],
+    AttributesToGet: ['custom:userId', 'sub'],
     Filter: `email = "${email}"`,
     UserPoolId: process.env.USER_POOL_ID,
   });
 
   const foundUser = users.Users?.[0];
 
-  const userId = foundUser?.Attributes?.find(
-    element => element.Name === 'custom:userId',
-  )?.Value;
+  const userId =
+    foundUser?.Attributes?.find(element => element.Name === 'custom:userId')
+      ?.Value ||
+    foundUser?.Attributes?.find(element => element.Name === 'sub')?.Value;
 
   if (!userId) {
     return { email };
