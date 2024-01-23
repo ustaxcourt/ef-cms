@@ -26,7 +26,7 @@ describe('entryOfAppearance', () => {
               postalCode: '61234',
               state: 'IL',
             },
-            email: 'privatePractitioner@example.com',
+            email: 'privatepractitioner@example.com',
             entityName: 'Practitioner',
             firmName: 'GW Law Offices',
             originalBarState: 'MD',
