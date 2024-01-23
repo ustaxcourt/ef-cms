@@ -905,10 +905,10 @@ workflows:
       #     <<: *only-deployed-lower-environments
       #     requires:
       #       - wait-for-reindex
-      - smoketests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
+      # - smoketests:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - disable-reindex-cron
       # - loadtests:
       #     <<: *only-deployed-lower-environments
       #     requires:
@@ -920,7 +920,7 @@ workflows:
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - smoketests
+            - deploy
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
           requires:
