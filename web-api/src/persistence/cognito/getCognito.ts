@@ -1,4 +1,4 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { AdminCreateUserCommandInput, AdminCreateUserCommandOutput, CognitoIdentityProvider, MessageActionType } from '@aws-sdk/client-cognito-identity-provider';
 
 let cognitoClientCache: CognitoIdentityProvider;
 
@@ -24,6 +24,23 @@ export function getLocalCognito() {
       maxAttempts: 3,
       region: 'local',
     });
+
+    const originalCognitoInstance = new CognitoIdentityProvider({
+      endpoint: 'http://localhost:9229/',
+      maxAttempts: 3,
+      region: 'local',
+    });
+
+
+    cognitoClientCache.adminCreateUser = async (args: AdminCreateUserCommandInput): Promise<AdminCreateUserCommandOutput> => {
+      if (args.MessageAction === MessageActionType.RESEND) {
+        return {
+          $metadata: {},
+        }
+      }
+
+      return originalCognitoInstance.adminCreateUser(args);
+    }
   }
 
   return cognitoClientCache;
