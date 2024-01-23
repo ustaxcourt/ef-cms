@@ -45,16 +45,16 @@ describe('formatWorkItem', () => {
   });
 
   it('should coerce the value of highPriority to a boolean', () => {
-    const workItem = {
+    const workItem: RawWorkItem = {
       ...baseWorkItem,
-      highPriority: 1,
+      highPriority: 1 as unknown as boolean,
     };
 
     let result = formatWorkItem({ applicationContext, workItem });
 
     expect(result.highPriority).toEqual(true);
 
-    workItem.highPriority = undefined;
+    workItem.highPriority = undefined as unknown as boolean;
 
     result = formatWorkItem({ applicationContext, workItem });
 
@@ -142,7 +142,7 @@ describe('formatWorkItem', () => {
 
     let result = formatWorkItem({ applicationContext, workItem });
 
-    expect(result.showHighPriorityIcon).toEqual(undefined);
+    expect(result.showHighPriorityIcon).toEqual(false);
 
     workItem.highPriority = true;
 
@@ -351,7 +351,8 @@ describe('formatWorkItem', () => {
     const workItem = {
       ...baseWorkItem,
       docketEntry: {
-        ...baseWorkItem.document,
+        ...baseWorkItem.docketEntry,
+        documentTitle: undefined,
         documentType: 'Document Type',
       },
     };
