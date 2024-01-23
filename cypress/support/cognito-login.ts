@@ -1,27 +1,29 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import AWS from 'aws-sdk';
+import {
+  DeleteItemCommand,
+  DynamoDBClient,
+  GetItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import promiseRetry from 'promise-retry';
 
 const awsRegion = 'us-east-1';
-AWS.config = new AWS.Config();
 
-AWS.config.credentials = {
-  accessKeyId: process.env.CYPRESS_AWS_ACCESS_KEY_ID!,
-  secretAccessKey: process.env.CYPRESS_AWS_SECRET_ACCESS_KEY!,
-  sessionToken: process.env.CYPRESS_AWS_SESSION_TOKEN,
-};
-AWS.config.region = awsRegion;
+const cognito = new CognitoIdentityProvider({
+  region: awsRegion,
+});
+
+const dynamoDB = new DynamoDBClient({
+  credentials: {
+    accessKeyId: process.env.CYPRESS_AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.CYPRESS_AWS_SECRET_ACCESS_KEY!,
+    sessionToken: process.env.CYPRESS_AWS_SESSION_TOKEN,
+  },
+  region: awsRegion,
+});
 
 const { ENV } = process.env;
 const DEFAULT_ACCOUNT_PASS = process.env.CYPRESS_DEFAULT_ACCOUNT_PASS;
 const DYNAMODB_TABLE_NAME = process.env.DYNAMODB_TABLE_NAME || '';
-
-const cognito = new CognitoIdentityProvider({
-  region: 'us-east-1',
-});
-
-const dynamoDB = new AWS.DynamoDB();
 
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = await getUserPoolId();
@@ -122,12 +124,12 @@ const getUserConfirmationCodeFromDynamo = async (userId: string) => {
     sk: { S: 'account-confirmation-code' },
   };
 
-  const items = await dynamoDB
-    .getItem({
-      Key: primaryKeyValues,
-      TableName: DYNAMODB_TABLE_NAME,
-    })
-    .promise();
+  const command = new GetItemCommand({
+    Key: primaryKeyValues,
+    TableName: DYNAMODB_TABLE_NAME,
+  });
+
+  const items = await dynamoDB.send(command);
 
   return items.Item?.confirmationCode?.S;
 };
@@ -160,10 +162,13 @@ const deleteAccountByUsername = async (
   userPoolId: string,
 ): Promise<void> => {
   const params = {
-    UserPoolId: userPoolId,
-    Username: username,
+    Key: {
+      Username: { S: username },
+    },
+    TableName: userPoolId,
   };
-  await cognito.adminDeleteUser(params);
+
+  await dynamoDB.send(new DeleteItemCommand(params));
 };
 
 const getAllCypressTestAccounts = async (
@@ -200,23 +205,18 @@ export const expireUserConfirmationCode = async (email: string) => {
   const userId = await getCognitoUserIdByEmail(email);
   if (!userId) return null;
 
-  const pk: DocumentClient.AttributeValue = { S: `user|${userId}` };
-  const sk: DocumentClient.AttributeValue = {
-    S: 'account-confirmation-code',
-  };
+  const pk = { S: `user|${userId}` };
+  const sk = { S: 'account-confirmation-code' };
 
-  const deleteItemParams: AWS.DynamoDB.DeleteItemInput = {
+  const deleteItemParams: DeleteItemCommand = new DeleteItemCommand({
     Key: {
       pk,
       sk,
     },
     TableName: DYNAMODB_TABLE_NAME,
-  };
+  });
 
-  await dynamoDB
-    .deleteItem(deleteItemParams)
-    .promise()
-    .catch(error => console.error(error));
+  await dynamoDB.send(deleteItemParams).catch(error => console.error(error));
 
   return null;
 };
