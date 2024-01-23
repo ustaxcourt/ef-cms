@@ -60,7 +60,7 @@ export const formatDateIfToday = (
 export const formatWorkItem = ({
   applicationContext,
   isSelected,
-  workItem = {},
+  workItem = {} as RawWorkItem,
 }: {
   applicationContext: ClientApplicationContext;
   isSelected: boolean;
@@ -72,13 +72,10 @@ export const formatWorkItem = ({
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderDoc => orderDoc.documentType,
   );
-
-  // const result = cloneDeep(workItem);
-
   const inConsolidatedGroup = !!workItem.leadDocketNumber;
   const inLeadCase = applicationContext.getUtilities().isLeadCase(workItem);
 
-  let consolidatedIconTooltipText = '';
+  let consolidatedIconTooltipText;
 
   if (inConsolidatedGroup) {
     if (inLeadCase) {
@@ -120,36 +117,35 @@ export const formatWorkItem = ({
 
   const selected = !!isSelected;
 
-  result.receivedAt = isDateToday(
-    result.docketEntry.receivedAt,
+  const receivedAt = isDateToday(
+    workItem.docketEntry.receivedAt,
     applicationContext,
   )
-    ? result.docketEntry.createdAt
-    : result.docketEntry.receivedAt;
-  result.received = formatDateIfToday(result.receivedAt, applicationContext);
+    ? workItem.docketEntry.createdAt
+    : workItem.docketEntry.receivedAt;
 
-  result.sentDateFormatted = formatDateIfToday(
-    result.createdAt,
+  const received = formatDateIfToday(receivedAt, applicationContext);
+
+  const sentDateFormatted = formatDateIfToday(
+    workItem.createdAt,
     applicationContext,
   );
 
-  result.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+  const isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
     ({ eventCode }) => eventCode,
-  ).includes(result.docketEntry.eventCode);
+  ).includes(workItem.docketEntry.eventCode);
 
-  result.isOrder = !!orderDocumentTypes.includes(
-    result.docketEntry.documentType,
+  const isOrder = !!orderDocumentTypes.includes(
+    workItem.docketEntry.documentType,
   );
 
-  let descriptionDisplay = result.docketEntry.documentType;
-  if (result.docketEntry.documentTitle) {
-    descriptionDisplay = result.docketEntry.documentTitle;
-    if (result.docketEntry.additionalInfo) {
-      descriptionDisplay += ` ${result.docketEntry.additionalInfo}`;
+  let descriptionDisplay = workItem.docketEntry.documentType;
+  if (workItem.docketEntry.documentTitle) {
+    descriptionDisplay = workItem.docketEntry.documentTitle;
+    if (workItem.docketEntry.additionalInfo) {
+      descriptionDisplay += ` ${workItem.docketEntry.additionalInfo}`;
     }
   }
-
-  result.docketEntry.descriptionDisplay = descriptionDisplay;
 
   return {
     ...workItem,
@@ -157,8 +153,19 @@ export const formatWorkItem = ({
     completedAtFormattedTZ,
     consolidatedIconTooltipText,
     createdAtFormatted,
+    descriptionDisplay: {
+      ...workItem.docketEntry.descriptionDisplay,
+      descriptionDisplay,
+    },
     formattedCaseStatus,
+    inConsolidatedGroup,
+    inLeadCase,
+    isCourtIssuedDocument,
+    isOrder,
+    received,
+    receivedAt,
     selected,
+    sentDateFormatted,
     showHighPriorityIcon,
     showUnassignedIcon,
     showUnreadIndicators,
