@@ -51,6 +51,11 @@ export const forgotPasswordInteractor = async (
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
 
+  //   1. Wrap call to adminCreateUser with 'if not local'
+  // 2. Don`t use messageAction: resend on local
+  // 3. getCognito handles adminCreateUser
+  // 4. Handle e-access account emails in DAWSON (store temp password, confirmation code)
+  // 5. Don't grant e-access to users
   if (
     foundUser &&
     foundUser.UserStatus === UserStatusType.FORCE_CHANGE_PASSWORD
