@@ -232,7 +232,7 @@ describe('Petitioner Account Creation', () => {
     const TEST_NAME = 'Cypress Test';
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
-    it('should create an account and verify it using the verification link', () => {
+    it('should create an account and verify it using the verification link, then login and create an eletronic case', () => {
       fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
 
       cy.get('[data-testid="email-address-verification-sent-message"]').should(
@@ -259,9 +259,7 @@ describe('Petitioner Account Creation', () => {
       });
 
       cy.get('[data-testid="success-alert"]').should('exist');
-    });
 
-    it('should be able to login to new account and create case', () => {
       cy.visit('/login');
 
       cy.get('[data-testid="email-input"]').type(TEST_EMAIL);
@@ -371,7 +369,6 @@ function fillAndSubmitPetitionerForm(
 
   cy.get('[data-testid="petitioner-account-creation-submit-button"]').click();
 }
-
 interface PasswordConfig {
   length: number;
   lower: number;
