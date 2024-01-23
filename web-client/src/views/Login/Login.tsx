@@ -1,9 +1,9 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { connect } from '@web-client/presenter/shared.cerebral';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { WarningNotification } from '@web-client/views/WarningNotification';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const Login = connect(
