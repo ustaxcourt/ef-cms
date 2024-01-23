@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 
+import { DESCENDING } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formattedMessages as formattedMessagesComputed } from './formattedMessages';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -100,12 +101,13 @@ describe('formattedMessages', () => {
           },
           {
             completedAt: '2019-01-03T16:29:13.122Z',
-            createdAt: '2019-01-01T17:29:13.122Z',
+            createdAt: '2019-01-03T17:29:13.122Z',
             docketNumber: '102-20',
             message: 'This is a test message',
           },
         ],
         screenMetadata: {},
+        tableSort: { sortOrder: DESCENDING },
         user: {
           role: 'docketclerk',
         },
@@ -115,18 +117,19 @@ describe('formattedMessages', () => {
     expect(result).toMatchObject({
       messages: [
         {
-          completedAt: '2019-01-01T16:29:13.122Z',
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: '103-20',
-          isCompleted: true,
-          message: 'This is a test message',
-        },
-        {
-          createdAt: '2019-01-01T17:29:13.122Z',
+          completedAt: '2019-01-03T16:29:13.122Z',
+          createdAt: '2019-01-03T17:29:13.122Z',
           docketNumber: '102-20',
           message: 'This is a test message',
         },
         {
+          completedAt: '2019-01-01T16:29:13.122Z',
+          createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
+          message: 'This is a test message',
+        },
+        {
+          completedAt: '2019-01-02T16:29:13.122Z',
           createdAt: '2019-01-01T16:29:13.122Z',
           docketNumber: '101-20',
           message: 'This is a test message',
@@ -259,7 +262,7 @@ describe('formattedMessages', () => {
     });
   });
 
-  it('the messages should be filtered correctly when we are an ADC user', () => {
+  it('the messages should be filtered correctly', () => {
     const result = runCompute(formattedMessages, {
       state: {
         messageBoxToDisplay: {
