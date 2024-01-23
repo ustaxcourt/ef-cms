@@ -10666,7 +10666,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -10735,7 +10735,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -10846,7 +10846,7 @@
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "pk": "case|102-20",
-    "email": "privatepractitioner1@example.com"
+    "email": "privatePractitioner1@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -15162,7 +15162,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15253,7 +15253,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15304,7 +15304,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15355,7 +15355,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15448,7 +15448,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15488,7 +15488,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15579,7 +15579,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15628,7 +15628,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15684,7 +15684,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15762,7 +15762,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15815,7 +15815,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15905,7 +15905,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15957,7 +15957,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16016,7 +16016,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16070,7 +16070,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16102,7 +16102,7 @@
         "servedParties": [
           {
             "name": "Test Private Practitioner",
-            "email": "privatepractitioner1@example.com"
+            "email": "privatePractitioner1@example.com"
           },
           {
             "name": "Test IRS Practitioner",
@@ -16174,7 +16174,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16228,7 +16228,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16283,7 +16283,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16332,7 +16332,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16382,7 +16382,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16435,7 +16435,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16489,7 +16489,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16543,7 +16543,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16601,7 +16601,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16657,7 +16657,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16712,7 +16712,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16806,7 +16806,7 @@
     "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "firmName": "Bogus Barristers",
     "pk": "case|105-23",
-    "email": "privatepractitioner1@example.com"
+    "email": "privatePractitioner1@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -16834,7 +16834,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -16965,7 +16965,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17070,7 +17070,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17177,7 +17177,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17288,7 +17288,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17393,7 +17393,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17530,7 +17530,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17669,7 +17669,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17773,7 +17773,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17874,7 +17874,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17981,7 +17981,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18082,7 +18082,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18184,7 +18184,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18468,7 +18468,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18575,7 +18575,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18681,7 +18681,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -42960,7 +42960,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43061,7 +43061,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43162,7 +43162,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43263,7 +43263,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43370,7 +43370,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43477,7 +43477,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43584,7 +43584,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43690,7 +43690,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43796,7 +43796,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43902,7 +43902,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44012,7 +44012,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44112,7 +44112,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44219,7 +44219,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44324,7 +44324,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44434,7 +44434,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44540,7 +44540,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46150,7 +46150,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46250,7 +46250,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46350,7 +46350,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46450,7 +46450,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46556,7 +46556,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46662,7 +46662,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46769,7 +46769,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46874,7 +46874,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46979,7 +46979,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47084,7 +47084,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47192,7 +47192,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47291,7 +47291,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47398,7 +47398,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47502,7 +47502,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47610,7 +47610,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47715,7 +47715,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -68177,7 +68177,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -68277,7 +68277,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -68377,7 +68377,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -68477,7 +68477,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -68583,7 +68583,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -68689,7 +68689,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -68796,7 +68796,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -68901,7 +68901,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -69006,7 +69006,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -69111,7 +69111,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -69219,7 +69219,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -69318,7 +69318,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -69425,7 +69425,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -69529,7 +69529,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -69637,7 +69637,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -69742,7 +69742,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -71775,7 +71775,7 @@
     "firmName": "Law Offices of Rivas and Kathy Gee",
     "pk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "originalBarState": "FL",
-    "email": "privatepractitioner4@example.com"
+    "email": "privatePractitioner4@example.com"
   },
   {
     "admissionsStatus": "Active",
@@ -72463,7 +72463,7 @@
     "firmName": "Lilah, Lilah",
     "pk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "originalBarState": "N/A",
-    "email": "privatepractitioner2@example.com"
+    "email": "privatePractitioner2@example.com"
   },
   {
     "sk": "case|102-67",
@@ -72615,7 +72615,7 @@
     "firmName": "Iron Law",
     "pk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
     "originalBarState": "TX",
-    "email": "privatepractitioner3@example.com"
+    "email": "privatePractitioner3@example.com"
   },
   {
     "role": "chambers",
@@ -72657,7 +72657,7 @@
     "firmName": "Bogus Barristers",
     "pk": "user|a6318a31-8aa4-4002-a7b0-1192af19dbb9",
     "originalBarState": "OR",
-    "email": "privatepractitioner99@example.com"
+    "email": "privatePractitioner99@example.com"
   },
   {
     "sk": "case|102-20",
@@ -72719,7 +72719,7 @@
     "firmName": "Bogus Barristers",
     "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "originalBarState": "OR",
-    "email": "privatepractitioner1@example.com"
+    "email": "privatePractitioner1@example.com"
   },
   {
     "admissionsStatus": "Active",
