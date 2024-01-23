@@ -25,7 +25,7 @@
     "files": true,
     "require": ["tsconfig-paths/register"]
   },
-  "include": ["./**/*"],
+  "include": ["./**/*.ts", "./**/*.tsx"],
   "exclude": [
     "node_modules",
     "./scripts/run-once-scripts/**/*",
