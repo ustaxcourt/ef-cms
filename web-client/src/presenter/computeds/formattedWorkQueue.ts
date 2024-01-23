@@ -27,10 +27,10 @@ export const workQueueItemsAreEqual = (first, second) => {
  */
 export const formatDateIfToday = (
   date,
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   now = null,
   yesterday = null,
-) => {
+): string => {
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
@@ -44,7 +44,7 @@ export const formatDateIfToday = (
       'MMDDYY',
     );
 
-  let formattedDate;
+  let formattedDate: string;
   if (now == then) {
     formattedDate = applicationContext
       .getUtilities()
@@ -59,23 +59,46 @@ export const formatDateIfToday = (
 
 export const formatWorkItem = ({
   applicationContext,
-  isSelected,
+  isSelected = false,
   workItem = {} as RawWorkItem,
 }: {
   applicationContext: ClientApplicationContext;
-  isSelected: boolean;
+  isSelected?: boolean;
   workItem: RawWorkItem;
-}) => {
+}): RawWorkItem & {
+  assigneeName: string;
+  completedAtFormatted: string;
+  completedAtFormattedTZ: string;
+  consolidatedIconTooltipText: string;
+  createdAtFormatted: string;
+  docketEntry: any;
+  formattedCaseStatus: string;
+  highPriority: boolean;
+  inConsolidatedGroup: boolean;
+  inLeadCase: boolean;
+  isCourtIssuedDocument: boolean;
+  isOrder: boolean;
+  received: string;
+  receivedAt: any;
+  selected: boolean;
+  sentBySection: string;
+  sentDateFormatted: string;
+  showHighPriorityIcon: boolean;
+  showUnassignedIcon: boolean;
+  showUnreadIndicators: boolean;
+  showUnreadStatusIcon: boolean;
+} => {
   const { COURT_ISSUED_EVENT_CODES, ORDER_TYPES_MAP } =
     applicationContext.getConstants();
 
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderDoc => orderDoc.documentType,
   );
+
   const inConsolidatedGroup = !!workItem.leadDocketNumber;
   const inLeadCase = applicationContext.getUtilities().isLeadCase(workItem);
 
-  let consolidatedIconTooltipText;
+  let consolidatedIconTooltipText = '';
 
   if (inConsolidatedGroup) {
     if (inLeadCase) {
@@ -94,8 +117,8 @@ export const formatWorkItem = ({
     .getUtilities()
     .formatDateString(workItem.createdAt, 'MMDDYY');
 
-  workItem.highPriority = !!workItem.highPriority;
-  workItem.sentBySection = capitalize(workItem.sentBySection);
+  const highPriority = !!workItem.highPriority;
+  const sentBySection = capitalize(workItem.sentBySection);
   const completedAtFormatted = formatDateIfToday(
     workItem.completedAt,
     applicationContext,
@@ -103,15 +126,15 @@ export const formatWorkItem = ({
   const completedAtFormattedTZ = applicationContext
     .getUtilities()
     .formatDateString(workItem.completedAt, 'DATE_TIME_TZ');
-  workItem.assigneeName = workItem.assigneeName || 'Unassigned';
+  const assigneeName = workItem.assigneeName || 'Unassigned';
 
-  const showHighPriorityIcon = !!workItem.highPriority;
+  const showHighPriorityIcon = highPriority;
 
   const showUnreadIndicators = !workItem.isRead;
   const showUnreadStatusIcon = !workItem.isRead && !showHighPriorityIcon;
 
   let showUnassignedIcon = false;
-  if (workItem.assigneeName === 'Unassigned' && !showHighPriorityIcon) {
+  if (assigneeName === 'Unassigned' && !showHighPriorityIcon) {
     showUnassignedIcon = true;
   }
 
@@ -149,15 +172,17 @@ export const formatWorkItem = ({
 
   return {
     ...workItem,
+    assigneeName,
     completedAtFormatted,
     completedAtFormattedTZ,
     consolidatedIconTooltipText,
     createdAtFormatted,
-    descriptionDisplay: {
-      ...workItem.docketEntry.descriptionDisplay,
+    docketEntry: {
+      ...workItem.docketEntry,
       descriptionDisplay,
     },
     formattedCaseStatus,
+    highPriority,
     inConsolidatedGroup,
     inLeadCase,
     isCourtIssuedDocument,
@@ -165,6 +190,7 @@ export const formatWorkItem = ({
     received,
     receivedAt,
     selected,
+    sentBySection,
     sentDateFormatted,
     showHighPriorityIcon,
     showUnassignedIcon,
