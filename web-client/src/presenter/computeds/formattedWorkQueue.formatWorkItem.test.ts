@@ -1,3 +1,5 @@
+import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { formatWorkItem } from './formattedWorkQueue';
@@ -8,12 +10,12 @@ describe('formatWorkItem', () => {
     .getUtilities()
     .calculateISODate({ dateString: currentTime, howMuch: -1 });
 
-  const { DOCKET_NUMBER_SUFFIXES, DOCKET_SECTION, STATUS_TYPES } =
-    applicationContext.getConstants();
+  const { DOCKET_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
-  const baseWorkItem = {
+  const baseWorkItem: RawWorkItem = {
+    ...MOCK_WORK_ITEM,
     assigneeId: docketClerkUser.userId,
-    assigneeName: null,
+    assigneeName: '',
     caseStatus: STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketEntry: {
@@ -23,7 +25,6 @@ describe('formatWorkItem', () => {
       documentType: 'Answer',
     },
     docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     docketNumberWithSuffix: '101-18S',
     section: DOCKET_SECTION,
     sentBy: 'respondent',
