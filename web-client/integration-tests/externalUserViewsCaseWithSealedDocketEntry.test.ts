@@ -58,7 +58,7 @@ describe('External user views case with sealed docket entry', () => {
   loginAs(testClient, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(testClient);
 
-  loginAs(testClient, 'privatepractitioner@example.com');
+  loginAs(testClient, 'privatePractitioner@example.com');
   it('verify sealed and served docket entry is not hyperlinked and a sealed icon displays for an unassociated practitioner', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(testClient);
@@ -75,7 +75,7 @@ describe('External user views case with sealed docket entry', () => {
 
   petitionsClerkAddsPractitionersToCase(testClient, true);
 
-  loginAs(testClient, 'privatepractitioner@example.com');
+  loginAs(testClient, 'privatePractitioner@example.com');
 
   it('verify sealed docket entry is hyperlinked for an associated practitioner', async () => {
     const { formattedDocketEntriesOnDocketRecord } =

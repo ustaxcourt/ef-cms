@@ -19,12 +19,12 @@ describe('Modify Practitioner Contact Information', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'privatepractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('login as a practitioner and creates a case that will be served', async () => {
     caseDetail = await uploadPetition(
       cerebralTest,
       {},
-      'privatepractitioner2@example.com',
+      'privatePractitioner2@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
@@ -33,12 +33,12 @@ describe('Modify Practitioner Contact Information', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('login as a practitioner and creates a case that will not be served', async () => {
     caseDetail = await uploadPetition(
       cerebralTest,
       {},
-      'privatepractitioner2@example.com',
+      'privatePractitioner2@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
@@ -49,7 +49,7 @@ describe('Modify Practitioner Contact Information', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(cerebralTest, 'privatepractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   practitionerUpdatesAddress(cerebralTest);
 
   practitionerViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, 0, true);

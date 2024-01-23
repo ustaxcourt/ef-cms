@@ -233,7 +233,7 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('Unassociated private practitioner views case detail', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
