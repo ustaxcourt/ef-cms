@@ -1,8 +1,9 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { connect } from '@web-client/presenter/shared.cerebral';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { WarningNotification } from '@web-client/views/WarningNotification';
-import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const Login = connect(
@@ -34,6 +35,7 @@ export const Login = connect(
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissable={false} />
               <WarningNotification isDismissable={false} />
+              <ErrorNotification />
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
