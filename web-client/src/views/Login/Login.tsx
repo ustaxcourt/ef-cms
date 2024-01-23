@@ -1,13 +1,12 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { MessageAlert } from '@web-client/ustc-ui/MessageAlert/MessageAlert';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
+import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const Login = connect(
   {
-    alertError: state.alertError,
     loginHelper: state.loginHelper,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
@@ -20,7 +19,6 @@ export const Login = connect(
       sequences.updateAuthenticationFormValueSequence,
   },
   ({
-    alertError,
     loginHelper,
     navigateToCreatePetitionerAccountSequence,
     navigateToForgotPasswordSequence,
@@ -35,13 +33,7 @@ export const Login = connect(
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissable={false} />
-              {alertError && (
-                <MessageAlert
-                  alertType={alertError.alertType}
-                  message={alertError.message}
-                  title={alertError.title}
-                ></MessageAlert>
-              )}
+              <WarningNotification isDismissable={false} />
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">

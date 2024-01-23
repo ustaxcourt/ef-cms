@@ -33,20 +33,18 @@ export const forgotPasswordAction = async ({
 
     if (originalErrorMessage === 'User is unconfirmed') {
       return path.unconfirmedAccount({
-        alertError: {
+        alertWarning: {
           message: (
             <>
-              The email address is associated with an account but is not
-              verified. We sent an email with a link to verify the email
-              address. If you don’t see it, check your spam folder. If you’re
-              still having trouble, email{' '}
+              We sent you an email to help you log in. If you don’t see it,
+              check your spam folder. If you’re still having trouble, email{' '}
               <a href="mailto:dawson.support@ustaxcourt.gov">
                 dawson.support@ustaxcourt.gov
               </a>
               .
             </>
           ),
-          title: 'Email address not verified',
+          title: 'We’ve sent you an email',
         },
       });
     }
