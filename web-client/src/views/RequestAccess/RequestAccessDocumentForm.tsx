@@ -87,7 +87,11 @@ export const RequestAccessDocumentForm = connect(
                   });
                 }}
               />
-              <label className="usa-radio__label" htmlFor="manual-generation">
+              <label
+                className="usa-radio__label"
+                data-testid="manual-generation-label"
+                htmlFor="manual-generation"
+              >
                 Upload PDF form
               </label>
             </fieldset>

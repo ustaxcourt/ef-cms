@@ -1,10 +1,7 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
-import {
-  JudgeActivityReportState,
-  initialJudgeActivityReportState,
-} from './judgeActivityReportState';
+import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
@@ -554,7 +551,13 @@ export const baseState = {
   assigneeId: null,
   batchDownloads: {},
   caseDeadlineReport: {} as {
-    caseDeadlines: RawCaseDeadline[];
+    caseDeadlines: (RawCaseDeadline & {
+      caseCaption: string;
+      docketNumber: string;
+      docketNumberSuffix: string;
+      docketNumberWithSuffix: string;
+      leadDocketNumber: string;
+    })[];
     judgeFilter: string;
     totalCount: number;
     page: number;
@@ -625,9 +628,9 @@ export const baseState = {
   individualInboxCount: 0,
   irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
-  judgeActivityReport: cloneDeep(
-    initialJudgeActivityReportState,
-  ) as JudgeActivityReportState,
+  judgeActivityReport: {
+    judgeActivityReportData: {},
+  } as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
   lastIdleAction: undefined,
