@@ -162,13 +162,10 @@ const deleteAccountByUsername = async (
   userPoolId: string,
 ): Promise<void> => {
   const params = {
-    Key: {
-      Username: { S: username },
-    },
-    TableName: userPoolId,
+    UserPoolId: userPoolId,
+    Username: username,
   };
-
-  await dynamoDB.send(new DeleteItemCommand(params));
+  await cognito.adminDeleteUser(params);
 };
 
 const getAllCypressTestAccounts = async (
