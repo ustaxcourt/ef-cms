@@ -8,8 +8,9 @@
 
 ::: QUESTIONS :::
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
-- Confirm removing "should route to the maintenance page when the user directly routes to a URL" condition from maintenance.cy.ys is OK
 - How do we make forgot password more secure? 
 
 ::: DOD :::
 - Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
+- Refactor getCognito to be more generic - "getAuthenticationGateway"
+  - Abstract away from cognito specific syntax in interactors
