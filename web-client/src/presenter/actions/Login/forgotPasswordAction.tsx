@@ -49,6 +49,7 @@ export const forgotPasswordAction = async ({
       });
     }
 
+    // TODO 10007: are we sure we want to just throw an error when the error is not `User is unconfirmed`?
     throw err;
   }
 };
