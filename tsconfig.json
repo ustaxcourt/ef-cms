@@ -28,7 +28,6 @@
   "include": ["./**/*.ts", "./**/*.tsx"],
   "exclude": [
     "node_modules",
-    "targetBranch",
     "./scripts/run-once-scripts/**/*",
     "./cognito-triggers-sls/node_modules/**/*",
     "./cypress/**/*",
