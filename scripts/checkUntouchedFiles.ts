@@ -108,7 +108,7 @@ function getFilesToCheck(
 }
 
 const branchDirPath = './';
-const targetDirPath = './targetBranch';
+const targetDirPath = '../targetBranch';
 const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
 const targetTypescriptErrorMap = getTypescriptErrorMap(targetDirPath);
 const modifiedFiles = getModifiedFiles(branchDirPath, targetDirPath);

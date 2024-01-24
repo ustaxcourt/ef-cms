@@ -22,7 +22,7 @@ jobs:
         with:
           repository: ustaxcourt/ef-cms
           ref: ${{ env.TARGET_BRANCH }}
-          path: targetBranch
+          path: ../targetBranch
 
       - uses: actions/setup-node@v3
         with:
@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: NPM Install in target branch
-        working-directory: ./targetBranch
+        working-directory: ../targetBranch
         run: npm ci
 
       - name: Check untouched files
