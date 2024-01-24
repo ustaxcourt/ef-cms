@@ -221,7 +221,6 @@ export const formattedDocketEntries = (
     .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
     .toISO();
 
-  // now do stuff
   const result = formatCase(applicationContext, caseDetail);
 
   switch (docketRecordFilter) {
