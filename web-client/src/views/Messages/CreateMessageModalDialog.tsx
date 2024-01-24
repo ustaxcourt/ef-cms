@@ -54,6 +54,7 @@ export const CreateMessageModalDialog = connect(
 
           <select
             className="usa-select"
+            data-testid="message-to-section"
             id="toSection"
             name="toSection"
             onChange={e => {
@@ -111,6 +112,7 @@ export const CreateMessageModalDialog = connect(
           <select
             aria-disabled={!form.toSection ? 'true' : 'false'}
             className="usa-select"
+            data-testid="message-to-user-id"
             disabled={!form.toSection}
             id="toUserId"
             name="toUserId"
@@ -137,6 +139,7 @@ export const CreateMessageModalDialog = connect(
           </label>
           <input
             className="usa-input"
+            data-testid="message-subject"
             id="subject"
             maxLength="250"
             name="subject"
@@ -158,6 +161,7 @@ export const CreateMessageModalDialog = connect(
           </label>
           <textarea
             className="usa-textarea ustc-message-modal-text-area"
+            data-testid="message-body"
             id="message"
             name="message"
             onChange={e => {
