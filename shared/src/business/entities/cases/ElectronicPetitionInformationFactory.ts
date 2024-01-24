@@ -112,6 +112,7 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
 
   static wizardStep2() {
     return ElectronicPetitionInformationFactory.atWizardStep(2, {
+      atpFiles: ElectronicPetition.VALIDATION_RULES.atpFiles,
       caseType: ElectronicPetition.VALIDATION_RULES.caseType,
       hasIrsNotice: ElectronicPetition.VALIDATION_RULES.hasIrsNotice,
       petitionFile: ElectronicPetition.VALIDATION_RULES.petitionFile,

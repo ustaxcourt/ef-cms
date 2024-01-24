@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
+import { StateDrivenMultiFileInput } from '@web-client/views/FileDocument/StateDrivenMultiFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -170,7 +171,7 @@ export const StartCaseStep2 = connect(
                     Make sure file is not encrypted or password protected. Max
                     file size {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
-                  <StateDrivenFileInput
+                  <StateDrivenMultiFileInput
                     aria-describedby="atp-files-upload-label"
                     customClassName="usa-file-input"
                     id="atp-files-upload"
@@ -180,23 +181,6 @@ export const StartCaseStep2 = connect(
                     validationSequence="validateExternalDocumentInformationSequence"
                   />
                 </FormGroup>
-                {/*I don't know why the code snippet below isn't working*/}
-                {/* <div className="usa-form-group">
-                  <label className="usa-label" htmlFor="file-input-multiple">
-                    Input accepts multiple files
-                  </label>
-                  <span className="usa-hint" id="file-input-multiple-hint">
-                    Select one or more files
-                  </span>
-                  <input
-                    aria-describedby="file-input-multiple-hint"
-                    className="usa-file-input"
-                    id="file-input-multiple"
-                    multiple="multiple"
-                    name="file-input-multiple"
-                    type="file"
-                  />
-                </div> */}
               </>
             )}
             {startCaseHelper.showNotHasIrsNoticeOptions && (
