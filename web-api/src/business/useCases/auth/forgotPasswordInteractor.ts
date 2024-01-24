@@ -76,7 +76,7 @@ export const forgotPasswordInteractor = async (
     .getPersistenceGateway()
     .generateForgotPasswordCode(applicationContext, { userId });
 
-  const queryString = qs.stringify({ code, email, userId }, { encode: false });
+  const queryString = qs.stringify({ code, email }, { encode: false });
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/reset-password?${queryString}`;
 
   const emailBody = `<div>
