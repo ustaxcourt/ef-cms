@@ -187,6 +187,12 @@ export const StartCaseStep5 = connect(
                           />
                         </address>
                       )}
+                      <div className="margin-top-3 margin-bottom-2">
+                        <span className="usa-label usa-label-display">
+                          Service email
+                        </span>
+                        {user.email}
+                      </div>
                     </div>
                     <div className="tablet:grid-col-4 margin-bottom-1 party-information">
                       {startCaseHelper.hasContactSecondary && (
