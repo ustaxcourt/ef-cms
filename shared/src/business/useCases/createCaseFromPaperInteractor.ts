@@ -1,4 +1,5 @@
 import { Case } from '../entities/cases/Case';
+import { CaseFromPaperType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
 import { PaperPetition } from '../entities/cases/PaperPetition';
@@ -21,7 +22,9 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd: Case;
   docketEntryEntity: DocketEntry;
   user: RawUser;
-}) => {
+}): {
+  workItem: WorkItem;
+} => {
   const workItemEntity = new WorkItem(
     {
       assigneeId: user.userId,
@@ -57,21 +60,11 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   };
 };
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.corporateDisclosureFileId the id of the corporate disclosure file
- * @param {string} providers.petitionFileId the id of the petition file
- * @param {string} providers.petitionMetadata the petition metadata
- * @param {string} providers.requestForPlaceOfTrialFileId the id of the request for place of trial file
- * @param {string} providers.stinFileId the id of the stin file
- * @returns {object} the created case
- */
 export const createCaseFromPaperInteractor = async (
   applicationContext: IApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
+    attachmentToPetitionFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
@@ -81,11 +74,12 @@ export const createCaseFromPaperInteractor = async (
     applicationForWaiverOfFilingFeeFileId?: string;
     corporateDisclosureFileId?: string;
     petitionFileId: string;
-    petitionMetadata: any;
+    petitionMetadata: CaseFromPaperType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
+    attachmentToPetitionFileId?: string;
   },
-) => {
+): Promise<RawCase> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
@@ -100,6 +94,7 @@ export const createCaseFromPaperInteractor = async (
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,
+      attachmentToPetitionFileId,
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
@@ -271,6 +266,30 @@ export const createCaseFromPaperInteractor = async (
     cdsDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
+  }
+
+  if (attachmentToPetitionFileId) {
+    const atpDocketEntryEntity = new DocketEntry(
+      {
+        createdAt: caseToAdd.receivedAt,
+        docketEntryId: attachmentToPetitionFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+        filers,
+        filingDate: caseToAdd.receivedAt,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        isPaper: true,
+        mailingDate: petitionEntity.mailingDate,
+        receivedAt: caseToAdd.receivedAt,
+      },
+      { applicationContext, petitioners: caseToAdd.petitioners },
+    );
+
+    atpDocketEntryEntity.setFiledBy(user);
+
+    caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
 
   await Promise.all([
