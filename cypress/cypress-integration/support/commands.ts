@@ -1,3 +1,4 @@
+import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
@@ -107,6 +108,7 @@ declare global {
       showsSpinner: (shows?: boolean) => void;
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;
+      keepAliases: (args?: string[]) => void;
     }
   }
 }
