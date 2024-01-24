@@ -112,7 +112,25 @@ export const UploadCourtIssuedDocument = connect(
                     </div>
                   </div>
                 </div>
-
+                <div className="grid-row grid-gap margin-top-4">
+                  <div className="grid-col-8">
+                    <Button
+                      data-testid="save-uploaded-pdf-button"
+                      id="save-uploaded-pdf-button"
+                      type="submit"
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      link
+                      onClick={() => {
+                        formCancelToggleCancelSequence();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
                 <div className="grid-col-7">
                   <div className="scanner-area-header">
                     <div className="grid-container padding-x-0">
