@@ -97,7 +97,7 @@ describe('Docket Clerk Document QC Journey', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   practitionerRequestsAccessToCaseManual(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'docketclerk@example.com');

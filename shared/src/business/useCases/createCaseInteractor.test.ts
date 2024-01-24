@@ -411,7 +411,7 @@ describe('createCaseInteractor', () => {
           address3: 'Cumque reprehenderit',
           city: 'Consequatur Iusto e',
           countryType: 'domestic',
-          email: 'privatepractitioner@example.com',
+          email: 'privatePractitioner@example.com',
           name: 'Inez Martinez',
           phone: '+1 (756) 271-3574',
           postalCode: '68964',

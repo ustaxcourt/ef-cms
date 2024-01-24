@@ -76,7 +76,7 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
     userVerifiesLengthOfDocketEntry(cerebralTest, 'NTD', 2);
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   // creating petition with prefferredTrialCity and procedureType that DOES have a corresponding clinic letter
   practitionerCreatesNewCase(
     cerebralTest,
