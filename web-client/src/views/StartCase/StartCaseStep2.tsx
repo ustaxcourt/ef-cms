@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './CaseTypeSelect';
 import { Focus } from '../../ustc-ui/Focus/Focus';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -140,15 +141,63 @@ export const StartCaseStep2 = connect(
               </fieldset>
             </FormGroup>
             {startCaseHelper.showHasIrsNoticeOptions && (
-              <CaseTypeSelect
-                allowDefaultOption={true}
-                caseTypes={caseTypeDescriptionHelper.caseTypes}
-                className="margin-bottom-0"
-                legend="Type of notice / case"
-                validation="validateStartCaseWizardSequence"
-                value={form.caseType}
-                onChange="updateFormValueSequence"
-              />
+              <>
+                <CaseTypeSelect
+                  allowDefaultOption={true}
+                  caseTypes={caseTypeDescriptionHelper.caseTypes}
+                  className="margin-bottom-20"
+                  legend="Type of notice / case"
+                  validation="validateStartCaseWizardSequence"
+                  value={form.caseType}
+                  onChange="updateFormValueSequence"
+                />
+                <FormGroup errorText={validationErrors.primaryDocumentFile}>
+                  <label
+                    className={classNames(
+                      'usa-label ustc-upload with-hint',
+                      // fileDocumentHelper.showPrimaryDocumentValid &&
+                      //   'validated',
+                    )}
+                    htmlFor="atp-files-upload"
+                    id="atp-files-upload-label"
+                  >
+                    Upload document PDF (.pdf){' '}
+                    <span className="success-message padding-left-1">
+                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                    </span>
+                  </label>
+                  <span className="usa-hint" id="atp-files-upload-hint">
+                    Make sure file is not encrypted or password protected. Max
+                    file size {constants.MAX_FILE_SIZE_MB}MB.
+                  </span>
+                  <StateDrivenFileInput
+                    aria-describedby="atp-files-upload-label"
+                    customClassName="usa-file-input"
+                    id="atp-files-upload"
+                    multiple={'multiple'}
+                    name="atpFiles"
+                    updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
+                    validationSequence="validateExternalDocumentInformationSequence"
+                  />
+                </FormGroup>
+                {/*I don't know why the code snippet below isn't working*/}
+                {/* <div className="usa-form-group">
+                  <label className="usa-label" htmlFor="file-input-multiple">
+                    Input accepts multiple files
+                  </label>
+                  <span className="usa-hint" id="file-input-multiple-hint">
+                    Select one or more files
+                  </span>
+                  <input
+                    aria-describedby="file-input-multiple-hint"
+                    className="usa-file-input"
+                    id="file-input-multiple"
+                    multiple="multiple"
+                    name="file-input-multiple"
+                    type="file"
+                  />
+                </div> */}
+              </>
             )}
             {startCaseHelper.showNotHasIrsNoticeOptions && (
               <CaseTypeSelect

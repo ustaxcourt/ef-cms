@@ -30,6 +30,7 @@ export const StartCaseStep5 = connect(
     submitFilePetitionSequence,
     user,
   }) {
+    console.log('form', form);
     return (
       <>
         <Focus>
@@ -79,6 +80,25 @@ export const StartCaseStep5 = connect(
                             </div>
                           </div>
                         </div>
+                        {/* <div className="grid-row margin-top-3">
+                          <div className="grid-col">
+                            <span className="usa-label usa-label-display">
+                              IRS Notice(s)
+                            </span>
+                            <div className="grid-row">
+                              <div className="grid-col flex-auto">
+                                <PDFPreviewButton
+                                  data-testid="petition-preview-button"
+                                  file={form.atpFiles}
+                                  id="petition-preview-button"
+                                  shouldAbbreviateTitle={false}
+                                  shouldWrapText={true}
+                                  title="Petition"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
