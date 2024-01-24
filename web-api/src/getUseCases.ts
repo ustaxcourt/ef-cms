@@ -140,6 +140,7 @@ import { getUsersInSectionInteractor } from '../../shared/src/business/useCases/
 import { getUsersPendingEmailInteractor } from '../../shared/src/business/useCases/users/getUsersPendingEmailInteractor';
 import { getWorkItemInteractor } from '../../shared/src/business/useCases/workitems/getWorkItemInteractor';
 import { handleBounceNotificationInteractor } from '../../shared/src/business/useCases/email/handleBounceNotificationInteractor';
+import { logClientErrorInteractor } from '../../shared/src/business/useCases/logClientErrorInteractor';
 import { onConnectInteractor } from '../../shared/src/business/useCases/notifications/onConnectInteractor';
 import { onDisconnectInteractor } from '../../shared/src/business/useCases/notifications/onDisconnectInteractor';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/opinionAdvancedSearchInteractor';
@@ -354,6 +355,7 @@ const useCases = {
   getUsersPendingEmailInteractor,
   getWorkItemInteractor,
   handleBounceNotificationInteractor,
+  logClientErrorInteractor,
   onConnectInteractor,
   onDisconnectInteractor,
   opinionAdvancedSearchInteractor,

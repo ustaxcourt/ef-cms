@@ -126,6 +126,7 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logClientErrorLambda } from './lambdas/client-error/logClientErrorLambda';
 import { logger } from './logger';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
@@ -1051,4 +1052,9 @@ if (process.env.IS_LOCAL) {
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 
   app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
+
+  /**
+   * Client Errors
+   */
+  app.post('/client-error', lambdaWrapper(logClientErrorLambda));
 }

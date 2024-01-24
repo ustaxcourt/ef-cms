@@ -70,7 +70,21 @@ export const uploadPdfFromClient = async ({
           onUploadProgress({ isDone: true });
           return r;
         })
-        .catch(retry);
+        .catch(async error => {
+          try {
+            await applicationContext
+              .getUseCases()
+              .logClientErrorInteractor(applicationContext, {
+                error: error.message,
+                method: error.config.method,
+                status: error.code,
+                url: error.config.url,
+              });
+          } catch (e) {
+            console.error((e as Error).message);
+          }
+          return retry(error);
+        });
     },
     {
       retries: 5,
