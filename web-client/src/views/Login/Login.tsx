@@ -53,6 +53,7 @@ export const Login = connect(
                         autoCorrect="off"
                         className="usa-input"
                         data-testid="email-input"
+                        id="email"
                         name="email"
                         type="email"
                         onChange={e => {
@@ -68,6 +69,7 @@ export const Login = connect(
                         required
                         className="usa-input"
                         data-testid="password-input"
+                        id="password"
                         name="password"
                         type={showPassword ? 'text' : 'password'}
                         onChange={e => {
