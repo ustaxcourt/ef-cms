@@ -119,7 +119,7 @@ export const createOrUpdatePractitionerUser = async ({
       UserPoolId: process.env.USER_POOL_ID,
       Username: userEmail,
     };
-    //TODO: deal with type error on params
+
     const response = await cognito.adminCreateUser(params);
     //replace sub here
     if (response && response.User && response.User.Username) {
