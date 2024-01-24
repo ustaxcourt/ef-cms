@@ -24,21 +24,19 @@ describe('clearAuthStateAction', () => {
     });
 
     expect(result.state.authentication).toEqual({
-      authentication: {
+      code: '',
+      forgotPassword: {
         code: '',
-        forgotPassword: {
-          code: '',
-          email: '',
-          userId: '',
-        },
-        form: {
-          confirmPassword: '',
-          email: '',
-          password: '',
-        },
-        tempPassword: '',
-        userEmail: '',
+        email: '',
+        userId: '',
       },
+      form: {
+        confirmPassword: '',
+        email: '',
+        password: '',
+      },
+      tempPassword: '',
+      userEmail: '',
     });
   });
 });
