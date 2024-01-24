@@ -63,17 +63,17 @@ describe('admissions clerk practitioner journey', () => {
   it('admissions clerk updates practitioner email but it already exists', async () => {
     expect(cerebralTest.getState('form.pendingEmail')).toBeUndefined();
     expect(cerebralTest.getState('form.originalEmail')).toBe(
-      'privatepractitioner3@example.com',
+      'privatePractitioner3@example.com',
     );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
-      value: 'privatepractitioner99@example.com',
+      value: 'privatePractitioner99@example.com',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'privatepractitioner99@example.com',
+      value: 'privatePractitioner99@example.com',
     });
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
@@ -122,17 +122,17 @@ describe('admissions clerk practitioner journey', () => {
 
     expect(cerebralTest.getState('form.pendingEmail')).toBe(validEmail);
     expect(cerebralTest.getState('form.originalEmail')).toBe(
-      'privatepractitioner3@example.com',
+      'privatePractitioner3@example.com',
     );
     expect(cerebralTest.getState('form.updatedEmail')).toBeUndefined();
     expect(cerebralTest.getState('form.confirmEmail')).toBeUndefined();
   });
 
   describe('private practitioner logs in and verifies email address', () => {
-    loginAs(cerebralTest, 'privatepractitioner3@example.com');
+    loginAs(cerebralTest, 'privatePractitioner3@example.com');
     userVerifiesUpdatedEmailAddress(cerebralTest, 'practitioner');
 
-    loginAs(cerebralTest, 'privatepractitioner3@example.com');
+    loginAs(cerebralTest, 'privatePractitioner3@example.com');
     userLogsInAndChecksVerifiedEmailAddress(
       cerebralTest,
       'practitioner',

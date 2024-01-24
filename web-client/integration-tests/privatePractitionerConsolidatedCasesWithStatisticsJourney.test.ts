@@ -18,14 +18,14 @@ describe('private practitioner views consolidated cases with statistics (cerebra
   });
 
   for (let i = 0; i < 2; i++) {
-    loginAs(cerebralTest, 'privatepractitioner@example.com');
+    loginAs(cerebralTest, 'privatePractitioner@example.com');
     it(`Create test case #${i}`, async () => {
       const caseDetail = await uploadPetition(
         cerebralTest,
         {
           caseType: CASE_TYPES_MAP.deficiency,
         },
-        'privatepractitioner@example.com',
+        'privatePractitioner@example.com',
       );
       expect(caseDetail.docketNumber).toBeDefined();
       cerebralTest.docketNumber = caseDetail.docketNumber;
@@ -45,6 +45,6 @@ describe('private practitioner views consolidated cases with statistics (cerebra
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   privatePractitionerViewsOpenConsolidatedCases(cerebralTest);
 });
