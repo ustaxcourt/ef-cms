@@ -5,6 +5,7 @@
 + Extract error message strings into constants OR do something else. (On hold)
 + Forgot password flow.
 - Figure out how to avoid lack of spinner when redirecting to login from public site
+- Swagger docs?
 
 ::: QUESTIONS :::
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
