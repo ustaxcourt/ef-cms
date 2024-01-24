@@ -11,7 +11,6 @@ export const createForgotPasswordLinkAction = ({
     {
       code: props.code,
       email: props.email,
-      userId: props.userId,
     },
     { encode: false },
   );
