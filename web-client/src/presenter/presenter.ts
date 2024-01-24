@@ -77,7 +77,7 @@ import { completeDocumentSelectSequence } from './sequences/completeDocumentSele
 import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
-import { confirmSignUpSequence } from './sequences/confirmSignUpSequence';
+import { confirmSignUpSequence } from './sequences/Login/confirmSignUpSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
 import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
