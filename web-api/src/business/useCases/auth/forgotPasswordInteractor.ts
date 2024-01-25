@@ -71,11 +71,11 @@ export const forgotPasswordInteractor = async (
       ${email} requested a password reset. Use the button below to reset your password. <span style="font-weight: bold;">This will expire in 24 hours</span>.
     </span>
     <div style="margin-top: 20px;">
-      <a href="${verificationLink}" style="background-color: #005ea2; color: white; line-height: 0.9; border-radius: 0.25rem; text-decoration: none; font-size: 1.06rem; padding: .6rem 2.25rem; font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;">Verify Email</a>
+      <a href="${verificationLink}" style="background-color: #005ea2; color: white; line-height: 0.9; border-radius: 0.25rem; text-decoration: none; font-size: 1.06rem; padding: .6rem 2.25rem; font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;">Reset Password</a>
     </div>
     <div style="margin-top: 20px;">
       <span>Or you can use this URL: </span>
-      <span>SOME URL GOES HERE</span>
+      <a href="${verificationLink}">${verificationLink}</a>
     </div>
     <div style="margin-top: 20px;">
     <span>If you did not request to reset your password, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
