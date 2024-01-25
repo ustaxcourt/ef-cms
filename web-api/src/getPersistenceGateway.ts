@@ -76,7 +76,6 @@ import {
 } from './persistence/dynamo/users/getCasesForUser';
 import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getCognitoUserIdByEmail } from './persistence/cognito/getCognitoUserIdByEmail';
 import { getCompletedSectionInboxMessages } from './persistence/elasticsearch/messages/getCompletedSectionInboxMessages';
 import { getCompletedUserInboxMessages } from './persistence/elasticsearch/messages/getCompletedUserInboxMessages';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
@@ -326,7 +325,6 @@ const gatewayMethods = {
   getCasesForUser,
   getCasesMetadataByLeadDocketNumber,
   getClientId,
-  getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getConfigurationItemValue,
