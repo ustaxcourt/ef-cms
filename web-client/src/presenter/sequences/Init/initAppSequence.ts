@@ -10,26 +10,24 @@ import { setUserPermissionsAction } from '@web-client/presenter/actions/setUserP
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startRefreshIntervalSequence } from '@web-client/presenter/sequences/startRefreshIntervalSequence';
 
-export const initAppSequence = [
-  showProgressSequenceDecorator([
-    getMaintenanceModeAction,
-    setMaintenanceModeAction,
-    isMaintenanceModeEngagedAction,
-    {
-      maintenanceModeOff: [
-        startRefreshIntervalSequence,
-        refreshTokenAction,
-        {
-          userIsLoggedIn: [
-            setTokenAction,
-            getUserAction,
-            setUserAction,
-            setUserPermissionsAction,
-          ],
-          userIsNotLoggedIn: [],
-        },
-      ],
-      maintenanceModeOn: [navigateToMaintenanceAction],
-    },
-  ]),
-] as unknown as () => void;
+export const initAppSequence = showProgressSequenceDecorator([
+  getMaintenanceModeAction,
+  setMaintenanceModeAction,
+  isMaintenanceModeEngagedAction,
+  {
+    maintenanceModeOff: [
+      startRefreshIntervalSequence,
+      refreshTokenAction,
+      {
+        userIsLoggedIn: [
+          setTokenAction,
+          getUserAction,
+          setUserAction,
+          setUserPermissionsAction,
+        ],
+        userIsNotLoggedIn: [],
+      },
+    ],
+    maintenanceModeOn: [navigateToMaintenanceAction],
+  },
+]) as unknown as () => void;

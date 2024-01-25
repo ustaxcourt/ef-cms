@@ -261,6 +261,24 @@ const app = {
       returnSequencePromise: true,
     });
 
+    const container = window.document.querySelector('#app');
+    const root = createRoot(container);
+
+    root.render(
+      <Container app={cerebralApp}>
+        {!process.env.CI && (
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+          </>
+        )}
+
+        <AppComponent />
+
+        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+      </Container>,
+    );
+
     await cerebralApp.getSequence('initAppSequence')();
 
     initializeSocketProvider(cerebralApp, applicationContext);
@@ -283,24 +301,6 @@ const app = {
       });
     };
     router.initialize(cerebralApp, wrappedRoute);
-
-    const container = window.document.querySelector('#app');
-    const root = createRoot(container);
-
-    root.render(
-      <Container app={cerebralApp}>
-        {!process.env.CI && (
-          <>
-            <IdleActivityMonitor />
-            <AppInstanceManager />
-          </>
-        )}
-
-        <AppComponent />
-
-        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
   },
 };
 
