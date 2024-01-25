@@ -675,6 +675,7 @@ export const createTestApplicationContext = ({
     getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
+    getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     isFeatureEnabled: jest.fn(),
     logger: {
