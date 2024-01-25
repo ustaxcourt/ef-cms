@@ -10,6 +10,7 @@ import { Parties } from './Parties';
 import { ScanBatchPreviewer } from './../ScanBatchPreviewer';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { initialFilingDocumentTabs } from '@web-client/presenter/computeds/petitionQcHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -17,7 +18,6 @@ import React from 'react';
 export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
-    documentTabs: state.constants.INITIAL_FILING_DOCUMENT_TABS,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
@@ -26,7 +26,6 @@ export const StartCaseInternal = connect(
   },
   function StartCaseInternal({
     documentSelectedForScan,
-    documentTabs,
     formCancelToggleCancelSequence,
     showModal,
     submitPetitionFromPaperSequence,
@@ -77,7 +76,7 @@ export const StartCaseInternal = connect(
               </div>
               <div className="grid-col-7">
                 <ScanBatchPreviewer
-                  documentTabs={documentTabs}
+                  documentTabs={initialFilingDocumentTabs}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
                   validateSequence={validatePetitionFromPaperSequence}
