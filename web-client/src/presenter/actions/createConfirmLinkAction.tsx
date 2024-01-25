@@ -20,7 +20,6 @@ export const createConfirmLinkAction = ({
 
   return {
     alertSuccess: {
-      alertType: 'success',
       message: (
         <>
           {' '}
