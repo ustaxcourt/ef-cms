@@ -28,7 +28,7 @@ export const removeSignatureAction = async ({
     caseDetail: updatedCase,
     viewerDraftDocumentToDisplay: {
       docketEntryId,
-      documentType: viewerDraftDocumentToDisplay.documentType,
+      documentType: viewerDraftDocumentToDisplay?.documentType,
     },
   };
 };
