@@ -22,6 +22,7 @@ export const uploadDocumentAndMakeSafeInteractor = async (
       onUploadProgress,
     });
 
+  //TODO: do we have a real virus scanner?
   await applicationContext
     .getUseCases()
     .getStatusOfVirusScanInteractor(applicationContext, {
