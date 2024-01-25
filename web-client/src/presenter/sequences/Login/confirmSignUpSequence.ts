@@ -1,9 +1,8 @@
-import { confirmSignUpAction } from '../actions/confirmSignUpAction';
+import { confirmSignUpAction } from '@web-client/presenter/actions/confirmSignUpAction';
 import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
+import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
 
-// TODO 10007: this can probably be unified with the other change password stuff
 export const confirmSignUpSequence = [
   confirmSignUpAction,
   {

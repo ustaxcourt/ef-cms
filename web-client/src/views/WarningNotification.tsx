@@ -108,17 +108,31 @@ export const WarningNotificationComponent =
     );
   };
 
-export const WarningNotification = connect(
-  {
-    alertWarning: state.alertWarning,
-    dismissAlertSequence: sequences.dismissAlertSequence,
-  },
-  function WarningNotification({ alertWarning, dismissAlertSequence }) {
+type WarningNotificationProps = {
+  isDismissable?: boolean;
+};
+
+const warningNotificationDeps = {
+  alertWarning: state.alertWarning,
+  dismissAlertSequence: sequences.dismissAlertSequence,
+};
+
+export const WarningNotification = connect<
+  WarningNotificationProps,
+  typeof warningNotificationDeps
+>(
+  warningNotificationDeps,
+  function WarningNotification({
+    alertWarning,
+    dismissAlertSequence,
+    isDismissable = true,
+  }) {
     if (alertWarning) {
       return (
         <WarningNotificationComponent
           alertWarning={alertWarning}
           dismissAlertSequence={dismissAlertSequence}
+          dismissable={isDismissable}
         />
       );
     } else {

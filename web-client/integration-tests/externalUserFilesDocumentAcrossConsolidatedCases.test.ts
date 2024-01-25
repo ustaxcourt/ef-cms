@@ -132,7 +132,7 @@ describe('External User files a document across a consolidated case group', () =
   });
 
   describe('privatePractitioner', () => {
-    loginAs(cerebralTest, 'privatepractitioner@example.com');
+    loginAs(cerebralTest, 'privatePractitioner@example.com');
     getConsolidatedCasesDetails(cerebralTest, leadCaseDocketNumber);
 
     verifyCorrectFileDocumentButton(cerebralTest, {
@@ -146,7 +146,7 @@ describe('External User files a document across a consolidated case group', () =
 
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
 
-    loginAs(cerebralTest, 'privatepractitioner2@example.com');
+    loginAs(cerebralTest, 'privatePractitioner2@example.com');
     verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
       expectedAssociation: false,
       practitionerRole: 'privatePractitioner',

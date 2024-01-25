@@ -1,17 +1,18 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { MessageAlert } from '@web-client/ustc-ui/MessageAlert/MessageAlert';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
+import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const Login = connect(
   {
-    alertError: state.alertError,
-    cognitoRequestPasswordResetUrl: state.cognitoRequestPasswordResetUrl,
     loginHelper: state.loginHelper,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
+    navigateToForgotPasswordSequence:
+      sequences.navigateToForgotPasswordSequence,
     showPassword: state.showPassword,
     submitLoginSequence: sequences.submitLoginSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
@@ -19,10 +20,9 @@ export const Login = connect(
       sequences.updateAuthenticationFormValueSequence,
   },
   ({
-    alertError,
-    cognitoRequestPasswordResetUrl,
     loginHelper,
     navigateToCreatePetitionerAccountSequence,
+    navigateToForgotPasswordSequence,
     showPassword,
     submitLoginSequence,
     toggleShowPasswordSequence,
@@ -34,13 +34,8 @@ export const Login = connect(
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissable={false} />
-              {alertError && (
-                <MessageAlert
-                  alertType={alertError.alertType}
-                  message={alertError.message}
-                  title={alertError.title}
-                ></MessageAlert>
-              )}
+              <WarningNotification isDismissable={false} />
+              <ErrorNotification />
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
@@ -58,6 +53,7 @@ export const Login = connect(
                         autoCorrect="off"
                         className="usa-input"
                         data-testid="email-input"
+                        id="email"
                         name="email"
                         type="email"
                         onChange={e => {
@@ -73,6 +69,7 @@ export const Login = connect(
                         required
                         className="usa-input"
                         data-testid="password-input"
+                        id="password"
                         name="password"
                         type={showPassword ? 'text' : 'password'}
                         onChange={e => {
@@ -109,9 +106,9 @@ export const Login = connect(
                     <div>
                       <Button
                         className="margin-top-1"
-                        href={cognitoRequestPasswordResetUrl}
                         link={true}
                         type="button"
+                        onClick={() => navigateToForgotPasswordSequence()}
                       >
                         Forgot password?
                       </Button>

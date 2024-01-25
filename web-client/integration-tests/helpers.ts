@@ -829,7 +829,7 @@ export const uploadPetition = async (
   return response.data;
 };
 
-export const loginAs = (cerebralTest, email) =>
+export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
   it(`login as ${email}`, async () => {
     await cerebralTest.runSequence('signOutSequence');
 
@@ -839,7 +839,7 @@ export const loginAs = (cerebralTest, email) =>
 
     // TODO: extract password to constant
     await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
-      password: 'Testing1234$',
+      password,
     });
 
     await cerebralTest.runSequence('submitLoginSequence');

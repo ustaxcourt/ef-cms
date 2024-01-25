@@ -4,11 +4,16 @@
   - web-api/terraform/template/lambdas/cognito-triggers.ts
 + Extract error message strings into constants OR do something else. (On hold)
 + Forgot password flow.
-- Talk about change password refactor & password validation
+- Figure out how to avoid lack of spinner when redirecting to login from public site
+- Swagger docs: Move to delete. Ask people to do so.
+- confirm user could timeout when associating a brand new person.
 
 ::: QUESTIONS :::
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
-- Manual code generation/checking vs Cognito-based codes for forgot password flow
+- How do we make forgot password more secure? 
+- Have we covered one of two scenarios mentioned in 10007 comments by Tenille?
 
 ::: DOD :::
 - Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
+- Refactor getCognito to be more generic - "getAuthenticationGateway"
+  - Abstract away from cognito specific syntax in interactors

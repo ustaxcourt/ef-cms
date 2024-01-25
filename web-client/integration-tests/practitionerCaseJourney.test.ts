@@ -46,7 +46,7 @@ describe('Practitioner requests access to case', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   practitionerCreatesNewCase(cerebralTest, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
 
@@ -93,7 +93,7 @@ describe('Practitioner requests access to case', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkEditsServiceIndicatorToNoneForPetitioner(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   practitionerSearchesForNonexistentCase(cerebralTest);
   practitionerViewsDashboardBeforeAddingCase(cerebralTest);
   practitionerSearchesForCase(cerebralTest);
@@ -103,7 +103,7 @@ describe('Practitioner requests access to case', () => {
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
   practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  loginAs(cerebralTest, 'privatepractitioner4@example.com');
+  loginAs(cerebralTest, 'privatePractitioner4@example.com');
   it('Practitioner requests access to case using "Notice of Election to Intervene" document type', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -216,7 +216,7 @@ describe('Practitioner requests access to case', () => {
   petitionsClerkAddsDocketEntryFromOrder(cerebralTest);
   petitionsClerkServesOrder(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   practitionerSearchesForCase(cerebralTest);
   practitionerViewsCaseDetailWithPublicOrder(cerebralTest);
   practitionerRequestsPendingAccessToCase(cerebralTest, fakeFile);
@@ -233,6 +233,6 @@ describe('Practitioner requests access to case', () => {
   loginAs(cerebralTest, 'petitioner1@example.com');
   petitionerSearchesForUnassociatedSealedCase(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner3@example.com');
+  loginAs(cerebralTest, 'privatePractitioner3@example.com');
   practitionerSearchesForUnassociatedSealedCase(cerebralTest);
 });

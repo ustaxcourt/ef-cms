@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { createNewPetitionerUserAction } from '@web-client/presenter/actions/CreateAccount/createNewPetitionerUserAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import React from 'react';
 
 describe('createNewPetitionerUserAction', () => {
   const mockSuccessPath = jest.fn();
@@ -93,14 +94,11 @@ describe('createNewPetitionerUserAction', () => {
       originalError: { response: { data: 'User already exists' } },
     });
 
-    const cognitoRequestPasswordResetUrl = 'cognitoRequestPasswordResetUrl';
-
     await runAction(createNewPetitionerUserAction, {
       modules: {
         presenter,
       },
       state: {
-        cognitoRequestPasswordResetUrl,
         form: {
           confirmPassword: TEST_CONFIRM_PASSWORD,
           email: TEST_EMAIL,
@@ -126,9 +124,15 @@ describe('createNewPetitionerUserAction', () => {
     });
     expect(mockSuccessPath).not.toHaveBeenCalled();
     expect(mockWarningPath.mock.calls.length).toEqual(1);
-    expect(mockWarningPath.mock.calls[0][0]).toEqual({
+    expect(mockWarningPath).toHaveBeenCalledWith({
       alertWarning: {
-        message: expect.anything(),
+        message: (
+          <>
+            This email address is already associated with an account. You can{' '}
+            <a href="/login">log in here</a>. If you forgot your password, you
+            can <a href={'/forgot-password'}> request a password reset</a>.
+          </>
+        ),
         title: 'Email address already has an account',
       },
     });
@@ -169,9 +173,20 @@ describe('createNewPetitionerUserAction', () => {
     });
     expect(mockSuccessPath).not.toHaveBeenCalled();
     expect(mockErrorPath.mock.calls.length).toEqual(1);
-    expect(mockErrorPath.mock.calls[0][0]).toEqual({
+    expect(mockErrorPath).toHaveBeenCalledWith({
       alertError: {
-        message: expect.anything(),
+        message: (
+          <>
+            The email address is associated with an account but is not verified.
+            We sent an email with a link to verify the email address. If you
+            don&apos;t see it, check your spam folder. If you&apos;re still
+            having trouble, please contact{' '}
+            <a href="mailto:dawson.support@ustaxcourt.gov">
+              dawson.support@ustaxcourt.gov
+            </a>
+            .
+          </>
+        ),
         title: 'Email address not verified',
       },
     });
