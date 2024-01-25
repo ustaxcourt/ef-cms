@@ -54,6 +54,7 @@ export const CreatePetitionerAccountForm = connect(
                 autoCapitalize="off"
                 autoCorrect="off"
                 className="usa-input"
+                data-testid="petitioner-account-creation-email"
                 id="email"
                 name="email"
                 type="text"
@@ -86,6 +87,7 @@ export const CreatePetitionerAccountForm = connect(
                 autoCapitalize="off"
                 autoCorrect="off"
                 className="usa-input"
+                data-testid="petitioner-account-creation-name"
                 id="name"
                 name="name"
                 type="text"
@@ -116,6 +118,7 @@ export const CreatePetitionerAccountForm = connect(
               <input
                 required
                 className="usa-input"
+                data-testid="petitioner-account-creation-password"
                 id="password"
                 name="password"
                 type={showPassword ? 'text' : 'password'}
@@ -143,7 +146,7 @@ export const CreatePetitionerAccountForm = connect(
                 {createAccountHelper.passwordErrors.map(error => {
                   return (
                     <RequirementsText
-                      fieldName="password"
+                      fieldName={`password-${error.key}`}
                       key={error.message}
                       text={error.message}
                       valid={error.valid}
@@ -158,6 +161,7 @@ export const CreatePetitionerAccountForm = connect(
               <input
                 required
                 className="usa-input"
+                data-testid="petitioner-account-creation-confirm-password"
                 id="confirm-password"
                 name="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
@@ -190,13 +194,14 @@ export const CreatePetitionerAccountForm = connect(
                 }}
               >
                 <RequirementsText
-                  fieldName="confirm password"
+                  fieldName="confirm-password"
                   text="Passwords must match"
                   valid={createAccountHelper.confirmPassword}
                 ></RequirementsText>
               </div>
               <Button
                 className="usa-button margin-top-2"
+                data-testid="petitioner-account-creation-submit-button"
                 disabled={!createAccountHelper.formIsValid}
                 id="submit-button"
               >
