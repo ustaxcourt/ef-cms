@@ -79,29 +79,30 @@ export const AddCorrespondenceDocument = connect(
                     />
                   </FormGroup>
                 </div>
-              </div>
-              <div className="grid-row grid-gap margin-top-4">
-                <div className="grid-col-8">
-                  <Button
-                    id="upload-correspondence"
-                    onClick={() => {
-                      uploadCorrespondenceDocumentSequence({
-                        tab: 'correspondence',
-                      });
-                    }}
-                  >
-                    Finish
-                  </Button>
-                  <Button
-                    link
-                    onClick={() => {
-                      formCancelToggleCancelSequence();
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                <div className="grid-row grid-gap margin-top-4">
+                  <div className="grid-col-8">
+                    <Button
+                      id="upload-correspondence"
+                      onClick={() => {
+                        uploadCorrespondenceDocumentSequence({
+                          tab: 'correspondence',
+                        });
+                      }}
+                    >
+                      Finish
+                    </Button>
+                    <Button
+                      link
+                      onClick={() => {
+                        formCancelToggleCancelSequence();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
               </div>
+
               <div className="grid-col-7">
                 <ScanBatchPreviewer
                   documentType="primaryDocumentFile"
