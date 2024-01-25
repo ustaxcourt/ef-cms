@@ -77,7 +77,7 @@ import { completeDocumentSelectSequence } from './sequences/completeDocumentSele
 import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
-import { confirmSignUpSequence } from './sequences/confirmSignUpSequence';
+import { confirmSignUpSequence } from './sequences/Login/confirmSignUpSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
 import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
@@ -124,6 +124,7 @@ import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
 import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
+import { goToForgotPasswordSequence } from '@web-client/presenter/sequences/Login/goToForgotPasswordSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
@@ -220,6 +221,7 @@ import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSe
 import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
 import { navigateToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/navigateToCreatePetitionerAccountSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
+import { navigateToForgotPasswordSequence } from '@web-client/presenter/sequences/Login/navigateToForgotPasswordSequence';
 import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { navigateToPathAndSetRedirectUrlSequence } from './sequences/navigateToPathAndSetRedirectUrlSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
@@ -325,6 +327,7 @@ import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
+import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
 import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
@@ -418,6 +421,7 @@ import { submitEditPractitionerDocumentSequence } from './sequences/submitEditPr
 import { submitEditRespondentCounselSequence } from './sequences/submitEditRespondentCounselSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
+import { submitForgotPasswordSequence } from '@web-client/presenter/sequences/Login/submitForgotPasswordSequence';
 import { submitJudgeActivityReportSequence } from './sequences/JudgeActivityReport/submitJudgeActivityReportSequence';
 import { submitJudgeActivityStatisticsReportSequence } from './sequences/JudgeActivityReport/submitJudgeActivityStatisticsReportSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
@@ -754,6 +758,7 @@ export const presenterSequences = {
   goToApplyStampSequence: goToApplyStampSequence as unknown as Function,
   goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
+  goToForgotPasswordSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
   gotoAccessibilityStatementSequence:
@@ -913,6 +918,7 @@ export const presenterSequences = {
   navigateToCreatePetitionerAccountSequence,
   navigateToEditOrderSequence:
     navigateToEditOrderSequence as unknown as Function,
+  navigateToForgotPasswordSequence,
   navigateToLoginSequence,
   navigateToPathAndSetRedirectUrlSequence:
     navigateToPathAndSetRedirectUrlSequence as unknown as Function,
@@ -1106,6 +1112,7 @@ export const presenterSequences = {
   resetHeaderAccordionsSequence:
     resetHeaderAccordionsSequence as unknown as Function,
   resetIdleTimerSequence: resetIdleTimerSequence as unknown as Function,
+  resetPasswordSequence,
   retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
@@ -1263,6 +1270,7 @@ export const presenterSequences = {
   submitExternalDocumentSequence:
     submitExternalDocumentSequence as unknown as Function,
   submitFilePetitionSequence: submitFilePetitionSequence as unknown as Function,
+  submitForgotPasswordSequence,
   submitJudgeActivityReportSequence:
     submitJudgeActivityReportSequence as unknown as Function,
   submitJudgeActivityStatisticsReportSequence:

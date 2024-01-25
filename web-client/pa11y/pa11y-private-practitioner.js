@@ -4,42 +4,42 @@ const { loginAs } = require('./helpers');
 module.exports = [
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/user/contact/edit',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/case-detail/105-19',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/file-a-petition/step-1',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-19/request-access',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-19/request-access',
       'wait for element #react-select-2-input to be visible',
       'click #react-select-2-input',
@@ -59,28 +59,28 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/search/no-matches',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/my-account',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/change-login-and-service-email',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatepractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/',
       'wait for #tab-closed to be visible',
       'click element #tab-closed',

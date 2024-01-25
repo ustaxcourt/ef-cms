@@ -49,6 +49,7 @@ import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
+import { getUserGateway } from '@web-api/getUserGateway';
 import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
@@ -87,6 +88,7 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+  userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
@@ -294,7 +296,6 @@ export const createApplicationContext = (
         }
       },
     }),
-
     getMessagingClient: () => {
       if (!sqsCache) {
         sqsCache = new SQS({
@@ -418,6 +419,7 @@ export const createApplicationContext = (
     getUniqueId,
     getUseCaseHelpers,
     getUseCases,
+    getUserGateway,
     getUtilities,
     isAuthorized,
     isCurrentColorActive,

@@ -31,8 +31,7 @@ describe('createConfirmLinkAction', () => {
 
   it('should construct an alertSuccess message when IS_LOCAL is "true"', async () => {
     process.env.IS_LOCAL = 'true';
-    const confirmationLink =
-      'http://localhost:1234/confirm-signup?email=something@example.com';
+    const confirmationLink = `http://localhost:1234/confirm-signup?email=${email}`;
 
     const expectedMessage = (
       <>

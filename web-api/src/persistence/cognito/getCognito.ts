@@ -1,4 +1,10 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AdminCreateUserCommandInput,
+  AdminCreateUserCommandOutput,
+  CognitoIdentityProvider,
+  MessageActionType,
+} from '@aws-sdk/client-cognito-identity-provider';
+import { HttpHandlerOptions } from '@smithy/types';
 
 let cognitoClientCache: CognitoIdentityProvider;
 
@@ -24,6 +30,26 @@ export function getLocalCognito() {
       maxAttempts: 3,
       region: 'local',
     });
+
+    // Cognito local does NOT support adminCreateUser with "MessageAction: 'RESEND'" argument.
+    // Here we stub out adminCreateUser locally IF it is being called with "MessageAction: 'RESEND'".
+    const originalAdminCreateUser: (
+      args: AdminCreateUserCommandInput,
+      options?: HttpHandlerOptions | undefined,
+    ) => Promise<AdminCreateUserCommandOutput> =
+      cognitoClientCache.adminCreateUser;
+
+    cognitoClientCache.adminCreateUser = async function (
+      args: AdminCreateUserCommandInput,
+    ): Promise<AdminCreateUserCommandOutput> {
+      if (args.MessageAction === MessageActionType.RESEND) {
+        return {
+          $metadata: {},
+        };
+      }
+
+      return originalAdminCreateUser.call(this, args);
+    };
   }
 
   return cognitoClientCache;

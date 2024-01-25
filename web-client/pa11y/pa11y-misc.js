@@ -1,5 +1,5 @@
 module.exports = [
-  // 'http://localhost:1234/login', // TODO 10007
+  'http://localhost:1234/login',
   'http://localhost:1234/create-account/petitioner',
   {
     actions: [

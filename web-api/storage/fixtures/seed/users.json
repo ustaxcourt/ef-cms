@@ -190,7 +190,7 @@
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "entityName": "PrivatePractitioner",
-    "email": "privatepractitioner@example.com",
+    "email": "privatePractitioner@example.com",
     "firmName": "GW Law Offices",
     "additionalPhone": "111-111-1111",
     "originalBarState": "MD",
@@ -222,7 +222,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "entityName": "PrivatePractitioner",
     "firmName": "Bogus Barristers",
-    "email": "privatepractitioner1@example.com",
+    "email": "privatePractitioner1@example.com",
     "barNumber": "PT5432",
     "contact": {
       "address1": "234 Main St",
@@ -250,7 +250,7 @@
     "suffix": "",
     "section": "privatePractitioner",
     "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "email": "privatepractitioner2@example.com",
+    "email": "privatePractitioner2@example.com",
     "firmName": "Lilah, Lilah",
     "barNumber": "GL1111",
     "contact": {
@@ -280,7 +280,7 @@
     "suffix": "",
     "section": "privatePractitioner",
     "userId": "9f25dc2c-764a-435c-86dd-323e53634537",
-    "email": "privatepractitioner3@example.com",
+    "email": "privatePractitioner3@example.com",
     "firmName": "Iron Law",
     "barNumber": "SC2222",
     "contact": {
@@ -310,7 +310,7 @@
     "suffix": "",
     "section": "privatePractitioner",
     "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "email": "privatepractitioner4@example.com",
+    "email": "privatePractitioner4@example.com",
     "firmName": "Law Offices of Rivas and Kathy Gee",
     "barNumber": "RA3333",
     "contact": {
@@ -341,7 +341,7 @@
     "section": "privatePractitioner",
     "userId": "a6318a31-8aa4-4002-a7b0-1192af19dbb9",
     "entityName": "PrivatePractitioner",
-    "email": "privatepractitioner99@example.com",
+    "email": "privatePractitioner99@example.com",
     "firmName": "Bogus Barristers",
     "barNumber": "PT9999",
     "contact": {
@@ -588,6 +588,14 @@
     "section": "admissions",
     "userId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "email": "admissionsclerk@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "admissionsclerk",
+    "name": "Test Admissions Clerk1",
+    "section": "admissions",
+    "userId": "9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "email": "admissionsclerk1@example.com",
     "entityName": "User"
   },
   {

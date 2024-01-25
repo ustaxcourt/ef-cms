@@ -53,6 +53,7 @@ import { fileCorrespondenceDocumentLambda } from './lambdas/correspondence/fileC
 import { fileCourtIssuedDocketEntryLambda } from './lambdas/documents/fileCourtIssuedDocketEntryLambda';
 import { fileCourtIssuedOrderToCaseLambda } from './lambdas/documents/fileCourtIssuedOrderToCaseLambda';
 import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExternalDocumentToCaseLambda';
+import { forgotPasswordLambda } from '@web-api/lambdas/auth/forgotPasswordLambda';
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
 import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
@@ -1028,6 +1029,7 @@ app.get(
   app.post('/auth/confirm-signup', lambdaWrapper(confirmSignUpLambda));
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
+  app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the

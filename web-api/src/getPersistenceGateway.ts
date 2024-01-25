@@ -51,6 +51,7 @@ import { editPractitionerDocument } from './persistence/dynamo/practitioners/edi
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
 import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
+import { generateForgotPasswordCode } from '@web-api/persistence/dynamo/users/generateForgotPasswordCode';
 import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/getAccountConfirmationCode';
 import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/elasticsearch/docketEntry/getAllPendingMotionDocketEntriesForJudge';
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
@@ -98,6 +99,7 @@ import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions
 import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
 import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
 import { getFirstSingleCaseRecord } from './persistence/elasticsearch/getFirstSingleCaseRecord';
+import { getForgotPasswordCode } from '@web-api/persistence/dynamo/users/getForgotPasswordCode';
 import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
 import { getMessageById } from './persistence/dynamo/messages/getMessageById';
@@ -302,6 +304,7 @@ const gatewayMethods = {
   deleteWorkItem,
   fetchEventCodesCountForJudges,
   generateAccountConfirmationCode,
+  generateForgotPasswordCode,
   getAccountConfirmationCode,
   getAllPendingMotionDocketEntriesForJudge,
   getAllUsersByRole,
@@ -347,6 +350,7 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,
   getFirstSingleCaseRecord,
+  getForgotPasswordCode,
   getInternalUsers,
   getLimiterByKey,
   getLock,

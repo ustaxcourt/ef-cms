@@ -644,10 +644,11 @@ export const PASSWORD_RULE = joi
   .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasSpecialCharacterOrSpace)
   .pattern(new RegExp(/[0-9]/), { name: 'hasOneNumber' })
   .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneNumber)
-  .trim()
+  .pattern(new RegExp(/^\S[^\s]*\S$/), {
+    name: 'hasNoLeadingOrTrailingSpace',
+  })
+  .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasNoLeadingOrTrailingSpace)
   .messages({
     'string.max': PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength,
     'string.min': PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength,
-    'string.trim':
-      PASSWORD_VALIDATION_ERROR_MESSAGES.hasNoLeadingOrTrailingSpace,
   });

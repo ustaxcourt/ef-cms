@@ -589,7 +589,6 @@ export const FILTER_OPTIONS = Object.values(
 );
 export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
-// TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentTitle: 'Application for Waiver of Filing Fee',
@@ -1015,7 +1014,9 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
-};
+} as const;
+const ROLES_TYPES = Object.values(ROLES);
+export type Role = (typeof ROLES_TYPES)[number];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.

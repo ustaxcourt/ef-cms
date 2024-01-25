@@ -51,3 +51,8 @@ export type AccountConfirmationRecord = TDynamoRecord<{
   userId: string;
   confirmationCode: string;
 }>;
+
+export type ForgotPasswordRecord = TDynamoRecord<{
+  userId: string;
+  code: string;
+}>;

@@ -9,7 +9,7 @@ export const getAccountConfirmationCode = async (
   }: {
     userId: string;
   },
-): Promise<{ confirmationCode?: string }> => {
+): Promise<string | undefined> => {
   const result: AccountConfirmationRecord = await get({
     Key: {
       pk: `user|${userId}`,
@@ -18,7 +18,5 @@ export const getAccountConfirmationCode = async (
     applicationContext,
   });
 
-  return {
-    confirmationCode: result?.confirmationCode,
-  };
+  return result?.confirmationCode;
 };

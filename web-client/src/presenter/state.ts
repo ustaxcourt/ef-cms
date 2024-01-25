@@ -123,7 +123,6 @@ import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNotic
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
-import { showSortableHeaders } from './computeds/showSortableHeaders';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
@@ -491,9 +490,6 @@ export const computeds = {
   showAppTimeoutModalHelper: showAppTimeoutModalHelper as unknown as ReturnType<
     typeof showAppTimeoutModalHelper
   >,
-  showSortableHeaders: showSortableHeaders as unknown as ReturnType<
-    typeof showSortableHeaders
-  >,
   startCaseHelper: startCaseHelper as unknown as ReturnType<
     typeof startCaseHelper
   >,
@@ -563,15 +559,20 @@ export const baseState = {
     documentTitle: null,
   },
   assigneeId: null,
-  //TODO: 10007 set these defaults back to ''
   authentication: {
-    form: {
-      confirmPassword: undefined,
-      email: undefined,
-      password: undefined,
+    code: '',
+    forgotPassword: {
+      code: '',
+      email: '',
+      userId: '',
     },
-    tempPassword: undefined,
-    userEmail: undefined,
+    form: {
+      confirmPassword: '',
+      email: '',
+      password: '',
+    },
+    tempPassword: '',
+    userEmail: '',
   },
   batchDownloads: {},
   caseDeadlineReport: {} as {
@@ -591,8 +592,6 @@ export const baseState = {
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
-  cognitoPasswordChange: '',
-  cognitoRequestPasswordResetUrl: '',
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
   currentJudges: [],

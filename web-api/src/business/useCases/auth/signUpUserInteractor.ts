@@ -1,4 +1,7 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  CognitoIdentityProvider,
+  UserStatusType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -24,20 +27,15 @@ export const signUpUserInteractor = async (
 ): Promise<SignUpUserResponse> => {
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
-  const { Users: existingAccounts } = await cognito.listUsers({
-    AttributesToGet: ['email'],
-    Filter: `email = "${user.email}"`,
-    UserPoolId: process.env.USER_POOL_ID,
-  });
+  const foundUser = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, { email: user.email });
 
-  if (existingAccounts?.length) {
-    const accountUnconfirmed = existingAccounts.some(
-      acct => acct.UserStatus === 'UNCONFIRMED',
-    );
-
-    const errorMessage = accountUnconfirmed
-      ? 'User exists, email unconfirmed'
-      : 'User already exists';
+  if (foundUser) {
+    const errorMessage =
+      foundUser.accountStatus === UserStatusType.UNCONFIRMED
+        ? 'User exists, email unconfirmed'
+        : 'User already exists';
 
     throw new Error(errorMessage);
   }

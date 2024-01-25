@@ -11,13 +11,14 @@ export const getCognitoUserIdByEmail = async ({
       Username: email,
     });
 
-    const customUserId = (
-      userFromCognito.UserAttributes?.find(
-        attribute => attribute.Name === 'custom:userId',
-      ) || {}
-    ).Value;
-    // replace with sub here
-    return customUserId || userFromCognito.Username;
+    const customUserId =
+      userFromCognito?.UserAttributes?.find(
+        element => element.Name === 'custom:userId',
+      )?.Value ||
+      userFromCognito?.UserAttributes?.find(element => element.Name === 'sub')
+        ?.Value;
+
+    return customUserId;
   } catch (e) {
     return null;
   }

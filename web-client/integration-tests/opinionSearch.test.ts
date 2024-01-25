@@ -24,7 +24,7 @@ describe('Opinion search', () => {
   });
 
   describe('external', () => {
-    loginAs(cerebralTest, 'privatepractitioner1@example.com');
+    loginAs(cerebralTest, 'privatePractitioner1@example.com');
 
     it('should preserve the warning message when the user routes back to search from their dashboard', async () => {
       await cerebralTest.runSequence('gotoDashboardSequence');

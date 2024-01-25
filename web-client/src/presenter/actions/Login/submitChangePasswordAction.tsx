@@ -10,16 +10,14 @@ export const submitChangePasswordAction = async ({
   idToken: string;
   refreshToken: string;
 }> => {
-  // TODO: move userEmail and session off form.state
-
-  //TODO: validate entity here
   const { confirmPassword, password } = get(state.authentication.form);
-  const { tempPassword, userEmail } = get(state.authentication);
+  const { code, tempPassword, userEmail } = get(state.authentication);
 
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
       .getUseCases()
       .changePasswordInteractor(applicationContext, {
+        code,
         confirmPassword,
         password,
         tempPassword,
@@ -31,7 +29,7 @@ export const submitChangePasswordAction = async ({
     const originalErrorMessage = err?.originalError?.response?.data;
 
     if (originalErrorMessage === 'User is unconfirmed') {
-      return path.error({
+      return path.unconfirmedAccount({
         alertError: {
           message: (
             <>
@@ -46,6 +44,24 @@ export const submitChangePasswordAction = async ({
             </>
           ),
           title: 'Email address not verified',
+        },
+      });
+    }
+    if (originalErrorMessage === 'Forgot password code expired') {
+      return path.codeExpired({
+        alertError: {
+          message: (
+            <>
+              Your previous request to reset your password expired. You can
+              request a new password reset below. If you’re still having
+              trouble, contact{' '}
+              <a href="mailto:dawson.support@ustaxcourt.gov">
+                dawson.support@ustaxcourt.gov
+              </a>
+              .
+            </>
+          ),
+          title: 'Request expired',
         },
       });
     }
