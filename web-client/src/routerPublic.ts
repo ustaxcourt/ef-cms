@@ -68,12 +68,6 @@ const router = {
       return app.getSequence('gotoContactSequence')();
     });
 
-    // TODO 10007 Does this need to be updated to move to private app? Or remove?
-    route('/email-verification-success', () => {
-      setPageTitle('Email Verification Success');
-      return app.getSequence('gotoPublicEmailVerificationSuccessSequence')();
-    });
-
     route('/email-verification-instructions', () => {
       setPageTitle('Email Verification Instructions');
       return app.getSequence(

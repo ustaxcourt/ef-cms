@@ -16,7 +16,6 @@ import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoPublicCaseDetailSequence } from './sequences/Public/gotoPublicCaseDetailSequence';
 import { gotoPublicEmailVerificationInstructionsSequence } from './sequences/gotoPublicEmailVerificationInstructionsSequence';
-import { gotoPublicEmailVerificationSuccessSequence } from './sequences/gotoPublicEmailVerificationSuccessSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/Public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/Public/gotoPublicSearchSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
@@ -77,9 +76,6 @@ export const presenterSequences = {
   ),
   gotoPublicEmailVerificationInstructionsSequence: showMaintenancePageDecorator(
     gotoPublicEmailVerificationInstructionsSequence,
-  ),
-  gotoPublicEmailVerificationSuccessSequence: showMaintenancePageDecorator(
-    gotoPublicEmailVerificationSuccessSequence,
   ),
   gotoPublicPrintableDocketRecordSequence,
   gotoPublicSearchSequence: showMaintenancePageDecorator(
