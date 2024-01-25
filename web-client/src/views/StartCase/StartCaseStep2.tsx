@@ -173,9 +173,7 @@ export const StartCaseStep2 = connect(
                   </span>
                   <StateDrivenMultiFileInput
                     aria-describedby="atp-files-upload-label"
-                    customClassName="usa-file-input"
                     id="atp-files-upload"
-                    multiple={'multiple'}
                     name="atpFiles"
                     updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
                     validationSequence="validateExternalDocumentInformationSequence"

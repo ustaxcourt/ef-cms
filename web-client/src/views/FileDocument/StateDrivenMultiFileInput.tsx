@@ -2,108 +2,123 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { limitFileSize } from '../limitFileSize';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+function handleFileSelectionAndValidation(
+  e,
+  maxFileSize,
+  updateFormValueSequence,
+) {
+  const { name: inputName } = e.target;
+
+  const filesExceedingSizeLimit = Array.from(e.target.files!)
+    .map(capturedFile => {
+      if (
+        capturedFile.size >=
+        maxFileSize * 1024 * 1024
+        // capturedFile.size >= 5
+      ) {
+        return capturedFile.name;
+      }
+    })
+    .filter(file => !!file);
+  if (filesExceedingSizeLimit.length) {
+    alert(
+      `Your file(s) size is too big. The maximum file size is ${maxFileSize}MB.
+        ${filesExceedingSizeLimit.join(', ')}
+        `,
+    );
+    e.target.value = '';
+    return false;
+  }
+
+  const clonedFilePromises = Array.from(e.target.files!).map(capturedFile => {
+    return cloneFile(capturedFile).catch(() => null);
+  });
+
+  Promise.all(clonedFilePromises)
+    .then(clonedFiles => {
+      const validatedFiles = clonedFiles.filter(file => file !== null);
+      updateFormValueSequence({
+        key: inputName,
+        value: validatedFiles,
+      });
+    })
+    .catch(() => {
+      /* no-op */
+    });
+  // run validationSequence
+}
+
 export const StateDrivenMultiFileInput = connect(
   {
     ariaDescribedBy: props.ariaDescribedBy,
     constants: state.constants,
-    file: props.file,
     fileInputName: props.name,
     form: state.form,
     id: props.id,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
-    validationSequence: sequences[props.validationSequence],
+    // validationSequence: sequences[props.validationSequence],
   },
-  function StateDrivenFileInput({
+  function StateDrivenMultiFileInput({
     accept = '.pdf',
     ariaDescribedBy,
     constants,
-    customClassName = 'usa-input',
-    file,
     fileInputName,
     form,
     id,
-    multiple,
     updateFormValueSequence,
-    validationSequence,
+    // validationSequence,
     ...remainingProps
   }) {
     let inputRef;
-
-    const fileOnForm = file || form[fileInputName] || form.existingFileName;
+    const filesOnForm = form[fileInputName];
 
     return (
       <React.Fragment>
         <input
           {...remainingProps}
+          multiple
           accept={accept}
           aria-describedby={ariaDescribedBy}
-          className={customClassName}
+          className="usa-input"
           data-testid={id}
           id={id}
-          multiple={!!multiple} // is 'false' a possible option for multiple?? from the docs, its true or undefined
           name={fileInputName}
           ref={ref => (inputRef = ref)}
           style={{
-            display: fileOnForm ? 'none' : 'block',
+            display: filesOnForm?.length ? 'none' : 'block',
           }}
           type="file"
-          onChange={e => {
-            const { name: inputName } = e.target;
-            let validatedFiles = [];
-            Array.from(e.target.files!).forEach(capturedFile => {
-              // validate size;
-              // add to array;
-
-              if (
-                capturedFile.size >=
-                constants.MAX_FILE_SIZE_MB * 1024 * 1024
-              ) {
-                alert('file n is too big'); // change message
-                return false;
-              }
-
-              // atpFiles: [File1, File2]
-              // atpFiles: [{file1: {file, fileSize}}, File2]
-              // atpFiles: [{file, fileSize}, {file, fileSize}]
-              // atpFiles: [[file, fileSize], []]
-              // atpFiles: [[{file: file}, {size: size}], ]
-
-              cloneFile(capturedFile)
-                .then(clonedFile => {
-                  validatedFiles.push(clonedFile);
-                })
-                .catch(() => {
-                  /* no-op */
-                });
-            });
-
-            updateFormValueSequence({
-              key: inputName,
-              value: validatedFiles,
-            });
-          }}
+          onChange={e =>
+            handleFileSelectionAndValidation(
+              e,
+              constants.MAX_FILE_SIZE_MB,
+              updateFormValueSequence,
+            )
+          }
           onClick={e => {
-            if (fileOnForm) e.preventDefault();
+            if (filesOnForm?.length) e.preventDefault();
           }}
         />
-
-        {fileOnForm && (
+        {!!filesOnForm?.length && (
           <div>
-            <span
-              className="success-message icon-upload margin-right-1"
-              data-testid="upload-file-success"
-            >
-              <FontAwesomeIcon icon="check-circle" size="1x" />
-            </span>
-            <span className="mr-1">
-              {fileOnForm.name || form.existingFileName}
-            </span>
+            {filesOnForm.map(file => {
+              return (
+                <div className="margin-bottom-1" key={file.name}>
+                  <span
+                    className="success-message icon-upload margin-right-1"
+                    data-testid="upload-file-success"
+                  >
+                    <FontAwesomeIcon icon="check-circle" size="1x" />
+                  </span>
+                  {file.name}
+                </div>
+              );
+            })}
             <Button
               link
               className="ustc-button--mobile-inline margin-left-1"
