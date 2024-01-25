@@ -5,7 +5,8 @@
 + Extract error message strings into constants OR do something else. (On hold)
 + Forgot password flow.
 - Figure out how to avoid lack of spinner when redirecting to login from public site
-- Swagger docs?
+- Swagger docs: Move to delete. Ask people to do so.
+- confirm user could timeout when associating a brand new person.
 
 ::: QUESTIONS :::
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?

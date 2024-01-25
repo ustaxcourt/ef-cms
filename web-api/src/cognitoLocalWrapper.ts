@@ -10,6 +10,7 @@ const cognitoFunctions = [
   'signUp',
 ];
 
+// Todo 10007 Delete this if unused.
 export const cognitoLocalWrapper = cognito => {
   for (const methodName in cognito) {
     if (typeof cognito[methodName] === 'function') {
