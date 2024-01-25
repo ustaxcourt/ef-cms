@@ -57,6 +57,19 @@ export const filePetitionInteractor = async (
       });
   }
 
+  //TODO: fill
+  let atpFilesUpload;
+  if (atpFiles?.length) {
+    atpFiles.map(atpFile => {
+      return applicationContext
+        .getUseCases()
+        .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+          document: stinFile,
+          onUploadProgress: stinUploadProgress,
+        });
+    });
+  }
+
   const [corporateDisclosureFileId, petitionFileId, stinFileId] =
     await Promise.all([
       corporateDisclosureFileUpload,

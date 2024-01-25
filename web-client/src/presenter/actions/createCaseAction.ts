@@ -16,7 +16,9 @@ export const createCaseAction = async ({
   path,
   store,
 }: ActionProps) => {
-  const { corporateDisclosureFile, petitionFile, stinFile } = get(state.form);
+  const { atipFiles, corporateDisclosureFile, petitionFile, stinFile } = get(
+    state.form,
+  );
 
   const form = omit(
     {
@@ -28,8 +30,23 @@ export const createCaseAction = async ({
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
+  // loop through each atp file and create a new object with each atp(key number ) and file
+
+  const resultObject = {};
+
+  atipFiles.forEach((obj, index) => {
+    // Convert the index to a string and use it as the key
+    let key = `atp${index}`;
+
+    // Assign the object from the array to the key in the result object
+    resultObject[key] = obj;
+  });
+
   const progressFunctions = setupPercentDone(
     {
+      // TODO: add ATP files
+      // get all the atp files and pass them to setupPercentDone function
+      ...resultObject,
       corporate: corporateDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
@@ -49,6 +66,7 @@ export const createCaseAction = async ({
         petitionUploadProgress: progressFunctions.petition,
         stinFile,
         stinUploadProgress: progressFunctions.stin,
+        //TODO: atpUploadProgress: progressFunctions.atpFiles
       });
   } catch (err) {
     return path.error();
