@@ -1,10 +1,14 @@
 import { loginAsPetitionsClerk } from '../../helpers/auth/login-as-helpers';
 import { v4 as uuidv4 } from 'uuid';
 
-const randomizedEmail = `${uuidv4()}@example.com`;
+const randomizedEmail = `cypress_test_account+${uuidv4()}@example.com`;
 
 if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
   describe('add email to practitioner', () => {
+    after(() => {
+      cy.task('deleteAllCypressTestAccounts');
+    });
+
     it('a noce should be generated after adding an email to a practitioner', () => {
       loginAsPetitionsClerk();
       cy.get('[data-testid="document-qc-nav-item"]').click();

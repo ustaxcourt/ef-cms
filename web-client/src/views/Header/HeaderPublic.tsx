@@ -94,6 +94,7 @@ export const HeaderPublic = connect(
                       <div className="create-container">
                         <Button
                           className="usa-button--unstyled"
+                          data-testid="create-account-button"
                           onClick={() =>
                             redirectToCreatePetitionerAccountSequence()
                           }

@@ -13,7 +13,11 @@ export const createAccountHelper = (
   email?: string;
   formIsValid: boolean;
   name?: string;
-  passwordErrors: { message: string; valid: boolean }[];
+  passwordErrors: {
+    key: string;
+    message: string;
+    valid: boolean;
+  }[];
 } => {
   const form = get(state.form);
   const formEntity = new NewPetitionerUser(form);
@@ -24,17 +28,22 @@ export const createAccountHelper = (
     convert: false,
   });
 
-  const passwordErrors: { message: string; valid: boolean }[] = Object.values(
-    PASSWORD_VALIDATION_ERROR_MESSAGES,
-  ).map(errorMessage => {
-    const invalid = passJoiErrors.error?.details.find(
-      joiError => joiError.message === errorMessage,
-    );
-    return {
-      message: errorMessage,
-      valid: !invalid,
-    };
-  });
+  const passwordErrors: {
+    key: string;
+    message: string;
+    valid: boolean;
+  }[] = Object.entries(PASSWORD_VALIDATION_ERROR_MESSAGES).map(
+    ([errorKey, errorMessage]) => {
+      const invalid = passJoiErrors.error?.details.find(
+        joiError => joiError.message === errorMessage,
+      );
+      return {
+        key: errorKey,
+        message: errorMessage,
+        valid: !invalid,
+      };
+    },
+  );
 
   return {
     confirmPassword: !errors?.confirmPassword,

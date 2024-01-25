@@ -49,6 +49,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Effect": "Allow",
       "Action": [
         "cognito-idp:AdminCreateUser",
+        "cognito-idp:AdminDeleteUser",
         "cognito-idp:AdminDisableUser",
         "cognito-idp:AdminEnableUser",
         "cognito-idp:AdminGetUser",
@@ -69,7 +70,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:SetUICustomization",
         "cognito-idp:SetUserPoolMfaConfig",
         "cognito-idp:UpdateUserPool",
-        "cognito-idp:UpdateUserPoolClient"
+        "cognito-idp:UpdateUserPoolClient",
+        "cognito-idp:ListUsers"
       ],
       "Resource": "*"
     },
