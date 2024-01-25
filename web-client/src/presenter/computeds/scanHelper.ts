@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { getScanModeLabel } from '../../utilities/getScanModeLabel';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -5,8 +7,6 @@ const getCaseDocumentByDocumentType = ({ documents, documentType }) => {
   return documents?.find(doc => doc.documentType === documentType);
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const scanHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
