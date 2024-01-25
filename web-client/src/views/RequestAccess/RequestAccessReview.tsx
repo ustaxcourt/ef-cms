@@ -332,32 +332,34 @@ export const RequestAccessReview = connect(
                   </div>
                 )}
 
-                <Button
-                  className="margin-bottom-1"
-                  data-testid="request-access-review-submit-document"
-                  disabled={
-                    fileDocumentHelper.EARedactionAcknowledgement &&
-                    !form.redactionAcknowledgement
-                  }
-                  id="submit-document"
-                  type="submit"
-                  onClick={() => {
-                    submitCaseAssociationRequestSequence();
-                  }}
-                >
-                  Submit Your Filing
-                </Button>
-                <Button secondary onClick={() => navigateBackSequence()}>
-                  Back
-                </Button>
-                <Button
-                  link
-                  onClick={() => {
-                    formCancelToggleCancelSequence();
-                  }}
-                >
-                  Cancel
-                </Button>
+                <div className="margin-top-2">
+                  <Button
+                    className="margin-bottom-1"
+                    data-testid="request-access-review-submit-document"
+                    disabled={
+                      fileDocumentHelper.EARedactionAcknowledgement &&
+                      !form.redactionAcknowledgement
+                    }
+                    id="submit-document"
+                    type="submit"
+                    onClick={() => {
+                      submitCaseAssociationRequestSequence();
+                    }}
+                  >
+                    Submit Your Filing
+                  </Button>
+                  <Button secondary onClick={() => navigateBackSequence()}>
+                    Back
+                  </Button>
+                  <Button
+                    link
+                    onClick={() => {
+                      formCancelToggleCancelSequence();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
