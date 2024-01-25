@@ -154,7 +154,7 @@ const cognitoLocalJSON: CognitoLocalJSON = {
         },
       },
       {
-        Name: 'userId',
+        Name: 'custom:userId',
         AttributeDataType: 'String',
         DeveloperOnlyAttribute: false,
         Mutable: true,
