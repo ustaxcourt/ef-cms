@@ -45,7 +45,7 @@ describe('DocketEntry isPublic', () => {
     ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ])('Order, Opinion, and Decision Event Codes', eventCode => {
     it.each([beforeVisibilityChangeDate, afterVisibilityChangeDate])(
-      'returns true before and after the visibility change',
+      'is public before and after the visibility change',
       filingDate => {
         const isPublic = DocketEntry.isPublic(
           {
@@ -62,7 +62,7 @@ describe('DocketEntry isPublic', () => {
       },
     );
 
-    it('returns false if it is not on the docket record', () => {
+    it('is not public if it is not on the docket record', () => {
       const isPublic = DocketEntry.isPublic(
         {
           ...baseDocketEntry,
@@ -75,7 +75,7 @@ describe('DocketEntry isPublic', () => {
       expect(isPublic).toEqual(false);
     });
 
-    it('returns false if it is pending', () => {
+    it('is not public if it is pending', () => {
       const isPublic = DocketEntry.isPublic(
         {
           ...baseDocketEntry,
@@ -90,7 +90,7 @@ describe('DocketEntry isPublic', () => {
       expect(isPublic).toEqual(false);
     });
 
-    it('returns false if it is stricken', () => {
+    it('is not public if it is stricken', () => {
       const isPublic = DocketEntry.isPublic(
         {
           ...baseDocketEntry,
@@ -108,7 +108,7 @@ describe('DocketEntry isPublic', () => {
     describe.each(POLICY_DATE_IMPACTED_EVENTCODES)(
       'before the visibility policy date change',
       eventCode => {
-        it('returns false', () => {
+        it('is not public', () => {
           const isPublic = DocketEntry.isPublic(
             {
               ...baseDocketEntry,
@@ -143,7 +143,7 @@ describe('DocketEntry isPublic', () => {
       describe.each(practitionerFiledBriefs)(
         'Practitioner-Filed Briefs',
         eventCode => {
-          it('returns false if it is paper', () => {
+          it('is not public if it is paper', () => {
             const isPublic = DocketEntry.isPublic(
               {
                 ...baseDocketEntry,
@@ -161,7 +161,7 @@ describe('DocketEntry isPublic', () => {
           });
 
           it.each(practitionerRoles)(
-            'returns true if the filing party is a practitioner and it is electronically filed',
+            'is public if the filing party is a practitioner and it is electronically filed',
             filedByRole => {
               const isPublic = DocketEntry.isPublic(
                 { ...baseDocketEntry, eventCode, filedByRole, filingDate },
@@ -175,7 +175,7 @@ describe('DocketEntry isPublic', () => {
           );
 
           it.each(otherRoles)(
-            'returns false if the filing party is not a practitioner and it is electronically filed',
+            'is not public if the filing party is not a practitioner and it is electronically filed',
             filedByRole => {
               const isPublic = DocketEntry.isPublic(
                 { ...baseDocketEntry, eventCode, filedByRole, filingDate },
@@ -196,7 +196,7 @@ describe('DocketEntry isPublic', () => {
           // must be electronic
           // must be filed by Practitioner
 
-          it('returns false if it is paper', () => {
+          it('is not public if it is paper', () => {
             const isPublic = DocketEntry.isPublic(
               {
                 ...baseDocketEntry,
@@ -214,7 +214,7 @@ describe('DocketEntry isPublic', () => {
           });
 
           it.each(practitionerRoles)(
-            'returns true if the filing party is a practitioner and it is electronically filed',
+            'is public if the filing party is a practitioner and it is electronically filed',
             filedByRole => {
               const isPublic = DocketEntry.isPublic(
                 {
@@ -239,7 +239,7 @@ describe('DocketEntry isPublic', () => {
             },
           );
 
-          it('returns false if the rootDocument was not filed by a Practitioner', () => {
+          it('is not public if the rootDocument was not filed by a Practitioner', () => {
             const isPublic = DocketEntry.isPublic(
               {
                 ...baseDocketEntry,
@@ -264,7 +264,7 @@ describe('DocketEntry isPublic', () => {
           });
 
           it.each(otherRoles)(
-            'returns false if the filing party is not a practitioner',
+            'is not public if the filing party is not a practitioner',
             filedByRole => {
               const isPublic = DocketEntry.isPublic(
                 { ...baseDocketEntry, eventCode, filedByRole, filingDate },
@@ -284,7 +284,7 @@ describe('DocketEntry isPublic', () => {
             },
           );
 
-          it('returns false when the docket entry is an amended document that does not have a rootDocument', () => {
+          it('is not public when the docket entry is an amended document that does not have a rootDocument', () => {
             const isPublic = DocketEntry.isPublic(
               {
                 ...baseDocketEntry,
@@ -306,7 +306,7 @@ describe('DocketEntry isPublic', () => {
       describe.each(['SDEC', 'AMBR'])(
         'Amicus Briefs and Stip Decisions',
         eventCode => {
-          it('returns true', () => {
+          it('is public', () => {
             const isPublic = DocketEntry.isPublic(
               {
                 ...baseDocketEntry,
@@ -336,7 +336,7 @@ describe('DocketEntry isPublic', () => {
 
   describe.each(allOtherEventCodes)('All other Documents', eventCode => {
     it.each([beforeVisibilityChangeDate, afterVisibilityChangeDate])(
-      'returns false before and after visibility change',
+      'is not public before and after visibility change',
       filingDate => {
         const isPublic = DocketEntry.isPublic(
           {
