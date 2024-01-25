@@ -1,4 +1,4 @@
-import { CaseFromPaperType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
+import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { post } from './requests';
 
 export const createCaseFromPaperInteractor = (
@@ -16,7 +16,7 @@ export const createCaseFromPaperInteractor = (
     attachmentToPetitionFileId: string;
     corporateDisclosureFileId: string;
     petitionFileId: string;
-    petitionMetadata: CaseFromPaperType;
+    petitionMetadata: PaperCaseDataType;
     requestForPlaceOfTrialFileId: string;
     stinFileId: string;
   },
