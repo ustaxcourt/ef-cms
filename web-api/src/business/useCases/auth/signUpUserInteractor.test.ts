@@ -1,4 +1,5 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { signUpUserInteractor } from './signUpUserInteractor';
 
@@ -11,8 +12,6 @@ describe('signUpUserInteractor', () => {
   const user = { confirmPassword: password, email, name, password };
 
   beforeEach(() => {
-    applicationContext.getCognito().listUsers.mockResolvedValue({ Users: [] });
-
     applicationContext.getUniqueId.mockReturnValue(userId);
 
     applicationContext.getCognito().signUp.mockResolvedValue({});
@@ -102,17 +101,12 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should throw an error when the provided email already exists for an account in the system and it has been confirmed', async () => {
-    applicationContext.getCognito().listUsers.mockResolvedValue({
-      Users: [
-        {
-          Attributes: [],
-          Enabled: true,
-          UserCreateDate: '2023-10-27T15:18:37.000Z',
-          UserLastModifiedDate: '2023-10-27T15:18:37.000Z',
-          UserStatus: 'CONFIRMED',
-          Username: email,
-        },
-      ],
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      accountStatus: UserStatusType.CONFIRMED,
+      email,
+      name,
+      role: ROLES.petitioner,
+      userId: '6f2ea0ba-f01b-4f8d-b3c1-8dee888b2da7',
     });
 
     await expect(
@@ -125,17 +119,12 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should throw an error when the provided email already exists for an account in the system and the account has not yet been confirmed', async () => {
-    applicationContext.getCognito().listUsers.mockResolvedValue({
-      Users: [
-        {
-          Attributes: [],
-          Enabled: true,
-          UserCreateDate: '2023-10-27T15:18:37.000Z',
-          UserLastModifiedDate: '2023-10-27T15:18:37.000Z',
-          UserStatus: 'UNCONFIRMED',
-          Username: email,
-        },
-      ],
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      accountStatus: UserStatusType.UNCONFIRMED,
+      email,
+      name,
+      role: ROLES.petitioner,
+      userId: '6f2ea0ba-f01b-4f8d-b3c1-8dee888b2da7',
     });
 
     await expect(
