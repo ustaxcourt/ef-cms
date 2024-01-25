@@ -17,7 +17,6 @@ import { createPractitionerUser } from '../../utilities/createPractitionerUser';
  * @returns {Promise} the promise of the createUser call
  */
 
-//TODO 10007: can we delete this interactor?
 export const createUserInteractor = async (
   applicationContext: IApplicationContext,
   { user }: { user: RawUser & { barNumber?: string; password: string } },

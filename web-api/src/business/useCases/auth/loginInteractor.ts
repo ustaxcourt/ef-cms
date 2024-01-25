@@ -25,7 +25,6 @@ export const loginInteractor = async (
       throw PasswordChangeError;
     }
 
-    // TODO 10007: Always return session? Would involve eschewing throwing an error above
     return {
       accessToken: result.AuthenticationResult!.AccessToken!,
       idToken: result.AuthenticationResult!.IdToken!,
