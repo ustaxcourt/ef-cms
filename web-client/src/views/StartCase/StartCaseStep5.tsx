@@ -96,6 +96,7 @@ export const StartCaseStep5 = connect(
                                         id="petition-preview-button"
                                         shouldAbbreviateTitle={false}
                                         shouldWrapText={true}
+                                        showIcon={false}
                                         title="Petition"
                                       />
                                     </div>
@@ -149,6 +150,7 @@ export const StartCaseStep5 = connect(
                                   id="stin-preview-button"
                                   shouldAbbreviateTitle={false}
                                   shouldWrapText={true}
+                                  showIcon={false}
                                   title="Statement of Taxpayer Identification"
                                 />
                               </div>
@@ -169,6 +171,7 @@ export const StartCaseStep5 = connect(
                                     id="cds-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
+                                    showIcon={false}
                                     title="Corporate Disclosure Statement"
                                   />
                                 </div>
