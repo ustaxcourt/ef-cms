@@ -192,7 +192,6 @@ const getS3BucketStatus = async ({
   return bucketStatus;
 };
 
-// todo 10007: cleanup
 const getCognitoStatus = async ({
   applicationContext,
 }: {
@@ -200,19 +199,12 @@ const getCognitoStatus = async ({
 }): Promise<boolean> => {
   try {
     const cognito = applicationContext.getCognito();
-    console.log(
-      'applicationContext.environment.userPoolId ',
-      applicationContext.environment.userPoolId,
-    );
 
-    const result = await cognito.describeUserPool({
+    await cognito.describeUserPool({
       UserPoolId: applicationContext.environment.userPoolId,
     });
-    console.log('*** describeUserPool', result);
-
     return true;
   } catch (e) {
-    console.log('*** error from getCognitoStatus', e);
     applicationContext.logger.error('Cognito health check failed. ', e);
     return false;
   }
