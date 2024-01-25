@@ -332,7 +332,7 @@ export const RequestAccessReview = connect(
                   </div>
                 )}
 
-                <div className="margin-top-2">
+                <div className="margin-top-4">
                   <Button
                     className="margin-bottom-1"
                     data-testid="request-access-review-submit-document"
