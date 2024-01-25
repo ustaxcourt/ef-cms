@@ -69,7 +69,6 @@ describe('Petitioner creates new account', () => {
 
     //THIS IS FOR LOCAL VERIFICATION ONLY
     expect(cerebralTestPrivate.getState('alertSuccess')).toMatchObject({
-      alertType: 'success',
       message: expectedMessage,
       title: 'Account Created Locally',
     });

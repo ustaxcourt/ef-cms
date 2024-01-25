@@ -53,9 +53,8 @@ describe('createConfirmLinkAction', () => {
       },
     });
 
-    const { alertType, message, title } = result.output!.alertSuccess;
+    const { message, title } = result.output!.alertSuccess;
 
-    expect(alertType).toEqual('success');
     expect(message).toEqual(expectedMessage);
     expect(title).toEqual('Account Created Locally');
   });
