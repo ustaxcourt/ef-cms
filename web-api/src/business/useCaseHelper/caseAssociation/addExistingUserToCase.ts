@@ -1,29 +1,26 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UserCase } from '../../entities/UserCase';
+import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 
-/**
- * addExistingUserToCase
- *
- * @param {object} options the options object
- * @param {object} options.applicationContext the applicationContext
- * @param {object} options.caseEntity the case entity to modify and return
- * @param {string} options.contactId the contactId of the user to add to the case
- * @param {string} options.email the email address for the user we are attaching to the case
- * @param {string} options.name the name of the user to update the case with
- * @returns {string} the contactId of the cognito user who matches the provided email
- */
 export const addExistingUserToCase = async ({
   applicationContext,
   caseEntity,
   contactId,
   email,
   name,
-}) => {
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  contactId: string;
+  email: string;
+  name: string;
+}): Promise<string> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_USER_TO_CASE)) {
@@ -31,14 +28,13 @@ export const addExistingUserToCase = async ({
   }
 
   //TODO 10007: make sure this flow is also tested
-  const userIdFromCognito = await applicationContext
-    .getPersistenceGateway()
-    .getCognitoUserIdByEmail({
-      applicationContext,
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
       email,
     });
 
-  if (!userIdFromCognito) {
+  if (!user) {
     throw new Error(`no user found with the provided email of ${email}`);
   }
 
@@ -46,12 +42,12 @@ export const addExistingUserToCase = async ({
     .getPersistenceGateway()
     .getUserById({
       applicationContext,
-      userId: userIdFromCognito,
+      userId: user.userId,
     });
 
   const contact = caseEntity.getPetitionerById(contactId);
 
-  caseEntity.privatePractitioners.forEach(practitioner => {
+  caseEntity.privatePractitioners?.forEach(practitioner => {
     const representingArray = practitioner.representing;
 
     if (representingArray.includes(contact.contactId)) {

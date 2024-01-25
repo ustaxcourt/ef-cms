@@ -19,7 +19,7 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../entities/User';
 import { UserCase } from '../entities/UserCase';
 import { addCoverToPdf } from './addCoverToPdf';
-import { addExistingUserToCase } from '../useCaseHelper/caseAssociation/addExistingUserToCase';
+import { addExistingUserToCase } from '../../../../web-api/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { calculateISODate } from '../utilities/DateHandler';
 import { docketClerkUser } from '../../test/mockUsers';
@@ -609,8 +609,8 @@ describe('updatePetitionerInformationInteractor', () => {
       );
 
       applicationContext
-        .getPersistenceGateway()
-        .getCognitoUserIdByEmail.mockReturnValue('someMockId');
+        .getUserGateway()
+        .getUserByEmail.mockReturnValue('someMockId');
 
       applicationContext
         .getPersistenceGateway()

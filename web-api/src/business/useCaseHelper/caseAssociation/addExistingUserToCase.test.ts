@@ -2,11 +2,14 @@ import {
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { Case, getContactPrimary } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  Case,
+  getContactPrimary,
+} from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { addExistingUserToCase } from './addExistingUserToCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('addExistingUserToCase', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
@@ -18,8 +21,8 @@ describe('addExistingUserToCase', () => {
 
   beforeEach(() => {
     applicationContext
-      .getPersistenceGateway()
-      .getCognitoUserIdByEmail.mockReturnValue(mockUser);
+      .getUserGateway()
+      .getUserByEmail.mockReturnValue(mockUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -44,9 +47,7 @@ describe('addExistingUserToCase', () => {
       role: ROLES.admissionsClerk,
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCognitoUserIdByEmail.mockReturnValue(null);
+    applicationContext.getUserGateway().getUserByEmail.mockReturnValue(null);
 
     await expect(
       addExistingUserToCase({

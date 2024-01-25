@@ -27,25 +27,26 @@ export const getUserByEmail = async (
   | undefined
 > => {
   const cognito = applicationContext.getCognito();
-  const users = await cognito.listUsers({
-    Filter: `email = "${email}"`,
+  const foundUser = await cognito.adminGetUser({
     UserPoolId: process.env.USER_POOL_ID,
+    Username: email,
   });
-  const foundUser = users.Users?.[0];
+
   if (!foundUser) {
     return;
   }
 
   const userId =
-    foundUser.Attributes?.find(element => element.Name === 'custom:userId')
+    foundUser.UserAttributes?.find(element => element.Name === 'custom:userId')
       ?.Value! ||
-    foundUser.Attributes?.find(element => element.Name === 'sub')?.Value!;
-  const role = foundUser.Attributes?.find(
+    foundUser.UserAttributes?.find(element => element.Name === 'sub')?.Value!;
+  const role = foundUser.UserAttributes?.find(
     element => element.Name === 'custom:role',
   )?.Value! as Role;
 
-  const name = foundUser.Attributes?.find(element => element.Name === 'name')
-    ?.Value!;
+  const name = foundUser.UserAttributes?.find(
+    element => element.Name === 'name',
+  )?.Value!;
 
   return {
     accountStatus: foundUser.UserStatus!,
