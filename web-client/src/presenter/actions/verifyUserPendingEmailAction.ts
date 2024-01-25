@@ -9,4 +9,11 @@ export const verifyUserPendingEmailAction = async ({
     .verifyUserPendingEmailInteractor(applicationContext, {
       token,
     });
+
+  return {
+    alertSuccess: {
+      message: 'Your email address is verified. You can now sign in to DAWSON.',
+      title: 'Email address verified',
+    },
+  };
 };
