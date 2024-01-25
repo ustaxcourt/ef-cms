@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "allowJs": true,
+    "allowJs": false,
     "noImplicitAny": false,
     "removeComments": true,
     "preserveConstEnums": true,
@@ -25,24 +25,17 @@
     "files": true,
     "require": ["tsconfig-paths/register"]
   },
-  "include": [
-    "./shared/admin-tools/**/*",
-    "./shared/src/**/*",
-    "./types/**/*.d.ts",
-    "./web-api/elasticsearch/index-types.ts",
-    "./web-api/src/**/*",
-    "./web-api/storage/fixtures/seed/cav-submitted-cases.ts",
-    "./web-api/workflow-terraform/migration/main/lambdas/**/*",
-    "./web-client/integration-tests/**/*",
-    "./web-client/integration-tests-public/**/*",
-    "./web-client/src/**/*",
-    "./scripts/**/*",
-    "./.eslintrc.js",
-    "./web-api/storage/scripts/loadTest/loadTestPdfGeneration.ts"
-  ],
+  "include": ["./**/*.ts", "./**/*.tsx"],
   "exclude": [
     "node_modules",
+    "targetBranch",
     "./scripts/run-once-scripts/**/*",
-    "./cognito-triggers-sls/node_modules/**/*"
+    "./cognito-triggers-sls/node_modules/**/*",
+    "./cypress/**/*",
+    "./cypress.config.ts",
+    "./cypress-smoketests.config.ts",
+    "./cypress-smoketests-readonly.config.ts",
+    "./cypress-smoketests-readonly-public.config.ts",
+    "./cypress-public.config.ts"
   ]
 }
