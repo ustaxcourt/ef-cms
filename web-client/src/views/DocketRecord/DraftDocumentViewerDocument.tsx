@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { getEditUrl } from '@shared/business/utilities/getFormattedCaseDetail';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -63,7 +64,11 @@ export const DraftDocumentViewerDocument = connect(
                 <Button
                   link
                   data-testid="draft-edit-button-not-signed"
-                  href={viewerDraftDocumentToDisplay.editUrl}
+                  href={getEditUrl({
+                    docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
+                    docketNumber: caseDetail.docketNumber,
+                    documentType: viewerDraftDocumentToDisplay.documentType,
+                  })}
                   icon="edit"
                   id="draft-edit-button-not-signed"
                 >
