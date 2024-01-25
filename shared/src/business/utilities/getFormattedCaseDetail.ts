@@ -308,7 +308,7 @@ export const formatCase = (applicationContext, caseDetail) => {
         ...formatDocketEntry(applicationContext, docketEntry),
         editUrl: getEditUrl({
           docketEntryId: docketEntry.docketEntryId,
-          docketNumber: docketEntry.docketNumber,
+          docketNumber: caseDetail.docketNumber,
           documentType: docketEntry.documentType,
         }),
         signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
