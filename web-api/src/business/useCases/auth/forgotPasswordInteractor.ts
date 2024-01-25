@@ -23,42 +23,29 @@ export const forgotPasswordInteractor = async (
 ): Promise<ForgotPasswordResponse> => {
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
-  const users = await cognito.listUsers({
-    AttributesToGet: ['custom:userId', 'sub'],
-    Filter: `email = "${email}"`,
-    UserPoolId: process.env.USER_POOL_ID,
-  });
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, { email });
 
-  const foundUser = users.Users?.[0];
-
-  const userId =
-    foundUser?.Attributes?.find(element => element.Name === 'custom:userId')
-      ?.Value ||
-    foundUser?.Attributes?.find(element => element.Name === 'sub')?.Value;
-
-  if (!userId) {
+  if (!user) {
     return { email };
   }
 
-  if (foundUser?.UserStatus === UserStatusType.UNCONFIRMED) {
+  if (user.accountStatus === UserStatusType.UNCONFIRMED) {
     await applicationContext
       .getUseCaseHelpers()
       .createUserConfirmation(applicationContext, {
         email,
-        userId,
+        userId: user.userId,
       });
 
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
 
-  if (
-    foundUser &&
-    foundUser.UserStatus === UserStatusType.FORCE_CHANGE_PASSWORD
-  ) {
+  if (user.accountStatus === UserStatusType.FORCE_CHANGE_PASSWORD) {
     const input: AdminCreateUserCommandInput = {
       DesiredDeliveryMediums: ['EMAIL'],
       MessageAction: 'RESEND',
-      UserAttributes: foundUser.Attributes,
       UserPoolId: applicationContext.environment.userPoolId,
       Username: email,
     };
@@ -68,13 +55,12 @@ export const forgotPasswordInteractor = async (
     }
 
     await cognito.adminCreateUser(input);
-
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
 
   const { code } = await applicationContext
     .getPersistenceGateway()
-    .generateForgotPasswordCode(applicationContext, { userId });
+    .generateForgotPasswordCode(applicationContext, { userId: user.userId });
 
   const queryString = qs.stringify({ code, email }, { encode: false });
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/reset-password?${queryString}`;
@@ -116,7 +102,7 @@ export const forgotPasswordInteractor = async (
   // Only return code & userId locally as we cannot send an email. Do not expose code & userId in deployed env.
   if (applicationContext.environment.stage === 'local') {
     forgotPasswordResponse.code = code;
-    forgotPasswordResponse.userId = userId;
+    forgotPasswordResponse.userId = user.userId;
   }
 
   return forgotPasswordResponse;

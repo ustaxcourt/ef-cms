@@ -76,21 +76,11 @@ async function resendAccountConfirmation(
   applicationContext: ServerApplicationContext,
   email: string,
 ): Promise<void> {
-  const cognito = applicationContext.getCognito();
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, { email });
 
-  const users = await cognito.listUsers({
-    AttributesToGet: ['custom:userId', 'sub'],
-    Filter: `email = "${email}"`,
-    UserPoolId: process.env.USER_POOL_ID,
-  });
-
-  const userId =
-    users.Users?.[0].Attributes?.find(
-      element => element.Name === 'custom:userId',
-    )?.Value ||
-    users.Users?.[0].Attributes?.find(element => element.Name === 'sub')?.Value;
-
-  if (!userId) {
+  if (!user) {
     throw new NotFoundError(
       `Could not find user to re-send confirmation code to. ${email}`,
     );
@@ -100,6 +90,6 @@ async function resendAccountConfirmation(
     .getUseCaseHelpers()
     .createUserConfirmation(applicationContext, {
       email,
-      userId,
+      userId: user.userId,
     });
 }

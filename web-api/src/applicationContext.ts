@@ -49,6 +49,7 @@ import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
+import { getUserGateway } from '@web-api/getUserGateway';
 import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
@@ -295,7 +296,6 @@ export const createApplicationContext = (
         }
       },
     }),
-
     getMessagingClient: () => {
       if (!sqsCache) {
         sqsCache = new SQS({
@@ -419,6 +419,7 @@ export const createApplicationContext = (
     getUniqueId,
     getUseCaseHelpers,
     getUseCases,
+    getUserGateway,
     getUtilities,
     isAuthorized,
     isCurrentColorActive,

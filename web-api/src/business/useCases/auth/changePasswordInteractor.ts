@@ -1,6 +1,10 @@
 import { AdminSetUserPasswordCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
-import { InvalidEntityError, InvalidRequest } from '@web-api/errors/errors';
+import {
+  InvalidEntityError,
+  InvalidRequest,
+  NotFoundError,
+} from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
@@ -98,22 +102,17 @@ export const changePasswordInteractor = async (
         refreshToken: result.AuthenticationResult.RefreshToken,
       };
     } else {
-      const users = await applicationContext.getCognito().listUsers({
-        AttributesToGet: ['custom:userId', 'sub'],
-        Filter: `email = "${userEmail}"`,
-        UserPoolId: applicationContext.environment.userPoolId,
-      });
+      const user = await applicationContext
+        .getUserGateway()
+        .getUserByEmail(applicationContext, { email: userEmail });
 
-      const userId =
-        users.Users?.[0].Attributes?.find(
-          element => element.Name === 'custom:userId',
-        )?.Value! ||
-        users.Users?.[0].Attributes?.find(element => element.Name === 'sub')
-          ?.Value!;
+      if (!user) {
+        throw new NotFoundError(`User not found with email: ${userEmail}`);
+      }
 
       const codeFromPersistence = await applicationContext
         .getPersistenceGateway()
-        .getForgotPasswordCode(applicationContext, { userId });
+        .getForgotPasswordCode(applicationContext, { userId: user.userId });
 
       if (!codeFromPersistence || code !== codeFromPersistence) {
         throw new InvalidRequest('Forgot password code expired');

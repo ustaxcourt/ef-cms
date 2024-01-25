@@ -1,4 +1,4 @@
-import { InvalidRequest } from '@web-api/errors/errors';
+import { InvalidRequest, NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const confirmSignUpInteractor = async (
@@ -52,22 +52,19 @@ const createPetitionerUser = async (
   applicationContext: ServerApplicationContext,
   { email, userId }: { email: string; userId: string },
 ) => {
-  const cognito = applicationContext.getCognito();
-  const users = await cognito.listUsers({
-    AttributesToGet: ['name'],
-    Filter: `email = "${email}"`,
-    UserPoolId: process.env.USER_POOL_ID,
-  });
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, { email });
 
-  const name = users.Users?.[0].Attributes?.find(
-    element => element.Name === 'name',
-  )?.Value!;
+  if (!user) {
+    throw new NotFoundError(`User not found with email: ${email}`);
+  }
 
   await applicationContext
     .getUseCases()
     .createPetitionerAccountInteractor(applicationContext, {
       email,
-      name,
+      name: user.name,
       userId,
     });
 };

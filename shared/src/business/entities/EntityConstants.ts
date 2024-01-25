@@ -1014,7 +1014,9 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
-};
+} as const;
+const ROLES_TYPES = Object.values(ROLES);
+export type Role = (typeof ROLES_TYPES)[number];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
