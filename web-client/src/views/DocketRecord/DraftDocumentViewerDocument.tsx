@@ -123,6 +123,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showRemoveSignatureButton && (
                 <Button
                   link
+                  data-testid="remove-signature-docket-entry-button"
                   icon="pencil-alt"
                   onClick={() =>
                     openConfirmRemoveSignatureModalSequence({
