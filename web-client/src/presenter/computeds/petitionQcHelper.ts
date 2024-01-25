@@ -2,12 +2,38 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
+export const initialFilingDocumentTabs = [
+  {
+    documentType: 'petitionFile',
+    title: 'Petition',
+  },
+  {
+    documentType: 'stinFile',
+    title: 'STIN',
+  },
+  {
+    documentType: 'attachmentToPetitionFile',
+    title: 'ATP',
+  },
+  {
+    documentType: 'requestForPlaceOfTrialFile',
+    title: 'RQT',
+  },
+  {
+    documentType: 'corporateDisclosureFile',
+    title: 'CDS',
+  },
+  {
+    documentType: 'applicationForWaiverOfFilingFeeFile',
+    title: 'APW',
+  },
+] as const;
+
 export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { INITIAL_DOCUMENT_TYPES, INITIAL_FILING_DOCUMENT_TABS } =
-    applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
 
@@ -16,7 +42,7 @@ export const petitionQcHelper = (
       doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
   );
 
-  let documentTabsToDisplay = [...INITIAL_FILING_DOCUMENT_TABS];
+  let documentTabsToDisplay = [...initialFilingDocumentTabs];
 
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:

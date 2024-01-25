@@ -18,7 +18,7 @@ describe('scanHelper', () => {
     applicationContext,
   );
 
-  it('sets hasScanFeature to `true` for `petitionsclerk` user roles', () => {
+  it('sets hasScanFeature to true for petitionsclerk user roles', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.petitionsClerk,
     });
@@ -27,10 +27,10 @@ describe('scanHelper', () => {
       state: stateWithEmptyFormDocuments,
     });
 
-    expect(result.hasScanFeature).toBeTruthy();
+    expect(result.hasScanFeature).toEqual(true);
   });
 
-  it('sets hasScanFeature to `true` for `docketclerk` user roles', () => {
+  it('sets hasScanFeature to true for docketclerk user roles', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.docketClerk,
     });
@@ -39,10 +39,10 @@ describe('scanHelper', () => {
       state: stateWithEmptyFormDocuments,
     });
 
-    expect(result.hasScanFeature).toBeTruthy();
+    expect(result.hasScanFeature).toEqual(true);
   });
 
-  it('sets hasScanFeature to `true` for `adc` user roles', () => {
+  it('sets hasScanFeature to true for adc user roles', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.adc,
     });
@@ -51,10 +51,10 @@ describe('scanHelper', () => {
       state: stateWithEmptyFormDocuments,
     });
 
-    expect(result.hasScanFeature).toBeTruthy();
+    expect(result.hasScanFeature).toEqual(true);
   });
 
-  it('sets hasScanFeature to `false` for `petitioner` user roles', () => {
+  it('sets hasScanFeature to false for petitioner user roles', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.petitioner,
     });
@@ -63,10 +63,10 @@ describe('scanHelper', () => {
       state: stateWithEmptyFormDocuments,
     });
 
-    expect(result.hasScanFeature).toBeFalsy();
+    expect(result.hasScanFeature).toEqual(false);
   });
 
-  it('sets hasScanFeature to `false` for `practitioner` user roles', () => {
+  it('sets hasScanFeature to false for practitioner user roles', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.privatePractitioner,
     });
@@ -75,10 +75,10 @@ describe('scanHelper', () => {
       state: stateWithEmptyFormDocuments,
     });
 
-    expect(result.hasScanFeature).toBeFalsy();
+    expect(result.hasScanFeature).toEqual(false);
   });
 
-  it('sets hasScanFeature to `false` for `respondent` user roles', () => {
+  it('sets hasScanFeature to false for respondent user roles', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.irsPractitioner,
     });
@@ -87,7 +87,7 @@ describe('scanHelper', () => {
       state: stateWithEmptyFormDocuments,
     });
 
-    expect(result.hasScanFeature).toBeFalsy();
+    expect(result.hasScanFeature).toEqual(false);
   });
 
   it('shows the scanner source selection modal', () => {
@@ -99,7 +99,7 @@ describe('scanHelper', () => {
         },
       },
     });
-    expect(result.showScannerSourceModal).toBeTruthy();
+    expect(result.showScannerSourceModal).toEqual(true);
   });
 
   it('gets the scanner sources from state', () => {
@@ -125,7 +125,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.stinFileCompleted).toBeTruthy();
+      expect(result.stinFileCompleted).toEqual(true);
     });
 
     it('should be true when document is on form', () => {
@@ -138,7 +138,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.stinFileCompleted).toBeTruthy();
+      expect(result.stinFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not on form', () => {
@@ -150,7 +150,7 @@ describe('scanHelper', () => {
           },
         },
       });
-      expect(result.stinFileCompleted).toBeFalsy();
+      expect(result.stinFileCompleted).toEqual(false);
     });
 
     it('should be true when document is in form.docketEntries', () => {
@@ -166,7 +166,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.stinFileCompleted).toBeTruthy();
+      expect(result.stinFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not in form.docketEntries', () => {
@@ -178,7 +178,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.stinFileCompleted).toBeFalsy();
+      expect(result.stinFileCompleted).toEqual(false);
     });
   });
 
@@ -193,7 +193,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.requestForPlaceOfTrialFileCompleted).toBeTruthy();
+      expect(result.requestForPlaceOfTrialFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not on form', () => {
@@ -205,7 +205,7 @@ describe('scanHelper', () => {
           },
         },
       });
-      expect(result.requestForPlaceOfTrialFileCompleted).toBeFalsy();
+      expect(result.requestForPlaceOfTrialFileCompleted).toEqual(false);
     });
 
     it('should be true when document is in form.docketEntries', () => {
@@ -222,7 +222,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.requestForPlaceOfTrialFileCompleted).toBeTruthy();
+      expect(result.requestForPlaceOfTrialFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not in form.docketEntries', () => {
@@ -234,7 +234,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.requestForPlaceOfTrialFileCompleted).toBeFalsy();
+      expect(result.requestForPlaceOfTrialFileCompleted).toEqual(false);
     });
   });
 
@@ -249,7 +249,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeTruthy();
+      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not on form', () => {
@@ -261,7 +261,9 @@ describe('scanHelper', () => {
           },
         },
       });
-      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeFalsy();
+      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toEqual(
+        false,
+      );
     });
 
     it('should be true when document is in form.docketEntries', () => {
@@ -278,7 +280,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeTruthy();
+      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not in form.docketEntries', () => {
@@ -290,7 +292,9 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeFalsy();
+      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toEqual(
+        false,
+      );
     });
   });
 
@@ -305,7 +309,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.petitionFileCompleted).toBeTruthy();
+      expect(result.petitionFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not on form', () => {
@@ -317,7 +321,7 @@ describe('scanHelper', () => {
           },
         },
       });
-      expect(result.petitionFileCompleted).toBeFalsy();
+      expect(result.petitionFileCompleted).toEqual(false);
     });
 
     it('should be true when document is in form.docketEntries', () => {
@@ -333,7 +337,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.petitionFileCompleted).toBeTruthy();
+      expect(result.petitionFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not in form.docketEntries', () => {
@@ -345,7 +349,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.petitionFileCompleted).toBeFalsy();
+      expect(result.petitionFileCompleted).toEqual(false);
     });
   });
 
@@ -360,7 +364,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.corporateDisclosureFileCompleted).toBeTruthy();
+      expect(result.corporateDisclosureFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not on form', () => {
@@ -372,7 +376,7 @@ describe('scanHelper', () => {
           },
         },
       });
-      expect(result.corporateDisclosureFileCompleted).toBeFalsy();
+      expect(result.corporateDisclosureFileCompleted).toEqual(false);
     });
 
     it('should be true when document is in form.docketEntries', () => {
@@ -389,7 +393,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.corporateDisclosureFileCompleted).toBeTruthy();
+      expect(result.corporateDisclosureFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not in form.docketEntries', () => {
@@ -401,7 +405,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.corporateDisclosureFileCompleted).toBeFalsy();
+      expect(result.corporateDisclosureFileCompleted).toEqual(false);
     });
   });
 
@@ -416,7 +420,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.attachmentToPetitionFileCompleted).toBeTruthy();
+      expect(result.attachmentToPetitionFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not on form', () => {
@@ -428,7 +432,7 @@ describe('scanHelper', () => {
           },
         },
       });
-      expect(result.attachmentToPetitionFileCompleted).toBeFalsy();
+      expect(result.attachmentToPetitionFileCompleted).toEqual(false);
     });
 
     it('should be true when document is in form.docketEntries', () => {
@@ -445,7 +449,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.attachmentToPetitionFileCompleted).toBeTruthy();
+      expect(result.attachmentToPetitionFileCompleted).toEqual(true);
     });
 
     it('should be false when document is not in form.docketEntries', () => {
@@ -457,7 +461,7 @@ describe('scanHelper', () => {
         },
       });
 
-      expect(result.attachmentToPetitionFileCompleted).toBeFalsy();
+      expect(result.attachmentToPetitionFileCompleted).toEqual(false);
     });
   });
 });
