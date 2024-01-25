@@ -22,5 +22,19 @@ export const setFormFromDraftStateAction = ({ props, store }: ActionProps) => {
     });
     store.set(state.form.documentContents, documentContents);
     store.set(state.form.richText, richText);
+
+    const addedDocketNumbers =
+      documentToEdit.draftOrderState?.addedDocketNumbers || [];
+    if (addedDocketNumbers.length > 0) {
+      const casesWithCheckMetadata = caseDetail.consolidatedCases.map(
+        aCase => ({
+          ...aCase,
+          checkboxDisabled: false,
+          checked: addedDocketNumbers.includes(aCase.docketNumberWithSuffix),
+        }),
+      );
+      store.set(state.createOrderSelectedCases, casesWithCheckMetadata);
+      store.set(state.addedDocketNumbers, addedDocketNumbers);
+    }
   }
 };
