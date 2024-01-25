@@ -41,6 +41,10 @@ export async function createUserConfirmation(
       <a href="${verificationLink}" style="background-color: #005ea2; color: white; line-height: 0.9; border-radius: 0.25rem; text-decoration: none; font-size: 1.06rem; padding: .6rem 2.25rem; font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;">Verify Email</a>
     </div>
     <div style="margin-top: 20px;">
+    <span>Or you can use this URL: </span>
+    <a href="${verificationLink}">${verificationLink}</a>
+  </div>
+    <div style="margin-top: 20px;">
       <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
     </div>
     <hr style="border-top:1px solid #000000;">

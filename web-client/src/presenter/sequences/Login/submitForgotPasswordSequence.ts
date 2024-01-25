@@ -5,19 +5,22 @@ import { navigateToLoginAction } from '@web-client/presenter/actions/Login/navig
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '@web-client/presenter/actions/setAlertWarningAction';
 import { setSaveAlertsForNavigationAction } from '@web-client/presenter/actions/setSaveAlertsForNavigationAction';
+import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 
 export const submitForgotPasswordSequence = [
-  forgotPasswordAction,
-  {
-    success: [
-      createForgotPasswordLinkAction,
-      setAlertSuccessAction,
-      clearAuthStateAction,
-    ],
-    unconfirmedAccount: [
-      setAlertWarningAction,
-      setSaveAlertsForNavigationAction,
-      navigateToLoginAction,
-    ],
-  },
+  showProgressSequenceDecorator([
+    forgotPasswordAction,
+    {
+      success: [
+        createForgotPasswordLinkAction,
+        setAlertSuccessAction,
+        clearAuthStateAction,
+      ],
+      unconfirmedAccount: [
+        setAlertWarningAction,
+        setSaveAlertsForNavigationAction,
+        navigateToLoginAction,
+      ],
+    },
+  ]),
 ] as unknown as () => {};

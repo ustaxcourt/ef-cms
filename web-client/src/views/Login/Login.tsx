@@ -62,7 +62,10 @@ export const Login = connect(
                           });
                         }}
                       />
-                      <label className="usa-label" htmlFor="password">
+                      <label
+                        className="usa-label margin-top-2"
+                        htmlFor="password"
+                      >
                         Password
                       </label>
                       <input
