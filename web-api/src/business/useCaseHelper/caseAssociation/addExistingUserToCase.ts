@@ -27,7 +27,6 @@ export const addExistingUserToCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  //TODO 10007: make sure this flow is also tested
   const user = await applicationContext
     .getUserGateway()
     .getUserByEmail(applicationContext, {

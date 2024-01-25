@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
 
@@ -39,7 +41,7 @@ export type ApplicationHealth = {
 const getElasticSearchStatus = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
   try {
     await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
@@ -56,7 +58,7 @@ const getElasticSearchStatus = async ({
 const getDynamoStatus = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
   try {
     const dynamoStatus = await applicationContext
@@ -72,7 +74,7 @@ const getDynamoStatus = async ({
 const getDeployDynamoStatus = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
   try {
     const deployDynamoStatus = await applicationContext
@@ -88,7 +90,7 @@ const getDeployDynamoStatus = async ({
 const getDynamsoftStatus = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
   const axios = applicationContext.getHttpClient();
 
@@ -117,7 +119,7 @@ const checkS3BucketsStatus = async ({
   applicationContext,
   bucketName,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   bucketName: string;
 }): Promise<boolean> => {
   try {
@@ -139,7 +141,7 @@ const checkS3BucketsStatus = async ({
 const getS3BucketStatus = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<S3BucketsStatus> => {
   const efcmsDomain = process.env.EFCMS_DOMAIN;
   const currentColor = process.env.CURRENT_COLOR;
@@ -193,27 +195,14 @@ const getS3BucketStatus = async ({
 const getCognitoStatus = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
-  const axios = applicationContext.getHttpClient();
-
-  const source = handleAxiosTimeout(axios);
-
   try {
-    const clientId = await applicationContext
-      .getPersistenceGateway()
-      .getClientId({
-        userPoolId: process.env.USER_POOL_ID,
-      });
+    const cognito = applicationContext.getCognito();
+    await cognito.describeUserPool({
+      UserPoolId: applicationContext.environment.userPoolId,
+    });
 
-    // TODO 10007: code will not work
-    await axios.get(
-      `https://auth-${process.env.STAGE}-${process.env.COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientId}&redirect_uri=https%3A//app.${process.env.EFCMS_DOMAIN}/log-in`,
-      {
-        cancelToken: source.token,
-        timeout: 1000,
-      },
-    );
     return true;
   } catch (e) {
     applicationContext.logger.error('Cognito health check failed. ', e);
@@ -224,7 +213,7 @@ const getCognitoStatus = async ({
 const getEmailServiceStatus = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
   // at risk of being throttled if used with a non-cached health check
   try {
@@ -238,7 +227,7 @@ const getEmailServiceStatus = async ({
 };
 
 export const getHealthCheckInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
 ): Promise<ApplicationHealth> => {
   const [
     elasticSearchStatus,

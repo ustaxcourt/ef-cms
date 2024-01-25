@@ -138,7 +138,6 @@ export const isUserAlreadyCreated = async ({
   }
 };
 
-// TODO 10007: can this method be removed?
 export const createOrUpdateUser = async ({
   applicationContext,
   disableCognitoUser = false,
