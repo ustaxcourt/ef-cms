@@ -1,5 +1,8 @@
 import { applicationContext } from '../../applicationContext';
-import { petitionQcHelper as petitionQcHelperComputed } from './petitionQcHelper';
+import {
+  initialFilingDocumentTabs,
+  petitionQcHelper as petitionQcHelperComputed,
+} from './petitionQcHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -10,8 +13,7 @@ describe('petitionQcHelper', () => {
   );
   let mockState;
 
-  const { INITIAL_DOCUMENT_TYPES, INITIAL_FILING_DOCUMENT_TABS } =
-    applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
   describe('isPetitionFile', () => {
     it('should be false when the documentSelectedForPreview is NOT a petition file', () => {
@@ -80,7 +82,7 @@ describe('petitionQcHelper', () => {
           },
         },
       });
-      expect(documentTabsToDisplay).toEqual(INITIAL_FILING_DOCUMENT_TABS);
+      expect(documentTabsToDisplay).toEqual(initialFilingDocumentTabs);
     });
 
     it('hides APW and RQT tabs for electronic filings', () => {
@@ -109,10 +111,10 @@ describe('petitionQcHelper', () => {
         },
       });
       expect(documentTabsToDisplay).toEqual([
-        INITIAL_FILING_DOCUMENT_TABS[0], // Petition
-        INITIAL_FILING_DOCUMENT_TABS[1], // STIN
-        INITIAL_FILING_DOCUMENT_TABS[2], // ATP
-        INITIAL_FILING_DOCUMENT_TABS[4], // CDS
+        initialFilingDocumentTabs[0], // Petition
+        initialFilingDocumentTabs[1], // STIN
+        initialFilingDocumentTabs[2], // ATP
+        initialFilingDocumentTabs[4], // CDS
       ]);
     });
 
@@ -138,9 +140,9 @@ describe('petitionQcHelper', () => {
         },
       });
       expect(documentTabsToDisplay).toEqual([
-        INITIAL_FILING_DOCUMENT_TABS[0], // Petition
-        INITIAL_FILING_DOCUMENT_TABS[1], // STIN
-        INITIAL_FILING_DOCUMENT_TABS[2], // ATP
+        initialFilingDocumentTabs[0], // Petition
+        initialFilingDocumentTabs[1], // STIN
+        initialFilingDocumentTabs[2], // ATP
       ]);
     });
   });
