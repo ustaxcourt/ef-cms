@@ -46,5 +46,5 @@ CONFIG
 
 resource "aws_iam_role_policy_attachment" "es_cognito_auth" {
   role       = aws_iam_role.es_kibana_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonESCognitoAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonOpenSearchServiceCognitoAccess"
 }
