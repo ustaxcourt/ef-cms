@@ -616,7 +616,7 @@ export const INITIAL_DOCUMENT_TYPES = {
     documentType: 'Attachment to Petition',
     eventCode: 'ATP',
   },
-};
+} as const;
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',

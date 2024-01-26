@@ -6,31 +6,39 @@ type FilingDocumentsType = {
   documentType: string;
   title: string;
   documentId?: string;
+  eventCode?: string;
 }[];
 
+// todo: move population of eventCodes in these tabs into helper
 export const initialFilingDocumentTabs = [
   {
     documentType: 'petitionFile',
+    eventCode: 'P',
     title: 'Petition',
   },
   {
     documentType: 'stinFile',
+    eventCode: 'STIN',
     title: 'STIN',
   },
   {
     documentType: 'attachmentToPetitionFile',
+    eventCode: 'ATP',
     title: 'ATP',
   },
   {
     documentType: 'requestForPlaceOfTrialFile',
+    eventCode: 'RQT',
     title: 'RQT',
   },
   {
     documentType: 'corporateDisclosureFile',
+    eventCode: 'CDS',
     title: 'CDS',
   },
   {
     documentType: 'applicationForWaiverOfFilingFeeFile',
+    eventCode: 'APW',
     title: 'APW',
   },
 ] as FilingDocumentsType;
@@ -51,7 +59,7 @@ export const petitionQcHelper = (
 
   console.log('initialFilingDocumentTabs before', initialFilingDocumentTabs);
 
-  let documentTabsToDisplay = [...initialFilingDocumentTabs].map(
+  let documentTabsToDisplay = initialFilingDocumentTabs.map(
     docToDisplayMetaData => {
       return {
         ...docToDisplayMetaData,
@@ -62,7 +70,26 @@ export const petitionQcHelper = (
     },
   );
 
-  console.log('documentTabsToDisplay', documentTabsToDisplay);
+  const atpDocketTabsForDisplay = documents
+    .filter(doc => doc.eventCode === 'ATP')
+    .map(doc => {
+      return {
+        documentId: doc.docketEntryId,
+        documentType: doc.documentType,
+        eventCode: doc.eventCode,
+        title: 'ATP',
+      };
+    });
+
+  if (atpDocketTabsForDisplay.length) {
+    // remove atp tab from documentTabsToDisplay and readd the formatted atp docket entries
+    // todo: probably find a better way.
+    documentTabsToDisplay = [
+      ...documentTabsToDisplay.slice(0, 2), // atp is the 3rd item in the tab
+      ...atpDocketTabsForDisplay,
+      ...documentTabsToDisplay.slice(2 + 1),
+    ];
+  }
 
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:

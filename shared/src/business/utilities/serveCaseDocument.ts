@@ -38,7 +38,35 @@ export const serveCaseDocument = async ({
           caseEntity,
           docketEntryId: initialDocketEntry.docketEntryId,
         });
+    } else if (
+      initialDocketEntry.documentType ===
+      INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType
+    ) {
+      console.log('something');
+
+      const atpDocketEntires = caseEntity.docketEntries?.filter(
+        doc => doc.eventCode === 'ATP',
+      );
+
+      console.log(
+        'atpDocketEntires',
+        atpDocketEntires.map(doc => doc.docketEntryId),
+      );
+
+      atpDocketEntires.forEach(async atpDocEntry => {
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+          applicationContext,
+          caseEntity,
+          docketEntryId: atpDocEntry.docketEntryId,
+          servedParties: {
+            //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
+            electronic: [],
+          },
+        });
+      });
     } else {
+      // check for atps can happen here.
+      // if you see an atp,
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,
