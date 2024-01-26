@@ -51,16 +51,6 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ];
 
-  // opinion documents are public even in sealed cases
-  if (
-    isSealedCase(caseEntity) &&
-    !DocketEntry.isOpinion(docketEntryEntity.eventCode)
-  ) {
-    throw new UnauthorizedError(
-      'Unauthorized to access documents in a sealed case',
-    );
-  }
-
   const isPublic = DocketEntry.isPublic(docketEntryEntity, {
     caseIsSealed: isSealedCase(caseEntity),
     rootDocument: DocketEntry.fetchRootDocument(
@@ -70,7 +60,13 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     visibilityChangeDate: documentVisibilityChangeDate,
   });
 
-  if (!isTerminalUser && !isPublic) {
+  if (
+    !DocketEntry.isDownloadable(docketEntryEntity, {
+      isCourtUser: false,
+      isPublic,
+      userHasAccessToCase: isTerminalUser,
+    })
+  ) {
     throw new UnauthorizedError('Unauthorized to access private document');
   }
 
