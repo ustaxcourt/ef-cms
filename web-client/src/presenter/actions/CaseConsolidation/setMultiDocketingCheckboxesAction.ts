@@ -21,15 +21,15 @@ export const setMultiDocketingCheckboxesAction = ({
   const consolidatedCases =
     props.consolidatedCases || get(state.caseDetail.consolidatedCases);
 
-  const addedDocketNumbers =
+  const createOrderAddedDocketNumbers =
     props.createOrderAddedDocketNumbers ||
     get(state.createOrderAddedDocketNumbers);
 
   const consolidatedCasesWithCheckboxInfo: ConsolidatedCasesWithCheckboxInfoType[] =
     consolidatedCases.map(aCase => ({
-      checkboxDisabled: !addedDocketNumbers,
-      checked: addedDocketNumbers
-        ? addedDocketNumbers.includes(aCase.docketNumberWithSuffix)
+      checkboxDisabled: !createOrderAddedDocketNumbers,
+      checked: createOrderAddedDocketNumbers
+        ? createOrderAddedDocketNumbers.includes(aCase.docketNumberWithSuffix)
         : true,
       docketNumber: aCase.docketNumber,
       docketNumberWithSuffix: aCase.docketNumberWithSuffix,
@@ -37,7 +37,11 @@ export const setMultiDocketingCheckboxesAction = ({
       leadDocketNumber: aCase.leadDocketNumber,
     }));
 
-  store.set(state.modal.form.consolidatedCaseAllCheckbox, !addedDocketNumbers);
+  store.set(
+    state.modal.form.consolidatedCaseAllCheckbox,
+    !createOrderAddedDocketNumbers,
+  );
+
   store.set(
     state.modal.form.consolidatedCasesToMultiDocketOn,
     consolidatedCasesWithCheckboxInfo,
