@@ -1,53 +1,41 @@
+import { SQSEvent } from 'aws-lambda';
 import { createApplicationContext } from '../../../src/applicationContext';
 
-export const handler = async event => {
-  const applicationContext = createApplicationContext({});
-
-  if (event.triggerSource === 'PostAuthentication_Authentication') {
-    // const { email, sub } = event.request.userAttributes;
-    // const userId = event.request.userAttributes['custom:userId'] || sub;
-    // const userFromPersistence = await applicationContext
-    //   .getPersistenceGateway()
-    //   .getUserById({ applicationContext, userId });
-    // if (
-    //   userFromPersistence &&
-    //   userFromPersistence.pendingEmail &&
-    //   userFromPersistence.pendingEmail === email
-    // ) {
-    //   const updatedUser = await applicationContext
-    //     .getUseCases()
-    //     .setUserEmailFromPendingEmailInteractor(applicationContext, {
-    //       user: userFromPersistence,
-    //     });
-    applicationContext.logger.info('Nothing happened', {
-      event,
-      // updatedUser,
-    });
-    // }
-  }
-
-  return event;
+export type WorkerMessage = {
+  payload: any;
+  type: WorkerMessageType;
 };
 
-export const updatePetitionerCasesLambda = async event => {
+export const MESSAGE_TYPES = {
+  UPDATE_PENDING_EMAIL: 'UPDATE_PENDING_EMAIL',
+  UPDATE_PETITIONER_CASES: 'UPDATE_PETITIONER_CASES',
+} as const;
+const WORKER_MESSAGE_TYPES = Object.values(MESSAGE_TYPES);
+export type WorkerMessageType = (typeof WORKER_MESSAGE_TYPES)[number];
+
+export const updatePetitionerCasesLambda = async (event: SQSEvent) => {
   const applicationContext = createApplicationContext({});
 
   const { Records } = event;
-  const { body, receiptHandle } = Records[0];
-  const user = JSON.parse(body);
-  const address = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/update_petitioner_cases_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`;
+  const { body } = Records[0];
+  const messageBody: WorkerMessage = JSON.parse(body);
   applicationContext.logger.info('updatePetitionerCasesLambda', event);
 
-  await applicationContext.getUseCases().updatePetitionerCasesInteractor({
-    applicationContext,
-    user,
-  });
-
-  await applicationContext
-    .getMessagingClient()
-    .deleteMessage({
-      QueueUrl: address,
-      ReceiptHandle: receiptHandle,
-    })
-    .promise();
+  switch (messageBody.type) {
+    case MESSAGE_TYPES.UPDATE_PETITIONER_CASES:
+      await applicationContext.getUseCases().updatePetitionerCasesInteractor({
+        applicationContext,
+        user: messageBody.payload,
+      });
+      break;
+    case MESSAGE_TYPES.UPDATE_PENDING_EMAIL:
+      await applicationContext
+        .getUseCases()
+        .setUserEmailFromPendingEmailInteractor(applicationContext, {
+          user: messageBody.payload,
+        });
+      break;
+    default:
+      console.log('No matching case found for message: ', messageBody);
+  }
 };
