@@ -185,7 +185,7 @@ describe('setFormFromDraftStateAction', () => {
       },
     });
 
-    expect(result.state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+    expect(result.state.createOrderSelectedCases).toEqual([
       {
         checked: true,
         docketNumberWithSuffix: '123-45',
