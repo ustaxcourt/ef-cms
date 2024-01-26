@@ -1,11 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './CaseTypeSelect';
+import { FileInput } from '../FileDocument/FileInput';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { StateDrivenMultiFileInput } from '@web-client/views/FileDocument/StateDrivenMultiFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -146,39 +145,30 @@ export const StartCaseStep2 = connect(
                 <CaseTypeSelect
                   allowDefaultOption={true}
                   caseTypes={caseTypeDescriptionHelper.caseTypes}
-                  className="margin-bottom-20"
                   legend="Type of notice / case"
                   validation="validateStartCaseWizardSequence"
                   value={form.caseType}
                   onChange="updateFormValueSequence"
                 />
-                <FormGroup errorText={validationErrors.primaryDocumentFile}>
+                <div className="usa-form-group">
                   <label
-                    className={classNames(
-                      'usa-label ustc-upload with-hint',
-                      // fileDocumentHelper.showPrimaryDocumentValid &&
-                      //   'validated',
-                    )}
+                    className="usa-label margin-bottom-0"
                     htmlFor="atp-files-upload"
-                    id="atp-files-upload-label"
                   >
-                    Upload document PDF (.pdf){' '}
-                    <span className="success-message padding-left-1">
-                      <FontAwesomeIcon icon="check-circle" size="sm" />
-                    </span>
+                    Upload a PDF of IRS Notice(s) (.pdf)
                   </label>
                   <span className="usa-hint" id="atp-files-upload-hint">
                     Make sure file is not encrypted or password protected. Max
                     file size {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
-                  <StateDrivenMultiFileInput
-                    aria-describedby="atp-files-upload-label"
-                    id="atp-files-upload"
-                    name="atpFiles"
-                    updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
-                    validationSequence="validateExternalDocumentInformationSequence"
-                  />
-                </FormGroup>
+                  <FormGroup>
+                    <FileInput
+                      name="atpFiles"
+                      updateFormValueSequence="updateFormValueSequence"
+                      validationSequence="validateExternalDocumentInformationSequence"
+                    />
+                  </FormGroup>
+                </div>
               </>
             )}
             {startCaseHelper.showNotHasIrsNoticeOptions && (
