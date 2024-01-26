@@ -80,8 +80,7 @@ export const createCaseInteractor = async (
     atpFileIds: string[];
   },
 ) => {
-  console.log('atpFileIds', atpFileIds); // this log isn't showing/working
-
+  console.log('atpFileIds', atpFileIds); 
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
