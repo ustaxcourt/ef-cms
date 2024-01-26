@@ -201,6 +201,13 @@ variable "bounce_handler_object" {
 variable "bounce_handler_object_hash" {
   type = string
 }
+variable "worker_object" {
+  type = any
+}
+
+variable "worker_object_hash" {
+  type = string
+}
 
 variable "node_version" {
   type = string

@@ -166,6 +166,17 @@ resource "null_resource" "triggers_east_object" {
   }
 }
 
+resource "null_resource" "worker_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_worker.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/worker_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 resource "null_resource" "send_emails_east_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
   provisioner "local-exec" {
@@ -472,6 +483,18 @@ data "aws_s3_bucket_object" "triggers_green_east_object" {
   key        = "triggers_green.js.zip"
 }
 
+data "aws_s3_object" "worker_green_east_object" { # 10007 we left here
+  depends_on = [null_resource.worker_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "worker_green.js.zip"
+}
+
+data "aws_s3_object" "worker_blue_east_object" {
+  depends_on = [null_resource.worker_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "worker_blue.js.zip"
+}
+
 data "aws_s3_bucket_object" "send_emails_green_east_object" {
   depends_on = [null_resource.send_emails_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
@@ -626,7 +649,7 @@ module "api-east-green" {
   region   = "us-east-1"
   validate = 1
   providers = {
-    aws = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
@@ -651,6 +674,8 @@ module "api-east-green" {
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  worker_object                  = null_resource.worker_east_object
+  worker_object_hash             = data.aws_s3_bucket_object.worker_green_east_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
 
@@ -701,7 +726,7 @@ module "api-east-blue" {
   region   = "us-east-1"
   validate = 1
   providers = {
-    aws = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
@@ -726,6 +751,8 @@ module "api-east-blue" {
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  worker_object                  = null_resource.worker_east_object
+  worker_object_hash             = data.aws_s3_bucket_object.worker_blue_east_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
 
