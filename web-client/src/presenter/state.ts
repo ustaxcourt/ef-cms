@@ -537,7 +537,8 @@ export const computeds = {
 };
 
 export const baseState = {
-  advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchForm: {} as any,
+  // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   alertError: undefined,
   alertSuccess: undefined,
@@ -570,6 +571,7 @@ export const baseState = {
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
+  createOrderAddedDocketNumbers: undefined as unknown as string[],
   currentJudges: [],
   currentPage: 'Interstitial',
   currentViewMetadata: {

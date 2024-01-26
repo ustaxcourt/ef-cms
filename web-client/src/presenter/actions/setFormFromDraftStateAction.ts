@@ -34,7 +34,7 @@ export const setFormFromDraftStateAction = ({ props, store }: ActionProps) => {
         }),
       );
       store.set(state.createOrderSelectedCases, casesWithCheckMetadata);
-      store.set(state.addedDocketNumbers, addedDocketNumbers);
+      store.set(state.createOrderAddedDocketNumbers, addedDocketNumbers);
     }
   }
 };

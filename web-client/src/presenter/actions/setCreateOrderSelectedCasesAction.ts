@@ -10,7 +10,7 @@ export const setCreateOrderSelectedCasesAction = ({
 
   store.set(state.createOrderSelectedCases, selectedOrderCases);
   store.set(
-    state.addedDocketNumbers,
+    state.createOrderAddedDocketNumbers,
     selectedOrderCases
       .filter(aCase => aCase.checked)
       .map(aCase => aCase.docketNumberWithSuffix),
