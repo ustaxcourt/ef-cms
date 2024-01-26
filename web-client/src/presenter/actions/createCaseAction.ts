@@ -60,6 +60,8 @@ export const createCaseAction = async ({
     store,
   );
 
+  console.log('atpFilesMetadata', atpFilesMetadata);
+
   let filePetitionResult; //todo: type
   try {
     filePetitionResult = await applicationContext

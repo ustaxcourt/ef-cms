@@ -76,6 +76,7 @@ export const PetitionQcScanBatchPreviewer = connect(
     title,
     validationErrors,
   }) {
+    console.log('here in PetitionQcScanBatchPreviewer', PetitionQcScanBatchPreviewer)
     useEffect(() => {
       scannerStartupSequence();
     }, []);
