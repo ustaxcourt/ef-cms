@@ -104,9 +104,10 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       user: mockPetitioner,
     });
 
-    expect(
-      applicationContext.getMessageGateway().sendUpdatePetitionerCasesMessage,
-    ).toHaveBeenCalled();
+    // TODO 10007: Replaced with worker gateway
+    // expect(
+    //   applicationContext.getMessageGateway().sendUpdatePetitionerCasesMessage,
+    // ).toHaveBeenCalled();
   });
 
   it('should update the user cases with the new email and electronic service for a practitioner', async () => {

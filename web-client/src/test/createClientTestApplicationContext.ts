@@ -611,7 +611,6 @@ const createTestApplicationContext = () => {
       sendCalendarSessionEvent: jest.fn(),
       sendEmailEventToQueue: jest.fn(),
       sendSetTrialSessionCalendarEvent: jest.fn(),
-      sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),

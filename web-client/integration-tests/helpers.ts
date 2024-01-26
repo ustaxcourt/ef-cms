@@ -73,7 +73,6 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateDocketEntry } from '../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
-import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { updateUser } from '../../web-api/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -212,15 +211,15 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           });
         }
       },
-      sendUpdatePetitionerCasesMessage: ({
-        applicationContext: appContext,
-        user,
-      }) => {
-        return updatePetitionerCasesInteractor({
-          applicationContext: appContext,
-          user,
-        });
-      },
+      // TODO 10007: Replaced with worker gateway
+      // sendUpdatePetitionerCasesMessage: ({
+      //   applicationContext: appContext,
+      //   user,
+      // }) => {
+      //   return updatePetitionerCasesInteractor(appContext, {
+      //     user,
+      //   });
+      // },
     }),
     getMessagingClient: () => {
       if (!sqsCache) {
