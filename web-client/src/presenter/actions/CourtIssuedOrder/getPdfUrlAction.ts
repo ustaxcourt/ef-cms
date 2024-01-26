@@ -13,7 +13,9 @@ export const getPdfUrlAction = async ({
   const { contentHtml, documentTitle, eventCode } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const consolidatedCasesToMultiDocketOn = get(state.createOrderSelectedCases);
+  const consolidatedCasesToMultiDocketOn =
+    get(state.createOrderSelectedCases) ||
+    get(state.modal.form.consolidatedCasesToMultiDocketOn);
 
   const consolidatedCasesToMultiDocketOnMetaData: CaseWithSelectionInfo[] = (
     consolidatedCasesToMultiDocketOn || []
