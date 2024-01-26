@@ -627,33 +627,6 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   attachmentToPetition: 'attachmentToPetitionFile',
 };
 
-export const INITIAL_FILING_DOCUMENT_TABS = [
-  {
-    documentType: 'petitionFile',
-    title: 'Petition',
-  },
-  {
-    documentType: 'stinFile',
-    title: 'STIN',
-  },
-  {
-    documentType: 'attachmentToPetitionFile',
-    title: 'ATP',
-  },
-  {
-    documentType: 'requestForPlaceOfTrialFile',
-    title: 'RQT',
-  },
-  {
-    documentType: 'corporateDisclosureFile',
-    title: 'CDS',
-  },
-  {
-    documentType: 'applicationForWaiverOfFilingFeeFile',
-    title: 'APW',
-  },
-] as const;
-
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,

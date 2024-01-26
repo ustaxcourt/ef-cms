@@ -1,4 +1,4 @@
-import { CaseFromPaperType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
+import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupPercentDone = <T extends Record<string, any | undefined>>(
@@ -73,7 +73,7 @@ export const createCaseFromPaperAction = async ({
   path,
   store,
 }: ActionProps) => {
-  const petitionMetadata: CaseFromPaperType = get(state.form);
+  const petitionMetadata: PaperCaseDataType = get(state.form);
 
   const {
     applicationForWaiverOfFilingFeeFile,
@@ -82,7 +82,7 @@ export const createCaseFromPaperAction = async ({
     petitionFile,
     requestForPlaceOfTrialFile,
     stinFile,
-  } = get(state.form) as CaseFromPaperType;
+  } = petitionMetadata;
 
   const progressFunctions = setupPercentDone(
     {
