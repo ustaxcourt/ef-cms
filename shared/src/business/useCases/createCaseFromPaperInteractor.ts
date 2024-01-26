@@ -1,7 +1,7 @@
 import { Case } from '../entities/cases/Case';
-import { CaseFromPaperType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { DocketEntry } from '../entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
+import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { PaperPetition } from '../entities/cases/PaperPetition';
 import {
   ROLE_PERMISSIONS,
@@ -74,7 +74,7 @@ export const createCaseFromPaperInteractor = async (
     applicationForWaiverOfFilingFeeFileId?: string;
     corporateDisclosureFileId?: string;
     petitionFileId: string;
-    petitionMetadata: CaseFromPaperType;
+    petitionMetadata: PaperCaseDataType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
     attachmentToPetitionFileId?: string;
