@@ -1,9 +1,9 @@
 import { updatePetitionerCases } from './verifyUserPendingEmailInteractor';
 
-export const updatePetitionerCasesInteractor = async ({
+export const updatePetitionerCasesInteractor = async (
   applicationContext,
-  user,
-}) => {
+  { user },
+) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByUser({

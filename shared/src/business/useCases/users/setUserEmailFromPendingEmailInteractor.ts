@@ -1,5 +1,7 @@
+import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import { Practitioner } from '../../entities/Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '../../entities/User';
 import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
 import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
@@ -14,7 +16,7 @@ import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
  * @returns {Promise} the updated user object
  */
 export const setUserEmailFromPendingEmailInteractor = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { user },
 ) => {
   let userEntity;
@@ -60,10 +62,12 @@ export const setUserEmailFromPendingEmailInteractor = async (
   try {
     if (userEntity.role === ROLES.petitioner) {
       await applicationContext
-        .getMessageGateway()
-        .sendUpdatePetitionerCasesMessage({
-          applicationContext,
-          user: rawUser,
+        .getWorkerGateway()
+        .initialize(applicationContext, {
+          message: {
+            payload: { user: rawUser },
+            type: MESSAGE_TYPES.UPDATE_PETITIONER_CASES,
+          },
         });
     } else {
       await updatePractitionerCases({

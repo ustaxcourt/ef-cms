@@ -31,6 +31,7 @@ import { User } from '../../shared/src/business/entities/User';
 import { UserCase } from '../../shared/src/business/entities/UserCase';
 import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
+import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
@@ -62,10 +63,8 @@ import { sendNotificationToConnection } from '../../shared/src/notifications/sen
 import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
-import { sendUpdatePendingEmailMessage } from '@web-api/persistence/messages/sendUpdatePendingEmailMessage';
-import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
-import { setUserEmailFromPendingEmailInteractor } from '@shared/business/useCases/users/setUserEmailFromPendingEmailInteractor';
-import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
+import { worker } from '@web-api/gateways/worker/worker';
+import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import AWS, { S3, SES, SQS } from 'aws-sdk';
 import axios from 'axios';
 import pug from 'pug';
@@ -92,6 +91,10 @@ const environment = {
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
+  // TODO 10007 change name of queue to worker something
+  workerQueueUrl:
+    `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/update_petitioner_cases_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
+    '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
@@ -182,7 +185,7 @@ export const createApplicationContext = (
       MAX_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
-        status => !CLOSED_CASE_STATUSES.includes(status),
+        status => !CLOSED_CASE_STATUSES.includes(status as any),
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
       PENDING_ITEMS_PAGE_SIZE: 100,
@@ -281,35 +284,6 @@ export const createApplicationContext = (
           });
         }
       },
-      sendUpdatePendingEmailMessage: (
-        applicationContext,
-        { user: userToSendTo },
-      ) => {
-        if (environment.stage === 'local') {
-          return setUserEmailFromPendingEmailInteractor(applicationContext, {
-            user: userToSendTo,
-          });
-        }
-        return sendUpdatePendingEmailMessage(applicationContext, {
-          user: userToSendTo,
-        });
-      },
-      sendUpdatePetitionerCasesMessage: ({
-        applicationContext: appContext,
-        user: userToSendTo,
-      }) => {
-        if (environment.stage === 'local') {
-          return updatePetitionerCasesInteractor({
-            applicationContext: appContext,
-            user: userToSendTo,
-          });
-        } else {
-          return sendUpdatePetitionerCasesMessage({
-            applicationContext: appContext,
-            user: userToSendTo,
-          });
-        }
-      },
     }),
     getMessagingClient: () => {
       if (!sqsCache) {
@@ -400,7 +374,7 @@ export const createApplicationContext = (
                     if (err) {
                       reject(err);
                     } else {
-                      resolve(credentials);
+                      resolve(credentials as any);
                     }
                   });
                 }),
@@ -436,6 +410,17 @@ export const createApplicationContext = (
     getUseCases,
     getUserGateway,
     getUtilities,
+    getWorkerGateway: () => ({
+      initialize: (
+        applicationContext: ServerApplicationContext,
+        { message }: { message: WorkerMessage },
+      ) => {
+        if (applicationContext.environment.stage === 'local') {
+          return workerLocal(applicationContext, { message });
+        }
+        return worker(applicationContext, { message });
+      },
+    }),
     isAuthorized,
     isCurrentColorActive,
     logger: {

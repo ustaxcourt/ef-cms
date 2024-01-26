@@ -5,6 +5,7 @@ import {
   InvalidRequest,
   NotFoundError,
 } from '@web-api/errors/errors';
+import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
@@ -83,9 +84,12 @@ export const changePasswordInteractor = async (
         userFromPersistence.pendingEmail === userEmail
       ) {
         await applicationContext
-          .getMessageGateway()
-          .sendUpdatePendingEmailMessage(applicationContext, {
-            user: userFromPersistence,
+          .getWorkerGateway()
+          .initialize(applicationContext, {
+            message: {
+              payload: { user: userFromPersistence },
+              type: MESSAGE_TYPES.UPDATE_PENDING_EMAIL,
+            },
           });
       }
 
