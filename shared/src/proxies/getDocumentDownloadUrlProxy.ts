@@ -12,7 +12,11 @@ import { get } from './requests';
  */
 export const getDocumentDownloadUrlInteractor = (
   applicationContext,
-  { docketNumber, isPublic, key },
+  {
+    docketNumber,
+    isPublic,
+    key,
+  }: { docketNumber: string; isPublic?: boolean; key: string }, // todo: move type to interactor
 ) => {
   return get({
     applicationContext,

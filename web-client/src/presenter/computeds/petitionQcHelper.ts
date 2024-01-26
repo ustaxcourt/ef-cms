@@ -42,7 +42,6 @@ export const petitionQcHelper = (
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
-
   console.log('documents', documents);
 
   const hasCDS = !!documents.find(
@@ -50,47 +49,20 @@ export const petitionQcHelper = (
       doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
   );
 
-  const computeATPDocketEntries = documents.filter(doc => {
-    return doc.eventCode === 'ATP';
-  });
+  console.log('initialFilingDocumentTabs before', initialFilingDocumentTabs);
 
-  const computeATPTabsCount = computeATPDocketEntries.length;
-
-  console.log('computeATPTabsCount', computeATPTabsCount);
-
-  const atpTabInfo = {
-    documentType: 'attachmentToPetitionFile',
-    title: 'ATP',
-  };
-
-  // 1. Remove atpTabInfo first so we can re-add later with the document ids so it makes the request
-  // to render the document with the id
-  // is this the best work around?
-  let documentTabsToDisplay: FilingDocumentsType = [
-    ...initialFilingDocumentTabs,
-  ]
-    .filter(filingTab => {
-      return filingTab !== atpTabInfo;
-    })
-    .map(filingTabInfo => {
+  let documentTabsToDisplay = [...initialFilingDocumentTabs].map(
+    docToDisplayMetaData => {
       return {
-        ...filingTabInfo,
+        ...docToDisplayMetaData,
         documentId: documents.find(
-          doc => doc.documentType === filingTabInfo.documentType,
-        ).docketEntryId,
+          doc => doc.eventCode === docToDisplayMetaData.eventCode,
+        )?.docketEntryId,
       };
-    });
+    },
+  );
 
-  if (!computeATPTabsCount) {
-    documentTabsToDisplay[2] = atpTabInfo;
-  } else {
-    const startIndex = 1;
-    computeATPDocketEntries.forEach((atpTab, index) => {
-      documentTabsToDisplay[index + startIndex] = atpTabInfo;
-    });
-  }
-
-  console.log('initialFilingDocumentTabs', initialFilingDocumentTabs);
+  console.log('documentTabsToDisplay', documentTabsToDisplay);
 
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:
@@ -107,8 +79,6 @@ export const petitionQcHelper = (
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
   );
-
-  console.log('documentSelectedForPreview', documentSelectedForPreview);
 
   const documentTypeSelectedForPreview =
     documentTypeMap[documentSelectedForPreview];
