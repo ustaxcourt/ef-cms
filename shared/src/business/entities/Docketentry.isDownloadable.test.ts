@@ -89,13 +89,13 @@ describe('isDownloadable', () => {
   });
 
   describe('External user with access to the case', () => {
-    const meetsAgeRequirements = jest.spyOn(
+    const isTranscriptOldEnoughToUnseal = jest.spyOn(
       DocketEntry,
-      'meetsAgeRequirements',
+      'isTranscriptOldEnoughToUnseal',
     );
 
     beforeEach(() => {
-      meetsAgeRequirements.mockReturnValue(true);
+      isTranscriptOldEnoughToUnseal.mockReturnValue(true);
     });
 
     const options = {
@@ -197,7 +197,7 @@ describe('isDownloadable', () => {
           });
 
           it('returns false if the document does not meet age requirement', () => {
-            meetsAgeRequirements.mockReturnValue(false);
+            isTranscriptOldEnoughToUnseal.mockReturnValue(false);
             expect(
               DocketEntry.isDownloadable(
                 {
@@ -213,7 +213,7 @@ describe('isDownloadable', () => {
           });
 
           it('returns true if the document meets age requirement', () => {
-            meetsAgeRequirements.mockReturnValue(true);
+            isTranscriptOldEnoughToUnseal.mockReturnValue(true);
             expect(
               DocketEntry.isDownloadable(
                 {
@@ -271,7 +271,7 @@ describe('isDownloadable', () => {
       });
 
       it('returns false if the document does not meet age requirement', () => {
-        meetsAgeRequirements.mockReturnValue(false);
+        isTranscriptOldEnoughToUnseal.mockReturnValue(false);
         expect(
           DocketEntry.isDownloadable(
             {
@@ -287,7 +287,7 @@ describe('isDownloadable', () => {
       });
 
       it('returns true if the document meets age requirement', () => {
-        meetsAgeRequirements.mockReturnValue(true);
+        isTranscriptOldEnoughToUnseal.mockReturnValue(true);
         expect(
           DocketEntry.isDownloadable(
             {
