@@ -187,14 +187,17 @@ describe('setFormFromDraftStateAction', () => {
 
     expect(result.state.createOrderSelectedCases).toEqual([
       {
+        checkboxDisabled: false,
         checked: true,
         docketNumberWithSuffix: '123-45',
       },
       {
+        checkboxDisabled: false,
         checked: false,
         docketNumberWithSuffix: '124-45',
       },
       {
+        checkboxDisabled: false,
         checked: true,
         docketNumberWithSuffix: '125-45',
       },
