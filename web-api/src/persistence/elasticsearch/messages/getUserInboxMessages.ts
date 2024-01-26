@@ -2,6 +2,8 @@ import { GET_PARENT_CASE } from '../helpers/searchClauses';
 import { search } from '../searchClient';
 
 export const getUserInboxMessages = async ({ applicationContext, userId }) => {
+  applicationContext.logger.info('getUserInboxMessages start');
+
   const query = {
     body: {
       query: {
@@ -29,6 +31,8 @@ export const getUserInboxMessages = async ({ applicationContext, userId }) => {
     applicationContext,
     searchParameters: query,
   });
+
+  applicationContext.logger.info('getUserInboxMessages end');
 
   return results;
 };
