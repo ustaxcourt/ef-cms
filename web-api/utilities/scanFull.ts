@@ -1,5 +1,5 @@
 import { Key } from 'aws-sdk/clients/dynamodb';
-import { TDynamoRecord } from '../../shared/src/persistence/dynamo/dynamoTypes';
+import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
 export const scanFull = async (
   tableName: string,
@@ -21,7 +21,7 @@ export const scanFull = async (
       .then(results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        items = [...items, ...results.Items!];
+        items = [...items, ...(results.Items as TDynamoRecord[])];
       });
   }
 
