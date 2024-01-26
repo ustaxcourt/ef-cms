@@ -16,13 +16,14 @@ export const setMultiDocketingCheckboxesAction = ({
   store,
 }: ActionProps<{
   consolidatedCases: RawConsolidatedCaseSummary[];
-  addedDocketNumbers?: string[];
+  createOrderAddedDocketNumbers?: string[];
 }>) => {
   const consolidatedCases =
     props.consolidatedCases || get(state.caseDetail.consolidatedCases);
 
   const addedDocketNumbers =
-    props.addedDocketNumbers || get(state.addedDocketNumbers);
+    props.createOrderAddedDocketNumbers ||
+    get(state.createOrderAddedDocketNumbers);
 
   const consolidatedCasesWithCheckboxInfo: ConsolidatedCasesWithCheckboxInfoType[] =
     consolidatedCases.map(aCase => ({
