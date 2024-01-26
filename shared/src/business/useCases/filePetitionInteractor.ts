@@ -63,7 +63,7 @@ export const filePetitionInteractor = async (
 
   let atpFilesUploads;
   if (!isEmpty(atpFilesMetadata)) {
-    atpFilesUploads = Object.entries(atpFilesMetadata).map(([key, value]) => {
+    atpFilesUploads = Object.entries(atpFilesMetadata).map(([, value]) => {
       return applicationContext
         .getUseCases()
         .uploadDocumentAndMakeSafeInteractor(applicationContext, {
@@ -92,12 +92,13 @@ export const filePetitionInteractor = async (
     stinFileId,
   };
 
-  atpFileIds.forEach((atpFileId, index) => {
-    requestParams[`atpFileId${index}`] = atpFileId;
-  });
+  if (atpFileIds.length) {
+    atpFileIds.forEach((atpFileId, index) => {
+      requestParams[`atpFileId${index}`] = atpFileId;
+    });
+  }
 
   console.log('atpFileIds', atpFileIds);
-
   console.log('requestParams', requestParams);
 
   const caseDetail = await applicationContext

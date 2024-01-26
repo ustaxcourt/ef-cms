@@ -16,13 +16,13 @@ export const createCaseAction = async ({
   path,
   store,
 }: ActionProps) => {
-  const electronicCasePetition = get(state.form); // todo: type
+  const petitionMetadata = get(state.form); // todo: type
   const { atpFiles, corporateDisclosureFile, petitionFile, stinFile } =
-    electronicCasePetition;
+    petitionMetadata;
 
   const form = omit(
     {
-      ...electronicCasePetition,
+      ...petitionMetadata,
     },
     'trialCities',
   );
@@ -30,23 +30,26 @@ export const createCaseAction = async ({
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  const atpFilesMetadata = {};
+  const atpFilesMetadata = {}; // todo: type
 
-  atpFiles.forEach((fileName, index) => {
-    let key = `atp${index}`;
+  // todo: is check necessary?
+  if (atpFiles) {
+    atpFiles.forEach((fileName, index) => {
+      let key = `atp${index}`;
 
-    const progressFunction = setupPercentDone(
-      {
-        [key]: fileName,
-      },
-      store,
-    );
+      const progressFunction = setupPercentDone(
+        {
+          [key]: fileName,
+        },
+        store,
+      );
 
-    atpFilesMetadata[key] = {
-      file: fileName,
-      progressFunction: progressFunction[key],
-    };
-  });
+      atpFilesMetadata[key] = {
+        file: fileName,
+        progressFunction: progressFunction[key],
+      };
+    });
+  }
 
   const progressFunctions = setupPercentDone(
     {
