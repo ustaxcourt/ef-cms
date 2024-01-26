@@ -24,6 +24,10 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should create a new user account when the provided information is valid and the email does not already exist for an account in the system', async () => {
+    applicationContext
+      .getCognito()
+      .listUsers.mockResolvedValue({ Users: undefined });
+
     const result = await signUpUserInteractor(applicationContext, {
       user,
     });
@@ -60,6 +64,9 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should NOT return the confirmation code after successfully creating a user when the environment is NOT `local`', async () => {
+    applicationContext
+      .getCognito()
+      .listUsers.mockResolvedValue({ Users: undefined });
     applicationContext.environment.stage = 'NOT_local';
 
     const result = await signUpUserInteractor(applicationContext, {
@@ -74,6 +81,9 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should throw an error when an error occurs while trying to create a new user account', async () => {
+    applicationContext
+      .getCognito()
+      .listUsers.mockResolvedValue({ Users: undefined });
     applicationContext.getCognito().signUp.mockRejectedValue(new Error('abc'));
 
     await expect(
@@ -86,6 +96,10 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should throw an error when the new user is not valid', async () => {
+    applicationContext
+      .getCognito()
+      .listUsers.mockResolvedValue({ Users: undefined });
+
     await expect(
       signUpUserInteractor(applicationContext, {
         user: {
@@ -95,18 +109,21 @@ describe('signUpUserInteractor', () => {
           password: 'NOT_VALID_PASSWORD', // This password is not valid because it must contain a lowercase letter, symbol, and number
         },
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrow(
+      'The NewPetitionerUser entity was invalid. {"password":"Must contain number","confirmPassword":"Passwords must match"}',
+    );
 
     expect(applicationContext.getCognito().signUp).not.toHaveBeenCalled();
   });
 
   it('should throw an error when the provided email already exists for an account in the system and it has been confirmed', async () => {
-    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
-      accountStatus: UserStatusType.CONFIRMED,
-      email,
-      name,
-      role: ROLES.petitioner,
-      userId: '6f2ea0ba-f01b-4f8d-b3c1-8dee888b2da7',
+    applicationContext.getCognito().listUsers.mockResolvedValue({
+      Users: [
+        {
+          UserStatus: UserStatusType.CONFIRMED,
+          userId,
+        },
+      ],
     });
 
     await expect(
@@ -119,12 +136,13 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should throw an error when the provided email already exists for an account in the system and the account has not yet been confirmed', async () => {
-    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
-      accountStatus: UserStatusType.UNCONFIRMED,
-      email,
-      name,
-      role: ROLES.petitioner,
-      userId: '6f2ea0ba-f01b-4f8d-b3c1-8dee888b2da7',
+    applicationContext.getCognito().listUsers.mockResolvedValue({
+      Users: [
+        {
+          UserStatus: UserStatusType.UNCONFIRMED,
+          userId,
+        },
+      ],
     });
 
     await expect(
