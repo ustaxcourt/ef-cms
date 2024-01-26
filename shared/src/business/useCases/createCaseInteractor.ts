@@ -70,13 +70,19 @@ export const createCaseInteractor = async (
     petitionFileId,
     petitionMetadata,
     stinFileId,
+    ...atpFileIds
   }: {
     corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
+    atpFileIds: any;
   },
 ) => {
+  // TODO: get aptFile ids and create docket numbers with them
+
+  console.log('atpFileIds', atpFileIds); // this log isn't showing/working
+
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {

@@ -30,7 +30,6 @@ export const StartCaseStep5 = connect(
     submitFilePetitionSequence,
     user,
   }) {
-    console.log('form', form);
     return (
       <>
         <Focus>

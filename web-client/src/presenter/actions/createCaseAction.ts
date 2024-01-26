@@ -16,13 +16,13 @@ export const createCaseAction = async ({
   path,
   store,
 }: ActionProps) => {
-  const { atipFiles, corporateDisclosureFile, petitionFile, stinFile } = get(
-    state.form,
-  );
+  const electronicCasePetition = get(state.form); // todo: type
+  const { atpFiles, corporateDisclosureFile, petitionFile, stinFile } =
+    electronicCasePetition;
 
   const form = omit(
     {
-      ...get(state.form),
+      ...electronicCasePetition,
     },
     'trialCities',
   );
@@ -30,23 +30,26 @@ export const createCaseAction = async ({
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  // loop through each atp file and create a new object with each atp(key number ) and file
+  const atpFilesMetadata = {};
 
-  const resultObject = {};
-
-  atipFiles.forEach((obj, index) => {
-    // Convert the index to a string and use it as the key
+  atpFiles.forEach((fileName, index) => {
     let key = `atp${index}`;
 
-    // Assign the object from the array to the key in the result object
-    resultObject[key] = obj;
+    const progressFunction = setupPercentDone(
+      {
+        [key]: fileName,
+      },
+      store,
+    );
+
+    atpFilesMetadata[key] = {
+      file: fileName,
+      progressFunction: progressFunction[key],
+    };
   });
 
   const progressFunctions = setupPercentDone(
     {
-      // TODO: add ATP files
-      // get all the atp files and pass them to setupPercentDone function
-      ...resultObject,
       corporate: corporateDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
@@ -54,11 +57,12 @@ export const createCaseAction = async ({
     store,
   );
 
-  let filePetitionResult;
+  let filePetitionResult; //todo: type
   try {
     filePetitionResult = await applicationContext
       .getUseCases()
       .filePetitionInteractor(applicationContext, {
+        atpFilesMetadata,
         corporateDisclosureFile,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
         petitionFile,
@@ -66,7 +70,6 @@ export const createCaseAction = async ({
         petitionUploadProgress: progressFunctions.petition,
         stinFile,
         stinUploadProgress: progressFunctions.stin,
-        //TODO: atpUploadProgress: progressFunctions.atpFiles
       });
   } catch (err) {
     return path.error();
