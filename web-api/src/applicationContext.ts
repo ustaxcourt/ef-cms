@@ -62,7 +62,9 @@ import { sendNotificationToConnection } from '../../shared/src/notifications/sen
 import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
+import { sendUpdatePendingEmailMessage } from '@web-api/persistence/messages/sendUpdatePendingEmailMessage';
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
+import { setUserEmailFromPendingEmailInteractor } from '@shared/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import AWS, { S3, SES, SQS } from 'aws-sdk';
 import axios from 'axios';
@@ -278,6 +280,19 @@ export const createApplicationContext = (
             payload,
           });
         }
+      },
+      sendUpdatePendingEmailMessage: (
+        applicationContext,
+        { user: userToSendTo },
+      ) => {
+        if (environment.stage === 'local') {
+          return setUserEmailFromPendingEmailInteractor(applicationContext, {
+            user: userToSendTo,
+          });
+        }
+        return sendUpdatePendingEmailMessage(applicationContext, {
+          user: userToSendTo,
+        });
       },
       sendUpdatePetitionerCasesMessage: ({
         applicationContext: appContext,
