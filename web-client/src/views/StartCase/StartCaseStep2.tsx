@@ -38,7 +38,6 @@ export const StartCaseStep2 = connect(
     validateStartCaseWizardSequence,
     validationErrors,
   }) {
-    console.log('form: ', form);
     return (
       <>
         <Focus>

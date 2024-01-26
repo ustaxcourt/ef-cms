@@ -3,10 +3,12 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { isEmpty } from 'lodash';
 
 export const filePetitionInteractor = async (
   applicationContext: any,
   {
+    atpFilesMetadata,
     corporateDisclosureFile,
     corporateDisclosureUploadProgress,
     petitionFile,
@@ -22,8 +24,10 @@ export const filePetitionInteractor = async (
     petitionUploadProgress: any;
     stinFile: any;
     stinUploadProgress: any;
+    atpFilesMetadata: any;
   },
 ) => {
+  console.log('atpFilesMetadata', atpFilesMetadata);
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
@@ -57,34 +61,48 @@ export const filePetitionInteractor = async (
       });
   }
 
-  //TODO: fill
-  let atpFilesUpload;
-  if (atpFiles?.length) {
-    atpFiles.map(atpFile => {
+  let atpFilesUploads;
+  if (!isEmpty(atpFilesMetadata)) {
+    atpFilesUploads = Object.entries(atpFilesMetadata).map(([key, value]) => {
       return applicationContext
         .getUseCases()
         .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-          document: stinFile,
-          onUploadProgress: stinUploadProgress,
+          document: value.file,
+          onUploadProgress: value.progressFunction,
         });
     });
   }
 
-  const [corporateDisclosureFileId, petitionFileId, stinFileId] =
-    await Promise.all([
-      corporateDisclosureFileUpload,
-      petitionFileUpload,
-      stinFileUpload,
-    ]);
+  const [
+    corporateDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+    ...atpFileIds
+  ]: string[] = await Promise.all([
+    corporateDisclosureFileUpload,
+    petitionFileUpload,
+    stinFileUpload,
+    ...atpFilesUploads,
+  ]);
+
+  const requestParams = {
+    corporateDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    stinFileId,
+  };
+
+  atpFileIds.forEach((atpFileId, index) => {
+    requestParams[`atpFileId${index}`] = atpFileId;
+  });
+
+  console.log('atpFileIds', atpFileIds);
+
+  console.log('requestParams', requestParams);
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .createCaseInteractor(applicationContext, {
-      corporateDisclosureFileId,
-      petitionFileId,
-      petitionMetadata,
-      stinFileId,
-    });
+    .createCaseInteractor(applicationContext, requestParams);
 
   return {
     caseDetail,
