@@ -14,6 +14,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserCase } from '../entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../entities/WorkItem';
+import { isEmpty } from 'lodash';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 
 const addPetitionDocketEntryToCase = ({
@@ -76,11 +77,9 @@ export const createCaseInteractor = async (
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
-    atpFileIds: any;
+    atpFileIds: string[];
   },
 ) => {
-  // TODO: get aptFile ids and create docket numbers with them
-
   console.log('atpFileIds', atpFileIds); // this log isn't showing/working
 
   const authorizedUser = applicationContext.getCurrentUser();
@@ -253,6 +252,32 @@ export const createCaseInteractor = async (
 
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
+
+  if (!isEmpty(atpFileIds))
+    Object.entries(atpFileIds).forEach(([, fileId]) => {
+      const atpDocketEntryEntity = new DocketEntry(
+        {
+          contactPrimary: caseToAdd.getContactPrimary(),
+          contactSecondary: caseToAdd.getContactSecondary(),
+          docketEntryId: fileId,
+          documentTitle:
+            INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+          documentType:
+            INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+          filers,
+          filingDate: caseToAdd.createdAt,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          privatePractitioners,
+        },
+        { applicationContext, petitioners: caseToAdd.petitioners },
+      );
+
+      atpDocketEntryEntity.setFiledBy(user);
+
+      caseToAdd.addDocketEntry(atpDocketEntryEntity);
+    });
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
