@@ -1,17 +1,7 @@
-import { SQSEvent } from 'aws-lambda';
-import {
-  WorkerMessage,
-  workerRouter,
-} from '@web-api/gateways/worker/workerRouter';
-import { createApplicationContext } from '../../../src/applicationContext';
+export const handler = () => {
+  // NOOP - not deleting this until after 10007 has been deployed so that the active color during a deployment does not lose cognito trigger capabilities.
+};
 
-//TODO Rename file and/or function?
-export const updatePetitionerCasesLambda = async (event: SQSEvent) => {
-  const applicationContext = createApplicationContext({});
-
-  const { Records } = event;
-  const { body } = Records[0];
-  const message: WorkerMessage = JSON.parse(body);
-
-  await workerRouter(applicationContext, { message });
+export const updatePetitionerCasesLambda = () => {
+  // NOOP - not deleting this until after 10007 has been deployed so that the active color during a deployment does not lose cognito trigger capabilities.
 };

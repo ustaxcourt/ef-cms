@@ -59,7 +59,7 @@ resource "aws_sqs_queue" "update_petitioner_cases_queue" {
     deadLetterTargetArn = aws_sqs_queue.update_petitioner_cases_dl_queue[0].arn
     maxReceiveCount     = 1
   })
-  count            = var.create_triggers
+  count = var.create_triggers
 }
 
 resource "aws_lambda_event_source_mapping" "update_petitioner_cases_mapping" {
@@ -70,6 +70,6 @@ resource "aws_lambda_event_source_mapping" "update_petitioner_cases_mapping" {
 }
 
 resource "aws_sqs_queue" "update_petitioner_cases_dl_queue" {
-  count            = var.create_triggers
-  name = "update_petitioner_cases_dl_queue_${var.environment}_${var.current_color}"
+  count = var.create_triggers
+  name  = "update_petitioner_cases_dl_queue_${var.environment}_${var.current_color}"
 }

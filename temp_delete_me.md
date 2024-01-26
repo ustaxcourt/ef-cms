@@ -2,6 +2,7 @@
 - Fix tests
   - web-api/terraform/template/lambdas/cognito-triggers.ts
 - confirm user could timeout when associating a brand new person.
+- Potentially remove switch-cognito-triggers-color.js as we do not have cognito triggers. Also remove cognito triggers from terraform.
 
 ::: SOLO :::
 - Update styling for forgotpassword, login, and resetpassword
@@ -17,3 +18,7 @@
 - Refactor getCognito to be more generic - "getAuthenticationGateway"
   - Abstract away from cognito specific syntax in interactors
 - Remove createUserInteractor() and createOrUpdateUser(). Make bulkimportjudgeusrs do its own thing.
+
+::: Deployment :::
+- Environment specific deploy
+?
