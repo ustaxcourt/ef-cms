@@ -572,6 +572,7 @@ export const baseState = {
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
   createOrderAddedDocketNumbers: undefined as unknown as string[],
+  createOrderSelectedCases: [] as any[],
   currentJudges: [],
   currentPage: 'Interstitial',
   currentViewMetadata: {
