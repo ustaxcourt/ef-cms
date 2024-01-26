@@ -123,6 +123,7 @@ export const PetitionersAndCounsel = connect(
                                 <Button
                                   link
                                   className="margin-left-1 padding-0 height-3"
+                                  data-testid="edit-petitioner-counsel"
                                   href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                   icon="edit"
                                   overrideMargin={true}

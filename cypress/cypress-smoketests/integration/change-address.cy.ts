@@ -1,15 +1,19 @@
 import { faker } from '@faker-js/faker';
-import { loginAsPrivatePractitioner } from '../../helpers/auth/login-as-helpers';
+import {
+  loginAsAdmissionsClerk,
+  loginAsPrivatePractitioner,
+} from '../../helpers/auth/login-as-helpers';
 import { petitionsclerkServePetition } from '../../helpers/petitionsclerk-serves-petition';
 import { practitionerCreatesEletronicCase } from '../../helpers/practitioner-creates-electronic-case';
+import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('change of address', () => {
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
     const newAddress = faker.location.streetAddress();
-    loginAsPrivatePractitioner();
+    loginAsPrivatePractitioner('privatePractitioner2');
     practitionerCreatesEletronicCase().then(docketNumber => {
       petitionsclerkServePetition(docketNumber);
-      cy.login('privatePractitioner1');
+      cy.login('privatePractitioner2');
       cy.get('[data-testid="case-list-table"]').should('exist');
       cy.get('[data-testid="account-menu-button"]').click();
       cy.get('[data-testid="my-account-link"]').click();
@@ -35,6 +39,18 @@ describe('change of address', () => {
       cy.get('[data-testid="address1-line"]')
         .contains(newAddress)
         .should('exist');
+
+      loginAsAdmissionsClerk('admissionsclerk1');
+      searchByDocketNumberInHeader(docketNumber);
+
+      cy.get('[data-testid="tab-case-information"] > .button-text').click();
+      cy.get('[data-testid="tab-parties"] > .button-text').click();
+      cy.get(
+        '[data-testid="petitioner-card-John"] [data-testid="edit-petitioner-counsel"]',
+      ).click();
+      cy.get('[data-testid="remove-petitioner-btn"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="success-alert"]').should('be.visible');
     });
   });
 });
