@@ -10,11 +10,30 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getDocumentSelectedForPreviewAction = ({
   applicationContext,
   get,
-}: ActionProps) => {
+  props,
+}: ActionProps<{
+  fileMetaData: string;
+}>) => {
+  const { fileMetaData } = props;
+  console.log('fileMetaData', fileMetaData);
+
+  // tab is selected been selected
+  if (fileMetaData) {
+    const documentId = fileMetaData?.split('_')[1];
+
+    return {
+      documentInS3: {
+        // todo: figure out better name for documentInS3 and how the sequence should consume it
+        docketEntryId: documentId,
+      },
+    };
+  }
+
   const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
   );
+
   const file = get(state.form[documentSelectedForPreview]);
 
   if (file) {
@@ -28,5 +47,7 @@ export const getDocumentSelectedForPreviewAction = ({
     document => document.documentType === documentTypeSelectedForPreview,
   );
 
-  return { documentInS3: selectedDocument };
+  return {
+    documentInS3: selectedDocument,
+  };
 };
