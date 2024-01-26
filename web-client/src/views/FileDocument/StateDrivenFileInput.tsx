@@ -23,12 +23,10 @@ export const StateDrivenFileInput = connect(
     accept = '.pdf',
     ariaDescribedBy,
     constants,
-    customClassName = 'usa-input',
     file,
     fileInputName,
     form,
     id,
-    multiple,
     updateFormValueSequence,
     validationSequence,
     ...remainingProps
@@ -43,10 +41,9 @@ export const StateDrivenFileInput = connect(
           {...remainingProps}
           accept={accept}
           aria-describedby={ariaDescribedBy}
-          className={customClassName}
+          className="usa-input"
           data-testid={id}
           id={id}
-          multiple={!!multiple} // is 'false' a possible option for multiple?? from the docs, its true or undefined
           name={fileInputName}
           ref={ref => (inputRef = ref)}
           style={{
@@ -83,7 +80,7 @@ export const StateDrivenFileInput = connect(
           <div>
             <span
               className="success-message icon-upload margin-right-1"
-              data-testid="upload-file-success"
+              data-cy="upload-file-success"
             >
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>
