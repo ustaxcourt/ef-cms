@@ -624,7 +624,7 @@ export class DocketEntry extends JoiValidationEntity {
     return !!documentTypes.includes(documentType);
   }
 
-  static meetsAgeRequirements = doc => {
+  static isTranscriptOldEnoughToUnseal = doc => {
     if (!DocketEntry.isTranscript(doc.eventCode)) return true;
 
     const dateStringToCheck = doc.isLegacy ? doc.filingDate : doc.date;
@@ -665,7 +665,7 @@ export class DocketEntry extends JoiValidationEntity {
 
     // user has access to the case
     if (entry.isStricken || DocketEntry.isSealedToExternal(entry)) return false;
-    return DocketEntry.meetsAgeRequirements(entry);
+    return DocketEntry.isTranscriptOldEnoughToUnseal(entry);
   };
 
   /**

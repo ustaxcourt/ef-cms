@@ -88,7 +88,7 @@ export const getDownloadPolicyUrlInteractor = async (
       }
 
       const documentIsAvailable =
-        DocketEntry.meetsAgeRequirements(docketEntryEntity);
+        DocketEntry.isTranscriptOldEnoughToUnseal(docketEntryEntity);
 
       if (!documentIsAvailable) {
         throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
