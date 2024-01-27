@@ -302,7 +302,7 @@ data "aws_s3_bucket_object" "cron_green_west_object" {
   provider   = aws.us-west-1
 }
 
-data "aws_s3_object" "worker_green_west_object" { # 10007 we left here
+data "aws_s3_object" "worker_green_west_object" {
   depends_on = [null_resource.worker_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
   key        = "worker_green.js.zip"
