@@ -440,7 +440,7 @@ module "api-west-green" {
   triggers_object_hash           = ""
   create_triggers                = 0
   worker_object                  = null_resource.worker_west_object
-  worker_object_hash             = data.aws_s3_bucket_object.worker_green_west_object.etag
+  worker_object_hash             = data.aws_s3_object.worker_green_west_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
 
@@ -518,7 +518,7 @@ module "api-west-blue" {
   triggers_object_hash           = ""
   create_triggers                = 0
   worker_object                  = null_resource.worker_west_object
-  worker_object_hash             = data.aws_s3_bucket_object.worker_blue_west_object.etag
+  worker_object_hash             = data.aws_s3_object.worker_blue_west_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
 
