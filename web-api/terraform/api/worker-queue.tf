@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "worker_lambda" {
   function_name    = "worker_lambda_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_update_petitioner_cases_lambda_role_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_worker_queue_lambda_role_${var.environment}"
   handler          = "worker-handler.workerHandler"
   timeout          = "900"
   memory_size      = "3008"
