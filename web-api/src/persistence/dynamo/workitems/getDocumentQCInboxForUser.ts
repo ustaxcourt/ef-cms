@@ -8,6 +8,8 @@ export const getDocumentQCInboxForUser = async ({
   applicationContext: IApplicationContext;
   userId: string;
 }): Promise<RawWorkItem[]> => {
+  applicationContext.logger.info('getDocumentQCInboxForUser start');
+
   const workItems: RawWorkItem[] = (await queryFull({
     ExpressionAttributeNames: {
       '#gsi2pk': 'gsi2pk',
@@ -21,6 +23,8 @@ export const getDocumentQCInboxForUser = async ({
     KeyConditionExpression: '#gsi2pk = :gsi2pk and begins_with(#sk, :prefix)',
     applicationContext,
   })) as any;
+
+  applicationContext.logger.info('getDocumentQCInboxForUser end');
 
   return workItems.sort((a, b) => {
     if (a.highPriority) {
