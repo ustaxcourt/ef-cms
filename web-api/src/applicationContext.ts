@@ -91,9 +91,8 @@ const environment = {
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
-  // TODO 10007 change name of queue to worker something
   workerQueueUrl:
-    `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/update_petitioner_cases_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
+    `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
     '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };

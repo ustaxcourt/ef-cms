@@ -41,7 +41,8 @@ data "archive_file" "zip_api" {
     "handle-bounced-service-email.js",
     "seal-in-lower-environment.js",
     "pdf-generation.js",
-    "report.html"
+    "report.html",
+    "worker-handler.js"
   ]
 }
 
@@ -63,7 +64,8 @@ data "archive_file" "zip_send_emails" {
     "handle-bounced-service-email.js",
     "seal-in-lower-environment.js",
     "pdf-generation.js",
-    "report.html"
+    "report.html",
+    "worker-handler.js"
   ]
 }
 
@@ -85,7 +87,8 @@ data "archive_file" "zip_trial_session" {
     "handle-bounced-service-email.js",
     "seal-in-lower-environment.js",
     "pdf-generation.js",
-    "report.html"
+    "report.html",
+    "worker-handler.js"
   ]
 }
 
@@ -104,6 +107,29 @@ data "archive_file" "zip_triggers" {
     "cron.js",
     "streams.js",
     "cognito-authorizer.js",
+    "public-api-authorizer.js",
+    "handle-bounced-service-email.js",
+    "pdf-generation.js",
+    "report.html",
+    "worker-handler.js"
+  ]
+}
+data "archive_file" "zip_worker" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/worker-handler.js.zip"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = [
+    "api.js",
+    "api-public.js",
+    "websockets.js",
+    "maintenance-notify.js",
+    "trial-session.js",
+    "send-emails.js",
+    "seal-in-lower-environment.js",
+    "cron.js",
+    "streams.js",
+    "cognito-authorizer.js",
+    "cognito-triggers.js",
     "public-api-authorizer.js",
     "handle-bounced-service-email.js",
     "pdf-generation.js",
@@ -129,7 +155,8 @@ data "archive_file" "pdf_generation" {
     "cognito-authorizer.js",
     "public-api-authorizer.js",
     "handle-bounced-service-email.js",
-    "report.html"
+    "report.html",
+    "worker-handler.js"
   ]
 }
 
@@ -483,7 +510,7 @@ data "aws_s3_bucket_object" "triggers_green_east_object" {
   key        = "triggers_green.js.zip"
 }
 
-data "aws_s3_object" "worker_green_east_object" { # 10007 we left here
+data "aws_s3_object" "worker_green_east_object" {
   depends_on = [null_resource.worker_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
   key        = "worker_green.js.zip"
