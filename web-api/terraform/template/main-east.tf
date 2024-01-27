@@ -702,7 +702,7 @@ module "api-east-green" {
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
   worker_object                  = null_resource.worker_east_object
-  worker_object_hash             = data.aws_s3_bucket_object.worker_green_east_object.etag
+  worker_object_hash             = data.aws_s3_object.worker_green_east_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
 
@@ -779,7 +779,7 @@ module "api-east-blue" {
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
   worker_object                  = null_resource.worker_east_object
-  worker_object_hash             = data.aws_s3_bucket_object.worker_blue_east_object.etag
+  worker_object_hash             = data.aws_s3_object.worker_blue_east_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
 
