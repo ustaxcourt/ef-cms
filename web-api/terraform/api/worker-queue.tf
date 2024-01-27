@@ -19,6 +19,7 @@ resource "aws_lambda_function" "worker_lambda" {
 
 resource "aws_sqs_queue" "worker_queue" {
   name = "worker_queue_${var.environment}_${var.current_color}"
+  visibility_timeout_seconds = 901
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.worker_dl_queue.arn
     maxReceiveCount     = 1
