@@ -1,51 +1,72 @@
-// arguments: env
+// usage: npx ts-node --transpile-only ./shared/admin-tools/elasticsearch/health-migration.ts
 
-/**
- * for each index, check the index count for alpha and beta
- *
- * we might do this for after a migration
- */
+import { Client } from '@opensearch-project/opensearch';
+import { esIndexType } from '../../../web-api/elasticsearch/elasticsearch-indexes';
+import { getBaseAliasFromIndexName } from '../../../web-api/elasticsearch/elasticsearch-aliases';
+import { getClient } from '../../../web-api/elasticsearch/client';
+import { requireEnvVars } from '../util';
 
-const {
-  getBaseAliasFromIndexName,
-} = require('../../../web-api/elasticsearch/elasticsearch-aliases');
-const { getClient } = require('../../../web-api/elasticsearch/client');
+requireEnvVars(['ENV']);
 
-const environmentName = process.argv[2] || 'exp1';
+const environmentName = process.env.ENV!;
+const esClientCache = {};
 
-console.log(environmentName);
+const getEsClient = async ({
+  version,
+}: {
+  version: string;
+}): Promise<Client> => {
+  if (!esClientCache[version]) {
+    esClientCache[version] = await getClient({ environmentName, version });
+  }
+  return esClientCache[version];
+};
 
-const getCounts = async ({ indexName, version }) => {
-  const esClient = await getClient({ environmentName, version });
+const getCounts = async ({
+  indexName,
+  version,
+}: {
+  indexName: string;
+  version: string;
+}): Promise<number> => {
+  const esClient = await getEsClient({ version });
   const info = await esClient.count({
     index: indexName,
   });
 
-  return info.body.count;
+  return info.body?.count || 0;
 };
 
-const listIndices = async ({ version }) => {
-  const esClient = await getClient({ environmentName, version });
+const listIndices = async ({
+  version,
+}: {
+  version: string;
+}): Promise<string[]> => {
+  const esClient = await getEsClient({ version });
+  const indices = await esClient.cat.indices({ format: 'json' });
+
   return (
-    (await esClient.cat.indices({ format: 'json' })).body
-      ?.filter(i => {
+    indices.body
+      ?.filter((i: esIndexType) => {
         return i.index.includes('efcms');
       })
-      .map(i => i.index) || []
+      .map((i: esIndexType) => i.index) || []
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  const totals = {
+await (async () => {
+  const counts = { alpha: {}, beta: {} };
+  const totals: { alpha: number; beta: number } = {
     alpha: 0,
     beta: 0,
   };
+  const out: {
+    countAlpha: number;
+    countBeta: number;
+    diff: number;
+    indexName: string;
+  }[] = [];
 
-  console.log(`## ${environmentName} Index Summary`);
-  const out = [];
-
-  const counts = { alpha: {}, beta: {} };
   for (const version of Object.keys(counts)) {
     const indices = await listIndices({ version });
     for (const indexName of indices) {
@@ -74,13 +95,13 @@ const listIndices = async ({ version }) => {
     (a, b) => a - b,
   );
 
+  console.log(`## ${environmentName} Index Summary`);
   console.table(out);
-
   console.log(
     `Total Difference: ${Math.round(
       totals.alpha - totals.beta,
     )} (${nominator}/${denominator}) ${
-      parseInt((nominator / denominator) * 10000) / 100
+      ((nominator / denominator) * 10000) / 100
     }% `,
   );
 })();
