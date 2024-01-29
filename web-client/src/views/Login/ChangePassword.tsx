@@ -35,11 +35,14 @@ export const ChangePassword = connect(
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissable={false} />
               <ErrorNotification />
+
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
-                    <h1 className="margin-bottom-1">Reset Password</h1>
-                    <form className="usa-form margin-top-4">
+                    <h1 className="margin-bottom-1 inherit-body-font-family">
+                      Reset Password
+                    </h1>
+                    <form className="usa-form margin-top-4 change-password-form">
                       <label className="usa-label" htmlFor="password">
                         Password
                       </label>
@@ -56,11 +59,10 @@ export const ChangePassword = connect(
                         }}
                       />
                       <button
-                        aria-controls="password password-create-account-confirm"
+                        aria-controls="password"
                         className="usa-show-password"
                         data-hide-text="Hide password"
                         data-show-text="Show password"
-                        title=""
                         type="button"
                         onClick={() =>
                           toggleShowPasswordSequence({
@@ -70,7 +72,7 @@ export const ChangePassword = connect(
                       >
                         {showPassword ? 'Hide Password' : 'Show password'}
                       </button>
-                      <div className="margin-top-1" hidden={!password}>
+                      <div className="margin-top-2" hidden={!password}>
                         {changePasswordHelper.passwordErrors.map(error => {
                           return (
                             <RequirementsText
@@ -83,7 +85,10 @@ export const ChangePassword = connect(
                         })}
                       </div>
 
-                      <label className="usa-label" htmlFor="confirm-password">
+                      <label
+                        className="usa-label margin-top-2"
+                        htmlFor="confirm-password"
+                      >
                         Re-type Password
                       </label>
                       <input
@@ -116,7 +121,7 @@ export const ChangePassword = connect(
                           : 'Show password'}
                       </button>
                       <div
-                        className="margin-top-1"
+                        className="margin-top-2"
                         style={{
                           visibility: confirmPassword ? 'visible' : 'hidden',
                         }}
