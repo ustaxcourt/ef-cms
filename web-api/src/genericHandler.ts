@@ -102,8 +102,8 @@ export const genericHandler = (awsEvent, cb, options = {}) => {
       if (!error.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
         applicationContext.logger.error(error);
+        await captureException(error);
       }
-      await captureException(error);
       throw error;
     }
   });
