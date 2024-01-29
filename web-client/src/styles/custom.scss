@@ -2185,3 +2185,17 @@ button.change-scanner-button {
 .resize-vertical-only {
   resize: vertical;
 }
+
+.max-width-unset {
+  max-width: unset;
+}
+
+.inherit-body-font-family {
+  font-family: inherit;
+}
+
+.login-form {
+  label {
+    margin-bottom: 8px;
+  }
+}
