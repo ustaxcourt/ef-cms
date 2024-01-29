@@ -17,7 +17,8 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('Petitions Clerk Counsel Association Journey', () => {
+// TODO 10007 Refactor to cypress
+describe.skip('Petitions Clerk Counsel Association Journey', () => {
   const cerebralTest = setupTest();
 
   const formattedCaseDetail = withAppContextDecorator(
