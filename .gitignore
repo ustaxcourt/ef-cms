@@ -14,6 +14,7 @@
 *.iml
 shared/src/business/utilities/htmlGenerator/index.scss
 /policy.json
+/sst-example
 artillery/private-app-report.json
 artillery/tokens.csv
 artillery/token-ids.csv
