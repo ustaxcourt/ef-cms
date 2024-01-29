@@ -1,3 +1,4 @@
+import { Case } from '../entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES, ROLES } from '../entities/EntityConstants';
 
 /**
@@ -11,71 +12,51 @@ export const serveCaseDocument = async ({
   applicationContext,
   caseEntity,
   initialDocumentTypeKey,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: Case;
+  initialDocumentTypeKey: string;
 }) => {
   const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
-  const initialDocketEntry = caseEntity.docketEntries.find(
+  const initialDocketEntries = caseEntity.docketEntries.filter(
     doc => doc.documentType === initialDocumentType.documentType,
   );
 
-  if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
-    initialDocketEntry.setAsServed([
-      {
-        name: 'IRS',
-        role: ROLES.irsSuperuser,
-      },
-    ]);
-    caseEntity.updateDocketEntry(initialDocketEntry);
+  const documentServiceCalls = initialDocketEntries.map(initialDocketEntry => {
+    if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
+      initialDocketEntry.setAsServed([
+        {
+          name: 'IRS',
+          role: ROLES.irsSuperuser,
+        },
+      ]);
+      caseEntity.updateDocketEntry(initialDocketEntry);
 
-    if (
-      initialDocketEntry.documentType ===
-      INITIAL_DOCUMENT_TYPES.petition.documentType
-    ) {
-      await applicationContext
-        .getUseCaseHelpers()
-        .sendIrsSuperuserPetitionEmail({
+      if (
+        initialDocketEntry.documentType ===
+        INITIAL_DOCUMENT_TYPES.petition.documentType
+      ) {
+        return applicationContext
+          .getUseCaseHelpers()
+          .sendIrsSuperuserPetitionEmail({
+            applicationContext,
+            caseEntity,
+            docketEntryId: initialDocketEntry.docketEntryId,
+          });
+      } else {
+        return applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
           docketEntryId: initialDocketEntry.docketEntryId,
-        });
-    } else if (
-      initialDocketEntry.documentType ===
-      INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType
-    ) {
-      console.log('something');
-
-      const atpDocketEntires = caseEntity.docketEntries?.filter(
-        doc => doc.eventCode === 'ATP',
-      );
-
-      console.log(
-        'atpDocketEntires',
-        atpDocketEntires.map(doc => doc.docketEntryId),
-      );
-
-      atpDocketEntires.forEach(async atpDocEntry => {
-        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-          applicationContext,
-          caseEntity,
-          docketEntryId: atpDocEntry.docketEntryId,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],
           },
         });
-      });
-    } else {
-      // check for atps can happen here.
-      // if you see an atp,
-      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-        applicationContext,
-        caseEntity,
-        docketEntryId: initialDocketEntry.docketEntryId,
-        servedParties: {
-          //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
-          electronic: [],
-        },
-      });
+      }
     }
-  }
+  });
+
+  await Promise.all(documentServiceCalls);
 };
