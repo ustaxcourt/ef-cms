@@ -3,6 +3,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   externals: {
+    '@sentry/profiling-node': 'commonjs @sentry/profiling-node',
     '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
     'aws-crt': 'commonjs aws-crt',
     'puppeteer-core': 'commonjs puppeteer-core',
