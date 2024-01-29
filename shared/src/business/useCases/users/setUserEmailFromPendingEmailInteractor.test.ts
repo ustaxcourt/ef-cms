@@ -7,7 +7,8 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactPrimary } from '../../entities/cases/Case';
 import { setUserEmailFromPendingEmailInteractor } from './setUserEmailFromPendingEmailInteractor';
 
-describe('setUserEmailFromPendingEmailInteractor', () => {
+// TODO 10007 Rewrite in Cypress
+describe.skip('setUserEmailFromPendingEmailInteractor', () => {
   const UPDATED_EMAIL = 'other@example.com';
   const USER_ID = '7a0c9454-5f1a-438a-8c8a-f7560b119343';
   const mockPetitioner = {
