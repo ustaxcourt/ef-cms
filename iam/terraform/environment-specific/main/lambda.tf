@@ -126,6 +126,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
         {
             "Action": [
                 "dynamodb:GetItem",
+                "dynamodb:Query",
                 "dynamodb:DescribeTable",
                 "dynamodb:UpdateItem",
                 "dynamodb:PutItem"
@@ -187,14 +188,18 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:ListQueueTags",
+                "sqs:CreateQueue",
+                "sqs:SetQueueAttributes",
                 "sqs:SendMessage",
                 "sqs:ReceiveMessage",
-                "sqs:GetQueueAttributes"
+                "sqs:DeleteMessage",
             ],
             "Resource": [
                 "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
-                "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:*"],
+                "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:*"
+            ],
             "Effect": "Allow"
         }
     ]
