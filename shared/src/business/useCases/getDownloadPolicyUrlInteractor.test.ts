@@ -2,6 +2,7 @@
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   ROLES,
@@ -116,6 +117,8 @@ describe('getDownloadPolicyUrlInteractor', () => {
         ...baseDocketEntry,
         documentType: 'Order that case is assigned',
         eventCode: 'O',
+        isOnDocketRecord: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
@@ -387,8 +390,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
               isMinuteEntry: false,
               isOnDocketRecord: true,
               pending: false,
-              processingStatus: 'complete',
+              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
               receivedAt: '2009-03-01T05:00:00.000Z',
+              servedAt: '2009-03-01T05:00:00.000Z',
               stampData: {},
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
@@ -401,6 +405,47 @@ describe('getDownloadPolicyUrlInteractor', () => {
       });
 
       expect(url).toEqual('localhost');
+    });
+
+    it('should throw an error when the document requested is a brief that has not yet been served', async () => {
+      const briefDocketEntryId = 'abb81f4d-1e47-423a-8caf-6d2fdc3d3859';
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              createdAt: '2009-11-21T20:49:28.192Z',
+              docketEntryId: briefDocketEntryId,
+              docketNumber: '101-18',
+              documentTitle: 'Simultaneous Opening Brief',
+              documentType: 'Simultaneous Opening Brief',
+              draftOrderState: {},
+              entityName: 'DocketEntry',
+              eventCode: 'SIOB',
+              filedBy: 'Test Petitioner',
+              filers: [],
+              filingDate: '2009-03-01T05:00:00.000Z',
+              index: 6,
+              isFileAttached: true,
+              isMinuteEntry: false,
+              isOnDocketRecord: true,
+              pending: false,
+              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+              receivedAt: '2009-03-01T05:00:00.000Z',
+              servedAt: undefined,
+              stampData: {},
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+        });
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: briefDocketEntryId,
+        }),
+      ).rejects.toThrow();
     });
   });
 
@@ -435,6 +480,8 @@ describe('getDownloadPolicyUrlInteractor', () => {
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
         isLegacyServed: true,
+        isOnDocketRecord: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: undefined,
       };
 
