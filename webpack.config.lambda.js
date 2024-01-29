@@ -19,8 +19,13 @@ module.exports = {
       },
       {
         // eslint-disable-next-line
-        test: /\.(map|node)$/,
+        test: /\.map$/,
         use: ['file-loader'],
+      },
+      {
+        loader: 'node-loader',
+        // eslint-disable-next-line
+        test: /\.node$/,
       },
       {
         exclude: /node_modules/,
