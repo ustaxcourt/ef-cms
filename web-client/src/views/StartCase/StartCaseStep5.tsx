@@ -224,22 +224,6 @@ export const StartCaseStep5 = connect(
           </div>
         </div>
 
-        <div className="tablet:grid-col-12 margin-bottom-4 create-case-review">
-          <div className="card height-full margin-bottom-0">
-            <div className="content-wrapper">
-              <h3 className="underlined">Service Information</h3>
-              <div className="grid-row grid-gap">
-                <div className="tablet:grid-col-12 margin-bottom-1">
-                  <span className="usa-label usa-label-display">
-                    Service email
-                  </span>
-                  {user.email}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-12 bg-white submit-reminders">
             <div className="card">
@@ -257,13 +241,7 @@ export const StartCaseStep5 = connect(
                     </strong>
                   </li>
                   <li>
-                    Be sure you have removed or redacted all personal
-                    information from your documents, with the exception of the
-                    STIN.
-                  </li>
-                  <li>
-                    Do not include any additional documents with your Petition,
-                    except for the IRS notice.{' '}
+                    Do not combine any additional documents with your Petition.{' '}
                     <strong>
                       Documents that might be evidence can be submitted at a
                       later time.
@@ -271,8 +249,11 @@ export const StartCaseStep5 = connect(
                   </li>
                   <li>
                     Confirm that all information being submitted appears as you
-                    want it to appear. After clicking Submit to U.S. Tax Court,
-                    you will only be able to edit your case by filing a motion.
+                    want it to appear.{' '}
+                    <strong>
+                      After submitting your case to the Court, you will only be
+                      able to make changes by filing a motion.
+                    </strong>
                   </li>
                 </ol>
               </div>
