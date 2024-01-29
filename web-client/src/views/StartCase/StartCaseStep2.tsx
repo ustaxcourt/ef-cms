@@ -155,7 +155,7 @@ export const StartCaseStep2 = connect(
                     className="usa-label margin-bottom-0"
                     htmlFor="atp-files-upload"
                   >
-                    Upload a PDF of IRS Notice(s) (.pdf)
+                    Upload a PDF of IRS Notice(s) if you have it (.pdf)
                   </label>
                   <span className="usa-hint" id="atp-files-upload-hint">
                     Make sure file is not encrypted or password protected. Max
