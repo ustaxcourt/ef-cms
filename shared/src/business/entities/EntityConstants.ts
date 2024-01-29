@@ -589,7 +589,6 @@ export const FILTER_OPTIONS = Object.values(
 );
 export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
-// TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentTitle: 'Application for Waiver of Filing Fee',
@@ -612,6 +611,11 @@ export const INITIAL_DOCUMENT_TYPES = {
     eventCode: 'RQT',
   },
   stin: STIN_DOCKET_ENTRY_TYPE,
+  attachmentToPetition: {
+    documentTitle: 'Attachment to Petition',
+    documentType: 'Attachment to Petition',
+    eventCode: 'ATP',
+  },
 };
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
@@ -620,11 +624,41 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   petition: 'petitionFile',
   requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
   stin: 'stinFile',
+  attachmentToPetition: 'attachmentToPetitionFile',
 };
+
+export const INITIAL_FILING_DOCUMENT_TABS = [
+  {
+    documentType: 'petitionFile',
+    title: 'Petition',
+  },
+  {
+    documentType: 'stinFile',
+    title: 'STIN',
+  },
+  {
+    documentType: 'attachmentToPetitionFile',
+    title: 'ATP',
+  },
+  {
+    documentType: 'requestForPlaceOfTrialFile',
+    title: 'RQT',
+  },
+  {
+    documentType: 'corporateDisclosureFile',
+    title: 'CDS',
+  },
+  {
+    documentType: 'applicationForWaiverOfFilingFeeFile',
+    title: 'APW',
+  },
+] as const;
 
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  attachmentToPetitionFile:
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
   corporateDisclosureFile:
     INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
   petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
