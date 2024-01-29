@@ -50,6 +50,7 @@ export const petitionQcHelper = (
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
+  const ATP_EVENT_CODE = INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode;
   console.log('documents', documents);
 
   const hasCDS = !!documents.find(
@@ -71,13 +72,13 @@ export const petitionQcHelper = (
   );
 
   const atpDocketTabsForDisplay = documents
-    .filter(doc => doc.eventCode === 'ATP')
+    .filter(doc => doc.eventCode === ATP_EVENT_CODE)
     .map(doc => {
       return {
         documentId: doc.docketEntryId,
         documentType: doc.documentType,
         eventCode: doc.eventCode,
-        title: 'ATP',
+        title: ATP_EVENT_CODE,
       };
     });
 
@@ -85,7 +86,7 @@ export const petitionQcHelper = (
     // remove atp tab from documentTabsToDisplay and readd the formatted atp docket entries
     // todo: probably find a better way.
     documentTabsToDisplay = [
-      ...documentTabsToDisplay.slice(0, 2), // atp is the 3rd item in the tab
+      ...documentTabsToDisplay.slice(0, 2), // atp was the 3rd item in the tab
       ...atpDocketTabsForDisplay,
       ...documentTabsToDisplay.slice(2 + 1),
     ];
