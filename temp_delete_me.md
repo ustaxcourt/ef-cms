@@ -3,10 +3,6 @@
   - update broken tests with worker queue
 
 ::: SOLO :::
-- Update styling for forgotpassword, login, and resetpassword
- - Reset Password: too much padding in white box, Retype Password need margin-top, "Reset Password" is using wrong font (should match header for create account), should be fixed with padding however make sure hide/show password doesn't warp requirements text.
- - Labels are OK as "semi" bold. So don't worry about changing this to match mocks.
- - Alert text wrapping is OK.
 - Update Swagger docs (not able to delete)
 
 
