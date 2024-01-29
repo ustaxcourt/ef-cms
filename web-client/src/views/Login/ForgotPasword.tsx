@@ -28,12 +28,14 @@ export const ForgotPassword = connect(
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
-                    <h1 className="margin-bottom-1">Forgot Password?</h1>
+                    <h1 className="margin-bottom-1 inherit-body-font-family">
+                      Forgot Password?
+                    </h1>
                     <span>
                       Enter your email address to receive an email to reset your
                       password.
                     </span>
-                    <form className="usa-form margin-top-4">
+                    <form className="usa-form margin-top-4 max-width-unset forgot-password-form">
                       <label className="usa-label" htmlFor="email">
                         Email address
                       </label>
@@ -63,8 +65,8 @@ export const ForgotPassword = connect(
                         Send Password Reset
                       </Button>
                       <p>
-                        If you have no longer have access to the email address
-                        on file, contact{' '}
+                        If you no longer have access to the email address on
+                        file, contact{' '}
                         <a href="mailto:dawson.support@ustaxcourt.gov">
                           dawson.support@ustaxcourt.gov
                         </a>
