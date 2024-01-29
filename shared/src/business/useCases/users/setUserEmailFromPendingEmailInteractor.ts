@@ -20,18 +20,19 @@ export const setUserEmailFromPendingEmailInteractor = async (
   { user },
 ) => {
   let userEntity;
-  let docketNumbersAssociatedWithUser;
+
+  const docketNumbersAssociatedWithUser = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByUser({
+      applicationContext,
+      userId: user.userId,
+    });
+
   if (
     user.role === ROLES.privatePractitioner ||
     user.role === ROLES.irsPractitioner ||
     user.role === ROLES.inactivePractitioner
   ) {
-    docketNumbersAssociatedWithUser = await applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser({
-        applicationContext,
-        userId: user.userId,
-      });
     userEntity = new Practitioner({
       ...user,
       email: user.pendingEmail,
@@ -61,14 +62,16 @@ export const setUserEmailFromPendingEmailInteractor = async (
 
   try {
     if (userEntity.role === ROLES.petitioner) {
-      await applicationContext
-        .getWorkerGateway()
-        .initialize(applicationContext, {
-          message: {
-            payload: { user: rawUser },
-            type: MESSAGE_TYPES.UPDATE_PETITIONER_CASES,
-          },
-        });
+      await Promise.all(
+        docketNumbersAssociatedWithUser.map(docketNumber =>
+          applicationContext.getWorkerGateway().initialize(applicationContext, {
+            message: {
+              payload: { docketNumber, user: rawUser },
+              type: MESSAGE_TYPES.UPDATE_PETITIONER_CASE,
+            },
+          }),
+        ),
+      );
     } else {
       await updatePractitionerCases({
         applicationContext,

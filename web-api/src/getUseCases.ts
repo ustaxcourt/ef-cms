@@ -199,7 +199,7 @@ import { updateDeficiencyStatisticInteractor } from '../../shared/src/business/u
 import { updateDocketEntryMetaInteractor } from '../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor';
 import { updateDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/updateDocketEntryWorksheetInteractor';
 import { updateOtherStatisticsInteractor } from '../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor';
-import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
+import { updatePetitionerCaseInteractor } from './business/useCases/user/updatePetitionerCaseInteractor';
 import { updatePetitionerInformationInteractor } from '../../shared/src/business/useCases/updatePetitionerInformationInteractor';
 import { updatePractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/updatePractitionerUserInteractor';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/business/useCases/updateQcCompleteForTrialInteractor';
@@ -413,7 +413,7 @@ const useCases = {
   updateDocketEntryMetaInteractor,
   updateDocketEntryWorksheetInteractor,
   updateOtherStatisticsInteractor,
-  updatePetitionerCasesInteractor,
+  updatePetitionerCaseInteractor,
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,
   updateQcCompleteForTrialInteractor,
