@@ -13,21 +13,11 @@ describe('confirmSignUpInteractor', () => {
   it('should call cognito confirmSignUp with correctly formatted parameters', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getAccountConfirmationCode.mockResolvedValue({ confirmationCode });
-
+      .getAccountConfirmationCode.mockResolvedValue(confirmationCode);
     applicationContext.getCognito().adminConfirmSignUp.mockResolvedValue({});
-
-    applicationContext.getCognito().listUsers.mockResolvedValue({
-      users: {
-        Users: [
-          {
-            Attributes: {
-              Name: 'example',
-            },
-          },
-        ],
-      },
-    });
+    applicationContext
+      .getUserGateway()
+      .getUserByEmail.mockResolvedValue({ email: userEmail });
 
     await confirmSignUpInteractor(applicationContext, {
       confirmationCode,
