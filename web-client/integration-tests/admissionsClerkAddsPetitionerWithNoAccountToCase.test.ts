@@ -10,7 +10,8 @@ import { docketClerkQCsNoticeOfChange } from './journey/docketClerkQCsNoticeOfCh
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-describe('admissions clerk adds petitioner without existing cognito account to case', () => {
+// TODO 10007. Transision to Cypress
+describe.skip('admissions clerk adds petitioner without existing cognito account to case', () => {
   const cerebralTest = setupTest();
 
   const EMAIL_TO_ADD = `new${Math.random()}@example.com`;
