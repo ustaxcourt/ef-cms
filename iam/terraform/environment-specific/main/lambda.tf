@@ -194,7 +194,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "sqs:SetQueueAttributes",
                 "sqs:SendMessage",
                 "sqs:ReceiveMessage",
-                "sqs:DeleteMessage",
+                "sqs:DeleteMessage"
             ],
             "Resource": [
                 "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
