@@ -23,6 +23,8 @@ export const serveCaseDocument = async ({
     doc => doc.documentType === initialDocumentType.documentType,
   );
 
+  // todo: evaluate the impact of using a map to make this calls.
+  // We can isolate the check for ATPs and only loop when ATP documents are being "serviced"
   const documentServiceCalls = initialDocketEntries.map(initialDocketEntry => {
     if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
       initialDocketEntry.setAsServed([
@@ -58,5 +60,12 @@ export const serveCaseDocument = async ({
     }
   });
 
-  await Promise.all(documentServiceCalls);
+  try {
+    await Promise.all(documentServiceCalls);
+  } catch (e) {
+    applicationContext.logger.error(
+      'Error sending service case documents to IRS',
+      e,
+    );
+  }
 };
