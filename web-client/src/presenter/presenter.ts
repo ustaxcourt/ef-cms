@@ -511,6 +511,7 @@ import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserC
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespondenceDocumentSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
+import { userContactNoAlertUpdateCompleteSequence } from '@web-client/presenter/sequences/userContactNoAlertUpdateCompleteSequence';
 import { userContactUpdateCompleteSequence } from './sequences/userContactUpdateCompleteSequence';
 import { userContactUpdateErrorSequence } from './sequences/userContactUpdateErrorSequence';
 import { userContactUpdateInitialUpdateCompleteSequence } from './sequences/userContactUpdateInitialUpdateCompleteSequence';
@@ -1422,6 +1423,8 @@ export const presenterSequences = {
     uploadCorrespondenceDocumentSequence as unknown as Function,
   uploadCourtIssuedDocumentSequence:
     uploadCourtIssuedDocumentSequence as unknown as Function,
+  userContactNoAlertUpdateCompleteSequence:
+    userContactNoAlertUpdateCompleteSequence as unknown as Function,
   userContactUpdateCompleteSequence:
     userContactUpdateCompleteSequence as unknown as Function,
   userContactUpdateErrorSequence:
