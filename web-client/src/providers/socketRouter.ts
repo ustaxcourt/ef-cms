@@ -75,6 +75,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      case 'user_contact_update_no_alert_complete':
+        await app.getSequence('userContactNoAlertUpdateCompleteSequence')({
+          ...message,
+        });
+        break;
       case 'user_contact_update_progress':
         await app.getSequence('userContactUpdateProgressSequence')({
           ...message,

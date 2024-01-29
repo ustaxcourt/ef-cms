@@ -377,7 +377,7 @@ export const getConnection = connectionId => {
   });
 };
 
-export const getUserRecordById = userId => {
+export const getUserRecordById = (userId: string) => {
   return client.get({
     Key: {
       pk: `user|${userId}`,

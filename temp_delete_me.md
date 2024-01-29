@@ -1,8 +1,8 @@
 ::: STUFF TO DO :::
-- confirm user could timeout when associating a brand new person.
 - test cases
   - update broken tests with worker queue
 - deleted cognito trigger (but cannot do this fully), bring back post confirmation lambda trigger in terraform
+- fan out approach for updating cases on user emails
 
 ::: SOLO :::
 - Update styling for forgotpassword, login, and resetpassword

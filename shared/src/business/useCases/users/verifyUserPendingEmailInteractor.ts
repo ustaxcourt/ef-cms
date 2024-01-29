@@ -195,7 +195,7 @@ export const updatePractitionerCases = async ({
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: 'user_contact_full_update_complete',
+      action: 'user_contact_update_no_alert_complete',
       user,
     },
     userId: user.userId,
