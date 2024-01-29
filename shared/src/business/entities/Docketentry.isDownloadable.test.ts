@@ -303,4 +303,40 @@ describe('isDownloadable', () => {
       });
     });
   });
+
+  describe('Terminal User', () => {
+    const options = {
+      isCourtUser: false,
+      isPublic: false,
+      isTerminalUser: true,
+      userHasAccessToCase: false,
+    };
+
+    it('returns true if the document is Public', () => {
+      expect(
+        DocketEntry.isDownloadable(baseDocketEntry, {
+          ...options,
+          isPublic: true,
+        }),
+      ).toEqual(true);
+    });
+
+    it('returns true if the document is not Public', () => {
+      expect(DocketEntry.isDownloadable(baseDocketEntry, options)).toEqual(
+        false,
+      );
+    });
+
+    it('returns false if the document is sealed', () => {
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...baseDocketEntry,
+            isSealed: true,
+          },
+          options,
+        ),
+      ).toEqual(false);
+    });
+  });
 });

@@ -42,6 +42,15 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     throw new UnauthorizedError('Docket entry has been sealed.');
   }
 
+  if (
+    isSealedCase(caseEntity) &&
+    !DocketEntry.isOpinion(docketEntryEntity.eventCode)
+  ) {
+    throw new UnauthorizedError(
+      'Unauthorized to access documents in a sealed case',
+    );
+  }
+
   const featureFlags = await applicationContext
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
@@ -64,7 +73,8 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     !DocketEntry.isDownloadable(docketEntryEntity, {
       isCourtUser: false,
       isPublic,
-      userHasAccessToCase: isTerminalUser,
+      isTerminalUser,
+      userHasAccessToCase: false,
     })
   ) {
     throw new UnauthorizedError('Unauthorized to access private document');
