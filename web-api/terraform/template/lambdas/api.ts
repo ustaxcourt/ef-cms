@@ -4,7 +4,7 @@ import { app } from '../../../src/app';
 import awsServerlessExpress from '@vendia/serverless-express';
 
 Sentry.AWSLambda.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: process.env.SENTRY_DSN_API,
   environment: process.env.STAGE!,
   integrations: [new ProfilingIntegration()],
   profilesSampleRate: 1.0,

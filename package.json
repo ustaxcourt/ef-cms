@@ -202,7 +202,7 @@
     "start:api:cognito-local:ci": "CI=true npm run start:api:cognito-local",
     "start:client:ci": "CI=true SKIP_VIRUS_SCAN=true NODE_ENV=production npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
-    "start:client": "npm run start:client-host && WATCH=true IS_LOCAL=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn SENTRY_DSN=https://48d99abaac54903672ce9fc211185c90@o4506638650507264.ingest.sentry.io/4506638651883520 npm run start:client:esbuild",
+    "start:client": "npm run start:client-host && WATCH=true IS_LOCAL=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn SENTRY_DSN_UI=https://48d99abaac54903672ce9fc211185c90@o4506638650507264.ingest.sentry.io/4506638651883520 npm run start:client:esbuild",
     "start:client:cognito-local": "USE_COGNITO_LOCAL=true npm run start:client",
     "start:client-host": "servor dist index.html 1234 &",
     "start:client:esbuild": "node esbuild.config.mjs",

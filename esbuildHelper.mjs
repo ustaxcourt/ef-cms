@@ -45,7 +45,7 @@ const env = {
   USE_COGNITO_LOCAL: process.env.USE_COGNITO_LOCAL,
   USTC_ENV: process.env.USTC_ENV,
   WS_URL: process.env.WS_URL,
-  SENTRY_DSN: process.env.SENTRY_DSN,
+  SENTRY_DSN: process.env.SENTRY_DSN_UI,
 };
 
 /**
