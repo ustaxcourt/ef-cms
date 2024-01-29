@@ -7,7 +7,7 @@ export type WorkerMessage = {
 
 export const MESSAGE_TYPES = {
   UPDATE_PENDING_EMAIL: 'UPDATE_PENDING_EMAIL',
-  UPDATE_PETITIONER_CASES: 'UPDATE_PETITIONER_CASES',
+  UPDATE_PETITIONER_CASE: 'UPDATE_PETITIONER_CASE',
 } as const;
 const WORKER_MESSAGE_TYPES = Object.values(MESSAGE_TYPES);
 export type WorkerMessageType = (typeof WORKER_MESSAGE_TYPES)[number];
@@ -22,10 +22,10 @@ export const workerRouter = async (
   { message }: { message: WorkerMessage },
 ): Promise<void> => {
   switch (message.type) {
-    case MESSAGE_TYPES.UPDATE_PETITIONER_CASES:
+    case MESSAGE_TYPES.UPDATE_PETITIONER_CASE:
       await applicationContext
         .getUseCases()
-        .updatePetitionerCasesInteractor(applicationContext, message.payload);
+        .updatePetitionerCaseInteractor(applicationContext, message.payload);
       break;
     case MESSAGE_TYPES.UPDATE_PENDING_EMAIL:
       await applicationContext

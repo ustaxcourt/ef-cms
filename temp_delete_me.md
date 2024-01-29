@@ -1,7 +1,6 @@
 ::: STUFF TO DO :::
 - test cases
   - update broken tests with worker queue
-- deleted cognito trigger (but cannot do this fully), bring back post confirmation lambda trigger in terraform
 - fan out approach for updating cases on user emails
 
 ::: SOLO :::

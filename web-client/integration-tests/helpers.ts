@@ -216,7 +216,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       //   applicationContext: appContext,
       //   user,
       // }) => {
-      //   return updatePetitionerCasesInteractor(appContext, {
+      //   return updatePetitionerCaseInteractor(appContext, {
       //     user,
       //   });
       // },
