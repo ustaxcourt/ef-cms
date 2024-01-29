@@ -1,3 +1,4 @@
+import { captureException } from '@web-api/sentry';
 import { createApplicationContext } from './applicationContext';
 import {
   getConnectionIdFromEvent,
@@ -97,11 +98,13 @@ export const genericHandler = (awsEvent, cb, options = {}) => {
 
       return returnResults;
     } catch (e) {
-      if (!e.skipLogging) {
+      const error = e as Error & { skipLogging?: boolean };
+      if (!error.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
-        applicationContext.logger.error(e);
+        applicationContext.logger.error(error);
       }
-      throw e;
+      await captureException(error);
+      throw error;
     }
   });
 };
