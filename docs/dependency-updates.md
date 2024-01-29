@@ -35,7 +35,7 @@ note: we have 3 package.json files, be sure to update them all
    To publish a new ECR docker image:
 
    - Increment the docker image version being used in `.circleci/config.yml` in the docker variable: 
-   `define: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.0.18` -> `ef-cms-us-east-1:3.0.19`
+   `define: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.1.0` -> `ef-cms-us-east-1:3.1.1`
    - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher). 
      - example: `export DESTINATION_TAG=3.0.19 && npm run deploy:ci-image`
 		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
@@ -73,10 +73,6 @@ note: we have 3 package.json files, be sure to update them all
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
-
-### eslint
-
-- As of `8.56.0` formatting on save is not working. Please investigate this issue if you have time or if there is a newer version available.
 
 ### puppeteer and @sparticuz/chromium
 
