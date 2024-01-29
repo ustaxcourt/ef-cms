@@ -1,7 +1,6 @@
 ::: STUFF TO DO :::
 - test cases
   - update broken tests with worker queue
-- fan out approach for updating cases on user emails
 
 ::: SOLO :::
 - Update styling for forgotpassword, login, and resetpassword
