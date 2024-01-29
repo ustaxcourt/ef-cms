@@ -40,5 +40,6 @@ STAGE="${CLIENT_STAGE}" \
   WS_URL="${WS_URL}" \
   API_URL="${API_URL}" \
   PUBLIC_SITE_URL="${PUBLIC_SITE_URL}" \
+  ENV="${ENV}" \
   CI="" \
   npm run build:client

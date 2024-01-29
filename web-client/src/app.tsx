@@ -125,11 +125,13 @@ import { createRoot } from 'react-dom/client';
 import App from 'cerebral';
 import React from 'react';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.USTC_ENV,
-  integrations: [],
-});
+if (process.env.USTC_ENV === 'prod') {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.ENV,
+    integrations: [],
+  });
+}
 
 /**
  * Instantiates the Cerebral app with React
