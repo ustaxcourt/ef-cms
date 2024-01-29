@@ -650,11 +650,13 @@ export class DocketEntry extends JoiValidationEntity {
     {
       isCourtUser = false,
       isPublic = false,
+      isTerminalUser = false,
       userHasAccessToCase = false,
     }: {
       isCourtUser?: boolean;
-      userHasAccessToCase?: boolean;
       isPublic?: boolean;
+      isTerminalUser?: boolean;
+      userHasAccessToCase?: boolean;
     },
   ): boolean => {
     if (!entry.isFileAttached) return false;
@@ -662,10 +664,8 @@ export class DocketEntry extends JoiValidationEntity {
     if (!DocketEntry.isServed(entry) && !DocketEntry.isUnservable(entry)) {
       return false;
     }
-
+    if (isTerminalUser) return !DocketEntry.isSealed(entry);
     if (!userHasAccessToCase || isPublic) return !!isPublic;
-
-    // user has access to the case
     if (entry.isStricken || DocketEntry.isSealedToExternal(entry)) return false;
     if (DocketEntry.isTranscript(entry.eventCode))
       return DocketEntry.isTranscriptOldEnoughToUnseal(entry);
