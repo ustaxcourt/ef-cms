@@ -25,7 +25,7 @@ export const setMultiDocketingCheckboxesAction = ({
     props.createOrderAddedDocketNumbers ||
     get(state.createOrderAddedDocketNumbers);
 
-  const stateData = getStateData(
+  const stateData = getStateConsolidatedCasesAndAllCheckboxBoolean(
     consolidatedCases,
     createOrderAddedDocketNumbers,
   );
@@ -41,7 +41,7 @@ export const setMultiDocketingCheckboxesAction = ({
   );
 };
 
-function getStateData(
+function getStateConsolidatedCasesAndAllCheckboxBoolean(
   consolidatedCases: RawConsolidatedCaseSummary[],
   createOrderAddedDocketNumbers: string[],
 ): {
