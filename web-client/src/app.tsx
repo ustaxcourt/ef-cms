@@ -2,6 +2,7 @@ import './index.scss';
 
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
+import * as Sentry from '@sentry/react';
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
@@ -123,6 +124,12 @@ import { withAppContextDecorator } from './withAppContext';
 import { createRoot } from 'react-dom/client';
 import App from 'cerebral';
 import React from 'react';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.USTC_ENV,
+  integrations: [],
+});
 
 /**
  * Instantiates the Cerebral app with React
@@ -344,9 +351,10 @@ const app = {
             <AppInstanceManager />
           </>
         )}
-
+        <button onClick={() => (window as any).methodDoesNotExist()}>
+          Break the world
+        </button>
         <AppComponent />
-
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
     );
