@@ -86,9 +86,9 @@ export const petitionQcHelper = (
     // remove atp tab from documentTabsToDisplay and readd the formatted atp docket entries
     // todo: probably find a better way.
     documentTabsToDisplay = [
-      ...documentTabsToDisplay.slice(0, 2), // atp was the 3rd item in the tab
+      ...documentTabsToDisplay.slice(0, 2), // atp is the 3rd item in the tab
       ...atpDocketTabsForDisplay,
-      ...documentTabsToDisplay.slice(2 + 1),
+      ...documentTabsToDisplay.slice(2 + 1), // re-add RQT, CDS AND APW
     ];
   }
 
