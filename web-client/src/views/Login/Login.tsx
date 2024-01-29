@@ -39,11 +39,13 @@ export const Login = connect(
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
-                    <h1 className="margin-bottom-1">Log in to DAWSON</h1>
+                    <h1 className="margin-bottom-1 inherit-body-font-family">
+                      Log in to DAWSON
+                    </h1>
 
                     <span>Email address and password are case sensitive.</span>
 
-                    <form className="usa-form margin-top-4" title="loginForm">
+                    <form className="usa-form margin-top-4 max-width-unset login-form">
                       <label className="usa-label" htmlFor="email">
                         Email address
                       </label>
