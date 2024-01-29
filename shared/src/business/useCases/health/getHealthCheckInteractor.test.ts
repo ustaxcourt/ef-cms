@@ -6,6 +6,9 @@ describe('getHealthCheckInteractor', () => {
       environment: {
         stage: 'dev',
       },
+      getCognito() {
+        return { describeUserPool: jest.fn() };
+      },
       getHttpClient: () => {
         return {
           CancelToken: {
