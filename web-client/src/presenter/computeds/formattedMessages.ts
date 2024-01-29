@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { MessageResult } from '@shared/business/entities/MessageResult';
 import {
   applyFiltersToCompletedMessages,
   applyFiltersToMessages,
@@ -10,7 +11,17 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const formattedMessages = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  caseStatuses: string[];
+  completedByUsers: string[];
+  completedMessages: MessageResult[];
+  fromSections: string[];
+  fromUsers: string[];
+  hasMessages: boolean;
+  messages: MessageResult[];
+  toSections: string[];
+  toUsers: string[];
+} => {
   const tableSort = get(state.tableSort);
 
   const { completedMessages, messages } = getFormattedMessages({
@@ -32,40 +43,25 @@ export const formattedMessages = (
     message.caseStatus = statusWithTrialInfo;
   });
 
-  const { role } = get(state.user);
-  const { USER_ROLES } = applicationContext.getConstants();
-
   const hasMessages = messages.length > 0;
 
-  let showFilters = role === USER_ROLES.adc;
-
-  let sharedComputedResult = {
-    completedMessages,
-    hasMessages,
+  const messageFilterResults = applyFiltersToMessages({
     messages,
-    showFilters,
+    screenMetadata: get(state.screenMetadata),
+  });
+
+  const completedMessageFilterResults = applyFiltersToCompletedMessages({
+    completedMessages,
+    screenMetadata: get(state.screenMetadata),
+  });
+
+  const sharedComputedResult = {
+    ...messageFilterResults.filterValues,
+    ...completedMessageFilterResults.filterValues,
+    completedMessages: completedMessageFilterResults.filteredCompletedMessages,
+    hasMessages,
+    messages: messageFilterResults.filteredMessages,
   };
-
-  if (showFilters) {
-    const messageFilterResults = applyFiltersToMessages({
-      messages,
-      screenMetadata: get(state.screenMetadata),
-    });
-
-    const completedMessageFilterResults = applyFiltersToCompletedMessages({
-      completedMessages,
-      screenMetadata: get(state.screenMetadata),
-    });
-
-    sharedComputedResult = {
-      ...sharedComputedResult,
-      ...messageFilterResults.filterValues,
-      ...completedMessageFilterResults.filterValues,
-      completedMessages:
-        completedMessageFilterResults.filteredCompletedMessages,
-      messages: messageFilterResults.filteredMessages,
-    };
-  }
 
   return sharedComputedResult;
 };
