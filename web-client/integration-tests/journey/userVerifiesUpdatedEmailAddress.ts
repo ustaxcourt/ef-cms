@@ -1,6 +1,6 @@
 import { getUserRecordById, wait } from '../helpers';
 
-export const userVerifiesUpdatedEmailAddress = (cerebralTest, user) =>
+export const userVerifiesUpdatedEmailAddress = (cerebralTest, user: string) =>
   it(`${user} verifies updated email address`, async () => {
     const userFromState = cerebralTest.getState('user');
     let userFromPersistence = await getUserRecordById(userFromState.userId);

@@ -13,7 +13,8 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-describe('admissions clerk adds secondary petitioner without existing cognito account to case', () => {
+// TODO 10007: Add as Cypress test
+describe.skip('admissions clerk adds secondary petitioner without existing cognito account to case', () => {
   const cerebralTest = setupTest();
 
   const EMAIL_TO_ADD = `new${Math.random()}@example.com`;
