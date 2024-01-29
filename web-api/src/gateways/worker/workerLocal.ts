@@ -9,5 +9,12 @@ export const workerLocal: WorkerHandler = async (
   applicationContext: ServerApplicationContext,
   { message }: { message: WorkerMessage },
 ): Promise<void> => {
-  await workerRouter(applicationContext, { message });
+  // Simulate what happens on a deployed environment when a message is sent to SQS.
+  setTimeout(
+    async () => {
+      await workerRouter(applicationContext, { message });
+    },
+    Math.random() * 1000 * 3,
+  );
+  return;
 };
