@@ -1,12 +1,10 @@
 import * as Sentry from '@sentry/serverless';
-import { ProfilingIntegration } from '@sentry/profiling-node';
 import { app } from '../../../src/app';
 import awsServerlessExpress from '@vendia/serverless-express';
 
 Sentry.AWSLambda.init({
   dsn: process.env.SENTRY_DSN_API,
   environment: process.env.STAGE!,
-  integrations: [new ProfilingIntegration()],
   profilesSampleRate: 1.0,
   tracesSampleRate: 1.0,
 });

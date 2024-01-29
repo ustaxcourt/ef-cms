@@ -3,7 +3,6 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   externals: {
-    '@sentry/profiling-node': 'commonjs @sentry/profiling-node',
     '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
     'aws-crt': 'commonjs aws-crt',
     'puppeteer-core': 'commonjs puppeteer-core',
@@ -19,13 +18,8 @@ module.exports = {
       },
       {
         // eslint-disable-next-line
-        test: /\.map$/,
+        test: /\.(map|node)$/,
         use: ['file-loader'],
-      },
-      {
-        loader: 'node-loader',
-        // eslint-disable-next-line
-        test: /\.node$/,
       },
       {
         exclude: /node_modules/,
