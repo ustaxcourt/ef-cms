@@ -1,11 +1,12 @@
 import { DocketEntryDynamoRecord } from '../../../../web-api/src/persistence/dynamo/dynamoTypes';
 import {
   FORMATS,
-  PATTERNS,
-  createEndOfDayISO,
-  createStartOfDayISO,
   formatNow,
+  isValidDateString,
+  isValidReconciliationDate,
+  normalizeIsoDateRange,
 } from '../../business/utilities/DateHandler';
+import { InvalidRequest } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -13,12 +14,9 @@ import {
 import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-const isValidDate = dateString => {
-  const dateInputValid = PATTERNS.YYYYMMDD.test(dateString);
-  const todayDate = formatNow(FORMATS.YYYYMMDD);
-  const dateLessthanOrEqualToToday = dateString <= todayDate;
-  return dateInputValid && dateLessthanOrEqualToToday;
-};
+function isValidTime(time: string): boolean {
+  return isValidDateString(time, [FORMATS.TIME_24_HOUR]);
+}
 
 /**
  * getReconciliationReportInteractor
@@ -30,35 +28,50 @@ const isValidDate = dateString => {
  */
 export const getReconciliationReportInteractor = async (
   applicationContext: IApplicationContext,
-  { reconciliationDate }: { reconciliationDate: string },
+  {
+    end: timeEnd,
+    reconciliationDate,
+    start: timeStart,
+  }: {
+    reconciliationDate: string;
+    end?: string;
+    start?: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVICE_SUMMARY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (reconciliationDate === 'today') {
-    reconciliationDate = formatNow(FORMATS.YYYYMMDD);
-  } else {
-    const dateInputValid = isValidDate(reconciliationDate);
-    if (!dateInputValid) {
-      throw new Error(
-        'Date must be formatted as YYYY-MM-DD and not later than today',
-      );
-    }
+  const effectiveTimeStart = isValidTime(timeStart!) ? timeStart : '00:00';
+  const effectiveTimeEnd = isValidTime(timeEnd!)
+    ? `${timeEnd}:59.999`
+    : '23:59:59.999';
+
+  const effectiveReconciliationDate =
+    reconciliationDate == 'today'
+      ? formatNow(FORMATS.YYYYMMDD)
+      : reconciliationDate;
+
+  if (!isValidReconciliationDate(effectiveReconciliationDate)) {
+    throw new InvalidRequest(
+      'Must be valid reconciliation date and not later than today',
+    );
   }
 
-  const [year, month, day] = reconciliationDate.split('-');
-  const reconciliationDateStart = createStartOfDayISO({ day, month, year });
-  const reconciliationDateEnd = createEndOfDayISO({ day, month, year });
+  //convert to full iso-8601 time stamps in utc timezone
+  const { end: isoEnd, start: isoStart } = normalizeIsoDateRange(
+    `${effectiveReconciliationDate}T${effectiveTimeStart}`,
+    `${effectiveReconciliationDate}T${effectiveTimeEnd}`,
+  );
 
+  // const reconciliationDateStart = dtReconciliationDateStart.toISO();
   const docketEntries = await applicationContext
     .getPersistenceGateway()
     .getReconciliationReport({
       applicationContext,
-      reconciliationDateEnd,
-      reconciliationDateStart,
+      reconciliationDateEnd: isoEnd,
+      reconciliationDateStart: isoStart,
     });
 
   await assignCaseCaptionFromPersistence(applicationContext, docketEntries);
@@ -69,6 +82,7 @@ export const getReconciliationReportInteractor = async (
       { applicationContext },
     ),
     reconciliationDate,
+    reconciliationDateEnd: isoEnd,
     reportTitle: 'Reconciliation Report',
     totalDocketEntries: docketEntries.length,
   };

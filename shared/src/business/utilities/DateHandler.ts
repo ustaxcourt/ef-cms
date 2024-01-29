@@ -94,9 +94,8 @@ export const prepareDateFromString = (
   dateString?: string,
   inputFormat?: TimeFormats,
 ): DateTime => {
-  const dateToFormat: string = dateString || createISODateString();
+  let dateToFormat: string = dateString || createISODateString();
   let result: DateTime;
-
   if (inputFormat === FORMATS.ISO) {
     result = DateTime.fromISO(dateToFormat, { zone: 'utc' });
   } else if (inputFormat) {
@@ -184,9 +183,9 @@ export const createDateAtStartOfWeekEST = (
 };
 
 export const createEndOfDayISO = (params?: {
-  day: string;
-  month: string;
-  year: string;
+  day: string | number;
+  month: string | number;
+  year: string | number;
 }): string => {
   const dateObject = params
     ? DateTime.fromObject(
@@ -203,9 +202,9 @@ export const createEndOfDayISO = (params?: {
 };
 
 export const createStartOfDayISO = (params?: {
-  day: string;
-  month: string;
-  year: string;
+  day: string | number;
+  month: string | number;
+  year: string | number;
 }): string => {
   const dateObject = params
     ? DateTime.fromObject(
@@ -268,6 +267,10 @@ export const formatNow = (formatStr?: TimeFormats | TimeFormatNames) => {
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };
+
+export function isValidISODate(isodate: string): boolean {
+  return DateTime.fromISO(isodate).isValid;
+}
 
 /**
  * @param {string} date1 the first date to be compared
@@ -579,3 +582,76 @@ export const isTodayWithinGivenInterval = ({
 
   return dateRangeInterval.contains(today);
 };
+
+export type IsoDateRange = {
+  start: string;
+  end: string;
+};
+
+/**
+ * Returns the difference in hours between two time stamps.
+ *
+ * @param {string} timestamp1 any valid ISO-8601 date string
+ * @param {string} timestamp2 any valid ISO-8601 date string
+ * @returns {number} the difference in hours (a negative number if timestamp1 occurs before timestamp2).
+ */
+export function calculateDifferenceInHours(
+  timestamp1: string,
+  timestamp2: string,
+): number {
+  const dt1 = DateTime.fromISO(timestamp1);
+  const dt2 = DateTime.fromISO(timestamp2);
+  return dt1.diff(dt2, 'hour').hours;
+}
+
+export const isValidReconciliationDate = dateString => {
+  const dateInputValid = isValidISODate(dateString);
+  const todayDate = formatNow(FORMATS.YYYYMMDD);
+  const dateLessthanOrEqualToToday = dateString <= todayDate;
+  // console.log(`dateInputValid: ${dateInputValid}`);
+  // console.log(`dateLessthanOrEqualToToday: ${dateLessthanOrEqualToToday}`);
+  return dateInputValid && dateLessthanOrEqualToToday;
+};
+
+/**
+ * Return an IsoDateRange containing start/end ISO time stamps given a starting partial ISO Date and
+ * an optional partial end date.  A "partial" ISO date may be any portion of an ISO date is still
+ * considered a valid ISO date, e.g. ("2022", "2022-01", "2022-01-02").
+ *
+ * @param {string} dateStart any valid ISO-8601 date string
+ * @param {string} dateEnd any valid ISO-8601 date string.
+ * @returns {IsoDateRange} date range containing fully-formed ISO date+time strings in UTC format
+ * @throws Error if start or end date strings are invalid.
+ */
+export function normalizeIsoDateRange(
+  dateStart: string,
+  dateEnd?: string,
+): IsoDateRange {
+  //If no end date specified, set it to end of the same day as start date
+  if (!dateEnd) {
+    dateEnd = DateTime.fromISO(dateStart, { zone: USTC_TZ })
+      .endOf('day')
+      .toUTC()
+      .toISO()!;
+  } else {
+    dateEnd = DateTime.fromISO(dateEnd, { zone: USTC_TZ }).toUTC().toISO()!;
+  }
+
+  const dtReconciliationDateStart = DateTime.fromISO(dateStart, {
+    zone: USTC_TZ,
+  }).toUTC();
+  const dtReconciliationDateEnd = DateTime.fromISO(dateEnd, {
+    zone: USTC_TZ,
+  }).toUTC();
+
+  if (!dtReconciliationDateEnd.isValid) {
+    throw new Error('End date must be formatted as ISO');
+  }
+  return {
+    end: dtReconciliationDateEnd.toUTC().toISO(),
+    start: dtReconciliationDateStart.toUTC().toISO()!,
+  };
+
+  //validate time string
+  //create IsoDateRange from day + time range
+}

@@ -45,7 +45,7 @@ describe('getReconciliationReportInteractor', () => {
       getReconciliationReportInteractor(applicationContext, {
         reconciliationDate: undefined,
       }),
-    ).rejects.toThrow('must be formatted');
+    ).rejects.toThrow('Must be valid reconciliation date');
   });
   it('should throw an error if date is in the future', async () => {
     await expect(
@@ -162,5 +162,46 @@ describe('getReconciliationReportInteractor', () => {
       applicationContext.getPersistenceGateway().getCasesByDocketNumbers.mock
         .calls[0][0].docketNumbers,
     ).toEqual(['135-20']);
+  });
+
+  //Given date may contain ISO time component
+  it('should accept ISO dates + start time', async () => {
+    const startDate = '2020-01-01';
+    const timeStart = '05:00';
+    await expect(
+      getReconciliationReportInteractor(applicationContext, {
+        reconciliationDate: startDate,
+        start: timeStart,
+      }),
+    ).resolves.not.toThrow();
+  });
+
+  //Caller may provide two date arguments
+  it('should accept starting date and start+end times', async () => {
+    const startDate = '2021-01-05';
+    const timeStart = '05:00';
+    const timeEnd = '09:00';
+    const docketEntries = [
+      {
+        docketEntryId: '3d27e02e-6954-4595-8b3f-0e91bbc1b51e',
+        docketNumber: '135-20',
+        documentTitle: 'Petition',
+        eventCode: 'P',
+        filedBy: 'Petr. Kaitlin Chaney',
+        filingDate: '2021-01-05T21:14:09.031Z',
+        servedAt: '2021-01-05T21:14:09.031Z',
+      },
+    ] as any;
+
+    applicationContext
+      .getPersistenceGateway()
+      .getReconciliationReport.mockReturnValue(docketEntries);
+
+    const result = await getReconciliationReportInteractor(applicationContext, {
+      end: timeEnd,
+      reconciliationDate: startDate,
+      start: timeStart,
+    });
+    expect(result.reconciliationDate).toBe(startDate);
   });
 });
