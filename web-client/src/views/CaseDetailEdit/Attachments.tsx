@@ -11,6 +11,7 @@ export const Attachments = connect(
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
   },
   function Attachments({ form, reviewSavedPetitionHelper }) {
+    console.log('reviewSavedPetitionHelper', reviewSavedPetitionHelper);
     return (
       <div className="tablet:grid-col-5 margin-bottom-4">
         <div className="card height-full margin-bottom-0">
@@ -53,26 +54,33 @@ export const Attachments = connect(
                         icon={['fas', 'file-pdf']}
                         size="1x"
                       />
+                      {/* TODO: icon size doesn't match others */}
                       Statement of Taxpayer Identification
                     </div>
                   </div>
                 </div>
               )}
-              {reviewSavedPetitionHelper.attachmentToPetitionFile && (
-                <div className="margin-top-3 margin-bottom-3">
-                  <div className="grid-row">
-                    <div className="grid-col flex-auto">
-                      <PDFPreviewButton
-                        data-testid="attachmentToPetitionFileButton"
-                        file={
-                          reviewSavedPetitionHelper.attachmentToPetitionFile
-                        }
-                        title="Attachment to Petition"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
+              {reviewSavedPetitionHelper.attachmentToPetitionFiles.length &&
+                reviewSavedPetitionHelper.attachmentToPetitionFiles.map(
+                  atpFile => {
+                    return (
+                      <div
+                        className="margin-top-3 margin-bottom-3"
+                        key={`attachmentToPetitionFileButton-${atpFile.docketEntryId}`}
+                      >
+                        <div className="grid-row">
+                          <div className="grid-col flex-auto">
+                            <PDFPreviewButton
+                              data-testid="attachmentToPetitionFileButton"
+                              file={atpFile}
+                              title="Attachment to Petition"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  },
+                )}
               {reviewSavedPetitionHelper.requestForPlaceOfTrialFile && (
                 <div className="margin-top-3 margin-bottom-3">
                   <div className="grid-row">
