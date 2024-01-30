@@ -36,15 +36,13 @@ export const Login = connect(
               <SuccessNotification isDismissable={false} />
               <WarningNotification isDismissable={false} />
               <ErrorNotification />
-              <div className="grid-container bg-white padding-y-3 border border-base-lighter">
+              <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">
                   <div className="flex-align-self-center">
                     <h1 className="margin-bottom-1 inherit-body-font-family">
                       Log in to DAWSON
                     </h1>
-
                     <span>Email address and password are case sensitive.</span>
-
                     <form className="usa-form margin-top-4 max-width-unset login-form">
                       <label className="usa-label" htmlFor="email">
                         Email address
@@ -108,18 +106,16 @@ export const Login = connect(
                         Log in
                       </Button>
                     </form>
-                    <div>
-                      <Button
-                        className="margin-top-1"
-                        link={true}
-                        type="button"
-                        onClick={() => navigateToForgotPasswordSequence()}
-                      >
-                        Forgot password?
-                      </Button>
-                    </div>
-                    <div>
-                      <span>Don&apos;t have an account?</span>{' '}
+                    <Button
+                      className="margin-top-1 display-block"
+                      link={true}
+                      type="button"
+                      onClick={() => navigateToForgotPasswordSequence()}
+                    >
+                      Forgot password?
+                    </Button>
+                    <span>
+                      Don&apos;t have an account?{' '}
                       <Button
                         className="padding-top-0"
                         link={true}
@@ -131,7 +127,7 @@ export const Login = connect(
                       >
                         Create your account now.
                       </Button>
-                    </div>
+                    </span>
                   </div>
                 </div>
               </div>
