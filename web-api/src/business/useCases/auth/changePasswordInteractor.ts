@@ -48,7 +48,7 @@ export const changePasswordInteractor = async (
         });
 
       if (initiateAuthResult.ChallengeName !== 'NEW_PASSWORD_REQUIRED') {
-        throw new Error('User is not `FORCE_CHANGE_PASSWORD` state');
+        throw new Error('User is not in `FORCE_CHANGE_PASSWORD` state');
       }
 
       const result = await applicationContext
@@ -59,7 +59,7 @@ export const changePasswordInteractor = async (
             NEW_PASSWORD: password,
             USERNAME: userEmail,
           },
-          ClientId: process.env.COGNITO_CLIENT_ID,
+          ClientId: applicationContext.environment.cognitoClientId,
           Session: initiateAuthResult.Session,
         });
 
