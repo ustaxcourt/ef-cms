@@ -1,35 +1,21 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import {
-  DeleteItemCommand,
-  DynamoDBClient,
-  GetItemCommand,
-} from '@aws-sdk/client-dynamodb';
-// import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import promiseRetry from 'promise-retry';
 
 const awsRegion = 'us-east-1';
 const stage = process.env.CYPRESS_STAGE || 'local';
-console.log('&&&&&&&&&&&&&&&&&&&&&&&&&: ', stage);
 const cognitoEndpoint =
   stage === 'local' ? 'http://localhost:9229/' : undefined;
 const accessKeyId = process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER';
 const secretAccessKey = process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER';
+const dynamoEndpoint = stage === 'local' ? 'http://localhost:8000' : undefined;
 
 const cognito = new CognitoIdentityProvider({
   credentials: { accessKeyId, secretAccessKey },
   endpoint: cognitoEndpoint,
   region: awsRegion,
 });
-
-// const dynamoDB = new DynamoDBClient({
-//   credentials: {
-//     accessKeyId: process.env.CYPRESS_AWS_ACCESS_KEY_ID!,
-//     secretAccessKey: process.env.CYPRESS_AWS_SECRET_ACCESS_KEY!,
-//     sessionToken: process.env.CYPRESS_AWS_SESSION_TOKEN,
-//   },
-//   region: awsRegion,
-// });
-const dynamoEndpoint = stage === 'local' ? 'http://localhost:8000' : undefined;
 const dynamoDB = new DynamoDBClient({
   credentials: {
     accessKeyId,
@@ -38,9 +24,9 @@ const dynamoDB = new DynamoDBClient({
   endpoint: dynamoEndpoint,
   region: 'us-east-1',
 });
-// const documentClient = DynamoDBDocument.from(dynamoDB, {
-//   marshallOptions: { removeUndefinedValues: true },
-// });
+const documentClient = DynamoDBDocument.from(dynamoDB, {
+  marshallOptions: { removeUndefinedValues: true },
+});
 const DEFAULT_ACCOUNT_PASS = process.env.CYPRESS_DEFAULT_ACCOUNT_PASS;
 const DYNAMODB_TABLE_NAME = process.env.DYNAMODB_TABLE_NAME || 'efcms-local';
 
@@ -87,7 +73,6 @@ const getUserPoolId = async () => {
   const results = await cognito.listUserPools({
     MaxResults: 50,
   });
-  console.log('^^^^^^^^ getUserPoolId: ', JSON.stringify(results, null, 2));
   const userPoolId = (results?.UserPools || []).find(
     pool => pool.Name === `efcms-${stage}`,
   )?.Id;
@@ -125,38 +110,33 @@ async function getUserToken(password: string, username: string) {
     });
 }
 
-const getCognitoUserIdByEmail = async (email: string) => {
+const getCognitoUserIdByEmail = async (email: string): Promise<string> => {
   const userPoolId = await getUserPoolId();
-  console.log('getCognitoUserIdByEmail args: ', { email, userPoolId });
   const users = await cognito.listUsers({
     AttributesToGet: ['custom:userId'],
     Filter: `email = "${email}"`,
     UserPoolId: userPoolId,
   });
-  console.log(
-    'getCognitoUserIdByEmail users: ',
-    JSON.stringify({ users }, null, 2),
-  );
 
-  return users.Users?.[0].Attributes?.find(
+  const userId = users.Users?.[0].Attributes?.find(
     element => element.Name === 'custom:userId',
   )?.Value;
+  if (!userId) {
+    throw new Error(`Could not find userId for email: ${email}`);
+  }
+
+  return userId;
 };
 
-const getUserConfirmationCodeFromDynamo = async (userId: string) => {
-  const primaryKeyValues = {
-    pk: { S: `user|${userId}` },
-    sk: { S: 'account-confirmation-code' },
-  };
-
-  const command = new GetItemCommand({
-    Key: primaryKeyValues,
+const getUserConfirmationCodeFromDynamo = async (
+  userId: string,
+): Promise<string> => {
+  const result = await documentClient.get({
+    Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
     TableName: DYNAMODB_TABLE_NAME,
   });
 
-  const items = await dynamoDB.send(command);
-
-  return items.Item?.confirmationCode?.S;
+  return result.Item!.confirmationCode;
 };
 
 export const getNewAccountVerificationCode = async ({
@@ -211,7 +191,7 @@ const getAllCypressTestAccounts = async (
   return usernames;
 };
 
-export const deleteAllCypressTestAccounts = async () => {
+export const deleteAllCypressTestAccounts = async (): Promise<null> => {
   const userPoolId = await getUserPoolId();
   if (!userPoolId) return null;
   const accounts = await getAllCypressTestAccounts(userPoolId);
@@ -223,22 +203,17 @@ export const deleteAllCypressTestAccounts = async () => {
   return null;
 };
 
-export const expireUserConfirmationCode = async (email: string) => {
+export const expireUserConfirmationCode = async (
+  email: string,
+): Promise<null> => {
   const userId = await getCognitoUserIdByEmail(email);
   if (!userId) return null;
 
-  const pk = { S: `user|${userId}` };
-  const sk = { S: 'account-confirmation-code' };
-
-  const deleteItemParams: DeleteItemCommand = new DeleteItemCommand({
-    Key: {
-      pk,
-      sk,
-    },
-    TableName: DYNAMODB_TABLE_NAME,
-  });
-
-  await dynamoDB.send(deleteItemParams).catch(error => console.error(error));
-
+  await documentClient
+    .delete({
+      Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
+      TableName: DYNAMODB_TABLE_NAME,
+    })
+    .catch(error => console.error(error)); // if no confirmation code exists do not throw error.
   return null;
 };
