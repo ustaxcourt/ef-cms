@@ -15,10 +15,12 @@ export const formatDocketEntryOnDocketRecord = (
   {
     entry,
     isTerminalUser,
+    rawCase,
     visibilityPolicyDate,
   }: {
     entry: any & { rootDocument: any };
     isTerminalUser: boolean;
+    rawCase: any;
     visibilityPolicyDate: string; // ISO Date String
   },
 ) => {
@@ -55,15 +57,16 @@ export const formatDocketEntryOnDocketRecord = (
 
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
-  const isPublic = DocketEntry.isPublic(entry, {
-    rootDocument: entry.rootDocument,
-    visibilityChangeDate: visibilityPolicyDate,
-  });
-
   const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
-    isCourtUser: false,
-    isPublic,
-    userHasAccessToCase: false,
+    isTerminalUser,
+    rawCase,
+    user: {
+      entityName: 'User',
+      name: '',
+      role: 'petitioner',
+      userId: '',
+    },
+    visibilityChangeDate: visibilityPolicyDate,
   });
 
   const canTerminalUserSeeLink =
@@ -160,6 +163,7 @@ export const publicCaseDetailHelper = (
       return formatDocketEntryOnDocketRecord(applicationContext, {
         entry,
         isTerminalUser,
+        rawCase: state.caseDetail,
         visibilityPolicyDate,
       });
     });

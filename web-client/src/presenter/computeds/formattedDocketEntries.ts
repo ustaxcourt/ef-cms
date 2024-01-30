@@ -91,13 +91,12 @@ export const getFormattedDocketEntry = ({
   entry,
   isExternalUser,
   permissions,
-  userAssociatedWithCase,
+  rawCase,
+  user,
   visibilityPolicyDateFormatted,
 }) => {
   const { DOCKET_ENTRY_SEALED_TO_TYPES, DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
-
-  const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
 
   const formattedResult = {
     numberOfPages: 0,
@@ -135,15 +134,11 @@ export const getFormattedDocketEntry = ({
   formattedResult.showNotServed = entry.isNotServedDocument;
   formattedResult.showServed = entry.isStatusServed;
 
-  const isPublic = DocketEntry.isPublic(entry, {
-    rootDocument: entry.rootDocument,
-    visibilityChangeDate: visibilityPolicyDateFormatted,
-  });
-
   const showDocumentLinks = DocketEntry.isDownloadable(entry, {
-    isCourtUser: !isExternalUser,
-    isPublic,
-    userHasAccessToCase,
+    isTerminalUser: false,
+    rawCase,
+    user,
+    visibilityChangeDate: visibilityPolicyDateFormatted,
   });
 
   formattedResult.showDocumentViewerLink = !isExternalUser && showDocumentLinks;
@@ -194,7 +189,7 @@ export const formattedDocketEntries = (
     .getUtilities()
     .isExternalUser(user.role);
   const permissions = get(state.permissions);
-  const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
+  // const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
   const {
     ALLOWLIST_FEATURE_FLAGS,
@@ -246,24 +241,18 @@ export const formattedDocketEntries = (
     docketRecordSort,
   );
 
-  docketEntriesFormatted = docketEntriesFormatted
-    .map((entry: any, _, array) => {
-      return {
-        ...entry,
-        rootDocument: DocketEntry.fetchRootDocument(entry, array),
-      };
-    })
-    .map(entry => {
-      return getFormattedDocketEntry({
-        applicationContext,
-        docketNumber,
-        entry,
-        isExternalUser,
-        permissions,
-        userAssociatedWithCase,
-        visibilityPolicyDateFormatted,
-      });
-    });
+  docketEntriesFormatted = docketEntriesFormatted.map(entry =>
+    getFormattedDocketEntry({
+      applicationContext,
+      docketNumber,
+      entry,
+      isExternalUser,
+      permissions,
+      rawCase: caseDetail,
+      user,
+      visibilityPolicyDateFormatted,
+    }),
+  );
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
