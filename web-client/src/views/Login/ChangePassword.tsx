@@ -37,115 +37,111 @@ export const ChangePassword = connect(
               <ErrorNotification />
 
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
-                <div className="display-flex flex-column">
-                  <div className="flex-align-self-center">
-                    <h1 className="margin-bottom-1 inherit-body-font-family">
-                      Reset Password
-                    </h1>
-                    <form className="usa-form margin-top-4 change-password-form">
-                      <label className="usa-label" htmlFor="password">
-                        Password
-                      </label>
-                      <input
-                        required
-                        className="usa-input"
-                        id="password"
-                        name="password"
-                        type={showPassword ? 'text' : 'password'}
-                        onChange={e => {
-                          updateAuthenticationFormValueSequence({
-                            password: e.target.value,
-                          });
-                        }}
-                      />
-                      <button
-                        aria-controls="password"
-                        className="usa-show-password"
-                        data-hide-text="Hide password"
-                        data-show-text="Show password"
-                        type="button"
-                        onClick={() =>
-                          toggleShowPasswordSequence({
-                            passwordType: 'showPassword',
-                          })
-                        }
-                      >
-                        {showPassword ? 'Hide Password' : 'Show password'}
-                      </button>
-                      <div className="margin-top-2" hidden={!password}>
-                        {changePasswordHelper.passwordErrors.map(error => {
-                          return (
-                            <RequirementsText
-                              fieldName="password"
-                              key={error.message}
-                              text={error.message}
-                              valid={error.valid}
-                            ></RequirementsText>
-                          );
-                        })}
-                      </div>
+                <h1 className="margin-bottom-1 inherit-body-font-family">
+                  Reset Password
+                </h1>
 
-                      <label
-                        className="usa-label margin-top-2"
-                        htmlFor="confirm-password"
-                      >
-                        Re-type Password
-                      </label>
-                      <input
-                        required
-                        className="usa-input"
-                        id="confirm-password"
-                        name="confirmPassword"
-                        type={showConfirmPassword ? 'text' : 'password'}
-                        onChange={e => {
-                          updateAuthenticationFormValueSequence({
-                            confirmPassword: e.target.value,
-                          });
-                        }}
-                      />
-                      <button
-                        aria-controls="password password-create-account-confirm"
-                        className="usa-show-password"
-                        data-hide-text="Hide password"
-                        data-show-text="Show password"
-                        title=""
-                        type="button"
-                        onClick={() =>
-                          toggleShowPasswordSequence({
-                            passwordType: 'showConfirmPassword',
-                          })
-                        }
-                      >
-                        {showConfirmPassword
-                          ? 'Hide Password'
-                          : 'Show password'}
-                      </button>
-                      <div
-                        className="margin-top-2"
-                        style={{
-                          visibility: confirmPassword ? 'visible' : 'hidden',
-                        }}
-                      >
+                <span>Enter a new password.</span>
+
+                <form className="usa-form margin-top-4 change-password-form max-width-unset">
+                  <label className="usa-label" htmlFor="password">
+                    New Password
+                  </label>
+                  <input
+                    required
+                    className="usa-input"
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    onChange={e => {
+                      updateAuthenticationFormValueSequence({
+                        password: e.target.value,
+                      });
+                    }}
+                  />
+                  <button
+                    aria-controls="password"
+                    className="usa-show-password"
+                    data-hide-text="Hide password"
+                    data-show-text="Show password"
+                    type="button"
+                    onClick={() =>
+                      toggleShowPasswordSequence({
+                        passwordType: 'showPassword',
+                      })
+                    }
+                  >
+                    {showPassword ? 'Hide Password' : 'Show password'}
+                  </button>
+                  <div className="margin-top-205" hidden={!password}>
+                    {changePasswordHelper.passwordErrors.map(error => {
+                      return (
                         <RequirementsText
-                          fieldName="confirm password"
-                          text="Passwords must match"
-                          valid={changePasswordHelper.confirmPassword}
+                          fieldName="password"
+                          key={error.message}
+                          text={error.message}
+                          valid={error.valid}
                         ></RequirementsText>
-                      </div>
-                      <Button
-                        className="usa-button margin-top-3"
-                        data-testid="login-button"
-                        disabled={!changePasswordHelper.formIsValid}
-                        onClick={e => {
-                          e.preventDefault();
-                          submitChangePasswordSequence();
-                        }}
-                      >
-                        Change Password
-                      </Button>
-                    </form>
+                      );
+                    })}
                   </div>
-                </div>
+
+                  <div className="margin-top-3">
+                    <label className="usa-label" htmlFor="confirm-password">
+                      Re-type New Password
+                    </label>
+                    <input
+                      required
+                      className="usa-input"
+                      id="confirm-password"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      onChange={e => {
+                        updateAuthenticationFormValueSequence({
+                          confirmPassword: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <button
+                    aria-controls="password password-create-account-confirm"
+                    className="usa-show-password"
+                    data-hide-text="Hide password"
+                    data-show-text="Show password"
+                    title=""
+                    type="button"
+                    onClick={() =>
+                      toggleShowPasswordSequence({
+                        passwordType: 'showConfirmPassword',
+                      })
+                    }
+                  >
+                    {showConfirmPassword ? 'Hide Password' : 'Show password'}
+                  </button>
+                  <div
+                    className="margin-top-205"
+                    style={{
+                      visibility: confirmPassword ? 'visible' : 'hidden',
+                    }}
+                  >
+                    <RequirementsText
+                      fieldName="confirm password"
+                      text="Passwords must match"
+                      valid={changePasswordHelper.confirmPassword}
+                    ></RequirementsText>
+                  </div>
+                  <Button
+                    className="usa-button margin-top-3"
+                    data-testid="login-button"
+                    disabled={!changePasswordHelper.formIsValid}
+                    onClick={e => {
+                      e.preventDefault();
+                      submitChangePasswordSequence();
+                    }}
+                  >
+                    Change Password
+                  </Button>
+                </form>
               </div>
             </div>
           </div>
