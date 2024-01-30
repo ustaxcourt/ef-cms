@@ -8,7 +8,7 @@ resource "aws_iam_role" "es_s3_snapshot_access_role" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "s3.amazonaws.com"
+        "Service": "es.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }
