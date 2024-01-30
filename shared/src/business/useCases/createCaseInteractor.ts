@@ -14,7 +14,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserCase } from '../entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../entities/WorkItem';
-import { isEmpty } from 'lodash';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 
 const addPetitionDocketEntryToCase = ({

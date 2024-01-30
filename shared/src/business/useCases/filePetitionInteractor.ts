@@ -16,14 +16,14 @@ export const filePetitionInteractor = async (
     stinFile,
     stinUploadProgress,
   }: {
-    corporateDisclosureFile: any;
-    corporateDisclosureUploadProgress: any;
+    atpFilesMetadata?: any;
+    corporateDisclosureFile?: any;
+    corporateDisclosureUploadProgress?: any;
     petitionFile: any;
     petitionMetadata: any;
     petitionUploadProgress: any;
     stinFile: any;
     stinUploadProgress: any;
-    atpFilesMetadata: any;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -59,7 +59,7 @@ export const filePetitionInteractor = async (
       });
   }
 
-  let atpFilesUploads;
+  let atpFilesUploads = [];
   if (atpFilesMetadata?.length) {
     atpFilesUploads = atpFilesMetadata.map(atp => {
       return applicationContext
