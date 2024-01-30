@@ -5,7 +5,6 @@ import {
   confirmEmailPendingAlert,
   goToMyAccount,
 } from '../support/pages/my-account';
-import { confirmEmailVerificationSuccessful } from '../support/pages/public/email-verification';
 import { navigateTo as loginAs } from '../support/pages/maintenance';
 
 describe('Petitioner updates and verifies their email', () => {
@@ -23,8 +22,16 @@ describe('Petitioner updates and verifies their email', () => {
     cy.task('getEmailVerificationToken', { userId: petitioner9Id }).then(
       verificationToken => {
         cy.visit(`/verify-email?token=${verificationToken}`);
-        confirmEmailVerificationSuccessful();
       },
     );
+    cy.get('[data-testid="success-alert"]')
+      .should('be.visible')
+      .and(
+        'contain.text',
+        'Your email address is verified. You can now sign in to DAWSON.',
+      );
+    cy.url().should('contain', '/login');
+    cy.login(`petitioner9+test${randomSuffix}`);
+    cy.get('[data-testid="my-cases-link"]');
   });
 });
