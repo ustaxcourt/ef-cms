@@ -586,9 +586,11 @@ export const createTestApplicationContext = ({
     documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     environment: {
       appEndpoint: 'localhost:1234',
+      cognitoClientId: 'bvjrggnd3co403c0aahscinne',
       dynamoDbTableName: 'efcms-local',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
+      userPoolId: 'local_2pHzece7',
     },
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
@@ -676,6 +678,9 @@ export const createTestApplicationContext = ({
     getUseCases: mockGetUseCases,
     getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
+    getWorkerGateway: appContextProxy({
+      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+    }),
     isFeatureEnabled: jest.fn(),
     logger: {
       debug: jest.fn(),
