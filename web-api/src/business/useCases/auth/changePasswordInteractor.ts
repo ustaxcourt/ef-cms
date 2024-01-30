@@ -6,6 +6,15 @@ import {
   NotFoundError,
 } from '@web-api/errors/errors';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
+import {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
@@ -83,11 +92,17 @@ export const changePasswordInteractor = async (
         userFromPersistence.pendingEmail &&
         userFromPersistence.pendingEmail === userEmail
       ) {
+        const { updatedUser } = await updateUserEmailAddress(
+          applicationContext,
+          {
+            user: userFromPersistence,
+          },
+        );
         await applicationContext
           .getWorkerGateway()
           .initialize(applicationContext, {
             message: {
-              payload: { user: userFromPersistence },
+              payload: { user: updatedUser },
               type: MESSAGE_TYPES.UPDATE_PENDING_EMAIL,
             },
           });
@@ -148,4 +163,38 @@ export const changePasswordInteractor = async (
     });
     throw err;
   }
+};
+
+const updateUserEmailAddress = async (
+  applicationContext: ServerApplicationContext,
+  { user }: { user: RawUser },
+): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
+  let userEntity;
+  if (
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner ||
+    user.role === ROLES.inactivePractitioner
+  ) {
+    userEntity = new Practitioner({
+      ...user,
+      email: user.pendingEmail,
+      pendingEmail: undefined,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
+  } else {
+    userEntity = new User({
+      ...user,
+      email: user.pendingEmail,
+      pendingEmail: undefined,
+    });
+  }
+
+  const rawUser = userEntity.validate().toRawObject();
+
+  await applicationContext.getPersistenceGateway().updateUser({
+    applicationContext,
+    user: rawUser,
+  });
+
+  return { updatedUser: rawUser };
 };
