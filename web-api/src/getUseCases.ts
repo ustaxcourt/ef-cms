@@ -149,6 +149,7 @@ import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCase
 import { orderPublicSearchInteractor } from '../../shared/src/business/useCases/public/orderPublicSearchInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/business/useCases/prioritizeCaseInteractor';
 import { processStreamRecordsInteractor } from '../../shared/src/business/useCases/processStreamRecordsInteractor';
+import { queueUpdateAssociatedCasesWorker } from '../../shared/src/business/useCases/users/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from '../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor';
 import { removeCasePendingItemInteractor } from '../../shared/src/business/useCases/removeCasePendingItemInteractor';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
@@ -175,7 +176,6 @@ import { setHealthCheckCacheInteractor } from '../../shared/src/business/useCase
 import { setMessageAsReadInteractor } from '../../shared/src/business/useCases/messages/setMessageAsReadInteractor';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor';
-import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { setWorkItemAsReadInteractor } from '../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor';
 import { signUpUserInteractor } from './business/useCases/auth/signUpUserInteractor';
 import { strikeDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/strikeDocketEntryInteractor';
@@ -185,6 +185,7 @@ import { unblockCaseFromTrialInteractor } from '../../shared/src/business/useCas
 import { unprioritizeCaseInteractor } from '../../shared/src/business/useCases/unprioritizeCaseInteractor';
 import { unsealCaseInteractor } from '../../shared/src/business/useCases/unsealCaseInteractor';
 import { unsealDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/unsealDocketEntryInteractor';
+import { updateAssociatedCaseWorker } from './business/useCases/user/updateAssociatedCaseWorker';
 import { updateCaseContextInteractor } from '../../shared/src/business/useCases/updateCaseContextInteractor';
 import { updateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor';
 import { updateCaseDetailsInteractor } from '../../shared/src/business/useCases/updateCaseDetailsInteractor';
@@ -199,7 +200,6 @@ import { updateDeficiencyStatisticInteractor } from '../../shared/src/business/u
 import { updateDocketEntryMetaInteractor } from '../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor';
 import { updateDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/updateDocketEntryWorksheetInteractor';
 import { updateOtherStatisticsInteractor } from '../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor';
-import { updatePetitionerCaseInteractor } from './business/useCases/user/updatePetitionerCaseInteractor';
 import { updatePetitionerInformationInteractor } from '../../shared/src/business/useCases/updatePetitionerInformationInteractor';
 import { updatePractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/updatePractitionerUserInteractor';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/business/useCases/updateQcCompleteForTrialInteractor';
@@ -363,6 +363,7 @@ const useCases = {
   orderPublicSearchInteractor,
   prioritizeCaseInteractor,
   processStreamRecordsInteractor,
+  queueUpdateAssociatedCasesWorker,
   removeCaseFromTrialInteractor,
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
@@ -389,7 +390,6 @@ const useCases = {
   setMessageAsReadInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
   setTrialSessionCalendarInteractor,
-  setUserEmailFromPendingEmailInteractor,
   setWorkItemAsReadInteractor,
   signUpUserInteractor,
   strikeDocketEntryInteractor,
@@ -399,6 +399,7 @@ const useCases = {
   unprioritizeCaseInteractor,
   unsealCaseInteractor,
   unsealDocketEntryInteractor,
+  updateAssociatedCaseWorker,
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
@@ -413,7 +414,6 @@ const useCases = {
   updateDocketEntryMetaInteractor,
   updateDocketEntryWorksheetInteractor,
   updateOtherStatisticsInteractor,
-  updatePetitionerCaseInteractor,
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,
   updateQcCompleteForTrialInteractor,

@@ -5,10 +5,9 @@ import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactPrimary } from '../../entities/cases/Case';
-import { setUserEmailFromPendingEmailInteractor } from './setUserEmailFromPendingEmailInteractor';
+import { queueUpdateAssociatedCasesWorker } from './queueUpdateAssociatedCasesWorker';
 
-// TODO 10007 Rewrite in Cypress
-describe.skip('setUserEmailFromPendingEmailInteractor', () => {
+describe('queueUpdateAssociatedCasesWorker', () => {
   const UPDATED_EMAIL = 'other@example.com';
   const USER_ID = '7a0c9454-5f1a-438a-8c8a-f7560b119343';
   const mockPetitioner = {
@@ -67,7 +66,7 @@ describe.skip('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined, and service indicator set to electronic with a practitioner user', async () => {
-    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+    await queueUpdateAssociatedCasesWorker(applicationContext, {
       user: {
         ...mockPractitioner,
         email: UPDATED_EMAIL,
@@ -87,7 +86,7 @@ describe.skip('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
-    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+    await queueUpdateAssociatedCasesWorker(applicationContext, {
       user: mockPetitioner,
     });
 
@@ -101,7 +100,7 @@ describe.skip('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should attempt to send a message to update the petitioner cases via the message gateway', async () => {
-    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+    await queueUpdateAssociatedCasesWorker(applicationContext, {
       user: mockPetitioner,
     });
 
@@ -112,7 +111,7 @@ describe.skip('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should update the user cases with the new email and electronic service for a practitioner', async () => {
-    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+    await queueUpdateAssociatedCasesWorker(applicationContext, {
       user: mockPractitioner,
     });
 
@@ -137,14 +136,14 @@ describe.skip('setUserEmailFromPendingEmailInteractor', () => {
       );
 
     await expect(
-      setUserEmailFromPendingEmailInteractor(applicationContext, {
+      queueUpdateAssociatedCasesWorker(applicationContext, {
         user: mockPractitioner,
       }),
     ).rejects.toThrow(mockErrorMessage);
   });
 
   it('should not turn an inactive Practitioner into a User', async () => {
-    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+    await queueUpdateAssociatedCasesWorker(applicationContext, {
       user: {
         ...mockPractitioner,
         email: UPDATED_EMAIL,
@@ -169,7 +168,7 @@ describe.skip('setUserEmailFromPendingEmailInteractor', () => {
       mockLock = MOCK_LOCK;
 
       await expect(
-        setUserEmailFromPendingEmailInteractor(applicationContext, {
+        queueUpdateAssociatedCasesWorker(applicationContext, {
           user: mockPractitioner,
         }),
       ).rejects.toThrow(ServiceUnavailableError);
@@ -180,7 +179,7 @@ describe.skip('setUserEmailFromPendingEmailInteractor', () => {
     });
 
     it('should acquire and remove the lock on the case', async () => {
-      await setUserEmailFromPendingEmailInteractor(applicationContext, {
+      await queueUpdateAssociatedCasesWorker(applicationContext, {
         user: mockPractitioner,
       });
 

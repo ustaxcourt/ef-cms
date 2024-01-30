@@ -60,13 +60,13 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { queueUpdateAssociatedCasesWorker } from '../../shared/src/business/useCases/users/queueUpdateAssociatedCasesWorker';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
 import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
 import { sendBulkTemplatedEmail } from '../../web-api/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
-import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { sleep } from '../../shared/src/business/utilities/sleep';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
@@ -216,7 +216,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       //   applicationContext: appContext,
       //   user,
       // }) => {
-      //   return updatePetitionerCaseInteractor(appContext, {
+      //   return updateAssociatedCaseWorker(appContext, {
       //     user,
       //   });
       // },
@@ -314,7 +314,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
   };
 
   const user = await getUserRecordById(userId);
-  await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
+  await queueUpdateAssociatedCasesWorker(apiApplicationContext, {
     user,
   });
 };

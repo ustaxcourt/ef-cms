@@ -103,7 +103,7 @@ export const changePasswordInteractor = async (
           .initialize(applicationContext, {
             message: {
               payload: { user: updatedUser },
-              type: MESSAGE_TYPES.UPDATE_PENDING_EMAIL,
+              type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
             },
           });
       }
