@@ -14,6 +14,7 @@ const config: Config = {
     '!src/getUseCases.{js,ts}',
     '!src/getUseCaseHelpers.{js,ts}',
     '!src/getPersistenceGateway.{js,ts}',
+    '!src/getUserGateway.ts',
     '!src/**/*Handlers.{js,ts}',
     '!src/**/*Lambda.{js,ts}',
     '!src/app.{js,ts}',

@@ -590,6 +590,7 @@ export const createTestApplicationContext = ({
       dynamoDbTableName: 'efcms-local',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
+      userPoolId: 'local_2pHzece7',
     },
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',

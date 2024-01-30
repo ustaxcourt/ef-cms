@@ -10,6 +10,7 @@ export class ChangePasswordForm extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('ChangePasswordForm');
+
     this.userEmail = rawProps.userEmail;
     this.password = rawProps.password;
     this.confirmPassword = rawProps.confirmPassword;
