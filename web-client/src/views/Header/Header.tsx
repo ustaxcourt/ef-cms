@@ -139,6 +139,7 @@ const NavigationItems = (
               'usa-nav__link',
               headerHelper.pageIsMyCases && 'usa-current',
             )}
+            data-testid="my-cases-link"
             href="/"
             onClick={() => toggleMobileMenuSequence()}
           >
