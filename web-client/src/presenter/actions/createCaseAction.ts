@@ -30,26 +30,19 @@ export const createCaseAction = async ({
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  const atpFilesMetadata = {}; // todo: type
+  const atpFilesMetadata = atpFiles?.map(fileName => {
+    const progressFunction = setupPercentDone(
+      {
+        atp: fileName,
+      },
+      store,
+    );
 
-  // todo: is check necessary?
-  if (atpFiles) {
-    atpFiles.forEach((fileName, index) => {
-      let key = `atp${index}`;
-
-      const progressFunction = setupPercentDone(
-        {
-          [key]: fileName,
-        },
-        store,
-      );
-
-      atpFilesMetadata[key] = {
-        file: fileName,
-        progressFunction: progressFunction[key],
-      };
-    });
-  }
+    return {
+      file: fileName,
+      progressFunction: progressFunction.atp,
+    };
+  });
 
   const progressFunctions = setupPercentDone(
     {
@@ -60,9 +53,7 @@ export const createCaseAction = async ({
     store,
   );
 
-  console.log('atpFilesMetadata', atpFilesMetadata);
-
-  let filePetitionResult; //todo: type
+  let filePetitionResult;
   try {
     filePetitionResult = await applicationContext
       .getUseCases()
