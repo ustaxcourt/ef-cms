@@ -6,12 +6,30 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import fileInput from '../../../../node_modules/@uswds/uswds/packages/usa-file-input/src';
 
-function DragDropInput({ fileInputName, handleChange }) {
+function DragDropInput({ existingFiles, fileInputName, handleChange }) {
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!inputRef.current) return;
     fileInput.on(inputRef.current);
   }, [inputRef]);
+
+  useEffect(() => {
+    const multiFileInput = window.document.getElementById(
+      'multi-file-input',
+    ) as HTMLInputElement;
+    if (multiFileInput && existingFiles) {
+      const loadFilesFromFormEvent = new Event('change');
+
+      Object.defineProperty(loadFilesFromFormEvent, 'target', {
+        value: {
+          files: existingFiles,
+        },
+        writable: false,
+      });
+
+      multiFileInput.dispatchEvent(loadFilesFromFormEvent);
+    }
+  }, []);
 
   return (
     <input
@@ -76,12 +94,14 @@ function handleFileSelectionAndValidation(
 export const FileInput = connect(
   {
     constants: state.constants,
+    form: state.form,
     name: props.name,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
     // validationSequence: sequences[props.validationSequence],
   },
   function FileInput({
     constants,
+    form,
     name,
     updateFormValueSequence,
     // validationSequence,
@@ -89,6 +109,7 @@ export const FileInput = connect(
     return (
       <React.Fragment>
         <DragDropInput
+          existingFiles={form[name]}
           fileInputName={name}
           handleChange={e =>
             handleFileSelectionAndValidation(
