@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../../entities/EntityConstants';
 import { Case, isSealedCase } from '../../entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -60,21 +60,17 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ];
 
-  const isPublic = DocketEntry.isPublic(docketEntryEntity, {
-    caseIsSealed: isSealedCase(caseEntity),
-    rootDocument: DocketEntry.fetchRootDocument(
-      docketEntryEntity,
-      caseEntity.docketEntries,
-    ),
-    visibilityChangeDate: documentVisibilityChangeDate,
-  });
-
   if (
     !DocketEntry.isDownloadable(docketEntryEntity, {
-      isCourtUser: false,
-      isPublic,
       isTerminalUser,
-      userHasAccessToCase: false,
+      rawCase: caseToCheck,
+      user: {
+        entityName: 'User',
+        name: '',
+        role: ROLES.petitioner,
+        userId: '',
+      },
+      visibilityChangeDate: documentVisibilityChangeDate,
     })
   ) {
     throw new UnauthorizedError('Unauthorized to access private document');

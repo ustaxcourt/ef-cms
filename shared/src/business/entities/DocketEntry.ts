@@ -21,10 +21,16 @@ import {
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   REVISED_TRANSCRIPT_EVENT_CODE,
   ROLES,
+  STIN_DOCKET_ENTRY_TYPE,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
+import {
+  Case,
+  getPetitionDocketEntry,
+  isSealedCase,
+} from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { RawUser, User } from './User';
@@ -648,24 +654,57 @@ export class DocketEntry extends JoiValidationEntity {
   static isDownloadable = (
     entry: RawDocketEntry,
     {
-      isCourtUser = false,
-      isPublic = false,
       isTerminalUser = false,
-      userHasAccessToCase = false,
+      rawCase,
+      user,
+      visibilityChangeDate,
     }: {
-      isCourtUser?: boolean;
-      isPublic?: boolean;
-      isTerminalUser?: boolean;
-      userHasAccessToCase?: boolean;
+      rawCase: RawCase;
+      user: RawUser;
+      isTerminalUser: boolean;
+      visibilityChangeDate: string;
     },
   ): boolean => {
     if (!entry.isFileAttached) return false;
-    if (isCourtUser) return true;
+
+    const petitionDocketEntry = getPetitionDocketEntry(rawCase);
+    console.log('isDownloadable', {
+      entry,
+      petitionDocketEntry,
+      petitioners: rawCase.petitioners,
+      rawCase,
+      user,
+    });
+
+    if (entry.eventCode == STIN_DOCKET_ENTRY_TYPE.eventCode) {
+      return (
+        user.role === ROLES.petitionsClerk &&
+        !DocketEntry.isServed(entry) &&
+        !DocketEntry.isServed(petitionDocketEntry)
+      );
+    }
+
+    if (User.isInternalUser(user.role)) return true;
+
     if (!DocketEntry.isServed(entry) && !DocketEntry.isUnservable(entry)) {
       return false;
     }
+
+    if (user.role === ROLES.irsSuperuser)
+      return DocketEntry.isServed(petitionDocketEntry);
+
     if (isTerminalUser) return !DocketEntry.isSealed(entry);
-    if (!userHasAccessToCase || isPublic) return !!isPublic;
+
+    const userHasAccessToCase = Case.userHasAccessToCase(rawCase, user);
+
+    const isPublicDocument = DocketEntry.isPublic(entry, {
+      caseIsSealed: isSealedCase(rawCase),
+      rootDocument: DocketEntry.fetchRootDocument(entry, rawCase.docketEntries),
+      visibilityChangeDate,
+    });
+    console.log('isDownloadable 2', { isPublicDocument, userHasAccessToCase });
+
+    if (!userHasAccessToCase || isPublicDocument) return !!isPublicDocument;
     if (entry.isStricken || DocketEntry.isSealedToExternal(entry)) return false;
     if (DocketEntry.isTranscript(entry.eventCode))
       return DocketEntry.isTranscriptOldEnoughToUnseal(entry);
