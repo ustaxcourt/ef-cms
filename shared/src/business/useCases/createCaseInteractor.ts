@@ -67,20 +67,19 @@ const addPetitionDocketEntryToCase = ({
 export const createCaseInteractor = async (
   applicationContext: IApplicationContext,
   {
+    atpFileIds,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     stinFileId,
-    ...atpFileIds
   }: {
+    atpFileIds?: string[];
     corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
-    atpFileIds: string[];
   },
 ) => {
-  console.log('atpFileIds', atpFileIds); 
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
@@ -252,8 +251,8 @@ export const createCaseInteractor = async (
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
-  if (!isEmpty(atpFileIds))
-    Object.entries(atpFileIds).forEach(([, fileId]) => {
+  if (atpFileIds?.length)
+    atpFileIds.forEach(fileId => {
       const atpDocketEntryEntity = new DocketEntry(
         {
           contactPrimary: caseToAdd.getContactPrimary(),

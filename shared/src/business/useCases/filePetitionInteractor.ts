@@ -85,25 +85,15 @@ export const filePetitionInteractor = async (
     ...atpFilesUploads,
   ]);
 
-  const requestParams = {
-    corporateDisclosureFileId,
-    petitionFileId,
-    petitionMetadata,
-    stinFileId,
-  };
-
-  if (atpFileIds.length) {
-    atpFileIds.forEach((atpFileId, index) => {
-      requestParams[`atpFileId${index}`] = atpFileId;
-    });
-  }
-
-  console.log('atpFileIds', atpFileIds);
-  console.log('requestParams', requestParams);
-
   const caseDetail = await applicationContext
     .getUseCases()
-    .createCaseInteractor(applicationContext, requestParams);
+    .createCaseInteractor(applicationContext, {
+      atpFileIds,
+      corporateDisclosureFileId,
+      petitionFileId,
+      petitionMetadata,
+      stinFileId,
+    });
 
   return {
     caseDetail,
