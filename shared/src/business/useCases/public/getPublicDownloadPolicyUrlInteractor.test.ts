@@ -13,6 +13,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
 
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
+    mockCase.docketEntries[0].servedAt = '2019-03-01T21:40:46.415Z';
 
     applicationContext
       .getPersistenceGateway()
