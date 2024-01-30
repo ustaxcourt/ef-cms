@@ -20,6 +20,19 @@ describe('renewIdTokenInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
+  it('should rethrow when an error occurs that is not recognized', async () => {
+    const mockError = new Error('Cognito exploded!!!');
+    applicationContext
+      .getPersistenceGateway()
+      .renewIdToken.mockRejectedValue(mockError);
+
+    await expect(
+      renewIdTokenInteractor(applicationContext, {
+        refreshToken: 'sometoken',
+      }),
+    ).rejects.toThrow(mockError);
+  });
+
   it('should make a call to get an id token and refresh token', async () => {
     const expectedRefresh = 'sometoken';
     applicationContext.getPersistenceGateway().renewIdToken.mockResolvedValue({
