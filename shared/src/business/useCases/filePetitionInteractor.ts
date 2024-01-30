@@ -3,7 +3,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { isEmpty } from 'lodash';
 
 export const filePetitionInteractor = async (
   applicationContext: any,
@@ -27,7 +26,6 @@ export const filePetitionInteractor = async (
     atpFilesMetadata: any;
   },
 ) => {
-  console.log('atpFilesMetadata', atpFilesMetadata);
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
@@ -62,13 +60,13 @@ export const filePetitionInteractor = async (
   }
 
   let atpFilesUploads;
-  if (!isEmpty(atpFilesMetadata)) {
-    atpFilesUploads = Object.entries(atpFilesMetadata).map(([, value]) => {
+  if (atpFilesMetadata?.length) {
+    atpFilesUploads = atpFilesMetadata.map(atp => {
       return applicationContext
         .getUseCases()
         .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-          document: value.file,
-          onUploadProgress: value.progressFunction,
+          document: atp.file,
+          onUploadProgress: atp.progressFunction,
         });
     });
   }
