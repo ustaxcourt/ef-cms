@@ -23,8 +23,6 @@ export const serveCaseDocument = async ({
     doc => doc.documentType === initialDocumentType.documentType,
   );
 
-  // todo: evaluate the impact of using a map to make these calls.
-  // We can check for ATPs and ONLY loop when ATP documents are being served
   const documentServiceCalls = initialDocketEntries.map(initialDocketEntry => {
     if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
       initialDocketEntry.setAsServed([
