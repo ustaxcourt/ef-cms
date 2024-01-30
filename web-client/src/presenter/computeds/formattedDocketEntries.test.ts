@@ -9,6 +9,7 @@ import {
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  casePetitioner,
   docketClerkUser,
   petitionerUser,
   petitionsClerkUser,
@@ -507,7 +508,11 @@ describe('formattedDocketEntries', () => {
                 isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
+                servedAt: undefined,
               },
+            ],
+            petitioners: [
+              { ...casePetitioner, contactId: petitionerUser.userId },
             ],
           },
           screenMetadata: {
