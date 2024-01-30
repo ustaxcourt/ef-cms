@@ -60,10 +60,10 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { type RawUser, User } from '../User';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
-import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
@@ -2003,6 +2003,19 @@ export class Case extends JoiValidationEntity {
       (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
     );
   }
+
+  userHasAccessToCase(user: RawUser): boolean {
+    return Case.userHasAccessToCase(this, user);
+  }
+
+  static userHasAccessToCase(rawCase: RawCase, user: RawUser): boolean {
+    return rawCase.leadDocketNumber
+      ? isUserPartOfGroup({
+          consolidatedCases: rawCase.consolidatedCases,
+          userId: user.userId,
+        })
+      : isAssociatedUser({ caseRaw: rawCase, user });
+  }
 }
 
 /**
@@ -2106,6 +2119,10 @@ export const isClosedStatus = function (caseStatus) {
  * @returns {Object} the contact object
  */
 export const getPetitionerById = function (rawCase, contactId) {
+  console.log('getPetitionerById', {
+    contactId,
+    petitioners: rawCase.petitioners,
+  });
   return rawCase.petitioners?.find(
     petitioner => petitioner.contactId === contactId,
   );
@@ -2132,7 +2149,7 @@ export const getPractitionersRepresenting = function (
   rawCase: RawCase,
   petitionerContactId: string,
 ) {
-  return rawCase.privatePractitioners.filter(practitioner =>
+  return rawCase.privatePractitioners?.filter(practitioner =>
     practitioner.representing.includes(petitionerContactId),
   );
 };
@@ -2190,7 +2207,10 @@ export const isAssociatedUser = function ({ caseRaw, user }) {
  * @param {String} userId the user's id
  * @returns {boolean} true if the user is a party of the case
  */
-export const isUserPartOfGroup = function ({ consolidatedCases, userId }) {
+export const isUserPartOfGroup = function ({
+  consolidatedCases,
+  userId,
+}): boolean {
   return consolidatedCases.some(aCase =>
     userIsDirectlyAssociated({ aCase, userId }),
   );
@@ -2202,7 +2222,7 @@ export const isUserPartOfGroup = function ({ consolidatedCases, userId }) {
  * @param {String} options.userId the user's id
  * @returns {boolean} true if the user is a party of the case
  */
-export const userIsDirectlyAssociated = function ({ aCase, userId }) {
+export const userIsDirectlyAssociated = function ({ aCase, userId }): boolean {
   const userIsPartyToCase = [
     ...(aCase.petitioners || []),
     ...(aCase.privatePractitioners || []),

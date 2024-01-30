@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
-import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import {
+  CASE_STATUS_TYPES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
@@ -9,7 +9,12 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { MOCK_CASE } from '../../test/mockCase';
+import {
+  UNAUTHORIZED_DOCUMENT_MESSAGE,
+  getDownloadPolicyUrlInteractor,
+} from './getDownloadPolicyUrlInteractor';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -26,7 +31,6 @@ import {
   privatePractitionerUser,
 } from '../../test/mockUsers';
 import { cloneDeep } from 'lodash';
-import { getDownloadPolicyUrlInteractor } from './getDownloadPolicyUrlInteractor';
 
 describe('getDownloadPolicyUrlInteractor', () => {
   let mockCase;
@@ -36,13 +40,17 @@ describe('getDownloadPolicyUrlInteractor', () => {
   const stinDocketEntry = MOCK_CASE.docketEntries.find(
     d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
   );
+  const petitionDocketEntry = MOCK_CASE.docketEntries.find(
+    d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+  );
 
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
+    mockCase.status = CASE_STATUS_TYPES.generalDocket;
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue('localhost');
@@ -65,9 +73,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
   describe('when the user is a petitioner not associated with case or the consolidated group', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(false);
     });
 
     it('should throw an unauthorized error', async () => {
@@ -89,10 +94,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should throw an unauthorized error when the document is sealed to the public', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(false);
-
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         createdAt: '2018-01-21T20:49:28.192Z',
@@ -160,9 +161,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
   describe('when the user is a petitioner associated with case', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(true);
+    });
+
+    beforeEach(() => {
+      mockCase.petitioners = [
+        {
+          contactId: petitionerUser.userId,
+        },
+      ];
     });
 
     it('should throw an unauthorized error when the document is not available for viewing at this time', async () => {
@@ -230,10 +236,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should return the policy url when the document requested is a document that has been sealed to the public', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(true);
-
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         createdAt: '2018-01-21T20:49:28.192Z',
@@ -367,37 +369,31 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should NOT throw an error when the document requested is a brief', async () => {
+      mockCase.docketEntries[0].servedAt = '2019-08-25T05:00:00.000Z';
       const briefDocketEntryId = 'abb81f4d-1e47-423a-8caf-6d2fdc3d3859';
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: '2009-11-21T20:49:28.192Z',
-              docketEntryId: briefDocketEntryId,
-              docketNumber: '101-18',
-              documentTitle: 'Simultaneous Opening Brief',
-              documentType: 'Simultaneous Opening Brief',
-              draftOrderState: {},
-              entityName: 'DocketEntry',
-              eventCode: 'SIOB',
-              filedBy: 'Test Petitioner',
-              filers: [],
-              filingDate: '2009-03-01T05:00:00.000Z',
-              index: 6,
-              isFileAttached: true,
-              isMinuteEntry: false,
-              isOnDocketRecord: true,
-              pending: false,
-              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-              receivedAt: '2009-03-01T05:00:00.000Z',
-              servedAt: '2009-03-01T05:00:00.000Z',
-              stampData: {},
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-          ],
-        });
+      mockCase.docketEntries.push({
+        createdAt: '2009-11-21T20:49:28.192Z',
+        docketEntryId: briefDocketEntryId,
+        docketNumber: '101-18',
+        documentTitle: 'Simultaneous Opening Brief',
+        documentType: 'Simultaneous Opening Brief',
+        draftOrderState: {},
+        entityName: 'DocketEntry',
+        eventCode: 'SIOB',
+        filedBy: 'Test Petitioner',
+        filers: [],
+        filingDate: '2009-03-01T05:00:00.000Z',
+        index: 6,
+        isFileAttached: true,
+        isMinuteEntry: false,
+        isOnDocketRecord: true,
+        pending: false,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        receivedAt: '2009-03-01T05:00:00.000Z',
+        servedAt: '2009-03-01T05:00:00.000Z',
+        stampData: {},
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      });
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
@@ -499,9 +495,10 @@ describe('getDownloadPolicyUrlInteractor', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         privatePractitionerUser,
       );
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(true);
+    });
+
+    beforeEach(() => {
+      mockCase.privatePractitioners = [privatePractitionerUser];
     });
 
     it('should receive the policy url when the document being viewed is a document that has been sealed to the public', async () => {
@@ -543,13 +540,13 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should receive the policy url when the document being viewed is a served Stipulated Decision', async () => {
-      mockCase.docketEntries[0] = {
+      mockCase.docketEntries.push({
         ...baseDocketEntry,
         documentType: 'Stipulated Decision',
         eventCode: STIPULATED_DECISION_EVENT_CODE,
         isOnDocketRecord: true,
         servedAt: applicationContext.getUtilities().createISODateString(),
-      };
+      });
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
@@ -563,21 +560,11 @@ describe('getDownloadPolicyUrlInteractor', () => {
   describe('when the user is a petitions clerk', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(false);
-    });
-
-    it('should return the policy url for an internal user role even when verifyCaseForUser returns false', async () => {
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
-
-      expect(url).toEqual('localhost');
     });
 
     it('should return the policy url when the case has not been served and the requested document is a STIN', async () => {
+      mockCase.docketEntries[0].servedAt = undefined;
+      stinDocketEntry.servedAt = undefined;
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         key: stinDocketEntry.docketEntryId,
@@ -594,7 +581,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
           docketNumber: MOCK_CASE.docketNumber,
           key: stinDocketEntry.docketEntryId,
         }),
-      ).rejects.toThrow('Unauthorized to view case documents at this time.');
+      ).rejects.toThrow(UNAUTHORIZED_DOCUMENT_MESSAGE);
     });
   });
 
@@ -609,7 +596,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
           docketNumber: MOCK_CASE.docketNumber,
           key: stinDocketEntry.docketEntryId,
         }),
-      ).rejects.toThrow('Unauthorized to view case documents at this time.');
+      ).rejects.toThrow(UNAUTHORIZED_DOCUMENT_MESSAGE);
     });
 
     it('should return the policy url when the requested document is a correspondence', async () => {
@@ -635,38 +622,30 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should throw an error when the petition document on the case is not served', async () => {
-      mockCase.docketEntries[0] = {
-        documentType: 'Petition',
-      };
+      mockCase.docketEntries[0].servedAt = undefined;
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: MOCK_CASE.docketNumber,
           key: baseDocketEntry.docketEntryId,
         }),
-      ).rejects.toThrow(
-        'Unauthorized to view case documents until the petition has been served.',
-      );
+      ).rejects.toThrow(UNAUTHORIZED_DOCUMENT_MESSAGE);
     });
 
     it('should return the policy url when requested document is a petition on a served case', async () => {
-      mockCase.docketEntries[0] = {
-        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
-        documentType: 'Petition',
-        isFileAttached: true,
-        servedAt: '2019-03-01T21:40:46.415Z',
-      };
+      mockCase.docketEntries[0].servedAt = '2019-08-25T05:00:00.000Z';
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        key: petitionDocketEntry.docketEntryId,
       });
 
       expect(url).toEqual('localhost');
     });
 
     it('returns the url if the user role is irsSuperuser and the order is sealed', async () => {
-      mockCase.docketEntries[0] = {
+      mockCase.docketEntries[0].servedAt = '2019-08-25T05:00:00.000Z';
+      mockCase.docketEntries.push({
         docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
         documentType: 'Order',
         eventCode: 'O',
@@ -674,7 +653,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         isSealed: true,
         sealedTo: 'Public',
         servedAt: '2019-03-01T21:40:46.415Z',
-      };
+      });
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
@@ -685,7 +664,8 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should receive the policy url when the document being viewed is a document that has been sealed to all external users', async () => {
-      mockCase.docketEntries[0] = {
+      mockCase.docketEntries[0].servedAt = '2019-08-25T05:00:00.000Z';
+      mockCase.docketEntries.push({
         ...baseDocketEntry,
         docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
         documentType: 'Order',
@@ -694,7 +674,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         isSealed: true,
         sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
         servedAt: applicationContext.getUtilities().createISODateString(),
-      };
+      });
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
@@ -705,6 +685,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('throw an error if the user role is irsSuperuser and the petition document on the case is served but the requested document does not have a file attached', async () => {
+      mockCase.docketEntries[0].servedAt = '2019-08-25T05:00:00.000Z';
       mockCase.docketEntries[0] = {
         docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
         documentType: 'Petition',
@@ -723,8 +704,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('throws a not found error if the user role is irsSuperuser and the petition document on the case is served but the document requested is not on the case', async () => {
-      mockCase.docketEntries[0].servedAt = '2019-03-01T21:40:46.415Z';
-
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: MOCK_CASE.docketNumber,
@@ -745,9 +724,10 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(true);
+    });
+
+    beforeEach(() => {
+      mockCase.irsPractitioners = [irsPractitionerUser];
     });
 
     it('should not throw an error if the user is associated with the case and the document meets age requirements', async () => {
@@ -783,7 +763,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
           docketNumber: MOCK_CASE.docketNumber,
           key: baseDocketEntry.docketEntryId,
         }),
-      ).rejects.toThrow('Unauthorized to view document at this time.');
+      ).rejects.toThrow(UNAUTHORIZED_DOCUMENT_MESSAGE);
     });
   });
 
