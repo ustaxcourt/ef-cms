@@ -89,12 +89,15 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
-  isExternalUser,
   permissions,
   rawCase,
   user,
   visibilityPolicyDateFormatted,
 }) => {
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(user.role);
+
   const { DOCKET_ENTRY_SEALED_TO_TYPES, DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
@@ -185,11 +188,7 @@ export const formattedDocketEntries = (
   applicationContext: ClientApplicationContext,
 ): any => {
   const user = applicationContext.getCurrentUser();
-  const isExternalUser = applicationContext
-    .getUtilities()
-    .isExternalUser(user.role);
   const permissions = get(state.permissions);
-  // const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
   const {
     ALLOWLIST_FEATURE_FLAGS,
@@ -246,7 +245,6 @@ export const formattedDocketEntries = (
       applicationContext,
       docketNumber,
       entry,
-      isExternalUser,
       permissions,
       rawCase: caseDetail,
       user,
