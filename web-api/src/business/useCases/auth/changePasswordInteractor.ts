@@ -118,7 +118,7 @@ export const changePasswordInteractor = async (
       const adminSetUserPasswordParams: AdminSetUserPasswordCommandInput = {
         Password: password,
         Permanent: true,
-        UserPoolId: process.env.USER_POOL_ID,
+        UserPoolId: applicationContext.environment.userPoolId,
         Username: userEmail,
       };
       await applicationContext
