@@ -3,7 +3,11 @@ import {
   InitiateAuthResponse,
   RespondToAuthChallengeResponse,
 } from '@aws-sdk/client-cognito-identity-provider';
-import { InvalidEntityError, NotFoundError } from '../../../errors/errors';
+import {
+  InvalidEntityError,
+  InvalidRequest,
+  NotFoundError,
+} from '../../../errors/errors';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -21,6 +25,7 @@ describe('changePasswordInteractor', () => {
     'custom:userId': mockUserId,
     name: 'Test Petitioner',
     pendingEmail: mockUserEmail,
+    userId: mockUserId,
   };
   const mockToken = jwt.sign(mockUser, 'secret');
 
@@ -28,13 +33,17 @@ describe('changePasswordInteractor', () => {
     ChallengeName: 'NEW_PASSWORD_REQUIRED',
     Session: mockSessionId,
   };
-  const mockRespondToAuthChallengeResponse: RespondToAuthChallengeResponse = {
+
+  const mockAuthenticationResponse = {
     AuthenticationResult: {
       AccessToken: mockToken,
       IdToken: mockToken,
       RefreshToken: mockToken,
     },
   };
+
+  const mockRespondToAuthChallengeResponse: RespondToAuthChallengeResponse =
+    mockAuthenticationResponse;
 
   const mockAuthErrorHandling = jest.spyOn(loginAuth, 'authErrorHandling');
 
@@ -85,7 +94,6 @@ describe('changePasswordInteractor', () => {
 
   it('should initiate response to NEW_PASSWORD_REQUIRED challenge when a temp password is passed, and send a UPDATE_PENDING_EMAIL message using decoded jwt when the user has a pending email', async () => {
     const result = await changePasswordInteractor(applicationContext, {
-      code: mockCode,
       confirmPassword: mockPassword,
       password: mockPassword,
       tempPassword: mockPassword,
@@ -138,7 +146,6 @@ describe('changePasswordInteractor', () => {
 
     await expect(
       changePasswordInteractor(applicationContext, {
-        code: mockCode,
         confirmPassword: mockPassword,
         password: mockPassword,
         tempPassword: mockPassword,
@@ -175,7 +182,6 @@ describe('changePasswordInteractor', () => {
       });
     await expect(
       changePasswordInteractor(applicationContext, {
-        code: mockCode,
         confirmPassword: mockPassword,
         password: mockPassword,
         tempPassword: mockPassword,
@@ -200,6 +206,54 @@ describe('changePasswordInteractor', () => {
       email: mockUserEmail,
       error: new Error('Unsuccessful password change'),
       sendAccountConfirmation: false,
+    });
+  });
+
+  it('should update user password when no temp password is passed and confirmation code is valid', async () => {
+    applicationContext
+      .getCognito()
+      .initiateAuth.mockResolvedValueOnce(mockAuthenticationResponse);
+
+    const result = await changePasswordInteractor(applicationContext, {
+      code: mockCode,
+      confirmPassword: mockPassword,
+      password: mockPassword,
+      userEmail: mockUserEmail,
+    });
+
+    expect(
+      applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
+    ).toEqual({ email: mockUserEmail });
+
+    expect(
+      applicationContext.getPersistenceGateway().getForgotPasswordCode.mock
+        .calls[0][1],
+    ).toEqual({
+      userId: mockUserId,
+    });
+
+    expect(
+      applicationContext.getCognito().adminSetUserPassword,
+    ).toHaveBeenCalledWith({
+      Password: mockPassword,
+      Permanent: true,
+      UserPoolId: applicationContext.environment.userPoolId,
+      Username: mockUserEmail,
+    });
+
+    expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith({
+      AuthFlow: 'USER_PASSWORD_AUTH',
+      AuthParameters: {
+        PASSWORD: mockPassword,
+        USERNAME: mockUserEmail,
+      },
+      ClientId: applicationContext.environment.cognitoClientId,
+    });
+
+    expect(result).toEqual({
+      accessToken: mockToken,
+      idToken: mockToken,
+      refreshToken: mockToken,
     });
   });
 
@@ -232,6 +286,10 @@ describe('changePasswordInteractor', () => {
   });
 
   it('should throw an error when the forgot password code has expired', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getForgotPasswordCode.mockResolvedValueOnce(undefined);
+
     await expect(
       changePasswordInteractor(applicationContext, {
         code: mockCode,
@@ -239,11 +297,14 @@ describe('changePasswordInteractor', () => {
         password: mockPassword,
         userEmail: mockUserEmail,
       }),
-    ).rejects.toThrow(`User not found with email: ${mockUserEmail}`);
+    ).rejects.toThrow('Forgot password code expired');
 
     expect(
       applicationContext.getUserGateway().getUserByEmail,
     ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getCognito().adminSetUserPassword,
+    ).not.toHaveBeenCalled();
     expect(applicationContext.getCognito().initiateAuth).not.toHaveBeenCalled();
     expect(
       applicationContext.getWorkerGateway().initialize,
@@ -251,7 +312,7 @@ describe('changePasswordInteractor', () => {
 
     expect(mockAuthErrorHandling.mock.calls[0][1]).toEqual({
       email: mockUserEmail,
-      error: new NotFoundError(`User not found with email: ${mockUserEmail}`),
+      error: new InvalidRequest('Forgot password code expired'),
       sendAccountConfirmation: false,
     });
   });
