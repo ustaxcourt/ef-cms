@@ -1,9 +1,7 @@
 ::: STUFF TO DO :::
 - test cases
   - update broken tests with worker queue
-- Change password interactor - Update user record before logging user in (INSTEAD OF part of worker queue).
-- Change password interactor - refresh token is not set as a cookie
-- Changing Email for Practitioner as admissions cle/async/practitioners/:barNumber
+- Changing Email for Practitioner as admissions clerk for endpoint: /async/practitioners/:barNumber stalls out.
 
 ::: SOLO :::
 - Update Swagger docs (not able to delete)
