@@ -135,12 +135,14 @@ export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
+  const rawCase = get(state.caseDetail);
+
   const {
     canAllowPrintableDocketRecord,
     docketEntries,
     docketNumber,
     isSealed,
-  } = get(state.caseDetail);
+  } = rawCase;
 
   const isTerminalUser = get(state.isTerminalUser);
 
@@ -152,21 +154,14 @@ export const publicCaseDetailHelper = (
     ],
   );
 
-  let formattedDocketEntriesOnDocketRecord = docketEntries
-    .map((entry: any, _, array) => {
-      return {
-        ...entry,
-        rootDocument: DocketEntry.fetchRootDocument(entry, array),
-      };
-    })
-    .map(entry => {
-      return formatDocketEntryOnDocketRecord(applicationContext, {
-        entry,
-        isTerminalUser,
-        rawCase: state.caseDetail,
-        visibilityPolicyDate,
-      });
+  let formattedDocketEntriesOnDocketRecord = docketEntries.map(entry => {
+    return formatDocketEntryOnDocketRecord(applicationContext, {
+      entry,
+      isTerminalUser,
+      rawCase,
+      visibilityPolicyDate,
     });
+  });
 
   const { docketRecordSort } = get(state.sessionMetadata);
   const sortOrder = docketRecordSort[docketNumber];
