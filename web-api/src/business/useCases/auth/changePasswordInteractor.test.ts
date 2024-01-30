@@ -128,7 +128,7 @@ describe('changePasswordInteractor', () => {
     ).toEqual({
       message: {
         payload: { user: mockUser },
-        type: MESSAGE_TYPES.UPDATE_PENDING_EMAIL,
+        type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
       },
     });
     expect(result).toEqual({

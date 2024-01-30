@@ -6,8 +6,8 @@ export type WorkerMessage = {
 };
 
 export const MESSAGE_TYPES = {
-  UPDATE_PENDING_EMAIL: 'UPDATE_PENDING_EMAIL',
-  UPDATE_PETITIONER_CASE: 'UPDATE_PETITIONER_CASE',
+  QUEUE_UPDATE_ASSOCIATED_CASES: 'QUEUE_UPDATE_ASSOCIATED_CASES',
+  UPDATE_ASSOCIATED_CASE: 'UPDATE_ASSOCIATED_CASE',
 } as const;
 const WORKER_MESSAGE_TYPES = Object.values(MESSAGE_TYPES);
 export type WorkerMessageType = (typeof WORKER_MESSAGE_TYPES)[number];
@@ -22,18 +22,15 @@ export const workerRouter = async (
   { message }: { message: WorkerMessage },
 ): Promise<void> => {
   switch (message.type) {
-    case MESSAGE_TYPES.UPDATE_PETITIONER_CASE:
+    case MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE:
       await applicationContext
         .getUseCases()
-        .updatePetitionerCaseInteractor(applicationContext, message.payload);
+        .updateAssociatedCaseWorker(applicationContext, message.payload);
       break;
-    case MESSAGE_TYPES.UPDATE_PENDING_EMAIL:
+    case MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES:
       await applicationContext
         .getUseCases()
-        .setUserEmailFromPendingEmailInteractor(
-          applicationContext,
-          message.payload,
-        );
+        .queueUpdateAssociatedCasesWorker(applicationContext, message.payload);
       break;
     default:
       throw new Error(
