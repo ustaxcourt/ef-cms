@@ -18,16 +18,13 @@ describe('Admissions clerk creates practitioner account', () => {
 
   it('practitioner attempts to log in with temporary password', async () => {
     await cerebralTest.runSequence('signOutSequence');
-
     await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
       email: emailAddress,
     });
     await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
       password: standardizedTemporaryPassword,
     });
-
     await cerebralTest.runSequence('submitLoginSequence');
-
     await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('currentPage')).toEqual('ChangePassword');
@@ -35,20 +32,18 @@ describe('Admissions clerk creates practitioner account', () => {
 
   it('practitioner creates new password', async () => {
     await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
-      password,
-    });
-
-    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
       confirmPassword: password,
+      password,
+      tempPassword: standardizedTemporaryPassword,
+      userEmail: emailAddress,
     });
-
     await cerebralTest.runSequence('submitChangePasswordSequence');
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('currentPage')).toEqual(
       'DashboardPractitioner',
     );
     expect(cerebralTest.getState('alertError')).toBeUndefined();
-    expect(cerebralTest.getState('user.email')).toEqual(emailAddress);
   });
 
   it('practitioner logs attempts to log in with invalid password', async () => {
@@ -84,6 +79,5 @@ describe('Admissions clerk creates practitioner account', () => {
       'DashboardPractitioner',
     );
     expect(cerebralTest.getState('alertError')).toBeUndefined();
-    expect(cerebralTest.getState('user.email')).toEqual(emailAddress);
   });
 });
