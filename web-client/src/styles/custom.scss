@@ -2024,6 +2024,10 @@ button.change-scanner-button {
   }
 }
 
+.display-block {
+  display: block;
+}
+
 .display-flex {
   display: flex;
 }
@@ -2199,5 +2203,11 @@ button.change-scanner-button {
 .login-form {
   label {
     margin-bottom: 7px;
+  }
+}
+
+.login {
+  .ustc-button--unstyled {
+    text-align: left;
   }
 }
