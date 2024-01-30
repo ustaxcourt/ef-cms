@@ -1,17 +1,42 @@
 import {
+  CASE_STATUS_TYPES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from './DocketEntry';
-import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import {
+  casePetitioner,
+  docketClerk1User,
+  petitionerUser,
+} from '@shared/test/mockUsers';
+import { cloneDeep } from 'lodash';
 
-const baseDocketEntry: RawDocketEntry = {
-  ...MOCK_DOCUMENTS[0],
-  servedAt: '2018-11-21T20:49:28.192Z',
-};
+let baseDocketEntry: RawDocketEntry;
+let rawCase: RawCase;
+const visibilityChangeDate = '2018-11-21T20:49:28.192Z';
 
 describe('isDownloadable', () => {
+  const isPublic = jest.spyOn(DocketEntry, 'isPublic');
+
+  beforeEach(() => {
+    rawCase = cloneDeep(MOCK_CASE);
+    rawCase.status = CASE_STATUS_TYPES.generalDocket;
+    rawCase.docketEntries[0].servedAt = '2018-11-21T20:49:28.192Z';
+    baseDocketEntry = rawCase.docketEntries[0];
+  });
+
   describe('Court User', () => {
+    let options;
+    beforeEach(() => {
+      options = {
+        isTerminalUser: false,
+        rawCase,
+        user: docketClerk1User,
+        visibilityChangeDate,
+      };
+    });
+
     it('returns false if there is no file attached', () => {
       expect(
         DocketEntry.isDownloadable(
@@ -19,9 +44,7 @@ describe('isDownloadable', () => {
             ...baseDocketEntry,
             isFileAttached: false,
           },
-          {
-            isCourtUser: true,
-          },
+          options,
         ),
       ).toEqual(false);
     });
@@ -33,20 +56,22 @@ describe('isDownloadable', () => {
             ...baseDocketEntry,
             isFileAttached: true,
           },
-          {
-            isCourtUser: true,
-          },
+          options,
         ),
       ).toEqual(true);
     });
   });
 
-  describe('External with no have access to the case', () => {
-    const options = {
-      isCourtUser: false,
-      isPublic: true,
-      userHasAccessToCase: false,
-    };
+  describe('External with no access to the case', () => {
+    let options;
+    beforeEach(() => {
+      options = {
+        isTerminalUser: false,
+        rawCase,
+        user: petitionerUser,
+        visibilityChangeDate,
+      };
+    });
 
     it('returns false if there is no file attached', () => {
       expect(
@@ -61,49 +86,44 @@ describe('isDownloadable', () => {
     });
 
     it('returns true if the document is Public', () => {
-      expect(
-        DocketEntry.isDownloadable(
-          {
-            ...baseDocketEntry,
-            isFileAttached: true,
-          },
-          options,
-        ),
-      ).toEqual(true);
+      isPublic.mockReturnValueOnce(true);
+      expect(DocketEntry.isDownloadable(baseDocketEntry, options)).toEqual(
+        true,
+      );
     });
 
     it('returns false if the document is not Public', () => {
-      expect(
-        DocketEntry.isDownloadable(
-          {
-            ...baseDocketEntry,
-            isFileAttached: true,
-          },
-          {
-            ...options,
-            isPublic: false,
-          },
-        ),
-      ).toEqual(false);
+      isPublic.mockReturnValueOnce(false);
+      expect(DocketEntry.isDownloadable(baseDocketEntry, options)).toEqual(
+        false,
+      );
     });
   });
 
   describe('External user with access to the case', () => {
+    let options;
+
+    beforeEach(() => {
+      options = {
+        isTerminalUser: false,
+        rawCase,
+        user: {
+          ...petitionerUser,
+          entityName: 'User',
+          userId: casePetitioner.contactId,
+        },
+        visibilityChangeDate,
+      };
+
+      rawCase.petitioners = [casePetitioner];
+      isTranscriptOldEnoughToUnseal.mockReturnValue(true);
+    });
+
     const isTranscriptOldEnoughToUnseal = jest.spyOn(
       DocketEntry,
       'isTranscriptOldEnoughToUnseal',
     );
 
-    beforeEach(() => {
-      isTranscriptOldEnoughToUnseal.mockReturnValue(true);
-    });
-
-    const options = {
-      isCourtUser: false,
-      isPublic: false,
-      userHasAccessToCase: true,
-    };
-
     it('returns false if there is no file attached', () => {
       expect(
         DocketEntry.isDownloadable(
@@ -117,12 +137,10 @@ describe('isDownloadable', () => {
     });
 
     it('returns true if the document is Public', () => {
-      expect(
-        DocketEntry.isDownloadable(baseDocketEntry, {
-          ...options,
-          isPublic: true,
-        }),
-      ).toEqual(true);
+      isPublic.mockReturnValueOnce(true);
+      expect(DocketEntry.isDownloadable(baseDocketEntry, options)).toEqual(
+        true,
+      );
     });
 
     it('returns false if it is sealed to external', () => {
@@ -136,6 +154,7 @@ describe('isDownloadable', () => {
         ),
       ).toEqual(false);
     });
+
     describe('not served', () => {
       it('returns false if the document is servable', () => {
         expect(
@@ -152,6 +171,7 @@ describe('isDownloadable', () => {
 
       describe('unservable', () => {
         it('returns true if the document is public', () => {
+          isPublic.mockReturnValueOnce(true);
           expect(
             DocketEntry.isDownloadable(
               {
@@ -159,10 +179,7 @@ describe('isDownloadable', () => {
                 eventCode: UNSERVABLE_EVENT_CODES[0],
                 servedAt: undefined,
               },
-              {
-                ...options,
-                isPublic: true,
-              },
+              options,
             ),
           ).toEqual(true);
         });
@@ -305,25 +322,32 @@ describe('isDownloadable', () => {
   });
 
   describe('Terminal User', () => {
-    const options = {
-      isCourtUser: false,
-      isPublic: false,
-      isTerminalUser: true,
-      userHasAccessToCase: false,
-    };
+    let options;
+    beforeEach(() => {
+      options = {
+        isTerminalUser: true,
+        rawCase,
+        user: {
+          entityName: 'User',
+          name: '',
+          role: 'petitioner',
+          userId: '',
+        },
+        visibilityChangeDate,
+      };
+    });
 
     it('returns true if the document is Public', () => {
-      expect(
-        DocketEntry.isDownloadable(baseDocketEntry, {
-          ...options,
-          isPublic: true,
-        }),
-      ).toEqual(true);
+      isPublic.mockReturnValueOnce(true);
+      expect(DocketEntry.isDownloadable(baseDocketEntry, options)).toEqual(
+        true,
+      );
     });
 
     it('returns true if the document is not Public', () => {
+      isPublic.mockReturnValueOnce(false);
       expect(DocketEntry.isDownloadable(baseDocketEntry, options)).toEqual(
-        false,
+        true,
       );
     });
 
