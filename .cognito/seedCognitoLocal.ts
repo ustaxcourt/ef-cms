@@ -182,7 +182,7 @@ const cognitoLocalJSON: CognitoLocalJSON = {
     CreationDate: '2023-01-24T22:34:48.100Z',
     Id: 'local_2pHzece7',
     LastModifiedDate: '2023-01-24T22:34:48.100Z',
-    Name: 'MyUserPool',
+    Name: 'efcms-local',
   },
   Users: {},
 };

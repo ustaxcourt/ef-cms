@@ -4,26 +4,45 @@ import {
   DynamoDBClient,
   GetItemCommand,
 } from '@aws-sdk/client-dynamodb';
+// import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import promiseRetry from 'promise-retry';
 
 const awsRegion = 'us-east-1';
+const stage = process.env.CYPRESS_STAGE || 'local';
+console.log('&&&&&&&&&&&&&&&&&&&&&&&&&: ', stage);
+const cognitoEndpoint =
+  stage === 'local' ? 'http://localhost:9229/' : undefined;
+const accessKeyId = process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER';
+const secretAccessKey = process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER';
 
 const cognito = new CognitoIdentityProvider({
+  credentials: { accessKeyId, secretAccessKey },
+  endpoint: cognitoEndpoint,
   region: awsRegion,
 });
 
+// const dynamoDB = new DynamoDBClient({
+//   credentials: {
+//     accessKeyId: process.env.CYPRESS_AWS_ACCESS_KEY_ID!,
+//     secretAccessKey: process.env.CYPRESS_AWS_SECRET_ACCESS_KEY!,
+//     sessionToken: process.env.CYPRESS_AWS_SESSION_TOKEN,
+//   },
+//   region: awsRegion,
+// });
+const dynamoEndpoint = stage === 'local' ? 'http://localhost:8000' : undefined;
 const dynamoDB = new DynamoDBClient({
   credentials: {
-    accessKeyId: process.env.CYPRESS_AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.CYPRESS_AWS_SECRET_ACCESS_KEY!,
-    sessionToken: process.env.CYPRESS_AWS_SESSION_TOKEN,
+    accessKeyId,
+    secretAccessKey,
   },
-  region: awsRegion,
+  endpoint: dynamoEndpoint,
+  region: 'us-east-1',
 });
-
-const { ENV } = process.env;
+// const documentClient = DynamoDBDocument.from(dynamoDB, {
+//   marshallOptions: { removeUndefinedValues: true },
+// });
 const DEFAULT_ACCOUNT_PASS = process.env.CYPRESS_DEFAULT_ACCOUNT_PASS;
-const DYNAMODB_TABLE_NAME = process.env.DYNAMODB_TABLE_NAME || '';
+const DYNAMODB_TABLE_NAME = process.env.DYNAMODB_TABLE_NAME || 'efcms-local';
 
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = (await getUserPoolId()) || '';
@@ -68,8 +87,9 @@ const getUserPoolId = async () => {
   const results = await cognito.listUserPools({
     MaxResults: 50,
   });
+  console.log('^^^^^^^^ getUserPoolId: ', JSON.stringify(results, null, 2));
   const userPoolId = (results?.UserPools || []).find(
-    pool => pool.Name === `efcms-${ENV}`,
+    pool => pool.Name === `efcms-${stage}`,
   )?.Id;
   return userPoolId;
 };
@@ -107,11 +127,16 @@ async function getUserToken(password: string, username: string) {
 
 const getCognitoUserIdByEmail = async (email: string) => {
   const userPoolId = await getUserPoolId();
+  console.log('getCognitoUserIdByEmail args: ', { email, userPoolId });
   const users = await cognito.listUsers({
     AttributesToGet: ['custom:userId'],
     Filter: `email = "${email}"`,
     UserPoolId: userPoolId,
   });
+  console.log(
+    'getCognitoUserIdByEmail users: ',
+    JSON.stringify({ users }, null, 2),
+  );
 
   return users.Users?.[0].Attributes?.find(
     element => element.Name === 'custom:userId',
