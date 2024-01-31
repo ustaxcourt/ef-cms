@@ -8,12 +8,11 @@ export const OtherFilingOptions = function () {
         <h3>Other Ways to File a Case</h3>
         <Accordion gray headingLevel="3">
           <AccordionItem
-            customClassName="other-filing-option other-filing-option-mail"
+            customClassName="other-filing-option"
             data-testid="other-filing-option-mail"
             key={'other-filing-option-mail accordion-icon'}
             title={'To file by mail'}
           >
-            <hr />
             Send required forms and filing fee to:
             <br />
             United States Tax Court
@@ -23,11 +22,10 @@ export const OtherFilingOptions = function () {
             Washington, DC 20217
           </AccordionItem>
           <AccordionItem
-            customClassName="other-filing-option other-filing-option-in-person"
+            customClassName="other-filing-option"
             key={'other-filing-option-in-person accordion-icon'}
             title={'To file in person'}
           >
-            <hr />
             Please bring your forms and filing fee to:
             <br />
             United States Tax Court
