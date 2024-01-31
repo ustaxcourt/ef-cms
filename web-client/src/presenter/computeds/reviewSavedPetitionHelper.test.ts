@@ -342,6 +342,31 @@ describe('reviewSavedPetitionHelper', () => {
     ]);
   });
 
+  it('should return attachmentToPetitionFile when the file was uploaded', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {
+          docketEntries: [
+            { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
+            {
+              documentType:
+                INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      attachmentToPetitionFile: {
+        documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+      },
+      petitionFile: {
+        documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+      },
+    });
+  });
+
   describe('E-service Consent label', () => {
     it('should return E-service consent text for primary and secondary contacts when hasConsentedToEService is true', () => {
       const result = runCompute(reviewSavedPetitionHelper, {

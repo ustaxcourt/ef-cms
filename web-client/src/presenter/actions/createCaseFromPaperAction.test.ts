@@ -36,6 +36,7 @@ describe('createCaseFromPaperAction', () => {
       state: {
         form: {
           applicationForWaiverOfFilingFeeFile: {},
+          attachmentToPetitionFile: {},
           corporateDisclosureFile: {},
           petitionFile: {},
           requestForPlaceOfTrialFile: {},
@@ -57,6 +58,7 @@ describe('createCaseFromPaperAction', () => {
         .calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
+      attachmentToPetitionFile: {},
       corporateDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: MOCK_CASE,
@@ -118,6 +120,7 @@ describe('setupPercentDone', () => {
 
     const result = setupPercentDone(
       {
+        atp: { size: 1 },
         ownership: { size: 1 },
         petition: { size: 2 },
         stin: { size: 3 },
@@ -128,6 +131,7 @@ describe('setupPercentDone', () => {
     );
 
     expect(result).toMatchObject({
+      atp: {},
       ownership: {},
       petition: {},
       stin: {},
@@ -140,12 +144,13 @@ describe('setupPercentDone', () => {
     );
     expect(storeObject['fileUploadProgress.isUploading']).toEqual(true);
 
+    result.atp({ isDone: true });
     result.ownership({ isDone: true });
     result.petition({ isDone: true });
     result.stin({ isDone: true });
     result.trial({ isDone: true });
     result.waiverOfFilingFee({ loaded: 0, total: 1 });
-    expect(storeObject['fileUploadProgress.percentComplete']).toEqual(90);
+    expect(storeObject['fileUploadProgress.percentComplete']).toEqual(91);
     result.waiverOfFilingFee({ isDone: true });
     expect(storeObject['fileUploadProgress.percentComplete']).toEqual(100);
   });

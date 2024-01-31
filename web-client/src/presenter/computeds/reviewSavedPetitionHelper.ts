@@ -127,6 +127,9 @@ export const reviewSavedPetitionHelper = (
   const corporateDisclosureFile =
     documentsByType[INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType];
   const stinFile = documentsByType[INITIAL_DOCUMENT_TYPES.stin.documentType];
+  const attachmentToPetitionFile =
+    documentsByType[INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType];
+
   const applicationForWaiverOfFilingFeeFile =
     documentsByType[
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
@@ -169,6 +172,7 @@ export const reviewSavedPetitionHelper = (
 
   return {
     applicationForWaiverOfFilingFeeFile,
+    attachmentToPetitionFile,
     corporateDisclosureFile,
     eConsentFieldsEnabledFeatureFlag,
     eServiceConsentTextForPrimaryContact,
