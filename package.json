@@ -36,6 +36,7 @@
     "@opensearch-project/opensearch": "2.5.0",
     "@sentry/node": "^7.98.0",
     "@sentry/react": "^7.98.0",
+    "@sentry/webpack-plugin": "^2.10.3",
     "@sparticuz/chromium": "112.0.2",
     "@uswds/uswds": "3.7.1",
     "archiver": "6.0.1",

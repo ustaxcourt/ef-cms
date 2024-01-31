@@ -1,7 +1,9 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 
 module.exports = {
+  devtool: 'source-map',
   externals: {
     '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
     'aws-crt': 'commonjs aws-crt',
@@ -46,6 +48,11 @@ module.exports = {
         { from: 'node_modules/pdf-lib/dist', to: '.' },
         { from: 'shared/static/pdfs/amended-petition-form.pdf', to: '.' },
       ],
+    }),
+    sentryWebpackPlugin({
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: 'cody-seibert',
+      project: 'node-awslambda',
     }),
   ],
   resolve: {
