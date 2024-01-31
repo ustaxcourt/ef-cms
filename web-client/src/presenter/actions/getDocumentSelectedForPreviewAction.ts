@@ -15,7 +15,6 @@ export const getDocumentSelectedForPreviewAction = ({
   fileMetaData: string;
 }>) => {
   const { fileMetaData } = props;
-  console.log('fileMetaData', fileMetaData);
 
   // tab is selected been selected
   if (fileMetaData) {

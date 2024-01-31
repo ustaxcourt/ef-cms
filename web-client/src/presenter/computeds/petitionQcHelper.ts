@@ -51,14 +51,11 @@ export const petitionQcHelper = (
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
   const ATP_EVENT_CODE = INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode;
-  console.log('documents', documents);
 
   const hasCDS = !!documents.find(
     doc =>
       doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
   );
-
-  console.log('initialFilingDocumentTabs before', initialFilingDocumentTabs);
 
   let documentTabsToDisplay = initialFilingDocumentTabs.map(
     docToDisplayMetaData => {
@@ -76,19 +73,19 @@ export const petitionQcHelper = (
     .map(doc => {
       return {
         documentId: doc.docketEntryId,
-        documentType: doc.documentType,
+        documentType: 'attachmentToPetitionFile',
         eventCode: doc.eventCode,
         title: ATP_EVENT_CODE,
       };
     });
 
   if (atpDocketTabsForDisplay.length) {
-    // remove atp tab from documentTabsToDisplay and readd the formatted atp docket entries
-    // todo: probably find a better way.
+    const firstTwoTabs = documentTabsToDisplay.slice(0, 2);
+    const remainingTabs = documentTabsToDisplay.slice(3);
     documentTabsToDisplay = [
-      ...documentTabsToDisplay.slice(0, 2), // atp is the 3rd item in the tab
+      ...firstTwoTabs,
       ...atpDocketTabsForDisplay,
-      ...documentTabsToDisplay.slice(2 + 1), // re-add RQT, CDS AND APW
+      ...remainingTabs,
     ];
   }
 

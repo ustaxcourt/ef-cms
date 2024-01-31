@@ -432,35 +432,38 @@ export const PetitionQcScanBatchPreviewer = connect(
     };
 
     const renderTabs = documentTabsList => {
-      console.log('documentTabsList', documentTabsList);
       if (documentTabsList && documentTabsList.length > 1) {
         return (
           <Tabs
             bind="currentViewMetadata.documentSelectedForPreview"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
             onSelect={fileMetaData => {
-              console.log('fileMetaData', fileMetaData);
               setDocumentForPreviewSequence({ fileMetaData }); // todo: decide how this sequence is been used in other places and may migrate all the logic from its actions to the new sequence
             }}
           >
-            {documentTabsList.map(documentTab => (
-              <Tab
-                data-testid={`${documentTab.documentType}_${documentTab.documentId}`}
-                icon={
-                  scanHelper[`${documentTab.documentType}Completed`] && (
-                    <FontAwesomeIcon
-                      color="green"
-                      icon={['fas', 'check-circle']}
-                    />
-                  )
-                }
-                key={documentTab.documentId}
-                tabName={`${documentTab.documentType}_${documentTab.documentId}`}
-                // key={documentTab.documentType}
-                // tabName={documentTab.documentType}
-                title={documentTab.title}
-              />
-            ))}
+            {documentTabsList.map(documentTab => {
+              const isFileUploaded =
+                scanHelper[`${documentTab.documentType}Completed`];
+
+              return (
+                <Tab
+                  data-testid={`${documentTab.documentType}_${documentTab.documentId}`}
+                  icon={
+                    isFileUploaded && (
+                      <FontAwesomeIcon
+                        color="green"
+                        icon={['fas', 'check-circle']}
+                      />
+                    )
+                  }
+                  key={documentTab.documentId}
+                  tabName={`${documentTab.documentType}_${documentTab.documentId}`}
+                  // key={documentTab.documentType}
+                  // tabName={documentTab.documentType}
+                  title={documentTab.title}
+                />
+              );
+            })}
           </Tabs>
         );
       }
