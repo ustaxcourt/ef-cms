@@ -1,42 +1,21 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { Focus } from '@web-client/ustc-ui/Focus/Focus';
+import { ErrorBanner } from '@web-client/views/ErrorBanner';
 import React from 'react';
-
-const CaselessNotification = () => {
-  return (
-    <div
-      aria-live="polite"
-      className="usa-alert usa-alert--error"
-      data-testid="error-alert"
-      role="alert"
-    >
-      <div className="usa-alert__body">
-        <Focus>
-          <h2 className="usa-alert__text">
-            Have you already filed a petition by mail or want electronic access
-            to your existing case?
-          </h2>
-        </Focus>
-        <p className="usa-alert__text">
-          Do not start a new case. Email{' '}
-          <a
-            href={
-              'mailto:dawson.support@ustaxcourt.gov?subject=eAccess to existing case'
-            }
-          >
-            dawson.support@ustaxcourt.gov
-          </a>{' '}
-          with your case&apos;s docket number (e.g. 12345-67) to get access to
-          your existing case.
-        </p>
-      </div>
-    </div>
-  );
-};
 
 export const WhatToExpect = () => (
   <>
-    <CaselessNotification />
+    <ErrorBanner
+      showSingleMessage
+      messages={[
+        `Do not start a new case. Email <a href={
+        'mailto:dawson.support@ustaxcourt.gov?subject=eAccess to existing case'
+      }>
+      dawson.support@ustaxcourt.gov</a> with your case's docket number (e.g. 12345-67) to get access to
+    your existing case.`,
+      ]}
+      title="Have you already filed a petition by mail or want electronic access to
+    your existing case?"
+    />
     <h2>What to Expect When Filing a Case Online</h2>
     <p>
       To file a case with the Tax Court, you’ll need to submit the following
