@@ -47,7 +47,8 @@ export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES, INITIAL_DOCUMENT_TYPES_FILE_MAP } =
+    applicationContext.getConstants();
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
   const ATP_EVENT_CODE = INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode;
@@ -56,6 +57,13 @@ export const petitionQcHelper = (
     doc =>
       doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
   );
+
+  const documentSelectedForPreview = get(
+    state.currentViewMetadata.documentSelectedForPreview,
+  );
+
+  const isPetitionFile =
+    documentSelectedForPreview === INITIAL_DOCUMENT_TYPES_FILE_MAP.petition;
 
   let documentTabsToDisplay = initialFilingDocumentTabs.map(
     docToDisplayMetaData => {
@@ -88,28 +96,6 @@ export const petitionQcHelper = (
       ...remainingTabs,
     ];
   }
-
-  const documentTypeMap = {
-    applicationForWaiverOfFilingFeeFile:
-      INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
-    attachmentToPetitionFile:
-      INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
-    corporateDisclosureFile:
-      INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
-    petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
-    requestForPlaceOfTrialFile:
-      INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-    stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
-  };
-  const documentSelectedForPreview = get(
-    state.currentViewMetadata.documentSelectedForPreview,
-  );
-
-  const documentTypeSelectedForPreview =
-    documentTypeMap[documentSelectedForPreview];
-
-  const isPetitionFile =
-    documentTypeSelectedForPreview === documentTypeMap.petitionFile;
 
   if (!isPaper) {
     documentTabsToDisplay = documentTabsToDisplay.filter(tab => {
