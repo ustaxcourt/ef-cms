@@ -27,20 +27,20 @@ data "archive_file" "zip_api" {
   output_path = "${path.module}/../template/lambdas/api.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
   excludes = [
-    "api-public.js",
-    "websockets.js",
-    "trial-session.js",
-    "send-emails.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
+    "api-public.js*",
+    "websockets.js*",
+    "trial-session.js*",
+    "send-emails.js*",
+    "websockets.js*",
+    "maintenance-notify.js*",
+    "cron.js*",
+    "streams.js*",
+    "cognito-triggers.js*",
+    "cognito-authorizer.js*",
+    "public-api-authorizer.js*",
+    "handle-bounced-service-email.js*",
+    "seal-in-lower-environment.js*",
+    "pdf-generation.js*",
     "report.html"
   ]
 }
@@ -50,19 +50,19 @@ data "archive_file" "zip_send_emails" {
   output_path = "${path.module}/../template/lambdas/send_emails.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
   excludes = [
-    "api-public.js",
-    "api.js",
-    "trial-session.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
+    "api-public.js*",
+    "api.js*",
+    "trial-session.js*",
+    "websockets.js*",
+    "maintenance-notify.js*",
+    "cron.js*",
+    "streams.js*",
+    "cognito-triggers.js*",
+    "cognito-authorizer.js*",
+    "public-api-authorizer.js*",
+    "handle-bounced-service-email.js*",
+    "seal-in-lower-environment.js*",
+    "pdf-generation.js*",
     "report.html"
   ]
 }
@@ -72,19 +72,19 @@ data "archive_file" "zip_trial_session" {
   output_path = "${path.module}/../template/lambdas/trial_session.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
   excludes = [
-    "api-public.js",
-    "api.js",
-    "websockets.js",
-    "send-emails.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
+    "api-public.js*",
+    "api.js*",
+    "websockets.js*",
+    "send-emails.js*",
+    "maintenance-notify.js*",
+    "cron.js*",
+    "streams.js*",
+    "cognito-triggers.js*",
+    "cognito-authorizer.js*",
+    "public-api-authorizer.js*",
+    "handle-bounced-service-email.js*",
+    "seal-in-lower-environment.js*",
+    "pdf-generation.js*",
     "report.html"
   ]
 }
@@ -94,19 +94,19 @@ data "archive_file" "zip_triggers" {
   output_path = "${path.module}/../template/lambdas/cognito-triggers.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
   excludes = [
-    "api.js",
-    "api-public.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "trial-session.js",
-    "send-emails.js",
-    "seal-in-lower-environment.js",
-    "cron.js",
-    "streams.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "pdf-generation.js",
+    "api.js*",
+    "api-public.js*",
+    "websockets.js*",
+    "maintenance-notify.js*",
+    "trial-session.js*",
+    "send-emails.js*",
+    "seal-in-lower-environment.js*",
+    "cron.js*",
+    "streams.js*",
+    "cognito-authorizer.js*",
+    "public-api-authorizer.js*",
+    "handle-bounced-service-email.js*",
+    "pdf-generation.js*",
     "report.html"
   ]
 }
@@ -117,18 +117,18 @@ data "archive_file" "pdf_generation" {
   output_path = "${path.module}/../template/lambdas/pdf-generation.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
   excludes = [
-    "api.js",
-    "api-public.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "trial-session.js",
-    "send-emails.js",
-    "seal-in-lower-environment.js",
-    "cron.js",
-    "streams.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
+    "api.js*",
+    "api-public.js*",
+    "websockets.js*",
+    "maintenance-notify.js*",
+    "trial-session.js*",
+    "send-emails.js*",
+    "seal-in-lower-environment.js*",
+    "cron.js*",
+    "streams.js*",
+    "cognito-authorizer.js*",
+    "public-api-authorizer.js*",
+    "handle-bounced-service-email.js*",
     "report.html"
   ]
 }
