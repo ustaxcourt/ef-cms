@@ -1,7 +1,7 @@
 const getConfig = require('./webpack.config.lambda');
 
 module.exports = {
-  ...getConfig(Object.keys(['.']).map(key => `./${key.split('/')[0]}`)),
+  ...getConfig(['.']),
   entry: {
     'migration-status':
       './web-api/workflow-terraform/migration-cron/main/lambdas/migration-status.js',

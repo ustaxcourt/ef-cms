@@ -1,4 +1,4 @@
-import { captureException } from '@web-api/sentry';
+import { captureException, setUser } from '@web-api/sentry';
 import { createApplicationContext } from './applicationContext';
 import {
   getConnectionIdFromEvent,
@@ -61,6 +61,9 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
 export const genericHandler = (awsEvent, cb, options = {}) => {
   return handle(awsEvent, async () => {
     const user = options.user || getUserFromAuthHeader(awsEvent);
+    setUser({
+      userId: user.userId as string,
+    });
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     const applicationContext =
       options.applicationContext ||

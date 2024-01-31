@@ -1,7 +1,7 @@
-const config = require('./webpack.config.lambda');
+const getConfig = require('./webpack.config.lambda');
 
 module.exports = {
-  ...config,
+  ...getConfig(['.']),
   entry: {
     'reindex-status':
       './web-api/workflow-terraform/reindex-cron/main/lambdas/reindex-status.js',

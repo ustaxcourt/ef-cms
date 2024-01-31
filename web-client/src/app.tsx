@@ -180,6 +180,9 @@ const app = {
         .getUserInteractor(applicationContext);
       presenter.state.user = user;
       applicationContext.setCurrentUser(user);
+      Sentry.setUser({
+        id: user.userId,
+      });
     }
 
     if (presenter.state.token) {

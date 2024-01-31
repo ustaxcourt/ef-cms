@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -14,4 +15,7 @@ export const setUserAction = ({
 }: ActionProps) => {
   store.set(state.user, props.user);
   applicationContext.setCurrentUser(props.user);
+  Sentry.setUser({
+    id: props.user.userId,
+  });
 };

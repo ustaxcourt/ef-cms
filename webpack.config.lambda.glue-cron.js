@@ -1,7 +1,7 @@
 const getConfig = require('./webpack.config.lambda');
 
 module.exports = {
-  ...getConfig(Object.keys(['.']).map(key => `./${key.split('/')[0]}`)),
+  ...getConfig(['.']),
   entry: {
     'glue-job-status':
       './web-api/workflow-terraform/glue-cron/main/lambdas/glue-job-status.js',
