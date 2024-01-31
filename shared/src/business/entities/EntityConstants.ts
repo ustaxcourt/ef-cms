@@ -603,7 +603,7 @@ export const INITIAL_DOCUMENT_TYPES = {
     documentTitle: 'Corporate Disclosure Statement',
     documentType: 'Corporate Disclosure Statement',
     eventCode: 'DISC',
-    tabTitle: 'DISC',
+    tabTitle: 'CDS',
     sort: 4,
   },
   petition: {

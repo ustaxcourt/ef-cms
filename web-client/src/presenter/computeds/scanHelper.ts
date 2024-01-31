@@ -24,7 +24,7 @@ export const scanHelper = (
   let APWFileCompleted;
   let PFileCompleted;
   let ATPFileCompleted;
-  let DISCFileCompleted;
+  let CDSFileCompleted;
   let STINFileCompleted;
   let RQTFileCompleted;
 
@@ -50,7 +50,7 @@ export const scanHelper = (
       documents: formCaseDocuments,
     });
 
-  DISCFileCompleted =
+  CDSFileCompleted =
     !!get(state.form.corporateDisclosureFile) ||
     !!getCaseDocumentByDocumentType({
       documentType: INITIAL_DOCUMENT_TYPES_MAP.corporateDisclosureFile,
@@ -82,7 +82,7 @@ export const scanHelper = (
   return {
     APWFileCompleted,
     ATPFileCompleted,
-    DISCFileCompleted,
+    CDSFileCompleted,
     PFileCompleted,
     RQTFileCompleted,
     STINFileCompleted,
