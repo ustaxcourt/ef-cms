@@ -353,9 +353,6 @@ const app = {
             <AppInstanceManager />
           </>
         )}
-        <button onClick={() => (window as any).methodDoesNotExist()}>
-          Break the world
-        </button>
         <AppComponent />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,

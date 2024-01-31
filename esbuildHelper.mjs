@@ -136,8 +136,10 @@ export default async function ({
                 runtime: 'automatic',
               },
             ],
+            '@babel/preset-typescript',
           ],
           sourceType: 'unambiguous',
+          sourceMaps: 'inline',
           targets: 'defaults',
         },
         filter: /\.(js|ts|jsx|tsx)$/,
@@ -177,7 +179,7 @@ export default async function ({
         },
       },
     ],
-    sourcemap: process.env.USTC_ENV !== 'prod',
+    sourcemap: true,
     splitting: true,
   };
 
