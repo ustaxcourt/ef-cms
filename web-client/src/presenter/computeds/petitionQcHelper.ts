@@ -85,6 +85,8 @@ export const petitionQcHelper = (
       };
     });
 
+  documentTabsToDisplay.sort((a, b) => a.sort - b.sort);
+
   if (atpDocketTabsForDisplay.length) {
     const firstTwoTabs = documentTabsToDisplay.slice(0, 2);
     const remainingTabs = documentTabsToDisplay.slice(3);
@@ -106,9 +108,6 @@ export const petitionQcHelper = (
       }
     });
   }
-  console.log('before documentTabsToDisplay', documentTabsToDisplay);
-  documentTabsToDisplay.sort((a, b) => a.sort - b.sort);
-  console.log('after documentTabsToDisplay', documentTabsToDisplay);
   return {
     documentTabsToDisplay,
     isPetitionFile,
