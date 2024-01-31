@@ -32,13 +32,9 @@ export const formattedMessages = (
     message.caseStatus = statusWithTrialInfo;
   });
 
-  const { box } = get(state.messageBoxToDisplay);
   const { role } = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
 
-  if (box === 'outbox' && role !== USER_ROLES.adc) {
-    messages.reverse();
-  }
   const hasMessages = messages.length > 0;
 
   let showFilters = role === USER_ROLES.adc;

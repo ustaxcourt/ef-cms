@@ -8,6 +8,7 @@ describe('getDocumentEditUrlAsPathAction', () => {
   const documentToMatch = {
     docketEntryId: docketEntryIdToEdit,
     documentType: 'Order',
+    draftOrderState: undefined as any,
   };
 
   documentToMatch.draftOrderState = { ...documentToMatch };
@@ -60,7 +61,7 @@ describe('getDocumentEditUrlAsPathAction', () => {
         parentMessageId: '09a41e75-cdbb-42a0-a602-e59d50a3ba6e',
       },
     });
-    expect(result.output.path).toContain(
+    expect(result.output!.path).toContain(
       '/09a41e75-cdbb-42a0-a602-e59d50a3ba6e',
     );
   });
@@ -84,6 +85,6 @@ describe('getDocumentEditUrlAsPathAction', () => {
       },
       state: {},
     });
-    expect(result.output.path).toEqual('/case-detail/123-19/edit-order/321');
+    expect(result.output!.path).toEqual('/case-detail/123-19/edit-order/321');
   });
 });

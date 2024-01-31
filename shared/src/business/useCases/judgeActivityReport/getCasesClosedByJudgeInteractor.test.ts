@@ -3,7 +3,7 @@ import {
   CasesClosedReturnType,
   getCasesClosedByJudgeInteractor,
 } from './getCasesClosedByJudgeInteractor';
-import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
+import { JudgeActivityStatisticsRequest } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   createEndOfDayISO,
@@ -40,7 +40,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
     year,
   });
 
-  const mockValidRequest: JudgeActivityReportFilters = {
+  const mockValidRequest: JudgeActivityStatisticsRequest = {
     endDate: calculatedEndDate,
     judges: [judgeUser.name],
     startDate: calculatedStartDate,

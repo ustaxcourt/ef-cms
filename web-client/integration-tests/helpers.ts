@@ -17,7 +17,6 @@ import {
 import { JSDOM } from 'jsdom';
 import { S3, SQS } from 'aws-sdk';
 import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
-import { applicationContext } from '../src/applicationContext';
 import {
   back,
   createObjectURL,
@@ -26,6 +25,7 @@ import {
   router,
 } from '../src/router';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
+import { applicationContext as clientApplicationContext } from '../src/applicationContext';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
 import {
@@ -85,6 +85,9 @@ import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 import sass from 'sass';
+
+const applicationContext =
+  clientApplicationContext as unknown as IApplicationContext;
 
 const { CASE_TYPES_MAP, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
   applicationContext.getConstants();
@@ -454,7 +457,7 @@ export const setFeatureFlag = async (isEnabled, key) => {
 
 export const getFormattedDocumentQCSectionInbox = async (
   cerebralTest,
-  selectedSection = null,
+  selectedSection?: string,
 ) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
@@ -759,7 +762,7 @@ export const uploadExternalAdministrativeRecord = async cerebralTest => {
 
 export const uploadPetition = async (
   cerebralTest,
-  overrides = {},
+  overrides: any = {},
   loginUsername = 'petitioner@example.com',
 ) => {
   if (!userMap[loginUsername]) {
@@ -806,6 +809,7 @@ export const uploadPetition = async (
   const userToken = jwt.sign(user, 'secret');
 
   const data = {
+    corporateDisclosureFileId: undefined,
     petitionFileId,
     petitionMetadata,
     stinFileId,
@@ -1130,7 +1134,7 @@ export const waitUntil = cb => {
         resolve();
       }
     };
-    waitUntilInternal();
+    return waitUntilInternal();
   });
 };
 
