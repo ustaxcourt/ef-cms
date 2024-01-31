@@ -25,3 +25,7 @@ variable "migrate_flag" {
 variable "circle_machine_user_token" {
   type = string
 }
+
+variable "deployment_timestamp" {
+  type = number
+}

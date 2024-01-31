@@ -18,14 +18,15 @@ resource "aws_lambda_function" "reindex_status_lambda" {
 
   environment {
     variables = {
+      ACCOUNT_ID                    = data.aws_caller_identity.current.account_id
+      CIRCLE_MACHINE_USER_TOKEN     = var.circle_machine_user_token
+      CIRCLE_WORKFLOW_ID            = var.circle_workflow_id
+      DEPLOYMENT_TIMESTAMP          = var.deployment_timestamp
       DESTINATION_TABLE             = var.destination_table
-      STAGE                         = var.environment
+      MIGRATE_FLAG                  = var.migrate_flag
       NODE_ENV                      = "production"
       SOURCE_TABLE                  = var.source_table
-      ACCOUNT_ID                    = data.aws_caller_identity.current.account_id
-      CIRCLE_WORKFLOW_ID            = var.circle_workflow_id
-      MIGRATE_FLAG                  = var.migrate_flag
-      CIRCLE_MACHINE_USER_TOKEN     = var.circle_machine_user_token
+      STAGE                         = var.environment
     }
   }
 }
