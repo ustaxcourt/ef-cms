@@ -8,7 +8,7 @@
 ./check-env-variables.sh \
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY" \
-  "ENV"
+  "SOURCE_TABLE"
 
 NOW=$(date -u "+%Y-%m-%dT%H:%M:%SZ")
 TOMORROW=$(($(date "+%s") + 86400))
