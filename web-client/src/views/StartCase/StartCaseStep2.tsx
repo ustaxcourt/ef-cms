@@ -47,6 +47,7 @@ export const StartCaseStep2 = connect(
         <Hint>
           Don’t forget to remove or block out (redact) your personal information
           on all your documents, including any IRS notice(s).
+          {/* TODO: verify this text vs mockup */}
         </Hint>
         <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required unless otherwise noted

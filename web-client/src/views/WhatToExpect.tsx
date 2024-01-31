@@ -19,16 +19,18 @@ export const WhatToExpect = () => (
     <h2>What to Expect When Filing a Case Online</h2>
     <p>
       To file a case with the Tax Court, you’ll need to submit the following
-      items. After the case has been processed, you&apos;ll be able to log in at
-      any time to view the status and take action on the case.
+      items that can be prepared in advance. Once you start a case, you
+      won&apos;t be able to save your work and come back to it. After the case
+      has been processed, you&apos;ll be able to log in at any time to view the
+      status and take action on the case.
     </p>
     <div className="icon-list">
       <span className="description-wrapper">
         <p className="label">1. Petition form</p>
         <p>
           This is the document where that explains why you disagree with the
-          Internal Revenue Service (IRS). There are two methods to add the
-          Petition:
+          Internal Revenue Service (IRS). There are two options you may use to
+          provide the Petition:
           <ul>
             <li>
               Complete and upload the Court&apos;s standard Petition Form.{' '}
@@ -63,13 +65,11 @@ export const WhatToExpect = () => (
             </li>
           </ul>
         </p>
-        <p className="label">2. PDF of your IRS Notice(s)</p>
+        <p className="label">2. IRS Notice(s)</p>
         <p>
           If you recieved a Notice(s) from the IRS:
           <ol type="a">
-            <li>
-              Include a copy of the Notices you received with the Petition.{' '}
-            </li>
+            <li>Submit a PDF of the Notice(s) you received. </li>
             <li>
               Remove or block out (redact) your Social Security Number (SSN),
               Tax Identification Number (TIN) , or Employer Identification
@@ -85,8 +85,7 @@ export const WhatToExpect = () => (
         <p>
           This is used to help the IRS identify who you are. This is the only
           document that should contain your SSN, TIN, OR EIN. The STIN will{' '}
-          <span className="text-bold">not</span> be visible as part of the case
-          record.
+          <strong>not</strong> be visible as part of the case record.
           <br />
           <Button
             link
