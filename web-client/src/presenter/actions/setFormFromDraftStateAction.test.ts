@@ -132,20 +132,19 @@ describe('setFormFromDraftStateAction', () => {
       },
     });
 
-    expect(result.state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+    expect(result.state.createOrderSelectedCases).toEqual([
       {
+        checkboxDisabled: false,
         checked: true,
         docketNumberWithSuffix: '123-45',
       },
       {
+        checkboxDisabled: false,
         checked: false,
         docketNumberWithSuffix: '124-45',
       },
       {
         checkboxDisabled: false,
-
-
-
         checked: true,
         docketNumberWithSuffix: '125-45',
       },
@@ -163,7 +162,6 @@ describe('setFormFromDraftStateAction', () => {
             { docketNumberWithSuffix: '123-45' },
             { docketNumberWithSuffix: '124-45' },
             { docketNumberWithSuffix: '125-45' },
-
           ],
           docketEntries: [
             {
@@ -183,20 +181,23 @@ describe('setFormFromDraftStateAction', () => {
       },
     });
 
-
     expect(result.state.createOrderAddedDocketNumbers).toEqual([
       '123-45',
       '125-45',
     ]);
+
     expect(result.state.createOrderSelectedCases).toEqual([
       {
         checkboxDisabled: false,
-
+        checked: true,
+        docketNumberWithSuffix: '123-45',
+      },
+      {
+        checkboxDisabled: false,
         checked: false,
         docketNumberWithSuffix: '124-45',
       },
       {
-
         checkboxDisabled: false,
         checked: true,
         docketNumberWithSuffix: '125-45',
