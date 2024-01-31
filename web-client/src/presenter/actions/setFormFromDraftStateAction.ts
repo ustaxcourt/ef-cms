@@ -29,7 +29,6 @@ export const setFormFromDraftStateAction = ({ props, store }: ActionProps) => {
       const casesWithCheckMetadata = caseDetail.consolidatedCases.map(
         aCase => ({
           ...aCase,
-
           checkboxDisabled: false,
           checked: addedDocketNumbers.includes(aCase.docketNumberWithSuffix),
         }),
