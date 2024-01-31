@@ -586,9 +586,7 @@ describe('Messages', () => {
           );
 
           cy.get('[data-testid="messages-completed-tab"]').click();
-          cy.get('[data-testid="table-filters-component"]').should(
-            'be.visible',
-          );
+          cy.get('[data-testid="table-filters-component"]').should('not.exist');
 
           cy.get('[data-testid="switch-to-section-messages-button"]').click();
           cy.get('[data-testid="table-filters-component"]').should(
