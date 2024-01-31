@@ -281,6 +281,20 @@ const formatTrialSessionScheduling = ({
   }
 };
 
+export const getEditUrl = ({
+  docketEntryId,
+  docketNumber,
+  documentType,
+}: {
+  docketNumber: string;
+  documentType: string;
+  docketEntryId: string;
+}) => {
+  return documentType === 'Miscellaneous'
+    ? `/case-detail/${docketNumber}/edit-upload-court-issued/${docketEntryId}`
+    : `/case-detail/${docketNumber}/edit-order/${docketEntryId}`;
+};
+
 export const formatCase = (applicationContext, caseDetail) => {
   if (isEmpty(caseDetail)) {
     return {};
@@ -292,10 +306,11 @@ export const formatCase = (applicationContext, caseDetail) => {
       .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)
       .map(docketEntry => ({
         ...formatDocketEntry(applicationContext, docketEntry),
-        editUrl:
-          docketEntry.documentType === 'Miscellaneous'
-            ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${docketEntry.docketEntryId}`
-            : `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}`,
+        editUrl: getEditUrl({
+          docketEntryId: docketEntry.docketEntryId,
+          docketNumber: caseDetail.docketNumber,
+          documentType: docketEntry.documentType,
+        }),
         signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
         signedAtFormatted: applicationContext
           .getUtilities()
