@@ -780,14 +780,12 @@ jobs:
       - run:
           name: Set Migration End Timestamp Value in Streams Lambda
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              MIGRATION_END_TIMESTAMP=$(date "+%s")
-              ./web-api/terraform/bin/edit-lambda-environment.sh \
-                -l "streams_${ENV}_${CURRENT_COLOR}" \
-                -k MIGRATION_END_TIMESTAMP \
-                -v "$MIGRATION_END_TIMESTAMP" \
-                -r us-east-1
-            fi
+            MIGRATION_END_TIMESTAMP=$(date "+%s")
+            ./web-api/terraform/bin/edit-lambda-environment.sh \
+              -l "streams_${ENV}_${CURRENT_COLOR}" \
+              -k MIGRATION_END_TIMESTAMP \
+              -v "$MIGRATION_END_TIMESTAMP" \
+              -r us-east-1
       - run:
           name: Disable Wait for Workflow Cron
           command: |
