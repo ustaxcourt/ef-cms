@@ -30,7 +30,7 @@ fi
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 [ -z "${SENTRY_DSN_API}" ] && echo "You must have SENTRY_DSN_API set in your environment" && exit 1
-
+[ -z "${SENTRY_AUTH_TOKEN}" ] && echo "You must have SENTRY_DSN_API set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
@@ -53,6 +53,7 @@ echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
 echo "  - SENTRY_DSN_API=${SENTRY_DSN_API}"
+echo "  - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}"
 
 ../../../scripts/verify-terraform-version.sh
 
