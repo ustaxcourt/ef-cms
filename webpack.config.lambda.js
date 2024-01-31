@@ -2,6 +2,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 
+console.log('process.env.SENTRY_AUTH_TOKEN', process.env.SENTRY_AUTH_TOKEN);
+
 module.exports = {
   devtool: 'source-map',
   externals: {

@@ -30,7 +30,7 @@ fi
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 [ -z "${SENTRY_DSN_API}" ] && echo "You must have SENTRY_DSN_API set in your environment" && exit 1
-[ -z "${SENTRY_AUTH_TOKEN}" ] && echo "You must have SENTRY_DSN_API set in your environment" && exit 1
+[ -z "${SENTRY_AUTH_TOKEN}" ] && echo "You must have SENTRY_AUTH_TOKEN set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
@@ -81,6 +81,7 @@ npm run build:assets
 # exit on any failure
 set -eo pipefail
 # build the cognito authorizer, api, and api-public with web pack
+echo "TOKEN - ${SENTRY_AUTH_TOKEN}"
 npm run build:lambda:api
 
 if [ -z "${CIRCLE_BRANCH}" ]; then
