@@ -834,12 +834,10 @@ jobs:
       - run:
           name: Unset Migration Values in Streams Lambda
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./web-api/terraform/bin/edit-lambda-environment.sh \
-                -l "streams_${ENV}_${CURRENT_COLOR}" \
-                -j '{ "MIGRATION_BEGIN_TIMESTAMP": "", "MIGRATION_END_TIMESTAMP": "", "MIGRATION_WORKFLOW": "" }' \
-                -r us-east-1
-            fi
+            ./web-api/terraform/bin/edit-lambda-environment.sh \
+              -l "streams_${ENV}_${CURRENT_COLOR}" \
+              -j '{ "MIGRATION_BEGIN_TIMESTAMP": "", "MIGRATION_END_TIMESTAMP": "", "MIGRATION_WORKFLOW": "" }' \
+              -r us-east-1
       - run:
           name: Kick off a deployment
           command: |
