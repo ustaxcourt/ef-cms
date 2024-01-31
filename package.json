@@ -12,7 +12,7 @@
     "@18f/us-federal-holidays": "4.0.0",
     "@aws-crypto/sha256-browser": "5.2.0",
     "@aws-sdk/client-cloudwatch": "3.499.0",
-    "@aws-sdk/client-cognito-identity-provider": "3.499.0",
+    "@aws-sdk/client-cognito-identity-provider": "3.490.0",
     "@aws-sdk/client-dynamodb": "3.490.0",
     "@aws-sdk/client-glue": "3.499.0",
     "@aws-sdk/client-lambda": "3.499.0",
