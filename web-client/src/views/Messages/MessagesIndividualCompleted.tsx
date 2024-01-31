@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
-import { TableFilters } from '../../ustc-ui/Table/TableFilters';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -11,33 +10,17 @@ export const MessagesIndividualCompleted = connect(
   {
     constants: state.constants,
     formattedMessages: state.formattedMessages,
-    screenMetadata: state.screenMetadata,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesIndividualCompleted({
     constants,
     formattedMessages,
-    screenMetadata,
     sortTableSequence,
     tableSort,
-    updateScreenMetadataSequence,
   }) {
     return (
       <>
-        <TableFilters
-          filters={[
-            {
-              isSelected: screenMetadata.completedBy,
-              key: 'completedBy',
-              label: 'Completed By',
-              options: formattedMessages.completedByUsers,
-              useInlineSelect: false,
-            },
-          ]}
-          onSelect={updateScreenMetadataSequence}
-        ></TableFilters>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
