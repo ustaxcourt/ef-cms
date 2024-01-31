@@ -42,7 +42,7 @@ export const StartCaseStep5 = connect(
           your PDF(s) to ensure all personal information has been removed or
           redacted from all documents EXCEPT the Statement of Taxpayer
           Identification Number (STIN). You will not be able to make changes to
-          your case once you submit it without filing a motion.{' '}
+          your case once you submit it without filing a motion.
         </Hint>
 
         <div className="grid-container padding-x-0 create-case-review">
@@ -241,10 +241,11 @@ export const StartCaseStep5 = connect(
                 <ol className="numbered-list">
                   <li>
                     Double check your IRS Notice to ensure your Petition is
-                    timely. &nbsp;
+                    timely.{' '}
                     <strong>
-                      In most cases, the Court must receive your Petition no
-                      later than 11:59 pm Eastern Time on the last date to file.
+                      In most cases, the Court must receive your electronically
+                      filed Petition no later than 11:59 pm Eastern Time on the
+                      last date to file.
                     </strong>
                   </li>
                   <li>

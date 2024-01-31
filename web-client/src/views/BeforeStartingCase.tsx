@@ -156,8 +156,8 @@ export const BeforeStartingCase = connect(
                     Save your Petition as a PDF (max file size of 250MB).
                     <span className="usa-hint">
                       *<strong>Do not include</strong> any additional documents
-                      with your Petition, except for the IRS notice. Documents
-                      that might be evidence can be submitted at a later time.
+                      with your Petition. Documents that might be evidence can
+                      be submitted at a later time.
                     </span>
                   </p>
                   <p className="label">3. Create a PDF of your IRS Notice(s)</p>
@@ -178,8 +178,8 @@ export const BeforeStartingCase = connect(
                     </ol>
                     <span className="usa-hint">
                       *<strong>Do not include</strong> any additional documents
-                      with your Petition, except for the IRS notice. Documents
-                      that might be evidence can be submitted at a later time.
+                      with your Petition. Documents that might be evidence can
+                      be submitted at a later time.
                     </span>
                   </p>
                 </AccordionItem>
