@@ -64,6 +64,7 @@ import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/ge
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
+import { genericHandler } from '@web-api/genericHandler';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
@@ -1051,4 +1052,17 @@ if (process.env.IS_LOCAL) {
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 
   app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
+
+  app.get(
+    '/error',
+    lambdaWrapper(event =>
+      genericHandler(
+        event,
+        () => {
+          throw new Error('something went very wrong REMOVE ME LATER');
+        },
+        { logResults: true },
+      ),
+    ),
+  );
 }
