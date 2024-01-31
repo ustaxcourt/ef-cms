@@ -79,32 +79,39 @@ export const StartCaseStep5 = connect(
                             </div>
                           </div>
                         </div>
-                        {!!form.atpFiles?.length && (
-                          <div className="grid-row margin-top-3">
-                            <div className="grid-col">
-                              <span className="usa-label usa-label-display">
-                                IRS notice(s)
-                              </span>
-                              {form.atpFiles.map(atpFile => {
-                                return (
-                                  <div className="grid-row" key={atpFile.name}>
-                                    <div className="grid-col flex-auto">
-                                      <PDFPreviewButton
-                                        data-testid="petition-preview-button"
-                                        file={atpFile}
-                                        id="petition-preview-button"
-                                        shouldAbbreviateTitle={false}
-                                        shouldWrapText={true}
-                                        showIcon={false}
-                                        title="Petition"
-                                      />
+                        <div className="grid-row margin-top-3">
+                          <div className="grid-col">
+                            <span className="usa-label usa-label-display">
+                              IRS notice(s)
+                            </span>
+                            {form.atpFiles?.length ? (
+                              <div>
+                                {form.atpFiles.map(atpFile => {
+                                  return (
+                                    <div
+                                      className="grid-row"
+                                      key={atpFile.name}
+                                    >
+                                      <div className="grid-col flex-auto">
+                                        <PDFPreviewButton
+                                          data-testid="petition-preview-button"
+                                          file={atpFile}
+                                          id="petition-preview-button"
+                                          shouldAbbreviateTitle={false}
+                                          shouldWrapText={true}
+                                          showIcon={false}
+                                          title="Petition"
+                                        />
+                                      </div>
                                     </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
+                                  );
+                                })}
+                              </div>
+                            ) : (
+                              <div>N/A</div>
+                            )}
                           </div>
-                        )}
+                        </div>
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
