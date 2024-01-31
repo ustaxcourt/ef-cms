@@ -16,6 +16,8 @@ import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocum
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
+import { unsetCreateOrderAddedDocketNumbers } from '@web-client/presenter/actions/unsetCreateOrderAddedDocketNumbers';
+import { unsetCreateOrderSelectedCases } from '@web-client/presenter/actions/unsetCreateOrderSelectedCases';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 
 const onFileUploadedSuccess = [
@@ -27,6 +29,8 @@ const onFileUploadedSuccess = [
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
   getEditedDocumentDetailParamsAction,
+  unsetCreateOrderSelectedCases,
+  unsetCreateOrderAddedDocketNumbers,
   getShouldRedirectToSigningAction,
   {
     no: [
