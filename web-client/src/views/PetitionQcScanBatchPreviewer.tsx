@@ -443,11 +443,11 @@ export const PetitionQcScanBatchPreviewer = connect(
           >
             {documentTabsList.map(documentTab => {
               const isFileUploaded =
-                scanHelper[`${documentTab.documentType}Completed`];
+                scanHelper[`${documentTab.eventCode}FileCompleted`];
 
               return (
                 <Tab
-                  data-testid={`${documentTab.documentType}_${documentTab.documentId}`}
+                  data-testid={`${documentTab.eventCode}_${documentTab.documentId}`}
                   icon={
                     isFileUploaded && (
                       <FontAwesomeIcon
@@ -457,10 +457,10 @@ export const PetitionQcScanBatchPreviewer = connect(
                     )
                   }
                   key={documentTab.documentId}
-                  tabName={`${documentTab.documentType}_${documentTab.documentId}`}
+                  tabName={`${documentTab.tabTitle}_${documentTab.documentId}`}
                   // key={documentTab.documentType}
                   // tabName={documentTab.documentType}
-                  title={documentTab.title}
+                  title={documentTab.tabTitle}
                 />
               );
             })}

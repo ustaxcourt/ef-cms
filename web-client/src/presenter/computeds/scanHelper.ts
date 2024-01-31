@@ -21,14 +21,14 @@ export const scanHelper = (
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
 
-  let applicationForWaiverOfFilingFeeFileCompleted;
-  let petitionFileCompleted;
-  let attachmentToPetitionFileCompleted;
-  let corporateDisclosureFileCompleted;
-  let stinFileCompleted;
-  let requestForPlaceOfTrialFileCompleted;
+  let APWFileCompleted;
+  let PFileCompleted;
+  let ATPFileCompleted;
+  let DISCFileCompleted;
+  let STINFileCompleted;
+  let RQTFileCompleted;
 
-  applicationForWaiverOfFilingFeeFileCompleted =
+  APWFileCompleted =
     !!get(state.form.applicationForWaiverOfFilingFeeFile) ||
     !!getCaseDocumentByDocumentType({
       documentType:
@@ -36,35 +36,35 @@ export const scanHelper = (
       documents: formCaseDocuments,
     });
 
-  petitionFileCompleted =
+  PFileCompleted =
     !!get(state.form.petitionFile) ||
     !!getCaseDocumentByDocumentType({
       documentType: INITIAL_DOCUMENT_TYPES_MAP.petitionFile,
       documents: formCaseDocuments,
     });
 
-  attachmentToPetitionFileCompleted =
+  ATPFileCompleted =
     !!get(state.form.attachmentToPetitionFile) ||
     !!getCaseDocumentByDocumentType({
       documentType: INITIAL_DOCUMENT_TYPES_MAP.attachmentToPetitionFile,
       documents: formCaseDocuments,
     });
 
-  corporateDisclosureFileCompleted =
+  DISCFileCompleted =
     !!get(state.form.corporateDisclosureFile) ||
     !!getCaseDocumentByDocumentType({
       documentType: INITIAL_DOCUMENT_TYPES_MAP.corporateDisclosureFile,
       documents: formCaseDocuments,
     });
 
-  stinFileCompleted =
+  STINFileCompleted =
     !!get(state.form.stinFile) ||
     !!getCaseDocumentByDocumentType({
       documentType: INITIAL_DOCUMENT_TYPES_MAP.stinFile,
       documents: formCaseDocuments,
     });
 
-  requestForPlaceOfTrialFileCompleted =
+  RQTFileCompleted =
     !!get(state.form.requestForPlaceOfTrialFile) ||
     !!getCaseDocumentByDocumentType({
       documentType: INITIAL_DOCUMENT_TYPES_MAP.requestForPlaceOfTrialFile,
@@ -80,22 +80,22 @@ export const scanHelper = (
   });
 
   return {
-    applicationForWaiverOfFilingFeeFileCompleted,
-    attachmentToPetitionFileCompleted,
-    corporateDisclosureFileCompleted,
+    APWFileCompleted,
+    ATPFileCompleted,
+    DISCFileCompleted,
+    PFileCompleted,
+    RQTFileCompleted,
+    STINFileCompleted,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
     hasScanFeature: !!(
       user &&
       user.role &&
       applicationContext.getUtilities().isInternalUser(user.role)
     ),
-    petitionFileCompleted,
-    requestForPlaceOfTrialFileCompleted,
     scanFeatureEnabled,
     scanModeOptions,
     showScannerSourceModal:
       get(state.modal.showModal) === 'SelectScannerSourceModal',
     sources: get(state.scanner.sources),
-    stinFileCompleted,
   };
 };

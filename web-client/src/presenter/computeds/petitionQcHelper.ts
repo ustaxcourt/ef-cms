@@ -65,7 +65,7 @@ export const petitionQcHelper = (
   const isPetitionFile =
     documentSelectedForPreview === INITIAL_DOCUMENT_TYPES_FILE_MAP.petition;
 
-  let documentTabsToDisplay = initialFilingDocumentTabs.map(
+  let documentTabsToDisplay = Object.values(INITIAL_DOCUMENT_TYPES).map(
     docToDisplayMetaData => {
       return {
         ...docToDisplayMetaData,
@@ -80,10 +80,8 @@ export const petitionQcHelper = (
     .filter(doc => doc.eventCode === ATP_EVENT_CODE)
     .map(doc => {
       return {
+        ...INITIAL_DOCUMENT_TYPES.attachmentToPetition,
         documentId: doc.docketEntryId,
-        documentType: 'attachmentToPetitionFile',
-        eventCode: doc.eventCode,
-        title: ATP_EVENT_CODE,
       };
     });
 
@@ -99,16 +97,18 @@ export const petitionQcHelper = (
 
   if (!isPaper) {
     documentTabsToDisplay = documentTabsToDisplay.filter(tab => {
-      if (tab.title === 'CDS') {
+      if (tab.tabTitle === 'CDS') {
         // Do not display CDS tab if one wasn't filed electronically
         return hasCDS;
       } else {
         // Do not display APW and RQT tabs for electronic filing
-        return tab.title !== 'APW' && tab.title !== 'RQT';
+        return tab.tabTitle !== 'APW' && tab.tabTitle !== 'RQT';
       }
     });
   }
-
+  console.log('before documentTabsToDisplay', documentTabsToDisplay);
+  documentTabsToDisplay.sort((a, b) => a.sort - b.sort);
+  console.log('after documentTabsToDisplay', documentTabsToDisplay);
   return {
     documentTabsToDisplay,
     isPetitionFile,
