@@ -1,4 +1,4 @@
-import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
 
 describe('Petitioner Account Creation', () => {
   const GUID = Date.now();
@@ -272,7 +272,7 @@ describe('Petitioner Account Creation', () => {
 
       cy.get('[data-testid="account-menu-button"]');
 
-      petitionerCreatesEletronicCase();
+      petitionerCreatesElectronicCase();
     });
   });
 

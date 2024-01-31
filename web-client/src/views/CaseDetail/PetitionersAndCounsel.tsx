@@ -58,7 +58,7 @@ export const PetitionersAndCounsel = connect(
                     }}
                     showEmail={false}
                   />
-                  <span className="address-line">
+                  <span className="address-line" data-testid="petitioner-email">
                     {petitioner.formattedEmail}
                     {petitioner.showEAccessFlag && (
                       <FontAwesomeIcon
@@ -69,8 +69,9 @@ export const PetitionersAndCounsel = connect(
                       />
                     )}
                   </span>
-                  {petitioner.formattedPendingEmail}
-
+                  <span data-testid="petitioner-pending-email">
+                    {petitioner.formattedPendingEmail}
+                  </span>
                   {petitioner.showPaperPetitionEmail && (
                     <>
                       <p className="semi-bold margin-bottom-0">

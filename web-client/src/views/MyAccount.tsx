@@ -21,7 +21,7 @@ export const MyAccount = connect(
 
           {myAccountHelper.showPetitionerView && (
             <Hint>
-              You can change other contact information within the individual
+              You can change other contact information within an individual
               case.
             </Hint>
           )}
