@@ -53,6 +53,7 @@ module.exports = {
       authToken: process.env.SENTRY_AUTH_TOKEN,
       org: 'cody-seibert',
       project: 'node-awslambda',
+      telemetry: false,
     }),
   ],
   resolve: {
