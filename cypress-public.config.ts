@@ -22,7 +22,7 @@ export default defineConfig({
         },
       });
     },
-    specPattern: 'cypress/cypress-integration/integration/public/*.cy.ts',
+    specPattern: 'cypress/cypress-integration/integration/public/**/*.cy.ts',
     supportFile: 'cypress/cypress-integration/support/index.ts',
     testIsolation: false,
   },

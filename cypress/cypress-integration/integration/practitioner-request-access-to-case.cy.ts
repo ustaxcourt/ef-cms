@@ -7,7 +7,7 @@ import {
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
 import {
-  petitionerCreatesEletronicCase,
+  petitionerCreatesElectronicCase,
   petitionerCreatesEletronicCaseWithDeseasedSpouse,
 } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
@@ -59,7 +59,7 @@ describe('Private Practitioner requests access to case', () => {
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
-      petitionerCreatesEletronicCase(primaryFilerName).then(docketNumber => {
+      petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
 
         loginAsDocketClerk();
