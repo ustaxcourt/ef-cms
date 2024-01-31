@@ -1,7 +1,7 @@
 data "archive_file" "zip_public_authorizer" {
   type        = "zip"
   output_path = "${path.module}/lambdas/public-api-authorizer.js.zip"
-  source_file = "${path.module}/lambdas/dist/public-api-authorizer.js"
+  source_file = "${path.module}/lambdas/dist/public-api-authorizer/public-api-authorizer.js"
 }
 
 resource "aws_lambda_function" "public_api_authorizer_lambda" {

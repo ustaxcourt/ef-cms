@@ -25,177 +25,32 @@ resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
 data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
-  source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-        "api-public.js.map",
-    "websockets.js",
-        "websockets.js.map",
-    "trial-session.js",
-        "trial-session.js.map",
-    "send-emails.js",
-        "send-emails.js.map",
-    "websockets.js",
-        "websockets.js.map",
-    "maintenance-notify.js",
-        "maintenance-notify.js.map",
-    "cron.js",
-        "cron.js.map",
-    "streams.js",
-        "streams.js.map",
-    "cognito-triggers.js",
-        "cognito-triggers.js.map",
-    "cognito-authorizer.js",
-        "cognito-authorizer.js.map",
-    "public-api-authorizer.js",
-        "public-api-authorizer.js.map",
-    "handle-bounced-service-email.js",
-        "handle-bounced-service-email.js.map",
-    "seal-in-lower-environment.js",
-        "seal-in-lower-environment.js.map",
-    "pdf-generation.js",
-        "pdf-generation.js.map",
-    "report.html"
-  ]
+  source_dir  = "${path.module}/../template/lambdas/dist/api"
 }
 
 data "archive_file" "zip_send_emails" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/send_emails.js.zip"
-  source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-    "api-public.js.map",
-    "api.js",
-    "api.js.map",
-    "trial-session.js",
-    "trial-session.js.map",
-    "websockets.js",
-    "websockets.js.map",
-    "maintenance-notify.js",
-    "maintenance-notify.js.map",
-    "cron.js",
-    "cron.js.map",
-    "streams.js",
-    "streams.js.map",
-    "cognito-triggers.js",
-    "cognito-triggers.js.map",
-    "cognito-authorizer.js",
-    "cognito-authorizer.js.map",
-    "public-api-authorizer.js",
-    "public-api-authorizer.js.map",
-    "handle-bounced-service-email.js",
-    "handle-bounced-service-email.js.map",
-    "seal-in-lower-environment.js",
-    "seal-in-lower-environment.js.map",
-    "pdf-generation.js",
-    "pdf-generation.js.map",
-    "report.html"
-  ]
+  source_dir  = "${path.module}/../template/lambdas/dist/send-emails"
 }
 
 data "archive_file" "zip_trial_session" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/trial_session.js.zip"
-  source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-    "api-public.js.map",
-    "api.js",
-    "api.js.map",
-    "websockets.js",
-    "websockets.js.map",
-    "send-emails.js",
-    "send-emails.js.map",
-    "maintenance-notify.js",
-    "maintenance-notify.js.map",
-    "cron.js",
-    "cron.js.map",
-    "streams.js",
-    "streams.js.map",
-    "cognito-triggers.js",
-    "cognito-triggers.js.map",
-    "cognito-authorizer.js",
-    "cognito-authorizer.js.map",
-    "public-api-authorizer.js",
-    "public-api-authorizer.js.map",
-    "handle-bounced-service-email.js",
-    "handle-bounced-service-email.js.map",
-    "seal-in-lower-environment.js",
-    "seal-in-lower-environment.js.map",
-    "pdf-generation.js",
-    "pdf-generation.js.map",
-    "report.html"
-  ]
+  source_dir  = "${path.module}/../template/lambdas/dist/trial-session"
 }
 
 data "archive_file" "zip_triggers" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/cognito-triggers.js.zip"
-  source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api.js",
-    "api.js.map",
-    "api-public.js",
-    "api-public.js.map",
-    "websockets.js",
-    "websockets.js.map",
-    "maintenance-notify.js",
-    "maintenance-notify.js.map",
-    "trial-session.js",
-    "trial-session.js.map",
-    "send-emails.js",
-    "send-emails.js.map",
-    "seal-in-lower-environment.js",
-    "seal-in-lower-environment.js.map",
-    "cron.js",
-    "cron.js.map",
-    "streams.js",
-    "streams.js.map",
-    "cognito-authorizer.js",
-    "cognito-authorizer.js.map",
-    "public-api-authorizer.js",
-    "public-api-authorizer.js.map",
-    "handle-bounced-service-email.js",
-    "handle-bounced-service-email.js.map",
-    "pdf-generation.js",
-    "pdf-generation.js.map",
-    "report.html"
-  ]
+  source_dir  = "${path.module}/../template/lambdas/dist/cognito-triggers"
 }
 
 
 data "archive_file" "pdf_generation" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/pdf-generation.js.zip"
-  source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api.js",
-    "api.js.map",
-    "api-public.js",
-    "api-public.js.map",
-    "websockets.js",
-    "websockets.js.map",
-    "maintenance-notify.js",
-    "maintenance-notify.js.map",
-    "trial-session.js",
-    "trial-session.js.map",
-    "send-emails.js",
-    "send-emails.js.map",
-    "seal-in-lower-environment.js",
-    "seal-in-lower-environment.js.map",
-    "cron.js",
-    "cron.js.map",
-    "streams.js",
-    "streams.js.map",
-    "cognito-authorizer.js",
-    "cognito-authorizer.js.map",
-    "public-api-authorizer.js",
-    "public-api-authorizer.js.map",
-    "handle-bounced-service-email.js",
-    "handle-bounced-service-email.js.map",
-    "report.html"
-  ]
+  source_dir  = "${path.module}/../template/lambdas/dist/pdf-generation"
 }
 
 resource "null_resource" "pdf_generation_east_object" {
@@ -257,7 +112,7 @@ resource "null_resource" "trial_session_east_object" {
 data "archive_file" "zip_websockets" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/websockets.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/websockets.js"
+  source_file = "${path.module}/../template/lambdas/dist/websockets/websockets.js"
 }
 
 resource "null_resource" "websockets_east_object" {
@@ -274,7 +129,7 @@ resource "null_resource" "websockets_east_object" {
 data "archive_file" "zip_maintenance_notify" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/maintenance-notify.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/maintenance-notify.js"
+  source_file = "${path.module}/../template/lambdas/dist/maintenance-notify/maintenance-notify.js"
 }
 
 resource "null_resource" "maintenance_notify_east_object" {
@@ -291,7 +146,7 @@ resource "null_resource" "maintenance_notify_east_object" {
 data "archive_file" "zip_api_public" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api-public.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/api-public.js"
+  source_file = "${path.module}/../template/lambdas/dist/api-public/api-public.js"
 }
 
 resource "null_resource" "api_public_east_object" {
@@ -320,7 +175,7 @@ resource "null_resource" "puppeteer_layer_east_object" {
 data "archive_file" "zip_cron" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/cron.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/cron.js"
+  source_file = "${path.module}/../template/lambdas/dist/cron/cron.js"
 }
 
 resource "null_resource" "cron_east_object" {
@@ -337,7 +192,7 @@ resource "null_resource" "cron_east_object" {
 data "archive_file" "zip_streams" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/streams.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/streams.js"
+  source_file = "${path.module}/../template/lambdas/dist/streams/streams.js"
 }
 
 resource "null_resource" "streams_east_object" {
@@ -354,7 +209,7 @@ resource "null_resource" "streams_east_object" {
 data "archive_file" "zip_seal_in_lower" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/seal-in-lower-environment.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/seal-in-lower-environment.js"
+  source_file = "${path.module}/../template/lambdas/dist/seal-in-lower-environment/seal-in-lower-environment.js"
 }
 
 resource "null_resource" "seal_in_lower_east_object" {
@@ -371,7 +226,7 @@ resource "null_resource" "seal_in_lower_east_object" {
 data "archive_file" "zip_bounce_handler" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/handle-bounced-service-email.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/handle-bounced-service-email.js"
+  source_file = "${path.module}/../template/lambdas/dist/handle-bounced-service-email/handle-bounced-service-email.js"
 }
 
 resource "null_resource" "bounce_handler_east_object" {

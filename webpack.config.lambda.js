@@ -2,9 +2,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 
-console.log('process.env.SENTRY_AUTH_TOKEN', process.env.SENTRY_AUTH_TOKEN);
-
-module.exports = {
+module.exports = copyDestinations => ({
   devtool: 'source-map',
   externals: {
     '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
@@ -45,11 +43,14 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [
-        { from: 'node_modules/pdfjs-dist/legacy/build', to: '.' },
-        { from: 'node_modules/pdf-lib/dist', to: '.' },
-        { from: 'shared/static/pdfs/amended-petition-form.pdf', to: '.' },
-      ],
+      patterns: copyDestinations.flatMap(destination => [
+        { from: 'node_modules/pdfjs-dist/legacy/build', to: destination },
+        { from: 'node_modules/pdf-lib/dist', to: destination },
+        {
+          from: 'shared/static/pdfs/amended-petition-form.pdf',
+          to: destination,
+        },
+      ]),
     }),
     sentryWebpackPlugin({
       authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -63,4 +64,4 @@ module.exports = {
     plugins: [new TsconfigPathsPlugin()], // Allows us to use the tsconfig path alias + basePath
   },
   target: 'node',
-};
+});

@@ -1,7 +1,7 @@
-const config = require('./webpack.config.lambda');
+const getConfig = require('./webpack.config.lambda');
 
 module.exports = {
-  ...config,
+  ...getConfig(Object.keys(['.']).map(key => `./${key.split('/')[0]}`)),
   entry: {
     'switch-colors-status':
       './web-api/workflow-terraform/switch-colors-cron/main/lambdas/switch-colors.js',
