@@ -32,6 +32,7 @@ export default defineConfig({
     toConsole: true,
   },
   requestTimeout: 12000,
+  screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/cypress-integration/screenshots',
   video: true,
   videosFolder: 'cypress/cypress-integration/videos',
