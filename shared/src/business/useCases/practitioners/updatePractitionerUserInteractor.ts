@@ -8,47 +8,6 @@ import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-const updateUserPendingEmail = async ({ applicationContext, user }) => {
-  const isEmailAvailable = await applicationContext
-    .getPersistenceGateway()
-    .isEmailAvailable({
-      applicationContext,
-      email: user.updatedEmail,
-    });
-
-  if (!isEmailAvailable) {
-    throw new Error('Email is not available');
-  }
-
-  const pendingEmailVerificationToken = applicationContext.getUniqueId();
-  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
-  user.pendingEmail = user.updatedEmail;
-};
-
-const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
-  const updatedPractitionerRaw = new Practitioner(updatedUser, {
-    applicationContext,
-  }).toRawObject();
-  const oldPractitionerRaw = new Practitioner(oldUser, {
-    applicationContext,
-  }).toRawObject();
-
-  const practitionerDetailDiff = applicationContext
-    .getUtilities()
-    .getAddressPhoneDiff({
-      newData: {
-        ...omit(updatedPractitionerRaw, 'contact'),
-        ...updatedPractitionerRaw.contact,
-      },
-      oldData: {
-        ...omit(oldPractitionerRaw, 'contact'),
-        ...oldPractitionerRaw.contact,
-      },
-    });
-
-  return Object.keys(practitionerDetailDiff);
-};
-
 /**
  * updatePractitionerUserInteractor
  * @param {object} applicationContext the application context
@@ -187,6 +146,47 @@ export const updatePractitionerUser = async (
       userId: requestUser.userId,
     });
   }
+};
+
+const updateUserPendingEmail = async ({ applicationContext, user }) => {
+  const isEmailAvailable = await applicationContext
+    .getPersistenceGateway()
+    .isEmailAvailable({
+      applicationContext,
+      email: user.updatedEmail,
+    });
+
+  if (!isEmailAvailable) {
+    throw new Error('Email is not available');
+  }
+
+  const pendingEmailVerificationToken = applicationContext.getUniqueId();
+  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  user.pendingEmail = user.updatedEmail;
+};
+
+const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
+  const updatedPractitionerRaw = new Practitioner(updatedUser, {
+    applicationContext,
+  }).toRawObject();
+  const oldPractitionerRaw = new Practitioner(oldUser, {
+    applicationContext,
+  }).toRawObject();
+
+  const practitionerDetailDiff = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: {
+        ...omit(updatedPractitionerRaw, 'contact'),
+        ...updatedPractitionerRaw.contact,
+      },
+      oldData: {
+        ...omit(oldPractitionerRaw, 'contact'),
+        ...oldPractitionerRaw.contact,
+      },
+    });
+
+  return Object.keys(practitionerDetailDiff);
 };
 
 export const handleLockError = async (

@@ -1,14 +1,16 @@
 import { Case } from '../../entities/cases/Case';
-import { Practitioner } from '../../entities/Practitioner';
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { RawUser, User } from '../../entities/User';
+import { RawUser } from '../../entities/User';
+import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { updateUserEmailAddress } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
@@ -204,20 +206,10 @@ export const updatePractitionerCases = async ({
   return validCasesToUpdate;
 };
 
-/**
- * verifyUserPendingEmailInteractor
- *
- * this interactor is invoked when a petitioner logs into DAWSON
- * and changes their email to a different email address and clicks the
- * verify link that was sent to their new email address.
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.pendingEmail the pending email
- */
-export const verifyUserPendingEmail = async (
-  applicationContext: IApplicationContext,
+export const verifyUserPendingEmailInteractor = async (
+  applicationContext: ServerApplicationContext,
   { token }: { token: string },
-) => {
+): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
@@ -228,23 +220,23 @@ export const verifyUserPendingEmail = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const docketNumbersAssociatedWithUser = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  // const docketNumbersAssociatedWithUser = await applicationContext
+  //   .getPersistenceGateway()
+  //   .getDocketNumbersByUser({
+  //     applicationContext,
+  //     userId: user.userId,
+  //   });
 
-  let userEntity;
-  if (user.role === ROLES.petitioner) {
-    userEntity = new User(user);
-  } else {
-    userEntity = new Practitioner(user);
-  }
+  // let userEntity;
+  // if (user.role === ROLES.petitioner) {
+  //   userEntity = new User(user);
+  // } else {
+  //   userEntity = new Practitioner(user);
+  // }
 
   if (
-    !userEntity.pendingEmailVerificationToken ||
-    userEntity.pendingEmailVerificationToken !== token
+    !user.pendingEmailVerificationToken ||
+    user.pendingEmailVerificationToken !== token
   ) {
     throw new UnauthorizedError('Tokens do not match');
   }
@@ -253,87 +245,90 @@ export const verifyUserPendingEmail = async (
     .getPersistenceGateway()
     .isEmailAvailable({
       applicationContext,
-      email: userEntity.pendingEmail,
+      email: user.pendingEmail,
     });
 
   if (!isEmailAvailable) {
     throw new Error('Email is not available');
   }
 
-  await applicationContext.getPersistenceGateway().updateUserEmail({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
+  const { updatedUser } = await updateUserEmailAddress(applicationContext, {
+    user,
   });
 
-  userEntity.email = userEntity.pendingEmail;
-  userEntity.pendingEmail = undefined;
-  userEntity.pendingEmailVerificationToken = undefined;
+  console.log('********** user', user);
+  console.log('********** updatedUser', updatedUser);
 
-  const updatedRawUser = userEntity.validate().toRawObject();
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: updatedRawUser,
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
+  // TODO 10007: Move to userGateway
+  // This is the problem, it never updated in cognito local
+  await cognito.adminUpdateUserAttributes({
+    UserAttributes: [
+      {
+        Name: 'email',
+        Value: updatedUser.email,
+      },
+      {
+        Name: 'email_verified',
+        Value: 'true',
+      },
+    ],
+    UserPoolId: process.env.USER_POOL_ID,
+    Username: user.email, // this is the OLD email, we have to look them up by the previous one until we have changed it.
   });
 
-  try {
-    if (userEntity.role === ROLES.petitioner) {
-      await updatePetitionerCases({
-        applicationContext,
-        docketNumbersAssociatedWithUser,
-        user: updatedRawUser,
-      });
-    } else if (userEntity.role === ROLES.privatePractitioner) {
-      await updatePractitionerCases({
-        applicationContext,
-        docketNumbersAssociatedWithUser,
-        user: updatedRawUser,
-      });
-    }
-  } catch (error) {
-    applicationContext.logger.error('Unable to verify pending user email', {
-      error,
-    });
-    throw error;
-  }
-};
-
-export const handleLockError = async (
-  applicationContext: IApplicationContext,
-  originalRequest: any,
-) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
+  await applicationContext.getWorkerGateway().initialize(applicationContext, {
     message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'verify_user_pending_email',
+      payload: { user: updatedUser },
+      type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
     },
-    userId: user.userId,
   });
+
+  // const isEmailAvailable = await applicationContext
+  //   .getPersistenceGateway()
+  //   .isEmailAvailable({
+  //     applicationContext,
+  //     email: userEntity.pendingEmail,
+  //   });
+
+  // if (!isEmailAvailable) {
+  //   throw new Error('Email is not available');
+  // }
+
+  // await applicationContext.getPersistenceGateway().updateUserEmail({
+  //   applicationContext,
+  //   user: userEntity.validate().toRawObject(),
+  // });
+
+  // userEntity.email = userEntity.pendingEmail;
+  // userEntity.pendingEmail = undefined;
+  // userEntity.pendingEmailVerificationToken = undefined;
+
+  // const updatedRawUser = userEntity.validate().toRawObject();
+  // await applicationContext.getPersistenceGateway().updateUser({
+  //   applicationContext,
+  //   user: updatedRawUser,
+  // });
+
+  // try {
+  //   if (userEntity.role === ROLES.petitioner) {
+  //     await updatePetitionerCases({
+  //       applicationContext,
+  //       docketNumbersAssociatedWithUser,
+  //       user: updatedRawUser,
+  //     });
+  //   } else if (userEntity.role === ROLES.privatePractitioner) {
+  //     await updatePractitionerCases({
+  //       applicationContext,
+  //       docketNumbersAssociatedWithUser,
+  //       user: updatedRawUser,
+  //     });
+  //   }
+  // } catch (error) {
+  //   applicationContext.logger.error('Unable to verify pending user email', {
+  //     error,
+  //   });
+  //   throw error;
+  // }
 };
-
-export const determineEntitiesToLock = async (
-  applicationContext: IApplicationContext,
-) => {
-  const user = await applicationContext.getCurrentUser();
-
-  const docketNumbers: string[] = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
-
-  return {
-    identifiers: docketNumbers.map(item => `case|${item}`),
-    ttl: 900,
-  };
-};
-
-export const verifyUserPendingEmailInteractor = withLocking(
-  verifyUserPendingEmail,
-  determineEntitiesToLock,
-  handleLockError,
-);

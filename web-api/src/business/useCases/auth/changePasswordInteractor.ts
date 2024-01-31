@@ -45,6 +45,7 @@ export const changePasswordInteractor = async (
       throw new InvalidEntityError('Change Password Form Entity is invalid');
     }
     if (tempPassword) {
+      console.log('1111111');
       const initiateAuthResult = await applicationContext
         .getCognito()
         .initiateAuth({
@@ -56,6 +57,7 @@ export const changePasswordInteractor = async (
           ClientId: applicationContext.environment.cognitoClientId,
         });
 
+      console.log('22222', initiateAuthResult);
       if (initiateAuthResult.ChallengeName !== 'NEW_PASSWORD_REQUIRED') {
         throw new Error('User is not in `FORCE_CHANGE_PASSWORD` state');
       }
@@ -71,6 +73,7 @@ export const changePasswordInteractor = async (
           ClientId: applicationContext.environment.cognitoClientId,
           Session: initiateAuthResult.Session,
         });
+      console.log('3333', result);
 
       if (
         !result.AuthenticationResult?.AccessToken ||
@@ -80,6 +83,7 @@ export const changePasswordInteractor = async (
         throw new Error('Unsuccessful password change');
       }
 
+      console.log('44444');
       const decoded = jwt.decode(result.AuthenticationResult?.IdToken);
       const userId = decoded['custom:userId'] || decoded.sub;
 
@@ -87,6 +91,7 @@ export const changePasswordInteractor = async (
         .getPersistenceGateway()
         .getUserById({ applicationContext, userId });
 
+      console.log('5555', userFromPersistence);
       if (
         userFromPersistence &&
         userFromPersistence.pendingEmail &&
@@ -98,6 +103,8 @@ export const changePasswordInteractor = async (
             user: userFromPersistence,
           },
         );
+        console.log('7777', updatedUser);
+
         await applicationContext
           .getWorkerGateway()
           .initialize(applicationContext, {
@@ -106,6 +113,7 @@ export const changePasswordInteractor = async (
               type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
             },
           });
+        console.log('8888');
       }
 
       return {
@@ -156,6 +164,8 @@ export const changePasswordInteractor = async (
       };
     }
   } catch (err: any) {
+    console.log('9999', err);
+
     await authErrorHandling(applicationContext, {
       email: userEmail,
       error: err,
@@ -165,7 +175,7 @@ export const changePasswordInteractor = async (
   }
 };
 
-const updateUserEmailAddress = async (
+export const updateUserEmailAddress = async (
   applicationContext: ServerApplicationContext,
   { user }: { user: RawUser },
 ): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
@@ -179,6 +189,7 @@ const updateUserEmailAddress = async (
       ...user,
       email: user.pendingEmail,
       pendingEmail: undefined,
+      pendingEmailVerificationToken: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   } else {
@@ -186,6 +197,7 @@ const updateUserEmailAddress = async (
       ...user,
       email: user.pendingEmail,
       pendingEmail: undefined,
+      pendingEmailVerificationToken: undefined,
     });
   }
 
@@ -195,6 +207,7 @@ const updateUserEmailAddress = async (
     applicationContext,
     user: rawUser,
   });
+  console.log('updatedUser', rawUser);
 
   return { updatedUser: rawUser };
 };
