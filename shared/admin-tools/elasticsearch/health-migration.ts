@@ -54,7 +54,8 @@ const listIndices = async ({
   );
 };
 
-await (async () => {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
   const counts = { alpha: {}, beta: {} };
   const totals: { alpha: number; beta: number } = {
     alpha: 0,
