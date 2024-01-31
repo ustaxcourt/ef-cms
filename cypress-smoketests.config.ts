@@ -52,6 +52,7 @@ export default defineConfig({
   },
   requestTimeout: 60000,
   retries: 0,
+  screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/cypress-smoketests/screenshots',
   video: true,
   videoCompression: 10,

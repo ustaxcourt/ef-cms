@@ -40,6 +40,7 @@ export const verifyUserPendingEmailInteractor = async (
     throw new Error('Email is not available');
   }
 
+  // Todo 10007 Look for other places we are doing this. Can this be consolidated?
   const { updatedUser } = await updateUserEmailAddress(applicationContext, {
     user,
   });

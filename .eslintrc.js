@@ -20,7 +20,14 @@ module.exports = {
     'plugin:import/typescript',
     // 'plugin:jsx-a11y/recommended', // todo
   ],
-  ignorePatterns: '**/*_.js',
+  ignorePatterns: [
+    '**/*_.js',
+    './cypress.config.ts',
+    './cypress-smoketests.config.ts',
+    './cypress-smoketests-readonly.config.ts',
+    './cypress-smoketests-readonly-public.config.ts',
+    './cypress-public.config.ts',
+  ],
   overrides: [
     {
       extends: ['plugin:@typescript-eslint/disable-type-checked'], // Disables type information from needing to be output, and clashing tsconfig/eslint issues https://typescript-eslint.io/linting/typed-linting#how-can-i-disable-type-aware-linting-for-a-subset-of-files

@@ -26,6 +26,7 @@ export default defineConfig({
   },
   requestTimeout: 60000,
   retries: 0,
+  screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/cypress-integration/screenshots',
   video: true,
   videosFolder: 'cypress/cypress-integration/videos',
