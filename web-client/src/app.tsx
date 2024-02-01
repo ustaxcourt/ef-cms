@@ -182,6 +182,7 @@ const app = {
       applicationContext.setCurrentUser(user);
       Sentry.setUser({
         id: user.userId,
+        ip_address: '{{auto}}',
       });
     }
 
@@ -350,10 +351,10 @@ const app = {
 
     root.render(
       <Container app={cerebralApp}>
-         <button onClick={() => (window as any).methodDoesNotExist()}>
+        <button onClick={() => (window as any).methodDoesNotExist()}>
           Break the world
         </button>
-        
+
         {!process.env.CI && (
           <>
             <IdleActivityMonitor />
