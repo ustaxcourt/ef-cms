@@ -9,6 +9,9 @@ import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_PRACTITIONER, validUser } from '@shared/test/mockUsers';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
@@ -16,7 +19,6 @@ import {
   updatePetitionerCases,
   updatePractitionerCases,
 } from './updateAssociatedCaseWorker';
-import { validUser } from '@shared/test/mockUsers';
 
 const mockPractitioner = {
   ...validUser,
@@ -96,6 +98,56 @@ it('should log an error when the petitioner is not found on one of their cases b
   expect(
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
   ).not.toHaveBeenCalled();
+});
+
+describe('locking', () => {
+  it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => MOCK_LOCK);
+    await expect(
+      updateAssociatedCaseWorker(applicationContext, {
+        docketNumber: '123-45',
+        user: MOCK_PRACTITIONER,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire a lock that lasts for 15 minutes', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => undefined);
+    await updateAssociatedCaseWorker(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      user: MOCK_PRACTITIONER,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 900,
+    });
+  });
+
+  it('should remove the lock', async () => {
+    await updateAssociatedCaseWorker(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      user: MOCK_PRACTITIONER,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
+  });
 });
 
 describe('updatePetitionerCases', () => {
