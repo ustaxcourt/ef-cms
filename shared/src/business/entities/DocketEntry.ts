@@ -541,7 +541,6 @@ export class DocketEntry extends JoiValidationEntity {
     if (caseIsSealed) {
       return DocketEntry.isOpinion(entry.eventCode);
     }
-
     if (DocketEntry.isPublicEventCode(entry.eventCode)) {
       return true;
     }
@@ -552,7 +551,6 @@ export class DocketEntry extends JoiValidationEntity {
     ) {
       return false;
     }
-
     if ([AMICUS_BRIEF_EVENT_CODE, 'SDEC'].includes(entry.eventCode)) {
       return true;
     }
@@ -659,7 +657,7 @@ export class DocketEntry extends JoiValidationEntity {
       user,
       visibilityChangeDate,
     }: {
-      rawCase: RawCase;
+      rawCase: RawCase | RawPublicCase;
       user: RawUser;
       isTerminalUser: boolean;
       visibilityChangeDate: string;
@@ -668,13 +666,6 @@ export class DocketEntry extends JoiValidationEntity {
     if (!entry.isFileAttached) return false;
 
     const petitionDocketEntry = getPetitionDocketEntry(rawCase);
-    console.log('isDownloadable', {
-      entry,
-      petitionDocketEntry,
-      petitioners: rawCase.petitioners,
-      rawCase,
-      user,
-    });
 
     if (entry.eventCode == STIN_DOCKET_ENTRY_TYPE.eventCode) {
       return (
@@ -702,7 +693,6 @@ export class DocketEntry extends JoiValidationEntity {
       rootDocument: DocketEntry.fetchRootDocument(entry, rawCase.docketEntries),
       visibilityChangeDate,
     });
-    console.log('isDownloadable 2', { isPublicDocument, userHasAccessToCase });
 
     if (!userHasAccessToCase || isPublicDocument) return !!isPublicDocument;
     if (entry.isStricken || DocketEntry.isSealedToExternal(entry)) return false;
