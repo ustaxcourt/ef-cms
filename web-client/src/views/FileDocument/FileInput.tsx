@@ -6,7 +6,12 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import fileInput from '../../../../node_modules/@uswds/uswds/packages/usa-file-input/src';
 
-function DragDropInput({ existingFiles, fileInputName, handleChange }) {
+function DragDropInput({
+  existingFiles,
+  fileInputName,
+  handleChange,
+  ...remainingProps
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!inputRef.current) return;
@@ -33,6 +38,7 @@ function DragDropInput({ existingFiles, fileInputName, handleChange }) {
 
   return (
     <input
+      {...remainingProps}
       multiple
       accept=".pdf"
       className="usa-file-input"
@@ -104,11 +110,13 @@ export const FileInput = connect(
     form,
     name,
     updateFormValueSequence,
+    ...remainingProps
     // validationSequence,
   }) {
     return (
       <React.Fragment>
         <DragDropInput
+          {...remainingProps}
           existingFiles={form[name]}
           fileInputName={name}
           handleChange={e =>
