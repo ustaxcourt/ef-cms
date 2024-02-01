@@ -140,3 +140,21 @@ describe('Given a petitioner with a DAWSON account', () => {
     });
   });
 });
+
+// eslint-disable-next-line spellcheck/spell-checker
+/*
+If you type in a random email address it displays identically as if you typed in an existing users email address
+Password validation:  reference(cypress/cypress-smoketests/integration/petitioner-account-creation.cy.ts)
+  - passwords do not match
+  - password no special character
+  - no number
+  - no capital
+  - no lowercase
+  - length
+Unconfirmed petitioner account that was created by the petitioner - show 'we sent you an email'
+Unconfirmed account that was created by court personel granting e-access to someone - show 'we sent you an email'
+*/
+
+// Can be added to other tests:
+// Reset password button is disabled if you don't enter an email address
+// Change password button is disabled until passwords match and meet requirements
