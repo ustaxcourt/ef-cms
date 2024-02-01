@@ -18,6 +18,7 @@ const sourceTable = process.env.SOURCE_TABLE!;
 
 import { startGlueJob } from '../../shared/admin-tools/aws/glueHelper';
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   await startGlueJob({ destinationTable, sourceTable });
 })();

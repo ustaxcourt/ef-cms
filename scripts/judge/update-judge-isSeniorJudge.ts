@@ -62,6 +62,7 @@ const getJudges = async ({
 
 let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
 
