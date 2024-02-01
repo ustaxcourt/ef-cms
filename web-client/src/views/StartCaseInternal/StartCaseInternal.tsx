@@ -5,12 +5,15 @@ import { ErrorNotification } from './../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './../FormCancelModalDialog';
+import {
+  INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_FILE_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { IRSNotice } from '../IRSNotice';
 import { Parties } from './Parties';
 import { ScanBatchPreviewer } from './../ScanBatchPreviewer';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { initialFilingDocumentTabs } from '@web-client/presenter/computeds/petitionQcHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -31,6 +34,16 @@ export const StartCaseInternal = connect(
     submitPetitionFromPaperSequence,
     validatePetitionFromPaperSequence,
   }) {
+    const documentTabs = Object.keys(INITIAL_DOCUMENT_TYPES)
+      .map(key => {
+        const tab = INITIAL_DOCUMENT_TYPES[key];
+        return {
+          ...tab,
+          documentType: INITIAL_DOCUMENT_TYPES_FILE_MAP[key],
+        };
+      })
+      .sort((a, b) => a.sort - b.sort);
+
     return (
       <>
         <BigHeader text="Create Case" />
@@ -76,7 +89,7 @@ export const StartCaseInternal = connect(
               </div>
               <div className="grid-col-7">
                 <ScanBatchPreviewer
-                  documentTabs={initialFilingDocumentTabs}
+                  documentTabs={documentTabs}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
                   validateSequence={validatePetitionFromPaperSequence}
