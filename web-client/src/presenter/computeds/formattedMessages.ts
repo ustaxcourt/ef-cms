@@ -8,6 +8,15 @@ import {
 } from '../utilities/processFormattedMessages';
 import { state } from '@web-client/presenter/app.cerebral';
 
+type FormattedMessageResult = MessageResult & {
+  createdAtFormatted: string;
+  isLeadCase: boolean;
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+  messageDetailLink: string;
+  fromSectionFormatted: string;
+};
+
 export const formattedMessages = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -18,7 +27,7 @@ export const formattedMessages = (
   fromSections: string[];
   fromUsers: string[];
   hasMessages: boolean;
-  messages: MessageResult[];
+  messages: FormattedMessageResult[];
   toSections: string[];
   toUsers: string[];
 } => {
