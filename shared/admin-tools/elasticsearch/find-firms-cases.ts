@@ -98,6 +98,7 @@ const getFirmsCases = async ({
   return (await search({ applicationContext, searchParameters }))?.results;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext: IApplicationContext = createApplicationContext({});
   const firmsPractitionerIds = (
