@@ -13,36 +13,24 @@ describe('setResetPasswordAction', () => {
       state: {
         authentication: {
           code: '',
-          forgotPassword: {
-            code: '',
-            email: '',
-            userId: '',
-          },
           form: {
             confirmPassword: '',
             email: '',
             password: '',
           },
           tempPassword: '',
-          userEmail: '',
         },
       },
     });
 
     expect(result.state.authentication).toEqual({
       code: testCode,
-      forgotPassword: {
-        code: '',
-        email: '',
-        userId: '',
-      },
       form: {
         confirmPassword: '',
         email: '',
         password: '',
       },
       tempPassword: '',
-      userEmail: testEmail,
     });
   });
 });

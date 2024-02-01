@@ -7,6 +7,6 @@ export const setResetPasswordAction = ({
   email: string;
   code: string;
 }>): void => {
-  store.set(state.authentication.userEmail, props.email);
+  store.set(state.authentication.form.email, props.email);
   store.set(state.authentication.code, props.code);
 };

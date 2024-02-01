@@ -7,11 +7,6 @@ describe('clearAuthStateAction', () => {
       state: {
         authentication: {
           code: 'abc123',
-          forgotPassword: {
-            code: 'def456',
-            email: 'example@example.com',
-            userId: '4cea6d99-460f-4196-af24-231833040e97',
-          },
           form: {
             confirmPassword: 'password',
             email: 'example@example.com',
@@ -25,18 +20,12 @@ describe('clearAuthStateAction', () => {
 
     expect(result.state.authentication).toEqual({
       code: '',
-      forgotPassword: {
-        code: '',
-        email: '',
-        userId: '',
-      },
       form: {
         confirmPassword: '',
         email: '',
         password: '',
       },
       tempPassword: '',
-      userEmail: '',
     });
   });
 });

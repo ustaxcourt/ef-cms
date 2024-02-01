@@ -50,6 +50,7 @@ export const ChangePassword = connect(
                   <input
                     required
                     className="usa-input"
+                    data-testid="new-password-input"
                     id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
@@ -93,6 +94,7 @@ export const ChangePassword = connect(
                     <input
                       required
                       className="usa-input"
+                      data-testid="confirm-password-input"
                       id="confirm-password"
                       name="confirmPassword"
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -108,7 +110,6 @@ export const ChangePassword = connect(
                     className="usa-show-password"
                     data-hide-text="Hide password"
                     data-show-text="Show password"
-                    title=""
                     type="button"
                     onClick={() =>
                       toggleShowPasswordSequence({
@@ -132,7 +133,7 @@ export const ChangePassword = connect(
                   </div>
                   <Button
                     className="usa-button margin-top-3"
-                    data-testid="login-button"
+                    data-testid="change-password-button"
                     disabled={!changePasswordHelper.formIsValid}
                     onClick={e => {
                       e.preventDefault();

@@ -10,8 +10,8 @@ export const submitChangePasswordAction = async ({
   idToken: string;
   refreshToken: string;
 }> => {
-  const { confirmPassword, password } = get(state.authentication.form);
-  const { code, tempPassword, userEmail } = get(state.authentication);
+  const { confirmPassword, email, password } = get(state.authentication.form);
+  const { code, tempPassword } = get(state.authentication);
 
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
@@ -19,9 +19,9 @@ export const submitChangePasswordAction = async ({
       .changePasswordInteractor(applicationContext, {
         code,
         confirmPassword,
+        email,
         password,
         tempPassword,
-        userEmail,
       });
 
     return path.success({ accessToken, idToken, refreshToken });
