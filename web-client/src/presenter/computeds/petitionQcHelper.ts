@@ -2,47 +2,6 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-type FilingDocumentsType = {
-  documentType: string;
-  title: string;
-  documentId?: string;
-  eventCode?: string;
-}[];
-
-// todo: move population of eventCodes in these tabs into helper
-export const initialFilingDocumentTabs = [
-  {
-    documentType: 'petitionFile',
-    eventCode: 'P',
-    title: 'Petition',
-  },
-  {
-    documentType: 'stinFile',
-    eventCode: 'STIN',
-    title: 'STIN',
-  },
-  {
-    documentType: 'attachmentToPetitionFile',
-    eventCode: 'ATP',
-    title: 'ATP',
-  },
-  {
-    documentType: 'requestForPlaceOfTrialFile',
-    eventCode: 'RQT',
-    title: 'RQT',
-  },
-  {
-    documentType: 'corporateDisclosureFile',
-    eventCode: 'CDS',
-    title: 'CDS',
-  },
-  {
-    documentType: 'applicationForWaiverOfFilingFeeFile',
-    eventCode: 'APW',
-    title: 'APW',
-  },
-] as FilingDocumentsType;
-
 export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
