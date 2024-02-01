@@ -112,18 +112,15 @@ async function getUserToken(password: string, username: string) {
 
 const getCognitoUserIdByEmail = async (email: string): Promise<string> => {
   const userPoolId = await getUserPoolId();
-  const users = await cognito.listUsers({
-    AttributesToGet: ['custom:userId'],
-    Filter: `email = "${email}"`,
+  const foundUser = await cognito.adminGetUser({
     UserPoolId: userPoolId,
+    Username: email,
   });
 
-  const userId = users.Users?.[0].Attributes?.find(
-    element => element.Name === 'custom:userId',
-  )?.Value;
-  if (!userId) {
-    throw new Error(`Could not find userId for email: ${email}`);
-  }
+  const userId =
+    foundUser.UserAttributes?.find(element => element.Name === 'custom:userId')
+      ?.Value! ||
+    foundUser.UserAttributes?.find(element => element.Name === 'sub')?.Value!;
 
   return userId;
 };

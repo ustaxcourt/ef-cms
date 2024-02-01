@@ -1,4 +1,6 @@
+import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
 describe('Petitioner Account Creation', () => {
   const GUID = Date.now();
@@ -233,32 +235,17 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
     it('should create an account and verify it using the verification link, then login and create an eletronic case', () => {
-      fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
+      createAPetitioner({
+        email: TEST_EMAIL,
+        name: TEST_NAME,
+        password: TEST_PASSWORD,
+      });
 
       cy.get('[data-testid="email-address-verification-sent-message"]').should(
         'exist',
       );
 
-      cy.task('getNewAccountVerificationCode', { email: TEST_EMAIL }).as(
-        'USER_COGNITO_INFO',
-      );
-
-      cy.get('@USER_COGNITO_INFO')
-        .should('have.a.property', 'userId')
-        .and('not.be.undefined');
-
-      cy.get('@USER_COGNITO_INFO')
-        .should('have.a.property', 'confirmationCode')
-        .and('not.be.undefined');
-
-      cy.get('@USER_COGNITO_INFO').then((userInfo: any) => {
-        const { confirmationCode, userId } = userInfo;
-        cy.visit(
-          `/confirm-signup?confirmationCode=${confirmationCode}&email=${TEST_EMAIL}&userId=${userId}`,
-        );
-      });
-
-      cy.get('[data-testid="success-alert"]').should('exist');
+      verifyPetitionerAccount({ email: TEST_EMAIL });
 
       cy.visit('/login');
 
@@ -282,7 +269,11 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
     it('should display the error message when user tries to confirm account with wrong confirmation code', () => {
-      fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
+      createAPetitioner({
+        email: TEST_EMAIL,
+        name: TEST_NAME,
+        password: TEST_PASSWORD,
+      });
 
       cy.get('[data-testid="email-address-verification-sent-message"]').should(
         'exist',
@@ -320,7 +311,11 @@ describe('Petitioner Account Creation', () => {
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
     it('should display error message when a user tries to confirm account with an expired confirmation code', () => {
-      fillAndSubmitPetitionerForm(TEST_EMAIL, TEST_NAME, TEST_PASSWORD);
+      createAPetitioner({
+        email: TEST_EMAIL,
+        name: TEST_NAME,
+        password: TEST_PASSWORD,
+      });
       cy.get('[data-testid="email-address-verification-sent-message"]').should(
         'exist',
       );
@@ -353,22 +348,6 @@ describe('Petitioner Account Creation', () => {
   });
 });
 
-function fillAndSubmitPetitionerForm(
-  email: string,
-  name: string,
-  password: string,
-) {
-  cy.visit('/create-account/petitioner');
-
-  cy.get('[data-testid="petitioner-account-creation-email"]').type(email);
-  cy.get('[data-testid="petitioner-account-creation-name"]').type(name);
-  cy.get('[data-testid="petitioner-account-creation-password"]').type(password);
-  cy.get('[data-testid="petitioner-account-creation-confirm-password"]').type(
-    password,
-  );
-
-  cy.get('[data-testid="petitioner-account-creation-submit-button"]').click();
-}
 interface PasswordConfig {
   length: number;
   lower: number;
