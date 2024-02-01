@@ -1,97 +1,56 @@
-import { loginAsPetitionsClerk } from '../../helpers/auth/login-as-helpers';
-import { v4 as uuidv4 } from 'uuid';
+import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { v4 } from 'uuid';
 
-const randomizedEmail = `cypress_test_account+${uuidv4()}@example.com`;
-
-if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
-  describe('add email to practitioner', () => {
-    after(() => {
-      cy.task('deleteAllCypressTestAccounts');
-    });
-
-    it('a noce should be generated after adding an email to a practitioner', () => {
-      loginAsPetitionsClerk();
-      cy.get('[data-testid="document-qc-nav-item"]').click();
-      cy.get('#file-a-petition').click();
-      cy.get('#party-type').select('Petitioner');
-      cy.get('[data-testid="contact-primary-name"]').clear();
-      cy.get('[data-testid="contact-primary-name"]').type('bob ross');
-      cy.get('[data-testid="contactPrimary.address1"]').clear();
-      cy.get('[data-testid="contactPrimary.address1"]').type('some address');
-      cy.get('[data-testid="contactPrimary.city"]').clear();
-      cy.get('[data-testid="contactPrimary.city"]').type('cleveland');
-      cy.get('[data-testid="contactPrimary.state"]').select('TN');
-      cy.get('[data-testid="contactPrimary.postalCode"]').clear();
-      cy.get('[data-testid="contactPrimary.postalCode"]').type('37363');
-      cy.get('[data-testid="phone"]').clear();
-      cy.get('[data-testid="phone"]').type('4444444444');
-      cy.get('#tab-case-info > .button-text').click();
+describe('admissions clerk grants e-access to practitioner', () => {
+  after(() => {
+    cy.task('deleteAllCypressTestAccounts');
+  });
+  it('a noce should be generated after granting e-access to a practitioner', () => {
+    createAndServePaperPetition().then(({ docketNumber }) => {
+      const practitionerUserName = `cypress_test_account+${v4()}`;
+      const practitionerEmail = `${practitionerUserName}@example.com`;
+      cy.login('admissionsclerk1');
+      cy.get('[data-testid="messages-banner"]');
+      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+      cy.get('[data-testid="search-docket-number"]').click();
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-counsel"]').click();
+      cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
+        practitionerEmail,
+      );
+      cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
+        practitionerEmail,
+      );
       cy.get(
-        '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
-      ).clear();
-      cy.get(
-        '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
-      ).type('01/02/2023');
-      cy.get('#mailing-date').clear();
-      cy.get('#mailing-date').type('01/02/2023');
-      cy.get(
-        ':nth-child(9) > .usa-fieldset > :nth-child(3) > .usa-radio__label',
+        '[data-testid="submit-edit-petitioner-information-button"]',
       ).click();
-      cy.get('#payment-status-unpaid').check({ force: true });
-      cy.get('#tab-irs-notice > .button-text').click();
-      cy.get('[data-testid="case-type-select"]').select('CDP (Lien/Levy)');
-      cy.get('#upload-mode-upload').click();
-      cy.get('#uploadMode').check();
-      cy.get('#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
-      cy.get('[data-testid="submit-paper-petition"]').click();
-      cy.get('.docket-number-header a')
-        .invoke('attr', 'href')
-        .then(href => {
-          const docketNumber = href!.split('/').pop()!;
-          cy.get('[data-testid="serve-case-to-irs"]').click();
-          cy.get('[data-testid="modal-confirm"]').click();
-          cy.get(
-            '[data-testid="done-viewing-paper-petition-receipt-button"]',
-          ).click();
-          cy.get('.usa-alert__text').should('be.visible');
-          cy.login('admissionsclerk1');
-          cy.get('table').should('exist');
-          cy.get('#search-field').clear();
-          cy.get('#search-field').type(docketNumber);
-          cy.get('.usa-search-submit-text').click();
-          cy.get('[data-testid="tab-case-information"] > .button-text').click();
-          cy.get('[data-testid="tab-parties"] > .button-text').click();
-          cy.get('.width-auto').click();
-          cy.get('#updatedEmail').clear();
-          cy.get('#updatedEmail').type(randomizedEmail);
-          cy.get('#confirm-email').clear();
-          cy.get('#confirm-email').type(randomizedEmail);
-          cy.get('#submit-edit-petitioner-information').click();
-          cy.get('[data-testid="modal-button-confirm"]').click();
-          cy.get('.parties-card').contains(`${randomizedEmail} (Pending)`);
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="success-alert"]').contains('Changes saved');
 
-          cy.task('confirmUser', { email: randomizedEmail });
-
-          cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
-            expect(isNOCECreated).to.equal(true);
-          });
-
-          cy.get('.usa-link').click();
-          cy.get('#advanced-search-button').should('exist');
-          cy.get('#search-field').clear();
-          cy.get('#search-field').type(docketNumber);
-          cy.get('.usa-search-submit-text').click();
-          cy.get('tbody:contains(NOCE)').should('exist');
-          cy.get('#tab-case-information').click();
-          cy.get('#tab-parties').click();
-          cy.get('.parties-card').contains('(Pending)').should('not.exist');
-        });
+      cy.visit('/login');
+      cy.get('[data-testid="email-input"]').type(practitionerEmail);
+      cy.get('[data-testid="password-input"]').type('Testing1234$', {
+        log: false,
+      });
+      cy.get('[data-testid="login-button"]').click();
+      cy.get('[data-testid="new-password-input"]').type('Testing1234$');
+      cy.get('[data-testid="confirm-new-password-input"]').type('Testing1234$');
+      cy.get('[data-testid="change-password-button"]').click();
+      cy.get('[data-testid="my-cases-link"]');
+      cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
+        expect(isNOCECreated).to.equal(
+          true,
+          'NOCE was not generated on a case that a practitioner was granted e-access for.',
+        );
+      });
+      cy.get(`[data-testid="${docketNumber}"]`).contains(docketNumber).click();
+      cy.get('tbody:contains(NOCE)').should('exist');
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="petitioner-pending-email"]').should(
+        'not.contain.text',
+      );
     });
   });
-} else {
-  describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
-    it('should skip', () => {
-      expect(true).to.equal(true);
-    });
-  });
-}
+});
