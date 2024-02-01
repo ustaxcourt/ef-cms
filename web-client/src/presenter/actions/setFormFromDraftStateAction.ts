@@ -29,12 +29,13 @@ export const setFormFromDraftStateAction = ({ props, store }: ActionProps) => {
       const casesWithCheckMetadata = caseDetail.consolidatedCases.map(
         aCase => ({
           ...aCase,
-          checkboxDisabled: false,
           checked: addedDocketNumbers.includes(aCase.docketNumberWithSuffix),
         }),
       );
-      store.set(state.createOrderSelectedCases, casesWithCheckMetadata);
-      store.set(state.createOrderAddedDocketNumbers, addedDocketNumbers);
+      store.set(
+        state.modal.form.consolidatedCasesToMultiDocketOn,
+        casesWithCheckMetadata,
+      );
     }
   }
 };

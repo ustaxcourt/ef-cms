@@ -14,14 +14,14 @@ export const removeSignatureAction = async ({
   const { docketNumber } = props.caseDetail;
   const docketEntryId = props.docketEntryIdToEdit;
 
+  const viewerDraftDocumentToDisplay = get(state.viewerDraftDocumentToDisplay);
+
   const updatedCase = await applicationContext
     .getUseCases()
     .removeSignatureFromDocumentInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
     });
-
-  const viewerDraftDocumentToDisplay = get(state.viewerDraftDocumentToDisplay);
 
   return {
     alertSuccess: { message: 'Signature removed.' },
