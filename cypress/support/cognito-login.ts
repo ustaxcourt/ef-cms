@@ -1,6 +1,5 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { getDocumentClient } from '../helpers/dynamo/getDynamoCypress';
 import promiseRetry from 'promise-retry';
 
 const awsRegion = 'us-east-1';
@@ -9,23 +8,11 @@ const cognitoEndpoint =
   stage === 'local' ? 'http://localhost:9229/' : undefined;
 const accessKeyId = process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER';
 const secretAccessKey = process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER';
-const dynamoEndpoint = stage === 'local' ? 'http://localhost:8000' : undefined;
 
 const cognito = new CognitoIdentityProvider({
   credentials: { accessKeyId, secretAccessKey },
   endpoint: cognitoEndpoint,
   region: awsRegion,
-});
-const dynamoDB = new DynamoDBClient({
-  credentials: {
-    accessKeyId,
-    secretAccessKey,
-  },
-  endpoint: dynamoEndpoint,
-  region: 'us-east-1',
-});
-const documentClient = DynamoDBDocument.from(dynamoDB, {
-  marshallOptions: { removeUndefinedValues: true },
 });
 const DEFAULT_ACCOUNT_PASS = process.env.CYPRESS_DEFAULT_ACCOUNT_PASS;
 const DYNAMODB_TABLE_NAME = process.env.DYNAMODB_TABLE_NAME || 'efcms-local';
@@ -128,7 +115,7 @@ const getCognitoUserIdByEmail = async (email: string): Promise<string> => {
 const getUserConfirmationCodeFromDynamo = async (
   userId: string,
 ): Promise<string> => {
-  const result = await documentClient.get({
+  const result = await getDocumentClient().get({
     Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
     TableName: DYNAMODB_TABLE_NAME,
   });
@@ -206,7 +193,7 @@ export const expireUserConfirmationCode = async (
   const userId = await getCognitoUserIdByEmail(email);
   if (!userId) return null;
 
-  await documentClient
+  await getDocumentClient()
     .delete({
       Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
       TableName: DYNAMODB_TABLE_NAME,
