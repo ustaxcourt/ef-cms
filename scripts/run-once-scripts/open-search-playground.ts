@@ -3,6 +3,7 @@ import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types
 import { createApplicationContext } from '../../web-api/src/applicationContext';
 import { search } from '../../web-api/src/persistence/elasticsearch/searchClient';
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const source = [
     'caseCaption',
