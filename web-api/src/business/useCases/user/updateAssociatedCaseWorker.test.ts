@@ -1,19 +1,104 @@
 import {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-} from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getContactPrimary } from '../../entities/cases/Case';
-import { updatePetitionerCases } from './verifyUserPendingEmailInteractor';
-import { validUser } from '../../../test/mockUsers';
+} from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
+import {
+  updateAssociatedCaseWorker,
+  updatePetitionerCases,
+  updatePractitionerCases,
+} from './updateAssociatedCaseWorker';
+import { validUser } from '@shared/test/mockUsers';
 
-describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
+const mockPractitioner = {
+  ...validUser,
+  admissionsDate: '2019-03-01',
+  admissionsStatus: 'Active',
+  barNumber: 'RA3333',
+  birthYear: '1950',
+  email: 'test@example.com',
+  employer: 'Private',
+  firstName: 'Alden',
+  lastName: 'Rivas',
+  name: 'Alden Rivas',
+  originalBarState: 'FL',
+  pendingEmail: 'other@example.com',
+  pendingEmailVerificationToken: undefined,
+  practitionerType: 'Attorney',
+  role: ROLES.privatePractitioner,
+};
+
+const mockPetitioner = {
+  ...validUser,
+  firstName: 'Olden',
+  lastName: 'Vivas',
+  pendingEmail: 'other@example.com',
+  pendingEmailVerificationToken: undefined,
+  role: ROLES.petitioner,
+  userId: getContactPrimary(MOCK_CASE).contactId,
+};
+
+const mockCase = {
+  ...MOCK_CASE,
+  petitioners: [
+    {
+      ...getContactPrimary(MOCK_CASE),
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    },
+  ],
+  privatePractitioners: [mockPractitioner],
+  status: CASE_STATUS_TYPES.generalDocket,
+};
+
+it('should log an error when the practitioner is not found on one of their associated cases by userId', async () => {
+  applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      privatePractitioners: [],
+    });
+
+  await updateAssociatedCaseWorker(applicationContext, {
+    docketNumber: '101-18',
+    user: mockPractitioner,
+  });
+
+  expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+    'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
+  );
+  expect(
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+  ).not.toHaveBeenCalled();
+});
+
+it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
+  applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    ...mockPetitioner,
+    userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
+  });
+
+  await updateAssociatedCaseWorker(applicationContext, {
+    docketNumber: '101-18',
+    user: { ...mockPetitioner, userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203' },
+  });
+
+  expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+    'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
+  );
+  expect(
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+  ).not.toHaveBeenCalled();
+});
+
+describe('updatePetitionerCases', () => {
   const UPDATED_EMAIL = 'hello@example.com';
   const mockPetitionerUser = {
     ...validUser,
@@ -255,5 +340,43 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
     expect(caseToUpdate.docketNumber).toBe(MOCK_CASE.docketNumber);
+  });
+});
+
+describe('updatePractitionerCases', () => {
+  let mockPractitionerUser;
+  const UPDATED_EMAIL = 'hello@example.com';
+
+  beforeEach(() => {
+    mockPractitionerUser = {
+      ...validUser,
+      barNumber: 'SS8888',
+      email: UPDATED_EMAIL,
+      role: ROLES.privatePractitioner,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        privatePractitioners: [mockPractitionerUser],
+      });
+  });
+
+  it('should set the service serviceIndicator to ELECTRONIC when confirming the email', async () => {
+    await updatePractitionerCases({
+      applicationContext,
+      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
+      user: mockPractitionerUser,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.privatePractitioners[0].serviceIndicator,
+    ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledTimes(2);
   });
 });

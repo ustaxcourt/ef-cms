@@ -7,7 +7,7 @@ import {
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
 import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
-import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
+import { waitForNoce } from './cypress/helpers/wait-for-noce';
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
 // eslint-disable-next-line import/no-default-export

@@ -94,7 +94,7 @@ export const ChangePassword = connect(
                     <input
                       required
                       className="usa-input"
-                      data-testid="confirm-password-input"
+                      data-testid="confirm-new-password-input"
                       id="confirm-password"
                       name="confirmPassword"
                       type={showConfirmPassword ? 'text' : 'password'}
