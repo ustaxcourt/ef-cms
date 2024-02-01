@@ -182,7 +182,7 @@ export const getUserFromAuthHeader = event => {
     decoded.token = token;
     decoded.role = decoded['custom:role'];
     decoded.userId = decoded['custom:userId'] || decoded.sub;
-    return decoded;
+    return decoded as { userId: string };
   } else {
     return null;
   }
