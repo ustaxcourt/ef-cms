@@ -1034,6 +1034,19 @@ app.get(
   app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 }
 
+app.get(
+  '/error',
+  lambdaWrapper(event =>
+    genericHandler(
+      event,
+      () => {
+        throw new Error('something went very wrong REMOVE ME LATER');
+      },
+      { logResults: true },
+    ),
+  ),
+);
+
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
 if (process.env.IS_LOCAL) {
@@ -1052,17 +1065,4 @@ if (process.env.IS_LOCAL) {
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 
   app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
-
-  app.get(
-    '/error',
-    lambdaWrapper(event =>
-      genericHandler(
-        event,
-        () => {
-          throw new Error('something went very wrong REMOVE ME LATER');
-        },
-        { logResults: true },
-      ),
-    ),
-  );
 }
