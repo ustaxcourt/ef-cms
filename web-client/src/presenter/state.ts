@@ -561,18 +561,12 @@ export const baseState = {
   assigneeId: null,
   authentication: {
     code: '',
-    forgotPassword: {
-      code: '',
-      email: '',
-      userId: '',
-    },
     form: {
       confirmPassword: '',
       email: '',
       password: '',
     },
     tempPassword: '',
-    userEmail: '',
   },
   batchDownloads: {},
   caseDeadlineReport: {} as {

@@ -1,9 +1,10 @@
 import { defineConfig } from 'cypress';
-import { getEmailVerificationToken } from './cypress/cypress-integration/support/database';
+import { expireForgotPasswordCode, getEmailVerificationToken, getForgotPasswordCode } from './cypress/cypress-integration/support/database';
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
   expireUserConfirmationCode,
+  getCognitoUserIdByEmail,
   getNewAccountVerificationCode,
   getUserTokenWithRetry,
 } from './cypress/support/cognito-login';
@@ -35,10 +36,16 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
+        getForgotPasswordCode({ email }) {
+          return getForgotPasswordCode({ email });
+        },
         getUserToken({ email, password }) {
           return CYPRESS_SMOKETESTS_LOCAL
             ? getUserTokenLocal(email)
             : getUserTokenWithRetry(email, password);
+        },
+        expireForgotPasswordCode({ email }) {
+          return expireForgotPasswordCode({ email });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
@@ -64,3 +71,4 @@ export default defineConfig({
   viewportWidth: 1200,
   watchForFileChanges: false,
 });
+

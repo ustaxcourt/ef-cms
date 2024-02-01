@@ -6,20 +6,20 @@ export const changePasswordInteractor = (
   {
     code,
     confirmPassword,
+    email,
     password,
     tempPassword,
-    userEmail,
   }: {
     confirmPassword: string;
     password: string;
-    userEmail: string;
+    email: string;
     tempPassword?: string;
     code?: string;
   },
 ): Promise<{ accessToken: string; idToken: string; refreshToken: string }> => {
   return post({
     applicationContext,
-    body: { code, confirmPassword, password, tempPassword, userEmail },
+    body: { code, confirmPassword, email, password, tempPassword },
     endpoint: '/auth/change-password',
     options: {
       withCredentials: true,
