@@ -13,6 +13,7 @@ describe('getCaseDeadlinesByDateRange', () => {
       results: ['some', 'matches'],
       total: 2,
     });
+
     const results = await getCaseDeadlinesByDateRange({
       applicationContext,
       endDate: END_DATE,
@@ -24,6 +25,7 @@ describe('getCaseDeadlinesByDateRange', () => {
       foundDeadlines: ['some', 'matches'],
       totalCount: 2,
     });
+
     const callParam = (search as jest.Mock).mock.calls[0][0];
     expect(callParam.searchParameters.body.size).toEqual(
       DEADLINE_REPORT_PAGE_SIZE,
@@ -50,10 +52,11 @@ describe('getCaseDeadlinesByDateRange', () => {
       startDate: START_DATE,
     });
 
-    expect(search.mock.calls[0][0].searchParameters.body.size).toEqual(
+    const callParam = (search as jest.Mock).mock.calls[0][0];
+    expect(callParam.searchParameters.body.size).toEqual(
       DEADLINE_REPORT_PAGE_SIZE - 1,
     );
-    expect(search.mock.calls[0][0].searchParameters.body.from).toEqual(20);
+    expect(callParam.searchParameters.body.from).toEqual(20);
   });
 
   it('returns results from the search client using default DEADLINE_REPORT_PAGE_SIZE if pageSize is greater than DEADLINE_REPORT_PAGE_SIZE', async () => {
