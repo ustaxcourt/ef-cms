@@ -110,7 +110,9 @@ async function getUserToken(password: string, username: string) {
     });
 }
 
-const getCognitoUserIdByEmail = async (email: string): Promise<string> => {
+export const getCognitoUserIdByEmail = async (
+  email: string,
+): Promise<string> => {
   const userPoolId = await getUserPoolId();
   const foundUser = await cognito.adminGetUser({
     UserPoolId: userPoolId,

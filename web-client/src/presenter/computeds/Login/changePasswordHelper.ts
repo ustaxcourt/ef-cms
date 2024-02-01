@@ -17,8 +17,8 @@ export const changePasswordHelper = (get: Get): ChangePasswordHelperResults => {
 
   const entity = new ChangePasswordForm({
     confirmPassword: authenticationState.form.confirmPassword,
+    email: authenticationState.form.email,
     password: authenticationState.form.password,
-    userEmail: authenticationState.userEmail,
   });
 
   const errors = entity.getFormattedValidationErrors();
