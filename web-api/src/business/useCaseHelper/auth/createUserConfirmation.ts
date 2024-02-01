@@ -28,7 +28,7 @@ export async function createUserConfirmation(
 
   const queryString = qs.stringify(
     { confirmationCode: code, email, userId },
-    { encode: false },
+    { encode: false }, // TODO 10007: Ensure this is safe, encode: true?
   );
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;
 

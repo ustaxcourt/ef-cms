@@ -1,5 +1,15 @@
 import { defineConfig } from 'cypress';
 import { getEmailVerificationToken } from './cypress/cypress-integration/support/database';
+import {
+  confirmUser,
+  deleteAllCypressTestAccounts,
+  expireUserConfirmationCode,
+  getNewAccountVerificationCode,
+  getUserTokenWithRetry,
+} from './cypress/support/cognito-login';
+import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
+import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
+const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -12,6 +22,26 @@ export default defineConfig({
       on('task', {
         getEmailVerificationToken({ userId }) {
           return getEmailVerificationToken({ userId });
+        },
+        confirmUser({ email }) {
+          return confirmUser({ email });
+        },
+        deleteAllCypressTestAccounts() {
+          return deleteAllCypressTestAccounts();
+        },
+        expireUserConfirmationCode(email: string) {
+          return expireUserConfirmationCode(email);
+        },
+        getNewAccountVerificationCode({ email }) {
+          return getNewAccountVerificationCode({ email });
+        },
+        getUserToken({ email, password }) {
+          return CYPRESS_SMOKETESTS_LOCAL
+            ? getUserTokenLocal(email)
+            : getUserTokenWithRetry(email, password);
+        },
+        waitForNoce({ docketNumber }: { docketNumber: string }) {
+          return waitForNoce({ docketNumber });
         },
       });
     },
