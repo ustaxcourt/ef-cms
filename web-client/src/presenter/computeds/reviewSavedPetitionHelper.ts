@@ -132,7 +132,7 @@ export const reviewSavedPetitionHelper = (
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
     ];
 
-  const attachmentToPetitionFiles = docketEntries.filter(
+  const attachmentToPetitionFiles = docketEntries?.filter(
     docketEntry => docketEntry.eventCode === 'ATP',
   );
 
