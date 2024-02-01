@@ -350,6 +350,10 @@ const app = {
 
     root.render(
       <Container app={cerebralApp}>
+         <button onClick={() => (window as any).methodDoesNotExist()}>
+          Break the world
+        </button>
+        
         {!process.env.CI && (
           <>
             <IdleActivityMonitor />

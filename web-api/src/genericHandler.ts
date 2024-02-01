@@ -61,8 +61,10 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
 export const genericHandler = (awsEvent, cb, options = {}) => {
   return handle(awsEvent, async () => {
     const user = options.user || getUserFromAuthHeader(awsEvent);
+    console.log(JSON.stringify(awsEvent));
     if (user) {
       setUser({
+        ip: awsEvent.ip,
         userId: user.userId as string,
       });
     }

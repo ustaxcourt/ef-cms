@@ -27,6 +27,7 @@ export const lambdaWrapper = (lambda, options = {}) => {
 
     const event = {
       headers: req.headers,
+      ip: get(currentInvoke, 'event.requestContext.identity.sourceIp'),
       isTerminalUser,
       path: req.path,
       pathParameters: req.params,
