@@ -133,7 +133,9 @@ export const reviewSavedPetitionHelper = (
     ];
 
   const attachmentToPetitionFiles = docketEntries?.filter(
-    docketEntry => docketEntry.eventCode === 'ATP',
+    docketEntry =>
+      docketEntry.eventCode ===
+      INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
   );
 
   const showStatistics = statistics && statistics.length > 0;
