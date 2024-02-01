@@ -14,6 +14,8 @@ export const fillInAndSubmitForm = () => {
   cy.get('#petition-file').attachFile(w3Dummy);
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get('#irs-notice-radios label').first().click();
+  cy.get('[data-testid="atp-files-upload"]').scrollIntoView();
+  cy.get('[data-testid="atp-files-upload"]').attachFile([w3Dummy, w3Dummy]);
   cy.get('#case-type').scrollIntoView();
   cy.get('#case-type').select('Notice of Deficiency');
   cy.get('button#submit-case').trigger('click');
@@ -51,6 +53,7 @@ export const fillInAndSubmitForm = () => {
   cy.get('button#submit-case').click();
 
   // step 5
+  cy.get('[data-testid="atp-preview-button-0"]').should('exist');
   cy.get('button#submit-case').scrollIntoView();
   cy.get('button#submit-case').click();
 
