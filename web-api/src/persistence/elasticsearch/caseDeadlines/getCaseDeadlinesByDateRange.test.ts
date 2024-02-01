@@ -9,8 +9,10 @@ describe('getCaseDeadlinesByDateRange', () => {
   const END_DATE = '2020-08-25T05:00:00.000Z';
 
   it('returns results from the search client using default page size if one is not passed in', async () => {
-    search.mockReturnValue({ results: ['some', 'matches'], total: 2 });
-
+    (search as jest.Mock).mockReturnValue({
+      results: ['some', 'matches'],
+      total: 2,
+    });
     const results = await getCaseDeadlinesByDateRange({
       applicationContext,
       endDate: END_DATE,
@@ -22,17 +24,18 @@ describe('getCaseDeadlinesByDateRange', () => {
       foundDeadlines: ['some', 'matches'],
       totalCount: 2,
     });
-    expect(search.mock.calls[0][0].searchParameters.body.size).toEqual(
+    const callParam = (search as jest.Mock).mock.calls[0][0];
+    expect(callParam.searchParameters.body.size).toEqual(
       DEADLINE_REPORT_PAGE_SIZE,
     );
-    expect(search.mock.calls[0][0].searchParameters.body.from).toEqual(0);
+    expect(callParam.searchParameters.body.from).toEqual(0);
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter[0].range[
+      callParam.searchParameters.body.query.bool.filter[0].range[
         'deadlineDate.S'
       ].gte,
     ).toEqual(`${START_DATE}||/h`);
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter[0].range[
+      callParam.searchParameters.body.query.bool.filter[0].range[
         'deadlineDate.S'
       ].lte,
     ).toEqual(`${END_DATE}||/h`);
@@ -61,7 +64,8 @@ describe('getCaseDeadlinesByDateRange', () => {
       startDate: START_DATE,
     });
 
-    expect(search.mock.calls[0][0].searchParameters.body.size).toEqual(
+    const callParam = (search as jest.Mock).mock.calls[0][0];
+    expect(callParam.searchParameters.body.size).toEqual(
       DEADLINE_REPORT_PAGE_SIZE,
     );
   });
@@ -75,9 +79,8 @@ describe('getCaseDeadlinesByDateRange', () => {
       startDate: START_DATE,
     });
 
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must[0],
-    ).toEqual({
+    const callParam = (search as jest.Mock).mock.calls[0][0];
+    expect(callParam.searchParameters.body.query.bool.must[0]).toEqual({
       simple_query_string: {
         default_operator: 'and',
         fields: ['associatedJudge.S'],

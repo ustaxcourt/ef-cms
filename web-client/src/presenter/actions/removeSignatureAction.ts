@@ -1,3 +1,4 @@
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * calls use case to remove signature from the document in props.docketEntryIdToEdit
  * @param {object} providers the providers object
@@ -7,6 +8,7 @@
  */
 export const removeSignatureAction = async ({
   applicationContext,
+  get,
   props,
 }: ActionProps) => {
   const { docketNumber } = props.caseDetail;
@@ -19,9 +21,14 @@ export const removeSignatureAction = async ({
       docketNumber,
     });
 
+  const viewerDraftDocumentToDisplay = get(state.viewerDraftDocumentToDisplay);
+
   return {
     alertSuccess: { message: 'Signature removed.' },
     caseDetail: updatedCase,
-    viewerDraftDocumentToDisplay: { docketEntryId },
+    viewerDraftDocumentToDisplay: {
+      docketEntryId,
+      documentType: viewerDraftDocumentToDisplay?.documentType,
+    },
   };
 };
