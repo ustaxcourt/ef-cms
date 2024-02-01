@@ -113,21 +113,43 @@ describe('Given a petitioner with a DAWSON account', () => {
           const practitionerUserName = `cypress_test_account+${v4()}`;
           const practitionerEmail = `${practitionerUserName}@example.com`;
           cy.login('admissionsclerk1');
-          cy.get('table').should('exist');
-          cy.get('#search-field').clear();
-          cy.get('#search-field').type(docketNumber);
-          cy.get('.usa-search-submit-text').click();
-          cy.get('[data-testid="tab-case-information"] > .button-text').click();
-          cy.get('[data-testid="tab-parties"] > .button-text').click();
-          cy.get('.width-auto').click();
-          cy.get('#updatedEmail').clear();
-          cy.get('#updatedEmail').type(practitionerEmail);
-          cy.get('#confirm-email').clear();
-          cy.get('#confirm-email').type(practitionerEmail);
-          cy.get('#submit-edit-petitioner-information').click();
+          cy.get('[data-testid="messages-banner"]');
+          cy.get('[data-testid="docket-number-search-input"]').type(
+            docketNumber,
+          );
+          cy.get('[data-testid="search-docket-number"]').click();
+          cy.get('[data-testid="tab-case-information"]').click();
+          cy.get('[data-testid="tab-parties"]').click();
+          cy.get('[data-testid="edit-petitioner-counsel"]').click();
+          cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
+            practitionerEmail,
+          );
+          cy.get(
+            '[data-testid="internal-confirm-petitioner-email-input"]',
+          ).type(practitionerEmail);
+          cy.get(
+            '[data-testid="submit-edit-petitioner-information-button"]',
+          ).click();
           cy.get('[data-testid="modal-button-confirm"]').click();
-          cy.get('.parties-card').contains(`${practitionerEmail} (Pending)`);
+          cy.get('[data-testid="success-alert"]').contains('Changes saved');
 
+          cy.visit('/login');
+          cy.get('[data-testid="email-input"]').type(practitionerEmail);
+          cy.get('[data-testid="password-input"]').type('Testing1234$', {
+            log: false,
+          });
+          cy.get('[data-testid="login-button"]').click();
+          cy.get('[data-testid="new-password-input"]').type('Testing1234$');
+          cy.get('[data-testid="confirm-new-password-input"]').type(
+            'Testing1234$',
+          );
+          cy.get('[data-testid="change-password-button"]').click();
+          cy.get('[data-testid="my-cases-link"]');
+          // waitfornoce
+          cy.get(`[data-testid="${docketNumber}"]`)
+            .contains(docketNumber)
+            .click();
+          cy.get('tbody:contains(NOCE)').should('exist');
           // set new password for practitioner
           // login as practitioner
           // wait for a little bit
