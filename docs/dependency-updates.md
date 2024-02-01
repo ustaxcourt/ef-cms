@@ -85,6 +85,10 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### s3-files (3.0.1)
 - (10/20/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
 
+### @aws-sdk/client-dynamodb and @aws-sdk/client-cognito-identity-provider
+
+- Left locked to 3.490.0 because they are causing websocket and cognito credential issues, respectively. Further investigation pending, maybe be related to this [urgent issue](https://github.com/aws/aws-sdk-js-v3/issues/5749)
+
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
