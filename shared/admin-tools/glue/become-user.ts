@@ -91,6 +91,7 @@ const lookupRoleForUser = async userId => {
   return data.Item?.role;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   try {
     const userId = process.argv[2];

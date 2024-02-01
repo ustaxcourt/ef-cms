@@ -27,6 +27,7 @@ module.exports = {
     './cypress-smoketests-readonly.config.ts',
     './cypress-smoketests-readonly-public.config.ts',
     './cypress-public.config.ts',
+    'scripts/run-once-scripts/**/*',
   ],
   overrides: [
     {
@@ -81,6 +82,7 @@ module.exports = {
     project: ['./tsconfig.json'],
     requireConfigFile: false,
     sourceType: 'module',
+    tsconfigRootDir: __dirname,
   },
   plugins: [
     'cypress',
@@ -396,6 +398,7 @@ module.exports = {
           'todays',
           'touchmove',
           'transferee',
+          'transpile',
           'truthy',
           'tubman',
           'uint',
