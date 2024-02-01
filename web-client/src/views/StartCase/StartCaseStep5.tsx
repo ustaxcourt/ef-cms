@@ -86,7 +86,7 @@ export const StartCaseStep5 = connect(
                             </span>
                             {form.atpFiles?.length ? (
                               <div>
-                                {form.atpFiles.map(atpFile => {
+                                {form.atpFiles.map((atpFile, index) => {
                                   return (
                                     <div
                                       className="grid-row"
@@ -94,13 +94,13 @@ export const StartCaseStep5 = connect(
                                     >
                                       <div className="grid-col flex-auto">
                                         <PDFPreviewButton
-                                          data-testid="petition-preview-button"
+                                          data-testid={`atp-preview-button-${index}`}
                                           file={atpFile}
-                                          id="petition-preview-button"
+                                          id="atp-preview-button"
                                           shouldAbbreviateTitle={false}
                                           shouldWrapText={true}
                                           showIcon={false}
-                                          title="Petition"
+                                          title="IRS Notice(s)"
                                         />
                                       </div>
                                     </div>
