@@ -6,7 +6,6 @@ import {
   goToMyAccount,
 } from '../../support/pages/my-account';
 import { createAPetitioner } from '../../../helpers/create-a-petitioner';
-import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
 import { navigateTo as loginAs } from '../../support/pages/maintenance';
 import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
@@ -15,9 +14,6 @@ import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
 
 describe('Given a petitioner with a DAWSON account', () => {
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
   describe('When they log in and change their email', () => {
     describe('And they do not verify their new email', () => {
       describe('And attempt to log in', () => {
@@ -82,7 +78,12 @@ describe('Given a petitioner with a DAWSON account', () => {
             cy.login(`petitioner9+test${randomSuffix}`);
 
             cy.get('[data-testid="my-cases-link"]');
-
+            cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
+              expect(isNOCECreated).to.equal(
+                true,
+                'NOCE was not generated on a case that a practitioner was granted e-access for.',
+              );
+            });
             cy.get(`[data-testid="${docketNumber}"]`)
               .contains(docketNumber)
               .click();
@@ -104,34 +105,6 @@ describe('Given a petitioner with a DAWSON account', () => {
               `petitioner9+test${randomSuffix}@example.com`,
             );
           });
-        });
-      });
-
-      //Replacement for user-post-auth. Should be moved
-      it('a noce should be generated after granting e access to a practitioner', () => {
-        createAndServePaperPetition().then(({ docketNumber }) => {
-          const practitionerUserName = `cypress_test_account+${v4()}`;
-          const practitionerEmail = `${practitionerUserName}@example.com`;
-          cy.login('admissionsclerk1');
-          cy.get('table').should('exist');
-          cy.get('#search-field').clear();
-          cy.get('#search-field').type(docketNumber);
-          cy.get('.usa-search-submit-text').click();
-          cy.get('[data-testid="tab-case-information"] > .button-text').click();
-          cy.get('[data-testid="tab-parties"] > .button-text').click();
-          cy.get('.width-auto').click();
-          cy.get('#updatedEmail').clear();
-          cy.get('#updatedEmail').type(practitionerEmail);
-          cy.get('#confirm-email').clear();
-          cy.get('#confirm-email').type(practitionerEmail);
-          cy.get('#submit-edit-petitioner-information').click();
-          cy.get('[data-testid="modal-button-confirm"]').click();
-          cy.get('.parties-card').contains(`${practitionerEmail} (Pending)`);
-
-          // set new password for practitioner
-          // login as practitioner
-          // wait for a little bit
-          // go to case and view NOCe
         });
       });
     });
