@@ -69,7 +69,7 @@ export const AccountMenu = connect(
                 <li className="usa-nav__submenu-item">
                   <button
                     className="account-menu-item usa-button usa-button--unstyled"
-                    data-testid="log-out-button"
+                    data-testid="logout-button-desktop"
                     id="log-out"
                     onClick={() => signOutSequence()}
                   >

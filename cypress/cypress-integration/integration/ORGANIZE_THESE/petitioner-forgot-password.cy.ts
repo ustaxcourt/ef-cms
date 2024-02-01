@@ -1,5 +1,6 @@
 import { createAPetitioner } from '../../../helpers/create-a-petitioner';
 import { faker } from '@faker-js/faker';
+import { logout } from '../../../helpers/auth/logout';
 import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
 import qs from 'qs';
@@ -36,7 +37,7 @@ describe('Given a petitioner with a DAWSON account', () => {
 
     describe('And they click the password reset link that was emailed to them', () => {
       it('Then they should be routed to the change password screen and after successful reset, be logged into their account', () => {
-        const username = v4(); // todo: put back to v4, email is too long for validation
+        const username = `cypress_test_account+${v4()}`;
         const email = `${username}@example.com`;
         const password = 'Testing1234$';
         const name = faker.person.fullName();
@@ -63,28 +64,35 @@ describe('Given a petitioner with a DAWSON account', () => {
           cy.visit(`/reset-password?${queryString}`);
         });
 
+        const brandNewPassword = 'brandNewPassword1204$^';
         cy.get('[data-testid="new-password-input"]').clear();
-        cy.get('[data-testid="new-password-input"]').type('Testing1234$');
+        cy.get('[data-testid="new-password-input"]').type(brandNewPassword);
         cy.get('[data-testid="confirm-new-password-input"]').clear();
         cy.get('[data-testid="confirm-new-password-input"]').type(
-          'Testing1234$',
+          brandNewPassword,
         );
         cy.get('[data-testid="change-password-button"]').click();
+        cy.get('[data-testid="header-text"]').should(
+          'contain',
+          `Welcome, ${name}`,
+        );
 
-        cy.visit('/login');
+        logout();
+
         cy.get('[data-testid="email-input"]').type(email);
-        cy.get('[data-testid="password-input"]').type(password, {
+        cy.get('[data-testid="password-input"]').type(brandNewPassword, {
           log: false,
         });
         cy.get('[data-testid="login-button"]').click();
-        cy.get('[data-testid="header-text"]');
-
-        // Todo? Log out and log back in
+        cy.get('[data-testid="header-text"]').should(
+          'contain',
+          `Welcome, ${name}`,
+        );
       });
 
       describe('And it has been longer than 24 hours since they indicated they Forgot Password', () => {
         it('Then they should be alerted that their forgot password link has expired', () => {
-          const username = v4(); // todo: put back to v4, email is too long for validation
+          const username = `cypress_test_account+${v4()}`;
           const email = `${username}@example.com`;
           const password = 'Testing1234$';
           const name = faker.person.fullName();
