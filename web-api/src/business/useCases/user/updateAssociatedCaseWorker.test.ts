@@ -10,7 +10,10 @@ import {
 } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
-import { updatePetitionerCases } from './updateAssociatedCaseWorker';
+import {
+  updatePetitionerCases,
+  updatePractitionerCases,
+} from './updateAssociatedCaseWorker';
 import { validUser } from '@shared/test/mockUsers';
 
 describe('updatePetitionerCases', () => {
@@ -255,5 +258,43 @@ describe('updatePetitionerCases', () => {
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
     expect(caseToUpdate.docketNumber).toBe(MOCK_CASE.docketNumber);
+  });
+});
+
+describe('updatePractitionerCases', () => {
+  let mockPractitionerUser;
+  const UPDATED_EMAIL = 'hello@example.com';
+
+  beforeEach(() => {
+    mockPractitionerUser = {
+      ...validUser,
+      barNumber: 'SS8888',
+      email: UPDATED_EMAIL,
+      role: ROLES.privatePractitioner,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        privatePractitioners: [mockPractitionerUser],
+      });
+  });
+
+  it('should set the service serviceIndicator to ELECTRONIC when confirming the email', async () => {
+    await updatePractitionerCases({
+      applicationContext,
+      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
+      user: mockPractitionerUser,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.privatePractitioners[0].serviceIndicator,
+    ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledTimes(2);
   });
 });
