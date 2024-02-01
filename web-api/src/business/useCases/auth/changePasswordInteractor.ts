@@ -41,9 +41,11 @@ export const changePasswordInteractor = async (
       email,
       password,
     }).getFormattedValidationErrors();
+
     if (errors) {
       throw new InvalidEntityError('Change Password Form Entity is invalid');
     }
+
     if (tempPassword) {
       const initiateAuthResult = await applicationContext
         .getCognito()
