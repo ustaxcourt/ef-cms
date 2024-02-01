@@ -24,13 +24,13 @@ export const changePasswordInteractor = async (
   {
     code,
     confirmPassword,
+    email,
     password,
     tempPassword,
-    userEmail,
   }: {
     password: string;
     tempPassword?: string;
-    userEmail: string;
+    email: string;
     confirmPassword: string;
     code?: string;
   },
@@ -38,8 +38,8 @@ export const changePasswordInteractor = async (
   try {
     const errors = new ChangePasswordForm({
       confirmPassword,
+      email,
       password,
-      userEmail,
     }).getFormattedValidationErrors();
     if (errors) {
       throw new InvalidEntityError('Change Password Form Entity is invalid');
@@ -51,7 +51,7 @@ export const changePasswordInteractor = async (
           AuthFlow: 'USER_PASSWORD_AUTH',
           AuthParameters: {
             PASSWORD: tempPassword,
-            USERNAME: userEmail,
+            USERNAME: email,
           },
           ClientId: applicationContext.environment.cognitoClientId,
         });
@@ -66,7 +66,7 @@ export const changePasswordInteractor = async (
           ChallengeName: 'NEW_PASSWORD_REQUIRED',
           ChallengeResponses: {
             NEW_PASSWORD: password,
-            USERNAME: userEmail,
+            USERNAME: email,
           },
           ClientId: applicationContext.environment.cognitoClientId,
           Session: initiateAuthResult.Session,
@@ -90,7 +90,7 @@ export const changePasswordInteractor = async (
       if (
         userFromPersistence &&
         userFromPersistence.pendingEmail &&
-        userFromPersistence.pendingEmail === userEmail
+        userFromPersistence.pendingEmail === email
       ) {
         const { updatedUser } = await updateUserEmailAddress(
           applicationContext,
@@ -117,10 +117,10 @@ export const changePasswordInteractor = async (
     } else {
       const user = await applicationContext
         .getUserGateway()
-        .getUserByEmail(applicationContext, { email: userEmail });
+        .getUserByEmail(applicationContext, { email });
 
       if (!user) {
-        throw new NotFoundError(`User not found with email: ${userEmail}`);
+        throw new NotFoundError(`User not found with email: ${email}`);
       }
 
       const codeFromPersistence = await applicationContext
@@ -135,7 +135,7 @@ export const changePasswordInteractor = async (
         Password: password,
         Permanent: true,
         UserPoolId: applicationContext.environment.userPoolId,
-        Username: userEmail,
+        Username: email,
       };
       await applicationContext
         .getCognito()
@@ -145,7 +145,7 @@ export const changePasswordInteractor = async (
         AuthFlow: 'USER_PASSWORD_AUTH',
         AuthParameters: {
           PASSWORD: password,
-          USERNAME: userEmail,
+          USERNAME: email,
         },
         ClientId: applicationContext.environment.cognitoClientId,
       });
@@ -158,7 +158,7 @@ export const changePasswordInteractor = async (
     }
   } catch (err: any) {
     await authErrorHandling(applicationContext, {
-      email: userEmail,
+      email,
       error: err,
       sendAccountConfirmation: false,
     });

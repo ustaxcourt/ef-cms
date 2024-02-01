@@ -108,6 +108,7 @@ export const Login = connect(
                     </form>
                     <Button
                       className="margin-top-1 display-block"
+                      data-testid="forgot-password-button"
                       link={true}
                       type="button"
                       onClick={() => navigateToForgotPasswordSequence()}

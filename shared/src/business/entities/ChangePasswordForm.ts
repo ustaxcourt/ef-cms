@@ -4,14 +4,14 @@ import { PASSWORD_RULE } from '@shared/business/entities/EntityValidationConstan
 import joi from 'joi';
 
 export class ChangePasswordForm extends JoiValidationEntity {
-  public userEmail: string;
+  public email: string;
   public password: string;
   public confirmPassword: string;
 
   constructor(rawProps) {
     super('ChangePasswordForm');
 
-    this.userEmail = rawProps.userEmail;
+    this.email = rawProps.email;
     this.password = rawProps.password;
     this.confirmPassword = rawProps.confirmPassword;
   }
@@ -21,15 +21,15 @@ export class ChangePasswordForm extends JoiValidationEntity {
       .valid(joi.ref('password'))
       .required()
       .messages({ '*': 'Passwords must match' }),
-    entityName:
-      JoiValidationConstants.STRING.valid('ChangePasswordForm').required(),
-    password: PASSWORD_RULE,
-    userEmail: JoiValidationConstants.EMAIL.required()
+    email: JoiValidationConstants.EMAIL.required()
       .messages({
         '*': 'Enter a valid email address',
         'string.max': 'Email address must contain fewer than 100 characters',
       })
       .description('Email of user'),
+    entityName:
+      JoiValidationConstants.STRING.valid('ChangePasswordForm').required(),
+    password: PASSWORD_RULE,
   });
 
   getValidationRules() {

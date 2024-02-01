@@ -110,7 +110,6 @@ export const ChangePassword = connect(
                     className="usa-show-password"
                     data-hide-text="Hide password"
                     data-show-text="Show password"
-                    title=""
                     type="button"
                     onClick={() =>
                       toggleShowPasswordSequence({
