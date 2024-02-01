@@ -159,6 +159,7 @@ export const fixRaceConditionServedInDrafts = async (
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   if (process.argv.length < 5) {
     console.log('Please provide required parameters');
