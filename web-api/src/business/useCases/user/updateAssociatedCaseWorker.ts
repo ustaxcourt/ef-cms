@@ -94,7 +94,7 @@ export const updatePetitionerCases = async ({
  * @param {string} providers.user the user who is a primary or secondary contact on a case
  * @returns {Promise} resolves upon completion of case updates
  */
-const updatePractitionerCases = async ({
+export const updatePractitionerCases = async ({
   applicationContext,
   docketNumbersAssociatedWithUser,
   user,
