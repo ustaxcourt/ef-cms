@@ -20,7 +20,7 @@ export const formatDocketEntryOnDocketRecord = (
   }: {
     entry: any & { rootDocument: any };
     isTerminalUser: boolean;
-    rawCase: any;
+    rawCase: RawPublicCase;
     visibilityPolicyDate: string; // ISO Date String
   },
 ) => {

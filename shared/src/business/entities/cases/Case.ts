@@ -2119,10 +2119,6 @@ export const isClosedStatus = function (caseStatus) {
  * @returns {Object} the contact object
  */
 export const getPetitionerById = function (rawCase, contactId) {
-  console.log('getPetitionerById', {
-    contactId,
-    petitioners: rawCase.petitioners,
-  });
   return rawCase.petitioners?.find(
     petitioner => petitioner.contactId === contactId,
   );
