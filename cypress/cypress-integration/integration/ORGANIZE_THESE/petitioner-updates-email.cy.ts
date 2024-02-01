@@ -82,7 +82,12 @@ describe('Given a petitioner with a DAWSON account', () => {
             cy.login(`petitioner9+test${randomSuffix}`);
 
             cy.get('[data-testid="my-cases-link"]');
-
+            cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
+              expect(isNOCECreated).to.equal(
+                true,
+                'NOCE was not generated on a case that a practitioner was granted e-access for.',
+              );
+            });
             cy.get(`[data-testid="${docketNumber}"]`)
               .contains(docketNumber)
               .click();
@@ -108,7 +113,7 @@ describe('Given a petitioner with a DAWSON account', () => {
       });
 
       //Replacement for user-post-auth. Should be moved
-      it('a noce should be generated after granting e access to a practitioner', () => {
+      it('a noce should be generated after granting e-access to a practitioner', () => {
         createAndServePaperPetition().then(({ docketNumber }) => {
           const practitionerUserName = `cypress_test_account+${v4()}`;
           const practitionerEmail = `${practitionerUserName}@example.com`;
@@ -145,15 +150,16 @@ describe('Given a petitioner with a DAWSON account', () => {
           );
           cy.get('[data-testid="change-password-button"]').click();
           cy.get('[data-testid="my-cases-link"]');
-          // waitfornoce
+          cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
+            expect(isNOCECreated).to.equal(
+              true,
+              'NOCE was not generated on a case that a practitioner was granted e-access for.',
+            );
+          });
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
             .click();
           cy.get('tbody:contains(NOCE)').should('exist');
-          // set new password for practitioner
-          // login as practitioner
-          // wait for a little bit
-          // go to case and view NOCe
         });
       });
     });

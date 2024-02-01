@@ -1,24 +1,21 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-
-const awsRegion = 'us-east-1';
-const stage = process.env.CYPRESS_STAGE || 'local';
-const accessKeyId = process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER';
-const secretAccessKey = process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER';
-const dynamoEndpoint = stage === 'local' ? 'http://localhost:8000' : undefined;
+import { cypressEnv } from '../env/cypressEnvironment';
 
 let dynamoCache: DynamoDBClient;
 let documentCache: DynamoDBDocument;
 
 export function getDocumentClient(): DynamoDBDocument {
   if (!documentCache) {
+    const dynamoEndpoint =
+      cypressEnv.stage === 'local' ? 'http://localhost:8000' : undefined;
     dynamoCache = new DynamoDBClient({
       credentials: {
-        accessKeyId,
-        secretAccessKey,
+        accessKeyId: cypressEnv.accessKeyId,
+        secretAccessKey: cypressEnv.secretAccessKey,
       },
       endpoint: dynamoEndpoint,
-      region: awsRegion,
+      region: cypressEnv.region,
     });
     documentCache = DynamoDBDocument.from(dynamoCache, {
       marshallOptions: { removeUndefinedValues: true },
