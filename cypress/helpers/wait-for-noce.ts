@@ -1,10 +1,5 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-
-const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
-const documentClient = DynamoDBDocument.from(dynamodb, {
-  marshallOptions: { removeUndefinedValues: true },
-});
+import { cypressEnv } from './env/cypressEnvironment';
+import { getDocumentClient } from './dynamo/getDynamoCypress';
 
 export async function waitForNoce({
   attempts = 0,
@@ -14,7 +9,7 @@ export async function waitForNoce({
   attempts?: number;
 }): Promise<boolean> {
   const maxAttempts = 10;
-  const result = await documentClient.query({
+  const result = await getDocumentClient().query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -24,7 +19,7 @@ export async function waitForNoce({
       ':prefix': 'docket-entry',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    TableName: process.env.DYNAMODB_TABLE_NAME,
+    TableName: cypressEnv.dynamoDbTableName,
   });
 
   const noce = result.Items?.find(item => item.eventCode === 'NOCE');

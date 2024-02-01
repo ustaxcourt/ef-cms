@@ -44,6 +44,7 @@ export const PetitionersAndCounsel = connect(
                       <Button
                         link
                         className="width-auto white-edit-link padding-0 margin-right-0 float-right edit-petitioner-button"
+                        data-testid="edit-petitioner-counsel"
                         href={petitioner.editPetitionerLink}
                         icon="edit"
                       >
@@ -124,7 +125,7 @@ export const PetitionersAndCounsel = connect(
                                 <Button
                                   link
                                   className="margin-left-1 padding-0 height-3"
-                                  data-testid="edit-petitioner-counsel"
+                                  data-testid="edit-private-practitioner-counsel"
                                   href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                   icon="edit"
                                   overrideMargin={true}
