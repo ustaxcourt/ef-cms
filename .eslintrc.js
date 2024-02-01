@@ -389,6 +389,7 @@ module.exports = {
           'todays',
           'touchmove',
           'transferee',
+          'transpile',
           'truthy',
           'tubman',
           'uint',
