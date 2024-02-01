@@ -144,6 +144,7 @@ const setupPractitioners = async () => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   // check if we have what we need?
   console.log('== Activating Admin Account');

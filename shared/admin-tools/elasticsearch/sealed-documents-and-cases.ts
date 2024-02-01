@@ -237,6 +237,7 @@ const getOrdersSinceDawson = async ({
   return ordersSinceDawson;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const sealedCases = await getSealedCases({ applicationContext });
