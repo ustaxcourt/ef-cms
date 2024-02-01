@@ -1,7 +1,7 @@
 ::: STUFF TO DO :::
 - test cases
-  - update broken tests with worker queue
 - Changing Email for Practitioner as admissions clerk for endpoint: /async/practitioners/:barNumber stalls out.
+- When something goes into the dead letter queue, we should send out some sort of notification, to what and who is TBD. 
 
 ::: SOLO :::
 - Update Swagger docs (not able to delete)
@@ -11,7 +11,7 @@
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
 - How do we make forgot password more secure? 
 - Have we covered one of two scenarios mentioned in 10007 comments by Tenille?
-
+- Retry logic around Worker Queues? They currently fan out for email changes, if it fails it will goto dead letter queue. Since verifyPendingEmail endpoint isn't async anymore it doesn't retry like it used. 
 
 ::: DOD :::
 - Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
