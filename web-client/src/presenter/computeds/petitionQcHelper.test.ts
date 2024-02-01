@@ -1,8 +1,5 @@
 import { applicationContext } from '../../applicationContext';
-import {
-  initialFilingDocumentTabs,
-  petitionQcHelper as petitionQcHelperComputed,
-} from './petitionQcHelper';
+import { petitionQcHelper as petitionQcHelperComputed } from './petitionQcHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -14,6 +11,9 @@ describe('petitionQcHelper', () => {
   let mockState;
 
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const initialTabs = Object.values(INITIAL_DOCUMENT_TYPES)
+    .sort((a, b) => a.sort - b.sort)
+    .map(tab => tab.tabTitle);
 
   describe('isPetitionFile', () => {
     it('should be false when the documentSelectedForPreview is NOT a petition file', () => {
@@ -82,7 +82,9 @@ describe('petitionQcHelper', () => {
           },
         },
       });
-      expect(documentTabsToDisplay).toEqual(initialFilingDocumentTabs);
+      expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual(
+        initialTabs,
+      );
     });
 
     it('hides APW and RQT tabs for electronic filings', () => {
@@ -110,11 +112,11 @@ describe('petitionQcHelper', () => {
           },
         },
       });
-      expect(documentTabsToDisplay).toEqual([
-        initialFilingDocumentTabs[0], // Petition
-        initialFilingDocumentTabs[1], // STIN
-        initialFilingDocumentTabs[2], // ATP
-        initialFilingDocumentTabs[4], // CDS
+      expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual([
+        initialTabs[0], // Petition
+        initialTabs[1], // STIN
+        initialTabs[2], // ATP
+        initialTabs[4], // CDS
       ]);
     });
 
@@ -139,10 +141,10 @@ describe('petitionQcHelper', () => {
           },
         },
       });
-      expect(documentTabsToDisplay).toEqual([
-        initialFilingDocumentTabs[0], // Petition
-        initialFilingDocumentTabs[1], // STIN
-        initialFilingDocumentTabs[2], // ATP
+      expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual([
+        initialTabs[0], // Petition
+        initialTabs[1], // STIN
+        initialTabs[2], // ATP
       ]);
     });
   });
