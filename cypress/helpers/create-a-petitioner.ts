@@ -17,4 +17,7 @@ export function createAPetitioner({
   );
 
   cy.get('[data-testid="petitioner-account-creation-submit-button"]').click();
+  cy.get('[data-testid="email-address-verification-sent-message"]').should(
+    'exist',
+  );
 }

@@ -20,6 +20,7 @@ export const LoginAndServiceEmailAddress = connect(
             <Button
               link
               className="text-left"
+              data-testid="change-email-button"
               icon="edit"
               onClick={() =>
                 navigateToPathSequence({

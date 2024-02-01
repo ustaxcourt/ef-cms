@@ -10,28 +10,46 @@ import { faker } from '@faker-js/faker';
 import { navigateTo as loginAs } from '../../support/pages/maintenance';
 import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../support/setup/petitionsclerk-serves-petition';
+import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
 
 describe('Given a petitioner with a DAWSON account', () => {
+  after(() => {
+    cy.task('deleteAllCypressTestAccounts');
+  });
   describe('When they log in and change their email', () => {
     describe('And they do not verify their new email', () => {
       describe('And attempt to log in', () => {
         it('Then they should be alerted that they need to confirm their new email', () => {
-          const email = faker.internet.email();
+          const username = `cypress_test_account+old${v4()}`;
+          const email = `${username}@example.com`;
           const password = 'Testing1234$';
           const name = faker.person.fullName();
           createAPetitioner({ email, name, password });
           verifyPetitionerAccount({ email });
+          cy.login(username);
+          cy.get('[data-testid="account-menu-button"]').click();
+          cy.get('[data-testid="my-account-link"]').click();
+          const newUsername = `cypress_test_account+new${v4()}`;
+          cy.get('[data-testid="change-email-button"]').click();
+          cy.get('[data-testid="change-login-email-input"]').type(
+            `${newUsername}@example.com`,
+          );
+          cy.get('[data-testid="confirm-change-login-email-input"]').type(
+            `${newUsername}@example.com`,
+          );
+          cy.get('[data-testid="save-change-login-email-button"]').click();
+          cy.get('[data-testid="modal-button-confirm"]').click();
+          cy.get('[data-testid="account-menu-button"]').click();
+          cy.reload();
 
-          // Login
-          // Change Account Email
-          // Logout
-          // Login with existing email
-          // Expect to see yellow banner that indicates they have a pending email
+          cy.get('[data-testid="verify-email-warning"]').contains(
+            `A verification email has been sent to ${newUsername}@example.com. Verify your email to log in and receive service at the new email address.`,
+          );
         });
       });
 
-      describe.skip('And they verify the new email', () => {
+      describe('And they verify the new email', () => {
         it('Then they should be able to log in using the updated email and all of their associated cases should be updated with the new email', () => {
           loginAs('petitioner9');
 
