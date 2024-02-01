@@ -3,25 +3,15 @@ export const navigateTo = (username: string) => {
 };
 
 export const fillInAndSubmitForm = () => {
-  cy.fixture('w3-dummy.pdf', null)
-    .then(Cypress.Buffer.from)
-    .then(pdfFile => {
-      const fileOptions = {
-        contents: pdfFile,
-        fileName: 'w3-dummy.pdf',
-        lastModified: Date.now(),
-        mimeType: 'application/pdf',
-      };
+  const w3Dummy = 'w3-dummy.pdf'; // this comes from the fixtures folder
 
-      // wizard step 1
-      cy.get('input#stin-file').should('be.enabled').selectFile(fileOptions);
-      cy.get('[data-testid="upload-file-success"]');
-      cy.get('button#submit-case').trigger('click');
+  // wizard step 1
+  cy.get('input#stin-file').should('be.enabled').attachFile(w3Dummy);
+  cy.get('[data-testid="upload-file-success"]');
+  cy.get('button#submit-case').trigger('click');
 
-      // wizard step 2
-      cy.get('#petition-file').selectFile(fileOptions);
-    });
-
+  // wizard step 2
+  cy.get('#petition-file').attachFile(w3Dummy);
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get('#irs-notice-radios label').first().click();
   cy.get('#case-type').scrollIntoView();
