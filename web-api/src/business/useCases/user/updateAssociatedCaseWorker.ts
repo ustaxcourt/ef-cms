@@ -44,7 +44,7 @@ export const updateAssociatedCaseWorker = async (
   });
 };
 
-const updatePetitionerCases = async ({
+export const updatePetitionerCases = async ({
   applicationContext,
   docketNumbersAssociatedWithUser,
   user,
