@@ -18,6 +18,12 @@ variable "sentry_dsn_api" {
   type = string
 }
 
+
+variable "commit_sha" {
+  type = string
+}
+
+
 variable "cognito_suffix" {
   type = string
 }

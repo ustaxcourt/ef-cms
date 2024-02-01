@@ -9,6 +9,7 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN_API,
   environment: process.env.STAGE!,
   profilesSampleRate: 1.0,
+  release: process.env.COMMIT_SHA,
   tracesSampleRate: 1.0,
 });
 

@@ -28,6 +28,7 @@ data "null_data_source" "locals" {
     SLACK_WEBHOOK_URL                  = var.slack_webhook_url
     STAGE                              = var.environment
     SENTRY_DSN_API                     = var.sentry_dsn_api
+    COMMIT_SHA                         = var.commit_sha
     TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
     USER_POOL_ID                       = aws_cognito_user_pool.pool.id
     USER_POOL_IRS_ID                   = aws_cognito_user_pool.irs_pool.id

@@ -61,6 +61,7 @@ module "ef-cms_apis" {
   destination_table          = var.destination_table
   disable_emails             = var.disable_emails
   sentry_dsn_api             = var.sentry_dsn_api
+  commit_sha                 = var.commit_sha
   dns_domain                 = var.dns_domain
   email_dmarc_policy         = var.email_dmarc_policy
   enable_health_checks       = var.enable_health_checks

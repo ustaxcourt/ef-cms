@@ -56,6 +56,9 @@ module.exports = copyDestinations => ({
       authToken: process.env.SENTRY_AUTH_TOKEN,
       org: 'cody-seibert',
       project: 'node-awslambda',
+      release: {
+        name: process.env.COMMIT_SHA,
+      },
       telemetry: false,
     }),
   ],

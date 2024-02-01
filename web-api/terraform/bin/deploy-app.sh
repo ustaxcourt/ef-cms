@@ -31,6 +31,7 @@ fi
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 [ -z "${SENTRY_DSN_API}" ] && echo "You must have SENTRY_DSN_API set in your environment" && exit 1
 [ -z "${SENTRY_AUTH_TOKEN}" ] && echo "You must have SENTRY_AUTH_TOKEN set in your environment" && exit 1
+[ -z "${COMMIT_SHA}" ] && echo "You must have COMMIT_SHA set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
@@ -54,6 +55,7 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
 echo "  - SENTRY_DSN_API=${SENTRY_DSN_API}"
 echo "  - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}"
+echo "  - COMMIT_SHA=${COMMIT_SHA}"
 
 ../../../scripts/verify-terraform-version.sh
 
@@ -182,6 +184,8 @@ export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_sentry_dsn_api=$SENTRY_DSN_API
 export TF_VAR_zone_name=$ZONE_NAME
+export TF_VAR_commit_sha=$COMMIT_SHA
+
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan

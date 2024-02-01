@@ -14,6 +14,10 @@ variable "zone_name" {
   type = string
 }
 
+variable "commit_sha" {
+  type = string
+}
+
 variable "sentry_dsn_api" {
   type = string
 }
