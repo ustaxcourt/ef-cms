@@ -74,7 +74,11 @@ export const ChangePassword = connect(
                   >
                     {showPassword ? 'Hide Password' : 'Show password'}
                   </button>
-                  <div className="margin-top-205" hidden={!password}>
+                  <div
+                    className="margin-top-205"
+                    data-testid="password-validation-errors"
+                    hidden={!password}
+                  >
                     {changePasswordHelper.passwordErrors.map(error => {
                       return (
                         <RequirementsText

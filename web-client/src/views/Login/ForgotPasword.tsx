@@ -55,7 +55,7 @@ export const ForgotPassword = connect(
                       />
                       <Button
                         className="usa-button margin-top-3"
-                        data-testid="forgot-password-button"
+                        data-testid="send-password-reset-button"
                         disabled={!email}
                         onClick={e => {
                           e.preventDefault();

@@ -1,6 +1,9 @@
+import {
+  AdminGetUserCommandOutput,
+  UserStatusType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 
 // Not every user has a custom:userId. If not then their userId is the sub
 // If they have a custom:userId then their userId is custom:userid
@@ -27,13 +30,17 @@ export const getUserByEmail = async (
   | undefined
 > => {
   const cognito = applicationContext.getCognito();
-  const foundUser = await cognito.adminGetUser({
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: email,
-  });
-
-  if (!foundUser) {
-    return;
+  let foundUser: AdminGetUserCommandOutput;
+  try {
+    foundUser = await cognito.adminGetUser({
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: email,
+    });
+  } catch (err: any) {
+    if (err.name === 'UserNotFoundException') {
+      return;
+    }
+    throw err;
   }
 
   const userId =

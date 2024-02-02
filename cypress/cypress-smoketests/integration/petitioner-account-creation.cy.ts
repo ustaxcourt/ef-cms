@@ -1,5 +1,10 @@
+import {
+  PasswordConfig,
+  generatePassword,
+} from '../../helpers/auth/generate-password';
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { verifyPasswordRequirements } from '../../helpers/auth/verify-password-requirements';
 import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
 describe('Petitioner Account Creation', () => {
@@ -51,158 +56,12 @@ describe('Petitioner Account Creation', () => {
 
       //password
       const VALID_PASSWORD = 'aA1!aaaa';
-
-      //leading white space
-      cy.get(
-        '[data-testid="password-hasNoLeadingOrTrailingSpace-requirement-text"]',
-      ).should('not.be.visible');
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(' ');
-      cy.get('[data-testid="petitioner-account-creation-password"]').blur();
-      cy.get(
-        '[data-testid="password-hasNoLeadingOrTrailingSpace-requirement-text"]',
-      )
-        .should('be.visible')
-        .and('have.class', 'invalid-requirement');
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
+      verifyPasswordRequirements(
+        '[data-testid="petitioner-account-creation-password"]',
+      );
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         VALID_PASSWORD,
       );
-
-      cy.get(
-        '[data-testid="password-hasNoLeadingOrTrailingSpace-requirement-text"]',
-      )
-        .should('be.visible')
-        .and('have.class', 'valid-requirement');
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-
-      //lower case
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        generatePassword({
-          digits: 1,
-          length: 8,
-          lower: 0,
-          special: 1,
-          upper: 1,
-        }),
-      );
-      cy.get('[data-testid="petitioner-account-creation-password"]').blur();
-      cy.get('[data-testid="password-hasOneLowercase-requirement-text"]')
-        .should('be.visible')
-        .and('have.class', 'invalid-requirement');
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        VALID_PASSWORD,
-      );
-
-      cy.get('[data-testid="password-hasOneLowercase-requirement-text"]')
-        .should('be.visible')
-        .and('have.class', 'valid-requirement');
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-
-      //digit
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        generatePassword({
-          digits: 0,
-          length: 8,
-          lower: 1,
-          special: 1,
-          upper: 1,
-        }),
-      );
-      cy.get('[data-testid="petitioner-account-creation-password"]').blur();
-      cy.get('[data-testid="password-hasOneNumber-requirement-text"]')
-        .should('be.visible')
-        .and('have.class', 'invalid-requirement');
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        VALID_PASSWORD,
-      );
-
-      cy.get('[data-testid="password-hasOneNumber-requirement-text"]')
-        .should('be.visible')
-        .and('have.class', 'valid-requirement');
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-
-      //upper case
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        generatePassword({
-          digits: 1,
-          length: 8,
-          lower: 1,
-          special: 1,
-          upper: 0,
-        }),
-      );
-      cy.get('[data-testid="petitioner-account-creation-password"]').blur();
-      cy.get('[data-testid="password-hasOneUppercase-requirement-text"]')
-        .should('be.visible')
-        .and('have.class', 'invalid-requirement');
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        VALID_PASSWORD,
-      );
-
-      cy.get('[data-testid="password-hasOneUppercase-requirement-text"]')
-        .should('be.visible')
-        .and('have.class', 'valid-requirement');
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-
-      //special characters
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        generatePassword({
-          digits: 1,
-          length: 8,
-          lower: 1,
-          special: 0,
-          upper: 1,
-        }),
-      );
-      cy.get('[data-testid="petitioner-account-creation-password"]').blur();
-      cy.get(
-        '[data-testid="password-hasSpecialCharacterOrSpace-requirement-text"]',
-      )
-        .should('be.visible')
-        .and('have.class', 'invalid-requirement');
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        VALID_PASSWORD,
-      );
-
-      cy.get(
-        '[data-testid="password-hasSpecialCharacterOrSpace-requirement-text"]',
-      )
-        .should('be.visible')
-        .and('have.class', 'valid-requirement');
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-
-      //length
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        generatePassword({
-          digits: 1,
-          length: 7,
-          lower: 1,
-          special: 1,
-          upper: 1,
-        }),
-      );
-      cy.get('[data-testid="petitioner-account-creation-password"]').blur();
-      cy.get('[data-testid="password-isProperLength-requirement-text"]')
-        .should('be.visible')
-        .and('have.class', 'invalid-requirement');
-
-      cy.get('[data-testid="petitioner-account-creation-password"]').clear();
-      cy.get('[data-testid="petitioner-account-creation-password"]').type(
-        VALID_PASSWORD,
-      );
-
-      cy.get('[data-testid="password-isProperLength-requirement-text"]')
-        .should('be.visible')
-        .and('have.class', 'valid-requirement');
 
       // confirm
       cy.get('[data-testid="confirm-password-requirement-text"]').should(
@@ -347,62 +206,3 @@ describe('Petitioner Account Creation', () => {
     });
   });
 });
-
-interface PasswordConfig {
-  length: number;
-  lower: number;
-  upper: number;
-  digits: number;
-  special: number;
-}
-
-function generatePassword(config: PasswordConfig): string {
-  const charSets: { [key: string]: string } = {
-    digits: '0123456789',
-    lower: 'abcdefghijklmnopqrstuvwxyz',
-    special: '!@#$',
-    upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  };
-
-  const getRandomChar = (charSet: string) =>
-    charSet[Math.floor(Math.random() * charSet.length)];
-
-  const password: string[] = [];
-
-  const addChars = (charSet: string, count: number) => {
-    for (let i = 0; i < count; i++) {
-      password.push(getRandomChar(charSet));
-    }
-  };
-
-  const includeChars = (type: keyof PasswordConfig) => {
-    if (config[type] > 0) {
-      addChars(charSets[type], config[type]);
-    }
-  };
-
-  includeChars('lower');
-  includeChars('upper');
-  includeChars('digits');
-  includeChars('special');
-
-  const remainingLength = config.length - password.length;
-
-  if (remainingLength > 0) {
-    const remainingCharSets: string[] = [];
-    if (config.lower > 0) remainingCharSets.push(charSets.lower);
-    if (config.upper > 0) remainingCharSets.push(charSets.upper);
-    if (config.digits > 0) remainingCharSets.push(charSets.digits);
-    if (config.special > 0) remainingCharSets.push(charSets.special);
-
-    const allChars = remainingCharSets.join('');
-    addChars(allChars, remainingLength);
-  }
-
-  for (let i = password.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [password[i], password[j]] = [password[j], password[i]];
-  }
-
-  return password.join('');
-}

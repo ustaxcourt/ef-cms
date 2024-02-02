@@ -2,6 +2,7 @@ import { createAPetitioner } from '../../../helpers/create-a-petitioner';
 import { faker } from '@faker-js/faker';
 import { logout } from '../../../helpers/auth/logout';
 import { v4 } from 'uuid';
+import { verifyPasswordRequirements } from '../../../helpers/auth/verify-password-requirements';
 import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
 import qs from 'qs';
 
@@ -11,6 +12,21 @@ describe('Given a petitioner with a DAWSON account', () => {
   });
 
   describe('When they indicate that they Forgot Password', () => {
+    describe('And they type in an email address that is not associated with a DAWSON account', () => {
+      it('Then they should be alerted in the same way as if the email is associated with a DAWSON account (security concern)', () => {
+        cy.visit('/login');
+        cy.get('[data-testid="forgot-password-button"]').click();
+        cy.get('[data-testid="email-input"]').clear();
+        const emailWithoutAccount = `doesNotExist${v4()}@email.com`;
+        cy.get('[data-testid="email-input"]').type(emailWithoutAccount);
+        cy.get('[data-testid="send-password-reset-button"]').click();
+        cy.get('[data-testid="success-alert"]').should(
+          'contain',
+          'Password reset email sent',
+        );
+      });
+    });
+
     describe('And they do not click the password reset link that was emailed to them', () => {
       it('Then they should be able to log into their account with their existing password', () => {
         const username = `cypress_test_account+${v4()}`;
@@ -23,7 +39,7 @@ describe('Given a petitioner with a DAWSON account', () => {
         cy.get('[data-testid="forgot-password-button"]').click();
         cy.get('[data-testid="email-input"]').clear();
         cy.get('[data-testid="email-input"]').type(email);
-        cy.get('[data-testid="forgot-password-button"]').click();
+        cy.get('[data-testid="send-password-reset-button"]').click();
 
         cy.visit('/login');
         cy.get('[data-testid="email-input"]').type(email);
@@ -45,11 +61,12 @@ describe('Given a petitioner with a DAWSON account', () => {
         verifyPetitionerAccount({ email });
 
         cy.get('[data-testid="forgot-password-button"]').click();
+
         cy.get('[data-testid="email-input"]').clear();
         cy.get('[data-testid="email-input"]').type(email);
-        cy.get('[data-testid="forgot-password-button"]').click();
+        cy.get('[data-testid="send-password-reset-button"]').click();
 
-        cy.get('.usa-alert--success').should(
+        cy.get('[data-testid="success-alert"]').should(
           'contain',
           'Password reset email sent',
         );
@@ -63,6 +80,8 @@ describe('Given a petitioner with a DAWSON account', () => {
           );
           cy.visit(`/reset-password?${queryString}`);
         });
+
+        verifyPasswordRequirements('[data-testid="new-password-input"]');
 
         const brandNewPassword = 'brandNewPassword1204$^';
         cy.get('[data-testid="new-password-input"]').clear();
@@ -102,7 +121,7 @@ describe('Given a petitioner with a DAWSON account', () => {
           cy.get('[data-testid="forgot-password-button"]').click();
           cy.get('[data-testid="email-input"]').clear();
           cy.get('[data-testid="email-input"]').type(email);
-          cy.get('[data-testid="forgot-password-button"]').click();
+          cy.get('[data-testid="send-password-reset-button"]').click();
 
           cy.get('[data-testid="success-alert"]').should(
             'contain',
@@ -143,14 +162,6 @@ describe('Given a petitioner with a DAWSON account', () => {
 
 // eslint-disable-next-line spellcheck/spell-checker
 /*
-If you type in a random email address it displays identically as if you typed in an existing users email address
-Password validation:  reference(cypress/cypress-smoketests/integration/petitioner-account-creation.cy.ts)
-  - passwords do not match
-  - password no special character
-  - no number
-  - no capital
-  - no lowercase
-  - length
 Unconfirmed petitioner account that was created by the petitioner - show 'we sent you an email'
 Unconfirmed account that was created by court personel granting e-access to someone - show 'we sent you an email'
 */
