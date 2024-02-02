@@ -14,6 +14,7 @@
 - How do we make forgot password more secure? 
 - Have we covered one of two scenarios mentioned in 10007 comments by Tenille?
 - Retry logic around Worker Queues? They currently fan out for email changes, if it fails it will goto dead letter queue. Since verifyPendingEmail endpoint isn't async anymore it doesn't retry like it used. 
+- Ask Chris what should happen when user logs in and then manually visits /login again.
 
 ::: DOD :::
 - Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
