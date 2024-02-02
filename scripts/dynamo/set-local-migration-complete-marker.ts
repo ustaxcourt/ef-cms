@@ -13,7 +13,7 @@ const completionMarker = {
   entityName: 'CompletionMarker',
   environment: 'local',
   jobName: 'wait-for-reindex',
-  pk: `completion-marker|${workflowId}`,
+  pk: 'completion-marker',
   sk: `completion-marker|${workflowId}`,
   ttl,
   workflowId,

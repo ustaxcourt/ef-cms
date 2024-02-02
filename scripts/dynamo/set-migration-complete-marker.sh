@@ -20,7 +20,7 @@ TOMORROW=$(($(date "+%s") + 86400))
 ITEM=$(cat <<-END
 {
     "pk": {
-        "S": "completion-marker|${CIRCLE_WORKFLOW_ID}"
+        "S": "completion-marker"
     },
     "sk":{
         "S": "completion-marker|${CIRCLE_WORKFLOW_ID}"
