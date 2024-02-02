@@ -1,6 +1,7 @@
 import { appendFormAndOverwriteOrderFileAction } from '../actions/CourtIssuedOrder/appendFormAndOverwriteOrderFileAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { getCreateOrderSelectedCases } from '@web-client/presenter/actions/getCreateOrderSelectedCases';
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectToSigningAction';
@@ -16,9 +17,12 @@ import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocum
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
+import { unsetCreateOrderAddedDocketNumbers } from '@web-client/presenter/actions/unsetCreateOrderAddedDocketNumbers';
+import { unsetCreateOrderSelectedCases } from '@web-client/presenter/actions/unsetCreateOrderSelectedCases';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 
 const onFileUploadedSuccess = [
+  getCreateOrderSelectedCases,
   submitCourtIssuedOrderAction,
   setDefaultDraftDocumentIdAction,
   setCaseAction,
@@ -27,6 +31,8 @@ const onFileUploadedSuccess = [
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
   getEditedDocumentDetailParamsAction,
+  unsetCreateOrderSelectedCases,
+  unsetCreateOrderAddedDocketNumbers,
   getShouldRedirectToSigningAction,
   {
     no: [
