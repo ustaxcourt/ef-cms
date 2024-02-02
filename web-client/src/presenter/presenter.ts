@@ -281,6 +281,7 @@ import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadl
 import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
+import { openInvalidFilesModalSequence } from '@web-client/presenter/sequences/openInvalidFilesModalSequence';
 import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPenaltiesModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
@@ -1028,6 +1029,8 @@ export const presenterSequences = {
     openForwardMessageModalSequence as unknown as Function,
   openGainElectronicAccessToCaseModalSequence:
     openGainElectronicAccessToCaseModalSequence as unknown as Function,
+  openInvalidFilesModalSequence:
+    openInvalidFilesModalSequence as unknown as Function,
   openItemizedPenaltiesModalSequence:
     openItemizedPenaltiesModalSequence as unknown as Function,
   openPdfPreviewModalSequence:

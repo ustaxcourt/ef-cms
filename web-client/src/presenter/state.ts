@@ -626,6 +626,7 @@ export const baseState = {
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  invalidFiles: [] as string[],
   irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
   judgeActivityReport: {
