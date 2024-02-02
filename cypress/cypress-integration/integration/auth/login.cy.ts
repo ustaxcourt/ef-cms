@@ -1,3 +1,5 @@
+import { v4 } from 'uuid';
+
 describe('Given a user with a DAWSON account', () => {
   describe('When they login in with the correct email and password', () => {
     it('Then they should be taken to their dashboard', () => {
@@ -30,7 +32,13 @@ describe('Given a user with a DAWSON account', () => {
 describe('Given a user without a DAWSON account', () => {
   describe('When they login', () => {
     it('Then they should receive an error alerting them that their email or password is incorrect', () => {
-      //* Login with email that does not have an account, wrong password
+      const emailWithoutAccount = `doesNotExist${v4()}@email.com`;
+      cy.visit('/login');
+      cy.get('[data-testid="email-input"]').type(emailWithoutAccount);
+      cy.get('[data-testid="password-input"]').type('Testing1234$', {
+        log: false,
+      });
+      cy.get('[data-testid="login-button"]').click();
     });
   });
 });
@@ -38,7 +46,7 @@ describe('Given a user without a DAWSON account', () => {
 describe('Given a user who has been granted e-access to DAWSON', () => {
   describe('When they login with the correct email and temporary password', () => {
     it('Then they should be prompted to set a new password and be able to login to their account', () => {
-      // * Login with force password change
+      // todo
     });
   });
 });
