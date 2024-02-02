@@ -4,9 +4,10 @@ import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
-import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
-import { validateDateAndCreateISO } from '../../src/business/utilities/DateHandler';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
+import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
 
@@ -64,6 +65,7 @@ const getUniqueValues = ({
   return uniqueValues;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const allPractitioners: RawPractitioner[] =
