@@ -18,5 +18,6 @@ export const setUserAction = ({
   Sentry.setUser({
     id: props.user.userId,
     ip_address: '{{auto}}',
+    username: props.user.name,
   });
 };

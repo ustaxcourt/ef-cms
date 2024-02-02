@@ -64,6 +64,7 @@ export const genericHandler = (awsEvent, cb, options = {}) => {
     if (user) {
       setUser({
         ip: awsEvent.ip,
+        name: user.name,
         userId: user.userId as string,
       });
     }

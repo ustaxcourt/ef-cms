@@ -183,6 +183,7 @@ const app = {
       Sentry.setUser({
         id: user.userId,
         ip_address: '{{auto}}',
+        username: user.name,
       });
     }
 

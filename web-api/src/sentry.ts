@@ -19,9 +19,18 @@ export async function captureException(error: Error) {
   await Sentry.flush();
 }
 
-export function setUser({ ip, userId }: { userId: string; ip: string }) {
+export function setUser({
+  ip,
+  name,
+  userId,
+}: {
+  userId: string;
+  ip: string;
+  name: string;
+}) {
   Sentry.setUser({
     id: userId,
     ip_address: ip,
+    username: name,
   });
 }

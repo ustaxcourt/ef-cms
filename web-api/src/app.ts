@@ -64,7 +64,6 @@ import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/ge
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
-import { genericHandler } from '@web-api/genericHandler';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
@@ -1033,19 +1032,6 @@ app.get(
     .delete(lambdaWrapper(deleteAuthCookieLambda));
   app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 }
-
-app.get(
-  '/error',
-  lambdaWrapper(event =>
-    genericHandler(
-      event,
-      () => {
-        throw new Error('something went very wrong REMOVE ME LATER');
-      },
-      { logResults: true },
-    ),
-  ),
-);
 
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
