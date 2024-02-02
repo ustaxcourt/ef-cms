@@ -1,5 +1,6 @@
 import { createAPetitioner } from '../../../helpers/create-a-petitioner';
 import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
+import { cypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { faker } from '@faker-js/faker';
 import { logout } from '../../../helpers/auth/logout';
 import { v4 } from 'uuid';
@@ -8,10 +9,30 @@ import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-acco
 describe('Given a user with a DAWSON account', () => {
   describe('When they login in with the correct email and password', () => {
     it('Then they should be taken to their dashboard', () => {
+      cy.visit('/login');
       // Login Button is Disabled till Enter Both Email and Password
-      // Login correctly (happy path)
-      // refresh (still on dashboard)
+      cy.get('[data-testid="login-button"]').should('be.disabled');
+      cy.get('[data-testid="email-input"]').type('docketclerk1@example.com');
+      cy.get('[data-testid="password-input"]').type(
+        cypressEnv.defaultAccountPass,
+        {
+          log: false,
+        },
+      );
+      cy.get('[data-testid="login-button"]').click();
+      cy.get('[data-testid="account-menu-button"]');
+      cy.get('[data-testid="error-alert"]').should('not.exist');
+
+      // after reloading they are still logged in
+      cy.reload();
+      cy.get('[data-testid="account-menu-button"]');
+      cy.get('[data-testid="error-alert"]').should('not.exist');
+      cy.url().should('contain', '/messages');
+
       // manually access url (still logged in)
+      cy.visit('/trial-sessions');
+      cy.get('[data-testid="header-text"]').should('contain', 'Trial Sessions');
+      cy.url().should('contain', '/trial-sessions');
     });
 
     describe('And their account is unconfirmed', () => {
