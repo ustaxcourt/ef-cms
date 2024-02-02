@@ -280,12 +280,14 @@ export const Header = connect(
                       <img alt="USTC Seal" src={seal} />
                     </a>
                   </div>
-                  <button
-                    className="usa-menu-btn"
-                    onClick={() => toggleMobileMenuSequence()}
-                  >
-                    Menu
-                  </button>
+                  {user && (
+                    <button
+                      className="usa-menu-btn"
+                      onClick={() => toggleMobileMenuSequence()}
+                    >
+                      Menu
+                    </button>
+                  )}
                 </div>
                 <nav
                   className={classNames(
