@@ -1,3 +1,5 @@
+import promiseRetry from 'promise-retry';
+
 /**
  * uploadPdfFromClient
  *
@@ -18,7 +20,17 @@ export const uploadPdfFromClient = async ({
   applicationContext: IApplicationContext;
   file: any;
   key: string;
-  onUploadProgress: ({ isDone }: { isDone: boolean }) => void;
+  onUploadProgress: ({
+    isDone,
+    isHavingSystemIssues,
+    loaded,
+    total,
+  }: {
+    isDone?: boolean;
+    loaded?: number;
+    total?: number;
+    isHavingSystemIssues?: boolean;
+  }) => void;
   policy: any;
 }) => {
   const docId = key;
@@ -35,21 +47,35 @@ export const uploadPdfFromClient = async ({
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
   formData.append('content-type', file.type || 'application/pdf');
   formData.append('file', file, file.name || 'fileName');
-  await applicationContext
-    .getHttpClient()
-    .post(policy.url, formData, {
-      headers: {
-        /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
-        'content-type': `multipart/form-data; boundary=${
-          (formData as any)._boundary
-        }`,
-      },
-      onUploadProgress,
-    })
-    .then(r => {
-      onUploadProgress({ isDone: true });
-      return r;
-    });
+
+  await promiseRetry(
+    (retry, attempts) => {
+      onUploadProgress({ isHavingSystemIssues: false, loaded: 0, total: 100 });
+
+      if (attempts > 3) {
+        onUploadProgress({ isHavingSystemIssues: true, loaded: 0, total: 100 });
+      }
+      return applicationContext
+        .getHttpClient()
+        .post(policy.url, formData, {
+          headers: {
+            /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
+            'content-type': `multipart/form-data; boundary=${
+              (formData as any)._boundary
+            }`,
+          },
+          onUploadProgress,
+        })
+        .then(r => {
+          onUploadProgress({ isDone: true });
+          return r;
+        })
+        .catch(retry);
+    },
+    {
+      retries: 5,
+    },
+  );
 
   return docId;
 };
