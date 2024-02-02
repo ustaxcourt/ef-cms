@@ -1,7 +1,5 @@
-import * as circleCiHelper from '../../../../admin-tools/circleci/circleci-helper';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
-  continueDeploymentIfMigrationWritesAreFinishedIndexing,
   getApproximateCreationDateTime,
   isPractitionerMappingInsertModifyRecord,
   isPractitionerMappingRemoveRecord,
@@ -9,9 +7,6 @@ import {
   shouldProcessRecord,
 } from './processStreamUtilities';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
-
-jest.mock('../../../../admin-tools/circleci/circleci-helper');
-const approvePendingJob = jest.spyOn(circleCiHelper, 'approvePendingJob');
 
 describe('processStreamUtilities', () => {
   const mockRemoveRecord: DynamoDBRecord = {
@@ -176,8 +171,6 @@ describe('processStreamUtilities', () => {
   };
 
   const deploymentTimestamp = 1577854800;
-  const migrationBeginTimestamp = 1577855400;
-  const migrationEndTimestamp = 1577858400;
   const streamEvent: DynamoDBStreamEvent = {
     Records: [
       {
@@ -495,100 +488,6 @@ describe('processStreamUtilities', () => {
         record: streamEvent.Records[0],
       });
       expect(result).toBeTruthy();
-    });
-  });
-
-  describe('continueDeploymentIfMigrationWritesAreFinishedIndexing', () => {
-    let lastProcessedRecord: DynamoDBRecord;
-    beforeEach(() => {
-      process.env.DEPLOYMENT_TIMESTAMP = String(deploymentTimestamp);
-      process.env.MIGRATION_BEGIN_TIMESTAMP = String(migrationBeginTimestamp);
-      process.env.MIGRATION_END_TIMESTAMP = String(migrationEndTimestamp);
-      process.env.MIGRATION_WORKFLOW =
-        '{ "apiToken": "secretToken", "jobName": "wait-for-reindex", "workflowId": "5" }';
-
-      // @ts-ignore
-      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
-        deploymentTimestamp + 300;
-      lastProcessedRecord = streamEvent.Records[0];
-    });
-
-    it('does not continue the deployment if the migration begin and end timestamps are not set', async () => {
-      process.env.MIGRATION_BEGIN_TIMESTAMP = '0';
-      process.env.MIGRATION_END_TIMESTAMP = '0';
-
-      await continueDeploymentIfMigrationWritesAreFinishedIndexing({
-        applicationContext,
-        lastProcessedRecord,
-      });
-      expect(approvePendingJob).not.toHaveBeenCalled();
-    });
-
-    it('does not continue the deployment if the workflow values are not defined', async () => {
-      process.env.MIGRATION_WORKFLOW = undefined;
-
-      await continueDeploymentIfMigrationWritesAreFinishedIndexing({
-        applicationContext,
-        lastProcessedRecord,
-      });
-      expect(approvePendingJob).not.toHaveBeenCalled();
-    });
-
-    it('does not continue the deployment if the stream event does not have an ApproximateCreationDateTime', async () => {
-      // @ts-ignore
-      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime = undefined;
-
-      await continueDeploymentIfMigrationWritesAreFinishedIndexing({
-        applicationContext,
-        lastProcessedRecord,
-      });
-      expect(approvePendingJob).not.toHaveBeenCalled();
-    });
-
-    it('does not continue the deployment if the stream event occurred before the migration began', async () => {
-      // @ts-ignore
-      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
-        migrationBeginTimestamp - 60;
-      lastProcessedRecord = streamEvent.Records[0];
-
-      await continueDeploymentIfMigrationWritesAreFinishedIndexing({
-        applicationContext,
-        lastProcessedRecord,
-      });
-      expect(approvePendingJob).not.toHaveBeenCalled();
-    });
-
-    it('does not continue the deployment if the stream event occurred during the migration', async () => {
-      // @ts-ignore
-      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
-        migrationBeginTimestamp + 60;
-      lastProcessedRecord = streamEvent.Records[0];
-
-      await continueDeploymentIfMigrationWritesAreFinishedIndexing({
-        applicationContext,
-        lastProcessedRecord,
-      });
-      expect(approvePendingJob).not.toHaveBeenCalled();
-    });
-
-    it('continues the deployment if the stream event occurred after the migration completed', async () => {
-      // @ts-ignore
-      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
-        migrationEndTimestamp + 60;
-      lastProcessedRecord = streamEvent.Records[0];
-
-      await continueDeploymentIfMigrationWritesAreFinishedIndexing({
-        applicationContext,
-        lastProcessedRecord,
-      });
-      const { apiToken, jobName, workflowId } = JSON.parse(
-        process.env.MIGRATION_WORKFLOW!,
-      );
-      expect(approvePendingJob).toHaveBeenCalledWith({
-        apiToken,
-        jobName,
-        workflowId,
-      });
     });
   });
 });

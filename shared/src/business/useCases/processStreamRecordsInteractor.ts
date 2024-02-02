@@ -1,8 +1,6 @@
-import {
-  continueDeploymentIfMigrationWritesAreFinishedIndexing,
-  partitionRecords,
-} from './processStreamRecords/processStreamUtilities';
+import { partitionRecords } from './processStreamRecords/processStreamUtilities';
 import { processCaseEntries } from './processStreamRecords/processCaseEntries';
+import { processCompletionMarkers } from './processStreamRecords/processCompletionMarkers';
 import { processDocketEntries } from './processStreamRecords/processDocketEntries';
 import { processMessageEntries } from './processStreamRecords/processMessageEntries';
 import { processOtherEntries } from './processStreamRecords/processOtherEntries';
@@ -17,6 +15,7 @@ export const processStreamRecordsInteractor = async (
 ): Promise<void> => {
   const {
     caseEntityRecords,
+    completionMarkers,
     docketEntryRecords,
     messageRecords,
     otherRecords,
@@ -88,6 +87,11 @@ export const processStreamRecordsInteractor = async (
       throw err;
     });
 
+    await processCompletionMarkers({
+      applicationContext,
+      completionMarkers,
+    });
+
     await processOtherEntries({ applicationContext, otherRecords }).catch(
       err => {
         applicationContext.logger.error('failed to processOtherEntries', {
@@ -103,11 +107,4 @@ export const processStreamRecordsInteractor = async (
     );
     throw err;
   }
-
-  const lastProcessedRecord =
-    recordsToProcess[recordsToProcess.length - 1] || {};
-  await continueDeploymentIfMigrationWritesAreFinishedIndexing({
-    applicationContext,
-    lastProcessedRecord,
-  });
 };

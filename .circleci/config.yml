@@ -251,28 +251,6 @@ jobs:
               ./web-api/disable-deploying-dynamo-stream-trigger.sh
             fi
       - run:
-          name: Set Migration Begin Timestamp Value in Streams Lambda
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              MIGRATION_BEGIN_TIMESTAMP=$(date "+%s")
-              ./web-api/terraform/bin/edit-lambda-environment.sh \
-                -l "streams_${ENV}_${DEPLOYING_COLOR}" \
-                -k MIGRATION_BEGIN_TIMESTAMP \
-                -v "$MIGRATION_BEGIN_TIMESTAMP" \
-                -r us-east-1
-            fi
-      - run:
-          name: Set Migration Workflow Values in Streams Lambda
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              MIGRATION_WORKFLOW='{\\\"apiToken\\\":\\\"'"${CIRCLE_MACHINE_USER_TOKEN}"'\\\",\\\"jobName\\\":\\\"wait-for-reindex\\\",\\\"workflowId\\\":\\\"'"${CIRCLE_WORKFLOW_ID}"'\\\"}'
-              ./web-api/terraform/bin/edit-lambda-environment.sh \
-                -l "streams_${ENV}_${DEPLOYING_COLOR}" \
-                -k MIGRATION_WORKFLOW \
-                -v "$MIGRATION_WORKFLOW" \
-                -r us-east-1
-            fi
-      - run:
           name: Run Migration
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
@@ -308,17 +286,6 @@ jobs:
               echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
             fi
       - run:
-          name: Set Migration End Timestamp Value in Streams Lambda
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              MIGRATION_END_TIMESTAMP=$(date "+%s")
-              ./web-api/terraform/bin/edit-lambda-environment.sh \
-                -l "streams_${ENV}_${DEPLOYING_COLOR}" \
-                -k MIGRATION_END_TIMESTAMP \
-                -v "$MIGRATION_END_TIMESTAMP" \
-                -r us-east-1
-            fi
-      - run:
           name: Disable Check Migration Status Cron
           command: |
             ./web-api/workflow-terraform/migration-cron/bin/disable.sh
@@ -332,7 +299,7 @@ jobs:
           name: Set Marker to Indicate Migration is Complete
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./scripts/dynamo/set-migration-complete-marker.sh
+              JOB_NAME="wait-for-reindex" ./scripts/dynamo/set-migration-complete-marker.sh
             fi
       - run:
           name: Enable Destination Table Stream
@@ -373,15 +340,6 @@ jobs:
           name: Disable Check Reindex Status Cron
           command: |
             ./web-api/workflow-terraform/reindex-cron/bin/disable.sh
-      - run:
-          name: Unset Migration Values in Streams Lambda
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./web-api/terraform/bin/edit-lambda-environment.sh \
-                -l "streams_${ENV}_${DEPLOYING_COLOR}" \
-                -j '{ "MIGRATION_BEGIN_TIMESTAMP": "", "MIGRATION_END_TIMESTAMP": "", "MIGRATION_WORKFLOW": "" }' \
-                -r us-east-1
-            fi
 
   smoketests:
     docker:
@@ -716,15 +674,6 @@ jobs:
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
       - run:
-          name: Set Migration Begin Timestamp Value in Streams Lambda
-          command: |
-            MIGRATION_BEGIN_TIMESTAMP=$(date "+%s")
-            ./web-api/terraform/bin/edit-lambda-environment.sh \
-              -l "streams_${ENV}_${CURRENT_COLOR}" \
-              -k MIGRATION_BEGIN_TIMESTAMP \
-              -v "$MIGRATION_BEGIN_TIMESTAMP" \
-              -r us-east-1
-      - run:
           name: Disable Dynamodb Streams
           command: |
             ./shared/admin-tools/dynamodb/toggle-streams.sh --off
@@ -778,15 +727,6 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Set Migration End Timestamp Value in Streams Lambda
-          command: |
-            MIGRATION_END_TIMESTAMP=$(date "+%s")
-            ./web-api/terraform/bin/edit-lambda-environment.sh \
-              -l "streams_${ENV}_${CURRENT_COLOR}" \
-              -k MIGRATION_END_TIMESTAMP \
-              -v "$MIGRATION_END_TIMESTAMP" \
-              -r us-east-1
-      - run:
           name: Disable Wait for Workflow Cron
           command: |
             ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
@@ -799,16 +739,7 @@ jobs:
       - run:
           name: Set Marker to Indicate Data is Finished Gluing
           command: |
-            ./scripts/dynamo/set-migration-complete-marker.sh
-      - run:
-          name: Set Migration Workflow Values in Streams Lambda
-          command: |
-            MIGRATION_WORKFLOW='{\\\"apiToken\\\":\\\"'"${CIRCLE_MACHINE_USER_TOKEN}"'\\\",\\\"jobName\\\":\\\"wait-for-glued-data-to-index\\\",\\\"workflowId\\\":\\\"'"${CIRCLE_WORKFLOW_ID}"'\\\"}'
-            ./web-api/terraform/bin/edit-lambda-environment.sh \
-              -l "streams_${ENV}_${CURRENT_COLOR}" \
-              -k MIGRATION_WORKFLOW \
-              -v "$MIGRATION_WORKFLOW" \
-              -r us-east-1
+            JOB_NAME="wait-for-glued-data-to-index" ./scripts/dynamo/set-migration-complete-marker.sh
       - run:
           name: Enable Dynamodb Streams
           command: |
@@ -831,13 +762,6 @@ jobs:
             VCS=<< pipeline.project.type >>
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-      - run:
-          name: Unset Migration Values in Streams Lambda
-          command: |
-            ./web-api/terraform/bin/edit-lambda-environment.sh \
-              -l "streams_${ENV}_${CURRENT_COLOR}" \
-              -j '{ "MIGRATION_BEGIN_TIMESTAMP": "", "MIGRATION_END_TIMESTAMP": "", "MIGRATION_WORKFLOW": "" }' \
-              -r us-east-1
       - run:
           name: Kick off a deployment
           command: |
