@@ -3,7 +3,10 @@ import classNames from 'classnames';
 
 export const TableFilters = ({ filters, onSelect }) => {
   return (
-    <div className="grid-row margin-bottom-4">
+    <div
+      className="grid-row margin-bottom-4"
+      data-testid="table-filters-component"
+    >
       <div className="padding-top-05">
         <label
           className="dropdown-label-serif margin-right-3"
