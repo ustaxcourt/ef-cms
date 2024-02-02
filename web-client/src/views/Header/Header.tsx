@@ -283,6 +283,7 @@ export const Header = connect(
                   {user && (
                     <button
                       className="usa-menu-btn"
+                      data-testid="account-menu-button-mobile"
                       onClick={() => toggleMobileMenuSequence()}
                     >
                       Menu
