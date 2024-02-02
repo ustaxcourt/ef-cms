@@ -1,3 +1,4 @@
+import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
 import { clearAuthStateAction } from '@web-client/presenter/actions/Login/clearAuthStateAction';
 import { getUserAction } from '@web-client/presenter/actions/getUserAction';
 import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
@@ -11,6 +12,7 @@ import { submitLoginAction } from '@web-client/presenter/actions/Login/submitLog
 
 export const submitLoginSequence = [
   showProgressSequenceDecorator([
+    clearAlertsAction,
     submitLoginAction,
     {
       changePassword: [goToChangePasswordSequence],
