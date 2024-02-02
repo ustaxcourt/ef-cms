@@ -10,6 +10,7 @@ function DragDropInput({
   existingFiles,
   fileInputName,
   handleChange,
+  multiple,
   ...remainingProps
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -19,10 +20,10 @@ function DragDropInput({
   }, [inputRef]);
 
   useEffect(() => {
-    const multiFileInput = window.document.getElementById(
-      'multi-file-input',
+    const fileInputElement = window.document.getElementById(
+      'file-input',
     ) as HTMLInputElement;
-    if (multiFileInput && existingFiles) {
+    if (fileInputElement && existingFiles) {
       const loadFilesFromFormEvent = new Event('change');
 
       Object.defineProperty(loadFilesFromFormEvent, 'target', {
@@ -32,17 +33,17 @@ function DragDropInput({
         writable: false,
       });
 
-      multiFileInput.dispatchEvent(loadFilesFromFormEvent);
+      fileInputElement.dispatchEvent(loadFilesFromFormEvent);
     }
   }, []);
 
   return (
     <input
       {...remainingProps}
-      multiple
       accept=".pdf"
       className="usa-file-input"
-      id="multi-file-input"
+      id="file-input"
+      multiple={multiple}
       name={fileInputName}
       ref={inputRef}
       type="file"
@@ -108,6 +109,7 @@ export const FileInput = connect(
   function FileInput({
     constants,
     form,
+    multiple,
     name,
     updateFormValueSequence,
     ...remainingProps
@@ -126,6 +128,7 @@ export const FileInput = connect(
               updateFormValueSequence,
             )
           }
+          multiple={multiple}
         />
       </React.Fragment>
     );
