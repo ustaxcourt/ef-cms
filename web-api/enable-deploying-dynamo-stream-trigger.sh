@@ -9,15 +9,16 @@ UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-
 aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --enabled
 
 BEGIN=$(date -u "+%s")
-ELAPSED='0'
+ELAPSED=0
 STATE=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 --query "State" --output text)
 
-while [[ "$STATE" != "Enabled" ]] || [[ "$ELAPSED" -gt 120 ]]; do
+while [ "$STATE" != "Enabled" ]; do
   sleep 2
   STATE=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 --query "State" --output text)
   ELAPSED=$(($(date -u "+%s") - "$BEGIN"))
+  [ "$ELAPSED" -gt 90 ] && break
 done
 
 echo "${ENV}'s ${DEPLOYING_COLOR} dynamo stream is now: ${STATE}"
 
-[[ "$STATE" != "Enabled" ]] && exit 1
+[ "$STATE" != "Enabled" ] && exit 1
