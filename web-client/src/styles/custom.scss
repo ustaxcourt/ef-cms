@@ -994,6 +994,14 @@ header.usa-header {
 
 .background-blue {
   background-color: color($theme-color-primary-darker);
+
+   @media only screen and (min-width: $medium-screen) {
+    padding-top: 4rem;
+  }
+
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    padding-top: 2rem;
+  }
 }
 
 .create-petitioner-account {
@@ -2209,5 +2217,15 @@ button.change-scanner-button {
 .login {
   .ustc-button--unstyled {
     text-align: left;
+  }
+}
+
+.floating-card.usa-section {
+  @media only screen and (min-width: $medium-screen) {
+    padding-top: 6rem;
+  }
+  
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    padding-bottom: 2rem;
   }
 }
