@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 type SuccessNotificationProps = {
-  isDismissable?: boolean;
+  isDismissible?: boolean;
 };
 
 const successNotificationDeps = {
@@ -22,7 +22,7 @@ export const SuccessNotification = connect<
   function SuccessNotification({
     alertSuccess,
     dismissAlertSequence,
-    isDismissable = true,
+    isDismissible = true,
   }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
@@ -57,7 +57,7 @@ export const SuccessNotification = connect<
                 <div className="grid-row">
                   <div
                     className={classNames(
-                      isDismissable
+                      isDismissible
                         ? 'tablet:grid-col-10 grid-col-8'
                         : 'tablet:grid-col-12 grid-col-10',
                     )}
@@ -77,7 +77,7 @@ export const SuccessNotification = connect<
                       </Button>
                     )}
                   </div>
-                  {isDismissable && (
+                  {isDismissible && (
                     <div className="tablet:grid-col-2 grid-col-4 usa-alert__action">
                       <Button
                         link

@@ -33,8 +33,8 @@ export const Login = connect(
         <section className="grid-container usa-section">
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
-              <SuccessNotification isDismissable={false} />
-              <WarningNotification isDismissable={false} />
+              <SuccessNotification isDismissible={false} />
+              <WarningNotification isDismissible={false} />
               <ErrorNotification />
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">

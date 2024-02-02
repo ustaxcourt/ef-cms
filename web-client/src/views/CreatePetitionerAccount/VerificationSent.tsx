@@ -17,7 +17,7 @@ export const VerificationSent = connect(
           className="grid-container grid-gap-lg padding-x-4"
           id="verification-sent-message"
         >
-          <SuccessNotification isDismissable={false} />
+          <SuccessNotification isDismissible={false} />
           <div className={'bg-white padding-4'}>
             <h2 className="inherit-body-font-family">
               Email address verification sent
