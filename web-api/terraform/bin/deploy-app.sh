@@ -83,7 +83,6 @@ npm run build:assets
 # exit on any failure
 set -eo pipefail
 # build the cognito authorizer, api, and api-public with web pack
-echo "TOKEN - ${SENTRY_AUTH_TOKEN}"
 npm run build:lambda:api
 
 if [ -z "${CIRCLE_BRANCH}" ]; then
