@@ -55,7 +55,13 @@ export const SuccessNotification = connect<
               )}
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
-                  <div className="tablet:grid-col-10 grid-col-8">
+                  <div
+                    className={classNames(
+                      isDismissable
+                        ? 'tablet:grid-col-10 grid-col-8'
+                        : 'tablet:grid-col-12 grid-col-10',
+                    )}
+                  >
                     <p className="usa-alert__text padding-top-0 padding-bottom-0">
                       {alertSuccess.message}
                     </p>
