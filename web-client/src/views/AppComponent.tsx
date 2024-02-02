@@ -51,7 +51,7 @@ import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompres
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
-import { ForgotPassword } from '@web-client/views/Login/ForgotPasword';
+import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
 import { GenericErrorModal } from './GenericErrorModal';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';

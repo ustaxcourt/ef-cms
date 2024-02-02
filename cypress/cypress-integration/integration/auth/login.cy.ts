@@ -7,6 +7,10 @@ import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
 
 describe('Given a user with a DAWSON account', () => {
+  after(() => {
+    cy.task('deleteAllCypressTestAccounts');
+  });
+
   describe('When they login in with the correct email and password', () => {
     it('Then they should be taken to their dashboard', () => {
       cy.visit('/login');
@@ -36,8 +40,26 @@ describe('Given a user with a DAWSON account', () => {
     });
 
     describe('And their account is unconfirmed', () => {
-      it('Then they should be alerted that they have been sent an email to assist them with confirmation of their account', () => {
-        // Login with unconfirmed account
+      it('Then they should be alerted that they need to confirm their account via a confirmation e-mail', () => {
+        const unconfirmedEmail = `cypress_test_account+${v4()}@example.com`;
+        createAPetitioner({
+          email: unconfirmedEmail,
+          name: 'Person mcDerson',
+          password: 'Testing1234$',
+        });
+        cy.visit('/login');
+        cy.get('[data-testid="email-input"]').type(unconfirmedEmail);
+        cy.get('[data-testid="password-input"]').type(
+          cypressEnv.defaultAccountPass,
+          {
+            log: false,
+          },
+        );
+        cy.get('[data-testid="login-button"]').click();
+        cy.get('[data-testid="error-alert"]').should(
+          'contain',
+          'Email address not verified',
+        );
       });
     });
   });

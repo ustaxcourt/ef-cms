@@ -223,7 +223,7 @@ export const EditPetitionerInformationInternal = connect(
               alertWarning={{
                 title: `${screenMetadata.userPendingEmail} is not verified. When petitioner verifies email, service will update to electronic at the verified email address.`,
               }}
-              dismissable={false}
+              dismissible={false}
               scrollToTop={false}
             />
           )}

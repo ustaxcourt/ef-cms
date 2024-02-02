@@ -55,7 +55,7 @@ export const PaperFiling = connect(
                     message:
                       'Document cannot be served until the Petition is served.',
                   }}
-                  dismissable={false}
+                  dismissible={false}
                   scrollToTop={false}
                 />
               )}
