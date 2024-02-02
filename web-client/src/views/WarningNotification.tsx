@@ -49,6 +49,7 @@ export const WarningNotificationComponent =
               'usa-alert--warning',
               isMessageOnly && 'usa-alert-warning-message-only',
             )}
+            data-testid="warning-alert"
             ref={notificationRef}
             role="alert"
           >
