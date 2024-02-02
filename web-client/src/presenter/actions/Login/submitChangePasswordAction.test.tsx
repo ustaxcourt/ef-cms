@@ -48,10 +48,10 @@ describe('submitChangePasswordAction', () => {
           code: '',
           form: {
             confirmPassword: testConfirmPassword,
+            email: testEmail,
             password: testPassword,
           },
           tempPassword: testTempPassword,
-          userEmail: testEmail,
         },
       },
     });
@@ -66,9 +66,9 @@ describe('submitChangePasswordAction', () => {
     ).toEqual({
       code: '',
       confirmPassword: testConfirmPassword,
+      email: testEmail,
       password: testPassword,
       tempPassword: testTempPassword,
-      userEmail: testEmail,
     });
     expect(mockSuccessPath).toHaveBeenCalledTimes(1);
     expect(mockUnconfirmedAccountPath).not.toHaveBeenCalled();
@@ -91,10 +91,10 @@ describe('submitChangePasswordAction', () => {
           code: '',
           form: {
             confirmPassword: testConfirmPassword,
+            email: testEmail,
             password: testPassword,
           },
           tempPassword: testTempPassword,
-          userEmail: testEmail,
         },
       },
     });
@@ -126,10 +126,10 @@ describe('submitChangePasswordAction', () => {
           code: '',
           form: {
             confirmPassword: testConfirmPassword,
+            email: testEmail,
             password: testPassword,
           },
           tempPassword: testTempPassword,
-          userEmail: testEmail,
         },
       },
     });
@@ -144,9 +144,9 @@ describe('submitChangePasswordAction', () => {
     ).toEqual({
       code: '',
       confirmPassword: testConfirmPassword,
+      email: testEmail,
       password: testPassword,
       tempPassword: testTempPassword,
-      userEmail: testEmail,
     });
 
     expect(mockSuccessPath).not.toHaveBeenCalled();
@@ -188,10 +188,10 @@ describe('submitChangePasswordAction', () => {
           code: 'expired_code',
           form: {
             confirmPassword: testConfirmPassword,
+            email: testEmail,
             password: testPassword,
           },
           tempPassword: '',
-          userEmail: testEmail,
         },
       },
     });
@@ -206,9 +206,9 @@ describe('submitChangePasswordAction', () => {
     ).toEqual({
       code: 'expired_code',
       confirmPassword: testConfirmPassword,
+      email: testEmail,
       password: testPassword,
       tempPassword: '',
-      userEmail: testEmail,
     });
 
     expect(mockSuccessPath).not.toHaveBeenCalled();
