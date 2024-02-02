@@ -20,5 +20,3 @@ while [ "$STATE" != "Enabled" ]; do
 done
 
 echo "${ENV}'s ${DEPLOYING_COLOR} dynamo stream is now: ${STATE}"
-
-[ "$STATE" != "Enabled" ] && exit 1
