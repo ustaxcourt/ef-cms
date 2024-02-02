@@ -5,6 +5,7 @@ describe('admissions clerk grants e-access to practitioner', () => {
   after(() => {
     cy.task('deleteAllCypressTestAccounts');
   });
+
   it('a NOCE should be generated after granting e-access to a practitioner', () => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       const practitionerUserName = `cypress_test_account+${v4()}`;
