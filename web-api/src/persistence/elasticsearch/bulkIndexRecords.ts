@@ -5,7 +5,10 @@ export const bulkIndexRecords = async ({ applicationContext, records }) => {
   const searchClient = applicationContext.getSearchClient();
 
   const CHUNK_SIZE = 50;
-  let chunkOfRecords = chunk(records, process.env.ES_CHUNK_SIZE || CHUNK_SIZE);
+  let chunkOfRecords = chunk(
+    records,
+    Number(process.env.ES_CHUNK_SIZE) || CHUNK_SIZE,
+  );
 
   const failedRecords = [];
 

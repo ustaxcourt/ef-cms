@@ -1,4 +1,3 @@
-import { approvePendingJob } from '../../../../admin-tools/circleci/circleci-helper';
 import { partition } from 'lodash';
 import type { DynamoDBRecord } from 'aws-lambda';
 
@@ -41,15 +40,23 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'WorkItem',
   );
 
-  const [messageRecords, otherRecords] = partition(
+  const [messageRecords, nonMessageRecords] = partition(
     nonWorkItemRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
       record.dynamodb.NewImage.entityName.S === 'Message',
   );
 
+  const [completionMarkers, otherRecords] = partition(
+    nonMessageRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'CompletionMarker',
+  );
+
   return {
     caseEntityRecords,
+    completionMarkers,
     docketEntryRecords,
     messageRecords,
     otherRecords,
@@ -165,75 +172,4 @@ export const shouldProcessRecord = ({
     approximateCreationDateTime === 0 ||
     approximateCreationDateTime >= deploymentTimestamp
   );
-};
-
-const shouldDetermineIfMigrationWritesAreFinishedIndexing = ({
-  migrationBeginTimestamp,
-  migrationEndTimestamp,
-  migrationWorkflow,
-}: {
-  migrationBeginTimestamp: number;
-  migrationEndTimestamp: number;
-  migrationWorkflow: string;
-}): boolean => {
-  return (
-    migrationBeginTimestamp > 0 &&
-    migrationEndTimestamp > 0 &&
-    migrationBeginTimestamp < migrationEndTimestamp &&
-    migrationWorkflow.includes('apiToken') &&
-    migrationWorkflow.includes('jobName') &&
-    migrationWorkflow.includes('workflowId')
-  );
-};
-
-const areMigrationWritesFinishedIndexing = ({
-  applicationContext,
-  lastProcessedRecord,
-  migrationBeginTimestamp,
-  migrationEndTimestamp,
-}: {
-  applicationContext: IApplicationContext;
-  lastProcessedRecord: DynamoDBRecord;
-  migrationBeginTimestamp: number;
-  migrationEndTimestamp: number;
-}): boolean => {
-  const approxCreationOfLastProcessedRecord = getApproximateCreationDateTime({
-    applicationContext,
-    record: lastProcessedRecord,
-  });
-  return (
-    approxCreationOfLastProcessedRecord > migrationBeginTimestamp &&
-    approxCreationOfLastProcessedRecord >= migrationEndTimestamp
-  );
-};
-
-export const continueDeploymentIfMigrationWritesAreFinishedIndexing = async ({
-  applicationContext,
-  lastProcessedRecord,
-}: {
-  applicationContext: IApplicationContext;
-  lastProcessedRecord: DynamoDBRecord;
-}): Promise<void> => {
-  const migrationBeginTimestamp: number =
-    Number(process.env.MIGRATION_BEGIN_TIMESTAMP) || 0;
-  const migrationEndTimestamp: number =
-    Number(process.env.MIGRATION_END_TIMESTAMP) || 0;
-  const migrationWorkflow = process.env.MIGRATION_WORKFLOW || '';
-
-  if (
-    shouldDetermineIfMigrationWritesAreFinishedIndexing({
-      migrationBeginTimestamp,
-      migrationEndTimestamp,
-      migrationWorkflow,
-    }) &&
-    areMigrationWritesFinishedIndexing({
-      applicationContext,
-      lastProcessedRecord,
-      migrationBeginTimestamp,
-      migrationEndTimestamp,
-    })
-  ) {
-    const { apiToken, jobName, workflowId } = JSON.parse(migrationWorkflow);
-    await approvePendingJob({ apiToken, jobName, workflowId });
-  }
 };

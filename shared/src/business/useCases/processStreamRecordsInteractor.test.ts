@@ -7,10 +7,7 @@ jest.mock('./processStreamRecords/processWorkItemEntries');
 jest.mock('./processStreamRecords/processCaseEntries');
 jest.mock('./processStreamRecords/processOtherEntries');
 import { applicationContext } from '../test/createTestApplicationContext';
-import {
-  continueDeploymentIfMigrationWritesAreFinishedIndexing,
-  partitionRecords,
-} from './processStreamRecords/processStreamUtilities';
+import { partitionRecords } from './processStreamRecords/processStreamUtilities';
 import { processCaseEntries } from './processStreamRecords/processCaseEntries';
 import { processDocketEntries } from './processStreamRecords/processDocketEntries';
 import { processMessageEntries } from './processStreamRecords/processMessageEntries';
@@ -47,9 +44,6 @@ describe('processStreamRecordsInteractor', () => {
     });
 
     expect(partitionRecords).toHaveBeenCalledWith([]);
-    expect(
-      continueDeploymentIfMigrationWritesAreFinishedIndexing,
-    ).toHaveBeenCalledWith({ applicationContext, lastProcessedRecord: {} });
   });
 
   it('should log an error, throw an exception, and halt further execution when processRemoveEntries fails', async () => {
