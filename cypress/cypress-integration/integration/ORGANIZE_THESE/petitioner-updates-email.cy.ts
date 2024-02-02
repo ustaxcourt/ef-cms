@@ -37,7 +37,6 @@ describe('Given a petitioner with a DAWSON account', () => {
           );
           cy.get('[data-testid="save-change-login-email-button"]').click();
           cy.get('[data-testid="modal-button-confirm"]').click();
-          cy.get('[data-testid="account-menu-button"]').click();
           cy.reload();
 
           cy.get('[data-testid="verify-email-warning"]').contains(

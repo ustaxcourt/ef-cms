@@ -201,7 +201,7 @@ const NavigationItems = (
       <li className="usa-nav__primary-item nav-medium">
         <a
           className="usa-nav__link"
-          data-testid="log-out-button"
+          data-testid="logout-button-mobile"
           href="/"
           id="log-out"
           onClick={() => signOutSequence()}
