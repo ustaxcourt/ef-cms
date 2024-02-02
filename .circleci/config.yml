@@ -302,12 +302,6 @@ jobs:
               JOB_NAME="wait-for-reindex" ./scripts/dynamo/set-migration-complete-marker.sh
             fi
       - run:
-          name: Enable Destination Table Stream
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./web-api/enable-deploying-dynamo-stream-trigger.sh
-            fi
-      - run:
           name: Begin Reindexing
           command: |
             if [ "$MIGRATE_FLAG" == "false" ]; then
@@ -321,6 +315,12 @@ jobs:
           name: Enable Check Reindex Status Cron
           command: |
             ./web-api/workflow-terraform/reindex-cron/bin/enable.sh
+      - run:
+          name: Enable Destination Table Stream
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              ./web-api/enable-deploying-dynamo-stream-trigger.sh
+            fi
 
   disable-reindex-cron:
     docker:
