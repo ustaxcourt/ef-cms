@@ -30,7 +30,7 @@ export const SearchResults = connect(
                     message: 'Narrow your search by adding search terms.',
                     title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
                   }}
-                  dismissable={false}
+                  dismissible={false}
                   messageNotBold={true}
                   scrollToTop={false}
                 />

@@ -22,7 +22,7 @@ export const ForgotPassword = connect(
         <section className="grid-container usa-section">
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
-              <SuccessNotification isDismissable={false} />
+              <SuccessNotification isDismissible={false} />
               <ErrorNotification />
 
               <div className="grid-container bg-white padding-y-3 border border-base-lighter">
