@@ -95,4 +95,144 @@ describe('setMultiDocketingCheckboxesAction', () => {
       mockConsolidatedCases.length,
     );
   });
+
+  describe('createOrderAddedDocketNumbers', () => {
+    it('should use the createOrderAddedDocketNumbers in state to determine the properties', async () => {
+      const CASE_DETAILS = {
+        docketNumber: '109-19',
+        docketNumberWithSuffix: '109-19',
+        leadDocketNumber: '109-19',
+        petitioners: [],
+      };
+
+      const mockConsolidatedCases = [
+        CASE_DETAILS,
+        {
+          docketNumber: '110-19',
+          docketNumberWithSuffix: '110-19',
+          leadDocketNumber: '109-19',
+          petitioners: [],
+        },
+        {
+          docketNumber: '111-19',
+          docketNumberWithSuffix: '111-19',
+          leadDocketNumber: '109-19',
+          petitioners: [],
+        },
+      ];
+
+      const { state } = await runAction(setMultiDocketingCheckboxesAction, {
+        modules: {
+          presenter,
+        },
+        props: {
+          consolidatedCases: undefined,
+        },
+        state: {
+          caseDetail: {
+            ...CASE_DETAILS,
+            consolidatedCases: mockConsolidatedCases,
+          },
+          createOrderAddedDocketNumbers: ['109-19', '111-19'],
+        },
+      });
+
+      expect(state.modal.form.consolidatedCaseAllCheckbox).toEqual(false);
+      expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+        {
+          checkboxDisabled: false,
+          checked: true,
+          docketNumber: '109-19',
+          docketNumberWithSuffix: '109-19',
+          formattedPetitioners: '',
+          leadDocketNumber: '109-19',
+        },
+        {
+          checkboxDisabled: false,
+          checked: false,
+          docketNumber: '110-19',
+          docketNumberWithSuffix: '110-19',
+          formattedPetitioners: '',
+          leadDocketNumber: '109-19',
+        },
+        {
+          checkboxDisabled: false,
+          checked: true,
+          docketNumber: '111-19',
+          docketNumberWithSuffix: '111-19',
+          formattedPetitioners: '',
+          leadDocketNumber: '109-19',
+        },
+      ]);
+    });
+
+    it('should use the createOrderAddedDocketNumbers in props to determine the properties', async () => {
+      const CASE_DETAILS = {
+        docketNumber: '109-19',
+        docketNumberWithSuffix: '109-19',
+        leadDocketNumber: '109-19',
+        petitioners: [],
+      };
+
+      const mockConsolidatedCases = [
+        CASE_DETAILS,
+        {
+          docketNumber: '110-19',
+          docketNumberWithSuffix: '110-19',
+          leadDocketNumber: '109-19',
+          petitioners: [],
+        },
+        {
+          docketNumber: '111-19',
+          docketNumberWithSuffix: '111-19',
+          leadDocketNumber: '109-19',
+          petitioners: [],
+        },
+      ];
+
+      const { state } = await runAction(setMultiDocketingCheckboxesAction, {
+        modules: {
+          presenter,
+        },
+        props: {
+          consolidatedCases: undefined,
+          createOrderAddedDocketNumbers: ['109-19', '111-19'],
+        },
+        state: {
+          caseDetail: {
+            ...CASE_DETAILS,
+            consolidatedCases: mockConsolidatedCases,
+          },
+        },
+      });
+
+      expect(state.modal.form.consolidatedCaseAllCheckbox).toEqual(false);
+      expect(state.modal.form.consolidatedCasesToMultiDocketOn).toEqual([
+        {
+          checkboxDisabled: false,
+          checked: true,
+          docketNumber: '109-19',
+          docketNumberWithSuffix: '109-19',
+          formattedPetitioners: '',
+          leadDocketNumber: '109-19',
+        },
+        {
+          checkboxDisabled: false,
+          checked: false,
+          docketNumber: '110-19',
+          docketNumberWithSuffix: '110-19',
+          formattedPetitioners: '',
+          leadDocketNumber: '109-19',
+        },
+        {
+          checkboxDisabled: false,
+          checked: true,
+          docketNumber: '111-19',
+          docketNumberWithSuffix: '111-19',
+          formattedPetitioners: '',
+          leadDocketNumber: '109-19',
+        },
+      ]);
+    });
+  });
 });
