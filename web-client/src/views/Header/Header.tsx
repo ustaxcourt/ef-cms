@@ -199,15 +199,17 @@ const NavigationItems = (
         </li>
       )}
       <li className="usa-nav__primary-item nav-medium">
-        <a
+        <button
           className="usa-nav__link"
           data-testid="logout-button-mobile"
-          href="/"
           id="log-out"
-          onClick={() => signOutSequence()}
+          onClick={() => {
+            toggleMobileMenuSequence();
+            signOutSequence();
+          }}
         >
           Log Out
-        </a>
+        </button>
       </li>
     </ul>
   );
@@ -280,13 +282,15 @@ export const Header = connect(
                       <img alt="USTC Seal" src={seal} />
                     </a>
                   </div>
-                  <button
-                    className="usa-menu-btn"
-                    data-testid="account-menu-button-mobile"
-                    onClick={() => toggleMobileMenuSequence()}
-                  >
-                    Menu
-                  </button>
+                  {headerHelper.showMobileAccountMenu && (
+                    <button
+                      className="usa-menu-btn"
+                      data-testid="account-menu-button-mobile"
+                      onClick={() => toggleMobileMenuSequence()}
+                    >
+                      Menu
+                    </button>
+                  )}
                 </div>
                 <nav
                   className={classNames(

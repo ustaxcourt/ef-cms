@@ -1,8 +1,10 @@
-describe('Given a user is logged in to DAWSON on their desktop', () => {
+import { cypressEnv } from '../../../helpers/env/cypressEnvironment';
+
+describe('Given a user is logged in to DAWSON on a desktop', () => {
   describe('When the user clicks logout', () => {
     it('Then they should be taken to the login page', () => {
       const email = 'docketclerk1@example.com';
-      const password = 'Testing1234$';
+      const password = cypressEnv.defaultAccountPass;
       cy.visit('/login');
       cy.get('[data-testid="email-input"]').type(email);
       cy.get('[data-testid="password-input"]').type(password, {
@@ -15,6 +17,7 @@ describe('Given a user is logged in to DAWSON on their desktop', () => {
       cy.get('[data-testid="login-header"]');
       cy.reload();
       cy.get('[data-testid="login-header"]');
+      cy.url().should('contain', '/login');
     });
 
     describe('And they try to access a case directly as a URL', () => {
@@ -26,14 +29,14 @@ describe('Given a user is logged in to DAWSON on their desktop', () => {
   });
 });
 
-describe('Given a user is logged in to DAWSON on their mobile', () => {
+describe('Given a user is logged in to DAWSON on a mobile device', () => {
   beforeEach(() => {
     cy.viewport('iphone-6');
   });
   describe('When the user clicks logout', () => {
     it('Then they should be taken to the login page', () => {
       const email = 'docketclerk1@example.com';
-      const password = 'Testing1234$';
+      const password = cypressEnv.defaultAccountPass;
       cy.visit('/login');
       cy.get('[data-testid="email-input"]').type(email);
       cy.get('[data-testid="password-input"]').type(password, {
@@ -46,6 +49,7 @@ describe('Given a user is logged in to DAWSON on their mobile', () => {
       cy.get('[data-testid="login-header"]');
       cy.reload();
       cy.get('[data-testid="login-header"]');
+      cy.url().should('contain', '/login');
     });
   });
 });
