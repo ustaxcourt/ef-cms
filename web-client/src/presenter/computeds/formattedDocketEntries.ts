@@ -2,11 +2,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
-import {
-  fetchRootDocument,
-  getMeetsPolicyChangeRequirements,
-} from './Public/publicCaseDetailHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -46,52 +41,6 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   }
 
   return iconsToDisplay;
-};
-
-export const getShowDocumentViewerLink = ({
-  hasDocument,
-  isCourtIssuedDocument,
-  isExternalUser,
-  isHiddenToPublic,
-  isInitialDocument,
-  isLegacySealed,
-  isPassingAgeRequirement,
-  isSealed,
-  isSealedToExternal,
-  isServed,
-  isStipDecision,
-  isStricken,
-  isUnservable,
-  meetsPolicyChangeRequirements,
-  userHasAccessToCase,
-  userHasNoAccessToDocument,
-}) => {
-  if (!hasDocument) return false;
-  if (!userHasAccessToCase && isHiddenToPublic) return false;
-
-  if (isExternalUser) {
-    if (isStricken) return false;
-    if (isLegacySealed) return false;
-    if (isSealed) {
-      if (userHasAccessToCase && !isSealedToExternal) {
-        return isPassingAgeRequirement;
-      } else {
-        return false;
-      }
-    }
-    if (userHasNoAccessToDocument) return false;
-    if (isCourtIssuedDocument && !isStipDecision) {
-      if (isUnservable) return true;
-      if (!isServed) return false;
-    } else {
-      if (isServed && meetsPolicyChangeRequirements) return true;
-      if (!userHasAccessToCase) return false;
-      if (isInitialDocument) return true;
-      if (!isServed) return false;
-    }
-  }
-
-  return true;
 };
 
 export const getShowEditDocketRecordEntry = ({
@@ -140,28 +89,23 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
-  isExternalUser,
   permissions,
-  userAssociatedWithCase,
+  rawCase,
+  user,
   visibilityPolicyDateFormatted,
 }) => {
-  const {
-    DOCKET_ENTRY_SEALED_TO_TYPES,
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_VISIBLE_TO_PUBLIC,
-    INITIAL_DOCUMENT_TYPES,
-  } = applicationContext.getConstants();
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(user.role);
 
-  const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
-  const userHasAccessToDocument = entry.isAvailableToUser;
+  const { DOCKET_ENTRY_SEALED_TO_TYPES, DOCUMENT_PROCESSING_STATUS_OPTIONS } =
+    applicationContext.getConstants();
 
   const formattedResult = {
     numberOfPages: 0,
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
-
-  let showDocumentLinks = false;
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =
@@ -193,33 +137,11 @@ export const getFormattedDocketEntry = ({
   formattedResult.showNotServed = entry.isNotServedDocument;
   formattedResult.showServed = entry.isStatusServed;
 
-  const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
-    .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
-    .includes(entry.documentType);
-
-  const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
-    entry,
-    visibilityPolicyDateFormatted,
-  );
-
-  showDocumentLinks = getShowDocumentViewerLink({
-    hasDocument: entry.isFileAttached,
-    isCourtIssuedDocument: entry.isCourtIssuedDocument,
-    isExternalUser,
-    isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode),
-    isInitialDocument,
-    isLegacySealed: entry.isLegacySealed,
-    isPassingAgeRequirement: documentMeetsAgeRequirements(entry),
-    isSealed: entry.isSealed,
-    isSealedToExternal:
-      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
-    isServed: DocketEntry.isServed(entry),
-    isStipDecision: entry.isStipDecision,
-    isStricken: entry.isStricken,
-    isUnservable: formattedResult.isUnservable,
-    meetsPolicyChangeRequirements,
-    userHasAccessToCase,
-    userHasNoAccessToDocument: !userHasAccessToDocument,
+  const showDocumentLinks = DocketEntry.isDownloadable(entry, {
+    isTerminalUser: false,
+    rawCase,
+    user,
+    visibilityChangeDate: visibilityPolicyDateFormatted,
   });
 
   formattedResult.showDocumentViewerLink = !isExternalUser && showDocumentLinks;
@@ -266,32 +188,32 @@ export const formattedDocketEntries = (
   applicationContext: ClientApplicationContext,
 ): any => {
   const user = applicationContext.getCurrentUser();
-  const isExternalUser = applicationContext
-    .getUtilities()
-    .isExternalUser(user.role);
   const permissions = get(state.permissions);
-  const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
   const {
     ALLOWLIST_FEATURE_FLAGS,
     DOCKET_RECORD_FILTER_OPTIONS,
     EXHIBIT_EVENT_CODES,
     MOTION_EVENT_CODES,
-    ORDER_EVENT_CODES,
   } = applicationContext.getConstants();
-
-  const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
-
   const caseDetail = get(state.caseDetail);
-
   const { docketNumber } = caseDetail;
-
   let docketRecordSort;
+  const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
   if (docketNumber) {
     docketRecordSort = get(
       state.sessionMetadata.docketRecordSort[docketNumber],
     );
   }
+  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
+  );
+  const visibilityPolicyDateFormatted = applicationContext
+    .getUtilities()
+    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+    .toISO();
 
   const result = formatCase(applicationContext, caseDetail);
 
@@ -308,7 +230,7 @@ export const formattedDocketEntries = (
       break;
     case DOCKET_RECORD_FILTER_OPTIONS.orders:
       result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
+        entry => DocketEntry.isOrder(entry.eventCode) && !entry.isDraft,
       );
       break;
   }
@@ -318,32 +240,17 @@ export const formattedDocketEntries = (
     docketRecordSort,
   );
 
-  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
-    ],
+  docketEntriesFormatted = docketEntriesFormatted.map(entry =>
+    getFormattedDocketEntry({
+      applicationContext,
+      docketNumber,
+      entry,
+      permissions,
+      rawCase: caseDetail,
+      user,
+      visibilityPolicyDateFormatted,
+    }),
   );
-
-  const visibilityPolicyDateFormatted = applicationContext
-    .getUtilities()
-    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
-    .toISO();
-
-  docketEntriesFormatted = docketEntriesFormatted
-    .map((entry: any, _, array) => {
-      return { ...entry, rootDocument: fetchRootDocument(entry, array) };
-    })
-    .map(entry => {
-      return getFormattedDocketEntry({
-        applicationContext,
-        docketNumber,
-        entry,
-        isExternalUser,
-        permissions,
-        userAssociatedWithCase,
-        visibilityPolicyDateFormatted,
-      });
-    });
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
