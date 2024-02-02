@@ -1577,8 +1577,8 @@ export const DOCKET_ENTRY_SEALED_TO_TYPES = {
   PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry if they are associated
 };
 
-export const ASCENDING = 'asc';
-export const DESCENDING = 'desc';
+export const ASCENDING: 'asc' = 'asc';
+export const DESCENDING: 'desc' = 'desc';
 
 export const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
 export const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
