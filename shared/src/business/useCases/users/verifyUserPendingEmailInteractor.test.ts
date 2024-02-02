@@ -27,6 +27,17 @@ describe('verifyUserPendingEmailInteractor', () => {
     pendingEmailVerificationToken: TOKEN,
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  };
+
+  const mockPetitioner = {
+    ...validUser,
+    firstName: 'Olden',
+    lastName: 'Vivas',
+    pendingEmail: 'other@example.com',
+    pendingEmailVerificationToken: '42289629-abe1-46d7-b7a4-9d3834f919xd',
+    role: ROLES.petitioner,
+    userId: getContactPrimary(MOCK_CASE).contactId,
   };
 
   const mockCase = {
@@ -140,4 +151,66 @@ describe('verifyUserPendingEmailInteractor', () => {
       pendingEmailVerificationToken: undefined,
     });
   });
+
+  it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined, and service indicator set to electronic with a practitioner user', async () => {
+    await verifyUserPendingEmailInteractor(applicationContext, {
+      token: TOKEN,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject({
+      email: 'other@example.com',
+      entityName: 'Practitioner',
+      pendingEmail: undefined,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
+  });
+
+  it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockPetitioner);
+
+    await verifyUserPendingEmailInteractor(applicationContext, {
+      token: mockPetitioner.pendingEmailVerificationToken,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject({
+      email: 'other@example.com',
+      pendingEmail: undefined,
+    });
+  });
+
+  // TODO 10007 - Returns Unauthorized to manage emails.
+  // it.only('should not turn an inactive Practitioner into a User', async () => {
+  //   const practitioner = {
+  //     ...mockPractitioner,
+  //     role: ROLES.inactivePractitioner,
+  //   };
+
+  //   applicationContext.getCurrentUser.mockReturnValue(practitioner);
+  //   applicationContext
+  //     .getPersistenceGateway()
+  //     .getUserById.mockReturnValue({ ...practitioner });
+
+  //   await verifyUserPendingEmailInteractor(applicationContext, {
+  //     token: TOKEN,
+  //   });
+
+  //   expect(
+  //     applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+  //       .user,
+  //   ).toMatchObject({
+  //     email: 'other@example.com',
+  //     entityName: 'Practitioner',
+  //     pendingEmail: undefined,
+  //     role: ROLES.inactivePractitioner,
+  //     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  //   });
+  // });
 });
