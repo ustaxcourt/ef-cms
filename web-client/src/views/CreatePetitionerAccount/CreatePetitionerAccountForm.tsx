@@ -142,7 +142,11 @@ export const CreatePetitionerAccountForm = connect(
               >
                 {showPassword ? 'Hide Password' : 'Show password'}
               </button>
-              <div className="margin-top-1" hidden={!password}>
+              <div
+                className="margin-top-1"
+                data-testid="password-validation-errors"
+                hidden={!password}
+              >
                 {createAccountHelper.passwordErrors.map(error => {
                   return (
                     <RequirementsText
