@@ -10,15 +10,31 @@ describe('setupChangePasswordAction', () => {
     const result = await runAction(setupChangePasswordAction, {
       modules: { presenter },
       props: {
+        email: mockUserEmail,
         tempPassword: mockTempPassword,
-        userEmail: mockUserEmail,
+      },
+      state: {
+        authentication: {
+          code: '',
+          form: {
+            confirmPassword: '',
+            email: '',
+            password: '',
+          },
+          tempPassword: '',
+        },
       },
     });
 
     expect(result.state.showPassword).toEqual(false);
     expect(result.state.authentication).toEqual({
+      code: '',
+      form: {
+        confirmPassword: '',
+        email: mockUserEmail,
+        password: '',
+      },
       tempPassword: mockTempPassword,
-      userEmail: mockUserEmail,
     });
   });
 });

@@ -27,7 +27,7 @@ describe('setResetPasswordAction', () => {
       code: testCode,
       form: {
         confirmPassword: '',
-        email: '',
+        email: testEmail,
         password: '',
       },
       tempPassword: '',
