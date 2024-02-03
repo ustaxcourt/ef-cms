@@ -115,9 +115,7 @@ export const FileInput = connect(
     clearModalSequence: sequences['clearModalSequence'],
     constants: state.constants,
     form: state.form,
-    invalidFiles: state.modal.invalidFiles,
     name: props.name,
-    showModal: state.modal.showModal,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
 
     // validationSequence: sequences[props.validationSequence],
