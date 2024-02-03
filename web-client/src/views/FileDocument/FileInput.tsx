@@ -1,4 +1,3 @@
-import { ModalDialog } from '@web-client/views/ModalDialog';
 import { cloneFile } from '../cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
@@ -118,21 +117,16 @@ export const FileInput = connect(
     form: state.form,
     invalidFiles: state.modal.invalidFiles,
     name: props.name,
-    openInvalidFilesModalSequence: sequences.openInvalidFilesModalSequence,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
 
     // validationSequence: sequences[props.validationSequence],
   },
   function FileInput({
-    clearModalSequence,
     constants,
     form,
-    invalidFiles,
     multiple,
     name,
-    openInvalidFilesModalSequence,
-    showModal,
     updateFormValueSequence,
     ...remainingProps
     // validationSequence,
@@ -148,44 +142,11 @@ export const FileInput = connect(
               e,
               constants.MAX_FILE_SIZE_MB,
               updateFormValueSequence,
-              openInvalidFilesModalSequence,
             )
           }
           multiple={multiple}
         />
-        {showModal === 'invalidFilesModal' && (
-          <SizeLimitModal
-            confirmModalSequence={clearModalSequence}
-            invalidFiles={invalidFiles}
-          />
-        )}
       </React.Fragment>
     );
   },
 );
-
-function SizeLimitModal({ confirmModalSequence, invalidFiles }) {
-  return (
-    <ModalDialog
-      confirmLabel="Ok"
-      confirmSequence={() => confirmModalSequence()}
-      title="Unable to Upload File"
-    >
-      <div className="margin-bottom-4" id="file-upload-error-modal">
-        <p>There was a problem with the selected file(s):</p>
-        {invalidFiles.map(file => {
-          <p>{file}</p>;
-        })}
-        <p>Your file exceeds the maximum size of 250MB.</p>
-        <p>
-          If you still have a problem after troubleshooting your files, email
-          {''}
-          <a href="mailto:dawson.support@ustaxcourt.gov">
-            dawson.support@ustaxcourt.gov
-          </a>
-          .
-        </p>
-      </div>
-    </ModalDialog>
-  );
-}
