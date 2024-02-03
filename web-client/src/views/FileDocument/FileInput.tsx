@@ -7,42 +7,15 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import fileInput from '../../../../node_modules/@uswds/uswds/packages/usa-file-input/src';
 
-const removeNode = node => {
-  if (node && node.parentNode) {
-    node.parentNode.removeChild(node);
-  }
-};
-
-const removeFilesExceedingLimit = (dropTarget, e, filesExceedingSizeLimit) => {
-  const currentPreviewHeading = dropTarget.querySelector(
-    '.usa-file-input__preview-heading',
-  );
-  removeNode(currentPreviewHeading);
-
-  const filePreviews = dropTarget.querySelectorAll('.usa-file-input__preview');
-  const updatedFiles = [];
-  filePreviews.forEach((file, index) => {
-    const fileName = file.textContent.trim();
-    if (filesExceedingSizeLimit.includes(fileName)) {
-      removeNode(file);
-    } else {
-      updatedFiles.push(e.target.files[index]);
-    }
+const forceLoadFiles = (fileInputElement, files) => {
+  const loadFiles = new Event('change');
+  Object.defineProperty(loadFiles, 'target', {
+    value: {
+      files,
+    },
+    writable: false,
   });
-
-  const dataTransfer = new DataTransfer();
-  updatedFiles.forEach(file => {
-    dataTransfer.items.add(file);
-  });
-
-  e.target.files = dataTransfer.files;
-
-  const instructions = dropTarget.querySelector(
-    '.usa-file-input__instructions',
-  );
-  if (filesExceedingSizeLimit.length === filePreviews.length && instructions) {
-    instructions.removeAttribute('hidden');
-  }
+  fileInputElement.dispatchEvent(loadFiles);
 };
 
 function DragDropInput({
@@ -59,20 +32,9 @@ function DragDropInput({
   }, [inputRef]);
 
   useEffect(() => {
-    const fileInputElement = window.document.getElementById(
-      'file-input',
-    ) as HTMLInputElement;
+    const fileInputElement = window.document.getElementById('file-input');
     if (fileInputElement && existingFiles) {
-      const loadFilesFromFormEvent = new Event('change');
-
-      Object.defineProperty(loadFilesFromFormEvent, 'target', {
-        value: {
-          files: existingFiles,
-        },
-        writable: false,
-      });
-
-      fileInputElement.dispatchEvent(loadFilesFromFormEvent);
+      forceLoadFiles(fileInputElement, existingFiles);
     }
   }, []);
 
@@ -95,10 +57,9 @@ function handleFileSelectionAndValidation(
   e,
   maxFileSize,
   updateFormValueSequence,
-  openInvalidFilesModalSequence,
 ) {
-  const { name: inputName } = e.target;
-  const { files } = e.target;
+  const { files, name: inputName } = e.target;
+  const fileList = Array.from(files);
 
   const filesExceedingSizeLimit = Array.from(files)
     .map(capturedFile => {
@@ -109,17 +70,25 @@ function handleFileSelectionAndValidation(
     .filter(file => !!file);
 
   if (filesExceedingSizeLimit.length) {
-    setTimeout(() => {
-      const dropTarget = window.document.querySelector(
-        '.usa-file-input__target',
-      ) as HTMLInputElement;
+    const fileInputElement = window.document.getElementById(
+      'file-input',
+    ) as HTMLInputElement;
 
-      removeFilesExceedingLimit(dropTarget, e, filesExceedingSizeLimit);
-      openInvalidFilesModalSequence({
-        invalidFiles: filesExceedingSizeLimit,
-        modalId: 'invalidFilesModal',
-      });
+    alert(
+      `Your file(s) size is too big. The maximum file size is ${maxFileSize}MB.
+        ${filesExceedingSizeLimit.join(', \n')}
+        `,
+    );
+
+    setTimeout(() => {
+      const validFiles = fileList.filter(
+        file => !filesExceedingSizeLimit.includes(file.name),
+      );
+      forceLoadFiles(fileInputElement, validFiles);
     }, 1);
+
+    e.target.value = '';
+    return false;
   }
 
   if (!files.length) return false;
