@@ -60,6 +60,7 @@ export const headerHelper = (
       userRole !== USER_ROLES.general &&
       !isCaseServicesSupervisor,
     showMessagesAndQCDropDown: isCaseServicesSupervisor,
+    showMobileAccountMenu: isLoggedIn,
     showMyAccount: [
       USER_ROLES.privatePractitioner,
       USER_ROLES.irsPractitioner,

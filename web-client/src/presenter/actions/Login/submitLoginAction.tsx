@@ -22,7 +22,7 @@ export const submitLoginAction = async ({
     const originalErrorMessage = err?.originalError?.response?.data;
 
     if (originalErrorMessage === 'NewPasswordRequired') {
-      return path.changePassword({ tempPassword: password, userEmail: email });
+      return path.changePassword({ email, tempPassword: password });
     }
 
     if (originalErrorMessage === 'Invalid Username or Password') {

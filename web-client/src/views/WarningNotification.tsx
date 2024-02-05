@@ -8,8 +8,8 @@ import classNames from 'classnames';
 export const WarningNotificationComponent =
   function WarningNotificationComponent({
     alertWarning,
-    dismissable = true,
     dismissAlertSequence,
+    dismissible = true,
     iconRight = true,
     messageNotBold = false,
     scrollToTop = true,
@@ -22,7 +22,7 @@ export const WarningNotificationComponent =
       dismissText?: string;
       dismissIcon?: string;
     };
-    dismissable?: boolean;
+    dismissible?: boolean;
     dismissAlertSequence?: Function;
     messageNotBold?: boolean;
     scrollToTop?: boolean;
@@ -88,7 +88,7 @@ export const WarningNotificationComponent =
                     )}
                   </div>
                   <div className="tablet:grid-col-2 usa-alert__action">
-                    {dismissable && (
+                    {dismissible && (
                       <Button
                         link
                         className="no-underline padding-0"
@@ -110,7 +110,7 @@ export const WarningNotificationComponent =
   };
 
 type WarningNotificationProps = {
-  isDismissable?: boolean;
+  isDismissible?: boolean;
 };
 
 const warningNotificationDeps = {
@@ -126,14 +126,14 @@ export const WarningNotification = connect<
   function WarningNotification({
     alertWarning,
     dismissAlertSequence,
-    isDismissable = true,
+    isDismissible = true,
   }) {
     if (alertWarning) {
       return (
         <WarningNotificationComponent
           alertWarning={alertWarning}
           dismissAlertSequence={dismissAlertSequence}
-          dismissable={isDismissable}
+          dismissible={isDismissible}
         />
       );
     } else {
