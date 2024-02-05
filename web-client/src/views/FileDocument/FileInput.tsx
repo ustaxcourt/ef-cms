@@ -153,7 +153,7 @@ function handleFileSelectionAndValidation(
       removeFilesExceedingLimit(dropTarget, e, filesExceedingSizeLimit);
       updateFormValues(e.target.files, updateFormValueSequence, inputName);
       alert(
-        `Your file(s) size is too big. The maximum file size is ${maxFileSize}MB.
+        `The maximum file size is ${maxFileSize}MB. The following file(s) exceed the limit:
           ${filesExceedingSizeLimit.join(', \n')}
           `,
       );
@@ -166,6 +166,8 @@ function handleFileSelectionAndValidation(
   updateFormValues(files, updateFormValueSequence, inputName);
   // run validationSequence
 }
+
+// Maximum file limit is 5.
 
 export const FileInput = connect(
   {
