@@ -52,6 +52,24 @@ function DragDropInput({
   );
 }
 
+const setFormValues = (updateFormValueSequence, inputName, files) => {
+  const clonedFilePromises = Array.from(files).map(capturedFile => {
+    return cloneFile(capturedFile).catch(() => null);
+  });
+
+  Promise.all(clonedFilePromises)
+    .then(clonedFiles => {
+      const validatedFiles = clonedFiles.filter(file => file !== null);
+      updateFormValueSequence({
+        key: inputName,
+        value: validatedFiles,
+      });
+    })
+    .catch(() => {
+      /* no-op */
+    });
+};
+
 function handleFileSelectionAndValidation(
   e,
   maxFileSize,
@@ -73,40 +91,37 @@ function handleFileSelectionAndValidation(
       'file-input',
     ) as HTMLInputElement;
 
-    alert(
-      `Your file(s) size is too big. The maximum file size is ${maxFileSize}MB.
-        ${filesExceedingSizeLimit.join(', \n')}
-        `,
-    );
-
     setTimeout(() => {
       const validFiles = fileList.filter(
         file => !filesExceedingSizeLimit.includes(file.name),
       );
       forceLoadFiles(fileInputElement, validFiles);
+
+      const dataTransfer = new DataTransfer();
+      validFiles.forEach(file => {
+        dataTransfer.items.add(file);
+      });
+
+      e.target.files = dataTransfer.files;
+
+      if (e.target.files.length) {
+        setFormValues(updateFormValueSequence, inputName, e.target.files);
+      }
+
+      alert(
+        `Your file(s) size is too big. The maximum file size is ${maxFileSize}MB.
+          ${filesExceedingSizeLimit.join(', \n')}
+          `,
+      );
     }, 1);
 
-    e.target.value = '';
     return false;
   }
 
   if (!files.length) return false;
 
-  const clonedFilePromises = Array.from(files).map(capturedFile => {
-    return cloneFile(capturedFile).catch(() => null);
-  });
+  setFormValues(updateFormValueSequence, inputName, files);
 
-  Promise.all(clonedFilePromises)
-    .then(clonedFiles => {
-      const validatedFiles = clonedFiles.filter(file => file !== null);
-      updateFormValueSequence({
-        key: inputName,
-        value: validatedFiles,
-      });
-    })
-    .catch(() => {
-      /* no-op */
-    });
   // run validationSequence
 }
 
@@ -129,6 +144,7 @@ export const FileInput = connect(
     ...remainingProps
     // validationSequence,
   }) {
+    console.log('existing files', form);
     return (
       <React.Fragment>
         <DragDropInput
