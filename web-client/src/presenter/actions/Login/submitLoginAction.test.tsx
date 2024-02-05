@@ -124,8 +124,8 @@ describe('submitLoginAction', () => {
     expect(mockErrorPath).not.toHaveBeenCalled();
     expect(mockChangePasswordPath.mock.calls.length).toEqual(1);
     expect(mockChangePasswordPath).toHaveBeenCalledWith({
+      email: testEmail,
       tempPassword: testPassword,
-      userEmail: testEmail,
     });
   });
 
