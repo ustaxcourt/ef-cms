@@ -1,12 +1,13 @@
 ::: STUFF TO DO :::
 - test cases
-- Changing Email for Practitioner as admissions clerk for endpoint: /async/practitioners/:barNumber stalls out.
+- Confirm if Changing Email for Practitioner as admissions clerk for endpoint: /async/practitioners/:barNumber stalls out.
 - When something goes into the dead letter queue, we should send out some sort of notification, to what and who is TBD. 
-- Center login, create-petitioner, forgot-password in the blue area
-- less white space on bottom of create-petitioner
+- WorkerLocal setTimeout causes unhandled thrown errors to crash the API
+
 
 ::: SOLO :::
 - Update Swagger docs (not able to delete)
+- confirm styling is correct with centering
 
 
 ::: QUESTIONS :::
@@ -26,3 +27,4 @@
 
 ::: Deployment :::
 - Environment specific deploy
+ 
