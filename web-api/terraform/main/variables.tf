@@ -18,6 +18,10 @@ variable "sentry_dsn_api" {
   type = string
 }
 
+variable "enable_sentry" {
+  type = bool
+  default = false
+}
 
 variable "commit_sha" {
   type = string

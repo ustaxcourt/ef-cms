@@ -32,5 +32,6 @@ data "null_data_source" "locals" {
     TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
     USER_POOL_ID                       = aws_cognito_user_pool.pool.id
     USER_POOL_IRS_ID                   = aws_cognito_user_pool.irs_pool.id
+    ENABLE_SENTRY                      = var.enable_sentry
   }
 }

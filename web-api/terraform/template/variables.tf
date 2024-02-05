@@ -75,6 +75,11 @@ variable "disable_emails" {
   default = false
 }
 
+variable "enable_sentry" {
+  type = bool
+  default = false
+}
+
 variable "es_volume_size" {
   type = number
 }

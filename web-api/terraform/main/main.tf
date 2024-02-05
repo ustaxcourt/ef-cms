@@ -73,6 +73,7 @@ module "ef-cms_apis" {
   green_node_version         = var.green_node_version
   green_table_name           = var.green_table_name
   green_use_layers           = var.green_use_layers
+  enable_sentry              = var.enable_sentry
   irs_superuser_email        = var.irs_superuser_email
   lower_env_account_id       = var.lower_env_account_id
   prod_env_account_id        = var.prod_env_account_id

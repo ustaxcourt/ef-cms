@@ -220,6 +220,13 @@ variable "health_check_id" {
   type = string
 }
 
+
+variable "enable_sentry" {
+  type = bool
+  default = false
+}
+
+
 variable "deployment_timestamp" {
   type = number
 }

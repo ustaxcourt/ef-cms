@@ -31,7 +31,10 @@ const entries = {
 };
 
 const apiConfig: webpack.Configuration = {
-  ...getConfig(Object.keys(entries).map(key => `./${key.split('/')[0]}`)),
+  ...getConfig(
+    Object.keys(entries).map(key => `./${key.split('/')[0]}`),
+    true,
+  ),
   entry: entries,
   output: {
     clean: true,

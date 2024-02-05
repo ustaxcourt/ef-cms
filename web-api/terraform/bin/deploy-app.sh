@@ -2,11 +2,11 @@
 
 ENV=$1
 
+[ -z "${ENV}" ] && echo "You must have ENV pass as an argument" && exit 1
+
+
 DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
-
-export DEPLOYING_COLOR
-export MIGRATE_FLAG
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 if [ -z "${SECRETS_LOADED}" ]; then
@@ -33,6 +33,8 @@ fi
 [ -z "${SENTRY_AUTH_TOKEN}" ] && echo "You must have SENTRY_AUTH_TOKEN set in your environment" && exit 1
 [ -z "${COMMIT_SHA}" ] && echo "You must have COMMIT_SHA set in your environment" && exit 1
 
+[ -z "${ENABLE_SENTRY}" ] && ENABLE_SENTRY=false
+
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 echo "  - BOUNCE_ALERT_RECIPIENTS=${BOUNCE_ALERT_RECIPIENTS}"
@@ -56,6 +58,7 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 echo "  - SENTRY_DSN_API=${SENTRY_DSN_API}"
 echo "  - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}"
 echo "  - COMMIT_SHA=${COMMIT_SHA}"
+echo "  - ENABLE_SENTRY=${COMMIT_SHA}"
 
 ../../../scripts/verify-terraform-version.sh
 
@@ -84,6 +87,9 @@ npm run build:assets
 set -eo pipefail
 # build the cognito authorizer, api, and api-public with web pack
 npm run build:lambda:api
+
+# delete all .map files so we do not include them in lambda package
+find "../template/lambdas/dist" -type f -name "*.map" -exec rm -f {} \;
 
 if [ -z "${CIRCLE_BRANCH}" ]; then
   pushd ../../runtimes/puppeteer/
@@ -184,8 +190,9 @@ export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_sentry_dsn_api=$SENTRY_DSN_API
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_commit_sha=$COMMIT_SHA
+export TF_VAR_enable_sentry=$ENABLE_SENTRY
 
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
 terraform apply -auto-approve execution-plan
