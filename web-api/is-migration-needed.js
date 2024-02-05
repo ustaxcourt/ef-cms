@@ -47,7 +47,7 @@ const hasMigrationRan = async key => {
     const hasRan = await hasMigrationRan(migrationFile);
     if (!hasRan) {
       console.log(
-        `${migrationFile} has not ran, migration is needed, exiting with status code 0`,
+        `${migrationFile} has not run, migration is needed, exiting with status code 0`,
       );
       process.exit(0);
     }
