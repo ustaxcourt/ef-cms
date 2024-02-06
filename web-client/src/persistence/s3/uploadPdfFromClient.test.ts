@@ -91,7 +91,6 @@ describe('uploadPdfFromClient', () => {
     let loadMock;
 
     const TEST_TITLE = 'TEST_TITLE';
-    const RESOLVE_MOCK = jest.fn();
 
     beforeEach(() => {
       applicationContext.getHttpClient().post.mockResolvedValue(null);
@@ -116,11 +115,19 @@ describe('uploadPdfFromClient', () => {
     });
 
     it('should clear out all metadata from PDF', async () => {
-      await cleanFileMetadata(
+      const TEST_STRING =
+        '<photoshop:AuthorsPosition>John is Testing</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
+
+      const modifiedPdfBytes = new Uint8Array(TEST_STRING.length);
+      for (let i = 0; i < TEST_STRING.length; i++) {
+        modifiedPdfBytes[i] = TEST_STRING.charCodeAt(i);
+      }
+
+      loadMock.save.mockReturnValue(modifiedPdfBytes);
+
+      const pdfBytes = await cleanFileMetadata(
         TEST_TITLE,
-        RESOLVE_MOCK,
         pdfLibMock,
-        {} as File,
         {} as FileReader,
       );
 
@@ -130,6 +137,8 @@ describe('uploadPdfFromClient', () => {
       expect(loadMock.setKeywords).toHaveBeenCalledWith([]);
       expect(loadMock.setCreationDate).toHaveBeenCalled();
       expect(loadMock.setModificationDate).toHaveBeenCalled();
+
+      expect(pdfBytes.toString()).toEqual('');
     });
   });
 });
