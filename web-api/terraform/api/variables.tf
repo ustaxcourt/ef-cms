@@ -230,3 +230,7 @@ variable "health_check_id" {
 variable "deployment_timestamp" {
   type = number
 }
+
+variable "alert_sns_topic_arn" {
+  type = string
+}
