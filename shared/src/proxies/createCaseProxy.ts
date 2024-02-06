@@ -12,7 +12,6 @@ import { post } from './requests';
  * @returns {Promise<*>} the promise of the api call
  */
 export const createCaseInteractor = (applicationContext, requestBody) => {
-  console.log('requestBody over the line', requestBody);
   return post({
     applicationContext,
     body: requestBody,
