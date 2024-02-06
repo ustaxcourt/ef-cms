@@ -321,7 +321,6 @@ describe('formattedMessages', () => {
       caseStatuses: expect.arrayContaining(['Open']),
       fromSections: expect.arrayContaining(['petitionsclerk']),
       fromUsers: expect.arrayContaining(['petitionsclerk']),
-      showFilters: true,
       toSections: expect.arrayContaining(['petitionsclerk']),
       toUsers: expect.arrayContaining(['petitionsclerk']),
     });

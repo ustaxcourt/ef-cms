@@ -23,6 +23,7 @@ const documentClient = DynamoDBDocument.from(dynamodb, {
   marshallOptions: { removeUndefinedValues: true },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
 
