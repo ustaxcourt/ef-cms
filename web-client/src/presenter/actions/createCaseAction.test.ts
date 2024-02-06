@@ -80,6 +80,7 @@ describe('createCaseAction', () => {
       },
       state: {
         form: {
+          atpFiles: [{}, {}],
           corporateDisclosureFile: {},
           petitionFile: {},
           stinFile: {},
@@ -94,18 +95,17 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
+      atpFilesMetadata: [{}, {}],
       corporateDisclosureFile: {},
       petitionFile: {},
-      petitionMetadata: {
-        ...MOCK_CASE,
-      },
+      petitionMetadata: MOCK_CASE,
       stinFile: {},
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(2);
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files and call the success path  finished', async () => {
+  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files and call the success path when finished', async () => {
     filePetitionInteractor.mockReturnValue({
       caseDetail: {
         ...MOCK_CASE,
