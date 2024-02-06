@@ -86,8 +86,6 @@ export const sendIrsSuperuserPetitionEmail = async ({
     },
   };
 
-  console.log('destination', destination);
-
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
     defaultTemplateData: {

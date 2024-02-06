@@ -451,7 +451,7 @@ export const ScanBatchPreviewer = connect(
                       </>
                     )
                   }
-                  key={documentTab.documentType}
+                  key={`tabButton-${documentTab.documentType}`}
                   tabName={documentTab.documentType}
                   title={documentTab.tabTitle}
                 />

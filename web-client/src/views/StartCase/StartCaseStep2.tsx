@@ -160,10 +160,11 @@ export const StartCaseStep2 = connect(
                   </label>
                   <span className="usa-hint" id="atp-files-upload-hint">
                     Make sure file is not encrypted or password protected. Max
-                    file size {constants.MAX_FILE_SIZE_MB}MB.
+                    file size {constants.MAX_FILE_SIZE_MB}MB. Max of 5 files.
                   </span>
                   <FormGroup>
                     <FileInput
+                      multiple
                       data-testid="atp-files-upload"
                       name="atpFiles"
                       updateFormValueSequence="updateFormValueSequence"
