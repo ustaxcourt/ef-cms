@@ -12,20 +12,6 @@ const removeNode = node => {
   }
 };
 
-const updatePreviewHeading = (dropTarget, numFilesSelected) => {
-  const previewHeading = dropTarget.querySelector(
-    '.usa-file-input__preview-heading',
-  );
-  if (numFilesSelected === 0) {
-    removeNode(previewHeading);
-    return;
-  }
-  const textNode = previewHeading.firstChild;
-  textNode.textContent = `${numFilesSelected} file${
-    numFilesSelected !== 1 ? 's' : ''
-  } selected`;
-};
-
 const updateFormValues = (files, updateFormValueSequence, inputName) => {
   const clonedFilePromises = Array.from(files).map(capturedFile => {
     return cloneFile(capturedFile).catch(() => null);
@@ -44,40 +30,21 @@ const updateFormValues = (files, updateFormValueSequence, inputName) => {
     });
 };
 
-const removeFilesExceedingLimit = (dropTarget, e, filesExceedingSizeLimit) => {
-  const numFilesSelected =
-    e.target.files.length - filesExceedingSizeLimit.length;
-  updatePreviewHeading(dropTarget, numFilesSelected);
+const removeFiles = dropTarget => {
+  const previewHeading = dropTarget.querySelector(
+    '.usa-file-input__preview-heading',
+  );
+  removeNode(previewHeading);
 
   const filePreviews = dropTarget.querySelectorAll('.usa-file-input__preview');
-  const updatedFiles = [];
-
-  Array.from(e.target.files).forEach(file => {
-    const fileName = file.name;
-    if (!filesExceedingSizeLimit.includes(fileName)) {
-      updatedFiles.push(file);
-    }
-  });
-
-  // Remove file previews that exceed the size limit
   filePreviews.forEach(file => {
-    const fileName = file.textContent.trim();
-    if (filesExceedingSizeLimit.includes(fileName)) {
-      removeNode(file);
-    }
+    removeNode(file);
   });
-
-  const dataTransfer = new DataTransfer();
-  updatedFiles.forEach(file => {
-    dataTransfer.items.add(file);
-  });
-
-  e.target.files = dataTransfer.files;
 
   const instructions = dropTarget.querySelector(
     '.usa-file-input__instructions',
   );
-  if (filesExceedingSizeLimit.length === filePreviews.length && instructions) {
+  if (instructions) {
     instructions.removeAttribute('hidden');
   }
 };
@@ -136,6 +103,19 @@ function handleFileSelectionAndValidation(
   const { name: inputName } = e.target;
   const { files } = e.target;
 
+  const dropTarget = window.document.querySelector(
+    '.usa-file-input__target',
+  ) as HTMLInputElement;
+
+  if (Array.from(files).length > 5) {
+    setTimeout(() => {
+      removeFiles(dropTarget);
+      e.target.value = '';
+      alert('Maximum file limit is 5.');
+    }, 10);
+    return false;
+  }
+
   const filesExceedingSizeLimit = Array.from(files)
     .map(capturedFile => {
       // if (capturedFile.size >= maxFileSize * 1024 * 1024) {
@@ -147,17 +127,15 @@ function handleFileSelectionAndValidation(
 
   if (filesExceedingSizeLimit.length) {
     setTimeout(() => {
-      const dropTarget = window.document.querySelector(
-        '.usa-file-input__target',
-      ) as HTMLInputElement;
-      removeFilesExceedingLimit(dropTarget, e, filesExceedingSizeLimit);
+      removeFiles(dropTarget);
+      e.target.value = '';
       updateFormValues(e.target.files, updateFormValueSequence, inputName);
       alert(
         `The maximum file size is ${maxFileSize}MB. The following file(s) exceed the limit:
           ${filesExceedingSizeLimit.join(', \n')}
           `,
       );
-    }, 1);
+    }, 10);
     return false;
   }
 
@@ -166,8 +144,6 @@ function handleFileSelectionAndValidation(
   updateFormValues(files, updateFormValueSequence, inputName);
   // run validationSequence
 }
-
-// Maximum file limit is 5.
 
 export const FileInput = connect(
   {
