@@ -145,6 +145,7 @@ const sendWelcomeEmail = async email => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const params = {
     email: process.argv[2],
