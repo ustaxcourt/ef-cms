@@ -1,5 +1,74 @@
 import promiseRetry from 'promise-retry';
 
+function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
+  let resultString = String.fromCharCode.apply(null, pdfBytes);
+  [
+    /<photoshop:AuthorsPosition>.*?<\/photoshop:AuthorsPosition>/g,
+    /<photoshop:CaptionWriter>.*?<\/photoshop:CaptionWriter>/g,
+    /<pdf:Keywords>.*?<\/pdf:Keywords>/g,
+  ].forEach(regex => {
+    resultString = resultString.replace(regex, '');
+  });
+
+  const modifiedPdfBytes = new Uint8Array(resultString.length);
+  for (let i = 0; i < resultString.length; i++) {
+    modifiedPdfBytes[i] = resultString.charCodeAt(i);
+  }
+
+  return modifiedPdfBytes;
+}
+
+const cleanFileMetadata = async (
+  title: string,
+  resolve: (value: File | PromiseLike<File>) => void,
+  pdfLib,
+  file: File,
+  fileReader: FileReader,
+) => {
+  const pdfDoc = await pdfLib.PDFDocument.load(fileReader.result, {
+    updateMetadata: false,
+  });
+
+  const cleanValue = '';
+  pdfDoc.setTitle(title);
+  pdfDoc.setAuthor(cleanValue);
+  pdfDoc.setSubject(cleanValue);
+
+  pdfDoc.setKeywords([]);
+
+  // eslint-disable-next-line @miovision/disallow-date/no-new-date
+  const nowDateString = new Date();
+  pdfDoc.setCreationDate(nowDateString);
+  pdfDoc.setModificationDate(nowDateString);
+
+  const modifiedPdfBytes: number[] = await pdfDoc.save();
+  const finalModifiedPdfBytes: BlobPart =
+    handleAdobeAdditionalMetadata(modifiedPdfBytes);
+
+  const updatedFile = new File([finalModifiedPdfBytes as BlobPart], file.name, {
+    type: file.type,
+  });
+
+  resolve(updatedFile);
+};
+
+const readAndCleanFileMetadata = async (
+  title: string,
+  file: File,
+  pdfLib,
+): Promise<File> => {
+  if (!pdfLib) return file;
+
+  return await new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsArrayBuffer(file);
+    fileReader.addEventListener('load', () =>
+      cleanFileMetadata(title, resolve, pdfLib, file, fileReader),
+    );
+    fileReader.addEventListener('error', () => reject('Failed to read file'));
+  });
+};
+
 /**
  * uploadPdfFromClient
  *
@@ -33,6 +102,11 @@ export const uploadPdfFromClient = async ({
   }) => void;
   policy: any;
 }) => {
+  const pdfLib = await applicationContext.getPdfLib().catch(() => null);
+  const updatedFile = await readAndCleanFileMetadata(key, file, pdfLib).catch(
+    () => file,
+  );
+
   const docId = key;
   const formData = new FormData();
   formData.append('key', docId);
@@ -45,8 +119,8 @@ export const uploadPdfFromClient = async ({
   );
   formData.append('Policy', policy.fields.Policy);
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
-  formData.append('content-type', file.type || 'application/pdf');
-  formData.append('file', file, file.name || 'fileName');
+  formData.append('content-type', updatedFile.type || 'application/pdf');
+  formData.append('file', updatedFile, updatedFile.name || 'fileName');
 
   await promiseRetry(
     (retry, attempts) => {
