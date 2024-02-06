@@ -250,7 +250,7 @@ export const createCaseInteractor = async (
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
-  if (atpFileIds?.length)
+  if (atpFileIds?.length) {
     atpFileIds.forEach(fileId => {
       const atpDocketEntryEntity = new DocketEntry(
         {
@@ -275,6 +275,7 @@ export const createCaseInteractor = async (
 
       caseToAdd.addDocketEntry(atpDocketEntryEntity);
     });
+  }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,

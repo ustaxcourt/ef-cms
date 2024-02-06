@@ -267,6 +267,50 @@ describe('createCaseInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {
+    const result = await createCaseInteractor(applicationContext, {
+      atpFileIds: [
+        'f09116b1-6a8c-4198-b661-0f06e9c6cbdc',
+        '9b969ca9-e3c3-4b35-bdff-10a4a31c01c6',
+      ],
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: {
+        caseType: CASE_TYPES_MAP.other,
+        contactPrimary: {
+          address1: '99 South Oak Lane',
+          address2: 'Culpa numquam saepe ',
+          address3: 'Eaque voluptates com',
+          city: 'Dignissimos voluptat',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner1@example.com',
+          name: 'Diana Prince',
+          phone: '+1 (215) 128-6587',
+          postalCode: '69580',
+          state: 'AR',
+        },
+        contactSecondary: {},
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.petitioner,
+        petitionFile: new File([], 'test.pdf'),
+        petitionFileSize: 1,
+        preferredTrialCity: 'Fresno, California',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: 1,
+      },
+      stinFileId: '96759830-8970-486f-916b-23439a8ebb70',
+    });
+
+    const atpDocketEntries = result.docketEntries.filter(
+      d =>
+        d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+    );
+
+    expect(atpDocketEntries.length).toEqual(2);
+  });
+
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
     user = new PrivatePractitioner({
       barNumber: 'BN1234',
