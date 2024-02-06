@@ -30,7 +30,10 @@ const updateFormValues = (files, updateFormValueSequence, inputName) => {
     });
 };
 
-const removeFiles = dropTarget => {
+const removeFiles = (inputName, updateFormValueSequence) => {
+  const dropTarget = window.document.querySelector(
+    '.usa-file-input__target',
+  ) as HTMLInputElement;
   const previewHeading = dropTarget.querySelector(
     '.usa-file-input__preview-heading',
   );
@@ -47,12 +50,22 @@ const removeFiles = dropTarget => {
   if (instructions) {
     instructions.removeAttribute('hidden');
   }
+  const fileInputElement = window.document.getElementById(
+    'file-input',
+  ) as HTMLInputElement;
+  fileInputElement.value = '';
+
+  updateFormValueSequence({
+    key: inputName,
+    value: [],
+  });
 };
 
 function DragDropInput({
   existingFiles,
   fileInputName,
   handleChange,
+  handleRemove,
   multiple,
   ...remainingProps
 }) {
@@ -80,18 +93,49 @@ function DragDropInput({
     }
   }, []);
 
+  useEffect(() => {
+    if (existingFiles?.length) {
+      const chooseFilesSpan = window.document.querySelector(
+        '.usa-file-input__choose',
+      );
+      if (chooseFilesSpan) {
+        removeNode(chooseFilesSpan);
+      }
+    }
+  }, [existingFiles]);
+
   return (
-    <input
-      {...remainingProps}
-      accept=".pdf"
-      className="usa-file-input"
-      id="file-input"
-      multiple={multiple}
-      name={fileInputName}
-      ref={inputRef}
-      type="file"
-      onChange={handleChange}
-    />
+    <div style={{ maxWidth: '75%', position: 'relative' }}>
+      <input
+        {...remainingProps}
+        accept=".pdf"
+        className="usa-file-input"
+        id="file-input"
+        multiple={multiple}
+        name={fileInputName}
+        ref={inputRef}
+        type="file"
+        onChange={handleChange}
+      />
+      {!!existingFiles?.length && (
+        <div
+          className="usa-file-input__remove"
+          style={{
+            color: '#005ea2',
+            cursor: 'pointer',
+            fontSize: '15px',
+            left: '82%',
+            position: 'absolute',
+            textDecoration: 'underline',
+            top: '9px',
+            zIndex: 10,
+          }}
+          onClick={handleRemove}
+        >
+          Remove File{existingFiles.length > 1 ? 's' : ''}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -103,14 +147,9 @@ function handleFileSelectionAndValidation(
   const { name: inputName } = e.target;
   const { files } = e.target;
 
-  const dropTarget = window.document.querySelector(
-    '.usa-file-input__target',
-  ) as HTMLInputElement;
-
   if (Array.from(files).length > 5) {
     setTimeout(() => {
-      removeFiles(dropTarget);
-      e.target.value = '';
+      removeFiles(inputName, updateFormValueSequence);
       alert('Maximum file limit is 5.');
     }, 10);
     return false;
@@ -127,9 +166,7 @@ function handleFileSelectionAndValidation(
 
   if (filesExceedingSizeLimit.length) {
     setTimeout(() => {
-      removeFiles(dropTarget);
-      e.target.value = '';
-      updateFormValues(e.target.files, updateFormValueSequence, inputName);
+      removeFiles(inputName, updateFormValueSequence);
       alert(
         `The maximum file size is ${maxFileSize}MB. The following file(s) exceed the limit:
           ${filesExceedingSizeLimit.join(', \n')}
@@ -175,6 +212,9 @@ export const FileInput = connect(
               updateFormValueSequence,
             )
           }
+          handleRemove={() => {
+            removeFiles(name, updateFormValueSequence);
+          }}
           multiple={multiple}
         />
       </React.Fragment>
