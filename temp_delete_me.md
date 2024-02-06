@@ -1,11 +1,12 @@
 ::: STUFF TO DO :::
 - test cases
-- Confirm if Changing Email for Practitioner as admissions clerk for endpoint: /async/practitioners/:barNumber stalls out.
 - When something goes into the dead letter queue, we should send out some sort of notification, to what and who is TBD. 
-- WorkerLocal setTimeout causes unhandled thrown errors to crash the API
+- No token on verify pending email shows verification success erroneously 
+
 
 ::: SOLO :::
 - confirm styling is correct with centering
+- Investigate socket closure (outage, idle state, etc)
 
 
 ::: QUESTIONS :::
