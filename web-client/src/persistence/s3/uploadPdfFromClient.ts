@@ -20,9 +20,7 @@ function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
 
 export const cleanFileMetadata = async (
   title: string,
-  resolve: (value: File | PromiseLike<File>) => void,
   pdfLib,
-  file: File,
   fileReader: FileReader,
 ) => {
   const pdfDoc = await pdfLib.PDFDocument.load(fileReader.result, {
@@ -45,11 +43,7 @@ export const cleanFileMetadata = async (
   const finalModifiedPdfBytes: BlobPart =
     handleAdobeAdditionalMetadata(modifiedPdfBytes);
 
-  const updatedFile = new File([finalModifiedPdfBytes as BlobPart], file.name, {
-    type: file.type,
-  });
-
-  resolve(updatedFile);
+  return finalModifiedPdfBytes;
 };
 
 const readAndCleanFileMetadata = async (
@@ -62,9 +56,14 @@ const readAndCleanFileMetadata = async (
   return await new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
-    fileReader.addEventListener('load', () =>
-      cleanFileMetadata(title, resolve, pdfLib, file, fileReader),
-    );
+    fileReader.addEventListener('load', async () => {
+      const pdfBytes = await cleanFileMetadata(title, pdfLib, fileReader);
+      const updatedFile = new File([pdfBytes as BlobPart], file.name, {
+        type: file.type,
+      });
+
+      resolve(updatedFile);
+    });
     fileReader.addEventListener('error', () => reject('Failed to read file'));
   });
 };
