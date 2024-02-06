@@ -30,7 +30,7 @@ export const setupPercentDone = <T extends Record<string, any | undefined>>(
   const createOnUploadProgress = key => {
     loadedAmounts[key] = 0;
     return progressEvent => {
-      const { isDone, loaded, total } = progressEvent;
+      const { isDone, isHavingSystemIssues, loaded, total } = progressEvent;
       if (total) {
         totalSizes[key] = total;
       }
@@ -47,6 +47,10 @@ export const setupPercentDone = <T extends Record<string, any | undefined>>(
       const percent = parseInt((uploadedBytes / totalSize) * 100);
       store.set(state.fileUploadProgress.percentComplete, percent);
       store.set(state.fileUploadProgress.timeRemaining, timeRemaining);
+      store.set(
+        state.fileUploadProgress.isHavingSystemIssues,
+        isHavingSystemIssues,
+      );
     };
   };
 
