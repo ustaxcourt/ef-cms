@@ -5,7 +5,6 @@
 - WorkerLocal setTimeout causes unhandled thrown errors to crash the API
 
 ::: SOLO :::
-- Update Swagger docs (not able to delete)
 - confirm styling is correct with centering
 
 

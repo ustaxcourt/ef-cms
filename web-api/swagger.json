@@ -150,7 +150,51 @@
         }
       }
     },
-    "/feature-flag/{featureFlag}": {
+    "/system/maintenance-mode": {
+      "get": {
+        "tags": [],
+        "summary": "get maintenance mode status",
+        "description": "get maintenance mode status. \n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/feature-flag/{featureFlag}": {
       "parameters": [
         {
           "name": "featureFlag",
@@ -7627,7 +7671,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "code": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "idToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
                   "type": "string"
                 }
               }
@@ -7635,12 +7685,12 @@
           }
         ],
         "tags": ["auth"],
-        "summary": "uses the oauth2 authorization code to generate a refresh and access token",
-        "description": "Uses the oauth2 authorization code to generate a refresh and access token.\n",
+        "summary": "logs user in and returns access, id, and refresh tokens",
+        "description": "Logs user in and returns access, id, and refresh tokens. \n",
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "the freshly created access token",
+            "description": "access, id, and refresh tokens",
             "schema": {
               "$ref": "#/definitions/authorization"
             },
@@ -7701,7 +7751,7 @@
           "200": {
             "description": "the newly created access token",
             "schema": {
-              "$ref": "#/definitions/authorization"
+              "$ref": "#/definitions/accessToken"
             }
           }
         },
@@ -7797,6 +7847,15 @@
   },
   "definitions": {
     "authorization": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "the access token"
+        }
+      }
+    },
+    "accessToken": {
       "type": "object",
       "properties": {
         "token": {
