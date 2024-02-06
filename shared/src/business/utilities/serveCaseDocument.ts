@@ -1,13 +1,6 @@
 import { Case } from '../entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES, ROLES } from '../entities/EntityConstants';
 
-/**
- *
- * @param {object} applicationContext the applicationContext
- * @param {object} caseEntity the case entity
- * @param {string} initialDocumentTypeKey the initialDocumentTypeKey
- */
-
 export const serveCaseDocument = async ({
   applicationContext,
   caseEntity,
