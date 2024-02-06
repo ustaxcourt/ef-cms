@@ -1,7 +1,6 @@
 ::: STUFF TO DO :::
 - test cases
 - When something goes into the dead letter queue, we should send out some sort of notification, to what and who is TBD. 
-- No token on verify pending email shows verification success erroneously 
 
 
 ::: SOLO :::
