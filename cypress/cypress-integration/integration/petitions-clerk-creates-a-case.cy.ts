@@ -131,5 +131,34 @@ describe('Petition clerk creates a paper filing', function () {
           });
       });
     });
+
+    describe('Create and submit a paper petition with all possible auto-generated PDFs', () => {
+      it('should create a paper petition', () => {
+        createPaperPetition();
+      });
+
+      it('should return to select all auto-generated orders', () => {
+        cy.get('#case-information-edit-button').click();
+        cy.get('label[for="payment-status-unpaid"]').click();
+        cy.get('label[for="order-designating-place-of-trial"]').click();
+        cy.get('label[for="order-for-ratification"]').scrollIntoView();
+        cy.get('label[for="order-for-ratification"]').click(); // un-checking
+        cy.get('label[for="order-for-amended-petition"]').click();
+
+        cy.intercept('PUT', '**/cases/**').as('submitCase');
+        cy.get('#submit-case').click();
+      });
+
+      it('should serve the petition to the IRS', () => {
+        cy.get('[data-testid="serve-case-to-irs"]').scrollIntoView();
+        cy.get('[data-testid="serve-case-to-irs"]').click();
+        cy.get('[data-testid="modal-confirm"]').click();
+        cy.get('#done-viewing-paper-petition-receipt-button').click();
+        cy.get('.usa-alert__text').should(
+          'have.text',
+          'Petition served to IRS.',
+        );
+      });
+    });
   });
 });
