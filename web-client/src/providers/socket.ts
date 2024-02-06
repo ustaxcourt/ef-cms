@@ -11,7 +11,7 @@ const createWebSocketClient = ({ clientConnectionId, token }) => {
 export const socketProvider = ({ socketRouter }) => {
   let app;
   let applicationContext;
-  let socket;
+  let socket: WebSocket;
   let pingInterval;
   // API Gateway is 10 minute idle timeout, so let's just do 1 minute ping interval
   const PING_INTERVAL = 1000 * 60;
@@ -19,7 +19,7 @@ export const socketProvider = ({ socketRouter }) => {
   const stopSocket = () => {
     if (socket) {
       clearInterval(pingInterval);
-      socket.close();
+      socket.close(1000, 'Normal connection closure');
       socket = null;
     }
   };
@@ -39,10 +39,10 @@ export const socketProvider = ({ socketRouter }) => {
             return reject(error);
           };
 
-          socket.onclose = async err => {
+          socket.onclose = async closeEvent => {
+            console.log('closeEvent', closeEvent);
             stopSocket();
-            if (err && err.reason !== 'Normal connection closure') {
-              console.error(err);
+            if (closeEvent && closeEvent.code !== 1000) {
               await start();
             }
           };
