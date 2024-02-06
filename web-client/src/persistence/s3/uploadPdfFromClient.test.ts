@@ -3,6 +3,10 @@ import { cleanFileMetadata, uploadPdfFromClient } from './uploadPdfFromClient';
 
 describe('uploadPdfFromClient', () => {
   describe('Http Post', () => {
+    beforeEach(() => {
+      applicationContext.getPdfLib = () => null;
+    });
+
     it('makes a post request to the expected endpoint with the expected data', async () => {
       applicationContext.getHttpClient().post.mockResolvedValue(null);
 
