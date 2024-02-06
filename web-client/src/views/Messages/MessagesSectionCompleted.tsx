@@ -26,20 +26,18 @@ export const MessagesSectionCompleted = connect(
   }) {
     return (
       <>
-        {formattedMessages.showFilters && (
-          <TableFilters
-            filters={[
-              {
-                isSelected: screenMetadata.completedBy,
-                key: 'completedBy',
-                label: 'Completed By',
-                options: formattedMessages.completedByUsers,
-                useInlineSelect: false,
-              },
-            ]}
-            onSelect={updateScreenMetadataSequence}
-          ></TableFilters>
-        )}
+        <TableFilters
+          filters={[
+            {
+              isSelected: screenMetadata.completedBy,
+              key: 'completedBy',
+              label: 'Completed By',
+              options: formattedMessages.completedByUsers,
+              useInlineSelect: false,
+            },
+          ]}
+          onSelect={updateScreenMetadataSequence}
+        ></TableFilters>
 
         <table className="usa-table ustc-table subsection">
           <thead>

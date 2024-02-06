@@ -560,6 +560,52 @@ describe('Messages', () => {
       });
     });
   });
+
+  describe('Message Filters', () => {
+    describe('Display', () => {
+      [
+        'adc',
+        'judgecolvin',
+        'docketclerk',
+        'admissionsClerk',
+        'colvinschambers',
+        'trialClerk',
+        'reportersOffice',
+        'petitionsClerk',
+        'general',
+      ].forEach(account => {
+        it(`should display the filters for Court User "${account}"`, () => {
+          cy.login(account, '/messages/my/inbox');
+          cy.get('[data-testid="table-filters-component"]').should(
+            'be.visible',
+          );
+
+          cy.get('[data-testid="messages-outbox-tab"]').click();
+          cy.get('[data-testid="table-filters-component"]').should(
+            'be.visible',
+          );
+
+          cy.get('[data-testid="messages-completed-tab"]').click();
+          cy.get('[data-testid="table-filters-component"]').should('not.exist');
+
+          cy.get('[data-testid="switch-to-section-messages-button"]').click();
+          cy.get('[data-testid="table-filters-component"]').should(
+            'be.visible',
+          );
+
+          cy.get('[data-testid="messages-outbox-tab"]').click();
+          cy.get('[data-testid="table-filters-component"]').should(
+            'be.visible',
+          );
+
+          cy.get('[data-testid="messages-completed-tab"]').click();
+          cy.get('[data-testid="table-filters-component"]').should(
+            'be.visible',
+          );
+        });
+      });
+    });
+  });
 });
 
 function sendMessages(DOCKET_CLERK_ID: string) {

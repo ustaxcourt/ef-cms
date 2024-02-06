@@ -16,7 +16,7 @@ export const getDocumentDownloadUrlInteractor = (
     docketNumber,
     isPublic,
     key,
-  }: { docketNumber: string; isPublic?: boolean; key: string }, // todo: move type to interactor
+  }: { docketNumber: string; isPublic?: boolean; key: string },
 ) => {
   return get({
     applicationContext,
