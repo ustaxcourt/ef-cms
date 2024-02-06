@@ -1,10 +1,3 @@
-/**
- * uploads a document and then immediately processes it to scan for viruses and validate the document.
- *
- * @param {object} document the documentFile
- * @param {Function} onUploadProgress the progressFunction
- * @returns {Promise<string>} the key returned from a successful upload
- */
 export const uploadDocumentAndMakeSafeInteractor = async (
   applicationContext: any, // keep as any until the UI is refactored
   {
@@ -12,7 +5,7 @@ export const uploadDocumentAndMakeSafeInteractor = async (
     key,
     onUploadProgress,
   }: { document: any; key?: string; onUploadProgress: () => void },
-) => {
+): Promise<string> => {
   const uploadedKey = await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
@@ -22,7 +15,6 @@ export const uploadDocumentAndMakeSafeInteractor = async (
       onUploadProgress,
     });
 
-  //TODO: do we have a real virus scanner?
   await applicationContext
     .getUseCases()
     .getStatusOfVirusScanInteractor(applicationContext, {
