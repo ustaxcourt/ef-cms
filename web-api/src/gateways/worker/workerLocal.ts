@@ -12,7 +12,11 @@ export const workerLocal: WorkerHandler = async (
   // Simulate what happens on a deployed environment when a message is sent to SQS.
   setTimeout(
     async () => {
-      await workerRouter(applicationContext, { message });
+      try {
+        await workerRouter(applicationContext, { message });
+      } catch (error) {
+        console.error('Worker Local Error: ', error);
+      }
     },
     Math.random() * 1000 * 3,
   );
