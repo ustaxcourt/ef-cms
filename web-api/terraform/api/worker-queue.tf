@@ -44,3 +44,21 @@ resource "aws_sqs_queue_redrive_allow_policy" "worker_queue_redrive_allow_policy
     sourceQueueArns   = [aws_sqs_queue.worker_queue.arn]
   })
 }
+
+resource "aws_cloudwatch_metric_alarm" "worker_dl_queue_check" {
+  alarm_name          = "efcms_${var.environment}_${var.current_color}: Worker-DLQueueCheck"
+  alarm_description   = "Alarm that triggers when a message is sent to worker_dl_queue_${var.environment}_${var.current_color}"
+  namespace           = "AWS/SQS"
+  metric_name         = "ApproximateNumberOfMessagesVisible"
+  comparison_operator = "GreaterThanThreshold"
+  statistic           = "Sum"
+  threshold           = 0
+  evaluation_periods  = 1
+  period              = 60
+
+  dimensions = {
+    QueueName = "worker_dl_queue_${var.environment}_${var.current_color}"
+  }
+
+  alarm_actions = [var.alert_sns_topic_arn]
+}
