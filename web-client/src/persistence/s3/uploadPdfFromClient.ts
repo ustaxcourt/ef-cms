@@ -18,7 +18,7 @@ function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
   return modifiedPdfBytes;
 }
 
-const cleanFileMetadata = async (
+export const cleanFileMetadata = async (
   title: string,
   resolve: (value: File | PromiseLike<File>) => void,
   pdfLib,
