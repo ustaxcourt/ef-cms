@@ -1,8 +1,5 @@
 const createWebSocketClient = ({ clientConnectionId, token }) => {
   const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
-  console.log('token', token);
-  const someErrr = new Error('hola');
-  console.log('createWebSocketClient stack trace: ', someErrr.stack);
   const connectionUrl = `${notificationsUrl}?token=${token}&clientConnectionId=${clientConnectionId}`;
   const socket = new WebSocket(
     connectionUrl,
@@ -43,6 +40,7 @@ export const socketProvider = ({ socketRouter }) => {
           };
 
           socket.onclose = async closeEvent => {
+            console.log('closeEvent', closeEvent);
             stopSocket();
             if (closeEvent && closeEvent.code !== 1000) {
               await start();
