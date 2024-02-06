@@ -1,4 +1,7 @@
-import { AdminSetUserPasswordCommandInput } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AuthFlowType,
+  ChallengeNameType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
 import {
   InvalidEntityError,
@@ -50,7 +53,7 @@ export const changePasswordInteractor = async (
       const initiateAuthResult = await applicationContext
         .getCognito()
         .initiateAuth({
-          AuthFlow: 'USER_PASSWORD_AUTH',
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
           AuthParameters: {
             PASSWORD: tempPassword,
             USERNAME: email,
@@ -58,14 +61,17 @@ export const changePasswordInteractor = async (
           ClientId: applicationContext.environment.cognitoClientId,
         });
 
-      if (initiateAuthResult.ChallengeName !== 'NEW_PASSWORD_REQUIRED') {
+      if (
+        initiateAuthResult.ChallengeName !==
+        ChallengeNameType.NEW_PASSWORD_REQUIRED
+      ) {
         throw new Error('User is not in `FORCE_CHANGE_PASSWORD` state');
       }
 
       const result = await applicationContext
         .getCognito()
         .respondToAuthChallenge({
-          ChallengeName: 'NEW_PASSWORD_REQUIRED',
+          ChallengeName: ChallengeNameType.NEW_PASSWORD_REQUIRED,
           ChallengeResponses: {
             NEW_PASSWORD: password,
             USERNAME: email,
@@ -133,18 +139,15 @@ export const changePasswordInteractor = async (
         throw new InvalidRequest('Forgot password code expired');
       }
 
-      const adminSetUserPasswordParams: AdminSetUserPasswordCommandInput = {
+      await applicationContext.getCognito().adminSetUserPassword({
         Password: password,
         Permanent: true,
         UserPoolId: applicationContext.environment.userPoolId,
         Username: email,
-      };
-      await applicationContext
-        .getCognito()
-        .adminSetUserPassword(adminSetUserPasswordParams);
+      });
 
       const result = await applicationContext.getCognito().initiateAuth({
-        AuthFlow: 'USER_PASSWORD_AUTH',
+        AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
         AuthParameters: {
           PASSWORD: password,
           USERNAME: email,
@@ -173,6 +176,7 @@ export const updateUserEmailAddress = async (
   { user }: { user: RawUser },
 ): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
   let userEntity;
+
   if (
     user.role === ROLES.privatePractitioner ||
     user.role === ROLES.irsPractitioner ||
@@ -195,7 +199,6 @@ export const updateUserEmailAddress = async (
   }
 
   const rawUser = userEntity.validate().toRawObject();
-
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
     user: rawUser,
