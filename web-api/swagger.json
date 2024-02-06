@@ -4370,7 +4370,7 @@
         }
       }
     },
-    "/async/users/verify-email": {
+    "/users/verify-email": {
       "put": {
         "tags": ["user"],
         "summary": "verifies a user's pending email with a token",
