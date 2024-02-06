@@ -156,7 +156,7 @@ export const createTestApplicationContext = ({
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
         getPage: () => ({
-          cleanup: () => {},
+          cleanup: () => { },
           getViewport: () => ({
             height: 100,
             width: 100,
@@ -449,11 +449,11 @@ export const createTestApplicationContext = ({
   };
 
   const mockGetStorageClient = appContextProxy({
-    deleteObject: jest.fn().mockReturnValue({ promise: () => {} }),
+    deleteObject: jest.fn().mockReturnValue({ promise: () => { } }),
     getObject: jest.fn().mockReturnValue({
       promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
     }),
-    putObject: jest.fn().mockReturnValue({ promise: () => {} }),
+    putObject: jest.fn().mockReturnValue({ promise: () => { } }),
   });
 
   const mockGetPersistenceGateway = appContextProxy({
@@ -555,8 +555,8 @@ export const createTestApplicationContext = ({
   };
 
   const mockGetMessagingClient = {
-    deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
-    sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    deleteMessage: jest.fn().mockReturnValue({ promise: () => { } }),
+    sendMessage: jest.fn().mockReturnValue({ promise: () => { } }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -591,6 +591,7 @@ export const createTestApplicationContext = ({
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
       userPoolId: 'local_2pHzece7',
+      workerQueueUrl: 'sqs.aws',
     },
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
@@ -679,7 +680,7 @@ export const createTestApplicationContext = ({
     getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
-      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+      initialize: jest.fn().mockReturnValue({ promise: () => { } }),
     }),
     isFeatureEnabled: jest.fn(),
     logger: {
