@@ -7,33 +7,32 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('getPdfUrlAction', () => {
   let createObjectURLStub;
 
-  const consolidatedCasesToMultiDocketOn: ConsolidatedCasesWithCheckboxInfoType[] =
-    [
-      {
-        checkboxDisabled: false,
-        checked: true,
-        docketNumber: '101-20',
-        docketNumberWithSuffix: '101-20',
-        formattedPetitioners: 'Petitioner 1, Petitioner2',
-        leadDocketNumber: '101-20',
-      },
-      {
-        checkboxDisabled: false,
-        checked: true,
-        docketNumber: '102-20',
-        docketNumberWithSuffix: '102-20',
-        formattedPetitioners: 'Petitioner 1, Petitioner2',
-        leadDocketNumber: '101-20',
-      },
-      {
-        checkboxDisabled: false,
-        checked: false,
-        docketNumber: '105-20',
-        docketNumberWithSuffix: '105-20',
-        formattedPetitioners: 'Petitioner 1, Petitioner2',
-        leadDocketNumber: '101-20',
-      },
-    ];
+  const createOrderSelectedCases: ConsolidatedCasesWithCheckboxInfoType[] = [
+    {
+      checkboxDisabled: false,
+      checked: true,
+      docketNumber: '101-20',
+      docketNumberWithSuffix: '101-20',
+      formattedPetitioners: 'Petitioner 1, Petitioner2',
+      leadDocketNumber: '101-20',
+    },
+    {
+      checkboxDisabled: false,
+      checked: true,
+      docketNumber: '102-20',
+      docketNumberWithSuffix: '102-20',
+      formattedPetitioners: 'Petitioner 1, Petitioner2',
+      leadDocketNumber: '101-20',
+    },
+    {
+      checkboxDisabled: false,
+      checked: false,
+      docketNumber: '105-20',
+      docketNumberWithSuffix: '105-20',
+      formattedPetitioners: 'Petitioner 1, Petitioner2',
+      leadDocketNumber: '101-20',
+    },
+  ];
   beforeAll(() => {
     global.File = jest.fn();
     createObjectURLStub = jest.fn();
@@ -63,11 +62,7 @@ describe('getPdfUrlAction', () => {
         caseDetail: {
           docketNumber: '123-20',
         },
-        modal: {
-          form: {
-            consolidatedCasesToMultiDocketOn,
-          },
-        },
+        createOrderSelectedCases,
       },
     });
 
@@ -109,11 +104,7 @@ describe('getPdfUrlAction', () => {
         caseDetail: {
           docketNumber: '123-20',
         },
-        modal: {
-          form: {
-            consolidatedCasesToMultiDocketOn,
-          },
-        },
+        createOrderSelectedCases,
       },
     });
 

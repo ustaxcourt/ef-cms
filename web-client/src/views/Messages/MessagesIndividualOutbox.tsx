@@ -26,31 +26,30 @@ export const MessagesIndividualOutbox = connect(
   }) {
     return (
       <>
-        {formattedMessages.showFilters && (
-          <TableFilters
-            filters={[
-              {
-                isSelected: screenMetadata.caseStatus,
-                key: 'caseStatus',
-                label: 'Case Status',
-                options: formattedMessages.caseStatuses,
-              },
-              {
-                isSelected: screenMetadata.toUser,
-                key: 'toUser',
-                label: 'To',
-                options: formattedMessages.toUsers,
-              },
-              {
-                isSelected: screenMetadata.toSection,
-                key: 'toSection',
-                label: 'Section',
-                options: formattedMessages.toSections,
-              },
-            ]}
-            onSelect={updateScreenMetadataSequence}
-          ></TableFilters>
-        )}
+        <TableFilters
+          filters={[
+            {
+              isSelected: screenMetadata.caseStatus,
+              key: 'caseStatus',
+              label: 'Case Status',
+              options: formattedMessages.caseStatuses,
+            },
+            {
+              isSelected: screenMetadata.toUser,
+              key: 'toUser',
+              label: 'To',
+              options: formattedMessages.toUsers,
+            },
+            {
+              isSelected: screenMetadata.toSection,
+              key: 'toSection',
+              label: 'Section',
+              options: formattedMessages.toSections,
+            },
+          ]}
+          onSelect={updateScreenMetadataSequence}
+        ></TableFilters>
+
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
