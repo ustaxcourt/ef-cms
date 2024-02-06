@@ -1,5 +1,5 @@
 ::: STUFF TO DO :::
-- test cases
+- test cases (review ones tenille wrote on story)
 - When something goes into the dead letter queue, we should send out some sort of notification, to what and who is TBD. 
 
 
@@ -25,4 +25,5 @@
 
 ::: Deployment :::
 - Environment specific deploy
+- Account specific deploy(sns_topic in west)
  
