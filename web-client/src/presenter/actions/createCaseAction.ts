@@ -20,12 +20,7 @@ export const createCaseAction = async ({
   const { atpFiles, corporateDisclosureFile, petitionFile, stinFile } =
     petitionMetadata;
 
-  const form = omit(
-    {
-      ...petitionMetadata,
-    },
-    'trialCities',
-  );
+  const form = omit(petitionMetadata, 'trialCities');
 
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
