@@ -11,7 +11,7 @@
 ## Documentation
 
 **To get a better understanding of Dawson, head over to the [main documentation page](https://ustaxcourt.github.io/ef-cms/#/).**
-Our documentation should help give you a better understanding of what Dawson is and how you can contribute.
+Our documentation should help give you a better understanding of what DAWSON is and how you can contribute.
 
 ### Project status
 
