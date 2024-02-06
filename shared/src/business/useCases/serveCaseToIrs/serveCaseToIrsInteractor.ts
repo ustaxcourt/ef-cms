@@ -415,21 +415,23 @@ const createCoversheetsForServedEntries = async ({
   applicationContext,
   caseEntity,
 }) => {
-  for (const doc of caseEntity.docketEntries) {
-    if (doc.isFileAttached) {
-      const updatedDocketEntry = await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          caseEntity,
-          docketEntryId: doc.docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-          replaceCoversheet: !caseEntity.isPaper,
-          useInitialData: !caseEntity.isPaper,
-        });
+  return await Promise.all(
+    caseEntity.docketEntries.map(async doc => {
+      if (doc.isFileAttached) {
+        const updatedDocketEntry = await applicationContext
+          .getUseCases()
+          .addCoversheetInteractor(applicationContext, {
+            caseEntity,
+            docketEntryId: doc.docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+            replaceCoversheet: !caseEntity.isPaper,
+            useInitialData: !caseEntity.isPaper,
+          });
 
-      caseEntity.updateDocketEntry(updatedDocketEntry);
-    }
-  }
+        caseEntity.updateDocketEntry(updatedDocketEntry);
+      }
+    }),
+  );
 };
 
 const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
@@ -510,16 +512,20 @@ export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
+  const generatedDocuments: Promise<any>[] = [];
+
   if (caseEntity.noticeOfAttachments) {
     const { noticeOfAttachmentsInNatureOfEvidence } =
       SYSTEM_GENERATED_DOCUMENT_TYPES;
-    await applicationContext
-      .getUseCaseHelpers()
-      .addDocketEntryForSystemGeneratedOrder({
-        applicationContext,
-        caseEntity,
-        systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
-      });
+    generatedDocuments.push(
+      applicationContext
+        .getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder({
+          applicationContext,
+          caseEntity,
+          systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+        }),
+    );
   }
 
   const petitionDocument = caseEntity.docketEntries.find(
@@ -534,15 +540,17 @@ export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
   if (caseEntity.orderDesignatingPlaceOfTrial) {
     const { orderDesignatingPlaceOfTrial } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    await generateDraftDocument({
-      applicationContext,
-      caseEntity,
-      document: orderDesignatingPlaceOfTrial,
-      replacements: [
-        formattedFiledDate,
-        caseEntity.procedureType.toLowerCase(),
-      ],
-    });
+    generatedDocuments.push(
+      generateDraftDocument({
+        applicationContext,
+        caseEntity,
+        document: orderDesignatingPlaceOfTrial,
+        replacements: [
+          formattedFiledDate,
+          caseEntity.procedureType.toLowerCase(),
+        ],
+      }),
+    );
   }
 
   const todayPlus30 = getBusinessDateInFuture({
@@ -553,24 +561,28 @@ export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
   if (caseEntity.orderForFilingFee) {
     const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    await generateDraftDocument({
-      applicationContext,
-      caseEntity,
-      document: orderForFilingFee,
-      replacements: [todayPlus30, todayPlus30],
-    });
+    generatedDocuments.push(
+      generateDraftDocument({
+        applicationContext,
+        caseEntity,
+        document: orderForFilingFee,
+        replacements: [todayPlus30, todayPlus30],
+      }),
+    );
   }
 
   if (caseEntity.orderForAmendedPetitionAndFilingFee) {
     const { orderForAmendedPetitionAndFilingFee } =
       SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    await generateDraftDocument({
-      applicationContext,
-      caseEntity,
-      document: orderForAmendedPetitionAndFilingFee,
-      replacements: [formattedFiledDate, todayPlus30, todayPlus30],
-    });
+    generatedDocuments.push(
+      generateDraftDocument({
+        applicationContext,
+        caseEntity,
+        document: orderForAmendedPetitionAndFilingFee,
+        replacements: [formattedFiledDate, todayPlus30, todayPlus30],
+      }),
+    );
   }
 
   const todayPlus60 = getBusinessDateInFuture({
@@ -581,25 +593,31 @@ export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
   if (caseEntity.orderForAmendedPetition) {
     const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    await generateDraftDocument({
-      applicationContext,
-      caseEntity,
-      document: orderForAmendedPetition,
-      replacements: [formattedFiledDate, todayPlus60, todayPlus60],
-    });
+    generatedDocuments.push(
+      generateDraftDocument({
+        applicationContext,
+        caseEntity,
+        document: orderForAmendedPetition,
+        replacements: [formattedFiledDate, todayPlus60, todayPlus60],
+      }),
+    );
   }
 
   if (caseEntity.orderToShowCause) {
     // OSCP, not OSC
     const { orderPetitionersToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    await generateDraftDocument({
-      applicationContext,
-      caseEntity,
-      document: orderPetitionersToShowCause,
-      replacements: [formattedFiledDate, todayPlus60],
-    });
+    generatedDocuments.push(
+      generateDraftDocument({
+        applicationContext,
+        caseEntity,
+        document: orderPetitionersToShowCause,
+        replacements: [formattedFiledDate, todayPlus60],
+      }),
+    );
   }
+
+  await Promise.all(generatedDocuments);
 
   await createPetitionWorkItems({
     applicationContext,
