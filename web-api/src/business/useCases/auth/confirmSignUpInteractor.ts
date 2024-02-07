@@ -20,27 +20,27 @@ export const confirmSignUpInteractor = async (
     throw new InvalidRequest('Confirmation code expired');
   }
 
-  const cognito = applicationContext.getCognito();
-
-  await cognito.adminConfirmSignUp({
+  await applicationContext.getCognito().adminConfirmSignUp({
     UserPoolId: process.env.USER_POOL_ID,
     Username: email,
   });
 
-  const updatePetitionerAttributes = cognito.adminUpdateUserAttributes({
-    UserAttributes: [
-      {
-        Name: 'email_verified',
-        Value: 'true',
-      },
-      {
-        Name: 'email',
-        Value: email,
-      },
-    ],
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: email,
-  });
+  const updatePetitionerAttributes = applicationContext
+    .getCognito()
+    .adminUpdateUserAttributes({
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'true',
+        },
+        {
+          Name: 'email',
+          Value: email,
+        },
+      ],
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: email,
+    });
 
   await Promise.all([
     updatePetitionerAttributes,
