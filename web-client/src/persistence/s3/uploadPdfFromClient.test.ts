@@ -58,6 +58,20 @@ describe('uploadPdfFromClient', () => {
     });
 
     it('makes use of defaults when not provided', async () => {
+      applicationContext.getPdfLib = () => ({
+        catch: () => ({}),
+      });
+
+      const readAsArrayBufferMock = jest.fn();
+      const addEventListenerMock = jest.fn((key, callback) => {
+        if (key === 'error') callback();
+      });
+
+      global.FileReader = jest.fn(() => ({
+        addEventListener: addEventListenerMock,
+        readAsArrayBuffer: readAsArrayBufferMock,
+      }));
+
       await uploadPdfFromClient({
         applicationContext,
         file: new Blob([]),
@@ -127,7 +141,7 @@ describe('uploadPdfFromClient', () => {
     describe('cleanFileMetadata', () => {
       it('should clear out all metadata from PDF', async () => {
         const TEST_STRING =
-          '<photoshop:AuthorsPosition>John is Testing</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
+          'FINAL<photoshop:AuthorsPosition>John is Testing</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
 
         const modifiedPdfBytes = new Uint8Array(TEST_STRING.length);
         for (let i = 0; i < TEST_STRING.length; i++) {
@@ -149,7 +163,9 @@ describe('uploadPdfFromClient', () => {
         expect(loadMock.setCreationDate).toHaveBeenCalled();
         expect(loadMock.setModificationDate).toHaveBeenCalled();
 
-        expect(pdfBytes.toString()).toEqual('');
+        expect(pdfBytes.toString()).toEqual(
+          new TextEncoder().encode('FINAL').toString(),
+        );
       });
     });
 
