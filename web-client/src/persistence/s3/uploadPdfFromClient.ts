@@ -1,21 +1,42 @@
 import promiseRetry from 'promise-retry';
 
-function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
-  let resultString = String.fromCharCode.apply(null, pdfBytes);
-  [
-    /<photoshop:AuthorsPosition>.*?<\/photoshop:AuthorsPosition>/g,
-    /<photoshop:CaptionWriter>.*?<\/photoshop:CaptionWriter>/g,
-    /<pdf:Keywords>.*?<\/pdf:Keywords>/g,
-  ].forEach(regex => {
-    resultString = resultString.replace(regex, '');
-  });
-
-  const modifiedPdfBytes = new Uint8Array(resultString.length);
-  for (let i = 0; i < resultString.length; i++) {
-    modifiedPdfBytes[i] = resultString.charCodeAt(i);
+function convertBytesToString(pdfBytes: number[]): string {
+  const chunkSize = 10000;
+  let resultString = '';
+  for (let i = 0; i < pdfBytes.length; i += chunkSize) {
+    let chunk = pdfBytes.slice(i, i + chunkSize);
+    resultString += String.fromCharCode.apply(null, chunk);
   }
 
-  return modifiedPdfBytes;
+  return resultString;
+}
+
+function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
+  try {
+    let resultString = convertBytesToString(pdfBytes);
+
+    ['photoshop:AuthorsPosition', 'photoshop:CaptionWriter', 'pdf:Keywords']
+      .map(tag => [`<${tag}>`, `</${tag}>`])
+      .forEach(([startTag, endTag]) => {
+        const startIndex = resultString.indexOf(startTag);
+        if (startIndex === -1) return;
+        const endIndex = resultString.indexOf(endTag, startIndex);
+        if (endIndex !== -1) {
+          resultString =
+            resultString.slice(0, startIndex) +
+            resultString.slice(endIndex + endTag.length);
+        }
+      });
+
+    const modifiedPdfBytes = new Uint8Array(resultString.length);
+    for (let i = 0; i < resultString.length; i++) {
+      modifiedPdfBytes[i] = resultString.charCodeAt(i);
+    }
+
+    return modifiedPdfBytes;
+  } catch (_) {
+    return pdfBytes as unknown as BlobPart;
+  }
 }
 
 export const cleanFileMetadata = async (
