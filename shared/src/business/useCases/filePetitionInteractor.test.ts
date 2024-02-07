@@ -7,6 +7,7 @@ describe('filePetitionInteractor', () => {
   let petitionFile: string;
   let corporateDisclosureFile: string;
   let petitionMetadata: string;
+  let atpFile: string;
 
   beforeAll(() => {
     applicationContext
@@ -24,6 +25,7 @@ describe('filePetitionInteractor', () => {
     stinFile = 'this is a stin file';
     petitionFile = 'this is a petition file';
     corporateDisclosureFile = 'this is a cds file';
+    atpFile = 'this is an atp file';
   });
   it('throws an error when a null user tries to access the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue(null);
@@ -57,17 +59,6 @@ describe('filePetitionInteractor', () => {
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
         .calls[0][0].document,
     ).toEqual('this is a petition file');
-  });
-
-  it('calls upload on an CDS file', async () => {
-    await filePetitionInteractor(applicationContext, {
-      corporateDisclosureFile,
-    } as any);
-
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[1][0].document,
-    ).toEqual('this is a cds file');
   });
 
   it('calls upload on a STIN file', async () => {
@@ -131,14 +122,25 @@ describe('filePetitionInteractor', () => {
 
   it('uploads multiple "Attachment to Petition" files', async () => {
     await filePetitionInteractor(applicationContext, {
-      atpFilesMetadata: ['atpFile1', 'atpFile2'],
+      atpFilesMetadata: [{ file: atpFile }, { file: atpFile }],
       petitionFile,
       petitionMetadata,
     } as any);
 
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient,
-    ).toHaveBeenCalledTimes(3);
+      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+        .calls[0][0].document,
+    ).toEqual('this is a petition file');
+
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+        .calls[1][0].document,
+    ).toEqual('this is an atp file');
+
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+        .calls[2][0].document,
+    ).toEqual('this is an atp file');
 
     expect(
       applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
