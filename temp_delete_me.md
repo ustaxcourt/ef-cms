@@ -1,19 +1,18 @@
 ::: STUFF TO DO :::
-- test cases (review ones tenille wrote on story)
-- When something goes into the dead letter queue, we should send out some sort of notification, to what and who is TBD. 
+- test cases (review ones Tenille wrote on story)
+- Test dlq (alarm and sns topic work)
+- Smoketests: we haven't run them in a long time
+- Let Tenille know that we've covered scenario two in 10007 comments
 
 
 ::: SOLO :::
-- confirm styling is correct with centering
+- send styling back to UX for second check on exp2?
 - Investigate socket closure (outage, idle state, etc)
 
 
 ::: QUESTIONS :::
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
-- How do we make forgot password more secure? 
-- Have we covered one of two scenarios mentioned in 10007 comments by Tenille?
-- Retry logic around Worker Queues? They currently fan out for email changes, if it fails it will goto dead letter queue. Since verifyPendingEmail endpoint isn't async anymore it doesn't retry like it used. 
-- Ask Chris what should happen when user logs in and then manually visits /login again.
+- Retry logic around Worker Queues? They currently fan out for email changes, if it fails it will go to dead letter queue. Since verifyPendingEmail endpoint isn't async anymore it doesn't retry like it used. 
 
 ::: DOD :::
 - Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
