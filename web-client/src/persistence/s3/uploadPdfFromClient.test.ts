@@ -70,7 +70,7 @@ describe('uploadPdfFromClient', () => {
       global.FileReader = jest.fn(() => ({
         addEventListener: addEventListenerMock,
         readAsArrayBuffer: readAsArrayBufferMock,
-      }));
+      })) as any;
 
       await uploadPdfFromClient({
         applicationContext,
@@ -192,7 +192,7 @@ describe('uploadPdfFromClient', () => {
         global.FileReader = jest.fn(() => ({
           addEventListener: addEventListenerMock,
           readAsArrayBuffer: readAsArrayBufferMock,
-        }));
+        })) as any;
 
         await readAndCleanFileMetadata(title, file, pdfLibMock);
 
@@ -222,7 +222,7 @@ describe('uploadPdfFromClient', () => {
         global.FileReader = jest.fn(() => ({
           addEventListener: addEventListenerMock,
           readAsArrayBuffer: readAsArrayBufferMock,
-        }));
+        })) as any;
 
         await expect(
           readAndCleanFileMetadata(title, file, pdfLibMock),
