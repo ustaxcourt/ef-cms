@@ -84,10 +84,6 @@ variable "alert_sns_topic_west_arn" {
   type = string
 }
 
-variable "alert_worker_sns_topic_arn" {
-  type = string
-}
-
 variable "bounced_email_recipient" {
   type = string
 }
