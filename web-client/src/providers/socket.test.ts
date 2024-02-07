@@ -14,14 +14,16 @@ describe('socket', () => {
   let oncloseFn;
   let onopenFn;
 
+  const mockSequence = jest.fn();
+
   beforeEach(() => {
     webSocketStub = jest.fn();
     webSocketCloseStub = jest.fn();
 
     jest.spyOn(global, 'setInterval');
     jest.spyOn(global, 'clearInterval');
-    // prevent errors from printing during unit tests
-    jest.spyOn(console, 'error').mockImplementation(() => null);
+    // Prevent logs from printing during unit tests
+    jest.spyOn(console, 'log').mockImplementation(() => null);
 
     ({
       initialize: initializeSocket,
@@ -49,7 +51,6 @@ describe('socket', () => {
       }
     };
 
-    const mockSequence = jest.fn();
     mockApp = {
       getSequence: () => {
         return mockSequence;
@@ -62,7 +63,7 @@ describe('socket', () => {
     initializeSocket(mockApp);
   });
 
-  it('starts and stops the socket', () => {
+  it('should start and stops the socket', () => {
     startSocket();
     stopSocket();
 
@@ -71,7 +72,7 @@ describe('socket', () => {
     expect(global.clearInterval).toHaveBeenCalled();
   });
 
-  it('calling start twice returns the original socket rather than a second one', () => {
+  it('should return the original socket rather than a second one when start is called twice', () => {
     startSocket();
     startSocket();
 
@@ -79,22 +80,28 @@ describe('socket', () => {
     expect(webSocketCloseStub).not.toHaveBeenCalled();
   });
 
-  it('calling start should create an interval which sends a ping message to backend', () => {
+  it('should create an interval which sends a ping message to backend when start is called', () => {
     startSocket();
+
     onopenFn();
+
     expect(global.setInterval).toHaveBeenCalled();
   });
 
-  it('reconnects the websocket connection if disconnected with a non-normal error message', () => {
+  it('should reconnect the websocket connection when it was disconnected with a non-normal error message', () => {
     startSocket();
-    oncloseFn({ reason: 'something bad happened' });
-    expect(console.error).toHaveBeenCalled();
+
+    oncloseFn({ code: 2000 }); // Anything other than code 1000 will cause the socket to retry connection
+
+    expect(console.log).toHaveBeenCalled();
     expect(webSocketStub).toHaveBeenCalledTimes(2);
   });
 
-  it('does not reconnect the websocket when closed via a normal event', () => {
+  it('should NOT reconnect the websocket when it was closed via a normal event', () => {
     startSocket();
-    oncloseFn({ reason: 'Normal connection closure' });
+
+    oncloseFn({ code: 1000 }); // Normal connection closure code
+
     expect(webSocketStub).toHaveBeenCalledTimes(1);
   });
 });
