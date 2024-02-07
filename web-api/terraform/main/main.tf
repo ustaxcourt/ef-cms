@@ -28,7 +28,8 @@ data "aws_sns_topic" "system_health_alarms" {
 
 data "aws_sns_topic" "system_health_alarms_west" {
   // account-level resource
-  name = "system_health_alarms_west"
+  name     = "system_health_alarms_west"
+  provider = aws.us-west-1
 }
 
 resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
