@@ -80,7 +80,7 @@ describe('createCaseAction', () => {
       },
       state: {
         form: {
-          atpFiles: [{}, {}],
+          attachmentToPetitionFiles: [{}, {}],
           corporateDisclosureFile: {},
           petitionFile: {},
           stinFile: {},

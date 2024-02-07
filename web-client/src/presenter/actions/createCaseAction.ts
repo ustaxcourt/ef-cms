@@ -16,16 +16,20 @@ export const createCaseAction = async ({
   path,
   store,
 }: ActionProps) => {
-  const petitionMetadata = get(state.form); // todo: type
-  const { atpFiles, corporateDisclosureFile, petitionFile, stinFile } =
-    petitionMetadata;
+  const petitionMetadata = get(state.form);
+  const {
+    attachmentToPetitionFiles,
+    corporateDisclosureFile,
+    petitionFile,
+    stinFile,
+  } = petitionMetadata;
 
   const form = omit(petitionMetadata, 'trialCities');
 
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  const atpFilesMetadata = atpFiles?.map(fileName => {
+  const atpFilesMetadata = attachmentToPetitionFiles?.map(fileName => {
     const progressFunction = setupPercentDone(
       {
         atp: fileName,

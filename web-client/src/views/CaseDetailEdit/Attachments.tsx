@@ -11,7 +11,6 @@ export const Attachments = connect(
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
   },
   function Attachments({ form, reviewSavedPetitionHelper }) {
-    console.log('reviewSavedPetitionHelper', reviewSavedPetitionHelper);
     return (
       <div className="tablet:grid-col-5 margin-bottom-4">
         <div className="card height-full margin-bottom-0">
