@@ -7,20 +7,20 @@ import React from 'react';
 
 export const ViewPetitionerCounselModal = connect(
   {
-    cancelSequence: sequences.clearModalSequence,
     contact: state.modal.contact,
+    dismissModalSequence: sequences.dismissModalSequence,
     viewCounselHelper: state.viewCounselHelper,
   },
   function ViewPetitionerCounselModal({
-    cancelSequence,
     contact,
+    dismissModalSequence,
     viewCounselHelper,
   }) {
     return (
       <ModalDialog
-        cancelSequence={cancelSequence}
+        cancelSequence={dismissModalSequence}
         confirmLabel="Ok"
-        confirmSequence={cancelSequence}
+        confirmSequence={dismissModalSequence}
         title="Petitioner Counsel"
       >
         <div className="margin-bottom-4" id="view-petitioner-counsel-modal">
