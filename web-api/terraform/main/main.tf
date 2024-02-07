@@ -26,6 +26,11 @@ data "aws_sns_topic" "system_health_alarms" {
   name = "system_health_alarms"
 }
 
+data "aws_sns_topic" "system_health_alarms_west" {
+  // account-level resource
+  name = "system_health_alarms_west"
+}
+
 resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
   alarm_name          = "efcms_${var.environment}_${var.deploying_color}: SendEmails-DLQueueCheck"
   alarm_description   = "Alarm that triggers when a message is sent to send_emails_dl_queue_${var.environment}_${var.deploying_color}.fifo"
@@ -47,6 +52,7 @@ resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
 
 module "ef-cms_apis" {
   alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
+  alert_sns_topic_west_arn   = data.aws_sns_topic.system_health_alarms_west.arn
   blue_elasticsearch_domain  = var.blue_elasticsearch_domain
   blue_node_version          = var.blue_node_version
   blue_table_name            = var.blue_table_name
