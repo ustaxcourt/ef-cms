@@ -1,28 +1,17 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Returns the in-memory file if there is one, otherwise returns the document from case detail.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.get the cerebral get method
- * @returns {object} the file from browser memory or document from the case detail
- */
 export const getDocumentSelectedForPreviewAction = ({
   applicationContext,
   get,
   props,
 }: ActionProps<{
-  fileMetaData: string;
+  documentId?: string;
 }>) => {
-  const { fileMetaData } = props;
+  const { documentId } = props;
 
-  // tab is selected been selected
-  if (fileMetaData) {
-    const documentId = fileMetaData?.split('_')[1];
-
+  if (documentId) {
     return {
       documentInS3: {
-        // todo: figure out better name for documentInS3 and how the sequence should consume it
         docketEntryId: documentId,
       },
     };
