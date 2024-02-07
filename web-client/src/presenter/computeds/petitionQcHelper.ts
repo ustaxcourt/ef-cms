@@ -58,6 +58,9 @@ export const petitionQcHelper = (
 
   if (!isPaper) {
     documentTabsToDisplay = documentTabsToDisplay.filter(tab => {
+      if (tab.tabTitle === 'ATP' && !atpDocketTabsForDisplay.length) {
+        return false;
+      }
       if (tab.tabTitle === 'CDS') {
         // Do not display CDS tab if one wasn't filed electronically
         return hasCDS;
