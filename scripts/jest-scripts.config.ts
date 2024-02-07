@@ -20,6 +20,7 @@ const config: Config = {
     '!set-maintenance-mode-locally.js',
     '!judge/update-judge-titles.ts',
     '!judge/update-judge-isSeniorJudge.ts',
+    '!reports/**',
     '!run-once-scripts/**',
   ],
   coverageDirectory: './coverage',
