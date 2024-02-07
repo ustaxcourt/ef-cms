@@ -14,6 +14,28 @@ describe('getDocumentSelectedForPreviewAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
+  it('should return documentInS3 if there is a selected document', async () => {
+    const documentId = 'docId1';
+    const { output } = await runAction(getDocumentSelectedForPreviewAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        documentId,
+      },
+      state: {
+        currentViewMetadata: {
+          documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          petitionFile: mockPetitionFile,
+        },
+      },
+    });
+
+    expect(output).toEqual({ documentInS3: { docketEntryId: documentId } });
+  });
+
   it('should return props.fileFromBrowserMemory when state.form has an entry equal to documentSelectedForPreview', async () => {
     const { output } = await runAction(getDocumentSelectedForPreviewAction, {
       modules: {
