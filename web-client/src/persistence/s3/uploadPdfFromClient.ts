@@ -67,7 +67,7 @@ export const cleanFileMetadata = async (
   return finalModifiedPdfBytes;
 };
 
-const readAndCleanFileMetadata = async (
+export const readAndCleanFileMetadata = async (
   title: string,
   file: File,
   pdfLib,

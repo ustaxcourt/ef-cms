@@ -1,5 +1,9 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { cleanFileMetadata, uploadPdfFromClient } from './uploadPdfFromClient';
+import {
+  cleanFileMetadata,
+  readAndCleanFileMetadata,
+  uploadPdfFromClient,
+} from './uploadPdfFromClient';
 
 describe('uploadPdfFromClient', () => {
   describe('Http Post', () => {
@@ -92,7 +96,7 @@ describe('uploadPdfFromClient', () => {
     });
   });
 
-  describe('PDF metadata "cleanFileMetadata"', () => {
+  describe('PDF metadata', () => {
     let pdfLibMock;
     let loadMock;
 
@@ -113,38 +117,101 @@ describe('uploadPdfFromClient', () => {
 
       pdfLibMock = {
         PDFDocument: {
-          load: () => loadMock,
+          load: jest.fn(() => loadMock),
         },
         catch: () => pdfLibMock,
       };
       applicationContext.getPdfLib = () => pdfLibMock;
     });
 
-    it('should clear out all metadata from PDF', async () => {
-      const TEST_STRING =
-        '<photoshop:AuthorsPosition>John is Testing</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
+    describe('cleanFileMetadata', () => {
+      it('should clear out all metadata from PDF', async () => {
+        const TEST_STRING =
+          '<photoshop:AuthorsPosition>John is Testing</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
 
-      const modifiedPdfBytes = new Uint8Array(TEST_STRING.length);
-      for (let i = 0; i < TEST_STRING.length; i++) {
-        modifiedPdfBytes[i] = TEST_STRING.charCodeAt(i);
-      }
+        const modifiedPdfBytes = new Uint8Array(TEST_STRING.length);
+        for (let i = 0; i < TEST_STRING.length; i++) {
+          modifiedPdfBytes[i] = TEST_STRING.charCodeAt(i);
+        }
 
-      loadMock.save.mockReturnValue(modifiedPdfBytes);
+        loadMock.save.mockReturnValue(modifiedPdfBytes);
 
-      const pdfBytes = await cleanFileMetadata(
-        TEST_TITLE,
-        pdfLibMock,
-        {} as FileReader,
-      );
+        const pdfBytes = await cleanFileMetadata(
+          TEST_TITLE,
+          pdfLibMock,
+          {} as FileReader,
+        );
 
-      expect(loadMock.setTitle).toHaveBeenCalledWith(TEST_TITLE);
-      expect(loadMock.setAuthor).toHaveBeenCalledWith('');
-      expect(loadMock.setSubject).toHaveBeenCalledWith('');
-      expect(loadMock.setKeywords).toHaveBeenCalledWith([]);
-      expect(loadMock.setCreationDate).toHaveBeenCalled();
-      expect(loadMock.setModificationDate).toHaveBeenCalled();
+        expect(loadMock.setTitle).toHaveBeenCalledWith(TEST_TITLE);
+        expect(loadMock.setAuthor).toHaveBeenCalledWith('');
+        expect(loadMock.setSubject).toHaveBeenCalledWith('');
+        expect(loadMock.setKeywords).toHaveBeenCalledWith([]);
+        expect(loadMock.setCreationDate).toHaveBeenCalled();
+        expect(loadMock.setModificationDate).toHaveBeenCalled();
 
-      expect(pdfBytes.toString()).toEqual('');
+        expect(pdfBytes.toString()).toEqual('');
+      });
+    });
+
+    describe('readAndCleanFileMetadata', () => {
+      it('returns the original file if pdfLib is falsy', async () => {
+        const title = 'example';
+        const file = new File(['file content'], 'example.pdf');
+        const pdfLib = null;
+
+        const result = await readAndCleanFileMetadata(title, file, pdfLib);
+
+        expect(result).toBe(file);
+      });
+
+      it('should call the "cleanFileMetadata" method if the file is loaded and resolve', async () => {
+        const title = 'example';
+        const file = new File(['file content'], 'example.pdf');
+
+        const readAsArrayBufferMock = jest.fn();
+        const addEventListenerMock = jest.fn((key, callback) => {
+          if (key === 'load') callback();
+        });
+
+        global.FileReader = jest.fn(() => ({
+          addEventListener: addEventListenerMock,
+          readAsArrayBuffer: readAsArrayBufferMock,
+        }));
+
+        await readAndCleanFileMetadata(title, file, pdfLibMock);
+
+        expect(readAsArrayBufferMock).toHaveBeenCalledWith(file);
+
+        expect(addEventListenerMock).toHaveBeenCalledWith(
+          'load',
+          expect.any(Function),
+        );
+        expect(addEventListenerMock).toHaveBeenCalledWith(
+          'error',
+          expect.any(Function),
+        );
+
+        expect(pdfLibMock.PDFDocument.load).toHaveBeenCalled();
+      });
+
+      it('should throw an error if the file reader rejects with an error', async () => {
+        const title = 'example';
+        const file = new File(['file content'], 'example.pdf');
+
+        const readAsArrayBufferMock = jest.fn();
+        const addEventListenerMock = jest.fn((key, callback) => {
+          if (key === 'error') callback();
+        });
+
+        global.FileReader = jest.fn(() => ({
+          addEventListener: addEventListenerMock,
+          readAsArrayBuffer: readAsArrayBufferMock,
+        }));
+
+        await expect(
+          readAndCleanFileMetadata(title, file, pdfLibMock),
+        ).rejects.toBe('Failed to read file');
+      });
     });
   });
 });
