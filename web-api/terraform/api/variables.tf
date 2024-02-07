@@ -234,3 +234,7 @@ variable "deployment_timestamp" {
 variable "alert_sns_topic_arn" {
   type = string
 }
+
+variable "alert_worker_sns_topic_arn" {
+  type = string
+}
