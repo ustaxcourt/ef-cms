@@ -183,7 +183,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       await getFormattedDocketEntriesForTest(cerebralTest);
 
     //4654- docket entries for initial (un-served and served) filing type documents are created when case has been served
-    expect(formattedDocketEntriesOnDocketRecord[6]).toMatchObject({
+    expect(formattedDocketEntriesOnDocketRecord[5]).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'RQT',
       showNotServed: true,

@@ -110,6 +110,10 @@ describe('serveCaseDocument', () => {
     });
 
     expect(
+      applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail,
+    ).toHaveBeenCalledTimes(1);
+
+    expect(
       applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail.mock
         .calls[0][0].caseEntity.docketEntries[0],
     ).toMatchObject({
