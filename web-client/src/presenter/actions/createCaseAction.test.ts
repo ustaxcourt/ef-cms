@@ -105,7 +105,7 @@ describe('createCaseAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files and call the success path when finished', async () => {
+  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files, then call the success path after completion', async () => {
     filePetitionInteractor.mockReturnValue({
       caseDetail: {
         ...MOCK_CASE,
