@@ -166,7 +166,7 @@ export const StartCaseStep2 = connect(
                     <FileInput
                       multiple
                       data-testid="atp-files-upload"
-                      name="atpFiles"
+                      name="attachmentToPetitionFiles"
                       updateFormValueSequence="updateFormValueSequence"
                       validationSequence="validateExternalDocumentInformationSequence"
                     />

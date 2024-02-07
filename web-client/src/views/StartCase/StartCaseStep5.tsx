@@ -84,28 +84,30 @@ export const StartCaseStep5 = connect(
                             <span className="usa-label usa-label-display">
                               IRS notice(s)
                             </span>
-                            {form.atpFiles?.length ? (
+                            {form.attachmentToPetitionFiles?.length ? (
                               <div>
-                                {form.atpFiles.map((atpFile, index) => {
-                                  return (
-                                    <div
-                                      className="grid-row"
-                                      key={atpFile.name}
-                                    >
-                                      <div className="grid-col flex-auto">
-                                        <PDFPreviewButton
-                                          data-testid={`atp-preview-button-${index}`}
-                                          file={atpFile}
-                                          id="atp-preview-button"
-                                          shouldAbbreviateTitle={false}
-                                          shouldWrapText={true}
-                                          showIcon={false}
-                                          title="IRS Notice(s)"
-                                        />
+                                {form.attachmentToPetitionFiles.map(
+                                  (atpFile, index) => {
+                                    return (
+                                      <div
+                                        className="grid-row"
+                                        key={atpFile.name}
+                                      >
+                                        <div className="grid-col flex-auto">
+                                          <PDFPreviewButton
+                                            data-testid={`atp-preview-button-${index}`}
+                                            file={atpFile}
+                                            id="atp-preview-button"
+                                            shouldAbbreviateTitle={false}
+                                            shouldWrapText={true}
+                                            showIcon={false}
+                                            title="IRS Notice(s)"
+                                          />
+                                        </div>
                                       </div>
-                                    </div>
-                                  );
-                                })}
+                                    );
+                                  },
+                                )}
                               </div>
                             ) : (
                               <div>N/A</div>
