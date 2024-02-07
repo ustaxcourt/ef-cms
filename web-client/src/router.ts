@@ -1113,8 +1113,14 @@ const router = {
     });
 
     registerRoute('/login', () => {
-      setPageTitle('Login');
-      app.getSequence('gotoLoginSequence')();
+      if (!app.getState('token')) {
+        setPageTitle('Login');
+        app.getSequence('gotoLoginSequence')();
+      } else {
+        app.getSequence('navigateToPathSequence')({
+          path: BASE_ROUTE,
+        });
+      }
     });
 
     registerRoute('/forgot-password', () => {
