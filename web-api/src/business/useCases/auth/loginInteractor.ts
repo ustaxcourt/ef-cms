@@ -1,4 +1,8 @@
 import {
+  AuthFlowType,
+  ChallengeNameType,
+} from '@aws-sdk/client-cognito-identity-provider';
+import {
   NotFoundError,
   UnauthorizedError,
   UnidentifiedUserError,
@@ -11,7 +15,7 @@ export const loginInteractor = async (
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
   try {
     const result = await applicationContext.getCognito().initiateAuth({
-      AuthFlow: 'USER_PASSWORD_AUTH',
+      AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
       AuthParameters: {
         PASSWORD: password,
         USERNAME: email,
@@ -19,7 +23,7 @@ export const loginInteractor = async (
       ClientId: applicationContext.environment.cognitoClientId,
     });
 
-    if (result?.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
+    if (result?.ChallengeName === ChallengeNameType.NEW_PASSWORD_REQUIRED) {
       const PasswordChangeError = new Error('NewPasswordRequired');
       PasswordChangeError.name = 'NewPasswordRequired';
       throw PasswordChangeError;
