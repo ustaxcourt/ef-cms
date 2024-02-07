@@ -1,4 +1,4 @@
-// usage: npx ts-node --transpile-only ./scripts/get-trial-sessions-by-year.ts 2023 > ~/Desktop/2023-trial-sessions.csv
+// usage: npx ts-node --transpile-only ./scripts/reports/trial-sessions-by-year.ts 2023 > ~/Desktop/2023-trial-sessions.csv
 
 import {
   FORMATS,
