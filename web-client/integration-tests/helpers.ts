@@ -211,15 +211,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           });
         }
       },
-      // TODO 10007: Replaced with worker gateway
-      // sendUpdatePetitionerCasesMessage: ({
-      //   applicationContext: appContext,
-      //   user,
-      // }) => {
-      //   return updateAssociatedCaseWorker(appContext, {
-      //     user,
-      //   });
-      // },
     }),
     getMessagingClient: () => {
       if (!sqsCache) {
