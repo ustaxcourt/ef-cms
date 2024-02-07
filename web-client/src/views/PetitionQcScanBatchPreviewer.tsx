@@ -437,8 +437,9 @@ export const PetitionQcScanBatchPreviewer = connect(
           <Tabs
             bind="currentViewMetadata.documentSelectedForPreview"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
-            onSelect={fileMetaData => {
-              setDocumentForPreviewSequence({ fileMetaData });
+            onSelect={tabSelected => {
+              const documentId = tabSelected?.split('_')[1];
+              setDocumentForPreviewSequence({ documentId });
             }}
           >
             {documentTabsList.map(documentTab => {
