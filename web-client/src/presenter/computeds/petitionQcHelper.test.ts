@@ -94,6 +94,9 @@ describe('petitionQcHelper', () => {
             {
               eventCode: INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
             },
+            {
+              eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+            },
           ],
         },
         currentViewMetadata: {
@@ -120,7 +123,39 @@ describe('petitionQcHelper', () => {
       ]);
     });
 
-    it('hides CDS tab for electronic filings if one was NOT initially filed', () => {
+    it('displays ATP tabs for electronic filings when an ATP is uploaded', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          isPaper: false,
+        },
+      };
+
+      const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
+        state: {
+          ...mockState,
+          pdfForSigning: {
+            signatureData: null,
+          },
+        },
+      });
+      expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual([
+        initialTabs[0], // Petition
+        initialTabs[1], // STIN
+        initialTabs[2], // ATP
+      ]);
+    });
+
+    it('hides CDS and ATP tabs for electronic filings if one was NOT initially filed', () => {
       mockState = {
         caseDetail: {
           docketEntries: [],
@@ -144,7 +179,6 @@ describe('petitionQcHelper', () => {
       expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual([
         initialTabs[0], // Petition
         initialTabs[1], // STIN
-        initialTabs[2], // ATP
       ]);
     });
   });
