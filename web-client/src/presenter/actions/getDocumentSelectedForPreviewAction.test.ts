@@ -23,14 +23,7 @@ describe('getDocumentSelectedForPreviewAction', () => {
       props: {
         documentId,
       },
-      state: {
-        currentViewMetadata: {
-          documentSelectedForPreview: 'petitionFile',
-        },
-        form: {
-          petitionFile: mockPetitionFile,
-        },
-      },
+      state: {},
     });
 
     expect(output).toEqual({ documentInS3: { docketEntryId: documentId } });
