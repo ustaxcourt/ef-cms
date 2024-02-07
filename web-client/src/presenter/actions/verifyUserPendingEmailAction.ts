@@ -2,7 +2,7 @@ export const verifyUserPendingEmailAction = async ({
   applicationContext,
   path,
   props,
-}: ActionProps) => {
+}: ActionProps<{ token: string }>) => {
   const { token } = props;
 
   try {
