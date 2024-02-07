@@ -60,7 +60,7 @@ export const Attachments = connect(
                   </div>
                 </div>
               )}
-              {reviewSavedPetitionHelper.attachmentToPetitionFiles.length &&
+              {!!reviewSavedPetitionHelper.attachmentToPetitionFiles.length &&
                 reviewSavedPetitionHelper.attachmentToPetitionFiles.map(
                   atpFile => {
                     return (
