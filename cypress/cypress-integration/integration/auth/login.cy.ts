@@ -144,7 +144,7 @@ describe('Given a user who has been granted e-access to DAWSON', () => {
         cy.get('[data-testid="search-docket-number"]').click();
         cy.get('[data-testid="tab-case-information"]').click();
         cy.get('[data-testid="tab-parties"]').click();
-        cy.get('[data-testid="edit-petitioner-counsel"]').click();
+        cy.get('[data-testid="edit-petitioner"]').click();
         cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
           practitionerEmail,
         );
