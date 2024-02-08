@@ -476,188 +476,197 @@ export const serveCaseToIrs = async (
   { clientConnectionId, docketNumber },
 ) => {
   const user = applicationContext.getCurrentUser();
+  try {
+    if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
+      throw new UnauthorizedError('Unauthorized');
+    }
+    // throw new Error('jtd:: something broke');
+    const caseToBatch = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+    let caseEntity = new Case(caseToBatch, { applicationContext });
 
-  const caseToBatch = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+    caseEntity.markAsSentToIRS();
 
-  let caseEntity = new Case(caseToBatch, { applicationContext });
+    if (caseEntity.isPaper) {
+      addDocketEntries({ caseEntity });
+    }
 
-  caseEntity.markAsSentToIRS();
+    for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
+      await applicationContext.getUtilities().serveCaseDocument({
+        applicationContext,
+        caseEntity,
+        initialDocumentTypeKey,
+      });
+    }
 
-  if (caseEntity.isPaper) {
-    addDocketEntries({ caseEntity });
-  }
-
-  for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
-    await applicationContext.getUtilities().serveCaseDocument({
+    addDocketEntryForPaymentStatus({
       applicationContext,
       caseEntity,
-      initialDocumentTypeKey,
+      user,
     });
-  }
 
-  addDocketEntryForPaymentStatus({
-    applicationContext,
-    caseEntity,
-    user,
-  });
+    caseEntity
+      .updateCaseCaptionDocketRecord({ applicationContext })
+      .updateDocketNumberRecord({ applicationContext })
+      .validate();
 
-  caseEntity
-    .updateCaseCaptionDocketRecord({ applicationContext })
-    .updateDocketNumberRecord({ applicationContext })
-    .validate();
+    const generatedDocuments: Promise<any>[] = [];
 
-  const generatedDocuments: Promise<any>[] = [];
+    if (caseEntity.noticeOfAttachments) {
+      const { noticeOfAttachmentsInNatureOfEvidence } =
+        SYSTEM_GENERATED_DOCUMENT_TYPES;
+      generatedDocuments.push(
+        applicationContext
+          .getUseCaseHelpers()
+          .addDocketEntryForSystemGeneratedOrder({
+            applicationContext,
+            caseEntity,
+            systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+          }),
+      );
+    }
 
-  if (caseEntity.noticeOfAttachments) {
-    const { noticeOfAttachmentsInNatureOfEvidence } =
-      SYSTEM_GENERATED_DOCUMENT_TYPES;
-    generatedDocuments.push(
-      applicationContext
-        .getUseCaseHelpers()
-        .addDocketEntryForSystemGeneratedOrder({
+    const petitionDocument = caseEntity.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    );
+
+    const formattedFiledDate = formatDateString(
+      petitionDocument.filingDate,
+      FORMATS.MONTH_DAY_YEAR,
+    );
+
+    if (caseEntity.orderDesignatingPlaceOfTrial) {
+      const { orderDesignatingPlaceOfTrial } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+      generatedDocuments.push(
+        generateDraftDocument({
           applicationContext,
           caseEntity,
-          systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+          document: orderDesignatingPlaceOfTrial,
+          replacements: [
+            formattedFiledDate,
+            caseEntity.procedureType.toLowerCase(),
+          ],
         }),
-    );
+      );
+    }
+
+    const todayPlus30 = getBusinessDateInFuture({
+      numberOfDays: 30,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    if (caseEntity.orderForFilingFee) {
+      const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+      generatedDocuments.push(
+        generateDraftDocument({
+          applicationContext,
+          caseEntity,
+          document: orderForFilingFee,
+          replacements: [todayPlus30, todayPlus30],
+        }),
+      );
+    }
+
+    if (caseEntity.orderForAmendedPetitionAndFilingFee) {
+      const { orderForAmendedPetitionAndFilingFee } =
+        SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+      generatedDocuments.push(
+        generateDraftDocument({
+          applicationContext,
+          caseEntity,
+          document: orderForAmendedPetitionAndFilingFee,
+          replacements: [formattedFiledDate, todayPlus30, todayPlus30],
+        }),
+      );
+    }
+
+    const todayPlus60 = getBusinessDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    if (caseEntity.orderForAmendedPetition) {
+      const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+      generatedDocuments.push(
+        generateDraftDocument({
+          applicationContext,
+          caseEntity,
+          document: orderForAmendedPetition,
+          replacements: [formattedFiledDate, todayPlus60, todayPlus60],
+        }),
+      );
+    }
+
+    if (caseEntity.orderToShowCause) {
+      // OSCP, not OSC
+      const { orderPetitionersToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+      generatedDocuments.push(
+        generateDraftDocument({
+          applicationContext,
+          caseEntity,
+          document: orderPetitionersToShowCause,
+          replacements: [formattedFiledDate, todayPlus60],
+        }),
+      );
+    }
+
+    await Promise.all(generatedDocuments);
+
+    await createPetitionWorkItems({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    await createCoversheetsForServedEntries({
+      applicationContext,
+      caseEntity,
+    });
+
+    const urlToReturn = await generateNoticeOfReceipt({
+      applicationContext,
+      caseEntity,
+      userServingPetition: user,
+    });
+
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_to_irs_complete',
+        pdfUrl: urlToReturn,
+      },
+      userId: user.userId,
+    });
+  } catch (ex) {
+    applicationContext.logger.error('Error serving case to IRS', {
+      docketNumber,
+      error: ex,
+    });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_to_irs_error',
+      },
+      userId: user.userId,
+    });
   }
-
-  const petitionDocument = caseEntity.docketEntries.find(
-    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-  );
-
-  const formattedFiledDate = formatDateString(
-    petitionDocument.filingDate,
-    FORMATS.MONTH_DAY_YEAR,
-  );
-
-  if (caseEntity.orderDesignatingPlaceOfTrial) {
-    const { orderDesignatingPlaceOfTrial } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    generatedDocuments.push(
-      generateDraftDocument({
-        applicationContext,
-        caseEntity,
-        document: orderDesignatingPlaceOfTrial,
-        replacements: [
-          formattedFiledDate,
-          caseEntity.procedureType.toLowerCase(),
-        ],
-      }),
-    );
-  }
-
-  const todayPlus30 = getBusinessDateInFuture({
-    numberOfDays: 30,
-    startDate: formatNow(FORMATS.ISO),
-  });
-
-  if (caseEntity.orderForFilingFee) {
-    const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    generatedDocuments.push(
-      generateDraftDocument({
-        applicationContext,
-        caseEntity,
-        document: orderForFilingFee,
-        replacements: [todayPlus30, todayPlus30],
-      }),
-    );
-  }
-
-  if (caseEntity.orderForAmendedPetitionAndFilingFee) {
-    const { orderForAmendedPetitionAndFilingFee } =
-      SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    generatedDocuments.push(
-      generateDraftDocument({
-        applicationContext,
-        caseEntity,
-        document: orderForAmendedPetitionAndFilingFee,
-        replacements: [formattedFiledDate, todayPlus30, todayPlus30],
-      }),
-    );
-  }
-
-  const todayPlus60 = getBusinessDateInFuture({
-    numberOfDays: 60,
-    startDate: formatNow(FORMATS.ISO),
-  });
-
-  if (caseEntity.orderForAmendedPetition) {
-    const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    generatedDocuments.push(
-      generateDraftDocument({
-        applicationContext,
-        caseEntity,
-        document: orderForAmendedPetition,
-        replacements: [formattedFiledDate, todayPlus60, todayPlus60],
-      }),
-    );
-  }
-
-  if (caseEntity.orderToShowCause) {
-    // OSCP, not OSC
-    const { orderPetitionersToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    generatedDocuments.push(
-      generateDraftDocument({
-        applicationContext,
-        caseEntity,
-        document: orderPetitionersToShowCause,
-        replacements: [formattedFiledDate, todayPlus60],
-      }),
-    );
-  }
-
-  await Promise.all(generatedDocuments);
-
-  await createPetitionWorkItems({
-    applicationContext,
-    caseEntity,
-    user,
-  });
-
-  await createCoversheetsForServedEntries({
-    applicationContext,
-    caseEntity,
-  });
-
-  const urlToReturn = await generateNoticeOfReceipt({
-    applicationContext,
-    caseEntity,
-    userServingPetition: user,
-  });
-
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity,
-  });
-
-  // TODO add try/catch
-
-  // TODO send websocket message with urlToReturn
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'serve_to_irs_complete',
-      pdfUrl: urlToReturn,
-    },
-    userId: user.userId,
-  });
-
-  return urlToReturn;
 };
 
 export const serveCaseToIrsInteractor = withLocking(
