@@ -471,7 +471,10 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
+export const serveCaseToIrs = async (
+  applicationContext,
+  { clientConnectionId, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
@@ -639,6 +642,19 @@ export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     caseToUpdate: caseEntity,
+  });
+
+  // TODO add try/catch
+
+  // TODO send websocket message with urlToReturn
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_to_irs_complete',
+      pdfUrl: urlToReturn,
+    },
+    userId: user.userId,
   });
 
   return urlToReturn;
