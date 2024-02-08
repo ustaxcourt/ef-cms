@@ -1,3 +1,4 @@
+import { MAX_FILE_SIZE_BYTES } from '@shared/business/entities/EntityConstants';
 import { cloneFile } from '../cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
@@ -12,7 +13,17 @@ const removeNode = node => {
   }
 };
 
-const updateFormValues = (files, updateFormValueSequence, inputName) => {
+const updateFormValues = ({
+  files,
+  inputName,
+  updateFormValueSequence,
+  validationSequence,
+}: {
+  files: File[];
+  inputName: string;
+  updateFormValueSequence: Function;
+  validationSequence: Function;
+}) => {
   const clonedFilePromises = Array.from(files).map(capturedFile => {
     return cloneFile(capturedFile).catch(() => null);
   });
@@ -24,6 +35,7 @@ const updateFormValues = (files, updateFormValueSequence, inputName) => {
         key: inputName,
         value: validatedFiles,
       });
+      validationSequence();
     })
     .catch(() => {
       /* no-op */
@@ -139,15 +151,21 @@ function DragDropInput({
   );
 }
 
-function handleFileSelectionAndValidation(
-  e,
+function handleFileSelectionAndValidation({
+  files,
+  inputName,
   maxFileSize,
   updateFormValueSequence,
-) {
-  const { name: inputName } = e.target;
-  const { files } = e.target;
-
-  if (Array.from(files).length > 5) {
+  validationSequence,
+}: {
+  files: File[];
+  inputName: string;
+  maxFileSize: number;
+  updateFormValueSequence: Function;
+  validationSequence: Function;
+}): false | undefined {
+  const maxFileUploads = 5;
+  if (Array.from(files).length > maxFileUploads) {
     setTimeout(() => {
       removeFiles(inputName, updateFormValueSequence);
       alert('Maximum file limit is 5.');
@@ -157,7 +175,7 @@ function handleFileSelectionAndValidation(
 
   const filesExceedingSizeLimit = Array.from(files)
     .map(capturedFile => {
-      if (capturedFile.size >= maxFileSize * 1024 * 1024) {
+      if (capturedFile.size >= MAX_FILE_SIZE_BYTES) {
         return capturedFile.name;
       }
     })
@@ -177,8 +195,12 @@ function handleFileSelectionAndValidation(
 
   if (!files.length) return false;
 
-  updateFormValues(files, updateFormValueSequence, inputName);
-  // run validationSequence
+  updateFormValues({
+    files,
+    inputName,
+    updateFormValueSequence,
+    validationSequence,
+  });
 }
 
 export const FileInput = connect(
@@ -187,7 +209,7 @@ export const FileInput = connect(
     form: state.form,
     name: props.name,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
-    // validationSequence: sequences[props.validationSequence],
+    validationSequence: sequences[props.validationSequence],
   },
   function FileInput({
     constants,
@@ -195,8 +217,8 @@ export const FileInput = connect(
     multiple,
     name,
     updateFormValueSequence,
+    validationSequence,
     ...remainingProps
-    // validationSequence,
   }) {
     return (
       <React.Fragment>
@@ -204,13 +226,17 @@ export const FileInput = connect(
           {...remainingProps}
           existingFiles={form[name]}
           fileInputName={name}
-          handleChange={e =>
-            handleFileSelectionAndValidation(
-              e,
-              constants.MAX_FILE_SIZE_MB,
+          handleChange={e => {
+            const { files, name: inputName } = e.target;
+
+            handleFileSelectionAndValidation({
+              files,
+              inputName,
+              maxFileSize: constants.MAX_FILE_SIZE_MB,
               updateFormValueSequence,
-            )
-          }
+              validationSequence,
+            });
+          }}
           handleRemove={() => {
             removeFiles(name, updateFormValueSequence);
           }}
