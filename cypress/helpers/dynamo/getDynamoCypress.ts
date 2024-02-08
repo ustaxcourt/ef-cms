@@ -13,6 +13,7 @@ export function getDocumentClient(): DynamoDBDocument {
       credentials: {
         accessKeyId: cypressEnv.accessKeyId,
         secretAccessKey: cypressEnv.secretAccessKey,
+        sessionToken: cypressEnv.sessionToken,
       },
       endpoint: dynamoEndpoint,
       region: cypressEnv.region,

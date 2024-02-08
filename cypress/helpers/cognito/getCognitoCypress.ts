@@ -8,6 +8,7 @@ export const getCognito = (): CognitoIdentityProvider => {
       credentials: {
         accessKeyId: cypressEnv.accessKeyId,
         secretAccessKey: cypressEnv.secretAccessKey,
+        sessionToken: cypressEnv.sessionToken,
       },
       endpoint: cypressEnv.cognitoEndpoint,
       region: cypressEnv.region,

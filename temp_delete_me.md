@@ -1,7 +1,8 @@
 ::: STUFF TO DO :::
-- test cases (review ones Tenille wrote on story)
-- Test dlq (alarm and sns topic work)
+- Test cases (review ones Tenille wrote on story)
 - Move cypress tests so that run on deployed and local environments
+- Increase retention period of sqs messages.
+- Verify messages from the dlq can be re-proccessed (redrive).
 
 
 ::: SOLO :::
