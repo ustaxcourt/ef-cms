@@ -15,16 +15,14 @@ note: we have 3 package.json files, be sure to update them all
   - ./cognito-triggers-sls/package.json
   - ./web-api/runtimes/puppeteer/package.json
 
-1. `npm update --save`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
+1. `npm outdated`: Informs us of minor and major version updates that we need to update manually. For major updates, there are often breaking API changes that require refactoring.
 
-2. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
-
-3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the overrides block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
+2. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the overrides block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
 
    > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-4. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
+3. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
@@ -42,7 +40,7 @@ note: we have 3 package.json files, be sure to update them all
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-5. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
+4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 	- ./iam/terraform/account-specific/main/main.tf
 	- ./iam/terraform/environment-specific/main/main.tf
 	- ./shared/admin-tools/glue/glue_migrations/main.tf
@@ -58,11 +56,11 @@ note: we have 3 package.json files, be sure to update them all
 
 	> aws = "<LATEST_VERSION>"
 
-6. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+5. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
 
-7. Check through the list of caveats to see if any of the documented issues have been resolved.
+6. Check through the list of caveats to see if any of the documented issues have been resolved.
 
-8. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
 
@@ -86,6 +84,10 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### s3-files (3.0.1)
 - (10/20/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
+
+### @aws-sdk/client-dynamodb and @aws-sdk/client-cognito-identity-provider
+
+- Left locked to 3.490.0 because they are causing websocket and cognito credential issues, respectively. Further investigation pending, maybe be related to this [urgent issue](https://github.com/aws/aws-sdk-js-v3/issues/5749)
 
 ## Incrementing the Node Cache Key Version
 
