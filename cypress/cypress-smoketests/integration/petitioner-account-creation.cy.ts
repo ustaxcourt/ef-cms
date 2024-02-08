@@ -127,6 +127,10 @@ describe('Petitioner Account Creation', () => {
     const TEST_NAME = 'Cypress Test Wrong Code';
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
+    before(() => {
+      Cypress.session.clearCurrentSessionData();
+    });
+
     it('should display the error message when user tries to confirm account with wrong confirmation code', () => {
       createAPetitioner({
         email: TEST_EMAIL,
@@ -168,6 +172,10 @@ describe('Petitioner Account Creation', () => {
     const TEST_EMAIL = `cypress_test_account+expired_${GUID}@example.com`;
     const TEST_NAME = 'Cypress Test Expired';
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
+
+    before(() => {
+      Cypress.session.clearCurrentSessionData();
+    });
 
     it('should display error message when a user tries to confirm account with an expired confirmation code', () => {
       createAPetitioner({
