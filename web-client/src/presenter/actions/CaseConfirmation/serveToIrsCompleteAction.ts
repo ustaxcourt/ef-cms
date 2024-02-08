@@ -1,4 +1,4 @@
-import { state } from '@web-client/presenter/app.cerebral';
+// import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * calls proxy endpoint to serve a case
@@ -9,18 +9,17 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {object} the next path based upon if there was any paper service or all electronic service
  */
-export const serveCaseToIrsAction = async ({
-  applicationContext,
-  get,
+export const serveToIrsCompleteAction = async ({
+  //   applicationContext,
+  //   get,
+  path,
   props,
 }: ActionProps) => {
-  const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
-  const clientConnectionId = get(state.clientConnectionId);
+  const { pdfUrl } = props;
 
-  await applicationContext
-    .getUseCases()
-    .serveCaseToIrsInteractor(applicationContext, {
-      clientConnectionId,
-      docketNumber,
-    });
+  if (pdfUrl) {
+    return path.paper({ pdfUrl });
+  }
+
+  return path.electronic();
 };
