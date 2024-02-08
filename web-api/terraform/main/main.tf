@@ -28,7 +28,7 @@ data "aws_sns_topic" "system_health_alarms" {
 
 data "aws_sns_topic" "system_health_alarms_west" {
   // account-level resource
-  name     = "system_health_alarms_west"
+  name     = "system_health_alarms"
   provider = aws.us-west-1
 }
 
