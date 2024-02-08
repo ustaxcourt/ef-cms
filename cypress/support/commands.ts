@@ -1,6 +1,7 @@
 import 'cypress-file-upload';
 
 Cypress.Commands.add('login', (username, route = '/') => {
+  Cypress.session.clearCurrentSessionData();
   cy.visit('/login');
   cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
   cy.get('[data-testid="password-input"]').type('Testing1234$', { log: false });

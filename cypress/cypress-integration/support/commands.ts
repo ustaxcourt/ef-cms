@@ -26,6 +26,8 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
 });
 
 Cypress.Commands.add('login', (username, route = '/') => {
+  Cypress.session.clearCurrentSessionData();
+
   cy.visit('/login');
 
   cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
