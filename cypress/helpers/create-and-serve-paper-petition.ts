@@ -82,6 +82,56 @@ export function createAndServePaperPetition(
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('#done-viewing-paper-petition-receipt-button').click();
       cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
+
+      cy.get('[data-testid="docket-number-search-input"]').type(
+        `${docketNumber}`,
+      );
+      cy.get('.usa-search-submit-text').click();
+
+      cy.get('[data-test-case-attribute="status"]').should(
+        'have.text',
+        'General Docket - Not at Issue',
+      );
+
+      const expectedDocuments = [
+        { eventCode: 'P', index: 1, servedTo: 'R' },
+        { eventCode: 'ATP', index: 2, servedTo: 'R' },
+        { eventCode: 'APW', index: 3, servedTo: 'R' },
+        { eventCode: 'DISC', index: 4, servedTo: 'R' },
+        { eventCode: 'RQT', index: 5, servedTo: 'R' },
+        { eventCode: 'NOTR', index: 6, servedTo: 'P' },
+      ];
+
+      expectedDocuments.forEach(({ eventCode, index, servedTo }) => {
+        cy.get(`[data-test-document-index="${index}"] > :nth-child(3)`).should(
+          'have.text',
+          eventCode,
+        );
+        cy.get(`[data-test-document-index="${index}"] > :nth-child(10)`).should(
+          'have.text',
+          servedTo,
+        );
+      });
+
+      cy.get('[data-testid="tab-drafts"] > .button-text').click();
+
+      cy.get('[data-testid="docket-entry-description-0"]').should(
+        'have.text',
+        'Notice of Attachments in the Nature of Evidence',
+      );
+      cy.get('[data-testid="docket-entry-description-1"]').should(
+        'have.text',
+        'Order',
+      );
+      cy.get('[data-testid="docket-entry-description-2"]').should(
+        'have.text',
+        'Order',
+      );
+      cy.get('[data-testid="docket-entry-description-3"]').should(
+        'have.text',
+        'Order to Show Cause',
+      );
+
       return cy.wrap({ docketNumber: docketNumber!, name });
     });
 }
