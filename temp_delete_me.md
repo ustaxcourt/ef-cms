@@ -1,18 +1,17 @@
 ::: STUFF TO DO :::
 - test cases (review ones Tenille wrote on story)
 - Test dlq (alarm and sns topic work)
-- Smoketests: we haven't run them in a long time
-- Let Tenille know that we've covered scenario two in 10007 comments
+- Move cypress tests so that run on deployed and local environments
 
 
 ::: SOLO :::
-- send styling back to UX for second check on exp2?
 - Investigate socket closure (outage, idle state, etc)
 
 
 ::: QUESTIONS :::
 - What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
-- Retry logic around Worker Queues? They currently fan out for email changes, if it fails it will go to dead letter queue. Since verifyPendingEmail endpoint isn't async anymore it doesn't retry like it used. 
+- Retry logic around Worker Queues? They currently fan out for email changes, if it fails it will go to dead letter queue. Since verifyPendingEmail endpoint isn't async anymore it doesn't retry like it used.
+ 
 
 ::: DOD :::
 - Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
