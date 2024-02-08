@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
@@ -31,6 +32,9 @@ export const petitionsClerkChangesCaseCaptionDuringQC = cerebralTest => {
     );
 
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     await cerebralTest.runSequence('gotoWorkQueueSequence', {
       box: 'outbox',
