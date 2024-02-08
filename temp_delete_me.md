@@ -28,4 +28,11 @@
 - Account specific deploy(sns_topic in west)
 - New lambda function being deployed - this will require manual deploy steps
   - First deploy will fail, need to copy worker_lambda_<DEPLOYING_COLOR>.zip and upload a copy as worker_lambda_<CURRENT_COLOR>.zip
- 
+
+
+::: New Patterns To Describe :::
+- Worker Queue + Gateway
+- Login local vs deployed
+- Cypress running in deployed environments
+- InitAppSequence
+- No more cognito triggers
