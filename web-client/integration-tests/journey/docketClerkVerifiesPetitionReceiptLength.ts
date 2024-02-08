@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
+import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
 import http from 'http';
 
 export const docketClerkVerifiesPetitionReceiptLength = (
@@ -11,6 +12,9 @@ export const docketClerkVerifiesPetitionReceiptLength = (
     await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     expect(cerebralTest.getState('currentPage')).toEqual(
       'PrintPaperPetitionReceipt',

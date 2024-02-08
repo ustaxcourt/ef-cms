@@ -5,7 +5,11 @@ import {
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { fakeFile } from '../helpers';
+import {
+  fakeFile,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
+} from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
@@ -225,6 +229,9 @@ export const petitionsClerkCreatesNewCase = (
 
     if (overrides?.shouldServe) {
       await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+      await waitForLoadingComponentToHide({ cerebralTest });
+      await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
     }
 
     await cerebralTest.runSequence('gotoCaseDetailSequence');
