@@ -157,8 +157,7 @@ function handleFileSelectionAndValidation(
 
   const filesExceedingSizeLimit = Array.from(files)
     .map(capturedFile => {
-      // if (capturedFile.size >= maxFileSize * 1024 * 1024) {
-      if (capturedFile.size >= 40 * 1024 * 1024) {
+      if (capturedFile.size >= maxFileSize * 1024 * 1024) {
         return capturedFile.name;
       }
     })
