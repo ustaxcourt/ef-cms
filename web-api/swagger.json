@@ -7849,9 +7849,17 @@
     "authorization": {
       "type": "object",
       "properties": {
-        "token": {
+        "accessToken": {
           "type": "string",
           "description": "the access token"
+        },
+        "idToken": {
+          "type": "string",
+          "description": "the identification token"
+        },
+        "refreshToken": {
+          "type": "string",
+          "description": "the refresh token"
         }
       }
     },
