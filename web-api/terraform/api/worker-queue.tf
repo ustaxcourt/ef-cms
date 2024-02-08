@@ -60,5 +60,5 @@ resource "aws_cloudwatch_metric_alarm" "worker_dl_queue_check" {
     QueueName = "worker_dl_queue_${var.environment}_${var.current_color}"
   }
 
-  alarm_actions = [var.alert_worker_sns_topic_arn]
+  alarm_actions = [var.alert_sns_topic_arn]
 }
