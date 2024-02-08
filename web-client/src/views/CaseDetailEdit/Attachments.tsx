@@ -51,9 +51,8 @@ export const Attachments = connect(
                       <FontAwesomeIcon
                         className="pdf-preview-btn padding-0"
                         icon={['fas', 'file-pdf']}
-                        size="1x"
+                        size="sm"
                       />
-                      {/* TODO: icon size doesn't match others */}
                       Statement of Taxpayer Identification
                     </div>
                   </div>
