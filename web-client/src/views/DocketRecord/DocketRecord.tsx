@@ -73,6 +73,7 @@ export const DocketRecord = connect(
                           entry.isInProgress && 'in-progress',
                           entry.qcWorkItemsUntouched && 'qc-untouched',
                         )}
+                        data-test-document-index={entry.index}
                         data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
