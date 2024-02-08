@@ -77,7 +77,7 @@ export class ElectronicPetition extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    attachmentToPetitionFiles: joi.array().items(joi.object().optional()),
+    attachmentToPetitionFiles: joi.array().items(joi.object()).optional(),
     businessType: JoiValidationConstants.STRING.valid(
       ...Object.values(BUSINESS_TYPES),
     )
