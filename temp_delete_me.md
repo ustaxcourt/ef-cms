@@ -1,7 +1,9 @@
 ::: STUFF TO DO :::
 - Test cases (review ones Tenille wrote on story)
-- Move cypress tests so that run on deployed and local environments
-- Verify messages from the dlq can be re-proccessed (redrive).
+- Move 10007 cypress tests so that run on deployed and local environments
+- Run full experimental deploy (NOT on exp1, exp2, or exp3).
+  - Remove switch colors step. Test that the old cognito workflow + account creation are still functional.
+  - Switch colors and verify login + account creation are functional.
 
 
 ::: SOLO :::
@@ -24,4 +26,6 @@
 ::: Deployment :::
 - Environment specific deploy
 - Account specific deploy(sns_topic in west)
+- New lambda function being deployed - this will require manual deploy steps
+  - First deploy will fail, need to copy worker_lambda_<DEPLOYING_COLOR>.zip and upload a copy as worker_lambda_<CURRENT_COLOR>.zip
  
