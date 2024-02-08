@@ -1,4 +1,5 @@
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
 
 describe('admissions clerk grants e-access to practitioner', () => {
@@ -28,6 +29,7 @@ describe('admissions clerk grants e-access to practitioner', () => {
       ).click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="success-alert"]').contains('Changes saved');
+      logout();
 
       cy.visit('/login');
       cy.get('[data-testid="email-input"]').type(practitionerEmail);

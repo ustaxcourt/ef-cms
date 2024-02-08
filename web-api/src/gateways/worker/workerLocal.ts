@@ -1,4 +1,7 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
 import {
   WorkerHandler,
   WorkerMessage,
@@ -10,10 +13,11 @@ export const workerLocal: WorkerHandler = async (
   { message }: { message: WorkerMessage },
 ): Promise<void> => {
   // Simulate what happens on a deployed environment when a message is sent to SQS.
+  const appContext = createApplicationContext(message.user);
   setTimeout(
     async () => {
       try {
-        await workerRouter(applicationContext, { message });
+        await workerRouter(appContext, { message });
       } catch (error) {
         console.error('Worker Local Error: ', error);
       }

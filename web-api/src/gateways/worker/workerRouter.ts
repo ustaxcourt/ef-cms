@@ -3,6 +3,12 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 export type WorkerMessage = {
   payload: any;
   type: WorkerMessageType;
+  user: {
+    role: string;
+    userId: string;
+    email: string;
+    name: string;
+  };
 };
 
 export const MESSAGE_TYPES = {
