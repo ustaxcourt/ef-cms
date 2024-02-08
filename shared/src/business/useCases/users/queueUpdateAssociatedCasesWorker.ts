@@ -20,6 +20,7 @@ export const queueUpdateAssociatedCasesWorker = async (
         message: {
           payload: { docketNumber, user },
           type: MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE,
+          user: applicationContext.getCurrentUser(),
         },
       }),
     ),

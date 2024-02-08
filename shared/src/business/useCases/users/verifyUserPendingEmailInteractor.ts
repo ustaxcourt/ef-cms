@@ -66,6 +66,7 @@ export const verifyUserPendingEmailInteractor = async (
     message: {
       payload: { user: updatedUser },
       type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
+      user: applicationContext.getCurrentUser(),
     },
   });
 };
