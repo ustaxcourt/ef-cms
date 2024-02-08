@@ -13,6 +13,7 @@ export const setTokenAction = ({
   store,
 }: ActionProps) => {
   store.set(state.token, props.token);
+  store.set(state.asyncToken, `${Date.now()}__${props.token}`);
   store.set(state.refreshToken, props.refreshToken || null);
   applicationContext.setCurrentUserToken(props.token);
 };

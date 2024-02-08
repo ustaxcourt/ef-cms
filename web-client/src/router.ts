@@ -96,15 +96,12 @@ const ifHasAccess = (
   return function () {
     if (!app.getState('token')) {
       return redirect.gotoLoginPage(app);
-    } else if (app.getState('maintenanceMode')) {
-      if (!skipMaintenanceCheck) {
-        return redirect.gotoMaintenancePage(app);
-      } else {
-        app.getSequence('clearAlertSequence')();
-        return cb.apply(null, arguments);
-      }
     } else {
-      if (
+      app.getSequence('setAsyncTokenSequence')();
+
+      if (app.getState('maintenanceMode') && !skipMaintenanceCheck) {
+        return redirect.gotoMaintenancePage(app);
+      } else if (
         permissionToCheck &&
         !app.getState('permissions')[permissionToCheck]
       ) {

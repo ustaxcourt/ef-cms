@@ -25,7 +25,7 @@ export const socketProvider = ({ socketRouter }) => {
   };
 
   const start = () => {
-    const token = app.getState('token');
+    const token = app.getState('asyncToken');
     const clientConnectionId = app.getState('clientConnectionId');
     if (!socket) {
       return new Promise<void>((resolve, reject) => {

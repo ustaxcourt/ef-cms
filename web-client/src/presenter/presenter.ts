@@ -350,6 +350,7 @@ import { serveDocumentCompleteSequence } from './sequences/serveDocumentComplete
 import { serveDocumentErrorSequence } from './sequences/serveDocumentErrorSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { serveThirtyDayNoticeOfTrialSequence } from './sequences/serveThirtyDayNoticeOfTrialSequence';
+import { setAsyncTokenSequence } from '@web-client/presenter/sequences/setAsyncTokenSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -1144,6 +1145,7 @@ export const presenterSequences = {
     servePaperFiledDocumentSequence as unknown as Function,
   serveThirtyDayNoticeOfTrialSequence:
     serveThirtyDayNoticeOfTrialSequence as unknown as Function,
+  setAsyncTokenSequence: setAsyncTokenSequence as unknown as Function,
   setCaseDetailPageTabSequence:
     setCaseDetailPageTabSequence as unknown as Function,
   setCaseDetailPrimaryTabSequence:
