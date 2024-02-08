@@ -34,6 +34,7 @@ resource "aws_lambda_event_source_mapping" "worker_event_mapping" {
 
 resource "aws_sqs_queue" "worker_dl_queue" {
   name = "worker_dl_queue_${var.environment}_${var.current_color}"
+  message_retention_seconds = 1209600
 }
 
 resource "aws_sqs_queue_redrive_allow_policy" "worker_queue_redrive_allow_policy" {
