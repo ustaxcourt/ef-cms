@@ -21,9 +21,11 @@ import { replaceBracketed } from '../../utilities/replaceBracketed';
 export const serveThirtyDayNoticeInteractor = async (
   applicationContext: IApplicationContext,
   {
+    clientConnectionId,
     trialSessionId,
   }: {
     trialSessionId: string;
+    clientConnectionId: string;
   },
 ): Promise<void> => {
   const currentUser = applicationContext.getCurrentUser();
@@ -58,6 +60,7 @@ export const serveThirtyDayNoticeInteractor = async (
   if (!trialSession.caseOrder?.length) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
+      clientConnectionId,
       message: {
         action: 'thirty_day_notice_paper_service_complete',
         pdfUrl: undefined,
@@ -79,6 +82,7 @@ export const serveThirtyDayNoticeInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'paper_service_started',
       totalPdfs: trialSession.caseOrder.length,
@@ -208,6 +212,7 @@ export const serveThirtyDayNoticeInteractor = async (
           .getNotificationGateway()
           .sendNotificationToUser({
             applicationContext,
+            clientConnectionId,
             message: {
               action: 'paper_service_updated',
               pdfsAppended,
@@ -250,6 +255,7 @@ export const serveThirtyDayNoticeInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'thirty_day_notice_paper_service_complete',
       fileId,
