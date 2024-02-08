@@ -47,6 +47,13 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      case 'serve_to_irs_error':
+        console.log('socketRouter', message);
+        await app.getSequence('serveToIrsErrorSequence')({
+          ...message,
+          showModal: 'ServeCaseToIrsErrorModal',
+        });
+        break;
       case 'update_trial_session_complete':
         await app.getSequence('updateTrialSessionCompleteSequence')({
           ...message,
