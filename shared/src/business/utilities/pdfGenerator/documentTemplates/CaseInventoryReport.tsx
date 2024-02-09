@@ -2,6 +2,7 @@
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader.tsx';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseInventoryReport = ({
   formattedCases,
@@ -17,6 +18,7 @@ export const CaseInventoryReport = ({
       <table>
         <thead>
           <tr>
+            <th />
             <th>Docket No.</th>
             <th>Case Title</th>
             {showStatusColumn && <th className="status-header">Case Status</th>}
@@ -26,6 +28,16 @@ export const CaseInventoryReport = ({
         <tbody>
           {formattedCases.map((formattedCase, idx) => (
             <tr key={idx}>
+              <td>
+                <div
+                  className={classNames(
+                    `${formattedCase.isLeadCase && 'lead-consolidated-icon'} ${
+                      formattedCase.inConsolidatedGroup && 'consolidated-icon'
+                    }`,
+                    'inline-consolidated-icon',
+                  )}
+                />
+              </td>
               <td className="no-wrap">
                 {formattedCase.docketNumber}
                 {formattedCase.docketNumberSuffix}
