@@ -5,9 +5,11 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
-jest.mock('../users/generateChangeOfAddress');
 import { generateChangeOfAddress } from '../../../../../shared/src/business/useCases/users/generateChangeOfAddress';
+import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
+jest.mock(
+  '../../../../../shared/src/business/useCases/users/generateChangeOfAddress',
+);
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
