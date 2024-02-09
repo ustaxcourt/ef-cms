@@ -8,9 +8,6 @@ Cypress.Commands.add('login', (username, route = '/') => {
   cy.get('[data-testid="login-button"]').click();
   cy.get('[data-testid="account-menu-button"]');
   cy.visit(route);
-  cy.window().then(win =>
-    win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
-  );
   cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
     body: `window.Dynamsoft = {DWT: {
             GetWebTwain() {}
