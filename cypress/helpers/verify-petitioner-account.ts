@@ -15,7 +15,7 @@ export function verifyPetitionerAccount({ email }: { email: string }) {
     const { confirmationCode, userId } = userInfo;
     const queryString = qs.stringify(
       { confirmationCode, email, userId },
-      { encode: false },
+      { encode: true },
     );
     cy.visit(`/confirm-signup?${queryString}`);
   });
