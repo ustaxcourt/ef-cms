@@ -117,7 +117,7 @@ function DragDropInput({
   }, [existingFiles]);
 
   return (
-    <div style={{ maxWidth: '75%', position: 'relative' }}>
+    <div style={{ maxWidth: '60%', position: 'relative' }}>
       <input
         {...remainingProps}
         accept=".pdf"
@@ -136,7 +136,7 @@ function DragDropInput({
             color: '#005ea2',
             cursor: 'pointer',
             fontSize: '15px',
-            left: '82%',
+            left: '75%',
             position: 'absolute',
             textDecoration: 'underline',
             top: '9px',
