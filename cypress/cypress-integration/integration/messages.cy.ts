@@ -567,11 +567,11 @@ describe('Messages', () => {
         'adc',
         'judgecolvin',
         'docketclerk',
-        'admissionsClerk',
+        'admissionsclerk',
         'colvinschambers',
-        'trialClerk',
-        'reportersOffice',
-        'petitionsClerk',
+        'trialclerk',
+        'reportersoffice',
+        'petitionsclerk',
         'general',
       ].forEach(account => {
         it(`should display the filters for Court User "${account}"`, () => {
