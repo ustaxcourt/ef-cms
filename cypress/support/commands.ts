@@ -16,6 +16,14 @@ Cypress.Commands.add('login', (username, route = '/') => {
   });
 });
 
+Cypress.Commands.add('goToRoute', (...args) => {
+  cy.get('.progress-indicator').should('not.exist');
+  return cy.window().then(w => {
+    // eslint-disable-next-line no-underscore-dangle
+    w.__cy_route(...args);
+  });
+});
+
 before(() => {
   // Skip subsequent tests in spec when one fails.
   (cy.state('runnable').ctx as Mocha.Context).currentTest?.parent?.bail(true);
