@@ -1,13 +1,9 @@
-export const createOrder = () => {
+export const createOrder = (docketNumber: string) => {
   const orderTitle = 'Order first title';
   const orderEventCode = 'O';
-
-  cy.get('[data-testid="case-detail-menu-button"]').click();
-  cy.get('[data-testid="menu-button-create-order"]').click();
-  cy.get('[data-testid="event-code-select"]').select(orderEventCode);
-  cy.get('[data-testid="create-order-document-title"]').clear();
-  cy.get('[data-testid="create-order-document-title"]').type(orderTitle);
-  cy.get('[data-testid="modal-button-confirm"]').click();
+  cy.goToRoute(
+    `/case-detail/${docketNumber}/create-order?documentTitle=${orderTitle}&documentType=Order&eventCode=${orderEventCode}`,
+  );
   cy.get('[data-testid="create-order-page-title"]').should(
     'contain',
     `Create ${orderTitle}`,
