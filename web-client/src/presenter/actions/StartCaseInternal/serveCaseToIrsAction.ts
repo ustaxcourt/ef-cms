@@ -31,7 +31,5 @@ export const serveCaseToIrsAction = async ({
     });
   }
 
-  return path.success({
-    showModal: 'ServeCaseToIrsErrorModal',
-  });
+  return path.success();
 };
