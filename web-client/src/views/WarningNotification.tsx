@@ -8,7 +8,7 @@ import classNames from 'classnames';
 export const WarningNotificationComponent =
   function WarningNotificationComponent({
     alertWarning,
-    dismissAlertSequence,
+    dismissAlertSequence = sequences.dismissAlertSequence,
     dismissible = true,
     iconRight = true,
     messageNotBold = false,
@@ -18,7 +18,7 @@ export const WarningNotificationComponent =
       title?: string;
       linkUrl?: string;
       linkText?: string;
-      message: string | React.ReactNode;
+      message?: string | React.ReactNode;
       dismissText?: string;
       dismissIcon?: string;
     };
