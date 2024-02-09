@@ -23,10 +23,10 @@ export const generateCaseInventoryReportPdf = async ({
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
 
-  const { formatCase } = applicationContext.getUtilities();
+  const { setConsolidationFlagsForDisplay } = applicationContext.getUtilities();
   const formattedCases = cases
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-    .map(caseItem => formatCase(applicationContext, caseItem))
+    .map(caseItem => setConsolidationFlagsForDisplay(caseItem, []))
     .map(caseItem => ({
       ...caseItem,
       caseTitle: applicationContext.getCaseTitle(caseItem.caseCaption || ''),

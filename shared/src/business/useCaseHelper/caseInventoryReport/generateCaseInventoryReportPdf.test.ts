@@ -33,8 +33,8 @@ describe('generateCaseInventoryReportPdf', () => {
         url: 'https://www.example.com',
       });
 
-    applicationContext.getUtilities().formatCase = jest.fn(
-      (appContext, item) => item,
+    applicationContext.getUtilities().setConsolidationFlagsForDisplay = jest.fn(
+      item => item,
     );
   });
 
@@ -62,10 +62,11 @@ describe('generateCaseInventoryReportPdf', () => {
       applicationContext.getDocumentGenerators().caseInventoryReport,
     ).toHaveBeenCalled();
 
-    const formatCaseCalls =
-      applicationContext.getUtilities().formatCase.mock.calls.length;
+    const setConsolidationFlagsForDisplayCalls =
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay.mock
+        .calls.length;
 
-    expect(formatCaseCalls).toEqual(mockCases.length);
+    expect(setConsolidationFlagsForDisplayCalls).toEqual(mockCases.length);
   });
 
   it('returns the pre-signed url to the document', async () => {
