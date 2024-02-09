@@ -16,7 +16,14 @@ export const generateCaseInventoryReportPdf = async ({
   applicationContext,
   cases,
   filters,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  cases: RawCase[];
+  filters: {
+    associatedJudge?: string;
+    status?: string;
+  };
+}): Promise<{ fileId: string; url: string }> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {

@@ -5,7 +5,26 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-export const caseInventoryReport = async ({ applicationContext, data }) => {
+export const caseInventoryReport = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    formattedCases: {
+      isLeadCase: boolean;
+      inConsolidatedGroup: boolean;
+      docketNumber: string;
+      caseTitle: string;
+      docketNumberSuffix?: string;
+      status: string;
+      associatedJudge?: string;
+    }[];
+    reportTitle: string;
+    showJudgeColumn: boolean;
+    showStatusColumn: boolean;
+  };
+}) => {
   const { formattedCases, reportTitle, showJudgeColumn, showStatusColumn } =
     data;
 
