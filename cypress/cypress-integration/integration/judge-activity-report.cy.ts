@@ -113,7 +113,7 @@ describe('Verify the activity report', () => {
 
         cy.login('docketclerk');
         searchByDocketNumberInHeader(docketNumber);
-        createOrderAndDecision();
+        createOrderAndDecision(docketNumber);
 
         retry(() => {
           cy.login('judgecolvin');
@@ -144,7 +144,7 @@ describe('Verify the activity report', () => {
         cy.login('docketclerk');
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
-        createOrderAndDecision();
+        createOrderAndDecision(docketNumber);
 
         cy.get('[data-testid="tab-drafts"]').click();
         cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();

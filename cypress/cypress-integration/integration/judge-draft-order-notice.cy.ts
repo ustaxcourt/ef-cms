@@ -6,7 +6,7 @@ describe('Judge Draft Order or Notice', () => {
     it('should allow judge to edit order that has had a signature removed', () => {
       cy.login('judgecolvin');
       searchByDocketNumberInHeader('999-15');
-      createOrderAndDecision();
+      createOrderAndDecision('999-15');
       cy.get('[data-testid="remove-signature-docket-entry-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="draft-edit-button-not-signed"]').click();
