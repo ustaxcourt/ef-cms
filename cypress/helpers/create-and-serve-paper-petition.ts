@@ -132,6 +132,8 @@ export function createAndServePaperPetition(
         'Order to Show Cause',
       );
 
+      cy.get('[data-testid="tab-docket-record"]').click();
+
       return cy.wrap({ docketNumber: docketNumber!, name });
     });
 }

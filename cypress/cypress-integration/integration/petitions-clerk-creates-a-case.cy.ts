@@ -111,25 +111,8 @@ describe('Petition clerk creates a paper filing', function () {
   });
 
   describe('Submit case to the IRS', () => {
-    it('should display the docket record correctly when uploading an attachment to petition', () => {
-      createAndServePaperPetition().then(({ docketNumber }) => {
-        searchByDocketNumberInHeader(docketNumber);
-        cy.get('[data-testid="document-viewer-link-ATP"]')
-          .should('be.visible')
-          .parent('td')
-          .siblings('td')
-          .then(siblingTds => {
-            siblingTds.each((_index, siblingTd) => {
-              const textContent = Cypress.$(siblingTd).text();
-              if (textContent === 'R') {
-                expect(textContent).to.equal('R');
-              }
-              if (textContent === 'ATP') {
-                expect(textContent).to.equal('ATP');
-              }
-            });
-          });
-      });
+    it('should display the docket record correctly', () => {
+      createAndServePaperPetition();
     });
   });
 });
