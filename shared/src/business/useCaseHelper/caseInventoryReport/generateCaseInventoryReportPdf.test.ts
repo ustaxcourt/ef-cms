@@ -32,6 +32,10 @@ describe('generateCaseInventoryReportPdf', () => {
       .saveFileAndGenerateUrl.mockReturnValue({
         url: 'https://www.example.com',
       });
+
+    applicationContext.getUtilities().formatCase = jest.fn(
+      (appContext, item) => item,
+    );
   });
 
   it('throws an error if the user is unauthorized', async () => {
@@ -57,6 +61,11 @@ describe('generateCaseInventoryReportPdf', () => {
     expect(
       applicationContext.getDocumentGenerators().caseInventoryReport,
     ).toHaveBeenCalled();
+
+    const formatCaseCalls =
+      applicationContext.getUtilities().formatCase.mock.calls.length;
+
+    expect(formatCaseCalls).toEqual(mockCases.length);
   });
 
   it('returns the pre-signed url to the document', async () => {
