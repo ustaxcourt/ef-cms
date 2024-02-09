@@ -20,6 +20,7 @@ describe('caseInventoryReport', () => {
               caseTitle: 'rick james b',
               docketNumber: '101-20',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+              isLeadCase: true,
               status: CASE_STATUS_TYPES.closed,
             },
           ],
