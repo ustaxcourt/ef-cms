@@ -12,10 +12,10 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
       cy.get('[data-testid="docket-number-search-input"]').clear();
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
-      cy.get('[data-testid="case-detail-menu-button"]').click();
-      cy.get('[data-testid="menu-button-create-order"]').click();
-      cy.get('[data-testid="event-code-select"]').select('O');
-      cy.get('[data-testid="modal-button-confirm"]').click();
+
+      cy.goToRoute(
+        `/case-detail/${docketNumber}/create-order?documentTitle=Order&documentType=Order&eventCode=O`,
+      );
       cy.get('.ql-editor').click();
       cy.get('[data-testid="save-order-button"]').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();

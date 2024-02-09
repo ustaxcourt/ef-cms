@@ -69,7 +69,7 @@ export const expireForgotPasswordCode = async ({
   return null;
 };
 
-export const setAllowedTerminalIpAddresses = async ipAddresses => {
+export const setAllowedTerminalIpAddresses = async (ipAddresses: string[]) => {
   return await documentClient.put({
     Item: {
       ips: ipAddresses,

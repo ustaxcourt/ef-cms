@@ -1,11 +1,12 @@
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
-import { MOCK_PRACTITIONER, petitionerUser } from '../../../test/mockUsers';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  MOCK_PRACTITIONER,
+  petitionerUser,
+} from '../../../../../shared/src/test/mockUsers';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { queueUpdateAssociatedCasesWorker } from './queueUpdateAssociatedCasesWorker';
 
 describe('queueUpdateAssociatedCasesWorker', () => {
-  beforeEach(() => {});
-
   it('should lookup the docket numbers for the current user', async () => {
     applicationContext
       .getPersistenceGateway()

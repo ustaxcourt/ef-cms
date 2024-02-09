@@ -60,7 +60,7 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
-import { queueUpdateAssociatedCasesWorker } from '../../shared/src/business/useCases/users/queueUpdateAssociatedCasesWorker';
+import { queueUpdateAssociatedCasesWorker } from '../../web-api/src/business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
 import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';

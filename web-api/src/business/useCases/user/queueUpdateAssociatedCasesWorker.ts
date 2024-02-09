@@ -1,6 +1,6 @@
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
-import { RawPractitioner } from '../../entities/Practitioner';
-import { RawUser } from '../../entities/User';
+import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
+import { RawUser } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const queueUpdateAssociatedCasesWorker = async (
@@ -25,6 +25,4 @@ export const queueUpdateAssociatedCasesWorker = async (
       }),
     ),
   );
-
-  return;
 };
