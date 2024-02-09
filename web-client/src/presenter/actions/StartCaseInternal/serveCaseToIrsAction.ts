@@ -12,15 +12,26 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const serveCaseToIrsAction = async ({
   applicationContext,
   get,
+  path,
   props,
 }: ActionProps) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
   const clientConnectionId = get(state.clientConnectionId);
 
-  await applicationContext
-    .getUseCases()
-    .serveCaseToIrsInteractor(applicationContext, {
-      clientConnectionId,
-      docketNumber,
+  try {
+    await applicationContext
+      .getUseCases()
+      .serveCaseToIrsInteractor(applicationContext, {
+        clientConnectionId,
+        docketNumber,
+      });
+  } catch (err) {
+    return path.error({
+      showModal: 'ServeCaseToIrsErrorModal',
     });
+  }
+
+  return path.success({
+    showModal: 'ServeCaseToIrsErrorModal',
+  });
 };
