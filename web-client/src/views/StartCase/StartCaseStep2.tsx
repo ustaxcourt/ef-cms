@@ -167,7 +167,7 @@ export const StartCaseStep2 = connect(
                       data-testid="atp-files-upload"
                       name="attachmentToPetitionFiles"
                       updateFormValueSequence="updateFormValueSequence"
-                      validationSequence="validateExternalDocumentInformationSequence"
+                      validationSequence="validateStartCaseWizardSequence"
                     />
                   </FormGroup>
                 </div>
