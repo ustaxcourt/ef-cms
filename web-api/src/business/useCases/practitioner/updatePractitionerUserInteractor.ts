@@ -1,20 +1,16 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { Practitioner, RawPractitioner } from '../../entities/Practitioner';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '../../../../../shared/src/business/entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { generateChangeOfAddress } from '../../../../../shared/src/business/useCases/users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-/**
- * updatePractitionerUserInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.barNumber the barNumber of the user to update
- * @param {object} providers.user the user data
- */
 export const updatePractitionerUser = async (
   applicationContext: IApplicationContext,
   {

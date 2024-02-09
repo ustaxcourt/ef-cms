@@ -8,15 +8,6 @@ import { RawUser, User } from '../../entities/User';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { createPractitionerUser } from '../../utilities/createPractitionerUser';
 
-/**
- * createUserInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.user the user data
- * @returns {Promise} the promise of the createUser call
- */
-
 export const createUserInteractor = async (
   applicationContext: IApplicationContext,
   { user }: { user: RawUser & { barNumber?: string; password: string } },
@@ -30,11 +21,9 @@ export const createUserInteractor = async (
   let userEntity: User;
 
   if (
-    [
-      ROLES.privatePractitioner,
-      ROLES.irsPractitioner,
-      ROLES.inactivePractitioner,
-    ].includes(user.role)
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner ||
+    user.role === ROLES.inactivePractitioner
   ) {
     userEntity = new Practitioner(
       await createPractitionerUser({ applicationContext, user }),

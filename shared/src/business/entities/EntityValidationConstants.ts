@@ -621,6 +621,7 @@ export const CASE_STATUS_RULE = joi
   })
   .meta({ tags: ['Restricted'] })
   .description('Status of the case.');
+
 export const PASSWORD_VALIDATION_ERROR_MESSAGES = {
   hasNoLeadingOrTrailingSpace: 'Must not contain leading or trailing space',
   hasOneLowercase: 'Must contain lower case letter',
