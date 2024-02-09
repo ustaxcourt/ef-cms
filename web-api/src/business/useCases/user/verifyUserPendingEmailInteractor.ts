@@ -3,9 +3,9 @@ import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '../../../errors/errors';
 import { updateUserEmailAddress } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
 export const verifyUserPendingEmailInteractor = async (

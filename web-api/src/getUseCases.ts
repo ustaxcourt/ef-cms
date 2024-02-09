@@ -149,7 +149,7 @@ import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCase
 import { orderPublicSearchInteractor } from '../../shared/src/business/useCases/public/orderPublicSearchInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/business/useCases/prioritizeCaseInteractor';
 import { processStreamRecordsInteractor } from '../../shared/src/business/useCases/processStreamRecordsInteractor';
-import { queueUpdateAssociatedCasesWorker } from '../../shared/src/business/useCases/users/queueUpdateAssociatedCasesWorker';
+import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from '../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor';
 import { removeCasePendingItemInteractor } from '../../shared/src/business/useCases/removeCasePendingItemInteractor';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
@@ -210,7 +210,7 @@ import { updateUserContactInformationInteractor } from '../../shared/src/busines
 import { updateUserPendingEmailInteractor } from '../../shared/src/business/useCases/users/updateUserPendingEmailInteractor';
 import { validatePdfInteractor } from '../../shared/src/business/useCases/pdf/validatePdfInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor';
-import { verifyUserPendingEmailInteractor } from '../../shared/src/business/useCases/users/verifyUserPendingEmailInteractor';
+import { verifyUserPendingEmailInteractor } from './business/useCases/user/verifyUserPendingEmailInteractor';
 import { virusScanPdfInteractor } from '../../shared/src/business/useCases/pdf/virusScanPdfInteractor';
 
 const useCases = {
