@@ -115,12 +115,12 @@ export const BeforeStartingCase = connect(
                   iconSize="lg"
                   iconTypes={['far', 'edit']}
                   key="Prepare the petition"
-                  title="Prepare the petition"
+                  title="Prepare the Petition and any IRS Notices"
                 >
                   <p className="label">1. Complete Your Petition</p>
                   <p>
-                    The Petition is the document that explains why you’re
-                    challenging the IRS’s determination. You can use the Court’s
+                    This is the document that explains why you’re challenging
+                    the IRS’s determination. You can complete the Court&apos;s
                     standard Petition form or you can upload your own Petition
                     that complies with the requirements of the Tax Court Rules
                     of Practice and Procedure.
@@ -151,28 +151,35 @@ export const BeforeStartingCase = connect(
                       in your Petition or any other filing with the Court.
                     </span>
                   </p>
-                  <p className="label">
-                    2. Create a single PDF of your Petition and IRS notice (if
-                    you received one)
-                  </p>
+                  <p className="label">2. Create a PDF of your Petition</p>
                   <p className="margin-top-0">
-                    Scan your Petition and IRS notice into one Petition PDF (max
-                    file size of 250MB) or combine them digitally.
-                    <Button
-                      link
-                      className="usa-link--external text-left mobile-text-wrap"
-                      href="https://ustaxcourt.gov/merging_files.html"
-                      overrideMargin="margin-right-1 margin-left-1"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      Learn more about how to merge files into one PDF.
-                    </Button>
-                    <br />
+                    Save your Petition as a PDF (max file size of 250MB).
                     <span className="usa-hint">
                       *<strong>Do not include</strong> any additional documents
-                      with your Petition, except for the IRS notice. Documents
-                      that might be evidence can be submitted at a later time.
+                      with your Petition. Documents that might be evidence can
+                      be submitted at a later time.
+                    </span>
+                  </p>
+                  <p className="label">3. Create a PDF of your IRS Notice(s)</p>
+                  <p className="margin-top-0">
+                    If you received a Notice(s) from the IRS:
+                    <ol className="margin-bottom-0" type="a">
+                      <li>
+                        Remove or block out (redact) your Social Security Number
+                        (SSN), Tax Identification Number (TIN), or Employer
+                        Identification Number (EIN) on a COPY of the IRS
+                        Notice(s) or in a manner that does not permanently alter
+                        the original IRS Notice(s).
+                      </li>
+                      <li>
+                        Save your IRS Notice(s) as a PDF (max file size of
+                        250MB).
+                      </li>
+                    </ol>
+                    <span className="usa-hint">
+                      *<strong>Do not include</strong> any additional documents
+                      with your Petition. Documents that might be evidence can
+                      be submitted at a later time.
                     </span>
                   </p>
                 </AccordionItem>

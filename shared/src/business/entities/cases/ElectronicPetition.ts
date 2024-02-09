@@ -36,10 +36,12 @@ export class ElectronicPetition extends JoiValidationEntity {
   public procedureType: string;
   public stinFile?: object;
   public stinFileSize?: number;
+  public attachmentToPetitionFiles: File[];
 
   constructor(rawCase, { applicationContext }) {
     super('ElectronicPetition');
 
+    this.attachmentToPetitionFiles = rawCase.attachmentToPetitionFiles;
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
     this.countryType = rawCase.countryType;
@@ -75,6 +77,7 @@ export class ElectronicPetition extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
+    attachmentToPetitionFiles: joi.array().items(joi.object()).optional(),
     businessType: JoiValidationConstants.STRING.valid(
       ...Object.values(BUSINESS_TYPES),
     )

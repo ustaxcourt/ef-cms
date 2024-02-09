@@ -33,6 +33,7 @@ export const PDFPreviewButton = connect<
     pdfPreviewModalHelper,
     shouldAbbreviateTitle = true,
     shouldWrapText = false,
+    showIcon = true,
     showModal,
     title,
     ...props
@@ -56,8 +57,8 @@ export const PDFPreviewButton = connect<
             link
             className="pdf-preview-btn padding-0"
             data-testid={props['data-testid']}
-            icon={['fas', 'file-pdf']}
-            iconColor="blue"
+            icon={showIcon && ['fas', 'file-pdf']}
+            iconColor={showIcon && 'blue'}
             id={id}
             shouldWrapText={shouldWrapText}
             title={fullTitle}

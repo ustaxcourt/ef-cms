@@ -1,58 +1,75 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { INITIAL_FILING_DOCUMENT_TABS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const initialFilingDocumentTabs = INITIAL_FILING_DOCUMENT_TABS;
 export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES, INITIAL_DOCUMENT_TYPES_FILE_MAP } =
+    applicationContext.getConstants();
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
+  const ATP_EVENT_CODE = INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode;
 
   const hasCDS = !!documents.find(
     doc =>
       doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
   );
 
-  let documentTabsToDisplay = [...initialFilingDocumentTabs];
-
-  const documentTypeMap = {
-    applicationForWaiverOfFilingFeeFile:
-      INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
-    attachmentToPetitionFile:
-      INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
-    corporateDisclosureFile:
-      INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
-    petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
-    requestForPlaceOfTrialFile:
-      INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-    stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
-  };
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
   );
 
-  const documentTypeSelectedForPreview =
-    documentTypeMap[documentSelectedForPreview];
-
   const isPetitionFile =
-    documentTypeSelectedForPreview === documentTypeMap.petitionFile;
+    documentSelectedForPreview === INITIAL_DOCUMENT_TYPES_FILE_MAP.petition;
+
+  let documentTabsToDisplay = Object.values(INITIAL_DOCUMENT_TYPES).map(
+    docToDisplayMetaData => {
+      return {
+        ...docToDisplayMetaData,
+        documentId: documents.find(
+          doc => doc.eventCode === docToDisplayMetaData.eventCode,
+        )?.docketEntryId,
+      };
+    },
+  );
+
+  const atpDocketTabsForDisplay = documents
+    .filter(doc => doc.eventCode === ATP_EVENT_CODE)
+    .map(doc => {
+      return {
+        ...INITIAL_DOCUMENT_TYPES.attachmentToPetition,
+        documentId: doc.docketEntryId,
+      };
+    });
+
+  documentTabsToDisplay.sort((a, b) => a.sort - b.sort);
+
+  if (atpDocketTabsForDisplay.length) {
+    const firstTwoTabs = documentTabsToDisplay.slice(0, 2);
+    const remainingTabs = documentTabsToDisplay.slice(3);
+    documentTabsToDisplay = [
+      ...firstTwoTabs,
+      ...atpDocketTabsForDisplay,
+      ...remainingTabs,
+    ];
+  }
 
   if (!isPaper) {
     documentTabsToDisplay = documentTabsToDisplay.filter(tab => {
-      if (tab.title === 'CDS') {
+      if (tab.tabTitle === 'ATP' && !atpDocketTabsForDisplay.length) {
+        return false;
+      }
+      if (tab.tabTitle === 'CDS') {
         // Do not display CDS tab if one wasn't filed electronically
         return hasCDS;
       } else {
         // Do not display APW and RQT tabs for electronic filing
-        return tab.title !== 'APW' && tab.title !== 'RQT';
+        return tab.tabTitle !== 'APW' && tab.tabTitle !== 'RQT';
       }
     });
   }
-
   return {
     documentTabsToDisplay,
     isPetitionFile,

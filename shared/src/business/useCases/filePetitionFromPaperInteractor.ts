@@ -12,7 +12,7 @@ export type FilePetitionFromPaperTypeDetailsType = {
   corporateDisclosureFile?: Blob;
   corporateDisclosureUploadProgress?: (progressEvent: any) => void;
   petitionFile: Blob;
-  petitionMetadata: CaseFromPaperType;
+  petitionMetadata: PaperCaseDataType;
   petitionUploadProgress?: (progressEvent: any) => void;
   requestForPlaceOfTrialFile?: Blob;
   requestForPlaceOfTrialUploadProgress?: (progressEvent: any) => void;
@@ -20,7 +20,7 @@ export type FilePetitionFromPaperTypeDetailsType = {
   stinUploadProgress?: (progressEvent: any) => void;
 };
 
-export type CaseFromPaperType = {
+export type PaperCaseDataType = {
   contactPrimary: {
     address1: string;
     address2: string;

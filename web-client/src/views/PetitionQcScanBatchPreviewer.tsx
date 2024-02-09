@@ -437,25 +437,32 @@ export const PetitionQcScanBatchPreviewer = connect(
           <Tabs
             bind="currentViewMetadata.documentSelectedForPreview"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
-            onSelect={() => {
-              setDocumentForPreviewSequence();
+            onSelect={tabSelected => {
+              const documentId = tabSelected?.split('_')[1];
+              setDocumentForPreviewSequence({ documentId });
             }}
           >
-            {documentTabsList.map(documentTab => (
-              <Tab
-                icon={
-                  scanHelper[`${documentTab.documentType}Completed`] && (
-                    <FontAwesomeIcon
-                      color="green"
-                      icon={['fas', 'check-circle']}
-                    />
-                  )
-                }
-                key={documentTab.documentType}
-                tabName={documentTab.documentType}
-                title={documentTab.title}
-              />
-            ))}
+            {documentTabsList.map(documentTab => {
+              const isFileUploaded =
+                scanHelper[`${documentTab.eventCode}FileCompleted`];
+
+              return (
+                <Tab
+                  data-testid={`${documentTab.eventCode}_${documentTab.documentId}`}
+                  icon={
+                    isFileUploaded && (
+                      <FontAwesomeIcon
+                        color="green"
+                        icon={['fas', 'check-circle']}
+                      />
+                    )
+                  }
+                  key={`${documentTab.eventCode}_${documentTab.documentId}`}
+                  tabName={`${documentTab.tabTitle}_${documentTab.documentId}`}
+                  title={documentTab.tabTitle}
+                />
+              );
+            })}
           </Tabs>
         );
       }

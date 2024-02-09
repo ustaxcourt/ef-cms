@@ -51,28 +51,34 @@ export const Attachments = connect(
                       <FontAwesomeIcon
                         className="pdf-preview-btn padding-0"
                         icon={['fas', 'file-pdf']}
-                        size="1x"
+                        size="sm"
                       />
                       Statement of Taxpayer Identification
                     </div>
                   </div>
                 </div>
               )}
-              {reviewSavedPetitionHelper.attachmentToPetitionFile && (
-                <div className="margin-top-3 margin-bottom-3">
-                  <div className="grid-row">
-                    <div className="grid-col flex-auto">
-                      <PDFPreviewButton
-                        data-testid="attachmentToPetitionFileButton"
-                        file={
-                          reviewSavedPetitionHelper.attachmentToPetitionFile
-                        }
-                        title="Attachment to Petition"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
+              {!!reviewSavedPetitionHelper.attachmentToPetitionFiles.length &&
+                reviewSavedPetitionHelper.attachmentToPetitionFiles.map(
+                  atpFile => {
+                    return (
+                      <div
+                        className="margin-top-3 margin-bottom-3"
+                        key={`attachmentToPetitionFileButton-${atpFile.docketEntryId}`}
+                      >
+                        <div className="grid-row">
+                          <div className="grid-col flex-auto">
+                            <PDFPreviewButton
+                              data-testid="attachmentToPetitionFileButton"
+                              file={atpFile}
+                              title="Attachment to Petition"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  },
+                )}
               {reviewSavedPetitionHelper.requestForPlaceOfTrialFile && (
                 <div className="margin-top-3 margin-bottom-3">
                   <div className="grid-row">

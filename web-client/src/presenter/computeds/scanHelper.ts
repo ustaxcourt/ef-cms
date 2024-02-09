@@ -1,12 +1,12 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { getScanModeLabel } from '../../utilities/getScanModeLabel';
 import { state } from '@web-client/presenter/app.cerebral';
 
-const getCaseDocumentByDocumentType = ({ documents, documentType }) => {
-  return documents?.find(doc => doc.documentType === documentType);
+const getCaseDocumentByEventCode = ({ documents, eventCode }) => {
+  return documents?.find(doc => doc.eventCode === eventCode);
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const scanHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -14,61 +14,54 @@ export const scanHelper = (
   // Master switch for the time being
   const scanFeatureEnabled = true;
 
-  const { INITIAL_DOCUMENT_TYPES_MAP, SCAN_MODES } =
+  const { INITIAL_DOCUMENT_TYPES, SCAN_MODES } =
     applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const formCaseDocuments = get(state.form.docketEntries);
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
 
-  let applicationForWaiverOfFilingFeeFileCompleted;
-  let petitionFileCompleted;
-  let attachmentToPetitionFileCompleted;
-  let corporateDisclosureFileCompleted;
-  let stinFileCompleted;
-  let requestForPlaceOfTrialFileCompleted;
-
-  applicationForWaiverOfFilingFeeFileCompleted =
+  const APWFileCompleted =
     !!get(state.form.applicationForWaiverOfFilingFeeFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType:
-        INITIAL_DOCUMENT_TYPES_MAP.applicationForWaiverOfFilingFeeFile,
+    !!getCaseDocumentByEventCode({
       documents: formCaseDocuments,
+      eventCode:
+        INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
     });
 
-  petitionFileCompleted =
+  const PFileCompleted =
     !!get(state.form.petitionFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.petitionFile,
+    !!getCaseDocumentByEventCode({
       documents: formCaseDocuments,
+      eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
     });
 
-  attachmentToPetitionFileCompleted =
+  const ATPFileCompleted =
     !!get(state.form.attachmentToPetitionFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.attachmentToPetitionFile,
+    !!getCaseDocumentByEventCode({
       documents: formCaseDocuments,
+      eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     });
 
-  corporateDisclosureFileCompleted =
+  const DISCFileCompleted =
     !!get(state.form.corporateDisclosureFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.corporateDisclosureFile,
+    !!getCaseDocumentByEventCode({
       documents: formCaseDocuments,
+      eventCode: INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
     });
 
-  stinFileCompleted =
+  const STINFileCompleted =
     !!get(state.form.stinFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.stinFile,
+    !!getCaseDocumentByEventCode({
       documents: formCaseDocuments,
+      eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
     });
 
-  requestForPlaceOfTrialFileCompleted =
+  const RQTFileCompleted =
     !!get(state.form.requestForPlaceOfTrialFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.requestForPlaceOfTrialFile,
+    !!getCaseDocumentByEventCode({
       documents: formCaseDocuments,
+      eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
     });
 
   const scanModeOptions = Object.keys(SCAN_MODES).map(scanModeKey => {
@@ -80,22 +73,22 @@ export const scanHelper = (
   });
 
   return {
-    applicationForWaiverOfFilingFeeFileCompleted,
-    attachmentToPetitionFileCompleted,
-    corporateDisclosureFileCompleted,
+    APWFileCompleted,
+    ATPFileCompleted,
+    DISCFileCompleted,
+    PFileCompleted,
+    RQTFileCompleted,
+    STINFileCompleted,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
     hasScanFeature: !!(
       user &&
       user.role &&
       applicationContext.getUtilities().isInternalUser(user.role)
     ),
-    petitionFileCompleted,
-    requestForPlaceOfTrialFileCompleted,
     scanFeatureEnabled,
     scanModeOptions,
     showScannerSourceModal:
       get(state.modal.showModal) === 'SelectScannerSourceModal',
     sources: get(state.scanner.sources),
-    stinFileCompleted,
   };
 };

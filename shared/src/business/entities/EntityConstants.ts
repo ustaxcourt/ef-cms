@@ -228,6 +228,8 @@ export const TODAYS_ORDERS_SORT_DEFAULT = TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
 export const STIN_DOCKET_ENTRY_TYPE = {
   documentType: 'Statement of Taxpayer Identification',
   eventCode: 'STIN',
+  sort: 1,
+  tabTitle: 'STIN',
 };
 
 const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
@@ -634,29 +636,39 @@ export const INITIAL_DOCUMENT_TYPES = {
     documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
+    tabTitle: 'APW',
+    sort: 5,
   },
   corporateDisclosure: {
     documentTitle: 'Corporate Disclosure Statement',
     documentType: 'Corporate Disclosure Statement',
     eventCode: 'DISC',
+    tabTitle: 'CDS',
+    sort: 4,
   },
   petition: {
     documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
+    tabTitle: 'Petition',
+    sort: 0,
   },
   requestForPlaceOfTrial: {
     documentTitle: 'Request for Place of Trial at [Place]',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
+    tabTitle: 'RQT',
+    sort: 3,
   },
   stin: STIN_DOCKET_ENTRY_TYPE,
   attachmentToPetition: {
     documentTitle: 'Attachment to Petition',
     documentType: 'Attachment to Petition',
     eventCode: 'ATP',
+    tabTitle: 'ATP',
+    sort: 2,
   },
-};
+} as const;
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
@@ -666,33 +678,6 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   stin: 'stinFile',
   attachmentToPetition: 'attachmentToPetitionFile',
 };
-
-export const INITIAL_FILING_DOCUMENT_TABS = [
-  {
-    documentType: 'petitionFile',
-    title: 'Petition',
-  },
-  {
-    documentType: 'stinFile',
-    title: 'STIN',
-  },
-  {
-    documentType: 'attachmentToPetitionFile',
-    title: 'ATP',
-  },
-  {
-    documentType: 'requestForPlaceOfTrialFile',
-    title: 'RQT',
-  },
-  {
-    documentType: 'corporateDisclosureFile',
-    title: 'CDS',
-  },
-  {
-    documentType: 'applicationForWaiverOfFilingFeeFile',
-    title: 'APW',
-  },
-] as const;
 
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:

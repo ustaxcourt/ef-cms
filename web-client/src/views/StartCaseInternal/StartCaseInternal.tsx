@@ -5,6 +5,10 @@ import { ErrorNotification } from './../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './../FormCancelModalDialog';
+import {
+  INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_FILE_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { IRSNotice } from '../IRSNotice';
 import { Parties } from './Parties';
 import { ScanBatchPreviewer } from './../ScanBatchPreviewer';
@@ -17,7 +21,6 @@ import React from 'react';
 export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
-    documentTabs: state.constants.INITIAL_FILING_DOCUMENT_TABS,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
@@ -26,12 +29,21 @@ export const StartCaseInternal = connect(
   },
   function StartCaseInternal({
     documentSelectedForScan,
-    documentTabs,
     formCancelToggleCancelSequence,
     showModal,
     submitPetitionFromPaperSequence,
     validatePetitionFromPaperSequence,
   }) {
+    const documentTabs = Object.keys(INITIAL_DOCUMENT_TYPES)
+      .map(key => {
+        const tab = INITIAL_DOCUMENT_TYPES[key];
+        return {
+          ...tab,
+          documentType: INITIAL_DOCUMENT_TYPES_FILE_MAP[key],
+        };
+      })
+      .sort((a, b) => a.sort - b.sort);
+
     return (
       <>
         <BigHeader text="Create Case" />
