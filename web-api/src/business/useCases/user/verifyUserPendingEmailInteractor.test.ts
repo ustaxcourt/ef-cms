@@ -2,11 +2,11 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getContactPrimary } from '../../entities/cases/Case';
-import { validUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import { validUser } from '../../../../../shared/src/test/mockUsers';
 import { verifyUserPendingEmailInteractor } from './verifyUserPendingEmailInteractor';
 
 describe('verifyUserPendingEmailInteractor', () => {
