@@ -2,6 +2,7 @@ import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm
 
 describe('ChangePasswordForm', () => {
   const email = 'updateMyPassword@example.com';
+
   it('should be valid when all required fields are present and password meets requirements', () => {
     const validChangePasswordForm = {
       email,
@@ -9,6 +10,7 @@ describe('ChangePasswordForm', () => {
     };
     validChangePasswordForm['confirmPassword'] =
       validChangePasswordForm.password;
+
     const changePasswordForm = new ChangePasswordForm(validChangePasswordForm);
 
     expect(changePasswordForm.isValid()).toBe(true);
@@ -21,6 +23,7 @@ describe('ChangePasswordForm', () => {
       email,
       password: 'Testing2$',
     };
+
     const changePasswordForm = new ChangePasswordForm(
       inValidChangePasswordForm,
     );
@@ -37,6 +40,7 @@ describe('ChangePasswordForm', () => {
         confirmPassword: 'TestPassword!1',
         email,
       };
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );
@@ -52,6 +56,7 @@ describe('ChangePasswordForm', () => {
         email,
         password: 'TestPassword!1',
       };
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );
@@ -67,6 +72,7 @@ describe('ChangePasswordForm', () => {
         confirmPassword: 'TestPassword!1',
         password: 'TestPassword!1',
       };
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );
@@ -86,6 +92,7 @@ describe('ChangePasswordForm', () => {
       };
       inValidChangePasswordForm['confirmPassword'] =
         inValidChangePasswordForm.password;
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );
@@ -120,6 +127,7 @@ describe('ChangePasswordForm', () => {
       };
       inValidChangePasswordForm['confirmPassword'] =
         inValidChangePasswordForm.password;
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );
@@ -137,6 +145,7 @@ describe('ChangePasswordForm', () => {
       };
       inValidChangePasswordForm['confirmPassword'] =
         inValidChangePasswordForm.password;
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );
@@ -154,6 +163,7 @@ describe('ChangePasswordForm', () => {
       };
       inValidChangePasswordForm['confirmPassword'] =
         inValidChangePasswordForm.password;
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );
@@ -171,6 +181,7 @@ describe('ChangePasswordForm', () => {
       };
       inValidChangePasswordForm['confirmPassword'] =
         inValidChangePasswordForm.password;
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );
@@ -189,6 +200,7 @@ describe('ChangePasswordForm', () => {
       };
       inValidChangePasswordForm['confirmPassword'] =
         inValidChangePasswordForm.password;
+
       const changePasswordForm = new ChangePasswordForm(
         inValidChangePasswordForm,
       );

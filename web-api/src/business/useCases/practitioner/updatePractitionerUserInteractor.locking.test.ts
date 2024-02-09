@@ -1,12 +1,12 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import {
   MOCK_PRACTITIONER,
   admissionsClerkUser,
-} from '../../../test/mockUsers';
+} from '../../../../../shared/src/test/mockUsers';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   handleLockError,
