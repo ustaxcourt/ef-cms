@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { forEach, set } from 'lodash';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
+import qs from 'qs';
 import route from 'riot-route';
 
 const REPORT_PATHS_DICTIONARY: {
@@ -836,7 +837,12 @@ const router = {
     );
 
     registerRoute('/confirm-signup?..', () => {
-      const { confirmationCode, email, userId } = route.query();
+      const { confirmationCode, email, userId } = qs.parse(
+        window.location.search,
+        {
+          ignoreQueryPrefix: true,
+        },
+      );
       return app.getSequence('confirmSignUpSequence')({
         confirmationCode,
         email,

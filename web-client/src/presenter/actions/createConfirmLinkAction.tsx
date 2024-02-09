@@ -13,7 +13,7 @@ export const createConfirmLinkAction = ({
       email: props.email,
       userId: props.userId,
     },
-    { encode: false },
+    { encode: true },
   );
 
   const confirmationLink = `http://localhost:1234/confirm-signup?${queryString}`;
