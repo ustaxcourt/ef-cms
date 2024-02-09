@@ -113,7 +113,8 @@ describe('petitionQcHelper', () => {
       expect(documentTabsToDisplay).toEqual([
         initialFilingDocumentTabs[0], // Petition
         initialFilingDocumentTabs[1], // STIN
-        initialFilingDocumentTabs[3], // CDS
+        initialFilingDocumentTabs[2], // ATP
+        initialFilingDocumentTabs[4], // CDS
       ]);
     });
 
@@ -141,6 +142,7 @@ describe('petitionQcHelper', () => {
       expect(documentTabsToDisplay).toEqual([
         initialFilingDocumentTabs[0], // Petition
         initialFilingDocumentTabs[1], // STIN
+        initialFilingDocumentTabs[2], // ATP
       ]);
     });
   });

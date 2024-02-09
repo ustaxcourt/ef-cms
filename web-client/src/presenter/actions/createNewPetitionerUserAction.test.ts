@@ -180,6 +180,44 @@ describe('createNewPetitionerUserAction', () => {
     });
   });
 
+  it('should call the error path when the interactor throws an error because email already in system and the email is unconfirmed', async () => {
+    applicationContext
+      .getUseCases()
+      .signUpUserInteractor.mockRejectedValueOnce({
+        originalError: { response: { data: 'User exists, email unconfirmed' } },
+      });
+
+    const FORM = {
+      confirmPassword: TEST_CONFIRM_PASSWORD,
+      email: TEST_EMAIL,
+      name: TEST_NAME,
+      password: TEST_PASSWORD,
+    };
+
+    const cognitoLoginUrl = 'cognitoLoginUrl';
+    const cognitoRequestPasswordResetUrl = 'cognitoRequestPasswordResetUrl';
+
+    await runAction(createNewPetitionerUserAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        cognitoLoginUrl,
+        cognitoRequestPasswordResetUrl,
+        form: FORM,
+      },
+    });
+
+    expect(mockErrorPath.mock.calls[0][0]).toEqual({
+      alertError: {
+        alertType: 'error',
+        message:
+          "The email address is associated with an account but is not verified. We sent an email with a link to verify the email address. If you don't see it, check your spam folder. If you're still having trouble, please contact <a href='mailto:dawson.support@ustaxcourt.gov'>dawson.support@ustaxcourt.gov</a>.",
+        title: 'Email address not verified',
+      },
+    });
+  });
+
   it('should call the error path when the interactor throws an error cognito throws', async () => {
     applicationContext
       .getUseCases()

@@ -17,6 +17,7 @@ import React from 'react';
 export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
+    documentTabs: state.constants.INITIAL_FILING_DOCUMENT_TABS,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
@@ -25,6 +26,7 @@ export const StartCaseInternal = connect(
   },
   function StartCaseInternal({
     documentSelectedForScan,
+    documentTabs,
     formCancelToggleCancelSequence,
     showModal,
     submitPetitionFromPaperSequence,
@@ -75,28 +77,7 @@ export const StartCaseInternal = connect(
               </div>
               <div className="grid-col-7">
                 <ScanBatchPreviewer
-                  documentTabs={[
-                    {
-                      documentType: 'petitionFile',
-                      title: 'Petition',
-                    },
-                    {
-                      documentType: 'stinFile',
-                      title: 'STIN',
-                    },
-                    {
-                      documentType: 'requestForPlaceOfTrialFile',
-                      title: 'RQT',
-                    },
-                    {
-                      documentType: 'corporateDisclosureFile',
-                      title: 'CDS',
-                    },
-                    {
-                      documentType: 'applicationForWaiverOfFilingFeeFile',
-                      title: 'APW',
-                    },
-                  ]}
+                  documentTabs={documentTabs}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
                   validateSequence={validatePetitionFromPaperSequence}
