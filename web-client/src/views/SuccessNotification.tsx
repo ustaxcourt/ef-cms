@@ -9,6 +9,16 @@ type SuccessNotificationProps = {
   isDismissible?: boolean;
 };
 
+type AlertSuccess = {
+  linkText?: string;
+  linkUrl?: string;
+  message?: string | React.ReactNode;
+  metaData?: string;
+  newTab?: string;
+  overwritable?: boolean;
+  title?: string;
+};
+
 const successNotificationDeps = {
   alertSuccess: state.alertSuccess,
   dismissAlertSequence: sequences.dismissAlertSequence,
@@ -21,8 +31,12 @@ export const SuccessNotification = connect<
   successNotificationDeps,
   function SuccessNotification({
     alertSuccess,
-    dismissAlertSequence,
+    dismissAlertSequence = sequences.dismissAlertSequence,
     isDismissible = true,
+  }: {
+    alertSuccess?: AlertSuccess;
+    dismissAlertSequence?: Function;
+    isDismissible?: boolean;
   }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
@@ -98,5 +112,3 @@ export const SuccessNotification = connect<
     );
   },
 );
-
-SuccessNotification.displayName = 'SuccessNotification';

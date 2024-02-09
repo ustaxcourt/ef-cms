@@ -6,7 +6,6 @@ export type WorkerMessage = {
   user: {
     role: string;
     userId: string;
-    email: string;
     name: string;
   };
 };

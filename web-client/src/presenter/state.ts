@@ -552,6 +552,7 @@ export const baseState = {
   advancedSearchTab: 'case',
   alertError: undefined,
   alertSuccess: undefined,
+  alertWarning: undefined,
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
