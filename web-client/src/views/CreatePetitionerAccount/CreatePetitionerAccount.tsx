@@ -9,7 +9,7 @@ export const CreatePetitionerAccount = connect({}, () => {
   return (
     <>
       <section className="usa-section">
-        <div className="grid-container padding-y-5">
+        <div className="grid-container grid-gap-lg">
           <div className="grid-row">
             <div className="grid-col-12">
               <ErrorNotification />
@@ -17,7 +17,7 @@ export const CreatePetitionerAccount = connect({}, () => {
             </div>
           </div>
 
-          <div className="grid-row bg-white padding-x-5 padding-y-4">
+          <div className="grid-row bg-white padding-x-5 padding-y-4 create-petitioner-account">
             <CreatePetitionerAccountForm />
             <CreatePetitionerAccountInfo />
           </div>
