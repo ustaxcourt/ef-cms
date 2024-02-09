@@ -67,7 +67,7 @@ export const HeaderPublic = connect(
                   Welcome to DAWSON{' '}
                   {isTerminalUser && ': US Tax Court Terminal'}
                 </h1>
-                {!headerPublicHelper.onCreationPage && (
+                {headerPublicHelper && !headerPublicHelper.onCreationPage && (
                   <>
                     <div className="login-container">
                       <Button
@@ -88,7 +88,8 @@ export const HeaderPublic = connect(
                     </div>
                   </>
                 )}
-                {!headerPublicHelper.onCreationPage &&
+                {headerPublicHelper &&
+                  !headerPublicHelper.onCreationPage &&
                   !headerPublicHelper.onVerificationSentPage && (
                     <>
                       <div className="create-container">

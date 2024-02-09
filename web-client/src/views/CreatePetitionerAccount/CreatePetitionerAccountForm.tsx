@@ -34,13 +34,12 @@ export const CreatePetitionerAccountForm = connect(
     return (
       <>
         <div
-          className="create-petitioner-account create-petitioner-form padding-x-205 margin-bottom-4 flex-1"
+          className="create-petitioner-form padding-x-205 margin-bottom-4 flex-1"
           style={{ width: 'fit-content' }}
         >
           <div>
             <h1 className="margin-bottom-1">Create Petitioner Account</h1>
             <form
-              style={{ width: '90%' }}
               onSubmit={e => {
                 e.preventDefault();
                 submitCreatePetitionerAccountFormSequence();

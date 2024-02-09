@@ -1030,6 +1030,12 @@ header.usa-header {
     max-width: unset;
   }
 
+  @media only screen and (min-width: $medium-screen) {
+    form {
+      max-width: 90%
+    }
+  }
+
   h1,
   h2 {
     font-family: inherit;
