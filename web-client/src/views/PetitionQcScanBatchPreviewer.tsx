@@ -431,6 +431,11 @@ export const PetitionQcScanBatchPreviewer = connect(
       );
     };
 
+    const getDocumentId = (tabSelected: string): string | undefined => {
+      const documentId = tabSelected.split('_')[1];
+      return documentId === 'undefined' ? undefined : documentId;
+    };
+
     const renderTabs = documentTabsList => {
       if (documentTabsList && documentTabsList.length > 1) {
         return (
@@ -438,7 +443,7 @@ export const PetitionQcScanBatchPreviewer = connect(
             bind="currentViewMetadata.documentSelectedForPreview"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
             onSelect={tabSelected => {
-              const documentId = tabSelected?.split('_')[1];
+              const documentId = getDocumentId(tabSelected);
               setDocumentForPreviewSequence({ documentId });
             }}
           >
