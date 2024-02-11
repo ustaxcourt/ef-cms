@@ -164,8 +164,12 @@ function handleFileSelectionAndValidation({
   updateFormValueSequence: Function;
   validationSequence: Function;
 }): false | undefined {
+  const filesArr = Array.from(files);
+
+  if (!filesArr.length) removeFiles(inputName, updateFormValueSequence);
+
   const maxFileUploads = 5;
-  if (Array.from(files).length > maxFileUploads) {
+  if (filesArr.length > maxFileUploads) {
     setTimeout(() => {
       removeFiles(inputName, updateFormValueSequence);
       alert('Maximum file limit is 5.');
@@ -173,7 +177,7 @@ function handleFileSelectionAndValidation({
     return false;
   }
 
-  const filesExceedingSizeLimit = Array.from(files)
+  const filesExceedingSizeLimit = filesArr
     .map(capturedFile => {
       if (capturedFile.size >= MAX_FILE_SIZE_BYTES) {
         return capturedFile.name;
