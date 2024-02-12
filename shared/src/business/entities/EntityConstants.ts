@@ -228,6 +228,8 @@ export const TODAYS_ORDERS_SORT_DEFAULT = TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
 export const STIN_DOCKET_ENTRY_TYPE = {
   documentType: 'Statement of Taxpayer Identification',
   eventCode: 'STIN',
+  sort: 1,
+  tabTitle: 'STIN',
 };
 
 const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
@@ -629,30 +631,44 @@ export const FILTER_OPTIONS = Object.values(
 );
 export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
-// TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
+    tabTitle: 'APW',
+    sort: 5,
   },
   corporateDisclosure: {
     documentTitle: 'Corporate Disclosure Statement',
     documentType: 'Corporate Disclosure Statement',
     eventCode: 'DISC',
+    tabTitle: 'CDS',
+    sort: 4,
   },
   petition: {
     documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
+    tabTitle: 'Petition',
+    sort: 0,
   },
   requestForPlaceOfTrial: {
     documentTitle: 'Request for Place of Trial at [Place]',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
+    tabTitle: 'RQT',
+    sort: 3,
   },
   stin: STIN_DOCKET_ENTRY_TYPE,
-};
+  attachmentToPetition: {
+    documentTitle: 'Attachment to Petition',
+    documentType: 'Attachment to Petition',
+    eventCode: 'ATP',
+    tabTitle: 'ATP',
+    sort: 2,
+  },
+} as const;
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
@@ -660,11 +676,14 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   petition: 'petitionFile',
   requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
   stin: 'stinFile',
+  attachmentToPetition: 'attachmentToPetitionFile',
 };
 
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  attachmentToPetitionFile:
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
   corporateDisclosureFile:
     INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
   petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -1543,8 +1562,8 @@ export const DOCKET_ENTRY_SEALED_TO_TYPES = {
   PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry if they are associated
 };
 
-export const ASCENDING = 'asc';
-export const DESCENDING = 'desc';
+export const ASCENDING: 'asc' = 'asc';
+export const DESCENDING: 'desc' = 'desc';
 
 export const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
 export const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';

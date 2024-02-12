@@ -3,27 +3,19 @@ export const navigateTo = (username: string) => {
 };
 
 export const fillInAndSubmitForm = () => {
-  cy.fixture('w3-dummy.pdf', null)
-    .then(Cypress.Buffer.from)
-    .then(pdfFile => {
-      const fileOptions = {
-        contents: pdfFile,
-        fileName: 'w3-dummy.pdf',
-        lastModified: Date.now(),
-        mimeType: 'application/pdf',
-      };
+  const w3Dummy = 'w3-dummy.pdf'; // this comes from the fixtures folder
 
-      // wizard step 1
-      cy.get('input#stin-file').should('be.enabled').selectFile(fileOptions);
-      cy.get('[data-testid="upload-file-success"]');
-      cy.get('button#submit-case').trigger('click');
+  // wizard step 1
+  cy.get('input#stin-file').should('be.enabled').attachFile(w3Dummy);
+  cy.get('[data-testid="upload-file-success"]');
+  cy.get('button#submit-case').trigger('click');
 
-      // wizard step 2
-      cy.get('#petition-file').selectFile(fileOptions);
-    });
-
+  // wizard step 2
+  cy.get('#petition-file').attachFile(w3Dummy);
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get('#irs-notice-radios label').first().click();
+  cy.get('[data-testid="atp-files-upload"]').scrollIntoView();
+  cy.get('[data-testid="atp-files-upload"]').attachFile([w3Dummy, w3Dummy]);
   cy.get('#case-type').scrollIntoView();
   cy.get('#case-type').select('Notice of Deficiency');
   cy.get('button#submit-case').trigger('click');
@@ -61,6 +53,7 @@ export const fillInAndSubmitForm = () => {
   cy.get('button#submit-case').click();
 
   // step 5
+  cy.get('[data-testid="atp-preview-button-0"]').should('exist');
   cy.get('button#submit-case').scrollIntoView();
   cy.get('button#submit-case').click();
 

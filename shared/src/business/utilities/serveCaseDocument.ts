@@ -1,23 +1,63 @@
+import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES, ROLES } from '../entities/EntityConstants';
-
-/**
- *
- * @param {object} applicationContext the applicationContext
- * @param {object} caseEntity the case entity
- * @param {string} initialDocumentTypeKey the initialDocumentTypeKey
- */
 
 export const serveCaseDocument = async ({
   applicationContext,
   caseEntity,
   initialDocumentTypeKey,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: Case;
+  initialDocumentTypeKey: string;
 }) => {
   const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
+  if (
+    initialDocumentType.eventCode ===
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+  ) {
+    const initialDocketEntries = caseEntity.docketEntries.filter(
+      doc => doc.documentType === initialDocumentType.documentType,
+    );
 
-  const initialDocketEntry = caseEntity.docketEntries.find(
-    doc => doc.documentType === initialDocumentType.documentType,
-  );
+    const documentServiceCalls = initialDocketEntries.map(
+      initialDocketEntry => {
+        return serveDocuments({
+          applicationContext,
+          caseEntity,
+          initialDocketEntry,
+        });
+      },
+    );
+    try {
+      await Promise.all(documentServiceCalls);
+    } catch (e) {
+      applicationContext.logger.error(
+        'Error sending service case documents to IRS',
+        e,
+      );
+    }
+  } else {
+    const initialDocketEntry = caseEntity.docketEntries.find(
+      doc => doc.documentType === initialDocumentType.documentType,
+    );
+    await serveDocuments({
+      applicationContext,
+      caseEntity,
+      initialDocketEntry,
+    });
+  }
+};
 
+const serveDocuments = ({
+  applicationContext,
+  caseEntity,
+  initialDocketEntry,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: Case;
+  initialDocketEntry: DocketEntry;
+}) => {
   if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
     initialDocketEntry.setAsServed([
       {
@@ -31,7 +71,7 @@ export const serveCaseDocument = async ({
       initialDocketEntry.documentType ===
       INITIAL_DOCUMENT_TYPES.petition.documentType
     ) {
-      await applicationContext
+      return applicationContext
         .getUseCaseHelpers()
         .sendIrsSuperuserPetitionEmail({
           applicationContext,
@@ -39,7 +79,7 @@ export const serveCaseDocument = async ({
           docketEntryId: initialDocketEntry.docketEntryId,
         });
     } else {
-      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      return applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,
         docketEntryId: initialDocketEntry.docketEntryId,

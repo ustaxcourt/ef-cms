@@ -1,11 +1,15 @@
+import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setupPercentDone = (files, store) => {
-  const loadedAmounts = {};
+export const setupPercentDone = <T extends Record<string, any | undefined>>(
+  files: T,
+  store: any,
+): Record<keyof T, (progressEvent: any) => void> => {
+  const loadedAmounts: Record<string, number> = {};
   // O.K. to use Date constructor for calculating time duration
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const startTime = new Date();
-  const totalSizes = {};
+  const totalSizes: Record<string, number> = {};
 
   const calculateTotalSize = () => {
     return Object.keys(loadedAmounts).reduce((acc, key) => {
@@ -26,7 +30,7 @@ export const setupPercentDone = (files, store) => {
   const createOnUploadProgress = key => {
     loadedAmounts[key] = 0;
     return progressEvent => {
-      const { isDone, loaded, total } = progressEvent;
+      const { isDone, isHavingSystemIssues, loaded, total } = progressEvent;
       if (total) {
         totalSizes[key] = total;
       }
@@ -43,6 +47,10 @@ export const setupPercentDone = (files, store) => {
       const percent = parseInt((uploadedBytes / totalSize) * 100);
       store.set(state.fileUploadProgress.percentComplete, percent);
       store.set(state.fileUploadProgress.timeRemaining, timeRemaining);
+      store.set(
+        state.fileUploadProgress.isHavingSystemIssues,
+        isHavingSystemIssues,
+      );
     };
   };
 
@@ -50,13 +58,17 @@ export const setupPercentDone = (files, store) => {
   store.set(state.fileUploadProgress.timeRemaining, Number.POSITIVE_INFINITY);
   store.set(state.fileUploadProgress.isUploading, true);
 
-  const uploadProgressCallbackMap = {};
+  const uploadProgressCallbackMap = {} as any;
+
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
     uploadProgressCallbackMap[key] = createOnUploadProgress(key);
   });
 
-  return uploadProgressCallbackMap;
+  return uploadProgressCallbackMap as Record<
+    keyof T,
+    (progressEvent: any) => void
+  >;
 };
 
 export const createCaseFromPaperAction = async ({
@@ -65,16 +77,20 @@ export const createCaseFromPaperAction = async ({
   path,
   store,
 }: ActionProps) => {
+  const petitionMetadata: PaperCaseDataType = get(state.form);
+
   const {
     applicationForWaiverOfFilingFeeFile,
+    attachmentToPetitionFile,
     corporateDisclosureFile,
     petitionFile,
     requestForPlaceOfTrialFile,
     stinFile,
-  } = get(state.form);
+  } = petitionMetadata;
 
   const progressFunctions = setupPercentDone(
     {
+      atp: attachmentToPetitionFile,
       corporate: corporateDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
@@ -84,8 +100,7 @@ export const createCaseFromPaperAction = async ({
     store,
   );
 
-  let caseDetail;
-
+  let caseDetail: RawCase;
   try {
     caseDetail = await applicationContext
       .getUseCases()
@@ -93,10 +108,12 @@ export const createCaseFromPaperAction = async ({
         applicationForWaiverOfFilingFeeFile,
         applicationForWaiverOfFilingFeeUploadProgress:
           progressFunctions.waiverOfFilingFee,
+        atpUploadProgress: progressFunctions.atp,
+        attachmentToPetitionFile,
         corporateDisclosureFile,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
         petitionFile,
-        petitionMetadata: get(state.form),
+        petitionMetadata,
         petitionUploadProgress: progressFunctions.petition,
         requestForPlaceOfTrialFile,
         requestForPlaceOfTrialUploadProgress: progressFunctions.trial,

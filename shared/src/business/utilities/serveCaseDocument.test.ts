@@ -1,3 +1,4 @@
+import { ATP_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
 import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -75,12 +76,42 @@ describe('serveCaseDocument', () => {
     });
   });
 
+  it('should serve and send service emails for each attachment to petitions document', async () => {
+    mockCase = new Case(
+      {
+        ...MOCK_CASE,
+        docketEntries: [
+          ATP_DOCKET_ENTRY,
+          {
+            ...ATP_DOCKET_ENTRY,
+            docketEntryId: '33084b8e-7e7f-4864-abc8-0118df12e662',
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    await serveCaseDocument({
+      applicationContext,
+      caseEntity: mockCase,
+      initialDocumentTypeKey: 'attachmentToPetition',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalledTimes(2);
+  });
+
   it('should send the IRS superuser email service for the served petition document', async () => {
     await serveCaseDocument({
       applicationContext,
       caseEntity: mockCase,
       initialDocumentTypeKey: 'petition',
     });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail,
+    ).toHaveBeenCalledTimes(1);
 
     expect(
       applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail.mock

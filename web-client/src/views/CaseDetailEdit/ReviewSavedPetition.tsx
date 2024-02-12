@@ -1,12 +1,12 @@
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
+import { Attachments } from '@web-client/views/CaseDetailEdit/Attachments';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
+import { IRSNoticeCaseReview } from '@web-client/views/CaseDetailEdit/IRSNoticeCaseReview';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
-import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -242,169 +242,8 @@ export const ReviewSavedPetition = connect(
 
           <div className="grid-container padding-x-0 create-case-review">
             <div className="grid-row grid-gap">
-              <div className="tablet:grid-col-7 margin-bottom-4">
-                <div className="card height-full margin-bottom-0">
-                  <div className="content-wrapper">
-                    <h3 className="underlined" id="irs-notice-card">
-                      IRS Notice
-                      <Button
-                        link
-                        aria-label="edit IRS notice information"
-                        className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.docketNumber}/petition-qc?tab=irsNotice`}
-                        icon="edit"
-                      >
-                        Edit
-                      </Button>
-                    </h3>
-                    <div className="grid-row grid-gap margin-bottom-4">
-                      <div className="grid-col-4">
-                        <div>
-                          <span className="usa-label usa-label-display margin-bottom-0">
-                            IRS Notice provided?
-                          </span>
-                          {reviewSavedPetitionHelper.hasIrsNoticeFormatted}
-                        </div>
-                      </div>
-                      <div className="grid-col-4">
-                        <span className="usa-label usa-label-display">
-                          Type of notice/case
-                        </span>
-                        {form.caseType}
-                      </div>
-                      <div className="grid-col-4">
-                        {reviewSavedPetitionHelper.shouldShowIrsNoticeDate && (
-                          <div>
-                            <span className="usa-label usa-label-display">
-                              Date of notice
-                            </span>
-                            {reviewSavedPetitionHelper.irsNoticeDateFormatted}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    {reviewSavedPetitionHelper.showStatistics && (
-                      <>
-                        <h4>Statistics</h4>
-                        <table className="usa-table ustc-table responsive-table">
-                          <thead>
-                            <tr>
-                              <th>Year/Period</th>
-                              <th>Deficiency</th>
-                              <th>Total penalties</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {reviewSavedPetitionHelper.formattedStatistics.map(
-                              statistic => (
-                                <tr
-                                  key={`${statistic.formattedDate}-${statistic.formattedIrsDeficiencyAmount}`}
-                                >
-                                  <td>{statistic.formattedDate}</td>
-                                  <td>
-                                    {statistic.formattedIrsDeficiencyAmount}
-                                  </td>
-                                  <td>
-                                    {statistic.formattedIrsTotalPenalties}
-                                  </td>
-                                </tr>
-                              ),
-                            )}
-                          </tbody>
-                        </table>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="tablet:grid-col-5 margin-bottom-4">
-                <div className="card height-full margin-bottom-0">
-                  <div className="content-wrapper">
-                    <h3 className="underlined" id="attachments-card">
-                      Attachments
-                      <Button
-                        link
-                        aria-label="edit parties"
-                        className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.docketNumber}/petition-qc?tab=partyInfo`}
-                        icon="edit"
-                      >
-                        Edit
-                      </Button>
-                    </h3>
-                    <div>
-                      {reviewSavedPetitionHelper.petitionFile && (
-                        <div className="margin-top-3 margin-bottom-2">
-                          <div className="grid-row">
-                            <div className="grid-col flex-auto">
-                              <PDFPreviewButton
-                                file={reviewSavedPetitionHelper.petitionFile}
-                                title="Petition"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {reviewSavedPetitionHelper.stinFile && (
-                        <div className="margin-top-3 margin-bottom-2">
-                          <div className="grid-row">
-                            <div className="grid-col flex-auto">
-                              <FontAwesomeIcon
-                                className="pdf-preview-btn padding-0"
-                                icon={['fas', 'file-pdf']}
-                                size="1x"
-                              />
-                              Statement of Taxpayer Identification
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {reviewSavedPetitionHelper.requestForPlaceOfTrialFile && (
-                        <div className="margin-top-3 margin-bottom-3">
-                          <div className="grid-row">
-                            <div className="grid-col flex-auto">
-                              <PDFPreviewButton
-                                file={
-                                  reviewSavedPetitionHelper.requestForPlaceOfTrialFile
-                                }
-                                title="Request for Place of Trial"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {reviewSavedPetitionHelper.corporateDisclosureFile && (
-                        <div className="margin-top-3 margin-bottom-3">
-                          <div className="grid-row">
-                            <div className="grid-col flex-auto">
-                              <PDFPreviewButton
-                                file={
-                                  reviewSavedPetitionHelper.corporateDisclosureFile
-                                }
-                                title="Corporate Disclosure Statement"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {reviewSavedPetitionHelper.applicationForWaiverOfFilingFeeFile && (
-                        <div className="margin-top-3 margin-bottom-3">
-                          <div className="grid-row">
-                            <div className="grid-col flex-auto">
-                              <PDFPreviewButton
-                                file={
-                                  reviewSavedPetitionHelper.applicationForWaiverOfFilingFeeFile
-                                }
-                                title="Application for Waiver of Filing Fee"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <IRSNoticeCaseReview />
+              <Attachments />
             </div>
           </div>
 
@@ -420,6 +259,7 @@ export const ReviewSavedPetition = connect(
             </Button>
             <Button
               secondary
+              data-testid="save-case-for-later"
               onClick={() => leaveCaseForLaterServiceSequence()}
             >
               Save for Later

@@ -89,7 +89,7 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-let s3Cache;
+let s3Cache: AWS.S3 | undefined;
 let sesCache;
 let sqsCache;
 let searchClientCache: Client;
