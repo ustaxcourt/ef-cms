@@ -480,7 +480,6 @@ export const serveCaseToIrs = async (
     if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
       throw new UnauthorizedError('Unauthorized');
     }
-    // throw new Error('jtd:: something broke');
     const caseToBatch = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({

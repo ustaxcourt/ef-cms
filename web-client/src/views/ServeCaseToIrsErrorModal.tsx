@@ -16,10 +16,10 @@ export const ServeCaseToIrsErrorModal = connect(
         title={'Unable to Serve to IRS'}
       >
         <div className="file-upload-error">
-          We were unable to complete service to the IRS. Please email
+          We were unable to complete service to the IRS. Please email{' '}
           <a href="mailto:dawson.support@ustaxcourt.gov">
             dawson.support@ustaxcourt.gov
-          </a>
+          </a>{' '}
           with the docket number.
         </div>
       </ModalDialog>
