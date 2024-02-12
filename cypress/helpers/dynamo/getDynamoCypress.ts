@@ -8,7 +8,7 @@ let documentCache: DynamoDBDocument;
 export function getDocumentClient(): DynamoDBDocument {
   if (!documentCache) {
     const dynamoEndpoint =
-      cypressEnv.stage === 'local' ? 'http://localhost:8000' : undefined;
+      cypressEnv.env === 'local' ? 'http://localhost:8000' : undefined;
     dynamoCache = new DynamoDBClient({
       credentials: {
         accessKeyId: cypressEnv.accessKeyId,
