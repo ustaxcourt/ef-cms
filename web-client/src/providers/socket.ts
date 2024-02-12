@@ -13,6 +13,7 @@ export const socketProvider = ({ socketRouter }) => {
   let applicationContext;
   let socket: WebSocket;
   let pingInterval;
+  let reconnectAttempt = 0;
   // API Gateway is 10 minute idle timeout, so let's just do 1 minute ping interval
   const PING_INTERVAL = 1000 * 60;
 
@@ -43,7 +44,18 @@ export const socketProvider = ({ socketRouter }) => {
             console.log('closeEvent', closeEvent);
             stopSocket();
             if (closeEvent && closeEvent.code !== 1000) {
+              reconnectAttempt++;
+              const timeToWaitBeforeReconnect = 1000 * 2 ** reconnectAttempt;
+
+              if (reconnectAttempt > 4) {
+                reject();
+              }
+              // eslint-disable-next-line promise/param-names
+              await new Promise(resolve1 =>
+                setTimeout(resolve1, timeToWaitBeforeReconnect),
+              );
               await start();
+              reconnectAttempt = 0;
             }
           };
 
