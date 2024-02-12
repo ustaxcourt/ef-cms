@@ -87,7 +87,7 @@ describe('Unauthed user views todays orders', () => {
     const sealedDocketEntry = helper.formattedDocketEntriesOnDocketRecord.find(
       entry =>
         entry.docketEntryId === privateTestClient.draftOrders[0].docketEntryId,
-    );
+    )!;
 
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
     expect(sealedDocketEntry.showLinkToDocument).toBe(false);
@@ -119,7 +119,7 @@ describe('Unauthed user views todays orders', () => {
         entry =>
           entry.docketEntryId ===
           privateTestClient.draftOrders[0].docketEntryId,
-      );
+      )!;
 
     expect(unsealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(false);
     expect(unsealedDocketEntry.showLinkToDocument).toBe(true);
