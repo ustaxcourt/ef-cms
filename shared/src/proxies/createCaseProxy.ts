@@ -11,18 +11,10 @@ import { post } from './requests';
  * @param {string} providers.stinFileId the id of the stin file
  * @returns {Promise<*>} the promise of the api call
  */
-export const createCaseInteractor = (
-  applicationContext,
-  { corporateDisclosureFileId, petitionFileId, petitionMetadata, stinFileId },
-) => {
+export const createCaseInteractor = (applicationContext, requestBody) => {
   return post({
     applicationContext,
-    body: {
-      corporateDisclosureFileId,
-      petitionFileId,
-      petitionMetadata,
-      stinFileId,
-    },
+    body: requestBody,
     endpoint: '/cases',
   });
 };

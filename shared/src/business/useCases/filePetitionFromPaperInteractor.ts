@@ -4,11 +4,69 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
+export type FilePetitionFromPaperTypeDetailsType = {
+  attachmentToPetitionFile?: Blob;
+  applicationForWaiverOfFilingFeeFile?: Blob;
+  applicationForWaiverOfFilingFeeUploadProgress?: (progressEvent: any) => void;
+  atpUploadProgress?: (progressEvent: any) => void;
+  corporateDisclosureFile?: Blob;
+  corporateDisclosureUploadProgress?: (progressEvent: any) => void;
+  petitionFile: Blob;
+  petitionMetadata: PaperCaseDataType;
+  petitionUploadProgress?: (progressEvent: any) => void;
+  requestForPlaceOfTrialFile?: Blob;
+  requestForPlaceOfTrialUploadProgress?: (progressEvent: any) => void;
+  stinFile?: Blob;
+  stinUploadProgress?: (progressEvent: any) => void;
+};
+
+export type PaperCaseDataType = {
+  contactPrimary: {
+    address1: string;
+    address2: string;
+    address3: string;
+    city: string;
+    countryType: string;
+    name: string;
+    paperPetitionEmail: string;
+    phone: string;
+    postalCode: string;
+    state: string;
+  };
+  caseType: string;
+  caseCaption: string;
+  attachmentToPetitionFileSize?: number;
+  attachmentToPetitionFile: Blob;
+  hasVerifiedIrsNotice: boolean;
+  isPaper: boolean;
+  mailingDate: string;
+  orderDesignatingPlaceOfTrial?: boolean;
+  orderForCds: boolean;
+  stinFile?: Blob;
+  stinFileSize?: number;
+  orderForFilingFee: boolean;
+  partyType: string;
+  petitionFile: Blob;
+  petitionFileSize: number;
+  petitionPaymentStatus: string;
+  procedureType: string;
+  receivedAt: string;
+  applicationForWaiverOfFilingFeeFile?: Blob;
+  corporateDisclosureFile?: Blob;
+  requestForPlaceOfTrialFile?: Blob;
+  status: string;
+  contactSecondary?: {
+    name: string;
+  };
+};
+
 export const filePetitionFromPaperInteractor = async (
   applicationContext: any,
   {
     applicationForWaiverOfFilingFeeFile,
     applicationForWaiverOfFilingFeeUploadProgress,
+    atpUploadProgress,
+    attachmentToPetitionFile,
     corporateDisclosureFile,
     corporateDisclosureUploadProgress,
     petitionFile,
@@ -18,25 +76,20 @@ export const filePetitionFromPaperInteractor = async (
     requestForPlaceOfTrialUploadProgress,
     stinFile,
     stinUploadProgress,
-  }: {
-    applicationForWaiverOfFilingFeeFile: string;
-    applicationForWaiverOfFilingFeeUploadProgress: string;
-    corporateDisclosureFile: string;
-    corporateDisclosureUploadProgress: string;
-    petitionFile: string;
-    petitionMetadata: any;
-    petitionUploadProgress: string;
-    requestForPlaceOfTrialFile: string;
-    requestForPlaceOfTrialUploadProgress: string;
-    stinFile: string;
-    stinUploadProgress: string;
-  },
-) => {
+  }: FilePetitionFromPaperTypeDetailsType,
+): Promise<RawCase> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const petitionFileUpload = applicationContext
+    .getUseCases()
+    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+      document: petitionFile,
+      onUploadProgress: petitionUploadProgress,
+    });
 
   let applicationForWaiverOfFilingFeeUpload;
   if (applicationForWaiverOfFilingFeeFile) {
@@ -47,13 +100,6 @@ export const filePetitionFromPaperInteractor = async (
         onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
       });
   }
-
-  const petitionFileUpload = applicationContext
-    .getUseCases()
-    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: petitionFile,
-      onUploadProgress: petitionUploadProgress,
-    });
 
   let corporateDisclosureFileUpload;
   if (corporateDisclosureFile) {
@@ -85,12 +131,23 @@ export const filePetitionFromPaperInteractor = async (
       });
   }
 
+  let attachmentToPetitionFileUpload;
+  if (attachmentToPetitionFile) {
+    attachmentToPetitionFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: attachmentToPetitionFile,
+        onUploadProgress: atpUploadProgress,
+      });
+  }
+
   await Promise.all([
     applicationForWaiverOfFilingFeeUpload,
     corporateDisclosureFileUpload,
     petitionFileUpload,
     requestForPlaceOfTrialFileUpload,
     stinFileUpload,
+    attachmentToPetitionFileUpload,
   ]);
 
   return await applicationContext
@@ -98,6 +155,7 @@ export const filePetitionFromPaperInteractor = async (
     .createCaseFromPaperInteractor(applicationContext, {
       applicationForWaiverOfFilingFeeFileId:
         await applicationForWaiverOfFilingFeeUpload,
+      attachmentToPetitionFileId: await attachmentToPetitionFileUpload,
       corporateDisclosureFileId: await corporateDisclosureFileUpload,
       petitionFileId: await petitionFileUpload,
       petitionMetadata,

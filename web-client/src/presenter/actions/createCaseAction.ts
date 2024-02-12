@@ -16,17 +16,32 @@ export const createCaseAction = async ({
   path,
   store,
 }: ActionProps) => {
-  const { corporateDisclosureFile, petitionFile, stinFile } = get(state.form);
+  const petitionMetadata = get(state.form);
+  const {
+    attachmentToPetitionFiles,
+    corporateDisclosureFile,
+    petitionFile,
+    stinFile,
+  } = petitionMetadata;
 
-  const form = omit(
-    {
-      ...get(state.form),
-    },
-    'trialCities',
-  );
+  const form = omit(petitionMetadata, 'trialCities');
 
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
+
+  const atpFilesMetadata = attachmentToPetitionFiles?.map(fileName => {
+    const progressFunction = setupPercentDone(
+      {
+        atp: fileName,
+      },
+      store,
+    );
+
+    return {
+      file: fileName,
+      progressFunction: progressFunction.atp,
+    };
+  });
 
   const progressFunctions = setupPercentDone(
     {
@@ -42,6 +57,7 @@ export const createCaseAction = async ({
     filePetitionResult = await applicationContext
       .getUseCases()
       .filePetitionInteractor(applicationContext, {
+        atpFilesMetadata,
         corporateDisclosureFile,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
         petitionFile,

@@ -22,6 +22,10 @@ import {
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
+import {
+  formatCase,
+  getFormattedCaseDetail,
+} from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import {
@@ -35,7 +39,6 @@ import {
   getWorkQueueFilters,
 } from '../../shared/src/business/utilities/getWorkQueueFilters';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
-import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import {
   isLeadCase,
@@ -63,6 +66,7 @@ const utilities = {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
+  formatCase,
   formatDateString,
   formatJudgeName,
   formatNow,
