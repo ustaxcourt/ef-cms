@@ -99,7 +99,7 @@ describe('Given a petitioner with a DAWSON account', () => {
         }).then(forgotPasswordCode => {
           const queryString = qs.stringify(
             { code: forgotPasswordCode, email },
-            { encode: false },
+            { encode: true },
           );
           cy.visit(`/reset-password?${queryString}`);
         });
@@ -162,7 +162,7 @@ describe('Given a petitioner with a DAWSON account', () => {
 
             const queryString = qs.stringify(
               { code: forgotPasswordCode, email },
-              { encode: false },
+              { encode: true },
             );
             cy.visit(`/reset-password?${queryString}`);
           });

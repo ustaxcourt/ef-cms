@@ -3,6 +3,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { forgotPasswordInteractor } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
+import qs from 'qs';
 
 describe('forgotPasswordInteractor', () => {
   const OLD_ENV = process.env;
@@ -140,8 +141,11 @@ describe('forgotPasswordInteractor', () => {
   });
 
   it('should generate a forgot password code and send it to the user when user account has a valid status', async () => {
-    const expectedQueryString = `code=${expectedForgotPasswordCode}&email=${email}`;
-    const expectedVerificationLink = `https://app.${process.env.EFCMS_DOMAIN}/reset-password?${expectedQueryString}`;
+    const queryString = qs.stringify(
+      { code: expectedForgotPasswordCode, email },
+      { encode: true },
+    );
+    const expectedVerificationLink = `https://app.${process.env.EFCMS_DOMAIN}/reset-password?${queryString}`;
 
     const result = await forgotPasswordInteractor(applicationContext, {
       email,
