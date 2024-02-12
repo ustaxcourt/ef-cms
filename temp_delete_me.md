@@ -1,6 +1,4 @@
 ::: STUFF TO DO :::
-- Test cases (review ones Tenille wrote on story)
-- Move 10007 cypress tests so that run on deployed and local environments
 - Run full experimental deploy (NOT on exp1, exp2, or exp3). -> All
   - Remove switch colors step. Test that the old cognito workflow + account creation are still functional.
   - Switch colors and verify login + account creation are functional.
@@ -20,7 +18,7 @@
 - Refactor cognito so every account has and can be looked up by custom:userId. Extract application.getCognito() into application.getUserGateway();
 - Refactor getCognito to be more generic - "getAuthenticationGateway"
   - Abstract away from cognito specific syntax in interactors
-- Remove createUserInteractor() and createOrUpdateUser(). Make bulkimportjudgeusrs do its own thing.
+- Remove createUserInteractor() and createOrUpdateUser(). Make bulkimportjudgeusers do its own thing.
 - Post-Deployment: Potentially remove switch-cognito-triggers-color.js as we do not have cognito triggers. Also remove cognito triggers from terraform.
 
 
