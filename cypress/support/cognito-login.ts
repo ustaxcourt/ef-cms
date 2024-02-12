@@ -47,7 +47,7 @@ const getUserPoolId = async () => {
     MaxResults: 50,
   });
   const userPoolId = (results?.UserPools || []).find(
-    pool => pool.Name === `efcms-${cypressEnv.stage}`,
+    pool => pool.Name === `efcms-${cypressEnv.env}`,
   )?.Id;
   return userPoolId;
 };

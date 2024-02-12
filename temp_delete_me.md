@@ -1,14 +1,14 @@
 ::: STUFF TO DO :::
 - Test cases (review ones Tenille wrote on story)
 - Move 10007 cypress tests so that run on deployed and local environments
-- Run full experimental deploy (NOT on exp1, exp2, or exp3).
+- Run full experimental deploy (NOT on exp1, exp2, or exp3). -> All
   - Remove switch colors step. Test that the old cognito workflow + account creation are still functional.
   - Switch colors and verify login + account creation are functional.
 
 
 ::: SOLO :::
-- Investigate socket closure (outage, idle state, etc)
-- Convert to Encoded Query Strings for reset and forgot password like with Confirm Signup?
+- Investigate socket closure (outage, idle state, etc) -> ??
+- Convert to Encoded Query Strings for reset and forgot password like with Confirm Signup? -> Kaitlyn
 
 
 ::: QUESTIONS :::
