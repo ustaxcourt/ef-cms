@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { loginAsAdmissionsClerk } from '../../helpers/auth/login-as-helpers';
 import { logout } from '../../helpers/auth/logout';
 import { petitionsclerkServePetition } from '../../helpers/petitionsclerk-serves-petition';
 import { practitionerCreatesEletronicCase } from '../../helpers/practitioner-creates-electronic-case';
@@ -38,7 +39,7 @@ describe('change of address', () => {
       cy.get('[data-testid="modal-button-confirm"]').click();
       logout();
 
-      cy.login('admissionsclerk1');
+      loginAsAdmissionsClerk();
       searchByDocketNumberInHeader(docketNumber);
       cy.get('[data-testid="tab-case-information"] > .button-text').click();
       cy.get('[data-testid="tab-parties"] > .button-text').click();
