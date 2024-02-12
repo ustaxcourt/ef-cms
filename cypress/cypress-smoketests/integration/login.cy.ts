@@ -1,10 +1,10 @@
-import { createAPetitioner } from '../../../helpers/create-a-petitioner';
-import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
-import { cypressEnv } from '../../../helpers/env/cypressEnvironment';
+import { createAPetitioner } from '../../helpers/create-a-petitioner';
+import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 import { faker } from '@faker-js/faker';
-import { logout } from '../../../helpers/auth/logout';
+import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
-import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
+import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
 describe('Given a user with a DAWSON account', () => {
   after(() => {

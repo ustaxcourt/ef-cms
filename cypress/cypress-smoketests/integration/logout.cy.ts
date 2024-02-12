@@ -1,4 +1,4 @@
-import { cypressEnv } from '../../../helpers/env/cypressEnvironment';
+import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 
 describe('Given a user is logged in to DAWSON on a desktop', () => {
   describe('When the user clicks logout', () => {
