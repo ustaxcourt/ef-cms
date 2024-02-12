@@ -1,6 +1,10 @@
 import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 
 describe('Given a user is logged in to DAWSON on a desktop', () => {
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
   describe('When the user clicks logout', () => {
     it('Then they should be taken to the login page', () => {
       const email = 'docketclerk1@example.com';

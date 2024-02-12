@@ -12,6 +12,10 @@ describe('Given a petitioner with a DAWSON account', () => {
     cy.task('deleteAllCypressTestAccounts');
   });
 
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
   describe('When they indicate that they Forgot Password', () => {
     describe('And they type in an email address that is not associated with a DAWSON account', () => {
       it('Then they should be alerted in the same way as if the email is associated with a DAWSON account (security concern)', () => {

@@ -10,7 +10,7 @@ import {
   petitionerCreatesElectronicCase,
   petitionerCreatesEletronicCaseWithDeseasedSpouse,
 } from '../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
+import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 import { selectRedactionAcknowledgement } from '../../helpers/select-redaction-acknowledgement';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
