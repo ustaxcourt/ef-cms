@@ -416,7 +416,7 @@ const createCoversheetsForServedEntries = async ({
   caseEntity,
 }) => {
   for (const doc of caseEntity.docketEntries) {
-    if (doc.isFileAttached) {
+    if (doc.isFileAttached && !doc.isDraft) {
       const updatedDocketEntry = await applicationContext
         .getUseCases()
         .addCoversheetInteractor(applicationContext, {
