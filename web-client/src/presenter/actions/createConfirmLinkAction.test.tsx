@@ -3,6 +3,7 @@ import { createConfirmLinkAction } from '@web-client/presenter/actions/createCon
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import React from 'react';
+import qs from 'qs';
 
 describe('createConfirmLinkAction', () => {
   const email = 'something@example.com';
@@ -31,7 +32,10 @@ describe('createConfirmLinkAction', () => {
 
   it('should construct an alertSuccess message when IS_LOCAL is "true"', async () => {
     process.env.IS_LOCAL = 'true';
-    const confirmationLink = `http://localhost:1234/confirm-signup?email=${email}`;
+
+    const queryString = qs.stringify({ email }, { encode: true });
+
+    const confirmationLink = `http://localhost:1234/confirm-signup?${queryString}`;
 
     const expectedMessage = (
       <>
