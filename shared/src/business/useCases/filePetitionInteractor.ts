@@ -71,30 +71,34 @@ export const filePetitionInteractor = async (
     });
   }
 
-  const [
-    corporateDisclosureFileId,
-    petitionFileId,
-    stinFileId,
-    ...atpFileIds
-  ]: string[] = await Promise.all([
-    corporateDisclosureFileUpload,
-    petitionFileUpload,
-    stinFileUpload,
-    ...atpFilesUploads,
-  ]);
-
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .createCaseInteractor(applicationContext, {
-      atpFileIds,
+  try {
+    const [
       corporateDisclosureFileId,
       petitionFileId,
-      petitionMetadata,
       stinFileId,
-    });
+      ...atpFileIds
+    ]: string[] = await Promise.all([
+      corporateDisclosureFileUpload,
+      petitionFileUpload,
+      stinFileUpload,
+      ...atpFilesUploads,
+    ]);
 
-  return {
-    caseDetail,
-    stinFileId,
-  };
+    const caseDetail = await applicationContext
+      .getUseCases()
+      .createCaseInteractor(applicationContext, {
+        atpFileIds,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        stinFileId,
+      });
+
+    return {
+      caseDetail,
+      stinFileId,
+    };
+  } catch (error) {
+    throw new Error('Error uploading documents to file petition');
+  }
 };
