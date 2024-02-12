@@ -7,7 +7,6 @@
 
 
 ::: SOLO :::
-- Investigate socket closure (outage, idle state, etc) -> ??
 - Convert to Encoded Query Strings for reset and forgot password like with Confirm Signup? -> Kaitlyn
 
 
