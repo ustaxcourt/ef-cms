@@ -1,7 +1,7 @@
 import { externalUserSearchesDocketNumber } from '../../helpers/external-user-searches-docket-number';
 import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
+import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 
 describe(

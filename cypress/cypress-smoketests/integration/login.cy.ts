@@ -11,6 +11,10 @@ describe('Given a user with a DAWSON account', () => {
     cy.task('deleteAllCypressTestAccounts');
   });
 
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
   describe('When they login in with the correct email and password', () => {
     it('Then they should be taken to their dashboard', () => {
       cy.visit('/login');

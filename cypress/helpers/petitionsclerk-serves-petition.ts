@@ -1,4 +1,4 @@
-export function petitionsclerkServePetition(docketNumber: string) {
+export function petitionsClerkServesPetition(docketNumber: string) {
   cy.login('petitionsclerk1', `case-detail/${docketNumber}`);
   cy.get('[data-testid="document-viewer-link-P"]').click();
   cy.get('[data-testid="review-and-serve-petition"]').click();

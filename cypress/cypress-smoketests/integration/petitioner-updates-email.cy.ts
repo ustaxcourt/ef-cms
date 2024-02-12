@@ -7,13 +7,20 @@ import {
 } from '../../cypress-integration/support/pages/my-account';
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { faker } from '@faker-js/faker';
-import { navigateTo as loginAs } from '../../cypress-integration/support/pages/maintenance';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../cypress-integration/support/setup/petitionsclerk-serves-petition';
+import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
 describe('Given a petitioner with a DAWSON account', () => {
+  after(() => {
+    cy.task('deleteAllCypressTestAccounts');
+  });
+
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
   describe('When they log in and change their email', () => {
     describe('And they do not verify their new email', () => {
       describe('And attempt to log in', () => {
@@ -47,23 +54,28 @@ describe('Given a petitioner with a DAWSON account', () => {
 
       describe('And they verify the new email', () => {
         it('Then they should be able to log in using the updated email and all of their associated cases should be updated with the new email', () => {
-          loginAs('petitioner9');
+          const username = `cypress_test_account+${v4()}`;
+          const email = `${username}@example.com`;
+          const password = 'Testing1234$';
+          const name = faker.person.fullName();
+          createAPetitioner({ email, name, password });
+          verifyPetitionerAccount({ email });
+          cy.login(username);
 
           petitionerCreatesElectronicCase().then(docketNumber => {
-            // TODO: standardize who is responsible for logging in, is it the test or the test helper function
             petitionsClerkServesPetition(docketNumber);
 
-            loginAs('petitioner9');
-            const randomSuffix = parseInt(`${Math.random() * 100}`);
+            cy.login(username);
             goToMyAccount();
             clickChangeEmail();
-            changeEmailTo(`petitioner9+test${randomSuffix}@example.com`);
+            const updatedUsername = `cypress_test_account+${v4()}`;
+            const updatedEmail = `${updatedUsername}@example.com`;
+            changeEmailTo(updatedEmail);
             clickConfirmModal();
             confirmEmailPendingAlert();
 
-            const petitioner9Id = 'b2d1941f-230a-47bb-80ec-6b561c1765cd';
             cy.task('getEmailVerificationToken', {
-              userId: petitioner9Id,
+              email,
             }).then(verificationToken => {
               cy.visit(`/verify-email?token=${verificationToken}`);
             });
@@ -74,7 +86,7 @@ describe('Given a petitioner with a DAWSON account', () => {
                 'Your email address is verified. You can now sign in to DAWSON.',
               );
             cy.url().should('contain', '/login');
-            cy.login(`petitioner9+test${randomSuffix}`);
+            cy.login(updatedUsername);
 
             cy.get('[data-testid="my-cases-link"]');
             cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
@@ -92,7 +104,7 @@ describe('Given a petitioner with a DAWSON account', () => {
             cy.get('[data-testid="tab-parties"]').click();
             cy.get('[data-testid="petitioner-email"]').should(
               'contain',
-              `petitioner9+test${randomSuffix}@example.com`,
+              updatedEmail,
             );
             cy.get('[data-testid="petitioner-pending-email"]').should(
               'not.contain.text',
@@ -101,7 +113,7 @@ describe('Given a petitioner with a DAWSON account', () => {
             cy.get('[data-testid="my-account-link"]').click();
             cy.get('[data-testid="user-service-email"]').should(
               'contain',
-              `petitioner9+test${randomSuffix}@example.com`,
+              updatedEmail,
             );
           });
         });

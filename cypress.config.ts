@@ -1,12 +1,13 @@
 import { defineConfig } from 'cypress';
-import { expireForgotPasswordCode, getEmailVerificationToken, getForgotPasswordCode } from './cypress/cypress-integration/support/database';
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
   expireUserConfirmationCode,
-  getCognitoUserIdByEmail,
   getNewAccountVerificationCode,
   getUserTokenWithRetry,
+  expireForgotPasswordCode,
+  getEmailVerificationToken,
+  getForgotPasswordCode,
 } from './cypress/support/cognito-login';
 import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
@@ -21,8 +22,8 @@ export default defineConfig({
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
-        getEmailVerificationToken({ userId }) {
-          return getEmailVerificationToken({ userId });
+        getEmailVerificationToken({ email }) {
+          return getEmailVerificationToken({ email });
         },
         confirmUser({ email }) {
           return confirmUser({ email });
@@ -71,4 +72,3 @@ export default defineConfig({
   viewportWidth: 1200,
   watchForFileChanges: false,
 });
-
