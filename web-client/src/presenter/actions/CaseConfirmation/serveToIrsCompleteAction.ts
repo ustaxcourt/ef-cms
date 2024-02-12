@@ -9,12 +9,7 @@
  * @param {object} providers.props the cerebral props object
  * @returns {object} the next path based upon if there was any paper service or all electronic service
  */
-export const serveToIrsCompleteAction = async ({
-  //   applicationContext,
-  //   get,
-  path,
-  props,
-}: ActionProps) => {
+export const serveToIrsCompleteAction = ({ path, props }: ActionProps) => {
   const { pdfUrl } = props;
 
   if (pdfUrl) {
