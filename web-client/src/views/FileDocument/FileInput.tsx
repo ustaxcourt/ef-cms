@@ -6,7 +6,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import fileInput from '../../../../node_modules/@uswds/uswds/packages/usa-file-input/src';
-import joi from 'joi';
 
 const removeNode = node => {
   if (node && node.parentNode) {
@@ -17,6 +16,7 @@ const removeNode = node => {
 const updateFormValues = ({
   files,
   inputName,
+  isMultipleFileUpload,
   updateFormValueSequence,
   validationSequence,
 }: {
@@ -24,6 +24,7 @@ const updateFormValues = ({
   inputName: string;
   updateFormValueSequence: Function;
   validationSequence: Function;
+  isMultipleFileUpload: boolean;
 }) => {
   const clonedFilePromises = Array.from(files).map(capturedFile => {
     return cloneFile(capturedFile).catch(() => null);
@@ -32,14 +33,25 @@ const updateFormValues = ({
   Promise.all(clonedFilePromises)
     .then(clonedFiles => {
       const validatedFiles = clonedFiles.filter(file => file !== null);
-      updateFormValueSequence({
-        key: inputName,
-        value: validatedFiles,
-      });
-      updateFormValueSequence({
-        key: `${inputName}Size`,
-        value: validatedFiles.map(file => file.size),
-      });
+      if (!isMultipleFileUpload) {
+        updateFormValueSequence({
+          key: inputName,
+          value: validatedFiles[0],
+        });
+        updateFormValueSequence({
+          key: `${inputName}Size`,
+          value: validatedFiles[0].size,
+        });
+      } else {
+        updateFormValueSequence({
+          key: inputName,
+          value: validatedFiles,
+        });
+        updateFormValueSequence({
+          key: `${inputName}Sizes`,
+          value: validatedFiles.map(file => file.size),
+        });
+      }
       validationSequence();
     })
     .catch(() => {
@@ -159,82 +171,58 @@ function DragDropInput({
 function handleFileSelectionAndValidation({
   files,
   inputName,
+  isMultipleFileUpload,
   maxFileSize,
   updateFormValueSequence,
   validationSequence,
 }: {
   files: File[];
   inputName: string;
+  isMultipleFileUpload: boolean;
   maxFileSize: number;
   updateFormValueSequence: Function;
   validationSequence: Function;
 }): false | undefined {
-  console.log('files', files);
   const filesArr = Array.from(files);
 
-  if (!filesArr.length) removeFiles(inputName, updateFormValueSequence);
+  if (!filesArr.length) {
+    removeFiles(inputName, updateFormValueSequence);
+    return false;
+  }
 
-  // const maxFileUploads = 5;
-  // if (filesArr.length > maxFileUploads) {
-  //   setTimeout(() => {
-  //     removeFiles(inputName, updateFormValueSequence);
-  //     alert('Maximum file limit is 5.');
-  //   }, 10);
-  //   return false;
-  // }
+  const maxFileUploads = 5;
+  if (filesArr.length > maxFileUploads) {
+    setTimeout(() => {
+      removeFiles(inputName, updateFormValueSequence);
+      alert('Maximum file limit is 5.');
+    }, 10);
+    return false;
+  }
 
-  // const filesExceedingSizeLimit = filesArr
-  //   .map(capturedFile => {
-  //     if (capturedFile.size >= MAX_FILE_SIZE_BYTES) {
-  //       return capturedFile.name;
-  //     }
-  //   })
-  //   .filter(file => !!file);
+  const filesExceedingSizeLimit = filesArr
+    .map(capturedFile => {
+      if (capturedFile.size >= MAX_FILE_SIZE_BYTES) {
+        return capturedFile.name;
+      }
+    })
+    .filter(file => !!file);
 
-  // if (filesExceedingSizeLimit.length) {
-  //   setTimeout(() => {
-  //     removeFiles(inputName, updateFormValueSequence);
-  //     alert(
-  //       `The maximum file size is ${maxFileSize}MB. The following file(s) exceed the limit:
-  //         ${filesExceedingSizeLimit.join(', \n')}
-  //         `,
-  //     );
-  //   }, 10);
-  //   return false;
-  // }
-
-  // if (!files.length) return false;
-
-  // find a way to
-
-  const attachmentToPetitionFiles = [
-    {
-      size: 13245,
-    },
-    {
-      size: 10245,
-    },
-    {
-      size: 8245,
-    },
-  ];
-
-  console.log('filesArr', filesArr);
-  const schema = joi
-    .array()
-    .items(
-      joi.object({
-        size: joi.number().min(1).max(MAX_FILE_SIZE_BYTES).required(), // .min(1).max(MAX_FILE_SIZE_BYTES), //.required(),
-      }),
-    )
-    .max(5);
-
-  const results = schema.validate(attachmentToPetitionFiles);
-  console.log('results', results);
+  if (filesExceedingSizeLimit.length) {
+    setTimeout(() => {
+      removeFiles(inputName, updateFormValueSequence);
+      alert(
+        `The maximum file size is ${maxFileSize}MB. The following file(s) exceed the limit:
+          ${filesExceedingSizeLimit.join(', \n')}
+          `,
+      );
+    }, 10);
+    return false;
+  }
 
   updateFormValues({
     files,
     inputName,
+    isMultipleFileUpload,
     updateFormValueSequence,
     validationSequence,
   });
@@ -269,6 +257,7 @@ export const FileInput = connect(
             handleFileSelectionAndValidation({
               files,
               inputName,
+              isMultipleFileUpload: !!multiple,
               maxFileSize: constants.MAX_FILE_SIZE_MB,
               updateFormValueSequence,
               validationSequence,
