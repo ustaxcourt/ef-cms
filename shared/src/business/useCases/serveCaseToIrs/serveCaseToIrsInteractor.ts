@@ -653,10 +653,10 @@ export const serveCaseToIrs = async (
       },
       userId: user.userId,
     });
-  } catch (ex) {
+  } catch (err) {
     applicationContext.logger.error('Error serving case to IRS', {
       docketNumber,
-      error: ex,
+      error: err,
     });
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
