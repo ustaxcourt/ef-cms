@@ -11,8 +11,6 @@ import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurre
 import { unsetWaitingForResponseAction } from '@web-client/presenter/actions/unsetWaitingForResponseAction';
 
 export const serveToIrsCompleteSequence = [
-  unsetWaitingForResponseAction,
-  clearModalStateAction,
   serveToIrsCompleteAction,
   {
     electronic: [
@@ -33,4 +31,6 @@ export const serveToIrsCompleteSequence = [
     ],
   },
   setAlertSuccessAction,
+  clearModalStateAction,
+  unsetWaitingForResponseAction,
 ];
