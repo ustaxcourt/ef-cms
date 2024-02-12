@@ -1,10 +1,10 @@
-import { createAPetitioner } from '../../../helpers/create-a-petitioner';
-import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
+import { createAPetitioner } from '../../helpers/create-a-petitioner';
+import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
-import { logout } from '../../../helpers/auth/logout';
+import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
-import { verifyPasswordRequirements } from '../../../helpers/auth/verify-password-requirements';
-import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
+import { verifyPasswordRequirements } from '../../helpers/auth/verify-password-requirements';
+import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 import qs from 'qs';
 
 describe('Given a petitioner with a DAWSON account', () => {

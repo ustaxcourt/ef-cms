@@ -4,14 +4,14 @@ import {
   clickConfirmModal,
   confirmEmailPendingAlert,
   goToMyAccount,
-} from '../../support/pages/my-account';
-import { createAPetitioner } from '../../../helpers/create-a-petitioner';
+} from '../../cypress-integration/support/pages/my-account';
+import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { faker } from '@faker-js/faker';
-import { navigateTo as loginAs } from '../../support/pages/maintenance';
-import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../support/setup/petitionsclerk-serves-petition';
+import { navigateTo as loginAs } from '../../cypress-integration/support/pages/maintenance';
+import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../cypress-integration/support/setup/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
-import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
+import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
 describe('Given a petitioner with a DAWSON account', () => {
   describe('When they log in and change their email', () => {
