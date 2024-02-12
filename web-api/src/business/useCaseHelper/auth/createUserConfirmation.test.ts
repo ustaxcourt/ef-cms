@@ -1,5 +1,6 @@
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
+import qs from 'qs';
 
 describe('createUserConfirmation', () => {
   const mockUserId = '674fdded-1d17-4081-b9fa-950abc677cee';
@@ -26,7 +27,16 @@ describe('createUserConfirmation', () => {
   });
 
   it('should generate a new confirmation code when one does not already exist and add said code to the verification email sent', async () => {
-    const mockVerificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?confirmationCode=${mockNewConfirmationCode}&email=${mockEmail}&userId=${mockUserId}`;
+    const queryString = qs.stringify(
+      {
+        confirmationCode: mockNewConfirmationCode,
+        email: mockEmail,
+        userId: mockUserId,
+      },
+      { encode: true },
+    );
+    const mockVerificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;
+
     applicationContext
       .getPersistenceGateway()
       .getAccountConfirmationCode.mockReturnValueOnce(undefined);
@@ -76,7 +86,15 @@ describe('createUserConfirmation', () => {
   });
 
   it('should refresh the existing confirmation code when it already exists', async () => {
-    const mockVerificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?confirmationCode=${mockConfirmationCode}&email=${mockEmail}&userId=${mockUserId}`;
+    const queryString = qs.stringify(
+      {
+        confirmationCode: mockConfirmationCode,
+        email: mockEmail,
+        userId: mockUserId,
+      },
+      { encode: true },
+    );
+    const mockVerificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;
 
     const result = await createUserConfirmation(applicationContext, {
       email: mockEmail,
