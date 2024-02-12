@@ -6,6 +6,4 @@ export const serveToIrsErrorSequence = [
   unsetWaitingForResponseAction,
   clearModalStateAction,
   setShowModalAction,
-  //   setAlertErrorAction,
-  // error alert? modal? ask ux
 ];
