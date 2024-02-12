@@ -1135,7 +1135,9 @@ const router = {
     });
 
     registerRoute('/reset-password?..', () => {
-      const { code, email } = route.query();
+      const { code, email } = qs.parse(window.location.search, {
+        ignoreQueryPrefix: true,
+      });
       return app.getSequence('resetPasswordSequence')({
         code,
         email,
