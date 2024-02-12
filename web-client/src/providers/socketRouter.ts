@@ -42,6 +42,17 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      case 'serve_to_irs_complete':
+        await app.getSequence('serveToIrsCompleteSequence')({
+          ...message,
+        });
+        break;
+      case 'serve_to_irs_error':
+        await app.getSequence('serveToIrsErrorSequence')({
+          ...message,
+          showModal: 'ServeCaseToIrsErrorModal',
+        });
+        break;
       case 'update_trial_session_complete':
         await app.getSequence('updateTrialSessionCompleteSequence')({
           ...message,

@@ -1,5 +1,6 @@
 import { messageDocumentHelper as messageDocumentHelperComputed } from '../../src/presenter/computeds/messageDocumentHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const messageDocumentHelper = withAppContextDecorator(
@@ -28,6 +29,9 @@ export const petitionsClerk1ServesPetitionFromMessageDetail = cerebralTest => {
     await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     expect(cerebralTest.getState('currentPage')).toEqual(
       'PrintPaperPetitionReceipt',
