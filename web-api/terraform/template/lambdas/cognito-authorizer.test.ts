@@ -24,7 +24,7 @@ describe('cognito-authorizer', () => {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
 
   const setupHappyPath = verifyObject => {
-    axios.get.mockImplementation(() => {
+    (axios.get as jest.Mock).mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'key-identifier' }] },
       });
@@ -54,7 +54,8 @@ describe('cognito-authorizer', () => {
     transport = new transports.Stream({
       stream: fs.createWriteStream('/dev/null'),
     });
-    createLogger.mockImplementation(opts => {
+
+    (createLogger as jest.Mock).mockImplementation(opts => {
       opts.transports = [transport];
       return actualCreateLogger(opts);
     });
@@ -96,7 +97,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if there is an error in contacting the issuer', async () => {
-    axios.get.mockImplementation(() => {
+    (axios.get as jest.Mock).mockImplementation(() => {
       throw new Error('any error');
     });
 
@@ -115,7 +116,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if the issuer doesn’t return data in expected format', async () => {
-    axios.get.mockImplementation(() => {
+    (axios.get as jest.Mock).mockImplementation(() => {
       return Promise.resolve({ data: null });
     });
 
@@ -134,7 +135,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if issuer is not the cognito user pools', async () => {
-    axios.get.mockImplementation(() => {
+    (axios.get as jest.Mock).mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'not-expected-key-identifier' }] },
       });
@@ -157,7 +158,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if token is not verified', async () => {
-    axios.get.mockImplementation(() => {
+    (axios.get as jest.Mock).mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'key-identifier' }] },
       });
@@ -264,7 +265,7 @@ describe('cognito-authorizer', () => {
       };
     });
 
-    axios.get.mockImplementation(() => {
+    (axios.get as jest.Mock).mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'identifier-to-cache' }] },
       });
