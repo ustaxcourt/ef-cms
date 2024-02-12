@@ -28,7 +28,7 @@
 - Environment specific deploy
 - Account specific deploy(sns_topic in west)
 - New lambda function being deployed - this will require manual deploy steps
-  - First deploy will fail, need to copy worker_lambda_<DEPLOYING_COLOR>.zip and upload a copy as worker_lambda_<CURRENT_COLOR>.zip
+  - First deploy will fail, need to copy worker_<DEPLOYING_COLOR>.js.zip and upload a copy as worker_<CURRENT_COLOR>.js.zip
 
 
 ::: New Patterns To Describe :::
