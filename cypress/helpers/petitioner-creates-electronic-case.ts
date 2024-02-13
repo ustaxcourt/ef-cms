@@ -39,6 +39,8 @@ export function petitionerCreatesEletronicCaseWithDeseasedSpouse(
 }
 
 export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
+  const w3Dummy = 'w3-dummy.pdf';
+
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   attachDummyFile('stin-file');
@@ -46,6 +48,14 @@ export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
   attachDummyFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
+  cy.get('[data-testid="atp-files-upload"]').attachFile([
+    w3Dummy,
+    w3Dummy,
+    w3Dummy,
+    w3Dummy,
+    w3Dummy,
+  ]);
+
   cy.get('[data-testid="complete-step-2"]').click();
   cy.get('[data-testid="filing-type-0"]').click();
 
