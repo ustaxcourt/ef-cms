@@ -16,6 +16,7 @@ const removeNode = node => {
 const updateFormValues = ({
   files,
   inputName,
+  isMultipleFileUpload,
   updateFormValueSequence,
   validationSequence,
 }: {
@@ -23,6 +24,7 @@ const updateFormValues = ({
   inputName: string;
   updateFormValueSequence: Function;
   validationSequence: Function;
+  isMultipleFileUpload: boolean;
 }) => {
   const clonedFilePromises = Array.from(files).map(capturedFile => {
     return cloneFile(capturedFile).catch(() => null);
@@ -31,10 +33,25 @@ const updateFormValues = ({
   Promise.all(clonedFilePromises)
     .then(clonedFiles => {
       const validatedFiles = clonedFiles.filter(file => file !== null);
-      updateFormValueSequence({
-        key: inputName,
-        value: validatedFiles,
-      });
+      if (!isMultipleFileUpload) {
+        updateFormValueSequence({
+          key: inputName,
+          value: validatedFiles[0],
+        });
+        updateFormValueSequence({
+          key: `${inputName}Size`,
+          value: validatedFiles[0].size,
+        });
+      } else {
+        updateFormValueSequence({
+          key: inputName,
+          value: validatedFiles,
+        });
+        updateFormValueSequence({
+          key: `${inputName}Sizes`,
+          value: validatedFiles.map(file => file.size),
+        });
+      }
       validationSequence();
     })
     .catch(() => {
@@ -154,19 +171,24 @@ function DragDropInput({
 function handleFileSelectionAndValidation({
   files,
   inputName,
+  isMultipleFileUpload,
   maxFileSize,
   updateFormValueSequence,
   validationSequence,
 }: {
   files: File[];
   inputName: string;
+  isMultipleFileUpload: boolean;
   maxFileSize: number;
   updateFormValueSequence: Function;
   validationSequence: Function;
 }): false | undefined {
   const filesArr = Array.from(files);
 
-  if (!filesArr.length) removeFiles(inputName, updateFormValueSequence);
+  if (!filesArr.length) {
+    removeFiles(inputName, updateFormValueSequence);
+    return false;
+  }
 
   const maxFileUploads = 5;
   if (filesArr.length > maxFileUploads) {
@@ -197,11 +219,10 @@ function handleFileSelectionAndValidation({
     return false;
   }
 
-  if (!files.length) return false;
-
   updateFormValues({
     files,
     inputName,
+    isMultipleFileUpload,
     updateFormValueSequence,
     validationSequence,
   });
@@ -236,6 +257,7 @@ export const FileInput = connect(
             handleFileSelectionAndValidation({
               files,
               inputName,
+              isMultipleFileUpload: !!multiple,
               maxFileSize: constants.MAX_FILE_SIZE_MB,
               updateFormValueSequence,
               validationSequence,
