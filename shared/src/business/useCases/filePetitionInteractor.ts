@@ -7,6 +7,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const filePetitionInteractor = async (
   applicationContext: any,
   {
+    atpFilesMetadata,
     corporateDisclosureFile,
     corporateDisclosureUploadProgress,
     petitionFile,
@@ -15,8 +16,9 @@ export const filePetitionInteractor = async (
     stinFile,
     stinUploadProgress,
   }: {
-    corporateDisclosureFile: any;
-    corporateDisclosureUploadProgress: any;
+    atpFilesMetadata?: any;
+    corporateDisclosureFile?: any;
+    corporateDisclosureUploadProgress?: any;
     petitionFile: any;
     petitionMetadata: any;
     petitionUploadProgress: any;
@@ -57,24 +59,46 @@ export const filePetitionInteractor = async (
       });
   }
 
-  const [corporateDisclosureFileId, petitionFileId, stinFileId] =
-    await Promise.all([
+  let atpFilesUploads = [];
+  if (atpFilesMetadata?.length) {
+    atpFilesUploads = atpFilesMetadata.map(atp => {
+      return applicationContext
+        .getUseCases()
+        .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+          document: atp.file,
+          onUploadProgress: atp.progressFunction,
+        });
+    });
+  }
+
+  try {
+    const [
+      corporateDisclosureFileId,
+      petitionFileId,
+      stinFileId,
+      ...atpFileIds
+    ]: string[] = await Promise.all([
       corporateDisclosureFileUpload,
       petitionFileUpload,
       stinFileUpload,
+      ...atpFilesUploads,
     ]);
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .createCaseInteractor(applicationContext, {
-      corporateDisclosureFileId,
-      petitionFileId,
-      petitionMetadata,
-      stinFileId,
-    });
+    const caseDetail = await applicationContext
+      .getUseCases()
+      .createCaseInteractor(applicationContext, {
+        atpFileIds,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        stinFileId,
+      });
 
-  return {
-    caseDetail,
-    stinFileId,
-  };
+    return {
+      caseDetail,
+      stinFileId,
+    };
+  } catch (error) {
+    throw new Error('Error uploading documents to file petition');
+  }
 };

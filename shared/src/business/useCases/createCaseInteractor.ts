@@ -66,11 +66,13 @@ const addPetitionDocketEntryToCase = ({
 export const createCaseInteractor = async (
   applicationContext: IApplicationContext,
   {
+    atpFileIds,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     stinFileId,
   }: {
+    atpFileIds?: string[];
     corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
@@ -246,6 +248,33 @@ export const createCaseInteractor = async (
     cdsDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
+  }
+
+  if (atpFileIds?.length) {
+    atpFileIds.forEach(fileId => {
+      const atpDocketEntryEntity = new DocketEntry(
+        {
+          contactPrimary: caseToAdd.getContactPrimary(),
+          contactSecondary: caseToAdd.getContactSecondary(),
+          docketEntryId: fileId,
+          documentTitle:
+            INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+          documentType:
+            INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+          filers,
+          filingDate: caseToAdd.createdAt,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          privatePractitioners,
+        },
+        { applicationContext, petitioners: caseToAdd.petitioners },
+      );
+
+      atpDocketEntryEntity.setFiledBy(user);
+
+      caseToAdd.addDocketEntry(atpDocketEntryEntity);
+    });
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({

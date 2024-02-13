@@ -73,6 +73,7 @@ export const DocketRecord = connect(
                           entry.isInProgress && 'in-progress',
                           entry.qcWorkItemsUntouched && 'qc-untouched',
                         )}
+                        data-test-document-index={entry.index}
                         data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
@@ -89,7 +90,10 @@ export const DocketRecord = connect(
                             {entry.createdAtFormatted}
                           </span>
                         </td>
-                        <td className="center-column hide-on-mobile">
+                        <td
+                          className="center-column hide-on-mobile"
+                          data-test-document-meta="eventCode"
+                        >
                           {entry.eventCode}
                         </td>
                         <td aria-hidden="true" className="filing-type-icon">
@@ -108,7 +112,7 @@ export const DocketRecord = connect(
                         </td>
                         <td className="hide-on-mobile">{entry.filedBy}</td>
                         <td className="hide-on-mobile">{entry.action}</td>
-                        <td>
+                        <td data-testid="docket-record-cell-not-served">
                           {entry.showNotServed && (
                             <span className="text-semibold not-served">
                               Not served
@@ -118,7 +122,10 @@ export const DocketRecord = connect(
                             <span>{entry.servedAtFormatted}</span>
                           )}
                         </td>
-                        <td className="center-column hide-on-mobile">
+                        <td
+                          className="center-column hide-on-mobile"
+                          data-test-document-meta="servedPartiesCode"
+                        >
                           {entry.showServed && entry.servedPartiesCode}
                         </td>
                         {docketRecordHelper.showEditOrSealDocketRecordEntry && (
