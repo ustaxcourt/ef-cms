@@ -109,9 +109,10 @@ resource "aws_cognito_user_pool_client" "client" {
   access_token_validity  = 1
   id_token_validity      = 1
 
+  # TODO 10007: remove when triggers are removed 
   callback_urls = [
-    "http://localhost:1234/login",
-    "https://app.${var.dns_domain}/login",
+    "http://localhost:1234/log-in",
+    "https://app.${var.dns_domain}/log-in",
   ]
 
   allowed_oauth_flows          = ["code", "implicit"]
@@ -249,9 +250,10 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   access_token_validity  = 1
   id_token_validity      = 1
 
+  # TODO 10007: remove when triggers are removed 
   callback_urls = [
-    "http://localhost:1234/login",
-    "https://app.${var.dns_domain}/login",
+    "http://localhost:1234/log-in",
+    "https://app.${var.dns_domain}/log-in",
   ]
 
   allowed_oauth_flows          = ["code", "implicit"]
