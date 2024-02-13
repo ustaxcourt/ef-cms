@@ -2,6 +2,7 @@
 - Run full experimental deploy (NOT on exp1, exp2, or exp3). -> All
   - Remove switch colors step. Test that the old cognito workflow + account creation are still functional.
   - Switch colors and verify login + account creation are functional.
+- Potentially remove websocket messaging from update web-api/src/business/useCases/user/updateAssociatedCaseWorker.ts.
 
 
 ::: SOLO :::
