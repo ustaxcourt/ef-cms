@@ -4,7 +4,7 @@ import { getDocumentClient } from '../helpers/dynamo/getDynamoCypress';
 import promiseRetry from 'promise-retry';
 
 export const confirmUser = async ({ email }: { email: string }) => {
-  const userPoolId = (await getUserPoolId()) || '';
+  const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
   const initAuthResponse = await getCognito().adminInitiateAuth({
@@ -33,22 +33,29 @@ export const confirmUser = async ({ email }: { email: string }) => {
   return null;
 };
 
-const getClientId = async (userPoolId: string) => {
+const getClientId = async (userPoolId: string): Promise<string> => {
   const results = await getCognito().listUserPoolClients({
     MaxResults: 60,
     UserPoolId: userPoolId,
   });
-  const clientId = (results?.UserPoolClients || [])[0].ClientId;
+  const clientId = results?.UserPoolClients?.[0].ClientId;
+  if (!clientId) {
+    throw new Error(`Could not find clientIdd for userPool: ${userPoolId}`);
+  }
   return clientId;
 };
 
-const getUserPoolId = async () => {
+const getUserPoolId = async (): Promise<string> => {
   const results = await getCognito().listUserPools({
     MaxResults: 50,
   });
-  const userPoolId = (results?.UserPools || []).find(
+  const userPoolId = results?.UserPools?.find(
     pool => pool.Name === `efcms-${cypressEnv.env}`,
   )?.Id;
+
+  if (!userPoolId) {
+    throw new Error('Could not get userPoolId');
+  }
   return userPoolId;
 };
 
@@ -64,7 +71,7 @@ export const getUserTokenWithRetry = (username: string, password: string) => {
 };
 
 async function getUserToken(password: string, username: string) {
-  const userPoolId = (await getUserPoolId()) || '';
+  const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
   return getCognito()
