@@ -23,6 +23,12 @@ export const saveWorkItem = ({
         workItem.assigneeId && !workItem.completedAt
           ? `assigneeId|${workItem.assigneeId}`
           : undefined,
+      gsi3pk:
+        !workItem.completedAt && workItem.section
+          ? `work-item|${workItem.section}|${
+              workItem.inProgress ? 'in-progress' : 'inbox' // docket|in-progress vs work-item|docket|in-progress
+            }`
+          : undefined,
       pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
       ...workItem,

@@ -20,6 +20,14 @@ export const updateMessage = ({
     Item: {
       ...message,
       gsi1pk: `message|${message.parentMessageId}`,
+      gsi2pk:
+        message.toUserId && !message.completedAt
+          ? `assigneeId|${message.toUserId}`
+          : undefined,
+      gsi3pk:
+        !message.completedAt && message.toSection
+          ? `section|${message.toSection}`
+          : undefined,
       pk: `case|${message.docketNumber}`,
       sk: `message|${message.messageId}`,
     },

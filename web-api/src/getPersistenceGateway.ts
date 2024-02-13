@@ -127,7 +127,10 @@ import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
 import { getUserCaseNote } from './persistence/dynamo/userCaseNotes/getUserCaseNote';
 import { getUserCaseNoteForCases } from './persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
-import { getUserInboxMessages } from './persistence/elasticsearch/messages/getUserInboxMessages';
+import {
+  getUserInboxMessageCount,
+  getUserInboxMessages,
+} from './persistence/elasticsearch/messages/getUserInboxMessages';
 import { getUserOutboxMessages } from './persistence/elasticsearch/messages/getUserOutboxMessages';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
@@ -380,6 +383,7 @@ const gatewayMethods = {
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
+  getUserInboxMessageCount,
   getUserInboxMessages,
   getUserOutboxMessages,
   getUsersById,

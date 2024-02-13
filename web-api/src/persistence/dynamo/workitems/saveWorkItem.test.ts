@@ -1,3 +1,4 @@
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import { MOCK_WORK_ITEM } from '../../../../../shared/src/test/mockWorkItem';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
@@ -35,6 +36,34 @@ describe('saveWorkItem', () => {
 
     expect(putMock.mock.calls[0][0].Item.gsi2pk).toBe(
       `assigneeId|${MOCK_WORK_ITEM.assigneeId}`,
+    );
+  });
+
+  it('should persist the work item with a gsi3pk when the work item has not been completed', async () => {
+    mockWorkItem.completedAt = undefined;
+    mockWorkItem.inProgress = false;
+
+    await saveWorkItem({
+      applicationContext,
+      workItem: mockWorkItem,
+    });
+
+    expect(putMock.mock.calls[0][0].Item.gsi3pk).toBe(
+      `section|${DOCKET_SECTION}|inbox`,
+    );
+  });
+
+  it('should persist the work item with a gsi3pk when the work item has been completed', async () => {
+    mockWorkItem.completedAt = undefined;
+    mockWorkItem.inProgress = true;
+
+    await saveWorkItem({
+      applicationContext,
+      workItem: mockWorkItem,
+    });
+
+    expect(putMock.mock.calls[0][0].Item.gsi3pk).toBe(
+      `section|${DOCKET_SECTION}|in-progress`,
     );
   });
 });

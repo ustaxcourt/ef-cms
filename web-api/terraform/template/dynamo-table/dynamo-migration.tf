@@ -40,6 +40,11 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     type = "S"
   }
 
+  attribute {
+    name = "gsi3pk"
+    type = "S"
+  }
+
   point_in_time_recovery {
     enabled = true
   }
@@ -54,6 +59,13 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   global_secondary_index {
     name            = "gsi2"
     hash_key        = "gsi2pk"
+    range_key       = "sk"
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "gsi3"
+    hash_key        = "gsi3pk"
     range_key       = "sk"
     projection_type = "ALL"
   }
