@@ -141,7 +141,7 @@ describe('uploadPdfFromClient', () => {
     describe('cleanFileMetadata', () => {
       it('should clear out all metadata from PDF', async () => {
         const TEST_STRING =
-          'FINAL<photoshop:AuthorsPosition>John is Testing</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
+          'FINAL<photoshop:AuthorsPosition>test</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
 
         const modifiedPdfBytes = new Uint8Array(TEST_STRING.length);
         for (let i = 0; i < TEST_STRING.length; i++) {
@@ -164,7 +164,11 @@ describe('uploadPdfFromClient', () => {
         expect(loadMock.setModificationDate).toHaveBeenCalled();
 
         expect(pdfBytes.toString()).toEqual(
-          new TextEncoder().encode('FINAL').toString(),
+          new TextEncoder()
+            .encode(
+              'FINAL<photoshop:AuthorsPosition>    </photoshop:AuthorsPosition><photoshop:CaptionWriter>   </photoshop:CaptionWriter><pdf:Keywords>   </pdf:Keywords>',
+            )
+            .toString(),
         );
       });
     });
