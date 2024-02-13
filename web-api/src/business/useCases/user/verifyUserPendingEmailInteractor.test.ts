@@ -185,32 +185,4 @@ describe('verifyUserPendingEmailInteractor', () => {
       pendingEmail: undefined,
     });
   });
-
-  // TODO 10007 - Returns Unauthorized to manage emails.
-  // it.only('should not turn an inactive Practitioner into a User', async () => {
-  //   const practitioner = {
-  //     ...mockPractitioner,
-  //     role: ROLES.inactivePractitioner,
-  //   };
-
-  //   applicationContext.getCurrentUser.mockReturnValue(practitioner);
-  //   applicationContext
-  //     .getPersistenceGateway()
-  //     .getUserById.mockReturnValue({ ...practitioner });
-
-  //   await verifyUserPendingEmailInteractor(applicationContext, {
-  //     token: TOKEN,
-  //   });
-
-  //   expect(
-  //     applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-  //       .user,
-  //   ).toMatchObject({
-  //     email: 'other@example.com',
-  //     entityName: 'Practitioner',
-  //     pendingEmail: undefined,
-  //     role: ROLES.inactivePractitioner,
-  //     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-  //   });
-  // });
 });
