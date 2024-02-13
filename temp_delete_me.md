@@ -4,6 +4,9 @@
   - Switch colors and verify login + account creation are functional.
 - Potentially remove websocket messaging from update web-api/src/business/useCases/user/updateAssociatedCaseWorker.ts.
 
+- automate maintenance mode in circle prod deploy
+- during deploy, turn off login and sign up
+
 
 ::: SOLO :::
 - Convert to Encoded Query Strings for reset and forgot password like with Confirm Signup? -> Kaitlyn
