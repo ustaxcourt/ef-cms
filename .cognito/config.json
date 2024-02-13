@@ -10,9 +10,6 @@
   "TokenConfig": {
     "IssuerDomain": "http://localhost:9229"
   },
-  "TriggerFunctions": {
-    "PostAuthentication": "PostAuthentication_Authentication"
-  },
   "LambdaConfig": {
     "endpoint": "http://localhost:3011"
   },
