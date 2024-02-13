@@ -13,6 +13,8 @@ import {
   setupTest,
   uploadPetition,
   waitForCondition,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
 } from './helpers';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
@@ -119,6 +121,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: cerebralTest.docketNumber,
     });
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');

@@ -16,16 +16,20 @@ export const serveCaseToIrsAction = async ({
   props,
 }: ActionProps) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
+  const clientConnectionId = get(state.clientConnectionId);
 
-  const pdfUrl = await applicationContext
-    .getUseCases()
-    .serveCaseToIrsInteractor(applicationContext, {
-      docketNumber,
+  try {
+    await applicationContext
+      .getUseCases()
+      .serveCaseToIrsInteractor(applicationContext, {
+        clientConnectionId,
+        docketNumber,
+      });
+  } catch (err) {
+    return path.error({
+      showModal: 'ServeCaseToIrsErrorModal',
     });
-
-  if (pdfUrl) {
-    return path.paper({ pdfUrl });
   }
 
-  return path.electronic();
+  return path.success();
 };

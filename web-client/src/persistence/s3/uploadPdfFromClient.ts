@@ -21,11 +21,13 @@ function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
         const startIndex = resultString.indexOf(startTag);
         if (startIndex === -1) return;
         const endIndex = resultString.indexOf(endTag, startIndex);
-        if (endIndex !== -1) {
-          resultString =
-            resultString.slice(0, startIndex) +
-            resultString.slice(endIndex + endTag.length);
-        }
+        if (endIndex === -1) return;
+        const length = endIndex - startIndex - startTag.length;
+        const replacement = ' '.repeat(length);
+        resultString =
+          resultString.slice(0, startIndex + startTag.length) +
+          replacement +
+          resultString.slice(endIndex);
       });
 
     const modifiedPdfBytes = new Uint8Array(resultString.length);
