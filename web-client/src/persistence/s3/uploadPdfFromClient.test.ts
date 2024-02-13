@@ -166,7 +166,7 @@ describe('uploadPdfFromClient', () => {
         expect(pdfBytes.toString()).toEqual(
           new TextEncoder()
             .encode(
-              "FINAL<photoshop:AuthorsPosition>    </photoshop:AuthorsPosition><photoshop:CaptionWriter>   </photoshop:CaptionWriter><pdf:Keywords>   </pdf:Keywords>",
+              'FINAL<photoshop:AuthorsPosition>    </photoshop:AuthorsPosition><photoshop:CaptionWriter>   </photoshop:CaptionWriter><pdf:Keywords>   </pdf:Keywords>',
             )
             .toString(),
         );
