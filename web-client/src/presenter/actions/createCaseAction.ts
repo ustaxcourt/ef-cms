@@ -67,6 +67,7 @@ export const createCaseAction = async ({
         stinUploadProgress: progressFunctions.stin,
       });
   } catch (err) {
+    console.log('err', err);
     return path.error();
   }
   const { caseDetail, stinFileId } = filePetitionResult;
