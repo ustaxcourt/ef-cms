@@ -3,7 +3,7 @@
 import { BatchWriteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { chunk } from 'lodash';
-import { requireEnvVars } from '../shared/admin-tools/util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['ENV', 'SOURCE_TABLE']);
 
