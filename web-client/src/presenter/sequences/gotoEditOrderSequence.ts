@@ -14,11 +14,15 @@ import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unsetCreateOrderAddedDocketNumbers } from '@web-client/presenter/actions/unsetCreateOrderAddedDocketNumbers';
+import { unsetCreateOrderSelectedCases } from '@web-client/presenter/actions/unsetCreateOrderSelectedCases';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
 const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setRedirectUrlAction,
   unsetDocumentToEditAction,
+  unsetCreateOrderSelectedCases,
+  unsetCreateOrderAddedDocketNumbers,
   clearModalAction,
   setDefaultTabStateAction,
   setupCurrentPageAction('Interstitial'),
