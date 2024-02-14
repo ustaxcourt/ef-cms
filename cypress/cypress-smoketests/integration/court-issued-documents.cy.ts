@@ -19,6 +19,7 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
       cy.get('[data-testid="create-order-document-title"]').clear();
       cy.get('[data-testid="create-order-document-title"]').type('Order');
       cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="create-order-page-title"]');
       cy.get('.ql-editor').click();
       cy.get('[data-testid="save-order-button"]').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
