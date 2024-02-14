@@ -945,10 +945,10 @@ workflows:
       #     <<: *only-deployed-lower-environments
       #     requires:
       #       - disable-reindex-cron
-      - loadtests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
+      # - loadtests:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - disable-reindex-cron
       # - smoketests-readonly: # TODO 10007 Cleanup: Add back running readonly smoketests after 10007 has been deployed to ustc/prod
       #     <<: *only-deployed-lower-environments
       #     requires:
@@ -956,7 +956,7 @@ workflows:
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - loadtests
+            - disable-reindex-cron
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
           requires:
