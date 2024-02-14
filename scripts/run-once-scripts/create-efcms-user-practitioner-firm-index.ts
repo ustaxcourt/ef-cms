@@ -28,6 +28,7 @@ const esSettings: esSettingsType = settings({
   overriddenNumberOfReplicasIfNonProd,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const version: string = await getVersion();
   const client: Client = await getClient({ environmentName, version });

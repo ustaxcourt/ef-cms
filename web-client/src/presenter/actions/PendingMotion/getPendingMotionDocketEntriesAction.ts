@@ -13,8 +13,8 @@ export const getJudgesFilters = (get: ActionProps['get']) => {
   }
 
   if (judgeName === 'All Special Trial Judges') {
-    return judges.filter(
-      judge => judge.judgeTitle?.includes('Special Trial Judge'),
+    return judges.filter(judge =>
+      judge.judgeTitle?.includes('Special Trial Judge'),
     );
   }
 

@@ -238,6 +238,7 @@ const updateCognitoUserId = async ({
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const userPoolId = await getUserPoolId();
   const judgeUsers = await getJudgeUsersByName();

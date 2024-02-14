@@ -10,6 +10,7 @@ if (process.env.ENV !== 'prod') {
   process.exit();
 }
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   await getRunStateOfMostRecentJobRun(true);
 })();
