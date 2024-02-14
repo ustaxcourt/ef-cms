@@ -232,6 +232,31 @@ describe('uploadPdfFromClient', () => {
           readAndCleanFileMetadata(title, file, pdfLibMock),
         ).rejects.toBe('Failed to read file');
       });
+
+      it('should return the original file if the file is encrypted', async () => {
+        const TEST_STRING =
+          'FINAL<photoshop:AuthorsPosition>test</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
+
+        const pdfLibMock2 = {
+          PDFDocument: {
+            load: jest.fn().mockResolvedValue({
+              isEncrypted: true,
+            }),
+          },
+        };
+
+        const fileReader = {
+          result: TEST_STRING,
+        };
+
+        const pdfBytes = await cleanFileMetadata(
+          TEST_TITLE,
+          pdfLibMock2,
+          fileReader as any,
+        );
+
+        expect(pdfBytes?.toString()).toEqual(TEST_STRING);
+      });
     });
   });
 });
