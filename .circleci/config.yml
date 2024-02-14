@@ -143,43 +143,43 @@ jobs:
           name: Setup Elasticsearch Index Settings
           command: |
             ./web-api/setup-elasticsearch-index.sh $ENV
-      - run:
-          name: Admin User Setup
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
-            else
-              echo "skipping…"
-            fi
-      - run:
-          name: Test Users Setup
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              ./shared/admin-tools/user/setup-test-users.sh $ENV
-            else
-              echo "skipping…"
-            fi
-      - run:
-          name: Judge Users Setup
-          environment:
-            FILE_NAME: ./scripts/circleci/judge/judge_users.csv
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
-              echo "skipping…"
-              exit 0
-            fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${SOURCE_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
-              npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
-            else
-              ./scripts/circleci/judge/bulk-import-judge-users.sh
-            fi
+      # - run: TODO 10007 Cleanup: Put this step back after 10007 has been deployed
+      #     name: Admin User Setup
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
+      #         npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
+      #       else
+      #         echo "skipping…"
+      #       fi
+      # - run:
+      #     name: Test Users Setup
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
+      #         ./shared/admin-tools/user/setup-test-users.sh $ENV
+      #       else
+      #         echo "skipping…"
+      #       fi
+      # - run:
+      #     name: Judge Users Setup
+      #     environment:
+      #       FILE_NAME: ./scripts/circleci/judge/judge_users.csv
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
+      #         echo "skipping…"
+      #         exit 0
+      #       fi
+      #       if [ "${CIRCLE_BRANCH}" == "test" ]; then
+      #         SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+      #         ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+      #           --domain-name "${SOURCE_DOMAIN}" \
+      #           --region "us-east-1" \
+      #           --query 'DomainStatus.Endpoint' \
+      #           --output text)
+      #         export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
+      #         npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
+      #       else
+      #         ./scripts/circleci/judge/bulk-import-judge-users.sh
+      #       fi
       - run:
           name: 'Deploy - Web Client - S3'
           command: |
