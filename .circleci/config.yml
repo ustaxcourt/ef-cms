@@ -917,6 +917,8 @@ workflows:
           <<: *only-deployed-lower-environments
       - deploy:
           <<: *only-deployed-lower-environments
+          requires:
+            - engage-maintenance-mode
       - migrate:
           <<: *only-deployed-lower-environments
           requires:
@@ -976,6 +978,8 @@ workflows:
           <<: *only-prod
       - deploy:
           <<: *only-prod
+          requires:
+            - engage-maintenance-mode
       - migrate:
           <<: *only-prod
           requires:
