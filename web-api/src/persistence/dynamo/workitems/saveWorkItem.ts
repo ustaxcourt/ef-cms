@@ -15,23 +15,27 @@ export const saveWorkItem = ({
 }: {
   applicationContext: IApplicationContext;
   workItem: RawWorkItem;
-}) =>
-  put({
+}) => {
+  const inboxType = workItem.inProgress ? 'in-progress' : 'inbox';
+  const gsi2pk =
+    workItem.assigneeId && !workItem.completedAt
+      ? `assigneeId|${workItem.assigneeId}|${inboxType}` // e.g., assigneeId|UUID|in-progress
+      : undefined;
+  const gsi3pk =
+    workItem.section && !workItem.completedAt
+      ? `section|${workItem.section}|${inboxType}` // e.g., section|petitions|inbox
+      : undefined;
+  return put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,
-      gsi2pk:
-        workItem.assigneeId && !workItem.completedAt
-          ? `assigneeId|${workItem.assigneeId}`
-          : undefined,
-      gsi3pk:
-        !workItem.completedAt && workItem.section
-          ? `work-item|${workItem.section}|${
-              workItem.inProgress ? 'in-progress' : 'inbox' // docket|in-progress vs work-item|docket|in-progress
-            }`
-          : undefined,
+      gsi2pk,
+      gsi3pk,
       pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,
   });
+};
+
+// sk: work-item|<PRIORITY>|<FILEDDATE>|<WorkItemId>

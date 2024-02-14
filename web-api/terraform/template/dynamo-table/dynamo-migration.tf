@@ -53,7 +53,7 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     name            = "gsi1"
     hash_key        = "gsi1pk"
     range_key       = "pk"
-    projection_type = "ALL"
+    projection_type = "ALL" 
   }
 
   global_secondary_index {
@@ -67,8 +67,14 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     name            = "gsi3"
     hash_key        = "gsi3pk"
     range_key       = "sk"
-    projection_type = "ALL"
+    projection_type = "ALL" # what fields to actually store into the gsi table .... 
   }
+
+  # if glue job, and 10252 is only in test
+    # we need to run the "migration" after in order to repopulate the gsi3pk
+    # ... because the data itself woudn't have the gsi3pk key:value pair saved
+  # if glue job and 10252 is in prod and test
+    # we don't need to do anything special
 
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"

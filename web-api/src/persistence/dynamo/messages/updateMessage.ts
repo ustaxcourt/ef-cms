@@ -15,15 +15,24 @@ export const updateMessage = ({
 }: {
   applicationContext: IApplicationContext;
   message: RawMessage;
-}) =>
-  put({
+}) => {
+  let gsi2pk;
+  if (message.toUserId) {
+    gsi2pk = `assigneeId|${message.toUserId}`;
+    if (message.completedAt) {
+      gsi2pk += '|completed';
+    } else if (message.isRepliedTo) {
+      gsi2pk += '|outbox';
+    } else {
+      gsi2pk += '|inbox';
+    }
+  }
+
+  return put({
     Item: {
       ...message,
       gsi1pk: `message|${message.parentMessageId}`,
-      gsi2pk:
-        message.toUserId && !message.completedAt
-          ? `assigneeId|${message.toUserId}`
-          : undefined,
+      gsi2pk,
       gsi3pk:
         !message.completedAt && message.toSection
           ? `section|${message.toSection}`
@@ -33,3 +42,4 @@ export const updateMessage = ({
     },
     applicationContext,
   });
+};

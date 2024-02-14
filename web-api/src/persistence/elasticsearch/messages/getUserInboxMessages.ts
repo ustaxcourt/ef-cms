@@ -45,19 +45,21 @@ export const getUserInboxMessageCount = async ({
   applicationContext: IApplicationContext;
   userId: string;
 }): Promise<number> => {
-  const result = (await queryFull({
+  // const result =
+  (await queryFull({
     ExpressionAttributeNames: {
       '#gsi2pk': 'gsi2pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi2pk': `assigneeId|${userId}`,
+      ':gsi2pk': `assigneeId|completed|${userId}`,
       ':prefix': 'message',
     },
     IndexName: 'gsi2',
     KeyConditionExpression: '#gsi2pk = :gsi2pk and begins_with(#sk, :prefix)',
+    // Select: 'COUNT',
     applicationContext,
   })) as any;
 
-  return result.Count;
+  return 9;
 };
