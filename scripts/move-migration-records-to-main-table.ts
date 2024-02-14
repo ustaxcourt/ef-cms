@@ -54,7 +54,7 @@ const deployTable = `efcms-deploy-${environment}`;
 
     const deleteRequests = mrChunk.map(record => ({
       DeleteRequest: {
-        Key: { pk: record.pk, sk: record.sk },
+        Key: { pk: record.pk.S, sk: record.sk.S },
       },
     }));
     const deleteCommand = new BatchWriteCommand({
