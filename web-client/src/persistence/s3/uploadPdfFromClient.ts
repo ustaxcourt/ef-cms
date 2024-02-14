@@ -46,10 +46,15 @@ export const cleanFileMetadata = async (
   pdfLib,
   fileReader: FileReader,
 ) => {
-  const pdfDoc = await pdfLib.PDFDocument.load(fileReader.result, {
-    ignoreEncryption: true,
-    updateMetadata: false,
-  });
+  let pdfDoc;
+  try {
+    pdfDoc = await pdfLib.PDFDocument.load(fileReader.result, {
+      ignoreEncryption: true,
+      updateMetadata: false,
+    });
+  } catch (error) {
+    return fileReader.result;
+  }
 
   if (pdfDoc.isEncrypted) {
     return fileReader.result;
