@@ -1,17 +1,15 @@
-const AWS = require('aws-sdk');
-const fs = require('fs');
-const path = require('path');
+import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { requireEnvVars } from '../shared/admin-tools/util';
+import fs from 'fs';
+import path from 'path';
 
-const { ENV } = process.env;
+requireEnvVars(['SOURCE_TABLE']);
 
-if (!ENV) {
-  throw new Error('Please provide an environment.');
-}
+const { SOURCE_TABLE } = process.env;
 
-const docClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-});
+const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
+const docClient = DynamoDBDocument.from(dynamodb);
 
 const getFilesInDirectory = dir => {
   const files = fs.readdirSync(dir);
@@ -24,18 +22,18 @@ const getFilesInDirectory = dir => {
 };
 
 const hasMigrationRan = async key => {
-  const { Item } = await docClient
-    .get({
-      Key: {
-        pk: `migration|${key}`,
-        sk: `migration|${key}`,
-      },
-      TableName: `efcms-deploy-${ENV}`,
-    })
-    .promise();
+  const getItemCommand = new GetItemCommand({
+    Key: {
+      pk: { S: 'migration' },
+      sk: { S: `migration|${key}` },
+    },
+    TableName: SOURCE_TABLE,
+  });
+  const { Item } = await docClient.send(getItemCommand);
   return !!Item;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const migrationFiles = getFilesInDirectory(
     path.join(
