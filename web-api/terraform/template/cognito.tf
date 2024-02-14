@@ -144,11 +144,6 @@ resource "aws_cognito_user_pool_client" "client" {
   ]
 }
 
-resource "aws_cognito_user_pool_domain" "main" {
-  domain       = "auth-${var.environment}-${var.cognito_suffix}"
-  user_pool_id = aws_cognito_user_pool.pool.id
-}
-
 resource "aws_cognito_user_pool" "irs_pool" {
   name = "efcms-irs-${var.environment}"
 
