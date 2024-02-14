@@ -47,8 +47,13 @@ export const cleanFileMetadata = async (
   fileReader: FileReader,
 ) => {
   const pdfDoc = await pdfLib.PDFDocument.load(fileReader.result, {
+    ignoreEncryption: true,
     updateMetadata: false,
   });
+
+  if (pdfDoc.isEncrypted) {
+    return fileReader.result;
+  }
 
   const cleanValue = '';
   pdfDoc.setTitle(title);
