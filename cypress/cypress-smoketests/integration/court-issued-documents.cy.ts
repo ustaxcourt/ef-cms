@@ -16,7 +16,10 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-create-order"]').click();
       cy.get('[data-testid="event-code-select"]').select('O');
+      cy.get('[data-testid="create-order-document-title"]').clear();
+      cy.get('[data-testid="create-order-document-title"]').type('Order');
       cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="create-order-page-title"]');
       cy.get('.ql-editor').click();
       cy.get('[data-testid="save-order-button"]').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
