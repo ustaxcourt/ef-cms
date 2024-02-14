@@ -70,11 +70,9 @@ export const filePetitionInteractor = async (
         });
     });
   }
-  console.log('atpFilesUploads', atpFilesUploads);
 
   try {
     const atpFileIds = await Promise.all(atpFilesUploads);
-    console.log('atpFileIds', atpFileIds);
 
     const [corporateDisclosureFileId, petitionFileId, stinFileId]: string[] =
       await Promise.all([
@@ -82,8 +80,6 @@ export const filePetitionInteractor = async (
         petitionFileUpload,
         stinFileUpload,
       ]);
-
-    console.log('atpFileIds', atpFileIds);
 
     const caseDetail = await applicationContext
       .getUseCases()
@@ -100,7 +96,6 @@ export const filePetitionInteractor = async (
       stinFileId,
     };
   } catch (error) {
-    console.log('error in file petitions', error);
     throw new Error('Error uploading documents to file petition');
   }
 };
