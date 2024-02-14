@@ -145,26 +145,7 @@ export const updatePractitionerCases = async ({
       applicationContext,
       caseToUpdate: validatedCaseToUpdate,
     });
-
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'user_contact_update_progress',
-        completedCases: idx + 1,
-        totalCases: validCasesToUpdate.length,
-      },
-      userId: user.userId,
-    });
   }
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'user_contact_update_no_alert_complete',
-      user,
-    },
-    userId: user.userId,
-  });
 
   return validCasesToUpdate;
 };

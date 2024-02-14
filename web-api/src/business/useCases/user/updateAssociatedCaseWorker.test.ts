@@ -210,40 +210,6 @@ describe('cases', () => {
     });
   });
 
-  it('should notify the user as their case is updated with the new email', async () => {
-    await updateAssociatedCaseWorker(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      user: mockPractitioner,
-    });
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'user_contact_update_progress',
-      completedCases: 1,
-      totalCases: 1,
-    });
-  });
-
-  it('should notify the user when their case has completed', async () => {
-    await updateAssociatedCaseWorker(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      user: mockPractitioner,
-    });
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[1][0].message,
-    ).toMatchObject({
-      action: 'user_contact_update_no_alert_complete',
-      user: {
-        email: 'test@example.com',
-        userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
-      },
-    });
-  });
-
   it('should not send any user notifications if the call to updateCase fails', async () => {
     applicationContext
       .getUseCaseHelpers()
@@ -627,8 +593,5 @@ describe('updatePractitionerCases', () => {
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0].caseToUpdate.privatePractitioners[0].serviceIndicator,
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledTimes(2);
   });
 });
