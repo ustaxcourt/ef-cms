@@ -2,6 +2,7 @@
 
 import { BatchWriteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { chunk } from 'lodash';
 import { requireEnvVars } from '../shared/admin-tools/util';
 
 requireEnvVars(['ENV', 'SOURCE_TABLE']);
@@ -35,33 +36,38 @@ const deployTable = `efcms-deploy-${environment}`;
     process.exit(1);
   }
 
-  const putRequests = migrationRecords.map(record => ({
-    PutRequest: {
-      Item: { ...record, pk: { S: 'migration' } },
-    },
-  }));
+  const mrChunks = chunk(migrationRecords, 25);
+  const promises: Promise<any>[] = [];
+  for (const mrChunk of mrChunks) {
+    const putRequests = mrChunk.map(record => ({
+      PutRequest: {
+        Item: { ...record, pk: { S: 'migration' } },
+      },
+    }));
 
-  const writeCommand = new BatchWriteCommand({
-    RequestItems: {
-      [mainTable]: putRequests,
-    },
-  });
-  await documentClient.send(writeCommand);
+    const writeCommand = new BatchWriteCommand({
+      RequestItems: {
+        [mainTable]: putRequests,
+      },
+    });
+    promises.push(documentClient.send(writeCommand));
+
+    const deleteRequests = mrChunk.map(record => ({
+      DeleteRequest: {
+        Key: { pk: record.pk, sk: record.sk },
+      },
+    }));
+    const deleteCommand = new BatchWriteCommand({
+      RequestItems: {
+        [deployTable]: deleteRequests,
+      },
+    });
+    promises.push(documentClient.send(deleteCommand));
+  }
+
+  await Promise.all(promises);
 
   console.log(
-    `Migrated ${migrationRecords.length} records to ${mainTable}. Deleting from deploy table.`,
+    `Migrated ${migrationRecords.length} records to ${mainTable} and deleted them from ${deployTable}.`,
   );
-
-  const deleteRequests = migrationRecords.map(record => ({
-    DeleteRequest: {
-      Key: { pk: record.pk, sk: record.sk },
-    },
-  }));
-  const deleteCommand = new BatchWriteCommand({
-    RequestItems: {
-      [deployTable]: deleteRequests,
-    },
-  });
-
-  await documentClient.send(deleteCommand);
 })();
