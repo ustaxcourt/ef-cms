@@ -7,7 +7,8 @@ import { requireEnvVars } from '../shared/admin-tools/util';
 requireEnvVars(['ENV', 'SOURCE_TABLE']);
 
 const environment = process.env.ENV!;
-const sourceTable = process.env.SOURCE_TABLE!;
+const mainTable = process.env.SOURCE_TABLE!;
+const deployTable = `efcms-deploy-${environment}`;
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
@@ -15,13 +16,13 @@ const sourceTable = process.env.SOURCE_TABLE!;
   const documentClient = DynamoDBDocument.from(dynamodb);
 
   const scanCommand = new ScanCommand({
-    TableName: `efcms-deploy-${environment}`,
+    TableName: deployTable,
   });
 
   const { Items } = await documentClient.send(scanCommand);
 
   if (!Items || Items.length === 0) {
-    console.error(`efcms-deploy-${environment} is empty. Exiting.`);
+    console.error(`${deployTable} is empty. Exiting.`);
     process.exit(1);
   }
 
@@ -36,16 +37,31 @@ const sourceTable = process.env.SOURCE_TABLE!;
 
   const putRequests = migrationRecords.map(record => ({
     PutRequest: {
-      Item: { ...record, pk: 'migration' },
+      Item: { ...record, pk: { S: 'migration' } },
     },
   }));
 
   const writeCommand = new BatchWriteCommand({
     RequestItems: {
-      [sourceTable]: putRequests,
+      [mainTable]: putRequests,
     },
   });
   await documentClient.send(writeCommand);
 
-  console.log(`Migrated ${migrationRecords.length} records to ${sourceTable}.`);
+  console.log(
+    `Migrated ${migrationRecords.length} records to ${mainTable}. Deleting from deploy table.`,
+  );
+
+  const deleteRequests = migrationRecords.map(record => ({
+    DeleteRequest: {
+      Key: { pk: record.pk, sk: record.sk },
+    },
+  }));
+  const deleteCommand = new BatchWriteCommand({
+    RequestItems: {
+      [deployTable]: deleteRequests,
+    },
+  });
+
+  await documentClient.send(deleteCommand);
 })();
