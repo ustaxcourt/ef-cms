@@ -189,10 +189,6 @@ jobs:
           command: |
             ./web-client/deploy-public.sh
       - run:
-          name: 'Deploy - Web API - Cognito Customize'
-          command: |
-            cd web-api && ./setup-cognito-ui.sh $ENV
-      - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             npm run verify-authorizers -- $ENV
