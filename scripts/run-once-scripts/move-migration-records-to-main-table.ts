@@ -4,6 +4,7 @@ import { BatchWriteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { chunk } from 'lodash';
 import { requireEnvVars } from '../../shared/admin-tools/util';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 requireEnvVars(['ENV', 'SOURCE_TABLE']);
 
@@ -37,35 +38,33 @@ const deployTable = `efcms-deploy-${environment}`;
   }
 
   const mrChunks = chunk(migrationRecords, 25);
-  const promises: Promise<any>[] = [];
+  const commands: BatchWriteCommand[] = [];
   for (const mrChunk of mrChunks) {
     const putRequests = mrChunk.map(record => ({
       PutRequest: {
-        Item: { ...record, pk: { S: 'migration' } },
+        Item: { ...unmarshall(record), pk: 'migration' },
       },
     }));
 
-    const writeCommand = new BatchWriteCommand({
+    commands.push(new BatchWriteCommand({
       RequestItems: {
         [mainTable]: putRequests,
       },
-    });
-    promises.push(documentClient.send(writeCommand));
+    }));
 
     const deleteRequests = mrChunk.map(record => ({
       DeleteRequest: {
         Key: { pk: record.pk.S, sk: record.sk.S },
       },
     }));
-    const deleteCommand = new BatchWriteCommand({
+    commands.push(new BatchWriteCommand({
       RequestItems: {
         [deployTable]: deleteRequests,
       },
-    });
-    promises.push(documentClient.send(deleteCommand));
+    }));
   }
 
-  await Promise.all(promises);
+  await Promise.all(commands.map(command => documentClient.send(command)));
 
   console.log(
     `Migrated ${migrationRecords.length} records to ${mainTable} and deleted them from ${deployTable}.`,
