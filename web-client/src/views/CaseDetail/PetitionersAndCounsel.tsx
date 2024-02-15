@@ -103,7 +103,10 @@ export const PetitionersAndCounsel = connect(
                   )}
 
                   {petitioner.serviceIndicator && (
-                    <span className="margin-top-4">
+                    <span
+                      className="margin-top-4"
+                      data-testid="petitioner-service-indicator"
+                    >
                       <p className="semi-bold margin-bottom-0">
                         Service preference
                       </p>
