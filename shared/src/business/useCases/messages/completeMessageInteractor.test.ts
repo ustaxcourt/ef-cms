@@ -96,10 +96,10 @@ describe('completeMessageInteractor', () => {
         .calls[0][0].parentMessageId,
     ).toEqual(PARENT_MESSAGE_ID);
     expect(
-      applicationContext.getPersistenceGateway().updateMessage,
+      applicationContext.getPersistenceGateway().upsertMessage,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().upsertMessage.mock.calls[0][0]
         .message,
     ).toMatchObject({
       completedBy: 'Test Petitionsclerk',

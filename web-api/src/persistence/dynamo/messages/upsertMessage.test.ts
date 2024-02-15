@@ -1,8 +1,8 @@
 import { PETITIONS_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawMessage } from '@shared/business/entities/Message';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { createMessage } from './createMessage';
 import { put } from '../../dynamodbClientService';
+import { upsertMessage } from './upsertMessage';
 
 jest.mock('../../dynamodbClientService', () => ({
   put: jest.fn(),
@@ -23,9 +23,9 @@ const mockMessage = {
   toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
 } as RawMessage;
 
-describe('createMessage', () => {
+describe('upsertMessage', () => {
   it('attempts to persist the message record', async () => {
-    await createMessage({
+    await upsertMessage({
       applicationContext,
       message: mockMessage,
     });

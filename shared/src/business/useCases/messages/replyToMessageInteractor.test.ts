@@ -79,10 +79,10 @@ describe('replyToMessageInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().createMessage,
+      applicationContext.getPersistenceGateway().upsertMessage,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().createMessage.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().upsertMessage.mock.calls[0][0]
         .message,
     ).toMatchObject({
       ...messageData,

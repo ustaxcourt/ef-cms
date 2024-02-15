@@ -132,7 +132,7 @@ describe('updateCaseAndAssociations', () => {
 
     // updateCaseMessages
     expect(
-      applicationContext.getPersistenceGateway().updateMessage,
+      applicationContext.getPersistenceGateway().upsertMessage,
     ).not.toHaveBeenCalled();
 
     // updateCorrespondence
@@ -846,7 +846,7 @@ describe('updateCaseAndAssociations', () => {
         applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
       ).not.toHaveBeenCalled();
       expect(
-        applicationContext.getPersistenceGateway().updateMessage,
+        applicationContext.getPersistenceGateway().upsertMessage,
       ).not.toHaveBeenCalled();
     });
 
@@ -872,7 +872,7 @@ describe('updateCaseAndAssociations', () => {
         applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
       ).toHaveBeenCalled();
       expect(
-        applicationContext.getPersistenceGateway().updateMessage,
+        applicationContext.getPersistenceGateway().upsertMessage,
       ).not.toHaveBeenCalled();
     });
 
@@ -892,7 +892,7 @@ describe('updateCaseAndAssociations', () => {
         applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
       ).toHaveBeenCalled();
       expect(
-        applicationContext.getPersistenceGateway().updateMessage,
+        applicationContext.getPersistenceGateway().upsertMessage,
       ).toHaveBeenCalled();
     });
   });

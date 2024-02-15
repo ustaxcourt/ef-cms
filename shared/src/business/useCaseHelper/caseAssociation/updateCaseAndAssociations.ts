@@ -105,7 +105,7 @@ const updateCaseMessages = async ({
   return validMessages.map(
     message =>
       function updateCaseMessages_cb() {
-        return applicationContext.getPersistenceGateway().updateMessage({
+        return applicationContext.getPersistenceGateway().upsertMessage({
           applicationContext,
           message,
         });

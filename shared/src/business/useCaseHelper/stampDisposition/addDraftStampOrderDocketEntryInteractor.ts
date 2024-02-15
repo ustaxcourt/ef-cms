@@ -119,7 +119,7 @@ export const addDraftStampOrderDocketEntry = async (
       documentTitle: stampedDocketEntryEntity.documentTitle,
     });
 
-    await applicationContext.getPersistenceGateway().updateMessage({
+    await applicationContext.getPersistenceGateway().upsertMessage({
       applicationContext,
       message: messageEntity.validate().toRawObject(),
     });

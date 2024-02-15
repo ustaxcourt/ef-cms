@@ -65,7 +65,7 @@ export const replyToMessage = async (
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createMessage({
+  await applicationContext.getPersistenceGateway().upsertMessage({
     applicationContext,
     message: validatedRawMessage,
   });

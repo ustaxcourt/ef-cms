@@ -21,7 +21,6 @@ import {
   getLock,
   removeLock,
 } from './persistence/dynamo/locks/acquireLock';
-import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
@@ -176,7 +175,6 @@ import {
   updatePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/updatePractitionerOnCase';
 import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
-import { updateMessage } from './persistence/dynamo/messages/updateMessage';
 import { updatePractitionerUser } from './persistence/dynamo/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
@@ -184,6 +182,7 @@ import { updateUser } from './persistence/dynamo/users/updateUser';
 import { updateUserCaseNote } from './persistence/dynamo/userCaseNotes/updateUserCaseNote';
 import { updateUserEmail } from './persistence/dynamo/users/updateUserEmail';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
+import { upsertMessage } from './persistence/dynamo/messages/upsertMessage';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from './persistence/s3/zipDocuments';
@@ -234,7 +233,6 @@ const gatewayMethods = {
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createJobStatus,
-    createMessage,
     createNewPetitionerUser,
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
@@ -272,7 +270,6 @@ const gatewayMethods = {
     updateDocketEntryWorksheet,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
-    updateMessage,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
     updateTrialSession,
@@ -281,6 +278,7 @@ const gatewayMethods = {
     updateUserCaseNote,
     updateUserEmail,
     updateUserRecords,
+    upsertMessage,
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
