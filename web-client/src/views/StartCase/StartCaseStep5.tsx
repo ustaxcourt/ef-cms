@@ -72,6 +72,7 @@ export const StartCaseStep5 = connect(
                                     id="petition-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
+                                    showIcon={false}
                                     title="Petition"
                                   />
                                 </div>

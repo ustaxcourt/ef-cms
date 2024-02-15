@@ -26,11 +26,11 @@ export const WhatToExpect = () => (
     </p>
     <div className="icon-list">
       <span className="description-wrapper">
-        <p className="label">1. Petition form</p>
+        <p className="label">1. Petition</p>
         <p>
-          This is the document where that explains why you disagree with the
-          Internal Revenue Service (IRS). There are two options you may use to
-          provide the Petition:
+          This is the document that explains why you disagree with the Internal
+          Revenue Service (IRS). There are two options you may use to provide
+          the Petition:
           <ul>
             <li>
               Complete and upload the Court&apos;s standard Petition Form.{' '}
@@ -53,8 +53,7 @@ export const WhatToExpect = () => (
               <Button
                 link
                 className="usa-link--external text-left mobile-text-wrap"
-                href="https://www.ustaxcourt.gov/resources/ropp/Complete_Rules_of_Practice_and_Procedure_Amended_03202023.pdf"
-                icon="file-pdf"
+                href="https://www.ustaxcourt.gov/rules.html"
                 iconColor="blue"
                 overrideMargin="margin-right-1"
                 rel="noopener noreferrer"
@@ -84,7 +83,7 @@ export const WhatToExpect = () => (
         </p>
         <p>
           This is used to help the IRS identify who you are. This is the only
-          document that should contain your SSN, TIN, OR EIN. The STIN will{' '}
+          document that should contain your SSN, TIN, or EIN. The STIN will{' '}
           <strong>not</strong> be visible as part of the case record.
           <br />
           <Button
@@ -107,7 +106,7 @@ export const WhatToExpect = () => (
         <p>
           If you’re filing on behalf of a business (this includes a corporation,
           partnership, and LLC), you’ll need to complete this to provide the
-          court additional information about corporate interests in the
+          Court additional information about corporate interests in the
           business.
           <br />
           <Button
@@ -149,7 +148,6 @@ export const WhatToExpect = () => (
       className="margin-right-0"
       data-testid="file-a-petition"
       href="/before-filing-a-petition"
-      icon="file"
       id="file-a-petition"
     >
       Start a Case
