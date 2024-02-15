@@ -13,6 +13,7 @@ import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('serveThirtyDayNoticeInteractor', () => {
   let trialSession: RawTrialSession;
+  const TEST_CLIENT_CONNECTION_ID = 'TEST_CLIENT_CONNECTION_ID';
 
   beforeEach(() => {
     trialSession = {
@@ -41,6 +42,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
     await expect(
       serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: trialSession.trialSessionId!,
       }),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
@@ -49,6 +51,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
   it('should throw an invalid request error when no trial session id is provided', async () => {
     await expect(
       serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: undefined as any,
       }),
     ).rejects.toThrow(new InvalidRequest('No trial Session Id provided'));
@@ -100,6 +103,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         .mockResolvedValueOnce(caseWithProSePetitioner);
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: trialSession.trialSessionId!,
       });
 
@@ -166,6 +170,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ];
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: trialSession.trialSessionId!,
       });
 
@@ -186,6 +191,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ];
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: trialSession.trialSessionId!,
       });
 
@@ -213,6 +219,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         applicationContext.getNotificationGateway().sendNotificationToUser,
       ).toHaveBeenCalledWith({
         applicationContext: expect.anything(),
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         message: {
           action: 'thirty_day_notice_paper_service_complete',
           fileId: mockFileId,
@@ -234,6 +241,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ];
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: trialSession.trialSessionId!,
       });
 
@@ -241,6 +249,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         applicationContext.getNotificationGateway().sendNotificationToUser,
       ).toHaveBeenCalledWith({
         applicationContext: expect.anything(),
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         message: {
           action: 'thirty_day_notice_paper_service_complete',
           pdfUrl: undefined,
@@ -258,6 +267,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         .getDocument.mockResolvedValue(testPdfDoc);
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: trialSession.trialSessionId!,
       });
 
@@ -275,6 +285,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         .getDocument.mockResolvedValue(testPdfDoc);
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: trialSession.trialSessionId!,
       });
 
@@ -319,6 +330,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ];
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
+        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
         trialSessionId: trialSession.trialSessionId!,
       });
 
