@@ -78,12 +78,12 @@ export const getNotificationsInteractor = async (
   );
 
   const [
-    userInboxCount,
+    userInbox,
     sectionInbox,
     documentQCIndividualInbox,
     documentQCSectionInbox,
   ] = await Promise.all([
-    applicationContext.getPersistenceGateway().getUserInboxMessageCount({
+    applicationContext.getPersistenceGateway().getUserInboxMessages({
       applicationContext,
       userId,
     }),
@@ -108,7 +108,7 @@ export const getNotificationsInteractor = async (
       documentQCIndividualInbox: documentQCIndividualInbox.length,
       documentQCSectionInbox: documentQCSectionInbox.length,
       sectionInbox: sectionInbox.length,
-      userInboxCount,
+      userInbox: userInbox.length,
     },
   );
 
@@ -126,7 +126,9 @@ export const getNotificationsInteractor = async (
     filters['section']['inbox'],
   ).length;
 
-  const unreadMessageCount = userInboxCount;
+  const unreadMessageCount = userInbox.filter(
+    message => !message.isRead,
+  ).length;
 
   applicationContext.logger.info('getNotificationsInteractor done filtering', {
     qcIndividualInProgressCount,
@@ -144,7 +146,7 @@ export const getNotificationsInteractor = async (
     qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
       .length,
     unreadMessageCount,
-    userInboxCount,
+    userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
   };
 };
