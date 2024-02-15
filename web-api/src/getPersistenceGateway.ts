@@ -78,7 +78,6 @@ import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/g
 import { getClientId } from './persistence/cognito/getClientId';
 import { getCognitoUserIdByEmail } from './persistence/cognito/getCognitoUserIdByEmail';
 import { getCompletedSectionInboxMessages } from './persistence/elasticsearch/messages/getCompletedSectionInboxMessages';
-import { getCompletedUserInboxMessages } from './persistence/elasticsearch/messages/getCompletedUserInboxMessages';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConsolidatedCasesCount } from '@web-api/persistence/dynamo/cases/getConsolidatedCasesCount';
 import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidatedCases';
@@ -127,6 +126,7 @@ import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
 import { getUserCaseNote } from './persistence/dynamo/userCaseNotes/getUserCaseNote';
 import { getUserCaseNoteForCases } from './persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
+import { getUserCompletedMessages } from './persistence/elasticsearch/messages/getUserCompletedMessages';
 import {
   getUserInboxMessageCount,
   getUserInboxMessages,
@@ -331,7 +331,6 @@ const gatewayMethods = {
   getClientId,
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
-  getCompletedUserInboxMessages,
   getConfigurationItemValue,
   getConsolidatedCasesCount,
   getCountOfConsolidatedCases,
@@ -383,6 +382,7 @@ const gatewayMethods = {
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
+  getUserCompletedMessages,
   getUserInboxMessageCount,
   getUserInboxMessages,
   getUserOutboxMessages,

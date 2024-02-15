@@ -25,7 +25,7 @@ export const getCompletedMessagesForUserInteractor = async (
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getCompletedUserInboxMessages({
+    .getUserCompletedMessages({
       applicationContext,
       userId,
     });

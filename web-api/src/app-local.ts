@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 import AWS from 'aws-sdk';
 import DynamoDBReadable from 'dynamodb-streams-readable';
 import express from 'express';
+import fs from 'fs';
 import http from 'http';
 
 // ************************ app-local *********************************
@@ -84,8 +85,20 @@ localStreamsApp.get('/isDone', (req, res) => {
   StreamDescription.Shards.forEach(shard => processShard(shard));
 })();
 
+let isSecondRun = fs.existsSync('./first-run.txt');
+fs.writeFileSync('./first-run.txt', 'true', 'utf-8');
+
+if (isSecondRun) {
+  console.log('TESTING is second+ run', isSecondRun);
+  process.env.DEPLOYMENT_TIMESTAMP = `${Date.now()}`;
+  console.log(process.env.DEPLOYMENT_TIMESTAMP);
+} else {
+  console.log('TESTING is first run');
+}
+
 const processChunks = async () => {
   for (const chunk of chunks) {
+    console.log(chunk[0]);
     await processStreamRecordsLambda({
       Records: chunk,
     }).catch(err => {
