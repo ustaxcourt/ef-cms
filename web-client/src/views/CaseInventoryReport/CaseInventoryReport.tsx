@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -106,6 +107,14 @@ export const CaseInventoryReport = connect(
                   <table className="usa-table row-border-only subsection case-inventory">
                     <thead>
                       <tr>
+                        <th
+                          aria-label="consolidation icon"
+                          className="width-205"
+                        >
+                          <span className="usa-sr-only">
+                            Consolidated Case Indicator
+                          </span>
+                        </th>
                         <th aria-label="docket number">Docket No.</th>
                         <th>Case Title</th>
                         {caseInventoryReportHelper.showJudgeColumn && (
@@ -120,6 +129,15 @@ export const CaseInventoryReport = connect(
                       {caseInventoryReportHelper.formattedReportData.map(
                         row => (
                           <tr key={row.docketNumber}>
+                            <td className="width-205">
+                              <ConsolidatedCaseIcon
+                                consolidatedIconTooltipText={
+                                  row.consolidatedIconTooltipText
+                                }
+                                inConsolidatedGroup={row.inConsolidatedGroup}
+                                showLeadCaseIcon={row.isLeadCase}
+                              />
+                            </td>
                             <td>
                               <CaseLink formattedCase={row} />
                             </td>
