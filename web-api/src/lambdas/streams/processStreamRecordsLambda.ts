@@ -2,8 +2,6 @@ import { createApplicationContext } from '../../applicationContext';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
 const applicationContext = createApplicationContext({});
-const deploymentTimestamp: number =
-  Number(process.env.DEPLOYMENT_TIMESTAMP!) || 0; // epoch seconds
 
 const shouldProcessRecord = (record: DynamoDBRecord): boolean => {
   if (
@@ -33,6 +31,9 @@ const shouldProcessRecord = (record: DynamoDBRecord): boolean => {
       );
       return true;
     }
+
+    const deploymentTimestamp: number =
+      Number(process.env.DEPLOYMENT_TIMESTAMP!) || 0; // epoch seconds
 
     applicationContext.logger.debug(
       `${

@@ -45,6 +45,16 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     type = "S"
   }
 
+  attribute {
+    name = "gsi4pk"
+    type = "S"
+  }
+
+  attribute {
+    name = "gsi5pk"
+    type = "S"
+  }
+
   point_in_time_recovery {
     enabled = true
   }
@@ -59,15 +69,29 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   global_secondary_index {
     name            = "gsi2"
     hash_key        = "gsi2pk"
-    range_key       = "sk"
+    range_key       = "gsi2sk"
     projection_type = "ALL"
   }
 
   global_secondary_index {
     name            = "gsi3"
     hash_key        = "gsi3pk"
-    range_key       = "sk"
-    projection_type = "ALL" # what fields to actually store into the gsi table .... 
+    range_key       = "gsi3sk"
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "gsi4"
+    hash_key        = "gsi4pk"
+    range_key       = "gsi4sk"
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "gsi5"
+    hash_key        = "gsi5pk"
+    range_key       = "gsi5sk"
+    projection_type = "ALL"
   }
 
   # if glue job, and 10252 is only in test

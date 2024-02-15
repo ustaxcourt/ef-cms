@@ -1,13 +1,13 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getCompletedUserInboxMessages } from './getCompletedUserInboxMessages';
+import { getUserCompletedMessages } from './getUserCompletedMessages';
 jest.mock('../searchClient');
 import { search } from '../searchClient';
 
-describe('getCompletedUserInboxMessages', () => {
+describe('getUserCompletedMessages', () => {
   it('should return results from the search client', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
 
-    const results = await getCompletedUserInboxMessages({
+    const results = await getUserCompletedMessages({
       applicationContext,
       userId: 'f5d68c53-af31-484d-803b-da22c4d03357',
     });

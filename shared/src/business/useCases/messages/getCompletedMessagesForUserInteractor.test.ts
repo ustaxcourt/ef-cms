@@ -56,7 +56,7 @@ describe('getCompletedMessagesForUserInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCompletedUserInboxMessages.mockReturnValue([messageData]);
+      .getUserCompletedMessages.mockReturnValue([messageData]);
 
     const returnedMessages = await getCompletedMessagesForUserInteractor(
       applicationContext,
@@ -66,7 +66,7 @@ describe('getCompletedMessagesForUserInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCompletedUserInboxMessages,
+      applicationContext.getPersistenceGateway().getUserCompletedMessages,
     ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });

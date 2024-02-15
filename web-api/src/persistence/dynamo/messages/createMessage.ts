@@ -21,13 +21,19 @@ export const createMessage = ({
       ...message,
       gsi1pk: `message|${message.parentMessageId}`,
       gsi2pk:
-        message.toUserId && !message.completedAt
-          ? `assigneeId|${message.toUserId}`
+        !message.completedAt && message.toUserId
+          ? `assigneeId|${message.toUserId}|inbox`
           : undefined,
-      gsi3pk:
+      gsi3pk: message.fromUserId
+        ? `assigneeId|${message.fromUserId}|${message.completedAt ? 'completed' : 'outbox'}`
+        : undefined,
+      gsi4pk:
         !message.completedAt && message.toSection
-          ? `section|${message.toSection}`
+          ? `section|${message.toSection}|inbox`
           : undefined,
+      gsi5pk: message.fromSection
+        ? `section|${message.fromSection}|${message.completedAt ? 'completed' : 'outbox'}`
+        : undefined,
       pk: `case|${message.docketNumber}`,
       sk: `message|${message.messageId}`,
     },
