@@ -1,40 +1,22 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
-import { search } from '../searchClient';
+import { queryFull } from '../../dynamodbClientService';
 
 export const getSectionInboxMessages = async ({
   applicationContext,
   section,
 }) => {
-  applicationContext.logger.info('getSectionInboxMessages start');
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'toSection.S': section },
-            },
-            {
-              term: { 'isRepliedTo.BOOL': false },
-            },
-            {
-              match: { 'isCompleted.BOOL': false },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
+  const results = await queryFull({
+    ExpressionAttributeNames: {
+      '#gsi4pk': 'gsi4pk',
+      '#sk': 'sk',
     },
-    index: 'efcms-message',
-  };
-
-  const { results } = await search({
+    ExpressionAttributeValues: {
+      ':gsi4pk': `section|inbox|${section}`,
+      ':prefix': 'message',
+    },
+    IndexName: 'gsi4',
+    KeyConditionExpression: '#gsi4pk = :gsi4pk and begins_with(#sk, :prefix)',
     applicationContext,
-    searchParameters: query,
   });
-
-  applicationContext.logger.info('getSectionInboxMessages end');
 
   return results;
 };

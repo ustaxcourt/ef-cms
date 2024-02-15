@@ -1,45 +1,24 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
-import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
-import { search } from '../searchClient';
+import { queryFull } from '../../dynamodbClientService';
 
 export const getCompletedSectionInboxMessages = async ({
   applicationContext,
   section,
 }) => {
-  const filterDate = calculateISODate({ howMuch: -7 });
-
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'completedBySection.S': section },
-            },
-            {
-              term: { 'isCompleted.BOOL': true },
-            },
-            {
-              range: {
-                'completedAt.S': {
-                  format: 'strict_date_time', // ISO-8601 time stamp
-                  gte: filterDate,
-                },
-              },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
+  const results = await queryFull({
+    ExpressionAttributeNames: {
+      '#gsi2pk': 'gsi2pk',
+      '#sk': 'sk',
     },
-    index: 'efcms-message',
-  };
-
-  const { results } = await search({
+    ExpressionAttributeValues: {
+      ':gsi2pk': `assigneeId|inbox|${section}`,
+      ':prefix': 'message',
+    },
+    IndexName: 'gsi2',
+    KeyConditionExpression: '#gsi2pk = :gsi2pk and begins_with(#sk, :prefix)',
     applicationContext,
-    searchParameters: query,
   });
+
+  // applicationContext.logger.info('getCompletedSectionInboxMessages end');
 
   return results;
 };
