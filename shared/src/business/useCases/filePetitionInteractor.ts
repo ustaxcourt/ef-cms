@@ -72,17 +72,14 @@ export const filePetitionInteractor = async (
   }
 
   try {
-    const [
-      corporateDisclosureFileId,
-      petitionFileId,
-      stinFileId,
-      ...atpFileIds
-    ]: string[] = await Promise.all([
-      corporateDisclosureFileUpload,
-      petitionFileUpload,
-      stinFileUpload,
-      ...atpFilesUploads,
-    ]);
+    const atpFileIds = await Promise.all(atpFilesUploads);
+
+    const [corporateDisclosureFileId, petitionFileId, stinFileId]: string[] =
+      await Promise.all([
+        corporateDisclosureFileUpload,
+        petitionFileUpload,
+        stinFileUpload,
+      ]);
 
     const caseDetail = await applicationContext
       .getUseCases()

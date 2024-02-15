@@ -3,6 +3,7 @@ import {
   ROLES,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
 
 export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
   return it('Petitions clerk submits paper case to IRS', async () => {
@@ -49,6 +50,9 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     expect(cerebralTest.getState('currentPage')).toEqual(
       'PrintPaperPetitionReceipt',
