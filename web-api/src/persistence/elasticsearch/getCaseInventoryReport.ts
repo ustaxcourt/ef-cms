@@ -24,13 +24,17 @@ export const getCaseInventoryReport = async ({
   from?: number;
   pageSize?: number;
   status?: string;
-}) => {
+}): Promise<{
+  foundCases: RawCase[];
+  totalCount: number;
+}> => {
   const source = [
     'associatedJudge',
     'caseCaption',
     'docketNumber',
     'docketNumberSuffix',
     'docketNumberWithSuffix',
+    'leadDocketNumber',
     'status',
   ];
   const { CASE_INVENTORY_MAX_PAGE_SIZE } = applicationContext.getConstants();
