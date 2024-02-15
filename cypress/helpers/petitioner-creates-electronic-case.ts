@@ -38,7 +38,13 @@ export function petitionerCreatesEletronicCaseWithDeseasedSpouse(
     });
 }
 
-export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
+export function petitionerCreatesEletronicCase({
+  atpFilesToAttach = [],
+  primaryFilerName = 'John',
+}: {
+  atpFilesToAttach?: string[];
+  primaryFilerName?: string;
+} = {}) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   attachDummyFile('stin-file');
@@ -46,6 +52,8 @@ export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
   attachDummyFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
+  cy.get('[data-testid="atp-files-upload"]').attachFile(atpFilesToAttach);
+
   cy.get('[data-testid="complete-step-2"]').click();
   cy.get('[data-testid="filing-type-0"]').click();
 
@@ -61,6 +69,15 @@ export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
   cy.get('[data-testid="procedure-type-0"]').click();
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
+
+  // Review Page
+  cy.get('[data-testid="attachment-to-petition-pdfs"]').should(
+    'have.length',
+    atpFilesToAttach.length,
+  );
+  cy.get('[data-testid="stin-preview-button"]').should('exist');
+  cy.get('[data-testid="petition-preview-button"]').should('exist');
+
   cy.get('[data-testid="file-petition"]').click();
   return cy
     .get('[data-testid="docket-number-with-suffix"]')

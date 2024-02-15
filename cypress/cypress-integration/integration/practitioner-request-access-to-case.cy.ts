@@ -59,31 +59,37 @@ describe('Private Practitioner requests access to case', () => {
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
-      petitionerCreatesEletronicCase(primaryFilerName).then(docketNumber => {
-        petitionsClerkServesPetition(docketNumber);
+      petitionerCreatesEletronicCase({ primaryFilerName }).then(
+        docketNumber => {
+          petitionsClerkServesPetition(docketNumber);
 
-        loginAsDocketClerk();
-        searchByDocketNumberInHeader(docketNumber);
-        addIntervenorAsPartyToCase();
+          loginAsDocketClerk();
+          searchByDocketNumberInHeader(docketNumber);
+          addIntervenorAsPartyToCase();
 
-        loginAsPrivatePractitioner();
-        externalUserSearchesDocketNumber(docketNumber);
-        cy.get('[data-testid="button-request-access"]').click();
-        selectTypeaheadInput('document-type', 'Entry of Appearance');
-        cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
-        cy.get('[data-testid="auto-generation"]').should('exist');
-        cy.get('[data-testid="request-access-submit-document"]').click();
+          loginAsPrivatePractitioner();
+          externalUserSearchesDocketNumber(docketNumber);
+          cy.get('[data-testid="button-request-access"]').click();
+          selectTypeaheadInput('document-type', 'Entry of Appearance');
+          cy.get(
+            `[data-testid="filer-${primaryFilerName}, Petitioner"]`,
+          ).click();
+          cy.get('[data-testid="auto-generation"]').should('exist');
+          cy.get('[data-testid="request-access-submit-document"]').click();
 
-        cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
-          'exist',
-        );
-        cy.get('[data-testid="request-access-review-submit-document"]').click();
+          cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
+            'exist',
+          );
+          cy.get(
+            '[data-testid="request-access-review-submit-document"]',
+          ).click();
 
-        cy.get('[data-testid="document-download-link-EA"]').should(
-          'have.text',
-          `Entry of Appearance for Petr. ${primaryFilerName}`,
-        );
-      });
+          cy.get('[data-testid="document-download-link-EA"]').should(
+            'have.text',
+            `Entry of Appearance for Petr. ${primaryFilerName}`,
+          );
+        },
+      );
     });
   });
 

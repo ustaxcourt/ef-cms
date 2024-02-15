@@ -5,12 +5,21 @@ import {
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
 import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { petitionsClerkQcsAndServesElectronicCase } from '../../helpers/petitions-clerk-qcs-and-serves-electronic-case';
 import { practitionerCreatesEletronicCase } from '../../helpers/practitioner-creates-electronic-case';
 
 describe('users should be able to create cases', () => {
-  it('a petitioner should be able to create a case', () => {
+  it('a petitioner should be able to create a case and petitions clerk QCs and serves it', () => {
+    const w3Dummy = 'w3-dummy.pdf';
+    const atpFilesToAttach = [w3Dummy, w3Dummy, w3Dummy, w3Dummy, w3Dummy];
+
     loginAsPetitioner();
-    petitionerCreatesEletronicCase();
+    petitionerCreatesEletronicCase({ atpFilesToAttach }).then(docketNumber => {
+      petitionsClerkQcsAndServesElectronicCase(
+        docketNumber,
+        atpFilesToAttach.length,
+      );
+    });
   });
 
   it('a practitioner should be able to create a case', () => {

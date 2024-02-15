@@ -42,8 +42,9 @@ describe('Petition clerk creates a paper filing', function () {
       cy.get('[data-testid="petitionFileButton"]').click();
       cy.get('[data-testid="modal-dialog-header"]').should('be.visible');
       cy.get('[data-testid="close-modal-button"]').click();
-      cy.get('[data-testid="stinFileButton"]').should('be.visible');
-      cy.get('[data-testid="stinFileButton"]').should('not.have.attr', 'href');
+      cy.get('[data-testid="stinFileDisplay"]').should('be.visible');
+      cy.get('[data-testid="stinFileDisplay"]').should('not.be.enabled');
+
       cy.get('[data-testid="requestForPlaceOfTrialFileButton"]').should(
         'be.visible',
       );

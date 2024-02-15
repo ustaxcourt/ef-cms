@@ -44,7 +44,7 @@ export const Attachments = connect(
               {reviewSavedPetitionHelper.stinFile && (
                 <div
                   className="margin-top-3 margin-bottom-2"
-                  data-testid="stinFileButton"
+                  data-testid="stinFileDisplay"
                 >
                   <div className="grid-row">
                     <div className="grid-col flex-auto">
