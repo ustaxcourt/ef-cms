@@ -20,10 +20,9 @@ describe('Given an admissions clerk is working with a served paper case that has
     });
   });
 
-  describe('When they grant the petitioners electronic access to the case', () => {
-    describe('And the petitioners create & verifies their accounts', () => {
-      it('Then a Notice Of Change of Email (NOCE) should be generated for each petitioner and served on the case', () => {
-        // TODO 10007: this isn't 100% correct
+  describe('When they grant the first petitioner electronic access to the case', () => {
+    describe('And the petitioner verifies their accounts', () => {
+      it('Then a Notice Of Change of Email (NOCE) should be generated and served on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic', () => {
         createAndServePaperPetition().then(({ docketNumber }) => {
           const petitionerUsername = `cypress_test_account+${v4()}`;
           const petitionerEmail = `${petitionerUsername}@example.com`;
@@ -82,14 +81,19 @@ describe('Given an admissions clerk is working with a served paper case that has
           cy.get('[data-testid="petitioner-pending-email"]').should(
             'not.contain.text',
           );
+          logout();
+
+          cy.login('docketclerk1');
+          cy.get('[data-testid="messages-banner"]');
+          cy.get('[data-testid="document-qc-nav-item"]').click();
+          cy.get(
+            '[data-testid="switch-to-section-document-qc-button"]',
+          ).click();
+          cy.get(`[data-testid="work-item-${docketNumber}"]`).contains(
+            'Notice of Change of Email Address for rick james',
+          );
         });
       });
-
-      // describe('And when the NOCE is QC`d by a docket clerk,', () => {
-      //   it('Then the petitioners service preference should be updated to electronic', () => {
-      //     // TODO 10007
-      //   });
-      // });
     });
   });
 });
