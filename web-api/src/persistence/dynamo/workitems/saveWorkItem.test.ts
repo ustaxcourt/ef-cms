@@ -49,7 +49,7 @@ describe('saveWorkItem', () => {
     });
 
     expect(putMock.mock.calls[0][0].Item.gsi3pk).toBe(
-      `section|${DOCKET_SECTION}|inbox`,
+      `section|inbox|${DOCKET_SECTION}`,
     );
   });
 

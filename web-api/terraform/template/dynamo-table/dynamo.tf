@@ -69,28 +69,28 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   global_secondary_index {
     name            = "gsi2"
     hash_key        = "gsi2pk"
-    range_key       = "gsi2sk"
+    range_key       = "sk"
     projection_type = "ALL"
   }
 
   global_secondary_index {
     name            = "gsi3"
     hash_key        = "gsi3pk"
-    range_key       = "gsi3sk"
+    range_key       = "sk"
     projection_type = "ALL"
   }
 
   global_secondary_index {
     name            = "gsi4"
     hash_key        = "gsi4pk"
-    range_key       = "gsi4sk"
+    range_key       = "sk"
     projection_type = "ALL"
   }
 
   global_secondary_index {
     name            = "gsi5"
     hash_key        = "gsi5pk"
-    range_key       = "gsi5sk"
+    range_key       = "sk"
     projection_type = "ALL"
   }
 

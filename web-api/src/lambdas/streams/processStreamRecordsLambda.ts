@@ -25,24 +25,24 @@ const shouldProcessRecord = (record: DynamoDBRecord): boolean => {
     } else if (typeof ApproximateCreationDateTime === 'number') {
       approximateCreationDateTime = ApproximateCreationDateTime;
     } else {
-      applicationContext.logger.error(
-        `Error handling stream event timestamp for event ${record.eventID}`,
-        { ApproximateCreationDateTime, pk: record.dynamodb.Keys?.pk?.S },
-      );
+      // applicationContext.logger.error(
+      //   `Error handling stream event timestamp for event ${record.eventID}`,
+      //   { ApproximateCreationDateTime, pk: record.dynamodb.Keys?.pk?.S },
+      // );
       return true;
     }
 
     const deploymentTimestamp: number =
       Number(process.env.DEPLOYMENT_TIMESTAMP!) || 0; // epoch seconds
 
-    applicationContext.logger.debug(
-      `${
-        approximateCreationDateTime >= deploymentTimestamp
-          ? 'Indexing'
-          : 'Not indexing'
-      } record ${record.dynamodb.Keys?.pk?.S}`,
-      { approximateCreationDateTime, deploymentTimestamp },
-    );
+    // applicationContext.logger.debug(
+    //   `${
+    //     approximateCreationDateTime >= deploymentTimestamp
+    //       ? 'Indexing'
+    //       : 'Not indexing'
+    //   } record ${record.dynamodb.Keys?.pk?.S}`,
+    //   { approximateCreationDateTime, deploymentTimestamp },
+    // );
     return approximateCreationDateTime >= deploymentTimestamp;
   }
   return true;
