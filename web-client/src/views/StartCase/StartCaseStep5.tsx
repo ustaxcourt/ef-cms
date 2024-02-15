@@ -92,6 +92,7 @@ export const StartCaseStep5 = connect(
                                     return (
                                       <div
                                         className="grid-row"
+                                        data-testid="attachment-to-petition-pdfs"
                                         key={atpFile.name}
                                       >
                                         <div className="grid-col flex-auto">
@@ -155,6 +156,7 @@ export const StartCaseStep5 = connect(
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
                                 <PDFPreviewButton
+                                  data-testid="stin-preview-button"
                                   file={form.stinFile}
                                   id="stin-preview-button"
                                   shouldAbbreviateTitle={false}
