@@ -4,7 +4,7 @@ import {
   loginAsPetitionsClerk,
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
-import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { petitionerCreatesEletronicCaseWithAttachmentsToPetitionFiles } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../helpers/petitions-clerk-qcs-and-serves-electronic-case';
 import { practitionerCreatesEletronicCase } from '../../helpers/practitioner-creates-electronic-case';
 
@@ -14,7 +14,9 @@ describe('users should be able to create cases', () => {
     const atpFilesToAttach = [w3Dummy, w3Dummy, w3Dummy, w3Dummy, w3Dummy];
 
     loginAsPetitioner();
-    petitionerCreatesEletronicCase({ atpFilesToAttach }).then(docketNumber => {
+    petitionerCreatesEletronicCaseWithAttachmentsToPetitionFiles({
+      atpFilesToAttach,
+    }).then(docketNumber => {
       petitionsClerkQcsAndServesElectronicCase(
         docketNumber,
         atpFilesToAttach.length,
