@@ -2,11 +2,11 @@ import { post } from '../requests';
 
 export const serveThirtyDayNoticeInteractor = (
   applicationContext,
-  { trialSessionId },
+  { clientConnectionId, trialSessionId },
 ) => {
   return post({
     applicationContext,
-    body: { trialSessionId },
+    body: { clientConnectionId, trialSessionId },
     endpoint: '/async/trial-sessions/serve-thirty-day-notice',
   });
 };
