@@ -38,10 +38,13 @@ export function petitionerCreatesEletronicCaseWithDeseasedSpouse(
     });
 }
 
-export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
-  const w3Dummy = 'w3-dummy.pdf';
-  const atpFilesToAttach = [w3Dummy, w3Dummy, w3Dummy, w3Dummy, w3Dummy];
-
+export function petitionerCreatesEletronicCase({
+  atpFilesToAttach = [],
+  primaryFilerName = 'John',
+}: {
+  atpFilesToAttach?: string[];
+  primaryFilerName?: string;
+} = {}) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   attachDummyFile('stin-file');
