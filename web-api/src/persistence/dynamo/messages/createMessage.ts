@@ -25,17 +25,17 @@ export const createMessage = ({
           ? `assigneeId|inbox|${message.toUserId}`
           : undefined,
       gsi3pk: message.fromUserId
-        ? `assigneeId|${message.fromUserId}|${message.completedAt ? 'completed' : 'outbox'}`
+        ? `assigneeId|${message.completedAt ? 'completed' : 'outbox'}|${message.fromUserId}`
         : undefined,
       gsi4pk:
         !message.completedAt && message.toSection
           ? `section|inbox|${message.toSection}`
           : undefined,
       gsi5pk: message.fromSection
-        ? `section|${message.fromSection}|${message.completedAt ? 'completed' : 'outbox'}`
+        ? `section|${message.completedAt ? 'completed' : 'outbox'}|${message.fromSection}`
         : undefined,
       pk: `case|${message.docketNumber}`,
       sk: `message|${message.messageId}`,
     },
-    applicationContext,
+    applicationContext, // section|outbox|docket .... // assigneeId|inbox|<USERID>
   });

@@ -3,11 +3,11 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 export const getUserOutboxMessages = async ({ applicationContext, userId }) => {
   const results = await queryFull({
     ExpressionAttributeNames: {
-      '#gsi2pk': 'gsi3pk',
+      '#gsi3pk': 'gsi3pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi3pk': `assigneeId|${userId}|outbox`,
+      ':gsi3pk': `assigneeId|outbox|${userId}`,
       ':prefix': 'message',
     },
     IndexName: 'gsi3',
