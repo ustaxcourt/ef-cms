@@ -44,7 +44,7 @@ export const PetitionersAndCounsel = connect(
                       <Button
                         link
                         className="width-auto white-edit-link padding-0 margin-right-0 float-right edit-petitioner-button"
-                        data-testid="edit-petitioner"
+                        data-testid="edit-petitioner-button"
                         href={petitioner.editPetitionerLink}
                         icon="edit"
                       >
