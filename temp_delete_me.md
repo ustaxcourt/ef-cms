@@ -1,18 +1,11 @@
 ::: STUFF TO DO :::
-- Run full experimental deploy (NOT on exp1, exp2, or exp3). -> All
-  - Remove switch colors step. Test that the old cognito workflow + account creation are still functional.
-  - Switch colors and verify login + account creation are functional.
-- Potentially remove websocket messaging from update web-api/src/business/useCases/user/updateAssociatedCaseWorker.ts.
-- automate maintenance mode in circle prod deploy
-- during deploy, turn off login and sign up
+- TODOs
 
 
 ::: SOLO :::
 
-
 ::: QUESTIONS :::
-- What happens if someone creates an account, we deploy 10007, and THEN they try to verify it?
-- Retry logic around Worker Queues? They currently fan out for email changes, if it fails it will go to dead letter queue. Since verifyPendingEmail endpoint isn't async anymore it doesn't retry like it used.
+
 
 ::: New Patterns To Describe :::
 - Worker Queue + Gateway
@@ -20,3 +13,18 @@
 - Cypress running in deployed environments
 - InitAppSequence
 - No more cognito triggers
+
+
+
+Deployment steps
+- Create an unconfirmed petitioner account (zrogers+1@flexion.us)
+- Create an account that is associated with a case and start the change email process (zrogers+verifyEmail@flexion.us -> zrogers+newEmail@flexion.us)
+- kick off deploy
+- mid deploy attempt to login by clicking "login"
+- mid deploy attempt to create an account
+- (wait for deploy to finish)
+- Click the verify email link for the unconfirmed petitioner account
+  - Attempt to log in with the unconfirme petitioner account
+  - Verify if asked
+- Verify pending email from 'pending email' email
+- 
