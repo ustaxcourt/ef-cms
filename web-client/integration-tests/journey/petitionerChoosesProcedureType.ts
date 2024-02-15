@@ -6,7 +6,10 @@ const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
 export const petitionerChoosesProcedureType = (
   cerebralTest,
-  overrides = {},
+  overrides = {
+    preferredTrialCity: undefined,
+    procedureType: undefined,
+  },
 ) => {
   it('petitioner chooses the procedure types to get the trial cities', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
