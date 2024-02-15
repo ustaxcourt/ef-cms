@@ -1,41 +1,21 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
-import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
-import { search } from '../searchClient';
+import { queryFull } from '@web-api/persistence/dynamodbClientService';
 
 export const getSectionOutboxMessages = async ({
   applicationContext,
   section,
 }) => {
-  const filterDate = calculateISODate({ howMuch: -7 });
-
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'fromSection.S': section },
-            },
-            {
-              range: {
-                'createdAt.S': {
-                  format: 'strict_date_time', // ISO-8601 time stamp
-                  gte: filterDate,
-                },
-              },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
+  const results = await queryFull({
+    ExpressionAttributeNames: {
+      '#gsi5pk': 'gsi5pk',
+      '#sk': 'sk',
     },
-    index: 'efcms-message',
-  };
-
-  const { results } = await search({
+    ExpressionAttributeValues: {
+      ':gsi5pk': `section|outbox|${section}`,
+      ':prefix': 'message',
+    },
+    IndexName: 'gsi5',
+    KeyConditionExpression: '#gsi5pk = :gsi5pk and begins_with(#sk, :prefix)',
     applicationContext,
-    searchParameters: query,
   });
 
   return results;

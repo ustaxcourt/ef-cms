@@ -37,7 +37,7 @@ export const markMessageThreadRepliedTo = async ({
           sk: `message|${message.messageId}`,
         },
         UpdateExpression:
-          'SET #isRepliedTo = :isRepliedTo, REMOVE #gsi2pk, #gsi4pk',
+          'SET #isRepliedTo = :isRepliedTo REMOVE #gsi2pk, #gsi4pk',
         applicationContext,
       });
     };

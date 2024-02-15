@@ -7,11 +7,11 @@ export const getUserCompletedMessages = async ({
   // TODO: think about 7 day logic
   const results = await queryFull({
     ExpressionAttributeNames: {
-      '#gsi2pk': 'gsi3pk',
+      '#gsi3pk': 'gsi3pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi3pk': `assigneeId|${userId}|completed`,
+      ':gsi3pk': `assigneeId|completed|${userId}`,
       ':prefix': 'message',
     },
     IndexName: 'gsi3',
