@@ -23,7 +23,6 @@ export function petitionsClerkQcsAndServesElectronicCase(
   });
   cy.get('[data-testid="submit-case"]').click();
 
-  // Attachments Card
   cy.get('[data-testid="petitionFileButton"]')
     .should('exist')
     .should('be.enabled');
