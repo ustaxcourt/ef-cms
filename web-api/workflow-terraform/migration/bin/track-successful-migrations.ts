@@ -1,8 +1,11 @@
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { formatNow } from '@shared/business/utilities/DateHandler';
+import { requireEnvVars } from '../shared/admin-tools/util';
 import fs from 'fs';
 import path from 'path';
+
+requireEnvVars(['DESTINATION_TABLE']);
 
 const { DESTINATION_TABLE } = process.env;
 
