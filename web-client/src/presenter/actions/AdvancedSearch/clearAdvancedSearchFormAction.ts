@@ -17,7 +17,14 @@ export const clearAdvancedSearchFormAction = ({
     applicationContext.getConstants();
 
   const { formType } = props;
-  const defaultForm = {};
+  const defaultForm = {} as {
+    countryType?: string;
+    keyword?: string;
+    dateRange?: string;
+    opinionTypes?: {
+      [key: string]: boolean;
+    };
+  };
   if (formType === 'caseSearchByName') {
     defaultForm.countryType = ALL_COUNTRY_TYPE;
   }
