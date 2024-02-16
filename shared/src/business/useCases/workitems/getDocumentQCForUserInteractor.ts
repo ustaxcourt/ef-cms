@@ -13,9 +13,9 @@ import { WorkItem } from '../../entities/WorkItem';
  * @param {string} providers.userId the user to get the document qc
  * @returns {object} the work items in the user document inbox
  */
-export const getDocumentQCInboxForUserInteractor = async (
+export const getDocumentQCForUserInteractor = async (
   applicationContext: IApplicationContext,
-  { userId }: { userId: string },
+  { box, userId }: { box: 'inbox' | 'inProgress' | 'served'; userId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -23,23 +23,24 @@ export const getDocumentQCInboxForUserInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  // const user = await applicationContext
+  //   .getPersistenceGateway()
+  //   .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const workItems = await applicationContext
     .getPersistenceGateway()
-    .getDocumentQCInboxForUser({
+    .getDocumentQCForUser({
       applicationContext,
+      box,
       userId,
     });
 
-  const filteredWorkItems = workItems.filter(
-    workItem =>
-      workItem.assigneeId === user.userId && workItem.section === user.section,
-  );
+  // const filteredWorkItems = workItems.filter(
+  //   workItem =>
+  //     workItem.assigneeId === user.userId && workItem.section === user.section,
+  // );
 
-  return WorkItem.validateRawCollection(filteredWorkItems, {
+  return WorkItem.validateRawCollection(workItems, {
     applicationContext,
   });
 };

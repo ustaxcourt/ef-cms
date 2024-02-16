@@ -6,13 +6,14 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getDocumentQCServedForSectionLambda = event =>
+export const getDocumentQCForSectionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { section } = event.pathParameters || {};
+    const { box, section } = event.pathParameters || {};
 
     return await applicationContext
       .getUseCases()
-      .getDocumentQCServedForSectionInteractor(applicationContext, {
+      .getDocumentQCForSectionInteractor(applicationContext, {
+        box,
         section,
       });
   });

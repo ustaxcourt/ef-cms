@@ -91,12 +91,14 @@ export const getNotificationsInteractor = async (
       applicationContext,
       section,
     }),
-    applicationContext.getPersistenceGateway().getDocumentQCInboxForUser({
+    applicationContext.getPersistenceGateway().getDocumentQCForUser({
       applicationContext,
+      box: 'inbox',
       userId,
     }),
-    applicationContext.getPersistenceGateway().getDocumentQCInboxForSection({
+    applicationContext.getPersistenceGateway().getDocumentQCForSection({
       applicationContext,
+      box: 'inbox',
       judgeUserName: judgeUser ? judgeUser.name : null,
       section: sectionToDisplay,
     }),

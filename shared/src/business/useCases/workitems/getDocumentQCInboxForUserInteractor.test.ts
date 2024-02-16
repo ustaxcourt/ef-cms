@@ -5,7 +5,7 @@ import {
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
+import { getDocumentQCInboxForUserInteractor } from './getDocumentQCForUserInteractor';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
   beforeEach(() => {

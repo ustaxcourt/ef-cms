@@ -91,8 +91,8 @@ import { getCompletedMessagesForUserInteractor } from '../../shared/src/business
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { getCustomCaseReportInteractor } from './business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
-import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor';
-import { getDocumentQCInboxForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor';
+import { getDocumentQCForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCForSectionInteractor';
+import { getDocumentQCForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCForUserInteractor';
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCServedForSectionInteractor';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor';
 import { getDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/getDownloadPolicyUrlInteractor';
@@ -305,8 +305,8 @@ const useCases = {
   getCountOfCaseDocumentsFiledByJudgesInteractor,
   getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
-  getDocumentQCInboxForSectionInteractor,
-  getDocumentQCInboxForUserInteractor,
+  getDocumentQCForSectionInteractor,
+  getDocumentQCForUserInteractor,
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getDownloadPolicyUrlInteractor,

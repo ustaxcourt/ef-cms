@@ -88,10 +88,8 @@ import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/d
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
-import { getDocumentQCInboxForSection } from './persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
-import { getDocumentQCInboxForUser } from './persistence/dynamo/workitems/getDocumentQCInboxForUser';
-import { getDocumentQCServedForSection } from './persistence/dynamo/workitems/getDocumentQCServedForSection';
-import { getDocumentQCServedForUser } from './persistence/dynamo/workitems/getDocumentQCServedForUser';
+import { getDocumentQCForSection } from './persistence/elasticsearch/workitems/getDocumentQCForSection';
+import { getDocumentQCForUser } from './persistence/dynamo/workitems/getDocumentQCForUser';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';
 import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
@@ -126,10 +124,7 @@ import { getUserById } from './persistence/dynamo/users/getUserById';
 import { getUserCaseNote } from './persistence/dynamo/userCaseNotes/getUserCaseNote';
 import { getUserCaseNoteForCases } from './persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
 import { getUserCompletedMessages } from './persistence/elasticsearch/messages/getUserCompletedMessages';
-import {
-  getUserInboxMessageCount,
-  getUserInboxMessages,
-} from './persistence/elasticsearch/messages/getUserInboxMessages';
+import { getUserInboxMessages } from './persistence/elasticsearch/messages/getUserInboxMessages';
 import { getUserOutboxMessages } from './persistence/elasticsearch/messages/getUserOutboxMessages';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
@@ -341,10 +336,8 @@ const gatewayMethods = {
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
-  getDocumentQCInboxForSection,
-  getDocumentQCInboxForUser,
-  getDocumentQCServedForSection,
-  getDocumentQCServedForUser,
+  getDocumentQCForSection,
+  getDocumentQCForUser,
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
@@ -381,7 +374,6 @@ const gatewayMethods = {
   getUserCaseNote,
   getUserCaseNoteForCases,
   getUserCompletedMessages,
-  getUserInboxMessageCount,
   getUserInboxMessages,
   getUserOutboxMessages,
   getUsersById,

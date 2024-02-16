@@ -1,5 +1,5 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getDocumentQCInboxForUser } from './getDocumentQCInboxForUser';
+import { getDocumentQCInboxForUser } from './getDocumentQCForUser';
 import { queryFull } from '../../dynamodbClientService';
 
 jest.mock('../../dynamodbClientService');

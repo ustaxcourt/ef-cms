@@ -93,7 +93,7 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../utilities/getWorkQueueFilters';
-import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../../../web-api/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
+import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../../../web-api/src/persistence/elasticsearch/workitems/getDocumentQCForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';

@@ -1,6 +1,6 @@
 import { DOCKET_SECTION, ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getDocumentQCInboxForSectionInteractor } from './getDocumentQCInboxForSectionInteractor';
+import { getDocumentQCInboxForSectionInteractor } from './getDocumentQCForSectionInteractor';
 
 describe('getDocumentQCInboxForSectionInteractor', () => {
   it('should throw an error when the user does not have permission to retrieve work items', async () => {

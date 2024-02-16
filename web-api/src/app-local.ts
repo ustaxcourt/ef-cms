@@ -89,16 +89,11 @@ let isSecondRun = fs.existsSync('./first-run.txt');
 fs.writeFileSync('./first-run.txt', 'true', 'utf-8');
 
 if (isSecondRun) {
-  console.log('TESTING is second+ run', isSecondRun);
   process.env.DEPLOYMENT_TIMESTAMP = `${Date.now()}`;
-  console.log(process.env.DEPLOYMENT_TIMESTAMP);
-} else {
-  console.log('TESTING is first run');
 }
 
 const processChunks = async () => {
   for (const chunk of chunks) {
-    console.log(chunk[0]);
     await processStreamRecordsLambda({
       Records: chunk,
     }).catch(err => {

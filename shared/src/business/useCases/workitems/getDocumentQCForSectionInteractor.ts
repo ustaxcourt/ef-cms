@@ -16,12 +16,14 @@ import { WorkItem } from '../../entities/WorkItem';
  * @param {string} providers.section the section to get the document qc
  * @returns {object} the work items in the section document inbox
  */
-export const getDocumentQCInboxForSectionInteractor = async (
+export const getDocumentQCForSectionInteractor = async (
   applicationContext: IApplicationContext,
   {
+    box,
     judgeUserName,
     section,
   }: {
+    box: 'inbox' | 'inProgress' | 'served';
     judgeUserName?: string;
     section: string;
   },
@@ -41,8 +43,9 @@ export const getDocumentQCInboxForSectionInteractor = async (
 
   const workItems = await applicationContext
     .getPersistenceGateway()
-    .getDocumentQCInboxForSection({
+    .getDocumentQCForSection({
       applicationContext,
+      box,
       judgeUserName,
       section: sectionToShow,
     });

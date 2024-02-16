@@ -5,7 +5,6 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
-import { createISODateString } from '../../utilities/DateHandler';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
@@ -50,14 +49,6 @@ export const completeWorkItem = async (
     })
     .validate()
     .toRawObject();
-
-  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-    applicationContext,
-    workItem: {
-      ...completedWorkItem,
-      createdAt: createISODateString(),
-    },
-  });
 
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,

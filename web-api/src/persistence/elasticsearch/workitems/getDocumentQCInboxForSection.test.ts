@@ -1,5 +1,5 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getDocumentQCInboxForSection } from './getDocumentQCInboxForSection';
+import { getDocumentQCInboxForSection } from './getDocumentQCForSection';
 jest.mock('../searchClient');
 import { GET_PARENT_CASE } from '../helpers/searchClauses';
 import { search } from '../searchClient';
