@@ -37,6 +37,7 @@ export const createCaseAction = async ({
       stin: stinFile,
     },
     store,
+    get,
   );
 
   const atpUploadsInfo = Object.keys(progressFunctions)

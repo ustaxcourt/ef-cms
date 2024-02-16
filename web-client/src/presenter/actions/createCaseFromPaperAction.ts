@@ -6,10 +6,8 @@ export const setupPercentDone = <
 >(
   files: T,
   store: any,
-): Record<
-  keyof T,
-  { file: any; uploadProgress: (progressEvent: any) => void }
-> => {
+  get,
+): Record<keyof T, (progressEvent: any) => void> => {
   const loadedAmounts: Record<string, number> = {};
   // O.K. to use Date constructor for calculating time duration
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
@@ -55,9 +53,34 @@ export const setupPercentDone = <
       const timeRemaining = Math.floor(
         (totalSize - uploadedBytes) / uploadSpeed,
       );
-      const percent = parseInt((uploadedBytes / totalSize) * 100);
-      console.log({ key, percent, timeRemaining });
-      store.set(state.fileUploadProgress.percentComplete, percent);
+      const documentUploadPercentCompleted = parseInt(
+        (uploadedBytes / totalSize) * 100,
+      );
+
+      // 1. get documentsProgress of each file type from state
+      const documentsUploadProgressAvg: Record<string, number> = get(
+        state.fileUploadProgress.documentsProgress,
+      );
+      documentsUploadProgressAvg[key] = documentUploadPercentCompleted;
+      console.table(documentsUploadProgressAvg);
+
+      // 2. update a value based on doc report received
+      store.set(
+        state.fileUploadProgress.documentsProgress,
+        documentsUploadProgressAvg,
+      );
+
+      // 3. calculate the average of all values in the object
+      const percentsArray: number[] = Object.values(documentsUploadProgressAvg);
+      const sum: number = percentsArray.reduce((acc, curr) => acc + curr, 0);
+      const avgCompletionOfAllDocuments = Math.ceil(sum / percentsArray.length);
+      console.log('total average:', avgCompletionOfAllDocuments);
+
+      // 4. update `documentUploadPercentCompleted` in state
+      store.set(
+        state.fileUploadProgress.percentComplete,
+        avgCompletionOfAllDocuments,
+      );
       store.set(state.fileUploadProgress.timeRemaining, timeRemaining);
       store.set(
         state.fileUploadProgress.isHavingSystemIssues,
@@ -123,6 +146,7 @@ export const createCaseFromPaperAction = async ({
       waiverOfFilingFee: applicationForWaiverOfFilingFeeFile,
     },
     store,
+    get,
   );
 
   let caseDetail: RawCase;
