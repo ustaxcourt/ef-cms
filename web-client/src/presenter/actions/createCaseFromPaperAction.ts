@@ -1,10 +1,15 @@
 import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setupPercentDone = <T extends Record<string, any | undefined>>(
+export const setupPercentDone = <
+  T extends Record<string, any | any[] | undefined>,
+>(
   files: T,
   store: any,
-): Record<keyof T, (progressEvent: any) => void> => {
+): Record<
+  keyof T,
+  { file: any; uploadProgress: (progressEvent: any) => void }
+> => {
   const loadedAmounts: Record<string, number> = {};
   // O.K. to use Date constructor for calculating time duration
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
@@ -24,10 +29,16 @@ export const setupPercentDone = <T extends Record<string, any | undefined>>(
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    totalSizes[key] = files[key].size;
+    if (Array.isArray(files[key])) {
+      files[key].forEach((file, index) => {
+        totalSizes[`${key}-${index}`] = file.size;
+      });
+    } else {
+      totalSizes[key] = files[key].size;
+    }
   });
 
-  const createOnUploadProgress = key => {
+  const createOnUploadProgress = (key: string) => {
     loadedAmounts[key] = 0;
     return progressEvent => {
       const { isDone, isHavingSystemIssues, loaded, total } = progressEvent;
@@ -45,6 +56,7 @@ export const setupPercentDone = <T extends Record<string, any | undefined>>(
         (totalSize - uploadedBytes) / uploadSpeed,
       );
       const percent = parseInt((uploadedBytes / totalSize) * 100);
+      console.log({ key, percent, timeRemaining });
       store.set(state.fileUploadProgress.percentComplete, percent);
       store.set(state.fileUploadProgress.timeRemaining, timeRemaining);
       store.set(
@@ -62,12 +74,25 @@ export const setupPercentDone = <T extends Record<string, any | undefined>>(
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    uploadProgressCallbackMap[key] = createOnUploadProgress(key);
+    if (Array.isArray(files[key])) {
+      files[key].forEach((file, index) => {
+        const fileTypeKey = `${key}-${index}`;
+        uploadProgressCallbackMap[fileTypeKey] = {
+          file,
+          uploadProgress: createOnUploadProgress(fileTypeKey),
+        };
+      });
+    } else {
+      uploadProgressCallbackMap[key] = {
+        file: files[key],
+        uploadProgress: createOnUploadProgress(key),
+      };
+    }
   });
 
   return uploadProgressCallbackMap as Record<
     keyof T,
-    (progressEvent: any) => void
+    { file: any; uploadProgress: (progressEvent: any) => void }
   >;
 };
 

@@ -29,22 +29,9 @@ export const createCaseAction = async ({
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  const atpFilesMetadata = attachmentToPetitionFiles?.map(fileName => {
-    const progressFunction = setupPercentDone(
-      {
-        atp: fileName,
-      },
-      store,
-    );
-
-    return {
-      file: fileName,
-      progressFunction: progressFunction.atp,
-    };
-  });
-
   const progressFunctions = setupPercentDone(
     {
+      atp: attachmentToPetitionFiles,
       corporate: corporateDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
@@ -52,18 +39,24 @@ export const createCaseAction = async ({
     store,
   );
 
+  const atpUploadsInfo = Object.keys(progressFunctions)
+    .map(key => {
+      if (key.startsWith('atp')) {
+        return progressFunctions[key];
+      }
+    })
+    .filter(val => !!val);
+
+  console.log('progressFunctions', progressFunctions);
   let filePetitionResult;
   try {
     filePetitionResult = await applicationContext
       .getUseCases()
       .filePetitionInteractor(applicationContext, {
-        atpFilesMetadata,
-        corporateDisclosureFile,
+        atpUploadProgress: atpUploadsInfo,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
-        petitionFile,
         petitionMetadata: form,
         petitionUploadProgress: progressFunctions.petition,
-        stinFile,
         stinUploadProgress: progressFunctions.stin,
       });
   } catch (err) {
