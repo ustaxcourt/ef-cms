@@ -117,8 +117,6 @@
     "cypress:integration:public": "./scripts/run-cypress.sh -p",
     "cypress:integration:public:open": "./scripts/run-cypress.sh -po",
     "cypress:readonly:open": "./scripts/run-cypress.sh -ro",
-    "cypress:readonly:open:local": "./scripts/run-cypress.sh -rol",
-    "cypress:readonly:local": "./scripts/run-cypress.sh -rl",
     "cypress:readonly:public:open": "./scripts/run-cypress.sh -rpo",
     "cypress:readonly:public:open:local": "./scripts/run-cypress.sh -rpol",
     "cypress:readonly:public": "./scripts/run-cypress.sh -rp",
