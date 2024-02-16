@@ -19,7 +19,7 @@ First, we'd want to create a new migration script called `0005-add-case-adjourne
 
 Second, we will need to implement a `migrateItems` function which will take in an array of dynamo records and modify them based on certain criteria.  In this scenario, we only care about modifying the records that are cases.  Often when dealing with case migrations we want to fetch the entire case and aggregate the items together into a single case object so we can validate the entity.  
 
-The following is an example of how one might write a migration script for this scenario.  I added extra comments in the code ot help explain what is going on.
+The following is an example of how one might write a migration script for this scenario.  I added extra comments in the code to help explain what is going on.
 
 
 ```javascript
@@ -113,12 +113,12 @@ If learning via a video if more your style, we have a short recording explaining
 
 ## Keeping Track of Migrations
 
-When our CI/CD process runs the migration process, it keeps track of which migration scripts have ran inside our `efcms-deploy-$ENV` table using the `./web-api/track-successful-migrations.ts` node script.  This script looks at the migration directory and writes entries into dynamo to track the migrations that have ran.  An example of one of these records looks like this:
+When our CI/CD process runs the migration process, it keeps track of which migration scripts have ran inside our `efcms-$ENV-$VERSION` table using the `./web-api/workflow-terraform/migration/bin/track-successful-migrations.ts` node script.  This script looks at the migration directory and writes entries into dynamo to track the migrations that have ran.  An example of one of these records looks like this:
 
 ```javascript
 {
   "createdAt": "2021-11-19T20:39:01.811Z",
-  "pk": "migration|0001-update-websockets-gsi1pk.js",
+  "pk": "migration",
   "sk": "migration|0001-update-websockets-gsi1pk.js"
 }
 ```
@@ -193,7 +193,7 @@ To help further understand these terms, take a look at the following diagram whi
 
 ![Blue-Green Migration Architecture](https://user-images.githubusercontent.com/1868782/117465361-9f83e400-af1f-11eb-8844-b14fefa2c3d2.png)
 
-As an overview of this diagram, when we do a deploy in circle, part of the CI/CD pipeline will check using the `./web-api/is-migration-needed.ts` script if we need to run a new migration script.  If a new migration is needed, CI/CD will run our  `npm run deploy:migration` script which will run terraform and create some of the resources displayed in this diagram above.  For example, this terraform deploy will create the SQS queues, the dead letter queues, the migration lambda, the live migration streams, and the segment migration lambda, etc.  
+As an overview of this diagram, when we do a deploy in circle, part of the CI/CD pipeline will check using the `./web-api/workflow-terraform/migration/bin/is-migration-needed.ts` script if we need to run a new migration script.  If a new migration is needed, CI/CD will run our  `npm run deploy:migration` script which will run terraform and create some of the resources displayed in this diagram above.  For example, this terraform deploy will create the SQS queues, the dead letter queues, the migration lambda, the live migration streams, and the segment migration lambda, etc.  
 
 ?> Please checkout our [Dawson's Terraform documentation](terraform?id=migration-terraform) for more information about terraform and our project.
 

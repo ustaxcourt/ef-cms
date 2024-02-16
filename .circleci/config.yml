@@ -293,7 +293,7 @@ jobs:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              npx ts-node --transpile-only ./web-api/track-successful-migrations.ts
+              npx ts-node --transpile-only ./web-api/workflow-terraform/migration/bin/track-successful-migrations.ts
             fi
       - run:
           name: Enable Destination Table Stream
