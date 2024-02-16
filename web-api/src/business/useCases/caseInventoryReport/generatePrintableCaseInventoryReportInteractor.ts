@@ -17,7 +17,7 @@ export const generatePrintableCaseInventoryReportInteractor = async (
     throw new Error('Either judge or status must be provided');
   }
 
-  const results = await applicationContext
+  const { foundCases } = await applicationContext
     .getPersistenceGateway()
     .getCaseInventoryReport({ applicationContext, associatedJudge, status });
 
@@ -25,7 +25,7 @@ export const generatePrintableCaseInventoryReportInteractor = async (
     .getUseCaseHelpers()
     .generateCaseInventoryReportPdf({
       applicationContext,
-      cases: results.foundCases,
+      cases: foundCases,
       filters: { associatedJudge, status },
     });
 };

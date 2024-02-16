@@ -16,15 +16,24 @@ export const generateCaseInventoryReportPdf = async ({
   applicationContext,
   cases,
   filters,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  cases: RawCase[];
+  filters: {
+    associatedJudge?: string;
+    status?: string;
+  };
+}): Promise<{ fileId: string; url: string }> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
 
-  let formattedCases = cases
+  const { setConsolidationFlagsForDisplay } = applicationContext.getUtilities();
+  const formattedCases = cases
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+    .map(caseItem => setConsolidationFlagsForDisplay(caseItem, []))
     .map(caseItem => ({
       ...caseItem,
       caseTitle: applicationContext.getCaseTitle(caseItem.caseCaption || ''),
