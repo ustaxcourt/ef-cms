@@ -10,7 +10,9 @@ describe('Given a user with a DAWSON account', () => {
       cy.visit('/login');
       // Login Button is Disabled till Enter Both Email and Password
       cy.get('[data-testid="login-button"]').should('be.disabled');
-      cy.get('[data-testid="email-input"]').type('docketclerk1@example.com');
+      cy.get('[data-testid="email-input"]').type(
+        'testAdmissionsClerk@example.com',
+      );
       cy.get('[data-testid="password-input"]').type(
         cypressEnv.defaultAccountPass,
         {
@@ -37,7 +39,9 @@ describe('Given a user with a DAWSON account', () => {
   describe('When they login with a correct email and an misspelled password', () => {
     it('Then they should be alerted that their username or password is incorrect', () => {
       cy.visit('/login');
-      cy.get('[data-testid="email-input"]').type('docketclerk1@example.com');
+      cy.get('[data-testid="email-input"]').type(
+        'testAdmissionsClerk@example.com',
+      );
       cy.get('[data-testid="password-input"]').type('testing1234$', {
         log: false,
       });
