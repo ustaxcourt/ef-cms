@@ -2,6 +2,7 @@ import { cypressEnv } from '../helpers/env/cypressEnvironment';
 import { getCognito } from '../helpers/cognito/getCognitoCypress';
 import { getDocumentClient } from '../helpers/dynamo/getDynamoCypress';
 import promiseRetry from 'promise-retry';
+import type { DeleteRequest } from '@web-api/src/persistence/dynamo/dynamoTypes.ts';
 
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = await getUserPoolId();
@@ -140,20 +141,73 @@ export const getNewAccountVerificationCode = async ({
   };
 };
 
-const deleteAccountByUsername = async (
-  username: string,
+const deleteAccount = async (
+  user: { userId: string; email: string },
   userPoolId: string,
 ): Promise<void> => {
   const params = {
     UserPoolId: userPoolId,
-    Username: username,
+    Username: user.email,
   };
   await getCognito().adminDeleteUser(params);
+
+  const userRecords = await getDocumentClient().query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `user|${user.userId}`,
+    },
+    KeyConditionExpression: '#pk = :pk ',
+    TableName: cypressEnv.dynamoDbTableName,
+  });
+
+  const userRecord = userRecords.Items?.find(record => {
+    return record.sk === `user|${user.userId}`;
+  });
+
+  const deleteRequests: DeleteRequest[] = [];
+  if (userRecord) {
+    deleteRequests.push({
+      Key: {
+        pk: `privatePractitioner|${userRecord.barNumber}`,
+        sk: `user|${user.userId}`,
+      },
+    });
+    deleteRequests.push({
+      Key: {
+        pk: `privatePractitioner|${userRecord.name}`,
+        sk: `user|${user.userId}`,
+      },
+    });
+    deleteRequests.push({
+      Key: {
+        pk: `user-email|${userRecord.email}`,
+        sk: `user|${user.userId}`,
+      },
+    });
+  }
+
+  userRecords.Items?.map(record =>
+    deleteRequests.push({
+      Key: {
+        pk: record.pk,
+        sk: record.sk,
+      },
+    }),
+  );
+  await getDocumentClient().batchWrite({
+    RequestItems: {
+      [cypressEnv.dynamoDbTableName]: deleteRequests.map(request => ({
+        DeleteRequest: request,
+      })),
+    },
+  });
 };
 
 const getAllCypressTestAccounts = async (
   userPoolId: string,
-): Promise<string[]> => {
+): Promise<{ email: string; userId: string }[]> => {
   const params = {
     Filter: 'email ^= "cypress_test_account"',
     UserPoolId: userPoolId,
@@ -162,9 +216,20 @@ const getAllCypressTestAccounts = async (
   const result = await getCognito().listUsers(params);
   if (!result || !result.Users) return [];
 
-  const usernames = result.Users.map(user => user.Username).filter(
-    Boolean,
-  ) as string[];
+  const usernames = result.Users.map(user => {
+    const userId =
+      user.Attributes?.find(element => element.Name === 'custom:userId')
+        ?.Value! ||
+      user.Attributes?.find(element => element.Name === 'sub')?.Value!;
+    const email = user.Attributes?.find(
+      element => element.Name === 'email',
+    )?.Value!;
+
+    return {
+      email,
+      userId,
+    };
+  });
 
   return usernames;
 };
@@ -173,11 +238,7 @@ export const deleteAllCypressTestAccounts = async (): Promise<null> => {
   const userPoolId = await getUserPoolId();
   if (!userPoolId) return null;
   const accounts = await getAllCypressTestAccounts(userPoolId);
-  await Promise.all(
-    accounts.map((username: string) =>
-      deleteAccountByUsername(username, userPoolId),
-    ),
-  );
+  await Promise.all(accounts.map(user => deleteAccount(user, userPoolId)));
   return null;
 };
 
