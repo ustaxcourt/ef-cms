@@ -44,37 +44,51 @@ export const setupPercentDone = <
         totalSizes[key] = total;
       }
       loadedAmounts[key] = isDone ? totalSizes[key] : loaded;
-      const totalSize = calculateTotalSize();
+      const fileSize = calculateTotalSize();
       // O.K. to use Date constructor for calculating time duration
       // eslint-disable-next-line @miovision/disallow-date/no-new-date
       const timeElapsed = new Date() - startTime;
       const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
       const timeRemaining = Math.floor(
-        (totalSize - uploadedBytes) / uploadSpeed,
+        (fileSize - uploadedBytes) / uploadSpeed,
       );
-      const documentUploadPercentCompleted = parseInt(
-        (uploadedBytes / totalSize) * 100,
-      );
+      // const documentUploadPercentCompleted = parseInt(
+      //   (uploadedBytes / totalSize) * 100,
+      // );
+
+      // using bytes example
+      let totalBytes = get(state.fileUploadProgress.filesTotalBytes);
+      // const percentRemaining = (uploadedBytes / totalBytes) * 100;
 
       // 1. get documentsProgress of each file type from state
-      const documentsUploadProgressAvg: Record<string, number> = get(
+      const documentsUploadProgress: Record<string, number> = get(
         state.fileUploadProgress.documentsProgress,
       );
-      documentsUploadProgressAvg[key] = documentUploadPercentCompleted;
-      console.table(documentsUploadProgressAvg);
+
+      if (!documentsUploadProgress[key]) {
+        totalBytes += fileSize;
+        store.set(state.fileUploadProgress.filesTotalBytes, totalBytes);
+      }
+      documentsUploadProgress[key] = uploadedBytes;
+      console.table(documentsUploadProgress);
 
       // 2. update a value based on doc report received
       store.set(
         state.fileUploadProgress.documentsProgress,
-        documentsUploadProgressAvg,
+        documentsUploadProgress,
       );
 
       // 3. calculate the average of all values in the object
-      const percentsArray: number[] = Object.values(documentsUploadProgressAvg);
-      const sum: number = percentsArray.reduce((acc, curr) => acc + curr, 0);
-      const avgCompletionOfAllDocuments = Math.ceil(sum / percentsArray.length);
-      console.log('total average:', avgCompletionOfAllDocuments);
+      const bytesArray: number[] = Object.values(documentsUploadProgress);
+      const sumOfUploadedBytes: number = bytesArray.reduce(
+        (acc, curr) => acc + curr,
+        0,
+      );
+      const avgCompletionOfAllDocuments = Math.ceil(
+        (sumOfUploadedBytes / totalBytes) * 100,
+      );
+      // console.log('total average:', avgCompletionOfAllDocuments);
 
       // 4. update `documentUploadPercentCompleted` in state
       store.set(

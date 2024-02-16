@@ -608,6 +608,7 @@ export const baseState = {
   fileUploadProgress: {
     // used for the progress bar shown in modal when uploading files
     documentsProgress: {} as Record<string, number>,
+    filesTotalBytes: 0,
     isUploading: false,
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
