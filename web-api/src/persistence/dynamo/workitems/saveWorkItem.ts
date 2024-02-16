@@ -16,14 +16,15 @@ export const saveWorkItem = ({
   applicationContext: IApplicationContext;
   workItem: RawWorkItem;
 }) => {
+  // seems like we were trying to separate these on the backend?
   const inboxType = workItem.inProgress ? 'in-progress' : 'inbox';
   const gsi2pk =
     workItem.assigneeId && !workItem.completedAt
-      ? `assigneeId|${workItem.assigneeId}|${inboxType}` // e.g., assigneeId|UUID|in-progress
+      ? `assigneeId|${inboxType}|${workItem.assigneeId}` // e.g., assigneeId|UUID|in-progress
       : undefined;
   const gsi3pk =
     workItem.section && !workItem.completedAt
-      ? `section|${workItem.section}|${inboxType}` // e.g., section|petitions|inbox
+      ? `section|${inboxType}|${workItem.section}` // e.g., section|petitions|inbox
       : undefined;
   return put({
     Item: {

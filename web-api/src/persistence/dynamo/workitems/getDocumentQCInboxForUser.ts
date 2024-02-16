@@ -16,7 +16,7 @@ export const getDocumentQCInboxForUser = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi2pk': `assigneeId|${userId}`,
+      ':gsi2pk': `assigneeId|inbox|${userId}`,
       ':prefix': 'work-item',
     },
     IndexName: 'gsi2',
