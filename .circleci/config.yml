@@ -670,7 +670,7 @@ jobs:
       - run:
           name: Disable Dynamodb Streams
           command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --off
+            ./scripts/dynamo/toggle-streams.sh --off
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
@@ -748,7 +748,7 @@ jobs:
       - run:
           name: Enable Dynamodb Streams
           command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+            ./scripts/dynamo/toggle-streams.sh --on
 
   sync-s3-buckets-with-timeout:
     docker:
