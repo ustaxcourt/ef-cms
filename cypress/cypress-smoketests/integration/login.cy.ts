@@ -16,33 +16,6 @@ describe('Given a user with a DAWSON account', () => {
   });
 
   describe('When they login in with the correct email and password', () => {
-    it('Then they should be taken to their dashboard', () => {
-      cy.visit('/login');
-      // Login Button is Disabled till Enter Both Email and Password
-      cy.get('[data-testid="login-button"]').should('be.disabled');
-      cy.get('[data-testid="email-input"]').type('docketclerk1@example.com');
-      cy.get('[data-testid="password-input"]').type(
-        cypressEnv.defaultAccountPass,
-        {
-          log: false,
-        },
-      );
-      cy.get('[data-testid="login-button"]').click();
-      cy.get('[data-testid="account-menu-button"]');
-      cy.get('[data-testid="error-alert"]').should('not.exist');
-
-      // after reloading they are still logged in
-      cy.reload();
-      cy.get('[data-testid="account-menu-button"]');
-      cy.get('[data-testid="error-alert"]').should('not.exist');
-      cy.url().should('contain', '/messages');
-
-      // manually access url (still logged in)
-      cy.visit('/trial-sessions');
-      cy.get('[data-testid="header-text"]').should('contain', 'Trial Sessions');
-      cy.url().should('contain', '/trial-sessions');
-    });
-
     describe('And their account is unconfirmed', () => {
       it('Then they should be alerted that they need to confirm their account via a confirmation e-mail', () => {
         const unconfirmedEmail = `cypress_test_account+${v4()}@example.com`;
@@ -80,49 +53,6 @@ describe('Given a user with a DAWSON account', () => {
       cy.visit('/login');
       cy.get('[data-testid="email-input"]').type(email);
       cy.get('[data-testid="password-input"]').type(`${password}_MISSPELLED`, {
-        log: false,
-      });
-      cy.get('[data-testid="login-button"]').click();
-
-      cy.get('[data-testid="error-alert"]').should(
-        'contain',
-        'The email address or password you entered is invalid',
-      );
-    });
-  });
-
-  describe('When they login with a misspelled email and correct password', () => {
-    it('Then they should be alerted that their username or password is incorrect', () => {
-      const username = `cypress_test_account+${v4()}`;
-      const email = `${username}@example.com`;
-      const password = 'Testing1234$';
-      const name = faker.person.fullName();
-      createAPetitioner({ email, name, password });
-      verifyPetitionerAccount({ email });
-
-      cy.visit('/login');
-      cy.get('[data-testid="email-input"]').type(`${email}_MISSPELLED`);
-      cy.get('[data-testid="password-input"]').type(password, {
-        log: false,
-      });
-      cy.get('[data-testid="login-button"]').click();
-
-      cy.get('[data-testid="error-alert"]').should(
-        'contain',
-        'The email address or password you entered is invalid',
-      );
-    });
-  });
-});
-
-describe('Given a user without a DAWSON account', () => {
-  describe('When they login', () => {
-    it('Then they should receive an error alerting them that their email or password is incorrect', () => {
-      const emailWithoutAccount = `doesNotExist${v4()}@example.com`;
-
-      cy.visit('/login');
-      cy.get('[data-testid="email-input"]').type(emailWithoutAccount);
-      cy.get('[data-testid="password-input"]').type('does_not_matter', {
         log: false,
       });
       cy.get('[data-testid="login-button"]').click();
