@@ -1,4 +1,8 @@
 import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
+import {
+  dateStringsCompared,
+  formatNow,
+} from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupPercentDone = <
@@ -11,7 +15,7 @@ export const setupPercentDone = <
   const loadedAmounts: Record<string, number> = {};
   // O.K. to use Date constructor for calculating time duration
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
-  const startTime = new Date();
+  const startTime = formatNow();
   const totalSizes: Record<string, number> = {};
 
   const calculateTotalSize = () => {
@@ -46,20 +50,14 @@ export const setupPercentDone = <
       loadedAmounts[key] = isDone ? totalSizes[key] : loaded;
       const fileSize = calculateTotalSize();
       // O.K. to use Date constructor for calculating time duration
-      // eslint-disable-next-line @miovision/disallow-date/no-new-date
-      const timeElapsed = new Date() - startTime;
+      const now = formatNow();
+      const timeElapsed = dateStringsCompared(now, startTime);
       const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
       const timeRemaining = Math.floor(
         (fileSize - uploadedBytes) / uploadSpeed,
       );
-      // const documentUploadPercentCompleted = parseInt(
-      //   (uploadedBytes / totalSize) * 100,
-      // );
-
-      // using bytes example
       let totalBytes = get(state.fileUploadProgress.filesTotalBytes);
-      // const percentRemaining = (uploadedBytes / totalBytes) * 100;
 
       // 1. get documentsProgress of each file type from state
       const documentsUploadProgress: Record<string, number> = get(
@@ -71,7 +69,6 @@ export const setupPercentDone = <
         store.set(state.fileUploadProgress.filesTotalBytes, totalBytes);
       }
       documentsUploadProgress[key] = uploadedBytes;
-      console.table(documentsUploadProgress);
 
       // 2. update a value based on doc report received
       store.set(
@@ -88,8 +85,6 @@ export const setupPercentDone = <
       const avgCompletionOfAllDocuments = Math.ceil(
         (sumOfUploadedBytes / totalBytes) * 100,
       );
-      // console.log('total average:', avgCompletionOfAllDocuments);
-
       // 4. update `documentUploadPercentCompleted` in state
       store.set(
         state.fileUploadProgress.percentComplete,
