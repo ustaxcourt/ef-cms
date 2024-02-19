@@ -2,7 +2,6 @@ import { server as WebSocketServer } from 'websocket';
 import { Writable } from 'stream';
 import { connectLambda } from './lambdas/notifications/connectLambda';
 import { disconnectLambda } from './lambdas/notifications/disconnectLambda';
-import { handler } from '../terraform/template/lambdas/cognito-triggers';
 import { app as localApiApp } from './app';
 import { app as localPublicApiApp } from './app-public';
 import { processStreamRecordsLambda } from './lambdas/streams/processStreamRecordsLambda';
@@ -103,7 +102,7 @@ processChunks();
 
 localStreamsApp.listen(5005);
 
-// ************************ web-sockets-local + cognito-local-triggers *********************************
+// ************************ web-sockets-local *********************************
 const connections = {};
 
 const server = http.createServer((request, response) => {
@@ -112,23 +111,6 @@ const server = http.createServer((request, response) => {
     requestBody += chunk.toString();
   });
   request.on('end', async () => {
-    if (request.url?.includes('/PostAuthentication_Authentication')) {
-      try {
-        const data = JSON.parse(requestBody);
-        await handler(data);
-        response.writeHead(200, { 'Content-Type': 'application/json' });
-        return response.end(
-          JSON.stringify({
-            body: '',
-            statusCode: 200,
-          }),
-        );
-      } catch (error) {
-        response.writeHead(400, { 'Content-Type': 'text/plain' });
-        return response.end('Cognito Local request failed\n');
-      }
-    }
-
     const split = request.url!.split('/');
     const connectionId = split[split.length - 1];
     if (connections[connectionId]) {
