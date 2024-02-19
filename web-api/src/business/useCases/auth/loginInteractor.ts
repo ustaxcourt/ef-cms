@@ -29,10 +29,18 @@ export const loginInteractor = async (
       throw PasswordChangeError;
     }
 
+    if (
+      !result.AuthenticationResult?.AccessToken ||
+      !result.AuthenticationResult?.IdToken ||
+      !result.AuthenticationResult?.RefreshToken
+    ) {
+      throw new Error('Unsuccessful authentication');
+    }
+
     return {
-      accessToken: result.AuthenticationResult!.AccessToken!,
-      idToken: result.AuthenticationResult!.IdToken!,
-      refreshToken: result.AuthenticationResult!.RefreshToken!,
+      accessToken: result.AuthenticationResult.AccessToken,
+      idToken: result.AuthenticationResult.IdToken,
+      refreshToken: result.AuthenticationResult.RefreshToken,
     };
   } catch (err: any) {
     await authErrorHandling(applicationContext, {
