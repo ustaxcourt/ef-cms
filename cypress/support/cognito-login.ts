@@ -170,6 +170,13 @@ const deleteAccount = async (
   if (userRecord) {
     deleteRequests.push({
       Key: {
+        pk: `user-email|${userRecord.email}`,
+        sk: `user|${user.userId}`,
+      },
+    });
+
+    deleteRequests.push({
+      Key: {
         pk: `privatePractitioner|${userRecord.barNumber}`,
         sk: `user|${user.userId}`,
       },
@@ -180,29 +187,23 @@ const deleteAccount = async (
         sk: `user|${user.userId}`,
       },
     });
-    deleteRequests.push({
-      Key: {
-        pk: `user-email|${userRecord.email}`,
-        sk: `user|${user.userId}`,
+
+    userRecords.Items?.map(record =>
+      deleteRequests.push({
+        Key: {
+          pk: record.pk,
+          sk: record.sk,
+        },
+      }),
+    );
+    await getDocumentClient().batchWrite({
+      RequestItems: {
+        [cypressEnv.dynamoDbTableName]: deleteRequests.map(request => ({
+          DeleteRequest: request,
+        })),
       },
     });
   }
-
-  userRecords.Items?.map(record =>
-    deleteRequests.push({
-      Key: {
-        pk: record.pk,
-        sk: record.sk,
-      },
-    }),
-  );
-  await getDocumentClient().batchWrite({
-    RequestItems: {
-      [cypressEnv.dynamoDbTableName]: deleteRequests.map(request => ({
-        DeleteRequest: request,
-      })),
-    },
-  });
 };
 
 const getAllCypressTestAccounts = async (
