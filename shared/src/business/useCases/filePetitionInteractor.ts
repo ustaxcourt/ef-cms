@@ -27,9 +27,6 @@ export const filePetitionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  console.log('petitionUploadProgress', petitionUploadProgress);
-  console.log('stinUploadProgress', stinUploadProgress);
-  console.log('atpUploadProgress', atpUploadProgress);
   const petitionFileUpload = applicationContext
     .getUseCases()
     .uploadDocumentAndMakeSafeInteractor(applicationContext, {
@@ -58,7 +55,6 @@ export const filePetitionInteractor = async (
   }
 
   let atpFilesUploads = [];
-  console.log('atpUploadProgress', atpUploadProgress);
   if (atpUploadProgress) {
     atpFilesUploads = atpUploadProgress.map(atp => {
       return applicationContext
@@ -82,8 +78,6 @@ export const filePetitionInteractor = async (
       stinFileUpload,
       ...atpFilesUploads,
     ]);
-
-    console.log('atpFileIds', atpFileIds);
 
     const caseDetail = await applicationContext
       .getUseCases()
