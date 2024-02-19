@@ -1,5 +1,4 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { ForgotPasswordResponse } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
 import { post } from '../requests';
 
 export const forgotPasswordInteractor = (
@@ -9,7 +8,7 @@ export const forgotPasswordInteractor = (
   }: {
     email: string;
   },
-): Promise<ForgotPasswordResponse> => {
+): Promise<void> => {
   return post({
     applicationContext,
     body: { email },
