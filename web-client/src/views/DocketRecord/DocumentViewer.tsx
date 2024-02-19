@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 export const DocumentViewer = connect(
@@ -22,9 +22,22 @@ export const DocumentViewer = connect(
     setViewerDocumentToDisplaySequence,
     viewDocumentId,
   }) {
+    const documentsListRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
       loadDefaultDocketViewerDocumentToDisplaySequence();
       return;
+    }, []);
+
+    useEffect(() => {
+      // this scrolls the documents list to the element
+      const elToScrollIntoView = documentsListRef.current?.querySelector(
+        `button[data-entry-id="${viewDocumentId}"]`,
+      );
+      elToScrollIntoView?.scrollIntoView();
+      // we now scroll the entire page back up to the blue header since the nested scroll bar is in position
+      const blueHeader = window.document.querySelector('.big-blue-header');
+      blueHeader?.scrollIntoView();
     }, []);
 
     return (
@@ -38,7 +51,10 @@ export const DocumentViewer = connect(
                 <div className="grid-col-5">Filings and Proceedings</div>
                 <div className="grid-col-2"></div>
               </div>
-              <div className="document-viewer--documents-list">
+              <div
+                className="document-viewer--documents-list"
+                ref={documentsListRef}
+              >
                 {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
                   entry => {
                     return (
@@ -47,6 +63,7 @@ export const DocumentViewer = connect(
                           'usa-button--unstyled attachment-viewer-button',
                           viewDocumentId === entry.docketEntryId && 'active',
                         )}
+                        data-entry-id={entry.docketEntryId}
                         disabled={!entry.isFileAttached}
                         isActive={viewDocumentId === entry.docketEntryId}
                         key={entry.docketEntryId}
