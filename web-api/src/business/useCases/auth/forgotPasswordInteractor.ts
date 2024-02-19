@@ -7,12 +7,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import qs from 'qs';
 
-export type ForgotPasswordResponse = {
-  email: string;
-  userId?: string;
-  code?: string;
-};
-
 export const forgotPasswordInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -20,7 +14,7 @@ export const forgotPasswordInteractor = async (
   }: {
     email: string;
   },
-): Promise<ForgotPasswordResponse> => {
+): Promise<void> => {
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
   const user = await applicationContext
@@ -28,7 +22,7 @@ export const forgotPasswordInteractor = async (
     .getUserByEmail(applicationContext, { email });
 
   if (!user) {
-    return { email };
+    return;
   }
 
   if (user.accountStatus === UserStatusType.UNCONFIRMED) {
@@ -94,16 +88,4 @@ export const forgotPasswordInteractor = async (
       subject: 'U.S. Tax Court DAWSON Account Verification',
       to: email,
     });
-
-  const forgotPasswordResponse: ForgotPasswordResponse = {
-    email,
-  };
-
-  // Only return code & userId locally as we cannot send an email. Do not expose code & userId in deployed env.
-  if (applicationContext.environment.stage === 'local') {
-    forgotPasswordResponse.code = code;
-    forgotPasswordResponse.userId = user.userId;
-  }
-
-  return forgotPasswordResponse;
 };
