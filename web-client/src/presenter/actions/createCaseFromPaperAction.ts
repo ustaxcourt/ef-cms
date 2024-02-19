@@ -158,6 +158,12 @@ export const createCaseFromPaperAction = async ({
     get,
   );
 
+  console.log('progressFunctions', progressFunctions);
+  console.log(
+    'uploadProgress',
+    progressFunctions.waiverOfFilingFee.uploadProgress,
+  );
+
   let caseDetail: RawCase;
   try {
     caseDetail = await applicationContext

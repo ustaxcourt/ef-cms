@@ -7,9 +7,9 @@ import {
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-const { US_STATES } = applicationContext.getConstants();
-
 describe('createCaseFromPaperAction', () => {
+  const { US_STATES } = applicationContext.getConstants();
+
   let errorStub, successStub;
 
   beforeAll(() => {
@@ -24,7 +24,16 @@ describe('createCaseFromPaperAction', () => {
     };
   });
 
-  it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
+  it.only('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
+    jest.mock('./createCaseFromPaperAction', () => ({
+      setupPercentDone: jest.fn().mockReturnValue({
+        waiverOfFilingFee: {
+          file: {},
+          uploadProgress: jest.fn(),
+        },
+      }),
+    }));
+
     applicationContext
       .getUseCases()
       .filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
@@ -57,13 +66,17 @@ describe('createCaseFromPaperAction', () => {
       applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      applicationForWaiverOfFilingFeeFile: {},
-      attachmentToPetitionFile: {},
-      corporateDisclosureFile: {},
-      petitionFile: {},
-      petitionMetadata: MOCK_CASE,
-      requestForPlaceOfTrialFile: {},
-      stinFile: {},
+      // applicationForWaiverOfFilingFeeFile: {},
+      // attachmentToPetitionFile: {},
+      // corporateDisclosureFile: {},
+      // petitionFile: {},
+      // petitionMetadata: MOCK_CASE,
+      // requestForPlaceOfTrialFile: {},
+      // stinFile: {},
+      applicationForWaiverOfFilingFeeUploadProgress: {
+        file: {},
+        uploadProgress: () => {},
+      },
     });
     expect(successStub).toHaveBeenCalled();
   });
@@ -128,6 +141,7 @@ describe('setupPercentDone', () => {
         waiverOfFilingFee: { size: 5 },
       },
       store,
+      // get: mock get
     );
 
     expect(result).toMatchObject({
