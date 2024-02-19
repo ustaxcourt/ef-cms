@@ -1,10 +1,9 @@
-import { setupPercentDone } from './createCaseFromPaperAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveCaseDetailInternalEditAction = async ({
   applicationContext,
   get,
-  store,
+  props,
 }: ActionProps) => {
   const {
     INITIAL_DOCUMENT_TYPES,
@@ -12,26 +11,14 @@ export const saveCaseDetailInternalEditAction = async ({
     STATUS_TYPES,
   } = applicationContext.getConstants();
   const originalCase = get(state.caseDetail);
+  const { uploadProgressCallbackMap } = props;
   const caseToUpdate = get(state.form);
 
   const keys = Object.keys(INITIAL_DOCUMENT_TYPES);
 
-  const progressFunctions = setupPercentDone(
-    {
-      applicationForWaiverOfFilingFeeFile:
-        caseToUpdate['applicationForWaiverOfFilingFeeFile'],
-      attachmentToPetitionFile: caseToUpdate['attachmentToPetitionFile'],
-      corporateDisclosureFile: caseToUpdate['corporateDisclosureFile'],
-      petitionFile: caseToUpdate['petitionFile'],
-      requestForPlaceOfTrialFile: caseToUpdate['requestForPlaceOfTrialFile'],
-      stinFile: caseToUpdate['stinFile'],
-    },
-    store,
-  );
-
   for (const key of keys) {
     const fileKey = INITIAL_DOCUMENT_TYPES_FILE_MAP[key];
-    if (caseToUpdate[fileKey]) {
+    if (uploadProgressCallbackMap[fileKey]) {
       if (fileKey === 'petitionFile') {
         const oldPetitionDocument = originalCase.docketEntries.find(
           document =>
@@ -41,16 +28,16 @@ export const saveCaseDetailInternalEditAction = async ({
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: caseToUpdate[fileKey],
+            document: uploadProgressCallbackMap[fileKey].file,
             key: oldPetitionDocument.docketEntryId,
-            onUploadProgress: progressFunctions[fileKey],
+            onUploadProgress: uploadProgressCallbackMap[fileKey].uploadProgress,
           });
       } else {
         const newDocketEntryId = await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: caseToUpdate[fileKey],
-            onUploadProgress: progressFunctions[fileKey],
+            document: uploadProgressCallbackMap[fileKey].file,
+            onUploadProgress: uploadProgressCallbackMap[fileKey].uploadProgress,
           });
 
         let { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
