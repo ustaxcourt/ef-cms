@@ -34,9 +34,14 @@ export const DocumentViewer = connect(
       const elToScrollIntoView = documentsListRef.current?.querySelector(
         `button[data-entry-id="${viewDocumentId}"]`,
       );
-      elToScrollIntoView?.scrollIntoView();
+      if (elToScrollIntoView && documentsListRef.current) {
+        elToScrollIntoView.scrollIntoView();
+        documentsListRef.current.scrollTop -= 200;
+      }
       // we now scroll the entire page back up to the blue header since the nested scroll bar is in position
-      const blueHeader = window.document.querySelector('.big-blue-header');
+      const blueHeader = window.document.querySelector(
+        '#tab-docket-sub-record',
+      );
       blueHeader?.scrollIntoView();
     }, []);
 
