@@ -100,7 +100,7 @@ export const changePasswordInteractor = async (
         userFromPersistence.pendingEmail &&
         userFromPersistence.pendingEmail === email
       ) {
-        const { updatedUser } = await updateUserEmailAddress(
+        const { updatedUser } = await updateUserPendingEmailRecord(
           applicationContext,
           {
             user: userFromPersistence,
@@ -180,7 +180,7 @@ export const changePasswordInteractor = async (
   }
 };
 
-export const updateUserEmailAddress = async (
+export const updateUserPendingEmailRecord = async (
   applicationContext: ServerApplicationContext,
   { user }: { user: RawUser },
 ): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
