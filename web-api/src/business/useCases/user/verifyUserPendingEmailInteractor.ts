@@ -62,7 +62,7 @@ export const verifyUserPendingEmailInteractor = async (
     Username: user.email,
   });
 
-  await applicationContext.getWorkerGateway().initialize(applicationContext, {
+  await applicationContext.getWorkerGateway().queueWork(applicationContext, {
     message: {
       payload: { user: updatedUser },
       type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,

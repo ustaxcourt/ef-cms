@@ -163,7 +163,7 @@ describe('changePasswordInteractor', () => {
           },
         });
         expect(
-          applicationContext.getWorkerGateway().initialize.mock.calls[0][1],
+          applicationContext.getWorkerGateway().queueWork.mock.calls[0][1],
         ).toMatchObject({
           message: {
             payload: {
@@ -207,7 +207,7 @@ describe('changePasswordInteractor', () => {
           },
         });
         expect(
-          applicationContext.getWorkerGateway().initialize.mock.calls[0][1],
+          applicationContext.getWorkerGateway().queueWork.mock.calls[0][1],
         ).toMatchObject({
           message: {
             payload: {
