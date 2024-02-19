@@ -17,7 +17,7 @@ export const uploadDocumentFromClient = async ({
 }: {
   applicationContext;
   document: any;
-  key: string;
+  key?: string;
   onUploadProgress?: () => void;
 }) => {
   const docId = key || applicationContext.getUniqueId();

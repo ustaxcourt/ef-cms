@@ -1,8 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './CaseTypeSelect';
+import { FileInput } from '../FileDocument/FileInput';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -44,8 +46,8 @@ export const StartCaseStep2 = connect(
           </h2>
         </Focus>
         <Hint>
-          Don’t forget to remove or block out (redact) your personal information
-          on all your documents, including any IRS notice(s).
+          Don’t forget to remove or redact your personal information on all your
+          documents, including any IRS notice(s).
         </Hint>
         <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required unless otherwise noted
@@ -140,16 +142,66 @@ export const StartCaseStep2 = connect(
               </fieldset>
             </FormGroup>
             {startCaseHelper.showHasIrsNoticeOptions && (
-              <CaseTypeSelect
-                allowDefaultOption={true}
-                caseTypes={caseTypeDescriptionHelper.caseTypes}
-                className="margin-bottom-0"
-                legend="Type of notice / case"
-                validation="validateStartCaseWizardSequence"
-                value={form.caseType}
-                onChange="updateFormValueSequence"
-              />
+              <>
+                <CaseTypeSelect
+                  allowDefaultOption={true}
+                  caseTypes={caseTypeDescriptionHelper.caseTypes}
+                  legend="Type of notice / case"
+                  validation="validateStartCaseWizardSequence"
+                  value={form.caseType}
+                  onChange="updateFormValueSequence"
+                />
+                <NonMobile>
+                  <div className="usa-form-group">
+                    <label
+                      className="usa-label margin-bottom-0"
+                      htmlFor="atp-files-upload"
+                    >
+                      Upload a PDF of the IRS Notice(s) if you have it (.pdf)
+                    </label>
+                    <span className="usa-hint" id="atp-files-upload-hint">
+                      Make sure file is not encrypted or password protected. Max
+                      file size {constants.MAX_FILE_SIZE_MB}MB. Max of 5 files.
+                    </span>
+                    <FormGroup>
+                      <FileInput
+                        multiple
+                        data-testid="atp-files-upload"
+                        name="attachmentToPetitionFiles"
+                        updateFormValueSequence="updateFormValueSequence"
+                        validationSequence="validateStartCaseWizardSequence"
+                      />
+                    </FormGroup>
+                  </div>
+                </NonMobile>
+
+                <Mobile>
+                  <div className="usa-form-group">
+                    <label
+                      className="usa-label margin-bottom-0"
+                      htmlFor="atp-files-upload"
+                    >
+                      Upload a PDF of the IRS Notice(s) if you have it (.pdf)
+                    </label>
+                    <span className="usa-hint" id="atp-files-upload-hint">
+                      Make sure file is not encrypted or password protected. Max
+                      file size {constants.MAX_FILE_SIZE_MB}MB. Max of 5 files.
+                    </span>
+                    <FormGroup>
+                      <FileInput
+                        isMobile
+                        multiple
+                        data-testid="atp-files-upload"
+                        name="attachmentToPetitionFiles"
+                        updateFormValueSequence="updateFormValueSequence"
+                        validationSequence="validateStartCaseWizardSequence"
+                      />
+                    </FormGroup>
+                  </div>
+                </Mobile>
+              </>
             )}
+
             {startCaseHelper.showNotHasIrsNoticeOptions && (
               <CaseTypeSelect
                 allowDefaultOption={true}

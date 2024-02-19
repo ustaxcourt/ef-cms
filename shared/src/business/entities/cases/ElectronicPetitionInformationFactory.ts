@@ -13,6 +13,8 @@ import joi from 'joi';
 export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
   private static MAX_STEPS = 4;
 
+  public attachmentToPetitionFiles?: File[];
+  public attachmentToPetitionFilesSizes?: number[];
   public businessType: string;
   public caseType: string;
   public corporateDisclosureFile?: object;
@@ -33,6 +35,9 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
   constructor(rawCase, { applicationContext }) {
     super('ElectronicPetitionInformationFactory');
 
+    this.attachmentToPetitionFiles = rawCase.attachmentToPetitionFiles;
+    this.attachmentToPetitionFilesSizes =
+      rawCase.attachmentToPetitionFilesSizes;
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
     this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
@@ -112,6 +117,10 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
 
   static wizardStep2() {
     return ElectronicPetitionInformationFactory.atWizardStep(2, {
+      attachmentToPetitionFiles:
+        ElectronicPetition.VALIDATION_RULES.attachmentToPetitionFiles,
+      attachmentToPetitionFilesSizes:
+        ElectronicPetition.VALIDATION_RULES.attachmentToPetitionFilesSizes,
       caseType: ElectronicPetition.VALIDATION_RULES.caseType,
       hasIrsNotice: ElectronicPetition.VALIDATION_RULES.hasIrsNotice,
       petitionFile: ElectronicPetition.VALIDATION_RULES.petitionFile,
