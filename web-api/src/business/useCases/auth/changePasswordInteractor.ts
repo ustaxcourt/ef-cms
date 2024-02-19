@@ -156,10 +156,18 @@ export const changePasswordInteractor = async (
         ClientId: applicationContext.environment.cognitoClientId,
       });
 
+      if (
+        !result.AuthenticationResult?.AccessToken ||
+        !result.AuthenticationResult?.IdToken ||
+        !result.AuthenticationResult?.RefreshToken
+      ) {
+        throw new Error('Unsuccessful password change');
+      }
+
       return {
-        accessToken: result.AuthenticationResult!.AccessToken!,
-        idToken: result.AuthenticationResult!.IdToken!,
-        refreshToken: result.AuthenticationResult!.RefreshToken!,
+        accessToken: result.AuthenticationResult.AccessToken,
+        idToken: result.AuthenticationResult.IdToken,
+        refreshToken: result.AuthenticationResult.RefreshToken,
       };
     }
   } catch (err: any) {
