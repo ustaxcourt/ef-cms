@@ -49,8 +49,10 @@ describe('filePetitionFromPaperInteractor', () => {
 
   it('makes a call to create a paper case with a Petition file', async () => {
     await filePetitionFromPaperInteractor(applicationContext, {
-      petitionFile: fileName,
       petitionMetadata,
+      petitionUploadProgress: {
+        file: fileName,
+      },
     } as any);
 
     expect(
@@ -69,9 +71,13 @@ describe('filePetitionFromPaperInteractor', () => {
 
   it('makes a call to create a paper case with a Petition file and a STIN file', async () => {
     await filePetitionFromPaperInteractor(applicationContext, {
-      petitionFile: fileName,
       petitionMetadata,
-      stinFile: fileName,
+      petitionUploadProgress: {
+        file: fileName,
+      },
+      stinUploadProgress: {
+        file: fileName,
+      },
     } as any);
 
     expect(
@@ -91,9 +97,13 @@ describe('filePetitionFromPaperInteractor', () => {
 
   it('makes a call to create a paper case with a Petition file and a Corporate Disclosure Statement file', async () => {
     await filePetitionFromPaperInteractor(applicationContext, {
-      corporateDisclosureFile: fileName,
-      petitionFile: fileName,
+      corporateDisclosureUploadProgress: {
+        file: fileName,
+      },
       petitionMetadata,
+      petitionUploadProgress: {
+        file: fileName,
+      },
     } as any);
 
     expect(
@@ -113,9 +123,13 @@ describe('filePetitionFromPaperInteractor', () => {
 
   it('makes a call to create a paper case with a Petition file and an Application for Waiver of Filing Fee file', async () => {
     await filePetitionFromPaperInteractor(applicationContext, {
-      applicationForWaiverOfFilingFeeFile: fileName,
-      petitionFile: fileName,
+      applicationForWaiverOfFilingFeeUploadProgress: {
+        file: fileName,
+      },
       petitionMetadata,
+      petitionUploadProgress: {
+        file: fileName,
+      },
     } as any);
 
     expect(
@@ -136,9 +150,13 @@ describe('filePetitionFromPaperInteractor', () => {
 
   it('makes a call to create a paper case with a Petition file and a Request for Place of Trial file', async () => {
     await filePetitionFromPaperInteractor(applicationContext, {
-      petitionFile: fileName,
       petitionMetadata,
-      requestForPlaceOfTrialFile: fileName,
+      petitionUploadProgress: {
+        file: fileName,
+      },
+      requestForPlaceOfTrialUploadProgress: {
+        file: fileName,
+      },
     } as any);
 
     expect(
@@ -158,9 +176,13 @@ describe('filePetitionFromPaperInteractor', () => {
 
   it('makes a call to create a paper case with a Petition file and an Attachment to Petition file', async () => {
     await filePetitionFromPaperInteractor(applicationContext, {
-      attachmentToPetitionFile: fileName,
-      petitionFile: fileName,
+      atpUploadProgress: {
+        file: fileName,
+      },
       petitionMetadata,
+      petitionUploadProgress: {
+        file: fileName,
+      },
     } as any);
 
     expect(
