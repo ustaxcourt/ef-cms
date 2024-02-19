@@ -17,7 +17,6 @@ export const FORMATS = {
   MMDDYYYY_UNDERSCORED: 'MM_dd_yyyy',
   MONTH_DAY_YEAR: 'MMMM d, yyyy',
   MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'DDDD',
-  RENAME_NAME: "EEE, dd MMM yyyy HH':'mm':'ss 'GMT'",
   SHORT_MONTH_DAY_YEAR: 'MMM d, yyyy',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
