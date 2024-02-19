@@ -32,7 +32,7 @@ export const signUpUserInteractor = async (
   const { Users: existingAccounts } = await cognito.listUsers({
     AttributesToGet: ['email'],
     Filter: `email = "${user.email}"`,
-    UserPoolId: process.env.USER_POOL_ID,
+    UserPoolId: applicationContext.environment.userPoolId,
   });
 
   if (existingAccounts?.length) {
@@ -50,7 +50,7 @@ export const signUpUserInteractor = async (
   const newUser = new NewPetitionerUser(user).validate().toRawObject();
   const userId = applicationContext.getUniqueId();
   await cognito.signUp({
-    ClientId: process.env.COGNITO_CLIENT_ID,
+    ClientId: applicationContext.environment.cognitoClientId,
     Password: newUser.password,
     UserAttributes: [
       {
