@@ -109,7 +109,7 @@ export const changePasswordInteractor = async (
 
         await applicationContext
           .getWorkerGateway()
-          .initialize(applicationContext, {
+          .queueWork(applicationContext, {
             message: {
               payload: { user: updatedUser },
               type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,

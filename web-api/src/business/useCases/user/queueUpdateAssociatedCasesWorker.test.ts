@@ -30,14 +30,14 @@ describe('queueUpdateAssociatedCasesWorker', () => {
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
     applicationContext.getCurrentUser.mockReturnValue(MOCK_PRACTITIONER);
-    applicationContext.getWorkerGateway().initialize.mockReturnValue({});
+    applicationContext.getWorkerGateway().queueWork.mockReturnValue({});
 
     await queueUpdateAssociatedCasesWorker(applicationContext, {
       user: MOCK_PRACTITIONER,
     });
 
     expect(
-      applicationContext.getWorkerGateway().initialize,
+      applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
         payload: { docketNumber: '111-20', user: MOCK_PRACTITIONER },
@@ -46,7 +46,7 @@ describe('queueUpdateAssociatedCasesWorker', () => {
       },
     });
     expect(
-      applicationContext.getWorkerGateway().initialize,
+      applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
         payload: { docketNumber: '222-20', user: MOCK_PRACTITIONER },
@@ -55,7 +55,7 @@ describe('queueUpdateAssociatedCasesWorker', () => {
       },
     });
     expect(
-      applicationContext.getWorkerGateway().initialize,
+      applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
         payload: { docketNumber: '333-20', user: MOCK_PRACTITIONER },
@@ -70,14 +70,14 @@ describe('queueUpdateAssociatedCasesWorker', () => {
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-    applicationContext.getWorkerGateway().initialize.mockReturnValue({});
+    applicationContext.getWorkerGateway().queueWork.mockReturnValue({});
 
     await queueUpdateAssociatedCasesWorker(applicationContext, {
       user: petitionerUser,
     });
 
     expect(
-      applicationContext.getWorkerGateway().initialize,
+      applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
         payload: { docketNumber: '111-20', user: petitionerUser },
@@ -86,7 +86,7 @@ describe('queueUpdateAssociatedCasesWorker', () => {
       },
     });
     expect(
-      applicationContext.getWorkerGateway().initialize,
+      applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
         payload: { docketNumber: '222-20', user: petitionerUser },
@@ -95,7 +95,7 @@ describe('queueUpdateAssociatedCasesWorker', () => {
       },
     });
     expect(
-      applicationContext.getWorkerGateway().initialize,
+      applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
         payload: { docketNumber: '333-20', user: petitionerUser },

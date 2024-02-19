@@ -410,7 +410,7 @@ export const createApplicationContext = (
     getUserGateway,
     getUtilities,
     getWorkerGateway: () => ({
-      initialize: (
+      queueWork: (
         applicationContext: ServerApplicationContext,
         { message }: { message: WorkerMessage },
       ) => {
