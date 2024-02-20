@@ -3,6 +3,14 @@ resource "aws_cognito_user_pool" "pool" {
 
   username_attributes = ["email"]
 
+  verification_message_template {
+    default_email_option  = "CONFIRM_WITH_CODE"
+    email_message = <<EMAILMESSAGE
+    Your verification code is {####}
+  EMAILMESSAGE
+    email_subject_by_link = "U.S. Tax Court DAWSON Account Verification"
+  }
+
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"

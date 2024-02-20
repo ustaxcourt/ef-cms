@@ -6,4 +6,5 @@ export const updateAuthenticationFormValueSequence = [
   confirmPassword?: string;
   email?: string;
   password?: string;
+  code?: string;
 }) => void;
