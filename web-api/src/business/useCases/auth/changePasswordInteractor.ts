@@ -149,7 +149,7 @@ export const changePasswordInteractor = async (
         !result.AuthenticationResult?.IdToken ||
         !result.AuthenticationResult?.RefreshToken
       ) {
-        throw new Error('Unsuccessful password change');
+        throw new Error(`Unable to change password for email: ${email}`);
       }
 
       return {

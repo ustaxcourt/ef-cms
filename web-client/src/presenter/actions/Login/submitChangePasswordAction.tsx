@@ -68,8 +68,16 @@ export const submitChangePasswordAction = async ({
 
     return path.error({
       alertError: {
-        title:
-          'There was an unexpected error when logging in. Please try again.',
+        message: (
+          <>
+            Please contact{' '}
+            <a href="mailto:dawson.support@ustaxcourt.gov">
+              dawson.support@ustaxcourt.gov
+            </a>
+            .
+          </>
+        ),
+        title: 'Unable to change password',
       },
     });
   }

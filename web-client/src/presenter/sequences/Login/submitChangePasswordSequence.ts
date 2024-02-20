@@ -1,3 +1,4 @@
+import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
 import { clearAuthStateAction } from '@web-client/presenter/actions/Login/clearAuthStateAction';
 import { getUserAction } from '@web-client/presenter/actions/getUserAction';
 import { navigateToForgotPasswordAction } from '@web-client/presenter/actions/Login/navigateToForgotPasswordAction';
@@ -15,6 +16,7 @@ import { validateChangePasswordFormAction } from '@web-client/presenter/actions/
 
 export const submitChangePasswordSequence = [
   showProgressSequenceDecorator([
+    clearAlertsAction,
     validateChangePasswordFormAction,
     {
       error: [setValidationAlertErrorsAction],

@@ -44,24 +44,29 @@ export const ChangePassword = connect(
                 <span>Enter a new password.</span>
 
                 <form className="usa-form margin-top-4 change-password-form max-width-unset">
-                  <div>
-                    <label className="usa-label" htmlFor="forgot-password-code">
-                      Code
-                    </label>
-                    <input
-                      required
-                      className="usa-input"
-                      data-testid="forgot-password-code"
-                      id="forgot-password-code"
-                      name="forgot-password-code"
-                      type="text"
-                      onChange={e => {
-                        updateAuthenticationFormValueSequence({
-                          code: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
+                  {changePasswordHelper.showForgotPasswordCode && (
+                    <div>
+                      <label
+                        className="usa-label"
+                        htmlFor="forgot-password-code"
+                      >
+                        Code
+                      </label>
+                      <input
+                        required
+                        className="usa-input"
+                        data-testid="forgot-password-code"
+                        id="forgot-password-code"
+                        name="forgot-password-code"
+                        type="text"
+                        onChange={e => {
+                          updateAuthenticationFormValueSequence({
+                            code: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className="margin-top-3">
                     <label className="usa-label" htmlFor="password">
                       New Password
