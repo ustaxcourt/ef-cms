@@ -14,7 +14,6 @@ export const setProgressForFileUploadAction = ({
   string,
   { file: any; uploadProgress: (progressEvent: any) => void }
 > => {
-  console.log('props', props);
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
   // O.K. to use Date constructor for calculating time duration
