@@ -15,7 +15,7 @@ import { WorkItem } from '../../entities/WorkItem';
  */
 export const getDocumentQCForUserInteractor = async (
   applicationContext: IApplicationContext,
-  { box, userId }: { box: 'inbox' | 'inProgress' | 'served'; userId: string },
+  { box, userId }: { box: 'inbox' | 'inProgress' | 'outbox'; userId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

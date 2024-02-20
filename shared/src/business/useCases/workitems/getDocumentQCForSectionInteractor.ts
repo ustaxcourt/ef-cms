@@ -23,7 +23,7 @@ export const getDocumentQCForSectionInteractor = async (
     judgeUserName,
     section,
   }: {
-    box: 'inbox' | 'inProgress' | 'served';
+    box: 'inbox' | 'inProgress' | 'outbox';
     judgeUserName?: string;
     section: string;
   },
