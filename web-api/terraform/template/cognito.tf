@@ -6,9 +6,24 @@ resource "aws_cognito_user_pool" "pool" {
   verification_message_template {
     default_email_option  = "CONFIRM_WITH_CODE"
     email_message = <<EMAILMESSAGE
-    Your verification code is {####}
+    <div>
+    <span>
+      Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>.
+    </span>
+    <div style="margin-top: 20px;">
+      <span>{####}</span>
+    </div>
+    <div style="margin-top: 20px;">
+      <span>If you did not request to reset your password, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+    </div>
+
+    <hr style="border-top:1px solid #000000;">
+    <div style="margin-top: 20px;">
+      <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
+    </div>
+  </div>
   EMAILMESSAGE
-    email_subject_by_link = "U.S. Tax Court DAWSON Account Verification"
+    email_subject_by_link = "U.S. Tax Court DAWSON Reset Password Request"
   }
 
   account_recovery_setting {
