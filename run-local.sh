@@ -53,7 +53,7 @@ echo "Seeding cognito-local users"
 npx ts-node .cognito/seedCognitoLocal.ts --transpile-only
 
 echo "Starting cognito-local"
-CODE="COGNITO_LOCAL_CONFIRMATION_CODE" npx cognito-local &
+CODE="385030" npx cognito-local &
 COGNITO_PID=$!
 
 

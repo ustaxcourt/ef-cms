@@ -44,51 +44,71 @@ export const ChangePassword = connect(
                 <span>Enter a new password.</span>
 
                 <form className="usa-form margin-top-4 change-password-form max-width-unset">
-                  <label className="usa-label" htmlFor="password">
-                    New Password
-                  </label>
-                  <input
-                    required
-                    className="usa-input"
-                    data-testid="new-password-input"
-                    id="password"
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    onChange={e => {
-                      updateAuthenticationFormValueSequence({
-                        password: e.target.value,
-                      });
-                    }}
-                  />
-                  <button
-                    aria-controls="password"
-                    className="usa-show-password"
-                    data-hide-text="Hide password"
-                    data-show-text="Show password"
-                    type="button"
-                    onClick={() =>
-                      toggleShowPasswordSequence({
-                        passwordType: 'showPassword',
-                      })
-                    }
-                  >
-                    {showPassword ? 'Hide Password' : 'Show password'}
-                  </button>
-                  <div
-                    className="margin-top-205"
-                    data-testid="password-validation-errors"
-                    hidden={!password}
-                  >
-                    {changePasswordHelper.passwordErrors.map(error => {
-                      return (
-                        <RequirementsText
-                          fieldName="password"
-                          key={error.message}
-                          text={error.message}
-                          valid={error.valid}
-                        ></RequirementsText>
-                      );
-                    })}
+                  <div>
+                    <label className="usa-label" htmlFor="forgot-password-code">
+                      Code
+                    </label>
+                    <input
+                      required
+                      className="usa-input"
+                      data-testid="forgot-password-code"
+                      id="forgot-password-code"
+                      name="forgot-password-code"
+                      type="text"
+                      onChange={e => {
+                        updateAuthenticationFormValueSequence({
+                          code: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="margin-top-3">
+                    <label className="usa-label" htmlFor="password">
+                      New Password
+                    </label>
+                    <input
+                      required
+                      className="usa-input"
+                      data-testid="new-password-input"
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      onChange={e => {
+                        updateAuthenticationFormValueSequence({
+                          password: e.target.value,
+                        });
+                      }}
+                    />
+                    <button
+                      aria-controls="password"
+                      className="usa-show-password"
+                      data-hide-text="Hide password"
+                      data-show-text="Show password"
+                      type="button"
+                      onClick={() =>
+                        toggleShowPasswordSequence({
+                          passwordType: 'showPassword',
+                        })
+                      }
+                    >
+                      {showPassword ? 'Hide Password' : 'Show password'}
+                    </button>
+                    <div
+                      className="margin-top-205"
+                      data-testid="password-validation-errors"
+                      hidden={!password}
+                    >
+                      {changePasswordHelper.passwordErrors.map(error => {
+                        return (
+                          <RequirementsText
+                            fieldName="password"
+                            key={error.message}
+                            text={error.message}
+                            valid={error.valid}
+                          ></RequirementsText>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div className="margin-top-3">
