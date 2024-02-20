@@ -10,6 +10,7 @@ export type ChangePasswordHelperResults = {
   confirmPassword: boolean;
   formIsValid: boolean;
   passwordErrors: { message: string; valid: boolean }[];
+  showForgotPasswordCode: boolean;
 };
 
 export const changePasswordHelper = (get: Get): ChangePasswordHelperResults => {
@@ -43,9 +44,12 @@ export const changePasswordHelper = (get: Get): ChangePasswordHelperResults => {
     };
   });
 
+  const showForgotPasswordCode = !authenticationState.tempPassword;
+
   return {
     confirmPassword: !errors?.confirmPassword,
     formIsValid: entity.isValid(),
     passwordErrors,
+    showForgotPasswordCode,
   };
 };
