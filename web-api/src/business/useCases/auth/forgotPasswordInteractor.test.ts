@@ -62,10 +62,17 @@ describe('forgotPasswordInteractor', () => {
     expect(
       applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
     ).toEqual({ email });
+    expect(
+      applicationContext.getUseCaseHelpers().createUserConfirmation,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getMessageGateway().sendEmailToUser,
+    ).not.toHaveBeenCalled();
 
-    expect(result).toEqual({
-      email,
-    });
+    expect(result).toBeUndefined();
   });
 
   it('should throw an UnauthorizedError and call createUserConfirmation when user account is unconfirmed', async () => {
