@@ -13,21 +13,7 @@ export const forgotPasswordAction = async ({
       .getUseCases()
       .forgotPasswordInteractor(applicationContext, { email });
 
-    return path.success({
-      alertSuccess: {
-        message: (
-          <>
-            If there is a DAWSON account for {email}, we’ll send a password
-            reset email. If you’re still having trouble, contact{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
-            </a>
-            .
-          </>
-        ),
-        title: 'Password reset email sent',
-      },
-    });
+    return path.success();
   } catch (err: any) {
     const originalErrorMessage = err?.originalError?.response?.data;
 

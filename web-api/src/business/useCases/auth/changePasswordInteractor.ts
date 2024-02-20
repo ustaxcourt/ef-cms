@@ -3,11 +3,7 @@ import {
   ChallengeNameType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
-import {
-  InvalidEntityError,
-  InvalidRequest,
-  NotFoundError,
-} from '@web-api/errors/errors';
+import { InvalidEntityError, NotFoundError } from '@web-api/errors/errors';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   Practitioner,
@@ -132,18 +128,10 @@ export const changePasswordInteractor = async (
         throw new NotFoundError(`User not found with email: ${email}`);
       }
 
-      const codeFromPersistence = await applicationContext
-        .getPersistenceGateway()
-        .getForgotPasswordCode(applicationContext, { userId: user.userId });
-
-      if (!codeFromPersistence || code !== codeFromPersistence) {
-        throw new InvalidRequest('Forgot password code expired');
-      }
-
-      await applicationContext.getCognito().adminSetUserPassword({
+      await applicationContext.getCognito().confirmForgotPassword({
+        ClientId: applicationContext.environment.cognitoClientId,
+        ConfirmationCode: code,
         Password: password,
-        Permanent: true,
-        UserPoolId: applicationContext.environment.userPoolId,
         Username: email,
       });
 
