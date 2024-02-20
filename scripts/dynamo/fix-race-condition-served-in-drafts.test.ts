@@ -2,8 +2,8 @@
  * @jest-environment node
  */
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
-import { MOCK_DOCUMENTS } from '../../src/test/mockDocketEntry';
-import { applicationContext } from '../../src/business/test/createTestApplicationContext';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   fixRaceConditionServedInDrafts,
   getDocumentFromDynamo,
