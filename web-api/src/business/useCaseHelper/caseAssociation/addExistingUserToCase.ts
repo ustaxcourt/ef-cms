@@ -37,6 +37,8 @@ export const addExistingUserToCase = async ({
     throw new Error(`no user found with the provided email of ${email}`);
   }
 
+  // 10007 bug here
+
   const userToAdd = await applicationContext
     .getPersistenceGateway()
     .getUserById({
