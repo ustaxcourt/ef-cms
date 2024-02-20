@@ -1,8 +1,10 @@
+import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { createAndServePaperPetitionMultipleParties } from '../../helpers/create-and-serve-paper-petition-petitioner-and-spouse';
 import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
+import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
 describe('Admissions Clerk Grants E-Access', () => {
   after(() => {
@@ -12,6 +14,7 @@ describe('Admissions Clerk Grants E-Access', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
+
   /*
   Given an admissions clerk is working with a served paper case that has two petitioners
   When they grant the first petitioner electronic access to the case
@@ -87,7 +90,9 @@ describe('Admissions Clerk Grants E-Access', () => {
   Given an admissions clerk is working with a served paper case that has two petitioners
   When they grant the second petitioner electronic access to the case
   And the petitioner verifies their account
-  Then a Notice Of Change of Email (NOCE) should be generated and served on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic
+  Then a Notice Of Change of Email (NOCE) should be generated and served on the case
+  And a work item is added for the NOCE to the docket section work queue
+  And the petitioner`s service preference should change to Electronic
   */
   it('should generate a Notice Of Change of Email (NOCE) on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic when an admissions clerk grants e-access to the second petitioner', () => {
     createAndServePaperPetitionMultipleParties().then(
@@ -166,7 +171,9 @@ describe('Admissions Clerk Grants E-Access', () => {
 
   /*
   Given that a practitioner does not yet have a DAWSON account
-  When an admissions clerk grants e-access to practitioner and adds them to a case then they should be able to login and view their case
+  When an admissions clerk grants e-access to practitioner and adds them to a case
+  Then they should be able to login
+  And view their case
   */
   it('should allow a practitioner to login and view their case when an admissions clerk grants e-access to a practitioner', () => {
     const practitionerUserName = `cypress_test_account+${v4()}`;
@@ -247,5 +254,86 @@ describe('Admissions Clerk Grants E-Access', () => {
         });
       },
     );
+  });
+
+  /*
+  Given a petitioner has created an account in DAWSON
+  And they have not verified their account
+  When an admissions clerk grants e-access to the petitioner by adding them to a case
+  Then they should be able to verify their account
+  And view their case
+  */
+  it('should allow a petitioner to verify their account, login and view their case when an admissions clerk grants e-access after they have created their account but before they have verified it', () => {
+    createAndServePaperPetition().then(({ docketNumber, name }) => {
+      const petitionerUsername = `cypress_test_account+${v4()}`;
+      const petitionerEmail = `${petitionerUsername}@example.com`;
+
+      createAPetitioner({
+        email: petitionerEmail,
+        name,
+        password: 'Testing1234$',
+      });
+
+      cy.login('admissionsclerk1');
+      cy.get('[data-testid="messages-banner"]');
+      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+      cy.get('[data-testid="search-docket-number"]').click();
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get(
+        `[data-testid="petitioner-card-${name}"] [data-testid="edit-petitioner-button"]`,
+      ).click();
+      cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
+        petitionerEmail,
+      );
+      cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
+        petitionerEmail,
+      );
+      cy.get(
+        '[data-testid="submit-edit-petitioner-information-button"]',
+      ).click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="success-alert"]').contains('Changes saved');
+      cy.get('[data-testid="petitioner-service-indicator"]').contains('Paper');
+      logout();
+
+      verifyPetitionerAccount({ email: petitionerEmail });
+
+      cy.visit('/login');
+      cy.get('[data-testid="email-input"]').type(petitionerEmail);
+      cy.get('[data-testid="password-input"]').type('Testing1234$', {
+        log: false,
+      });
+      cy.get('[data-testid="login-button"]').click();
+      cy.get('[data-testid="new-password-input"]').type('Testing1234$');
+      cy.get('[data-testid="confirm-new-password-input"]').type('Testing1234$');
+      cy.get('[data-testid="change-password-button"]').click();
+      cy.get('[data-testid="my-cases-link"]');
+      cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
+        expect(isNOCECreated).to.equal(
+          true,
+          'NOCE was not generated on a case that a petitioner was granted e-access for.',
+        );
+      });
+      cy.get(`[data-testid="${docketNumber}"]`).contains(docketNumber).click();
+      cy.get('tbody:contains(NOCE)').should('exist');
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get(
+        `[data-testid="petitioner-card-${name}"] [data-testid="petitioner-service-indicator"]`,
+      ).contains('Electronic');
+      cy.get(
+        `[data-testid="petitioner-card-${name}"] [data-testid="petitioner-pending-email"]`,
+      ).should('not.contain.text');
+      logout();
+
+      cy.login('docketclerk1');
+      cy.get('[data-testid="messages-banner"]');
+      cy.get('[data-testid="document-qc-nav-item"]').click();
+      cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
+      cy.get(`[data-testid="work-item-${docketNumber}"]`).contains(
+        `Notice of Change of Email Address for ${name}`,
+      );
+    });
   });
 });
