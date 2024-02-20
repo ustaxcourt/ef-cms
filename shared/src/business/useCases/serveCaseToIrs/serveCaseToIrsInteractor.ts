@@ -115,13 +115,8 @@ const createPetitionWorkItems = async ({
     message: 'Served to IRS',
     user,
   });
-
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: PETITIONS_SECTION,
-    userId: user.userId,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
-  });
+  initializeCaseWorkItem.section = PETITIONS_SECTION;
+  initializeCaseWorkItem.assigneeId = user.userId;
 
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,

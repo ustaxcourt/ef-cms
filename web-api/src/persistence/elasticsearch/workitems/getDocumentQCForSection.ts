@@ -8,23 +8,21 @@ export const getDocumentQCForSection = async ({
   section,
 }: {
   applicationContext: IApplicationContext;
-  box: 'inbox' | 'inProgress' | 'served';
+  box: 'inbox' | 'inProgress' | 'outbox';
   judgeUserName?: string;
   section: string;
 }): Promise<RawWorkItem[]> => {
-  const gsi = box === 'served' ? 4 : 3;
-
   const results = (await queryFull({
     ExpressionAttributeNames: {
-      [`#gsi${gsi}pk`]: `gsi${gsi}pk`,
+      '#gsi3pk': 'gsi3pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      [`:gsi${gsi}pk`]: `section|${box}|${section}`,
+      ':gsi3pk': `section|${box}|${section}`,
       ':prefix': 'work-item',
     },
-    IndexName: `gsi${gsi}`,
-    KeyConditionExpression: `#gsi${gsi}pk = :gsi${gsi}pk and begins_with(#sk, :prefix)`,
+    IndexName: 'gsi3',
+    KeyConditionExpression: '#gsi3pk = :gsi3pk and begins_with(#sk, :prefix)',
     applicationContext,
   })) as RawWorkItem[];
 

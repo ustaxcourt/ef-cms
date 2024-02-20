@@ -18,7 +18,7 @@ export const saveWorkItem = ({
   workItem: RawWorkItem;
 }) => {
   const box = workItem.completedAt
-    ? 'served'
+    ? 'outbox'
     : workItem.inProgress
       ? 'inProgress'
       : 'inbox';
