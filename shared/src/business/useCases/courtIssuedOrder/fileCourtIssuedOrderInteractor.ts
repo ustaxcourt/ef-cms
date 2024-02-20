@@ -138,6 +138,7 @@ export const fileCourtIssuedOrder = async (
 
     const messageEntity = new Message(mostRecentMessage, {
       applicationContext,
+      caseEntity,
     }).validate();
     messageEntity.addAttachment({
       documentId: docketEntryEntity.docketEntryId,

@@ -123,6 +123,7 @@ export const saveSignedDocumentInteractor = async (
 
       const messageEntity = new Message(mostRecentMessage, {
         applicationContext,
+        caseEntity,
       }).validate();
       messageEntity.addAttachment({
         documentId: signedDocketEntryEntity.docketEntryId,

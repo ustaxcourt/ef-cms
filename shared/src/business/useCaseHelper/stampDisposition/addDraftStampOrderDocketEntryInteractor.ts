@@ -113,7 +113,9 @@ export const addDraftStampOrderDocketEntry = async (
 
     const messageEntity = new Message(mostRecentMessage, {
       applicationContext,
+      caseEntity,
     }).validate();
+
     messageEntity.addAttachment({
       documentId: stampedDocketEntryEntity.docketEntryId,
       documentTitle: stampedDocketEntryEntity.documentTitle,

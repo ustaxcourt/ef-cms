@@ -72,10 +72,9 @@ const updateCaseMessages = async ({
   caseToUpdate,
   oldCase,
 }) => {
-  const messageUpdatesNecessary =
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix;
+  const messageUpdatesNecessary = Message.CASE_PROPERTIES.filter(
+    caseProperty => oldCase[caseProperty] !== caseToUpdate[caseProperty],
+  );
 
   if (!messageUpdatesNecessary) {
     return [];
@@ -92,13 +91,12 @@ const updateCaseMessages = async ({
     return [];
   }
 
-  caseMessages.forEach(message => {
-    message.caseStatus = caseToUpdate.status;
-    message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
-    message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
-  });
+  const caseEntities = caseMessages.map(
+    message =>
+      new Message(message, { applicationContext, caseEntity: caseToUpdate }),
+  );
 
-  const validMessages = Message.validateRawCollection(caseMessages, {
+  const validMessages = Message.validateRawCollection(caseEntities, {
     applicationContext,
   });
 
