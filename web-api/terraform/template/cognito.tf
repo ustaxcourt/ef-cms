@@ -8,7 +8,7 @@ resource "aws_cognito_user_pool" "pool" {
     email_message = <<EMAILMESSAGE
     <div>
     <span>
-      Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>.
+      Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>
     </span>
     <div style="margin-top: 20px;">
       <span>{####}</span>
@@ -23,7 +23,7 @@ resource "aws_cognito_user_pool" "pool" {
     </div>
   </div>
   EMAILMESSAGE
-    email_subject_by_link = "U.S. Tax Court DAWSON Reset Password Request"
+    email_subject = "U.S. Tax Court DAWSON Reset Password Request"
   }
 
   account_recovery_setting {
