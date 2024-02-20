@@ -8,9 +8,10 @@ export const setupFilesForCaseCreationAction = ({
   const petitionMetadata = get(state.form);
   const {
     applicationForWaiverOfFilingFeeFile,
-    attachmentToPetitionFiles, // make sure its the same name in paper flow
+    attachmentToPetitionFiles,
     corporateDisclosureFile,
     petitionFile,
+    primaryDocumentFile,
     requestForPlaceOfTrialFile,
     stinFile,
   } = petitionMetadata;
@@ -21,6 +22,7 @@ export const setupFilesForCaseCreationAction = ({
       atps: attachmentToPetitionFiles,
       corporateDisclosure: corporateDisclosureFile,
       petition: petitionFile,
+      primaryDocumentFile,
       requestForPlaceOfTrial: requestForPlaceOfTrialFile,
       stin: stinFile,
     },

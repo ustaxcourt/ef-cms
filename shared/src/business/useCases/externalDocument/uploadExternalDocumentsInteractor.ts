@@ -37,8 +37,8 @@ export const uploadExternalDocumentsInteractor = async (
   documentMetadata.primaryDocumentId = await applicationContext
     .getUseCases()
     .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: documentFiles['primary'],
-      onUploadProgress: progressFunctions['primary'],
+      document: progressFunctions.primary.file,
+      onUploadProgress: progressFunctions.primary.uploadProgress,
     });
   docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
 
@@ -46,8 +46,8 @@ export const uploadExternalDocumentsInteractor = async (
     documentMetadata.secondaryDocument.docketEntryId = await applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: documentFiles['secondary'],
-        onUploadProgress: progressFunctions['secondary'],
+        document: progressFunctions.secondary.file,
+        onUploadProgress: progressFunctions.secondary.uploadProgress,
       });
     docketEntryIdsAdded.push(documentMetadata.secondaryDocument.docketEntryId);
   }
@@ -58,8 +58,9 @@ export const uploadExternalDocumentsInteractor = async (
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: documentFiles[`primarySupporting${i}`],
-            onUploadProgress: progressFunctions[`primarySupporting${i}`],
+            document: progressFunctions[`primarySupporting${i}`].file,
+            onUploadProgress:
+              progressFunctions[`primarySupporting${i}`].uploadProgress,
           });
       docketEntryIdsAdded.push(
         documentMetadata.supportingDocuments[i].docketEntryId,
@@ -77,8 +78,9 @@ export const uploadExternalDocumentsInteractor = async (
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: documentFiles[`secondarySupporting${i}`],
-            onUploadProgress: progressFunctions[`secondarySupporting${i}`],
+            document: progressFunctions[`secondarySupporting${i}`].file,
+            onUploadProgress:
+              progressFunctions[`secondarySupporting${i}`].uploadProgress,
           });
       docketEntryIdsAdded.push(
         documentMetadata.secondarySupportingDocuments[i].docketEntryId,
