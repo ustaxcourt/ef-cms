@@ -3,7 +3,7 @@
  *   npx ts-node --transpile-only scripts/run-once-scripts/create-efcms-user-practitioner-firm-index.ts
  *
  * USAGE:
- *   npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv
+ *   npx ts-node --transpile-only scripts/reports/firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv
  *
  * CLEANUP:
  *   npx ts-node --transpile-only scripts/run-once-scripts/delete-efcms-user-practitioner-firm-index.ts
