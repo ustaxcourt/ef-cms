@@ -1,17 +1,20 @@
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import {
   dateStringsCompared,
   formatNow,
-} from '../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setupPercentDone = <
-  T extends Record<string, any | any[] | undefined>,
->(
-  files: T,
-  store: any,
+export const setProgressForFileUploadAction = ({
   get,
-): Record<keyof T, (progressEvent: any) => void> => {
+  props,
+  store,
+}: ActionProps<{
+  files: any;
+}>): Record<
+  string,
+  { file: any; uploadProgress: (progressEvent: any) => void }
+> => {
+  const { files } = props;
   const loadedAmounts: Record<string, number> = {};
   // O.K. to use Date constructor for calculating time duration
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
@@ -102,7 +105,10 @@ export const setupPercentDone = <
   store.set(state.fileUploadProgress.timeRemaining, Number.POSITIVE_INFINITY);
   store.set(state.fileUploadProgress.isUploading, true);
 
-  const uploadProgressCallbackMap = {} as any;
+  const uploadProgressCallbackMap = {} as Record<
+    string,
+    { file: any; uploadProgress: (progressEvent: any) => void }
+  >;
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
@@ -122,61 +128,5 @@ export const setupPercentDone = <
     }
   });
 
-  return uploadProgressCallbackMap as Record<
-    keyof T,
-    { file: any; uploadProgress: (progressEvent: any) => void }
-  >;
-};
-
-export const createCaseFromPaperAction = async ({
-  applicationContext,
-  get,
-  path,
-  store,
-}: ActionProps) => {
-  const petitionMetadata: PaperCaseDataType = get(state.form);
-
-  const {
-    applicationForWaiverOfFilingFeeFile,
-    attachmentToPetitionFile,
-    corporateDisclosureFile,
-    petitionFile,
-    requestForPlaceOfTrialFile,
-    stinFile,
-  } = petitionMetadata;
-
-  const progressFunctions = setupPercentDone(
-    {
-      atp: attachmentToPetitionFile,
-      corporate: corporateDisclosureFile,
-      petition: petitionFile,
-      stin: stinFile,
-      trial: requestForPlaceOfTrialFile,
-      waiverOfFilingFee: applicationForWaiverOfFilingFeeFile,
-    },
-    store,
-    get,
-  );
-
-  let caseDetail: RawCase;
-  try {
-    caseDetail = await applicationContext
-      .getUseCases()
-      .filePetitionFromPaperInteractor(applicationContext, {
-        applicationForWaiverOfFilingFeeUploadProgress:
-          progressFunctions.waiverOfFilingFee,
-        atpUploadProgress: progressFunctions.atp,
-        corporateDisclosureUploadProgress: progressFunctions.corporate,
-        petitionMetadata,
-        petitionUploadProgress: progressFunctions.petition,
-        requestForPlaceOfTrialUploadProgress: progressFunctions.trial,
-        stinUploadProgress: progressFunctions.stin,
-      });
-  } catch (err) {
-    return path.error();
-  }
-
-  return path.success({
-    caseDetail,
-  });
+  return { uploadProgressCallbackMap };
 };
