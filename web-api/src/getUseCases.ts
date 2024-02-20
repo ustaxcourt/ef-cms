@@ -17,7 +17,7 @@ import { blockCaseFromTrialInteractor } from '../../shared/src/business/useCases
 import { caseAdvancedSearchInteractor } from '../../shared/src/business/useCases/caseAdvancedSearchInteractor';
 import { casePublicSearchInteractor } from '../../shared/src/business/useCases/public/casePublicSearchInteractor';
 import { changePasswordInteractor } from '@web-api/business/useCases/auth/changePasswordInteractor';
-import { checkEmailAvailabilityInteractor } from '../../shared/src/business/useCases/users/checkEmailAvailabilityInteractor';
+import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from '../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor';
 import { completeDocketEntryQCInteractor } from '../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor';
@@ -200,7 +200,7 @@ import { updateDeficiencyStatisticInteractor } from '../../shared/src/business/u
 import { updateDocketEntryMetaInteractor } from '../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor';
 import { updateDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/updateDocketEntryWorksheetInteractor';
 import { updateOtherStatisticsInteractor } from '../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor';
-import { updatePetitionerInformationInteractor } from '../../shared/src/business/useCases/updatePetitionerInformationInteractor';
+import { updatePetitionerInformationInteractor } from './business/useCases/user/updatePetitionerInformationInteractor';
 import { updatePractitionerUserInteractor } from './business/useCases/practitioner/updatePractitionerUserInteractor';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/business/useCases/updateQcCompleteForTrialInteractor';
 import { updateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/updateTrialSessionInteractor';

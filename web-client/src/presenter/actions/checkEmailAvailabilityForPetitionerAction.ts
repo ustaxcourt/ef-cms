@@ -15,18 +15,29 @@ export const checkEmailAvailabilityForPetitionerAction = async ({
 }: ActionProps) => {
   const { updatedEmail } = get(state.form.contact);
 
-  const isEmailAvailable = await applicationContext
+  const { isAccountConfirmed, isEmailAvailable } = await applicationContext
     .getUseCases()
     .checkEmailAvailabilityInteractor(applicationContext, {
       email: updatedEmail,
     });
 
-  return isEmailAvailable
-    ? path.emailAvailable()
-    : path.emailInUse({
+  if (isEmailAvailable) {
+    return path.emailAvailable();
+  } else {
+    if (!isAccountConfirmed) {
+      return path.accountIsUnconfirmed({
         errors: {
           email:
-            'An account with this email already exists. Enter a new email address.',
+            'An account with this email already exists but is not confirmed. Please contact the user and ask them to verify their account.',
         },
       });
+    }
+
+    return path.emailInUse({
+      errors: {
+        email:
+          'An account with this email already exists. Enter a new email address.',
+      },
+    });
+  }
 };
