@@ -7,7 +7,6 @@ import {
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-
 describe('createCaseFromPaperAction', () => {
   const { US_STATES } = applicationContext.getConstants();
 
@@ -26,14 +25,10 @@ describe('createCaseFromPaperAction', () => {
   });
 
   it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
-    jest.mock('./createCaseFromPaperAction', () => ({
-      setupPercentDone: jest.fn().mockReturnValue({
-        waiverOfFilingFee: {
-          file: {},
-          uploadProgress: jest.fn(),
-        },
-      }),
-    }));
+    const fileMetaData = {
+      file: {},
+      uploadProgress: () => {},
+    };
 
     applicationContext
       .getUseCases()
@@ -42,6 +37,16 @@ describe('createCaseFromPaperAction', () => {
     await runAction(createCaseFromPaperAction, {
       modules: {
         presenter,
+      },
+      props: {
+        uploadProgressCallbackMap: {
+          atp: fileMetaData,
+          corporate: fileMetaData,
+          petition: fileMetaData,
+          requestForPlaceOfTrial: fileMetaData,
+          stin: fileMetaData,
+          waiverOfFilingFee: fileMetaData,
+        },
       },
       state: {
         form: {
@@ -54,41 +59,28 @@ describe('createCaseFromPaperAction', () => {
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
         },
-        user: {
-          email: 'petitionsclerk1@example.com',
-        },
       },
     });
-    expect(
-      applicationContext.getUseCases().filePetitionFromPaperInteractor,
-    ).toHaveBeenCalled();
+
     expect(
       applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      applicationForWaiverOfFilingFeeUploadProgress: {
-        file: {},
-      },
-      atpUploadProgress: {
-        file: {},
-      },
-      corporateDisclosureUploadProgress: {
-        file: {},
-      },
-      petitionUploadProgress: {
-        file: {},
-      },
-      requestForPlaceOfTrialUploadProgress: {
-        file: {},
-      },
-      stinUploadProgress: {
-        file: {},
-      },
+      applicationForWaiverOfFilingFeeUploadProgress: fileMetaData,
+      atpUploadProgress: fileMetaData,
+      corporateDisclosureUploadProgress: fileMetaData,
+      petitionUploadProgress: fileMetaData,
+      requestForPlaceOfTrialUploadProgress: fileMetaData,
+      stinUploadProgress: fileMetaData,
     });
     expect(successStub).toHaveBeenCalled();
   });
 
   it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
+    const fileMetaData = {
+      file: {},
+      uploadProgress: () => {},
+    };
     applicationContext
       .getUseCases()
       .filePetitionFromPaperInteractor.mockImplementation(() => {
@@ -99,37 +91,49 @@ describe('createCaseFromPaperAction', () => {
       modules: {
         presenter,
       },
+
+      props: {
+        uploadProgressCallbackMap: {
+          atp: fileMetaData,
+          corporate: fileMetaData,
+          petition: fileMetaData,
+          requestForPlaceOfTrial: fileMetaData,
+          stin: fileMetaData,
+          waiverOfFilingFee: fileMetaData,
+        },
+      },
       state: {
         form: {
+          applicationForWaiverOfFilingFeeFile: {},
+          attachmentToPetitionFile: {},
           corporateDisclosureFile: {},
           petitionFile: {},
+          requestForPlaceOfTrialFile: {},
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
-        },
-        user: {
-          email: 'petitioner1@example.com',
         },
       },
     });
 
     expect(
-      applicationContext.getUseCases().filePetitionFromPaperInteractor,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      corporateDisclosureFile: {},
-      petitionFile: {},
-      petitionMetadata: MOCK_CASE,
-      stinFile: {},
+      applicationForWaiverOfFilingFeeUploadProgress: fileMetaData,
+      atpUploadProgress: fileMetaData,
+      corporateDisclosureUploadProgress: fileMetaData,
+      petitionUploadProgress: fileMetaData,
+      requestForPlaceOfTrialUploadProgress: fileMetaData,
+      stinUploadProgress: fileMetaData,
     });
     expect(errorStub).toHaveBeenCalled();
   });
 });
 
-describe.only('setupPercentDone', () => {
+// this goes to new function
+// TODO: update
+describe('setupPercentDone', () => {
   it('should return progress functions for each file passed in', () => {
     const storeObject = {};
     const store = {
@@ -148,7 +152,7 @@ describe.only('setupPercentDone', () => {
         waiverOfFilingFee: { size: 5 },
       },
       store,
-      get: jest.fn(),
+      // get: jest.fn(),
     );
 
     console.log('result', result);
