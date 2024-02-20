@@ -1,4 +1,3 @@
-import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {

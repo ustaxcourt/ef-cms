@@ -7,15 +7,14 @@ export const uploadDocketEntryFileAction = async ({
   props,
 }: ActionProps) => {
   const docketEntryId = get(state.docketEntryId);
-  const { primaryDocumentFile, uploadProgressCallbackMap } = props;
-
+  const { uploadProgressCallbackMap } = props;
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
       .uploadDocumentInteractor(applicationContext, {
-        documentFile: primaryDocumentFile,
+        documentFile: uploadProgressCallbackMap.primary.file,
         key: docketEntryId,
-        onUploadProgress: uploadProgressCallbackMap.primary,
+        onUploadProgress: uploadProgressCallbackMap.primary.onUploadProgress,
       });
 
     return path.success({
