@@ -9,7 +9,7 @@ export type FilePetitionFromPaperTypeDetailsType = {
   atpUploadProgress?: (progressEvent: any) => void;
   corporateDisclosureUploadProgress?: (progressEvent: any) => void;
   petitionMetadata: PaperCaseDataType;
-  petitionUploadProgress?: (progressEvent: any) => void;
+  petitionUploadProgress: (progressEvent: any) => void; // change type
   requestForPlaceOfTrialUploadProgress?: (progressEvent: any) => void;
   stinUploadProgress?: (progressEvent: any) => void;
 };
@@ -126,12 +126,18 @@ export const filePetitionFromPaperInteractor = async (
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
         document: atpUploadProgress.file,
-        onUploadProgress: atpUploadProgress.progressFunction,
+        onUploadProgress: atpUploadProgress.uploadProgress,
       });
   }
 
-  // todo: might not need since its been resolved in the createCaseFromPaperInteractor call
-  await Promise.all([
+  const [
+    applicationForWaiverOfFilingFeeFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+    attachmentToPetitionFileId,
+  ] = await Promise.all([
     applicationForWaiverOfFilingFeeUpload,
     corporateDisclosureFileUpload,
     petitionFileUpload,
@@ -143,13 +149,12 @@ export const filePetitionFromPaperInteractor = async (
   return await applicationContext
     .getUseCases()
     .createCaseFromPaperInteractor(applicationContext, {
-      applicationForWaiverOfFilingFeeFileId:
-        await applicationForWaiverOfFilingFeeUpload,
-      attachmentToPetitionFileId: await attachmentToPetitionFileUpload,
-      corporateDisclosureFileId: await corporateDisclosureFileUpload,
-      petitionFileId: await petitionFileUpload,
+      applicationForWaiverOfFilingFeeFileId,
+      attachmentToPetitionFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
       petitionMetadata,
-      requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,
-      stinFileId: await stinFileUpload,
+      requestForPlaceOfTrialFileId,
+      stinFileId,
     });
 };
