@@ -5,9 +5,9 @@
 //     23887-13L,3/24/2022,CAV
 //     22570-18W,3/9/2020,CAV
 //
-// usage: npx ts-node --transpile-only shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts
+// usage: npx ts-node --transpile-only scripts/import-case-status-changes-from-csv.ts
 
-import { requireEnvVars } from '../util';
+import { requireEnvVars } from '../shared/admin-tools/util';
 requireEnvVars(['ENV', 'HOME', 'REGION']);
 
 import {
@@ -27,7 +27,7 @@ import { parse } from 'csv-parse/sync';
 import fs from 'fs';
 
 const dynamodbClient = new DynamoDBClient({ region: process.env.REGION });
-const INPUT_FILE = `${process.env.HOME}/Downloads/case-status-changes.csv`;
+const INPUT_FILE = `${process.env.HOME!}/Downloads/case-status-changes.csv`;
 
 const getCaseRecord = async ({
   applicationContext,
