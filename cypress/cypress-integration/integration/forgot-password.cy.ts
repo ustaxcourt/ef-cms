@@ -1,6 +1,7 @@
 import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../support/cognito-login';
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 import { faker } from '@faker-js/faker';
 import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
@@ -15,6 +16,7 @@ describe('Forgot Password', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
+  const password = cypressEnv.defaultAccountPass;
 
   /*
       Given a petitioner with a DAWSON account
@@ -44,7 +46,6 @@ describe('Forgot Password', () => {
   it('should alert a user that that they have been sent an email to assist them with the confirmation of their account when they enter an email address that is an unconfirmed account', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
-    const password = 'Testing1234$';
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     cy.visit('/login');
@@ -67,7 +68,6 @@ describe('Forgot Password', () => {
   it('should allow a user to login with their existing password if they have indicated they forgot their password and have not clicked the verification email', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
-    const password = 'Testing1234$';
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
@@ -79,9 +79,7 @@ describe('Forgot Password', () => {
 
     cy.visit('/login');
     cy.get('[data-testid="email-input"]').type(email);
-    cy.get('[data-testid="password-input"]').type(password, {
-      log: false,
-    });
+    cy.get('[data-testid="password-input"]').type(password);
     cy.get('[data-testid="login-button"]').click();
     cy.get('[data-testid="my-cases-link"]');
   });
@@ -95,7 +93,6 @@ describe('Forgot Password', () => {
   it('should reset a users password and log them in when they indicate they have forgotten their password and click on the email verfication link', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
-    const password = 'Testing1234$';
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
@@ -130,9 +127,7 @@ describe('Forgot Password', () => {
     logout();
 
     cy.get('[data-testid="email-input"]').type(email);
-    cy.get('[data-testid="password-input"]').type(brandNewPassword, {
-      log: false,
-    });
+    cy.get('[data-testid="password-input"]').type(brandNewPassword);
     cy.get('[data-testid="login-button"]').click();
     cy.get('[data-testid="header-text"]').should('contain', `Welcome, ${name}`);
   });
@@ -146,7 +141,6 @@ describe('Forgot Password', () => {
   it('should notify the user that their forgot password link has expired or is wrong when the user types in the wrong confirmation code', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
-    const password = 'Testing1234$';
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
@@ -165,9 +159,9 @@ describe('Forgot Password', () => {
       'totally incorrect code',
     );
     cy.get('[data-testid="new-password-input"]').clear();
-    cy.get('[data-testid="new-password-input"]').type('Testing1234$');
+    cy.get('[data-testid="new-password-input"]').type(password);
     cy.get('[data-testid="confirm-new-password-input"]').clear();
-    cy.get('[data-testid="confirm-new-password-input"]').type('Testing1234$');
+    cy.get('[data-testid="confirm-new-password-input"]').type(password);
     cy.get('[data-testid="change-password-button"]').click();
 
     cy.get('[data-testid="error-alert"]').should(
