@@ -10,10 +10,12 @@ export const setProgressForFileUploadAction = ({
   store,
 }: ActionProps<{
   files: any;
-}>): Record<
-  string,
-  { file: any; uploadProgress: (progressEvent: any) => void }
-> => {
+}>): {
+  uploadProgressCallbackMap: Record<
+    string,
+    { file: any; uploadProgress: (progressEvent: any) => void }
+  >;
+} => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
   const startTime = formatNow();
