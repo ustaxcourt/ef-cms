@@ -1,3 +1,4 @@
+import { FileUploadProgressMapType } from '../../../../shared/src/business/entities/EntityConstants';
 import {
   dateStringsCompared,
   formatNow,
@@ -94,10 +95,7 @@ export const setProgressForFileUploadAction = ({
   store.set(state.fileUploadProgress.timeRemaining, Number.POSITIVE_INFINITY);
   store.set(state.fileUploadProgress.isUploading, true);
 
-  const uploadProgressCallbackMap = {} as Record<
-    string,
-    { file: any; uploadProgress: (progressEvent: any) => void }
-  >;
+  const fileUploadProgressMap = {} as FileUploadProgressMapType;
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
@@ -111,7 +109,7 @@ export const setProgressForFileUploadAction = ({
     //       };
     //     });
     //   } else {
-    uploadProgressCallbackMap[key] = {
+    fileUploadProgressMap[key] = {
       file,
       // file: files[key],
       uploadProgress: createOnUploadProgress(key),
@@ -119,5 +117,5 @@ export const setProgressForFileUploadAction = ({
     // }
   });
 
-  return { uploadProgressCallbackMap };
+  return { uploadProgressCallbackMap: fileUploadProgressMap };
 };

@@ -1615,3 +1615,8 @@ export const JUDGE_TITLES = [
   'Chief Judge',
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
+
+export type FileUploadProgressMapType = Record<
+  string,
+  { file: any; uploadProgress: (progressEvent: any) => void }
+>;
