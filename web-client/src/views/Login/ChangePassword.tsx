@@ -54,10 +54,10 @@ export const ChangePassword = connect(
                       </label>
                       <input
                         required
+                        autoComplete="off"
                         className="usa-input"
                         data-testid="forgot-password-code"
                         id="forgot-password-code"
-                        name="forgot-password-code"
                         type="text"
                         onChange={e => {
                           updateAuthenticationFormValueSequence({
@@ -68,15 +68,15 @@ export const ChangePassword = connect(
                     </div>
                   )}
                   <div className="margin-top-3">
-                    <label className="usa-label" htmlFor="password">
+                    <label className="usa-label" htmlFor="new-password-input">
                       New Password
                     </label>
                     <input
                       required
+                      autoComplete="new-password"
                       className="usa-input"
                       data-testid="new-password-input"
-                      id="password"
-                      name="password"
+                      id="new-password-input"
                       type={showPassword ? 'text' : 'password'}
                       onChange={e => {
                         updateAuthenticationFormValueSequence({
@@ -122,10 +122,10 @@ export const ChangePassword = connect(
                     </label>
                     <input
                       required
+                      autoComplete="new-password"
                       className="usa-input"
                       data-testid="confirm-new-password-input"
                       id="confirm-password"
-                      name="confirmPassword"
                       type={showConfirmPassword ? 'text' : 'password'}
                       onChange={e => {
                         updateAuthenticationFormValueSequence({
