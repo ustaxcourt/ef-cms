@@ -262,7 +262,7 @@ describe('Admissions Clerk Grants E-Access', () => {
   Then they should see a warning that the account is unverified
   And the email should not be updated
   */
-  it('should allow a petitioner to verify their account, login and view their case when an admissions clerk grants e-access after they have created their account but before they have verified it', () => {
+  it('should display a modal and do nothing when an admissions clerk attempts to grant e-access to an email that is associated with an unverified account', () => {
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       const petitionerUsername = `cypress_test_account+${v4()}`;
       const petitionerEmail = `${petitionerUsername}@example.com`;
