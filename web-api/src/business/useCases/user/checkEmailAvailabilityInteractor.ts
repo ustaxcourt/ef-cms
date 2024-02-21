@@ -22,7 +22,8 @@ export const checkEmailAvailabilityInteractor = async (
       email,
     });
 
-  const isAccountUnverified = user?.accountStatus === UserStatusType.CONFIRMED;
+  const isAccountUnverified =
+    user?.accountStatus === UserStatusType.UNCONFIRMED;
 
   return { isAccountUnverified, isEmailAvailable: !user };
 };
