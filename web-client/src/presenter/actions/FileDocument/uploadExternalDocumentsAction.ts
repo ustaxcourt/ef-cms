@@ -24,7 +24,7 @@ export const uploadExternalDocumentsAction = async ({
   path,
   props,
 }: ActionProps) => {
-  const { documentMetadata, files, uploadProgressCallbackMap } = props;
+  const { documentMetadata, files, fileUploadProgressMap } = props;
   const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
@@ -34,7 +34,7 @@ export const uploadExternalDocumentsAction = async ({
       .uploadExternalDocumentsInteractor(applicationContext, {
         documentFiles: files,
         documentMetadata,
-        progressFunctions: uploadProgressCallbackMap,
+        progressFunctions: fileUploadProgressMap,
       });
 
     for (let docketEntryId of docketEntryIdsAdded) {

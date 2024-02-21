@@ -24,7 +24,7 @@ describe('setProgressForFileUploadAction', () => {
       },
     });
 
-    expect(results.output.uploadProgressCallbackMap).toMatchObject({
+    expect(results.output.fileUploadProgressMap).toMatchObject({
       atp: {
         file: {},
         uploadProgress: expect.any(Function),
@@ -74,19 +74,19 @@ describe('setProgressForFileUploadAction', () => {
         },
       },
     });
-    results.output.uploadProgressCallbackMap.atp.uploadProgress({
+    results.output.fileUploadProgressMap.atp.uploadProgress({
       isDone: true,
     });
-    results.output.uploadProgressCallbackMap.petition.uploadProgress({
+    results.output.fileUploadProgressMap.petition.uploadProgress({
       isDone: true,
     });
-    results.output.uploadProgressCallbackMap.stin.uploadProgress({
+    results.output.fileUploadProgressMap.stin.uploadProgress({
       isDone: true,
     });
-    results.output.uploadProgressCallbackMap.trial.uploadProgress({
+    results.output.fileUploadProgressMap.trial.uploadProgress({
       isDone: true,
     });
-    results.output.uploadProgressCallbackMap.waiverOfFilingFee.uploadProgress({
+    results.output.fileUploadProgressMap.waiverOfFilingFee.uploadProgress({
       loaded: 0,
       total: 5,
     });
@@ -96,7 +96,7 @@ describe('setProgressForFileUploadAction', () => {
     ).toEqual(0);
     expect(results.state.fileUploadProgress.percentComplete).toEqual(66);
 
-    results.output.uploadProgressCallbackMap.waiverOfFilingFee.uploadProgress({
+    results.output.fileUploadProgressMap.waiverOfFilingFee.uploadProgress({
       loaded: 3,
       total: 5,
     });
@@ -105,7 +105,7 @@ describe('setProgressForFileUploadAction', () => {
     ).toEqual(3);
     expect(results.state.fileUploadProgress.percentComplete).toEqual(86);
 
-    results.output.uploadProgressCallbackMap.waiverOfFilingFee.uploadProgress({
+    results.output.fileUploadProgressMap.waiverOfFilingFee.uploadProgress({
       isDone: true,
     });
     expect(
@@ -114,7 +114,7 @@ describe('setProgressForFileUploadAction', () => {
     expect(results.state.fileUploadProgress.percentComplete).toEqual(100);
   });
 
-  it('should not include, in uploadProgressCallbackMap, keys that have not been uploaded', async () => {
+  it('should not include, in fileUploadProgressMap, keys that have not been uploaded', async () => {
     const results = await runAction(setProgressForFileUploadAction, {
       props: {
         files: {
@@ -127,7 +127,7 @@ describe('setProgressForFileUploadAction', () => {
       },
     });
 
-    expect(results.output.uploadProgressCallbackMap).toMatchObject({
+    expect(results.output.fileUploadProgressMap).toMatchObject({
       atp: {
         file: {},
         uploadProgress: expect.any(Function),

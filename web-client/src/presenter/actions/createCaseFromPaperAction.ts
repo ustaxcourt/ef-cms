@@ -8,7 +8,7 @@ export const createCaseFromPaperAction = async ({
   props,
 }: ActionProps) => {
   const petitionMetadata: PaperCaseDataType = get(state.form);
-  const { uploadProgressCallbackMap: progressFunctions } = props;
+  const { fileUploadProgressMap: progressFunctions } = props;
 
   let caseDetail: RawCase;
   try {
