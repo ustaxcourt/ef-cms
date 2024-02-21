@@ -7,6 +7,8 @@ import { getCognito } from '../helpers/cognito/getCognitoCypress';
 import promiseRetry from 'promise-retry';
 import type { DeleteRequest } from '../../web-api/src/persistence/dynamo/dynamoTypes';
 
+export const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
+
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
