@@ -12,10 +12,7 @@ export const setProgressForFileUploadAction = ({
 }: ActionProps<{
   files: any;
 }>): {
-  fileUploadProgressMap: Record<
-    string,
-    { file: any; uploadProgress: (progressEvent: any) => void }
-  >;
+  fileUploadProgressMap: FileUploadProgressMapType;
 } => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
