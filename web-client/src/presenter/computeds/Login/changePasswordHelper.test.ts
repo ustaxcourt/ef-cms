@@ -2,7 +2,7 @@ import { changePasswordHelper } from '@web-client/presenter/computeds/Login/chan
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('changePasswordHelper', () => {
-  it('should return only true values when form is valid', () => {
+  it('should return validation values as true when form is valid', () => {
     const result = runCompute(changePasswordHelper, {
       state: {
         authentication: {
@@ -15,21 +15,23 @@ describe('changePasswordHelper', () => {
       },
     });
 
-    expect(result).toEqual({
-      confirmPassword: true,
-      formIsValid: true,
-      passwordErrors: [
-        {
-          message: 'Must not contain leading or trailing space',
-          valid: true,
-        },
-        { message: 'Must contain lower case letter', valid: true },
-        { message: 'Must contain number', valid: true },
-        { message: 'Must contain upper case letter', valid: true },
-        { message: 'Must contain special character or space', valid: true },
-        { message: 'Must be between 8-99 characters long', valid: true },
-      ],
-    });
+    expect(result).toEqual(
+      expect.objectContaining({
+        confirmPassword: true,
+        formIsValid: true,
+        passwordErrors: [
+          {
+            message: 'Must not contain leading or trailing space',
+            valid: true,
+          },
+          { message: 'Must contain lower case letter', valid: true },
+          { message: 'Must contain number', valid: true },
+          { message: 'Must contain upper case letter', valid: true },
+          { message: 'Must contain special character or space', valid: true },
+          { message: 'Must be between 8-99 characters long', valid: true },
+        ],
+      }),
+    );
   });
 
   it('should return false when confirmPassword is not valid', () => {
@@ -199,6 +201,42 @@ describe('changePasswordHelper', () => {
         { message: 'Must contain special character or space', valid: true },
         { message: 'Must be between 8-99 characters long', valid: false },
       ]);
+    });
+
+    it('should return showForgotPasswordCode as true when tempPassword is not present', () => {
+      const result = runCompute(changePasswordHelper, {
+        state: {
+          authentication: {
+            code: 'abc123',
+            form: {
+              confirmPassword: 'aA1!aaaa',
+              email: 'test@example.com',
+              password: 'aA1!aaaa',
+            },
+            tempPassword: '',
+          },
+        },
+      });
+
+      expect(result.showForgotPasswordCode).toEqual(true);
+    });
+
+    it('should return showForgotPasswordCode as false when tempPassword is present', () => {
+      const result = runCompute(changePasswordHelper, {
+        state: {
+          authentication: {
+            code: '',
+            form: {
+              confirmPassword: 'aA1!aaaa',
+              email: 'test@example.com',
+              password: 'aA1!aaaa',
+            },
+            tempPassword: 'abc123',
+          },
+        },
+      });
+
+      expect(result.showForgotPasswordCode).toEqual(false);
     });
   });
 });
