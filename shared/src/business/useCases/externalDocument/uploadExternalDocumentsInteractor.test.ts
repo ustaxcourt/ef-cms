@@ -23,7 +23,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           },
         },
         documentMetadata: {},
-        progressFunctions: {
+        progressTrackerCbs: {
           primary: () => {},
         },
       }),
@@ -43,7 +43,7 @@ describe('uploadExternalDocumentsInteractor', () => {
       documentMetadata: {
         primaryDocumentFile: {},
       },
-      progressFunctions: {
+      progressTrackerCbs: {
         primary: () => {},
       },
     });
@@ -75,7 +75,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           secondarySupportingDocuments: [{ supportingDocument: 'something' }],
           supportingDocuments: [{ supportingDocument: 'something' }],
         },
-        progressFunctions: {
+        progressTrackerCbs: {
           primary: () => 'something',
           primarySupporting0: () => 'something3',
           secondary: () => 'something2',
@@ -103,7 +103,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           primaryDocumentFile: {},
           secondaryDocument: {},
         },
-        progressFunctions: {
+        progressTrackerCbs: {
           primary: 'something',
           primarySupporting0: 'something3',
           secondary: 'something2',
