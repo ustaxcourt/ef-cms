@@ -3,11 +3,11 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const AccountUnconfirmedModal = connect(
+export const AccountUnverifiedModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
   },
-  function MatchingEmailFoundModal({ cancelSequence }) {
+  function AccountUnverifiedModal({ cancelSequence }) {
     return (
       <ModalDialog
         cancelSequence={cancelSequence}
@@ -26,4 +26,4 @@ export const AccountUnconfirmedModal = connect(
   },
 );
 
-AccountUnconfirmedModal.displayName = 'AccountUnconfirmedModal';
+AccountUnverifiedModal.displayName = 'AccountUnverifiedModal';

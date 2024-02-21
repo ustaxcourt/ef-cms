@@ -3,7 +3,7 @@ import { get } from '../requests';
 export const checkEmailAvailabilityInteractor = (
   applicationContext: IApplicationContext,
   { email }: { email: string },
-): Promise<{ isAccountConfirmed: boolean; isEmailAvailable: boolean }> => {
+): Promise<{ isAccountUnverified: boolean; isEmailAvailable: boolean }> => {
   return get({
     applicationContext,
     endpoint: '/users/email-availability',

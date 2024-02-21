@@ -8,17 +8,17 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
 
   let mockEmailAvailablePath;
   let mockEmailInUsePath;
-  let mockAccountIsUnconfirmedPath;
+  let mockaccountIsUnverifiedPath;
 
   beforeEach(() => {
     mockEmailAvailablePath = jest.fn();
     mockEmailInUsePath = jest.fn();
-    mockAccountIsUnconfirmedPath = jest.fn();
+    mockaccountIsUnverifiedPath = jest.fn();
 
     presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
-      accountIsUnconfirmed: mockAccountIsUnconfirmedPath,
+      accountIsUnconfirmed: mockaccountIsUnverifiedPath,
       emailAvailable: mockEmailAvailablePath,
       emailInUse: mockEmailInUsePath,
     };
@@ -28,7 +28,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
     applicationContext
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockResolvedValue({
-        isAccountConfirmed: false,
+        isAccountUnverified: false,
         isEmailAvailable: false,
       });
 
@@ -51,7 +51,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
     applicationContext
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockResolvedValue({
-        isAccountConfirmed: true,
+        isAccountUnverified: true,
         isEmailAvailable: true,
       });
 
@@ -71,7 +71,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
     applicationContext
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockResolvedValue({
-        isAccountConfirmed: false,
+        isAccountUnverified: false,
         isEmailAvailable: false,
       });
 
@@ -84,14 +84,14 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
       },
     });
 
-    expect(mockAccountIsUnconfirmedPath).toHaveBeenCalled();
+    expect(mockaccountIsUnverifiedPath).toHaveBeenCalled();
   });
 
   it('should call path.emailInUse with an error when the email is already associated with an account in the system', async () => {
     applicationContext
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockResolvedValue({
-        isAccountConfirmed: true,
+        isAccountUnverified: true,
         isEmailAvailable: false,
       });
 
