@@ -56,7 +56,11 @@ export const cleanFileMetadata = async (
     return fileReader.result;
   }
 
-  if (pdfDoc.isEncrypted) {
+  const pdfBytes = Array.from(new Uint8Array(fileReader.result));
+  const pdfString = convertBytesToString(pdfBytes);
+  const pdfHeaderString = pdfString.slice(0, 5);
+
+  if (pdfDoc.isEncrypted || pdfHeaderString !== '%PDF-') {
     return fileReader.result;
   }
 
