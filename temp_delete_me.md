@@ -2,6 +2,11 @@
 - TODOs
 - Cypress smoketests will fail on test right now because of passwords.
 - Investigate rate limiting authentication end points
+- Remove homebrew forgotPasswordCode generation
+- Rewrite cypress tests around forgotPassword or move to local only.
+- Add modal around what happens when granting e-access to an unconfirmed account
+- Add error scenarios around forgotPassword. (expired, incorrect)
+
 
 
 ::: QUESTIONS :::
