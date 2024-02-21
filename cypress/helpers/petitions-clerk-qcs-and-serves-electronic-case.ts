@@ -1,6 +1,9 @@
 import { navigateTo } from '../cypress-integration/support/pages/petition-qc';
 
-export function petitionsClerkQcsAndServesElectronicCase(docketNumber: string) {
+export function petitionsClerkQcsAndServesElectronicCase(
+  docketNumber: string,
+  atpFileCount: number,
+) {
   navigateTo('petitionsclerk1', docketNumber);
 
   cy.get('[data-testid="tab-case-info"]').click();
@@ -19,6 +22,21 @@ export function petitionsClerkQcsAndServesElectronicCase(docketNumber: string) {
     force: true,
   });
   cy.get('[data-testid="submit-case"]').click();
+
+  cy.get('[data-testid="petitionFileButton"]')
+    .should('exist')
+    .should('be.enabled');
+
+  cy.get('[data-testid="stinFileDisplay"]')
+    .should('exist')
+    .should('not.be.enabled');
+
+  cy.get('[data-testid="attachmentToPetitionFileButton"]').should('exist');
+  cy.get('[data-testid="attachmentToPetitionFileButton"]').should(
+    'have.length',
+    atpFileCount,
+  );
+
   cy.get('[data-testid="serve-case-to-irs"]').click();
   cy.get('[data-testid="modal-confirm"]').click();
   cy.get('.usa-alert__text').should('have.text', 'Petition served to IRS.');
