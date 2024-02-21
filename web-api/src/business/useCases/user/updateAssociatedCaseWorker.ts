@@ -20,9 +20,9 @@ export const updateAssociatedCaseWorker = async (
   });
 
   if (user.role === ROLES.petitioner) {
-    await updatePetitionerCases({
+    await updatePetitionerCase({
       applicationContext,
-      docketNumbersAssociatedWithUser: [docketNumber],
+      docketNumber,
       user,
     });
   }
@@ -31,9 +31,9 @@ export const updateAssociatedCaseWorker = async (
     user.role === ROLES.irsPractitioner ||
     user.role === ROLES.inactivePractitioner
   ) {
-    await updatePractitionerCases({
+    await updatePractitionerCase({
       applicationContext,
-      docketNumbersAssociatedWithUser: [docketNumber],
+      docketNumber,
       user,
     });
   }
@@ -44,110 +44,82 @@ export const updateAssociatedCaseWorker = async (
   });
 };
 
-export const updatePetitionerCases = async ({
+export const updatePetitionerCase = async ({
   applicationContext,
-  docketNumbersAssociatedWithUser,
-  user,
-}) => {
-  const rawCasesToUpdate = await Promise.all(
-    docketNumbersAssociatedWithUser.map(docketNumber =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      }),
-    ),
-  );
-
-  applicationContext.logger.info('updatePetitionerCases', { rawCasesToUpdate });
-
-  const validatedCasesToUpdateInPersistence: (Case | undefined)[] = [];
-  for (let rawCaseData of rawCasesToUpdate) {
-    validatedCasesToUpdateInPersistence.push(
-      await updateCaseEntityAndGenerateChange({
-        applicationContext,
-        rawCaseData,
-        user,
-      }),
-    );
-  }
-  const filteredCasesToUpdateInPersistence =
-    validatedCasesToUpdateInPersistence.filter(Boolean);
-
-  return Promise.all(
-    filteredCasesToUpdateInPersistence.map(caseToUpdate =>
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate,
-      }),
-    ),
-  );
-};
-
-/**
- * updatePractitionerCases
- * for the provided user, update their email address on all cases
- * where they are an IRS practitioner or private practitioner, sending an
- * update to the practitioner for each case updated, as well as a final email when
- * all case updates have been completed.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.user the user who is a primary or secondary contact on a case
- * @returns {Promise} resolves upon completion of case updates
- */
-export const updatePractitionerCases = async ({
-  applicationContext,
-  docketNumbersAssociatedWithUser,
+  docketNumber,
   user,
 }: {
-  applicationContext: IApplicationContext;
-  docketNumbersAssociatedWithUser: string[];
-  user: any;
-}) => {
-  const casesToUpdate = await Promise.all(
-    docketNumbersAssociatedWithUser.map(docketNumber =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      }),
-    ),
-  );
-
-  const validCasesToUpdate = casesToUpdate
-    .map(caseToUpdate => {
-      const caseEntity = new Case(caseToUpdate, { applicationContext });
-      const practitionerObject = [
-        ...caseEntity.privatePractitioners,
-        ...caseEntity.irsPractitioners,
-      ].find(practitioner => practitioner.userId === user.userId);
-
-      if (!practitionerObject) {
-        applicationContext.logger.error(
-          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${caseToUpdate.docketNumber}`,
-        );
-        return;
-      }
-      // This updates the case by reference!
-      practitionerObject.email = user.email;
-      practitionerObject.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-
-      // we do this again so that it will convert '' to null
-      return new Case(caseEntity, { applicationContext }).validate();
-    })
-    // if practitioner is not found on the case, function exits early and returns `undefined`.
-    // if this happens, continue with remaining cases and do not throw exception, but discard
-    // any undefined values by filtering for truthy objects.
-    .filter(Boolean);
-
-  for (let idx = 0; idx < validCasesToUpdate.length; idx++) {
-    const validatedCaseToUpdate = validCasesToUpdate[idx];
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+  applicationContext: ServerApplicationContext;
+  docketNumber: string;
+  user: RawUser;
+}): Promise<RawCase | undefined> => {
+  const rawCaseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
       applicationContext,
-      caseToUpdate: validatedCaseToUpdate,
+      docketNumber,
     });
-  }
 
-  return validCasesToUpdate;
+  const caseToUpdate = await updateCaseEntityAndGenerateChange({
+    applicationContext,
+    rawCaseData: rawCaseToUpdate,
+    user,
+  });
+
+  if (!caseToUpdate) return;
+
+  return await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate,
+    });
+};
+
+export const updatePractitionerCase = async ({
+  applicationContext,
+  docketNumber,
+  user,
+}: {
+  applicationContext: ServerApplicationContext;
+  docketNumber: string;
+  user: any;
+}): Promise<Case | undefined> => {
+  const caseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const practitionerObject = [
+    ...caseEntity.privatePractitioners,
+    ...caseEntity.irsPractitioners,
+  ].find(practitioner => practitioner.userId === user.userId);
+
+  if (!practitionerObject) {
+    // if practitioner is not found on the case, function exits early and returns `undefined`.
+    applicationContext.logger.error(
+      `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${caseToUpdate.docketNumber}`,
+    );
+    return;
+  }
+  // This updates the case by reference!
+  practitionerObject.email = user.email;
+  practitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+
+  // we do this again so that it will convert '' to null
+  const validatedCaseToUpdate = new Case(caseEntity, {
+    applicationContext,
+  }).validate();
+
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: validatedCaseToUpdate,
+  });
+
+  return validatedCaseToUpdate;
 };
 
 const updateCaseEntityAndGenerateChange = async ({
@@ -156,7 +128,7 @@ const updateCaseEntityAndGenerateChange = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  rawCaseData: Case;
+  rawCaseData: RawCase;
   user: RawUser;
 }) => {
   const caseEntity = new Case(rawCaseData, {

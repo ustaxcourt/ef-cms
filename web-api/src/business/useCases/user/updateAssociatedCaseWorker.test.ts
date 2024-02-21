@@ -18,8 +18,8 @@ import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   updateAssociatedCaseWorker,
-  updatePetitionerCases,
-  updatePractitionerCases,
+  updatePetitionerCase,
+  updatePractitionerCase,
 } from './updateAssociatedCaseWorker';
 
 const mockPractitioner = {
@@ -360,7 +360,7 @@ describe('updatePetitionerCases', () => {
         casesMock.find(c => c.docketNumber === docketNumber),
       );
 
-    await updatePetitionerCases({
+    await updatePetitionerCase({
       applicationContext,
       docketNumbersAssociatedWithUser: ['101-21', MOCK_CASE.docketNumber],
       user: mockPetitionerUser,
@@ -409,7 +409,7 @@ describe('updatePetitionerCases', () => {
       );
 
     await expect(
-      updatePetitionerCases({
+      updatePetitionerCase({
         applicationContext,
         docketNumbersAssociatedWithUser: ['101-21', MOCK_CASE.docketNumber],
         user: mockPetitionerUser,
@@ -432,7 +432,7 @@ describe('updatePetitionerCases', () => {
       });
 
     await expect(
-      updatePetitionerCases({
+      updatePetitionerCase({
         applicationContext,
         docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
         user: mockPetitionerUser,
@@ -464,7 +464,7 @@ describe('updatePetitionerCases', () => {
         ],
       });
 
-    await updatePetitionerCases({
+    await updatePetitionerCase({
       applicationContext,
       docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
       user: mockPetitionerUser,
@@ -504,7 +504,7 @@ describe('updatePetitionerCases', () => {
         ],
       });
 
-    await updatePetitionerCases({
+    await updatePetitionerCase({
       applicationContext,
       docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
       user: mockPetitionerUser,
@@ -544,7 +544,7 @@ describe('updatePetitionerCases', () => {
         ],
       });
 
-    await updatePetitionerCases({
+    await updatePetitionerCase({
       applicationContext,
       docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
       user: mockPetitionerUser,
@@ -583,7 +583,7 @@ describe('updatePractitionerCases', () => {
   });
 
   it('should set the service serviceIndicator to ELECTRONIC when confirming the email', async () => {
-    await updatePractitionerCases({
+    await updatePractitionerCase({
       applicationContext,
       docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
       user: mockPractitionerUser,
