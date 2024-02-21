@@ -170,7 +170,7 @@ describe('uploadPdfFromClient', () => {
         expect(loadMock.setCreationDate).toHaveBeenCalled();
         expect(loadMock.setModificationDate).toHaveBeenCalled();
 
-        expect(pdfBytes.toString()).toEqual(
+        expect(pdfBytes?.toString()).toEqual(
           new TextEncoder()
             .encode(
               'FINAL<photoshop:AuthorsPosition>    </photoshop:AuthorsPosition><photoshop:CaptionWriter>   </photoshop:CaptionWriter><pdf:Keywords>   </pdf:Keywords><dc:subject>   </dc:subject>',
