@@ -7,7 +7,8 @@
 - Add error scenarios around forgotPassword. (expired, incorrect)
 - Create Presentation on new patterns
 
-
+:: Solo ::
+- web-api/src/business/useCases/auth/changePasswordInteractor.test.ts, test coverage for incorrect/expired code
 
 ::: QUESTIONS :::
 - Ask how many users are in an unconfirmed state in prod. If there are many we may need to think more about how to direct users.
