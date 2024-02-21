@@ -7,6 +7,8 @@ import { getCognito } from '../helpers/cognito/getCognitoCypress';
 import promiseRetry from 'promise-retry';
 import type { DeleteRequest } from '../../web-api/src/persistence/dynamo/dynamoTypes';
 
+export const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
+
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
@@ -261,43 +263,6 @@ export const expireUserConfirmationCode = async (
       TableName: cypressEnv.dynamoDbTableName,
     })
     .catch(error => console.error(error)); // if no confirmation code exists do not throw error.
-  return null;
-};
-
-export const getForgotPasswordCode = async ({
-  email,
-}: {
-  email: string;
-}): Promise<string> => {
-  const userId = await getCognitoUserIdByEmail(email);
-
-  const result = await getDocumentClient().get({
-    Key: {
-      pk: `user|${userId}`,
-      sk: 'forgot-password-code',
-    },
-    TableName: cypressEnv.dynamoDbTableName,
-  });
-
-  return result?.Item?.code;
-};
-
-export const expireForgotPasswordCode = async ({
-  email,
-}: {
-  email: string;
-}): Promise<null> => {
-  const userId = await getCognitoUserIdByEmail(email);
-
-  try {
-    await getDocumentClient().delete({
-      Key: { pk: `user|${userId}`, sk: 'forgot-password-code' },
-      TableName: cypressEnv.dynamoDbTableName,
-    });
-  } catch (e) {
-    // if no confirmation code exists do not throw error.
-  }
-
   return null;
 };
 

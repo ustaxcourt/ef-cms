@@ -5,9 +5,7 @@ import {
   expireUserConfirmationCode,
   getNewAccountVerificationCode,
   getUserTokenWithRetry,
-  expireForgotPasswordCode,
   getEmailVerificationToken,
-  getForgotPasswordCode,
 } from './cypress/support/cognito-login';
 import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
@@ -37,16 +35,10 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
-        getForgotPasswordCode({ email }) {
-          return getForgotPasswordCode({ email });
-        },
         getUserToken({ email, password }) {
           return CYPRESS_SMOKETESTS_LOCAL
             ? getUserTokenLocal(email)
             : getUserTokenWithRetry(email, password);
-        },
-        expireForgotPasswordCode({ email }) {
-          return expireForgotPasswordCode({ email });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
