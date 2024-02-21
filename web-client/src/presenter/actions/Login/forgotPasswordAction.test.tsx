@@ -59,7 +59,7 @@ describe('forgotPasswordAction', () => {
             .
           </>
         ),
-        title: 'Password reset email sent',
+        title: 'Password reset code sent',
       },
     });
     expect(mockUnconfirmedAccountPath).not.toHaveBeenCalled();

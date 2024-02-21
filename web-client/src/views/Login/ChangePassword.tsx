@@ -41,8 +41,6 @@ export const ChangePassword = connect(
                   Reset Password
                 </h1>
 
-                <span>Enter a new password.</span>
-
                 <form className="usa-form margin-top-4 change-password-form max-width-unset">
                   {changePasswordHelper.showForgotPasswordCode && (
                     <div>
@@ -169,7 +167,7 @@ export const ChangePassword = connect(
                       submitChangePasswordSequence();
                     }}
                   >
-                    Change Password
+                    Change Password and Log In
                   </Button>
                 </form>
               </div>

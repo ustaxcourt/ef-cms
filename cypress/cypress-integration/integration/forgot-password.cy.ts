@@ -31,7 +31,7 @@ describe('Forgot Password', () => {
     cy.get('[data-testid="send-password-reset-button"]').click();
     cy.get('[data-testid="success-alert"]').should(
       'contain',
-      'Password reset email sent',
+      'Password reset code sent',
     );
   });
 
@@ -109,7 +109,7 @@ describe('Forgot Password', () => {
 
     cy.get('[data-testid="success-alert"]').should(
       'contain',
-      'Password reset email sent',
+      'Password reset code sent',
     );
 
     cy.get('[data-testid="change-password-button"]').should('be.disabled');
@@ -143,7 +143,7 @@ describe('Forgot Password', () => {
       And it has been longer than 24 hours since they indicated they Forgot Password
       Then they should be alerted that their forgot password link has expired
        */
-  it.only('should notify the user that their forgot password link has expired or is wrong when the user types in the wrong confirmation code', () => {
+  it('should notify the user that their forgot password link has expired or is wrong when the user types in the wrong confirmation code', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
     const password = 'Testing1234$';
@@ -158,10 +158,9 @@ describe('Forgot Password', () => {
 
     cy.get('[data-testid="success-alert"]').should(
       'contain',
-      'Password reset email sent',
+      'Password reset code sent',
     );
 
-    // TODO 10007: Expand test for what should happen with incorrect code.
     cy.get('[data-testid="forgot-password-code"]').type(
       'totally incorrect code',
     );
@@ -171,7 +170,10 @@ describe('Forgot Password', () => {
     cy.get('[data-testid="confirm-new-password-input"]').type('Testing1234$');
     cy.get('[data-testid="change-password-button"]').click();
 
-    cy.get('[data-testid="error-alert"]').should('contain', 'Request expired');
+    cy.get('[data-testid="error-alert"]').should(
+      'contain',
+      'Invalid verification code',
+    );
   });
 
   /*
