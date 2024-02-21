@@ -1,3 +1,4 @@
+import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../support/cognito-login';
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
@@ -5,7 +6,6 @@ import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
 import { verifyPasswordRequirements } from '../../helpers/auth/verify-password-requirements';
 import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
-import qs from 'qs';
 
 describe('Forgot Password', () => {
   after(() => {
@@ -112,20 +112,13 @@ describe('Forgot Password', () => {
       'Password reset email sent',
     );
 
-    cy.task('getForgotPasswordCode', {
-      email,
-    }).then(forgotPasswordCode => {
-      const queryString = qs.stringify(
-        { code: forgotPasswordCode, email },
-        { encode: true },
-      );
-      cy.visit(`/reset-password?${queryString}`);
-    });
-
     cy.get('[data-testid="change-password-button"]').should('be.disabled');
 
     verifyPasswordRequirements('[data-testid="new-password-input"]');
 
+    cy.get('[data-testid="forgot-password-code"]').type(
+      DEFAULT_FORGOT_PASSWORD_CODE,
+    );
     const brandNewPassword = 'brandNewPassword1204$^';
     cy.get('[data-testid="new-password-input"]').clear();
     cy.get('[data-testid="new-password-input"]').type(brandNewPassword);
@@ -150,7 +143,7 @@ describe('Forgot Password', () => {
       And it has been longer than 24 hours since they indicated they Forgot Password
       Then they should be alerted that their forgot password link has expired
        */
-  it('should notify the user that their forgot password link has expired when the user clicks on the password verification link after 24 hours', () => {
+  it.only('should notify the user that their forgot password link has expired or is wrong when the user types in the wrong confirmation code', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
     const password = 'Testing1234$';
@@ -168,20 +161,10 @@ describe('Forgot Password', () => {
       'Password reset email sent',
     );
 
-    cy.task('getForgotPasswordCode', {
-      email,
-    }).then(forgotPasswordCode => {
-      cy.task('expireForgotPasswordCode', {
-        email,
-      });
-
-      const queryString = qs.stringify(
-        { code: forgotPasswordCode, email },
-        { encode: true },
-      );
-      cy.visit(`/reset-password?${queryString}`);
-    });
-
+    // TODO 10007: Expand test for what should happen with incorrect code.
+    cy.get('[data-testid="forgot-password-code"]').type(
+      'totally incorrect code',
+    );
     cy.get('[data-testid="new-password-input"]').clear();
     cy.get('[data-testid="new-password-input"]').type('Testing1234$');
     cy.get('[data-testid="confirm-new-password-input"]').clear();

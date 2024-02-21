@@ -159,6 +159,7 @@ export const changePasswordInteractor = async (
       };
     }
   } catch (err: any) {
+    // TODO 10007: Do we need authErrorHandling here anymore? User's would have been stopped if they were unconfirmed over in forgotpasswordInteractor
     await authErrorHandling(applicationContext, {
       email,
       error: err,
