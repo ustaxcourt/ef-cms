@@ -277,12 +277,8 @@ describe('changePasswordInteractor', () => {
       });
 
       applicationContext
-        .getPersistenceGateway()
-        .getForgotPasswordCode.mockResolvedValue(mockCode);
-
-      applicationContext
         .getCognito()
-        .initiateAuth.mockResolvedValueOnce(mockInitiateAuthResponse);
+        .initiateAuth.mockResolvedValue(mockInitiateAuthResponse);
     });
 
     it('should throw an error when a user with the email provided is not found in persistence', async () => {
@@ -300,22 +296,7 @@ describe('changePasswordInteractor', () => {
       ).rejects.toThrow(`User not found with email: ${mockEmail}`);
     });
 
-    it('should throw an error when the forgot password code has expired', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getForgotPasswordCode.mockResolvedValue(undefined);
-
-      await expect(
-        changePasswordInteractor(applicationContext, {
-          code: mockCode,
-          confirmPassword: mockPassword,
-          email: mockEmail,
-          password: mockPassword,
-        }),
-      ).rejects.toThrow('Forgot password code expired');
-    });
-
-    it('should update user password when the forgot password code is valid and return the user`s access tokens', async () => {
+    it('should update call confirmForgotPassword and return the user`s access tokens', async () => {
       const result = await changePasswordInteractor(applicationContext, {
         code: mockCode,
         confirmPassword: mockPassword,
@@ -324,11 +305,11 @@ describe('changePasswordInteractor', () => {
       });
 
       expect(
-        applicationContext.getCognito().adminSetUserPassword,
+        applicationContext.getCognito().confirmForgotPassword,
       ).toHaveBeenCalledWith({
+        ClientId: applicationContext.environment.cognitoClientId,
+        ConfirmationCode: mockCode,
         Password: mockPassword,
-        Permanent: true,
-        UserPoolId: applicationContext.environment.userPoolId,
         Username: mockEmail,
       });
       expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(

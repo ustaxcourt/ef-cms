@@ -104,8 +104,16 @@ describe('submitChangePasswordAction', () => {
     expect(mockCodeExpiredPath).not.toHaveBeenCalled();
     expect(mockErrorPath).toHaveBeenCalledWith({
       alertError: {
-        title:
-          'There was an unexpected error when logging in. Please try again.',
+        message: (
+          <>
+            Please contact{' '}
+            <a href="mailto:dawson.support@ustaxcourt.gov">
+              dawson.support@ustaxcourt.gov
+            </a>
+            .
+          </>
+        ),
+        title: 'Unable to change password',
       },
     });
   });

@@ -3,7 +3,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { forgotPasswordInteractor } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
-import qs from 'qs';
 
 describe('forgotPasswordInteractor', () => {
   const OLD_ENV = process.env;
@@ -20,7 +19,6 @@ describe('forgotPasswordInteractor', () => {
     role: ROLES.petitioner,
     userId,
   };
-  const expectedForgotPasswordCode = 'b0f56806-a9ab-4152-ac3f-2da231499368';
 
   beforeAll(() => {
     applicationContext
@@ -31,12 +29,6 @@ describe('forgotPasswordInteractor', () => {
       .getUseCaseHelpers()
       .createUserConfirmation.mockResolvedValue({
         confirmationCode: mockConfirmationCode,
-      });
-
-    applicationContext
-      .getPersistenceGateway()
-      .generateForgotPasswordCode.mockResolvedValue({
-        code: expectedForgotPasswordCode,
       });
   });
 
@@ -147,13 +139,7 @@ describe('forgotPasswordInteractor', () => {
     });
   });
 
-  it('should generate a forgot password code and send it to the user when user account has a valid status', async () => {
-    const queryString = qs.stringify(
-      { code: expectedForgotPasswordCode, email },
-      { encode: true },
-    );
-    const expectedVerificationLink = `https://app.${process.env.EFCMS_DOMAIN}/reset-password?${queryString}`;
-
+  it('should call forgotPassword when user account has a valid status', async () => {
     const result = await forgotPasswordInteractor(applicationContext, {
       email,
     });
@@ -168,58 +154,12 @@ describe('forgotPasswordInteractor', () => {
       applicationContext.getCognito().adminCreateUser,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().generateForgotPasswordCode.mock
-        .calls[0][1],
-    ).toEqual({ userId: mockUser.userId });
-    expect(
-      applicationContext.getMessageGateway().sendEmailToUser.mock.calls[0][1]
-        .subject,
-    ).toEqual('U.S. Tax Court DAWSON Account Verification');
-    expect(
-      applicationContext.getMessageGateway().sendEmailToUser.mock.calls[0][1]
-        .to,
-    ).toEqual(email);
-    expect(
-      applicationContext.getMessageGateway().sendEmailToUser.mock.calls[0][1]
-        .body,
-    ).toEqual(`<div>
-    <h3>Welcome to DAWSON!</h3>
-    <span>
-      ${email} requested a password reset. Use the button below to reset your password. <span style="font-weight: bold;">This will expire in 24 hours</span>.
-    </span>
-    <div style="margin-top: 20px;">
-      <a href="${expectedVerificationLink}" style="background-color: #005ea2; color: white; line-height: 0.9; border-radius: 0.25rem; text-decoration: none; font-size: 1.06rem; padding: .6rem 2.25rem; font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;">Reset Password</a>
-    </div>
-    <div style="margin-top: 20px;">
-      <span>Or you can use this URL: </span>
-      <a href="${expectedVerificationLink}">${expectedVerificationLink}</a>
-    </div>
-    <div style="margin-top: 20px;">
-    <span>If you did not request to reset your password, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
-    </div>
-
-    <hr style="border-top:1px solid #000000;">
-    <div style="margin-top: 20px;">
-      <span>This is an automated email. We are unable to respond to any messages to this email address.</span>
-    </div>
-  </div>`);
-
-    expect(result).toEqual({
-      code: expectedForgotPasswordCode,
-      email,
-      userId: mockUser.userId,
-    });
-  });
-
-  it('should omit code and userId from response when not on local', async () => {
-    applicationContext.environment.stage = 'notLocal';
-
-    const result = await forgotPasswordInteractor(applicationContext, {
-      email,
+      applicationContext.getCognito().forgotPassword.mock.calls[0][0],
+    ).toEqual({
+      ClientId: applicationContext.environment.cognitoClientId,
+      Username: email,
     });
 
-    expect(result).toEqual({
-      email,
-    });
+    expect(result).toBeUndefined();
   });
 });
