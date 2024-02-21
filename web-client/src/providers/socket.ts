@@ -43,7 +43,6 @@ export const socketProvider = ({ socketRouter }) => {
           };
 
           socket.onclose = async closeEvent => {
-            console.log('closeEvent', closeEvent);
             stopSocket();
             if (closeEvent && closeEvent.code !== 1000) {
               reconnectAttempt++;
