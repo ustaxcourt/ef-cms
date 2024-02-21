@@ -266,43 +266,6 @@ export const expireUserConfirmationCode = async (
   return null;
 };
 
-export const getForgotPasswordCode = async ({
-  email,
-}: {
-  email: string;
-}): Promise<string> => {
-  const userId = await getCognitoUserIdByEmail(email);
-
-  const result = await getDocumentClient().get({
-    Key: {
-      pk: `user|${userId}`,
-      sk: 'forgot-password-code',
-    },
-    TableName: cypressEnv.dynamoDbTableName,
-  });
-
-  return result?.Item?.code;
-};
-
-export const expireForgotPasswordCode = async ({
-  email,
-}: {
-  email: string;
-}): Promise<null> => {
-  const userId = await getCognitoUserIdByEmail(email);
-
-  try {
-    await getDocumentClient().delete({
-      Key: { pk: `user|${userId}`, sk: 'forgot-password-code' },
-      TableName: cypressEnv.dynamoDbTableName,
-    });
-  } catch (e) {
-    // if no confirmation code exists do not throw error.
-  }
-
-  return null;
-};
-
 export const getEmailVerificationToken = async ({
   email,
 }: {
