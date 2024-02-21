@@ -1,11 +1,11 @@
 ::: STUFF TO DO :::
-- TODOs
 - Investigate rate limiting authentication end points
-- Add modal around what happens when granting e-access to an unconfirmed account
+- Verify that we are not logging passwords to cloudwatch.
 - Create Presentation on new patterns
 
 :: Solo ::
 - web-api/src/business/useCases/auth/changePasswordInteractor.test.ts, test coverage for incorrect/expired code
+
 
 ::: QUESTIONS :::
 - Ask how many users are in an unconfirmed state in prod. If there are many we may need to think more about how to direct users.
