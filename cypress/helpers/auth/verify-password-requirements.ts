@@ -28,6 +28,7 @@ export function verifyPasswordRequirements(passwordInputSelector: string) {
       upper: 1,
     }),
   );
+
   cy.get(passwordInputSelector).blur();
   cy.get('[data-testid="password-validation-errors"]')
     .contains('Must contain lower case letter')

@@ -110,9 +110,7 @@ describe('Petitioner Account Creation', () => {
 
       cy.get('[data-testid="email-input"]').type(TEST_EMAIL);
 
-      cy.get('[data-testid="password-input"]').type(TEST_PASSWORD, {
-        log: false,
-      });
+      cy.get('[data-testid="password-input"]').type(TEST_PASSWORD);
 
       cy.get('[data-testid="login-button"]').click();
 

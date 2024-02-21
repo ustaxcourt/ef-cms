@@ -24,15 +24,12 @@ describe('login', () => {
     createAPetitioner({
       email: unconfirmedEmail,
       name: 'Person mcDerson',
-      password: 'Testing1234$',
+      password: cypressEnv.defaultAccountPass,
     });
     cy.visit('/login');
     cy.get('[data-testid="email-input"]').type(unconfirmedEmail);
     cy.get('[data-testid="password-input"]').type(
       cypressEnv.defaultAccountPass,
-      {
-        log: false,
-      },
     );
     cy.get('[data-testid="login-button"]').click();
     cy.get('[data-testid="error-alert"]').should(
@@ -49,9 +46,7 @@ describe('login', () => {
   it('should give an error alert when the password is incorrect', () => {
     cy.visit('/login');
     cy.get('[data-testid="email-input"]').type('docketclerk1@example.com');
-    cy.get('[data-testid="password-input"]').type('totallyIncorrectPassword', {
-      log: false,
-    });
+    cy.get('[data-testid="password-input"]').type('totallyIncorrectPassword');
     cy.get('[data-testid="login-button"]').click();
 
     cy.get('[data-testid="error-alert"]').should(
@@ -96,13 +91,17 @@ describe('login', () => {
 
     cy.visit('/login');
     cy.get('[data-testid="email-input"]').type(practitionerEmail);
-    cy.get('[data-testid="password-input"]').type('Testing1234$', {
-      log: false,
-    });
+    cy.get('[data-testid="password-input"]').type(
+      cypressEnv.defaultAccountPass,
+    );
     cy.get('[data-testid="login-button"]').click();
 
-    cy.get('[data-testid="new-password-input"]').type('Testing1234$');
-    cy.get('[data-testid="confirm-new-password-input"]').type('Testing1234$');
+    cy.get('[data-testid="new-password-input"]').type(
+      cypressEnv.defaultAccountPass,
+    );
+    cy.get('[data-testid="confirm-new-password-input"]').type(
+      cypressEnv.defaultAccountPass,
+    );
     cy.get('[data-testid="change-password-button"]').click();
 
     cy.get('[data-testid="my-cases-link"]');

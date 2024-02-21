@@ -5,6 +5,7 @@ import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
 
 describe('Admissions Clerk Grants E-Access', () => {
+  const password = cypressEnv.defaultAccountPass;
   after(() => {
     cy.task('deleteAllCypressTestAccounts');
   });
@@ -47,12 +48,10 @@ describe('Admissions Clerk Grants E-Access', () => {
 
       cy.visit('/login');
       cy.get('[data-testid="email-input"]').type(petitionerEmail);
-      cy.get('[data-testid="password-input"]').type('Testing1234$', {
-        log: false,
-      });
+      cy.get('[data-testid="password-input"]').type(password);
       cy.get('[data-testid="login-button"]').click();
-      cy.get('[data-testid="new-password-input"]').type('Testing1234$');
-      cy.get('[data-testid="confirm-new-password-input"]').type('Testing1234$');
+      cy.get('[data-testid="new-password-input"]').type(password);
+      cy.get('[data-testid="confirm-new-password-input"]').type(password);
       cy.get('[data-testid="change-password-button"]').click();
       cy.get('[data-testid="my-cases-link"]');
       cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
@@ -122,14 +121,10 @@ describe('Admissions Clerk Grants E-Access', () => {
 
         cy.visit('/login');
         cy.get('[data-testid="email-input"]').type(petitionerEmail);
-        cy.get('[data-testid="password-input"]').type('Testing1234$', {
-          log: false,
-        });
+        cy.get('[data-testid="password-input"]').type(password);
         cy.get('[data-testid="login-button"]').click();
-        cy.get('[data-testid="new-password-input"]').type('Testing1234$');
-        cy.get('[data-testid="confirm-new-password-input"]').type(
-          'Testing1234$',
-        );
+        cy.get('[data-testid="new-password-input"]').type(password);
+        cy.get('[data-testid="confirm-new-password-input"]').type(password);
         cy.get('[data-testid="change-password-button"]').click();
         cy.get('[data-testid="my-cases-link"]');
         cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
@@ -206,7 +201,6 @@ describe('Admissions Clerk Grants E-Access', () => {
         cy.get('[data-testid="email-input"]').type(practitionerEmail);
         cy.get('[data-testid="password-input"]').type(
           cypressEnv.defaultAccountPass,
-          { log: false },
         );
         cy.get('[data-testid="login-button"]').click();
         cy.get('[data-testid="new-password-input"]').type(

@@ -15,9 +15,6 @@ describe('Given a user with a DAWSON account', () => {
       );
       cy.get('[data-testid="password-input"]').type(
         cypressEnv.defaultAccountPass,
-        {
-          log: false,
-        },
       );
       cy.get('[data-testid="login-button"]').click();
       cy.get('[data-testid="account-menu-button"]');
@@ -42,9 +39,7 @@ describe('Given a user with a DAWSON account', () => {
       cy.get('[data-testid="email-input"]').type(
         'testAdmissionsClerk@example.com',
       );
-      cy.get('[data-testid="password-input"]').type('testing1234$', {
-        log: false,
-      });
+      cy.get('[data-testid="password-input"]').type('misspelled');
       cy.get('[data-testid="login-button"]').click();
 
       cy.get('[data-testid="error-alert"]').should(
@@ -66,9 +61,6 @@ describe('Given a user without a DAWSON account', () => {
       cy.get('[data-testid="email-input"]').type('doesNotExist@example.com');
       cy.get('[data-testid="password-input"]').type(
         cypressEnv.defaultAccountPass,
-        {
-          log: false,
-        },
       );
       cy.get('[data-testid="login-button"]').click();
 
