@@ -270,7 +270,7 @@ describe('Admissions Clerk Grants E-Access', () => {
       createAPetitioner({
         email: petitionerEmail,
         name,
-        password: 'Testing1234$',
+        password: cypressEnv.defaultAccountPass,
       });
 
       cy.login('admissionsclerk1');
