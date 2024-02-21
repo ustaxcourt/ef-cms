@@ -7,22 +7,17 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const filePetitionInteractor = async (
   applicationContext: any,
   {
-    atpFilesMetadata,
-    corporateDisclosureFile,
+    atpUploadProgress,
     corporateDisclosureUploadProgress,
-    petitionFile,
     petitionMetadata,
     petitionUploadProgress,
-    stinFile,
     stinUploadProgress,
   }: {
+    atpUploadProgress?: any;
     atpFilesMetadata?: any;
-    corporateDisclosureFile?: any;
     corporateDisclosureUploadProgress?: any;
-    petitionFile: any;
     petitionMetadata: any;
     petitionUploadProgress: any;
-    stinFile: any;
     stinUploadProgress: any;
   },
 ) => {
@@ -35,38 +30,38 @@ export const filePetitionInteractor = async (
   const petitionFileUpload = applicationContext
     .getUseCases()
     .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: petitionFile,
-      onUploadProgress: petitionUploadProgress,
+      document: petitionUploadProgress.file,
+      onUploadProgress: petitionUploadProgress.uploadProgress,
     });
 
   let corporateDisclosureFileUpload;
-  if (corporateDisclosureFile) {
+  if (corporateDisclosureUploadProgress) {
     corporateDisclosureFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: corporateDisclosureFile,
-        onUploadProgress: corporateDisclosureUploadProgress,
+        document: corporateDisclosureUploadProgress.file,
+        onUploadProgress: corporateDisclosureUploadProgress.uploadProgress,
       });
   }
 
   let stinFileUpload;
-  if (stinFile) {
+  if (stinUploadProgress) {
     stinFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: stinFile,
-        onUploadProgress: stinUploadProgress,
+        document: stinUploadProgress.file,
+        onUploadProgress: stinUploadProgress.uploadProgress,
       });
   }
 
   let atpFilesUploads = [];
-  if (atpFilesMetadata?.length) {
-    atpFilesUploads = atpFilesMetadata.map(atp => {
+  if (atpUploadProgress) {
+    atpFilesUploads = atpUploadProgress.map(atp => {
       return applicationContext
         .getUseCases()
         .uploadDocumentAndMakeSafeInteractor(applicationContext, {
           document: atp.file,
-          onUploadProgress: atp.progressFunction,
+          onUploadProgress: atp.uploadProgress,
         });
     });
   }

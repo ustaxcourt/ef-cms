@@ -157,15 +157,15 @@ export const StartCaseStep2 = connect(
                       className="usa-label margin-bottom-0"
                       htmlFor="atp-files-upload"
                     >
-                      Upload a PDF of the IRS Notice(s) if you have it (.pdf)
+                      Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
+                      have it.
                     </label>
                     <span className="usa-hint" id="atp-files-upload-hint">
                       Make sure file is not encrypted or password protected. Max
-                      file size {constants.MAX_FILE_SIZE_MB}MB. Max of 5 files.
+                      file size {constants.MAX_FILE_SIZE_MB}MB.
                     </span>
                     <FormGroup>
                       <FileInput
-                        multiple
                         data-testid="atp-files-upload"
                         name="attachmentToPetitionFiles"
                         updateFormValueSequence="updateFormValueSequence"
@@ -181,16 +181,16 @@ export const StartCaseStep2 = connect(
                       className="usa-label margin-bottom-0"
                       htmlFor="atp-files-upload"
                     >
-                      Upload a PDF of the IRS Notice(s) if you have it (.pdf)
+                      Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
+                      have it.
                     </label>
                     <span className="usa-hint" id="atp-files-upload-hint">
                       Make sure file is not encrypted or password protected. Max
-                      file size {constants.MAX_FILE_SIZE_MB}MB. Max of 5 files.
+                      file size {constants.MAX_FILE_SIZE_MB}MB.
                     </span>
                     <FormGroup>
                       <FileInput
                         isMobile
-                        multiple
                         data-testid="atp-files-upload"
                         name="attachmentToPetitionFiles"
                         updateFormValueSequence="updateFormValueSequence"

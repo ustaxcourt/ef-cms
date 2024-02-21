@@ -16,7 +16,7 @@ const removeNode = node => {
 const updateFormValues = ({
   files,
   inputName,
-  isMultipleFileUpload,
+  // isMultipleFileUpload,
   updateFormValueSequence,
   validationSequence,
 }: {
@@ -33,25 +33,25 @@ const updateFormValues = ({
   Promise.all(clonedFilePromises)
     .then(clonedFiles => {
       const validatedFiles = clonedFiles.filter(file => file !== null);
-      if (!isMultipleFileUpload) {
-        updateFormValueSequence({
-          key: inputName,
-          value: validatedFiles[0],
-        });
-        updateFormValueSequence({
-          key: `${inputName}Size`,
-          value: validatedFiles[0].size,
-        });
-      } else {
-        updateFormValueSequence({
-          key: inputName,
-          value: validatedFiles,
-        });
-        updateFormValueSequence({
-          key: `${inputName}Sizes`,
-          value: validatedFiles.map(file => file.size),
-        });
-      }
+      // if (!isMultipleFileUpload) {
+      //   updateFormValueSequence({
+      //     key: inputName,
+      //     value: validatedFiles[0],
+      //   });
+      //   updateFormValueSequence({
+      //     key: `${inputName}Size`,
+      //     value: validatedFiles[0].size,
+      //   });
+      // } else {
+      updateFormValueSequence({
+        key: inputName,
+        value: validatedFiles,
+      });
+      updateFormValueSequence({
+        key: `${inputName}Sizes`,
+        value: validatedFiles.map(file => file.size),
+      });
+      // }
       validationSequence();
     })
     .catch(() => {
