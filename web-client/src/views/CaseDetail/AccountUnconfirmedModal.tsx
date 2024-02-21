@@ -1,18 +1,15 @@
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const AccountUnconfirmedModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    form: state.form,
   },
-  function MatchingEmailFoundModal({ cancelSequence, form }) {
+  function MatchingEmailFoundModal({ cancelSequence }) {
     return (
       <ModalDialog
-        cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="OK"
         confirmSequence={cancelSequence}
@@ -20,9 +17,8 @@ export const AccountUnconfirmedModal = connect(
       >
         <div>
           <p>
-            {form.contact.updatedEmail} has started the account creation
-            process, but their account has not been verified. Please contact the
-            user and ask them to verify their account.
+            This account is unverified. Please contact the user and ask them to
+            verify their email address.
           </p>
         </div>
       </ModalDialog>
