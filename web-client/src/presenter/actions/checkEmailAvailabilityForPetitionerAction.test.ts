@@ -8,43 +8,20 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
 
   let mockEmailAvailablePath;
   let mockEmailInUsePath;
-  let mockaccountIsUnverifiedPath;
+  let mockAccountIsUnverifiedPath;
 
   beforeEach(() => {
     mockEmailAvailablePath = jest.fn();
     mockEmailInUsePath = jest.fn();
-    mockaccountIsUnverifiedPath = jest.fn();
+    mockAccountIsUnverifiedPath = jest.fn();
 
     presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
-      accountIsUnconfirmed: mockaccountIsUnverifiedPath,
+      accountIsUnverified: mockAccountIsUnverifiedPath,
       emailAvailable: mockEmailAvailablePath,
       emailInUse: mockEmailInUsePath,
     };
-  });
-
-  it('should call checkEmailAvailabilityInteractor with state.form.contact.email', async () => {
-    applicationContext
-      .getUseCases()
-      .checkEmailAvailabilityInteractor.mockResolvedValue({
-        isAccountUnverified: false,
-        isEmailAvailable: false,
-      });
-
-    await runAction(checkEmailAvailabilityForPetitionerAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: { contact: { updatedEmail: mockEmail } },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
-        .calls[0][1],
-    ).toMatchObject({ email: mockEmail });
   });
 
   it('should call path.emailAvailable when the email is not already associated with an account in the system', async () => {
@@ -60,10 +37,14 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
         presenter,
       },
       state: {
-        form: { contact: { email: mockEmail } },
+        form: { contact: { updatedEmail: mockEmail } },
       },
     });
 
+    expect(
+      applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({ email: mockEmail });
     expect(mockEmailAvailablePath).toHaveBeenCalled();
   });
 
@@ -71,7 +52,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
     applicationContext
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockResolvedValue({
-        isAccountUnverified: false,
+        isAccountUnverified: true,
         isEmailAvailable: false,
       });
 
@@ -84,14 +65,14 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
       },
     });
 
-    expect(mockaccountIsUnverifiedPath).toHaveBeenCalled();
+    expect(mockAccountIsUnverifiedPath).toHaveBeenCalled();
   });
 
   it('should call path.emailInUse with an error when the email is already associated with an account in the system', async () => {
     applicationContext
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockResolvedValue({
-        isAccountUnverified: true,
+        isAccountUnverified: false,
         isEmailAvailable: false,
       });
 
