@@ -1,3 +1,4 @@
+import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
@@ -9,21 +10,16 @@ const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
     });
 };
 
-/**
- * upload document to s3.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @param {object} providers.path the next object in the path
- * @param {Function} providers.store the cerebral store function
- * @returns {object} the next path based on if validation was successful or error
- */
 export const uploadExternalDocumentsAction = async ({
   applicationContext,
   get,
   path,
   props,
-}: ActionProps) => {
+}: ActionProps<{
+  fileUploadProgressMap: FileUploadProgressMapType;
+  files: File;
+  documentMetadata: any;
+}>) => {
   const { documentMetadata, files, fileUploadProgressMap } = props;
   const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
