@@ -296,7 +296,7 @@ describe('changePasswordInteractor', () => {
       ).rejects.toThrow(`User not found with email: ${mockEmail}`);
     });
 
-    it('should update call confirmForgotPassword and return the user`s access tokens', async () => {
+    it('should call confirmForgotPassword and return the user`s access tokens', async () => {
       const result = await changePasswordInteractor(applicationContext, {
         code: mockCode,
         confirmPassword: mockPassword,
@@ -327,6 +327,30 @@ describe('changePasswordInteractor', () => {
         idToken: mockToken,
         refreshToken: mockToken,
       });
+    });
+
+    it('should throw an error if initiate auth does not return the correct tokens', async () => {
+      applicationContext.getCognito().initiateAuth.mockResolvedValue({});
+
+      await expect(
+        changePasswordInteractor(applicationContext, {
+          code: mockCode,
+          confirmPassword: mockPassword,
+          email: mockEmail,
+          password: mockPassword,
+        }),
+      ).rejects.toThrow(`Unable to change password for email: ${mockEmail}`);
+
+      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
+        {
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+          AuthParameters: {
+            PASSWORD: mockPassword,
+            USERNAME: mockEmail,
+          },
+          ClientId: applicationContext.environment.cognitoClientId,
+        },
+      );
     });
   });
 });
