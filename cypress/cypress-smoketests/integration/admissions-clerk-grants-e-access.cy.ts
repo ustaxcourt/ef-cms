@@ -4,7 +4,6 @@ import { createAndServePaperPetitionMultipleParties } from '../../helpers/create
 import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
-import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
 describe('Admissions Clerk Grants E-Access', () => {
   after(() => {
@@ -260,8 +259,8 @@ describe('Admissions Clerk Grants E-Access', () => {
   Given a petitioner has created an account in DAWSON
   And they have not verified their account
   When an admissions clerk grants e-access to the petitioner by adding them to a case
-  Then they should be able to verify their account
-  And view their case
+  Then they should see a warning that the account is unverified
+  And the email should not be updated
   */
   it('should allow a petitioner to verify their account, login and view their case when an admissions clerk grants e-access after they have created their account but before they have verified it', () => {
     createAndServePaperPetition().then(({ docketNumber, name }) => {
@@ -292,48 +291,7 @@ describe('Admissions Clerk Grants E-Access', () => {
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',
       ).click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
-      cy.get('[data-testid="success-alert"]').contains('Changes saved');
-      cy.get('[data-testid="petitioner-service-indicator"]').contains('Paper');
-      logout();
-
-      verifyPetitionerAccount({ email: petitionerEmail });
-
-      cy.visit('/login');
-      cy.get('[data-testid="email-input"]').type(petitionerEmail);
-      cy.get('[data-testid="password-input"]').type('Testing1234$', {
-        log: false,
-      });
-      cy.get('[data-testid="login-button"]').click();
-      cy.get('[data-testid="new-password-input"]').type('Testing1234$');
-      cy.get('[data-testid="confirm-new-password-input"]').type('Testing1234$');
-      cy.get('[data-testid="change-password-button"]').click();
-      cy.get('[data-testid="my-cases-link"]');
-      cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
-        expect(isNOCECreated).to.equal(
-          true,
-          'NOCE was not generated on a case that a petitioner was granted e-access for.',
-        );
-      });
-      cy.get(`[data-testid="${docketNumber}"]`).contains(docketNumber).click();
-      cy.get('tbody:contains(NOCE)').should('exist');
-      cy.get('[data-testid="tab-case-information"]').click();
-      cy.get('[data-testid="tab-parties"]').click();
-      cy.get(
-        `[data-testid="petitioner-card-${name}"] [data-testid="petitioner-service-indicator"]`,
-      ).contains('Electronic');
-      cy.get(
-        `[data-testid="petitioner-card-${name}"] [data-testid="petitioner-pending-email"]`,
-      ).should('not.contain.text');
-      logout();
-
-      cy.login('docketclerk1');
-      cy.get('[data-testid="messages-banner"]');
-      cy.get('[data-testid="document-qc-nav-item"]').click();
-      cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
-      cy.get(`[data-testid="work-item-${docketNumber}"]`).contains(
-        `Notice of Change of Email Address for ${name}`,
-      );
+      cy.get('[data-testid="modal-header"]').contains('Account is Unverified');
     });
   });
 });
