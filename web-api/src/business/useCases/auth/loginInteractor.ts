@@ -69,7 +69,7 @@ export async function authErrorHandling(
     error.name === 'NotAuthorizedException' ||
     error.name === 'UserNotFoundException'
   ) {
-    throw new UnidentifiedUserError('Invalid Username or Password'); //401
+    throw new UnidentifiedUserError('Invalid Username or Password'); //401 Security Concern do not reveal if the user account does not exist or if they have an incorrect password.
   }
 
   if (error.name === 'UserNotConfirmedException') {
