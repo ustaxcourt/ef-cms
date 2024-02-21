@@ -2,18 +2,18 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   Case,
   getPetitionerById,
   getPractitionersRepresenting,
-} from '../entities/cases/Case';
+} from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
-import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 

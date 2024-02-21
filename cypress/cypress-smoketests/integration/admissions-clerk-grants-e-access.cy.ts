@@ -1,3 +1,4 @@
+import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { createAndServePaperPetitionMultipleParties } from '../../helpers/create-and-serve-paper-petition-petitioner-and-spouse';
 import { cypressEnv } from '../../helpers/env/cypressEnvironment';
@@ -12,6 +13,7 @@ describe('Admissions Clerk Grants E-Access', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
+
   /*
   Given an admissions clerk is working with a served paper case that has two petitioners
   When they grant the first petitioner electronic access to the case
@@ -87,7 +89,9 @@ describe('Admissions Clerk Grants E-Access', () => {
   Given an admissions clerk is working with a served paper case that has two petitioners
   When they grant the second petitioner electronic access to the case
   And the petitioner verifies their account
-  Then a Notice Of Change of Email (NOCE) should be generated and served on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic
+  Then a Notice Of Change of Email (NOCE) should be generated and served on the case
+  And a work item is added for the NOCE to the docket section work queue
+  And the petitioner`s service preference should change to Electronic
   */
   it('should generate a Notice Of Change of Email (NOCE) on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic when an admissions clerk grants e-access to the second petitioner', () => {
     createAndServePaperPetitionMultipleParties().then(
@@ -166,7 +170,9 @@ describe('Admissions Clerk Grants E-Access', () => {
 
   /*
   Given that a practitioner does not yet have a DAWSON account
-  When an admissions clerk grants e-access to practitioner and adds them to a case then they should be able to login and view their case
+  When an admissions clerk grants e-access to practitioner and adds them to a case
+  Then they should be able to login
+  And view their case
   */
   it('should allow a practitioner to login and view their case when an admissions clerk grants e-access to a practitioner', () => {
     const practitionerUserName = `cypress_test_account+${v4()}`;
@@ -247,5 +253,45 @@ describe('Admissions Clerk Grants E-Access', () => {
         });
       },
     );
+  });
+
+  /*
+  Given a petitioner has created an account in DAWSON
+  And they have not verified their account
+  When an admissions clerk grants e-access to the petitioner by adding them to a case
+  Then they should see a warning that the account is unverified
+  And the email should not be updated
+  */
+  it('should display a modal and do nothing when an admissions clerk attempts to grant e-access to an email that is associated with an unverified account', () => {
+    createAndServePaperPetition().then(({ docketNumber, name }) => {
+      const petitionerUsername = `cypress_test_account+${v4()}`;
+      const petitionerEmail = `${petitionerUsername}@example.com`;
+
+      createAPetitioner({
+        email: petitionerEmail,
+        name,
+        password: cypressEnv.defaultAccountPass,
+      });
+
+      cy.login('admissionsclerk1');
+      cy.get('[data-testid="messages-banner"]');
+      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+      cy.get('[data-testid="search-docket-number"]').click();
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get(
+        `[data-testid="petitioner-card-${name}"] [data-testid="edit-petitioner-button"]`,
+      ).click();
+      cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
+        petitionerEmail,
+      );
+      cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
+        petitionerEmail,
+      );
+      cy.get(
+        '[data-testid="submit-edit-petitioner-information-button"]',
+      ).click();
+      cy.get('[data-testid="modal-header"]').contains('Account is Unverified');
+    });
   });
 });

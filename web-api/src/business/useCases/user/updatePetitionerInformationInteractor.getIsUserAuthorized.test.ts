@@ -2,9 +2,12 @@ import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   ROLES,
-} from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_PRACTITIONER, docketClerkUser } from '../../test/mockUsers';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import {
+  MOCK_PRACTITIONER,
+  docketClerkUser,
+} from '../../../../../shared/src/test/mockUsers';
 import { getIsUserAuthorized } from './updatePetitionerInformationInteractor';
 
 describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {

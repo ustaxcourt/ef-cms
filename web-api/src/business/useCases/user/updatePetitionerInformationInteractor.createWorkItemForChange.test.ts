@@ -3,15 +3,18 @@ import {
   CONTACT_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_PRACTITIONER, docketClerkUser } from '../../test/mockUsers';
-import { User } from '../entities/User';
-import { UserCase } from '../entities/UserCase';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import {
+  MOCK_PRACTITIONER,
+  docketClerkUser,
+} from '../../../../../shared/src/test/mockUsers';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
-jest.mock('./addCoverToPdf');
-import { addCoverToPdf } from './addCoverToPdf';
+jest.mock('../../../../../shared/src/business/useCases/addCoverToPdf');
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockUser;

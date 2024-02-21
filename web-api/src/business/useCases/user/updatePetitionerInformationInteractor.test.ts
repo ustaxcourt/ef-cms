@@ -7,24 +7,27 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../entities/EntityConstants';
-import { Case, getOtherFilers } from '../entities/cases/Case';
-import { DocketEntry } from '../entities/DocketEntry';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  Case,
+  getOtherFilers,
+} from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
-} from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
+} from '../../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../entities/User';
-import { UserCase } from '../entities/UserCase';
-import { addCoverToPdf } from './addCoverToPdf';
-import { addExistingUserToCase } from '../../../../web-api/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { calculateISODate } from '../utilities/DateHandler';
-import { docketClerkUser } from '../../test/mockUsers';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+import { addExistingUserToCase } from '../../useCaseHelper/caseAssociation/addExistingUserToCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
-jest.mock('./addCoverToPdf');
+jest.mock('../../../../../shared/src/business/useCases/addCoverToPdf');
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockUser;
