@@ -1,9 +1,7 @@
 ::: STUFF TO DO :::
 - TODOs
-- Increase SES email quote in the us-west-1 region as we are now sending emails from there.
 - Cypress smoketests will fail on test right now because of passwords.
 - Investigate rate limiting authentication end points
-- Talk about forgotPassword security. Potentially refactor to use a tempPass instead?
 
 
 ::: QUESTIONS :::
