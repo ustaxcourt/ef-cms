@@ -3,6 +3,7 @@ import {
   ChallengeNameType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
+  InvalidRequest,
   NotFoundError,
   UnauthorizedError,
   UnidentifiedUserError,
@@ -70,6 +71,13 @@ export async function authErrorHandling(
     error.name === 'UserNotFoundException'
   ) {
     throw new UnidentifiedUserError('Invalid Username or Password'); //401 Security Concern do not reveal if the user account does not exist or if they have an incorrect password.
+  }
+
+  if (
+    error.name === 'CodeMismatchException' ||
+    error.name === 'ExpiredCodeException'
+  ) {
+    throw new InvalidRequest('Forgot password code expired');
   }
 
   if (error.name === 'UserNotConfirmedException') {

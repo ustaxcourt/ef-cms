@@ -995,12 +995,16 @@ header.usa-header {
 .background-blue {
   background-color: color($theme-color-primary-darker);
 
-   @media only screen and (min-width: $medium-screen) {
+  @media only screen and (min-width: $medium-screen) {
     padding-top: 4rem;
   }
 
   @media only screen and (max-width: ($medium-screen - 1)) {
     padding-top: 2rem;
+  }
+
+  .usa-alert__body {
+    padding-right: 15px !important;
   }
 }
 
@@ -1032,7 +1036,7 @@ header.usa-header {
 
   @media only screen and (min-width: $medium-screen) {
     form {
-      max-width: 90%
+      max-width: 90%;
     }
   }
 
@@ -2230,7 +2234,7 @@ button.change-scanner-button {
   @media only screen and (min-width: $medium-screen) {
     padding-top: 6rem;
   }
-  
+
   @media only screen and (max-width: ($medium-screen - 1)) {
     padding-bottom: 2rem;
   }
