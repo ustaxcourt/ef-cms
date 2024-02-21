@@ -20,7 +20,7 @@ export const getDocumentQCInteractor = (
       identifier: string;
     };
     judgeUser?: { name: string };
-    box: 'inbox' | 'inProgress' | 'served';
+    box: 'inbox' | 'inProgress' | 'outbox';
   },
 ) => {
   let prefix = recipient.group === 'user' ? 'users' : 'sections';

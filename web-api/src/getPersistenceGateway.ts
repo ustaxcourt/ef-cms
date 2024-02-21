@@ -88,7 +88,7 @@ import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/d
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
-import { getDocumentQCForSection } from './persistence/elasticsearch/workitems/getDocumentQCForSection';
+import { getDocumentQCForSection } from './persistence/dynamo/workitems/getDocumentQCForSection';
 import { getDocumentQCForUser } from './persistence/dynamo/workitems/getDocumentQCForUser';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';

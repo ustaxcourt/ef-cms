@@ -26,7 +26,7 @@ export const getDocumentQCForSection = async ({
     applicationContext,
   })) as RawWorkItem[];
 
-  return results.filter(
-    result => !judgeUserName || result.associatedJudge === judgeUserName,
-  );
+  if (judgeUserName) {
+    return results.filter(result => result.associatedJudge === judgeUserName);
+  } else return results;
 };
