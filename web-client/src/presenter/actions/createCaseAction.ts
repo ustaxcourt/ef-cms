@@ -7,12 +7,12 @@ export const createCaseAction = async ({
   path,
   props,
 }: ActionProps) => {
-  const { uploadProgressCallbackMap } = props;
+  const { fileUploadProgressMap } = props;
   const petitionMetadata = get(state.form);
-  const atpUploadsInfo = Object.keys(uploadProgressCallbackMap)
+  const atpUploadsInfo = Object.keys(fileUploadProgressMap)
     .map(key => {
       if (key.startsWith('atps')) {
-        return uploadProgressCallbackMap[key];
+        return fileUploadProgressMap[key];
       }
     })
     .filter(val => !!val);
@@ -29,10 +29,10 @@ export const createCaseAction = async ({
       .filePetitionInteractor(applicationContext, {
         atpUploadProgress: atpUploadsInfo,
         corporateDisclosureUploadProgress:
-          uploadProgressCallbackMap.corporateDisclosure,
+          fileUploadProgressMap.corporateDisclosure,
         petitionMetadata: form,
-        petitionUploadProgress: uploadProgressCallbackMap.petition,
-        stinUploadProgress: uploadProgressCallbackMap.stin,
+        petitionUploadProgress: fileUploadProgressMap.petition,
+        stinUploadProgress: fileUploadProgressMap.stin,
       });
   } catch (err) {
     return path.error();

@@ -12,7 +12,7 @@ export const setProgressForFileUploadAction = ({
 }: ActionProps<{
   files: any;
 }>): {
-  uploadProgressCallbackMap: Record<
+  fileUploadProgressMap: Record<
     string,
     { file: any; uploadProgress: (progressEvent: any) => void }
   >;
@@ -103,7 +103,7 @@ export const setProgressForFileUploadAction = ({
     // if (Array.isArray(files[key])) {
     //     files[key].forEach((file, index) => {
     //       const fileTypeKey = `${key}-${index}`;
-    //       uploadProgressCallbackMap[fileTypeKey] = {
+    //       fileUploadProgressMap[fileTypeKey] = {
     //         file,
     //         uploadProgress: createOnUploadProgress(fileTypeKey),
     //       };
@@ -117,5 +117,5 @@ export const setProgressForFileUploadAction = ({
     // }
   });
 
-  return { uploadProgressCallbackMap: fileUploadProgressMap };
+  return { fileUploadProgressMap };
 };
