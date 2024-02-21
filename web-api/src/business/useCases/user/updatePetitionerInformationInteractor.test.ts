@@ -27,7 +27,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
-jest.mock('./addCoverToPdf');
+jest.mock('../../../../../shared/src/business/useCases/addCoverToPdf');
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockUser;

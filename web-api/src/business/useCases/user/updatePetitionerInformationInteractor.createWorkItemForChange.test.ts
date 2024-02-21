@@ -11,10 +11,10 @@ import {
 } from '../../../../../shared/src/test/mockUsers';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
-jest.mock('./addCoverToPdf');
-import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+jest.mock('../../../../../shared/src/business/useCases/addCoverToPdf');
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockUser;
