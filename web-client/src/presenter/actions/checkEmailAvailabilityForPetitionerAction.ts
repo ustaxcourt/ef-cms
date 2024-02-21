@@ -25,12 +25,7 @@ export const checkEmailAvailabilityForPetitionerAction = async ({
     return path.emailAvailable();
   } else {
     if (!isAccountConfirmed) {
-      return path.accountIsUnconfirmed({
-        errors: {
-          email:
-            'An account with this email already exists but is not confirmed. Please contact the user and ask them to verify their account.',
-        },
-      });
+      return path.accountIsUnconfirmed();
     }
 
     return path.emailInUse({
