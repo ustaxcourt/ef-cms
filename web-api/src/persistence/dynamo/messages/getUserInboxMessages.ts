@@ -1,8 +1,6 @@
 import { queryFull } from '../../dynamodbClientService';
 
 export const getUserInboxMessages = async ({ applicationContext, userId }) => {
-  applicationContext.logger.info('getUserInboxMessages start');
-
   const results = await queryFull({
     ExpressionAttributeNames: {
       '#gsi2pk': 'gsi2pk',
@@ -16,8 +14,6 @@ export const getUserInboxMessages = async ({ applicationContext, userId }) => {
     KeyConditionExpression: '#gsi2pk = :gsi2pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
-
-  applicationContext.logger.info('getUserInboxMessages end');
 
   return results;
 };

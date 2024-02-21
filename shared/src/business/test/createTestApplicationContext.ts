@@ -93,7 +93,7 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../utilities/getWorkQueueFilters';
-import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../../../web-api/src/persistence/elasticsearch/workitems/getDocumentQCForSection';
+import { getDocumentQCForSection } from '../../../../web-api/src/persistence/dynamo/workitems/getDocumentQCForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
@@ -494,11 +494,10 @@ export const createTestApplicationContext = ({
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn(),
-    getDocumentQCInboxForSection: jest.fn(),
-    getDocumentQCInboxForUser: jest.fn(),
-    getDocumentQCServedForSection: jest
+    getDocumentQCForSection: jest
       .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
+      .mockImplementation(getDocumentQCForSection),
+    getDocumentQCForUser: jest.fn(),
     getDownloadPolicyUrl: jest
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
