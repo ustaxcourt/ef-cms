@@ -34,7 +34,7 @@ export const uploadExternalDocumentsAction = async ({
       .uploadExternalDocumentsInteractor(applicationContext, {
         documentFiles: files,
         documentMetadata,
-        progressTrackerCbs: fileUploadProgressMap,
+        fileUploadProgressMap,
       });
 
     for (let docketEntryId of docketEntryIdsAdded) {
