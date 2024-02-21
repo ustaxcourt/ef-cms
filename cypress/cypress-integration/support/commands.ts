@@ -1,5 +1,6 @@
 import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
+import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
   if (shows) {
@@ -30,7 +31,9 @@ Cypress.Commands.add('login', (username, route = '/') => {
 
   cy.visit('/login');
   cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
-  cy.get('[data-testid="password-input"]').type('Testing1234$', { log: false });
+  cy.get('[data-testid="password-input"]').type(cypressEnv.defaultAccountPass, {
+    log: false,
+  });
   cy.get('[data-testid="login-button"]').click();
   cy.get('[data-testid="account-menu-button"]');
   cy.visit(route);
