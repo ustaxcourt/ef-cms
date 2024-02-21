@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 
-import { AccountUnconfirmedModal } from '@web-client/views/CaseDetail/AccountUnconfirmedModal';
+import { AccountUnverifiedModal } from '@web-client/views/CaseDetail/AccountUnverifiedModal';
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
@@ -358,7 +358,7 @@ export const EditPetitionerInformationInternal = connect(
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
         {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
-        {showModal === 'AccountUnconfirmedModal' && <AccountUnconfirmedModal />}
+        {showModal === 'AccountUnverifiedModal' && <AccountUnverifiedModal />}
         {showModal === 'NoMatchingEmailFoundModal' && (
           <NoMatchingEmailFoundModal />
         )}

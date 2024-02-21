@@ -15,7 +15,7 @@ export const checkEmailAvailabilityForPetitionerAction = async ({
 }: ActionProps) => {
   const { updatedEmail } = get(state.form.contact);
 
-  const { isAccountConfirmed, isEmailAvailable } = await applicationContext
+  const { isAccountUnverified, isEmailAvailable } = await applicationContext
     .getUseCases()
     .checkEmailAvailabilityInteractor(applicationContext, {
       email: updatedEmail,
@@ -24,8 +24,8 @@ export const checkEmailAvailabilityForPetitionerAction = async ({
   if (isEmailAvailable) {
     return path.emailAvailable();
   } else {
-    if (!isAccountConfirmed) {
-      return path.accountIsUnconfirmed();
+    if (!isAccountUnverified) {
+      return path.accountIsUnverified();
     }
 
     return path.emailInUse({
