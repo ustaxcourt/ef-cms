@@ -16,21 +16,8 @@ export const setProgressForFileUploadAction = ({
 > => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
-  // O.K. to use Date constructor for calculating time duration
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const startTime = formatNow();
   const totalSizes: Record<string, number> = {};
-
-  const calculateTotalSize = () => {
-    return Object.keys(loadedAmounts).reduce((acc, key) => {
-      return totalSizes[key] + acc;
-    }, 0);
-  };
-  const calculateTotalLoaded = () => {
-    return Object.keys(loadedAmounts).reduce((acc, key) => {
-      return loadedAmounts[key] + acc;
-    }, 0);
-  };
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
@@ -44,51 +31,48 @@ export const setProgressForFileUploadAction = ({
   });
 
   const createOnUploadProgress = (key: string) => {
-    loadedAmounts[key] = 0;
+    loadedAmounts[key] = 0; // do we need this?
     return progressEvent => {
       const { isDone, isHavingSystemIssues, loaded, total } = progressEvent;
       if (total) {
         totalSizes[key] = total;
       }
       loadedAmounts[key] = isDone ? totalSizes[key] : loaded;
-      const fileSize = calculateTotalSize();
-      // O.K. to use Date constructor for calculating time duration
+      const fileSize = totalSizes[key];
       const now = formatNow();
       const timeElapsed = dateStringsCompared(now, startTime);
-      const uploadedBytes = calculateTotalLoaded();
+      const uploadedBytes = loadedAmounts[key];
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
       const timeRemaining = Math.floor(
+        // goes somewhere else
         (fileSize - uploadedBytes) / uploadSpeed,
       );
       let totalBytes = get(state.fileUploadProgress.filesTotalBytes);
 
-      // 1. get documentsProgress of each file type from state
       const documentsUploadProgress: Record<string, number> = get(
         state.fileUploadProgress.documentsProgress,
       );
 
-      if (!documentsUploadProgress[key]) {
+      if (!(key in documentsUploadProgress)) {
         totalBytes += fileSize;
         store.set(state.fileUploadProgress.filesTotalBytes, totalBytes);
       }
       documentsUploadProgress[key] = uploadedBytes;
 
-      // 2. update a value based on doc report received
       store.set(
         state.fileUploadProgress.documentsProgress,
         documentsUploadProgress,
       );
 
-      // 3. calculate the average of all values in the object
       const bytesArray: number[] = Object.values(documentsUploadProgress);
       const sumOfUploadedBytes: number = bytesArray.reduce(
         (acc, curr) => acc + curr,
         0,
       );
-      const avgCompletionOfAllDocuments = Math.ceil(
+      const avgCompletionOfAllDocuments = Math.floor(
         (sumOfUploadedBytes / totalBytes) * 100,
       );
-      // 4. update `documentUploadPercentCompleted` in state
+
       store.set(
         state.fileUploadProgress.percentComplete,
         avgCompletionOfAllDocuments,
