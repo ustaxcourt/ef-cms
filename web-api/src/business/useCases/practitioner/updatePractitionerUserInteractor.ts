@@ -7,12 +7,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateChangeOfAddress } from '../../../../../shared/src/business/useCases/users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const updatePractitionerUser = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     barNumber,
     bypassDocketEntry = false,
@@ -144,7 +145,13 @@ export const updatePractitionerUser = async (
   }
 };
 
-const updateUserPendingEmail = async ({ applicationContext, user }) => {
+const updateUserPendingEmail = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: ServerApplicationContext;
+  user: any;
+}) => {
   const isEmailAvailable = await applicationContext
     .getPersistenceGateway()
     .isEmailAvailable({
@@ -161,7 +168,15 @@ const updateUserPendingEmail = async ({ applicationContext, user }) => {
   user.pendingEmail = user.updatedEmail;
 };
 
-const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
+const getUpdatedFieldNames = ({
+  applicationContext,
+  oldUser,
+  updatedUser,
+}: {
+  applicationContext: ServerApplicationContext;
+  oldUser: any;
+  updatedUser: any;
+}) => {
   const updatedPractitionerRaw = new Practitioner(updatedUser, {
     applicationContext,
   }).toRawObject();
@@ -186,7 +201,7 @@ const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
 };
 
 export const handleLockError = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest: any,
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -204,7 +219,7 @@ export const handleLockError = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { user }: { user: Practitioner },
 ) => {
   const docketNumbers: string[] = await applicationContext
