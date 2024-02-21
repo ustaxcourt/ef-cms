@@ -17,45 +17,45 @@ export const setProgressForFileUploadAction = ({
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
   const startTime = formatNow();
-  const totalSizes: Record<string, number> = {};
+  const sizeOfFiles: Record<string, number> = {};
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
     if (Array.isArray(files[key])) {
-      files[key].forEach((file, index) => {
-        totalSizes[`${key}-${index}`] = file.size;
-      });
+      sizeOfFiles[key] = files[key][0].size;
+      //     files[key].forEach((file, index) => {
+      //       totalSizes[`${key}-${index}`] = file.size;
+      //     });
     } else {
-      totalSizes[key] = files[key].size;
+      sizeOfFiles[key] = files[key].size;
     }
   });
 
   const createOnUploadProgress = (key: string) => {
-    loadedAmounts[key] = 0; // do we need this?
+    loadedAmounts[key] = 0;
     return progressEvent => {
-      const { isDone, isHavingSystemIssues, loaded, total } = progressEvent;
-      if (total) {
-        totalSizes[key] = total;
-      }
-      loadedAmounts[key] = isDone ? totalSizes[key] : loaded;
-      const fileSize = totalSizes[key];
+      const { isDone, isHavingSystemIssues, loaded } = progressEvent;
+
+      loadedAmounts[key] = isDone ? sizeOfFiles[key] : loaded;
+      const fileSize = sizeOfFiles[key];
       const now = formatNow();
       const timeElapsed = dateStringsCompared(now, startTime);
       const uploadedBytes = loadedAmounts[key];
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
       const timeRemaining = Math.floor(
-        // goes somewhere else
         (fileSize - uploadedBytes) / uploadSpeed,
       );
-      let totalBytes = get(state.fileUploadProgress.filesTotalBytes);
+      const filesTotalBytes = get(state.fileUploadProgress.filesTotalBytes);
 
       const documentsUploadProgress: Record<string, number> = get(
         state.fileUploadProgress.documentsProgress,
       );
 
       if (!(key in documentsUploadProgress)) {
-        totalBytes += fileSize;
-        store.set(state.fileUploadProgress.filesTotalBytes, totalBytes);
+        store.set(
+          state.fileUploadProgress.filesTotalBytes,
+          filesTotalBytes + fileSize,
+        );
       }
       documentsUploadProgress[key] = uploadedBytes;
 
@@ -65,10 +65,13 @@ export const setProgressForFileUploadAction = ({
       );
 
       const bytesArray: number[] = Object.values(documentsUploadProgress);
+
       const sumOfUploadedBytes: number = bytesArray.reduce(
         (acc, curr) => acc + curr,
         0,
       );
+      const totalBytes = get(state.fileUploadProgress.filesTotalBytes);
+
       const avgCompletionOfAllDocuments = Math.floor(
         (sumOfUploadedBytes / totalBytes) * 100,
       );
@@ -96,20 +99,22 @@ export const setProgressForFileUploadAction = ({
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    if (Array.isArray(files[key])) {
-      files[key].forEach((file, index) => {
-        const fileTypeKey = `${key}-${index}`;
-        uploadProgressCallbackMap[fileTypeKey] = {
-          file,
-          uploadProgress: createOnUploadProgress(fileTypeKey),
-        };
-      });
-    } else {
-      uploadProgressCallbackMap[key] = {
-        file: files[key],
-        uploadProgress: createOnUploadProgress(key),
-      };
-    }
+    const file = Array.isArray(files[key]) ? files[key][0] : files[key];
+    // if (Array.isArray(files[key])) {
+    //     files[key].forEach((file, index) => {
+    //       const fileTypeKey = `${key}-${index}`;
+    //       uploadProgressCallbackMap[fileTypeKey] = {
+    //         file,
+    //         uploadProgress: createOnUploadProgress(fileTypeKey),
+    //       };
+    //     });
+    //   } else {
+    uploadProgressCallbackMap[key] = {
+      file,
+      // file: files[key],
+      uploadProgress: createOnUploadProgress(key),
+    };
+    // }
   });
 
   return { uploadProgressCallbackMap };
