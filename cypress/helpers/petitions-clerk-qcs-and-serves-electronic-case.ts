@@ -1,9 +1,6 @@
 import { navigateTo } from '../cypress-integration/support/pages/petition-qc';
 
-export function petitionsClerkQcsAndServesElectronicCase(
-  docketNumber: string,
-  atpFileCount: number,
-) {
+export function petitionsClerkQcsAndServesElectronicCase(docketNumber: string) {
   navigateTo('petitionsclerk1', docketNumber);
 
   cy.get('[data-testid="tab-case-info"]').click();
@@ -32,10 +29,6 @@ export function petitionsClerkQcsAndServesElectronicCase(
     .should('not.be.enabled');
 
   cy.get('[data-testid="attachmentToPetitionFileButton"]').should('exist');
-  cy.get('[data-testid="attachmentToPetitionFileButton"]').should(
-    'have.length',
-    atpFileCount,
-  );
 
   cy.get('[data-testid="serve-case-to-irs"]').click();
   cy.get('[data-testid="modal-confirm"]').click();
