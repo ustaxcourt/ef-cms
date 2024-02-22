@@ -1,6 +1,6 @@
 import { attachDummyFile } from './attach-file';
 
-export function petitionerCreatesEletronicCaseWithDeseasedSpouse(
+export function petitionerCreatesElectronicCaseWithDeseasedSpouse(
   primaryFilerName = 'John',
   secondaryFilerName = 'Sally',
 ) {
@@ -38,7 +38,7 @@ export function petitionerCreatesEletronicCaseWithDeseasedSpouse(
     });
 }
 
-export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
+export function petitionerCreatesElectronicCase(primaryFilerName = 'John') {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   attachDummyFile('stin-file');
