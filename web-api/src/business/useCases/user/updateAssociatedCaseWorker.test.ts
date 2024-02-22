@@ -62,260 +62,264 @@ const mockCase = {
   status: CASE_STATUS_TYPES.generalDocket,
 };
 
-it('should log an error when the practitioner is not found on one of their associated cases by userId', async () => {
-  applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber.mockReturnValue({
-      ...mockCase,
-      privatePractitioners: [],
-    });
-
-  await updateAssociatedCaseWorker(applicationContext, {
-    docketNumber: '101-18',
-    user: mockPractitioner,
-  });
-
-  expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-    'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
-  );
-  expect(
-    applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-  ).not.toHaveBeenCalled();
-});
-
-it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
-  applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-    ...mockPetitioner,
-    userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
-  });
-
-  await updateAssociatedCaseWorker(applicationContext, {
-    docketNumber: '101-18',
-    user: { ...mockPetitioner, userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203' },
-  });
-
-  expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-    'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
-  );
-  expect(
-    applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-  ).not.toHaveBeenCalled();
-});
-
-describe('locking', () => {
-  it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => MOCK_LOCK);
-    await expect(
-      updateAssociatedCaseWorker(applicationContext, {
-        docketNumber: '123-45',
-        user: MOCK_PRACTITIONER,
-      }),
-    ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should acquire a lock that lasts for 15 minutes', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => undefined);
-    await updateAssociatedCaseWorker(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      user: MOCK_PRACTITIONER,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 900,
-    });
-  });
-
-  it('should remove the lock', async () => {
-    await updateAssociatedCaseWorker(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      user: MOCK_PRACTITIONER,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
-  });
-});
-
-describe('cases', () => {
-  let mockPractitionerUser;
-  const UPDATED_EMAIL = 'hello@example.com';
-
-  beforeEach(() => {
-    mockPractitionerUser = {
-      ...validUser,
-      barNumber: 'SS8888',
-      email: UPDATED_EMAIL,
-      role: ROLES.privatePractitioner,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-    };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        privatePractitioners: [mockPractitionerUser],
-      });
-  });
-
-  it('should call generateAndServeDocketEntry with verified petitioner for servedParties', async () => {
+describe('updateAssociatedCaseWorker', () => {
+  it('should log an error when the practitioner is not found on one of their associated cases by userId', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...mockCase,
         privatePractitioners: [],
       });
-    await updateAssociatedCaseWorker(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      user: mockPetitioner,
-    });
-    const { servedParties } =
-      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry.mock
-        .calls[0][0];
-    expect(servedParties.electronic).toEqual([
-      { email: 'user@example.com', name: 'Test Petitioner' },
-    ]);
-  });
 
-  it("should update the user's case with the new email", async () => {
     await updateAssociatedCaseWorker(applicationContext, {
-      docketNumber: mockCase.docketNumber,
+      docketNumber: '101-18',
       user: mockPractitioner,
     });
 
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
+    );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    ).not.toHaveBeenCalled();
+  });
 
+  it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...mockPetitioner,
+      userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
+    });
+
+    await updateAssociatedCaseWorker(applicationContext, {
+      docketNumber: '101-18',
+      user: {
+        ...mockPetitioner,
+        userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
+      },
+    });
+
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
+    );
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
-    ).toMatchObject({
-      privatePractitioners: [{ email: 'test@example.com' }],
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).not.toHaveBeenCalled();
+  });
+
+  describe('locking', () => {
+    it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getLock.mockImplementation(() => MOCK_LOCK);
+      await expect(
+        updateAssociatedCaseWorker(applicationContext, {
+          docketNumber: '123-45',
+          user: MOCK_PRACTITIONER,
+        }),
+      ).rejects.toThrow(ServiceUnavailableError);
+
+      expect(
+        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should acquire a lock that lasts for 15 minutes', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getLock.mockImplementation(() => undefined);
+      await updateAssociatedCaseWorker(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        user: MOCK_PRACTITIONER,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: `case|${MOCK_CASE.docketNumber}`,
+        ttl: 900,
+      });
+    });
+
+    it('should remove the lock', async () => {
+      await updateAssociatedCaseWorker(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        user: MOCK_PRACTITIONER,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      });
     });
   });
 
-  it('should not send any user notifications if the call to updateCase fails', async () => {
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockRejectedValueOnce(
-        new Error('updateCaseAndAssociations failure'),
-      );
+  describe('cases', () => {
+    let mockPractitionerUser;
+    const UPDATED_EMAIL = 'hello@example.com';
 
-    await expect(
-      updateAssociatedCaseWorker(applicationContext, {
+    beforeEach(() => {
+      mockPractitionerUser = {
+        ...validUser,
+        barNumber: 'SS8888',
+        email: UPDATED_EMAIL,
+        role: ROLES.privatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          privatePractitioners: [mockPractitionerUser],
+        });
+    });
+
+    it('should call generateAndServeDocketEntry with verified petitioner for servedParties', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...mockCase,
+          privatePractitioners: [],
+        });
+      await updateAssociatedCaseWorker(applicationContext, {
+        docketNumber: mockCase.docketNumber,
+        user: mockPetitioner,
+      });
+      const { servedParties } =
+        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry.mock
+          .calls[0][0];
+      expect(servedParties.electronic).toEqual([
+        { email: 'user@example.com', name: 'Test Petitioner' },
+      ]);
+    });
+
+    it("should update the user's case with the new email", async () => {
+      await updateAssociatedCaseWorker(applicationContext, {
         docketNumber: mockCase.docketNumber,
         user: mockPractitioner,
-      }),
-    ).rejects.toThrow('updateCaseAndAssociations failure');
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).not.toHaveBeenCalled();
-  });
-});
-
-describe('generating a docket entry for petitioners', () => {
-  beforeEach(() => {
-    applicationContext
-      .getUseCaseHelpers()
-      .generateAndServeDocketEntry.mockReturnValue({
-        changeOfAddressDocketEntry: {
-          ...MOCK_DOCUMENTS[0],
-          entityName: 'DocketEntry',
-          isMinuteEntry: 'false',
-        },
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockPetitioner);
-  });
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      ).toHaveBeenCalled();
 
-  it('should call generateAndServeDocketEntry if case is open', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
-
-    await expect(
-      updateAssociatedCaseWorker(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        user: mockPetitioner,
-      }),
-    ).resolves.toBeUndefined(); // has no return value
-
-    expect(
-      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-    ).toHaveBeenCalled();
-  });
-
-  it('should call generateAndServeDocketEntry if case was closed recently', async () => {
-    const closedDate = calculateISODate({
-      howMuch: -3,
-      units: 'months',
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        closedDate,
-        status: CASE_STATUS_TYPES.closed,
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0].caseToUpdate,
+      ).toMatchObject({
+        privatePractitioners: [{ email: 'test@example.com' }],
       });
-
-    await expect(
-      updateAssociatedCaseWorker(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        user: mockPetitioner,
-      }),
-    ).resolves.toBeUndefined(); // has no return value
-
-    expect(
-      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-    ).toHaveBeenCalled();
-  });
-
-  it('should not call generateAndServeDocketEntry if case has been closed longer than six months', async () => {
-    const closedDate = calculateISODate({
-      howMuch: -7,
-      units: 'months',
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        closedDate,
-        status: CASE_STATUS_TYPES.closed,
+    it('should not send any user notifications if the call to updateCase fails', async () => {
+      applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAndAssociations.mockRejectedValueOnce(
+          new Error('updateCaseAndAssociations failure'),
+        );
+
+      await expect(
+        updateAssociatedCaseWorker(applicationContext, {
+          docketNumber: mockCase.docketNumber,
+          user: mockPractitioner,
+        }),
+      ).rejects.toThrow('updateCaseAndAssociations failure');
+
+      expect(
+        applicationContext.getNotificationGateway().sendNotificationToUser,
+      ).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('generating a docket entry for petitioners', () => {
+    beforeEach(() => {
+      applicationContext
+        .getUseCaseHelpers()
+        .generateAndServeDocketEntry.mockReturnValue({
+          changeOfAddressDocketEntry: {
+            ...MOCK_DOCUMENTS[0],
+            entityName: 'DocketEntry',
+            isMinuteEntry: 'false',
+          },
+        });
+
+      applicationContext
+        .getPersistenceGateway()
+        .getUserById.mockReturnValue(mockPetitioner);
+    });
+
+    it('should call generateAndServeDocketEntry if case is open', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+      await expect(
+        updateAssociatedCaseWorker(applicationContext, {
+          docketNumber: mockCase.docketNumber,
+          user: mockPetitioner,
+        }),
+      ).resolves.toBeUndefined(); // has no return value
+
+      expect(
+        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+      ).toHaveBeenCalled();
+    });
+
+    it('should call generateAndServeDocketEntry if case was closed recently', async () => {
+      const closedDate = calculateISODate({
+        howMuch: -3,
+        units: 'months',
+      });
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...mockCase,
+          closedDate,
+          status: CASE_STATUS_TYPES.closed,
+        });
+
+      await expect(
+        updateAssociatedCaseWorker(applicationContext, {
+          docketNumber: mockCase.docketNumber,
+          user: mockPetitioner,
+        }),
+      ).resolves.toBeUndefined(); // has no return value
+
+      expect(
+        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+      ).toHaveBeenCalled();
+    });
+
+    it('should not call generateAndServeDocketEntry if case has been closed longer than six months', async () => {
+      const closedDate = calculateISODate({
+        howMuch: -7,
+        units: 'months',
       });
 
-    await expect(
-      updateAssociatedCaseWorker(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        user: mockPetitioner,
-      }),
-    ).resolves.toBeUndefined(); // has no return value
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          closedDate,
+          status: CASE_STATUS_TYPES.closed,
+        });
 
-    expect(
-      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-    ).not.toHaveBeenCalled();
+      await expect(
+        updateAssociatedCaseWorker(applicationContext, {
+          docketNumber: mockCase.docketNumber,
+          user: mockPetitioner,
+        }),
+      ).resolves.toBeUndefined(); // has no return value
+
+      expect(
+        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+      ).not.toHaveBeenCalled();
+    });
   });
 });
-
 describe('updatePetitionerCases', () => {
   const UPDATED_EMAIL = 'hello@example.com';
   const mockPetitionerUser = {
@@ -331,38 +335,14 @@ describe('updatePetitionerCases', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
 
-  it('should call getCaseByDocketNumber for each docketNumber passed in', async () => {
-    const casesMock = [
-      {
-        ...MOCK_CASE,
-        docketNumber: '101-21',
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser.userId,
-          },
-        ],
-      },
-      {
-        ...MOCK_CASE,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser.userId,
-          },
-        ],
-      },
-    ];
-
+  it('should call getCaseByDocketNumber for passed in docketNumber', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
-        casesMock.find(c => c.docketNumber === docketNumber),
-      );
+      .getCaseByDocketNumber.mockReturnValueOnce(mockCase);
 
     await updatePetitionerCase({
       applicationContext,
-      docketNumbersAssociatedWithUser: ['101-21', MOCK_CASE.docketNumber],
+      docketNumber: MOCK_CASE.docketNumber,
       user: mockPetitionerUser,
     });
 
@@ -370,14 +350,7 @@ describe('updatePetitionerCases', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls[0][0],
     ).toMatchObject({
-      docketNumber: '101-21',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-        .calls[1][0],
-    ).toMatchObject({
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -385,41 +358,36 @@ describe('updatePetitionerCases', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should log an error if the petitioner is not found on a case returned by getCasesForUser and call updateCaseAndAssociations only once', async () => {
-    const casesMock = [
-      {
-        ...MOCK_CASE,
-        docketNumber: '101-21',
-      },
-      {
-        ...MOCK_CASE,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: 'some-other-uuid',
-          },
-        ],
-      },
-    ];
+  it('should log an error if the petitioner is not found on a case returned by getCasesForUser', async () => {
+    const caseMock = {
+      ...MOCK_CASE,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: 'some-other-uuid',
+        },
+      ],
+    };
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
-        casesMock.find(c => c.docketNumber === docketNumber),
-      );
+      .getCaseByDocketNumber.mockReturnValueOnce(caseMock);
 
     await expect(
       updatePetitionerCase({
         applicationContext,
-        docketNumbersAssociatedWithUser: ['101-21', MOCK_CASE.docketNumber],
+        docketNumber: '101-21',
         user: mockPetitionerUser,
       }),
     ).resolves.not.toThrow();
 
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      `Could not find user|${mockPetitionerUser.userId} on ${caseMock.docketNumber}`,
+    );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(1);
+    ).not.toHaveBeenCalled();
   });
 
   it('should log an error if any case update is invalid and prevent updateCaseAndAssociations from being called', async () => {
@@ -434,7 +402,7 @@ describe('updatePetitionerCases', () => {
     await expect(
       updatePetitionerCase({
         applicationContext,
-        docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
+        docketNumber: MOCK_CASE.docketNumber,
         user: mockPetitionerUser,
       }),
     ).rejects.toThrow('entity was invalid');
@@ -466,7 +434,7 @@ describe('updatePetitionerCases', () => {
 
     await updatePetitionerCase({
       applicationContext,
-      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
+      docketNumber: MOCK_CASE.docketNumber,
       user: mockPetitionerUser,
     });
 
@@ -506,7 +474,7 @@ describe('updatePetitionerCases', () => {
 
     await updatePetitionerCase({
       applicationContext,
-      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
+      docketNumber: MOCK_CASE.docketNumber,
       user: mockPetitionerUser,
     });
 
@@ -546,7 +514,7 @@ describe('updatePetitionerCases', () => {
 
     await updatePetitionerCase({
       applicationContext,
-      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
+      docketNumber: MOCK_CASE.docketNumber,
       user: mockPetitionerUser,
     });
 
@@ -585,7 +553,7 @@ describe('updatePractitionerCases', () => {
   it('should set the service serviceIndicator to ELECTRONIC when confirming the email', async () => {
     await updatePractitionerCase({
       applicationContext,
-      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
+      docketNumber: MOCK_CASE.docketNumber,
       user: mockPractitionerUser,
     });
 
