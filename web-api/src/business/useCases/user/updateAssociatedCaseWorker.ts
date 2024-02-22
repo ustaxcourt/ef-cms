@@ -52,7 +52,7 @@ export const updatePetitionerCase = async ({
   applicationContext: ServerApplicationContext;
   docketNumber: string;
   user: RawUser;
-}): Promise<RawCase | undefined> => {
+}): Promise<void> => {
   const rawCaseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -68,12 +68,10 @@ export const updatePetitionerCase = async ({
 
   if (!caseToUpdate) return;
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate,
-    });
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate,
+  });
 };
 
 export const updatePractitionerCase = async ({
@@ -84,7 +82,7 @@ export const updatePractitionerCase = async ({
   applicationContext: ServerApplicationContext;
   docketNumber: string;
   user: any;
-}): Promise<Case | undefined> => {
+}): Promise<void> => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -118,8 +116,6 @@ export const updatePractitionerCase = async ({
     applicationContext,
     caseToUpdate: validatedCaseToUpdate,
   });
-
-  return validatedCaseToUpdate;
 };
 
 const updateCaseEntityAndGenerateChange = async ({
@@ -130,7 +126,7 @@ const updateCaseEntityAndGenerateChange = async ({
   applicationContext: IApplicationContext;
   rawCaseData: RawCase;
   user: RawUser;
-}) => {
+}): Promise<RawCase | undefined> => {
   const caseEntity = new Case(rawCaseData, {
     applicationContext,
   });
