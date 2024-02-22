@@ -40,8 +40,8 @@ describe('search page functionality', () => {
     cy.get('[data-testid="practitioner-row-PT1234"]').should('exist');
     cy.get('[data-testid="clear-practitioner-search"]').click();
     cy.get('[data-testid="practitioner-row-PT1234"]').should('not.exist');
-    cy.get('[data-testid="bar-number"]').clear();
-    cy.get('[data-testid="bar-number"]').type('pt1234');
+    cy.get('[data-testid="bar-number-search-input"]').clear();
+    cy.get('[data-testid="bar-number-search-input"]').type('pt1234');
     cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
     cy.url().should('include', 'pt1234');
     cy.get('[data-testid="print-practitioner-case-list"]').click();
@@ -54,8 +54,8 @@ describe('search page functionality', () => {
     cy.get('[data-testid="inbox-tab-content"]').should('exist');
     cy.get('[data-testid="search-link"]').click();
     cy.get('[data-testid="tab-practitioner"]').click();
-    cy.get('[data-testid="bar-number"]').clear();
-    cy.get('[data-testid="bar-number"]').type('pt1234');
+    cy.get('[data-testid="bar-number-search-input"]').clear();
+    cy.get('[data-testid="bar-number-search-input"]').type('pt1234');
     cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
     cy.url().should('include', 'pt1234');
   });
