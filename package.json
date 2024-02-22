@@ -228,7 +228,6 @@
     "test:pa11y:public-search": "pa11y-ci --config ./web-client/pa11y/pa11y-ci-public-search.config.js",
     "test:pa11y:screenshots:capture": "mkdir -p ./web-client/pa11y/pa11y-screenshots/new/ ./web-client/pa11y/pa11y-screenshots/old/ && cp -R ./web-client/pa11y/pa11y-screenshots/new/ ./web-client/pa11y/pa11y-screenshots/old/",
     "test:pa11y:screenshots": "npm run test:pa11y:screenshots:capture && pa11y-ci --config ./web-client/pa11y/pa11y-ci-screenshots.config.js && rm -rf ./web-client/pa11y/pa11y-screenshots/diffs/* && node ./web-client/pa11y/compare-screenshots.js",
-    "test:pa11y:smoketests": ". ./set-tokens.sh && pa11y-ci --config ./web-client/pa11y/pa11y-ci-smoketests.config.js",
     "test:pa11y": "npm run test:pa11y:1 && npm run test:pa11y:2 && npm run test:pa11y:3 && npm run test:pa11y:4",
     "test:document-generation": "npm run build:assets && jest --config shared/src/business/utilities/documentGenerators/document_generator.jest.config.ts",
     "test:shared": "npm run build:assets && jest --config shared/jest-shared.config.ts",
