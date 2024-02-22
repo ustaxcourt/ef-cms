@@ -4,6 +4,7 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { verifyAdminUserDisabled } from './admin';
 
 describe('verifyAdminUserDisabled', () => {
+  // @ts-ignore
   const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
   const OLD_ENV = process.env;
 
