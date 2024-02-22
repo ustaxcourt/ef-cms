@@ -1,10 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setupFilesForCaseCreationAction = ({
-  get,
-}: ActionProps<{
-  files: any;
-}>) => {
+export const setupFilesForCaseCreationAction = ({ get }: ActionProps) => {
   const petitionMetadata = get(state.form);
   const {
     applicationForWaiverOfFilingFeeFile,
