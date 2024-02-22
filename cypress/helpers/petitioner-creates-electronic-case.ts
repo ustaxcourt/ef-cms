@@ -77,7 +77,6 @@ export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
 }
 
 export function petitionerCreatesEletronicCaseWithAttachmentsToPetitionFiles({
-  atpFilesToAttach = 'w3-dummy.pdf',
   primaryFilerName = 'John',
 }: {
   atpFilesToAttach?: string;
@@ -108,12 +107,9 @@ export function petitionerCreatesEletronicCaseWithAttachmentsToPetitionFiles({
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="complete-step-4"]').click();
 
-  cy.get('[data-testid="attachment-to-petition-pdfs"]').should(
-    'have.length',
-    atpFilesToAttach.length,
-  );
   cy.get('[data-testid="stin-preview-button"]').should('exist');
   cy.get('[data-testid="petition-preview-button"]').should('exist');
+  cy.get('[data-testid="atp-preview-button"]').should('exist');
 
   cy.get('[data-testid="file-petition"]').click();
   return cy
