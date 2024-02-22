@@ -15,6 +15,7 @@ export const setProgressForFileUploadAction = ({
   fileUploadProgressMap: FileUploadProgressMapType;
 } => {
   const { files } = props;
+  console.log('files', files);
   const loadedAmounts: Record<string, number> = {};
   const startTime = formatNow();
   const sizeOfFiles: Record<string, number> = {};
