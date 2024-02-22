@@ -131,10 +131,8 @@ export const reviewSavedPetitionHelper = (
     documentsByType[
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
     ];
-
-  const attachmentToPetitionFile = [
-    INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
-  ];
+  const attachmentToPetitionFile =
+    documentsByType[INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType];
 
   const showStatistics = statistics && statistics.length > 0;
 
