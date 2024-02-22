@@ -3,8 +3,8 @@
 import {
   ServerApplicationContext,
   createApplicationContext,
-} from '../../../web-api/src/applicationContext';
-import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+} from '@web-api/applicationContext';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
 const loadCaseFromInitialBlackstoneMigrationDb = async ({
   applicationContext,
@@ -12,7 +12,7 @@ const loadCaseFromInitialBlackstoneMigrationDb = async ({
 }: {
   applicationContext: ServerApplicationContext;
   docketNumber: string;
-}) => {
+}): Promise<RawCase> => {
   const result = await applicationContext
     .getDocumentClient(applicationContext)
     .get({
@@ -23,7 +23,7 @@ const loadCaseFromInitialBlackstoneMigrationDb = async ({
       TableName: 'efcms-prod-first',
     });
 
-  return result || {};
+  return (result as any as RawCase) || {};
 };
 
 const getSealedCases = async ({

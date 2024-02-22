@@ -1,10 +1,10 @@
-// usage: npx ts-node --transpile-only ./shared/admin-tools/elasticsearch/health-migration.ts
+// usage: npx ts-node --transpile-only scripts/elasticsearch/health-migration.ts
 
 import { Client } from '@opensearch-project/opensearch';
-import { esIndexType } from '../../../web-api/elasticsearch/elasticsearch-indexes';
-import { getBaseAliasFromIndexName } from '../../../web-api/elasticsearch/elasticsearch-aliases';
-import { getClient } from '../../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../util';
+import { esIndexType } from '../../web-api/elasticsearch/elasticsearch-indexes';
+import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
+import { getClient } from '../../web-api/elasticsearch/client';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['ENV']);
 
