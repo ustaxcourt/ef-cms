@@ -827,7 +827,6 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
       email,
     });
 
-    // TODO: extract password to constant
     await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
       password,
     });
