@@ -15,11 +15,17 @@ import { WorkItem } from '../../entities/WorkItem';
  */
 export const getDocumentQCForUserInteractor = async (
   applicationContext: IApplicationContext,
-  { box, userId }: { box: 'inbox' | 'inProgress' | 'outbox'; userId: string },
+  {
+    box,
+    userId,
+  }: { box: 'inbox' | 'inProgress' | 'outbox'; userId: string | null },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
+  if (
+    userId === null ||
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

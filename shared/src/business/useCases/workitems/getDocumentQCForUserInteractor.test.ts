@@ -5,9 +5,9 @@ import {
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { getDocumentQCInboxForUserInteractor } from './getDocumentQCForUserInteractor';
+import { getDocumentQCForUserInteractor } from './getDocumentQCForUserInteractor';
 
-describe('getDocumentQCInboxForUserInteractor', () => {
+describe('getDocumentQCForUserInteractor', () => {
   beforeEach(() => {
     const workItem = {
       assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -23,7 +23,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocumentQCInboxForUser.mockReturnValue([workItem]);
+      .getDocumentQCForUser.mockReturnValue([workItem]);
 
     applicationContext
       .getPersistenceGateway()
@@ -37,7 +37,8 @@ describe('getDocumentQCInboxForUserInteractor', () => {
     });
 
     await expect(
-      getDocumentQCInboxForUserInteractor(applicationContext, {
+      getDocumentQCForUserInteractor(applicationContext, {
+        box: 'inbox',
         userId: null,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -46,7 +47,8 @@ describe('getDocumentQCInboxForUserInteractor', () => {
   it('should fetch the user from persistence', async () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
-    await getDocumentQCInboxForUserInteractor(applicationContext, {
+    await getDocumentQCForUserInteractor(applicationContext, {
+      box: 'inbox',
       userId: docketClerkUser.userId,
     });
 
@@ -59,12 +61,13 @@ describe('getDocumentQCInboxForUserInteractor', () => {
   it('should query workItems that are associated with the provided userId', async () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
-    await getDocumentQCInboxForUserInteractor(applicationContext, {
+    await getDocumentQCForUserInteractor(applicationContext, {
+      box: 'inbox',
       userId: docketClerkUser.userId,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getDocumentQCInboxForUser.mock
+      applicationContext.getPersistenceGateway().getDocumentQCForUser.mock
         .calls[0][0].userId,
     ).toEqual(docketClerkUser.userId);
   });
@@ -72,7 +75,8 @@ describe('getDocumentQCInboxForUserInteractor', () => {
   it('should filter the workItems for the provided user', async () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
-    await getDocumentQCInboxForUserInteractor(applicationContext, {
+    await getDocumentQCForUserInteractor(applicationContext, {
+      box: 'inbox',
       userId: docketClerkUser.userId,
     });
   });

@@ -68,8 +68,10 @@ describe('createMessageInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         caseCaption: 'Guy Fieri, Petitioner',
-        docketNumberWithSuffix: '123-45S',
+        docketNumber: '101-20',
+        docketNumberWithSuffix: '101-20S',
         status: CASE_STATUS_TYPES.generalDocket,
+        trialLocation: 'Denver, Colorado',
       });
 
     await createMessageInteractor(applicationContext, {
@@ -89,7 +91,7 @@ describe('createMessageInteractor', () => {
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Guy Fieri',
       docketNumber: '101-20',
-      docketNumberWithSuffix: '123-45S',
+      docketNumberWithSuffix: '101-20S',
       from: 'Test Petitionsclerk',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',

@@ -1,8 +1,8 @@
 import { DOCKET_SECTION, ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getDocumentQCInboxForSectionInteractor } from './getDocumentQCForSectionInteractor';
+import { getDocumentQCForSectionInteractor } from './getDocumentQCForSectionInteractor';
 
-describe('getDocumentQCInboxForSectionInteractor', () => {
+describe('getDocumentQCForSectionInteractor', () => {
   it('should throw an error when the user does not have permission to retrieve work items', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -10,7 +10,8 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
     });
 
     await expect(
-      getDocumentQCInboxForSectionInteractor(applicationContext, {
+      getDocumentQCForSectionInteractor(applicationContext, {
+        box: 'inbox',
         section: DOCKET_SECTION,
       }),
     ).rejects.toThrow();
@@ -22,13 +23,14 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'docketclerk',
     });
 
-    await getDocumentQCInboxForSectionInteractor(applicationContext, {
+    await getDocumentQCForSectionInteractor(applicationContext, {
+      box: 'inbox',
       section: DOCKET_SECTION,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
-        .mock.calls[0][0].section,
+      applicationContext.getPersistenceGateway().getDocumentQCForSection.mock
+        .calls[0][0].section,
     ).toEqual(DOCKET_SECTION);
   });
 
@@ -38,13 +40,14 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'docketclerk',
     });
 
-    await getDocumentQCInboxForSectionInteractor(applicationContext, {
+    await getDocumentQCForSectionInteractor(applicationContext, {
+      box: 'inbox',
       section: 'ANY_OTHER_SECTION',
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
-        .mock.calls[0][0].section,
+      applicationContext.getPersistenceGateway().getDocumentQCForSection.mock
+        .calls[0][0].section,
     ).toEqual(DOCKET_SECTION);
   });
 
@@ -54,15 +57,16 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'judge',
     });
 
-    await getDocumentQCInboxForSectionInteractor(applicationContext, {
+    await getDocumentQCForSectionInteractor(applicationContext, {
+      box: 'inbox',
       judgeUserName: 'Ashford',
       section: applicationContext.getPersistenceGateway().getJudgesChambers()
         .ASHFORDS_CHAMBERS_SECTION.section,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
-        .mock.calls[0][0].judgeUserName,
+      applicationContext.getPersistenceGateway().getDocumentQCForSection.mock
+        .calls[0][0].judgeUserName,
     ).toEqual('Ashford');
   });
 });
