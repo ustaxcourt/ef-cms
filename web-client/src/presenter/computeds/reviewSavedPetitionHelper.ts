@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { formatStatistic } from './statisticsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -29,8 +31,6 @@ const getEConsentAttributesForContact = (
   return { eServiceConsentText, shouldDisplayEConsentText };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const reviewSavedPetitionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
