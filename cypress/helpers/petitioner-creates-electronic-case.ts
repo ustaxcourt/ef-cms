@@ -77,10 +77,10 @@ export function petitionerCreatesEletronicCase(primaryFilerName = 'John') {
 }
 
 export function petitionerCreatesEletronicCaseWithAttachmentsToPetitionFiles({
-  atpFilesToAttach = [],
+  atpFilesToAttach = 'w3-dummy.pdf',
   primaryFilerName = 'John',
 }: {
-  atpFilesToAttach?: string[];
+  atpFilesToAttach?: string;
   primaryFilerName?: string;
 } = {}) {
   cy.get('[data-testid="file-a-petition"]').click();
@@ -90,7 +90,7 @@ export function petitionerCreatesEletronicCaseWithAttachmentsToPetitionFiles({
   attachDummyFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  cy.get('[data-testid="atp-files-upload"]').attachFile(atpFilesToAttach);
+  attachDummyFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
   cy.get('[data-testid="filing-type-0"]').click();

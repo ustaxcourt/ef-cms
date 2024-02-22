@@ -54,16 +54,14 @@ export const filePetitionInteractor = async (
       });
   }
 
-  let atpFilesUploads = [];
+  let atpFileUpload;
   if (atpUploadProgress) {
-    atpFilesUploads = atpUploadProgress.map(atp => {
-      return applicationContext
-        .getUseCases()
-        .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-          document: atp.file,
-          onUploadProgress: atp.uploadProgress,
-        });
-    });
+    atpFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: atpUploadProgress.file,
+        onUploadProgress: atpUploadProgress.uploadProgress,
+      });
   }
 
   try {
@@ -71,18 +69,18 @@ export const filePetitionInteractor = async (
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
-      ...atpFileIds
+      atpFileId,
     ]: string[] = await Promise.all([
       corporateDisclosureFileUpload,
       petitionFileUpload,
       stinFileUpload,
-      ...atpFilesUploads,
+      atpFileUpload,
     ]);
 
     const caseDetail = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
-        atpFileIds,
+        atpFileId,
         corporateDisclosureFileId,
         petitionFileId,
         petitionMetadata,

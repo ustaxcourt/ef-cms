@@ -1,10 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './CaseTypeSelect';
-import { FileInput } from '../FileDocument/FileInput';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -151,54 +149,28 @@ export const StartCaseStep2 = connect(
                   value={form.caseType}
                   onChange="updateFormValueSequence"
                 />
-                <NonMobile>
-                  <div className="usa-form-group">
-                    <label
-                      className="usa-label margin-bottom-0"
-                      htmlFor="atp-files-upload"
-                    >
-                      Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
-                      have it.
-                    </label>
-                    <span className="usa-hint" id="atp-files-upload-hint">
-                      Make sure file is not encrypted or password protected. Max
-                      file size {constants.MAX_FILE_SIZE_MB}MB.
-                    </span>
-                    <FormGroup>
-                      <FileInput
-                        data-testid="atp-files-upload"
-                        name="attachmentToPetitionFiles"
-                        updateFormValueSequence="updateFormValueSequence"
-                        validationSequence="validateStartCaseWizardSequence"
-                      />
-                    </FormGroup>
-                  </div>
-                </NonMobile>
-
-                <Mobile>
-                  <div className="usa-form-group">
-                    <label
-                      className="usa-label margin-bottom-0"
-                      htmlFor="atp-files-upload"
-                    >
-                      Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
-                      have it.
-                    </label>
-                    <span className="usa-hint" id="atp-files-upload-hint">
-                      Make sure file is not encrypted or password protected. Max
-                      file size {constants.MAX_FILE_SIZE_MB}MB.
-                    </span>
-                    <FormGroup>
-                      <FileInput
-                        isMobile
-                        data-testid="atp-files-upload"
-                        name="attachmentToPetitionFiles"
-                        updateFormValueSequence="updateFormValueSequence"
-                        validationSequence="validateStartCaseWizardSequence"
-                      />
-                    </FormGroup>
-                  </div>
-                </Mobile>
+                <div className="usa-form-group">
+                  <label
+                    className="usa-label margin-bottom-0"
+                    data-testid="atp-file-upload-label"
+                    htmlFor="atp-file-upload"
+                  >
+                    Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
+                    have it.
+                  </label>
+                  <span className="usa-hint" id="atp-files-upload-hint">
+                    Make sure file is not encrypted or password protected. Max
+                    file size {constants.MAX_FILE_SIZE_MB}MB.
+                  </span>
+                  <FormGroup>
+                    <StateDrivenFileInput
+                      data-testid="atp-file-upload"
+                      name="attachmentToPetitionFile"
+                      updateFormValueSequence="updateFormValueSequence"
+                      validationSequence="validateStartCaseWizardSequence"
+                    />
+                  </FormGroup>
+                </div>
               </>
             )}
 

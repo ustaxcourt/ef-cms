@@ -342,7 +342,7 @@ describe('reviewSavedPetitionHelper', () => {
     ]);
   });
 
-  it('should return attachmentToPetitionFiles when the file was uploaded', () => {
+  it('should return attachmentToPetitionFile when the file was uploaded', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
@@ -359,13 +359,10 @@ describe('reviewSavedPetitionHelper', () => {
     });
 
     expect(result).toMatchObject({
-      attachmentToPetitionFiles: [
-        {
-          documentType:
-            INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
-          eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
-        },
-      ],
+      attachmentToPetitionFile: {
+        documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+      },
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
