@@ -132,11 +132,9 @@ export const reviewSavedPetitionHelper = (
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
     ];
 
-  const attachmentToPetitionFiles = docketEntries?.filter(
-    docketEntry =>
-      docketEntry.eventCode ===
-      INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
-  );
+  const attachmentToPetitionFile = [
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+  ];
 
   const showStatistics = statistics && statistics.length > 0;
 
@@ -175,7 +173,7 @@ export const reviewSavedPetitionHelper = (
 
   return {
     applicationForWaiverOfFilingFeeFile,
-    attachmentToPetitionFiles,
+    attachmentToPetitionFile,
     corporateDisclosureFile,
     eConsentFieldsEnabledFeatureFlag,
     eServiceConsentTextForPrimaryContact,
