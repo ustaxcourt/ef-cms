@@ -1,6 +1,8 @@
-import { esAliasType } from '../../../web-api/elasticsearch/elasticsearch-aliases';
-import { getClient } from '../../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../util';
+// usage: npx ts-node --transpile-only scripts/reports/indices.ts
+
+import { esAliasType } from '../../web-api/elasticsearch/elasticsearch-aliases';
+import { getClient } from '../../web-api/elasticsearch/client';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
 

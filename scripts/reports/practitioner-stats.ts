@@ -1,6 +1,6 @@
-// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/practitioner-stats.ts 2022
+// usage: npx ts-node --transpile-only scripts/reports/practitioner-stats.ts 2022
 
-import { requireEnvVars } from '../util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
