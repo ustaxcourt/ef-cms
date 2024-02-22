@@ -150,21 +150,32 @@ export const StartCaseStep2 = connect(
                   onChange="updateFormValueSequence"
                 />
                 <div className="usa-form-group">
-                  <label
-                    className="usa-label margin-bottom-0"
-                    data-testid="atp-file-upload-label"
-                    htmlFor="atp-file-upload"
+                  <FormGroup
+                    errorText={[
+                      validationErrors.attachmentToPetitionFile,
+                      validationErrors.attachmentToPetitionFileSize,
+                    ]}
                   >
-                    Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
-                    have it.
-                  </label>
-                  <span className="usa-hint" id="atp-files-upload-hint">
-                    Make sure file is not encrypted or password protected. Max
-                    file size {constants.MAX_FILE_SIZE_MB}MB.
-                  </span>
-                  <FormGroup>
+                    <label
+                      className={classNames(
+                        'usa-label margin-bottom-0',
+                        startCaseHelper.showAttachmentToPetitionFileValid &&
+                          'validated',
+                      )}
+                      data-testid="atp-file-upload-label"
+                      htmlFor="atp-file-upload"
+                    >
+                      Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
+                      have it.
+                    </label>
+                    <span className="usa-hint" id="atp-files-upload-hint">
+                      Make sure file is not encrypted or password protected. Max
+                      file size {constants.MAX_FILE_SIZE_MB}MB.
+                    </span>
                     <StateDrivenFileInput
+                      aria-describedby="atp-file-upload-label"
                       data-testid="atp-file-upload"
+                      id="atp-file-upload"
                       name="attachmentToPetitionFile"
                       updateFormValueSequence="updateFormValueSequence"
                       validationSequence="validateStartCaseWizardSequence"
