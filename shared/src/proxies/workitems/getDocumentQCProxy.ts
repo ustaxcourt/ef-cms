@@ -23,7 +23,7 @@ export const getDocumentQCInteractor = (
     box: 'inbox' | 'inProgress' | 'outbox';
   },
 ) => {
-  let prefix = recipient.group === 'user' ? 'users' : 'sections';
+  const prefix = recipient.group === 'user' ? 'users' : 'sections';
 
   const queryParams =
     judgeUser && judgeUser.name ? { judgeUserName: judgeUser.name } : {};
