@@ -11,7 +11,6 @@ export const setupFilesForCaseCreationAction = ({
     attachmentToPetitionFile,
     corporateDisclosureFile,
     petitionFile,
-    primaryDocumentFile,
     requestForPlaceOfTrialFile,
     stinFile,
   } = petitionMetadata;
@@ -22,7 +21,6 @@ export const setupFilesForCaseCreationAction = ({
       atp: attachmentToPetitionFile,
       corporateDisclosure: corporateDisclosureFile,
       petition: petitionFile,
-      primary: primaryDocumentFile,
       requestForPlaceOfTrial: requestForPlaceOfTrialFile,
       stin: stinFile,
     },
