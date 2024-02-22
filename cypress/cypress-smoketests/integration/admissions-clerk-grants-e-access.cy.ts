@@ -16,10 +16,10 @@ describe('Admissions Clerk Grants E-Access', () => {
   });
 
   /*
-  Given an admissions clerk is working with a served paper case that has two petitioners
-  When they grant the first petitioner electronic access to the case
-  And the petitioner verifies their account
-  Then a Notice Of Change of Email (NOCE) should be generated and served on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic
+    Given an admissions clerk is working with a served paper case that has two petitioners
+    When they grant the first petitioner electronic access to the case
+    And the petitioner verifies their account
+    Then a Notice Of Change of Email (NOCE) should be generated and served on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic
   */
   it('should generate a Notice Of Change of Email (NOCE) on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic when an admissions clerk grants e-access to a petitioner', () => {
     createAndServePaperPetition().then(({ docketNumber, name }) => {
@@ -85,12 +85,12 @@ describe('Admissions Clerk Grants E-Access', () => {
   });
 
   /*
-  Given an admissions clerk is working with a served paper case that has two petitioners
-  When they grant the second petitioner electronic access to the case
-  And the petitioner verifies their account
-  Then a Notice Of Change of Email (NOCE) should be generated and served on the case
-  And a work item is added for the NOCE to the docket section work queue
-  And the petitioner`s service preference should change to Electronic
+    Given an admissions clerk is working with a served paper case that has two petitioners
+    When they grant the second petitioner electronic access to the case
+    And the petitioner verifies their account
+    Then a Notice Of Change of Email (NOCE) should be generated and served on the case
+    And a work item is added for the NOCE to the docket section work queue
+    And the petitioner`s service preference should change to Electronic
   */
   it('should generate a Notice Of Change of Email (NOCE) on the case, a work item added for the NOCE to the docket section work queue, and the petitioner`s service preference should change to Electronic when an admissions clerk grants e-access to the second petitioner', () => {
     createAndServePaperPetitionMultipleParties().then(
@@ -164,10 +164,10 @@ describe('Admissions Clerk Grants E-Access', () => {
   });
 
   /*
-  Given that a practitioner does not yet have a DAWSON account
-  When an admissions clerk grants e-access to practitioner and adds them to a case
-  Then they should be able to login
-  And view their case
+    Given that a practitioner does not yet have a DAWSON account
+    When an admissions clerk grants e-access to practitioner and adds them to a case
+    Then they should be able to login
+    And view their case
   */
   it('should allow a practitioner to login and view their case when an admissions clerk grants e-access to a practitioner', () => {
     const practitionerUserName = `cypress_test_account+${v4()}`;
@@ -250,11 +250,11 @@ describe('Admissions Clerk Grants E-Access', () => {
   });
 
   /*
-  Given a petitioner has created an account in DAWSON
-  And they have not verified their account
-  When an admissions clerk grants e-access to the petitioner by adding them to a case
-  Then they should see a warning that the account is unverified
-  And the email should not be updated
+    Given a petitioner has created an account in DAWSON
+    And they have not verified their account
+    When an admissions clerk grants e-access to the petitioner by adding them to a case
+    Then they should see a warning that the account is unverified
+    And the email should not be updated
   */
   it('should display a modal and do nothing when an admissions clerk attempts to grant e-access to an email that is associated with an unverified account', () => {
     createAndServePaperPetition().then(({ docketNumber, name }) => {
