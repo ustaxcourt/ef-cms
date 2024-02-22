@@ -129,12 +129,11 @@ describe('Messages', () => {
 
   describe('Message sorting', () => {
     before(() => {
-      loginAsPetitionsClerk();
       createAndServePaperPetition().then(({ docketNumber }) => {
         cy.wrap(docketNumber).as('DOCKET_NUMBER');
         searchByDocketNumberInHeader(docketNumber);
         sendMessagesToCompletedTab(DOCKET_CLERK_ID, docketNumber);
-        cy.login('petitionsclerk');
+        loginAsPetitionsClerk();
         searchByDocketNumberInHeader(docketNumber);
         sendMessages(DOCKET_CLERK_ID);
       });
