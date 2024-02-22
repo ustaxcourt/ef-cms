@@ -29,9 +29,9 @@ export const getDocumentQCForUserInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // const user = await applicationContext
-  //   .getPersistenceGateway()
-  //   .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const workItems = await applicationContext
     .getPersistenceGateway()
@@ -41,12 +41,12 @@ export const getDocumentQCForUserInteractor = async (
       userId,
     });
 
-  // const filteredWorkItems = workItems.filter(
-  //   workItem =>
-  //     workItem.assigneeId === user.userId && workItem.section === user.section,
-  // );
+  const filteredWorkItems = workItems.filter(
+    workItem =>
+      workItem.assigneeId === user.userId && workItem.section === user.section,
+  );
 
-  return WorkItem.validateRawCollection(workItems, {
+  return WorkItem.validateRawCollection(filteredWorkItems, {
     applicationContext,
   });
 };
