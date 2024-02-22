@@ -22,7 +22,6 @@ export const uploadExternalDocumentsAction = async ({
 }>) => {
   const { documentMetadata, files, fileUploadProgressMap } = props;
   const { docketNumber } = get(state.caseDetail);
-  const form = get(state.form);
 
   try {
     const { caseDetail, docketEntryIdsAdded } = await applicationContext
@@ -45,7 +44,7 @@ export const uploadExternalDocumentsAction = async ({
       caseDetail,
       docketNumber,
       documentsFiled: documentMetadata,
-      fileAcrossConsolidatedGroup: form.fileAcrossConsolidatedGroup,
+      fileAcrossConsolidatedGroup: documentMetadata.fileAcrossConsolidatedGroup,
     });
   } catch (err) {
     return path.error();
