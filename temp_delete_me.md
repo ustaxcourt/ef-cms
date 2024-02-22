@@ -2,6 +2,7 @@
 - Investigate rate limiting authentication end points
 - Verify that we are not logging passwords to cloudwatch.
 - Create Presentation on new patterns
+- Benchmark updating users cases when their email updates
 
 :: Solo ::
 - web-api/src/business/useCases/auth/changePasswordInteractor.test.ts, test coverage for incorrect/expired code
