@@ -121,8 +121,8 @@ export const createOrUpdatePractitionerUser = async ({
     };
 
     const response = await cognito.adminCreateUser(params);
-    //replace sub here
-    if (response && response.User && response.User.Username) {
+
+    if (response?.User?.Username) {
       const userIdAttribute =
         response.User.Attributes?.find(element => {
           if (element.Name === 'custom:userId') {

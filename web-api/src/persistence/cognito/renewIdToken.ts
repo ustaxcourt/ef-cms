@@ -14,7 +14,11 @@ export const renewIdToken = async (
     ClientId: clientId,
   });
 
+  if (!result.AuthenticationResult?.IdToken) {
+    throw new Error('Id token not present on initiateAuth response');
+  }
+
   return {
-    idToken: result.AuthenticationResult?.IdToken!,
+    idToken: result.AuthenticationResult.IdToken,
   };
 };
