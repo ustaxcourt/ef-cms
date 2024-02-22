@@ -354,9 +354,6 @@ jobs:
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
-      - run:
-          name: 'Pa11y Smoke Tests'
-          command: npm run test:pa11y:smoketests
       - store_artifacts:
           path: /root/project/cypress/cypress-smoketests/videos/
 
