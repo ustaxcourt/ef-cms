@@ -7,8 +7,20 @@ export const upsertMessage = ({
 }: {
   applicationContext: IApplicationContext;
   message: RawMessage;
-}) =>
-  put({
+}) => {
+  const gsi3pk = message.completedAt
+    ? `assigneeId|completed|${message.completedByUserId}`
+    : message.fromUserId
+      ? `assigneeId|outbox|${message.fromUserId}`
+      : undefined;
+
+  const gsi5pk = message.completedAt
+    ? `section|${message.completedAt}|${message.completedBySection}`
+    : message.fromSection
+      ? `section|outbox|${message.fromSection}`
+      : undefined;
+
+  return put({
     Item: {
       ...message,
       gsi1pk: `message|${message.parentMessageId}`,
@@ -16,18 +28,15 @@ export const upsertMessage = ({
         !message.completedAt && message.toUserId
           ? `assigneeId|inbox|${message.toUserId}`
           : undefined,
-      gsi3pk: message.fromUserId
-        ? `assigneeId|${message.completedAt ? 'completed' : 'outbox'}|${message.fromUserId}`
-        : undefined,
+      gsi3pk,
       gsi4pk:
         !message.completedAt && message.toSection
           ? `section|inbox|${message.toSection}`
           : undefined,
-      gsi5pk: message.fromSection
-        ? `section|${message.completedAt ? 'completed' : 'outbox'}|${message.fromSection}`
-        : undefined,
+      gsi5pk,
       pk: `case|${message.docketNumber}`,
       sk: `message|${message.messageId}`,
     },
     applicationContext, // section|outbox|docket .... // assigneeId|inbox|<USERID>
   });
+};
