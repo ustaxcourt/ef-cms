@@ -7,17 +7,8 @@ const misc = require('./pa11y-misc.js');
 const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
 
 const userUrls = [...chambers, ...floater, ...general];
-const initialUrls = [];
 
-if (process.env.CI) {
-  initialUrls.push({
-    actions: ['wait for element #ci-environment to be visible'],
-    notes: 'Confirm Pa11y is running against client in CI mode',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/&info=verify-ci-client-environment',
-  });
-}
-
-const urls = [...initialUrls, ...userUrls, ...misc].map(jsCheckDecorator);
+const urls = [...userUrls, ...misc].map(jsCheckDecorator);
 
 module.exports = {
   defaults,

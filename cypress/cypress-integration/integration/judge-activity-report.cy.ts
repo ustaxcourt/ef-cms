@@ -3,6 +3,10 @@ import { assertDoesNotExist, assertExists, retry } from '../../helpers/retry';
 import { createAndServePaperFiling } from '../../helpers/create-and-serve-paper-filing';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { createOrderAndDecision } from '../../helpers/create-order-and-decision';
+import {
+  loginAsColvin,
+  loginAsDocketClerk,
+} from '../../helpers/auth/login-as-helpers';
 import { navigateToJudgeActivityReport } from '../../helpers/navigate-to-judge-activity-report';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 import { updateCaseStatus } from '../../helpers/update-case-status';
@@ -10,7 +14,7 @@ import { updateCaseStatus } from '../../helpers/update-case-status';
 describe('Verify the activity report', () => {
   describe('Statistics table', () => {
     it('should display an error message when invalid dates are entered into the form', () => {
-      cy.login('judgecolvin');
+      loginAsColvin();
       navigateToJudgeActivityReport('statistics');
       cy.get('[data-testid="view-statistics-button"]').should('be.disabled');
       cy.get(
@@ -33,7 +37,7 @@ describe('Verify the activity report', () => {
     });
 
     it('should display statistics tables when a correct date is inputed', () => {
-      cy.login('judgecolvin');
+      loginAsColvin();
       navigateToJudgeActivityReport('statistics');
       cy.get('[data-testid="view-statistics-button"]').should('be.disabled');
       cy.get('[data-testid="cases-closed-table"]').should('not.exist');
@@ -65,12 +69,12 @@ describe('Verify the activity report', () => {
   describe('Submitted/CAV table', () => {
     it('create a Submitted case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.login('docketclerk');
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
 
         retry(() => {
-          cy.login('judgecolvin');
+          loginAsColvin();
           navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
@@ -79,12 +83,12 @@ describe('Verify the activity report', () => {
 
     it('create a CAV case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.login('docketclerk');
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('CAV', 'Colvin');
 
         retry(() => {
-          cy.login('judgecolvin');
+          loginAsColvin();
           navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
@@ -93,12 +97,12 @@ describe('Verify the activity report', () => {
 
     it('create a Submitted - Rule 122 case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.login('docketclerk');
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted - Rule 122', 'Colvin');
 
         retry(() => {
-          cy.login('judgecolvin');
+          loginAsColvin();
           navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
@@ -107,21 +111,21 @@ describe('Verify the activity report', () => {
 
     it('should not display a served decision type event code on the submitted and cav table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.login('docketclerk');
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
 
-        cy.login('docketclerk');
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
-        createOrderAndDecision(docketNumber);
+        createOrderAndDecision();
 
         retry(() => {
-          cy.login('judgecolvin');
+          loginAsColvin();
           navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
 
-        cy.login('docketclerk');
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
 
         cy.get('[data-testid="tab-drafts"]').click();
@@ -132,7 +136,7 @@ describe('Verify the activity report', () => {
         cy.get('[data-testid="print-paper-service-done-button"]').click();
 
         retry(() => {
-          cy.login('judgecolvin');
+          loginAsColvin();
           navigateToJudgeActivityReport('submitted-and-cav');
           return assertDoesNotExist(`[data-testid="${docketNumber}"]`);
         });
@@ -141,10 +145,10 @@ describe('Verify the activity report', () => {
 
     it('should display a stricken decision type documents on the submitted and cav table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.login('docketclerk');
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
-        createOrderAndDecision(docketNumber);
+        createOrderAndDecision();
 
         cy.get('[data-testid="tab-drafts"]').click();
         cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
@@ -162,7 +166,7 @@ describe('Verify the activity report', () => {
         cy.get('[data-testid="modal-button-confirm"]').click();
 
         retry(() => {
-          cy.login('judgecolvin');
+          loginAsColvin();
           navigateToJudgeActivityReport('submitted-and-cav');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
@@ -172,19 +176,19 @@ describe('Verify the activity report', () => {
     it('should display lead case of a consolidated group', () => {
       createAndServePaperPetition().then(
         ({ docketNumber: childDocketNumber }) => {
-          cy.login('docketclerk');
+          loginAsDocketClerk();
           searchByDocketNumberInHeader(childDocketNumber);
           updateCaseStatus('Submitted', 'Colvin');
 
           createAndServePaperPetition({ yearReceived: '2019' }).then(
             ({ docketNumber: leadDocketNumber }) => {
-              cy.login('docketclerk');
+              loginAsDocketClerk();
               searchByDocketNumberInHeader(leadDocketNumber);
               updateCaseStatus('Submitted', 'Colvin');
               addCaseToGroup(childDocketNumber);
 
               retry(() => {
-                cy.login('judgecolvin');
+                loginAsColvin();
                 navigateToJudgeActivityReport('submitted-and-cav');
                 return assertExists(`[data-testid="${leadDocketNumber}"]`).then(
                   isLeadVisible => {
@@ -204,7 +208,7 @@ describe('Verify the activity report', () => {
   describe('Pending Motions Table', () => {
     it('should display Pending Motions for judge in that report', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.login('docketclerk');
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
         searchByDocketNumberInHeader(docketNumber);
@@ -218,7 +222,7 @@ describe('Verify the activity report', () => {
           .invoke('attr', 'data-testid')
           .then(docketEntryId => {
             retry(() => {
-              cy.login('judgecolvin');
+              loginAsColvin();
               navigateToJudgeActivityReport('pending-motions');
               return assertExists(
                 `[data-testid="pending-motion-row-${docketEntryId}"]`,
