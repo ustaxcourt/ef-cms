@@ -53,7 +53,6 @@ export const StateDrivenFileInput = connect(
           onChange={e => {
             const { name: inputName } = e.target;
             limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-              console.log('inputName', inputName);
               const uploadedFile = e.target.files[0];
               cloneFile(uploadedFile)
                 .then(clonedFile => {
