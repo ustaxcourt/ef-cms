@@ -11,7 +11,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @param {object} providers the providers object
  * @param {Array} providers.documentFiles array of file objects
  * @param {object} providers.documentMetadata metadata associated with the documents/cases
- * @param {string} providers.progressFunctions callback functions for updating the progress indicator during file upload
+ * @param {string} providers.fileUploadProgressMap callback functions for updating the progress indicator during file upload
  * @returns {Promise<Object>} the case details with the uploaded document(s) attached
  */
 export const uploadExternalDocumentsInteractor = async (
@@ -19,11 +19,11 @@ export const uploadExternalDocumentsInteractor = async (
   {
     documentFiles,
     documentMetadata,
-    progressFunctions,
+    fileUploadProgressMap,
   }: {
     documentFiles: Record<string, any>;
     documentMetadata: any;
-    progressFunctions: Record<string, any>;
+    fileUploadProgressMap: Record<string, any>;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -37,8 +37,8 @@ export const uploadExternalDocumentsInteractor = async (
   documentMetadata.primaryDocumentId = await applicationContext
     .getUseCases()
     .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: progressFunctions.primary.file,
-      onUploadProgress: progressFunctions.primary.uploadProgress,
+      document: fileUploadProgressMap.primary.file,
+      onUploadProgress: fileUploadProgressMap.primary.uploadProgress,
     });
   docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
 
@@ -46,8 +46,8 @@ export const uploadExternalDocumentsInteractor = async (
     documentMetadata.secondaryDocument.docketEntryId = await applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: progressFunctions.secondary.file,
-        onUploadProgress: progressFunctions.secondary.uploadProgress,
+        document: fileUploadProgressMap.secondary.file,
+        onUploadProgress: fileUploadProgressMap.secondary.uploadProgress,
       });
     docketEntryIdsAdded.push(documentMetadata.secondaryDocument.docketEntryId);
   }
@@ -58,9 +58,9 @@ export const uploadExternalDocumentsInteractor = async (
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: progressFunctions[`primarySupporting${i}`].file,
+            document: fileUploadProgressMap[`primarySupporting${i}`].file,
             onUploadProgress:
-              progressFunctions[`primarySupporting${i}`].uploadProgress,
+              fileUploadProgressMap[`primarySupporting${i}`].uploadProgress,
           });
       docketEntryIdsAdded.push(
         documentMetadata.supportingDocuments[i].docketEntryId,
@@ -78,9 +78,9 @@ export const uploadExternalDocumentsInteractor = async (
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: progressFunctions[`secondarySupporting${i}`].file,
+            document: fileUploadProgressMap[`secondarySupporting${i}`].file,
             onUploadProgress:
-              progressFunctions[`secondarySupporting${i}`].uploadProgress,
+              fileUploadProgressMap[`secondarySupporting${i}`].uploadProgress,
           });
       docketEntryIdsAdded.push(
         documentMetadata.secondarySupportingDocuments[i].docketEntryId,

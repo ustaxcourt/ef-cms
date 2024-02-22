@@ -11,14 +11,14 @@ export const saveCaseDetailInternalEditAction = async ({
     STATUS_TYPES,
   } = applicationContext.getConstants();
   const originalCase = get(state.caseDetail);
-  const { uploadProgressCallbackMap } = props;
+  const { fileUploadProgressMap } = props;
   const caseToUpdate = get(state.form);
 
   const keys = Object.keys(INITIAL_DOCUMENT_TYPES);
 
   for (const key of keys) {
     const fileKey = INITIAL_DOCUMENT_TYPES_FILE_MAP[key];
-    if (uploadProgressCallbackMap[fileKey]) {
+    if (fileUploadProgressMap[fileKey]) {
       if (fileKey === 'petitionFile') {
         const oldPetitionDocument = originalCase.docketEntries.find(
           document =>
@@ -28,16 +28,16 @@ export const saveCaseDetailInternalEditAction = async ({
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: uploadProgressCallbackMap[fileKey].file,
+            document: fileUploadProgressMap[fileKey].file,
             key: oldPetitionDocument.docketEntryId,
-            onUploadProgress: uploadProgressCallbackMap[fileKey].uploadProgress,
+            onUploadProgress: fileUploadProgressMap[fileKey].uploadProgress,
           });
       } else {
         const newDocketEntryId = await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: uploadProgressCallbackMap[fileKey].file,
-            onUploadProgress: uploadProgressCallbackMap[fileKey].uploadProgress,
+            document: fileUploadProgressMap[fileKey].file,
+            onUploadProgress: fileUploadProgressMap[fileKey].uploadProgress,
           });
 
         let { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];

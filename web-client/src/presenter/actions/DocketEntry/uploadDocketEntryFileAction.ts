@@ -1,3 +1,4 @@
+import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const uploadDocketEntryFileAction = async ({
@@ -5,16 +6,18 @@ export const uploadDocketEntryFileAction = async ({
   get,
   path,
   props,
-}: ActionProps) => {
+}: ActionProps<{
+  fileUploadProgressMap: FileUploadProgressMapType;
+}>) => {
   const docketEntryId = get(state.docketEntryId);
-  const { uploadProgressCallbackMap } = props;
+  const { fileUploadProgressMap } = props;
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
       .uploadDocumentInteractor(applicationContext, {
-        documentFile: uploadProgressCallbackMap.primary.file,
+        documentFile: fileUploadProgressMap.primary.file,
         key: docketEntryId,
-        onUploadProgress: uploadProgressCallbackMap.primary.onUploadProgress,
+        onUploadProgress: fileUploadProgressMap.primary.uploadProgress,
       });
 
     return path.success({
