@@ -40,21 +40,12 @@ export const getNotificationsInteractor = async (
 }> => {
   const appContextUser = applicationContext.getCurrentUser();
 
-  applicationContext.logger.info('getNotificationsInteractor start', {
-    appContextUser,
-  });
-
   const [currentUser, judgeUser] = await Promise.all([
     applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId: appContextUser.userId }),
     getJudgeUser(judgeUserId, applicationContext, appContextUser.role),
   ]);
-
-  applicationContext.logger.info('getNotificationsInteractor getUser', {
-    currentUser,
-    judgeUser,
-  });
 
   const { section, userId } = caseServicesSupervisorData || currentUser;
 
@@ -66,21 +57,12 @@ export const getNotificationsInteractor = async (
     sectionToDisplay = caseServicesSupervisorData.section;
   }
 
-  const filters = applicationContext
-    .getUtilities()
-    .getWorkQueueFilters({ section: sectionToDisplay, user: currentUser });
-
-  applicationContext.logger.info(
-    'getNotificationsInteractor about to start queries',
-    {
-      sectionToDisplay,
-    },
-  );
-
   const [
     userInbox,
     sectionInbox,
+    documentQcIndividualInProgress,
     documentQCIndividualInbox,
+    documentQcSectionInProgress,
     documentQCSectionInbox,
   ] = await Promise.all([
     applicationContext.getPersistenceGateway().getUserInboxMessages({
@@ -96,6 +78,17 @@ export const getNotificationsInteractor = async (
       box: 'inbox',
       userId,
     }),
+    applicationContext.getPersistenceGateway().getDocumentQCForUser({
+      applicationContext,
+      box: 'inProgress',
+      userId,
+    }),
+    applicationContext.getPersistenceGateway().getDocumentQCForSection({
+      applicationContext,
+      box: 'inbox',
+      judgeUserName: judgeUser ? judgeUser.name : null,
+      section: sectionToDisplay,
+    }),
     applicationContext.getPersistenceGateway().getDocumentQCForSection({
       applicationContext,
       box: 'inbox',
@@ -104,41 +97,15 @@ export const getNotificationsInteractor = async (
     }),
   ]);
 
-  applicationContext.logger.info(
-    'getNotificationsInteractor queries complete',
-    {
-      documentQCIndividualInbox: documentQCIndividualInbox.length,
-      documentQCSectionInbox: documentQCSectionInbox.length,
-      sectionInbox: sectionInbox.length,
-      userInbox: userInbox.length,
-    },
-  );
+  const qcIndividualInProgressCount = documentQcIndividualInProgress.length;
+  const qcIndividualInboxCount = documentQCIndividualInbox.length;
 
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
-    filters['my']['inProgress'],
-  ).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
-    filters['my']['inbox'],
-  ).length;
-
-  const qcSectionInProgressCount = documentQCSectionInbox.filter(
-    filters['section']['inProgress'],
-  ).length;
-  const qcSectionInboxCount = documentQCSectionInbox.filter(
-    filters['section']['inbox'],
-  ).length;
+  const qcSectionInProgressCount = documentQcSectionInProgress.length;
+  const qcSectionInboxCount = documentQCSectionInbox.length;
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
   ).length;
-
-  applicationContext.logger.info('getNotificationsInteractor done filtering', {
-    qcIndividualInProgressCount,
-    qcIndividualInboxCount,
-    qcSectionInProgressCount,
-    qcSectionInboxCount,
-    unreadMessageCount,
-  });
 
   return {
     qcIndividualInProgressCount,
