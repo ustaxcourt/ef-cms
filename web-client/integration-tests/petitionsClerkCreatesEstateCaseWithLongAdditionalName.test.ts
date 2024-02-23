@@ -6,7 +6,13 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  fakeFile,
+  loginAs,
+  setupTest,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
+} from './helpers';
 
 describe('Petitions clerk creates Estate case with long additionalName', () => {
   const cerebralTest = setupTest();
@@ -138,6 +144,9 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
     await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     expect(cerebralTest.getState('currentPage')).toEqual(
       'PrintPaperPetitionReceipt',
