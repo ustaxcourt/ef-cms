@@ -23,11 +23,11 @@ describe('Petitioner Updates e-mail', () => {
   });
 
   /*
-  Given a petitioner with a DAWSON account
-  When they log in and change their email
-  And they do not verify their new email
-  And attempt to log in
-  Then they should be alerted that they need to confirm their new email
+    Given a petitioner with a DAWSON account
+    When they log in and change their email
+    And they do not verify their new email
+    And attempt to log in
+    Then they should be alerted that they need to confirm their new email
   */
   it('should alert the petitioner that they need to verify their new email address when the user changes their email but does not verify their new email', () => {
     const username = `cypress_test_account+old${v4()}`;
@@ -57,10 +57,10 @@ describe('Petitioner Updates e-mail', () => {
   });
 
   /*
-  Given a petitioner with a DAWSON account
-  When they log in and change their email
-  And they verify the new email
-  Then they should be able to log in using the updated email and all of their associated cases should be updated with the new email
+    Given a petitioner with a DAWSON account
+    When they log in and change their email
+    And they verify the new email
+    Then they should be able to log in using the updated email and all of their associated cases should be updated with the new email
   */
   it('should allow a petitioner to login with their updated email and have all associated cases updated with the new email when the user changes their email address and verifies it', () => {
     const username = `cypress_test_account+${v4()}`;
