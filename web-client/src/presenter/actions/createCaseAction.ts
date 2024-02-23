@@ -9,8 +9,6 @@ export const createCaseAction = async ({
 }: ActionProps) => {
   const { fileUploadProgressMap } = props;
   const petitionMetadata = get(state.form);
-  console.log('fileUploadProgressMap', fileUploadProgressMap);
-  console.log('petitionMetadata', petitionMetadata);
 
   const form = omit(petitionMetadata, 'trialCities');
 
