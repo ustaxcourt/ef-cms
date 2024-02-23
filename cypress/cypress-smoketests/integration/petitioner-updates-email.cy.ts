@@ -8,6 +8,7 @@ import {
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 import { faker } from '@faker-js/faker';
+import { logout } from '../../helpers/auth/logout';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
@@ -61,6 +62,7 @@ describe('Petitioner Updates e-mail', () => {
     When they log in and change their email
     And they verify the new email
     Then they should be able to log in using the updated email and all of their associated cases should be updated with the new email
+    And they should NOT be able to log in using their old email
   */
   it('should allow a petitioner to login with their updated email and have all associated cases updated with the new email when the user changes their email address and verifies it', () => {
     const username = `cypress_test_account+${v4()}`;
@@ -69,16 +71,17 @@ describe('Petitioner Updates e-mail', () => {
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
+
     cy.login(username);
 
     petitionerCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
+      const updatedUsername = `cypress_test_account+${v4()}`;
+      const updatedEmail = `${updatedUsername}@example.com`;
       cy.login(username);
       goToMyAccount();
       clickChangeEmail();
-      const updatedUsername = `cypress_test_account+${v4()}`;
-      const updatedEmail = `${updatedUsername}@example.com`;
       changeEmailTo(updatedEmail);
       clickConfirmModal();
       confirmEmailPendingAlert();
@@ -88,6 +91,7 @@ describe('Petitioner Updates e-mail', () => {
       }).then(verificationToken => {
         cy.visit(`/verify-email?token=${verificationToken}`);
       });
+
       cy.get('[data-testid="success-alert"]')
         .should('be.visible')
         .and(
@@ -123,5 +127,15 @@ describe('Petitioner Updates e-mail', () => {
         updatedEmail,
       );
     });
+    logout();
+
+    // The code below will fail on cognito-local
+    cy.visit('/login');
+    cy.get('[data-testid="email-input"]').type(email);
+    cy.get('[data-testid="password-input"]').type(password);
+    cy.get('[data-testid="login-button"]').click();
+    cy.get('[data-testid="error-alert"]').contains(
+      'The email address or password you entered is invalid.',
+    );
   });
 });
