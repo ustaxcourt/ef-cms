@@ -130,12 +130,14 @@ describe('Petitioner Updates e-mail', () => {
     logout();
 
     // The code below will fail on cognito-local
-    cy.visit('/login');
-    cy.get('[data-testid="email-input"]').type(email);
-    cy.get('[data-testid="password-input"]').type(password);
-    cy.get('[data-testid="login-button"]').click();
-    cy.get('[data-testid="error-alert"]').contains(
-      'The email address or password you entered is invalid.',
-    );
+    if (cypressEnv.env !== 'local') {
+      cy.visit('/login');
+      cy.get('[data-testid="email-input"]').type(email);
+      cy.get('[data-testid="password-input"]').type(password);
+      cy.get('[data-testid="login-button"]').click();
+      cy.get('[data-testid="error-alert"]').contains(
+        'The email address or password you entered is invalid.',
+      );
+    }
   });
 });
