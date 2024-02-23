@@ -1,6 +1,6 @@
 import { attachDummyFile } from './attach-file';
 
-export function petitionerCreatesElectronicCaseWithDeseasedSpouse(
+export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
   primaryFilerName = 'John',
   secondaryFilerName = 'Sally',
 ) {

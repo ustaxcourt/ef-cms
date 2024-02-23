@@ -8,7 +8,7 @@ import {
 } from '../../helpers/auth/login-as-helpers';
 import {
   petitionerCreatesElectronicCase,
-  petitionerCreatesElectronicCaseWithDeseasedSpouse,
+  petitionerCreatesElectronicCaseWithDeceasedSpouse,
 } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
@@ -22,7 +22,7 @@ describe('Private Practitioner requests access to case', () => {
       const secondaryFilerName = 'Sally';
 
       loginAsPetitioner();
-      petitionerCreatesElectronicCaseWithDeseasedSpouse(
+      petitionerCreatesElectronicCaseWithDeceasedSpouse(
         primaryFilerName,
         secondaryFilerName,
       ).then(docketNumber => {
@@ -93,7 +93,7 @@ describe('Private Practitioner requests access to case', () => {
       const secondaryFilerName = 'Sally';
 
       loginAsPetitioner();
-      petitionerCreatesElectronicCaseWithDeseasedSpouse(
+      petitionerCreatesElectronicCaseWithDeceasedSpouse(
         primaryFilerName,
         secondaryFilerName,
       ).then(docketNumber => {
