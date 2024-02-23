@@ -267,12 +267,9 @@ describe('createCaseInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {
+  it('should create a case successfully with "Attachment to Petition" document', async () => {
     const result = await createCaseInteractor(applicationContext, {
-      atpFileIds: [
-        'f09116b1-6a8c-4198-b661-0f06e9c6cbdc',
-        '9b969ca9-e3c3-4b35-bdff-10a4a31c01c6',
-      ],
+      atpFileId: 'f09116b1-6a8c-4198-b661-0f06e9c6cbdc',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
@@ -303,12 +300,12 @@ describe('createCaseInteractor', () => {
       stinFileId: '96759830-8970-486f-916b-23439a8ebb70',
     });
 
-    const atpDocketEntries = result.docketEntries.filter(
+    const atpDocketEntry = result.docketEntries.find(
       d =>
         d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
 
-    expect(atpDocketEntries.length).toEqual(2);
+    expect(atpDocketEntry).toBeDefined();
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
