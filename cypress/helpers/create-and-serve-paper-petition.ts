@@ -83,7 +83,7 @@ export function createAndServePaperPetition(
       );
       cy.get('.usa-search-submit-text').click();
 
-      cy.get('[data-test-case-attribute="status"]').should(
+      cy.get('[data-testid="case-status"]').should(
         'have.text',
         'General Docket - Not at Issue',
       );
@@ -97,11 +97,12 @@ export function createAndServePaperPetition(
       ];
 
       expectedDocuments.forEach(({ eventCode, index, servedTo }) => {
+        cy.get(`[data-testid="docket-entry-index-${index}-eventCode"]`).should(
+          'have.text',
+          eventCode,
+        );
         cy.get(
-          `[data-test-document-index="${index}"] > [data-test-document-meta="eventCode"]`,
-        ).should('have.text', eventCode);
-        cy.get(
-          `[data-test-document-index="${index}"] > [data-test-document-meta="servedPartiesCode"]`,
+          `[data-testid="docket-entry-index-${index}-servedPartiesCode"]`,
         ).should('have.text', servedTo);
       });
 
