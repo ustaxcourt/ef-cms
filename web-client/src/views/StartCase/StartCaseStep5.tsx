@@ -87,13 +87,10 @@ export const StartCaseStep5 = connect(
                             </span>
                             {form.attachmentToPetitionFile ? (
                               <div>
-                                <div
-                                  className="grid-row"
-                                  data-testid="attachment-to-petition-pdfs"
-                                >
+                                <div className="grid-row">
                                   <div className="grid-col flex-auto">
                                     <PDFPreviewButton
-                                      data-testid={'atp-preview-button'}
+                                      data-testid="atp-preview-button"
                                       file={form.attachmentToPetitionFile}
                                       id="atp-preview-button"
                                       shouldAbbreviateTitle={false}
