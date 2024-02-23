@@ -24,7 +24,10 @@ export const getCaseInventoryReport = async ({
   from?: number;
   pageSize?: number;
   status?: string;
-}) => {
+}): Promise<{
+  foundCases: RawCase[];
+  totalCount: number;
+}> => {
   const source = [
     'associatedJudge',
     'caseCaption',

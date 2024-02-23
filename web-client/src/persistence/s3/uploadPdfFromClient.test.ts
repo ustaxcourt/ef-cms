@@ -120,6 +120,7 @@ describe('uploadPdfFromClient', () => {
       applicationContext.getHttpClient().post.mockResolvedValue(null);
 
       loadMock = {
+        isEncrypted: false,
         save: jest.fn(),
         setAuthor: jest.fn(),
         setCreationDate: jest.fn(),
@@ -141,7 +142,7 @@ describe('uploadPdfFromClient', () => {
     describe('cleanFileMetadata', () => {
       it('should clear out all metadata from PDF', async () => {
         const TEST_STRING =
-          'FINAL<photoshop:AuthorsPosition>test</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
+          'FINAL<photoshop:AuthorsPosition>test</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords><dc:subject>.*?</dc:subject>';
 
         const modifiedPdfBytes = new Uint8Array(TEST_STRING.length);
         for (let i = 0; i < TEST_STRING.length; i++) {
@@ -150,10 +151,16 @@ describe('uploadPdfFromClient', () => {
 
         loadMock.save.mockReturnValue(modifiedPdfBytes);
 
+        const pdfContent = new Uint8Array([37, 80, 68, 70, 45, 49, 46, 51]); // bytes representing "%PDF-1.3"
+
+        const fileReaderMock = {
+          result: pdfContent,
+        };
+
         const pdfBytes = await cleanFileMetadata(
           TEST_TITLE,
           pdfLibMock,
-          {} as FileReader,
+          fileReaderMock as unknown as FileReader,
         );
 
         expect(loadMock.setTitle).toHaveBeenCalledWith(TEST_TITLE);
@@ -163,10 +170,10 @@ describe('uploadPdfFromClient', () => {
         expect(loadMock.setCreationDate).toHaveBeenCalled();
         expect(loadMock.setModificationDate).toHaveBeenCalled();
 
-        expect(pdfBytes.toString()).toEqual(
+        expect(pdfBytes?.toString()).toEqual(
           new TextEncoder()
             .encode(
-              'FINAL<photoshop:AuthorsPosition>    </photoshop:AuthorsPosition><photoshop:CaptionWriter>   </photoshop:CaptionWriter><pdf:Keywords>   </pdf:Keywords>',
+              'FINAL<photoshop:AuthorsPosition>    </photoshop:AuthorsPosition><photoshop:CaptionWriter>   </photoshop:CaptionWriter><pdf:Keywords>   </pdf:Keywords><dc:subject>   </dc:subject>',
             )
             .toString(),
         );
@@ -196,6 +203,7 @@ describe('uploadPdfFromClient', () => {
         global.FileReader = jest.fn(() => ({
           addEventListener: addEventListenerMock,
           readAsArrayBuffer: readAsArrayBufferMock,
+          result: '%PDF- sample data',
         })) as any;
 
         await readAndCleanFileMetadata(title, file, pdfLibMock);
@@ -231,6 +239,121 @@ describe('uploadPdfFromClient', () => {
         await expect(
           readAndCleanFileMetadata(title, file, pdfLibMock),
         ).rejects.toBe('Failed to read file');
+      });
+
+      it('should return the original file if the file is encrypted', async () => {
+        const TEST_STRING =
+          'FINAL<photoshop:AuthorsPosition>test</photoshop:AuthorsPosition><photoshop:CaptionWriter>.*?</photoshop:CaptionWriter><pdf:Keywords>.*?</pdf:Keywords>';
+
+        const pdfDocMock = {
+          isEncrypted: true,
+          setAuthor: jest.fn(),
+          setCreationDate: jest.fn(),
+          setKeywords: jest.fn(),
+          setModificationDate: jest.fn(),
+          setSubject: jest.fn(),
+          setTitle: jest.fn(),
+        };
+
+        const pdfLibMock2 = {
+          PDFDocument: {
+            load: jest.fn().mockResolvedValue(pdfDocMock),
+          },
+        };
+
+        const fileReader = {
+          result: TEST_STRING,
+        };
+
+        const pdfBytes = await cleanFileMetadata(
+          TEST_TITLE,
+          pdfLibMock2,
+          fileReader as any,
+        );
+
+        expect(pdfBytes?.toString()).toEqual(TEST_STRING);
+        expect(pdfDocMock.setTitle).not.toHaveBeenCalled();
+        expect(pdfDocMock.setAuthor).not.toHaveBeenCalled();
+        expect(pdfDocMock.setSubject).not.toHaveBeenCalled();
+        expect(pdfDocMock.setKeywords).not.toHaveBeenCalled();
+        expect(pdfDocMock.setCreationDate).not.toHaveBeenCalled();
+        expect(pdfDocMock.setModificationDate).not.toHaveBeenCalled();
+      });
+
+      it('should return the original file when the file is not a valid PDF file', async () => {
+        const TEST_STRING = 'This is not a PDF file.';
+
+        const pdfLibMock2 = {
+          PDFDocument: {
+            load: jest.fn().mockRejectedValue(new Error('Invalid PDF format')),
+          },
+        };
+
+        const fileReader = {
+          result: TEST_STRING,
+        };
+
+        const pdfDocMock = {
+          isEncrypted: false,
+          save: jest.fn(),
+          setAuthor: jest.fn(),
+          setCreationDate: jest.fn(),
+          setKeywords: jest.fn(),
+          setModificationDate: jest.fn(),
+          setSubject: jest.fn(),
+          setTitle: jest.fn(),
+        };
+
+        pdfLibMock.PDFDocument.load.mockResolvedValue(pdfDocMock);
+
+        const pdfBytes = await cleanFileMetadata(
+          TEST_TITLE,
+          pdfLibMock2,
+          fileReader as any,
+        );
+
+        expect(pdfBytes?.toString()).toEqual(TEST_STRING);
+        expect(loadMock.setTitle).not.toHaveBeenCalled();
+        expect(loadMock.setAuthor).not.toHaveBeenCalled();
+        expect(loadMock.setSubject).not.toHaveBeenCalled();
+        expect(loadMock.setKeywords).not.toHaveBeenCalled();
+        expect(loadMock.setCreationDate).not.toHaveBeenCalled();
+        expect(loadMock.setModificationDate).not.toHaveBeenCalled();
+      });
+
+      it('should return the original file if the file is corrupted', async () => {
+        const TEST_STRING = 'This is not a PDF file.';
+
+        const fileReader = {
+          result: TEST_STRING,
+        };
+
+        const pdfDocMock = {
+          isEncrypted: false,
+          save: jest.fn(),
+          setAuthor: jest.fn(),
+          setCreationDate: jest.fn(),
+          setKeywords: jest.fn(),
+          setModificationDate: jest.fn(),
+          setSubject: jest.fn(),
+          setTitle: jest.fn(),
+        };
+
+        pdfLibMock.PDFDocument.load.mockResolvedValue(pdfDocMock);
+
+        const pdfBytes = await cleanFileMetadata(
+          TEST_TITLE,
+          pdfLibMock,
+          fileReader as any,
+        );
+
+        expect(pdfBytes?.toString()).toEqual(TEST_STRING);
+        expect(loadMock.setTitle).not.toHaveBeenCalled();
+        expect(loadMock.setAuthor).not.toHaveBeenCalled();
+        expect(loadMock.setSubject).not.toHaveBeenCalled();
+        expect(loadMock.setKeywords).not.toHaveBeenCalled();
+        expect(loadMock.setCreationDate).not.toHaveBeenCalled();
+        expect(loadMock.setModificationDate).not.toHaveBeenCalled();
       });
     });
   });

@@ -85,31 +85,24 @@ export const StartCaseStep5 = connect(
                             <span className="usa-label usa-label-display">
                               IRS notice(s)
                             </span>
-                            {form.attachmentToPetitionFiles?.length ? (
+                            {form.attachmentToPetitionFile ? (
                               <div>
-                                {form.attachmentToPetitionFiles.map(
-                                  (atpFile, index) => {
-                                    return (
-                                      <div
-                                        className="grid-row"
-                                        data-testid="attachment-to-petition-pdfs"
-                                        key={atpFile.name}
-                                      >
-                                        <div className="grid-col flex-auto">
-                                          <PDFPreviewButton
-                                            data-testid={`atp-preview-button-${index}`}
-                                            file={atpFile}
-                                            id="atp-preview-button"
-                                            shouldAbbreviateTitle={false}
-                                            shouldWrapText={true}
-                                            showIcon={false}
-                                            title="IRS Notice(s)"
-                                          />
-                                        </div>
-                                      </div>
-                                    );
-                                  },
-                                )}
+                                <div
+                                  className="grid-row"
+                                  data-testid="attachment-to-petition-pdfs"
+                                >
+                                  <div className="grid-col flex-auto">
+                                    <PDFPreviewButton
+                                      data-testid={'atp-preview-button'}
+                                      file={form.attachmentToPetitionFile}
+                                      id="atp-preview-button"
+                                      shouldAbbreviateTitle={false}
+                                      shouldWrapText={true}
+                                      showIcon={false}
+                                      title="IRS Notice(s)"
+                                    />
+                                  </div>
+                                </div>
                               </div>
                             ) : (
                               <div>N/A</div>

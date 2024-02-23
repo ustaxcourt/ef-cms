@@ -15,20 +15,28 @@ function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
   try {
     let resultString = convertBytesToString(pdfBytes);
 
-    ['photoshop:AuthorsPosition', 'photoshop:CaptionWriter', 'pdf:Keywords']
-      .map(tag => [`<${tag}>`, `</${tag}>`])
-      .forEach(([startTag, endTag]) => {
-        const startIndex = resultString.indexOf(startTag);
-        if (startIndex === -1) return;
-        const endIndex = resultString.indexOf(endTag, startIndex);
-        if (endIndex === -1) return;
-        const length = endIndex - startIndex - startTag.length;
-        const replacement = ' '.repeat(length);
-        resultString =
-          resultString.slice(0, startIndex + startTag.length) +
-          replacement +
-          resultString.slice(endIndex);
-      });
+    const tagsToRemove = [
+      'photoshop:AuthorsPosition',
+      'photoshop:CaptionWriter',
+      'pdf:Keywords',
+      'dc:subject',
+    ];
+
+    tagsToRemove.forEach(tag => {
+      const startTag = `<${tag}>`;
+      const endTag = `</${tag}>`;
+
+      const startIndex = resultString.indexOf(startTag);
+      if (startIndex === -1) return;
+      const endIndex = resultString.indexOf(endTag, startIndex);
+      if (endIndex === -1) return;
+      const length = endIndex - startIndex - startTag.length;
+      const replacement = ' '.repeat(length);
+      resultString =
+        resultString.slice(0, startIndex + startTag.length) +
+        replacement +
+        resultString.slice(endIndex);
+    });
 
     const modifiedPdfBytes = new Uint8Array(resultString.length);
     for (let i = 0; i < resultString.length; i++) {
@@ -40,15 +48,28 @@ function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
     return pdfBytes as unknown as BlobPart;
   }
 }
-
 export const cleanFileMetadata = async (
   title: string,
   pdfLib,
   fileReader: FileReader,
 ) => {
-  const pdfDoc = await pdfLib.PDFDocument.load(fileReader.result, {
-    updateMetadata: false,
-  });
+  let pdfDoc;
+  try {
+    pdfDoc = await pdfLib.PDFDocument.load(fileReader.result, {
+      ignoreEncryption: true,
+      updateMetadata: false,
+    });
+  } catch (error) {
+    return fileReader.result;
+  }
+
+  const pdfBytes = Array.from(new Uint8Array(fileReader.result));
+  const pdfString = convertBytesToString(pdfBytes);
+  const pdfHeaderString = pdfString.slice(0, 5);
+
+  if (pdfDoc.isEncrypted || pdfHeaderString !== '%PDF-') {
+    return fileReader.result;
+  }
 
   const cleanValue = '';
   pdfDoc.setTitle(title);

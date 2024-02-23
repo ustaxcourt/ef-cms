@@ -7,8 +7,8 @@ import {
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
 import {
-  petitionerCreatesEletronicCase,
-  petitionerCreatesEletronicCaseWithDeseasedSpouse,
+  petitionerCreatesElectronicCase,
+  petitionerCreatesElectronicCaseWithDeseasedSpouse,
 } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
@@ -22,7 +22,7 @@ describe('Private Practitioner requests access to case', () => {
       const secondaryFilerName = 'Sally';
 
       loginAsPetitioner();
-      petitionerCreatesEletronicCaseWithDeseasedSpouse(
+      petitionerCreatesElectronicCaseWithDeseasedSpouse(
         primaryFilerName,
         secondaryFilerName,
       ).then(docketNumber => {
@@ -59,37 +59,31 @@ describe('Private Practitioner requests access to case', () => {
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
-      petitionerCreatesEletronicCase({ primaryFilerName }).then(
-        docketNumber => {
-          petitionsClerkServesPetition(docketNumber);
+      petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+        petitionsClerkServesPetition(docketNumber);
 
-          loginAsDocketClerk();
-          searchByDocketNumberInHeader(docketNumber);
-          addIntervenorAsPartyToCase();
+        loginAsDocketClerk();
+        searchByDocketNumberInHeader(docketNumber);
+        addIntervenorAsPartyToCase();
 
-          loginAsPrivatePractitioner();
-          externalUserSearchesDocketNumber(docketNumber);
-          cy.get('[data-testid="button-request-access"]').click();
-          selectTypeaheadInput('document-type', 'Entry of Appearance');
-          cy.get(
-            `[data-testid="filer-${primaryFilerName}, Petitioner"]`,
-          ).click();
-          cy.get('[data-testid="auto-generation"]').should('exist');
-          cy.get('[data-testid="request-access-submit-document"]').click();
+        loginAsPrivatePractitioner();
+        externalUserSearchesDocketNumber(docketNumber);
+        cy.get('[data-testid="button-request-access"]').click();
+        selectTypeaheadInput('document-type', 'Entry of Appearance');
+        cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
+        cy.get('[data-testid="auto-generation"]').should('exist');
+        cy.get('[data-testid="request-access-submit-document"]').click();
 
-          cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
-            'exist',
-          );
-          cy.get(
-            '[data-testid="request-access-review-submit-document"]',
-          ).click();
+        cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
+          'exist',
+        );
+        cy.get('[data-testid="request-access-review-submit-document"]').click();
 
-          cy.get('[data-testid="document-download-link-EA"]').should(
-            'have.text',
-            `Entry of Appearance for Petr. ${primaryFilerName}`,
-          );
-        },
-      );
+        cy.get('[data-testid="document-download-link-EA"]').should(
+          'have.text',
+          `Entry of Appearance for Petr. ${primaryFilerName}`,
+        );
+      });
     });
   });
 
@@ -99,7 +93,7 @@ describe('Private Practitioner requests access to case', () => {
       const secondaryFilerName = 'Sally';
 
       loginAsPetitioner();
-      petitionerCreatesEletronicCaseWithDeseasedSpouse(
+      petitionerCreatesElectronicCaseWithDeseasedSpouse(
         primaryFilerName,
         secondaryFilerName,
       ).then(docketNumber => {
