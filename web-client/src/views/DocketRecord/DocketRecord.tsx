@@ -89,7 +89,10 @@ export const DocketRecord = connect(
                             {entry.createdAtFormatted}
                           </span>
                         </td>
-                        <td className="center-column hide-on-mobile">
+                        <td
+                          className="center-column hide-on-mobile"
+                          data-testid={`docket-entry-index-${entry.index}-eventCode`}
+                        >
                           {entry.eventCode}
                         </td>
                         <td aria-hidden="true" className="filing-type-icon">
@@ -118,7 +121,10 @@ export const DocketRecord = connect(
                             <span>{entry.servedAtFormatted}</span>
                           )}
                         </td>
-                        <td className="center-column hide-on-mobile">
+                        <td
+                          className="center-column hide-on-mobile"
+                          data-testid={`docket-entry-index-${entry.index}-servedPartiesCode`}
+                        >
                           {entry.showServed && entry.servedPartiesCode}
                         </td>
                         {docketRecordHelper.showEditOrSealDocketRecordEntry && (
