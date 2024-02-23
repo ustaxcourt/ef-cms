@@ -2,7 +2,7 @@ data "archive_file" "zip_public_authorizer" {
   type        = "zip"
   output_path = "${path.module}/lambdas/public-api-authorizer.js.zip"
   source_dir = "${path.module}/lambdas/dist/"
-  excludes = setsubtract(data.null_data_source.template_lambdas.outputs, ["public-api-authorizer.js"])
+  excludes = setsubtract(var.template_lambdas, ["public-api-authorizer.js"])
 }
 
 resource "aws_lambda_function" "public_api_authorizer_lambda" {
