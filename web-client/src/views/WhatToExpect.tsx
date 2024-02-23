@@ -70,9 +70,9 @@ export const WhatToExpect = () => (
           <ol type="a">
             <li>Submit a PDF of the Notice(s) you received. </li>
             <li>
-              Remove or block out (redact) your Social Security Number (SSN),
-              Tax Identification Number (TIN) , or Employer Identification
-              Number (EIN) on a COPY of the IRS Notice(s) or in a manner that
+              Remove or block out (redact) your Social Security Numbers (SSN),
+              Taxpayer Identification Numbers (TIN) , or Employer Identification
+              Numbers (EIN) on a COPY of the IRS Notice(s) or in a manner that
               does not permanently alter the original IRS Notice(s).
             </li>
             <li>The Notice(s) will be part of the case record.</li>
@@ -138,7 +138,7 @@ export const WhatToExpect = () => (
         petition.{' '}
         <span className="text-bold">
           In most cases, the Court must receive your electronically filed
-          Petition no later than 11:59 pm Eastern on the last day to file.{' '}
+          Petition no later than 11:59 pm Eastern Time on the last day to file.{' '}
         </span>
         Petitions received after this date may be untimely and your case may be
         dismissed for lack of jurisdiction.
