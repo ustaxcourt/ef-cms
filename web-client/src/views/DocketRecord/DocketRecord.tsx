@@ -73,7 +73,6 @@ export const DocketRecord = connect(
                           entry.isInProgress && 'in-progress',
                           entry.qcWorkItemsUntouched && 'qc-untouched',
                         )}
-                        data-test-document-index={entry.index}
                         data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
@@ -92,7 +91,7 @@ export const DocketRecord = connect(
                         </td>
                         <td
                           className="center-column hide-on-mobile"
-                          data-test-document-meta="eventCode"
+                          data-testid={`docket-entry-index-${entry.index}-eventCode`}
                         >
                           {entry.eventCode}
                         </td>
@@ -124,7 +123,7 @@ export const DocketRecord = connect(
                         </td>
                         <td
                           className="center-column hide-on-mobile"
-                          data-test-document-meta="servedPartiesCode"
+                          data-testid={`docket-entry-index-${entry.index}-servedPartiesCode`}
                         >
                           {entry.showServed && entry.servedPartiesCode}
                         </td>

@@ -182,7 +182,7 @@ export const CaseDetailHeader = connect(
                           'usa-tag',
                           formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
                         )}
-                        data-test-case-attribute="status"
+                        data-testid="case-status"
                       >
                         <span aria-hidden="true">
                           {formattedCaseDetail.status}

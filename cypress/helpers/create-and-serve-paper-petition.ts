@@ -54,6 +54,13 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
 
+  cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
+  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('input#attachmentToPetitionFile-file').attachFile(
+    '../fixtures/w3-dummy.pdf',
+  );
+  cy.get('[data-testid="remove-pdf"]');
+
   cy.get('[data-testid="tabButton-corporateDisclosureFile"]').click();
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#corporateDisclosureFile-file').attachFile(
@@ -67,12 +74,6 @@ export function createAndServePaperPetition(
     '../fixtures/w3-dummy.pdf',
   );
 
-  cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
-  cy.get('input#attachmentToPetitionFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
-  );
-  cy.get('[data-testid="remove-pdf"]');
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy
     .get('.docket-number-header a')
@@ -89,7 +90,7 @@ export function createAndServePaperPetition(
       );
       cy.get('.usa-search-submit-text').click();
 
-      cy.get('[data-test-case-attribute="status"]').should(
+      cy.get('[data-testid="case-status"]').should(
         'have.text',
         'General Docket - Not at Issue',
       );
@@ -104,11 +105,12 @@ export function createAndServePaperPetition(
       ];
 
       expectedDocuments.forEach(({ eventCode, index, servedTo }) => {
+        cy.get(`[data-testid="docket-entry-index-${index}-eventCode"]`).should(
+          'have.text',
+          eventCode,
+        );
         cy.get(
-          `[data-test-document-index="${index}"] > [data-test-document-meta="eventCode"]`,
-        ).should('have.text', eventCode);
-        cy.get(
-          `[data-test-document-index="${index}"] > [data-test-document-meta="servedPartiesCode"]`,
+          `[data-testid="docket-entry-index-${index}-servedPartiesCode"]`,
         ).should('have.text', servedTo);
       });
 
