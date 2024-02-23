@@ -1,3 +1,24 @@
+  
+  locals {
+    excludedList =  [
+      "api-public.js",
+      "api.js",
+      "cognito-authorizer.js",
+      "cognito-triggers.js",
+      "cron.js",
+      "handle-bounced-service-email.js",
+      "maintenance-notify.js",
+      "pdf-generation.js",
+      "public-api-authorizer.js",
+      "report.html",
+      "seal-in-lower-environment.js",
+      "send-emails.js",
+      "streams.js",
+      "trial-session.js",
+      "websockets.js",
+  ]
+  }
+
 resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.lambdas"
   acl    = "private"
@@ -26,89 +47,28 @@ data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-    "websockets.js",
-    "trial-session.js",
-    "send-emails.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes = setsubtract(local.excludedList, ["api.js"])
 }
 
 data "archive_file" "zip_send_emails" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/send_emails.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-    "api.js",
-    "trial-session.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes = setsubtract(local.excludedList, ["send_emails.js"])
 }
 
 data "archive_file" "zip_trial_session" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/trial_session.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-    "api.js",
-    "websockets.js",
-    "send-emails.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes = setsubtract(local.excludedList, ["trial_session.js"])
 }
 
 data "archive_file" "zip_triggers" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/cognito-triggers.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api.js",
-    "api-public.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "trial-session.js",
-    "send-emails.js",
-    "seal-in-lower-environment.js",
-    "cron.js",
-    "streams.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes = setsubtract(local.excludedList, ["cognito-triggers.js"])
 }
 
 
@@ -116,21 +76,7 @@ data "archive_file" "pdf_generation" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/pdf-generation.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api.js",
-    "api-public.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "trial-session.js",
-    "send-emails.js",
-    "seal-in-lower-environment.js",
-    "cron.js",
-    "streams.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "report.html"
-  ]
+  excludes = setsubtract(local.excludedList, ["pdf-generation.js"])
 }
 
 resource "null_resource" "pdf_generation_east_object" {
@@ -192,7 +138,8 @@ resource "null_resource" "trial_session_east_object" {
 data "archive_file" "zip_websockets" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/websockets.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/websockets.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = setsubtract(local.excludedList, ["websockets.js"])
 }
 
 resource "null_resource" "websockets_east_object" {
@@ -209,7 +156,8 @@ resource "null_resource" "websockets_east_object" {
 data "archive_file" "zip_maintenance_notify" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/maintenance-notify.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/maintenance-notify.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = setsubtract(local.excludedList, ["maintenance-notify.js"])
 }
 
 resource "null_resource" "maintenance_notify_east_object" {
@@ -227,22 +175,7 @@ data "archive_file" "zip_api_public" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api-public.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api.js",
-    "trial-session.js",
-    "send-emails.js",
-    "api.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes = setsubtract(local.excludedList, ["api-public.js"])
 }
 
 resource "null_resource" "api_public_east_object" {
@@ -271,7 +204,8 @@ resource "null_resource" "puppeteer_layer_east_object" {
 data "archive_file" "zip_cron" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/cron.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/cron.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = setsubtract(local.excludedList, ["cron.js"])
 }
 
 resource "null_resource" "cron_east_object" {
@@ -288,7 +222,8 @@ resource "null_resource" "cron_east_object" {
 data "archive_file" "zip_streams" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/streams.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/streams.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = setsubtract(local.excludedList, ["streams.js"])
 }
 
 resource "null_resource" "streams_east_object" {
@@ -305,7 +240,8 @@ resource "null_resource" "streams_east_object" {
 data "archive_file" "zip_seal_in_lower" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/seal-in-lower-environment.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/seal-in-lower-environment.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = setsubtract(local.excludedList, ["seal-in-lower-environment.js"])
 }
 
 resource "null_resource" "seal_in_lower_east_object" {
@@ -322,7 +258,8 @@ resource "null_resource" "seal_in_lower_east_object" {
 data "archive_file" "zip_bounce_handler" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/handle-bounced-service-email.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/handle-bounced-service-email.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = setsubtract(local.excludedList, ["handle-bounced-service-email.js"])
 }
 
 resource "null_resource" "bounce_handler_east_object" {
