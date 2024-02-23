@@ -146,7 +146,7 @@ export const BeforeStartingCase = connect(
                     <span className="usa-hint">
                       *<strong>Do not include</strong> personal information
                       (such as Social Security Numbers, Taxpayer Identification
-                      Numbers, or Employer Identification Numbers, birthdates,
+                      Numbers, Employer Identification Numbers, birthdates,
                       names of minor children, or financial account information)
                       in your Petition or any other filing with the Court.
                     </span>
@@ -156,7 +156,7 @@ export const BeforeStartingCase = connect(
                     Save your Petition as a PDF (max file size of 250MB).
                     <span className="usa-hint">
                       *<strong>Do not include</strong> any additional documents
-                      with your Petition. Documents that might be evidence can
+                      with your Notice(s). Documents that might be evidence can
                       be submitted at a later time.
                     </span>
                   </p>
