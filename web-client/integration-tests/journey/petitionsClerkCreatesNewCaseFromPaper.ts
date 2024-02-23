@@ -19,7 +19,10 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     receivedAtYear = '2001',
     trialLocation = 'Birmingham, Alabama',
   } = {},
-  formOverrides = [],
+  formOverrides: {
+    key: string;
+    value: boolean;
+  }[] = [],
 ) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
