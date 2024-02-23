@@ -49,7 +49,6 @@ export const loginInteractor = async (
       error: err,
       sendAccountConfirmation: true,
     });
-    throw err;
   }
 };
 
