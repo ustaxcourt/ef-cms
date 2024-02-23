@@ -1,4 +1,10 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  fakeFile,
+  loginAs,
+  setupTest,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
+} from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkEditsSavedPetition } from './journey/petitionsClerkEditsSavedPetition';
 import { petitionsClerkRemovesAndReaddsPdfFromPetition } from './journey/petitionsClerkRemovesAndReaddsPdfFromPetition';
@@ -43,6 +49,9 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
     await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     expect(cerebralTest.getState('currentPage')).toEqual(
       'PrintPaperPetitionReceipt',
