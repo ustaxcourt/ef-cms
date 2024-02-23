@@ -158,7 +158,7 @@ export const StartCaseStep2 = connect(
                   >
                     <label
                       className={classNames(
-                        'usa-label margin-bottom-0',
+                        'usa-label ustc-upload-atp with-hint',
                         startCaseHelper.showAttachmentToPetitionFileValid &&
                           'validated',
                       )}
