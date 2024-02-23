@@ -352,6 +352,8 @@ import { serveDocumentCompleteSequence } from './sequences/serveDocumentComplete
 import { serveDocumentErrorSequence } from './sequences/serveDocumentErrorSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { serveThirtyDayNoticeOfTrialSequence } from './sequences/serveThirtyDayNoticeOfTrialSequence';
+import { serveToIrsCompleteSequence } from './sequences/serveToIrsCompleteSequence';
+import { serveToIrsErrorSequence } from './sequences/serveToIrsErrorSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -1046,6 +1048,7 @@ export const presenterSequences = {
     openPrintGeneratedPaperServiceSequence as unknown as Function,
   openPrintableTrialSessionWorkingCopyModalSequence:
     openPrintableTrialSessionWorkingCopyModalSequence as unknown as Function,
+
   openPrioritizeCaseModalSequence:
     openPrioritizeCaseModalSequence as unknown as Function,
   openRemoveFromTrialSessionModalSequence:
@@ -1152,6 +1155,8 @@ export const presenterSequences = {
     servePaperFiledDocumentSequence as unknown as Function,
   serveThirtyDayNoticeOfTrialSequence:
     serveThirtyDayNoticeOfTrialSequence as unknown as Function,
+  serveToIrsCompleteSequence: serveToIrsCompleteSequence as unknown as Function,
+  serveToIrsErrorSequence: serveToIrsErrorSequence as unknown as Function,
   setCaseDetailPageTabSequence:
     setCaseDetailPageTabSequence as unknown as Function,
   setCaseDetailPrimaryTabSequence:
