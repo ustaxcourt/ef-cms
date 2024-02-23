@@ -1,6 +1,8 @@
 import {
   AuthFlowType,
   ChallengeNameType,
+  CodeMismatchException,
+  ExpiredCodeException,
   InitiateAuthResponse,
   RespondToAuthChallengeResponse,
   UserStatusType,
@@ -340,6 +342,62 @@ describe('changePasswordInteractor', () => {
           password: mockPassword,
         }),
       ).rejects.toThrow(`Unable to change password for email: ${mockEmail}`);
+
+      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
+        {
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+          AuthParameters: {
+            PASSWORD: mockPassword,
+            USERNAME: mockEmail,
+          },
+          ClientId: applicationContext.environment.cognitoClientId,
+        },
+      );
+    });
+
+    it('should throw an InvalidRequest error if initiateAuth returns a CodeMismatchException', async () => {
+      applicationContext
+        .getCognito()
+        .initiateAuth.mockRejectedValueOnce(
+          new CodeMismatchException({ $metadata: {}, message: '' }),
+        );
+
+      await expect(
+        changePasswordInteractor(applicationContext, {
+          code: mockCode,
+          confirmPassword: mockPassword,
+          email: mockEmail,
+          password: mockPassword,
+        }),
+      ).rejects.toThrow('Forgot password code expired');
+
+      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
+        {
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+          AuthParameters: {
+            PASSWORD: mockPassword,
+            USERNAME: mockEmail,
+          },
+          ClientId: applicationContext.environment.cognitoClientId,
+        },
+      );
+    });
+
+    it('should throw an InvalidRequest error if initiateAuth returns a ExpiredCodeException', async () => {
+      applicationContext
+        .getCognito()
+        .initiateAuth.mockRejectedValueOnce(
+          new ExpiredCodeException({ $metadata: {}, message: '' }),
+        );
+
+      await expect(
+        changePasswordInteractor(applicationContext, {
+          code: mockCode,
+          confirmPassword: mockPassword,
+          email: mockEmail,
+          password: mockPassword,
+        }),
+      ).rejects.toThrow('Forgot password code expired');
 
       expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
         {

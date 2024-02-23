@@ -88,6 +88,21 @@ describe('loginInteractor', () => {
     ).rejects.toThrow(mockWrongEmailOrPasswordError);
   });
 
+  it('should throw an error if initiateAuth does not return access, id, and refresh tokens', async () => {
+    const mockEmail = 'petitioner@example.com';
+    const mockPassword = 'MyPa$Sword!';
+    applicationContext
+      .getCognito()
+      .initiateAuth.mockResolvedValue({ AuthenticationResult: {} });
+
+    await expect(
+      loginInteractor(applicationContext, {
+        email: mockEmail,
+        password: mockPassword,
+      }),
+    ).rejects.toThrow('Unsuccessful authentication');
+  });
+
   it('should resend an account confirmation email with a new confirmation code when the user`s account is not confirmed', async () => {
     const mockEmail = 'petitioner@example.com';
     const mockPassword = 'MyPa$Sword!';
