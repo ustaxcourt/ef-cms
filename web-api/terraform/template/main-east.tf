@@ -226,7 +226,23 @@ resource "null_resource" "maintenance_notify_east_object" {
 data "archive_file" "zip_api_public" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api-public.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/api-public.js"
+  source_dir = "${path.module}/../template/lambdas/dist/"
+  excludes = [
+    "api.js",
+    "trial-session.js",
+    "send-emails.js",
+    "api.js",
+    "maintenance-notify.js",
+    "cron.js",
+    "streams.js",
+    "cognito-triggers.js",
+    "cognito-authorizer.js",
+    "public-api-authorizer.js",
+    "handle-bounced-service-email.js",
+    "seal-in-lower-environment.js",
+    "pdf-generation.js",
+    "report.html"
+  ]
 }
 
 resource "null_resource" "api_public_east_object" {
@@ -626,7 +642,7 @@ module "api-east-green" {
   region   = "us-east-1"
   validate = 1
   providers = {
-    aws = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
@@ -701,7 +717,7 @@ module "api-east-blue" {
   region   = "us-east-1"
   validate = 1
   providers = {
-    aws = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
