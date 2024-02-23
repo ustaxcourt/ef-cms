@@ -30,5 +30,28 @@ data "null_data_source" "locals" {
     TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
     USER_POOL_ID                       = aws_cognito_user_pool.pool.id
     USER_POOL_IRS_ID                   = aws_cognito_user_pool.irs_pool.id
+    
   }
 }
+
+data "null_data_source" "template_lambdas" {
+  inputs = [
+      "api-public.js",
+      "api.js",
+      "cognito-authorizer.js",
+      "cognito-triggers.js",
+      "cron.js",
+      "handle-bounced-service-email.js",
+      "maintenance-notify.js",
+      "pdf-generation.js",
+      "public-api-authorizer.js",
+      "report.html",
+      "seal-in-lower-environment.js",
+      "send-emails.js",
+      "streams.js",
+      "trial-session.js",
+      "websocket-authorizer.js",
+      "websockets.js",
+  ]
+}
+

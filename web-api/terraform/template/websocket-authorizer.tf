@@ -1,7 +1,9 @@
 data "archive_file" "websocket_authorizer" {
   type        = "zip"
   output_path = "${path.module}/lambdas/websocket-authorizer.js.zip"
-  source_file = "${path.module}/lambdas/dist/websocket-authorizer.js"
+  source_dir = "${path.module}/lambdas/dist/"
+  excludes = setsubtract(data.null_data_source.template_lambdas.outputs, ["websocket-authorizer.js"])
+
 }
 
 resource "aws_lambda_function" "websocket_authorizer_lambda" {
