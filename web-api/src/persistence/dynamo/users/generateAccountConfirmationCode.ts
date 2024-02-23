@@ -12,6 +12,7 @@ export const generateAccountConfirmationCode = async (
 ): Promise<{ confirmationCode: string }> => {
   const confirmationCode = applicationContext.getUniqueId();
   const expireInOneDay = Date.now() / 1000 + 24 * 60 * 60;
+
   const accountConfirmationRecord: AccountConfirmationRecord = {
     confirmationCode,
     pk: `user|${userId}`,

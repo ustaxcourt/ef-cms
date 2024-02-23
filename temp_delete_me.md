@@ -4,10 +4,6 @@
 - Create Presentation on new patterns
 - Benchmark updating users cases when their email updates
 
-:: Solo ::
-- web-api/src/business/useCases/auth/changePasswordInteractor.test.ts, test coverage for incorrect/expired code
-- Test error condition in web-api/src/persistence/cognito/renewIdToken.ts
-- Test web-api/src/persistence/dynamo/users/generateAccountConfirmationCode.ts, web-api/src/persistence/dynamo/users/refreshConfirmationCodeExpiration.ts
 
 - Make sure the following are covered by Cypress tests, then delete (?)
 - web-client/integration-tests/admissionsClerkCreatesPractitionerAccount.test.ts  
