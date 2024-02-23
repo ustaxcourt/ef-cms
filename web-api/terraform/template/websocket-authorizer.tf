@@ -2,7 +2,7 @@ data "archive_file" "websocket_authorizer" {
   type        = "zip"
   output_path = "${path.module}/lambdas/websocket-authorizer.js.zip"
   source_dir = "${path.module}/lambdas/dist/"
-  excludes = setsubtract(data.null_data_source.template_lambdas.outputs, ["websocket-authorizer.js"])
+  excludes = setsubtract(var.template_lambdas, ["websocket-authorizer.js"])
 
 }
 
