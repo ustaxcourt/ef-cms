@@ -603,8 +603,8 @@ app.use(logger());
     lambdaWrapper(removeCasePendingItemLambda),
   );
   app.post(
-    '/cases/:docketNumber/serve-to-irs',
-    lambdaWrapper(serveCaseToIrsLambda),
+    '/async/cases/:docketNumber/serve-to-irs',
+    lambdaWrapper(serveCaseToIrsLambda, { isAsync: true }),
   );
   app.put(
     '/cases/:docketNumber',
