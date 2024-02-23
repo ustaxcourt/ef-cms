@@ -62,8 +62,9 @@ export const cleanFileMetadata = async (
   } catch (error) {
     return fileReader.result;
   }
-
-  const headerArray = new Uint8Array(fileReader.result.slice(0, 5));
+  const headerArray = new Uint8Array(
+    (fileReader.result as ArrayBuffer).slice(0, 5),
+  );
   const pdfBytes = Array.from(headerArray);
   const pdfHeaderString = convertBytesToString(pdfBytes);
 
