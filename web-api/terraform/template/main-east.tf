@@ -226,7 +226,7 @@ resource "null_resource" "maintenance_notify_east_object" {
 data "archive_file" "zip_api_public" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api-public.js.zip"
-  source_dir = "${path.module}/../template/lambdas/dist/"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
   excludes = [
     "api.js",
     "trial-session.js",
