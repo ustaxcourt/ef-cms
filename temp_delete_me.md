@@ -1,11 +1,6 @@
 ::: STUFF TO DO :::
 - Investigate rate limiting authentication end points
-- Verify that we are not logging passwords to cloudwatch.
 - Create Presentation on new patterns
-- Benchmark updating users cases when their email updates
-- Investigate why cypress/cypress-smoketests/integration/petitioner-updates-email.cy.ts (see comment) does not work with cognito-local
-
-
 
 
 ::: QUESTIONS :::

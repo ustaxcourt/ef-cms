@@ -192,9 +192,25 @@ describe('logger', () => {
   it('does not log a password if it was included in the body of the request', async () => {
     process.env.NODE_ENV = 'production';
     const body = {
-      confirmPassword: 'Password1!',
-      password: 'Password1!',
+      arrayOBools: [true, false, true],
+      arrayONums: [38, 100, 11100],
+      confirmPassword: '5340989',
+      passWoRdnEW: '345090fgdfg',
+      password: 'vdsfa09dfga',
+      tempPassword: 'knmlakLKIHJOI',
+      user: {
+        passWoRdnEW: '6951434d65cDEDE$$',
+        password: '0943k,mj',
+        username: 'Usern4me',
+      },
       username: 'Usern4me',
+      users: [
+        {
+          confirmPassword: 'fnsoin',
+          dog: 'password',
+          password: 'somestuff',
+        },
+      ],
     };
     req.body = body;
     await subject(req, res);
@@ -204,9 +220,15 @@ describe('logger', () => {
     );
 
     expect(bodyToBeLogged.username).toBe(body.username);
-    expect(bodyToBeLogged.password).not.toBe(body.password);
     expect(bodyToBeLogged.password).toBe('*** REDACTED ***');
-    expect(bodyToBeLogged.confirmPassword).not.toBe(body.confirmPassword);
     expect(bodyToBeLogged.confirmPassword).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.tempPassword).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.passWoRdnEW).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.user.passWoRdnEW).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.user.password).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.user.username).toBe('Usern4me');
+    expect(bodyToBeLogged.users[0].confirmPassword).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.users[0].dog).toBe('password');
+    expect(bodyToBeLogged.users[0].password).toBe('*** REDACTED ***');
   });
 });
