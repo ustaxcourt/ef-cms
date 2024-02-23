@@ -28,7 +28,9 @@ export function petitionsClerkQcsAndServesElectronicCase(docketNumber: string) {
     .should('exist')
     .should('not.be.enabled');
 
-  cy.get('[data-testid="attachmentToPetitionFileButton"]').should('exist');
+  cy.get('[data-testid="attachmentToPetitionFileButton"]')
+    .should('exist')
+    .should('be.enabled');
 
   cy.get('[data-testid="serve-case-to-irs"]').click();
   cy.get('[data-testid="modal-confirm"]').click();
