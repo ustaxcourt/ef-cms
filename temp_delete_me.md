@@ -6,10 +6,6 @@
 - Investigate why cypress/cypress-smoketests/integration/petitioner-updates-email.cy.ts (see comment) does not work with cognito-local
 
 
-:: Solo ::
-- web-api/src/business/useCases/auth/changePasswordInteractor.test.ts, test coverage for incorrect/expired code
-- Test error condition in web-api/src/persistence/cognito/renewIdToken.ts
-- Test web-api/src/persistence/dynamo/users/generateAccountConfirmationCode.ts, web-api/src/persistence/dynamo/users/refreshConfirmationCodeExpiration.ts
 
 
 ::: QUESTIONS :::
