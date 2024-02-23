@@ -12,20 +12,15 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const serveCaseToIrsAction = async ({
   applicationContext,
   get,
-  path,
   props,
 }: ActionProps) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
+  const clientConnectionId = get(state.clientConnectionId);
 
-  const pdfUrl = await applicationContext
+  await applicationContext
     .getUseCases()
     .serveCaseToIrsInteractor(applicationContext, {
+      clientConnectionId,
       docketNumber,
     });
-
-  if (pdfUrl) {
-    return path.paper({ pdfUrl });
-  }
-
-  return path.electronic();
 };
