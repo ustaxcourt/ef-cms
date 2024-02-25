@@ -1,10 +1,13 @@
+import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveCaseDetailInternalEditAction = async ({
   applicationContext,
   get,
   props,
-}: ActionProps) => {
+}: ActionProps<{
+  fileUploadProgressMap: FileUploadProgressMapType;
+}>) => {
   const {
     INITIAL_DOCUMENT_TYPES,
     INITIAL_DOCUMENT_TYPES_FILE_MAP,
@@ -18,8 +21,9 @@ export const saveCaseDetailInternalEditAction = async ({
 
   for (const key of keys) {
     const fileKey = INITIAL_DOCUMENT_TYPES_FILE_MAP[key];
-    if (fileUploadProgressMap[fileKey]) {
-      if (fileKey === 'petitionFile') {
+
+    if (fileUploadProgressMap[key]) {
+      if (key === 'petition') {
         const oldPetitionDocument = originalCase.docketEntries.find(
           document =>
             document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
@@ -28,16 +32,16 @@ export const saveCaseDetailInternalEditAction = async ({
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: fileUploadProgressMap[fileKey].file,
+            document: fileUploadProgressMap[key].file,
             key: oldPetitionDocument.docketEntryId,
-            onUploadProgress: fileUploadProgressMap[fileKey].uploadProgress,
+            onUploadProgress: fileUploadProgressMap[key].uploadProgress,
           });
       } else {
         const newDocketEntryId = await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: fileUploadProgressMap[fileKey].file,
-            onUploadProgress: fileUploadProgressMap[fileKey].uploadProgress,
+            document: fileUploadProgressMap[key].file,
+            onUploadProgress: fileUploadProgressMap[key].uploadProgress,
           });
 
         let { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
