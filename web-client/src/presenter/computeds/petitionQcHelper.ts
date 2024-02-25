@@ -10,11 +10,15 @@ export const petitionQcHelper = (
     applicationContext.getConstants();
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
-  const ATP_EVENT_CODE = INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode;
 
   const hasCDS = !!documents.find(
     doc =>
       doc.eventCode === INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
+  );
+
+  const hasATP = !!documents.find(
+    doc =>
+      doc.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
   );
 
   const documentSelectedForPreview = get(
@@ -35,34 +39,16 @@ export const petitionQcHelper = (
     },
   );
 
-  const atpDocketTabsForDisplay = documents
-    .filter(doc => doc.eventCode === ATP_EVENT_CODE)
-    .map(doc => {
-      return {
-        ...INITIAL_DOCUMENT_TYPES.attachmentToPetition,
-        documentId: doc.docketEntryId,
-      };
-    });
-
   documentTabsToDisplay.sort((a, b) => a.sort - b.sort);
-
-  if (atpDocketTabsForDisplay.length) {
-    const firstTwoTabs = documentTabsToDisplay.slice(0, 2);
-    const remainingTabs = documentTabsToDisplay.slice(3);
-    documentTabsToDisplay = [
-      ...firstTwoTabs,
-      ...atpDocketTabsForDisplay,
-      ...remainingTabs,
-    ];
-  }
 
   if (!isPaper) {
     documentTabsToDisplay = documentTabsToDisplay.filter(tab => {
-      if (tab.tabTitle === 'ATP' && !atpDocketTabsForDisplay.length) {
-        return false;
+      if (tab.tabTitle === 'ATP') {
+        // Do not display ATP tab if it wasn't filed electronically
+        return hasATP;
       }
       if (tab.tabTitle === 'CDS') {
-        // Do not display CDS tab if one wasn't filed electronically
+        // Do not display ATP tab if it wasn't filed electronically
         return hasCDS;
       } else {
         // Do not display APW and RQT tabs for electronic filing
