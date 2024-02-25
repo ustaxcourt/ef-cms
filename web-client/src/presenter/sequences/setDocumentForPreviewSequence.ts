@@ -25,4 +25,4 @@ export const setDocumentForPreviewSequence = [
       setDocumentUploadModeAction('preview'),
     ],
   },
-] as unknown as (props: { documentId?: string }) => void;
+];

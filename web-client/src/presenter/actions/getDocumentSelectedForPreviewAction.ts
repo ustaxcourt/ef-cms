@@ -3,20 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getDocumentSelectedForPreviewAction = ({
   applicationContext,
   get,
-  props,
-}: ActionProps<{
-  documentId?: string;
-}>) => {
-  const { documentId } = props;
-
-  if (documentId) {
-    return {
-      documentInS3: {
-        docketEntryId: documentId,
-      },
-    };
-  }
-
+}: ActionProps) => {
   const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
