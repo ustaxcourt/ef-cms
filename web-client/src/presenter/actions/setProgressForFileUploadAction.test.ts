@@ -6,7 +6,7 @@ describe('setProgressForFileUploadAction', () => {
     const results = await runAction(setProgressForFileUploadAction, {
       props: {
         files: {
-          atp: [{ size: 1 }],
+          attachmentToPetition: [{ size: 1 }],
           petition: { size: 2 },
           stin: { size: 3 },
           trial: { size: 4 },
@@ -25,7 +25,7 @@ describe('setProgressForFileUploadAction', () => {
     });
 
     expect(results.output.fileUploadProgressMap).toMatchObject({
-      atp: {
+      attachmentToPetition: {
         file: {},
         uploadProgress: expect.any(Function),
       },
@@ -57,7 +57,7 @@ describe('setProgressForFileUploadAction', () => {
     const results = await runAction(setProgressForFileUploadAction, {
       props: {
         files: {
-          atp: [{ size: 1 }],
+          attachmentToPetition: [{ size: 1 }],
           petition: { size: 2 },
           stin: { size: 3 },
           trial: { size: 4 },
@@ -74,7 +74,7 @@ describe('setProgressForFileUploadAction', () => {
         },
       },
     });
-    results.output.fileUploadProgressMap.atp.uploadProgress({
+    results.output.fileUploadProgressMap.attachmentToPetition.uploadProgress({
       isDone: true,
     });
     results.output.fileUploadProgressMap.petition.uploadProgress({
@@ -118,7 +118,7 @@ describe('setProgressForFileUploadAction', () => {
     const results = await runAction(setProgressForFileUploadAction, {
       props: {
         files: {
-          atp: [{ size: 1 }],
+          attachmentToPetition: [{ size: 1 }],
           noFile: undefined,
           petition: { size: 2 },
           stin: { size: 3 },
@@ -128,7 +128,7 @@ describe('setProgressForFileUploadAction', () => {
     });
 
     expect(results.output.fileUploadProgressMap).toMatchObject({
-      atp: {
+      attachmentToPetition: {
         file: {},
         uploadProgress: expect.any(Function),
       },

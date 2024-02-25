@@ -17,7 +17,7 @@ export const createCaseFromPaperAction = async ({
       .filePetitionFromPaperInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeUploadProgress:
           fileUploadProgressMap.waiverOfFilingFee,
-        atpUploadProgress: fileUploadProgressMap.atp,
+        atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
         corporateDisclosureUploadProgress: fileUploadProgressMap.corporate,
         petitionMetadata,
         petitionUploadProgress: fileUploadProgressMap.petition,

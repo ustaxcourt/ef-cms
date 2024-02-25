@@ -14,7 +14,7 @@ export const setupFilesForCaseCreationAction = ({ get }: ActionProps) => {
   return {
     files: {
       applicationForWaiverOfFilingFee: applicationForWaiverOfFilingFeeFile,
-      atp: attachmentToPetitionFile,
+      attachmentToPetition: attachmentToPetitionFile,
       corporateDisclosure: corporateDisclosureFile,
       petition: petitionFile,
       requestForPlaceOfTrial: requestForPlaceOfTrialFile,

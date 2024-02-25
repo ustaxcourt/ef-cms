@@ -20,7 +20,7 @@ export const createCaseAction = async ({
     filePetitionResult = await applicationContext
       .getUseCases()
       .filePetitionInteractor(applicationContext, {
-        atpUploadProgress: fileUploadProgressMap.atp,
+        atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
         corporateDisclosureUploadProgress:
           fileUploadProgressMap.corporateDisclosure,
         petitionMetadata: form,

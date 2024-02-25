@@ -14,7 +14,7 @@ describe('createCaseAction', () => {
       file: {},
       uploadProgress: jest.fn(),
     },
-    atp: {
+    attachmentToPetition: {
       file: {},
       uploadProgress: jest.fn(),
     },
@@ -125,7 +125,7 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      atpUploadProgress: fileUploadProgressMap.atp,
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
       corporateDisclosureUploadProgress:
         fileUploadProgressMap.corporateDisclosure,
       petitionMetadata: MOCK_CASE,
@@ -229,7 +229,7 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      atpUploadProgress: fileUploadProgressMap.atp,
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
       corporateDisclosureUploadProgress:
         fileUploadProgressMap.corporateDisclosure,
       petitionMetadata: MOCK_CASE,
@@ -268,7 +268,7 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      atpUploadProgress: fileUploadProgressMap.atp,
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
       corporateDisclosureUploadProgress:
         fileUploadProgressMap.corporateDisclosure,
       petitionMetadata: MOCK_CASE,
