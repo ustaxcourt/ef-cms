@@ -39,6 +39,14 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap: {
+          petition: {
+            file: {},
+            uploadProgress: jest.fn(),
+          },
+        },
+      },
       state: {
         caseDetail: {
           ...caseDetail,
@@ -49,10 +57,7 @@ describe('saveCaseDetailInternalEditAction', () => {
             },
           ],
         },
-        form: {
-          ...caseDetail,
-          petitionFile: {},
-        },
+        form: caseDetail,
       },
     });
 
@@ -76,12 +81,17 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap: {
+          corporateDisclosure: {
+            file: {},
+            uploadProgress: jest.fn(),
+          },
+        },
+      },
       state: {
         caseDetail,
-        form: {
-          ...caseDetail,
-          corporateDisclosureFile: {},
-        },
+        form: caseDetail,
       },
     });
 
@@ -115,6 +125,14 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap: {
+          corporateDisclosure: {
+            file: {},
+            uploadProgress: jest.fn(),
+          },
+        },
+      },
       state: {
         caseDetail,
         form: caseDetail,
@@ -138,6 +156,14 @@ describe('saveCaseDetailInternalEditAction', () => {
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
         presenter,
+      },
+      props: {
+        fileUploadProgressMap: {
+          corporateDisclosure: {
+            file: {},
+            uploadProgress: jest.fn(),
+          },
+        },
       },
       state: {
         caseDetail,
@@ -164,9 +190,21 @@ describe('saveCaseDetailInternalEditAction', () => {
       requestForPlaceOfTrialFileSize: 2,
     };
 
+    applicationContext
+      .getUseCases()
+      .saveCaseDetailInternalEditInteractor.mockReturnValue(caseDetail);
+
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
         presenter,
+      },
+      props: {
+        fileUploadProgressMap: {
+          requestForPlaceOfTrial: {
+            file: mockRqtFile,
+            uploadProgress: jest.fn(),
+          },
+        },
       },
       state: {
         form: caseDetail,
@@ -213,6 +251,14 @@ describe('saveCaseDetailInternalEditAction', () => {
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
         presenter,
+      },
+      props: {
+        fileUploadProgressMap: {
+          requestForPlaceOfTrial: {
+            file: mockRqtFile,
+            uploadProgress: jest.fn(),
+          },
+        },
       },
       state: {
         form: caseDetail,
