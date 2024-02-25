@@ -48,7 +48,7 @@ export const petitionQcHelper = (
         return hasATP;
       }
       if (tab.tabTitle === 'CDS') {
-        // Do not display ATP tab if it wasn't filed electronically
+        // Do not display CDS tab if it wasn't filed electronically
         return hasCDS;
       } else {
         // Do not display APW and RQT tabs for electronic filing
