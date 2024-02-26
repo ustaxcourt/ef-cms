@@ -1,3 +1,4 @@
+import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createCaseAction } from './createCaseAction';
@@ -8,6 +9,32 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('createCaseAction', () => {
   const errorStub = jest.fn();
   const successStub = jest.fn();
+  const fileUploadProgressMap: FileUploadProgressMapType = {
+    applicationForWaiverOfFilingFee: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    attachmentToPetition: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    corporateDisclosure: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    petition: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    requestForPlaceOfTrial: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    stin: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+  };
 
   presenter.providers.applicationContext = applicationContext;
 
@@ -78,6 +105,9 @@ describe('createCaseAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap,
+      },
       state: {
         form: {
           attachmentToPetitionFile: [{}, {}],
@@ -95,11 +125,12 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      atpFilesMetadata: [{}, {}],
-      corporateDisclosureFile: {},
-      petitionFile: {},
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
       petitionMetadata: MOCK_CASE,
-      stinFile: {},
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(2);
     expect(successStub).toHaveBeenCalled();
@@ -179,6 +210,9 @@ describe('createCaseAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap,
+      },
       state: {
         form: {
           corporateDisclosureFile: {},
@@ -195,12 +229,12 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      corporateDisclosureFile: {},
-      petitionFile: {},
-      petitionMetadata: {
-        ...MOCK_CASE,
-      },
-      stinFile: {},
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionMetadata: MOCK_CASE,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and CDS
     expect(successStub).toHaveBeenCalled();
@@ -215,6 +249,9 @@ describe('createCaseAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap,
+      },
       state: {
         form: {
           corporateDisclosureFile: {},
@@ -231,12 +268,12 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      corporateDisclosureFile: {},
-      petitionFile: {},
-      petitionMetadata: {
-        ...MOCK_CASE,
-      },
-      stinFile: {},
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionMetadata: MOCK_CASE,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
     });
     expect(addCoversheetInteractor).not.toHaveBeenCalled();
     expect(errorStub).toHaveBeenCalled();

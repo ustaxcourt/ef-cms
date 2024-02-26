@@ -12,6 +12,7 @@ describe('setupFilesForCaseCreationAction test', () => {
           corporateDisclosureFile: undefined,
           notAFile: file,
           petitionFile: file,
+          primaryDocumentFile: file,
           requestForPlaceOfTrialFile: file,
           stinFile: file,
         },
@@ -20,9 +21,10 @@ describe('setupFilesForCaseCreationAction test', () => {
 
     expect(result.output.files).toMatchObject({
       applicationForWaiverOfFilingFee: file,
-      atp: file,
+      attachmentToPetition: file,
       corporateDisclosure: undefined,
       petition: file,
+      primary: file,
       requestForPlaceOfTrial: file,
       stin: file,
     });
