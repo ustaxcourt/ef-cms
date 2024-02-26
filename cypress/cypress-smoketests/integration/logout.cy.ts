@@ -1,4 +1,4 @@
-import { loginAsDocketClerk } from '../../helpers/auth/login-as-helpers';
+import { loginAsDocketClerk1 } from '../../helpers/auth/login-as-helpers';
 
 describe('logout', () => {
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('logout', () => {
     Then they should be taken to the login page
     */
   it('should route the user to the /login page after they logout', () => {
-    loginAsDocketClerk();
+    loginAsDocketClerk1();
     cy.get('[data-testid="account-menu-button"]').click();
     cy.get('[data-testid="logout-button-desktop"]').click();
     cy.get('[data-testid="login-header"]');
@@ -27,7 +27,7 @@ describe('logout', () => {
     Then they should be taken to the login page
     */
   it('should not allow a user to directly access a protected route after they logout', () => {
-    loginAsDocketClerk();
+    loginAsDocketClerk1();
     cy.get('[data-testid="account-menu-button"]').click();
     cy.get('[data-testid="logout-button-desktop"]').click();
     cy.get('[data-testid="login-header"]');
@@ -42,7 +42,7 @@ describe('logout', () => {
   */
   it('should route the user to the /login page after they logout on a mobile device', () => {
     cy.viewport('iphone-6');
-    loginAsDocketClerk();
+    loginAsDocketClerk1();
     cy.get('[data-testid="account-menu-button-mobile"]').click();
     cy.get('[data-testid="logout-button-mobile"]').click();
     cy.get('[data-testid="login-header"]');
