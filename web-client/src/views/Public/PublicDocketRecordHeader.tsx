@@ -43,6 +43,7 @@ export const PublicDocketRecordHeader = connect(
             <Button
               link
               className="hide-on-mobile float-right margin-right-0 margin-top-1"
+              data-testid="print-public-docket-record-button"
               icon="print"
               id="printable-docket-record-button"
               onClick={() => {
