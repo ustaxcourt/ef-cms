@@ -128,7 +128,11 @@ export const ModalDialog = ({
               <div className="grid-row">
                 <div className="mobile-lg:grid-col-9">
                   {title && (
-                    <h3 className="modal-header__title" tabIndex={-1}>
+                    <h3
+                      className="modal-header__title"
+                      data-testid="modal-header"
+                      tabIndex={-1}
+                    >
                       {title}
                     </h3>
                   )}
