@@ -4,7 +4,11 @@ export const uploadDocumentAndMakeSafeInteractor = async (
     document,
     key,
     onUploadProgress,
-  }: { document: any; key?: string; onUploadProgress: () => void },
+  }: {
+    document: any;
+    key?: string;
+    onUploadProgress: (progressEvent: any) => void;
+  },
 ): Promise<string> => {
   const uploadedKey = await applicationContext
     .getPersistenceGateway()

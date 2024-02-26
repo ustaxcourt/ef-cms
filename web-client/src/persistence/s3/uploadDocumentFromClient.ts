@@ -18,7 +18,7 @@ export const uploadDocumentFromClient = async ({
   applicationContext;
   document: any;
   key?: string;
-  onUploadProgress?: () => void;
+  onUploadProgress?: (progressEvent: any) => void;
 }) => {
   const docId = key || applicationContext.getUniqueId();
   const policy = await getUploadPolicy({

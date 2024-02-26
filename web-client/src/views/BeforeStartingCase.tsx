@@ -156,7 +156,7 @@ export const BeforeStartingCase = connect(
                     Save your Petition as a PDF (max file size of 250MB).
                     <span className="usa-hint">
                       *<strong>Do not include</strong> any additional documents
-                      with your Notice(s). Documents that might be evidence can
+                      with your Petition. Documents that might be evidence can
                       be submitted at a later time.
                     </span>
                   </p>
@@ -166,7 +166,7 @@ export const BeforeStartingCase = connect(
                     <ol className="margin-bottom-0" type="a">
                       <li>
                         Remove or block out (redact) your Social Security Number
-                        (SSN), Tax Identification Number (TIN), or Employer
+                        (SSN), Taxpayer Identification Number (TIN), or Employer
                         Identification Number (EIN) on a COPY of the IRS
                         Notice(s) or in a manner that does not permanently alter
                         the original IRS Notice(s).
@@ -178,7 +178,7 @@ export const BeforeStartingCase = connect(
                     </ol>
                     <span className="usa-hint">
                       *<strong>Do not include</strong> any additional documents
-                      with your Petition. Documents that might be evidence can
+                      with your Notice(s). Documents that might be evidence can
                       be submitted at a later time.
                     </span>
                   </p>
