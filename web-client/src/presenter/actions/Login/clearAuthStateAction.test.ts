@@ -6,8 +6,8 @@ describe('clearAuthStateAction', () => {
     const result = await runAction(clearAuthStateAction, {
       state: {
         authentication: {
-          code: 'abc123',
           form: {
+            code: 'abc123',
             confirmPassword: 'password',
             email: 'example@example.com',
             password: 'password',
@@ -19,8 +19,8 @@ describe('clearAuthStateAction', () => {
     });
 
     expect(result.state.authentication).toEqual({
-      code: '',
       form: {
+        code: '',
         confirmPassword: '',
         email: '',
         password: '',
