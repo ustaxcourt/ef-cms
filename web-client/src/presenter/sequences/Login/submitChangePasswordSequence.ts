@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
 import { clearAuthStateAction } from '@web-client/presenter/actions/Login/clearAuthStateAction';
 import { getUserAction } from '@web-client/presenter/actions/getUserAction';
-import { navigateToForgotPasswordAction } from '@web-client/presenter/actions/Login/navigateToForgotPasswordAction';
 import { navigateToLoginAction } from '@web-client/presenter/actions/Login/navigateToLoginAction';
 import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
@@ -23,11 +22,6 @@ export const submitChangePasswordSequence = [
       success: [
         submitChangePasswordAction,
         {
-          codeExpired: [
-            setAlertErrorAction,
-            setSaveAlertsForNavigationAction,
-            navigateToForgotPasswordAction,
-          ],
           error: [setAlertErrorAction],
           success: [
             clearAuthStateAction,
@@ -38,6 +32,7 @@ export const submitChangePasswordSequence = [
             navigateToPathAction,
           ],
           unconfirmedAccount: [
+            clearAuthStateAction,
             setAlertErrorAction,
             setSaveAlertsForNavigationAction,
             navigateToLoginAction,

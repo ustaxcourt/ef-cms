@@ -49,8 +49,10 @@ export const submitChangePasswordAction = async ({
         },
       });
     }
-    if (originalErrorMessage === 'Forgot password code expired') {
-      return path.codeExpired({
+    if (
+      originalErrorMessage === 'Forgot password code is expired or incorrect'
+    ) {
+      return path.error({
         alertError: {
           message: (
             <>

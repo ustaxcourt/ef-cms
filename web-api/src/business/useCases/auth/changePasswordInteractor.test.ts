@@ -369,7 +369,7 @@ describe('changePasswordInteractor', () => {
           email: mockEmail,
           password: mockPassword,
         }),
-      ).rejects.toThrow('Forgot password code expired');
+      ).rejects.toThrow('Forgot password code is expired or incorrect');
 
       expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
         {
@@ -397,7 +397,7 @@ describe('changePasswordInteractor', () => {
           email: mockEmail,
           password: mockPassword,
         }),
-      ).rejects.toThrow('Forgot password code expired');
+      ).rejects.toThrow('Forgot password code is expired or incorrect');
 
       expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
         {
