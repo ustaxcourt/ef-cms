@@ -1,5 +1,4 @@
 ::: STUFF TO DO :::
-- Investigate rate limiting authentication end points
 - Create Presentation on new patterns
 
 
