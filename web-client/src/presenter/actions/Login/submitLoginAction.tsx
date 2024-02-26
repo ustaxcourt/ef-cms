@@ -33,6 +33,23 @@ export const submitLoginAction = async ({
         },
       });
     }
+    if (originalErrorMessage === 'Password attempts exceeded') {
+      return path.error({
+        alertError: {
+          message: (
+            <>
+              You can try again later or reset your password. If you’re still
+              having problems, contact{' '}
+              <a href="mailto:dawson.support@ustaxcourt.gov">
+                dawson.support@ustaxcourt.gov
+              </a>
+              .
+            </>
+          ),
+          title: 'Too many unsuccessful log ins',
+        },
+      });
+    }
 
     if (originalErrorMessage === 'User is unconfirmed') {
       return path.error({
