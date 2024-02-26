@@ -1,7 +1,7 @@
 data "archive_file" "zip_logs_to_es_lambda" {
   type        = "zip"
   output_path = "${path.cwd}/../../../../aws/lambdas/LogsToElasticSearch_info.zip"
-  source_file = "${path.cwd}/../../../../aws/lambdas/LogsToElasticSearch_info/index.js"
+  source_dir = "${path.cwd}/../../../../aws/lambdas/LogsToElasticSearch_info/"
 }
 
 resource "aws_lambda_function" "logs_to_es" {
