@@ -1,14 +1,20 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { showContactsHelper } from './showContactsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const startCaseHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { CASE_TYPES_MAP, FILING_TYPES, PARTY_TYPES, USER_ROLES } =
-    applicationContext.getConstants();
+  const {
+    CASE_TYPES_MAP,
+    FILING_TYPES,
+    INITIAL_DOCUMENT_TYPES,
+    INITIAL_DOCUMENT_TYPES_FILE_MAP,
+    PARTY_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const form = get(state.form);
   const user = applicationContext.getCurrentUser();
 
@@ -49,6 +55,16 @@ export const startCaseHelper = (
     ? CASE_TYPES_MAP.disclosure
     : form.caseType;
 
+  const documentTabs = Object.keys(INITIAL_DOCUMENT_TYPES)
+    .map(key => {
+      const tab = INITIAL_DOCUMENT_TYPES[key];
+      return {
+        ...tab,
+        documentType: INITIAL_DOCUMENT_TYPES_FILE_MAP[key],
+      };
+    })
+    .sort((a, b) => a.sort - b.sort);
+
   return {
     caseTitle,
     contactPrimaryLabel,
@@ -57,6 +73,7 @@ export const startCaseHelper = (
       user.role === USER_ROLES.petitioner
         ? 'Is your spouse deceased?'
         : 'Is the spouse deceased?',
+    documentTabs,
     filingTypes: FILING_TYPES[user.role] || FILING_TYPES[USER_ROLES.petitioner],
     formattedCaseType,
     hasContactSecondary,
