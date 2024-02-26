@@ -4,8 +4,11 @@ import {
   PutSecretValueCommand,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
-import { checkEnvVar } from '../util';
+import { requireEnvVars } from '../util';
 import { shuffle } from 'lodash';
+
+requireEnvVars(['COGNITO_USER_POOL', 'ENV']);
+
 const { COGNITO_USER_POOL, ENV } = process.env;
 
 const secretsClient = new SecretsManagerClient({ region: 'us-east-1' });
@@ -15,12 +18,6 @@ const cognitoClient = new CognitoIdentityProvider({
 
 const isDevelopmentEnvironment =
   process.argv[2] && process.argv[2] === '--development';
-
-checkEnvVar(ENV, 'You must specify a ENV in your local environment');
-checkEnvVar(
-  COGNITO_USER_POOL,
-  'You must specify a COGNITO_USER_POOL in your local environment',
-);
 
 const makeNewPassword = (): string => {
   const getRandomChar = charSet =>
@@ -75,10 +72,12 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   const USTC_ADMIN_PASS = makeNewPassword();
 
   // for local use only!
-  console.log({
-    DEFAULT_ACCOUNT_PASS,
-    USTC_ADMIN_PASS,
-  });
+  if (!process.env.CI) {
+    console.log({
+      DEFAULT_ACCOUNT_PASS,
+      USTC_ADMIN_PASS,
+    });
+  }
 
   await cognitoClient.adminSetUserPassword({
     Password: USTC_ADMIN_PASS,
@@ -100,8 +99,10 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   console.log('✅ Secrets updated');
 };
 
-rotateSecrets(ENV!).then(() => {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  await rotateSecrets(ENV!);
   console.log(
     '🏁 All done. Be sure to run setup-test-users.sh or wait for the next deploy',
   );
-});
+})();
