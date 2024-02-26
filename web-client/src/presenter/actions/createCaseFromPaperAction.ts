@@ -12,18 +12,36 @@ export const createCaseFromPaperAction = async ({
 
   let caseDetail: RawCase;
   try {
-    caseDetail = await applicationContext
+    const {
+      applicationForWaiverOfFilingFeeFileId,
+      atpFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
+      requestForPlaceOfTrialFileId,
+      stinFileId,
+    } = await applicationContext
       .getUseCases()
-      .filePetitionFromPaperInteractor(applicationContext, {
+      .filePetitionInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeUploadProgress:
           fileUploadProgressMap.waiverOfFilingFee,
         atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
         corporateDisclosureUploadProgress: fileUploadProgressMap.corporate,
-        petitionMetadata,
         petitionUploadProgress: fileUploadProgressMap.petition,
         requestForPlaceOfTrialUploadProgress:
           fileUploadProgressMap.requestForPlaceOfTrial,
         stinUploadProgress: fileUploadProgressMap.stin,
+      });
+
+    caseDetail = await applicationContext
+      .getUseCases()
+      .createCaseFromPaperInteractor(applicationContext, {
+        applicationForWaiverOfFilingFeeFileId,
+        attachmentToPetitionFileId: atpFileId,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        requestForPlaceOfTrialFileId,
+        stinFileId,
       });
   } catch (err) {
     return path.error();

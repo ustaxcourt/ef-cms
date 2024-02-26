@@ -60,7 +60,6 @@ export const filePetitionFromPaperInteractor = async (
     applicationForWaiverOfFilingFeeUploadProgress,
     atpUploadProgress,
     corporateDisclosureUploadProgress,
-    petitionMetadata,
     petitionUploadProgress,
     requestForPlaceOfTrialUploadProgress,
     stinUploadProgress,
@@ -146,15 +145,24 @@ export const filePetitionFromPaperInteractor = async (
     attachmentToPetitionFileUpload,
   ]);
 
-  return await applicationContext
-    .getUseCases()
-    .createCaseFromPaperInteractor(applicationContext, {
-      applicationForWaiverOfFilingFeeFileId,
-      attachmentToPetitionFileId,
-      corporateDisclosureFileId,
-      petitionFileId,
-      petitionMetadata,
-      requestForPlaceOfTrialFileId,
-      stinFileId,
-    });
+  return {
+    applicationForWaiverOfFilingFeeFileId,
+    attachmentToPetitionFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+  };
+
+  // return await applicationContext
+  //   .getUseCases()
+  //   .createCaseFromPaperInteractor(applicationContext, {
+  //     applicationForWaiverOfFilingFeeFileId,
+  //     attachmentToPetitionFileId,
+  //     corporateDisclosureFileId,
+  //     petitionFileId,
+  //     petitionMetadata,
+  //     requestForPlaceOfTrialFileId,
+  //     stinFileId,
+  //   });
 };
