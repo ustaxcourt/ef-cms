@@ -8,10 +8,8 @@ resource "aws_cognito_user_pool" "pool" {
     email_message        = <<EMAILMESSAGE
     <div>
     <span>
-      Hello DAWSON user,
-    </span>
-    <span>
-      You have requested a password reset. Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>
+    Hello DAWSON user, <br/> 
+    You have requested a password reset. Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>
     </span>
     <div style="margin-top: 20px;">
       <span style="font-weight: bold; font-size: 20px;">{####}</span>
