@@ -436,6 +436,7 @@ export const ScanBatchPreviewer = connect(
           >
             {documentTabsList.map(documentTab => (
               <Tab
+                data-testid={`tabButton-${documentTab.documentType}`}
                 icon={
                   scanHelper[`${documentTab.documentType}Completed`] && (
                     <FontAwesomeIcon

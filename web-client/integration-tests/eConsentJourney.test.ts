@@ -11,6 +11,8 @@ import {
   loginAs,
   setupTest,
   uploadPetition,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
 } from './helpers';
 import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from '../src/presenter/computeds/internalPetitionPartiesHelper';
 import { partiesInformationHelper as partiesInformationHelperComputed } from '../src/presenter/computeds/partiesInformationHelper';
@@ -210,6 +212,9 @@ describe('E-Consent journey', () => {
       );
 
       await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+      await waitForLoadingComponentToHide({ cerebralTest });
+      await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
       expect(cerebralTest.getState('currentPage')).toEqual(
         'PrintPaperPetitionReceipt',
