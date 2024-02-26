@@ -1,18 +1,19 @@
 import {
   batchDelete,
   queryFull,
-} from '../../web-api/persistence/dynamodbClientService';
+} from '@web-api/persistence/dynamodbClientService';
 import { chunk } from 'lodash';
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { createSectionOutboxRecords } from '../../web-api/src/persistence/dynamo/workitems/createSectionOutboxRecords';
-import { createUserOutboxRecord } from '../../web-api/src/persistence/dynamo/workitems/createUserOutboxRecord';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { createSectionOutboxRecords } from '@web-api/persistence/dynamo/workitems/createSectionOutboxRecords';
+import { createUserOutboxRecord } from '@web-api/persistence/dynamo/workitems/createUserOutboxRecord';
 import { readFileSync } from 'fs';
-import { sleep } from '../../shared/src/tools/helpers';
+import { sleep } from '@shared/tools/helpers';
+import type { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 const archiveUserOutboxItems = async (
-  applicationContext,
-  { items, userId },
-) => {
+  applicationContext: IApplicationContext,
+  { items, userId }: { items: RawWorkItem[]; userId: string },
+): Promise<void> => {
   const promises = items.map(workItem =>
     createUserOutboxRecord({ applicationContext, userId, workItem }),
   );
@@ -20,9 +21,9 @@ const archiveUserOutboxItems = async (
 };
 
 const archiveSectionOutboxItems = async (
-  applicationContext,
-  { items, section },
-) => {
+  applicationContext: IApplicationContext,
+  { items, section }: { items: RawWorkItem[]; section: string },
+): Promise<void> => {
   const promises = items.map(workItem =>
     createSectionOutboxRecords({ applicationContext, section, workItem }),
   );
@@ -30,9 +31,19 @@ const archiveSectionOutboxItems = async (
 };
 
 const archiveOutboxItems = async (
-  applicationContext,
-  { bucketKey, bucketType, items, retries = 0 },
-) => {
+  applicationContext: IApplicationContext,
+  {
+    bucketKey,
+    bucketType,
+    items,
+    retries = 0,
+  }: {
+    bucketKey: string;
+    bucketType: string;
+    items: RawWorkItem[];
+    retries?: number;
+  },
+): Promise<void> => {
   try {
     switch (bucketType) {
       case 'user-outbox':
@@ -49,7 +60,7 @@ const archiveOutboxItems = async (
         break;
     }
   } catch (err) {
-    console.log(`ERROR - ${err.message}`);
+    console.log('Error archiving outbox items:', err);
     if (retries > 9) {
       console.log(items);
       throw 'Cannot complete operation';
@@ -64,7 +75,10 @@ const archiveOutboxItems = async (
   }
 };
 
-const processPrimaryKey = async (applicationContext, { pk }) => {
+const processPrimaryKey = async (
+  applicationContext: IApplicationContext,
+  { pk }: { pk: string },
+): Promise<void> => {
   const [bucketType, bucketKey] = pk.split('|');
 
   if (!['user-outbox', 'section-outbox'].includes(bucketType)) {
@@ -94,7 +108,7 @@ const processPrimaryKey = async (applicationContext, { pk }) => {
     await archiveOutboxItems(applicationContext, {
       bucketKey,
       bucketType,
-      items,
+      items: items as unknown as RawWorkItem[],
     });
 
     console.log(`batch ${i++}/${chunks.length} done`);
