@@ -17,8 +17,9 @@ describe('createConfirmLinkAction', () => {
     process.env = oldEnv;
   });
 
-  it('should return immediately if IS_LOCAL is not defined', async () => {
-    delete process.env.IS_LOCAL;
+  it('should return immediately when running on a deployed environment', async () => {
+    delete process.env.ENV;
+
     const result = await runAction(createConfirmLinkAction, {
       modules: {
         presenter,
@@ -27,16 +28,14 @@ describe('createConfirmLinkAction', () => {
         email,
       },
     });
+
     expect(result.output).toBeUndefined();
   });
 
-  it('should construct an alertSuccess message when IS_LOCAL is "true"', async () => {
-    process.env.IS_LOCAL = 'true';
-
+  it('should construct an alertSuccess message when env is "local"', async () => {
+    process.env.ENV = 'local';
     const queryString = qs.stringify({ email }, { encode: true });
-
     const confirmationLink = `http://localhost:1234/confirm-signup?${queryString}`;
-
     const expectedMessage = (
       <>
         {' '}
@@ -48,6 +47,7 @@ describe('createConfirmLinkAction', () => {
         </a>
       </>
     );
+
     const result = await runAction(createConfirmLinkAction, {
       modules: {
         presenter,
@@ -58,7 +58,6 @@ describe('createConfirmLinkAction', () => {
     });
 
     const { message, title } = result.output!.alertSuccess;
-
     expect(message).toEqual(expectedMessage);
     expect(title).toEqual('Account Created Locally');
   });

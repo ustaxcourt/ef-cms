@@ -5,7 +5,7 @@ import qs from 'qs';
 export const createConfirmLinkAction = ({
   props,
 }: ActionProps<SignUpUserResponse>) => {
-  if (!process.env.IS_LOCAL) return;
+  if (process.env.ENV !== 'local') return;
 
   const queryString = qs.stringify(
     {

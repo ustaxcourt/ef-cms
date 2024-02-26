@@ -11,7 +11,7 @@ export const deleteAuthCookieLambda = event =>
           'Set-Cookie': deleteCookieString(
             'refreshToken',
             process.env.EFCMS_DOMAIN,
-            !process.env.IS_LOCAL,
+            process.env.STAGE !== 'local',
           ),
         },
         statusCode: 204,
