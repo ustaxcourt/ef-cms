@@ -10,7 +10,10 @@ export const setProgressForFileUploadAction = ({
   props,
   store,
 }: ActionProps<{
-  files: any;
+  files: {
+    size: string;
+    name: string;
+  };
 }>): {
   fileUploadProgressMap: FileUploadProgressMapType;
 } => {
