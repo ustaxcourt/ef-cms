@@ -1,19 +1,13 @@
-const {
+import {
   batchDelete,
   queryFull,
-} = require('../../../web-api/src/persistence/dynamodbClientService');
-const {
-  createApplicationContext,
-} = require('../../../web-api/src/applicationContext');
-const {
-  createSectionOutboxRecords,
-} = require('../../../web-api/src/persistence/dynamo/workitems/createSectionOutboxRecords');
-const {
-  createUserOutboxRecord,
-} = require('../../../web-api/src/persistence/dynamo/workitems/createUserOutboxRecord');
-const { chunk } = require('lodash');
-const { readFileSync } = require('fs');
-const { sleep } = require('../../src/tools/helpers');
+} from '../../../web-api/src/persistence/dynamodbClientService';
+import { chunk } from 'lodash';
+import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import { createSectionOutboxRecords } from '../../../web-api/src/persistence/dynamo/workitems/createSectionOutboxRecords';
+import { createUserOutboxRecord } from '../../../web-api/src/persistence/dynamo/workitems/createUserOutboxRecord';
+import { readFileSync } from 'fs';
+import { sleep } from '../../src/tools/helpers';
 
 const archiveUserOutboxItems = async (
   applicationContext,
@@ -107,6 +101,8 @@ const processPrimaryKey = async (applicationContext, { pk }) => {
   }
   console.timeEnd(pk);
 };
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const jsonFile = process.argv[2];
   const applicationContext = createApplicationContext({});
