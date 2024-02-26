@@ -1,13 +1,13 @@
 import {
   batchDelete,
   queryFull,
-} from '../../../web-api/src/persistence/dynamodbClientService';
+} from '../../web-api/persistence/dynamodbClientService';
 import { chunk } from 'lodash';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
-import { createSectionOutboxRecords } from '../../../web-api/src/persistence/dynamo/workitems/createSectionOutboxRecords';
-import { createUserOutboxRecord } from '../../../web-api/src/persistence/dynamo/workitems/createUserOutboxRecord';
+import { createApplicationContext } from '../../web-api/src/applicationContext';
+import { createSectionOutboxRecords } from '../../web-api/src/persistence/dynamo/workitems/createSectionOutboxRecords';
+import { createUserOutboxRecord } from '../../web-api/src/persistence/dynamo/workitems/createUserOutboxRecord';
 import { readFileSync } from 'fs';
-import { sleep } from '../../src/tools/helpers';
+import { sleep } from '../../shared/src/tools/helpers';
 
 const archiveUserOutboxItems = async (
   applicationContext,
