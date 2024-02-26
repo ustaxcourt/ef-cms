@@ -9,6 +9,35 @@ describe('createCaseFromPaperAction', () => {
 
   let errorStub, successStub;
 
+  const fileMetaData = {
+    file: {},
+    uploadProgress: () => {},
+  };
+
+  const mockProps = {
+    fileUploadProgressMap: {
+      applicationForWaiverOfFilingFee: fileMetaData,
+      attachmentToPetition: fileMetaData,
+      corporateDisclosure: fileMetaData,
+      petition: fileMetaData,
+      requestForPlaceOfTrial: fileMetaData,
+      stin: fileMetaData,
+    },
+  };
+
+  const mockState = {
+    form: {
+      applicationForWaiverOfFilingFeeFile: {},
+      attachmentToPetitionFile: {},
+      corporateDisclosureFile: {},
+      petitionFile: {},
+      requestForPlaceOfTrialFile: {},
+      stinFile: {},
+      trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
+      ...MOCK_CASE,
+    },
+  };
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
@@ -22,11 +51,6 @@ describe('createCaseFromPaperAction', () => {
   });
 
   it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
-    const fileMetaData = {
-      file: {},
-      uploadProgress: () => {},
-    };
-
     applicationContext
       .getUseCases()
       .filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
@@ -35,28 +59,8 @@ describe('createCaseFromPaperAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        fileUploadProgressMap: {
-          attachmentToPetition: fileMetaData,
-          corporate: fileMetaData,
-          petition: fileMetaData,
-          requestForPlaceOfTrial: fileMetaData,
-          stin: fileMetaData,
-          waiverOfFilingFee: fileMetaData,
-        },
-      },
-      state: {
-        form: {
-          applicationForWaiverOfFilingFeeFile: {},
-          attachmentToPetitionFile: {},
-          corporateDisclosureFile: {},
-          petitionFile: {},
-          requestForPlaceOfTrialFile: {},
-          stinFile: {},
-          trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
-          ...MOCK_CASE,
-        },
-      },
+      props: mockProps,
+      state: mockState,
     });
 
     expect(
@@ -74,10 +78,6 @@ describe('createCaseFromPaperAction', () => {
   });
 
   it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
-    const fileMetaData = {
-      file: {},
-      uploadProgress: () => {},
-    };
     applicationContext
       .getUseCases()
       .filePetitionFromPaperInteractor.mockImplementation(() => {
@@ -88,29 +88,8 @@ describe('createCaseFromPaperAction', () => {
       modules: {
         presenter,
       },
-
-      props: {
-        fileUploadProgressMap: {
-          attachmentToPetition: fileMetaData,
-          corporate: fileMetaData,
-          petition: fileMetaData,
-          requestForPlaceOfTrial: fileMetaData,
-          stin: fileMetaData,
-          waiverOfFilingFee: fileMetaData,
-        },
-      },
-      state: {
-        form: {
-          applicationForWaiverOfFilingFeeFile: {},
-          attachmentToPetitionFile: {},
-          corporateDisclosureFile: {},
-          petitionFile: {},
-          requestForPlaceOfTrialFile: {},
-          stinFile: {},
-          trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
-          ...MOCK_CASE,
-        },
-      },
+      props: mockProps,
+      state: mockState,
     });
 
     expect(
