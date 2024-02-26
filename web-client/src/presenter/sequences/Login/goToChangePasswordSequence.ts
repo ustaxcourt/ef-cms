@@ -8,4 +8,4 @@ export const goToChangePasswordSequence = [
   clearAlertsAction,
   setupChangePasswordAction,
   setupCurrentPageAction('ChangePassword'),
-] as unknown as () => void;
+] as unknown as (props: { email: string; tempPassword: string }) => void;
