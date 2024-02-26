@@ -227,16 +227,16 @@ describe('submitChangePasswordAction', () => {
       alertError: {
         message: (
           <>
-            Your previous request to reset your password expired. You can
-            request a new password reset below. If you’re still having trouble,
-            contact{' '}
+            The code you entered is incorrect or expired. You can{' '}
+            <a href="/forgot-password">request a new code</a>. If you’re still
+            having trouble, contact{' '}
             <a href="mailto:dawson.support@ustaxcourt.gov">
               dawson.support@ustaxcourt.gov
             </a>
             .
           </>
         ),
-        title: 'Request expired',
+        title: 'Invalid verification code',
       },
     });
   });
