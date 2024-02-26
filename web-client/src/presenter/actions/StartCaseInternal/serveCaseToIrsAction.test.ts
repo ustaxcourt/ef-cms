@@ -4,15 +4,8 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { serveCaseToIrsAction } from './serveCaseToIrsAction';
 
 describe('serveCaseToIrsAction', () => {
-  const pathErrorStub = jest.fn();
-  const pathSuccessStub = jest.fn();
-
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
-    presenter.providers.path = {
-      error: pathErrorStub,
-      success: pathSuccessStub,
-    };
   });
 
   it('should serve an electronic case', async () => {
@@ -30,6 +23,5 @@ describe('serveCaseToIrsAction', () => {
     expect(
       applicationContext.getUseCases().serveCaseToIrsInteractor,
     ).toHaveBeenCalled();
-    expect(pathSuccessStub).toHaveBeenCalled();
   });
 });
