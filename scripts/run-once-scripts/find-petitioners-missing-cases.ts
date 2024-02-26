@@ -1,11 +1,11 @@
-// how to run
-// node find-petitioners-missing-cases.js mig alpha https://search-efcms-search-mig-alpha-dwffrub5hv5f4w4vlxpt4v65ni.us-east-1.es.amazonaws.com
+// usage: npx ts-node --transpile-only scripts/run-once-scripts/find-petitioners-missing-cases.ts
 
-import { RawUser } from '@shared/business/entities/User';
+import '../../types/IApplicationContext';
 import { chunk, isObject } from 'lodash';
-import { createApplicationContext } from '@web-api/applicationContext';
-import { requireEnvVars } from '../shared/admin-tools/util';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { createApplicationContext } from '../../web-api/src/applicationContext';
+import { requireEnvVars } from '../../shared/admin-tools/util';
+import { searchAll } from '../../web-api/src/persistence/elasticsearch/searchClient';
+import type { RawUser } from '../../shared/src/business/entities/User';
 
 requireEnvVars(['ENV', 'REGION']);
 
