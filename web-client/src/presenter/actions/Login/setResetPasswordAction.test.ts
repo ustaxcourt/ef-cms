@@ -12,8 +12,8 @@ describe('setResetPasswordAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form: {
+            code: '',
             confirmPassword: '',
             email: '',
             password: '',
@@ -24,8 +24,8 @@ describe('setResetPasswordAction', () => {
     });
 
     expect(result.state.authentication).toEqual({
-      code: testCode,
       form: {
+        code: testCode,
         confirmPassword: '',
         email: testEmail,
         password: '',

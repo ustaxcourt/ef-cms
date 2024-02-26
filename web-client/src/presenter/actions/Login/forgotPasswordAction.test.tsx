@@ -31,8 +31,12 @@ describe('forgotPasswordAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
+            confirmPassword: '',
             email: TEST_EMAIL,
+            password: '',
           },
+          tempPassword: '',
         },
       },
     });
@@ -76,8 +80,12 @@ describe('forgotPasswordAction', () => {
         state: {
           authentication: {
             form: {
+              code: '',
+              confirmPassword: '',
               email: TEST_EMAIL,
+              password: '',
             },
+            tempPassword: '',
           },
         },
       }),
@@ -101,8 +109,12 @@ describe('forgotPasswordAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
+            confirmPassword: '',
             email: TEST_EMAIL,
+            password: '',
           },
+          tempPassword: '',
         },
       },
     });

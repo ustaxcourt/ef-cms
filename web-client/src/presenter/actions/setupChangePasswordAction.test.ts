@@ -15,8 +15,8 @@ describe('setupChangePasswordAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form: {
+            code: '',
             confirmPassword: '',
             email: '',
             password: '',
@@ -28,8 +28,8 @@ describe('setupChangePasswordAction', () => {
 
     expect(result.state.showPassword).toEqual(false);
     expect(result.state.authentication).toEqual({
-      code: '',
       form: {
+        code: '',
         confirmPassword: '',
         email: mockUserEmail,
         password: '',

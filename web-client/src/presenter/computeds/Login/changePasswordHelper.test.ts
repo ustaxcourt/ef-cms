@@ -7,10 +7,12 @@ describe('changePasswordHelper', () => {
       state: {
         authentication: {
           form: {
+            code: '',
             confirmPassword: 'aA1!aaaa',
             email: 'test@example.com',
             password: 'aA1!aaaa',
           },
+          tempPassword: '',
         },
       },
     });
@@ -39,10 +41,12 @@ describe('changePasswordHelper', () => {
       state: {
         authentication: {
           form: {
+            code: '',
             confirmPassword: 'aA1!a',
             email: 'test@example.com',
             password: 'aA1!aaaa',
           },
+          tempPassword: '',
         },
       },
     });
@@ -57,9 +61,11 @@ describe('changePasswordHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
               email: 'realEmail@example.com',
               password: '',
             },
+            tempPassword: '',
           },
         },
       });
@@ -82,9 +88,11 @@ describe('changePasswordHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
               email: 'realEmail@example.com',
               password: ' Testing1234$',
             },
+            tempPassword: '',
           },
         },
       });
@@ -107,9 +115,11 @@ describe('changePasswordHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
               email: 'realEmail@example.com',
               password: '56781234$',
             },
+            tempPassword: '',
           },
         },
       });
@@ -132,9 +142,11 @@ describe('changePasswordHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
               email: 'realEmail@example.com',
               password: 'goodPassword',
             },
+            tempPassword: '',
           },
         },
       });
@@ -157,9 +169,11 @@ describe('changePasswordHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
               email: 'realEmail@example.com',
               password: 'aB1$',
             },
+            tempPassword: '',
           },
         },
       });
@@ -182,10 +196,12 @@ describe('changePasswordHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
               email: 'realEmail@example.com',
               password:
                 'KyA!1Quqagfkp4welhhf5su93V7AS80OMaSlzFkcQKHg571h5xOJu5Rk9E89ZRY1Y8XKvVnUI2QG50muWpF7Y8GB16cKkMCvh62Xl5CIEnk5yoJZ2SOKI0jTEYXstZtkTfbXNLb1LYrfU5ENUcJC31NA3q0',
             },
+            tempPassword: '',
           },
         },
       });
@@ -207,8 +223,8 @@ describe('changePasswordHelper', () => {
       const result = runCompute(changePasswordHelper, {
         state: {
           authentication: {
-            code: 'abc123',
             form: {
+              code: 'abc123',
               confirmPassword: 'aA1!aaaa',
               email: 'test@example.com',
               password: 'aA1!aaaa',
@@ -225,8 +241,8 @@ describe('changePasswordHelper', () => {
       const result = runCompute(changePasswordHelper, {
         state: {
           authentication: {
-            code: '',
             form: {
+              code: '',
               confirmPassword: 'aA1!aaaa',
               email: 'test@example.com',
               password: 'aA1!aaaa',
