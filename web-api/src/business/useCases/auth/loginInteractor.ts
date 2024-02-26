@@ -69,6 +69,9 @@ export async function authErrorHandling(
     error.name === 'NotAuthorizedException' ||
     error.name === 'UserNotFoundException'
   ) {
+    if (error?.message?.includes('Password attempts exceeded')) {
+      throw new Error('Password attempts exceeded');
+    }
     throw new UnidentifiedUserError('Invalid Username or Password'); //401 Security Concern do not reveal if the user account does not exist or if they have an incorrect password.
   }
 
