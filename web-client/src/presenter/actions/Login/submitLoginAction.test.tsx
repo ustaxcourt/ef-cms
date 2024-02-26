@@ -158,6 +158,44 @@ describe('submitLoginAction', () => {
     });
   });
 
+  it('should call the error path with a password attempts exceeded error when the user has too many failed login attempts', async () => {
+    applicationContext.getUseCases().loginInteractor.mockRejectedValue({
+      originalError: { response: { data: 'Password attempts exceeded' } },
+    });
+
+    await runAction(submitLoginAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        authentication: {
+          form: {
+            email: testEmail,
+            password: 'bad_password',
+          },
+        },
+      },
+    });
+
+    expect(mockSuccessPath).not.toHaveBeenCalled();
+    expect(mockChangePasswordPath).not.toHaveBeenCalled();
+    expect(mockErrorPath).toHaveBeenCalledWith({
+      alertError: {
+        message: (
+          <>
+            You can try again later or reset your password. If you’re still
+            having problems, contact{' '}
+            <a href="mailto:dawson.support@ustaxcourt.gov">
+              dawson.support@ustaxcourt.gov
+            </a>
+            .
+          </>
+        ),
+        title: 'Too many unsuccessful log ins',
+      },
+    });
+  });
+
   it('should call the error path with a user is unconfirmed message when the user is not authenticated because their account is not yet confirmed', async () => {
     applicationContext.getUseCases().loginInteractor.mockRejectedValue({
       originalError: { response: { data: 'User is unconfirmed' } },
