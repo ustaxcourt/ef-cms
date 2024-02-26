@@ -9,19 +9,16 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocketEntryIdAction } from '../actions/unsetDocketEntryIdAction';
 
-export const gotoAddPaperFiling = [
-  setupCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearScansAction,
-  clearFormAction,
-  unsetDocketEntryIdAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  resetAddPaperFilingAction,
-  setupCurrentPageAction('PaperFiling'),
-];
-
-export const gotoAddPaperFilingSequence = [
-  startWebSocketConnectionSequenceDecorator(gotoAddPaperFiling),
-];
+export const gotoAddPaperFilingSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearScansAction,
+    clearFormAction,
+    unsetDocketEntryIdAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    resetAddPaperFilingAction,
+    setupCurrentPageAction('PaperFiling'),
+  ]);

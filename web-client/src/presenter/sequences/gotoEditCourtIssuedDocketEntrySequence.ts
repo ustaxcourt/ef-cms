@@ -14,7 +14,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditCourtIssuedDocketEntry =
+export const gotoEditCourtIssuedDocketEntrySequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     setFromPageAction,
@@ -32,7 +32,3 @@ export const gotoEditCourtIssuedDocketEntry =
     setIsEditingDocketEntryAction(true),
     setupCurrentPageAction('CourtIssuedDocketEntry'),
   ]);
-
-export const gotoEditCourtIssuedDocketEntrySequence = [
-  gotoEditCourtIssuedDocketEntry,
-];

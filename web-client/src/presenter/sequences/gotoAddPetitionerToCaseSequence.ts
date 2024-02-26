@@ -6,7 +6,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoAddPetitionerToCaseSequence = [
+export const gotoAddPetitionerToCaseSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -15,5 +15,4 @@ export const gotoAddPetitionerToCaseSequence = [
     setCaseAction,
     setDefaultAddPetitionerToCaseFormAction,
     setupCurrentPageAction('AddPetitionerToCase'),
-  ]),
-];
+  ]);

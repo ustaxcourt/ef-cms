@@ -11,22 +11,21 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoCaseDeadlineReport = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearScreenMetadataAction,
-  closeMobileMenuAction,
-  clearErrorAlertsAction,
-  parallel([
-    getSetJudgesSequence,
-    [
-      clearCaseDeadlineReportAction,
-      setDefaultCaseDeadlinesReportDatesAction,
-      getCaseDeadlinesAction,
-      setCaseDeadlinesAction,
-    ],
-  ]),
-  setupCurrentPageAction('CaseDeadlines'),
-]);
-
-export const gotoCaseDeadlineReportSequence = [gotoCaseDeadlineReport];
+export const gotoCaseDeadlineReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearScreenMetadataAction,
+    closeMobileMenuAction,
+    clearErrorAlertsAction,
+    parallel([
+      getSetJudgesSequence,
+      [
+        clearCaseDeadlineReportAction,
+        setDefaultCaseDeadlinesReportDatesAction,
+        getCaseDeadlinesAction,
+        setCaseDeadlinesAction,
+      ],
+    ]),
+    setupCurrentPageAction('CaseDeadlines'),
+  ]);

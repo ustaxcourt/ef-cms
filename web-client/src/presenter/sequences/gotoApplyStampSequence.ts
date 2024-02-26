@@ -10,8 +10,8 @@ import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureName
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const goToApplyStampSequence = [
-  startWebSocketConnectionSequenceDecorator([
+export const goToApplyStampSequence = startWebSocketConnectionSequenceDecorator(
+  [
     setupCurrentPageAction('Interstitial'),
     getCaseAction,
     setCaseAction,
@@ -23,5 +23,5 @@ export const goToApplyStampSequence = [
     setPDFForStampAction,
     setPDFPageForSigningAction,
     setupCurrentPageAction('ApplyStamp'),
-  ]),
-];
+  ],
+);

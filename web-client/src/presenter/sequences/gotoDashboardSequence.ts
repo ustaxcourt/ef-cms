@@ -33,7 +33,7 @@ const proceedToMessages = [navigateToMessagesAction];
 
 const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 
-const goToDashboard = [
+export const gotoDashboardSequence = [
   setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
@@ -121,5 +121,3 @@ const goToDashboard = [
     ],
   },
 ];
-
-export const gotoDashboardSequence = [goToDashboard];

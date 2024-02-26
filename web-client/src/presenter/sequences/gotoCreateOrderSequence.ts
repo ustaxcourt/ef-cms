@@ -18,7 +18,7 @@ export const gotoCaseDetailWithModal = [
   navigateToCaseDetailAction,
 ];
 
-export const gotoCreateOrderSequence = [
+export const gotoCreateOrderSequence =
   startWebSocketConnectionSequenceDecorator([
     setRedirectUrlAction,
     hasOrderTypeSelectedAction,
@@ -37,5 +37,4 @@ export const gotoCreateOrderSequence = [
         setupCurrentPageAction('CreateOrder'),
       ],
     },
-  ]),
-];
+  ]);
