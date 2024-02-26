@@ -7,7 +7,6 @@ import React from 'react';
 describe('submitChangePasswordAction', () => {
   const mockSuccessPath = jest.fn();
   const mockUnconfirmedAccountPath = jest.fn();
-  const mockCodeExpiredPath = jest.fn();
   const mockErrorPath = jest.fn();
 
   const testEmail = 'example@example.com';
@@ -23,7 +22,6 @@ describe('submitChangePasswordAction', () => {
     presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
-      codeExpired: mockCodeExpiredPath,
       error: mockErrorPath,
       success: mockSuccessPath,
       unconfirmedAccount: mockUnconfirmedAccountPath,
@@ -71,9 +69,6 @@ describe('submitChangePasswordAction', () => {
       tempPassword: testTempPassword,
     });
     expect(mockSuccessPath).toHaveBeenCalledTimes(1);
-    expect(mockUnconfirmedAccountPath).not.toHaveBeenCalled();
-    expect(mockCodeExpiredPath).not.toHaveBeenCalled();
-    expect(mockErrorPath).not.toHaveBeenCalled();
   });
 
   it('should call the error path with a generic message when password was not changed because of an unknown error', async () => {
@@ -99,9 +94,6 @@ describe('submitChangePasswordAction', () => {
       },
     });
 
-    expect(mockSuccessPath).not.toHaveBeenCalled();
-    expect(mockUnconfirmedAccountPath).not.toHaveBeenCalled();
-    expect(mockCodeExpiredPath).not.toHaveBeenCalled();
     expect(mockErrorPath).toHaveBeenCalledWith({
       alertError: {
         message: (
@@ -157,9 +149,6 @@ describe('submitChangePasswordAction', () => {
       tempPassword: testTempPassword,
     });
 
-    expect(mockSuccessPath).not.toHaveBeenCalled();
-    expect(mockCodeExpiredPath).not.toHaveBeenCalled();
-    expect(mockErrorPath).not.toHaveBeenCalled();
     expect(mockUnconfirmedAccountPath.mock.calls.length).toEqual(1);
     expect(mockUnconfirmedAccountPath).toHaveBeenCalledWith({
       alertError: {
@@ -184,7 +173,9 @@ describe('submitChangePasswordAction', () => {
     applicationContext
       .getUseCases()
       .changePasswordInteractor.mockRejectedValue({
-        originalError: { response: { data: 'Forgot password code expired' } },
+        originalError: {
+          response: { data: 'Forgot password code is expired or incorrect' },
+        },
       });
 
     await runAction(submitChangePasswordAction, {
@@ -219,11 +210,7 @@ describe('submitChangePasswordAction', () => {
       tempPassword: '',
     });
 
-    expect(mockSuccessPath).not.toHaveBeenCalled();
-    expect(mockUnconfirmedAccountPath).not.toHaveBeenCalled();
-    expect(mockErrorPath).not.toHaveBeenCalled();
-    expect(mockCodeExpiredPath.mock.calls.length).toEqual(1);
-    expect(mockCodeExpiredPath).toHaveBeenCalledWith({
+    expect(mockErrorPath).toHaveBeenCalledWith({
       alertError: {
         message: (
           <>

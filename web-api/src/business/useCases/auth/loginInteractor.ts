@@ -79,7 +79,7 @@ export async function authErrorHandling(
     error.name === 'CodeMismatchException' ||
     error.name === 'ExpiredCodeException'
   ) {
-    throw new InvalidRequest('Forgot password code expired');
+    throw new InvalidRequest('Forgot password code is expired or incorrect');
   }
 
   if (error.name === 'UserNotConfirmedException') {
