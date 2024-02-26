@@ -9,6 +9,7 @@ import {
 import { defineConfig } from 'cypress';
 import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
+import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
 // eslint-disable-next-line import/no-default-export
@@ -41,6 +42,18 @@ export default defineConfig({
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
+        },
+        waitForPractitionerEmailUpdate({
+          docketNumber,
+          practitionerEmail,
+        }: {
+          docketNumber: string;
+          practitionerEmail: string;
+        }) {
+          return waitForPractitionerEmailUpdate({
+            docketNumber,
+            practitionerEmail,
+          });
         },
       });
     },
