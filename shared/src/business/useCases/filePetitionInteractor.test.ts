@@ -3,16 +3,14 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { filePetitionInteractor } from './filePetitionInteractor';
 
 describe('filePetitionInteractor', () => {
-  let stinFile: string;
-  let petitionFile: string;
-  let corporateDisclosureFile: string;
-  let petitionMetadata: string;
-  let atpFile: string;
+  let petitionMetadata: object;
+
+  const mockFile = {};
 
   beforeAll(() => {
     applicationContext
-      .getPersistenceGateway()
-      .uploadDocumentFromClient.mockResolvedValue(
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor.mockResolvedValue(
         'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       );
   });
@@ -22,10 +20,7 @@ describe('filePetitionInteractor', () => {
       role: ROLES.petitioner,
       userId: 'petitioner',
     });
-    stinFile = 'this is a stin file';
-    petitionFile = 'this is a petition file';
-    corporateDisclosureFile = 'this is a cds file';
-    atpFile = 'this is an atp file';
+    petitionMetadata = {};
   });
   it('throws an error when a null user tries to access the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue(null);
@@ -51,107 +46,116 @@ describe('filePetitionInteractor', () => {
 
   it('calls upload on a Petition file', async () => {
     await filePetitionInteractor(applicationContext, {
-      petitionFile,
-      petitionMetadata: null,
-    } as any);
-
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[0][0].document,
-    ).toEqual('this is a petition file');
-  });
-
-  it('calls upload on a STIN file', async () => {
-    await filePetitionInteractor(applicationContext, {
-      stinFile,
-    } as any);
-
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[1][0].document,
-    ).toEqual('this is a stin file');
-  });
-
-  it('uploads a Petition file and a STIN file', async () => {
-    await filePetitionInteractor(applicationContext, {
-      petitionFile,
       petitionMetadata,
-      stinFile,
+      petitionUploadProgress: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
     } as any);
 
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[0][0].document,
-    ).toEqual('this is a petition file');
-
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[1][0].document,
-    ).toEqual('this is a stin file');
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[0][1].document,
+    ).toEqual(mockFile);
 
     expect(
       applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
     ).toMatchObject({
-      corporateDisclosureFileId: undefined,
+      petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+  });
+
+  it('uploads a Petition file and a STIN file', async () => {
+    await filePetitionInteractor(applicationContext, {
+      petitionMetadata,
+      petitionUploadProgress: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
+      stinUploadProgress: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
+    } as any);
+
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[1][1].document,
+    ).toEqual(mockFile);
+
+    expect(
+      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
+    ).toMatchObject({
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
 
-  it('uploads an Corporate Disclosure Statement file', async () => {
+  it('uploads a Corporate Disclosure Statement file and a petition', async () => {
     await filePetitionInteractor(applicationContext, {
-      corporateDisclosureFile,
-      petitionFile,
+      corporateDisclosureUploadProgress: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
       petitionMetadata,
-      stinFile,
+      petitionUploadProgress: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
     } as any);
 
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[1][0].document,
-    ).toEqual('this is a cds file');
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[1][1].document,
+    ).toEqual(mockFile);
 
     expect(
       applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
     ).toMatchObject({
       corporateDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
 
-  it('uploads multiple "Attachment to Petition" files', async () => {
+  it('uploads Attachment to Petition file and a Petition file', async () => {
     await filePetitionInteractor(applicationContext, {
-      atpFilesMetadata: [{ file: atpFile }, { file: atpFile }],
-      petitionFile,
+      atpUploadProgress: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
       petitionMetadata,
+      petitionUploadProgress: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
     } as any);
 
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[0][0].document,
-    ).toEqual('this is a petition file');
-
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[1][0].document,
-    ).toEqual('this is an atp file');
-
-    expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[2][0].document,
-    ).toEqual('this is an atp file');
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[1][1].document,
+    ).toEqual(mockFile);
 
     expect(
       applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
     ).toMatchObject({
-      atpFileIds: [
-        'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      ],
-      corporateDisclosureFileId: undefined,
+      atpFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      stinFileId: undefined,
     });
+  });
+
+  it('throws an error if there is an error uploading documents', async () => {
+    applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor.mockRejectedValue('something wrong');
+
+    await expect(
+      filePetitionInteractor(applicationContext, {
+        petitionMetadata,
+        petitionUploadProgress: {
+          file: mockFile,
+          uploadProgress: jest.fn(),
+        },
+      } as any),
+    ).rejects.toThrow('Error uploading documents to file petition');
   });
 });
