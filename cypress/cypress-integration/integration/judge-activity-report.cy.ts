@@ -5,7 +5,7 @@ import { createAndServePaperPetition } from '../../helpers/create-and-serve-pape
 import { createOrderAndDecision } from '../../helpers/create-order-and-decision';
 import {
   loginAsColvin,
-  loginAsDocketClerk,
+  loginAsDocketClerk1,
 } from '../../helpers/auth/login-as-helpers';
 import { navigateToJudgeActivityReport } from '../../helpers/navigate-to-judge-activity-report';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
@@ -69,7 +69,7 @@ describe('Verify the activity report', () => {
   describe('Submitted/CAV table', () => {
     it('create a Submitted case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
 
@@ -83,7 +83,7 @@ describe('Verify the activity report', () => {
 
     it('create a CAV case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('CAV', 'Colvin');
 
@@ -97,7 +97,7 @@ describe('Verify the activity report', () => {
 
     it('create a Submitted - Rule 122 case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted - Rule 122', 'Colvin');
 
@@ -111,11 +111,11 @@ describe('Verify the activity report', () => {
 
     it('should not display a served decision type event code on the submitted and cav table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
 
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         createOrderAndDecision();
 
@@ -125,7 +125,7 @@ describe('Verify the activity report', () => {
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
 
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
 
         cy.get('[data-testid="tab-drafts"]').click();
@@ -146,7 +146,7 @@ describe('Verify the activity report', () => {
 
     it('should display a stricken decision type documents on the submitted and cav table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
         createOrderAndDecision();
@@ -178,13 +178,13 @@ describe('Verify the activity report', () => {
     it('should display lead case of a consolidated group', () => {
       createAndServePaperPetition().then(
         ({ docketNumber: childDocketNumber }) => {
-          loginAsDocketClerk();
+          loginAsDocketClerk1();
           searchByDocketNumberInHeader(childDocketNumber);
           updateCaseStatus('Submitted', 'Colvin');
 
           createAndServePaperPetition({ yearReceived: '2019' }).then(
             ({ docketNumber: leadDocketNumber }) => {
-              loginAsDocketClerk();
+              loginAsDocketClerk1();
               searchByDocketNumberInHeader(leadDocketNumber);
               updateCaseStatus('Submitted', 'Colvin');
               addCaseToGroup(childDocketNumber);
@@ -210,7 +210,7 @@ describe('Verify the activity report', () => {
   describe('Pending Motions Table', () => {
     it('should display Pending Motions for judge in that report', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
         searchByDocketNumberInHeader(docketNumber);
