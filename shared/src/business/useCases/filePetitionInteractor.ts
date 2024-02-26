@@ -7,17 +7,18 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const filePetitionInteractor = async (
   applicationContext: any,
   {
+    applicationForWaiverOfFilingFeeUploadProgress,
     atpUploadProgress,
     corporateDisclosureUploadProgress,
-    petitionMetadata,
     petitionUploadProgress,
+    requestForPlaceOfTrialUploadProgress,
     stinUploadProgress,
   }: {
+    applicationForWaiverOfFilingFeeUploadProgress?: any;
     atpUploadProgress?: any;
-    atpFilesMetadata?: any;
     corporateDisclosureUploadProgress?: any;
-    petitionMetadata: any;
     petitionUploadProgress: any;
+    requestForPlaceOfTrialUploadProgress?: any;
     stinUploadProgress: any;
   },
 ) => {
@@ -33,6 +34,17 @@ export const filePetitionInteractor = async (
       document: petitionUploadProgress.file,
       onUploadProgress: petitionUploadProgress.uploadProgress,
     });
+
+  let applicationForWaiverOfFilingFeeUpload;
+  if (applicationForWaiverOfFilingFeeUploadProgress) {
+    applicationForWaiverOfFilingFeeUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: applicationForWaiverOfFilingFeeUploadProgress.file,
+        onUploadProgress:
+          applicationForWaiverOfFilingFeeUploadProgress.uploadProgress,
+      });
+  }
 
   let corporateDisclosureFileUpload;
   if (corporateDisclosureUploadProgress) {
@@ -54,6 +66,16 @@ export const filePetitionInteractor = async (
       });
   }
 
+  let requestForPlaceOfTrialFileUpload;
+  if (requestForPlaceOfTrialUploadProgress) {
+    requestForPlaceOfTrialFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: requestForPlaceOfTrialUploadProgress.file,
+        onUploadProgress: requestForPlaceOfTrialUploadProgress.uploadProgress,
+      });
+  }
+
   let atpFileUpload;
   if (atpUploadProgress) {
     atpFileUpload = applicationContext
@@ -66,31 +88,44 @@ export const filePetitionInteractor = async (
 
   try {
     const [
+      applicationForWaiverOfFilingFeeFileId,
       corporateDisclosureFileId,
       petitionFileId,
+      requestForPlaceOfTrialFileId,
       stinFileId,
       atpFileId,
     ]: string[] = await Promise.all([
+      applicationForWaiverOfFilingFeeUpload,
       corporateDisclosureFileUpload,
       petitionFileUpload,
+      requestForPlaceOfTrialFileUpload,
       stinFileUpload,
       atpFileUpload,
     ]);
 
-    const caseDetail = await applicationContext
-      .getUseCases()
-      .createCaseInteractor(applicationContext, {
-        atpFileId,
-        corporateDisclosureFileId,
-        petitionFileId,
-        petitionMetadata,
-        stinFileId,
-      });
-
     return {
-      caseDetail,
+      applicationForWaiverOfFilingFeeFileId,
+      atpFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
+      requestForPlaceOfTrialFileId,
       stinFileId,
     };
+
+    // const caseDetail = await applicationContext
+    //   .getUseCases()
+    //   .createCaseInteractor(applicationContext, {
+    //     atpFileId,
+    //     corporateDisclosureFileId,
+    //     petitionFileId,
+    //     petitionMetadata,
+    //     stinFileId,
+    //   });
+
+    // return {
+    //   caseDetail,
+    //   stinFileId,
+    // };
   } catch (error) {
     throw new Error('Error uploading documents to file petition');
   }
