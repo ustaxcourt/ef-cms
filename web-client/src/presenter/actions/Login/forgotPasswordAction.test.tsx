@@ -51,12 +51,9 @@ describe('forgotPasswordAction', () => {
       alertSuccess: {
         message: (
           <>
-            If there is a DAWSON account for {TEST_EMAIL}, we’ll send a password
-            reset email. If you’re still having trouble, contact{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
-            </a>
-            .
+            If there is a DAWSON account for {TEST_EMAIL} we’ll send an email
+            with a code. This code will expire in 1 hour. If you don’t see the
+            email, check your spam folder.
           </>
         ),
         title: 'Password reset code sent',

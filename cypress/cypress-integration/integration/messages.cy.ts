@@ -1,3 +1,5 @@
+import { assertCountOfSelector, retry } from '../../helpers/retry';
+import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import {
   createMessage,
   enterSubject,
@@ -9,9 +11,6 @@ import {
   selectSection,
   sendMessage,
 } from '../support/pages/document-qc';
-
-import { assertCountOfSelector, retry } from '../../helpers/retry';
-import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import {
   getCaseStatusFilter,
   messagesShouldBeFiltered,
@@ -58,26 +57,14 @@ function verifySubjectTitleOrder({
 describe('Messages', () => {
   describe('Message filtering', () => {
     describe('Docket clerk completes qc and sends a message', () => {
-      it('should go to section document QC inbox', () => {
+      it('should go to section document QC inbox, complete an item needing qc, and send a message', () => {
         cy.login('docketclerk', '/document-qc/section/inbox');
         cy.get('.big-blue-header').should('exist');
-      });
-
-      it('should go to first document needing QC', () => {
         goToDocumentNeedingQC();
-      });
-
-      it('should open dialog to complete & send message', () => {
         openCompleteAndSendMessageDialog();
-      });
-
-      it('should fill out dialog to complete & send message', () => {
         selectSection('ADC');
         selectRecipient('Test ADC');
         fillOutMessageField();
-      });
-
-      it('should send the message', () => {
         sendMessage();
         progressIndicatorDoesNotExist();
       });
@@ -87,9 +74,6 @@ describe('Messages', () => {
       it('should go to case detail and open the dialog to create a new message', () => {
         cy.login('docketclerk', '/case-detail/103-20');
         createMessage();
-      });
-
-      it('should fill out the form and send the new message', () => {
         selectSection('ADC');
         selectRecipient('Test ADC');
         enterSubject();
@@ -103,9 +87,6 @@ describe('Messages', () => {
       it('should go to case detail and open the dialog to create a new message', () => {
         cy.login('docketclerk', '/case-detail/102-20');
         createMessage();
-      });
-
-      it('should fill out the form and send the new message', () => {
         selectSection('ADC');
         selectRecipient('Test ADC');
         enterSubject();

@@ -35,6 +35,11 @@ export function loginAsPetitionsClerk() {
 }
 
 export function loginAsDocketClerk() {
+  cy.login('docketclerk');
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+}
+
+export function loginAsDocketClerk1() {
   cy.login('docketclerk1');
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }

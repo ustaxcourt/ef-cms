@@ -2,7 +2,7 @@ import { addIntervenorAsPartyToCase } from '../../helpers/addIntervenorToCase';
 import { attachDummyFile } from '../../helpers/attach-file';
 import { externalUserSearchesDocketNumber } from '../../helpers/external-user-searches-docket-number';
 import {
-  loginAsDocketClerk,
+  loginAsDocketClerk1,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
@@ -62,7 +62,7 @@ describe('Private Practitioner requests access to case', () => {
       petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
 
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         addIntervenorAsPartyToCase();
 
