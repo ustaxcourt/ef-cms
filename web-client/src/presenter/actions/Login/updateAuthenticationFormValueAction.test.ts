@@ -12,8 +12,8 @@ describe('updateAuthenticationFormValueAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form: {
+            code: '',
             confirmPassword: '',
             email: '',
             password: '',
@@ -32,8 +32,8 @@ describe('updateAuthenticationFormValueAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form: {
+            code: '',
             confirmPassword: '',
             email: '',
             password: '',
@@ -54,8 +54,8 @@ describe('updateAuthenticationFormValueAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form: {
+            code: '',
             confirmPassword: '',
             email: '',
             password: '',
@@ -69,6 +69,7 @@ describe('updateAuthenticationFormValueAction', () => {
 
   it('should set state.authentication.form values to an empty string when values are removed from the form', async () => {
     let form = {
+      code: '',
       confirmPassword: 'invalid',
       email: 'invalid',
       password: 'invalid',
@@ -80,7 +81,6 @@ describe('updateAuthenticationFormValueAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form,
           tempPassword: '',
         },
@@ -94,7 +94,6 @@ describe('updateAuthenticationFormValueAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form,
           tempPassword: '',
         },
@@ -108,7 +107,6 @@ describe('updateAuthenticationFormValueAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form,
           tempPassword: '',
         },
@@ -117,6 +115,7 @@ describe('updateAuthenticationFormValueAction', () => {
     ({ form } = result.state.authentication);
 
     expect(result.state.authentication.form).toEqual({
+      code: '',
       confirmPassword: '',
       email: '',
       password: '',

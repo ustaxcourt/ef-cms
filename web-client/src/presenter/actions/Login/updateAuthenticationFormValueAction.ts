@@ -19,6 +19,6 @@ export const updateAuthenticationFormValueAction = ({
     store.set(state.authentication.form.password, props.password);
   }
   if ('code' in props) {
-    store.set(state.authentication.code, props.code);
+    store.set(state.authentication.form.code, props.code);
   }
 };
