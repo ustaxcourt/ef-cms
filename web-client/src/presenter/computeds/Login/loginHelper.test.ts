@@ -8,8 +8,12 @@ describe('loginHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
+              confirmPassword: '',
+              email: '',
               password: 'aA1!aaaa',
             },
+            tempPassword: '',
           },
         },
       });
@@ -22,8 +26,12 @@ describe('loginHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
+              confirmPassword: '',
               email: 'realEmail@example.com',
+              password: '',
             },
+            tempPassword: '',
           },
         },
       });
@@ -36,9 +44,12 @@ describe('loginHelper', () => {
         state: {
           authentication: {
             form: {
+              code: '',
+              confirmPassword: '',
               email: 'realEmail@example.com',
               password: 'friend',
             },
+            tempPassword: '',
           },
         },
       });

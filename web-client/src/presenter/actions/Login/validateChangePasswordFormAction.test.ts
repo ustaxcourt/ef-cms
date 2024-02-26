@@ -28,6 +28,7 @@ describe('validateChangePasswordFormAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
             confirmPassword: TEST_CONFIRM_PASSWORD,
             email: TEST_EMAIL,
             password: TEST_PASSWORD,
@@ -48,6 +49,7 @@ describe('validateChangePasswordFormAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
             confirmPassword: TEST_CONFIRM_PASSWORD,
             email: 'invalid@example',
             password: TEST_PASSWORD,
@@ -68,6 +70,7 @@ describe('validateChangePasswordFormAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
             confirmPassword: TEST_CONFIRM_PASSWORD,
             email: TEST_EMAIL,
             password: 'not_test_password',
@@ -89,6 +92,7 @@ describe('validateChangePasswordFormAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
             confirmPassword: mockInvalidPassword,
             email: TEST_EMAIL,
             password: mockInvalidPassword,

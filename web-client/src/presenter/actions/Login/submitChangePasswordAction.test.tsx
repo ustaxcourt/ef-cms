@@ -45,8 +45,8 @@ describe('submitChangePasswordAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form: {
+            code: '',
             confirmPassword: testConfirmPassword,
             email: testEmail,
             password: testPassword,
@@ -88,8 +88,8 @@ describe('submitChangePasswordAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form: {
+            code: '',
             confirmPassword: testConfirmPassword,
             email: testEmail,
             password: testPassword,
@@ -131,8 +131,8 @@ describe('submitChangePasswordAction', () => {
       },
       state: {
         authentication: {
-          code: '',
           form: {
+            code: '',
             confirmPassword: testConfirmPassword,
             email: testEmail,
             password: testPassword,
@@ -193,8 +193,8 @@ describe('submitChangePasswordAction', () => {
       },
       state: {
         authentication: {
-          code: 'expired_code',
           form: {
+            code: 'expired_code',
             confirmPassword: testConfirmPassword,
             email: testEmail,
             password: testPassword,

@@ -40,9 +40,12 @@ describe('submitLoginAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
+            confirmPassword: '',
             email: testEmail,
             password: testPassword,
           },
+          tempPassword: '',
         },
       },
     });
@@ -74,9 +77,12 @@ describe('submitLoginAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
+            confirmPassword: '',
             email: testEmail,
             password: testPassword,
           },
+          tempPassword: '',
         },
       },
     });
@@ -103,9 +109,12 @@ describe('submitLoginAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
+            confirmPassword: '',
             email: testEmail,
             password: testPassword,
           },
+          tempPassword: '',
         },
       },
     });
@@ -141,9 +150,12 @@ describe('submitLoginAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
+            confirmPassword: '',
             email: testEmail,
             password: 'bad_password',
           },
+          tempPassword: '',
         },
       },
     });
@@ -170,9 +182,12 @@ describe('submitLoginAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
+            confirmPassword: '',
             email: testEmail,
             password: 'bad_password',
           },
+          tempPassword: '',
         },
       },
     });
@@ -208,9 +223,12 @@ describe('submitLoginAction', () => {
       state: {
         authentication: {
           form: {
+            code: '',
+            confirmPassword: '',
             email: testEmail,
             password: testPassword,
           },
+          tempPassword: '',
         },
       },
     });
