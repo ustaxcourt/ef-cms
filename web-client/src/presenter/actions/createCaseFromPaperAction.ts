@@ -9,16 +9,16 @@ export const createCaseFromPaperAction = async ({
 }: ActionProps) => {
   const petitionMetadata: PaperCaseDataType = get(state.form);
   const { fileUploadProgressMap } = props;
-
   let caseDetail: RawCase;
   try {
     caseDetail = await applicationContext
       .getUseCases()
       .filePetitionFromPaperInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeUploadProgress:
-          fileUploadProgressMap.waiverOfFilingFee,
+          fileUploadProgressMap.applicationForWaiverOfFilingFee,
         atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
-        corporateDisclosureUploadProgress: fileUploadProgressMap.corporate,
+        corporateDisclosureUploadProgress:
+          fileUploadProgressMap.corporateDisclosure,
         petitionMetadata,
         petitionUploadProgress: fileUploadProgressMap.petition,
         requestForPlaceOfTrialUploadProgress:
