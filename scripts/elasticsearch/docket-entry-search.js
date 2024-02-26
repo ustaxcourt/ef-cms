@@ -1,5 +1,5 @@
-import { getClient } from '../../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../util';
+import { getClient } from '../../web-api/elasticsearch/client';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['ENV', 'SOURCE_TABLE_VERSION']);
 const environmentName = process.env.ENV;
