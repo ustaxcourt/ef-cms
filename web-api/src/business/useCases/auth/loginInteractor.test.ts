@@ -2,6 +2,7 @@ import {
   ChallengeNameType,
   InitiateAuthCommandOutput,
   InvalidPasswordException,
+  NotAuthorizedException,
   UserNotConfirmedException,
   UserNotFoundException,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -49,6 +50,25 @@ describe('loginInteractor', () => {
         password: mockPassword,
       }),
     ).rejects.toThrow(UnidentifiedUserError);
+  });
+
+  it('should throw an error when the user has too many failed login attempts', async () => {
+    const mockEmail = 'petitioner@example.com';
+    const mockPassword = 'MyPa$Sword!';
+    const mockTooManyAttemptsError = new NotAuthorizedException({
+      $metadata: {},
+      message: 'Password attempts exceeded',
+    });
+    applicationContext
+      .getCognito()
+      .initiateAuth.mockRejectedValue(mockTooManyAttemptsError);
+
+    await expect(
+      loginInteractor(applicationContext, {
+        email: mockEmail,
+        password: mockPassword,
+      }),
+    ).rejects.toThrow(new Error('Password attempts exceeded'));
   });
 
   it('should throw an UnidentifiedUserError error when the user is not found in persistence with the provided email', async () => {

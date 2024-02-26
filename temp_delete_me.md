@@ -1,10 +1,10 @@
 ::: STUFF TO DO :::
-- Investigate rate limiting authentication end points
 - Create Presentation on new patterns
 
 
 ::: QUESTIONS :::
 - Ask how many users are in an unconfirmed state in prod. If there are many we may need to think more about how to direct users.
+    - There 1388 Unconfirmed accounts.
 
 
 ::: New Patterns To Describe :::
