@@ -131,7 +131,11 @@ export const ModalDialog = ({
                   data-testid="modal-dialog-header"
                 >
                   {title && (
-                    <h3 className="modal-header__title" tabIndex={-1}>
+                    <h3
+                      className="modal-header__title"
+                      data-testid="modal-header"
+                      tabIndex={-1}
+                    >
                       {title}
                     </h3>
                   )}

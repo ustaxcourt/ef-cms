@@ -7,6 +7,8 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { IRSNoticeCaseReview } from '@web-client/views/CaseDetailEdit/IRSNoticeCaseReview';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
+import { ServeCaseToIrsErrorModal } from '../ServeCaseToIrsErrorModal';
+
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -278,6 +280,9 @@ export const ReviewSavedPetition = connect(
         {showModal == 'ConfirmServeToIrsModal' && <ConfirmServeToIrsModal />}
         {showModal == 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndNavigateSequence" />
+        )}
+        {showModal === 'ServeCaseToIrsErrorModal' && (
+          <ServeCaseToIrsErrorModal onCancelSequence="closeModalAndNavigateSequence" />
         )}
       </>
     );
