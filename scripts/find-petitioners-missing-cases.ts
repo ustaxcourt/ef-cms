@@ -1,103 +1,75 @@
 // how to run
 // node find-petitioners-missing-cases.js mig alpha https://search-efcms-search-mig-alpha-dwffrub5hv5f4w4vlxpt4v65ni.us-east-1.es.amazonaws.com
 
-const AWS = require('aws-sdk');
-const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
-const { chunk } = require('lodash');
-const { Client } = require('@opensearch-project/opensearch');
-const { get } = require('lodash');
+import { RawUser } from '@shared/business/entities/User';
+import { chunk, isObject } from 'lodash';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { requireEnvVars } from '../shared/admin-tools/util';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
-const environmentName = process.argv[2] || 'exp1';
-const version = process.argv[3] || 'alpha';
-const openSearchEndpoint = process.argv[4];
+requireEnvVars(['ENV', 'REGION']);
 
 const CHUNK_SIZE = 100;
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-});
-
-const openSearchClient = new Client({
-  ...AwsSigv4Signer({
-    getCredentials: () =>
-      new Promise((resolve, reject) => {
-        AWS.config.getCredentials((err, credentials) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(credentials);
-          }
-        });
-      }),
-
-    region: 'us-east-1',
-  }),
-  node: `https://${openSearchEndpoint}:443`,
-});
-
-const TABLE_NAME = `efcms-${environmentName}-${version}`;
-
-const queryForPetitioners = async () => {
-  let results = await openSearchClient.search({
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              terms: {
-                'role.S': ['petitioner'],
+const queryForPetitioners = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<RawUser[]> => {
+  const { results } = await searchAll({
+    applicationContext,
+    searchParameters: {
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                terms: {
+                  'role.S': ['petitioner'],
+                },
               },
-            },
-          ],
+            ],
+          },
         },
       },
+      index: 'efcms-user',
     },
-    index: 'efcms-user',
-    size: 10000,
   });
-
-  const hits = get(results, 'hits.hits');
-  const formatHit = hit => {
-    return {
-      ...AWS.DynamoDB.Converter.unmarshall(hit['_source']),
-      score: hit['_score'],
-    };
-  };
-
-  if (hits && hits.length > 0) {
-    results = hits.map(formatHit);
-  }
 
   return results;
 };
 
-const checkUser = async user => {
-  const userCases = await documentClient
-    .query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `user|${user.userId}`,
-        ':prefix': 'case',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      TableName: TABLE_NAME,
-    })
-    .promise()
-    .then(result => result.Items);
+const checkUser = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: RawUser;
+}): Promise<void> => {
+  const documentClient =
+    applicationContext.getDocumentClient(applicationContext);
+  const { Items: userCases } = await documentClient.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `user|${user.userId}`,
+      ':prefix': 'case',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    TableName: applicationContext.environment.dynamoDbTableName,
+  });
 
   await Promise.all(
     userCases.map(async theUserCase => {
-      const theCase = await documentClient
+      const theCase: RawCase = await documentClient
         .get({
           Key: {
             pk: `case|${theUserCase.docketNumber}`,
             sk: `case|${theUserCase.docketNumber}`,
           },
-          TableName: TABLE_NAME,
+          TableName: applicationContext.environment.dynamoDbTableName,
         })
         .promise()
         .then(({ Item }) => Item);
@@ -112,9 +84,21 @@ const checkUser = async user => {
           );
         }
       } else {
+        const primaryContactId =
+          'contactPrimary' in theCase &&
+          isObject(theCase.contactPrimary) &&
+          'contactId' in theCase.contactPrimary
+            ? theCase.contactPrimary.contactId
+            : '';
+        const secondaryContactId =
+          'contactSecondary' in theCase &&
+          isObject(theCase.contactSecondary) &&
+          'contactId' in theCase.contactSecondary
+            ? theCase.contactSecondary.contactId
+            : '';
         if (
-          user.userId !== theCase.contactPrimary?.contactId &&
-          user.userId !== theCase.contactSecondary?.contactId
+          user.userId !== primaryContactId &&
+          user.userId !== secondaryContactId
         ) {
           console.log(
             `ERROR: user ${user.userId} is associated with ${theCase.docketNumber}, but does not exist on the contactPrimary / contactSecondary`,
@@ -125,16 +109,21 @@ const checkUser = async user => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const users = await queryForPetitioners();
+  const applicationContext = createApplicationContext({});
+
+  const users = await queryForPetitioners({ applicationContext });
 
   const userChunks = chunk(users, CHUNK_SIZE);
-  let i = 1;
+  let i = 0;
   console.log(
     `processing ${userChunks.length} chunks of users with each chunk being ${CHUNK_SIZE}`,
   );
   for (let userChunk of userChunks) {
     console.log(`processing chunk ${i++} of ${userChunks.length}`);
-    await Promise.all(userChunk.map(checkUser));
+    await Promise.all(
+      userChunk.map(user => checkUser({ applicationContext, user })),
+    );
   }
 })();
