@@ -1,8 +1,11 @@
-const { getClient } = require('../../../web-api/elasticsearch/client');
+import { getClient } from '../../../web-api/elasticsearch/client';
+import { requireEnvVars } from '../util';
 
-const environmentName = process.argv[2] || 'exp1';
-const version = process.argv[3] || 'alpha';
+requireEnvVars(['ENV', 'SOURCE_TABLE_VERSION']);
+const environmentName = process.env.ENV;
+const version = process.env.SOURCE_TABLE_VERSION;
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const esClient = await getClient({ environmentName, version });
 
