@@ -1,6 +1,6 @@
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import {
-  loginAsDocketClerk,
+  loginAsDocketClerk1,
   loginAsPetitionsClerk,
 } from '../../helpers/auth/login-as-helpers';
 
@@ -8,7 +8,7 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
   it('should create a paper petition, serve the petition, and create an order on the petition', () => {
     loginAsPetitionsClerk();
     createAndServePaperPetition().then(({ docketNumber }) => {
-      loginAsDocketClerk();
+      loginAsDocketClerk1();
       cy.get('[data-testid="docket-number-search-input"]').clear();
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
