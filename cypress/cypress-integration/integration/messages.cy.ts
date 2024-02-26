@@ -19,7 +19,6 @@ import {
 import {
   loginAsDocketClerk,
   loginAsPetitionsClerk,
-  loginAsPetitionsClerk1,
 } from '../../helpers/auth/login-as-helpers';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
@@ -83,7 +82,7 @@ describe('Messages', () => {
         cy.wrap(docketNumber).as('DOCKET_NUMBER');
         searchByDocketNumberInHeader(docketNumber);
         sendMessagesToCompletedTab(DOCKET_CLERK_ID, docketNumber);
-        loginAsPetitionsClerk1();
+        loginAsPetitionsClerk();
         searchByDocketNumberInHeader(docketNumber);
         sendMessages(DOCKET_CLERK_ID);
       });
