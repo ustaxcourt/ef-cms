@@ -1,20 +1,24 @@
-// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-m071s-and-m074s.js > ~/Desktop/m071s-and-m074s-filed-in-2021-and-2022.csv
+// usage: npx ts-node --transpile-only scripts/reports/event-codes-by-year.ts M071,M074 2021-2022 > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
 
-const { requireEnvVars } = require('../util');
-requireEnvVars(['ENV', 'REGION']);
-const {
-  createApplicationContext,
-} = require('../../../web-api/src/applicationContext');
-const {
+import { createApplicationContext } from '@web-api/applicationContext';
+import { requireEnvVars } from '../../shared/admin-tools/util';
+import {
   search,
-} = require('../../../web-api/src/persistence/elasticsearch/searchClient');
-const {
-  validateDateAndCreateISO,
-} = require('../../src/business/utilities/DateHandler');
+  searchAll,
+} from '@web-api/persistence/elasticsearch/searchClient';
+import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
-const cachedCases = {};
+requireEnvVars(['ENV', 'REGION']);
 
-const getCase = async ({ applicationContext, docketNumber }) => {
+const cachedCases: { [key: string]: RawCase } = {};
+
+const getCase = async ({
+  applicationContext,
+  docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+}): Promise<RawCase | undefined> => {
   if (docketNumber in cachedCases) {
     return cachedCases[docketNumber];
   }
@@ -41,56 +45,83 @@ const getCase = async ({ applicationContext, docketNumber }) => {
     return;
   }
   cachedCases[docketNumber] = results[0];
-  return results[0];
+  return cachedCases[docketNumber];
 };
 
-const getM071AndM074DocketEntriesFiledIn2021Or2022 = async ({
+const getDocketEntriesByEventCodesAndYears = async ({
   applicationContext,
-}) => {
-  const { results } = await search({
+  eventCodes,
+  years,
+}: {
+  applicationContext: IApplicationContext;
+  eventCodes: string[];
+  years?: number[];
+}): Promise<RawDocketEntry[]> => {
+  const must: {}[] = [
+    {
+      bool: {
+        should: eventCodes.map(eventCode => {
+          return {
+            term: {
+              'eventCode.S': eventCode,
+            },
+          };
+        }),
+      },
+    },
+  ];
+  if (years && years.length) {
+    if (years.length === 1) {
+      must.push({
+        range: {
+          'receivedAt.S': {
+            gte: validateDateAndCreateISO({
+              day: '1',
+              month: '1',
+              year: String(years[0]),
+            }),
+            lt: validateDateAndCreateISO({
+              day: '1',
+              month: '1',
+              year: String(years[0] + 1),
+            }),
+          },
+        },
+      });
+    } else {
+      must.push({
+        bool: {
+          should: years.map(year => {
+            return {
+              range: {
+                'receivedAt.S': {
+                  gte: validateDateAndCreateISO({
+                    day: '1',
+                    month: '1',
+                    year: String(year),
+                  }),
+                  lt: validateDateAndCreateISO({
+                    day: '1',
+                    month: '1',
+                    year: String(year + 1),
+                  }),
+                },
+              },
+            };
+          }),
+        },
+      });
+    }
+  }
+  const { results } = await searchAll({
     applicationContext,
     searchParameters: {
       body: {
-        from: 0,
         query: {
           bool: {
-            must: [
-              {
-                range: {
-                  'receivedAt.S': {
-                    gte: validateDateAndCreateISO({
-                      day: 1,
-                      month: 1,
-                      year: 2021,
-                    }),
-                    lt: validateDateAndCreateISO({
-                      day: 1,
-                      month: 1,
-                      year: 2023,
-                    }),
-                  },
-                },
-              },
-              {
-                bool: {
-                  should: [
-                    {
-                      term: {
-                        'eventCode.S': 'M071',
-                      },
-                    },
-                    {
-                      term: {
-                        'eventCode.S': 'M074',
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
+            must,
           },
         },
-        size: 20000,
         sort: [{ 'receivedAt.S': 'asc' }],
       },
       index: 'efcms-docket-entry',
@@ -99,13 +130,33 @@ const getM071AndM074DocketEntriesFiledIn2021Or2022 = async ({
   return results;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
-  const docketEntries = await getM071AndM074DocketEntriesFiledIn2021Or2022({
+
+  const eventCodes = process.argv[2].split(',');
+  const years: number[] = [];
+  const yearArg = process.argv[3];
+  if (yearArg.includes('-')) {
+    const [lower, upper] = yearArg.split('-');
+    for (let i = Number(lower); i <= Number(upper); i++) {
+      years.push(Number(i));
+    }
+  } else {
+    const yearStrings = yearArg.split(',');
+    for (const year of yearStrings) {
+      years.push(Number(year));
+    }
+  }
+
+  const docketEntries = await getDocketEntriesByEventCodesAndYears({
     applicationContext,
+    eventCodes,
+    years,
   });
+
   console.log(
-    '"Docket Number","Date Filed","Document Type","Preferred Trial City","Associated Judge",' +
+    '"Docket Number","Date Filed","Document Type","Associated Judge",' +
       '"Case Status","Case Caption"',
   );
   for (const de of docketEntries) {
@@ -116,14 +167,17 @@ const getM071AndM074DocketEntriesFiledIn2021Or2022 = async ({
       applicationContext,
       docketNumber: de.docketNumber,
     });
+    if (!c) {
+      continue;
+    }
     const associatedJudge = c.associatedJudge
-      .replace('Chief Special Trial ', '')
+      ?.replace('Chief Special Trial ', '')
       .replace('Special Trial ', '')
       .replace('Judge ', '');
     console.log(
       `"${c.docketNumberWithSuffix}","${de.receivedAt.split('T')[0]}",` +
-        `"${de.documentType}","${c.preferredTrialCity}","${associatedJudge}",` +
-        `"${c.status}","${c.caseCaption}"`,
+        `"${de.documentType}","${associatedJudge}","${c.status}",` +
+        `"${c.caseCaption}"`,
     );
   }
 })();
