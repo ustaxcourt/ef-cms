@@ -67,7 +67,7 @@ export const ChangePassword = connect(
                   )}
                   <div className="margin-top-3">
                     <label className="usa-label" htmlFor="new-password-input">
-                      New Password
+                      New password
                     </label>
                     <input
                       required
@@ -116,7 +116,7 @@ export const ChangePassword = connect(
 
                   <div className="margin-top-3">
                     <label className="usa-label" htmlFor="confirm-password">
-                      Re-type New Password
+                      Re-type new password
                     </label>
                     <input
                       required

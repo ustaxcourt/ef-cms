@@ -159,7 +159,7 @@ export const CreatePetitionerAccountForm = connect(
               </div>
 
               <label className="usa-label" htmlFor="confirm-password">
-                Re-type Password
+                Re-type password
               </label>
               <input
                 required
