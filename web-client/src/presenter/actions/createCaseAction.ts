@@ -9,8 +9,6 @@ export const createCaseAction = async ({
 }: ActionProps) => {
   const { fileUploadProgressMap } = props;
   const petitionMetadata = get(state.form);
-  console.log('fileUploadProgressMap', fileUploadProgressMap);
-  console.log('petitionMetadata', petitionMetadata);
 
   const form = omit(petitionMetadata, 'trialCities');
 
@@ -22,7 +20,7 @@ export const createCaseAction = async ({
     filePetitionResult = await applicationContext
       .getUseCases()
       .filePetitionInteractor(applicationContext, {
-        atpUploadProgress: fileUploadProgressMap.atp,
+        atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
         corporateDisclosureUploadProgress:
           fileUploadProgressMap.corporateDisclosure,
         petitionMetadata: form,

@@ -37,7 +37,7 @@ describe('createCaseFromPaperAction', () => {
       },
       props: {
         fileUploadProgressMap: {
-          atp: fileMetaData,
+          attachmentToPetition: fileMetaData,
           corporate: fileMetaData,
           petition: fileMetaData,
           requestForPlaceOfTrial: fileMetaData,
@@ -91,7 +91,7 @@ describe('createCaseFromPaperAction', () => {
 
       props: {
         fileUploadProgressMap: {
-          atp: fileMetaData,
+          attachmentToPetition: fileMetaData,
           corporate: fileMetaData,
           petition: fileMetaData,
           requestForPlaceOfTrial: fileMetaData,
