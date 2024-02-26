@@ -27,7 +27,6 @@ const env = {
   EFCMS_DOMAIN: process.env.EFCMS_DOMAIN,
   ENV: process.env.ENV,
   FILE_UPLOAD_MODAL_TIMEOUT: process.env.FILE_UPLOAD_MODAL_TIMEOUT,
-  IS_LOCAL: process.env.IS_LOCAL,
   NO_SCANNER: process.env.NO_SCANNER,
   NODE_DEBUG: process.env.NODE_DEBUG,
   PDF_EXPRESS_LICENSE_KEY: process.env.PDF_EXPRESS_LICENSE_KEY,

@@ -23,7 +23,7 @@ export const loginLambda = event =>
             refreshToken,
             expiresAt,
             process.env.EFCMS_DOMAIN,
-            !process.env.IS_LOCAL,
+            applicationContext.environment.stage !== 'local',
           ),
         },
         statusCode: 200,

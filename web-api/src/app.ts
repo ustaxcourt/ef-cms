@@ -213,7 +213,10 @@ const allowAccessOriginFunction = (origin, callback) => {
 
   //if the backend is running locally or if an official deployed front-end called the backend, parrot out the Origin
   //this is required for the browser to support receiving and sending cookies
-  if (process.env.IS_LOCAL || origin.includes(process.env.EFCMS_DOMAIN)) {
+  if (
+    applicationContext.environment.stage === 'local' ||
+    origin.includes(process.env.EFCMS_DOMAIN)
+  ) {
     callback(null, origin);
     return;
   }
@@ -1031,7 +1034,7 @@ app.get(
 
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
-if (process.env.IS_LOCAL) {
+if (applicationContext.environment.stage === 'local') {
   app.get(
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
