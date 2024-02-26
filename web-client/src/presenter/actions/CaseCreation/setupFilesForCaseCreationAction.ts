@@ -7,6 +7,7 @@ export const setupFilesForCaseCreationAction = ({ get }: ActionProps) => {
     attachmentToPetitionFile,
     corporateDisclosureFile,
     petitionFile,
+    primaryDocumentFile,
     requestForPlaceOfTrialFile,
     stinFile,
   } = petitionMetadata;
@@ -17,6 +18,7 @@ export const setupFilesForCaseCreationAction = ({ get }: ActionProps) => {
       attachmentToPetition: attachmentToPetitionFile,
       corporateDisclosure: corporateDisclosureFile,
       petition: petitionFile,
+      primary: primaryDocumentFile,
       requestForPlaceOfTrial: requestForPlaceOfTrialFile,
       stin: stinFile,
     },

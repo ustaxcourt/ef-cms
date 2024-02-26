@@ -12,6 +12,7 @@ describe('setupFilesForCaseCreationAction test', () => {
           corporateDisclosureFile: undefined,
           notAFile: file,
           petitionFile: file,
+          primaryDocumentFile: file,
           requestForPlaceOfTrialFile: file,
           stinFile: file,
         },
@@ -23,6 +24,7 @@ describe('setupFilesForCaseCreationAction test', () => {
       attachmentToPetition: file,
       corporateDisclosure: undefined,
       petition: file,
+      primary: file,
       requestForPlaceOfTrial: file,
       stin: file,
     });
