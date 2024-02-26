@@ -108,7 +108,7 @@ describe('petitionQcHelper', () => {
       ]);
     });
 
-    it('displays ATP tab for electronic filings when an ATP is uploaded', () => {
+    it('displays ATP tab for electronic filings if an ATP document is filed', () => {
       mockState = {
         caseDetail: {
           docketEntries: [
@@ -135,7 +135,7 @@ describe('petitionQcHelper', () => {
       ]);
     });
 
-    it('displays CDS tab for electronic filings when a CDS is uploaded', () => {
+    it('displays CDS tab for electronic filings if a CDS document is filed', () => {
       mockState = {
         caseDetail: {
           docketEntries: [
