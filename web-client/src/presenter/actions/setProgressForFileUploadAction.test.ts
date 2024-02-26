@@ -6,7 +6,7 @@ describe('setProgressForFileUploadAction', () => {
     const results = await runAction(setProgressForFileUploadAction, {
       props: {
         files: {
-          attachmentToPetition: [{ size: 1 }],
+          attachmentToPetition: { size: 1 },
           petition: { size: 2 },
           stin: { size: 3 },
           trial: { size: 4 },
@@ -57,7 +57,7 @@ describe('setProgressForFileUploadAction', () => {
     const results = await runAction(setProgressForFileUploadAction, {
       props: {
         files: {
-          attachmentToPetition: [{ size: 1 }],
+          attachmentToPetition: { size: 1 },
           petition: { size: 2 },
           stin: { size: 3 },
           trial: { size: 4 },
@@ -118,7 +118,7 @@ describe('setProgressForFileUploadAction', () => {
     const results = await runAction(setProgressForFileUploadAction, {
       props: {
         files: {
-          attachmentToPetition: [{ size: 1 }],
+          attachmentToPetition: { size: 1 },
           noFile: undefined,
           petition: { size: 2 },
           stin: { size: 3 },

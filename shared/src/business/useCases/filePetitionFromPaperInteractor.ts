@@ -5,13 +5,31 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type FilePetitionFromPaperTypeDetailsType = {
-  applicationForWaiverOfFilingFeeUploadProgress?: (progressEvent: any) => void;
-  atpUploadProgress?: (progressEvent: any) => void;
-  corporateDisclosureUploadProgress?: (progressEvent: any) => void;
+  applicationForWaiverOfFilingFeeUploadProgress?: {
+    file: any;
+    uploadProgress: (progressEvent: any) => void;
+  };
+  atpUploadProgress?: {
+    file: any;
+    uploadProgress: (progressEvent: any) => void;
+  };
+  corporateDisclosureUploadProgress?: {
+    file: any;
+    uploadProgress: (progressEvent: any) => void;
+  };
   petitionMetadata: PaperCaseDataType;
-  petitionUploadProgress: (progressEvent: any) => void; // change type
-  requestForPlaceOfTrialUploadProgress?: (progressEvent: any) => void;
-  stinUploadProgress?: (progressEvent: any) => void;
+  petitionUploadProgress: {
+    file: any;
+    uploadProgress: (progressEvent: any) => void;
+  };
+  requestForPlaceOfTrialUploadProgress?: {
+    file: any;
+    uploadProgress: (progressEvent: any) => void;
+  };
+  stinUploadProgress?: {
+    file: any;
+    uploadProgress: (progressEvent: any) => void;
+  };
 };
 
 export type PaperCaseDataType = {
