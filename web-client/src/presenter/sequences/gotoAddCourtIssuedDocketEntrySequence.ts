@@ -14,7 +14,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoAddCourtIssuedDocketEntrySequence = [
+export const gotoAddCourtIssuedDocketEntrySequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -31,5 +31,4 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
     generateCourtIssuedDocumentTitleAction,
     setIsEditingDocketEntryAction(false),
     setupCurrentPageAction('CourtIssuedDocketEntry'),
-  ]),
-];
+  ]) as unknown as (props: { section: string; redirectUrl: string }) => void;

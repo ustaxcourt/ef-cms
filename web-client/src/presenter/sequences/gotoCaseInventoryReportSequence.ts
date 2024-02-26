@@ -22,7 +22,7 @@ const gotoDashboardWithModal = [
   navigateToDashboardAction,
 ];
 
-export const gotoCaseInventoryReportSequence = [
+export const gotoCaseInventoryReportSequence =
   startWebSocketConnectionSequenceDecorator([
     hasCaseInventoryReportFilterSelectedAction,
     {
@@ -32,5 +32,4 @@ export const gotoCaseInventoryReportSequence = [
         gotoCaseInventoryReport,
       ]),
     },
-  ]),
-];
+  ]);

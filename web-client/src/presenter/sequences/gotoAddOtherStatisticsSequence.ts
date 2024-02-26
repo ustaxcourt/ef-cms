@@ -5,7 +5,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoAddOtherStatisticsSequence = [
+export const gotoAddOtherStatisticsSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -13,5 +13,4 @@ export const gotoAddOtherStatisticsSequence = [
     getCaseAction,
     setCaseAction,
     setupCurrentPageAction('AddOtherStatistics'),
-  ]),
-];
+  ]);

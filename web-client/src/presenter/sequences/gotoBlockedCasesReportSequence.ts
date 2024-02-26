@@ -5,13 +5,12 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoBlockedCasesReport = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  clearScreenMetadataAction,
-  clearFormAction,
-  closeMobileMenuAction,
-  clearErrorAlertsAction,
-  setupCurrentPageAction('BlockedCasesReport'),
-]);
-
-export const gotoBlockedCasesReportSequence = [gotoBlockedCasesReport];
+export const gotoBlockedCasesReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    clearScreenMetadataAction,
+    clearFormAction,
+    closeMobileMenuAction,
+    clearErrorAlertsAction,
+    setupCurrentPageAction('BlockedCasesReport'),
+  ]);

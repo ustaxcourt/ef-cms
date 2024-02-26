@@ -18,32 +18,31 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  setFromPageAction,
-  clearScansAction,
-  clearFormAction,
-  clearModalAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  setDocketEntryFormForDocketEditAction,
-  updateDocketEntryWizardDataAction,
-  setDocketEntryIdAction,
-  isWorkItemAlreadyCompletedAction,
-  {
-    no: [],
-    yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
-  },
-  setQCWorkItemIdToMarkAsReadIfNeededAction,
-  setTabAction('Document Info'),
-  setupCurrentPageAction('DocketEntryQc'),
-  getShouldMarkReadAction,
-  {
-    markRead: [setWorkItemAsReadAction],
-    noAction: [],
-  },
-]);
-
-export const gotoDocketEntryQcSequence = [gotoDocketEntryQc];
+export const gotoDocketEntryQcSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    setFromPageAction,
+    clearScansAction,
+    clearFormAction,
+    clearModalAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    setDocketEntryFormForDocketEditAction,
+    updateDocketEntryWizardDataAction,
+    setDocketEntryIdAction,
+    isWorkItemAlreadyCompletedAction,
+    {
+      no: [],
+      yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
+    },
+    setQCWorkItemIdToMarkAsReadIfNeededAction,
+    setTabAction('Document Info'),
+    setupCurrentPageAction('DocketEntryQc'),
+    getShouldMarkReadAction,
+    {
+      markRead: [setWorkItemAsReadAction],
+      noAction: [],
+    },
+  ]);

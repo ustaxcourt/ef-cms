@@ -6,14 +6,13 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoContactEdit = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setupContactFormAction,
-  setupCurrentPageAction('ContactEdit'),
-]);
-
-export const gotoContactEditSequence = [gotoContactEdit];
+export const gotoContactEditSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setupContactFormAction,
+    setupCurrentPageAction('ContactEdit'),
+  ]);

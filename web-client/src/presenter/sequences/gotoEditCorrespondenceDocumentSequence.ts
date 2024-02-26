@@ -9,7 +9,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoEditCorrespondenceDocument =
+export const gotoEditCorrespondenceDocumentSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -22,7 +22,3 @@ const gotoEditCorrespondenceDocument =
     setRedirectUrlAction,
     setupCurrentPageAction('EditCorrespondenceDocument'),
   ]);
-
-export const gotoEditCorrespondenceDocumentSequence = [
-  gotoEditCorrespondenceDocument,
-];

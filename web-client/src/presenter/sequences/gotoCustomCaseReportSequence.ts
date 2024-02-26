@@ -4,12 +4,11 @@ import { setAllAndCurrentJudgesAction } from '@web-client/presenter/actions/setA
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoCustomCaseReport = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  resetCustomCaseReportStateAction,
-  getUsersInSectionAction({ section: 'judge' }),
-  setAllAndCurrentJudgesAction,
-  setupCurrentPageAction('CustomCaseReport'),
-]);
-
-export const gotoCustomCaseReportSequence = [gotoCustomCaseReport];
+export const gotoCustomCaseReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    resetCustomCaseReportStateAction,
+    getUsersInSectionAction({ section: 'judge' }),
+    setAllAndCurrentJudgesAction,
+    setupCurrentPageAction('CustomCaseReport'),
+  ]);

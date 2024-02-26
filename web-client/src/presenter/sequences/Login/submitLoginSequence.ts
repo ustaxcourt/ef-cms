@@ -10,21 +10,19 @@ import { setUserPermissionsAction } from '@web-client/presenter/actions/setUserP
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { submitLoginAction } from '@web-client/presenter/actions/Login/submitLoginAction';
 
-export const submitLoginSequence = [
-  showProgressSequenceDecorator([
-    clearAlertsAction,
-    submitLoginAction,
-    {
-      changePassword: [goToChangePasswordSequence],
-      error: [setAlertErrorAction],
-      success: [
-        clearAuthStateAction,
-        setTokenAction,
-        getUserAction,
-        setUserAction,
-        setUserPermissionsAction,
-        navigateToPathAction,
-      ],
-    },
-  ]),
-] as unknown as () => void;
+export const submitLoginSequence = showProgressSequenceDecorator([
+  clearAlertsAction,
+  submitLoginAction,
+  {
+    changePassword: [goToChangePasswordSequence],
+    error: [setAlertErrorAction],
+    success: [
+      clearAuthStateAction,
+      setTokenAction,
+      getUserAction,
+      setUserAction,
+      setUserPermissionsAction,
+      navigateToPathAction,
+    ],
+  },
+]) as unknown as () => void;

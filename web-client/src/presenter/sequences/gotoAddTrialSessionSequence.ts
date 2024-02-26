@@ -13,24 +13,21 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoAddTrialSession = [
-  setupCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  parallel([
-    [getTrialSessionsAction, setTrialSessionsAction],
-    [getIrsPractitionerUsersAction, setIrsPractitionerUsersAction],
-    getSetJudgesSequence,
-    [
-      getUsersInSectionAction({ section: 'trialClerks' }),
-      setUsersByKeyAction('trialClerks'),
-    ],
-  ]),
-  setDefaultTrialSessionFormValuesAction,
-  setupCurrentPageAction('AddTrialSession'),
-];
-
-export const gotoAddTrialSessionSequence = [
-  startWebSocketConnectionSequenceDecorator(gotoAddTrialSession),
-];
+export const gotoAddTrialSessionSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    parallel([
+      [getTrialSessionsAction, setTrialSessionsAction],
+      [getIrsPractitionerUsersAction, setIrsPractitionerUsersAction],
+      getSetJudgesSequence,
+      [
+        getUsersInSectionAction({ section: 'trialClerks' }),
+        setUsersByKeyAction('trialClerks'),
+      ],
+    ]),
+    setDefaultTrialSessionFormValuesAction,
+    setupCurrentPageAction('AddTrialSession'),
+  ]);
