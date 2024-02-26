@@ -163,6 +163,10 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           cy.get('[data-testid="practitioner-search-submit-button"]').click();
           cy.get('[data-testid="practitioner-representing-0"]').click();
           cy.get('[data-testid="modal-button-confirm"]').click();
+          cy.get('[data-testid="success-alert"]').should(
+            'contain.text',
+            'Petitioner counsel added to case.',
+          );
           logout();
 
           cy.login(practitionerUserName);
@@ -220,6 +224,15 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
             );
           cy.login(updatedPractitionerUserName);
           cy.get('[data-testid="my-cases-link"]');
+          cy.task('waitForPractitionerEmailUpdate', {
+            docketNumber,
+            practitionerEmail: updatedPractitionerEmail,
+          }).then(emailIsUpdatedOnCase => {
+            expect(emailIsUpdatedOnCase).to.equal(
+              true,
+              `The case ${docketNumber} does not reflect that the practitioner updated their email address.`,
+            );
+          });
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
             .click();
