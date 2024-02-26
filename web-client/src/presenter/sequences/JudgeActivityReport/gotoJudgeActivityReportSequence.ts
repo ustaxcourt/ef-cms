@@ -17,28 +17,25 @@ import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 
-const gotoJudgeActivityReport = [
-  setupCurrentPageAction('Interstitial'),
-  closeMobileMenuAction,
-  stopShowValidationAction,
-  clearScreenMetadataAction,
-  clearErrorAlertsAction,
-  clearJudgeActivityReportStatisticsDataAction,
-  clearJudgeActivityReportStatisticsFiltersAction,
-  getJudgeForCurrentUserAction,
-  setJudgeUserAction,
-  setDefaultJudgeNameBasedOnUserAction,
-  getUsersInSectionAction({ section: 'judge' }),
-  setAllAndCurrentJudgesAction,
-  setupCurrentPageAction('JudgeActivityReport'),
-  parallel([
-    [getSubmittedAndCavCasesByJudgeAction],
-    [getPendingMotionDocketEntriesForCurrentJudgeAction],
-  ]),
-  setCavAndSubmittedCasesAction,
-  setPendingMotionDocketEntriesForCurrentJudgeAction,
-];
-
-export const gotoJudgeActivityReportSequence = [
-  startWebSocketConnectionSequenceDecorator(gotoJudgeActivityReport),
-];
+export const gotoJudgeActivityReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    closeMobileMenuAction,
+    stopShowValidationAction,
+    clearScreenMetadataAction,
+    clearErrorAlertsAction,
+    clearJudgeActivityReportStatisticsDataAction,
+    clearJudgeActivityReportStatisticsFiltersAction,
+    getJudgeForCurrentUserAction,
+    setJudgeUserAction,
+    setDefaultJudgeNameBasedOnUserAction,
+    getUsersInSectionAction({ section: 'judge' }),
+    setAllAndCurrentJudgesAction,
+    setupCurrentPageAction('JudgeActivityReport'),
+    parallel([
+      [getSubmittedAndCavCasesByJudgeAction],
+      [getPendingMotionDocketEntriesForCurrentJudgeAction],
+    ]),
+    setCavAndSubmittedCasesAction,
+    setPendingMotionDocketEntriesForCurrentJudgeAction,
+  ]);
