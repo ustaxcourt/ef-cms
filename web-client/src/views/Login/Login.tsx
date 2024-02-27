@@ -95,7 +95,7 @@ export const Login = connect(
                           })
                         }
                       >
-                        {showPassword ? 'Hide Password' : 'Show password'}
+                        {showPassword ? 'Hide password' : 'Show password'}
                       </button>
                       <Button
                         className="usa-button margin-top-3"

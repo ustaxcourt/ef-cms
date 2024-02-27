@@ -18,7 +18,7 @@ export const userVerifiesUpdatedEmailAddress = (cerebralTest, user: string) =>
     const alertSuccess = cerebralTest.getState('alertSuccess');
     expect(currentPage).toEqual('Login');
     expect(alertSuccess).toEqual({
-      message: 'Your email address is verified. You can now sign in to DAWSON.',
+      message: 'Your email address is verified. You can now log in to DAWSON.',
       title: 'Email address verified',
     });
   });

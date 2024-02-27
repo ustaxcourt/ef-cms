@@ -15,7 +15,7 @@ export const verifyUserPendingEmailAction = async ({
     return path.success({
       alertSuccess: {
         message:
-          'Your email address is verified. You can now sign in to DAWSON.',
+          'Your email address is verified. You can now log in to DAWSON.',
         title: 'Email address verified',
       },
     });

@@ -139,7 +139,7 @@ export const CreatePetitionerAccountForm = connect(
                   toggleShowPasswordSequence({ passwordType: 'showPassword' })
                 }
               >
-                {showPassword ? 'Hide Password' : 'Show password'}
+                {showPassword ? 'Hide password' : 'Show password'}
               </button>
               <div
                 className="margin-top-1"
@@ -188,7 +188,7 @@ export const CreatePetitionerAccountForm = connect(
                   })
                 }
               >
-                {showConfirmPassword ? 'Hide Password' : 'Show password'}
+                {showConfirmPassword ? 'Hide password' : 'Show password'}
               </button>
               <div
                 className="margin-top-1"

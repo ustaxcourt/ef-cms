@@ -96,7 +96,7 @@ describe('Petitioner Updates e-mail', () => {
         .should('be.visible')
         .and(
           'contain.text',
-          'Your email address is verified. You can now sign in to DAWSON.',
+          'Your email address is verified. You can now log in to DAWSON.',
         );
       cy.url().should('contain', '/login');
       cy.login(updatedUsername);

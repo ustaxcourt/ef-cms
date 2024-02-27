@@ -42,7 +42,7 @@ describe('confirmSignUpAction', () => {
     expect(mockSuccessPath.mock.calls[0][0]).toEqual({
       alertSuccess: {
         message:
-          'Your email address is verified. You can now sign in to DAWSON.',
+          'Your email address is verified. You can now log in to DAWSON.',
         title: 'Email address verified',
       },
     });
