@@ -7,17 +7,14 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoPractitionerEditDocument = [
-  setupCurrentPageAction('Interstitial'),
-  clearFormAction,
-  stopShowValidationAction,
-  getPractitionerDetailAction,
-  setPractitionerDetailAction,
-  getPractitionerDocumentAction,
-  setPractitionerDocumentFormForEditAction,
-  setupCurrentPageAction('PractitionerAddEditDocument'),
-];
-
-export const gotoPractitionerEditDocumentSequence = [
-  startWebSocketConnectionSequenceDecorator(gotoPractitionerEditDocument),
-];
+export const gotoPractitionerEditDocumentSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    clearFormAction,
+    stopShowValidationAction,
+    getPractitionerDetailAction,
+    setPractitionerDetailAction,
+    getPractitionerDocumentAction,
+    setPractitionerDocumentFormForEditAction,
+    setupCurrentPageAction('PractitionerAddEditDocument'),
+  ]);

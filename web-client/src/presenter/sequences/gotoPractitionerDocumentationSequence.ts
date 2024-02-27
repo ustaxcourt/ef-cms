@@ -8,7 +8,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoPractitionerDocumentationSequence = [
+export const gotoPractitionerDocumentationSequence =
   showProgressSequenceDecorator([
     startWebSocketConnectionSequenceDecorator([
       clearErrorAlertsAction,
@@ -19,5 +19,4 @@ export const gotoPractitionerDocumentationSequence = [
       setPractitionerDocumentsAction,
       setupCurrentPageAction('PractitionerInformation'),
     ]),
-  ]),
-];
+  ]);

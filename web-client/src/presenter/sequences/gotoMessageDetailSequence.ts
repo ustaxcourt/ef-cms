@@ -19,31 +19,30 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
 
-const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
-  showProgressSequenceDecorator([
-    setupCurrentPageAction('Interstitial'),
-    closeMobileMenuAction,
-    clearErrorAlertsAction,
-    getCaseAction,
-    setCaseAction,
-    getJudgesCaseNoteForCaseAction,
-    setJudgesCaseNoteOnCaseDetailAction,
-    setParentMessageIdAction,
-    getMessageThreadAction,
-    setMessageAction,
-    getMostRecentMessageInThreadAction,
-    getDefaultAttachmentViewerDocumentToDisplayAction,
-    setMessageDetailViewerDocumentToDisplayAction,
-    setDefaultIsExpandedAction,
-    setCaseDetailPageTabActionGenerator('messages'),
-    setupCurrentPageAction('MessageDetail'),
-    getShouldMarkMessageAsReadAction,
-    {
-      markRead: [setMessageAsReadAction],
-      noAction: [],
-    },
-    unsetDocumentIdAction,
-  ]),
-);
-
-export const gotoMessageDetailSequence = [gotoMessageDetail];
+export const gotoMessageDetailSequence =
+  startWebSocketConnectionSequenceDecorator(
+    showProgressSequenceDecorator([
+      setupCurrentPageAction('Interstitial'),
+      closeMobileMenuAction,
+      clearErrorAlertsAction,
+      getCaseAction,
+      setCaseAction,
+      getJudgesCaseNoteForCaseAction,
+      setJudgesCaseNoteOnCaseDetailAction,
+      setParentMessageIdAction,
+      getMessageThreadAction,
+      setMessageAction,
+      getMostRecentMessageInThreadAction,
+      getDefaultAttachmentViewerDocumentToDisplayAction,
+      setMessageDetailViewerDocumentToDisplayAction,
+      setDefaultIsExpandedAction,
+      setCaseDetailPageTabActionGenerator('messages'),
+      setupCurrentPageAction('MessageDetail'),
+      getShouldMarkMessageAsReadAction,
+      {
+        markRead: [setMessageAsReadAction],
+        noAction: [],
+      },
+      unsetDocumentIdAction,
+    ]),
+  );

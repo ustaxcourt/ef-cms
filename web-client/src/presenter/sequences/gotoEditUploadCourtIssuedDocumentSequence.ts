@@ -9,7 +9,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoEditUploadCourtIssuedDocument =
+export const gotoEditUploadCourtIssuedDocumentSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -22,7 +22,3 @@ const gotoEditUploadCourtIssuedDocument =
     setDocumentToFormAction,
     setupCurrentPageAction('EditUploadCourtIssuedDocument'),
   ]);
-
-export const gotoEditUploadCourtIssuedDocumentSequence = [
-  gotoEditUploadCourtIssuedDocument,
-];

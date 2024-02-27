@@ -7,15 +7,14 @@ import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoPendingReport = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  clearScreenMetadataAction,
-  clearFormAction,
-  closeMobileMenuAction,
-  clearErrorAlertsAction,
-  clearPendingReportsAction,
-  getSetJudgesSequence,
-  setupCurrentPageAction('PendingReport'),
-]);
-
-export const gotoPendingReportSequence = [gotoPendingReport];
+export const gotoPendingReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    clearScreenMetadataAction,
+    clearFormAction,
+    closeMobileMenuAction,
+    clearErrorAlertsAction,
+    clearPendingReportsAction,
+    getSetJudgesSequence,
+    setupCurrentPageAction('PendingReport'),
+  ]);

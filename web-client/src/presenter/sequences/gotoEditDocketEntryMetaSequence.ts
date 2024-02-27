@@ -19,7 +19,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditDocketEntryMeta =
+export const gotoEditDocketEntryMetaSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -46,5 +46,3 @@ export const gotoEditDocketEntryMeta =
     setDefaultEditDocketEntryMetaTabAction,
     setupCurrentPageAction('EditDocketEntryMeta'),
   ]);
-
-export const gotoEditDocketEntryMetaSequence = [gotoEditDocketEntryMeta];

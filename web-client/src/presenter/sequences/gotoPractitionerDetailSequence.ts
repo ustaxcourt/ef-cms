@@ -7,15 +7,13 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoPractitionerDetailSequence = [
-  showProgressSequenceDecorator([
-    startWebSocketConnectionSequenceDecorator([
-      clearErrorAlertsAction,
-      setTabFromPropsAction,
-      setInitialTableSortAction,
-      getPractitionerDetailAction,
-      setPractitionerDetailAction,
-      setupCurrentPageAction('PractitionerInformation'),
-    ]),
+export const gotoPractitionerDetailSequence = showProgressSequenceDecorator([
+  startWebSocketConnectionSequenceDecorator([
+    clearErrorAlertsAction,
+    setTabFromPropsAction,
+    setInitialTableSortAction,
+    getPractitionerDetailAction,
+    setPractitionerDetailAction,
+    setupCurrentPageAction('PractitionerInformation'),
   ]),
-];
+]);

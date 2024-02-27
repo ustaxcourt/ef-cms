@@ -7,7 +7,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditDeficiencyStatisticSequence = [
+export const gotoEditDeficiencyStatisticSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -17,5 +17,4 @@ export const gotoEditDeficiencyStatisticSequence = [
     setCaseAction,
     setEditDeficiencyStatisticFormAction,
     setupCurrentPageAction('EditDeficiencyStatistic'),
-  ]),
-];
+  ]);

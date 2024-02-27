@@ -14,22 +14,21 @@ import { setTrialSessionsFiltersAction } from '../actions/TrialSession/setTrialS
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  clearScreenMetadataAction,
-  closeMobileMenuAction,
-  clearErrorAlertsAction,
-  parallel([
-    [getJudgeForCurrentUserAction, setJudgeUserAction],
-    [getNotificationsAction, setNotificationsAction],
-    [getTrialSessionsAction, setTrialSessionsAction],
-    [
-      getUsersInSectionAction({ section: 'judge' }),
-      setAllAndCurrentJudgesAction,
-    ],
-  ]),
-  setTrialSessionsFiltersAction,
-  setupCurrentPageAction('TrialSessions'),
-]);
-
-export const gotoTrialSessionsSequence = [gotoTrialSessions];
+export const gotoTrialSessionsSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    clearScreenMetadataAction,
+    closeMobileMenuAction,
+    clearErrorAlertsAction,
+    parallel([
+      [getJudgeForCurrentUserAction, setJudgeUserAction],
+      [getNotificationsAction, setNotificationsAction],
+      [getTrialSessionsAction, setTrialSessionsAction],
+      [
+        getUsersInSectionAction({ section: 'judge' }),
+        setAllAndCurrentJudgesAction,
+      ],
+    ]),
+    setTrialSessionsFiltersAction,
+    setupCurrentPageAction('TrialSessions'),
+  ]);

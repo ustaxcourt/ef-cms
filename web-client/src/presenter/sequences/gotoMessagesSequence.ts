@@ -18,7 +18,7 @@ import { setSectionForMessageBoxAction } from '../actions/setSectionForMessageBo
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const goToMessages = startWebSocketConnectionSequenceDecorator([
+export const gotoMessagesSequence = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('Interstitial'),
   resetCacheKeyAction,
   closeMobileMenuAction,
@@ -43,5 +43,3 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
   ]),
   setupCurrentPageAction('Messages'),
 ]);
-
-export const gotoMessagesSequence = [goToMessages];

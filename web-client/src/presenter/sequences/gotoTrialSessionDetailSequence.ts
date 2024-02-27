@@ -16,32 +16,31 @@ import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  setDefaultTrialSessionDetailTabAction,
-  clearErrorAlertsAction,
-  setTrialSessionIdAction,
-  parallel([
-    [
-      getTrialSessionDetailsAction,
-      setTrialSessionDetailsAction,
-      isTrialSessionCalendaredAction,
-      {
-        no: [
-          getEligibleCasesForTrialSessionAction,
-          setEligibleCasesOnTrialSessionAction,
-          mergeCaseOrderIntoEligibleCasesAction,
-        ],
-        yes: [
-          getCalendaredCasesForTrialSessionAction,
-          setCalendaredCasesOnTrialSessionAction,
-          mergeCaseOrderIntoCalendaredCasesAction,
-        ],
-      },
-    ],
-    [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
-  ]),
-  setupCurrentPageAction('TrialSessionDetail'),
-]);
-
-export const gotoTrialSessionDetailSequence = [gotoTrialSessionDetails];
+export const gotoTrialSessionDetailSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    setDefaultTrialSessionDetailTabAction,
+    clearErrorAlertsAction,
+    setTrialSessionIdAction,
+    parallel([
+      [
+        getTrialSessionDetailsAction,
+        setTrialSessionDetailsAction,
+        isTrialSessionCalendaredAction,
+        {
+          no: [
+            getEligibleCasesForTrialSessionAction,
+            setEligibleCasesOnTrialSessionAction,
+            mergeCaseOrderIntoEligibleCasesAction,
+          ],
+          yes: [
+            getCalendaredCasesForTrialSessionAction,
+            setCalendaredCasesOnTrialSessionAction,
+            mergeCaseOrderIntoCalendaredCasesAction,
+          ],
+        },
+      ],
+      [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
+    ]),
+    setupCurrentPageAction('TrialSessionDetail'),
+  ]);

@@ -14,35 +14,34 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoRequestAccess = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  getCaseAssociationAction,
-  setCaseAssociationAction,
-  canRequestAccessAction,
-  {
-    proceed: [
-      setDefaultFileDocumentFormValuesAction,
-      runPathForUserRoleAction,
-      {
-        irsPractitioner: [
-          setFormPartyTrueAction('partyIrsPractitioner'),
-          setRequestAccessWizardStepActionGenerator('RequestAccess'),
-          setupCurrentPageAction('RequestAccessWizard'),
-        ],
-        privatePractitioner: [
-          setFormPartyTrueAction('partyPrivatePractitioner'),
-          setRequestAccessWizardStepActionGenerator('RequestAccess'),
-          setupCurrentPageAction('RequestAccessWizard'),
-        ],
-      },
-    ],
-    unauthorized: [navigateToCaseDetailAction],
-  },
-]);
-
-export const gotoRequestAccessSequence = [gotoRequestAccess];
+export const gotoRequestAccessSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    getCaseAssociationAction,
+    setCaseAssociationAction,
+    canRequestAccessAction,
+    {
+      proceed: [
+        setDefaultFileDocumentFormValuesAction,
+        runPathForUserRoleAction,
+        {
+          irsPractitioner: [
+            setFormPartyTrueAction('partyIrsPractitioner'),
+            setRequestAccessWizardStepActionGenerator('RequestAccess'),
+            setupCurrentPageAction('RequestAccessWizard'),
+          ],
+          privatePractitioner: [
+            setFormPartyTrueAction('partyPrivatePractitioner'),
+            setRequestAccessWizardStepActionGenerator('RequestAccess'),
+            setupCurrentPageAction('RequestAccessWizard'),
+          ],
+        },
+      ],
+      unauthorized: [navigateToCaseDetailAction],
+    },
+  ]);
