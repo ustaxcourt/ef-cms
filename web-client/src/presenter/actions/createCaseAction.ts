@@ -1,3 +1,4 @@
+import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -6,7 +7,9 @@ export const createCaseAction = async ({
   get,
   path,
   props,
-}: ActionProps) => {
+}: ActionProps<{
+  fileUploadProgressMap: FileUploadProgressMapType;
+}>) => {
   const { fileUploadProgressMap } = props;
   const petitionMetadata = get(state.form);
 

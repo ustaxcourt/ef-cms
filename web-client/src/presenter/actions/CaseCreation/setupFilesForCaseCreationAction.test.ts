@@ -1,7 +1,7 @@
 import { runAction } from 'cerebral/test';
 import { setupFilesForCaseCreationAction } from './setupFilesForCaseCreationAction';
 
-describe('setupFilesForCaseCreationAction test', () => {
+describe('setupFilesForCaseCreationAction', () => {
   it('should get petition documents from state.form and returns document identifying keys', async () => {
     const file = {};
     const result = await runAction(setupFilesForCaseCreationAction, {

@@ -342,7 +342,7 @@ describe('reviewSavedPetitionHelper', () => {
     ]);
   });
 
-  it('should return attachmentToPetitionFile when the file was uploaded', () => {
+  it('should return attachmentToPetitionFile if the file was uploaded', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
