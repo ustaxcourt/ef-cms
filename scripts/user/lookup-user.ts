@@ -15,7 +15,7 @@ import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['ENV']);
 
-const { ENV: environmentName } = process.env;
+const environmentName = process.env.ENV!;
 
 if (process.argv.length < 3) {
   console.log(`Lookup User IDs and roles for the specified environment.
