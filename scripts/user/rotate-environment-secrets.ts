@@ -4,7 +4,7 @@ import {
   PutSecretValueCommand,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
-import { requireEnvVars } from '../util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 import { shuffle } from 'lodash';
 
 requireEnvVars(['COGNITO_USER_POOL', 'ENV']);

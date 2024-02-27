@@ -1,4 +1,7 @@
-import { createAdminAccount, deactivateAdminAccount } from './admin';
+import {
+  createAdminAccount,
+  deactivateAdminAccount,
+} from '../../shared/admin-tools/user/admin';
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

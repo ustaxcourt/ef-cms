@@ -8,4 +8,4 @@ if [ -z "${SECRETS_LOADED}" ]; then
     . ./scripts/load-environment-from-secrets.sh
 fi
 
-npx ts-node --transpile-only shared/admin-tools/user/setup-test-users.ts
+npx ts-node --transpile-only scripts/user/setup-test-users.ts

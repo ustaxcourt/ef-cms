@@ -2,8 +2,8 @@ import {
   activateAdminAccount,
   createDawsonUser,
   deactivateAdminAccount,
-} from './admin';
-import { requireEnvVars } from '../util';
+} from '../../shared/admin-tools/user/admin';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',

@@ -1,7 +1,7 @@
 jest.mock('uuid', () => 'eb7b7961-395d-4b4c-afc6-9ebcadaf0150');
 jest.mock('@aws-sdk/client-cognito-identity-provider');
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { verifyAdminUserDisabled } from './admin';
+import { verifyAdminUserDisabled } from '../../shared/admin-tools/user/admin';
 
 describe('verifyAdminUserDisabled', () => {
   // @ts-ignore
