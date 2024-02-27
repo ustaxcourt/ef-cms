@@ -1,15 +1,11 @@
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
-
-const getPublicSiteUrl = () => {
-  return `https://${process.env.EFCMS_DOMAIN}` || 'http://localhost:5678';
-};
+import { getPublicSiteUrl } from '../../helpers/env/get-public-site-url';
 
 describe('Public Docket Record', () => {
   it('should allow the user to generate and download a PDF of the docket record', () => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       cy.get('[data-testid="account-menu-button"]').click();
-      // cy.get('[data-testid="logout-button-desktop"]').click();
-      cy.get('[id="log-out"]').last().click();
+      cy.get('[data-testid="logout-button-desktop"]').click();
 
       cy.visit(getPublicSiteUrl());
       cy.get('input#docket-number').type(docketNumber);
