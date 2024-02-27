@@ -1,3 +1,4 @@
+import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -5,31 +6,13 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type FilePetitionFromPaperTypeDetailsType = {
-  applicationForWaiverOfFilingFeeUploadProgress?: {
-    file: any;
-    uploadProgress: (progressEvent: any) => void;
-  };
-  atpUploadProgress?: {
-    file: any;
-    uploadProgress: (progressEvent: any) => void;
-  };
-  corporateDisclosureUploadProgress?: {
-    file: any;
-    uploadProgress: (progressEvent: any) => void;
-  };
+  applicationForWaiverOfFilingFeeUploadProgress?: FileUploadProgressType;
+  atpUploadProgress?: FileUploadProgressType;
+  corporateDisclosureUploadProgress?: FileUploadProgressType;
   petitionMetadata: PaperCaseDataType;
-  petitionUploadProgress: {
-    file: any;
-    uploadProgress: (progressEvent: any) => void;
-  };
-  requestForPlaceOfTrialUploadProgress?: {
-    file: any;
-    uploadProgress: (progressEvent: any) => void;
-  };
-  stinUploadProgress?: {
-    file: any;
-    uploadProgress: (progressEvent: any) => void;
-  };
+  petitionUploadProgress: FileUploadProgressType;
+  requestForPlaceOfTrialUploadProgress?: FileUploadProgressType;
+  stinUploadProgress?: FileUploadProgressType;
 };
 
 export type PaperCaseDataType = {
