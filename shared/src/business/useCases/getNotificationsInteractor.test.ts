@@ -226,12 +226,16 @@ describe('getNotificationsInteractor', () => {
       {} as any,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getDocumentQCForSection.mock
-        .calls[0][0],
-    ).toMatchObject({
-      judgeUserId: undefined,
-      judgeUserName: CHIEF_JUDGE,
+    ['inbox', 'inProgress'].forEach(box => {
+      expect(
+        applicationContext.getPersistenceGateway().getDocumentQCForSection,
+      ).toHaveBeenCalledWith(
+        expect.objectContaining({
+          box,
+          judgeUserId: undefined,
+          judgeUserName: CHIEF_JUDGE,
+        }),
+      );
     });
   });
 
