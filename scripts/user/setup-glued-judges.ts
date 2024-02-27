@@ -1,4 +1,4 @@
-import { requireEnvVars } from '../util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
   'DESTINATION_TABLE',
@@ -15,7 +15,7 @@ import {
   formatResults,
 } from '@web-api/persistence/elasticsearch/searchClient';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
-import { getUserPoolId } from '../util';
+import { getUserPoolId } from '../../shared/admin-tools/util';
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
 const dynamoClient = new DynamoDBClient({
