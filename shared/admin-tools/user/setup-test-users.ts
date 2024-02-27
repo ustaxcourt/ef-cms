@@ -3,6 +3,15 @@ import {
   createDawsonUser,
   deactivateAdminAccount,
 } from './admin';
+import { requireEnvVars } from '../util';
+
+requireEnvVars([
+  'DEFAULT_ACCOUNT_PASS',
+  'DEPLOYING_COLOR',
+  'EFCMS_DOMAIN',
+  'USTC_ADMIN_PASS',
+  'USTC_ADMIN_USER',
+]);
 
 const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
 
@@ -146,7 +155,6 @@ const setupPractitioners = async () => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  // check if we have what we need?
   console.log('== Activating Admin Account');
   await activateAdminAccount();
   console.log('== Creating Court Users');
