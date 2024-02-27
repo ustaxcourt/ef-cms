@@ -4,24 +4,22 @@ import {
   createDawsonUser,
   deactivateAdminAccount,
 } from './admin';
-import { checkEnvVar, getUserPoolId } from '../util';
+import { getUserPoolId, requireEnvVars } from '../util';
 import joi from 'joi';
 
-const { DEPLOYING_COLOR, EFCMS_DOMAIN, ENV } = process.env;
+requireEnvVars([
+  'DEPLOYING_COLOR',
+  'EFCMS_DOMAIN',
+  'ENV',
+  'USTC_ADMIN_PASS',
+  'USTC_ADMIN_USER',
+]);
 
-checkEnvVar(
-  EFCMS_DOMAIN,
-  'Please have EFCMS_DOMAIN set up in your local environment',
-);
-checkEnvVar(ENV, 'Please have ENV set up in your local environment');
-checkEnvVar(
-  DEPLOYING_COLOR,
-  'Please have DEPLOYING_COLOR set up in your local environment',
-);
+const { DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
 
 const usage = error => {
   if (error) {
-    console.log(`\nERROR: ${error}`);
+    console.log(`\nERROR: ${error}\n`);
   }
 
   console.log(`
@@ -40,8 +38,8 @@ const usage = error => {
 
   Required Environment Variables:
 
-    - ENV: The deployed environment to which we are creating a user
     - EFCMS_DOMAIN: The URL to access the environment where we are creating a user
+    - DEPLOYING_COLOR: The color to which we are deploying
     - USTC_ADMIN_USER: The user we use to perform administrative actions
     - USTC_ADMIN_PASS: The password of the user we use to perform administrative actions\n`);
   process.exit();
