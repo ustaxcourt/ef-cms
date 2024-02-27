@@ -1,16 +1,20 @@
-// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/get-petition-counts.js 2022
+// usage: npx ts-node --transpile-only scripts/reports/petition-counts.js 2022
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import { createApplicationContext } from '@web-api/applicationContext';
 import {
   dateStringsCompared,
   validateDateAndCreateISO,
-} from '../../src/business/utilities/DateHandler';
-import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+} from '@shared/business/utilities/DateHandler';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
-const year = process.argv[2] || DateTime.now().toObject().year;
+const year = process.argv[2] || String(DateTime.now().toObject().year);
 
-const getAllPetitions = async ({ applicationContext }) => {
+const getAllPetitions = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<RawDocketEntry[]> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
@@ -50,7 +54,15 @@ const getAllPetitions = async ({ applicationContext }) => {
   return results;
 };
 
-const getCounts = ({ gte, lt, petitions }) => {
+const getCounts = ({
+  gte,
+  lt,
+  petitions,
+}: {
+  gte: string;
+  lt: string;
+  petitions: RawDocketEntry[];
+}): { isElectronic: number; isPaper: number } => {
   const petitionsReceivedInTimeframe = petitions.filter(
     p =>
       dateStringsCompared(p.receivedAt, gte) >= 0 &&
@@ -66,6 +78,7 @@ const getCounts = ({ gte, lt, petitions }) => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const petitions = await getAllPetitions({ applicationContext });
@@ -77,8 +90,8 @@ const getCounts = ({ gte, lt, petitions }) => {
       start.plus({ months: month + 1 }),
     ];
     const { isElectronic, isPaper } = getCounts({
-      gte: gte.toISO(),
-      lt: lt.toISO(),
+      gte: gte.toISO()!,
+      lt: lt.toISO()!,
       petitions,
     });
     console.log(
