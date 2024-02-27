@@ -8,16 +8,15 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoFileDocument = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  setDefaultFilersMapAction,
-  getCaseAction,
-  setCaseAction,
-  setWizardStepAction('SelectDocumentType'),
-  setupCurrentPageAction('FileDocumentWizard'),
-]);
-
-export const gotoFileDocumentSequence = [gotoFileDocument];
+export const gotoFileDocumentSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    setDefaultFilersMapAction,
+    getCaseAction,
+    setCaseAction,
+    setWizardStepAction('SelectDocumentType'),
+    setupCurrentPageAction('FileDocumentWizard'),
+  ]);

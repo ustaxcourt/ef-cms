@@ -50,35 +50,34 @@ const checkUserAssociationAndProceed = [
   },
 ];
 
-const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  clearErrorAlertsAction,
-  setTrialSessionIdAction,
-  getTrialSessionDetailsAction,
-  setTrialSessionDetailsAction,
-  getJudgeForCurrentUserAction,
-  setJudgeUserAction,
-  runPathForUserRoleAction,
-  {
-    ...takePathForRoles(
-      [
-        USER_ROLES.adc,
-        USER_ROLES.admissionsClerk,
-        USER_ROLES.clerkOfCourt,
-        USER_ROLES.caseServicesSupervisor,
-        USER_ROLES.docketClerk,
-        USER_ROLES.petitionsClerk,
+export const gotoTrialSessionWorkingCopySequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    clearErrorAlertsAction,
+    setTrialSessionIdAction,
+    getTrialSessionDetailsAction,
+    setTrialSessionDetailsAction,
+    getJudgeForCurrentUserAction,
+    setJudgeUserAction,
+    runPathForUserRoleAction,
+    {
+      ...takePathForRoles(
+        [
+          USER_ROLES.adc,
+          USER_ROLES.admissionsClerk,
+          USER_ROLES.clerkOfCourt,
+          USER_ROLES.caseServicesSupervisor,
+          USER_ROLES.docketClerk,
+          USER_ROLES.petitionsClerk,
+        ],
+        gotoTrialSessionDetailSequence,
+      ),
+      chambers: [
+        getUsersInSectionAction({}),
+        setUsersAction,
+        ...checkUserAssociationAndProceed,
       ],
-      gotoTrialSessionDetailSequence,
-    ),
-    chambers: [
-      getUsersInSectionAction({}),
-      setUsersAction,
-      ...checkUserAssociationAndProceed,
-    ],
-    judge: checkUserAssociationAndProceed,
-    trialclerk: checkUserAssociationAndProceed,
-  },
-]);
-
-export const gotoTrialSessionWorkingCopySequence = [gotoTrialSessionDetails];
+      judge: checkUserAssociationAndProceed,
+      trialclerk: checkUserAssociationAndProceed,
+    },
+  ]);

@@ -16,7 +16,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { takePathForRoles } from './takePathForRoles';
 const { DOCKET_SECTION, PETITIONS_SECTION, USER_ROLES } = getConstants();
 
-const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
+export const gotoWorkQueueSequence = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
@@ -66,5 +66,3 @@ const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
   ]),
   setupCurrentPageAction('WorkQueue'),
 ]);
-
-export const gotoWorkQueueSequence = [goToWorkQueue];

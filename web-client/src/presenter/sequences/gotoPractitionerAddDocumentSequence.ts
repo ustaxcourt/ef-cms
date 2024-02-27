@@ -5,15 +5,12 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoPractitionerAddDocument = [
-  setupCurrentPageAction('Interstitial'),
-  clearFormAction,
-  stopShowValidationAction,
-  getPractitionerDetailAction,
-  setPractitionerDetailAction,
-  setupCurrentPageAction('PractitionerAddEditDocument'),
-];
-
-export const gotoPractitionerAddDocumentSequence = [
-  startWebSocketConnectionSequenceDecorator(gotoPractitionerAddDocument),
-];
+export const gotoPractitionerAddDocumentSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    clearFormAction,
+    stopShowValidationAction,
+    getPractitionerDetailAction,
+    setPractitionerDetailAction,
+    setupCurrentPageAction('PractitionerAddEditDocument'),
+  ]);
