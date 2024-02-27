@@ -74,7 +74,7 @@ const updateCaseMessages = async ({
 }) => {
   const messageUpdatesNecessary = Message.CASE_PROPERTIES.filter(
     caseProperty => oldCase[caseProperty] !== caseToUpdate[caseProperty],
-  );
+  ).length;
 
   if (!messageUpdatesNecessary) {
     return [];
