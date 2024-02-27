@@ -93,7 +93,7 @@
   "scripts": {
     "admin:create-user": "npx ts-node --transpile-only shared/admin-tools/user/add-user.ts",
     "admin:become-user": "npx ts-node --transpile-only shared/admin-tools/glue/become-user.ts",
-    "admin:lookup-user": "npx ts-node --transpile-only shared/admin-tools/glue/lookup-user.js",
+    "admin:lookup-user": "npx ts-node --transpile-only scripts/user/lookup-user.ts",
     "admin:resend-service-email-to-irs-superuser": "npx ts-node --transpile-only shared/admin-tools/email/resend-service-email-to-irs-superuser.js",
     "backup:dynamo-table": "./scripts/dynamo/backup-dynamo-table.sh",
     "build:all": "npm run clean && npm run build:assets && npm run build:client",
