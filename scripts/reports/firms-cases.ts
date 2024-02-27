@@ -17,7 +17,7 @@ import { search } from '@web-api/persistence/elasticsearch/searchClient';
 const firmTerms: string[] = process.argv.slice(2);
 if (!firmTerms.length) {
   console.error(
-    'usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv',
+    'usage: npx ts-node --transpile-only scripts/reports/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv',
   );
   process.exit(1);
 }
