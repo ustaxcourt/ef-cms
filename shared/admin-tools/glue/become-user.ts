@@ -14,19 +14,11 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { checkEnvVar, getVersion } from '../util';
+import { getVersion, requireEnvVars } from '../util';
+
+requireEnvVars(['COGNITO_USER_EMAIL', 'COGNITO_USER_POOL', 'ENV']);
 
 const { COGNITO_USER_EMAIL, COGNITO_USER_POOL, ENV } = process.env;
-
-checkEnvVar(
-  COGNITO_USER_POOL,
-  'You must have COGNITO_USER_POOL set in your environment',
-);
-checkEnvVar(
-  COGNITO_USER_EMAIL,
-  'You must have COGNITO_USER_EMAIL set in your environment; This is the email address you use for Cognito',
-);
-checkEnvVar(ENV, 'You must have ENV set in your environment; (e.g., mig)');
 
 const usage = () => {
   console.log(`Assume the account of another user in the system. 
@@ -60,13 +52,7 @@ if (process.argv.length < 3) {
   usage();
 }
 
-/**
- * Lookup a role for the specified userId
- *
- * @param {String} userId The unique identifier of the user
- * @returns {String} The role found for the user
- */
-const lookupRoleForUser = async userId => {
+const lookupRoleForUser = async (userId: string): Promise<string> => {
   const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
   const documentClient = DynamoDBDocument.from(dynamodb, {
     marshallOptions: { removeUndefinedValues: true },
@@ -85,10 +71,16 @@ const lookupRoleForUser = async userId => {
     TableName,
   });
 
-  if (!data) {
+  if (
+    !data ||
+    !('Item' in data) ||
+    !data.Item ||
+    !('role' in data.Item) ||
+    !data.Item.role
+  ) {
     throw new Error(`Could not find a user for ${userId}`);
   }
-  return data.Item?.role;
+  return data.Item.role;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
