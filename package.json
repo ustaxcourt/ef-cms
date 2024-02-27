@@ -180,6 +180,8 @@
     "postinstall": "husky install && cd cognito-triggers-sls && npm ci",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",
+    "report:event-codes-by-year": "npx ts-node --transpile-only scripts/reports/event-codes-by-year.ts",
+    "report:petition-counts": "npx ts-node --transpile-only scripts/reports/petition-counts.ts",
     "reset-cases": "./clear-env.sh",
     "secrets:rotate-circleci": "./shared/admin-tools/user/rotate-circleci-secrets.sh",
     "secrets:rotate-environment": "npx ts-node shared/admin-tools/user/rotate-environment-secrets.ts",
