@@ -29,11 +29,15 @@ export const getNotificationsInteractor = async (
   userInboxCount: number;
   userSectionCount: number;
 }> => {
-  const currentUser = applicationContext.getCurrentUser();
+  const appContextUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(currentUser, ROLE_PERMISSIONS.WORKITEM)) {
+  if (!isAuthorized(appContextUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for getting work items');
   }
+
+  const currentUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: appContextUser.userId });
 
   const { role } = currentUser;
   const { section, userId } = caseServicesSupervisorData || currentUser;
