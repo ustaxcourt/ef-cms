@@ -1158,7 +1158,8 @@ export const presenterSequences = {
   setCurrentPageIndexSequence:
     setCurrentPageIndexSequence as unknown as Function,
   setCustomCaseReportFiltersSequence,
-  setDocumentForPreviewSequence,
+  setDocumentForPreviewSequence:
+    setDocumentForPreviewSequence as unknown as Function,
   setDocumentForUploadSequence:
     setDocumentForUploadSequence as unknown as Function,
   setDocumentUploadModeSequence:

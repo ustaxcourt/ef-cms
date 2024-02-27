@@ -431,20 +431,14 @@ export const PetitionQcScanBatchPreviewer = connect(
       );
     };
 
-    const getDocumentId = (tabSelected: string): string | undefined => {
-      const documentId = tabSelected.split('_')[1];
-      return documentId === 'undefined' ? undefined : documentId;
-    };
-
     const renderTabs = documentTabsList => {
       if (documentTabsList && documentTabsList.length > 1) {
         return (
           <Tabs
             bind="currentViewMetadata.documentSelectedForPreview"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
-            onSelect={tabSelected => {
-              const documentId = getDocumentId(tabSelected);
-              setDocumentForPreviewSequence({ documentId });
+            onSelect={() => {
+              setDocumentForPreviewSequence();
             }}
           >
             {documentTabsList.map(documentTab => {
@@ -453,7 +447,7 @@ export const PetitionQcScanBatchPreviewer = connect(
 
               return (
                 <Tab
-                  data-testid={`${documentTab.eventCode}_${documentTab.documentId}`}
+                  data-testid={documentTab.documentType}
                   icon={
                     isFileUploaded && (
                       <FontAwesomeIcon
@@ -462,8 +456,8 @@ export const PetitionQcScanBatchPreviewer = connect(
                       />
                     )
                   }
-                  key={`${documentTab.eventCode}_${documentTab.documentId}`}
-                  tabName={`${documentTab.tabTitle}_${documentTab.documentId}`}
+                  key={documentTab.documentType}
+                  tabName={documentTab.fileName}
                   title={documentTab.tabTitle}
                 />
               );

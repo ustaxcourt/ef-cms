@@ -49,12 +49,7 @@ describe('petitionQcHelper', () => {
       };
 
       const { isPetitionFile } = runCompute(petitionQcHelper, {
-        state: {
-          ...mockState,
-          pdfForSigning: {
-            signatureData: null,
-          },
-        },
+        state: mockState,
       });
       expect(isPetitionFile).toBe(true);
     });
@@ -75,12 +70,7 @@ describe('petitionQcHelper', () => {
       };
 
       const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
-        state: {
-          ...mockState,
-          pdfForSigning: {
-            signatureData: null,
-          },
-        },
+        state: mockState,
       });
       expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual(
         initialTabs,
@@ -108,12 +98,7 @@ describe('petitionQcHelper', () => {
       };
 
       const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
-        state: {
-          ...mockState,
-          pdfForSigning: {
-            signatureData: null,
-          },
-        },
+        state: mockState,
       });
       expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual([
         initialTabs[0], // Petition
@@ -123,7 +108,7 @@ describe('petitionQcHelper', () => {
       ]);
     });
 
-    it('displays ATP tabs for electronic filings when an ATP is uploaded', () => {
+    it('displays ATP tab for electronic filings if an ATP document is filed', () => {
       mockState = {
         caseDetail: {
           docketEntries: [
@@ -141,12 +126,7 @@ describe('petitionQcHelper', () => {
       };
 
       const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
-        state: {
-          ...mockState,
-          pdfForSigning: {
-            signatureData: null,
-          },
-        },
+        state: mockState,
       });
       expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual([
         initialTabs[0], // Petition
@@ -155,7 +135,35 @@ describe('petitionQcHelper', () => {
       ]);
     });
 
-    it('hides CDS and ATP tabs for electronic filings if one was NOT initially filed', () => {
+    it('displays CDS tab for electronic filings if a CDS document is filed', () => {
+      mockState = {
+        caseDetail: {
+          docketEntries: [
+            {
+              eventCode: INITIAL_DOCUMENT_TYPES.corporateDisclosure.eventCode,
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          isPaper: false,
+        },
+      };
+
+      const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
+        state: mockState,
+      });
+
+      expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual([
+        initialTabs[0], // Petition
+        initialTabs[1], // STIN
+        initialTabs[4], // CDS
+      ]);
+    });
+
+    it('hides CDS and ATP tabs for electronic filings if none of the docs were initially filed', () => {
       mockState = {
         caseDetail: {
           docketEntries: [],
@@ -169,12 +177,7 @@ describe('petitionQcHelper', () => {
       };
 
       const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
-        state: {
-          ...mockState,
-          pdfForSigning: {
-            signatureData: null,
-          },
-        },
+        state: mockState,
       });
       expect(documentTabsToDisplay.map(tab => tab.tabTitle)).toEqual([
         initialTabs[0], // Petition
@@ -198,12 +201,7 @@ describe('petitionQcHelper', () => {
       };
 
       const { showRemovePdfButton } = runCompute(petitionQcHelper, {
-        state: {
-          ...mockState,
-          pdfForSigning: {
-            signatureData: null,
-          },
-        },
+        state: mockState,
       });
       expect(showRemovePdfButton).toEqual(true);
     });
@@ -222,12 +220,7 @@ describe('petitionQcHelper', () => {
       };
 
       const { showRemovePdfButton } = runCompute(petitionQcHelper, {
-        state: {
-          ...mockState,
-          pdfForSigning: {
-            signatureData: null,
-          },
-        },
+        state: mockState,
       });
       expect(showRemovePdfButton).toEqual(false);
     });

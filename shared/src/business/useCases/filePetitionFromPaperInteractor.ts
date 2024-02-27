@@ -1,3 +1,4 @@
+import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -5,19 +6,13 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type FilePetitionFromPaperTypeDetailsType = {
-  attachmentToPetitionFile?: Blob;
-  applicationForWaiverOfFilingFeeFile?: Blob;
-  applicationForWaiverOfFilingFeeUploadProgress?: (progressEvent: any) => void;
-  atpUploadProgress?: (progressEvent: any) => void;
-  corporateDisclosureFile?: Blob;
-  corporateDisclosureUploadProgress?: (progressEvent: any) => void;
-  petitionFile: Blob;
+  applicationForWaiverOfFilingFeeUploadProgress?: FileUploadProgressType;
+  atpUploadProgress?: FileUploadProgressType;
+  corporateDisclosureUploadProgress?: FileUploadProgressType;
   petitionMetadata: PaperCaseDataType;
-  petitionUploadProgress?: (progressEvent: any) => void;
-  requestForPlaceOfTrialFile?: Blob;
-  requestForPlaceOfTrialUploadProgress?: (progressEvent: any) => void;
-  stinFile?: Blob;
-  stinUploadProgress?: (progressEvent: any) => void;
+  petitionUploadProgress: FileUploadProgressType;
+  requestForPlaceOfTrialUploadProgress?: FileUploadProgressType;
+  stinUploadProgress?: FileUploadProgressType;
 };
 
 export type PaperCaseDataType = {
@@ -63,18 +58,12 @@ export type PaperCaseDataType = {
 export const filePetitionFromPaperInteractor = async (
   applicationContext: any,
   {
-    applicationForWaiverOfFilingFeeFile,
     applicationForWaiverOfFilingFeeUploadProgress,
     atpUploadProgress,
-    attachmentToPetitionFile,
-    corporateDisclosureFile,
     corporateDisclosureUploadProgress,
-    petitionFile,
     petitionMetadata,
     petitionUploadProgress,
-    requestForPlaceOfTrialFile,
     requestForPlaceOfTrialUploadProgress,
-    stinFile,
     stinUploadProgress,
   }: FilePetitionFromPaperTypeDetailsType,
 ): Promise<RawCase> => {
@@ -87,61 +76,69 @@ export const filePetitionFromPaperInteractor = async (
   const petitionFileUpload = applicationContext
     .getUseCases()
     .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: petitionFile,
-      onUploadProgress: petitionUploadProgress,
+      document: petitionUploadProgress.file,
+      onUploadProgress: petitionUploadProgress.uploadProgress,
     });
 
   let applicationForWaiverOfFilingFeeUpload;
-  if (applicationForWaiverOfFilingFeeFile) {
+  if (applicationForWaiverOfFilingFeeUploadProgress) {
     applicationForWaiverOfFilingFeeUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: applicationForWaiverOfFilingFeeFile,
-        onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
+        document: applicationForWaiverOfFilingFeeUploadProgress.file,
+        onUploadProgress:
+          applicationForWaiverOfFilingFeeUploadProgress.uploadProgress,
       });
   }
 
   let corporateDisclosureFileUpload;
-  if (corporateDisclosureFile) {
+  if (corporateDisclosureUploadProgress) {
     corporateDisclosureFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: corporateDisclosureFile,
-        onUploadProgress: corporateDisclosureUploadProgress,
+        document: corporateDisclosureUploadProgress.file,
+        onUploadProgress: corporateDisclosureUploadProgress.uploadProgress,
       });
   }
 
   let stinFileUpload;
-  if (stinFile) {
+  if (stinUploadProgress) {
     stinFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: stinFile,
-        onUploadProgress: stinUploadProgress,
+        document: stinUploadProgress.file,
+        onUploadProgress: stinUploadProgress.uploadProgress,
       });
   }
 
   let requestForPlaceOfTrialFileUpload;
-  if (requestForPlaceOfTrialFile) {
+  if (requestForPlaceOfTrialUploadProgress) {
     requestForPlaceOfTrialFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: requestForPlaceOfTrialFile,
-        onUploadProgress: requestForPlaceOfTrialUploadProgress,
+        document: requestForPlaceOfTrialUploadProgress.file,
+        onUploadProgress: requestForPlaceOfTrialUploadProgress.uploadProgress,
       });
   }
 
   let attachmentToPetitionFileUpload;
-  if (attachmentToPetitionFile) {
+  if (atpUploadProgress) {
     attachmentToPetitionFileUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: attachmentToPetitionFile,
-        onUploadProgress: atpUploadProgress,
+        document: atpUploadProgress.file,
+        onUploadProgress: atpUploadProgress.uploadProgress,
       });
   }
 
-  await Promise.all([
+  const [
+    applicationForWaiverOfFilingFeeFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+    attachmentToPetitionFileId,
+  ] = await Promise.all([
     applicationForWaiverOfFilingFeeUpload,
     corporateDisclosureFileUpload,
     petitionFileUpload,
@@ -153,13 +150,12 @@ export const filePetitionFromPaperInteractor = async (
   return await applicationContext
     .getUseCases()
     .createCaseFromPaperInteractor(applicationContext, {
-      applicationForWaiverOfFilingFeeFileId:
-        await applicationForWaiverOfFilingFeeUpload,
-      attachmentToPetitionFileId: await attachmentToPetitionFileUpload,
-      corporateDisclosureFileId: await corporateDisclosureFileUpload,
-      petitionFileId: await petitionFileUpload,
+      applicationForWaiverOfFilingFeeFileId,
+      attachmentToPetitionFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
       petitionMetadata,
-      requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,
-      stinFileId: await stinFileUpload,
+      requestForPlaceOfTrialFileId,
+      stinFileId,
     });
 };

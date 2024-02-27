@@ -638,6 +638,7 @@ export const INITIAL_DOCUMENT_TYPES = {
     eventCode: 'APW',
     tabTitle: 'APW',
     sort: 5,
+    fileName: 'applicationForWaiverOfFilingFeeFile',
   },
   corporateDisclosure: {
     documentTitle: 'Corporate Disclosure Statement',
@@ -645,6 +646,7 @@ export const INITIAL_DOCUMENT_TYPES = {
     eventCode: 'DISC',
     tabTitle: 'CDS',
     sort: 4,
+    fileName: 'corporateDisclosureFile',
   },
   petition: {
     documentTitle: 'Petition',
@@ -652,6 +654,7 @@ export const INITIAL_DOCUMENT_TYPES = {
     eventCode: 'P',
     tabTitle: 'Petition',
     sort: 0,
+    fileName: 'petitionFile',
   },
   requestForPlaceOfTrial: {
     documentTitle: 'Request for Place of Trial at [Place]',
@@ -659,14 +662,22 @@ export const INITIAL_DOCUMENT_TYPES = {
     eventCode: 'RQT',
     tabTitle: 'RQT',
     sort: 3,
+    fileName: 'requestForPlaceOfTrialFile',
   },
-  stin: STIN_DOCKET_ENTRY_TYPE,
+  stin: {
+    documentType: 'Statement of Taxpayer Identification',
+    eventCode: 'STIN',
+    sort: 1,
+    tabTitle: 'STIN',
+    fileName: 'stinFile',
+  },
   attachmentToPetition: {
     documentTitle: 'Attachment to Petition',
     documentType: 'Attachment to Petition',
     eventCode: 'ATP',
     tabTitle: 'ATP',
     sort: 2,
+    fileName: 'attachmentToPetitionFile',
   },
 } as const;
 
@@ -1604,3 +1615,10 @@ export const JUDGE_TITLES = [
   'Chief Judge',
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
+
+export type FileUploadProgressMapType = Record<string, FileUploadProgressType>;
+
+export type FileUploadProgressType = {
+  file: any;
+  uploadProgress: (progressEvent: any) => void;
+};

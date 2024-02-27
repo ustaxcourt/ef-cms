@@ -1,4 +1,6 @@
+import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createCaseAction } from './createCaseAction';
 import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
@@ -8,6 +10,32 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('createCaseAction', () => {
   const errorStub = jest.fn();
   const successStub = jest.fn();
+  const fileUploadProgressMap: FileUploadProgressMapType = {
+    applicationForWaiverOfFilingFee: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    attachmentToPetition: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    corporateDisclosure: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    petition: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    requestForPlaceOfTrial: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+    stin: {
+      file: {},
+      uploadProgress: jest.fn(),
+    },
+  };
 
   presenter.providers.applicationContext = applicationContext;
 
@@ -30,44 +58,15 @@ describe('createCaseAction', () => {
       caseDetail: {
         ...MOCK_CASE,
         docketEntries: [
+          MOCK_DOCUMENTS[0],
           {
-            createdAt: '2020-12-21T17:21:39.718Z',
-            docketEntryId: 'ed1cb5ff-4761-4cca-b8ca-9464e540fee4',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            entityName: 'DocketEntry',
-            eventCode: 'P',
-            filedBy: 'Petr. Mark Mikecotte',
-            filingDate: '2020-12-21T17:21:39.717Z',
-            index: 1,
-            isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            isStricken: false,
-            partyPrimary: true,
-            partySecondary: false,
-            privatePractitioners: [],
-            processingStatus: 'pending',
-            receivedAt: '2020-12-21T17:21:39.718Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2020-12-21T17:21:39.719Z',
+            ...MOCK_DOCUMENTS[0],
             docketEntryId: '2b1e5fb3-e7f2-48c4-9a43-4f856ae46d66',
             documentTitle:
               'Request for Place of Trial at Little Rock, Arkansas',
             documentType: 'Request for Place of Trial',
-            entityName: 'DocketEntry',
             eventCode: 'RQT',
-            filingDate: '2020-12-21T17:21:39.717Z',
-            index: 2,
             isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            isStricken: false,
-            processingStatus: 'complete',
-            receivedAt: '2020-12-21T17:21:39.720Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
       },
@@ -78,12 +77,11 @@ describe('createCaseAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap,
+      },
       state: {
         form: {
-          attachmentToPetitionFiles: [{}, {}],
-          corporateDisclosureFile: {},
-          petitionFile: {},
-          stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
           contactPrimary: {
@@ -95,11 +93,12 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      atpFilesMetadata: [{}, {}],
-      corporateDisclosureFile: {},
-      petitionFile: {},
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
       petitionMetadata: MOCK_CASE,
-      stinFile: {},
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(2);
     expect(successStub).toHaveBeenCalled();
@@ -110,65 +109,23 @@ describe('createCaseAction', () => {
       caseDetail: {
         ...MOCK_CASE,
         docketEntries: [
+          MOCK_DOCUMENTS[0],
           {
-            createdAt: '2020-12-21T17:21:39.718Z',
-            docketEntryId: 'ed1cb5ff-4761-4cca-b8ca-9464e540fee4',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            entityName: 'DocketEntry',
-            eventCode: 'P',
-            filedBy: 'Petr. Com Pan Nee',
-            filingDate: '2020-12-21T17:21:39.717Z',
-            index: 1,
-            isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            isStricken: false,
-            partyPrimary: true,
-            partySecondary: false,
-            privatePractitioners: [],
-            processingStatus: 'pending',
-            receivedAt: '2020-12-21T17:21:39.718Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2020-12-21T17:21:39.719Z',
+            ...MOCK_DOCUMENTS[0],
             docketEntryId: '2b1e5fb3-e7f2-48c4-9a43-4f856ae46d66',
             documentTitle:
               'Request for Place of Trial at Little Rock, Arkansas',
             documentType: 'Request for Place of Trial',
-            entityName: 'DocketEntry',
             eventCode: 'RQT',
-            filingDate: '2020-12-21T17:21:39.717Z',
-            index: 2,
             isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            isStricken: false,
-            processingStatus: 'complete',
-            receivedAt: '2020-12-21T17:21:39.720Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
-            createdAt: '2020-12-21T22:13:58.658Z',
+            ...MOCK_DOCUMENTS[0],
             docketEntryId: 'aaec01d8-98e7-4534-959f-6c384c4cf0e0',
             documentTitle: 'Corporate Disclosure Statement',
             documentType: 'Corporate Disclosure Statement',
-            entityName: 'DocketEntry',
-            eventCode: 'DISC',
-            filedBy: 'Petr. Com Pan Nee',
-            filingDate: '2020-12-21T22:13:58.655Z',
-            index: 3,
+            eventCode: 'RQT',
             isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            isStricken: false,
-            partyPrimary: true,
-            partySecondary: false,
-            privatePractitioners: [],
-            processingStatus: 'pending',
-            receivedAt: '2020-12-21T22:13:58.658Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
       },
@@ -179,11 +136,11 @@ describe('createCaseAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap,
+      },
       state: {
         form: {
-          corporateDisclosureFile: {},
-          petitionFile: {},
-          stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
           contactPrimary: {
@@ -195,12 +152,12 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      corporateDisclosureFile: {},
-      petitionFile: {},
-      petitionMetadata: {
-        ...MOCK_CASE,
-      },
-      stinFile: {},
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionMetadata: MOCK_CASE,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and CDS
     expect(successStub).toHaveBeenCalled();
@@ -215,11 +172,11 @@ describe('createCaseAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        fileUploadProgressMap,
+      },
       state: {
         form: {
-          corporateDisclosureFile: {},
-          petitionFile: {},
-          stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
           contactPrimary: {
@@ -231,12 +188,12 @@ describe('createCaseAction', () => {
 
     expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      corporateDisclosureFile: {},
-      petitionFile: {},
-      petitionMetadata: {
-        ...MOCK_CASE,
-      },
-      stinFile: {},
+      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionMetadata: MOCK_CASE,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
     });
     expect(addCoversheetInteractor).not.toHaveBeenCalled();
     expect(errorStub).toHaveBeenCalled();
