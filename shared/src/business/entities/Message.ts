@@ -227,7 +227,7 @@ export class Message extends JoiValidationEntity {
     this.completedBy = user.name;
     this.completedByUserId = user.userId;
     this.completedBySection = user.section;
-    this.completedMessage = message;
+    this.completedMessage = message || null;
 
     return this;
   }

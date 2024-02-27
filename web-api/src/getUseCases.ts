@@ -93,8 +93,6 @@ import { getCustomCaseReportInteractor } from './business/useCases/caseInventory
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCForSectionInteractor';
 import { getDocumentQCForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCForUserInteractor';
-import { getDocumentQCServedForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCServedForSectionInteractor';
-import { getDocumentQCServedForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor';
 import { getDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 import { getHealthCheckInteractor } from '../../shared/src/business/useCases/health/getHealthCheckInteractor';
@@ -307,8 +305,6 @@ const useCases = {
   getDocumentContentsForDocketEntryInteractor,
   getDocumentQCForSectionInteractor,
   getDocumentQCForUserInteractor,
-  getDocumentQCServedForSectionInteractor,
-  getDocumentQCServedForUserInteractor,
   getDownloadPolicyUrlInteractor,
   getEligibleCasesForTrialSessionInteractor,
   getHealthCheckInteractor,
