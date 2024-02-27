@@ -8,20 +8,29 @@ export const filePetitionInteractor = async (
   applicationContext: any,
   {
     applicationForWaiverOfFilingFeeUploadProgress,
-    atpUploadProgress,
+    attachmentToPetitionUploadProgress,
     corporateDisclosureUploadProgress,
     petitionUploadProgress,
     requestForPlaceOfTrialUploadProgress,
     stinUploadProgress,
   }: {
     applicationForWaiverOfFilingFeeUploadProgress?: any;
-    atpUploadProgress?: any;
+    attachmentToPetitionUploadProgress?: any;
     corporateDisclosureUploadProgress?: any;
     petitionUploadProgress: any;
     requestForPlaceOfTrialUploadProgress?: any;
     stinUploadProgress: any;
   },
 ) => {
+  console.log(
+    'progresses at the top of the interactor',
+    applicationForWaiverOfFilingFeeUploadProgress,
+    attachmentToPetitionUploadProgress,
+    corporateDisclosureUploadProgress,
+    petitionUploadProgress,
+    requestForPlaceOfTrialUploadProgress,
+    stinUploadProgress,
+  );
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
@@ -76,15 +85,25 @@ export const filePetitionInteractor = async (
       });
   }
 
-  let atpFileUpload;
-  if (atpUploadProgress) {
-    atpFileUpload = applicationContext
+  let attachmentToPetitionUpload;
+  if (attachmentToPetitionUploadProgress) {
+    attachmentToPetitionUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
         document: atpUploadProgress.file,
         onUploadProgress: atpUploadProgress.uploadProgress,
       });
   }
+
+  console.log(
+    'uploads before the promise.all',
+    applicationForWaiverOfFilingFeeUpload,
+    corporateDisclosureFileUpload,
+    petitionFileUpload,
+    requestForPlaceOfTrialFileUpload,
+    stinFileUpload,
+    attachmentToPetitionUpload,
+  );
 
   try {
     const [
@@ -100,7 +119,7 @@ export const filePetitionInteractor = async (
       petitionFileUpload,
       requestForPlaceOfTrialFileUpload,
       stinFileUpload,
-      atpFileUpload,
+      attachmentToPetitionUpload,
     ]);
 
     return {

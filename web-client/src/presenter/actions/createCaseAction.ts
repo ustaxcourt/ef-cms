@@ -18,7 +18,7 @@ export const createCaseAction = async ({
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  let filePetitionResult;
+  let caseDetail;
   let stinFile;
   try {
     const { atpFileId, corporateDisclosureFileId, petitionFileId, stinFileId } =
@@ -34,7 +34,7 @@ export const createCaseAction = async ({
 
     stinFile = stinFileId;
 
-    filePetitionResult = await applicationContext
+    caseDetail = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
         atpFileId,
@@ -46,8 +46,6 @@ export const createCaseAction = async ({
   } catch (err) {
     return path.error();
   }
-  console.log('filePetitionResult', filePetitionResult);
-  const { caseDetail } = filePetitionResult;
 
   const addCoversheet = docketEntryId => {
     return applicationContext

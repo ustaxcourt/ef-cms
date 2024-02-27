@@ -12,6 +12,7 @@ export const createCaseFromPaperAction = async ({
 }>) => {
   const petitionMetadata: PaperCaseDataType = get(state.form);
   const { fileUploadProgressMap } = props;
+  console.log('fileUploadProgressMap', fileUploadProgressMap);
   let caseDetail: RawCase;
   try {
     const {
@@ -26,15 +27,24 @@ export const createCaseFromPaperAction = async ({
       .filePetitionInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeUploadProgress:
           fileUploadProgressMap.applicationForWaiverOfFilingFee,
-        atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+        attachmentToPetitionUploadProgress:
+          fileUploadProgressMap.attachmentToPetition,
         corporateDisclosureUploadProgress:
           fileUploadProgressMap.corporateDisclosure,
-        petitionMetadata,
         petitionUploadProgress: fileUploadProgressMap.petition,
         requestForPlaceOfTrialUploadProgress:
           fileUploadProgressMap.requestForPlaceOfTrial,
         stinUploadProgress: fileUploadProgressMap.stin,
       });
+
+    console.log('ids generated', {
+      applicationForWaiverOfFilingFeeFileId,
+      atpFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
+      requestForPlaceOfTrialFileId,
+      stinFileId,
+    });
 
     caseDetail = await applicationContext
       .getUseCases()
@@ -48,6 +58,7 @@ export const createCaseFromPaperAction = async ({
         stinFileId,
       });
   } catch (err) {
+    console.log('!!!error', err);
     return path.error();
   }
 
