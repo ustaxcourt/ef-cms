@@ -10,12 +10,12 @@
  * $ npm run admin:lookup-user docketClerk "Beth"
  */
 
-const { checkEnvVar } = require('../util');
-const { getClient } = require('../../../web-api/elasticsearch/client');
+import { getClient } from '../../../web-api/elasticsearch/client';
+import { requireEnvVars } from '../util';
 
-const { ENV } = process.env;
+requireEnvVars(['ENV']);
 
-checkEnvVar(ENV, 'You must have ENV set in your environment');
+const { ENV: environmentName } = process.env;
 
 if (process.argv.length < 3) {
   console.log(`Lookup User IDs and roles for the specified environment.
@@ -39,7 +39,7 @@ const role = process.argv[2];
 const userName = process.argv[3];
 
 const lookupUsers = async () => {
-  const esClient = await getClient({ environmentName: ENV });
+  const esClient = await getClient({ environmentName });
   const query = userName
     ? {
         bool: {
@@ -72,6 +72,7 @@ const lookupUsers = async () => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const users = await lookupUsers();
   console.table(users);
