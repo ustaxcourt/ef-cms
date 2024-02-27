@@ -15,7 +15,7 @@ export const upsertMessage = ({
       : undefined;
 
   const gsi5pk = message.completedAt
-    ? `section|${message.completedAt}|${message.completedBySection}`
+    ? `section|completed|${message.completedBySection}`
     : message.fromSection
       ? `section|outbox|${message.fromSection}`
       : undefined;
