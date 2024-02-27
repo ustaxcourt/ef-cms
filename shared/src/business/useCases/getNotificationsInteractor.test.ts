@@ -105,6 +105,9 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getSectionInboxMessages.mockReturnValue(mockMessages.section);
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockUser);
   });
 
   beforeEach(() => {
