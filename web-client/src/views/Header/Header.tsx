@@ -282,6 +282,9 @@ export const Header = connect(
                       <img alt="USTC Seal" src={seal} />
                     </a>
                   </div>
+                  {!headerHelper.isLoggedIn && (
+                    <h1 className="header-welcome-public">Welcome to DAWSON</h1>
+                  )}
                   {headerHelper.showMobileAccountMenu && (
                     <button
                       className="usa-menu-btn"
