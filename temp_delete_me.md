@@ -1,5 +1,7 @@
 ::: STUFF TO DO :::
 - Create Presentation on new patterns
+- For account confirmation set "U.S. Tax Court" as the respondant
+- create petitioner padding on mobile should match login
 
 
 ::: QUESTIONS :::
