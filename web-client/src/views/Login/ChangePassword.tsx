@@ -94,7 +94,7 @@ export const ChangePassword = connect(
                         })
                       }
                     >
-                      {showPassword ? 'Hide Password' : 'Show password'}
+                      {showPassword ? 'Hide password' : 'Show password'}
                     </button>
                     <div
                       className="margin-top-205"
@@ -144,7 +144,7 @@ export const ChangePassword = connect(
                       })
                     }
                   >
-                    {showConfirmPassword ? 'Hide Password' : 'Show password'}
+                    {showConfirmPassword ? 'Hide password' : 'Show password'}
                   </button>
                   <div
                     className="margin-top-205"
