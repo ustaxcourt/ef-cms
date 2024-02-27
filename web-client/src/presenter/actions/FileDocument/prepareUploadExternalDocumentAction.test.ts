@@ -1,12 +1,8 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { prepareUploadExternalDocumentsAction } from './prepareUploadExternalDocumentsAction';
-import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('prepareUploadExternalDocumentsAction', () => {
-  presenter.providers.applicationContext = applicationContext;
-
   const mockFile = {
     name: 'petition',
     size: 100,

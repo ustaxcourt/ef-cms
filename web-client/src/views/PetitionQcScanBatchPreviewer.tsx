@@ -457,7 +457,7 @@ export const PetitionQcScanBatchPreviewer = connect(
                     )
                   }
                   key={documentTab.documentType}
-                  tabName={documentTab.fileName} // may need some refactor (established in constants)
+                  tabName={documentTab.fileName}
                   title={documentTab.tabTitle}
                 />
               );

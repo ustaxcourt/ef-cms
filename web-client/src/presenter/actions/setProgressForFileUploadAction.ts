@@ -10,7 +10,10 @@ export const setProgressForFileUploadAction = ({
   props,
   store,
 }: ActionProps<{
-  files: any;
+  files: {
+    size: string;
+    name: string;
+  };
 }>): {
   fileUploadProgressMap: FileUploadProgressMapType;
 } => {
@@ -21,14 +24,7 @@ export const setProgressForFileUploadAction = ({
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    if (Array.isArray(files[key])) {
-      sizeOfFiles[key] = files[key][0].size;
-      //     files[key].forEach((file, index) => {
-      //       totalSizes[`${key}-${index}`] = file.size;
-      //     });
-    } else {
-      sizeOfFiles[key] = files[key].size;
-    }
+    sizeOfFiles[key] = files[key].size;
   });
 
   const createOnUploadProgress = (key: string) => {
@@ -96,22 +92,10 @@ export const setProgressForFileUploadAction = ({
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    const file = Array.isArray(files[key]) ? files[key][0] : files[key];
-    // if (Array.isArray(files[key])) {
-    //     files[key].forEach((file, index) => {
-    //       const fileTypeKey = `${key}-${index}`;
-    //       fileUploadProgressMap[fileTypeKey] = {
-    //         file,
-    //         uploadProgress: createOnUploadProgress(fileTypeKey),
-    //       };
-    //     });
-    //   } else {
     fileUploadProgressMap[key] = {
-      file,
-      // file: files[key],
+      file: files[key],
       uploadProgress: createOnUploadProgress(key),
     };
-    // }
   });
 
   return { fileUploadProgressMap };

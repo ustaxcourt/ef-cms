@@ -1,5 +1,6 @@
 import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createCaseAction } from './createCaseAction';
 import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
@@ -57,44 +58,15 @@ describe('createCaseAction', () => {
       caseDetail: {
         ...MOCK_CASE,
         docketEntries: [
+          MOCK_DOCUMENTS[0],
           {
-            createdAt: '2020-12-21T17:21:39.718Z',
-            docketEntryId: 'ed1cb5ff-4761-4cca-b8ca-9464e540fee4',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            entityName: 'DocketEntry',
-            eventCode: 'P',
-            filedBy: 'Petr. Mark Mikecotte',
-            filingDate: '2020-12-21T17:21:39.717Z',
-            index: 1,
-            isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            isStricken: false,
-            partyPrimary: true,
-            partySecondary: false,
-            privatePractitioners: [],
-            processingStatus: 'pending',
-            receivedAt: '2020-12-21T17:21:39.718Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2020-12-21T17:21:39.719Z',
+            ...MOCK_DOCUMENTS[0],
             docketEntryId: '2b1e5fb3-e7f2-48c4-9a43-4f856ae46d66',
             documentTitle:
               'Request for Place of Trial at Little Rock, Arkansas',
             documentType: 'Request for Place of Trial',
-            entityName: 'DocketEntry',
             eventCode: 'RQT',
-            filingDate: '2020-12-21T17:21:39.717Z',
-            index: 2,
             isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            isStricken: false,
-            processingStatus: 'complete',
-            receivedAt: '2020-12-21T17:21:39.720Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
       },
@@ -110,10 +82,6 @@ describe('createCaseAction', () => {
       },
       state: {
         form: {
-          attachmentToPetitionFile: [{}, {}],
-          corporateDisclosureFile: {},
-          petitionFile: {},
-          stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
           contactPrimary: {
@@ -141,65 +109,23 @@ describe('createCaseAction', () => {
       caseDetail: {
         ...MOCK_CASE,
         docketEntries: [
+          MOCK_DOCUMENTS[0],
           {
-            createdAt: '2020-12-21T17:21:39.718Z',
-            docketEntryId: 'ed1cb5ff-4761-4cca-b8ca-9464e540fee4',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            entityName: 'DocketEntry',
-            eventCode: 'P',
-            filedBy: 'Petr. Com Pan Nee',
-            filingDate: '2020-12-21T17:21:39.717Z',
-            index: 1,
-            isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            isStricken: false,
-            partyPrimary: true,
-            partySecondary: false,
-            privatePractitioners: [],
-            processingStatus: 'pending',
-            receivedAt: '2020-12-21T17:21:39.718Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2020-12-21T17:21:39.719Z',
+            ...MOCK_DOCUMENTS[0],
             docketEntryId: '2b1e5fb3-e7f2-48c4-9a43-4f856ae46d66',
             documentTitle:
               'Request for Place of Trial at Little Rock, Arkansas',
             documentType: 'Request for Place of Trial',
-            entityName: 'DocketEntry',
             eventCode: 'RQT',
-            filingDate: '2020-12-21T17:21:39.717Z',
-            index: 2,
             isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            isStricken: false,
-            processingStatus: 'complete',
-            receivedAt: '2020-12-21T17:21:39.720Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
-            createdAt: '2020-12-21T22:13:58.658Z',
+            ...MOCK_DOCUMENTS[0],
             docketEntryId: 'aaec01d8-98e7-4534-959f-6c384c4cf0e0',
             documentTitle: 'Corporate Disclosure Statement',
             documentType: 'Corporate Disclosure Statement',
-            entityName: 'DocketEntry',
-            eventCode: 'DISC',
-            filedBy: 'Petr. Com Pan Nee',
-            filingDate: '2020-12-21T22:13:58.655Z',
-            index: 3,
+            eventCode: 'RQT',
             isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            isStricken: false,
-            partyPrimary: true,
-            partySecondary: false,
-            privatePractitioners: [],
-            processingStatus: 'pending',
-            receivedAt: '2020-12-21T22:13:58.658Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
       },
@@ -215,9 +141,6 @@ describe('createCaseAction', () => {
       },
       state: {
         form: {
-          corporateDisclosureFile: {},
-          petitionFile: {},
-          stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
           contactPrimary: {
@@ -254,9 +177,6 @@ describe('createCaseAction', () => {
       },
       state: {
         form: {
-          corporateDisclosureFile: {},
-          petitionFile: {},
-          stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
           contactPrimary: {

@@ -8,6 +8,10 @@ import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAc
 describe('saveCaseDetailInternalEditAction', () => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const mockUploadedKey = applicationContext.getUniqueId();
+  const uploadProgressInfo = {
+    file: {},
+    uploadProgress: jest.fn(),
+  };
 
   beforeAll(() => {
     applicationContext
@@ -41,10 +45,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       },
       props: {
         fileUploadProgressMap: {
-          petition: {
-            file: {},
-            uploadProgress: jest.fn(),
-          },
+          petition: uploadProgressInfo,
         },
       },
       state: {
@@ -83,10 +84,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       },
       props: {
         fileUploadProgressMap: {
-          corporateDisclosure: {
-            file: {},
-            uploadProgress: jest.fn(),
-          },
+          corporateDisclosure: uploadProgressInfo,
         },
       },
       state: {
@@ -127,10 +125,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       },
       props: {
         fileUploadProgressMap: {
-          corporateDisclosure: {
-            file: {},
-            uploadProgress: jest.fn(),
-          },
+          corporateDisclosure: uploadProgressInfo,
         },
       },
       state: {
@@ -159,10 +154,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       },
       props: {
         fileUploadProgressMap: {
-          corporateDisclosure: {
-            file: {},
-            uploadProgress: jest.fn(),
-          },
+          corporateDisclosure: uploadProgressInfo,
         },
       },
       state: {
