@@ -1,7 +1,8 @@
 data "archive_file" "zip_authorizer" {
   type        = "zip"
   output_path = "${path.module}/lambdas/cognito-authorizer.js.zip"
-  source_file = "${path.module}/lambdas/dist/cognito-authorizer.js"
+  source_dir = "${path.module}/lambdas/dist/"
+  excludes = setsubtract(var.template_lambdas, ["cognito-authorizer.js"])
 }
 
 resource "aws_lambda_function" "cognito_authorizer_lambda" {
