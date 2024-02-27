@@ -5,34 +5,12 @@ if (!process.argv[2] || !process.argv[3]) {
   process.exit();
 }
 
-const {
-  createApplicationContext,
-} = require('../../../web-api/src/applicationContext');
-const {
-  INITIAL_DOCUMENT_TYPES,
-} = require('../../src/business/entities/EntityConstants');
-const {
-  sendIrsSuperuserPetitionEmail,
-} = require('../../src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
-const {
-  sendServedPartiesEmails,
-} = require('../../src/business/useCaseHelper/service/sendServedPartiesEmails');
-const { Case } = require('../../src/business/entities/cases/Case');
+import { Case } from '../../src/business/entities/cases/Case';
+import { INITIAL_DOCUMENT_TYPES } from '../../src/business/entities/EntityConstants';
+import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import { sendIrsSuperuserPetitionEmail } from '../../src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
+import { sendServedPartiesEmails } from '../../src/business/useCaseHelper/service/sendServedPartiesEmails';
 
-const getDocketEntriesServedWithinTimeframe = async (
-  applicationContext,
-  { endTimestamp, startTimestamp },
-) => {
-  const docketEntriesServedWithinTimeframe = await applicationContext
-    .getPersistenceGateway()
-    .getDocketEntriesServedWithinTimeframe({
-      applicationContext,
-      endTimestamp,
-      startTimestamp,
-    });
-
-  return docketEntriesServedWithinTimeframe;
-};
 const getCase = async (applicationContext, { docketNumber }) => {
   const caseToBatch = await applicationContext
     .getPersistenceGateway()
@@ -41,8 +19,7 @@ const getCase = async (applicationContext, { docketNumber }) => {
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToBatch, { applicationContext });
-  return caseEntity;
+  return new Case(caseToBatch, { applicationContext });
 };
 const resendServiceEmail = async (
   applicationContext,
@@ -71,13 +48,13 @@ const resendServiceEmail = async (
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  const docketEntriesToReServe = await getDocketEntriesServedWithinTimeframe(
-    applicationContext,
-    {
+  const docketEntriesToReServe = await applicationContext
+    .getPersistenceGateway()
+    .getDocketEntriesServedWithinTimeframe({
+      applicationContext,
       endTimestamp: process.argv[3],
       startTimestamp: process.argv[2],
-    },
-  );
+    });
   for (const docketEntryToReServe of docketEntriesToReServe) {
     await resendServiceEmail(applicationContext, docketEntryToReServe);
   }
