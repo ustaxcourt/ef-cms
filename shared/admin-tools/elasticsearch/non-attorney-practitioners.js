@@ -1,12 +1,12 @@
-// usage: node non-attorney-practitioners.js >> ~/Desktop/non-attorney-practitioners.csv
+// usage: npx ts-node --transpile-only scripts/reports/non-attorney-practitioners.ts >> ~/Desktop/non-attorney-practitioners.csv
 
-const {
+import {
   calculateDifferenceInDays,
   formatDateString,
-} = require('../../src/business/utilities/DateHandler');
-const { getClient } = require('../../../web-api/elasticsearch/client');
-const { getVersion } = require('../util');
-const { sortBy } = require('lodash');
+} from '../../src/business/utilities/DateHandler';
+import { getClient } from '../../../web-api/elasticsearch/client';
+import { getVersion } from '../util';
+import { sortBy } from 'lodash';
 
 const environmentName = process.env.ENV;
 
@@ -528,6 +528,7 @@ const wentToTrial = caseRecord => {
   return !!(caseRecord.trialSessionId || caseRecord.trialDate);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const nonAttorneys = await retrieveNonAttorneys();
   const cases = await retrieveCases(Object.keys(nonAttorneys));
