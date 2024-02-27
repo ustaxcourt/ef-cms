@@ -212,7 +212,7 @@ jobs:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              npx ts-node --transpile-only shared/admin-tools/user/verify-ustc-admin-user-disabled.js
+              npx ts-node --transpile-only scripts/user/verify-ustc-admin-user-disabled.ts
             else
               echo "skipping…"
             fi
