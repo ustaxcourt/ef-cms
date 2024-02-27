@@ -48,11 +48,7 @@ function handleAdobeAdditionalMetadata(pdfBytes: number[]): BlobPart {
     return pdfBytes as unknown as BlobPart;
   }
 }
-export const cleanFileMetadata = async (
-  title: string,
-  pdfLib,
-  fileReader: FileReader,
-) => {
+export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
   let pdfDoc;
   try {
     pdfDoc = await pdfLib.PDFDocument.load(fileReader.result, {
@@ -73,7 +69,7 @@ export const cleanFileMetadata = async (
   }
 
   const cleanValue = '';
-  pdfDoc.setTitle(title);
+  pdfDoc.setTitle(cleanValue);
   pdfDoc.setAuthor(cleanValue);
   pdfDoc.setSubject(cleanValue);
 
@@ -92,7 +88,6 @@ export const cleanFileMetadata = async (
 };
 
 export const readAndCleanFileMetadata = async (
-  title: string,
   file: File,
   pdfLib,
 ): Promise<File> => {
@@ -102,7 +97,7 @@ export const readAndCleanFileMetadata = async (
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
     fileReader.addEventListener('load', async () => {
-      const pdfBytes = await cleanFileMetadata(title, pdfLib, fileReader);
+      const pdfBytes = await cleanFileMetadata(pdfLib, fileReader);
       const updatedFile = new File([pdfBytes as BlobPart], file.name, {
         type: file.type,
       });
@@ -147,7 +142,7 @@ export const uploadPdfFromClient = async ({
   policy: any;
 }) => {
   const pdfLib = await applicationContext.getPdfLib().catch(() => null);
-  const updatedFile = await readAndCleanFileMetadata(key, file, pdfLib).catch(
+  const updatedFile = await readAndCleanFileMetadata(file, pdfLib).catch(
     () => file,
   );
 

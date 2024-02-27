@@ -114,8 +114,6 @@ describe('uploadPdfFromClient', () => {
     let pdfLibMock;
     let loadMock;
 
-    const TEST_TITLE = 'TEST_TITLE';
-
     beforeEach(() => {
       applicationContext.getHttpClient().post.mockResolvedValue(null);
 
@@ -158,12 +156,11 @@ describe('uploadPdfFromClient', () => {
         };
 
         const pdfBytes = await cleanFileMetadata(
-          TEST_TITLE,
           pdfLibMock,
           fileReaderMock as unknown as FileReader,
         );
 
-        expect(loadMock.setTitle).toHaveBeenCalledWith(TEST_TITLE);
+        expect(loadMock.setTitle).toHaveBeenCalledWith('');
         expect(loadMock.setAuthor).toHaveBeenCalledWith('');
         expect(loadMock.setSubject).toHaveBeenCalledWith('');
         expect(loadMock.setKeywords).toHaveBeenCalledWith([]);
@@ -182,17 +179,15 @@ describe('uploadPdfFromClient', () => {
 
     describe('readAndCleanFileMetadata', () => {
       it('returns the original file if pdfLib is falsy', async () => {
-        const title = 'example';
         const file = new File(['file content'], 'example.pdf');
         const pdfLib = null;
 
-        const result = await readAndCleanFileMetadata(title, file, pdfLib);
+        const result = await readAndCleanFileMetadata(file, pdfLib);
 
         expect(result).toBe(file);
       });
 
       it('should call the "cleanFileMetadata" method if the file is loaded and resolve', async () => {
-        const title = 'example';
         const file = new File(['file content'], 'example.pdf');
 
         const readAsArrayBufferMock = jest.fn();
@@ -206,7 +201,7 @@ describe('uploadPdfFromClient', () => {
           result: '%PDF- sample data',
         })) as any;
 
-        await readAndCleanFileMetadata(title, file, pdfLibMock);
+        await readAndCleanFileMetadata(file, pdfLibMock);
 
         expect(readAsArrayBufferMock).toHaveBeenCalledWith(file);
 
@@ -223,7 +218,6 @@ describe('uploadPdfFromClient', () => {
       });
 
       it('should throw an error if the file reader rejects with an error', async () => {
-        const title = 'example';
         const file = new File(['file content'], 'example.pdf');
 
         const readAsArrayBufferMock = jest.fn();
@@ -236,9 +230,9 @@ describe('uploadPdfFromClient', () => {
           readAsArrayBuffer: readAsArrayBufferMock,
         })) as any;
 
-        await expect(
-          readAndCleanFileMetadata(title, file, pdfLibMock),
-        ).rejects.toBe('Failed to read file');
+        await expect(readAndCleanFileMetadata(file, pdfLibMock)).rejects.toBe(
+          'Failed to read file',
+        );
       });
 
       it('should return the original file if the file is encrypted', async () => {
@@ -266,7 +260,6 @@ describe('uploadPdfFromClient', () => {
         };
 
         const pdfBytes = await cleanFileMetadata(
-          TEST_TITLE,
           pdfLibMock2,
           fileReader as any,
         );
@@ -307,7 +300,6 @@ describe('uploadPdfFromClient', () => {
         pdfLibMock.PDFDocument.load.mockResolvedValue(pdfDocMock);
 
         const pdfBytes = await cleanFileMetadata(
-          TEST_TITLE,
           pdfLibMock2,
           fileReader as any,
         );
@@ -341,11 +333,7 @@ describe('uploadPdfFromClient', () => {
 
         pdfLibMock.PDFDocument.load.mockResolvedValue(pdfDocMock);
 
-        const pdfBytes = await cleanFileMetadata(
-          TEST_TITLE,
-          pdfLibMock,
-          fileReader as any,
-        );
+        const pdfBytes = await cleanFileMetadata(pdfLibMock, fileReader as any);
 
         expect(pdfBytes?.toString()).toEqual(TEST_STRING);
         expect(loadMock.setTitle).not.toHaveBeenCalled();
