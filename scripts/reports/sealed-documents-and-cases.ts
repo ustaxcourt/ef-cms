@@ -1,4 +1,4 @@
-// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/sealed-documents-and-cases.ts > ~/Desktop/sealed-cases.csv
+// usage: npx ts-node --transpile-only scripts/reports/sealed-documents-and-cases.ts > ~/Desktop/sealed-cases.csv
 
 import {
   ServerApplicationContext,
