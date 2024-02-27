@@ -1,16 +1,12 @@
 // usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/get-petition-counts.js 2022
 
-const {
-  createApplicationContext,
-} = require('../../../web-api/src/applicationContext');
-const {
+import { DateTime } from 'luxon';
+import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import {
   dateStringsCompared,
   validateDateAndCreateISO,
-} = require('../../src/business/utilities/DateHandler');
-const {
-  searchAll,
-} = require('../../../web-api/src/persistence/elasticsearch/searchClient');
-const { DateTime } = require('luxon');
+} from '../../src/business/utilities/DateHandler';
+import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
 
 const year = process.argv[2] || DateTime.now().toObject().year;
 
@@ -30,11 +26,15 @@ const getAllPetitions = async ({ applicationContext }) => {
               {
                 range: {
                   'receivedAt.S': {
-                    gte: validateDateAndCreateISO({ day: 1, month: 1, year }),
+                    gte: validateDateAndCreateISO({
+                      day: '1',
+                      month: '1',
+                      year,
+                    }),
                     lt: validateDateAndCreateISO({
-                      day: 1,
-                      month: 1,
-                      year: year + 1,
+                      day: '1',
+                      month: '1',
+                      year: String(Number(year) + 1),
                     }),
                   },
                 },
