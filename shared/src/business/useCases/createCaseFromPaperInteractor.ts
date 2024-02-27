@@ -64,7 +64,7 @@ export const createCaseFromPaperInteractor = async (
   applicationContext: IApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
-    atpFileId,
+    attachmentToPetitionFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
@@ -77,7 +77,7 @@ export const createCaseFromPaperInteractor = async (
     petitionMetadata: PaperCaseDataType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    atpFileId?: string;
+    attachmentToPetitionFileId?: string;
   },
 ): Promise<RawCase> => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -94,7 +94,7 @@ export const createCaseFromPaperInteractor = async (
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,
-      atpFileId, // do we need these?
+      attachmentToPetitionFileId, // do we need these?
       corporateDisclosureFileId, // do we need these?
       petitionFileId, // do we need these?
       stinFileId, // do we need these?
@@ -268,11 +268,11 @@ export const createCaseFromPaperInteractor = async (
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
-  if (atpFileId) {
+  if (attachmentToPetitionFileId) {
     const atpDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        docketEntryId: atpFileId,
+        docketEntryId: attachmentToPetitionFileId,
         documentTitle: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
