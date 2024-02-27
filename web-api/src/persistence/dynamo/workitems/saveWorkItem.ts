@@ -19,7 +19,7 @@ export const saveWorkItem = ({
 }) => {
   const box = workItem.completedAt
     ? 'outbox'
-    : workItem.inProgress
+    : workItem.inProgress || workItem.caseIsInProgress
       ? 'inProgress'
       : 'inbox';
 

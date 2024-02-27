@@ -4,12 +4,14 @@ import { queryFull } from '../../dynamodbClientService';
 export const getDocumentQCForSection = async ({
   applicationContext,
   box,
+  judgeUserId,
   judgeUserName,
   section,
 }: {
   applicationContext: IApplicationContext;
   box: 'inbox' | 'inProgress' | 'outbox';
   judgeUserName?: string;
+  judgeUserId?: string;
   section: string;
 }): Promise<RawWorkItem[]> => {
   const results = (await queryFull({
@@ -28,5 +30,7 @@ export const getDocumentQCForSection = async ({
 
   if (judgeUserName) {
     return results.filter(result => result.associatedJudge === judgeUserName);
+  } else if (judgeUserId) {
+    return results.filter(result => result.associatedJudgeId === judgeUserId);
   } else return results;
 };
