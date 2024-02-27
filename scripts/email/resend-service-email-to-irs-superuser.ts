@@ -1,17 +1,22 @@
 if (!process.argv[2] || !process.argv[3]) {
   console.log('please specify start and end timestamps in ISO-8601 format');
   console.log('');
-  console.log('$ node resend-service-email.js [startTimestamp] [endTimestamp]');
+  console.log(
+    '$ npx ts-node --transpile-only scripts/email/resend-service-email.ts [startTimestamp] [endTimestamp]',
+  );
   process.exit();
 }
 
-import { Case } from '../../src/business/entities/cases/Case';
-import { INITIAL_DOCUMENT_TYPES } from '../../src/business/entities/EntityConstants';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
-import { sendIrsSuperuserPetitionEmail } from '../../src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
-import { sendServedPartiesEmails } from '../../src/business/useCaseHelper/service/sendServedPartiesEmails';
+import { Case } from '@shared/business/entities/cases/Case';
+import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { sendIrsSuperuserPetitionEmail } from '@shared/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
+import { sendServedPartiesEmails } from '@shared/business/useCaseHelper/service/sendServedPartiesEmails';
 
-const getCase = async (applicationContext, { docketNumber }) => {
+const getCase = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
+): Promise<Case> => {
   const caseToBatch = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -21,10 +26,14 @@ const getCase = async (applicationContext, { docketNumber }) => {
 
   return new Case(caseToBatch, { applicationContext });
 };
+
 const resendServiceEmail = async (
-  applicationContext,
-  { docketEntryId, docketNumber },
-) => {
+  applicationContext: IApplicationContext,
+  {
+    docketEntryId,
+    docketNumber,
+  }: { docketEntryId: string; docketNumber: string },
+): Promise<void> => {
   const caseEntity = await getCase(applicationContext, { docketNumber });
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
@@ -46,6 +55,7 @@ const resendServiceEmail = async (
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const docketEntriesToReServe = await applicationContext
