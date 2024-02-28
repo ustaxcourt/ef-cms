@@ -1,7 +1,7 @@
 import * as userAdmin from '../../shared/admin-tools/user/admin';
 import { createAndEnableSmoketestUser } from './create-and-enable-smoketest-user-helpers';
 
-jest.mock('../shared/admin-tools/user/admin');
+jest.mock('../../shared/admin-tools/user/admin');
 const activateAdminAccount = jest
   .spyOn(userAdmin, 'activateAdminAccount')
   .mockImplementation();
