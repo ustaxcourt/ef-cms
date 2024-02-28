@@ -1,7 +1,9 @@
 import { Case } from '../entities/cases/Case';
+import {
+  CreatedCaseType,
+  INITIAL_DOCUMENT_TYPES,
+} from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
-import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionInteractor';
 import { PaperPetition } from '../entities/cases/PaperPetition';
 import {
   ROLE_PERMISSIONS,
@@ -75,7 +77,7 @@ export const createCaseFromPaperInteractor = async (
     attachmentToPetitionFileId?: string;
     corporateDisclosureFileId?: string;
     petitionFileId: string;
-    petitionMetadata: PaperCaseDataType;
+    petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
   },

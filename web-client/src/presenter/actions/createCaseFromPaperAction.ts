@@ -1,5 +1,5 @@
+import { CreatedCaseType } from '@shared/business/entities/EntityConstants';
 import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const createCaseFromPaperAction = async ({
@@ -10,7 +10,7 @@ export const createCaseFromPaperAction = async ({
 }: ActionProps<{
   fileUploadProgressMap: FileUploadProgressMapType;
 }>) => {
-  const petitionMetadata: PaperCaseDataType = get(state.form);
+  const petitionMetadata: CreatedCaseType = get(state.form);
   const { fileUploadProgressMap } = props;
   let caseDetail: RawCase;
   const {
