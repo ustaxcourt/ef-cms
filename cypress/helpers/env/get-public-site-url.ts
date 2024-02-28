@@ -1,5 +1,7 @@
 export function getPublicSiteUrl(): string {
-  const publicUrl = Cypress.env('EFCMS_DOMAIN') || 'localhost:5678';
-
-  return `http://${publicUrl}`;
+  if (Cypress.env('ENV') === 'local') {
+    return 'http://localhost:5678';
+  } else {
+    return `https://${Cypress.env('DEPLOYING_COLOR')}.${Cypress.env('EFCMS_DOMAIN')}`;
+  }
 }
