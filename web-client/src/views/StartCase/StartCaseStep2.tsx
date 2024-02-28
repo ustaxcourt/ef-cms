@@ -164,6 +164,7 @@ export const StartCaseStep2 = connect(
                       )}
                       data-testid="atp-file-upload-label"
                       htmlFor="atp-file-upload"
+                      id="atp-file-upload-label"
                     >
                       Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
                       have it.
