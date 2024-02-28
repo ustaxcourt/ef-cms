@@ -42,6 +42,7 @@ describe('TEST', () => {
           expect(items[0].content).to.contain(
             'The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.',
           );
+          expect(items[0].content).to.contain(TEST_EMAIL);
         }
       });
     };
