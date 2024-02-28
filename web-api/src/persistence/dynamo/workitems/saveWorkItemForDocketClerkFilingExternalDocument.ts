@@ -1,7 +1,6 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
-import { createSectionOutboxRecords } from './createSectionOutboxRecords';
-import { createUserOutboxRecord } from './createUserOutboxRecord';
 import { put } from '../../dynamodbClientService';
+import { putWorkItemInUsersOutbox } from './putWorkItemInUsersOutbox';
 
 /**
  * saveWorkItemForDocketClerkFilingExternalDocument
@@ -19,13 +18,9 @@ export const saveWorkItemForDocketClerkFilingExternalDocument = ({
   workItem: RawWorkItem;
 }) =>
   Promise.all([
-    createSectionOutboxRecords({
+    putWorkItemInUsersOutbox({
       applicationContext,
       section: workItem.section,
-      workItem,
-    }),
-    createUserOutboxRecord({
-      applicationContext,
       userId: workItem.assigneeId,
       workItem,
     }),

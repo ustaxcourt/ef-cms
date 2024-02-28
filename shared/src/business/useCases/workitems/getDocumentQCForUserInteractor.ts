@@ -1,9 +1,10 @@
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawWorkItem, WorkItem } from '../../entities/WorkItem';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { WorkItem } from '../../entities/WorkItem';
 
 /**
  * getDocumentQCInboxForUserInteractor
@@ -32,21 +33,35 @@ export const getDocumentQCForUserInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
+  let workItems: RawWorkItem[] = [];
 
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCForUser({
-      applicationContext,
-      box,
-      userId,
-    });
+  if (box === 'inbox' || box === 'inProgress') {
+    workItems = await applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCForUser({
+        applicationContext,
+        box,
+        userId,
+      });
+    workItems = workItems.filter(
+      workItem =>
+        workItem.assigneeId === user.userId &&
+        workItem.section === user.section,
+    );
+  } else if (box === 'outbox') {
+    workItems = await applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCServedForUser({
+        applicationContext,
+        userId,
+      });
 
-  const filteredWorkItems = workItems.filter(
-    workItem =>
-      workItem.assigneeId === user.userId && workItem.section === user.section,
-  );
+    workItems = workItems.filter(workItem =>
+      user.role === ROLES.petitionsClerk ? !!workItem.section : true,
+    );
+  }
 
-  return WorkItem.validateRawCollection(filteredWorkItems, {
+  return WorkItem.validateRawCollection(workItems, {
     applicationContext,
   });
 };

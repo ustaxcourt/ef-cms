@@ -1,5 +1,4 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
-import { calculateTimeToLive } from '@web-api/persistence/dynamo/calculateTimeToLive';
 import { put } from '../../dynamodbClientService';
 
 /**
@@ -17,18 +16,17 @@ export const saveWorkItem = ({
   applicationContext: IApplicationContext;
   workItem: RawWorkItem;
 }) => {
-  const box = workItem.completedAt
-    ? 'outbox'
-    : workItem.inProgress || workItem.caseIsInProgress
-      ? 'inProgress'
-      : 'inbox';
+  const box =
+    workItem.inProgress || workItem.caseIsInProgress ? 'inProgress' : 'inbox';
 
-  const gsi2pk = workItem.assigneeId
-    ? `assigneeId|${box}|${workItem.assigneeId}`
-    : undefined;
-  const gsi3pk = workItem.section
-    ? `section|${box}|${workItem.section}`
-    : undefined;
+  const gsi2pk =
+    !workItem.completedAt && workItem.assigneeId
+      ? `assigneeId|${box}|${workItem.assigneeId}`
+      : undefined;
+  const gsi3pk =
+    !workItem.completedAt && workItem.section
+      ? `section|${box}|${workItem.section}`
+      : undefined;
 
   return put({
     Item: {
@@ -38,10 +36,6 @@ export const saveWorkItem = ({
       pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
       ...workItem,
-      ttl: workItem.completedAt
-        ? calculateTimeToLive({ numDays: 8, timestamp: workItem.completedAt })
-            .expirationTimestamp
-        : undefined,
     },
     applicationContext,
   });

@@ -51,10 +51,6 @@ describe('completeWorkItemInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .putWorkItemInOutbox.mockReturnValue({});
-
-    applicationContext
-      .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
 

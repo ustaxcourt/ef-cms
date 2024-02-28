@@ -9,7 +9,7 @@ export const getDocumentQCForSection = async ({
   section,
 }: {
   applicationContext: IApplicationContext;
-  box: 'inbox' | 'inProgress' | 'outbox';
+  box: 'inbox' | 'inProgress';
   judgeUserName?: string;
   judgeUserId?: string;
   section: string;

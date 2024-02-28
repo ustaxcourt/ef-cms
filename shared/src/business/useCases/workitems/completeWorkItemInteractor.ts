@@ -3,8 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawWorkItem, WorkItem } from '../../entities/WorkItem';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { WorkItem } from '../../entities/WorkItem';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
@@ -50,6 +51,20 @@ export const completeWorkItem = async (
     .validate()
     .toRawObject();
 
+  const authorizedUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: user.userId });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: authorizedUser.section,
+    userId: user.userId,
+    workItem: {
+      ...completedWorkItem,
+      createdAt: createISODateString(),
+    },
+  });
+
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
     workItem: completedWorkItem,
@@ -86,12 +101,12 @@ export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { workItemId }: { workItemId: string },
 ) => {
-  const originalWorkItem: RawWorkItem = await applicationContext
+  const originalWorkItem = (await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
       applicationContext,
       workItemId,
-    });
+    })) as unknown as RawWorkItem;
 
   return {
     identifiers: [`case|${originalWorkItem.docketNumber}`],

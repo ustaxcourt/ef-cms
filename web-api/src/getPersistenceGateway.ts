@@ -90,6 +90,8 @@ import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCForSection } from './persistence/dynamo/workitems/getDocumentQCForSection';
 import { getDocumentQCForUser } from './persistence/dynamo/workitems/getDocumentQCForUser';
+import { getDocumentQCServedForSection } from './persistence/dynamo/workitems/getDocumentQCServedForSection';
+import { getDocumentQCServedForUser } from './persistence/dynamo/workitems/getDocumentQCServedForUser';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';
 import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
@@ -138,7 +140,6 @@ import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
 import { markMessageThreadRepliedTo } from './persistence/dynamo/messages/markMessageThreadRepliedTo';
 import { persistUser } from './persistence/dynamo/users/persistUser';
-import { putWorkItemInOutbox } from './persistence/dynamo/workitems/putWorkItemInOutbox';
 import { putWorkItemInUsersOutbox } from './persistence/dynamo/workitems/putWorkItemInUsersOutbox';
 import { refreshToken } from './persistence/cognito/refreshToken';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
@@ -242,7 +243,6 @@ const gatewayMethods = {
     incrementKeyCount,
     markMessageThreadRepliedTo,
     persistUser,
-    putWorkItemInOutbox,
     putWorkItemInUsersOutbox,
     removeCaseFromHearing,
     saveDispatchNotification,
@@ -338,6 +338,8 @@ const gatewayMethods = {
   getDocumentIdFromSQSMessage,
   getDocumentQCForSection,
   getDocumentQCForUser,
+  getDocumentQCServedForSection,
+  getDocumentQCServedForUser,
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,

@@ -7,7 +7,7 @@ export const getDocumentQCForUser = async ({
   userId,
 }: {
   applicationContext: IApplicationContext;
-  box: 'inbox' | 'inProgress' | 'outbox';
+  box: 'inbox' | 'inProgress';
   userId: string;
 }): Promise<RawWorkItem[]> => {
   const workItems: RawWorkItem[] = (await queryFull({
