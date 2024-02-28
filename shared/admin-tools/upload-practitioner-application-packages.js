@@ -1,22 +1,16 @@
-// usage: npx ts-node --transpile-only shared/admin-tools/upload-practitioner-application-packages.js > "$HOME/Documents/upload/stats-$(date +%s).txt"
+// usage: npx ts-node --transpile-only scripts/upload-practitioner-application-packages.ts > "$HOME/Documents/upload/stats-$(date +%s).txt"
 
-const { requireEnvVars } = require('./util');
+import { DateTime } from 'luxon';
+import { createApplicationContext } from '../../web-api/src/applicationContext';
+import { createISODateString } from '../src/business/utilities/DateHandler';
+import { extname, parse } from 'path';
+import { requireEnvVars } from './util';
+import { searchAll } from '../../web-api/src/persistence/elasticsearch/searchClient';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import tiff2pdf from 'tiff2pdf';
+
 requireEnvVars(['ENV', 'HOME', 'REGION']);
-
-const fs = require('fs');
-const tiff2pdf = require('tiff2pdf');
-const {
-  createApplicationContext,
-} = require('../../web-api/src/applicationContext');
-const {
-  createISODateString,
-} = require('../src/business/utilities/DateHandler');
-const {
-  searchAll,
-} = require('../../web-api/src/persistence/elasticsearch/searchClient');
-const { DateTime } = require('luxon');
-const { extname, parse } = require('path');
-const { v4: uuidv4 } = require('uuid');
 
 const INPUT_DIR = `${process.env.HOME}/Documents/upload`;
 const MAX_TRIES = 5;
@@ -376,6 +370,7 @@ const batchUploadPractitionerApplicationPackages = async ({
   console.timeEnd('Total execution time');
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   await batchUploadPractitionerApplicationPackages({ applicationContext });
