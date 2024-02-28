@@ -1,15 +1,14 @@
-const {
-  sendMaintenanceNotificationsLambda,
-} = require('../web-api/src/lambdas/cases/sendMaintenanceNotificationsLambda');
+import { sendMaintenanceNotificationsLambda } from '../web-api/src/lambdas/cases/sendMaintenanceNotificationsLambda';
 
 const maintenanceMode = process.argv[2];
 
-const setMaintenanceModeLocally = async () => {
+export const setMaintenanceModeLocally = async () => {
   await sendMaintenanceNotificationsLambda({
     maintenanceMode: maintenanceMode === 'true',
   });
 };
 
-setMaintenanceModeLocally();
-
-exports.setMaintenanceModeLocally = setMaintenanceModeLocally;
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  await setMaintenanceModeLocally();
+})();
