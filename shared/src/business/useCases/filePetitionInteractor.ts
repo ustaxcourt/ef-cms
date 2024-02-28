@@ -22,18 +22,13 @@ export const filePetitionInteractor = async (
     stinUploadProgress: any;
   },
 ) => {
-  console.log(
-    'progresses at the top of the interactor',
-    applicationForWaiverOfFilingFeeUploadProgress,
-    attachmentToPetitionUploadProgress,
-    corporateDisclosureUploadProgress,
-    petitionUploadProgress,
-    requestForPlaceOfTrialUploadProgress,
-    stinUploadProgress,
-  );
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
+  const hasPermissions =
+    isAuthorized(user, ROLE_PERMISSIONS.PETITION) ||
+    isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE);
+
+  if (!hasPermissions) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -95,16 +90,6 @@ export const filePetitionInteractor = async (
       });
   }
 
-  console.log(
-    'uploads before the promise.all',
-    applicationForWaiverOfFilingFeeUpload,
-    corporateDisclosureFileUpload,
-    petitionFileUpload,
-    requestForPlaceOfTrialFileUpload,
-    stinFileUpload,
-    attachmentToPetitionUpload,
-  );
-
   try {
     const [
       applicationForWaiverOfFilingFeeFileId,
@@ -130,21 +115,6 @@ export const filePetitionInteractor = async (
       requestForPlaceOfTrialFileId,
       stinFileId,
     };
-
-    // const caseDetail = await applicationContext
-    //   .getUseCases()
-    //   .createCaseInteractor(applicationContext, {
-    //     atpFileId,
-    //     corporateDisclosureFileId,
-    //     petitionFileId,
-    //     petitionMetadata,
-    //     stinFileId,
-    //   });
-
-    // return {
-    //   caseDetail,
-    //   stinFileId,
-    // };
   } catch (error) {
     throw new Error('Error uploading documents to file petition');
   }

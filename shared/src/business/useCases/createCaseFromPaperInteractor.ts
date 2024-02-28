@@ -72,12 +72,12 @@ export const createCaseFromPaperInteractor = async (
     stinFileId,
   }: {
     applicationForWaiverOfFilingFeeFileId?: string;
+    attachmentToPetitionFileId?: string;
     corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: PaperCaseDataType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    attachmentToPetitionFileId?: string;
   },
 ): Promise<RawCase> => {
   const authorizedUser = applicationContext.getCurrentUser();

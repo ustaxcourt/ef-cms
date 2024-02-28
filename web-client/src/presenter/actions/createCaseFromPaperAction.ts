@@ -12,45 +12,35 @@ export const createCaseFromPaperAction = async ({
 }>) => {
   const petitionMetadata: PaperCaseDataType = get(state.form);
   const { fileUploadProgressMap } = props;
-  console.log('fileUploadProgressMap', fileUploadProgressMap);
   let caseDetail: RawCase;
-  try {
-    const {
-      applicationForWaiverOfFilingFeeFileId,
-      atpFileId,
-      corporateDisclosureFileId,
-      petitionFileId,
-      requestForPlaceOfTrialFileId,
-      stinFileId,
-    } = await applicationContext
-      .getUseCases()
-      .filePetitionInteractor(applicationContext, {
-        applicationForWaiverOfFilingFeeUploadProgress:
-          fileUploadProgressMap.applicationForWaiverOfFilingFee,
-        attachmentToPetitionUploadProgress:
-          fileUploadProgressMap.attachmentToPetition,
-        corporateDisclosureUploadProgress:
-          fileUploadProgressMap.corporateDisclosure,
-        petitionUploadProgress: fileUploadProgressMap.petition,
-        requestForPlaceOfTrialUploadProgress:
-          fileUploadProgressMap.requestForPlaceOfTrial,
-        stinUploadProgress: fileUploadProgressMap.stin,
-      });
-
-    console.log('ids generated', {
-      applicationForWaiverOfFilingFeeFileId,
-      atpFileId,
-      corporateDisclosureFileId,
-      petitionFileId,
-      requestForPlaceOfTrialFileId,
-      stinFileId,
+  const {
+    applicationForWaiverOfFilingFeeFileId,
+    attachmentToPetitionFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+  } = await applicationContext
+    .getUseCases()
+    .filePetitionInteractor(applicationContext, {
+      applicationForWaiverOfFilingFeeUploadProgress:
+        fileUploadProgressMap.applicationForWaiverOfFilingFee,
+      attachmentToPetitionUploadProgress:
+        fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      requestForPlaceOfTrialUploadProgress:
+        fileUploadProgressMap.requestForPlaceOfTrial,
+      stinUploadProgress: fileUploadProgressMap.stin,
     });
 
+  try {
     caseDetail = await applicationContext
       .getUseCases()
       .createCaseFromPaperInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeFileId,
-        attachmentToPetitionFileId: atpFileId,
+        attachmentToPetitionFileId,
         corporateDisclosureFileId,
         petitionFileId,
         petitionMetadata,
@@ -58,7 +48,6 @@ export const createCaseFromPaperAction = async ({
         stinFileId,
       });
   } catch (err) {
-    console.log('!!!error', err);
     return path.error();
   }
 
