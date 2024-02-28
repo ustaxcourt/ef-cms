@@ -1,6 +1,6 @@
-const { disableUser } = require('../../shared/admin-tools/user/admin');
+import { disableUser } from '../../shared/admin-tools/user/admin';
 
-const disableSmoketestUser = async () => {
+export const disableSmoketestUser = async () => {
   try {
     await disableUser('testAdmissionsClerk@example.com');
     console.log('Successfully disabled test user!');
@@ -10,6 +10,7 @@ const disableSmoketestUser = async () => {
   }
 };
 
-disableSmoketestUser();
-
-exports.disableSmoketestUser = disableSmoketestUser;
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  await disableSmoketestUser();
+})();
