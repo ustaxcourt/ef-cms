@@ -1,14 +1,16 @@
-// usage: npx ts-node --transpile-only shared/admin-tools/download-all-case-documents.js "453-17"
+// usage: npx ts-node --transpile-only scripts/download-all-case-documents.js "453-17"
 
-const fs = require('fs');
-const {
-  createApplicationContext,
-} = require('../../web-api/src/applicationContext');
-const {
-  getCaseByDocketNumber,
-} = require('../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber');
+import { createApplicationContext } from '../../web-api/src/applicationContext';
+import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import fs from 'fs';
 
 const DOCKET_NUMBER = process.argv[2];
+
+if (!DOCKET_NUMBER) {
+  console.error('Error: please provide a docket number.');
+  process.exit(1);
+}
+
 const OUTPUT_DIR = `${process.env.HOME}/Downloads/${DOCKET_NUMBER}`;
 
 const downloadPdf = async ({
@@ -46,6 +48,7 @@ const generateFilename = ({
   return `${filename.substring(0, MAX_OVERALL_FILE_LENGTH)}${EXT}`;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
 
