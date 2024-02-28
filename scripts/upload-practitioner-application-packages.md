@@ -37,7 +37,7 @@ cd "$HOME/path/to/ef-cms"
 In the same shell session, run the `upload-practitioner-application-packages` script.
 
 ```bash
-npx ts-node --transpile-only shared/admin-tools/upload-practitioner-application-packages.js > "$HOME/Documents/upload/stats-$(date +%s).txt"
+npx ts-node --transpile-only scripts/upload-practitioner-application-packages.js > "$HOME/Documents/upload/stats-$(date +%s).txt"
 ```
 
 ## Evaluate the results
