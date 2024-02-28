@@ -1,4 +1,4 @@
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
+import { PaperCaseDataType } from '@shared/business/useCases/filePetitionInteractor';
 import { post } from './requests';
 
 export const createCaseFromPaperInteractor = (

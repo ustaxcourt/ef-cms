@@ -4,6 +4,46 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
+export type PaperCaseDataType = {
+  contactPrimary: {
+    address1: string;
+    address2: string;
+    address3: string;
+    city: string;
+    countryType: string;
+    name: string;
+    paperPetitionEmail: string;
+    phone: string;
+    postalCode: string;
+    state: string;
+  };
+  caseType: string;
+  caseCaption: string;
+  attachmentToPetitionFileSize?: number;
+  attachmentToPetitionFile: Blob;
+  hasVerifiedIrsNotice: boolean;
+  isPaper: boolean;
+  mailingDate: string;
+  orderDesignatingPlaceOfTrial?: boolean;
+  orderForCds: boolean;
+  stinFile?: Blob;
+  stinFileSize?: number;
+  orderForFilingFee: boolean;
+  partyType: string;
+  petitionFile: Blob;
+  petitionFileSize: number;
+  petitionPaymentStatus: string;
+  procedureType: string;
+  receivedAt: string;
+  applicationForWaiverOfFilingFeeFile?: Blob;
+  corporateDisclosureFile?: Blob;
+  requestForPlaceOfTrialFile?: Blob;
+  status: string;
+  contactSecondary?: {
+    name: string;
+  };
+};
+
 export const filePetitionInteractor = async (
   applicationContext: any,
   {
