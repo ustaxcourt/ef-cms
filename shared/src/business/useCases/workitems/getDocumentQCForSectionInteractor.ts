@@ -6,8 +6,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawWorkItem, WorkItem } from '../../entities/WorkItem';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { WorkItem } from '../../entities/WorkItem';
 
 /**
  *
@@ -36,19 +36,28 @@ export const getDocumentQCForSectionInteractor = async (
     );
   }
 
-  let sectionToShow = section;
-  if (section !== PETITIONS_SECTION) {
-    sectionToShow = DOCKET_SECTION;
-  }
+  const sectionToShow =
+    section === PETITIONS_SECTION ? PETITIONS_SECTION : DOCKET_SECTION;
 
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCForSection({
-      applicationContext,
-      box,
-      judgeUserName,
-      section: sectionToShow,
-    });
+  let workItems: RawWorkItem[] = [];
+
+  if (box === 'inbox' || box === 'inProgress') {
+    workItems = await applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCForSection({
+        applicationContext,
+        box,
+        judgeUserName,
+        section: sectionToShow,
+      });
+  } else {
+    workItems = await applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCServedForSection({
+        applicationContext,
+        section: sectionToShow,
+      });
+  }
 
   return WorkItem.validateRawCollection(workItems, {
     applicationContext,

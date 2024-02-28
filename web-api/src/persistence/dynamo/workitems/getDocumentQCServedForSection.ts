@@ -7,10 +7,10 @@ import { queryFull } from '../../dynamodbClientService';
 
 export const getDocumentQCServedForSection = ({
   applicationContext,
-  userId,
+  section,
 }: {
   applicationContext: IApplicationContext;
-  userId: string;
+  section: string;
 }) => {
   const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateISODate({
@@ -26,7 +26,7 @@ export const getDocumentQCServedForSection = ({
     },
     ExpressionAttributeValues: {
       ':afterDate': afterDate,
-      ':pk': `section-outbox|${userId}`,
+      ':pk': `section-outbox|${section}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,

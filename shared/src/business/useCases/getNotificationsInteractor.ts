@@ -48,7 +48,7 @@ export const getNotificationsInteractor = async (
     judgeUserId = undefined;
   }
 
-  let sectionToDisplay =
+  let documentQcSection =
     section === PETITIONS_SECTION ? PETITIONS_SECTION : DOCKET_SECTION;
 
   const [
@@ -82,14 +82,14 @@ export const getNotificationsInteractor = async (
       box: 'inProgress',
       judgeUserId,
       judgeUserName,
-      section: sectionToDisplay,
+      section: documentQcSection,
     }),
     applicationContext.getPersistenceGateway().getDocumentQCForSection({
       applicationContext,
       box: 'inbox',
       judgeUserId,
       judgeUserName,
-      section: sectionToDisplay,
+      section: documentQcSection,
     }),
   ]);
 

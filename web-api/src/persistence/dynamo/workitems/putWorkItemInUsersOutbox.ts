@@ -37,7 +37,7 @@ export const putWorkItemInUsersOutbox = async ({
         gsi1pk: `work-item|${workItem.workItemId}`,
         pk: `section-outbox|${section}`,
         sk: workItem.completedAt,
-        ttl,
+        ttl: ttl.expirationTimestamp,
       },
       applicationContext,
     }),
