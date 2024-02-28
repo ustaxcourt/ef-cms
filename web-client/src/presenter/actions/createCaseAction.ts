@@ -19,25 +19,28 @@ export const createCaseAction = async ({
   form.contactPrimary.email = user.email;
 
   let caseDetail;
-  let stinFile;
+
+  const {
+    attachmentToPetitionFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  } = await applicationContext
+    .getUseCases()
+    .filePetitionInteractor(applicationContext, {
+      attachmentToPetitionUploadProgress:
+        fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
+    });
+
   try {
-    const { atpFileId, corporateDisclosureFileId, petitionFileId, stinFileId } =
-      await applicationContext
-        .getUseCases()
-        .filePetitionInteractor(applicationContext, {
-          atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
-          corporateDisclosureUploadProgress:
-            fileUploadProgressMap.corporateDisclosure,
-          petitionUploadProgress: fileUploadProgressMap.petition,
-          stinUploadProgress: fileUploadProgressMap.stin,
-        });
-
-    stinFile = stinFileId;
-
     caseDetail = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
-        atpFileId,
+        attachmentToPetitionFileId,
         corporateDisclosureFileId,
         petitionFileId,
         petitionMetadata,
@@ -60,9 +63,8 @@ export const createCaseAction = async ({
     .filter(d => d.isFileAttached)
     .map(d => d.docketEntryId);
 
-  console.log('stinFile', stinFile);
   // for security reasons, the STIN is not in the API response, but we already know the docketEntryId
-  documentsThatNeedCoverSheet.push(stinFile);
+  documentsThatNeedCoverSheet.push(stinFileId);
 
   await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 

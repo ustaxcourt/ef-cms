@@ -90,8 +90,8 @@ export const filePetitionInteractor = async (
     attachmentToPetitionUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: atpUploadProgress.file,
-        onUploadProgress: atpUploadProgress.uploadProgress,
+        document: attachmentToPetitionUploadProgress.file,
+        onUploadProgress: attachmentToPetitionUploadProgress.uploadProgress,
       });
   }
 
@@ -112,7 +112,7 @@ export const filePetitionInteractor = async (
       petitionFileId,
       requestForPlaceOfTrialFileId,
       stinFileId,
-      atpFileId,
+      attachmentToPetitionFileId,
     ]: string[] = await Promise.all([
       applicationForWaiverOfFilingFeeUpload,
       corporateDisclosureFileUpload,
@@ -124,7 +124,7 @@ export const filePetitionInteractor = async (
 
     return {
       applicationForWaiverOfFilingFeeFileId,
-      atpFileId,
+      attachmentToPetitionFileId,
       corporateDisclosureFileId,
       petitionFileId,
       requestForPlaceOfTrialFileId,
