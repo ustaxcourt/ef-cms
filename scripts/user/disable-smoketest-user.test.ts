@@ -1,5 +1,5 @@
 import * as userAdmin from '../../shared/admin-tools/user/admin';
-import { disableSmoketestUser } from './disable-smoketest-user';
+import { disableSmoketestUser } from './disable-smoketest-user-helpers';
 
 jest.mock('../../shared/admin-tools/user/admin');
 const disableUser = jest.spyOn(userAdmin, 'disableUser').mockImplementation();
