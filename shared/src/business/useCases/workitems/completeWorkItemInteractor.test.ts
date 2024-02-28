@@ -40,10 +40,14 @@ describe('completeWorkItemInteractor', () => {
     mockUser = {
       name: 'docket clerk',
       role: ROLES.docketClerk,
+      section: DOCKET_SECTION,
       userId: applicationContext.getUniqueId(),
     };
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockUser);
 
     applicationContext
       .getPersistenceGateway()

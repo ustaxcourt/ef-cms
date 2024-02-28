@@ -46,6 +46,9 @@ describe('completeWorkItemInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => docketClerkUser);
   });
 
   beforeEach(() => {
