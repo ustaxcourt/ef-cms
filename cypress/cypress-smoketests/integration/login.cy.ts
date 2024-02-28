@@ -1,6 +1,6 @@
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
-import { cypressEnv } from '../../helpers/env/cypressEnvironment';
+import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
 
@@ -24,12 +24,12 @@ describe('login', () => {
     createAPetitioner({
       email: unconfirmedEmail,
       name: 'Person mcDerson',
-      password: cypressEnv.defaultAccountPass,
+      password: getCypressEnv().defaultAccountPass,
     });
     cy.visit('/login');
     cy.get('[data-testid="email-input"]').type(unconfirmedEmail);
     cy.get('[data-testid="password-input"]').type(
-      cypressEnv.defaultAccountPass,
+      getCypressEnv().defaultAccountPass,
     );
     cy.get('[data-testid="login-button"]').click();
     cy.get('[data-testid="error-alert"]').should(
@@ -92,15 +92,15 @@ describe('login', () => {
     cy.visit('/login');
     cy.get('[data-testid="email-input"]').type(practitionerEmail);
     cy.get('[data-testid="password-input"]').type(
-      cypressEnv.defaultAccountPass,
+      getCypressEnv().defaultAccountPass,
     );
     cy.get('[data-testid="login-button"]').click();
 
     cy.get('[data-testid="new-password-input"]').type(
-      cypressEnv.defaultAccountPass,
+      getCypressEnv().defaultAccountPass,
     );
     cy.get('[data-testid="confirm-new-password-input"]').type(
-      cypressEnv.defaultAccountPass,
+      getCypressEnv().defaultAccountPass,
     );
     cy.get('[data-testid="change-password-button"]').click();
 

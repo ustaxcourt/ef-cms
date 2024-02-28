@@ -2,8 +2,8 @@ import {
   batchWrite,
   getDocumentClient,
 } from '../helpers/dynamo/getDynamoCypress';
-import { cypressEnv } from '../helpers/env/cypressEnvironment';
 import { getCognito } from '../helpers/cognito/getCognitoCypress';
+import { getCypressEnv } from '../helpers/env/cypressEnvironment';
 import promiseRetry from 'promise-retry';
 import type { DeleteRequest } from '../../web-api/src/persistence/dynamo/dynamoTypes';
 
@@ -16,7 +16,7 @@ export const confirmUser = async ({ email }: { email: string }) => {
   const initAuthResponse = await getCognito().adminInitiateAuth({
     AuthFlow: 'ADMIN_NO_SRP_AUTH',
     AuthParameters: {
-      PASSWORD: cypressEnv.defaultAccountPass,
+      PASSWORD: getCypressEnv().defaultAccountPass,
       USERNAME: email,
     },
     ClientId: clientId,
@@ -27,7 +27,7 @@ export const confirmUser = async ({ email }: { email: string }) => {
     await getCognito().adminRespondToAuthChallenge({
       ChallengeName: 'NEW_PASSWORD_REQUIRED',
       ChallengeResponses: {
-        NEW_PASSWORD: cypressEnv.defaultAccountPass,
+        NEW_PASSWORD: getCypressEnv().defaultAccountPass,
         USERNAME: email,
       },
       ClientId: clientId,
@@ -56,7 +56,7 @@ const getUserPoolId = async (): Promise<string> => {
     MaxResults: 50,
   });
   const userPoolId = results?.UserPools?.find(
-    pool => pool.Name === `efcms-${cypressEnv.env}`,
+    pool => pool.Name === `efcms-${getCypressEnv().env}`,
   )?.Id;
 
   if (!userPoolId) {
@@ -117,7 +117,7 @@ const getUserConfirmationCodeFromDynamo = async (
 ): Promise<string> => {
   const result = await getDocumentClient().get({
     Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
-    TableName: cypressEnv.dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbTableName,
   });
 
   return result.Item!.confirmationCode;
@@ -164,7 +164,7 @@ const deleteAccount = async (
       ':pk': `user|${user.userId}`,
     },
     KeyConditionExpression: '#pk = :pk ',
-    TableName: cypressEnv.dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbTableName,
   });
 
   const userRecord = userRecords.Items?.find(record => {
@@ -260,7 +260,7 @@ export const expireUserConfirmationCode = async (
   await getDocumentClient()
     .delete({
       Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
-      TableName: cypressEnv.dynamoDbTableName,
+      TableName: getCypressEnv().dynamoDbTableName,
     })
     .catch(error => console.error(error)); // if no confirmation code exists do not throw error.
   return null;
@@ -277,7 +277,7 @@ export const getEmailVerificationToken = async ({
       pk: `user|${userId}`,
       sk: `user|${userId}`,
     },
-    TableName: cypressEnv.dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbTableName,
   });
 
   return result?.Item?.pendingEmailVerificationToken;

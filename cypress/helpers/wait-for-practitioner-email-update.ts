@@ -1,5 +1,5 @@
-import { cypressEnv } from './env/cypressEnvironment';
 import { getCognitoUserIdByEmail } from '../support/cognito-login';
+import { getCypressEnv } from './env/cypressEnvironment';
 import { getDocumentClient } from './dynamo/getDynamoCypress';
 
 export async function waitForPractitionerEmailUpdate({
@@ -18,7 +18,7 @@ export async function waitForPractitionerEmailUpdate({
       pk: `case|${docketNumber}`,
       sk: `privatePractitioner|${practitionerUserId}`,
     },
-    TableName: cypressEnv.dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbTableName,
   });
 
   const practitionerCaseRecordEmail = result.Item?.email;
