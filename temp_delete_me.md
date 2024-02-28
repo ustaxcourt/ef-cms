@@ -1,8 +1,5 @@
 ::: STUFF TO DO :::
-- Create Presentation on new patterns
-- For account confirmation set "U.S. Tax Court" as the respondant
 - create petitioner padding on mobile should match login
-- add pa11y to login and change password
 - refactor cypressEnv to handle node vs window environment.
 
 

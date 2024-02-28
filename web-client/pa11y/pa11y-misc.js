@@ -17,4 +17,13 @@ module.exports = [
     notes: 'checks a11y of create petitioner account success message',
     url: 'http://localhost:1234/create-account/petitioner',
   },
+  'http://localhost:1234/forgot-password',
+  {
+    actions: [
+      'wait for [data-testid="email-input"] to be visible',
+      `set field [data-testid="email-input"] to example${Date.now()}@pa11y.com`,
+    ],
+    notes: 'checks a11y of reset password page',
+    url: 'http://localhost:1234/forgot-password',
+  },
 ];
