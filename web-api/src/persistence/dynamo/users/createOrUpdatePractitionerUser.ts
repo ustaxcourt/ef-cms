@@ -120,6 +120,10 @@ export const createOrUpdatePractitionerUser = async ({
       Username: userEmail,
     };
 
+    if (process.env.STAGE !== 'prod') {
+      params.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+    }
+
     const response = await cognito.adminCreateUser(params);
 
     if (response?.User?.Username) {
