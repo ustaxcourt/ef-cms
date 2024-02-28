@@ -48,7 +48,7 @@ const config: Config = {
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-      prefix: '<rootDir>',
+      prefix: '<rootDir>/../',
     }),
     uuid: require.resolve('uuid'),
   },
