@@ -1,14 +1,15 @@
 // usage: npx ts-node --transpile-only scripts/upload-practitioner-application-packages.ts > "$HOME/Documents/upload/stats-$(date +%s).txt"
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { createISODateString } from '../src/business/utilities/DateHandler';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { extname, parse } from 'path';
-import { requireEnvVars } from './util';
-import { searchAll } from '../../web-api/src/persistence/elasticsearch/searchClient';
+import { requireEnvVars } from '../shared/admin-tools/util';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import tiff2pdf from 'tiff2pdf';
+import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 requireEnvVars(['ENV', 'HOME', 'REGION']);
 
@@ -16,27 +17,34 @@ const INPUT_DIR = `${process.env.HOME}/Documents/upload`;
 const MAX_TRIES = 5;
 const DYNAMODB_CHUNK_SIZE = 25;
 
+type putRequestType = { PutRequest: { Item: { [key: string]: string } } };
+type fileType = { fileId: string; fileName: string };
+
 const uploadDir = `${INPUT_DIR}/to-upload`;
 const completedDir = `${INPUT_DIR}/done/uploaded`;
-const ddbEntities = [];
+const ddbEntities: putRequestType[] = [];
 const output = {
   completed: {
-    conversion: {},
-    uploadToS3: {},
-    writeToDynamoDB: {},
+    conversion: {} as { [key: string]: string },
+    uploadToS3: {} as { [key: string]: fileType },
+    writeToDynamoDB: {} as { [key: string]: fileType },
   },
   failed: {
-    conversion: {},
-    practitionerNotFound: [],
-    uploadToS3: {},
+    conversion: {} as { [key: string]: string },
+    practitionerNotFound: [] as string[],
+    uploadToS3: {} as { [key: string]: { fileId: string; fileName: string } },
     writeToDynamoDB: {
-      error: [],
-      unprocessed: [],
+      error: [] as putRequestType[],
+      unprocessed: [] as putRequestType[],
     },
   },
 };
 
-const getAllBarNumbers = async ({ applicationContext }) => {
+const getAllBarNumbers = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<string[]> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
@@ -55,20 +63,28 @@ const getAllBarNumbers = async ({ applicationContext }) => {
       index: 'efcms-user',
     },
   });
-  return results.map(practitioner => practitioner.barNumber);
+  return results.map((practitioner: RawPractitioner) => practitioner.barNumber);
 };
 
-const uploadDocumentToS3 = async ({ applicationContext, fileId, filePath }) => {
+const uploadDocumentToS3 = async ({
+  applicationContext,
+  fileId,
+  filePath,
+}: {
+  applicationContext: IApplicationContext;
+  fileId: string;
+  filePath: string;
+}): Promise<boolean> => {
   const fileData = fs.readFileSync(filePath);
   if (!fileData) {
-    return;
+    return false;
   }
 
   let uploaded = false;
   let tries = 0;
   while (!uploaded && tries < MAX_TRIES) {
     try {
-      uploaded = await applicationContext
+      await applicationContext
         .getStorageClient()
         .putObject({
           Body: fileData,
@@ -77,8 +93,14 @@ const uploadDocumentToS3 = async ({ applicationContext, fileId, filePath }) => {
           Key: fileId,
         })
         .promise();
+      uploaded = true;
     } catch (err) {
-      if (err && 'retryable' in err && !err.retryable) {
+      if (
+        err &&
+        typeof err === 'object' &&
+        'retryable' in err &&
+        !err.retryable
+      ) {
         tries = MAX_TRIES;
       }
     }
@@ -93,7 +115,12 @@ const uploadFileAndMoveOriginal = async ({
   barNumber,
   fileId,
   fileName,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  barNumber: string;
+  fileId: string;
+  fileName: string;
+}): Promise<boolean> => {
   const uploaded = await uploadDocumentToS3({
     applicationContext,
     fileId,
@@ -120,7 +147,10 @@ const uploadFileAndMoveOriginal = async ({
 const convertAllTifsAndConstructDocumentEntities = async ({
   allBarNumbers,
   fileNames,
-}) => {
+}: {
+  allBarNumbers: string[];
+  fileNames: string[];
+}): Promise<void> => {
   for (let fileName of fileNames) {
     if (['.DS_Store', '__MACOSX'].includes(fileName)) {
       continue;
@@ -162,7 +192,11 @@ const convertAllTifsAndConstructDocumentEntities = async ({
   }
 };
 
-const convertTifToPdfAndMoveOriginal = async ({ fileName }) => {
+const convertTifToPdfAndMoveOriginal = async ({
+  fileName,
+}: {
+  fileName: string;
+}): Promise<string | undefined> => {
   const outputDir = `${INPUT_DIR}/to-upload`;
   const convertedDir = `${INPUT_DIR}/done/original`;
   const converted = await asyncTifToPdf({ fileName, outputDir });
@@ -178,7 +212,13 @@ const convertTifToPdfAndMoveOriginal = async ({ fileName }) => {
   return `${newFileNameWithoutExt}.pdf`;
 };
 
-const asyncTifToPdf = ({ fileName, outputDir }) => {
+const asyncTifToPdf = ({
+  fileName,
+  outputDir,
+}: {
+  fileName: string;
+  outputDir: string;
+}): Promise<string> => {
   const filePath = `${outputDir}/${fileName}`;
   return new Promise((resolve, reject) => {
     tiff2pdf(filePath, outputDir, result => {
@@ -193,23 +233,39 @@ const asyncTifToPdf = ({ fileName, outputDir }) => {
   });
 };
 
-const moveLocalFile = async ({ newPath, oldPath }) => {
+const moveLocalFile = async ({
+  newPath,
+  oldPath,
+}: {
+  newPath: string;
+  oldPath: string;
+}): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     fs.rename(oldPath, newPath, err => {
       if (err) {
         reject();
       } else {
-        resolve();
+        resolve(true);
       }
     });
   });
 };
 
-const getBarNumberFromPractitionerDocumentPk = ({ pk }) => {
+const getBarNumberFromPractitionerDocumentPk = ({
+  pk,
+}: {
+  pk: string;
+}): string => {
   return pk.replace('practitioner|', '').toUpperCase();
 };
 
-const uploadChunkToS3 = async ({ applicationContext, chunk }) => {
+const uploadChunkToS3 = async ({
+  applicationContext,
+  chunk,
+}: {
+  applicationContext: IApplicationContext;
+  chunk: putRequestType[];
+}): Promise<void> => {
   await Promise.all(
     chunk.map(doc => {
       const barNumber = getBarNumberFromPractitionerDocumentPk({
@@ -227,7 +283,13 @@ const uploadChunkToS3 = async ({ applicationContext, chunk }) => {
   );
 };
 
-const writeChunkToDynamoDb = async ({ applicationContext, chunk }) => {
+const writeChunkToDynamoDb = async ({
+  applicationContext,
+  chunk,
+}: {
+  applicationContext: IApplicationContext;
+  chunk: putRequestType[];
+}): Promise<void> => {
   const { dynamoDbTableName } = applicationContext.environment;
   let unprocessedItems = { [dynamoDbTableName]: chunk };
   let tries = 0;
@@ -274,7 +336,7 @@ const writeChunkToDynamoDb = async ({ applicationContext, chunk }) => {
   }
 };
 
-const outputStatistics = () => {
+const outputStatistics = (): void => {
   console.log('');
   console.log(
     `Number of files converted from .tif to .pdf: ${
@@ -318,7 +380,9 @@ const outputStatistics = () => {
 
 const batchUploadPractitionerApplicationPackages = async ({
   applicationContext,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<void> => {
   console.time('Total execution time');
   const fileNames = fs.readdirSync(uploadDir);
   if (!fileNames || fileNames.length === 0) {
