@@ -1,13 +1,11 @@
-const {
+import {
   activateAdminAccount,
   createAdminAccount,
   createDawsonUser,
   deactivateAdminAccount,
   enableUser,
-} = require('../shared/admin-tools/user/admin');
-const {
-  createAndEnableSmoketestUser,
-} = require('./create-and-enable-smoketest-user');
+} from '../shared/admin-tools/user/admin';
+import { createAndEnableSmoketestUser } from './create-and-enable-smoketest-user';
 jest.mock('../shared/admin-tools/user/admin', () => ({
   activateAdminAccount: jest.fn(),
   createAdminAccount: jest.fn(),

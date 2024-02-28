@@ -1,10 +1,13 @@
-const {
+import {
   activateAdminAccount,
   createAdminAccount,
   createDawsonUser,
   deactivateAdminAccount,
   enableUser,
-} = require('../shared/admin-tools/user/admin');
+} from '../shared/admin-tools/user/admin';
+import { requireEnvVars } from '../shared/admin-tools/util';
+
+requireEnvVars(['DEFAULT_ACCOUNT_PASS', 'DEPLOYING_COLOR', 'EFCMS_DOMAIN']);
 const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
 
 const baseUser = {
@@ -33,7 +36,7 @@ const user = {
   section: 'admissions',
 };
 
-const createAndEnableSmoketestUser = async () => {
+export const createAndEnableSmoketestUser = async () => {
   try {
     console.log('About to create admin user!');
     await createAdminAccount();
@@ -60,8 +63,7 @@ const createAndEnableSmoketestUser = async () => {
   }
 };
 
-createAndEnableSmoketestUser();
-
-module.exports = {
-  createAndEnableSmoketestUser,
-};
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  await createAndEnableSmoketestUser();
+})();
