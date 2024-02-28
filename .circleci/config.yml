@@ -393,7 +393,7 @@ jobs:
             set -e
       - run:
           name: Disable Test User
-          command: npx ts-node --transpile-only ./scripts/circleci/disable-smoketest-user.js
+          command: npx ts-node --transpile-only ./scripts/user/disable-smoketest-user.ts
       - run:
           name: Kill Build if Smoketests Failed
           command: ./scripts/kill-circle-build.sh
