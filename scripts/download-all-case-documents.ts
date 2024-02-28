@@ -1,7 +1,7 @@
 // usage: npx ts-node --transpile-only scripts/download-all-case-documents.js "453-17"
 
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import fs from 'fs';
 
 const DOCKET_NUMBER = process.argv[2];
@@ -18,7 +18,12 @@ const downloadPdf = async ({
   docketEntryId,
   filename,
   path,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  docketEntryId: string;
+  filename: string;
+  path: string;
+}): Promise<void> => {
   console.log(`BEGIN --- ${filename}`);
 
   // download pdf from S3
@@ -30,15 +35,21 @@ const downloadPdf = async ({
     })
     .promise();
 
-  await fs.promises.writeFile(`${path}/${filename}`, data.Body);
-
-  console.log(`COMPLETE --- ${filename}`);
+  if (data && 'Body' in data && data.Body) {
+    await fs.promises.writeFile(`${path}/${filename}`, data.Body.toString());
+    console.log(`COMPLETE --- ${filename}`);
+  } else {
+    console.error(`ERROR --- ${filename}`);
+  }
 };
 
 const generateFilename = ({
   caseCaption,
   docketEntry: { docketNumber, documentType, index },
-}) => {
+}: {
+  caseCaption: string;
+  docketEntry: { docketNumber: string; documentType: string; index: number };
+}): string => {
   const MAX_OVERALL_FILE_LENGTH = 64;
   const EXT = '.pdf';
 
