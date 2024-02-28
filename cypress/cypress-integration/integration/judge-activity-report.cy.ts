@@ -125,6 +125,7 @@ describe('Verify the activity report', () => {
         searchByDocketNumberInHeader(docketNumber);
 
         cy.get('[data-testid="tab-drafts"]').click();
+        cy.get('[data-testid="docket-entry-description-4"]').click(); // Order and Decision
         cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
         cy.get('[data-testid="judge-select"]').select('Colvin');
         cy.get('[data-testid="serve-to-parties-btn"]').click();
@@ -147,6 +148,7 @@ describe('Verify the activity report', () => {
         createOrderAndDecision();
 
         cy.get('[data-testid="tab-drafts"]').click();
+        cy.get('[data-testid="docket-entry-description-4"]').click(); // Order and Decision
         cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
         cy.get('[data-testid="judge-select"]').select('Colvin');
         cy.get('[data-testid="serve-to-parties-btn"]').click();
