@@ -36,7 +36,8 @@ const downloadPdf = async ({
     .promise();
 
   if (data && 'Body' in data && data.Body) {
-    await fs.promises.writeFile(`${path}/${filename}`, data.Body.toString());
+    // @ts-ignore
+    await fs.promises.writeFile(`${path}/${filename}`, data.Body);
     console.log(`COMPLETE --- ${filename}`);
   } else {
     console.error(`ERROR --- ${filename}`);
