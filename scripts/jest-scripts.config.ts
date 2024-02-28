@@ -27,7 +27,7 @@ const config: Config = {
     '!import-case-status-changes-from-csv.ts',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
-    '!set-maintenance-mode-locally.js',
+    '!set-maintenance-mode-locally.ts',
     '!judge/update-judge-titles.ts',
     '!judge/update-judge-isSeniorJudge.ts',
     '!reports/**',
