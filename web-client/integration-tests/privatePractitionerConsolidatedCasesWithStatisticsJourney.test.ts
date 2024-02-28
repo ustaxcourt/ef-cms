@@ -11,7 +11,7 @@ import { privatePractitionerViewsOpenConsolidatedCases } from './journey/private
 describe('private practitioner views consolidated cases with statistics (cerebralTest for bug 8473)', () => {
   const cerebralTest = setupTest();
 
-  const createdDocketNumbers = [];
+  const createdDocketNumbers: string[] = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();
