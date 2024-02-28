@@ -267,9 +267,9 @@ describe('createCaseInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should create a case successfully with "Attachment to Petition" document', async () => {
+  it('should create a case successfully with an "Attachment to Petition" document', async () => {
     const result = await createCaseInteractor(applicationContext, {
-      atpFileId: 'f09116b1-6a8c-4198-b661-0f06e9c6cbdc',
+      attachmentToPetitionFileId: 'f09116b1-6a8c-4198-b661-0f06e9c6cbdc',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
