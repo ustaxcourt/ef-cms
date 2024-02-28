@@ -4,8 +4,8 @@ import {
   createDawsonUser,
   deactivateAdminAccount,
   enableUser,
-} from '../shared/admin-tools/user/admin';
-import { requireEnvVars } from '../shared/admin-tools/util';
+} from '../../shared/admin-tools/user/admin';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['DEFAULT_ACCOUNT_PASS', 'DEPLOYING_COLOR', 'EFCMS_DOMAIN']);
 const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
@@ -62,8 +62,3 @@ export const createAndEnableSmoketestUser = async () => {
     process.exit(1);
   }
 };
-
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  await createAndEnableSmoketestUser();
-})();
