@@ -31,16 +31,16 @@ data "archive_file" "zip_api" {
 
 data "archive_file" "zip_send_emails" {
   type        = "zip"
-  output_path = "${path.module}/../template/lambdas/send_emails.js.zip"
+  output_path = "${path.module}/../template/lambdas/send-emails.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = setsubtract(var.template_lambdas, ["send_emails.js"])
+  excludes = setsubtract(var.template_lambdas, ["send-emails.js"])
 }
 
 data "archive_file" "zip_trial_session" {
   type        = "zip"
-  output_path = "${path.module}/../template/lambdas/trial_session.js.zip"
+  output_path = "${path.module}/../template/lambdas/trial-session.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = setsubtract(var.template_lambdas, ["trial_session.js"])
+  excludes = setsubtract(var.template_lambdas, ["trial-session.js"])
 }
 
 data "archive_file" "zip_triggers" {
