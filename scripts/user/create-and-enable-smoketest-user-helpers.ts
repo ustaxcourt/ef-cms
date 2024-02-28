@@ -5,9 +5,7 @@ import {
   deactivateAdminAccount,
   enableUser,
 } from '../../shared/admin-tools/user/admin';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['DEFAULT_ACCOUNT_PASS', 'DEPLOYING_COLOR', 'EFCMS_DOMAIN']);
 const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
 
 const baseUser = {
