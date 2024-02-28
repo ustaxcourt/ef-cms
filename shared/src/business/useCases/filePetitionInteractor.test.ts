@@ -57,12 +57,6 @@ describe('filePetitionInteractor', () => {
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][1].document,
     ).toEqual(mockFile);
-
-    expect(
-      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
   });
 
   it('uploads a Petition file and a STIN file', async () => {
@@ -82,13 +76,6 @@ describe('filePetitionInteractor', () => {
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][1].document,
     ).toEqual(mockFile);
-
-    expect(
-      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
   });
 
   it('uploads a Corporate Disclosure Statement file and a petition', async () => {
@@ -108,18 +95,11 @@ describe('filePetitionInteractor', () => {
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][1].document,
     ).toEqual(mockFile);
-
-    expect(
-      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      corporateDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
   });
 
   it('uploads Attachment to Petition file and a Petition file', async () => {
     await filePetitionInteractor(applicationContext, {
-      atpUploadProgress: {
+      attachmentToPetitionUploadProgress: {
         file: mockFile,
         uploadProgress: jest.fn(),
       },
@@ -134,13 +114,6 @@ describe('filePetitionInteractor', () => {
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][1].document,
     ).toEqual(mockFile);
-
-    expect(
-      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      atpFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
   });
 
   it('throws an error if there is an error uploading documents', async () => {

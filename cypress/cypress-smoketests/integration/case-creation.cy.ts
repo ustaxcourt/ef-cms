@@ -21,7 +21,7 @@ describe('users should be able to create cases', () => {
     practitionerCreatesElectronicCase();
   });
 
-  it.only('a petitionsclerk should be able to create and serve a paper case', () => {
+  it('a petitionsclerk should be able to create and serve a paper case', () => {
     loginAsPetitionsClerk();
     createAndServePaperPetition();
   });
