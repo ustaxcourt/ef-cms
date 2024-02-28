@@ -37,7 +37,7 @@ describe('Petitions clerk views case detail', function () {
       cy.get('.progress-indicator').should('not.exist');
       cy.get('button#tab-docket-sub-record');
 
-      cy.get('button#printable-docket-record-button').should('not.exist');
+      cy.get('[data-testid="print-docket-record-button"').should('not.exist');
     });
   });
 });

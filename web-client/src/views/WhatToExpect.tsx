@@ -17,7 +17,7 @@ export const WhatToExpect = () => (
     your existing case?"
     />
     <h2>What to Expect When Filing a Case Online</h2>
-    <p>
+    <p className="what-to-expect-text">
       To file a case with the Tax Court, you’ll need to submit the following
       items that can be prepared in advance. Once you start a case, you
       won&apos;t be able to save your work and come back to it. After the case
@@ -66,12 +66,12 @@ export const WhatToExpect = () => (
         </p>
         <p className="label">2. IRS Notice(s)</p>
         <p>
-          If you recieved a Notice(s) from the IRS:
+          If you received a Notice(s) from the IRS:
           <ol type="a">
             <li>Submit a PDF of the Notice(s) you received. </li>
             <li>
               Remove or block out (redact) your Social Security Numbers (SSN),
-              Taxpayer Identification Numbers (TIN) , or Employer Identification
+              Taxpayer Identification Numbers (TIN), or Employer Identification
               Numbers (EIN) on a COPY of the IRS Notice(s) or in a manner that
               does not permanently alter the original IRS Notice(s).
             </li>
@@ -132,7 +132,7 @@ export const WhatToExpect = () => (
     </div>
     <div className="margin-bottom-30px">
       <h3>Deadline to File</h3>
-      <p>
+      <p className="what-to-expect-text">
         You may have received a notice in the mail from the IRS. The IRS notice
         may show the last date to file or the number of days you have to file a
         petition.{' '}
