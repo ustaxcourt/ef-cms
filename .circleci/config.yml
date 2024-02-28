@@ -383,7 +383,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: Create and Enable Test User
-          command: npx ts-node --transpile-only ./scripts/create-and-enable-smoketest-user.js
+          command: npx ts-node --transpile-only ./scripts/user/create-and-enable-smoketest-user.ts
       - run:
           name: 'Cypress Readonly Smoke Tests'
           command: |
