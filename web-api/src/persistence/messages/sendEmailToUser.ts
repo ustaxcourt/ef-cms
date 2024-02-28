@@ -1,5 +1,8 @@
+import type { SES } from 'aws-sdk';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const sendEmailToUser = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   {
     body,
     subject,
@@ -9,9 +12,8 @@ export const sendEmailToUser = async (
     subject: string;
     to: string;
   },
-): Promise<string> => {
-  return await applicationContext
-    .getEmailClient()
+): Promise<void> => {
+  await (applicationContext.getEmailClient() as SES)
     .sendEmail({
       Destination: {
         ToAddresses: [to],
@@ -26,7 +28,7 @@ export const sendEmailToUser = async (
           Data: subject,
         },
       },
-      Source: process.env.EMAIL_SOURCE!,
+      Source: applicationContext.environment.emailFromAddress,
     })
     .promise();
 };
