@@ -1,5 +1,5 @@
-const { disableSmoketestUser } = require('./disable-smoketest-user');
-const { disableUser } = require('../../shared/admin-tools/user/admin');
+import { disableSmoketestUser } from './disable-smoketest-user';
+import { disableUser } from '../../shared/admin-tools/user/admin';
 jest.mock('../../shared/admin-tools/user/admin', () => ({
   disableUser: jest.fn(),
 }));
