@@ -1,4 +1,7 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AdminCreateUserCommandInput,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { put } from '../../dynamodbClientService';
 
@@ -54,7 +57,7 @@ export const createNewPractitionerUser = async ({
 
   const cognito: CognitoIdentityProvider = applicationContext.getCognito();
 
-  await cognito.adminCreateUser({
+  const params: AdminCreateUserCommandInput = {
     DesiredDeliveryMediums: ['EMAIL'],
     UserAttributes: [
       {
@@ -80,7 +83,13 @@ export const createNewPractitionerUser = async ({
     ],
     UserPoolId: process.env.USER_POOL_ID,
     Username: user.pendingEmail,
-  });
+  };
+
+  if (process.env.STAGE !== 'prod') {
+    params.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+  }
+
+  await cognito.adminCreateUser(params);
 
   const updatedUser = await updateUserRecords({
     applicationContext,
