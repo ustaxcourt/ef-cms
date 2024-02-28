@@ -41,8 +41,9 @@ export const sendBulkTemplatedEmail = async ({
           ReplacementTemplateData: JSON.stringify(destination.templateData),
         })),
         ReturnPath:
-          process.env.BOUNCED_EMAIL_RECIPIENT || process.env.EMAIL_SOURCE,
-        Source: process.env.EMAIL_SOURCE,
+          process.env.BOUNCED_EMAIL_RECIPIENT ||
+          applicationContext.environment.emailFromAddress,
+        Source: applicationContext.environment.emailFromAddress,
         Template: templateName,
       },
     });

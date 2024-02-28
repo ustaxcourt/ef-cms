@@ -14,8 +14,8 @@ export const MESSAGE_TYPES = {
   QUEUE_UPDATE_ASSOCIATED_CASES: 'QUEUE_UPDATE_ASSOCIATED_CASES',
   UPDATE_ASSOCIATED_CASE: 'UPDATE_ASSOCIATED_CASE',
 } as const;
-const WORKER_MESSAGE_TYPES = Object.values(MESSAGE_TYPES);
-export type WorkerMessageType = (typeof WORKER_MESSAGE_TYPES)[number];
+export type WorkerMessageType =
+  (typeof MESSAGE_TYPES)[keyof typeof MESSAGE_TYPES];
 
 export type WorkerHandler = (
   applicationContext: ServerApplicationContext,
