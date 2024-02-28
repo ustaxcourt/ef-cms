@@ -14,6 +14,7 @@ const config: Config = {
     '!coverage/**',
     '!download-all-case-documents.ts',
     '!dynamo/archive-outboxes.ts',
+    '!dynamo/fix-race-condition-served-in-drafts.ts',
     '!dynamo/read-segment.ts',
     '!elasticsearch/docket-entry-search.ts',
     '!elasticsearch/docket-inbox.ts',
