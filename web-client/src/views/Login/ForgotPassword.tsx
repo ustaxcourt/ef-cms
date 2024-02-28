@@ -45,6 +45,7 @@ export const ForgotPassword = connect(
                         autoCorrect="off"
                         className="usa-input"
                         data-testid="email-input"
+                        id="email"
                         name="email"
                         type="email"
                         onChange={e => {
