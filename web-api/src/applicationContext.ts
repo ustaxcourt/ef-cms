@@ -85,7 +85,7 @@ const environment = {
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress:
     process.env.EMAIL_SOURCE ||
-    'U.S. Tax Court <noreply@exp2.ustc-case-mgmt.flexion.us>',
+    `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`,
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
