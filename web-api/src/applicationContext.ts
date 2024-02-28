@@ -83,6 +83,9 @@ const environment = {
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
+  emailFromAddress:
+    process.env.EMAIL_SOURCE ||
+    'U.S. Tax Court <noreply@exp2.ustc-case-mgmt.flexion.us>',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
