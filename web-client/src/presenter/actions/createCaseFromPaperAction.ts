@@ -1,5 +1,5 @@
 import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
+import { PaperCaseDataType } from '@shared/business/useCases/filePetitionInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const createCaseFromPaperAction = async ({
