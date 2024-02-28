@@ -1,12 +1,14 @@
 import 'cypress-file-upload';
-import { cypressEnv } from '../helpers/env/cypressEnvironment';
+import { getCypressEnv } from '../helpers/env/cypressEnvironment';
 
 Cypress.Commands.add('login', (username, route = '/') => {
   Cypress.session.clearCurrentSessionData();
 
   cy.visit('/login');
   cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
-  cy.get('[data-testid="password-input"]').type(cypressEnv.defaultAccountPass);
+  cy.get('[data-testid="password-input"]').type(
+    getCypressEnv().defaultAccountPass,
+  );
   cy.get('[data-testid="login-button"]').click();
   cy.get('[data-testid="account-menu-button"]');
   cy.visit(route);

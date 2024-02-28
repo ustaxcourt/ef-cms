@@ -1,7 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { chunk } from 'lodash';
-import { cypressEnv } from '../env/cypressEnvironment';
+import { getCypressEnv } from '../env/cypressEnvironment';
 import type {
   DeleteRequest,
   PutRequest,
@@ -13,15 +13,15 @@ let documentCache: DynamoDBDocument;
 export function getDocumentClient(): DynamoDBDocument {
   if (!documentCache) {
     const dynamoEndpoint =
-      cypressEnv.env === 'local' ? 'http://localhost:8000' : undefined;
+      getCypressEnv().env === 'local' ? 'http://localhost:8000' : undefined;
     dynamoCache = new DynamoDBClient({
       credentials: {
-        accessKeyId: cypressEnv.accessKeyId,
-        secretAccessKey: cypressEnv.secretAccessKey,
-        sessionToken: cypressEnv.sessionToken,
+        accessKeyId: getCypressEnv().accessKeyId,
+        secretAccessKey: getCypressEnv().secretAccessKey,
+        sessionToken: getCypressEnv().sessionToken,
       },
       endpoint: dynamoEndpoint,
-      region: cypressEnv.region,
+      region: getCypressEnv().region,
     });
     documentCache = DynamoDBDocument.from(dynamoCache, {
       marshallOptions: { removeUndefinedValues: true },
@@ -43,7 +43,7 @@ export const batchWrite = async (
     chunks.map(commandChunk =>
       documentClient.batchWrite({
         RequestItems: {
-          [cypressEnv.dynamoDbTableName]: commandChunk,
+          [getCypressEnv().dynamoDbTableName]: commandChunk,
         },
       }),
     ),
