@@ -91,8 +91,9 @@
     "winston": "3.11.0"
   },
   "scripts": {
-    "admin:create-user": "npx ts-node --transpile-only scripts/user/add-user.ts",
     "admin:become-user": "npx ts-node --transpile-only scripts/user/become-user.ts",
+    "admin:create-user": "npx ts-node --transpile-only scripts/user/add-user.ts",
+    "admin:download-case-documents": "npx ts-node --transpile-only scripts/download-all-case-documents.ts",
     "admin:lookup-user": "npx ts-node --transpile-only scripts/user/lookup-user.ts",
     "admin:resend-service-email-to-irs-superuser": "npx ts-node --transpile-only scripts/email/resend-service-email-to-irs-superuser.ts",
     "backup:dynamo-table": "./scripts/dynamo/backup-dynamo-table.sh",
