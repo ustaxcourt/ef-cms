@@ -1,6 +1,6 @@
 export const getCypressEnv = () => {
   if (typeof window === 'object') {
-    const env = Cypress.env('ENV') || 'local';
+    const env = Cypress.env('TARGET_ENV') || 'local';
     return {
       accessKeyId: Cypress.env('AWS_ACCESS_KEY_ID') || 'S3RVER',
       cognitoEndpoint: env === 'local' ? 'http://localhost:9229/' : undefined,
@@ -13,7 +13,7 @@ export const getCypressEnv = () => {
     };
   }
 
-  const env = process.env.CYPRESS_ENV || 'local';
+  const env = process.env.CYPRESS_TARGET_ENV || 'local';
   return {
     accessKeyId: process.env.CYPRESS_AWS_ACCESS_KEY_ID || 'S3RVER',
     cognitoEndpoint: env === 'local' ? 'http://localhost:9229/' : undefined,
