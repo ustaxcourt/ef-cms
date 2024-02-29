@@ -190,7 +190,7 @@ describe('createCaseFromPaperInteractor', () => {
     });
   });
 
-  it('adds an Corporate Disclosure Statement docket entry to the case', async () => {
+  it('adds a Corporate Disclosure Statement docket entry to the case', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor(
       applicationContext,
       {

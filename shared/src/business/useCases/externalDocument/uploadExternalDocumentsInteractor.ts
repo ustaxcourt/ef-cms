@@ -1,3 +1,4 @@
+import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -23,7 +24,7 @@ export const uploadExternalDocumentsInteractor = async (
   }: {
     documentFiles: Record<string, any>;
     documentMetadata: any;
-    fileUploadProgressMap: Record<string, any>;
+    fileUploadProgressMap: FileUploadProgressMapType;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -32,7 +33,7 @@ export const uploadExternalDocumentsInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const docketEntryIdsAdded = [];
+  const docketEntryIdsAdded: string[] = [];
 
   documentMetadata.primaryDocumentId = await applicationContext
     .getUseCases()
