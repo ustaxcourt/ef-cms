@@ -1,24 +1,21 @@
 import { partitionRecords } from './processStreamRecords/processStreamUtilities';
 import { processCaseEntries } from './processStreamRecords/processCaseEntries';
+import { processCompletionMarkers } from './processStreamRecords/processCompletionMarkers';
 import { processDocketEntries } from './processStreamRecords/processDocketEntries';
 import { processMessageEntries } from './processStreamRecords/processMessageEntries';
 import { processOtherEntries } from './processStreamRecords/processOtherEntries';
 import { processPractitionerMappingEntries } from './processStreamRecords/processPractitionerMappingEntries';
 import { processRemoveEntries } from './processStreamRecords/processRemoveEntries';
 import { processWorkItemEntries } from './processStreamRecords/processWorkItemEntries';
+import type { DynamoDBRecord } from 'aws-lambda';
 
-/**
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {Array<object>} providers.recordsToProcess the records to process
- * @returns {object} the results of all the index calls for logging
- */
 export const processStreamRecordsInteractor = async (
-  applicationContext,
-  { recordsToProcess },
-) => {
+  applicationContext: IApplicationContext,
+  { recordsToProcess }: { recordsToProcess: DynamoDBRecord[] },
+): Promise<void> => {
   const {
     caseEntityRecords,
+    completionMarkers,
     docketEntryRecords,
     messageRecords,
     otherRecords,
@@ -88,6 +85,11 @@ export const processStreamRecordsInteractor = async (
         },
       );
       throw err;
+    });
+
+    await processCompletionMarkers({
+      applicationContext,
+      completionMarkers,
     });
 
     await processOtherEntries({ applicationContext, otherRecords }).catch(
