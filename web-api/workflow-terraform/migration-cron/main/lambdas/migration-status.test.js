@@ -1,25 +1,28 @@
-const {
-  approvePendingJob,
-  cancelWorkflow,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const {
-  getMetricStatistics,
-  getMigrationQueueIsEmptyFlag,
-  getSqsQueueCount,
-  putMigrationQueueIsEmptyFlag,
-} = require('../../../../../shared/admin-tools/aws/migrationWaitHelper');
-const { handler } = require('./migration-status');
+import * as circleHelper from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import * as migrationWaitHelper from '../../../../../shared/admin-tools/aws/migrationWaitHelper';
+import { handler } from './migration-status';
 
-jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
-  approvePendingJob: jest.fn(),
-  cancelWorkflow: jest.fn(),
-}));
-jest.mock('../../../../../shared/admin-tools/aws/migrationWaitHelper', () => ({
-  getMetricStatistics: jest.fn(),
-  getMigrationQueueIsEmptyFlag: jest.fn(),
-  getSqsQueueCount: jest.fn(),
-  putMigrationQueueIsEmptyFlag: jest.fn(),
-}));
+jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper');
+const approvePendingJob = jest
+  .spyOn(circleHelper, 'approvePendingJob')
+  .mockImplementation(jest.fn());
+const cancelWorkflow = jest
+  .spyOn(circleHelper, 'cancelWorkflow')
+  .mockImplementation(jest.fn());
+
+jest.mock('../../../../../shared/admin-tools/aws/migrationWaitHelper');
+const getMetricStatistics = jest
+  .spyOn(migrationWaitHelper, 'getMetricStatistics')
+  .mockImplementation(jest.fn());
+const getMigrationQueueIsEmptyFlag = jest
+  .spyOn(migrationWaitHelper, 'getMigrationQueueIsEmptyFlag')
+  .mockImplementation(jest.fn());
+const getSqsQueueCount = jest
+  .spyOn(migrationWaitHelper, 'getSqsQueueCount')
+  .mockImplementation(jest.fn());
+const putMigrationQueueIsEmptyFlag = jest
+  .spyOn(migrationWaitHelper, 'putMigrationQueueIsEmptyFlag')
+  .mockImplementation(jest.fn());
 
 const mockContext = {
   fail: jest.fn(),
