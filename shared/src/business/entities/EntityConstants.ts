@@ -1646,6 +1646,7 @@ export type CreatedCaseType = {
     phone: string;
     postalCode: string;
     state: string;
+    email?: string;
   };
   caseType: string;
   caseCaption: string;
