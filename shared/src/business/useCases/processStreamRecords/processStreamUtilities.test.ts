@@ -1,12 +1,15 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
+  getApproximateCreationDateTime,
   isPractitionerMappingInsertModifyRecord,
   isPractitionerMappingRemoveRecord,
   partitionRecords,
+  shouldProcessRecord,
 } from './processStreamUtilities';
+import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
 describe('processStreamUtilities', () => {
-  const mockRemoveRecord = {
+  const mockRemoveRecord: DynamoDBRecord = {
     dynamodb: {
       NewImage: {
         entityName: {
@@ -23,7 +26,7 @@ describe('processStreamUtilities', () => {
     eventName: 'REMOVE',
   };
 
-  const mockCaseRecord = {
+  const mockCaseRecord: DynamoDBRecord = {
     dynamodb: {
       NewImage: {
         docketNumber: {
@@ -42,7 +45,7 @@ describe('processStreamUtilities', () => {
     },
   };
 
-  const mockUnsearchableDocketEntryRecord = {
+  const mockUnsearchableDocketEntryRecord: DynamoDBRecord = {
     dynamodb: {
       NewImage: {
         entityName: {
@@ -58,7 +61,7 @@ describe('processStreamUtilities', () => {
     },
   };
 
-  const mockWorkItemRecord = {
+  const mockWorkItemRecord: DynamoDBRecord = {
     dynamodb: {
       NewImage: {
         entityName: {
@@ -74,7 +77,7 @@ describe('processStreamUtilities', () => {
     },
   };
 
-  const mockRepliedToMessageRecord = {
+  const mockRepliedToMessageRecord: DynamoDBRecord = {
     dynamodb: {
       NewImage: {
         docketNumber: {
@@ -99,7 +102,7 @@ describe('processStreamUtilities', () => {
     },
   };
 
-  const mockModifyPrivatePractitionerMappingRecord = {
+  const mockModifyPrivatePractitionerMappingRecord: DynamoDBRecord = {
     dynamodb: {
       NewImage: {
         entityName: {
@@ -116,7 +119,7 @@ describe('processStreamUtilities', () => {
     eventName: 'MODIFY',
   };
 
-  const mockRemovePrivatePractitionerMappingRecordObject = {
+  const mockRemovePrivatePractitionerMappingRecordObject: DynamoDBRecord = {
     dynamodb: {
       OldImage: {
         entityName: {
@@ -133,7 +136,7 @@ describe('processStreamUtilities', () => {
     eventName: 'REMOVE',
   };
 
-  const mockModifyIrsPractitionerMappingRecord = {
+  const mockModifyIrsPractitionerMappingRecord: DynamoDBRecord = {
     dynamodb: {
       NewImage: {
         entityName: {
@@ -150,7 +153,7 @@ describe('processStreamUtilities', () => {
     eventName: 'MODIFY',
   };
 
-  const mockRemoveIrsPractitionerMappingRecord = {
+  const mockRemoveIrsPractitionerMappingRecord: DynamoDBRecord = {
     dynamodb: {
       OldImage: {
         entityName: {
@@ -165,6 +168,17 @@ describe('processStreamUtilities', () => {
       },
     },
     eventName: 'REMOVE',
+  };
+
+  const deploymentTimestamp = 1577854800;
+  const streamEvent: DynamoDBStreamEvent = {
+    Records: [
+      {
+        dynamodb: {
+          ApproximateCreationDateTime: deploymentTimestamp + 300,
+        },
+      },
+    ],
   };
 
   beforeEach(() => {
@@ -178,7 +192,7 @@ describe('processStreamUtilities', () => {
   });
 
   describe('partitionRecords', () => {
-    const mockModifyRecord = {
+    const mockModifyRecord: DynamoDBRecord = {
       dynamodb: {
         NewImage: {
           pk: {
@@ -375,6 +389,105 @@ describe('processStreamUtilities', () => {
       );
 
       expect(result).toBe(false);
+    });
+  });
+
+  describe('getApproximateCreationDateTime', () => {
+    it("logs an error when a stream event's ApproximateCreationDateTime value is neither a number nor a Date", () => {
+      // @ts-ignore
+      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
+        'not a date';
+
+      getApproximateCreationDateTime({
+        applicationContext,
+        record: streamEvent.Records[0],
+      });
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
+    });
+
+    it("converts a stream event's ApproximateCreationDateTime from Date to unix timestamp", () => {
+      const timestamp = deploymentTimestamp + 300;
+      const timestampMillis = timestamp * 1000;
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
+      const approxCreationDT = new Date(timestampMillis);
+      // @ts-ignore
+      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
+        approxCreationDT;
+
+      const result = getApproximateCreationDateTime({
+        applicationContext,
+        record: streamEvent.Records[0],
+      });
+      expect(result).toEqual(timestamp);
+    });
+
+    it('returns a unix timestamp', () => {
+      const timestamp = deploymentTimestamp + 300;
+      // @ts-ignore
+      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime = timestamp;
+
+      const result = getApproximateCreationDateTime({
+        applicationContext,
+        record: streamEvent.Records[0],
+      });
+      expect(result).toEqual(timestamp);
+    });
+  });
+
+  describe('shouldProcessRecord', () => {
+    beforeEach(() => {
+      process.env.DEPLOYMENT_TIMESTAMP = String(deploymentTimestamp);
+    });
+
+    it('will not process records from stream events that occurred before the streams lambda was deployed', () => {
+      // @ts-ignore
+      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
+        deploymentTimestamp - 1;
+
+      const result = shouldProcessRecord({
+        applicationContext,
+        deploymentTimestamp,
+        record: streamEvent.Records[0],
+      });
+      expect(result).toBeFalsy();
+    });
+
+    it('will process records from stream events that occurred after the streams lambda was deployed', () => {
+      // @ts-ignore
+      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
+        deploymentTimestamp + 1;
+
+      const result = shouldProcessRecord({
+        applicationContext,
+        deploymentTimestamp,
+        record: streamEvent.Records[0],
+      });
+      expect(result).toBeTruthy();
+    });
+
+    it('will process records from stream events that do not have an ApproximateCreationDateTime', () => {
+      // @ts-ignore
+      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime = undefined;
+
+      const result = shouldProcessRecord({
+        applicationContext,
+        deploymentTimestamp,
+        record: streamEvent.Records[0],
+      });
+      expect(result).toBeTruthy();
+    });
+
+    it('will process records from stream events that do not have a valid ApproximateCreationDateTime', () => {
+      // @ts-ignore
+      streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
+        'not a date';
+
+      const result = shouldProcessRecord({
+        applicationContext,
+        deploymentTimestamp,
+        record: streamEvent.Records[0],
+      });
+      expect(result).toBeTruthy();
     });
   });
 });
