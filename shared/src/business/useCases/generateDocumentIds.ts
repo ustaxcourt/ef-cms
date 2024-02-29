@@ -117,6 +117,6 @@ export const generateDocumentIds = async (
       stinFileId,
     };
   } catch (error) {
-    throw new Error('Error uploading documents to file petition');
+    throw new Error('Error generating document Ids');
   }
 };
