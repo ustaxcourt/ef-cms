@@ -4,7 +4,7 @@ import { workQueueHelper as workQueueHelperComputed } from '../../src/presenter/
 
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
-export const petitionsClerkViewsMyDocumentQC = (cerebralTest, storeCount) => {
+export const petitionsClerkViewsMyDocumentQC = (cerebralTest, storeCount?) => {
   return it('Petitions clerk views My Document QC', async () => {
     await cerebralTest.runSequence('navigateToPathSequence', {
       path: '/document-qc/my/inbox',

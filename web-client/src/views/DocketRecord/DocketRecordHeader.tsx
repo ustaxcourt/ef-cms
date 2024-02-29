@@ -185,8 +185,8 @@ export const DocketRecordHeader = connect(
                     <Button
                       link
                       aria-label="printable docket record"
+                      data-testid="print-docket-record-button"
                       icon="print"
-                      id="printable-docket-record-button"
                       onClick={() => {
                         gotoPrintableDocketRecordSequence({
                           docketNumber: formattedCaseDetail.docketNumber,

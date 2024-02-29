@@ -1,7 +1,8 @@
 data "archive_file" "zip_strip_basepath_lambda" {
   type        = "zip"
-  source_file = "${path.module}/cloudfront-edge/strip-basepath-lambda.js"
+  source_dir = "${path.module}/cloudfront-edge/"
   output_path = "${path.module}/cloudfront-edge/strip-basepath-lambda.js.zip"
+  excludes = ["header-security-lambda.js"]
 }
 
 resource "aws_lambda_function" "strip_basepath_lambda" {
