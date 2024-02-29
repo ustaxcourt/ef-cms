@@ -54,14 +54,11 @@ describe('createCaseAction', () => {
     },
   };
 
-  const {
-    addCoversheetInteractor,
-    createCaseInteractor,
-    filePetitionInteractor,
-  } = applicationContext.getUseCases();
+  const { addCoversheetInteractor, createCaseInteractor, generateDocumentIds } =
+    applicationContext.getUseCases();
 
   beforeEach(() => {
-    filePetitionInteractor.mockReturnValue({
+    generateDocumentIds.mockReturnValue({
       attachmentToPetitionFileId: '123',
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
@@ -108,8 +105,8 @@ describe('createCaseAction', () => {
       },
     });
 
-    expect(filePetitionInteractor).toHaveBeenCalled();
-    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
+    expect(generateDocumentIds).toHaveBeenCalled();
+    expect(generateDocumentIds.mock.calls[0][1]).toMatchObject({
       attachmentToPetitionUploadProgress:
         fileUploadProgressMap.attachmentToPetition,
       corporateDisclosureUploadProgress:
@@ -147,8 +144,8 @@ describe('createCaseAction', () => {
       },
     });
 
-    expect(filePetitionInteractor).toHaveBeenCalled();
-    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
+    expect(generateDocumentIds).toHaveBeenCalled();
+    expect(generateDocumentIds.mock.calls[0][1]).toMatchObject({
       attachmentToPetitionUploadProgress:
         fileUploadProgressMap.attachmentToPetition,
       corporateDisclosureUploadProgress:
