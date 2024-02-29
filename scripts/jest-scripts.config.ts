@@ -12,6 +12,7 @@ const config: Config = {
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!circleci/judge/bulkImportJudgeUsers.ts',
+    '!dynamo/set-local-migration-complete-marker.ts',
     '!elasticsearch/ready-cluster-for-migration.ts',
     '!elasticsearch/reindex.ts',
     '!glue/**',
