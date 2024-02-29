@@ -22,7 +22,7 @@ export const createCaseFromPaperAction = async ({
     stinFileId,
   } = await applicationContext
     .getUseCases()
-    .filePetitionInteractor(applicationContext, {
+    .generateDocumentIds(applicationContext, {
       applicationForWaiverOfFilingFeeUploadProgress:
         fileUploadProgressMap.applicationForWaiverOfFilingFee,
       attachmentToPetitionUploadProgress:
