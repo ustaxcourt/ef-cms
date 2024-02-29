@@ -1,4 +1,4 @@
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
+import { CreatedCaseType } from '@shared/business/entities/EntityConstants';
 import { post } from './requests';
 
 export const createCaseFromPaperInteractor = (
@@ -16,7 +16,7 @@ export const createCaseFromPaperInteractor = (
     attachmentToPetitionFileId: string;
     corporateDisclosureFileId: string;
     petitionFileId: string;
-    petitionMetadata: PaperCaseDataType;
+    petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId: string;
     stinFileId: string;
   },

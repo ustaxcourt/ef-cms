@@ -1,5 +1,5 @@
+import { CreatedCaseType } from '@shared/business/entities/EntityConstants';
 import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const createCaseFromPaperAction = async ({
@@ -10,23 +10,42 @@ export const createCaseFromPaperAction = async ({
 }: ActionProps<{
   fileUploadProgressMap: FileUploadProgressMapType;
 }>) => {
-  const petitionMetadata: PaperCaseDataType = get(state.form);
+  const petitionMetadata: CreatedCaseType = get(state.form);
   const { fileUploadProgressMap } = props;
   let caseDetail: RawCase;
+  const {
+    applicationForWaiverOfFilingFeeFileId,
+    attachmentToPetitionFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+  } = await applicationContext
+    .getUseCases()
+    .generateDocumentIds(applicationContext, {
+      applicationForWaiverOfFilingFeeUploadProgress:
+        fileUploadProgressMap.applicationForWaiverOfFilingFee,
+      attachmentToPetitionUploadProgress:
+        fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      requestForPlaceOfTrialUploadProgress:
+        fileUploadProgressMap.requestForPlaceOfTrial,
+      stinUploadProgress: fileUploadProgressMap.stin,
+    });
+
   try {
     caseDetail = await applicationContext
       .getUseCases()
-      .filePetitionFromPaperInteractor(applicationContext, {
-        applicationForWaiverOfFilingFeeUploadProgress:
-          fileUploadProgressMap.applicationForWaiverOfFilingFee,
-        atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
-        corporateDisclosureUploadProgress:
-          fileUploadProgressMap.corporateDisclosure,
+      .createCaseFromPaperInteractor(applicationContext, {
+        applicationForWaiverOfFilingFeeFileId,
+        attachmentToPetitionFileId,
+        corporateDisclosureFileId,
+        petitionFileId,
         petitionMetadata,
-        petitionUploadProgress: fileUploadProgressMap.petition,
-        requestForPlaceOfTrialUploadProgress:
-          fileUploadProgressMap.requestForPlaceOfTrial,
-        stinUploadProgress: fileUploadProgressMap.stin,
+        requestForPlaceOfTrialFileId,
+        stinFileId,
       });
   } catch (err) {
     return path.error();
