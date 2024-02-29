@@ -3,7 +3,7 @@ const {
 } = require('../../../../../shared/admin-tools/circleci/circleci-helper');
 const {
   areAllReindexTasksFinished,
-} = require('../../../../../shared/admin-tools/elasticsearch/check-reindex-complete');
+} = require('../../../../../scripts/elasticsearch/check-reindex-complete');
 
 exports.handler = async (input, context) => {
   const environmentName = process.env.STAGE;
