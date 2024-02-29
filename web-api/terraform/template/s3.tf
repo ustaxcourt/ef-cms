@@ -338,13 +338,13 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
         Principal = { Service = "ses.amazonaws.com" }
         Action    = "s3:PutObject"
         Resources = [
-          "arn:aws:s3:::${var.dns_domain}-email-test-${var.environment}-us-east-1",
-          "arn:aws:s3:::${var.dns_domain}-email-test-${var.environment}-us-east-1/*",
+          "arn:aws:s3:::${var.dns_domain}-email-inbox-${var.environment}-us-east-1",
+          "arn:aws:s3:::${var.dns_domain}-email-inbox-${var.environment}-us-east-1/*",
         ]
         Condition = {
           StringEquals = {
-            "AWS:SourceAccount" = "111122223333"
-            "AWS:SourceArn"     = "arn:aws:ses:region:${data.aws_caller_identity.current.account_id}:receipt-rule-set/rule_set_name:receipt-rule/receipt_rule_name"
+            "AWS:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
+            "AWS:SourceArn"     = "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:receipt-rule-set/email_forwarding_rule_set:receipt-rule/email_forwarding_rule"
           }
         }
       }
@@ -354,7 +354,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
 
 resource "aws_s3_bucket" "smoketest_email_inbox" {
   provider = aws.us-east-1
-  bucket   = "${var.dns_domain}-email-inbox-${var.environment}"
+  bucket   = "${var.dns_domain}-email-inbox-${var.environment}-us-east-1"
   acl      = "private"
 
   cors_rule {
