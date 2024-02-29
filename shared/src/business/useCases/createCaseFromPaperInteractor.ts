@@ -1,7 +1,9 @@
 import { Case } from '../entities/cases/Case';
+import {
+  CreatedCaseType,
+  INITIAL_DOCUMENT_TYPES,
+} from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
-import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { PaperPetition } from '../entities/cases/PaperPetition';
 import {
   ROLE_PERMISSIONS,
@@ -72,12 +74,12 @@ export const createCaseFromPaperInteractor = async (
     stinFileId,
   }: {
     applicationForWaiverOfFilingFeeFileId?: string;
+    attachmentToPetitionFileId?: string;
     corporateDisclosureFileId?: string;
     petitionFileId: string;
-    petitionMetadata: PaperCaseDataType;
+    petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    attachmentToPetitionFileId?: string;
   },
 ): Promise<RawCase> => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -90,17 +92,9 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new PaperPetition(
-    {
-      ...petitionMetadata,
-      applicationForWaiverOfFilingFeeFileId,
-      attachmentToPetitionFileId,
-      corporateDisclosureFileId,
-      petitionFileId,
-      stinFileId,
-    },
-    { applicationContext },
-  ).validate();
+  const petitionEntity = new PaperPetition(petitionMetadata, {
+    applicationContext,
+  }).validate();
 
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({

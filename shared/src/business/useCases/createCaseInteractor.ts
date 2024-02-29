@@ -1,11 +1,12 @@
 import { Case } from '../entities/cases/Case';
-import { DocketEntry } from '../entities/DocketEntry';
-import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
+  CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
+import { DocketEntry } from '../entities/DocketEntry';
+import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -15,6 +16,8 @@ import { UserCase } from '../entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
+
+export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
 const addPetitionDocketEntryToCase = ({
   applicationContext,
@@ -66,13 +69,13 @@ const addPetitionDocketEntryToCase = ({
 export const createCaseInteractor = async (
   applicationContext: IApplicationContext,
   {
-    atpFileId,
+    attachmentToPetitionFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     stinFileId,
   }: {
-    atpFileId?: string;
+    attachmentToPetitionFileId?: string;
     corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
@@ -250,12 +253,12 @@ export const createCaseInteractor = async (
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
-  if (atpFileId) {
+  if (attachmentToPetitionFileId) {
     const atpDocketEntryEntity = new DocketEntry(
       {
         contactPrimary: caseToAdd.getContactPrimary(),
         contactSecondary: caseToAdd.getContactSecondary(),
-        docketEntryId: atpFileId,
+        docketEntryId: attachmentToPetitionFileId,
         documentTitle: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,

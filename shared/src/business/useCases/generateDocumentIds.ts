@@ -1,75 +1,35 @@
-import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
+import { FileUploadProgressType } from '../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-export type FilePetitionFromPaperTypeDetailsType = {
-  applicationForWaiverOfFilingFeeUploadProgress?: FileUploadProgressType;
-  atpUploadProgress?: FileUploadProgressType;
-  corporateDisclosureUploadProgress?: FileUploadProgressType;
-  petitionMetadata: PaperCaseDataType;
-  petitionUploadProgress: FileUploadProgressType;
-  requestForPlaceOfTrialUploadProgress?: FileUploadProgressType;
-  stinUploadProgress?: FileUploadProgressType;
-};
-
-export type PaperCaseDataType = {
-  contactPrimary: {
-    address1: string;
-    address2: string;
-    address3: string;
-    city: string;
-    countryType: string;
-    name: string;
-    paperPetitionEmail: string;
-    phone: string;
-    postalCode: string;
-    state: string;
-  };
-  caseType: string;
-  caseCaption: string;
-  attachmentToPetitionFileSize?: number;
-  attachmentToPetitionFile: Blob;
-  hasVerifiedIrsNotice: boolean;
-  isPaper: boolean;
-  mailingDate: string;
-  orderDesignatingPlaceOfTrial?: boolean;
-  orderForCds: boolean;
-  stinFile?: Blob;
-  stinFileSize?: number;
-  orderForFilingFee: boolean;
-  partyType: string;
-  petitionFile: Blob;
-  petitionFileSize: number;
-  petitionPaymentStatus: string;
-  procedureType: string;
-  receivedAt: string;
-  applicationForWaiverOfFilingFeeFile?: Blob;
-  corporateDisclosureFile?: Blob;
-  requestForPlaceOfTrialFile?: Blob;
-  status: string;
-  contactSecondary?: {
-    name: string;
-  };
-};
-
-export const filePetitionFromPaperInteractor = async (
+export const generateDocumentIds = async (
   applicationContext: any,
   {
     applicationForWaiverOfFilingFeeUploadProgress,
-    atpUploadProgress,
+    attachmentToPetitionUploadProgress,
     corporateDisclosureUploadProgress,
-    petitionMetadata,
     petitionUploadProgress,
     requestForPlaceOfTrialUploadProgress,
     stinUploadProgress,
-  }: FilePetitionFromPaperTypeDetailsType,
-): Promise<RawCase> => {
+  }: {
+    applicationForWaiverOfFilingFeeUploadProgress?: FileUploadProgressType;
+    attachmentToPetitionUploadProgress?: FileUploadProgressType;
+    corporateDisclosureUploadProgress?: FileUploadProgressType;
+    petitionUploadProgress: FileUploadProgressType;
+    requestForPlaceOfTrialUploadProgress?: FileUploadProgressType;
+    stinUploadProgress: FileUploadProgressType;
+  },
+) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE)) {
+  const hasPermissions =
+    isAuthorized(user, ROLE_PERMISSIONS.PETITION) ||
+    isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE);
+
+  if (!hasPermissions) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -121,41 +81,42 @@ export const filePetitionFromPaperInteractor = async (
       });
   }
 
-  let attachmentToPetitionFileUpload;
-  if (atpUploadProgress) {
-    attachmentToPetitionFileUpload = applicationContext
+  let attachmentToPetitionUpload;
+  if (attachmentToPetitionUploadProgress) {
+    attachmentToPetitionUpload = applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: atpUploadProgress.file,
-        onUploadProgress: atpUploadProgress.uploadProgress,
+        document: attachmentToPetitionUploadProgress.file,
+        onUploadProgress: attachmentToPetitionUploadProgress.uploadProgress,
       });
   }
 
-  const [
-    applicationForWaiverOfFilingFeeFileId,
-    corporateDisclosureFileId,
-    petitionFileId,
-    requestForPlaceOfTrialFileId,
-    stinFileId,
-    attachmentToPetitionFileId,
-  ] = await Promise.all([
-    applicationForWaiverOfFilingFeeUpload,
-    corporateDisclosureFileUpload,
-    petitionFileUpload,
-    requestForPlaceOfTrialFileUpload,
-    stinFileUpload,
-    attachmentToPetitionFileUpload,
-  ]);
+  try {
+    const [
+      applicationForWaiverOfFilingFeeFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
+      requestForPlaceOfTrialFileId,
+      stinFileId,
+      attachmentToPetitionFileId,
+    ]: string[] = await Promise.all([
+      applicationForWaiverOfFilingFeeUpload,
+      corporateDisclosureFileUpload,
+      petitionFileUpload,
+      requestForPlaceOfTrialFileUpload,
+      stinFileUpload,
+      attachmentToPetitionUpload,
+    ]);
 
-  return await applicationContext
-    .getUseCases()
-    .createCaseFromPaperInteractor(applicationContext, {
+    return {
       applicationForWaiverOfFilingFeeFileId,
       attachmentToPetitionFileId,
       corporateDisclosureFileId,
       petitionFileId,
-      petitionMetadata,
       requestForPlaceOfTrialFileId,
       stinFileId,
-    });
+    };
+  } catch (error) {
+    throw new Error('Error generating document Ids');
+  }
 };

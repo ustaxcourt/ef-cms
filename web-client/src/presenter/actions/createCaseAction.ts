@@ -1,4 +1,8 @@
-import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
+import {
+  CreatedCaseType,
+  FileUploadProgressMapType,
+} from '@shared/business/entities/EntityConstants';
+import { ElectronicCreatedCaseType } from '@shared/business/useCases/createCaseInteractor';
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -11,29 +15,44 @@ export const createCaseAction = async ({
   fileUploadProgressMap: FileUploadProgressMapType;
 }>) => {
   const { fileUploadProgressMap } = props;
-  const petitionMetadata = get(state.form);
+  const petitionMetadata: CreatedCaseType = get(state.form);
 
-  const form = omit(petitionMetadata, 'trialCities');
+  const form: ElectronicCreatedCaseType = omit(petitionMetadata, 'trialCities');
 
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  let filePetitionResult;
+  let caseDetail;
+
+  const {
+    attachmentToPetitionFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  } = await applicationContext
+    .getUseCases()
+    .generateDocumentIds(applicationContext, {
+      attachmentToPetitionUploadProgress:
+        fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
+    });
+
   try {
-    filePetitionResult = await applicationContext
+    caseDetail = await applicationContext
       .getUseCases()
-      .filePetitionInteractor(applicationContext, {
-        atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
-        corporateDisclosureUploadProgress:
-          fileUploadProgressMap.corporateDisclosure,
+      .createCaseInteractor(applicationContext, {
+        attachmentToPetitionFileId,
+        corporateDisclosureFileId,
+        petitionFileId,
         petitionMetadata: form,
-        petitionUploadProgress: fileUploadProgressMap.petition,
-        stinUploadProgress: fileUploadProgressMap.stin,
+        stinFileId,
       });
   } catch (err) {
     return path.error();
   }
-  const { caseDetail, stinFileId } = filePetitionResult;
 
   const addCoversheet = docketEntryId => {
     return applicationContext
