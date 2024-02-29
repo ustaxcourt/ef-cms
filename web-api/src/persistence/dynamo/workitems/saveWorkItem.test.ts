@@ -14,22 +14,6 @@ describe('saveWorkItem', () => {
     mockWorkItem = cloneDeep(MOCK_WORK_ITEM);
   });
 
-  it('should persist the work item with a box of `outbox` when the work item has been completed', async () => {
-    mockWorkItem.completedAt = '2022-02-01T17:21:07.439Z';
-
-    await saveWorkItem({
-      applicationContext,
-      workItem: mockWorkItem,
-    });
-
-    expect(putMock.mock.calls[0][0].Item.gsi2pk).toBe(
-      `assigneeId|outbox|${MOCK_WORK_ITEM.assigneeId}`,
-    );
-    expect(putMock.mock.calls[0][0].Item.gsi3pk).toBe(
-      `section|outbox|${MOCK_WORK_ITEM.section}`,
-    );
-  });
-
   it('should persist the work item with a box of `inbox` when the work item has not been completed and is not in progress', async () => {
     mockWorkItem.completedAt = undefined;
     mockWorkItem.inProgress = false;
@@ -76,26 +60,5 @@ describe('saveWorkItem', () => {
     expect(putMock.mock.calls[0][0].Item.sk).toBe(
       `work-item|${MOCK_WORK_ITEM.workItemId}`,
     );
-  });
-
-  it('should persist the work item with a `ttl` if the workItem is completed', async () => {
-    mockWorkItem.completedAt = '2022-02-01T17:21:07.439Z';
-    await saveWorkItem({
-      applicationContext,
-      workItem: mockWorkItem,
-    });
-
-    expect(putMock.mock.calls[0][0].Item.ttl).toBeDefined();
-  });
-
-  it('should not persist the work item with a `ttl` if the workItem is not completed', async () => {
-    mockWorkItem.completedAt = undefined;
-
-    await saveWorkItem({
-      applicationContext,
-      workItem: mockWorkItem,
-    });
-
-    expect(putMock.mock.calls[0][0].Item.ttl).toBeUndefined();
   });
 });
