@@ -1,20 +1,23 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const petitionsClerkReviewsPetitionAndSavesForLater = cerebralTest => {
+export const petitionsClerkReviewsPetitionAndSavesForLater = (
+  cerebralTest,
+  { box }: { box: 'inbox' | 'inProgress' },
+) => {
   return it('Petitions Clerk reviews petition and saves for later', async () => {
     await refreshElasticsearchIndex();
 
     await cerebralTest.runSequence('gotoWorkQueueSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
     await cerebralTest.runSequence('chooseWorkQueueSequence', {
-      box: 'inProgress',
+      box,
       queue: 'section',
     });
 
     const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('section');
-    expect(workQueueToDisplay.box).toEqual('inProgress');
+    expect(workQueueToDisplay.box).toEqual(box);
 
     const inboxQueue = cerebralTest.getState('workQueue');
     const inboxWorkItem = inboxQueue.find(
