@@ -9,14 +9,18 @@ export const updateDocketEntriesInteractor = async (
     docketEntryId,
     docketNumber,
     numberOfPages,
+    updatedDocketEntryData,
   }: {
     caseEntity?: Case;
     consolidatedCases;
     docketEntryId: string;
     docketNumber: string;
     numberOfPages;
+    updatedDocketEntryData: any;
   },
 ) => {
+  console.log('****************updatedDocketEntryData', updatedDocketEntryData);
+
   if (!caseEntity) {
     const caseRecord = await applicationContext
       .getPersistenceGateway()

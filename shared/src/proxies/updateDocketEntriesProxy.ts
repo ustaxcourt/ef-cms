@@ -11,7 +11,7 @@ export const updateDocketEntriesInteractor = (
     docketNumber: string;
     updatedDocketEntryData: {
       consolidatedCases: any[];
-      numberOfPages;
+      numberOfPages: number;
     };
   },
 ) => {

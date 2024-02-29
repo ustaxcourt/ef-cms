@@ -22,7 +22,6 @@ export const uploadDocumentFromClient = async ({
   key: string;
   onUploadProgress?: () => void;
 }) => {
-  console.log('uploadDocumentFromClient');
   const docId = key || applicationContext.getUniqueId();
   const policy = await getUploadPolicy({
     applicationContext,

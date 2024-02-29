@@ -40,12 +40,11 @@ export const generateCoversheetAction = async ({
       docketNumber,
     });
 
-  //get pdflib
   const { PDFDocument } = await applicationContext.getPdfLib();
 
-  console.log('coversheetData', coversheetData);
-  console.log('fileBuffer', fileBuffer);
-  const coverPageDocument = await PDFDocument.load(coversheetData.pdfData);
+  const coverPageDocument = await PDFDocument.load(
+    new Uint8Array(coversheetData.pdfData.data),
+  );
   const pdfDoc = await PDFDocument.load(fileBuffer);
 
   const coverPageDocumentPages = await pdfDoc.copyPages(
@@ -75,7 +74,7 @@ export const generateCoversheetAction = async ({
       key: docketEntryId,
       onUploadProgress: () => {},
     });
-  console.log('completed START TO SAVE AGAIN!!!!!!!!!');
+  console.log('completed START TO SAVE AGAIN!!!!!!!!!', coversheetData);
 
   await applicationContext
     .getUseCases()
@@ -87,16 +86,4 @@ export const generateCoversheetAction = async ({
         numberOfPages,
       },
     });
-
-  //append coversheet
-  //upload updated file to S3
-
-  //create new enpoint to update docket entry with new page count and set process to complete
-
-  // await applicationContext
-  //   .getUseCases()
-  //   .addCoversheetInteractor(applicationContext, {
-  //     docketEntryId,
-  //     docketNumber,
-  //   });
 };
