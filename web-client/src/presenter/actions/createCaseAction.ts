@@ -1,4 +1,8 @@
-import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
+import {
+  CreatedCaseType,
+  FileUploadProgressMapType,
+} from '@shared/business/entities/EntityConstants';
+import { ElectronicCreatedCaseType } from '@shared/business/useCases/createCaseInteractor';
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -11,9 +15,9 @@ export const createCaseAction = async ({
   fileUploadProgressMap: FileUploadProgressMapType;
 }>) => {
   const { fileUploadProgressMap } = props;
-  const petitionMetadata = get(state.form);
+  const petitionMetadata: CreatedCaseType = get(state.form);
 
-  const form = omit(petitionMetadata, 'trialCities');
+  const form: ElectronicCreatedCaseType = omit(petitionMetadata, 'trialCities');
 
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
@@ -43,7 +47,7 @@ export const createCaseAction = async ({
         attachmentToPetitionFileId,
         corporateDisclosureFileId,
         petitionFileId,
-        petitionMetadata,
+        petitionMetadata: form,
         stinFileId,
       });
   } catch (err) {
