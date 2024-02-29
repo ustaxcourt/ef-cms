@@ -7,14 +7,14 @@ export const petitionsClerkReviewsPetitionAndSavesForLater = cerebralTest => {
     await cerebralTest.runSequence('gotoWorkQueueSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
     await cerebralTest.runSequence('chooseWorkQueueSequence', {
-      box: 'inbox',
+      box: 'inProgress',
       queue: 'section',
     });
 
     const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('section');
-    expect(workQueueToDisplay.box).toEqual('inbox');
+    expect(workQueueToDisplay.box).toEqual('inProgress');
 
     const inboxQueue = cerebralTest.getState('workQueue');
     const inboxWorkItem = inboxQueue.find(
