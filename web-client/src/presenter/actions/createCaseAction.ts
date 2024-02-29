@@ -27,7 +27,7 @@ export const createCaseAction = async ({
     stinFileId,
   } = await applicationContext
     .getUseCases()
-    .filePetitionInteractor(applicationContext, {
+    .generateDocumentIds(applicationContext, {
       attachmentToPetitionUploadProgress:
         fileUploadProgressMap.attachmentToPetition,
       corporateDisclosureUploadProgress:
