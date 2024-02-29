@@ -4,3 +4,4 @@
 - Load test the worker with a petitioner/practitioner that is associated with many cases on the test environment.
 - Run identical workflow as prod on another environment.
 - Keep on top of our PR to make sure it is up to date to reduce integration errors with the repo. Advocate for deploying this separately.
+- Run smoketests against deployed dev env
