@@ -4,7 +4,6 @@ import {
 } from '../helpers/dynamo/getDynamoCypress';
 import { getCognito } from '../helpers/cognito/getCognitoCypress';
 import { getCypressEnv } from '../helpers/env/cypressEnvironment';
-import promiseRetry from 'promise-retry';
 import type { DeleteRequest } from '../../web-api/src/persistence/dynamo/dynamoTypes';
 
 export const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
@@ -64,36 +63,6 @@ const getUserPoolId = async (): Promise<string> => {
   }
   return userPoolId;
 };
-
-export const getUserTokenWithRetry = (username: string, password: string) => {
-  return promiseRetry(
-    retry => {
-      return getUserToken(password, username).catch(retry);
-    },
-    {
-      retries: 10,
-    },
-  );
-};
-
-async function getUserToken(password: string, username: string) {
-  const userPoolId = await getUserPoolId();
-  const clientId = await getClientId(userPoolId);
-
-  return getCognito()
-    .adminInitiateAuth({
-      AuthFlow: 'ADMIN_NO_SRP_AUTH',
-      AuthParameters: {
-        PASSWORD: password,
-        USERNAME: username,
-      },
-      ClientId: clientId,
-      UserPoolId: userPoolId,
-    })
-    .catch(e => {
-      throw e;
-    });
-}
 
 export const getCognitoUserIdByEmail = async (
   email: string,
