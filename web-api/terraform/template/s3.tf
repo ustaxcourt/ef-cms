@@ -337,10 +337,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
         Effect    = "Allow"
         Principal = { Service = "ses.amazonaws.com" }
         Action    = "s3:PutObject"
-        Resources = [
-          "arn:aws:s3:::${var.dns_domain}-email-inbox-${var.environment}-us-east-1",
-          "arn:aws:s3:::${var.dns_domain}-email-inbox-${var.environment}-us-east-1/*",
-        ]
+        Resource  = "arn:aws:s3:::${aws_s3_bucket.smoketest_email_inbox.bucket}/*"
         Condition = {
           StringEquals = {
             "AWS:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
