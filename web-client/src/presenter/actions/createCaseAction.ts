@@ -18,22 +18,37 @@ export const createCaseAction = async ({
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  let filePetitionResult;
+  let caseDetail;
+
+  const {
+    attachmentToPetitionFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  } = await applicationContext
+    .getUseCases()
+    .generateDocumentIds(applicationContext, {
+      attachmentToPetitionUploadProgress:
+        fileUploadProgressMap.attachmentToPetition,
+      corporateDisclosureUploadProgress:
+        fileUploadProgressMap.corporateDisclosure,
+      petitionUploadProgress: fileUploadProgressMap.petition,
+      stinUploadProgress: fileUploadProgressMap.stin,
+    });
+
   try {
-    filePetitionResult = await applicationContext
+    caseDetail = await applicationContext
       .getUseCases()
-      .filePetitionInteractor(applicationContext, {
-        atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
-        corporateDisclosureUploadProgress:
-          fileUploadProgressMap.corporateDisclosure,
-        petitionMetadata: form,
-        petitionUploadProgress: fileUploadProgressMap.petition,
-        stinUploadProgress: fileUploadProgressMap.stin,
+      .createCaseInteractor(applicationContext, {
+        attachmentToPetitionFileId,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        stinFileId,
       });
   } catch (err) {
     return path.error();
   }
-  const { caseDetail, stinFileId } = filePetitionResult;
 
   const addCoversheet = docketEntryId => {
     return applicationContext

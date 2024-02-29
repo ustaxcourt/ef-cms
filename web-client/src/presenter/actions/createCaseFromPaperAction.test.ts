@@ -5,8 +5,6 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('createCaseFromPaperAction', () => {
-  const { US_STATES } = applicationContext.getConstants();
-
   let errorStub, successStub;
 
   const fileMetaData = {
@@ -26,16 +24,7 @@ describe('createCaseFromPaperAction', () => {
   };
 
   const mockState = {
-    form: {
-      applicationForWaiverOfFilingFeeFile: {},
-      attachmentToPetitionFile: {},
-      corporateDisclosureFile: {},
-      petitionFile: {},
-      requestForPlaceOfTrialFile: {},
-      stinFile: {},
-      trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
-      ...MOCK_CASE,
-    },
+    form: MOCK_CASE,
   };
 
   beforeAll(() => {
@@ -50,10 +39,24 @@ describe('createCaseFromPaperAction', () => {
     };
   });
 
-  it('should call filePetitionFromPaperInteractor with the petition metadata and files and call the success path when finished', async () => {
+  beforeEach(() => {
+    applicationContext.getUseCases().generateDocumentIds.mockReturnValue({
+      applicationForWaiverOfFilingFeeFileId: '123',
+      attachmentToPetitionFileId: '123',
+      corporateDisclosureFileId: '123',
+      petitionFileId: '123',
+      requestForPlaceOfTrialFileId: '123',
+      stinFileId: '123',
+    });
+    applicationContext.getCurrentUser.mockReturnValue({
+      email: 'petitioner1@example.com',
+    });
+  });
+
+  it('should generate document ids for files selected, then call createCaseFromPaperInteractor with the petition metadata and ids and call the success path when finished', async () => {
     applicationContext
       .getUseCases()
-      .filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
+      .createCaseFromPaperInteractor.mockReturnValue(MOCK_CASE);
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -64,23 +67,38 @@ describe('createCaseFromPaperAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
-        .calls[0][1],
+      applicationContext.getUseCases().generateDocumentIds.mock.calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeUploadProgress: fileMetaData,
-      atpUploadProgress: fileMetaData,
+      attachmentToPetitionUploadProgress: fileMetaData,
       corporateDisclosureUploadProgress: fileMetaData,
       petitionUploadProgress: fileMetaData,
       requestForPlaceOfTrialUploadProgress: fileMetaData,
       stinUploadProgress: fileMetaData,
     });
+
+    expect(
+      applicationContext.getUseCases().createCaseFromPaperInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().createCaseFromPaperInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      applicationForWaiverOfFilingFeeFileId: '123',
+      attachmentToPetitionFileId: '123',
+      corporateDisclosureFileId: '123',
+      petitionFileId: '123',
+      petitionMetadata: MOCK_CASE,
+      requestForPlaceOfTrialFileId: '123',
+      stinFileId: '123',
+    });
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
+  it('generate document ids for files selected, but take path.error when finished if createCaseFromPaperInteractor throws an error', async () => {
     applicationContext
       .getUseCases()
-      .filePetitionFromPaperInteractor.mockImplementation(() => {
+      .createCaseFromPaperInteractor.mockImplementation(() => {
         throw new Error('error');
       });
 
@@ -93,11 +111,10 @@ describe('createCaseFromPaperAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
-        .calls[0][1],
+      applicationContext.getUseCases().generateDocumentIds.mock.calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeUploadProgress: fileMetaData,
-      atpUploadProgress: fileMetaData,
+      attachmentToPetitionUploadProgress: fileMetaData,
       corporateDisclosureUploadProgress: fileMetaData,
       petitionUploadProgress: fileMetaData,
       requestForPlaceOfTrialUploadProgress: fileMetaData,

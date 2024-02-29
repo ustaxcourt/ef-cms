@@ -46,31 +46,51 @@ describe('createCaseAction', () => {
 
   const { US_STATES } = applicationContext.getConstants();
 
-  const { addCoversheetInteractor, filePetitionInteractor } =
+  const mockPetitionMetadata = {
+    trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
+    ...MOCK_CASE,
+    contactPrimary: {
+      ...getContactPrimary(MOCK_CASE),
+    },
+  };
+
+  const { addCoversheetInteractor, createCaseInteractor, generateDocumentIds } =
     applicationContext.getUseCases();
 
-  applicationContext.getCurrentUser.mockReturnValue({
-    email: 'petitioner1@example.com',
+  beforeEach(() => {
+    generateDocumentIds.mockReturnValue({
+      attachmentToPetitionFileId: '123',
+      corporateDisclosureFileId: '123',
+      petitionFileId: '123',
+      stinFileId: '123',
+    });
+    applicationContext.getCurrentUser.mockReturnValue({
+      email: 'petitioner1@example.com',
+    });
   });
 
-  it('should call filePetitionInteractor and addCoversheetInteractor TWICE with the petition metadata and files and call the success path when finished', async () => {
-    filePetitionInteractor.mockReturnValue({
-      caseDetail: {
-        ...MOCK_CASE,
-        docketEntries: [
-          MOCK_DOCUMENTS[0],
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: '2b1e5fb3-e7f2-48c4-9a43-4f856ae46d66',
-            documentTitle:
-              'Request for Place of Trial at Little Rock, Arkansas',
-            documentType: 'Request for Place of Trial',
-            eventCode: 'RQT',
-            isFileAttached: false,
-          },
-        ],
-      },
-      stinFileId: '123',
+  it('should call createCaseInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files, then call the success path after completion', async () => {
+    createCaseInteractor.mockReturnValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        MOCK_DOCUMENTS[0],
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: '2b1e5fb3-e7f2-48c4-9a43-4f856ae46d66',
+          documentTitle: 'Request for Place of Trial at Little Rock, Arkansas',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RQT',
+          isFileAttached: false,
+        },
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: 'aaec01d8-98e7-4534-959f-6c384c4cf0e0',
+          documentTitle: 'Corporate Disclosure Statement',
+          documentType: 'Corporate Disclosure Statement',
+          eventCode: 'CDS',
+          isFileAttached: true,
+        },
+      ],
     });
 
     await runAction(createCaseAction, {
@@ -81,90 +101,34 @@ describe('createCaseAction', () => {
         fileUploadProgressMap,
       },
       state: {
-        form: {
-          trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
-          ...MOCK_CASE,
-          contactPrimary: {
-            ...getContactPrimary(MOCK_CASE),
-          },
-        },
+        form: mockPetitionMetadata,
       },
     });
 
-    expect(filePetitionInteractor).toHaveBeenCalled();
-    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+    expect(generateDocumentIds).toHaveBeenCalled();
+    expect(generateDocumentIds.mock.calls[0][1]).toMatchObject({
+      attachmentToPetitionUploadProgress:
+        fileUploadProgressMap.attachmentToPetition,
       corporateDisclosureUploadProgress:
         fileUploadProgressMap.corporateDisclosure,
-      petitionMetadata: MOCK_CASE,
       petitionUploadProgress: fileUploadProgressMap.petition,
       stinUploadProgress: fileUploadProgressMap.stin,
     });
-    expect(addCoversheetInteractor).toHaveBeenCalledTimes(2);
-    expect(successStub).toHaveBeenCalled();
-  });
 
-  it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files, then call the success path after completion', async () => {
-    filePetitionInteractor.mockReturnValue({
-      caseDetail: {
-        ...MOCK_CASE,
-        docketEntries: [
-          MOCK_DOCUMENTS[0],
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: '2b1e5fb3-e7f2-48c4-9a43-4f856ae46d66',
-            documentTitle:
-              'Request for Place of Trial at Little Rock, Arkansas',
-            documentType: 'Request for Place of Trial',
-            eventCode: 'RQT',
-            isFileAttached: false,
-          },
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: 'aaec01d8-98e7-4534-959f-6c384c4cf0e0',
-            documentTitle: 'Corporate Disclosure Statement',
-            documentType: 'Corporate Disclosure Statement',
-            eventCode: 'RQT',
-            isFileAttached: true,
-          },
-        ],
-      },
+    expect(createCaseInteractor).toHaveBeenCalled();
+    expect(createCaseInteractor.mock.calls[0][1]).toMatchObject({
+      attachmentToPetitionFileId: '123',
+      corporateDisclosureFileId: '123',
+      petitionFileId: '123',
+      petitionMetadata: mockPetitionMetadata,
       stinFileId: '123',
-    });
-
-    await runAction(createCaseAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        fileUploadProgressMap,
-      },
-      state: {
-        form: {
-          trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
-          ...MOCK_CASE,
-          contactPrimary: {
-            ...getContactPrimary(MOCK_CASE),
-          },
-        },
-      },
-    });
-
-    expect(filePetitionInteractor).toHaveBeenCalled();
-    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
-      corporateDisclosureUploadProgress:
-        fileUploadProgressMap.corporateDisclosure,
-      petitionMetadata: MOCK_CASE,
-      petitionUploadProgress: fileUploadProgressMap.petition,
-      stinUploadProgress: fileUploadProgressMap.stin,
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and CDS
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call filePetitionInteractor and call path.error when finished if it throws an error', async () => {
-    filePetitionInteractor.mockImplementation(() => {
+  it('should call createCaseInteractor and call path.error when finished if it throws an error', async () => {
+    createCaseInteractor.mockImplementation(() => {
       throw new Error('error');
     });
 
@@ -176,24 +140,27 @@ describe('createCaseAction', () => {
         fileUploadProgressMap,
       },
       state: {
-        form: {
-          trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
-          ...MOCK_CASE,
-          contactPrimary: {
-            ...getContactPrimary(MOCK_CASE),
-          },
-        },
+        form: mockPetitionMetadata,
       },
     });
 
-    expect(filePetitionInteractor).toHaveBeenCalled();
-    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
-      atpUploadProgress: fileUploadProgressMap.attachmentToPetition,
+    expect(generateDocumentIds).toHaveBeenCalled();
+    expect(generateDocumentIds.mock.calls[0][1]).toMatchObject({
+      attachmentToPetitionUploadProgress:
+        fileUploadProgressMap.attachmentToPetition,
       corporateDisclosureUploadProgress:
         fileUploadProgressMap.corporateDisclosure,
-      petitionMetadata: MOCK_CASE,
       petitionUploadProgress: fileUploadProgressMap.petition,
       stinUploadProgress: fileUploadProgressMap.stin,
+    });
+
+    expect(createCaseInteractor).toHaveBeenCalled();
+    expect(createCaseInteractor.mock.calls[0][1]).toMatchObject({
+      attachmentToPetitionFileId: '123',
+      corporateDisclosureFileId: '123',
+      petitionFileId: '123',
+      petitionMetadata: mockPetitionMetadata,
+      stinFileId: '123',
     });
     expect(addCoversheetInteractor).not.toHaveBeenCalled();
     expect(errorStub).toHaveBeenCalled();

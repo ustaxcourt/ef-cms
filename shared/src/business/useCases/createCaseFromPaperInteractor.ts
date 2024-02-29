@@ -1,7 +1,9 @@
 import { Case } from '../entities/cases/Case';
+import {
+  CreatedCaseType,
+  INITIAL_DOCUMENT_TYPES,
+} from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
-import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
-import { PaperCaseDataType } from '@shared/business/useCases/filePetitionFromPaperInteractor';
 import { PaperPetition } from '../entities/cases/PaperPetition';
 import {
   ROLE_PERMISSIONS,
@@ -72,12 +74,12 @@ export const createCaseFromPaperInteractor = async (
     stinFileId,
   }: {
     applicationForWaiverOfFilingFeeFileId?: string;
+    attachmentToPetitionFileId?: string;
     corporateDisclosureFileId?: string;
     petitionFileId: string;
-    petitionMetadata: PaperCaseDataType;
+    petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    attachmentToPetitionFileId?: string;
   },
 ): Promise<RawCase> => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -94,10 +96,10 @@ export const createCaseFromPaperInteractor = async (
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,
-      attachmentToPetitionFileId,
-      corporateDisclosureFileId,
-      petitionFileId,
-      stinFileId,
+      attachmentToPetitionFileId, // do we need these?
+      corporateDisclosureFileId, // do we need these?
+      petitionFileId, // do we need these?
+      stinFileId, // do we need these?
     },
     { applicationContext },
   ).validate();
