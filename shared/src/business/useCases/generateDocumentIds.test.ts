@@ -129,6 +129,6 @@ describe('generateDocumentIds', () => {
           uploadProgress: jest.fn(),
         },
       } as any),
-    ).rejects.toThrow('Error uploading documents to file petition');
+    ).rejects.toThrow('Error generating document Ids');
   });
 });
