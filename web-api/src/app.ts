@@ -79,6 +79,7 @@ import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
+import { getCoversheetLambda } from '@web-api/lambdas/documents/getCoversheetLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
@@ -365,6 +366,10 @@ app.use(logger());
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/coversheet',
     lambdaWrapper(addCoversheetLambda),
+  );
+  app.get(
+    '/get-coversheet/:docketNumber/:docketEntryId',
+    lambdaWrapper(getCoversheetLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:motionDocketEntryId/stamp',

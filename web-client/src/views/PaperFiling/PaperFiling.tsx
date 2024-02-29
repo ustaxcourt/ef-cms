@@ -39,6 +39,7 @@ export const PaperFiling = connect(
     showModal,
     submitPaperFilingSequence,
   }) {
+    console.log('showModal', showModal);
     return (
       <>
         <CaseDetailHeader />

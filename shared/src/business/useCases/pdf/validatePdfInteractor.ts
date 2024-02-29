@@ -35,6 +35,7 @@ export const validatePdfInteractor = async (
   const stringDecoder = new StringDecoder('utf8');
   const pdfHeaderBytes = pdfData.slice(0, 5);
   const pdfHeaderString = stringDecoder.write(pdfHeaderBytes);
+  console.log('****pdfHeaderString');
 
   applicationContext.logger.debug('pdfHeaderBytes', pdfHeaderBytes);
   applicationContext.logger.debug('pdfHeaderString', pdfHeaderString);
@@ -47,6 +48,7 @@ export const validatePdfInteractor = async (
   applicationContext.logger.debug('pdfIsEncrypted', pdfIsEncrypted);
 
   if (pdfIsEncrypted || pdfHeaderString !== '%PDF-') {
+    console.log('removing pdf...');
     await removePdf({
       applicationContext,
       key,

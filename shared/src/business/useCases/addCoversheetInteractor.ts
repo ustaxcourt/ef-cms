@@ -44,6 +44,7 @@ export const addCoversheetInteractor = async (
 
   let pdfData;
   try {
+    console.time('getObject');
     const { Body } = await applicationContext
       .getStorageClient()
       .getObject({
@@ -51,6 +52,8 @@ export const addCoversheetInteractor = async (
         Key: docketEntryId,
       })
       .promise();
+    console.timeEnd('getObject');
+
     pdfData = Body;
   } catch (err) {
     applicationContext.logger.error(
@@ -64,6 +67,7 @@ export const addCoversheetInteractor = async (
     docketEntryId,
   });
 
+  console.time('addCoverToPdf');
   const {
     consolidatedCases, // if feature flag is off, this will always be null
     numberOfPages,
@@ -77,12 +81,15 @@ export const addCoversheetInteractor = async (
     replaceCoversheet,
     useInitialData,
   });
+  console.timeEnd('addCoverToPdf');
 
+  console.time('saveDocumentFromLambda');
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
     key: docketEntryId,
   });
+  console.timeEnd('saveDocumentFromLambda');
 
   let docketNumbersToUpdate = [docketNumber];
 
@@ -92,6 +99,7 @@ export const addCoversheetInteractor = async (
       .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
   }
 
+  console.time('Promise.all');
   const updatedDocketEntries = await Promise.all(
     docketNumbersToUpdate.map(async caseDocketNumber => {
       // in one instance, we pass in the caseEntity which we don't want to refetch
@@ -147,6 +155,7 @@ export const addCoversheetInteractor = async (
       }
     }),
   );
+  console.timeEnd('Promise.all');
 
   return updatedDocketEntries
     .filter(Boolean)

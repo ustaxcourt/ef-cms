@@ -98,6 +98,7 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
         );
         break;
       case 'serve_document_complete':
+        console.log('serve_document_complete');
         await app.getSequence('serveDocumentCompleteSequence')(message);
         break;
       case 'serve_document_error':

@@ -72,3 +72,18 @@ export const addCoverToPdf = async ({
     pdfData: newPdfData,
   };
 };
+
+// //endpoint
+// //get pdf coversheet
+// caseEntity = getCaseByDocket (docket)
+// const coverSheetData = await generateCoverSheetData({
+// 	applicationContext,
+// 	caseEntity,
+// });
+
+// return await applicationContext
+// .getDocumentGenerators()
+// .coverSheet({
+// 	applicationContext,
+// 	data: coverSheetData,
+// });

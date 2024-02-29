@@ -27,9 +27,13 @@ export const uploadDocketEntryFileAction = async ({
   );
 
   try {
+    console.log('primaryDocumentFile', primaryDocumentFile);
+    console.log('typeof primaryDocumentFile', typeof primaryDocumentFile);
+    //JOHN THIS IS WHERE WE WILL ADD NEW PARAM
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
       .uploadDocumentInteractor(applicationContext, {
+        addCoverSheet: true,
         documentFile: primaryDocumentFile,
         key: docketEntryId,
         onUploadProgress: progressFunctions.primary,

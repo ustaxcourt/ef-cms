@@ -10,22 +10,26 @@ const getUploadPolicy = async ({ applicationContext, key }) => {
 };
 
 export const uploadDocumentFromClient = async ({
+  addCoverSheet = false,
   applicationContext,
   document,
   key,
   onUploadProgress = () => {},
 }: {
+  addCoverSheet: boolean;
   applicationContext;
   document: any;
   key: string;
   onUploadProgress?: () => void;
 }) => {
+  console.log('uploadDocumentFromClient');
   const docId = key || applicationContext.getUniqueId();
   const policy = await getUploadPolicy({
     applicationContext,
     key: docId,
   });
   await applicationContext.getPersistenceGateway().uploadPdfFromClient({
+    addCoverSheet,
     applicationContext,
     file: document,
     key: docId,

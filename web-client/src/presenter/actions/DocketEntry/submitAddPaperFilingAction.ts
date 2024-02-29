@@ -14,6 +14,7 @@ export const submitAddPaperFilingAction = async ({
   get,
   props,
 }: ActionProps) => {
+  console.log('submitAddPaperFilingAction');
   const { docketNumbers, isSavingForLater } = props;
   const { docketNumber } = get(state.caseDetail);
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
