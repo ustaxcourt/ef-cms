@@ -100,6 +100,7 @@ if [ -n "${INTEGRATION}" ]; then
   export CYPRESS_CHECK_DEPLOY_DATE_INTERVAL=5000
 elif [ -n "${CYPRESS_SMOKETESTS_LOCAL}" ]; then
   export CYPRESS_BASE_URL="http://localhost:${PORT}"
+  export ENV='local'
 else
   if [ -z "${ENV}" ]; then
     echo "Please export the environment name as a variable named ENV."
