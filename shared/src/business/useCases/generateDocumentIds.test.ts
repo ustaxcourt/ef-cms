@@ -1,8 +1,8 @@
 import { ROLES } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
-import { filePetitionInteractor } from './filePetitionInteractor';
+import { generateDocumentIds } from './generateDocumentIds';
 
-describe('filePetitionInteractor', () => {
+describe('generateDocumentIds', () => {
   let petitionMetadata: object;
 
   const mockFile = {};
@@ -26,7 +26,7 @@ describe('filePetitionInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(null);
 
     await expect(
-      filePetitionInteractor(applicationContext, {} as any),
+      generateDocumentIds(applicationContext, {} as any),
     ).rejects.toThrow();
   });
 
@@ -37,7 +37,7 @@ describe('filePetitionInteractor', () => {
     });
 
     await expect(
-      filePetitionInteractor(applicationContext, {
+      generateDocumentIds(applicationContext, {
         petitionFile: null,
         petitionMetadata: null,
       } as any),
@@ -45,7 +45,7 @@ describe('filePetitionInteractor', () => {
   });
 
   it('calls upload on a Petition file', async () => {
-    await filePetitionInteractor(applicationContext, {
+    await generateDocumentIds(applicationContext, {
       petitionMetadata,
       petitionUploadProgress: {
         file: mockFile,
@@ -60,7 +60,7 @@ describe('filePetitionInteractor', () => {
   });
 
   it('uploads a Petition file and a STIN file', async () => {
-    await filePetitionInteractor(applicationContext, {
+    await generateDocumentIds(applicationContext, {
       petitionMetadata,
       petitionUploadProgress: {
         file: mockFile,
@@ -79,7 +79,7 @@ describe('filePetitionInteractor', () => {
   });
 
   it('uploads a Corporate Disclosure Statement file and a petition', async () => {
-    await filePetitionInteractor(applicationContext, {
+    await generateDocumentIds(applicationContext, {
       corporateDisclosureUploadProgress: {
         file: mockFile,
         uploadProgress: jest.fn(),
@@ -98,7 +98,7 @@ describe('filePetitionInteractor', () => {
   });
 
   it('uploads Attachment to Petition file and a Petition file', async () => {
-    await filePetitionInteractor(applicationContext, {
+    await generateDocumentIds(applicationContext, {
       attachmentToPetitionUploadProgress: {
         file: mockFile,
         uploadProgress: jest.fn(),
@@ -122,7 +122,7 @@ describe('filePetitionInteractor', () => {
       .uploadDocumentAndMakeSafeInteractor.mockRejectedValue('something wrong');
 
     await expect(
-      filePetitionInteractor(applicationContext, {
+      generateDocumentIds(applicationContext, {
         petitionMetadata,
         petitionUploadProgress: {
           file: mockFile,
