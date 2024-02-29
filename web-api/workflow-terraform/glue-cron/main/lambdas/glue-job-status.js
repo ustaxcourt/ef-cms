@@ -1,15 +1,13 @@
-const {
+import {
   approvePendingJob,
   cancelWorkflow,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const {
-  getRunStateOfMostRecentJobRun,
-} = require('../../../../../shared/admin-tools/aws/glueHelper');
+} from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import { getRunStateOfMostRecentJobRun } from '../../../../../shared/admin-tools/aws/glueHelper';
 
 const FAILURE_STATES = ['ERROR', 'FAILED', 'STOPPED', 'TIMEOUT'];
 const RUNNING_STATES = ['RUNNING', 'STARTING', 'STOPPING', 'WAITING'];
 
-exports.handler = async (input, context) => {
+export const handler = async (event, context) => {
   const mostRecentRunState = await getRunStateOfMostRecentJobRun();
   const results = { mostRecentRunState };
 
