@@ -5,7 +5,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-export const filePetitionInteractor = async (
+export const generateDocumentIds = async (
   applicationContext: any,
   {
     applicationForWaiverOfFilingFeeUploadProgress,
