@@ -1,8 +1,6 @@
-const {
-  approvePendingJob,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
+import { approvePendingJob } from '../../../../../shared/admin-tools/circleci/circleci-helper';
 
-exports.handler = async () => {
+export const handler = async () => {
   console.log('Approving CircleCI wait for color switch job');
 
   const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
