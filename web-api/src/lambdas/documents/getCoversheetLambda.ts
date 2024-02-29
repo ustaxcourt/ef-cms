@@ -4,7 +4,7 @@ export const getCoversheetLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      await applicationContext
+      return await applicationContext
         .getUseCases()
         .getCoversheetInteractor(applicationContext, event.pathParameters);
     },
