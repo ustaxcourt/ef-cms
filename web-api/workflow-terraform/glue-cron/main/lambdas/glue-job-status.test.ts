@@ -1,15 +1,16 @@
+import * as circleHelper from '../../../../../shared/admin-tools/circleci/circleci-helper';
 import * as glueHelper from '../../../../../shared/admin-tools/aws/glueHelper';
-import {
-  approvePendingJob,
-  cancelWorkflow,
-} from '../../../../../shared/admin-tools/circleci/circleci-helper';
 import { handler } from './glue-job-status';
 import type { Context } from 'aws-lambda';
 
-jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
-  approvePendingJob: jest.fn(),
-  cancelWorkflow: jest.fn(),
-}));
+jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper');
+const approvePendingJob = jest
+  .spyOn(circleHelper, 'approvePendingJob')
+  .mockImplementation(jest.fn());
+const cancelWorkflow = jest
+  .spyOn(circleHelper, 'cancelWorkflow')
+  .mockImplementation(jest.fn());
+
 jest.mock('../../../../../shared/admin-tools/aws/glueHelper');
 const getRunStateOfMostRecentJobRun = jest
   .spyOn(glueHelper, 'getRunStateOfMostRecentJobRun')
