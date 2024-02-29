@@ -3,11 +3,12 @@ import {
   cancelWorkflow,
 } from '../../../../../shared/admin-tools/circleci/circleci-helper';
 import { getRunStateOfMostRecentJobRun } from '../../../../../shared/admin-tools/aws/glueHelper';
+import type { Handler } from 'aws-lambda';
 
 const FAILURE_STATES = ['ERROR', 'FAILED', 'STOPPED', 'TIMEOUT'];
 const RUNNING_STATES = ['RUNNING', 'STARTING', 'STOPPING', 'WAITING'];
 
-export const handler = async (event, context) => {
+export const handler: Handler = async (_event, context) => {
   const mostRecentRunState = await getRunStateOfMostRecentJobRun();
   const results = { mostRecentRunState };
 
@@ -20,8 +21,8 @@ export const handler = async (event, context) => {
     return succeed({ context, results });
   }
 
-  const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
-  const workflowId = process.env.CIRCLE_WORKFLOW_ID;
+  const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN!;
+  const workflowId = process.env.CIRCLE_WORKFLOW_ID!;
 
   if (FAILURE_STATES.includes(mostRecentRunState)) {
     console.log(
