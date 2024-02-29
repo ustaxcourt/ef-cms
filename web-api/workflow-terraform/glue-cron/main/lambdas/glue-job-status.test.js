@@ -1,19 +1,18 @@
-const {
+import * as glueHelper from '../../../../../shared/admin-tools/aws/glueHelper';
+import {
   approvePendingJob,
   cancelWorkflow,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const {
-  getRunStateOfMostRecentJobRun,
-} = require('../../../../../shared/admin-tools/aws/glueHelper');
-const { handler } = require('./glue-job-status');
+} from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import { handler } from './glue-job-status';
 
 jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
   approvePendingJob: jest.fn(),
   cancelWorkflow: jest.fn(),
 }));
-jest.mock('../../../../../shared/admin-tools/aws/glueHelper', () => ({
-  getRunStateOfMostRecentJobRun: jest.fn(),
-}));
+jest.mock('../../../../../shared/admin-tools/aws/glueHelper');
+const getRunStateOfMostRecentJobRun = jest
+  .spyOn(glueHelper, 'getRunStateOfMostRecentJobRun')
+  .mockImplementation(jest.fn());
 
 const mockContext = {
   fail: jest.fn(),
