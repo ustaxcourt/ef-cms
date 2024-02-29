@@ -15,8 +15,7 @@ describe('setProgressForFileUploadAction', () => {
       },
       state: {
         fileUploadProgress: {
-          documentsProgress: {} as Record<string, number>,
-          filesTotalBytes: 0,
+          isHavingSystemIssues: false,
           isUploading: false,
           percentComplete: 0,
           timeRemaining: Number.POSITIVE_INFINITY,
@@ -66,8 +65,7 @@ describe('setProgressForFileUploadAction', () => {
       },
       state: {
         fileUploadProgress: {
-          documentsProgress: {} as Record<string, number>,
-          filesTotalBytes: 0,
+          isHavingSystemIssues: false,
           isUploading: false,
           percentComplete: 0,
           timeRemaining: Number.POSITIVE_INFINITY,
@@ -76,42 +74,57 @@ describe('setProgressForFileUploadAction', () => {
     });
     results.output.fileUploadProgressMap.attachmentToPetition.uploadProgress({
       isDone: true,
+      total: 1,
     });
     results.output.fileUploadProgressMap.petition.uploadProgress({
       isDone: true,
+      total: 2,
     });
     results.output.fileUploadProgressMap.stin.uploadProgress({
       isDone: true,
+      total: 3,
     });
-    results.output.fileUploadProgressMap.trial.uploadProgress({
-      isDone: true,
-    });
+
     results.output.fileUploadProgressMap.waiverOfFilingFee.uploadProgress({
       loaded: 0,
       total: 5,
     });
-
-    expect(
-      results.state.fileUploadProgress.documentsProgress.waiverOfFilingFee,
-    ).toEqual(0);
-    expect(results.state.fileUploadProgress.percentComplete).toEqual(66);
-
-    results.output.fileUploadProgressMap.waiverOfFilingFee.uploadProgress({
-      loaded: 3,
-      total: 5,
+    results.output.fileUploadProgressMap.trial.uploadProgress({
+      isHavingSystemIssues: true,
+      loaded: 0,
+      total: 4,
     });
-    expect(
-      results.state.fileUploadProgress.documentsProgress.waiverOfFilingFee,
-    ).toEqual(3);
-    expect(results.state.fileUploadProgress.percentComplete).toEqual(86);
+
+    expect(results.state.fileUploadProgress).toMatchObject({
+      isHavingSystemIssues: true,
+      isUploading: true,
+      percentComplete: 40,
+      timeRemaining: 0,
+    });
+
+    results.output.fileUploadProgressMap.trial.uploadProgress({
+      isDone: true,
+      isHavingSystemIssues: false,
+      total: 4,
+    });
+    expect(results.state.fileUploadProgress).toMatchObject({
+      isHavingSystemIssues: false,
+      isUploading: true,
+      percentComplete: 66,
+      timeRemaining: 0,
+    });
 
     results.output.fileUploadProgressMap.waiverOfFilingFee.uploadProgress({
       isDone: true,
+      isHavingSystemIssues: false,
+      total: 5,
     });
-    expect(
-      results.state.fileUploadProgress.documentsProgress.waiverOfFilingFee,
-    ).toEqual(5);
-    expect(results.state.fileUploadProgress.percentComplete).toEqual(100);
+    expect(results.state.fileUploadProgress).toMatchObject({
+      isHavingSystemIssues: false,
+      isUploading: true,
+      percentComplete: 100,
+      timeRemaining: 0,
+    });
   });
 
   it('should not include, in fileUploadProgressMap, keys that have not been uploaded', async () => {
