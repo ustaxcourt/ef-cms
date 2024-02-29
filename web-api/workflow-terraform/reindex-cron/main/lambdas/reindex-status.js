@@ -1,11 +1,7 @@
-const {
-  approvePendingJob,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const {
-  areAllReindexTasksFinished,
-} = require('../../../../../shared/admin-tools/elasticsearch/check-reindex-complete');
+import { approvePendingJob } from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import { areAllReindexTasksFinished } from '../../../../../shared/admin-tools/elasticsearch/check-reindex-complete';
 
-exports.handler = async (input, context) => {
+export const handler = async (_event, context) => {
   const environmentName = process.env.STAGE;
   const migrateFlag = process.env.MIGRATE_FLAG;
   console.log(`Migrate flag is ${migrateFlag}`);

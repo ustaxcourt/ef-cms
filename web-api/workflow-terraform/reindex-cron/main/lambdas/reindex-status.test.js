@@ -1,17 +1,17 @@
-const {
-  areAllReindexTasksFinished,
-} = require('../../../../../shared/admin-tools/elasticsearch/check-reindex-complete');
-const { handler } = require('./reindex-status');
+import * as checkReindexComplete from '../../../../../shared/admin-tools/elasticsearch/check-reindex-complete';
+import { handler } from './reindex-status';
+import axios from 'axios';
+
 jest.mock(
   '../../../../../shared/admin-tools/elasticsearch/check-reindex-complete',
-  () => ({
-    areAllReindexTasksFinished: jest.fn(),
-    isMigratedClusterFinishedIndexing: jest.fn(),
-  }),
 );
-jest.mock('axios');
+const areAllReindexTasksFinished = jest
+  .spyOn(checkReindexComplete, 'areAllReindexTasksFinished')
+  .mockImplementation(jest.fn());
 
-const axios = require('axios');
+jest.mock('axios');
+const axiosPost = jest.spyOn(axios, 'post').mockImplementation(jest.fn());
+const axiosGet = jest.spyOn(axios, 'get').mockImplementation(jest.fn());
 
 const mockContext = {
   fail: jest.fn(),
@@ -35,16 +35,16 @@ describe('reindex-status', () => {
 
   it('should make get and post requests when MIGRATE_FLAG is false and areAllReindexTasksFinished returns true', async () => {
     process.env.MIGRATE_FLAG = 'false';
-    areAllReindexTasksFinished.mockReturnValue(true);
-    axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
-    axios.get.mockImplementation(() =>
+    areAllReindexTasksFinished.mockReturnValue(Promise.resolve(true));
+    axiosPost.mockImplementation(() => Promise.resolve({ status: 200 }));
+    axiosGet.mockImplementation(() =>
       Promise.resolve({ data: { items: mockJobs } }),
     );
 
     await handler({}, mockContext);
 
-    expect(axios.get).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledTimes(1);
+    expect(axiosGet).toHaveBeenCalledTimes(1);
+    expect(axiosPost).toHaveBeenCalledTimes(1);
   });
 
   it('should NOT make get and post requests when MIGRATE_FLAG is true and areAllReindexTasksFinished returns false', async () => {
@@ -53,15 +53,15 @@ describe('reindex-status', () => {
 
     await handler({}, mockContext);
     expect(areAllReindexTasksFinished).toHaveBeenCalledTimes(1);
-    expect(axios.get).toHaveBeenCalledTimes(0);
-    expect(axios.post).toHaveBeenCalledTimes(0);
+    expect(axiosGet).toHaveBeenCalledTimes(0);
+    expect(axiosPost).toHaveBeenCalledTimes(0);
   });
 
   it('should NOT make get and post requests when MIGRATE_FLAG is true', async () => {
     process.env.MIGRATE_FLAG = 'true';
 
     await handler({}, mockContext);
-    expect(axios.get).toHaveBeenCalledTimes(0);
-    expect(axios.post).toHaveBeenCalledTimes(0);
+    expect(axiosGet).toHaveBeenCalledTimes(0);
+    expect(axiosPost).toHaveBeenCalledTimes(0);
   });
 });
