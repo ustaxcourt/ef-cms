@@ -1,13 +1,13 @@
-const {
+import {
   approvePendingJob,
   cancelWorkflow,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const {
+} from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import {
   getMetricStatistics,
   getMigrationQueueIsEmptyFlag,
   getSqsQueueCount,
   putMigrationQueueIsEmptyFlag,
-} = require('../../../../../shared/admin-tools/aws/migrationWaitHelper');
+} from '../../../../../shared/admin-tools/aws/migrationWaitHelper';
 
 const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
 const workflowId = process.env.CIRCLE_WORKFLOW_ID;
@@ -15,7 +15,7 @@ const dlQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUN
 const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${process.env.STAGE}`;
 const jobName = 'wait-for-migration';
 
-exports.handler = async (input, context) => {
+export const handler = async (_event, context) => {
   const results = { migrateFlag: process.env.MIGRATE_FLAG };
   if (results.migrateFlag !== 'true') {
     await approvePendingJob({ apiToken, jobName, workflowId });
