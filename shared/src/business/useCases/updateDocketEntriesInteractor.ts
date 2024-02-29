@@ -4,38 +4,33 @@ import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../entities/EntityConstants';
 export const updateDocketEntriesInteractor = async (
   applicationContext: IApplicationContext,
   {
-    caseEntity,
-    consolidatedCases,
     docketEntryId,
     docketNumber,
-    numberOfPages,
     updatedDocketEntryData,
   }: {
-    caseEntity?: Case;
-    consolidatedCases;
     docketEntryId: string;
     docketNumber: string;
-    numberOfPages;
-    updatedDocketEntryData: any;
+    updatedDocketEntryData: {
+      numberOfPages;
+      consolidatedCases;
+    };
   },
 ) => {
   console.log('****************updatedDocketEntryData', updatedDocketEntryData);
 
-  if (!caseEntity) {
-    const caseRecord = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
-    caseEntity = new Case(caseRecord, { applicationContext });
-  }
+  const caseEntity = new Case(caseRecord, { applicationContext });
 
   let docketNumbersToUpdate = [docketNumber];
 
-  if (consolidatedCases) {
-    docketNumbersToUpdate = consolidatedCases
+  if (updatedDocketEntryData.consolidatedCases) {
+    docketNumbersToUpdate = updatedDocketEntryData.consolidatedCases
       .filter(consolidatedCase => consolidatedCase.documentNumber)
       .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
   }
@@ -45,13 +40,13 @@ export const updateDocketEntriesInteractor = async (
       // in one instance, we pass in the caseEntity which we don't want to refetch
       let consolidatedCaseEntity = caseEntity;
       if (caseEntity && caseDocketNumber !== docketNumber) {
-        const caseRecord = await applicationContext
+        const cCaseRecord = await applicationContext
           .getPersistenceGateway()
           .getCaseByDocketNumber({
             applicationContext,
             docketNumber: caseDocketNumber,
           });
-        consolidatedCaseEntity = new Case(caseRecord, {
+        consolidatedCaseEntity = new Case(cCaseRecord, {
           applicationContext,
         });
       }
@@ -79,7 +74,9 @@ export const updateDocketEntriesInteractor = async (
           consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
         }
 
-        consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
+        consolidatedCaseDocketEntryEntity.setNumberOfPages(
+          updatedDocketEntryData.numberOfPages,
+        );
 
         const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
           .validate()
