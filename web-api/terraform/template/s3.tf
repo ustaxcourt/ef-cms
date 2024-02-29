@@ -58,67 +58,6 @@ resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
   bucket = aws_s3_bucket.documents_us_east_1.bucket
   policy = data.aws_iam_policy_document.allow_access_for_glue_job.json
 }
-
-resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
-  count  = var.environment == "prod" ? 1 : 0
-  bucket = aws_s3_bucket.smoketest_email_inbox.bucket
-  policy = data.aws_iam_policy_document.allow_access_for_email_smoketests.json
-}
-
-resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
-  bucket = "${var.dns_domain}-email-test-${var.environment}-us-east-1"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid       = "AllowSESPuts"
-        Effect    = "Allow"
-        Principal = { Service = "ses.amazonaws.com" }
-        Action    = "s3:PutObject"
-        Resources = [
-          "arn:aws:s3:::${var.dns_domain}-email-test-${var.environment}-us-east-1",
-          "arn:aws:s3:::${var.dns_domain}-email-test-${var.environment}-us-east-1/*",
-        ]
-        Condition = {
-          StringEquals = {
-            "AWS:SourceAccount" = "111122223333"
-            "AWS:SourceArn"     = "arn:aws:ses:region:${data.aws_caller_identity.current.account_id}:receipt-rule-set/rule_set_name:receipt-rule/receipt_rule_name"
-          }
-        }
-      }
-    ]
-  })
-}
-
-resource "aws_s3_bucket" "smoketest_email_inbox" {
-  provider = aws.us-east-1
-  bucket   = "${var.dns_domain}-email-inbox-${var.environment}"
-  acl      = "private"
-
-  cors_rule {
-    allowed_headers = ["Authorization"]
-    allowed_methods = ["GET", "POST"]
-    allowed_origins = ["*"]
-    max_age_seconds = 3000
-  }
-
-  versioning {
-    enabled = false
-  }
-
-  tags = {
-    environment = var.environment
-  }
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-}
 data "aws_iam_policy_document" "allow_access_for_glue_job" {
   statement {
     sid = "DelegateS3Access"
@@ -384,4 +323,60 @@ resource "aws_s3_bucket_public_access_block" "block_quarantine_west" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
+  count  = var.environment == "prod" ? 1 : 0
+  bucket = aws_s3_bucket.smoketest_email_inbox.bucket
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "AllowSESPuts"
+        Effect    = "Allow"
+        Principal = { Service = "ses.amazonaws.com" }
+        Action    = "s3:PutObject"
+        Resources = [
+          "arn:aws:s3:::${var.dns_domain}-email-test-${var.environment}-us-east-1",
+          "arn:aws:s3:::${var.dns_domain}-email-test-${var.environment}-us-east-1/*",
+        ]
+        Condition = {
+          StringEquals = {
+            "AWS:SourceAccount" = "111122223333"
+            "AWS:SourceArn"     = "arn:aws:ses:region:${data.aws_caller_identity.current.account_id}:receipt-rule-set/rule_set_name:receipt-rule/receipt_rule_name"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_s3_bucket" "smoketest_email_inbox" {
+  provider = aws.us-east-1
+  bucket   = "${var.dns_domain}-email-inbox-${var.environment}"
+  acl      = "private"
+
+  cors_rule {
+    allowed_headers = ["Authorization"]
+    allowed_methods = ["GET", "POST"]
+    allowed_origins = ["*"]
+    max_age_seconds = 3000
+  }
+
+  versioning {
+    enabled = false
+  }
+
+  tags = {
+    environment = var.environment
+  }
+  server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 }
