@@ -1,12 +1,8 @@
 import { FileUploadProgressMapType } from '../../../../shared/src/business/entities/EntityConstants';
-import {
-  dateStringsCompared,
-  formatNow,
-} from '@shared/business/utilities/DateHandler';
+import { formatNow } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setProgressForFileUploadAction = ({
-  get,
   props,
   store,
 }: ActionProps<{
@@ -22,6 +18,17 @@ export const setProgressForFileUploadAction = ({
   const startTime = formatNow();
   const sizeOfFiles: Record<string, number> = {};
 
+  const calculateTotalSize = () => {
+    return Object.keys(loadedAmounts).reduce((acc, key) => {
+      return sizeOfFiles[key] + acc;
+    }, 0);
+  };
+  const calculateTotalLoaded = () => {
+    return Object.keys(loadedAmounts).reduce((acc, key) => {
+      return loadedAmounts[key] + acc;
+    }, 0);
+  };
+
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
     sizeOfFiles[key] = files[key].size;
@@ -30,52 +37,23 @@ export const setProgressForFileUploadAction = ({
   const createOnUploadProgress = (key: string) => {
     loadedAmounts[key] = 0;
     return progressEvent => {
-      const { isDone, isHavingSystemIssues, loaded } = progressEvent;
+      const { isDone, isHavingSystemIssues, loaded, total } = progressEvent;
+      if (total) {
+        sizeOfFiles[key] = total;
+      }
 
       loadedAmounts[key] = isDone ? sizeOfFiles[key] : loaded;
-      const fileSize = sizeOfFiles[key];
-      const now = formatNow();
-      const timeElapsed = dateStringsCompared(now, startTime);
-      const uploadedBytes = loadedAmounts[key];
+      const totalSize = calculateTotalSize();
+      // O.K. to use Date constructor for calculating time duration
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
+      const timeElapsed = new Date() - startTime;
+      const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
       const timeRemaining = Math.floor(
-        (fileSize - uploadedBytes) / uploadSpeed,
+        (totalSize - uploadedBytes) / uploadSpeed,
       );
-      const filesTotalBytes = get(state.fileUploadProgress.filesTotalBytes);
-
-      const documentsUploadProgress: Record<string, number> = get(
-        state.fileUploadProgress.documentsProgress,
-      );
-
-      if (!(key in documentsUploadProgress)) {
-        store.set(
-          state.fileUploadProgress.filesTotalBytes,
-          filesTotalBytes + fileSize,
-        );
-      }
-      documentsUploadProgress[key] = uploadedBytes;
-
-      store.set(
-        state.fileUploadProgress.documentsProgress,
-        documentsUploadProgress,
-      );
-
-      const bytesArray: number[] = Object.values(documentsUploadProgress);
-
-      const sumOfUploadedBytes: number = bytesArray.reduce(
-        (acc, curr) => acc + curr,
-        0,
-      );
-      const totalBytes = get(state.fileUploadProgress.filesTotalBytes);
-
-      const avgCompletionOfAllDocuments = Math.floor(
-        (sumOfUploadedBytes / totalBytes) * 100,
-      );
-
-      store.set(
-        state.fileUploadProgress.percentComplete,
-        avgCompletionOfAllDocuments,
-      );
+      const percent = Math.floor((uploadedBytes / totalSize) * 100);
+      store.set(state.fileUploadProgress.percentComplete, percent);
       store.set(state.fileUploadProgress.timeRemaining, timeRemaining);
       store.set(
         state.fileUploadProgress.isHavingSystemIssues,
