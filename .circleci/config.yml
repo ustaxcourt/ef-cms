@@ -292,10 +292,10 @@ jobs:
               node ./web-api/track-successful-migrations.js
             fi
       - run:
-          name: Enable Destination Table Stream
+          name: Set Marker to Indicate Migration is Complete
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./web-api/enable-deploying-dynamo-stream-trigger.sh
+              JOB_NAME="wait-for-reindex" ./scripts/dynamo/set-migration-complete-marker.sh
             fi
       - run:
           name: Begin Reindexing
@@ -311,6 +311,12 @@ jobs:
           name: Enable Check Reindex Status Cron
           command: |
             ./web-api/workflow-terraform/reindex-cron/bin/enable.sh
+      - run:
+          name: Enable Destination Table Stream
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              ./web-api/enable-deploying-dynamo-stream-trigger.sh
+            fi
 
   disable-reindex-cron:
     docker:
@@ -699,6 +705,39 @@ jobs:
                 \"source_bucket\":\"${SOURCE_BUCKET}\", \
                 \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
 
+  index-glued-data:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Disable Wait for Workflow Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+      - run:
+          name: Destroy Wait for Workflow Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+            export CIRCLE_PIPELINE_ID=noop
+            npm run destroy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Set Marker to Indicate Data is Finished Gluing
+          command: |
+            JOB_NAME="wait-for-glued-data-to-index" ./scripts/dynamo/set-migration-complete-marker.sh
+      - run:
+          name: Enable Dynamodb Streams
+          command: |
+            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+
   cleanup-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -713,35 +752,17 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-              --domain-name "${DESTINATION_DOMAIN}" \
-              --region "us-east-1" \
-              --query 'DomainStatus.Endpoint' \
-              --output text)
-            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            VCS=<< pipeline.project.type >>
+            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
       - run:
-          name: Disable Wait for Workflow Cron
+          name: Kick off a deployment
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-glue-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Test Users Setup
-          command: |
-            DEPLOYING_COLOR="$CURRENT_COLOR" ./shared/admin-tools/user/setup-test-users.sh "$ENV"
-      - run:
-          name: Judge Users Setup
-          command: |
-            npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
-      - run:
-          name: Enable Dynamodb Streams
-          command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+            CIRCLE_PIPELINE_ID=$(curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}")
 
   sync-s3-buckets-with-timeout:
     docker:
@@ -1091,11 +1112,20 @@ workflows:
           type: approval
           requires:
             - initiate-glue-job
-      - cleanup-glue-job:
+      - index-glued-data:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
             - wait-for-s3-sync-workflow
+      - wait-for-glued-data-to-index:
+          <<: *only-test
+          type: approval
+          requires:
+            - index-glued-data
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - wait-for-glued-data-to-index
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
