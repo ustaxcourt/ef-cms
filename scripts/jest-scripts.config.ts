@@ -16,6 +16,7 @@ const config: Config = {
     '!dynamo/archive-outboxes.ts',
     '!dynamo/fix-race-condition-served-in-drafts.ts',
     '!dynamo/read-segment.ts',
+    '!dynamo/set-local-migration-complete-marker.ts',
     '!elasticsearch/docket-entry-search.ts',
     '!elasticsearch/docket-inbox.ts',
     '!elasticsearch/get-users.ts',
