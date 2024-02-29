@@ -1020,10 +1020,10 @@ workflows:
           <<: *only-prod
           requires:
             - wait-for-reindex
-      - loadtests:
-          <<: *only-prod
-          requires:
-            - disable-reindex-cron
+      # - loadtests: # TODO 10007 Cleanup: Add back running loadtests after 10007 has been deployed to ustc/prod
+      #     <<: *only-prod
+      #     requires:
+      #       - disable-reindex-cron
       # - smoketests-readonly: # TODO 10007 Cleanup: Add back running readonly smoketests after 10007 has been deployed to ustc/prod
       #     <<: *only-prod
       #     requires:
@@ -1031,7 +1031,7 @@ workflows:
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - loadtests
+            - disable-reindex-cron
       - wait-for-switch:
           <<: *only-prod
           type: approval
