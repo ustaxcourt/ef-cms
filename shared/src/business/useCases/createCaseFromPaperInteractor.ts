@@ -96,10 +96,6 @@ export const createCaseFromPaperInteractor = async (
     {
       ...petitionMetadata,
       applicationForWaiverOfFilingFeeFileId,
-      attachmentToPetitionFileId, // do we need these?
-      corporateDisclosureFileId, // do we need these?
-      petitionFileId, // do we need these?
-      stinFileId, // do we need these?
     },
     { applicationContext },
   ).validate();
