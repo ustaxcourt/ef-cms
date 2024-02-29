@@ -1,3 +1,4 @@
+import { application } from 'express';
 import { state } from '@web-client/presenter/app.cerebral';
 
 async function getDocketEntryFileBuffer(
@@ -33,7 +34,7 @@ export const generateCoversheetAction = async ({
     docketEntryId,
   );
 
-  const coversheetBuffer = await applicationContext
+  const coversheetData = await applicationContext
     .getUseCases()
     .getCoversheetInteractor(applicationContext, {
       docketEntryId,
@@ -43,9 +44,9 @@ export const generateCoversheetAction = async ({
   //get pdflib
   const { PDFDocument } = await applicationContext.getPdfLib();
 
-  console.log('coversheetBuffer', coversheetBuffer);
+  console.log('coversheetData', coversheetData);
   console.log('fileBuffer', fileBuffer);
-  const coverPageDocument = await PDFDocument.load(coversheetBuffer);
+  const coverPageDocument = await PDFDocument.load(coversheetData.pdfData);
   const pdfDoc = await PDFDocument.load(fileBuffer);
 
   const coverPageDocumentPages = await pdfDoc.copyPages(
@@ -56,6 +57,8 @@ export const generateCoversheetAction = async ({
   pdfDoc.insertPage(0, coverPageDocumentPages[0]);
 
   const newPdfData = await pdfDoc.save();
+  const numberOfPages = pdfDoc.getPageCount();
+
   const updatedFile = new File(
     [newPdfData as BlobPart],
     `${docketEntryId}.pdf`,
@@ -63,7 +66,6 @@ export const generateCoversheetAction = async ({
       type: 'application/pdf',
     },
   );
-  // const numberOfPages = pdfDoc.getPageCount();
 
   console.log('GONNA START TO SAVE AGAIN!!!!!!!!!');
 
@@ -75,6 +77,18 @@ export const generateCoversheetAction = async ({
       onUploadProgress: () => {},
     });
   console.log('completed START TO SAVE AGAIN!!!!!!!!!');
+
+  await applicationContext.getUseCases.updateDocketEntriesInteractor(
+    application,
+    {
+      docketEntryId,
+      docketNumber,
+      updatedDocketEntryData: {
+        consolidatedCases: coversheetData.consolidatedCases,
+        numberOfPages,
+      },
+    },
+  );
 
   //append coversheet
   //upload updated file to S3

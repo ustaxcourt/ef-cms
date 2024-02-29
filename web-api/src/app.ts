@@ -177,6 +177,7 @@ import { updateCounselOnCaseLambda } from './lambdas/cases/updateCounselOnCaseLa
 import { updateCourtIssuedDocketEntryLambda } from './lambdas/documents/updateCourtIssuedDocketEntryLambda';
 import { updateCourtIssuedOrderToCaseLambda } from './lambdas/documents/updateCourtIssuedOrderToCaseLambda';
 import { updateDeficiencyStatisticLambda } from './lambdas/cases/updateDeficiencyStatisticLambda';
+import { updateDocketEntriesLambda } from '@web-api/lambdas/cases/updateDocketEntriesLambda';
 import { updateDocketEntryMetaLambda } from './lambdas/documents/updateDocketEntryMetaLambda';
 import { updateDocketEntryWorksheetLambda } from '@web-api/lambdas/pendingMotion/updateDocketEntryWorksheetLambda';
 import { updateOtherStatisticsLambda } from './lambdas/cases/updateOtherStatisticsLambda';
@@ -638,6 +639,11 @@ app.post(
 app.delete(
   '/docket-entry/:docketEntryId/worksheet',
   lambdaWrapper(deleteDocketEntryWorksheetLambda),
+);
+
+app.post(
+  '/docket-entries/:docketNumber/:docketEntryId',
+  lambdaWrapper(updateDocketEntriesLambda),
 );
 /**
  * case-worksheets
