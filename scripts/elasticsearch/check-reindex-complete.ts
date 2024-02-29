@@ -1,4 +1,4 @@
-import { getClient } from '../../../web-api/elasticsearch/client';
+import { getClient } from '../../web-api/elasticsearch/client';
 
 export const areAllReindexTasksFinished = async ({
   environmentName,

@@ -1,8 +1,8 @@
 import { Client } from '@opensearch-project/opensearch';
 import { areAllReindexTasksFinished } from './check-reindex-complete';
-import { getClient } from '../../../web-api/elasticsearch/client';
+import { getClient } from '../../web-api/elasticsearch/client';
 
-jest.mock('../../../web-api/elasticsearch/client', () => ({
+jest.mock('../../web-api/elasticsearch/client', () => ({
   getClient: jest.fn(),
 }));
 const mockedClient = jest.mocked(getClient);

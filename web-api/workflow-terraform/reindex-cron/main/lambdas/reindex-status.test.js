@@ -1,9 +1,9 @@
 const {
   areAllReindexTasksFinished,
-} = require('../../../../../shared/admin-tools/elasticsearch/check-reindex-complete');
+} = require('../../../../../scripts/elasticsearch/check-reindex-complete');
 const { handler } = require('./reindex-status');
 jest.mock(
-  '../../../../../shared/admin-tools/elasticsearch/check-reindex-complete',
+  '../../../../../scripts/elasticsearch/check-reindex-complete',
   () => ({
     areAllReindexTasksFinished: jest.fn(),
     isMigratedClusterFinishedIndexing: jest.fn(),
