@@ -128,10 +128,10 @@ EOF
 
 resource "aws_sns_topic" "bounced_service_emails" {
   name = "bounced_service_emails_${var.environment}"
-} 
+}
 
 resource "aws_sns_topic_policy" "bounced_service_emails" {
-  arn = aws_sns_topic.bounced_service_emails.arn
+  arn    = aws_sns_topic.bounced_service_emails.arn
   policy = data.aws_iam_policy_document.sns_bounced_service_emails_policy.json
 }
 
@@ -161,7 +161,7 @@ data "aws_iam_policy_document" "sns_bounced_service_emails_policy" {
 
     effect = "Allow"
     principals {
-      type        = "Service"
+      type = "Service"
       identifiers = [
         "ses.amazonaws.com"
       ]
@@ -178,4 +178,21 @@ resource "aws_ses_identity_notification_topic" "bounced_service_emails" {
   notification_type        = "Bounce"
   identity                 = aws_ses_email_identity.ses_sender.arn
   include_original_headers = true
+}
+
+resource "aws_ses_receipt_rule_set" "email_forwarding_rule_set" {
+  rule_set_name = "email_forwarding_rule_set"
+}
+
+resource "aws_ses_receipt_rule" "email_forwarding_rule" {
+  name          = "email_forwarding_rule"
+  rule_set_name = aws_ses_receipt_rule_set.email_forwarding_rule_set.rule_set_name
+  # TODO: parameterize 'smoktestEmail@'
+  recipients   = ["smoketestEmail@${aws_ses_domain_identity.main.domain}"]
+  enabled      = true
+  scan_enabled = true
+  s3_action {
+    bucket_name = "smoketest_email_inbox"
+    position    = 1
+  }
 }
