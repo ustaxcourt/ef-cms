@@ -4,7 +4,7 @@ module.exports = {
   ...config,
   entry: {
     'wait-for-workflow':
-      './web-api/workflow-terraform/wait-for-workflow-cron/main/lambdas/wait-for-workflow.js',
+      './web-api/workflow-terraform/wait-for-workflow-cron/main/lambdas/wait-for-workflow.ts',
   },
   output: {
     clean: true,
