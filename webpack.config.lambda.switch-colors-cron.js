@@ -4,7 +4,7 @@ module.exports = {
   ...config,
   entry: {
     'switch-colors-status':
-      './web-api/workflow-terraform/switch-colors-cron/main/lambdas/switch-colors.js',
+      './web-api/workflow-terraform/switch-colors-cron/main/lambdas/switch-colors.ts',
   },
   output: {
     clean: true,

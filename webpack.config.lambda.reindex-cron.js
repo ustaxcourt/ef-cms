@@ -4,7 +4,7 @@ module.exports = {
   ...config,
   entry: {
     'reindex-status':
-      './web-api/workflow-terraform/reindex-cron/main/lambdas/reindex-status.js',
+      './web-api/workflow-terraform/reindex-cron/main/lambdas/reindex-status.ts',
   },
   output: {
     clean: true,

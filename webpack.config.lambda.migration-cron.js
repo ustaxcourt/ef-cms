@@ -4,7 +4,7 @@ module.exports = {
   ...config,
   entry: {
     'migration-status':
-      './web-api/workflow-terraform/migration-cron/main/lambdas/migration-status.js',
+      './web-api/workflow-terraform/migration-cron/main/lambdas/migration-status.ts',
   },
   output: {
     clean: true,

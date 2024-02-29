@@ -4,7 +4,7 @@ module.exports = {
   ...config,
   entry: {
     'glue-job-status':
-      './web-api/workflow-terraform/glue-cron/main/lambdas/glue-job-status.js',
+      './web-api/workflow-terraform/glue-cron/main/lambdas/glue-job-status.ts',
   },
   output: {
     clean: true,
