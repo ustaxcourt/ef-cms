@@ -1,4 +1,3 @@
-import { application } from 'express';
 import { state } from '@web-client/presenter/app.cerebral';
 
 async function getDocketEntryFileBuffer(
@@ -80,7 +79,7 @@ export const generateCoversheetAction = async ({
 
   await applicationContext
     .getUseCases()
-    .updateDocketEntriesInteractor(application, {
+    .updateDocketEntriesInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
       updatedDocketEntryData: {

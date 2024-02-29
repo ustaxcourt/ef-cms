@@ -177,7 +177,7 @@ import { updateCounselOnCaseLambda } from './lambdas/cases/updateCounselOnCaseLa
 import { updateCourtIssuedDocketEntryLambda } from './lambdas/documents/updateCourtIssuedDocketEntryLambda';
 import { updateCourtIssuedOrderToCaseLambda } from './lambdas/documents/updateCourtIssuedOrderToCaseLambda';
 import { updateDeficiencyStatisticLambda } from './lambdas/cases/updateDeficiencyStatisticLambda';
-import { updateDocketEntriesLambda } from './lambdas/cases/updateDocketEntriesLambda';
+import { updateDocketEntriesLambda } from '@web-api/lambdas/cases/updateDocketEntriesLambda';
 import { updateDocketEntryMetaLambda } from './lambdas/documents/updateDocketEntryMetaLambda';
 import { updateDocketEntryWorksheetLambda } from '@web-api/lambdas/pendingMotion/updateDocketEntryWorksheetLambda';
 import { updateOtherStatisticsLambda } from './lambdas/cases/updateOtherStatisticsLambda';
