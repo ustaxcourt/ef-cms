@@ -326,7 +326,7 @@ resource "aws_s3_bucket_public_access_block" "block_quarantine_west" {
 }
 
 resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
-  count  = var.environment == "prod" ? 1 : 0
+  count  = var.environment == "prod" ? 0 : 1
   bucket = aws_s3_bucket.smoketest_email_inbox.bucket
 
   policy = jsonencode({
