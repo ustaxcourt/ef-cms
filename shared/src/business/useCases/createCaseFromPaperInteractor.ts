@@ -92,17 +92,9 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new PaperPetition(
-    {
-      ...petitionMetadata,
-      applicationForWaiverOfFilingFeeFileId,
-      attachmentToPetitionFileId, // do we need these?
-      corporateDisclosureFileId, // do we need these?
-      petitionFileId, // do we need these?
-      stinFileId, // do we need these?
-    },
-    { applicationContext },
-  ).validate();
+  const petitionEntity = new PaperPetition(petitionMetadata, {
+    applicationContext,
+  }).validate();
 
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({
