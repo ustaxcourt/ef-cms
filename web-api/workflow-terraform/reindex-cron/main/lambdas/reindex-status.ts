@@ -1,9 +1,10 @@
 import { approvePendingJob } from '../../../../../shared/admin-tools/circleci/circleci-helper';
 import { areAllReindexTasksFinished } from '../../../../../shared/admin-tools/elasticsearch/check-reindex-complete';
+import type { Handler } from 'aws-lambda';
 
-export const handler = async (_event, context) => {
-  const environmentName = process.env.STAGE;
-  const migrateFlag = process.env.MIGRATE_FLAG;
+export const handler: Handler = async (_event, context) => {
+  const environmentName = process.env.STAGE!;
+  const migrateFlag = process.env.MIGRATE_FLAG!;
   console.log(`Migrate flag is ${migrateFlag}`);
 
   if (migrateFlag === 'true') {
@@ -20,9 +21,9 @@ export const handler = async (_event, context) => {
 
   console.log('Approving CircleCI wait for reindex job');
 
-  const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
+  const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN!;
   const jobName = 'wait-for-reindex';
-  const workflowId = process.env.CIRCLE_WORKFLOW_ID;
+  const workflowId = process.env.CIRCLE_WORKFLOW_ID!;
 
   await approvePendingJob({ apiToken, jobName, workflowId });
   return succeed({ context, results: { isReindexFinished, migrateFlag } });
