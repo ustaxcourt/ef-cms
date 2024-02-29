@@ -35,10 +35,15 @@ export const getCoversheetInteractor = async (
     filingDateUpdated: false,
   });
 
+  console.log('coverSheetData', coverSheetData);
+
   const results = await applicationContext.getDocumentGenerators().coverSheet({
     applicationContext,
     data: coverSheetData,
   });
 
-  return results;
+  return {
+    consolidatedCases: coverSheetData.consolidatedCases,
+    pdfData: results,
+  };
 };
