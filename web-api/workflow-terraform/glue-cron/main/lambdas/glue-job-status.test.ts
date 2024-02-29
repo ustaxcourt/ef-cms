@@ -4,6 +4,7 @@ import {
   cancelWorkflow,
 } from '../../../../../shared/admin-tools/circleci/circleci-helper';
 import { handler } from './glue-job-status';
+import type { Context } from 'aws-lambda';
 
 jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
   approvePendingJob: jest.fn(),
@@ -17,7 +18,7 @@ const getRunStateOfMostRecentJobRun = jest
 const mockContext = {
   fail: jest.fn(),
   succeed: jest.fn(),
-};
+} as unknown as Context;
 
 describe('glue-job-status', () => {
   console.log = () => null;
@@ -31,7 +32,7 @@ describe('glue-job-status', () => {
     getRunStateOfMostRecentJobRun.mockReturnValueOnce(
       Promise.resolve(undefined),
     );
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(mockContext.succeed).toHaveBeenCalledWith({
@@ -43,7 +44,7 @@ describe('glue-job-status', () => {
     getRunStateOfMostRecentJobRun.mockReturnValueOnce(
       Promise.resolve('RUNNING'),
     );
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(mockContext.succeed).toHaveBeenCalledWith({
@@ -55,7 +56,7 @@ describe('glue-job-status', () => {
     getRunStateOfMostRecentJobRun.mockReturnValueOnce(
       Promise.resolve('FAILED'),
     );
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(1);
     expect(mockContext.succeed).toHaveBeenCalledWith({
@@ -67,7 +68,7 @@ describe('glue-job-status', () => {
     getRunStateOfMostRecentJobRun.mockReturnValueOnce(
       Promise.resolve('SUCCEEDED'),
     );
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(1);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(mockContext.succeed).toHaveBeenCalledWith({
