@@ -1,5 +1,4 @@
 import { FileUploadProgressMapType } from '../../../../shared/src/business/entities/EntityConstants';
-import { formatNow } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setProgressForFileUploadAction = ({
@@ -15,7 +14,7 @@ export const setProgressForFileUploadAction = ({
 } => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
-  const startTime = formatNow();
+  const startTime = new Date();
   const sizeOfFiles: Record<string, number> = {};
 
   const calculateTotalSize = () => {
