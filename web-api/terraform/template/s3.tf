@@ -354,13 +354,6 @@ resource "aws_s3_bucket" "smoketest_email_inbox" {
   bucket   = "${var.dns_domain}-email-inbox-${var.environment}-us-east-1"
   acl      = "private"
 
-  cors_rule {
-    allowed_headers = ["Authorization"]
-    allowed_methods = ["GET", "POST"]
-    allowed_origins = ["*"]
-    max_age_seconds = 3000
-  }
-
   versioning {
     enabled = false
   }
