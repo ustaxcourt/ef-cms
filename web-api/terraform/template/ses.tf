@@ -192,7 +192,7 @@ resource "aws_ses_receipt_rule" "email_forwarding_rule" {
   enabled      = true
   scan_enabled = true
   s3_action {
-    bucket_name = "smoketest_email_inbox"
+    bucket_name = aws_s3_bucket.smoketest_email_inbox.bucket
     position    = 1
   }
 }
