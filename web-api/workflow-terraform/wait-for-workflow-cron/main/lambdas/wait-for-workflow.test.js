@@ -1,9 +1,9 @@
-const {
+import {
   approvePendingJob,
   cancelWorkflow,
   getPipelineStatus,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const { handler } = require('./wait-for-workflow');
+} from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import { handler } from './wait-for-workflow';
 
 jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
   approvePendingJob: jest.fn(),
