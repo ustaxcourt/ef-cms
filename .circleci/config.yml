@@ -201,10 +201,6 @@ jobs:
           command: |
             npm run verify-private-elasticsearch -- $ENV
       - run:
-          name: 'Deploy - Verify Cognito Lambda Triggers'
-          command: |
-            npm run verify-cognito-lambda-triggers -- $ENV
-      - run:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
