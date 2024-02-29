@@ -237,7 +237,6 @@
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
     "verify-private-s3-buckets": "./scripts/circleci/verify-private-s3-buckets.sh",
-    "verify-cognito-lambda-triggers": "./scripts/circleci/verify-cognito-lambda-triggers.sh",
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
     "watch": "nodemon -e yml --exec sls offline start"
   },

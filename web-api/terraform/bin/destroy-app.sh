@@ -25,7 +25,6 @@ BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENVIRONMEN
 GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENVIRONMENT}")
 BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENVIRONMENT}")
 GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENVIRONMENT}")
-COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENVIRONMENT}")
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
   SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
@@ -37,7 +36,6 @@ export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
-export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY

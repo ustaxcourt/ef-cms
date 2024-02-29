@@ -91,7 +91,6 @@ if [ "${MIGRATE_FLAG}" == 'false' ]; then
   DESTINATION_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
   BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
   GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
-  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
 
   if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
     SHOULD_ES_ALPHA_EXIST=true
@@ -109,13 +108,11 @@ else
     GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
   else
     GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
     BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
   fi
 fi
 
@@ -151,7 +148,6 @@ export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
 export TF_VAR_bounce_alert_recipients=$BOUNCE_ALERT_RECIPIENTS
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
-export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
 export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
 export TF_VAR_deployment_timestamp=$DEPLOYMENT_TIMESTAMP
