@@ -1,11 +1,12 @@
 import { Case } from '../entities/cases/Case';
-import { DocketEntry } from '../entities/DocketEntry';
-import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
+  CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
+import { DocketEntry } from '../entities/DocketEntry';
+import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -15,6 +16,8 @@ import { UserCase } from '../entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
+
+export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
 const addPetitionDocketEntryToCase = ({
   applicationContext,

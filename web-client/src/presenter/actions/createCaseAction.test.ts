@@ -4,6 +4,7 @@ import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createCaseAction } from './createCaseAction';
 import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
+import { omit } from 'lodash';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -53,6 +54,8 @@ describe('createCaseAction', () => {
       ...getContactPrimary(MOCK_CASE),
     },
   };
+
+  const mockForm = omit(mockPetitionMetadata, 'trialCities');
 
   const { addCoversheetInteractor, createCaseInteractor, generateDocumentIds } =
     applicationContext.getUseCases();
@@ -120,7 +123,7 @@ describe('createCaseAction', () => {
       attachmentToPetitionFileId: '123',
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
-      petitionMetadata: mockPetitionMetadata,
+      petitionMetadata: mockForm,
       stinFileId: '123',
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and CDS
@@ -159,7 +162,7 @@ describe('createCaseAction', () => {
       attachmentToPetitionFileId: '123',
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
-      petitionMetadata: mockPetitionMetadata,
+      petitionMetadata: mockForm,
       stinFileId: '123',
     });
     expect(addCoversheetInteractor).not.toHaveBeenCalled();
