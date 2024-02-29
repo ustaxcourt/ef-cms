@@ -89,7 +89,8 @@ fi
 CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.ts"
 echo "${CONFIG_FILE}"
 
-export CYPRESS_ENV=$ENV
+export CYPRESS_TARGET_ENV=$ENV
+
 if [ -n "${INTEGRATION}" ]; then
   echo "Running integration tests."
   export CYPRESS_TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
