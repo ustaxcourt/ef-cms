@@ -1,32 +1,30 @@
-const AWS = require('aws-sdk');
-const promiseRetry = require('promise-retry');
-const {
-  createApplicationContext,
-} = require('../../../../src/applicationContext');
-const {
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { SQSClient } from '@aws-sdk/client-sqs';
+
+import { chunk } from 'lodash';
+import { createApplicationContext } from '../../../../src/applicationContext';
+import {
   createISODateString,
   dateStringsCompared,
-} = require('../../../../../shared/src/business/utilities/DateHandler');
-const {
-  migrateItems: validationMigration,
-} = require('./migrations/0000-validate-all-items');
-const { chunk } = require('lodash');
-const { createLogger } = require('../../../../src/createLogger');
-const { migrationsToRun } = require('./migrationsToRun');
+} from '../../../../../shared/src/business/utilities/DateHandler';
+import { createLogger } from '../../../../src/createLogger';
+import { migrationsToRun } from './migrationsToRun';
+import { promiseRetry } from 'promise-retry';
+import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
-const dynamodb = new AWS.DynamoDB({
-  maxRetries: 10,
+const dynamodb = new DynamoDBClient({
+  maxAttempts: 10,
   region: 'us-east-1',
-  retryDelayOptions: { base: 300 },
 });
-const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-  service: dynamodb,
+
+const dynamoDbDocumentClient = DynamoDBDocument.from(dynamodb, {
+  marshallOptions: { removeUndefinedValues: true },
 });
-const sqs = new AWS.SQS({ region: 'us-east-1' });
+
+const sqs = new SQSClient({ region: 'us-east-1' });
 
 const scanTableSegment = async (
   applicationContext,
