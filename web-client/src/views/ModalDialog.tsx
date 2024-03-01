@@ -116,6 +116,7 @@ export const ModalDialog = ({
         <dialog
           open
           className="modal-screen"
+          data-testid="modal-dialog"
           role="dialog"
           onClick={blurDialog}
         >
