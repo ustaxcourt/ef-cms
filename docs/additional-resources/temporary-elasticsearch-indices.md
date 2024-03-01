@@ -9,14 +9,34 @@ Sometimes we need to query against information that isn't indexed in OpenSearch.
      ```bash
      . scripts/env/set-env.zsh myenv
      ```
-  1. Run the `create-temporary-indices` script to create indices from the locally-defined mappings:
+  1. Run the `create-temporary-indices` script to create the new index (or indices, if you modified multiple mappings) from the locally-defined mappings:
      ```bash
      npx ts-node --transpile-only scripts/elasticsearch/create-temporary-indices.ts
      ```
-  1. You can now query against your temporary index (or indices, if you modified multiple mappings) by writing a new script that utilizes [searchClient](../../web-api/src/persistence/elasticsearch/searchClient.ts)'s `search` or `searchAll`.
+  1. You can now query against your temporary index (or indices) by utilizing [searchClient](../../web-api/src/persistence/elasticsearch/searchClient.ts)'s `search` or `searchAll`:
+     ```typescript
+     import { createApplicationContext } from '@web-api/applicationContext';
+     import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+
+     // eslint-disable-next-line @typescript-eslint/no-floating-promises
+     (async () => {
+       const applicationContext = createApplicationContext({});
+       const { results }: { results: RawDocketEntry[] } = await searchAll({
+         applicationContext,
+         searchParameters: {
+           body: { query: {} },
+           index: 'efcms-docket-entry',
+         },
+       });
+       console.log('Docket Number,Index,Document Title');
+       results.map(de => { console.log(`"${de.docketNumber}","${de.index}","${de.documentTitle}"`); });
+     })();
+     ```
+     The `searchClient` will automatically transform the index name from the provided alias (`efcms-docket-entry` in this example) to the newly-created index based on the hash of your locally-defined mappings.
 
 ### Removing Temporary OpenSearch Indices from Deployed Environments
 
+  1. Restore all [mappings](../../web-api/elasticsearch) files to an unmodified state.
   1. Use the [environment switcher](./environment-switcher.md) to switch to the desired deployed environment:
      ```bash
      . scripts/env/set-env.zsh myenv
