@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocument, PutCommandOutput } from '@aws-sdk/lib-dynamodb';
 import { SQSClient } from '@aws-sdk/client-sqs';
 
 import { chunk } from 'lodash';
@@ -10,9 +10,9 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { createLogger } from '../../../../src/createLogger';
 import { migrationsToRun } from './migrationsToRun';
-import { promiseRetry } from 'promise-retry';
 import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
-
+import promiseRetry from 'promise-retry';
+// import type { EfcmsEntity } from './migration';
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
 const dynamodb = new DynamoDBClient({
@@ -33,7 +33,7 @@ const scanTableSegment = async (
   ranMigrations,
 ) => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey: Record<string, any> | undefined;
   while (hasMoreResults) {
     hasMoreResults = false;
 
@@ -46,7 +46,6 @@ const scanTableSegment = async (
         TableName: process.env.SOURCE_TABLE,
         TotalSegments: totalSegments,
       })
-      .promise()
       .then(async results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
@@ -74,8 +73,16 @@ const hasMigrationRan = async key => {
 };
 
 export const migrateRecords = async (
-  applicationContext,
-  { documentClient, items, ranMigrations = {} },
+  applicationContext: IApplicationContext,
+  {
+    documentClient,
+    items,
+    ranMigrations,
+  }: {
+    documentClient: DynamoDBDocument;
+    items: Record<string, any>[];
+    ranMigrations: { [key: string]: boolean };
+  },
 ) => {
   for (let { key, script } of migrationsToRun) {
     if (!ranMigrations[key]) {
@@ -91,8 +98,16 @@ export const migrateRecords = async (
 };
 
 export const processItems = async (
-  applicationContext,
-  { documentClient, items, ranMigrations },
+  applicationContext: IApplicationContext,
+  {
+    documentClient,
+    items,
+    ranMigrations,
+  }: {
+    documentClient: DynamoDBDocument;
+    items: Record<string, any>[];
+    ranMigrations: { [key: string]: boolean };
+  },
 ) => {
   try {
     items = await migrateRecords(applicationContext, {
@@ -107,7 +122,7 @@ export const processItems = async (
 
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let aChunk of chunks) {
-    const promises = [];
+    const promises: Promise<string | PutCommandOutput>[] = [];
     for (let item of aChunk) {
       promises.push(
         promiseRetry(retry => {
@@ -117,7 +132,6 @@ export const processItems = async (
               Item: item,
               TableName: process.env.DESTINATION_TABLE,
             })
-            .promise()
             .catch(e => {
               if (e.message.includes('The conditional request failed')) {
                 applicationContext.logger.info(
