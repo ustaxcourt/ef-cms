@@ -24,23 +24,23 @@ export const createCaseAction = async ({
 
   let caseDetail;
 
-  const {
-    attachmentToPetitionFileId,
-    corporateDisclosureFileId,
-    petitionFileId,
-    stinFileId,
-  } = await applicationContext
-    .getUseCases()
-    .generateDocumentIds(applicationContext, {
-      attachmentToPetitionUploadProgress:
-        fileUploadProgressMap.attachmentToPetition,
-      corporateDisclosureUploadProgress:
-        fileUploadProgressMap.corporateDisclosure,
-      petitionUploadProgress: fileUploadProgressMap.petition,
-      stinUploadProgress: fileUploadProgressMap.stin,
-    });
-
   try {
+    const {
+      attachmentToPetitionFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
+      stinFileId,
+    } = await applicationContext
+      .getUseCases()
+      .generateDocumentIds(applicationContext, {
+        attachmentToPetitionUploadProgress:
+          fileUploadProgressMap.attachmentToPetition,
+        corporateDisclosureUploadProgress:
+          fileUploadProgressMap.corporateDisclosure,
+        petitionUploadProgress: fileUploadProgressMap.petition,
+        stinUploadProgress: fileUploadProgressMap.stin,
+      });
+
     caseDetail = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
