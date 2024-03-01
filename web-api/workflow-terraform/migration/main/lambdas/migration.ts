@@ -3,8 +3,7 @@ import { DynamoDBDocument, PutCommandOutput } from '@aws-sdk/lib-dynamodb';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
-import { unmarshall } from '@aws-sdk/util-dynamodb';
-import type { AttributeValue, DynamoDBStreamEvent } from 'aws-lambda';
+import type { AttributeValue, DynamoDBStreamEvent, Handler } from 'aws-lambda';
 
 type dynamoRecord = {
   [key: string]: AttributeValue;
@@ -70,14 +69,16 @@ export const getFilteredGlobalEvents = (
   ).map(item => item.dynamodb!.NewImage!);
 };
 
-const getRemoveEvents = event => {
+const getRemoveEvents = (
+  event: DynamoDBStreamEvent,
+): dynamoRecord[] | undefined => {
   const { Records } = event;
-  return Records.filter(item => item.eventName === 'REMOVE').map(item =>
-    unmarshall(item.dynamodb.OldImage),
-  );
+  return Records.filter(
+    item => item.eventName === 'REMOVE' && !!item.dynamodb?.OldImage,
+  ).map(item => item.dynamodb!.OldImage!);
 };
 
-export const handler = async (event, context) => {
+export const handler: Handler = async (event, context) => {
   const applicationContext = createApplicationContext(
     {},
     createLogger({
@@ -92,22 +93,26 @@ export const handler = async (event, context) => {
     }),
   );
   const items = getFilteredGlobalEvents(event);
-  await processItems(applicationContext, {
-    documentClient: docClient,
-    items,
-    migrateRecords: migrations,
-  });
+  if (items) {
+    await processItems(applicationContext, {
+      documentClient: docClient,
+      items,
+      migrateRecords: migrations,
+    });
+  }
 
   const removeEvents = getRemoveEvents(event);
-  await Promise.all(
-    removeEvents.map(item =>
-      docClient.delete({
-        Key: {
-          pk: item.pk,
-          sk: item.sk,
-        },
-        TableName: process.env.DESTINATION_TABLE,
-      }),
-    ),
-  );
+  if (removeEvents) {
+    await Promise.all(
+      removeEvents.map(item =>
+        docClient.delete({
+          Key: {
+            pk: item.pk,
+            sk: item.sk,
+          },
+          TableName: process.env.DESTINATION_TABLE,
+        }),
+      ),
+    );
+  }
 };
