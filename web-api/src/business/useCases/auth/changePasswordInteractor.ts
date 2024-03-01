@@ -1,7 +1,4 @@
-import {
-  AuthFlowType,
-  ChallengeNameType,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { ChallengeNameType } from '@aws-sdk/client-cognito-identity-provider';
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
 import { InvalidEntityError, NotFoundError } from '@web-api/errors/errors';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
@@ -47,14 +44,10 @@ export const changePasswordInteractor = async (
 
     if (tempPassword) {
       const initiateAuthResult = await applicationContext
-        .getCognito()
-        .initiateAuth({
-          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-          AuthParameters: {
-            PASSWORD: tempPassword,
-            USERNAME: email,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
+        .getUserGateway()
+        .initiateAuth(applicationContext, {
+          email,
+          password: tempPassword,
         });
 
       if (

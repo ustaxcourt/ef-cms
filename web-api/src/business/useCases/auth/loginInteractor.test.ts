@@ -22,7 +22,7 @@ describe('loginInteractor', () => {
       ChallengeName: ChallengeNameType.NEW_PASSWORD_REQUIRED,
     };
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockResolvedValue(mockNewPasswordRequiredResponse);
 
     await expect(
@@ -41,7 +41,7 @@ describe('loginInteractor', () => {
       message: '',
     });
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockRejectedValue(mockWrongEmailOrPasswordError);
 
     await expect(
@@ -60,7 +60,7 @@ describe('loginInteractor', () => {
       message: 'Password attempts exceeded',
     });
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockRejectedValue(mockTooManyAttemptsError);
 
     await expect(
@@ -79,7 +79,7 @@ describe('loginInteractor', () => {
       message: '',
     });
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockRejectedValue(mockWrongEmailOrPasswordError);
 
     await expect(
@@ -97,7 +97,7 @@ describe('loginInteractor', () => {
       'Totally unexpected, unhandled error.',
     );
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockRejectedValue(mockWrongEmailOrPasswordError);
 
     await expect(
@@ -108,11 +108,11 @@ describe('loginInteractor', () => {
     ).rejects.toThrow(mockWrongEmailOrPasswordError);
   });
 
-  it('should throw an error if initiateAuth does not return access, id, and refresh tokens', async () => {
+  it('should throw an error when initiateAuth does not return access, id, and refresh tokens', async () => {
     const mockEmail = 'petitioner@example.com';
     const mockPassword = 'MyPa$Sword!';
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockResolvedValue({ AuthenticationResult: {} });
 
     await expect(
@@ -131,7 +131,7 @@ describe('loginInteractor', () => {
       message: '',
     });
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockRejectedValue(mockWrongEmailOrPasswordError);
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
       email: mockEmail,
@@ -154,7 +154,7 @@ describe('loginInteractor', () => {
       message: '',
     });
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockRejectedValue(mockWrongEmailOrPasswordError);
     applicationContext
       .getUserGateway()
@@ -182,7 +182,7 @@ describe('loginInteractor', () => {
       },
     };
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockResolvedValue(mockSuccessFullLoginResponse);
 
     const result = await loginInteractor(applicationContext, {
