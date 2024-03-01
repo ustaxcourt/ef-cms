@@ -49,8 +49,8 @@ const putMessageInOutbox = async ({
   });
 
   const buckets = [
-    { bucket: 'section', identifier: message.fromSection },
     { bucket: 'user', identifier: message.fromUserId },
+    { bucket: 'section', identifier: message.fromSection },
   ];
 
   await Promise.all(
@@ -82,8 +82,8 @@ const putMessageInCompletedBox = async ({
   });
 
   const buckets = [
-    { bucket: 'section', identifier: message.completedBySection },
     { bucket: 'user', identifier: message.completedByUserId },
+    { bucket: 'section', identifier: message.completedBySection },
   ];
 
   await Promise.all(
