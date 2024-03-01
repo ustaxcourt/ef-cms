@@ -13,6 +13,7 @@ const config: Config = {
     '!coverage/**',
     '!circleci/judge/bulkImportJudgeUsers.ts',
     '!dynamo/set-local-migration-complete-marker.ts',
+    '!elasticsearch/create-temporary-indices.ts',
     '!elasticsearch/ready-cluster-for-migration.ts',
     '!elasticsearch/reindex.ts',
     '!glue/**',
