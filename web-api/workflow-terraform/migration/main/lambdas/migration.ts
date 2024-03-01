@@ -1,10 +1,10 @@
-import { AttributeValue, DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument, PutCommandOutput } from '@aws-sdk/lib-dynamodb';
-import { DynamoDBStreamEvent } from 'aws-lambda';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
+import type { AttributeValue, DynamoDBStreamEvent } from 'aws-lambda';
 
 type dynamoRecord = {
   [key: string]: AttributeValue;
