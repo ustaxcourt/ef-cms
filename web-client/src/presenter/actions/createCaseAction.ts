@@ -23,6 +23,7 @@ export const createCaseAction = async ({
   form.contactPrimary.email = user.email;
 
   let caseDetail;
+  let stinFile;
 
   try {
     const {
@@ -41,6 +42,8 @@ export const createCaseAction = async ({
         stinUploadProgress: fileUploadProgressMap.stin,
       });
 
+    stinFile = stinFileId;
+
     caseDetail = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
@@ -48,7 +51,7 @@ export const createCaseAction = async ({
         corporateDisclosureFileId,
         petitionFileId,
         petitionMetadata: form,
-        stinFileId,
+        stinFileId: stinFile,
       });
   } catch (err) {
     return path.error();
@@ -68,7 +71,7 @@ export const createCaseAction = async ({
     .map(d => d.docketEntryId);
 
   // for security reasons, the STIN is not in the API response, but we already know the docketEntryId
-  documentsThatNeedCoverSheet.push(stinFileId);
+  documentsThatNeedCoverSheet.push(stinFile);
 
   await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 
