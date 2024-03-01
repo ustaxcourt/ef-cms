@@ -50,7 +50,7 @@ const scanTableSegment = async (
       .then(async results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        await exports.processItems(applicationContext, {
+        await processItems(applicationContext, {
           documentClient: dynamoDbDocumentClient,
           items: results.Items,
           ranMigrations,
@@ -73,7 +73,7 @@ const hasMigrationRan = async key => {
   return { [key]: !!Item };
 };
 
-exports.migrateRecords = async (
+export const migrateRecords = async (
   applicationContext,
   { documentClient, items, ranMigrations = {} },
 ) => {
@@ -90,12 +90,12 @@ exports.migrateRecords = async (
   return items;
 };
 
-exports.processItems = async (
+export const processItems = async (
   applicationContext,
   { documentClient, items, ranMigrations },
 ) => {
   try {
-    items = await exports.migrateRecords(applicationContext, {
+    items = await migrateRecords(applicationContext, {
       documentClient,
       items,
       ranMigrations,
@@ -136,7 +136,7 @@ exports.processItems = async (
   }
 };
 
-exports.handler = async (event, context) => {
+export const handler = async (event, context) => {
   const applicationContext = createApplicationContext(
     {},
     createLogger({
