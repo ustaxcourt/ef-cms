@@ -1,4 +1,4 @@
-import { Api, Function } from 'sst/constructs';
+import { Api, Function, WebSocketApi } from 'sst/constructs';
 import { Role } from 'aws-cdk-lib/aws-iam';
 import { SSTConfig } from 'sst';
 
@@ -63,6 +63,45 @@ export default {
   stacks(app) {
     app.stack(function Site({ stack }) {
       const role = Role.fromRoleName(stack, 'lambda_role', 'lambda_role_exp5');
+      const authRole = Role.fromRoleName(
+        stack,
+        'websocket_auth_role',
+        'authorizer_lambda_role_exp5',
+      );
+
+      const websocket = new WebSocketApi(stack, 'WebsocketApi', {
+        authorizer: {
+          function: new Function(stack, 'WebsocketAuthorizer', {
+            environment,
+            handler:
+              'web-api/terraform/template/lambdas/websocket-authorizer.handler',
+            role: authRole,
+          }),
+          identitySource: ['route.request.querystring.token'],
+          type: 'lambda',
+        },
+        defaults: {
+          function: {
+            environment,
+            nodejs: {
+              esbuild: {
+                loader: {
+                  '.node': 'file',
+                },
+              },
+            },
+            role,
+          },
+        },
+        routes: {
+          $connect:
+            'web-api/terraform/template/lambdas/websockets.connectHandler',
+          $default:
+            'web-api/terraform/template/lambdas/websockets.defaultHandler',
+          $disconnect:
+            'web-api/terraform/template/lambdas/websockets.disconnectHandler',
+        },
+      });
 
       const api = new Api(stack, 'Api', {
         authorizers: {
@@ -77,7 +116,6 @@ export default {
         },
         defaults: {
           function: {
-            environment,
             nodejs: {
               esbuild: {
                 loader: {
@@ -101,6 +139,7 @@ export default {
       // Show the API endpoint in the output
       stack.addOutputs({
         ApiEndpoint: api.url,
+        WebsocketEndpoint: websocket.url,
       });
     });
   },
