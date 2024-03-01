@@ -58,7 +58,6 @@ const putMessageInOutbox = async ({
       put({
         Item: {
           ...message,
-          gsi1pk: `message|${message.parentMessageId}`,
           pk: `message|outbox|${bucket}|${identifier}`,
           sk,
           ttl: ttl.expirationTimestamp,
@@ -91,7 +90,6 @@ const putMessageInCompletedBox = async ({
       put({
         Item: {
           ...message,
-          gsi1pk: `message|${message.parentMessageId}`,
           pk: `message|completed|${bucket}|${identifier}`,
           sk: message.completedAt!,
           ttl: ttl.expirationTimestamp,
