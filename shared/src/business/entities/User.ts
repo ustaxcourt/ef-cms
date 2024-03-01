@@ -18,7 +18,7 @@ export class User extends JoiValidationEntity {
   public email?: string;
   public name: string;
   public pendingEmail?: string;
-  public role: string;
+  public role: Role;
   public token?: string;
   public userId: string;
   public isUpdatingInformation?: boolean;
