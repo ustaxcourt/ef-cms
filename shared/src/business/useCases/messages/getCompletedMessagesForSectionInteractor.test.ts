@@ -57,7 +57,7 @@ describe('getCompletedMessagesForSectionInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCompletedSectionInboxMessages.mockReturnValue([messageData]);
+      .getCompletedMessages.mockReturnValue([messageData]);
 
     const returnedMessages = await getCompletedMessagesForSectionInteractor(
       applicationContext,
@@ -67,9 +67,12 @@ describe('getCompletedMessagesForSectionInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .getCompletedSectionInboxMessages,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().getCompletedMessages,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      bucket: 'section',
+      identifier: DOCKET_SECTION,
+    });
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

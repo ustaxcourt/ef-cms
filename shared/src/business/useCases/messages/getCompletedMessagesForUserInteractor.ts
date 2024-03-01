@@ -25,9 +25,10 @@ export const getCompletedMessagesForUserInteractor = async (
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getUserCompletedMessages({
+    .getCompletedMessages({
       applicationContext,
-      userId,
+      bucket: 'user',
+      identifier: userId,
     });
 
   return MessageResult.validateRawCollection(messages, {
