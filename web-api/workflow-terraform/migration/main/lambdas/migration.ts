@@ -5,7 +5,7 @@ import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
 import type { AttributeValue, DynamoDBStreamEvent, Handler } from 'aws-lambda';
 
-type dynamoRecord = {
+type EfcmsEntity = {
   [key: string]: AttributeValue;
 };
 
@@ -18,7 +18,7 @@ type migrationsCallback = {
       ranMigrations,
     }: {
       documentClient: DynamoDBDocument;
-      items: dynamoRecord[];
+      items: EfcmsEntity[];
       ranMigrations?: {};
     },
   ): Promise<any>;
@@ -41,7 +41,7 @@ export const processItems = async (
     migrateRecords,
   }: {
     documentClient: DynamoDBDocument;
-    items: dynamoRecord[];
+    items: EfcmsEntity[];
     migrateRecords: migrationsCallback;
   },
 ): Promise<void> => {
@@ -62,7 +62,7 @@ export const processItems = async (
 
 export const getFilteredGlobalEvents = (
   event: DynamoDBStreamEvent,
-): dynamoRecord[] | undefined => {
+): EfcmsEntity[] | undefined => {
   const { Records } = event;
   return Records.filter(
     item => item.eventName !== 'REMOVE' && !!item.dynamodb?.NewImage,
@@ -71,7 +71,7 @@ export const getFilteredGlobalEvents = (
 
 const getRemoveEvents = (
   event: DynamoDBStreamEvent,
-): dynamoRecord[] | undefined => {
+): EfcmsEntity[] | undefined => {
   const { Records } = event;
   return Records.filter(
     item => item.eventName === 'REMOVE' && !!item.dynamodb?.OldImage,
