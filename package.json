@@ -247,7 +247,8 @@
     "verify-private-s3-buckets": "./scripts/circleci/verify-private-s3-buckets.sh",
     "verify-cognito-lambda-triggers": "./scripts/circleci/verify-cognito-lambda-triggers.sh",
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
-    "watch": "nodemon -e yml --exec sls offline start"
+    "watch": "nodemon -e yml --exec sls offline start",
+    "dev": "sst bind next dev"
   },
   "overrides": {
     "axios": "$axios",
@@ -378,6 +379,9 @@
     "utf8": "3.0.0",
     "webpack": "5.90.1",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "5.0.1"
+    "webpack-dev-server": "5.0.1",
+    "sst": "^2.40.3",
+    "aws-cdk-lib": "2.124.0",
+    "constructs": "10.3.0"
   }
 }

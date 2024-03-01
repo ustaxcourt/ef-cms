@@ -107,6 +107,8 @@ export const getCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
+  console.log('we are here');
+
   const caseRecord = decorateForCaseStatus(
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
@@ -124,10 +126,13 @@ export const getCaseInteractor = async (
 
   const currentUser = applicationContext.getCurrentUser();
 
+  console.log('currentUser', currentUser);
+
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
   );
+
   if (!isAuthorizedToGetCase) {
     const petitioner = getPetitionerById(caseRecord, currentUser.userId);
     if (petitioner) {

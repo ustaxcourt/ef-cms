@@ -70,3 +70,6 @@ metadata.json
 metadata-public.json
 stats.html
 other/
+
+# sst
+.sst
