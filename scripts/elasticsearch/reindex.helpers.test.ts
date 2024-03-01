@@ -1,8 +1,12 @@
+import * as checkReindexComplete from '../../shared/admin-tools/elasticsearch/check-reindex-complete';
 import { Client } from '@opensearch-project/opensearch';
 import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { mockDifferentExistingMappings } from './reindex.helpers.test.helpers';
-import { reindexIfNecessary } from './reindex.helpers';
+import {
+  reindexIfNecessary,
+  waitForReindexTasksToComplete,
+} from './reindex.helpers';
 
 const mockAliases = elasticsearchIndexes.map(index => {
   return {
@@ -20,6 +24,11 @@ const mockedClient = {
 jest.mock('../../web-api/elasticsearch/client', () => ({
   getClient: jest.fn().mockReturnValue(mockedClient),
 }));
+
+jest.mock('../../shared/admin-tools/elasticsearch/check-reindex-complete');
+const areAllReindexTasksFinished = jest
+  .spyOn(checkReindexComplete, 'areAllReindexTasksFinished')
+  .mockImplementation(jest.fn());
 
 describe('reindexIfNecessary', () => {
   it('retrieves a list of existing aliases', async () => {
@@ -80,5 +89,18 @@ describe('reindexIfNecessary', () => {
       },
       wait_for_completion: false,
     });
+  });
+});
+
+describe('waitForReindexTasksToComplete', () => {
+  beforeEach(() => {
+    process.env.ENV = 'jest';
+  });
+  it('waits for reindex tasks to complete', async () => {
+    areAllReindexTasksFinished
+      .mockResolvedValueOnce(false)
+      .mockResolvedValueOnce(true);
+    await waitForReindexTasksToComplete({ environmentName: process.env.ENV! });
+    expect(areAllReindexTasksFinished).toHaveBeenCalledTimes(2);
   });
 });
