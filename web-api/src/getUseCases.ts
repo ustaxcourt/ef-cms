@@ -130,7 +130,6 @@ import { getTrialSessionsForJudgeActivityReportInteractor } from '../../shared/s
 import { getTrialSessionsForJudgeInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionsForJudgeInteractor';
 import { getTrialSessionsInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor';
 import { getUploadPolicyInteractor } from '../../shared/src/business/useCases/getUploadPolicyInteractor';
-import { getUserByIdInteractor } from '../../shared/src/business/useCases/getUserByIdInteractor';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/business/useCases/caseNote/getUserCaseNoteForCasesInteractor';
 import { getUserCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor';
 import { getUserInteractor } from '../../shared/src/business/useCases/getUserInteractor';
@@ -344,7 +343,6 @@ const useCases = {
   getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
   getUploadPolicyInteractor,
-  getUserByIdInteractor,
   getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
   getUserInteractor,
