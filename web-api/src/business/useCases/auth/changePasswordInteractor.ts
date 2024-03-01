@@ -135,14 +135,12 @@ export const changePasswordInteractor = async (
         Username: email,
       });
 
-      const result = await applicationContext.getCognito().initiateAuth({
-        AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-        AuthParameters: {
-          PASSWORD: password,
-          USERNAME: email,
-        },
-        ClientId: applicationContext.environment.cognitoClientId,
-      });
+      const result = await applicationContext
+        .getUserGateway()
+        .initiateAuth(applicationContext, {
+          email,
+          password,
+        });
 
       if (
         !result.AuthenticationResult?.AccessToken ||
