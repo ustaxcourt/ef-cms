@@ -69,4 +69,49 @@ describe('getDocumentQCForSectionInteractor', () => {
         .calls[0][0].judgeUserName,
     ).toEqual('Ashford');
   });
+
+  it('queries completed work items when box is outbox', async () => {
+    await getDocumentQCForSectionInteractor(applicationContext, {
+      box: 'outbox',
+      section: DOCKET_SECTION,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCForSection,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCServedForSection,
+    ).toHaveBeenCalledWith({ applicationContext, section: DOCKET_SECTION });
+  });
+
+  it('queries inProgress work items when box is inProgress', async () => {
+    await getDocumentQCForSectionInteractor(applicationContext, {
+      box: 'inProgress',
+      section: DOCKET_SECTION,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCForSection,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      box: 'inProgress',
+      section: DOCKET_SECTION,
+    });
+  });
+
+  it('throws an error if an invalid box was specified', async () => {
+    await expect(
+      getDocumentQCForSectionInteractor(applicationContext, {
+        box: 'cardboard' as any,
+        section: DOCKET_SECTION,
+      }),
+    ).rejects.toThrow();
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCForSection,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCServedForSection,
+    ).not.toHaveBeenCalled();
+  });
 });

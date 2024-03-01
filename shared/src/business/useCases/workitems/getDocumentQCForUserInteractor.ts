@@ -1,10 +1,9 @@
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { RawWorkItem, WorkItem } from '../../entities/WorkItem';
-import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  * getDocumentQCInboxForUserInteractor
@@ -30,9 +29,6 @@ export const getDocumentQCForUserInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
   let workItems: RawWorkItem[] = [];
 
   if (box === 'inbox' || box === 'inProgress') {
@@ -43,11 +39,6 @@ export const getDocumentQCForUserInteractor = async (
         box,
         userId,
       });
-    workItems = workItems.filter(
-      workItem =>
-        workItem.assigneeId === user.userId &&
-        workItem.section === user.section,
-    );
   } else if (box === 'outbox') {
     workItems = await applicationContext
       .getPersistenceGateway()
@@ -55,10 +46,8 @@ export const getDocumentQCForUserInteractor = async (
         applicationContext,
         userId,
       });
-
-    workItems = workItems.filter(workItem =>
-      user.role === ROLES.petitionsClerk ? !!workItem.section : true,
-    );
+  } else {
+    throw new InvalidRequest('Did not receive a valid box to query');
   }
 
   return WorkItem.validateRawCollection(workItems, {

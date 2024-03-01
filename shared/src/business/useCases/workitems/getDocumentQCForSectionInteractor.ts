@@ -2,12 +2,12 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '../../entities/EntityConstants';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { RawWorkItem, WorkItem } from '../../entities/WorkItem';
-import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  *
@@ -50,13 +50,15 @@ export const getDocumentQCForSectionInteractor = async (
         judgeUserName,
         section: sectionToShow,
       });
-  } else {
+  } else if (box === 'outbox') {
     workItems = await applicationContext
       .getPersistenceGateway()
       .getDocumentQCServedForSection({
         applicationContext,
         section: sectionToShow,
       });
+  } else {
+    throw new InvalidRequest('Did not receive a valid box to query');
   }
 
   return WorkItem.validateRawCollection(workItems, {

@@ -3,6 +3,7 @@ import {
   DOCKET_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
+import { InvalidRequest } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { getDocumentQCForUserInteractor } from './getDocumentQCForUserInteractor';
@@ -24,10 +25,7 @@ describe('getDocumentQCForUserInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocumentQCForUser.mockReturnValue([workItem]);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
   });
 
   it('should throw an error when the user does not have access retrieve work items', async () => {
@@ -44,23 +42,7 @@ describe('getDocumentQCForUserInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should fetch the user from persistence', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    await getDocumentQCForUserInteractor(applicationContext, {
-      box: 'inbox',
-      userId: docketClerkUser.userId,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().getUserById.mock.calls[0][0]
-        .userId,
-    ).toEqual(docketClerkUser.userId);
-  });
-
   it('should query workItems that are associated with the provided userId', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     await getDocumentQCForUserInteractor(applicationContext, {
       box: 'inbox',
       userId: docketClerkUser.userId,
@@ -72,12 +54,41 @@ describe('getDocumentQCForUserInteractor', () => {
     ).toEqual(docketClerkUser.userId);
   });
 
-  it('should filter the workItems for the provided user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
+  it('queries workItems that are in the provided box', async () => {
     await getDocumentQCForUserInteractor(applicationContext, {
       box: 'inbox',
       userId: docketClerkUser.userId,
     });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCForUser.mock
+        .calls[0][0].box,
+    ).toEqual('inbox');
+  });
+
+  it('queries the for completed work items if the provided box is outbox', async () => {
+    await getDocumentQCForUserInteractor(applicationContext, {
+      box: 'outbox',
+      userId: docketClerkUser.userId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCForUser,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCServedForUser,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      userId: docketClerkUser.userId,
+    });
+  });
+
+  it('throws an error if an invalid box is provided', async () => {
+    await expect(
+      getDocumentQCForUserInteractor(applicationContext, {
+        box: 'cardboard' as any,
+        userId: docketClerkUser.userId,
+      }),
+    ).rejects.toThrow(InvalidRequest);
   });
 });
