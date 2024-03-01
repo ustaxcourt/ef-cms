@@ -65,8 +65,6 @@ export const generateCoversheetAction = async ({
     },
   );
 
-  console.log('GONNA START TO SAVE AGAIN!!!!!!!!!');
-
   await applicationContext
     .getUseCases()
     .uploadDocumentInteractor(applicationContext, {
@@ -74,7 +72,6 @@ export const generateCoversheetAction = async ({
       key: docketEntryId,
       onUploadProgress: () => {},
     });
-  console.log('completed START TO SAVE AGAIN!!!!!!!!!', coversheetData);
 
   await applicationContext
     .getUseCases()

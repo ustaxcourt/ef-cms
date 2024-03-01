@@ -16,8 +16,6 @@ export const updateDocketEntriesInteractor = async (
     };
   },
 ) => {
-  console.log('****************updatedDocketEntryData', updatedDocketEntryData);
-
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({

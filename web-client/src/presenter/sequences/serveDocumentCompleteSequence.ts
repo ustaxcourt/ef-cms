@@ -18,12 +18,7 @@ export const serveDocumentCompleteSequence = [
   isCoversheetNeededAction,
   {
     no: [],
-    yes: [generateCoversheetAction], //addcover down adds reupload
-    // localGenerate: [generateCoversheetOnClientAction]
-    //get cover from backend
-    //get original file just uploaded
-    //front end append it to document
-    //reupload
+    yes: [generateCoversheetAction],
   },
   unsetWaitingForResponseAction,
   setAlertSuccessAction,

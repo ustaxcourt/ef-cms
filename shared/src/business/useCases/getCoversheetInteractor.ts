@@ -11,10 +11,6 @@ export const getCoversheetInteractor = async (
     docketNumber: string;
   },
 ) => {
-  console.log('getCoversheetInteractor', {
-    docketEntryId,
-    docketNumber,
-  });
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -34,8 +30,6 @@ export const getCoversheetInteractor = async (
     docketEntryEntity,
     filingDateUpdated: false,
   });
-
-  console.log('coverSheetData', coverSheetData);
 
   const results = await applicationContext.getDocumentGenerators().coverSheet({
     applicationContext,

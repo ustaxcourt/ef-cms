@@ -2,15 +2,6 @@ import { Case } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import { generateCoverSheetData } from './generateCoverSheetData';
 
-/**
- * a helper function which creates a coversheet, prepends it to a pdf, and returns the new pdf
- * @param {object} options the providers object
- * @param {object} options.applicationContext the application context
- * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
- * @param {object} options.docketEntryEntity the docket entry entity we are creating the cover for
- * @param {object} options.pdfData the original document pdf data
- * @returns {object} the new pdf with a coversheet attached
- */
 export const addCoverToPdf = async ({
   applicationContext,
   caseEntity,
@@ -72,18 +63,3 @@ export const addCoverToPdf = async ({
     pdfData: newPdfData,
   };
 };
-
-// //endpoint
-// //get pdf coversheet
-// caseEntity = getCaseByDocket (docket)
-// const coverSheetData = await generateCoverSheetData({
-// 	applicationContext,
-// 	caseEntity,
-// });
-
-// return await applicationContext
-// .getDocumentGenerators()
-// .coverSheet({
-// 	applicationContext,
-// 	data: coverSheetData,
-// });
