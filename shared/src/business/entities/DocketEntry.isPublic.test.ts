@@ -187,6 +187,23 @@ describe('DocketEntry isPublic', () => {
               expect(isPublic).toEqual(false);
             },
           );
+
+          it('is not public if the document is lodged', () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode,
+                filedByRole: ROLES.privatePractitioner,
+                filingDate,
+                lodged: true,
+              },
+              {
+                visibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toEqual(false);
+          });
         },
       );
 
