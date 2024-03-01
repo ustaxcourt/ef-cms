@@ -63,7 +63,6 @@ describe('upsertMessage', () => {
       });
       expect((put as jest.Mock).mock.calls[0][0].Item).toMatchObject({
         ...mockMessage,
-        gsi1pk: `message|${mockMessage.parentMessageId}`,
         pk: 'message|completed|user|completed-by-user-id',
         sk: completedMessage.completedAt,
         ttl: expect.anything(),
@@ -77,7 +76,6 @@ describe('upsertMessage', () => {
       });
       expect((put as jest.Mock).mock.calls[1][0].Item).toMatchObject({
         ...mockMessage,
-        gsi1pk: `message|${mockMessage.parentMessageId}`,
         pk: 'message|completed|section|completed-by-section',
         sk: completedMessage.completedAt,
         ttl: expect.anything(),
@@ -93,7 +91,6 @@ describe('upsertMessage', () => {
       });
       expect((put as jest.Mock).mock.calls[0][0].Item).toMatchObject({
         ...mockMessage,
-        gsi1pk: `message|${mockMessage.parentMessageId}`,
         pk: `message|outbox|user|${mockMessage.fromUserId}`,
         sk: mockMessage.createdAt,
         ttl: expect.anything(),
@@ -106,7 +103,6 @@ describe('upsertMessage', () => {
       });
       expect((put as jest.Mock).mock.calls[1][0].Item).toMatchObject({
         ...mockMessage,
-        gsi1pk: `message|${mockMessage.parentMessageId}`,
         pk: `message|outbox|section|${mockMessage.fromSection}`,
         sk: mockMessage.createdAt,
         ttl: expect.anything(),
