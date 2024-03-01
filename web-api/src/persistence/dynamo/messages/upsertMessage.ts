@@ -16,7 +16,7 @@ export const upsertMessage = async ({
     await putMessageInCompletedBox({ applicationContext, message });
   } else {
     // user inbox
-    gsi2pk = !message.toUserId
+    gsi2pk = message.toUserId
       ? `assigneeId|inbox|${message.toUserId}`
       : undefined;
 
