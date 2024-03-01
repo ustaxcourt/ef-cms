@@ -9,29 +9,17 @@ export const upsertMessage = async ({
   applicationContext: IApplicationContext;
   message: RawMessage;
 }) => {
-  let gsi2pk, gsi3pk, gsi4pk, gsi5pk;
+  let gsi2pk, gsi3pk;
 
-  if (message.completedAt) {
-    // save to completed box
-    await putMessageInCompletedBox({ applicationContext, message });
-  } else {
+  if (!message.completedAt) {
+    await putMessageInOutbox({ applicationContext, message });
     // user inbox
-    gsi2pk = message.toUserId
-      ? `assigneeId|inbox|${message.toUserId}`
-      : undefined;
+    gsi2pk = message.toUserId ? `assigneeId|${message.toUserId}` : undefined;
 
     // section inbox
-    gsi3pk = message.toSection
-      ? `section|inbox|${message.toSection}`
-      : undefined;
-
-    // user outbox
-    gsi4pk = message.fromUserId
-      ? `assigneeId|outbox|${message.fromUserId}`
-      : undefined;
-    gsi5pk = message.fromSection
-      ? `section|outbox|${message.fromSection}`
-      : undefined;
+    gsi3pk = message.toSection ? `section|${message.toSection}` : undefined;
+  } else {
+    await putMessageInCompletedBox({ applicationContext, message });
   }
 
   return put({
@@ -40,13 +28,45 @@ export const upsertMessage = async ({
       gsi1pk: `message|${message.parentMessageId}`,
       gsi2pk,
       gsi3pk,
-      gsi4pk,
-      gsi5pk,
       pk: `case|${message.docketNumber}`,
       sk: `message|${message.messageId}`,
     },
-    applicationContext, // section|outbox|docket .... // assigneeId|inbox|<USERID>
+    applicationContext,
   });
+};
+
+const putMessageInOutbox = async ({
+  applicationContext,
+  message,
+}: {
+  applicationContext: IApplicationContext;
+  message: RawMessage;
+}) => {
+  const sk = message.createdAt;
+  const ttl = calculateTimeToLive({
+    numDays: 8,
+    timestamp: message.createdAt,
+  });
+
+  const buckets = [
+    { bucket: 'section', identifier: message.fromSection },
+    { bucket: 'user', identifier: message.fromUserId },
+  ];
+
+  await Promise.all(
+    buckets.map(({ bucket, identifier }) =>
+      put({
+        Item: {
+          ...message,
+          gsi1pk: `message|${message.parentMessageId}`,
+          pk: `message|outbox|${bucket}|${identifier}`,
+          sk,
+          ttl: ttl.expirationTimestamp,
+        },
+        applicationContext,
+      }),
+    ),
+  );
 };
 
 const putMessageInCompletedBox = async ({
@@ -61,23 +81,23 @@ const putMessageInCompletedBox = async ({
     timestamp: message.completedAt!,
   });
 
-  await put({
-    Item: {
-      ...message,
-      pk: `user-message-outbox|${message.completedByUserId}`,
-      sk: message.completedAt!,
-      ttl: ttl.expirationTimestamp,
-    },
-    applicationContext,
-  });
+  const buckets = [
+    { bucket: 'section', identifier: message.completedBySection },
+    { bucket: 'user', identifier: message.completedByUserId },
+  ];
 
-  await put({
-    Item: {
-      ...message,
-      pk: `section-message-outbox|${message.completedBySection}`,
-      sk: message.completedAt!,
-      ttl: ttl.expirationTimestamp,
-    },
-    applicationContext,
-  });
+  await Promise.all(
+    buckets.map(({ bucket, identifier }) =>
+      put({
+        Item: {
+          ...message,
+          gsi1pk: `message|${message.parentMessageId}`,
+          pk: `message|completed|${bucket}|${identifier}`,
+          sk: message.completedAt!,
+          ttl: ttl.expirationTimestamp,
+        },
+        applicationContext,
+      }),
+    ),
+  );
 };

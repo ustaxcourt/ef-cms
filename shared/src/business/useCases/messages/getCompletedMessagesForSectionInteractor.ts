@@ -25,10 +25,9 @@ export const getCompletedMessagesForSectionInteractor = async (
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getCompletedMessages({
+    .getSectionCompletedMessages({
       applicationContext,
-      bucket: 'section',
-      identifier: section,
+      section,
     });
 
   return MessageResult.validateRawCollection(messages, {

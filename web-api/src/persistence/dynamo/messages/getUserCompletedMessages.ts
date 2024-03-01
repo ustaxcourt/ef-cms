@@ -4,7 +4,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 
-export const getUserOutboxMessages = async ({
+export const getUserCompletedMessages = async ({
   applicationContext,
   userId,
 }: {
@@ -25,7 +25,7 @@ export const getUserOutboxMessages = async ({
     },
     ExpressionAttributeValues: {
       ':afterDate': afterDate,
-      ':pk': `message|outbox|user|${userId}`,
+      ':pk': `message|completed|user|${userId}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,

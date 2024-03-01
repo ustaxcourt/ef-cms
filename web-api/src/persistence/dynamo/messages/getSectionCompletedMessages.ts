@@ -4,14 +4,12 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 
-export const getCompletedMessages = async ({
+export const getSectionCompletedMessages = async ({
   applicationContext,
-  bucket,
-  identifier,
+  section,
 }: {
   applicationContext: IApplicationContext;
-  bucket: 'section' | 'user';
-  identifier: string;
+  section: string;
 }) => {
   const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateISODate({
@@ -27,7 +25,7 @@ export const getCompletedMessages = async ({
     },
     ExpressionAttributeValues: {
       ':afterDate': afterDate,
-      ':pk': `${bucket}|completed-messages|${identifier}`,
+      ':pk': `message|completed|section|${section}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,

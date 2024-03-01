@@ -14,7 +14,7 @@ export const getUserInboxMessages = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi2pk': `assigneeId|inbox|${userId}`,
+      ':gsi2pk': `assigneeId|${userId}`,
       ':prefix': 'message',
     },
     IndexName: 'gsi2',

@@ -48,14 +48,6 @@ const createEFCMSTable = async tableName => {
           AttributeName: 'gsi3pk',
           AttributeType: 'S',
         },
-        {
-          AttributeName: 'gsi4pk',
-          AttributeType: 'S',
-        },
-        {
-          AttributeName: 'gsi5pk',
-          AttributeType: 'S',
-        },
       ],
       GlobalSecondaryIndexes: [
         {
@@ -103,46 +95,6 @@ const createEFCMSTable = async tableName => {
           KeySchema: [
             {
               AttributeName: 'gsi3pk',
-              KeyType: 'HASH',
-            },
-            {
-              AttributeName: 'sk',
-              KeyType: 'RANGE',
-            },
-          ],
-          Projection: {
-            ProjectionType: 'ALL',
-          },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 1,
-            WriteCapacityUnits: 1,
-          },
-        },
-        {
-          IndexName: 'gsi4',
-          KeySchema: [
-            {
-              AttributeName: 'gsi4pk',
-              KeyType: 'HASH',
-            },
-            {
-              AttributeName: 'sk',
-              KeyType: 'RANGE',
-            },
-          ],
-          Projection: {
-            ProjectionType: 'ALL',
-          },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 1,
-            WriteCapacityUnits: 1,
-          },
-        },
-        {
-          IndexName: 'gsi5',
-          KeySchema: [
-            {
-              AttributeName: 'gsi5pk',
               KeyType: 'HASH',
             },
             {

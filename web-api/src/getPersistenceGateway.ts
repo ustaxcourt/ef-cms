@@ -76,7 +76,6 @@ import {
 import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getCognitoUserIdByEmail } from './persistence/cognito/getCognitoUserIdByEmail';
-import { getCompletedMessages } from './persistence/dynamo/messages/getCompletedMessages';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConsolidatedCasesCount } from '@web-api/persistence/dynamo/cases/getConsolidatedCasesCount';
 import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidatedCases';
@@ -110,6 +109,7 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getPublicDownloadPolicyUrl } from './persistence/s3/getPublicDownloadPolicyUrl';
 import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTrialCases';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
+import { getSectionCompletedMessages } from './persistence/dynamo/messages/getSectionCompletedMessages';
 import { getSectionInboxMessages } from './persistence/dynamo/messages/getSectionInboxMessages';
 import { getSectionOutboxMessages } from './persistence/dynamo/messages/getSectionOutboxMessages';
 import { getSesStatus } from './persistence/ses/getSesStatus';
@@ -125,6 +125,7 @@ import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
 import { getUserCaseNote } from './persistence/dynamo/userCaseNotes/getUserCaseNote';
 import { getUserCaseNoteForCases } from './persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
+import { getUserCompletedMessages } from './persistence/dynamo/messages/getUserCompletedMessages';
 import { getUserInboxMessages } from './persistence/dynamo/messages/getUserInboxMessages';
 import { getUserOutboxMessages } from './persistence/dynamo/messages/getUserOutboxMessages';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
@@ -322,7 +323,6 @@ const gatewayMethods = {
   getCasesMetadataByLeadDocketNumber,
   getClientId,
   getCognitoUserIdByEmail,
-  getCompletedMessages,
   getConfigurationItemValue,
   getConsolidatedCasesCount,
   getCountOfConsolidatedCases,
@@ -359,6 +359,7 @@ const gatewayMethods = {
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
+  getSectionCompletedMessages,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getSesStatus,
@@ -374,6 +375,7 @@ const gatewayMethods = {
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
+  getUserCompletedMessages,
   getUserInboxMessages,
   getUserOutboxMessages,
   getUsersById,
