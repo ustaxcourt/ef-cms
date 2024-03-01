@@ -1,7 +1,7 @@
 import { createNewIndicesFromLocalMappings } from './create-temporary-indices-helpers';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['ENV', 'OVERRIDE_ES_NUMBER_OF_REPLICAS']);
+requireEnvVars(['ENV']);
 
 const environmentName: string = process.env.ENV!;
 
