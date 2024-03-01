@@ -111,4 +111,8 @@ export function petitionerAttemptsToUploadCorruptPdf() {
   cy.get('[data-testid="file-petition"]').click();
 
   cy.get('[data-testid="modal-dialog"]').should('exist');
+  cy.get('[data-testid="modal-dialog-header"]').should(
+    'contain.text',
+    'Your Request Was Not Completed',
+  );
 }
