@@ -1,5 +1,5 @@
-import { Api } from 'sst/constructs';
-import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { Api, Function } from 'sst/constructs';
+import { Role } from 'aws-cdk-lib/aws-iam';
 import { SSTConfig } from 'sst';
 
 const EXPECTED_ENV_KEYS = [
@@ -33,9 +33,10 @@ const EXPECTED_ENV_KEYS = [
   'DOCUMENTS_BUCKET_NAME',
   'CURRENT_COLOR', // TODO: CI Defined
   'DEPLOYMENT_TIMESTAMP', // TODO: CI Defined
-  'DYNAMODB_ENDPOINT', // TODO: CI Defined
   'DYNAMODB_TABLE_NAME', // TODO: CI Defined
   'ELASTICSEARCH_ENDPOINT', // TODO: CI Defined
+  'USER_POOL_ID_MAIN',
+  'USER_POOL_ID_IRS',
   'REGION',
 ];
 
@@ -53,7 +54,7 @@ for (let key of EXPECTED_ENV_KEYS) {
 
 // eslint-disable-next-line import/no-default-export
 export default {
-  config(_input) {
+  config() {
     return {
       name: 'ef-cms-api',
       region: 'us-east-1',
@@ -64,6 +65,16 @@ export default {
       const role = Role.fromRoleName(stack, 'lambda_role', 'lambda_role_exp5');
 
       const api = new Api(stack, 'Api', {
+        authorizers: {
+          cognitoAuthorizer: {
+            function: new Function(stack, 'CognitoAuthorizer', {
+              environment,
+              handler:
+                'web-api/terraform/template/lambdas/cognito-authorizer.handler',
+            }),
+            type: 'lambda',
+          },
+        },
         defaults: {
           function: {
             environment,
@@ -77,10 +88,13 @@ export default {
             role,
           },
         },
-
         routes: {
-          'GET /cases/{docketNumber}':
-            'web-api/src/lambdas/cases/getCaseLambda.getCaseLambda',
+          'ANY /{proxy+}': {
+            authorizer: 'cognitoAuthorizer',
+            function: {
+              handler: 'web-api/terraform/template/lambdas/api.handler',
+            },
+          },
         },
       });
 
