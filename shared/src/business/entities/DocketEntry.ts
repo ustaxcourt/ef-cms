@@ -80,7 +80,7 @@ export class DocketEntry extends JoiValidationEntity {
   public isPendingService?: boolean;
   public isSealed?: boolean;
   public isStricken?: boolean;
-  public lodged?: string;
+  public lodged?: boolean;
   public mailingDate?: string;
   public numberOfPages?: number;
   public objections?: string;
@@ -543,6 +543,9 @@ export class DocketEntry extends JoiValidationEntity {
     }
     if (DocketEntry.isPublicEventCode(entry.eventCode)) {
       return true;
+    }
+    if (entry.lodged) {
+      return false;
     }
 
     if (
