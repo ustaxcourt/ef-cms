@@ -61,7 +61,8 @@ jest.mock('../../../../src/applicationContext', () => {
     }),
   };
 });
-const { handler } = require('./migration-segments');
+
+import { handler } from './migration-segments';
 
 describe('migration-segments', () => {
   const mockLambdaEvent = {
