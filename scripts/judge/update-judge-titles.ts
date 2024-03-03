@@ -18,6 +18,7 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
 ];
 // **********************************************************************
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
 

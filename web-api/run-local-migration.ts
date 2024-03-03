@@ -5,6 +5,7 @@ import AWS from 'aws-sdk';
 
 const applicationContext = createApplicationContext({});
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const dynamo = new AWS.DynamoDB({
     credentials: {

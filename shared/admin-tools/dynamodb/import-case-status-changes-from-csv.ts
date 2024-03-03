@@ -96,6 +96,7 @@ const parseCsv = (): Array<any> => {
   return parse(csvContent, csvOptions);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
   const statusChangesToLog = parseCsv();

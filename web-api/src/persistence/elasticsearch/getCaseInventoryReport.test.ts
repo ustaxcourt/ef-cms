@@ -268,5 +268,14 @@ describe('getCaseInventoryReport', () => {
       },
     ]);
     expect(results).toEqual({ foundCases: [], totalCount: 0 });
+    expect(searchSpy.mock.calls[0][0].body._source).toEqual([
+      'associatedJudge',
+      'caseCaption',
+      'docketNumber',
+      'docketNumberSuffix',
+      'docketNumberWithSuffix',
+      'leadDocketNumber',
+      'status',
+    ]);
   });
 });

@@ -58,7 +58,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('[data-testid="remove-pdf"]');
-  cy.get('button#tabButton-stinFile').click();
+  cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('[data-testid="remove-pdf"]');

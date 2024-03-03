@@ -4,6 +4,7 @@ import { requireEnvVars } from '../util';
 
 requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const environmentName = process.env.ENV!;
   const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
