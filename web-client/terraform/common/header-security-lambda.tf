@@ -2,8 +2,9 @@ data "aws_caller_identity" "current" {}
 
 data "archive_file" "zip_header_security_lambda" {
   type        = "zip"
-  source_file = "${path.module}/cloudfront-edge/header-security-lambda.js"
+  source_dir = "${path.module}/cloudfront-edge/"
   output_path = "${path.module}/cloudfront-edge/header-security-lambda.js.zip"
+  excludes = ["strip-basepath-lambda.js"]
 }
 
 resource "aws_lambda_function" "header_security_lambda" {

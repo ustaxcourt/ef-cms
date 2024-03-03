@@ -21,13 +21,21 @@ import {
 } from '../../utilities/DateHandler';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_LOCK } from '../../../test/mockLock';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
 import { getFakeFile, testPdfDoc } from '../../test/getFakeFile';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 
 describe('serveCaseToIrsInteractor', () => {
+  const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
+  const mockParams = {
+    clientConnectionId,
+    docketNumber: MOCK_CASE.docketNumber,
+  };
   const MOCK_WORK_ITEM = {
     assigneeId: null,
     assigneeName: 'IRSBatchSystem',
@@ -121,11 +129,25 @@ describe('serveCaseToIrsInteractor', () => {
   it('should throw unauthorized error when user is unauthorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
-    await expect(
-      serveCaseToIrsInteractor(applicationContext, {
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_to_irs_error',
+      },
+      userId: expect.anything(),
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      'Error serving case to IRS',
+      {
         docketNumber: MOCK_CASE.docketNumber,
-      }),
-    ).rejects.toThrow('Unauthorized');
+        error: new UnauthorizedError('Unauthorized'),
+      },
+    );
   });
 
   it('should add a coversheet to the served petition', async () => {
@@ -135,9 +157,7 @@ describe('serveCaseToIrsInteractor', () => {
       mailingDate: 'some day',
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -162,9 +182,7 @@ describe('serveCaseToIrsInteractor', () => {
       mailingDate: 'some day',
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -174,9 +192,7 @@ describe('serveCaseToIrsInteractor', () => {
   it('should replace coversheet on the served petition if the case is not paper', async () => {
     mockCase = { ...MOCK_CASE };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -191,9 +207,7 @@ describe('serveCaseToIrsInteractor', () => {
   it('should preserve original case caption and docket number on the coversheet if the case is not paper', async () => {
     mockCase = { ...MOCK_CASE };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -231,9 +245,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUtilities().getAddressPhoneDiff,
@@ -263,9 +275,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
     expect(
       applicationContext.getUtilities().getAddressPhoneDiff,
     ).toHaveBeenCalled();
@@ -298,9 +308,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUtilities().getAddressPhoneDiff,
@@ -357,9 +365,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -393,9 +399,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
@@ -439,9 +443,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
@@ -484,9 +486,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
@@ -515,9 +515,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getPersistenceGateway().isFileExists,
@@ -545,9 +543,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(addDocketEntrySpy.mock.calls[0][0].documentTitle).toEqual(
       'Filing Fee Waived',
@@ -568,9 +564,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(addDocketEntrySpy.mock.calls[0][0].documentTitle).toEqual(
       'Filing Fee Paid',
@@ -592,9 +586,7 @@ describe('serveCaseToIrsInteractor', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
 
-      await serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      await serveCaseToIrsInteractor(applicationContext, mockParams);
 
       expect(
         applicationContext.getPersistenceGateway().isFileExists,
@@ -630,9 +622,7 @@ describe('serveCaseToIrsInteractor', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
 
-      await serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      await serveCaseToIrsInteractor(applicationContext, mockParams);
 
       expect(
         applicationContext.getPersistenceGateway().isFileExists,
@@ -672,9 +662,7 @@ describe('serveCaseToIrsInteractor', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
 
-      await serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      await serveCaseToIrsInteractor(applicationContext, mockParams);
 
       expect(
         applicationContext.getPersistenceGateway().isFileExists,
@@ -721,9 +709,7 @@ describe('serveCaseToIrsInteractor', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
 
-      await serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      await serveCaseToIrsInteractor(applicationContext, mockParams);
 
       expect(
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -776,9 +762,7 @@ describe('serveCaseToIrsInteractor', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
 
-      await serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      await serveCaseToIrsInteractor(applicationContext, mockParams);
 
       expect(
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -808,9 +792,7 @@ describe('serveCaseToIrsInteractor', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
 
-      await serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      await serveCaseToIrsInteractor(applicationContext, mockParams);
 
       expect(
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -852,9 +834,7 @@ describe('serveCaseToIrsInteractor', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
 
-      await serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      await serveCaseToIrsInteractor(applicationContext, mockParams);
 
       expect(
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -872,9 +852,7 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: false,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -888,9 +866,7 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: false,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -904,9 +880,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderForFilingFee: false,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUseCaseHelpers()
@@ -926,9 +900,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderForAmendedPetition: false,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUseCaseHelpers()
@@ -942,9 +914,10 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: false,
     };
 
-    const result = await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+    );
 
     expect(result).toBeUndefined();
   });
@@ -956,11 +929,19 @@ describe('serveCaseToIrsInteractor', () => {
       mailingDate: 'some day',
     };
 
-    const result = await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
-    expect(result).toBeDefined();
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_to_irs_complete',
+        pdfUrl: expect.anything(),
+      },
+      userId: expect.anything(),
+    });
   });
 
   it('should mark the Petition docketEntry as served', async () => {
@@ -970,9 +951,7 @@ describe('serveCaseToIrsInteractor', () => {
       mailingDate: 'some day',
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     const updatedCase =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -1037,9 +1016,7 @@ describe('serveCaseToIrsInteractor', () => {
       .mockReturnValueOnce(mockCaseWithServedDocketEntries)
       .mockReturnValueOnce(mockCaseWithServedDocketEntries);
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -1080,9 +1057,7 @@ describe('serveCaseToIrsInteractor', () => {
     };
     const MOCK_NOTR_ID = 'ea10afeb-f189-4657-a862-c607a091beaa';
     applicationContext.getUniqueId.mockReturnValue(MOCK_NOTR_ID);
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
         .calls[0][0].docketEntryId,
@@ -1123,9 +1098,7 @@ describe('serveCaseToIrsInteractor', () => {
       mailingDate: 'some day',
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getUtilities().serveCaseDocument,
@@ -1138,9 +1111,7 @@ describe('serveCaseToIrsInteractor', () => {
       noticeOfAttachments: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
@@ -1152,9 +1123,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderDesignatingPlaceOfTrial: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       await applicationContext.getUseCaseHelpers()
@@ -1207,9 +1176,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderToShowCause: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
@@ -1221,9 +1188,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderToShowCause: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       await applicationContext.getUseCaseHelpers()
@@ -1269,9 +1234,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderForAmendedPetition: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       await applicationContext.getUseCaseHelpers()
@@ -1309,9 +1272,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderForAmendedPetitionAndFilingFee: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       await applicationContext.getUseCaseHelpers()
@@ -1364,9 +1325,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderToShowCause: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       await applicationContext.getUseCaseHelpers()
@@ -1383,9 +1342,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderForFilingFee: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
@@ -1415,9 +1372,7 @@ describe('serveCaseToIrsInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      serveCaseToIrsInteractor(applicationContext, mockParams),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -1426,9 +1381,7 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -1447,9 +1400,7 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should generate a notice of receipt of petition with the name and title of the clerk of the court', async () => {
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
         .calls[0][0].data,
@@ -1484,9 +1435,7 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock

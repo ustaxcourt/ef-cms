@@ -32,6 +32,10 @@ describe('generateCaseInventoryReportPdf', () => {
       .saveFileAndGenerateUrl.mockReturnValue({
         url: 'https://www.example.com',
       });
+
+    applicationContext.getUtilities().setConsolidationFlagsForDisplay = jest.fn(
+      item => item,
+    );
   });
 
   it('throws an error if the user is unauthorized', async () => {
@@ -57,6 +61,12 @@ describe('generateCaseInventoryReportPdf', () => {
     expect(
       applicationContext.getDocumentGenerators().caseInventoryReport,
     ).toHaveBeenCalled();
+
+    const setConsolidationFlagsForDisplayCalls =
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay.mock
+        .calls.length;
+
+    expect(setConsolidationFlagsForDisplayCalls).toEqual(mockCases.length);
   });
 
   it('returns the pre-signed url to the document', async () => {
