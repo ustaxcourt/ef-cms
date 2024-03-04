@@ -1,6 +1,10 @@
+import {
+  DeleteMessageCommand,
+  DeleteMessageCommandInput,
+  SQSClient,
+} from '@aws-sdk/client-sqs';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument, PutCommandOutput } from '@aws-sdk/lib-dynamodb';
-import { SQSClient } from '@aws-sdk/client-sqs';
 
 import { chunk } from 'lodash';
 import { createApplicationContext } from '../../../../src/applicationContext';
@@ -12,6 +16,8 @@ import { createLogger } from '../../../../src/createLogger';
 import { migrationsToRun } from './migrationsToRun';
 import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
 import promiseRetry from 'promise-retry';
+import type { Context, Handler, SQSEvent } from 'aws-lambda';
+
 // import type { EfcmsEntity } from './migration';
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -150,7 +156,7 @@ export const processItems = async (
   }
 };
 
-export const handler = async (event, context) => {
+export const handler: Handler = async (event: SQSEvent, context: Context) => {
   const applicationContext = createApplicationContext(
     {},
     createLogger({
@@ -192,10 +198,11 @@ export const handler = async (event, context) => {
     segment,
     totalSegments,
   });
-  await sqs
-    .deleteMessage({
-      QueueUrl: process.env.SEGMENTS_QUEUE_URL,
-      ReceiptHandle: receiptHandle,
-    })
-    .promise();
+
+  const input: DeleteMessageCommandInput = {
+    QueueUrl: process.env.SEGMENTS_QUEUE_URL,
+    ReceiptHandle: receiptHandle,
+  };
+  const command = new DeleteMessageCommand(input);
+  await sqs.send(command);
 };
