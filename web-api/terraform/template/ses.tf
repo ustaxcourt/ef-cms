@@ -192,7 +192,3 @@ resource "aws_ses_receipt_rule" "email_forwarding_rule" {
     position    = 1
   }
 }
-
-resource "aws_ses_active_receipt_rule_set" "main" {
-  rule_set_name = "email_forwarding_rule_set"
-}
