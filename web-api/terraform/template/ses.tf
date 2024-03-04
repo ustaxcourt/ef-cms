@@ -180,13 +180,9 @@ resource "aws_ses_identity_notification_topic" "bounced_service_emails" {
   include_original_headers = true
 }
 
-resource "aws_ses_receipt_rule_set" "email_forwarding_rule_set" {
-  rule_set_name = "email_forwarding_rule_set"
-}
-
 resource "aws_ses_receipt_rule" "email_forwarding_rule" {
   name          = "email_forwarding_rule"
-  rule_set_name = aws_ses_receipt_rule_set.email_forwarding_rule_set.rule_set_name
+  rule_set_name = var.active_ses_ruleset
   # TODO: should smoketest@ be a secret?
   recipients   = ["smoketest@${aws_ses_domain_identity.main.domain}"]
   enabled      = true
