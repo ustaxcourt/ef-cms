@@ -26,37 +26,36 @@ export const MessagesSectionInbox = connect(
   }) {
     return (
       <>
-        {formattedMessages.showFilters && (
-          <TableFilters
-            filters={[
-              {
-                isSelected: screenMetadata.caseStatus,
-                key: 'caseStatus',
-                label: 'Case Status',
-                options: formattedMessages.caseStatuses,
-              },
-              {
-                isSelected: screenMetadata.toUser,
-                key: 'toUser',
-                label: 'To',
-                options: formattedMessages.toUsers,
-              },
-              {
-                isSelected: screenMetadata.fromUser,
-                key: 'fromUser',
-                label: 'From',
-                options: formattedMessages.fromUsers,
-              },
-              {
-                isSelected: screenMetadata.fromSection,
-                key: 'fromSection',
-                label: 'Section',
-                options: formattedMessages.fromSections,
-              },
-            ]}
-            onSelect={updateScreenMetadataSequence}
-          ></TableFilters>
-        )}
+        <TableFilters
+          filters={[
+            {
+              isSelected: screenMetadata.caseStatus,
+              key: 'caseStatus',
+              label: 'Case Status',
+              options: formattedMessages.caseStatuses,
+            },
+            {
+              isSelected: screenMetadata.toUser,
+              key: 'toUser',
+              label: 'To',
+              options: formattedMessages.toUsers,
+            },
+            {
+              isSelected: screenMetadata.fromUser,
+              key: 'fromUser',
+              label: 'From',
+              options: formattedMessages.fromUsers,
+            },
+            {
+              isSelected: screenMetadata.fromSection,
+              key: 'fromSection',
+              label: 'Section',
+              options: formattedMessages.fromSections,
+            },
+          ]}
+          onSelect={updateScreenMetadataSequence}
+        ></TableFilters>
+
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>

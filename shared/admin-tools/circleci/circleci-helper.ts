@@ -16,16 +16,24 @@ const findPendingJob = async ({
     url: `https://circleci.com/api/v2/workflow/${workflowId}/job`,
   };
 
-  const allJobsInWorkflow = await axios.get(
-    getAllJobsRequest.url,
-    getAllJobsRequest,
-  );
+  let approvalRequestId = '';
+  try {
+    const allJobsInWorkflow = await axios.get(
+      getAllJobsRequest.url,
+      getAllJobsRequest,
+    );
+    const jobWithApprovalNeeded = find(allJobsInWorkflow.data.items, o => {
+      return o.name === jobName;
+    });
+    approvalRequestId = jobWithApprovalNeeded.approval_request_id;
+  } catch (err) {
+    console.error(
+      `Unable to determine approval id of pending job ${jobName}`,
+      err,
+    );
+  }
 
-  const jobWithApprovalNeeded = find(allJobsInWorkflow.data.items, o => {
-    return o.name === jobName;
-  });
-
-  return jobWithApprovalNeeded.approval_request_id;
+  return approvalRequestId;
 };
 
 export const approvePendingJob = async ({
@@ -42,13 +50,21 @@ export const approvePendingJob = async ({
     jobName,
     workflowId,
   });
+  if (!approvalRequestId.length) {
+    return;
+  }
+
   const approveJobRequest = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
     url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${approvalRequestId}`,
   };
 
-  await axios.post(approveJobRequest.url, {}, approveJobRequest);
+  try {
+    await axios.post(approveJobRequest.url, {}, approveJobRequest);
+  } catch (err) {
+    console.log(`Unable to approve pending job ${jobName}`, err);
+  }
 };
 
 export const cancelWorkflow = async ({
@@ -64,7 +80,11 @@ export const cancelWorkflow = async ({
     url: `https://circleci.com/api/v2/workflow/${workflowId}/cancel`,
   };
 
-  await axios.post(cancelWorkflowRequest.url, {}, cancelWorkflowRequest);
+  try {
+    await axios.post(cancelWorkflowRequest.url, {}, cancelWorkflowRequest);
+  } catch (err) {
+    console.log(`Unable to cancel workflow ${workflowId}`, err);
+  }
 };
 
 export const getPipelineStatus = async ({
@@ -74,24 +94,28 @@ export const getPipelineStatus = async ({
   apiToken: string;
   pipelineId: string;
 }): Promise<string | undefined> => {
+  let pipelineStatus;
+
   const pipelineStatusRequest = {
     headers: { 'Circle-Token': apiToken },
     method: 'GET',
     url: `https://circleci.com/api/v2/pipeline/${pipelineId}/workflow`,
   };
 
-  const pipelineStatusResponse = await axios.get(
-    pipelineStatusRequest.url,
-    pipelineStatusRequest,
-  );
-
-  let pipelineStatus;
-  if (
-    'items' in pipelineStatusResponse.data &&
-    pipelineStatusResponse.data.items &&
-    'status' in pipelineStatusResponse.data.items[0]
-  ) {
-    pipelineStatus = pipelineStatusResponse.data.items[0].status;
+  try {
+    const pipelineStatusResponse = await axios.get(
+      pipelineStatusRequest.url,
+      pipelineStatusRequest,
+    );
+    if (
+      'items' in pipelineStatusResponse.data &&
+      pipelineStatusResponse.data.items &&
+      'status' in pipelineStatusResponse.data.items[0]
+    ) {
+      pipelineStatus = pipelineStatusResponse.data.items[0].status;
+    }
+  } catch (err) {
+    console.log(`Unable to determine status of pipeline ${pipelineId}`, err);
   }
 
   return pipelineStatus;
