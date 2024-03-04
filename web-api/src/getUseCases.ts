@@ -89,6 +89,7 @@ import { getCasesForUserInteractor } from '../../shared/src/business/useCases/ge
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
+import { getCoversheetInteractor } from '@shared/business/useCases/getCoversheetInteractor';
 import { getCustomCaseReportInteractor } from './business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor';
@@ -196,6 +197,7 @@ import { updateCounselOnCaseInteractor } from '../../shared/src/business/useCase
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/updateCourtIssuedDocketEntryInteractor';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/updateCourtIssuedOrderInteractor';
 import { updateDeficiencyStatisticInteractor } from '../../shared/src/business/useCases/caseStatistics/updateDeficiencyStatisticInteractor';
+import { updateDocketEntriesPostCoversheetInteractor } from '@shared/business/useCases/updateDocketEntriesPostCoversheetInteractor';
 import { updateDocketEntryMetaInteractor } from '../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor';
 import { updateDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/updateDocketEntryWorksheetInteractor';
 import { updateOtherStatisticsInteractor } from '../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor';
@@ -303,6 +305,7 @@ const useCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
+  getCoversheetInteractor,
   getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentQCInboxForSectionInteractor,
@@ -410,6 +413,7 @@ const useCases = {
   updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
   updateDeficiencyStatisticInteractor,
+  updateDocketEntriesPostCoversheetInteractor,
   updateDocketEntryMetaInteractor,
   updateDocketEntryWorksheetInteractor,
   updateOtherStatisticsInteractor,
