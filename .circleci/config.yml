@@ -293,7 +293,7 @@ jobs:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              node ./web-api/track-successful-migrations.js
+              npx ts-node --transpile-only ./web-api/workflow-terraform/migration/bin/track-successful-migrations.ts
             fi
       - run:
           name: Set Marker to Indicate Migration is Complete
