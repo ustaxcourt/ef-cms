@@ -35,9 +35,11 @@ const EXPECTED_ENV_KEYS = [
   'DEPLOYMENT_TIMESTAMP', // TODO: CI Defined
   'DYNAMODB_TABLE_NAME', // TODO: CI Defined
   'ELASTICSEARCH_ENDPOINT', // TODO: CI Defined
+  'S3_ENDPOINT',
   'USER_POOL_ID_MAIN',
   'USER_POOL_ID_IRS',
   'REGION',
+  'NODE_ENV',
 ];
 
 const environment: Record<string, string> = {};
@@ -51,6 +53,8 @@ for (let key of EXPECTED_ENV_KEYS) {
   }
   environment[key] = process.env[key] as string;
 }
+environment.NODE_OPTIONS = '--enable-source-maps';
+environment.NODE_ENV = 'production';
 
 // eslint-disable-next-line import/no-default-export
 export default {
@@ -61,6 +65,17 @@ export default {
     };
   },
   stacks(app) {
+    app.setDefaultFunctionProps({
+      environment,
+      nodejs: {
+        esbuild: {
+          loader: {
+            '.node': 'file',
+          },
+        },
+        sourcemap: true,
+      },
+    });
     app.stack(function Site({ stack }) {
       const role = Role.fromRoleName(stack, 'lambda_role', 'lambda_role_exp5');
       const authRole = Role.fromRoleName(
@@ -72,7 +87,6 @@ export default {
       const websocket = new WebSocketApi(stack, 'WebsocketApi', {
         authorizer: {
           function: new Function(stack, 'WebsocketAuthorizer', {
-            environment,
             handler:
               'web-api/terraform/template/lambdas/websocket-authorizer.handler',
             role: authRole,
@@ -82,14 +96,6 @@ export default {
         },
         defaults: {
           function: {
-            environment,
-            nodejs: {
-              esbuild: {
-                loader: {
-                  '.node': 'file',
-                },
-              },
-            },
             role,
           },
         },
@@ -109,23 +115,15 @@ export default {
         {
           handler:
             'web-api/src/lambdas/trialSessions/batchDownloadTrialSessionLambda.batchDownloadTrialSessionHandler',
-          nodejs: {
-            esbuild: {
-              loader: {
-                '.node': 'file',
-              },
-            },
-          },
           role,
+          timeout: '900 second',
         },
       );
-      console.log('Batch download name', batchDownloadFunction.functionName);
 
       const api = new Api(stack, 'Api', {
         authorizers: {
           cognitoAuthorizer: {
             function: new Function(stack, 'CognitoAuthorizer', {
-              environment,
               handler:
                 'web-api/terraform/template/lambdas/cognito-authorizer.handler',
             }),
@@ -134,13 +132,6 @@ export default {
         },
         defaults: {
           function: {
-            nodejs: {
-              esbuild: {
-                loader: {
-                  '.node': 'file',
-                },
-              },
-            },
             role,
           },
         },
@@ -158,6 +149,7 @@ export default {
       stack.addOutputs({
         ApiEndpoint: api.url,
         WebsocketEndpoint: websocket.url,
+        batchDownloadLambdaName: batchDownloadFunction.functionName,
       });
     });
   },
