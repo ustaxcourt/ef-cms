@@ -57,7 +57,7 @@ export async function createUserConfirmation(
     .getMessageGateway()
     .sendEmailToUser(applicationContext, {
       body: emailBody,
-      subject: 'U.S. Tax Court DAWSON Account Verification',
+      subject: 'U.S. Tax Court DAWSON: Account Verification',
       to: email,
     });
 
