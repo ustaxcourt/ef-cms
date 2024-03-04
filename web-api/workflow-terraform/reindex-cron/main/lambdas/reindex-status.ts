@@ -1,5 +1,5 @@
 import { approvePendingJob } from '../../../../../shared/admin-tools/circleci/circleci-helper';
-import { areAllReindexTasksFinished } from '../../../../../shared/admin-tools/elasticsearch/check-reindex-complete';
+import { areAllReindexTasksFinished } from '../../../../../scripts/elasticsearch/check-reindex-complete';
 import type { Handler } from 'aws-lambda';
 
 export const handler: Handler = async (_event, context) => {
