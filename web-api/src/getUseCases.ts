@@ -413,7 +413,7 @@ const useCases = {
   updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
   updateDeficiencyStatisticInteractor,
-  updateDocketEntriesInteractor: updateDocketEntriesPostCoversheetInteractor,
+  updateDocketEntriesPostCoversheetInteractor,
   updateDocketEntryMetaInteractor,
   updateDocketEntryWorksheetInteractor,
   updateOtherStatisticsInteractor,
