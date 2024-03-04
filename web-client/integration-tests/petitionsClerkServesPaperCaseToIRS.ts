@@ -1,3 +1,5 @@
+import { waitForLoadingComponentToHide, waitForModalsToHide } from './helpers';
+
 export const petitionsClerkServesPaperCaseToIRS = cerebralTest => {
   return it('Petitions clerk serves paper petition to IRS', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -10,7 +12,8 @@ export const petitionsClerkServesPaperCaseToIRS = cerebralTest => {
 
     await cerebralTest.runSequence('gotoPetitionQcSequence', {
       docketNumber: cerebralTest.docketNumber,
-      redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${petitionDocketEntryId}`,
+      redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=
+      ${petitionDocketEntryId}`,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -27,6 +30,9 @@ export const petitionsClerkServesPaperCaseToIRS = cerebralTest => {
     await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     expect(cerebralTest.getState('currentPage')).toEqual(
       'PrintPaperPetitionReceipt',
