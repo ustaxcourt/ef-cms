@@ -82,7 +82,7 @@ The Dawson system is built using a role-based authentication system.  Each user 
 
 ## Mock Users
 
-After deploying a brand new Dawson environment, an admin will manually run the [setup-test-users.sh](https://github.com/ustaxcourt/ef-cms/blob/staging/shared/admin-tools/user/setup-test-users.sh) script to create these mock users in our deployed environments so members of our team can login and interact with the system to test various roles.  This script will generate the following test users will allow you to login.
+After deploying a brand new Dawson environment, an admin will manually run the [setup-test-users.sh](https://github.com/ustaxcourt/ef-cms/blob/staging/scripts/user/setup-test-users.sh) script to create these mock users in our deployed environments so members of our team can login and interact with the system to test various roles.  This script will generate the following test users will allow you to login.
 
 !> **Ask a teammate for the passwords.**
 
