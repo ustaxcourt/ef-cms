@@ -639,7 +639,7 @@ export const PASSWORD_RULE = joi
   .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneLowercase)
   .pattern(new RegExp(/[A-Z]/), { name: 'hasOneUppercase' })
   .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneUppercase)
-  .pattern(new RegExp(/[\^$*.[\]{}()?\-“!@#%&/,><’:;|_~`]/), {
+  .pattern(new RegExp(/[\^$*.[\]{}()\s?\-“!@#%&/,><’:;|_~`]/), {
     name: 'hasOneSpecialCharacter',
   })
   .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasSpecialCharacterOrSpace)
