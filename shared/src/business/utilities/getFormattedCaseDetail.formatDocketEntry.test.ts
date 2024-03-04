@@ -1,4 +1,5 @@
 import {
+  MINUTE_ENTRIES_MAP,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
@@ -111,8 +112,9 @@ describe('formatDocketEntry', () => {
 
     it('should be false when isMinuteEntry is true and isLegacyServed and servedAt are undefined', () => {
       const result = formatDocketEntry(applicationContext, {
+        eventCode:
+          MINUTE_ENTRIES_MAP[Object.keys(MINUTE_ENTRIES_MAP)[0]].eventCode,
         isLegacyServed: undefined,
-        isMinuteEntry: true,
         servedAt: undefined,
       });
 
