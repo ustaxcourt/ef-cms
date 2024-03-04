@@ -11,8 +11,8 @@ export const updateDocketEntriesPostCoversheetInteractor = async (
     docketEntryId: string;
     docketNumber: string;
     updatedDocketEntryData: {
-      numberOfPages;
-      consolidatedCases;
+      numberOfPages: number;
+      consolidatedCases?: any[];
     };
   },
 ) => {
