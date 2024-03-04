@@ -7,7 +7,10 @@ import {
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { getFilingsAndProceedings } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
+import {
+  computeIsNotServedDocument,
+  getFilingsAndProceedings,
+} from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const formatDocketEntryOnDocketRecord = (
@@ -105,8 +108,7 @@ export const formatDocketEntryOnDocketRecord = (
     servedPartiesCode: entry.servedPartiesCode,
     showDocumentDescriptionWithoutLink: !showLinkToDocument,
     showLinkToDocument,
-    showNotServed:
-      !DocketEntry.isServed(entry) && !DocketEntry.isUnservable(entry),
+    showNotServed: computeIsNotServedDocument({ formattedEntry: entry }),
     showServed: DocketEntry.isServed(entry),
     signatory: entry.signatory,
   };
