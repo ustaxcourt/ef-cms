@@ -2008,7 +2008,10 @@ export class Case extends JoiValidationEntity {
     return Case.userHasAccessToCase(this, user);
   }
 
-  static userHasAccessToCase(rawCase: RawCase, user: RawUser): boolean {
+  static userHasAccessToCase(
+    rawCase: RawCase | RawPublicCase,
+    user: RawUser,
+  ): boolean {
     return rawCase.leadDocketNumber
       ? isUserPartOfGroup({
           consolidatedCases: rawCase.consolidatedCases,

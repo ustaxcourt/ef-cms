@@ -3,6 +3,7 @@ import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
 } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
@@ -63,7 +64,9 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.isFileAttached = rawProps.isFileAttached;
     this.filedByRole = rawProps.filedByRole;
     this.isLegacyServed = rawProps.isLegacyServed;
-    this.isMinuteEntry = rawProps.isMinuteEntry;
+    this.isMinuteEntry = DocketEntry.isMinuteEntry({
+      eventCode: rawProps.eventCode,
+    });
     this.isOnDocketRecord = rawProps.isOnDocketRecord;
     this.isPaper = rawProps.isPaper;
     this.isSealed = !!rawProps.isSealed;
