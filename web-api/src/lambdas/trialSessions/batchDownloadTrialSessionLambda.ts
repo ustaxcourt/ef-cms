@@ -1,3 +1,5 @@
+import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
+import { createApplicationContext } from '@web-api/applicationContext';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -10,9 +12,23 @@ export const batchDownloadTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || event.path;
 
-    return await applicationContext
-      .getUseCases()
-      .batchDownloadTrialSessionInteractor(applicationContext, {
-        trialSessionId,
-      });
+    const { currentColor, region, stage } = applicationContext.environment;
+    const client = new LambdaClient({
+      region,
+    });
+    const command = new InvokeCommand({
+      FunctionName: `batch_download_${stage}_${currentColor}`,
+      InvocationType: 'Event',
+      Payload: JSON.stringify({ trialSessionId }),
+    });
+    await client.send(command);
   });
+
+export const batchDownloadTrialSessionHandler = async event => {
+  console.log(event);
+  const applicationContext = createApplicationContext({});
+
+  return await applicationContext
+    .getUseCases()
+    .batchDownloadTrialSessionInteractor(applicationContext, JSON.parse(event));
+};

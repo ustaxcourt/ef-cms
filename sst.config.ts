@@ -103,6 +103,22 @@ export default {
         },
       });
 
+      const batchDownloadFunction = new Function(
+        stack,
+        'batchDownloadFunction',
+        {
+          nodejs: {
+            esbuild: {
+              loader: {
+                '.node': 'file',
+              },
+            },
+          },
+          role,
+        },
+      );
+      console.log('Batch download name', batchDownloadFunction.functionName);
+
       const api = new Api(stack, 'Api', {
         authorizers: {
           cognitoAuthorizer: {
