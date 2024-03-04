@@ -21,7 +21,7 @@ const computeIsInProgress = ({ formattedEntry }) => {
   return (
     (!formattedEntry.isCourtIssuedDocument &&
       formattedEntry.isFileAttached === false &&
-      !formattedEntry.isMinuteEntry &&
+      !DocketEntry.isMinuteEntry(formattedEntry) &&
       !formattedEntry.isUnservable) ||
     (formattedEntry.isFileAttached === true &&
       !DocketEntry.isServed(formattedEntry) &&

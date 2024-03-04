@@ -56,7 +56,7 @@ describe('PublicDocketEntry', () => {
       index: undefined,
       isFileAttached: true,
       isLegacyServed: true,
-      isMinuteEntry: undefined,
+      isMinuteEntry: false,
       isOnDocketRecord: undefined,
       isPaper: true,
       isSealed: false,
