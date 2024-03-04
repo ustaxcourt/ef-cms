@@ -100,10 +100,6 @@ variable "scanner_resource_uri" {
   type = string
 }
 
-variable "cognito_table_name" {
-  type = string
-}
-
 variable "prod_env_account_id" {
   type = string
 }
@@ -152,7 +148,6 @@ variable "template_lambdas" {
       "api-public.js",
       "api.js",
       "cognito-authorizer.js",
-      "cognito-triggers.js",
       "cron.js",
       "handle-bounced-service-email.js",
       "maintenance-notify.js",
