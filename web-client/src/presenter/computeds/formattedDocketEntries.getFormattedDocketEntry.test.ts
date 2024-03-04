@@ -13,6 +13,13 @@ import {
 import { getFormattedDocketEntry } from './formattedDocketEntries';
 import { simpleDocketEntries } from './formattedCaseDetail.test';
 
+let mockIsNotServedDocument;
+jest.mock('@shared/business/utilities/getFormattedCaseDetail', () => ({
+  computeIsNotServedDocument: jest
+    .fn()
+    .mockImplementation(() => mockIsNotServedDocument),
+}));
+
 describe('getFormattedDocketEntry', () => {
   let simpleDocketEntry;
   let mockCase;
@@ -44,6 +51,7 @@ describe('getFormattedDocketEntry', () => {
   };
 
   beforeEach(() => {
+    mockIsNotServedDocument = false;
     mockCase = cloneDeep(MOCK_CASE);
     baseParams = {
       applicationContext,
@@ -279,25 +287,21 @@ describe('getFormattedDocketEntry', () => {
   });
 
   describe('showNotServed', () => {
-    it('should be true if entry.isNotServedDocument is true', () => {
+    it('should be true if computeIsNotServedDocument returns true', () => {
+      mockIsNotServedDocument = true;
       const result = getFormattedDocketEntry({
         ...baseParams,
-        entry: {
-          ...simpleDocketEntry,
-          isNotServedDocument: true,
-        },
+        entry: simpleDocketEntry,
       });
 
       expect(result.showNotServed).toBeTruthy();
     });
 
-    it('should be false if entry.isNotServedDocument is false', () => {
+    it('should be false if computeIsNotServedDocument returns false', () => {
+      mockIsNotServedDocument = false;
       const result = getFormattedDocketEntry({
         ...baseParams,
-        entry: {
-          ...simpleDocketEntry,
-          isNotServedDocument: false,
-        },
+        entry: simpleDocketEntry,
       });
 
       expect(result.showNotServed).toBeFalsy();

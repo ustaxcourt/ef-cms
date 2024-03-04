@@ -35,6 +35,7 @@ describe('formattedDocketEntries', () => {
     documentTitle: 'Petition',
     filedBy: 'Jessica Frase Marine',
     filingDate: '2019-02-28T21:14:39.488Z',
+    index: 5,
     isOnDocketRecord: true,
     processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
   };

@@ -31,10 +31,10 @@ const computeIsInProgress = ({ formattedEntry }) => {
 
 export const computeIsNotServedDocument = ({ formattedEntry }) => {
   return (
-    !DocketEntry.isServed(formattedEntry) &&
-    !DocketEntry.isUnservable(formattedEntry) &&
-    !DocketEntry.isMinuteEntry(formattedEntry) &&
-    !formattedEntry.isDraft
+    formattedEntry.isDraft ||
+    (!DocketEntry.isServed(formattedEntry) &&
+      !DocketEntry.isUnservable(formattedEntry) &&
+      !DocketEntry.isMinuteEntry(formattedEntry))
   );
 };
 
