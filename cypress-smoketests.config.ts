@@ -8,7 +8,7 @@ import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce'
 import {
   deleteAllItemsInEmailBucket,
   readAllItemsInBucket,
-} from './cypress/cypress-integration/support/database';
+} from './cypress/cypress-smoketests/support/email-receipt';
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
 // eslint-disable-next-line import/no-default-export

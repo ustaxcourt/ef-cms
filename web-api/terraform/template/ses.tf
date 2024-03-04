@@ -187,12 +187,16 @@ resource "aws_ses_receipt_rule_set" "email_forwarding_rule_set" {
 resource "aws_ses_receipt_rule" "email_forwarding_rule" {
   name          = "email_forwarding_rule"
   rule_set_name = aws_ses_receipt_rule_set.email_forwarding_rule_set.rule_set_name
-  # TODO: parameterize 'smoktestEmail@'
-  recipients   = ["smoketestEmail@${aws_ses_domain_identity.main.domain}"]
+  # TODO: should smoketest@ be a secret?
+  recipients   = ["smoketest@${aws_ses_domain_identity.main.domain}"]
   enabled      = true
   scan_enabled = true
   s3_action {
     bucket_name = aws_s3_bucket.smoketest_email_inbox.bucket
     position    = 1
   }
+}
+
+resource "aws_ses_active_receipt_rule_set" "main" {
+  rule_set_name = "email_forwarding_rule_set"
 }

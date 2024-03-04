@@ -17,7 +17,10 @@ describe('Verify verification email', () => {
   });
 
   const UNIQUE_TIMESTAMP = Date.now();
-  const TEST_EMAIL = `testemail+${UNIQUE_TIMESTAMP}@exp3.ustc-case-mgmt.flexion.us`;
+  const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
+  const TEST_EMAIL = `smoketest+${UNIQUE_TIMESTAMP}@${EFCMS_DOMAIN}`;
+
+  //TODO: Skip this test when running locally (?)
 
   it('should update petitioner email and confirm that a verification email is received by the updated email address', () => {
     navigateTo('petitioner9');
