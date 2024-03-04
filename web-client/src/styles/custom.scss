@@ -1033,7 +1033,7 @@ header.usa-header {
     max-width: unset;
   }
 
-  @media only screen and (min-width: $medium-screen) {
+  @media only screen and (min-width: $large-screen) {
     form {
       max-width: 90%;
     }

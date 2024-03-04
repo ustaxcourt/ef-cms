@@ -133,7 +133,6 @@ export const ChangePassword = connect(
                     />
                   </div>
                   <button
-                    aria-controls="password password-create-account-confirm"
                     className="usa-show-password"
                     data-hide-text="Hide password"
                     data-show-text="Show password"
@@ -156,7 +155,7 @@ export const ChangePassword = connect(
                       fieldName="confirm password"
                       text="Passwords must match"
                       valid={changePasswordHelper.confirmPassword}
-                    ></RequirementsText>
+                    />
                   </div>
                   <Button
                     className="usa-button margin-top-3"

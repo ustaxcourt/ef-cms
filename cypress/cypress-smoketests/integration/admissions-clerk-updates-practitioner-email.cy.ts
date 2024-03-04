@@ -1,6 +1,6 @@
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
-import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 import { faker } from '@faker-js/faker';
+import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 import { loginAsAdmissionsClerk } from '../../helpers/auth/login-as-helpers';
 import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
@@ -51,14 +51,14 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         cy.visit('/login');
         cy.get('[data-testid="email-input"]').type(practitionerEmail);
         cy.get('[data-testid="password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="login-button"]').click();
         cy.get('[data-testid="new-password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="confirm-new-password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="change-password-button"]').click();
         cy.get('[data-testid="open-cases-count"]');
@@ -136,14 +136,14 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         cy.visit('/login');
         cy.get('[data-testid="email-input"]').type(practitionerEmail);
         cy.get('[data-testid="password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="login-button"]').click();
         cy.get('[data-testid="new-password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="confirm-new-password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="change-password-button"]').click();
         cy.get('[data-testid="open-cases-count"]');

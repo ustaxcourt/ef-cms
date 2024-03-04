@@ -12,9 +12,18 @@ module.exports = [
       'wait for #confirm-password to be visible',
       'set field #confirm-password to aA1!aaaa',
       'click element #submit-button',
-      'wait for #verification-sent-message to be visible',
+      'wait for [data-testid="verification-sent-message"] to be visible',
     ],
     notes: 'checks a11y of create petitioner account success message',
     url: 'http://localhost:1234/create-account/petitioner',
+  },
+  'http://localhost:1234/forgot-password',
+  {
+    actions: [
+      'wait for [data-testid="email-input"] to be visible',
+      `set field [data-testid="email-input"] to example${Date.now()}@pa11y.com`,
+    ],
+    notes: 'checks a11y of reset password page',
+    url: 'http://localhost:1234/forgot-password',
   },
 ];

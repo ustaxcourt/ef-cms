@@ -78,7 +78,7 @@ export const CreatePetitionerAccountForm = connect(
                 </div>
               )}
 
-              <label className="usa-label " htmlFor="name">
+              <label className="usa-label" htmlFor="name">
                 Name
               </label>
               <input
