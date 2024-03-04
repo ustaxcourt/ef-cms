@@ -1,4 +1,4 @@
-import * as checkReindexComplete from '../../shared/admin-tools/elasticsearch/check-reindex-complete';
+import * as checkReindexComplete from '../../scripts/elasticsearch/check-reindex-complete';
 import { Client } from '@opensearch-project/opensearch';
 import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { getBaseAliasFromIndexName } from '../../web-api/elasticsearch/elasticsearch-aliases';
@@ -25,7 +25,7 @@ jest.mock('../../web-api/elasticsearch/client', () => ({
   getClient: jest.fn().mockReturnValue(mockedClient),
 }));
 
-jest.mock('../../shared/admin-tools/elasticsearch/check-reindex-complete');
+jest.mock('../../scripts/elasticsearch/check-reindex-complete');
 const areAllReindexTasksFinished = jest
   .spyOn(checkReindexComplete, 'areAllReindexTasksFinished')
   .mockImplementation(jest.fn());
