@@ -1,7 +1,8 @@
 /* eslint-disable complexity */
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
+import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -134,7 +135,9 @@ export const getFormattedDocketEntry = ({
     !permissions.UPDATE_CASE &&
     entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-  formattedResult.showNotServed = entry.isNotServedDocument;
+  formattedResult.showNotServed = computeIsNotServedDocument({
+    formattedEntry: entry,
+  });
   formattedResult.showServed = entry.isStatusServed;
 
   const showDocumentLinks = DocketEntry.isDownloadable(entry, {

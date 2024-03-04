@@ -29,11 +29,12 @@ const computeIsInProgress = ({ formattedEntry }) => {
   );
 };
 
-const computeIsNotServedDocument = ({ formattedEntry }) => {
+export const computeIsNotServedDocument = ({ formattedEntry }) => {
   return (
     !DocketEntry.isServed(formattedEntry) &&
-    !formattedEntry.isUnservable &&
-    !formattedEntry.isMinuteEntry
+    !DocketEntry.isUnservable(formattedEntry) &&
+    !DocketEntry.isMinuteEntry(formattedEntry) &&
+    !formattedEntry.isDraft
   );
 };
 
