@@ -18,6 +18,6 @@ export const updateDocketEntriesPostCoversheetInteractor = (
   return post({
     applicationContext,
     body: { updatedDocketEntryData },
-    endpoint: `/docket-entries/${docketNumber}/${docketEntryId}`,
+    endpoint: `/docket-entry/${docketNumber}/${docketEntryId}`,
   });
 };
