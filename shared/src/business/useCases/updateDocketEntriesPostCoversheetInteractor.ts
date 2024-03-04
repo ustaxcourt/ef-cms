@@ -1,7 +1,9 @@
 import { Case } from '../entities/cases/Case';
 import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../entities/EntityConstants';
 
-export const updateDocketEntriesInteractor = async (
+//update all records with docket entry
+//processing status and page number
+export const updateDocketEntriesPostCoversheetInteractor = async (
   applicationContext: IApplicationContext,
   {
     docketEntryId,

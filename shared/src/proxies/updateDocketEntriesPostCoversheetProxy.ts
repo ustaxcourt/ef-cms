@@ -1,6 +1,6 @@
 import { post } from './requests';
 
-export const updateDocketEntriesInteractor = (
+export const updateDocketEntriesPostCoversheetInteractor = (
   applicationContext,
   {
     docketEntryId,

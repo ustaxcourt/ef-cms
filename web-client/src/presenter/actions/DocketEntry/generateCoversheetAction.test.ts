@@ -54,7 +54,8 @@ describe('generateCoversheetAction', () => {
     applicationContext.getPdfLib = () => PDF_LIB_MOCK;
 
     applicationContext.getUseCases().uploadDocumentInteractor = jest.fn();
-    applicationContext.getUseCases().updateDocketEntriesInteractor = jest.fn();
+    applicationContext.getUseCases().updateDocketEntriesPostCoversheetInteractor =
+      jest.fn();
 
     presenter.providers.applicationContext = applicationContext;
 
@@ -138,10 +139,11 @@ describe('generateCoversheetAction', () => {
 
     expect(uploadDocumentInteractorCalls[0][1].key).toEqual(mockDocketEntryId);
 
-    const updateDocketEntriesInteractorCalls =
-      applicationContext.getUseCases().updateDocketEntriesInteractor.mock.calls;
-    expect(updateDocketEntriesInteractorCalls.length).toEqual(1);
-    expect(updateDocketEntriesInteractorCalls[0][1]).toEqual({
+    const updateDocketEntriesPostCoversheetInteractorCalls =
+      applicationContext.getUseCases()
+        .updateDocketEntriesPostCoversheetInteractor.mock.calls;
+    expect(updateDocketEntriesPostCoversheetInteractorCalls.length).toEqual(1);
+    expect(updateDocketEntriesPostCoversheetInteractorCalls[0][1]).toEqual({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockDocketNumber,
       updatedDocketEntryData: {

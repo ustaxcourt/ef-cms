@@ -75,7 +75,7 @@ export const generateCoversheetAction = async ({
 
   await applicationContext
     .getUseCases()
-    .updateDocketEntriesInteractor(applicationContext, {
+    .updateDocketEntriesPostCoversheetInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
       updatedDocketEntryData: {

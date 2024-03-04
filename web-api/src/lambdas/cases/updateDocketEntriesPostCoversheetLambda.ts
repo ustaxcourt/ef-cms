@@ -1,10 +1,10 @@
 import { genericHandler } from '../../genericHandler';
 
-export const updateDocketEntriesLambda = event =>
+export const updateDocketEntriesPostCoversheetLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateDocketEntriesInteractor(applicationContext, {
+      .updateDocketEntriesPostCoversheetInteractor(applicationContext, {
         ...JSON.parse(event.body),
         ...event.pathParameters,
       });
