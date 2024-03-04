@@ -69,7 +69,7 @@ export const getShowEditDocketRecordEntry = ({
   return (
     userPermissions.EDIT_DOCKET_ENTRY &&
     (hasSystemGeneratedDocument ||
-      entry.isMinuteEntry ||
+      DocketEntry.isMinuteEntry(entry) ||
       entry.qcWorkItemsCompleted) &&
     (!hasCourtIssuedDocument ||
       hasServedCourtIssuedDocument ||
