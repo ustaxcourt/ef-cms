@@ -106,7 +106,7 @@ npm run admin:become-user "$COGNITO_USER_ID"
 
 ```
 source scripts/env/set-env.zsh myenv
-node shared/admin-tools/email/resend-service-email-to-irs-superuser.js "2022-09-07T14:18:00.000Z" "2022-09-07T15:04:00.000Z"
+npm run admin:resend-service-email-to-irs-superuser "2022-09-07T14:18:00.000Z" "2022-09-07T15:04:00.000Z"
 ```
 
 ### Run environment-level terraform deployment

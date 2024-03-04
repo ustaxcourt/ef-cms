@@ -1,8 +1,8 @@
 import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../support/cognito-login';
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
-import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 import { faker } from '@faker-js/faker';
+import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
 import { verifyPasswordRequirements } from '../../helpers/auth/verify-password-requirements';
@@ -16,7 +16,7 @@ describe('Forgot Password', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
-  const password = cypressEnv.defaultAccountPass;
+  const password = getCypressEnv().defaultAccountPass;
 
   /*
       Given a petitioner with a DAWSON account

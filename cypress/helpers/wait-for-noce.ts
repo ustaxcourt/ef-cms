@@ -1,4 +1,4 @@
-import { cypressEnv } from './env/cypressEnvironment';
+import { getCypressEnv } from './env/cypressEnvironment';
 import { getDocumentClient } from './dynamo/getDynamoCypress';
 
 export async function waitForNoce({
@@ -19,7 +19,7 @@ export async function waitForNoce({
       ':prefix': 'docket-entry',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    TableName: cypressEnv.dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbTableName,
   });
 
   const noce = result.Items?.find(item => item.eventCode === 'NOCE');

@@ -1,4 +1,4 @@
-import { cypressEnv } from '../../helpers/env/cypressEnvironment';
+import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 
 describe('Given a user with a DAWSON account', () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe('Given a user with a DAWSON account', () => {
         'testAdmissionsClerk@example.com',
       );
       cy.get('[data-testid="password-input"]').type(
-        cypressEnv.defaultAccountPass,
+        getCypressEnv().defaultAccountPass,
       );
       cy.get('[data-testid="login-button"]').click();
       cy.get('[data-testid="account-menu-button"]');
@@ -60,7 +60,7 @@ describe('Given a user without a DAWSON account', () => {
       cy.visit('/login');
       cy.get('[data-testid="email-input"]').type('doesNotExist@example.com');
       cy.get('[data-testid="password-input"]').type(
-        cypressEnv.defaultAccountPass,
+        getCypressEnv().defaultAccountPass,
       );
       cy.get('[data-testid="login-button"]').click();
 

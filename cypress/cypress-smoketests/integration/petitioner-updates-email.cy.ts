@@ -6,8 +6,8 @@ import {
   goToMyAccount,
 } from '../../cypress-integration/support/pages/my-account';
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
-import { cypressEnv } from '../../helpers/env/cypressEnvironment';
 import { faker } from '@faker-js/faker';
+import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 import { logout } from '../../helpers/auth/logout';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
@@ -33,7 +33,7 @@ describe('Petitioner Updates e-mail', () => {
   it('should alert the petitioner that they need to verify their new email address when the user changes their email but does not verify their new email', () => {
     const username = `cypress_test_account+old${v4()}`;
     const email = `${username}@example.com`;
-    const password = cypressEnv.defaultAccountPass;
+    const password = getCypressEnv().defaultAccountPass;
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
@@ -67,7 +67,7 @@ describe('Petitioner Updates e-mail', () => {
   it('should allow a petitioner to login with their updated email and have all associated cases updated with the new email when the user changes their email address and verifies it', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
-    const password = cypressEnv.defaultAccountPass;
+    const password = getCypressEnv().defaultAccountPass;
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
@@ -130,7 +130,7 @@ describe('Petitioner Updates e-mail', () => {
     logout();
 
     // The code below will fail on cognito-local
-    if (cypressEnv.env !== 'local') {
+    if (getCypressEnv().env !== 'local') {
       cy.visit('/login');
       cy.get('[data-testid="email-input"]').type(email);
       cy.get('[data-testid="password-input"]').type(password);

@@ -15,7 +15,7 @@ export const VerificationSent = connect(
       >
         <div
           className="grid-container grid-gap-lg padding-x-4"
-          id="verification-sent-message"
+          data-testid="verification-sent-message"
         >
           <SuccessNotification isDismissible={false} />
           <div className={'bg-white padding-4'}>

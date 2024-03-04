@@ -1,12 +1,12 @@
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import { createAndServePaperPetitionMultipleParties } from '../../helpers/create-and-serve-paper-petition-petitioner-and-spouse';
-import { cypressEnv } from '../../helpers/env/cypressEnvironment';
+import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
 
 describe('Admissions Clerk Grants E-Access', () => {
-  const password = cypressEnv.defaultAccountPass;
+  const password = getCypressEnv().defaultAccountPass;
   after(() => {
     cy.task('deleteAllCypressTestAccounts');
   });
@@ -206,14 +206,14 @@ describe('Admissions Clerk Grants E-Access', () => {
         cy.visit('/login');
         cy.get('[data-testid="email-input"]').type(practitionerEmail);
         cy.get('[data-testid="password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="login-button"]').click();
         cy.get('[data-testid="new-password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="confirm-new-password-input"]').type(
-          cypressEnv.defaultAccountPass,
+          getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="change-password-button"]').click();
         cy.get('[data-testid="open-cases-count"]');
@@ -264,7 +264,7 @@ describe('Admissions Clerk Grants E-Access', () => {
       createAPetitioner({
         email: petitionerEmail,
         name,
-        password: cypressEnv.defaultAccountPass,
+        password: getCypressEnv().defaultAccountPass,
       });
 
       cy.login('admissionsclerk1');

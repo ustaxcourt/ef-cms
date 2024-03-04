@@ -1,8 +1,4 @@
 import { defineConfig } from 'cypress';
-import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
-import { getUserTokenWithRetry } from './cypress/support/cognito-login';
-
-const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -10,13 +6,7 @@ export default defineConfig({
   e2e: {
     experimentalStudio: true,
     setupNodeEvents(on) {
-      on('task', {
-        getUserToken({ email, password }) {
-          return CYPRESS_SMOKETESTS_LOCAL
-            ? getUserTokenLocal(email)
-            : getUserTokenWithRetry(email, password);
-        },
-      });
+      on('task', {});
     },
     specPattern: 'cypress/cypress-readonly/integration/*.cy.ts',
     supportFile: 'cypress/cypress-readonly/support/index.ts',
