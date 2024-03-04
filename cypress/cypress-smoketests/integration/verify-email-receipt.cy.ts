@@ -8,17 +8,18 @@ import {
 import { navigateTo } from '../../cypress-integration/support/pages/maintenance';
 
 describe('Verify verification email', () => {
+  const BUCKET_NAME = Cypress.env('SMOKETEST_BUCKET');
+  const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
+  const UNIQUE_TIMESTAMP = Date.now();
+  const TEST_EMAIL = `smoketest+${UNIQUE_TIMESTAMP}@${EFCMS_DOMAIN}`;
+
   before(() => {
-    cy.task('deleteAllItemsInEmailBucket');
+    cy.task('deleteAllItemsInEmailBucket', BUCKET_NAME);
   });
 
   after(() => {
-    cy.task('deleteAllItemsInEmailBucket');
+    cy.task('deleteAllItemsInEmailBucket', BUCKET_NAME);
   });
-
-  const UNIQUE_TIMESTAMP = Date.now();
-  const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
-  const TEST_EMAIL = `smoketest+${UNIQUE_TIMESTAMP}@${EFCMS_DOMAIN}`;
 
   //TODO: Skip this test when running locally (?)
 
@@ -30,19 +31,25 @@ describe('Verify verification email', () => {
     clickConfirmModal();
     confirmEmailPendingAlert();
 
-    readItemsAndRetry(TEST_EMAIL);
+    readItemsAndRetry({ BUCKET_NAME, TEST_EMAIL });
   });
 });
 
-const readItemsAndRetry = (TEST_EMAIL: string) => {
+const readItemsAndRetry = ({
+  BUCKET_NAME,
+  TEST_EMAIL,
+}: {
+  BUCKET_NAME: string;
+  TEST_EMAIL: string;
+}) => {
   const MAX_RETRIES = 3;
   let retryCount = 0;
-  cy.task<any[]>('readAllItemsInBucket').then(items => {
+  cy.task<any[]>('readAllItemsInBucket', BUCKET_NAME).then(items => {
     if (items.length === 0 && retryCount < MAX_RETRIES) {
       retryCount++;
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(2000);
-      readItemsAndRetry(TEST_EMAIL);
+      readItemsAndRetry({ BUCKET_NAME, TEST_EMAIL });
     } else {
       expect(items).to.have.length(1);
       expect(items[0].content).to.contain(

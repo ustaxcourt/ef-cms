@@ -30,11 +30,11 @@ export default defineConfig({
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
         },
-        deleteAllItemsInEmailBucket() {
-          return deleteAllItemsInEmailBucket();
+        deleteAllItemsInEmailBucket(bucketName: string) {
+          return deleteAllItemsInEmailBucket(bucketName);
         },
-        readAllItemsInBucket() {
-          return readAllItemsInBucket();
+        readAllItemsInBucket(bucketName: string) {
+          return readAllItemsInBucket(bucketName);
         },
       });
     },
