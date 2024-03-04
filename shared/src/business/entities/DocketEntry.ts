@@ -190,8 +190,8 @@ export class DocketEntry extends JoiValidationEntity {
     this.isLegacySealed = rawDocketEntry.isLegacySealed;
     this.isLegacyServed = rawDocketEntry.isLegacyServed;
     this.isMinuteEntry =
-      DocketEntry.isMinuteEntry({ eventCode: rawDocketEntry.eventCode }) ||
-      false;
+      rawDocketEntry.isMinuteEntry ||
+      DocketEntry.isMinuteEntry({ eventCode: rawDocketEntry.eventCode });
     this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord || false;
     this.isPaper = rawDocketEntry.isPaper;
     this.isPendingService = rawDocketEntry.isPendingService;

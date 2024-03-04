@@ -64,9 +64,11 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.isFileAttached = rawProps.isFileAttached;
     this.filedByRole = rawProps.filedByRole;
     this.isLegacyServed = rawProps.isLegacyServed;
-    this.isMinuteEntry = DocketEntry.isMinuteEntry({
-      eventCode: rawProps.eventCode,
-    });
+    this.isMinuteEntry =
+      rawProps.isMinuteEntry ||
+      DocketEntry.isMinuteEntry({
+        eventCode: rawProps.eventCode,
+      });
     this.isOnDocketRecord = rawProps.isOnDocketRecord;
     this.isPaper = rawProps.isPaper;
     this.isSealed = !!rawProps.isSealed;

@@ -96,7 +96,7 @@ export const formatDocketEntryOnDocketRecord = (
     eventCode: entry.eventCode,
     filedBy: entry.filedBy,
     filingDate: entry.filingDate,
-    hasDocument: !entry.isMinuteEntry,
+    hasDocument: !DocketEntry.isMinuteEntry(entry),
     index: entry.index,
     isPaper: entry.isPaper,
     isSealed: entry.isSealed,
