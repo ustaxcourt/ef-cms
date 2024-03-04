@@ -225,7 +225,6 @@ export const Header = connect(
     templateHelper: state.templateHelper,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
-    user: state.user,
   },
   function Header({
     headerHelper,
@@ -236,7 +235,6 @@ export const Header = connect(
     templateHelper,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
-    user,
   }) {
     const headerRef = useRef(null);
 
@@ -311,7 +309,7 @@ export const Header = connect(
                   >
                     Close
                   </Button>
-                  {user &&
+                  {headerHelper.isLoggedIn &&
                     NavigationItems(headerHelper, {
                       isDocumentQCMenuOpen: menuHelper.isDocumentQCMenuOpen,
                       isMessagesMenuOpen: menuHelper.isMessagesMenuOpen,
