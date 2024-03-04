@@ -107,6 +107,8 @@ export default {
         stack,
         'batchDownloadFunction',
         {
+          handler:
+            'web-api/src/lambdas/trialSessions/batchDownloadTrialSessionLambda.batchDownloadTrialSessionHandler',
           nodejs: {
             esbuild: {
               loader: {
