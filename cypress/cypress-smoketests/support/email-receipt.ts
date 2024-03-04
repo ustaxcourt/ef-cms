@@ -8,9 +8,8 @@ import {
 const s3 = new S3Client({
   region: 'us-east-1',
 });
-const bucketName = Cypress.env('SMOKETEST_BUCKET');
 
-export const deleteAllItemsInEmailBucket = async () => {
+export const deleteAllItemsInEmailBucket = async (bucketName: string) => {
   try {
     const objectsList = await s3.send(
       new ListObjectsV2Command({ Bucket: bucketName }),
@@ -32,7 +31,7 @@ export const deleteAllItemsInEmailBucket = async () => {
   return null;
 };
 
-export const readAllItemsInBucket = async () => {
+export const readAllItemsInBucket = async (bucketName: string) => {
   try {
     const objectsList = await s3.send(
       new ListObjectsV2Command({ Bucket: bucketName }),
