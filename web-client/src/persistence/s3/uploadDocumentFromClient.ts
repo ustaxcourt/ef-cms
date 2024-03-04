@@ -10,13 +10,11 @@ const getUploadPolicy = async ({ applicationContext, key }) => {
 };
 
 export const uploadDocumentFromClient = async ({
-  addCoverSheet = false,
   applicationContext,
   document,
   key,
   onUploadProgress = () => {},
 }: {
-  addCoverSheet: boolean;
   applicationContext;
   document: any;
   key: string;
@@ -28,7 +26,6 @@ export const uploadDocumentFromClient = async ({
     key: docId,
   });
   await applicationContext.getPersistenceGateway().uploadPdfFromClient({
-    addCoverSheet,
     applicationContext,
     file: document,
     key: docId,

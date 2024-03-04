@@ -6,7 +6,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const uploadDocumentInteractor = async (
   applicationContext,
-  { addCoverSheet = false, documentFile, key, onUploadProgress },
+  { documentFile, key, onUploadProgress },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -23,7 +23,6 @@ export const uploadDocumentInteractor = async (
   return await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
-      addCoverSheet,
       applicationContext,
       document: documentFile,
       key,

@@ -51,7 +51,6 @@ export const addCoversheetInteractor = async (
         Key: docketEntryId,
       })
       .promise();
-
     pdfData = Body;
   } catch (err) {
     applicationContext.logger.error(
