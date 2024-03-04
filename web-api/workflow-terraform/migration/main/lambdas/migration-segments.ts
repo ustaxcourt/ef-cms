@@ -66,15 +66,13 @@ const scanTableSegment = async (
 };
 
 const hasMigrationRan = async key => {
-  const { Item } = await dynamoDbDocumentClient
-    .get({
-      Key: {
-        pk: `migration|${key}`,
-        sk: `migration|${key}`,
-      },
-      TableName: `efcms-deploy-${process.env.STAGE}`,
-    })
-    .promise();
+  const { Item } = await dynamoDbDocumentClient.get({
+    Key: {
+      pk: `migration|${key}`,
+      sk: `migration|${key}`,
+    },
+    TableName: `efcms-deploy-${process.env.STAGE}`,
+  });
   return { [key]: !!Item };
 };
 
@@ -184,6 +182,7 @@ export const handler: Handler = async (event: SQSEvent, context: Context) => {
   for (let { key } of migrationsToRun) {
     Object.assign(ranMigrations, await hasMigrationRan(key));
   }
+  console.log('hello world');
 
   await scanTableSegment(
     applicationContext,
