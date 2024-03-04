@@ -84,7 +84,7 @@ describe('generateCoversheetAction', () => {
       },
     });
 
-    //make sure file gets downloaded
+    // file gets downloaded
     const getDocumentDownloadUrlInteractorCalls =
       applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
         .calls;
@@ -101,7 +101,7 @@ describe('generateCoversheetAction', () => {
       { responseType: 'arraybuffer' },
     ]);
 
-    //make sure we get teh coversheet
+    // get the coversheet
     const getCoversheetInteractorCalls =
       applicationContext.getUseCases().getCoversheetInteractor.mock.calls;
     expect(getCoversheetInteractorCalls.length).toEqual(1);
@@ -110,7 +110,7 @@ describe('generateCoversheetAction', () => {
       docketNumber: mockDocketNumber,
     });
 
-    //make sure we append coversheet
+    // append coversheet
     const pdfLibLoadCalls = PDF_LIB_MOCK.PDFDocument.load.mock.calls;
     expect(pdfLibLoadCalls.length).toEqual(2);
     expect(pdfLibLoadCalls[0][0]).toEqual(new Uint8Array([12, 12, 12]));
