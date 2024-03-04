@@ -1,5 +1,5 @@
 import { Client } from '@opensearch-project/opensearch';
-import { areAllReindexTasksFinished } from '../../shared/admin-tools/elasticsearch/check-reindex-complete';
+import { areAllReindexTasksFinished } from '../elasticsearch/check-reindex-complete';
 import { baseAliases } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
 import { reindexIfNecessary } from '../elasticsearch/reindex.helpers';

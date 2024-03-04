@@ -1,4 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
@@ -81,7 +82,6 @@ export const formatDocumentSearchResultRecord = (
     ADVANCED_SEARCH_TABS,
     BENCH_OPINION_EVENT_CODE,
     OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
-    ORDER_EVENT_CODES,
     STANDING_PRETRIAL_EVENT_CODES,
   } = applicationContext.getConstants();
 
@@ -108,7 +108,7 @@ export const formatDocumentSearchResultRecord = (
   } else if (STANDING_PRETRIAL_EVENT_CODES.includes(result.eventCode)) {
     result.formattedJudgeName = result.judge;
   } else if (
-    ORDER_EVENT_CODES.includes(result.eventCode) ||
+    DocketEntry.isOrder(result.eventCode) ||
     result.eventCode === BENCH_OPINION_EVENT_CODE
   ) {
     result.formattedJudgeName = result.signedJudgeName

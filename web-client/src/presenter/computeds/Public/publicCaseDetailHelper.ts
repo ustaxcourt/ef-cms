@@ -1,99 +1,33 @@
 /* eslint-disable complexity */
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  BRIEF_EVENTCODES,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  EVENT_CODES_VISIBLE_TO_PUBLIC,
-  MOTION_EVENT_CODES,
-  ORDER_EVENT_CODES,
-  POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
-  ROLES,
-  STIPULATED_DECISION_EVENT_CODE,
-  isDocumentBriefType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { getFilingsAndProceedings } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
-import { prepareDateFromString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app-public.cerebral';
-
-export const getMeetsPolicyChangeRequirements = (
-  entry: RawDocketEntry & { rootDocument: RawDocketEntry },
-  visibilityPolicyDate: string,
-) => {
-  if (!POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
-    return false;
-  }
-
-  const visibilityPolicyDateFormatted =
-    prepareDateFromString(visibilityPolicyDate).toISO();
-
-  const filedByPractitioner = [
-    ROLES.privatePractitioner,
-    ROLES.irsPractitioner,
-  ].includes(entry.filedByRole ?? '');
-
-  const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
-    entry.eventCode,
-  );
-  const filedAfterPolicyChange =
-    entry.filingDate >= visibilityPolicyDateFormatted;
-
-  if (isAmendment) {
-    const originalDocType = entry.rootDocument.documentType;
-
-    if (isDocumentBriefType(originalDocType)) {
-      return filedAfterPolicyChange && filedByPractitioner;
-    }
-    if (originalDocType === 'Amicus Brief') {
-      return filedAfterPolicyChange;
-    }
-    return false;
-  }
-
-  const isDocketEntryBrief = BRIEF_EVENTCODES.includes(entry.eventCode);
-
-  if (isDocketEntryBrief) {
-    return filedAfterPolicyChange && filedByPractitioner;
-  }
-  return filedAfterPolicyChange;
-};
-
-export const fetchRootDocument = (
-  entry: RawDocketEntry,
-  docketEntries: RawDocketEntry[],
-): RawDocketEntry => {
-  const { previousDocument } = entry;
-  if (!previousDocument) return entry;
-
-  const previousEntry = docketEntries.find(
-    e => e.docketEntryId === previousDocument.docketEntryId,
-  );
-
-  if (!previousEntry) return entry;
-
-  return fetchRootDocument(previousEntry, docketEntries);
-};
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   {
     entry,
     isTerminalUser,
+    rawCase,
     visibilityPolicyDate,
   }: {
     entry: any & { rootDocument: any };
     isTerminalUser: boolean;
+    rawCase: RawPublicCase;
     visibilityPolicyDate: string; // ISO Date String
   },
 ) => {
   const isServed =
     DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry);
 
-  const isCourtIssued = DocketEntry.isCourtIssued(entry.eventCode);
+  const isCourtIssued = DocketEntry.isCourtIssued(entry);
 
   let createdAtFormatted;
   if (
@@ -123,24 +57,20 @@ export const formatDocketEntryOnDocketRecord = (
 
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
-  const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
-    entry,
-    visibilityPolicyDate,
-  );
+  const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
+    isTerminalUser,
+    rawCase,
+    user: {
+      entityName: 'User',
+      name: '',
+      role: 'petitioner',
+      userId: '',
+    },
+    visibilityChangeDate: visibilityPolicyDate,
+  });
 
   const canTerminalUserSeeLink =
     entry.isFileAttached && isServed && !entry.isSealed && !entry.isStricken;
-
-  const canPublicUserSeeLink =
-    ((isCourtIssued && entry.eventCode !== STIPULATED_DECISION_EVENT_CODE) ||
-      meetsPolicyChangeRequirements) &&
-    entry.isFileAttached &&
-    isServed &&
-    !entry.isStricken &&
-    !entry.isTranscript &&
-    !entry.isSealed &&
-    EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode) &&
-    entry.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
   const showLinkToDocument = isTerminalUser
     ? canTerminalUserSeeLink
@@ -189,11 +119,11 @@ const filterDocketEntries = (
   switch (filter) {
     case PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions:
       return docketEntries.filter(entry =>
-        MOTION_EVENT_CODES.includes(entry.eventCode),
+        DocketEntry.isMotion(entry.eventCode),
       );
     case PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders:
       return docketEntries.filter(entry =>
-        ORDER_EVENT_CODES.includes(entry.eventCode),
+        DocketEntry.isOrder(entry.eventCode),
       );
     case PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments:
     default:
@@ -205,12 +135,14 @@ export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
+  const rawCase = get(state.caseDetail);
+
   const {
     canAllowPrintableDocketRecord,
     docketEntries,
     docketNumber,
     isSealed,
-  } = get(state.caseDetail);
+  } = rawCase;
 
   const isTerminalUser = get(state.isTerminalUser);
 
@@ -222,17 +154,14 @@ export const publicCaseDetailHelper = (
     ],
   );
 
-  let formattedDocketEntriesOnDocketRecord = docketEntries
-    .map((entry: any, _, array) => {
-      return { ...entry, rootDocument: fetchRootDocument(entry, array) };
-    })
-    .map(entry => {
-      return formatDocketEntryOnDocketRecord(applicationContext, {
-        entry,
-        isTerminalUser,
-        visibilityPolicyDate,
-      });
+  let formattedDocketEntriesOnDocketRecord = docketEntries.map(entry => {
+    return formatDocketEntryOnDocketRecord(applicationContext, {
+      entry,
+      isTerminalUser,
+      rawCase,
+      visibilityPolicyDate,
     });
+  });
 
   const { docketRecordSort } = get(state.sessionMetadata);
   const sortOrder = docketRecordSort[docketNumber];
