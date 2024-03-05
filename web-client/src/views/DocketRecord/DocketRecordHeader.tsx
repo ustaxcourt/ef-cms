@@ -179,9 +179,8 @@ export const DocketRecordHeader = connect(
                     }
                   />
                 </div>
-
-                {docketRecordHelper.showPrintableDocketRecord && (
-                  <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+                <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+                  {docketRecordHelper.showPrintableDocketRecord && (
                     <Button
                       link
                       aria-label="printable docket record"
@@ -195,8 +194,24 @@ export const DocketRecordHeader = connect(
                     >
                       Printable Docket Record
                     </Button>
-                  </div>
-                )}
+                  )}
+                  {docketRecordHelper.showDownloadLink && (
+                    <Button
+                      link
+                      aria-label="download docket records"
+                      data-testid="download-docket-records-button"
+                      disabled={docketRecordHelper.isDownloadButtonLinkDisabled}
+                      icon="download-arrow-down"
+                      onClick={() => {
+                        // gotoPrintableDocketRecordSequence({
+                        //   docketNumber: formattedCaseDetail.docketNumber,
+                        // });
+                      }}
+                    >
+                      Download
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </NonMobile>
