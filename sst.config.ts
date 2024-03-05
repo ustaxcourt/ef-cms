@@ -46,6 +46,7 @@ const EXPECTED_ENV_KEYS = [
   'USER_POOL_ID_IRS',
   'REGION',
   'NODE_ENV',
+  'COLOR',
 ] as const;
 
 const environment: Record<(typeof EXPECTED_ENV_KEYS)[number], string> = {};
@@ -278,7 +279,7 @@ export default {
         timeout: '900 second',
       });
 
-      const api = new Api(stack, 'Api', {
+      const webApi = new Api(stack, 'Api', {
         authorizers: {
           cognitoAuthorizer: {
             function: new Function(stack, 'CognitoAuthorizer', {
@@ -287,6 +288,10 @@ export default {
             }),
             type: 'lambda',
           },
+        },
+        customDomain: {
+          domainName: `zach-api-${environment.COLOR}.${environment.EFCMS_DOMAIN}`,
+          hostedZone: environment.ZONE_NAME,
         },
         defaults: {
           function: {
@@ -309,7 +314,7 @@ export default {
 
       // Show the API endpoint in the output
       stack.addOutputs({
-        ApiEndpoint: api.url,
+        ApiEndpoint: webApi.url,
         WebsocketEndpoint: websocket.url,
         batchDownloadLambdaName: asyncLambdaFunction.functionName,
       });

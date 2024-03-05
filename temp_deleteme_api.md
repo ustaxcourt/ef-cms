@@ -5,6 +5,11 @@ Goals
 
 :::TO DO:::
 - Deploy Blue/green east/west public/private
-- Create generic handler for all async requests
+- update all async lambdas to use generic async work flow
 - Figure out deployments + integration with terraform
 - Add correct environment variables.
+- custom domains
+
+
+::: Discussion :::
+- Should sst rely on terraform resources or should terraform rely on sst resources? (sst deploy -> terraform deploy)
