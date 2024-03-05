@@ -84,6 +84,50 @@ describe('docketRecordHelper', () => {
     });
   });
 
+  describe('isDownloadButtonLinkDisabled', () => {
+    it('should be set to false by default', () => {
+      const mockCanAllowPrintableDocketRecord = true;
+
+      const result = runCompute(docketRecordHelper, {
+        state: {
+          caseDetail: {
+            canAllowPrintableDocketRecord: mockCanAllowPrintableDocketRecord,
+          },
+          permissions: {},
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
+          },
+        },
+      });
+
+      expect(result.isDownloadButtonLinkDisabled).toBe(false);
+    });
+  });
+
+  describe('showDownloadLink', () => {
+    it('should be set to false by default', () => {
+      const mockCanAllowPrintableDocketRecord = true;
+
+      const result = runCompute(docketRecordHelper, {
+        state: {
+          caseDetail: {
+            canAllowPrintableDocketRecord: mockCanAllowPrintableDocketRecord,
+          },
+          permissions: {},
+          sessionMetadata: {
+            docketRecordSort: {
+              [mockDocketNumber]: '',
+            },
+          },
+        },
+      });
+
+      expect(result.showDownloadLink).toBe(true);
+    });
+  });
+
   describe('sortLabelTextMobile', () => {
     const sortLabelsMobile = {
       byDate: 'Oldest to Newest',
