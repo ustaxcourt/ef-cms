@@ -147,6 +147,7 @@ export const DocketRecordHeader = connect(
     DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntriesHelper: state.formattedDocketEntries,
     gotoPrintableDocketRecordSequence:
       sequences.gotoPrintableDocketRecordSequence,
     sessionMetadata: state.sessionMetadata,
@@ -158,6 +159,7 @@ export const DocketRecordHeader = connect(
     DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper,
     formattedCaseDetail,
+    formattedDocketEntriesHelper,
     gotoPrintableDocketRecordSequence,
     sessionMetadata,
     showModal,
@@ -200,7 +202,9 @@ export const DocketRecordHeader = connect(
                       link
                       aria-label="download docket records"
                       data-testid="download-docket-records-button"
-                      disabled={docketRecordHelper.isDownloadButtonLinkDisabled}
+                      disabled={
+                        !formattedDocketEntriesHelper.someDocumentsSelectedForDownload
+                      }
                       icon={['fas', 'cloud-download-alt']}
                       onClick={() => {
                         // gotoPrintableDocketRecordSequence({
