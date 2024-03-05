@@ -341,7 +341,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
         Condition = {
           StringEquals = {
             "AWS:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
-            "AWS:SourceArn"     = "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:receipt-rule-set/email_forwarding_rule_set:receipt-rule/email_forwarding_rule"
+            "AWS:SourceArn"     = "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:receipt-rule-set/email_forwarding_rule_set:receipt-rule/email_forwarding_rule_${var.environment}"
           }
         }
       }
