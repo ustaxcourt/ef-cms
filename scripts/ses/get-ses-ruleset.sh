@@ -10,6 +10,6 @@
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
-ACTIVE_SES_RULESET=$(aws ses describe-active-receipt-rule-set | jq -r ".Metadata.Name")
+ACTIVE_SES_RULESET=$(aws ses describe-active-receipt-rule-set --region "us-east-1" | jq -r ".Metadata.Name")
 
-echo $ACTIVE_SES_RULESET
+echo "$ACTIVE_SES_RULESET"
