@@ -1,3 +1,4 @@
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { genericHandler } from '../../genericHandler';
@@ -8,7 +9,7 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const batchDownloadTrialSessionLambda = event =>
+export const batchDownloadTrialSessionLambda = (event: APIGatewayProxyEvent) =>
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || event.path;
 
