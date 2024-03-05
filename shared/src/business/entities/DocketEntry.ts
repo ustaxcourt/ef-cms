@@ -781,7 +781,17 @@ export class DocketEntry extends JoiValidationEntity {
     return DOCKET_ENTRY_VALIDATION_RULES;
   }
 
-  static isMinuteEntry({ eventCode }: { eventCode: string }): boolean {
+  static isMinuteEntry({
+    eventCode,
+    isFileAttached,
+  }: {
+    eventCode: string;
+    isFileAttached?: boolean;
+  }): boolean {
+    if (eventCode === 'RQT') {
+      return !isFileAttached;
+    }
+
     const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
       key => MINUTE_ENTRIES_MAP[key].eventCode,
     );

@@ -66,6 +66,8 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
     for (const document of documents) {
       if (!DocketEntry.isMinuteEntry(document) && !document.isDraft) {
         expect(document.servedAt).toBeDefined();
+      } else {
+        expect(document.servedAt).toBeUndefined();
       }
     }
   });
