@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { verifyUserPendingEmailAction } from './verifyUserPendingEmailAction';
+import React from 'react';
 
 describe('verifyUserPendingEmailAction', () => {
   const errorMock = jest.fn();
@@ -55,9 +56,17 @@ describe('verifyUserPendingEmailAction', () => {
 
     expect(errorMock).toHaveBeenCalledWith({
       alertError: {
-        message:
-          'An unexpected error occurred. Could not verify e-mail address. Please contact DAWSON support if this continues.',
-        title: 'Unable to verify e-mail address',
+        message: (
+          <>
+            Your request cannot be completed. Please try to log in. If you’re
+            still having trouble, contact{' '}
+            <a href="mailto:dawson.support@ustaxcourt.gov">
+              dawson.support@ustaxcourt.gov
+            </a>
+            .
+          </>
+        ),
+        title: 'Unable to complete your request',
       },
     });
   });
