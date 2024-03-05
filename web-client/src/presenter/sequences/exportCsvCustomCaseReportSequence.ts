@@ -1,7 +1,7 @@
 import { exportCsvFileAction } from '@web-client/presenter/actions/CaseInventoryReport/exportCsvFileAction';
-import { getCustomCaseReportCsvDataAction } from '@web-client/presenter/actions/CaseInventoryReport/getCustomCaseReportCsvDataAction';
+import { getAllCustomCaseReportDataAction } from '@web-client/presenter/actions/CaseInventoryReport/getAllCustomCaseReportDataAction';
 
 export const exportCsvCustomCaseReportSequence = [
-  getCustomCaseReportCsvDataAction,
+  getAllCustomCaseReportDataAction,
   exportCsvFileAction,
 ];

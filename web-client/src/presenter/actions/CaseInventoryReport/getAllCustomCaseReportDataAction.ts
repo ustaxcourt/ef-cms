@@ -6,7 +6,7 @@ import {
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getCustomCaseReportCsvDataAction = async ({
+export const getAllCustomCaseReportDataAction = async ({
   applicationContext,
   get,
 }: ActionProps<{ selectedPage: number }>) => {
@@ -90,6 +90,7 @@ export const getCustomCaseReportCsvDataAction = async ({
     ['Requested Place of Trial', 'preferredTrialCity'],
     ['Calendaring High Priority', 'calendaringHighPriority'],
   ];
+
   const headerString = CSV_VALUES.map(([headerTitle]) => headerTitle).join(',');
   const casesString = formattedCases
     .map(aCase => {
