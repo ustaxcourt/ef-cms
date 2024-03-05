@@ -36,7 +36,7 @@ describe('upsertMessage', () => {
     expect((put as jest.Mock).mock.calls[2][0].Item).toMatchObject({
       gsi1pk: `message|${mockMessage.parentMessageId}`,
       gsi2pk: `assigneeId|${mockMessage.toUserId}`,
-      gsi3pk: `section|${mockMessage.toSection}`,
+      gsiSectionBox: `section|${mockMessage.toSection}`,
       pk: 'case|123-20',
       sk: `message|${mockMessage.messageId}`,
       ...mockMessage,

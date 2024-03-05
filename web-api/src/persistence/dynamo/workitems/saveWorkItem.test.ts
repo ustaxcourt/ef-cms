@@ -26,7 +26,7 @@ describe('saveWorkItem', () => {
     expect(putMock.mock.calls[0][0].Item.gsi2pk).toBe(
       `assigneeId|inbox|${MOCK_WORK_ITEM.assigneeId}`,
     );
-    expect(putMock.mock.calls[0][0].Item.gsi3pk).toBe(
+    expect(putMock.mock.calls[0][0].Item.gsiSectionBox).toBe(
       `section|inbox|${MOCK_WORK_ITEM.section}`,
     );
   });
@@ -43,7 +43,7 @@ describe('saveWorkItem', () => {
     expect(putMock.mock.calls[0][0].Item.gsi2pk).toBe(
       `assigneeId|inProgress|${MOCK_WORK_ITEM.assigneeId}`,
     );
-    expect(putMock.mock.calls[0][0].Item.gsi3pk).toBe(
+    expect(putMock.mock.calls[0][0].Item.gsiSectionBox).toBe(
       `section|inProgress|${MOCK_WORK_ITEM.section}`,
     );
   });

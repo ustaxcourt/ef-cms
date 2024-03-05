@@ -26,7 +26,7 @@ export const markMessageThreadRepliedTo = async ({
       return await update({
         ExpressionAttributeNames: {
           '#gsi2pk': 'gsi2pk',
-          '#gsi3pk': 'gsi3pk',
+          '#gsiSectionBox': 'gsiSectionBox',
           '#isRepliedTo': 'isRepliedTo',
         },
         ExpressionAttributeValues: {
@@ -37,7 +37,7 @@ export const markMessageThreadRepliedTo = async ({
           sk: `message|${message.messageId}`,
         },
         UpdateExpression:
-          'SET #isRepliedTo = :isRepliedTo REMOVE #gsi2pk, #gsi3pk',
+          'SET #isRepliedTo = :isRepliedTo REMOVE #gsi2pk, #gsiSectionBox',
         applicationContext,
       });
     };

@@ -45,7 +45,7 @@ const createEFCMSTable = async tableName => {
           AttributeType: 'S',
         },
         {
-          AttributeName: 'gsi3pk',
+          AttributeName: 'gsiSectionBox',
           AttributeType: 'S',
         },
       ],
@@ -91,10 +91,10 @@ const createEFCMSTable = async tableName => {
           },
         },
         {
-          IndexName: 'gsi3',
+          IndexName: 'gsiSectionBox',
           KeySchema: [
             {
-              AttributeName: 'gsi3pk',
+              AttributeName: 'gsiSectionBox',
               KeyType: 'HASH',
             },
             {

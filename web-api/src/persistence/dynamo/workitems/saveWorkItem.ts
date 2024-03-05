@@ -23,7 +23,7 @@ export const saveWorkItem = ({
     !workItem.completedAt && workItem.assigneeId
       ? `assigneeId|${box}|${workItem.assigneeId}`
       : undefined;
-  const gsi3pk =
+  const gsiSectionBox =
     !workItem.completedAt && workItem.section
       ? `section|${box}|${workItem.section}`
       : undefined;
@@ -32,7 +32,7 @@ export const saveWorkItem = ({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,
       gsi2pk,
-      gsi3pk,
+      gsiSectionBox,
       pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
       ...workItem,

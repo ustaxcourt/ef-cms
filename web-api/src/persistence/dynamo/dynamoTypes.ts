@@ -14,7 +14,7 @@ export type TDynamoRecord<T = Record<string, any>> = {
   sk: string;
   gsi1pk?: string;
   gsi2pk?: string;
-  gsi3pk?: string;
+  gsiSectionBox?: string;
   ttl?: number;
 } & T;
 export type DeleteRequest = {

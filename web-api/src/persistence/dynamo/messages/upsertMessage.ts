@@ -9,7 +9,7 @@ export const upsertMessage = async ({
   applicationContext: IApplicationContext;
   message: RawMessage;
 }) => {
-  let gsi2pk, gsi3pk;
+  let gsi2pk, gsiSectionBox;
 
   if (!message.completedAt) {
     await putMessageInOutbox({ applicationContext, message });
@@ -17,7 +17,9 @@ export const upsertMessage = async ({
     gsi2pk = message.toUserId ? `assigneeId|${message.toUserId}` : undefined;
 
     // section inbox
-    gsi3pk = message.toSection ? `section|${message.toSection}` : undefined;
+    gsiSectionBox = message.toSection
+      ? `section|${message.toSection}`
+      : undefined;
   } else {
     await putMessageInCompletedBox({ applicationContext, message });
   }
@@ -27,7 +29,7 @@ export const upsertMessage = async ({
       ...message,
       gsi1pk: `message|${message.parentMessageId}`,
       gsi2pk,
-      gsi3pk,
+      gsiSectionBox,
       pk: `case|${message.docketNumber}`,
       sk: `message|${message.messageId}`,
     },

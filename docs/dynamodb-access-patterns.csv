@@ -1,4 +1,4 @@
-Access Scenario,PK,SK,GS1PK,GSI2PK,GSI3PK
+Access Scenario,PK,SK,GS1PK,GSI2PK,gsiSectionBox
 the case deadline object,case-deadline|${DEADLINE_ID},case-deadline|${DEADLINE_ID},
 associate a deadline with a case (mapping record),case|${CASE_ID},case-deadline|${DEADLINE_ID},
 a case,case|${CASE_ID},case|${CASE_ID},leadCase|${LEAD_CASE_ID}
