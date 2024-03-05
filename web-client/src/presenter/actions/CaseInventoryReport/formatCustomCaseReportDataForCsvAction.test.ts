@@ -4,29 +4,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('formatCustomCaseReportDataForCsvAction', () => {
-  let counter = 1;
-
   beforeEach(() => {
-    counter = 1;
-    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
-      .fn()
-      .mockImplementation(() => {
-        const results = {
-          foundCases: [
-            {
-              highPriority: counter !== 1,
-              receivedAt: counter,
-              testProp: 'John Cruz' + counter,
-            },
-          ],
-          lastCaseId: { pk: counter.toString(), receivedAt: counter },
-        };
-
-        counter = counter + 1;
-
-        return results;
-      });
-
     presenter.providers.applicationContext = applicationContext;
   });
 
