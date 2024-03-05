@@ -30,7 +30,7 @@ describe('getAllCustomCaseReportDataAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should test', async () => {
+  it('should fetch all the Custom Case Report data using our interactor and format them', async () => {
     const result = await runAction(getAllCustomCaseReportDataAction, {
       modules: {
         presenter,
