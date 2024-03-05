@@ -21,7 +21,7 @@ source ./scripts/helpers/dynamodb-table-exists.sh
 # shellcheck disable=SC1091
 source ./scripts/helpers/opensearch-domain-exists.sh
 
-node web-api/is-migration-needed.js
+npx ts-node --transpile-only web-api/workflow-terraform/migration/bin/is-migration-needed.ts
 SKIP_MIGRATION="$?"
 
 if [[ "$SKIP_MIGRATION" == "1" ]] && [[ "$FORCE_MIGRATION" != "--force" ]]; then
