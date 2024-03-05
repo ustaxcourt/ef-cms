@@ -1,3 +1,15 @@
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  ScanCommand,
+} from '@aws-sdk/lib-dynamodb';
+// import { SQSClient } from '@aws-sdk/client-sqs';
+import { mockClient } from 'aws-sdk-client-mock';
+
+const ddbMock = mockClient(DynamoDBDocumentClient);
+// const sqsMock = mockClient(SQSClient);
+
 const deleteMessageMock = jest.fn().mockReturnValue({
   promise: () => Promise.resolve({}),
 });
@@ -65,6 +77,10 @@ jest.mock('../../../../src/applicationContext', () => {
 import { handler } from './migration-segments';
 
 describe('migration-segments', () => {
+  beforeEach(() => {
+    ddbMock.reset();
+  });
+
   const mockLambdaEvent = {
     Records: [
       {
@@ -79,13 +95,28 @@ describe('migration-segments', () => {
   };
 
   beforeEach(() => {
-    documentClientMock.get = () => ({
-      promise: () => ({ Item: false }),
+    ddbMock.on(GetCommand).resolves({
+      Item: false,
     });
 
-    documentClientMock.put = () => ({
-      promise: () => new Promise(resolve => resolve()),
+    ddbMock.on(PutCommand).resolves({});
+    ddbMock.on(ScanCommand).resolves({
+      Items: [
+        {
+          pk: 'case|101-20',
+          sk: 'case|101-20',
+        },
+      ],
+      LastEvaluatedKey: null,
     });
+
+    // documentClientMock.get = () => ({
+    //   promise: () => ({ Item: false }),
+    // });
+
+    // documentClientMock.put = () => ({
+    //   promise: () => new Promise(resolve => resolve()),
+    // });
 
     documentClientMock.scan = () => ({
       promise: () =>
