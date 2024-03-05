@@ -1,4 +1,7 @@
-import { COURT_ISSUED_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  COURT_ISSUED_EVENT_CODES,
+  MINUTE_ENTRIES_MAP,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -42,6 +45,8 @@ describe('setDocketEntryMetaTypeAction', () => {
       state: {
         form: {
           docketEntryId: '123',
+          eventCode:
+            MINUTE_ENTRIES_MAP[Object.keys(MINUTE_ENTRIES_MAP)[0]].eventCode,
         },
       },
     });
