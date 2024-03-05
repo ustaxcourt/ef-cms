@@ -44,6 +44,9 @@ export const DocketRecord = connect(
             >
               <thead>
                 <tr>
+                  <th>
+                    <input checked={true} type="checkbox" />
+                  </th>
                   <th className="center-column hide-on-mobile">
                     <span>
                       <span className="usa-sr-only">Number</span>
@@ -76,6 +79,12 @@ export const DocketRecord = connect(
                         data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
+                        {' '}
+                        <td>
+                          {!entry.isMinuteEntry && (
+                            <input checked={true} type="checkbox" />
+                          )}
+                        </td>
                         <td className="center-column hide-on-mobile">
                           {entry.index}
                         </td>
@@ -128,7 +137,7 @@ export const DocketRecord = connect(
                           {entry.showServed && entry.servedPartiesCode}
                         </td>
                         {docketRecordHelper.showEditOrSealDocketRecordEntry && (
-                          <td>
+                          <td className="seal-and-edit-col">
                             {entry.showEditDocketRecordEntry && (
                               <Button
                                 link
