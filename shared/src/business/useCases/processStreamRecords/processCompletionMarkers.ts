@@ -10,7 +10,9 @@ export const processCompletionMarkers = async ({
   if (!completionMarkers || !completionMarkers.length) return;
 
   applicationContext.logger.debug(
-    `found ${completionMarkers.length} completion marker${completionMarkers.length > 1 ? 's' : ''}`,
+    `found ${completionMarkers.length} completion marker${
+      completionMarkers.length > 1 ? 's' : ''
+    }`,
   );
 
   const stage = process.env.STAGE || 'local';
