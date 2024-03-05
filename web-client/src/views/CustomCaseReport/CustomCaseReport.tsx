@@ -506,7 +506,9 @@ export const CustomCaseReport = connect(
               aria-label="export pending report"
               className="margin-top-2"
               data-testid="export-pending-report"
-              disabled={isSubmitDebounced}
+              disabled={
+                isSubmitDebounced || +formatPositiveNumber(totalCases) === 0
+              }
               icon="file-export"
               onClick={() => {
                 debounceSubmit(200);
