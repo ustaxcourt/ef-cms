@@ -14,6 +14,7 @@ export const setProgressForFileUploadAction = ({
 } => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
+  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const startTime = new Date();
   const sizeOfFiles: Record<string, number> = {};
 
