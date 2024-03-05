@@ -7,12 +7,12 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument, PutCommandOutput } from '@aws-sdk/lib-dynamodb';
 
 import { chunk } from 'lodash';
-import { createApplicationContext } from '../../../../src/applicationContext';
+import { createApplicationContext } from '@web-api/applicationContext';
 import {
   createISODateString,
   dateStringsCompared,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { createLogger } from '../../../../src/createLogger';
+} from '@shared/business/utilities/DateHandler';
+import { createLogger } from '@web-api/createLogger';
 import { migrationsToRun } from './migrationsToRun';
 import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
 import promiseRetry from 'promise-retry';
@@ -182,7 +182,6 @@ export const handler: Handler = async (event: SQSEvent, context: Context) => {
   for (let { key } of migrationsToRun) {
     Object.assign(ranMigrations, await hasMigrationRan(key));
   }
-  console.log('hello world');
 
   await scanTableSegment(
     applicationContext,
