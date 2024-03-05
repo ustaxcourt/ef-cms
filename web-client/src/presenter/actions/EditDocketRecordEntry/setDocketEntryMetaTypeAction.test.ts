@@ -42,7 +42,6 @@ describe('setDocketEntryMetaTypeAction', () => {
       state: {
         form: {
           docketEntryId: '123',
-          isMinuteEntry: true,
         },
       },
     });

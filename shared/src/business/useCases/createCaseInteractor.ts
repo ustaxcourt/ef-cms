@@ -47,6 +47,15 @@ const addPetitionDocketEntryToCase = ({
     caseToAdd,
   );
 
+  applicationContext.logger.info(
+    'this is adding the peition docket entry to case',
+    {
+      docketEntryEntity,
+      user,
+      workItemEntity,
+    },
+  );
+
   docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
 
@@ -190,7 +199,6 @@ export const createCaseInteractor = async (
       eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
       filingDate: caseToAdd.createdAt,
       isFileAttached: false,
-      isMinuteEntry: true,
       isOnDocketRecord: true,
       processingStatus: 'complete',
     },
@@ -261,6 +269,8 @@ export const createCaseInteractor = async (
     userCase: userCaseEntity.validate().toRawObject(),
     userId: user.userId,
   });
+
+  applicationContext.logger.info('filing a new petition', { newWorkItem });
 
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
