@@ -526,7 +526,6 @@ module "api-east-waf" {
 }
 
 module "api-east-green" {
-  active_ses_ruleset        = var.active_ses_ruleset
   api_object                = null_resource.api_east_object
   api_public_object         = null_resource.api_public_east_object
   websockets_object         = null_resource.websockets_east_object
@@ -602,7 +601,6 @@ module "api-east-green" {
 }
 
 module "api-east-blue" {
-  active_ses_ruleset        = var.active_ses_ruleset
   api_object                = null_resource.api_east_object
   api_public_object         = null_resource.api_public_east_object
   send_emails_object        = null_resource.send_emails_east_object
