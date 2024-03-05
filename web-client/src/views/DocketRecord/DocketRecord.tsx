@@ -9,13 +9,13 @@ import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
-    formattedDocketEntries: state.formattedDocketEntries,
+    formattedDocketEntriesHelper: state.formattedDocketEntries,
     openSealDocketEntryModalSequence:
       sequences.openSealDocketEntryModalSequence,
     openUnsealDocketEntryModalSequence:
@@ -27,12 +27,21 @@ export const DocketRecord = connect(
 
   function DocketRecord({
     docketRecordHelper,
-    formattedDocketEntries,
+    formattedDocketEntriesHelper,
     openSealDocketEntryModalSequence,
     openUnsealDocketEntryModalSequence,
     setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
+    useEffect(() => {
+      const documentsSelectorHeaderInput = window.document.getElementById(
+        'docket-entry-selections',
+      ) as HTMLInputElement;
+      if (formattedDocketEntriesHelper.someDocumentsSelectedForDownload) {
+        documentsSelectorHeaderInput.indeterminate = true;
+      } else documentsSelectorHeaderInput.indeterminate = false;
+    }, [formattedDocketEntriesHelper.someDocumentsSelectedForDownload]);
+
     return (
       <>
         <DocketRecordHeader />
@@ -48,7 +57,16 @@ export const DocketRecord = connect(
               <thead>
                 <tr>
                   <th>
-                    <input checked={true} type="checkbox" />
+                    <input
+                      checked={
+                        formattedDocketEntriesHelper.allDocumentsSelectedForDownload
+                      }
+                      id="docket-entry-selections"
+                      type="checkbox"
+                      onChange={e => {
+                        console.log('e', e);
+                      }}
+                    />
                   </th>
                   <th className="center-column hide-on-mobile">
                     <span>
@@ -71,7 +89,7 @@ export const DocketRecord = connect(
                 </tr>
               </thead>
               <tbody>
-                {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
+                {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
                   entry => {
                     return (
                       <tr
@@ -202,7 +220,7 @@ export const DocketRecord = connect(
               </tr>
             </thead>
             <tbody>
-              {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
+              {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
                 entry => {
                   return (
                     <tr key={entry.index}>
