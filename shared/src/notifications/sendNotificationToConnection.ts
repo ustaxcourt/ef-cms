@@ -21,6 +21,12 @@ export const sendNotificationToConnection = async ({
     endpoint,
   });
 
+  console.log(
+    'sending notification to ',
+    connection.endpoint,
+    connection.connectionId,
+  );
+
   await notificationClient
     .postToConnection({
       ConnectionId: connectionId,
