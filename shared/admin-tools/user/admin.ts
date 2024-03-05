@@ -3,14 +3,14 @@ import {
   CognitoIdentityProvider,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
-  checkEnvVar,
   generatePassword,
   getClientId,
   getUserPoolId,
+  requireEnvVars,
 } from '../util';
 import axios from 'axios';
 
-const { EFCMS_DOMAIN, ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
+const { ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
 let cachedAuthToken;
 
@@ -118,15 +118,7 @@ export const getAuthToken = async () => {
   if (cachedAuthToken) {
     return cachedAuthToken;
   }
-  checkEnvVar(
-    USTC_ADMIN_PASS,
-    'You must have USTC_ADMIN_PASS set in your local environment',
-  );
-  checkEnvVar(
-    USTC_ADMIN_USER,
-    'You must have USTC_ADMIN_USER set in your local environment',
-  );
-  checkEnvVar(ENV, 'You must have ENV set in your local environment');
+  requireEnvVars(['ENV', 'USTC_ADMIN_PASS', 'USTC_ADMIN_USER']);
 
   const cognito: CognitoIdentityProvider = new CognitoIdentityProvider({
     region: 'us-east-1',
@@ -201,10 +193,6 @@ export const createDawsonUser = async ({
     email: string;
   };
 }) => {
-  checkEnvVar(
-    EFCMS_DOMAIN,
-    'Please Ensure EFCMS_DOMAIN is set in your local environment',
-  );
   user.password = user.password || generatePassword(12);
   const authToken = await getAuthToken();
   const headers = {
