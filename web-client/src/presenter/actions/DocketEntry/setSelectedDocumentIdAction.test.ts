@@ -5,7 +5,7 @@ import { setSelectedDocumentIdAction } from './setSelectedDocumentIdAction';
 describe('setSelectedDocumentIdAction', () => {
   const mockDocketEntryId = 'be944d7c-63ac-459b-8a72-1a3c9e71ef70';
 
-  it('should add document id for download if it has not been set already', async () => {
+  it('should add document id state.documentsSelectedForDownload if it has not been previously set', async () => {
     const result = await runAction(setSelectedDocumentIdAction, {
       modules: {
         presenter,
@@ -23,7 +23,7 @@ describe('setSelectedDocumentIdAction', () => {
     ]);
   });
 
-  it('should add remove the document id from download list if it has been set already', async () => {
+  it('should remove the document id from state.documentsSelectedForDownload if it was previously set', async () => {
     const result = await runAction(setSelectedDocumentIdAction, {
       modules: {
         presenter,
