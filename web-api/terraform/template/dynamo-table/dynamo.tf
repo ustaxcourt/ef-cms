@@ -36,7 +36,7 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   }
 
    attribute {
-    name = "gsi2pk"
+    name = "gsiUserBox"
     type = "S"
   }
 
@@ -57,8 +57,8 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   }
 
   global_secondary_index {
-    name            = "gsi2"
-    hash_key        = "gsi2pk"
+    name            = "gsiUserBox"
+    hash_key        = "gsiUserBox"
     range_key       = "sk"
     projection_type = "ALL"
   }

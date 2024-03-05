@@ -12,15 +12,16 @@ export const getDocumentQCForUser = async ({
 }): Promise<RawWorkItem[]> => {
   const workItems: RawWorkItem[] = (await queryFull({
     ExpressionAttributeNames: {
-      '#gsi2pk': 'gsi2pk',
+      '#gsiUserBox': 'gsiUserBox',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi2pk': `assigneeId|${box}|${userId}`,
+      ':gsiUserBox': `assigneeId|${box}|${userId}`,
       ':prefix': 'work-item',
     },
-    IndexName: 'gsi2',
-    KeyConditionExpression: '#gsi2pk = :gsi2pk and begins_with(#sk, :prefix)',
+    IndexName: 'gsiUserBox',
+    KeyConditionExpression:
+      '#gsiUserBox = :gsiUserBox and begins_with(#sk, :prefix)',
     applicationContext,
   })) as any;
 

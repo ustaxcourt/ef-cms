@@ -23,7 +23,7 @@ const deleteTable = async tableName => {
   }
 };
 
-const createEFCMSTable = async tableName => {
+const createEFCMSTable = tableName => {
   console.log(`Creating EFCMS Table: ${tableName}`);
   return dynamo
     .createTable({
@@ -41,7 +41,7 @@ const createEFCMSTable = async tableName => {
           AttributeType: 'S',
         },
         {
-          AttributeName: 'gsi2pk',
+          AttributeName: 'gsiUserBox',
           AttributeType: 'S',
         },
         {
@@ -71,10 +71,10 @@ const createEFCMSTable = async tableName => {
           },
         },
         {
-          IndexName: 'gsi2',
+          IndexName: 'gsiUserBox',
           KeySchema: [
             {
-              AttributeName: 'gsi2pk',
+              AttributeName: 'gsiUserBox',
               KeyType: 'HASH',
             },
             {
