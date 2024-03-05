@@ -466,6 +466,7 @@ export const CustomCaseReport = connect(
             </label>
           </div>
           <Button
+            data-testid="run-custom-case-report"
             id="run-custom-case-report"
             tooltip="Run Report"
             onClick={() => {
@@ -523,7 +524,9 @@ export const CustomCaseReport = connect(
             <span className="text-bold" id="custom-case-result-count">
               Count: &nbsp;
             </span>
-            {formatPositiveNumber(totalCases)}
+            <span data-testid="custom-case-report-count">
+              {formatPositiveNumber(totalCases)}
+            </span>
           </div>
           <ReportTable
             cases={customCaseReportHelper.cases}
