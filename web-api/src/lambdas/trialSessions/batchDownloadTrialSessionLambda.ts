@@ -12,23 +12,35 @@ export const batchDownloadTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || event.path;
 
-    const { currentColor, region, stage } = applicationContext.environment;
+    // const { region } = applicationContext.environment;
+    console.log('******* ' + trialSessionId);
     const client = new LambdaClient({
-      region,
+      region: 'us-east-1',
     });
+    const user = applicationContext.getCurrentUser();
     const command = new InvokeCommand({
-      FunctionName: `batch_download_${stage}_${currentColor}`,
+      FunctionName:
+        'zach-ef-cms-api-Site-batchDownloadFunctionAE7C1BEB-OA4iWlDSKM47',
       InvocationType: 'Event',
-      Payload: JSON.stringify({ trialSessionId }),
+      Payload: JSON.stringify({ payload: { trialSessionId }, user }),
     });
+    console.log('******* sending command to lambda');
     await client.send(command);
+    console.log('******* done sending command');
   });
 
-export const batchDownloadTrialSessionHandler = async event => {
+export const batchDownloadTrialSessionHandler = async (event: {
+  user: any;
+  payload: {
+    trialSessionId: string;
+  };
+}) => {
   console.log(event);
-  const applicationContext = createApplicationContext({});
+  const applicationContext = createApplicationContext(event.user);
 
-  return await applicationContext
+  await applicationContext
     .getUseCases()
-    .batchDownloadTrialSessionInteractor(applicationContext, JSON.parse(event));
+    .batchDownloadTrialSessionInteractor(applicationContext, event.payload);
+
+  return null;
 };
