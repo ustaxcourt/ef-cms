@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const verifyUserPendingEmailAction = async ({
   applicationContext,
   path,
@@ -22,9 +24,17 @@ export const verifyUserPendingEmailAction = async ({
   } catch (e: any) {
     return path.error({
       alertError: {
-        message:
-          'An unexpected error occurred. Could not verify e-mail address. Please contact DAWSON support if this continues.',
-        title: 'Unable to verify e-mail address',
+        message: (
+          <>
+            Your request cannot be completed. Please try to log in. If you’re
+            still having trouble, contact{' '}
+            <a href="mailto:dawson.support@ustaxcourt.gov">
+              dawson.support@ustaxcourt.gov
+            </a>
+            .
+          </>
+        ),
+        title: 'Unable to complete your request',
       },
     });
   }
