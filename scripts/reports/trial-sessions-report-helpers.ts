@@ -2,7 +2,7 @@ import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import type { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 let trialSessionsCache: RawTrialSession[] = [];
 
@@ -26,7 +26,7 @@ export const getUniqueValues = ({
   return uniqueValues;
 };
 
-export const getTrialSessions = async ({
+const getTrialSessions = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
@@ -42,7 +42,7 @@ export const getTrialSessions = async ({
   return trialSessionsCache;
 };
 
-export const getTrialSessionsInTimeframe = async ({
+const getTrialSessionsInTimeframe = async ({
   applicationContext,
   end,
   start,
@@ -62,7 +62,7 @@ export const getTrialSessionsInTimeframe = async ({
   return yearSessions;
 };
 
-export const outputTrialSessionsReport = ({
+const outputTrialSessionsReport = ({
   trialSessions,
 }: {
   trialSessions: RawTrialSession[];
@@ -78,13 +78,15 @@ export const outputTrialSessionsReport = ({
     } else if (s.alternateTrialClerkName) {
       trialClerk = s.alternateTrialClerkName;
     }
+    const judgeName =
+      s.judge && 'name' in s.judge && s.judge.name ? s.judge.name : '';
     console.log(
-      `"${startDate}","${s.trialLocation}","${s.sessionType}","${s.proceedingType}","${s.judge?.name}","${trialClerk}"`,
+      `"${startDate}","${s.trialLocation}","${s.sessionType}","${s.proceedingType}","${judgeName}","${trialClerk}"`,
     );
   }
 };
 
-export const outputTrialSessionsStats = ({
+const outputTrialSessionsStats = ({
   trialSessions,
 }: {
   trialSessions: RawTrialSession[];
