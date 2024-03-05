@@ -80,39 +80,7 @@ export const getAllCustomCaseReportDataAction = async ({
       .formatDateString(aCase.receivedAt, FORMATS.MMDDYY),
   }));
 
-  const CSV_VALUES = [
-    ['Docket No.', 'docketNumber'],
-    ['Date Created', 'receivedAt'],
-    ['Case Title', 'caseCaption'],
-    ['Case Status', 'status'],
-    ['Case Type', 'caseType'],
-    ['Judge', 'associatedJudge'],
-    ['Requested Place of Trial', 'preferredTrialCity'],
-    ['Calendaring High Priority', 'calendaringHighPriority'],
-  ];
-
-  const headerString = CSV_VALUES.map(([headerTitle]) => headerTitle).join(',');
-  const casesString = formattedCases
-    .map(aCase => {
-      const caseValues = CSV_VALUES.map(mapping => {
-        const propertyName = mapping[1];
-        const value = aCase[propertyName];
-        if (!value) return '';
-        let stringValue = aCase[propertyName]?.split('"').join('""');
-        if (stringValue.includes(',')) stringValue = `"${stringValue}"`;
-        return stringValue;
-      });
-      return caseValues.join(',');
-    })
-    .join('\n');
-
-  const csvString = headerString + '\n' + casesString;
-
-  const today = applicationContext.getUtilities().formatNow(FORMATS.MMDDYYYY);
-  const fileName = 'Custom Case Report - ' + today;
-
   return {
-    csvString,
-    fileName,
+    formattedCases,
   };
 };
