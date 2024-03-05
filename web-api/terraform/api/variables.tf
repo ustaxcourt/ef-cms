@@ -6,6 +6,10 @@ variable "dns_domain" {
   type = string
 }
 
+variable "active_ses_ruleset" {
+  type = string
+}
+
 variable "authorizer_uri" {
   type = string
 }
