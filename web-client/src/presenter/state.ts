@@ -604,6 +604,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
+  documentsSelectedForDownload: [] as string[],
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
     // used for the progress bar shown in modal when uploading files

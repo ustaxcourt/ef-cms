@@ -373,6 +373,7 @@ import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
+import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
@@ -1183,6 +1184,7 @@ export const presenterSequences = {
     setSelectedAddressOnFormSequence as unknown as Function,
   setSelectedBatchIndexSequence:
     setSelectedBatchIndexSequence as unknown as Function,
+  setSelectedDocumentsForDownloadSequence,
   setTrialSessionCalendarSequence:
     setTrialSessionCalendarSequence as unknown as Function,
   setViewerCorrespondenceToDisplaySequence:

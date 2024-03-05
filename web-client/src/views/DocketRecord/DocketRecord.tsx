@@ -20,6 +20,8 @@ export const DocketRecord = connect(
       sequences.openSealDocketEntryModalSequence,
     openUnsealDocketEntryModalSequence:
       sequences.openUnsealDocketEntryModalSequence,
+    setSelectedDocumentsForDownloadSequence:
+      sequences.setSelectedDocumentsForDownloadSequence,
     showModal: state.modal.showModal,
   },
 
@@ -28,6 +30,7 @@ export const DocketRecord = connect(
     formattedDocketEntries,
     openSealDocketEntryModalSequence,
     openUnsealDocketEntryModalSequence,
+    setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
     return (
@@ -82,7 +85,15 @@ export const DocketRecord = connect(
                         {' '}
                         <td>
                           {!entry.isMinuteEntry && (
-                            <input checked={true} type="checkbox" />
+                            <input
+                              checked={entry.isDocumentSelected}
+                              type="checkbox"
+                              onChange={() => {
+                                setSelectedDocumentsForDownloadSequence({
+                                  documentId: entry.docketEntryId,
+                                });
+                              }}
+                            />
                           )}
                         </td>
                         <td className="center-column hide-on-mobile">
