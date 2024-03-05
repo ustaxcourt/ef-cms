@@ -41,6 +41,15 @@ export const CustomCaseReport = connect(
     const [activePage, setActivePage] = useState(0);
     const paginatorTop = useRef(null);
 
+    const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
+
+    const debounceSubmit = timeout => {
+      setIsSubmitDebounced(true);
+      setTimeout(() => {
+        setIsSubmitDebounced(false);
+      }, timeout);
+    };
+
     return (
       <>
         <BigHeader text="Reports" />
@@ -492,6 +501,19 @@ export const CustomCaseReport = connect(
             )}
           </div>
           <div className="text-right margin-bottom-2">
+            <Button
+              link
+              aria-label="export pending report"
+              className="margin-top-2"
+              data-testid="export-pending-report"
+              disabled={isSubmitDebounced}
+              icon="file-export"
+              onClick={() => {
+                debounceSubmit(200);
+              }}
+            >
+              Export
+            </Button>
             <span className="text-bold" id="custom-case-result-count">
               Count: &nbsp;
             </span>
