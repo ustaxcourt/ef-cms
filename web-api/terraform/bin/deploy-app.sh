@@ -143,6 +143,7 @@ else
 fi
 
 ACTIVE_SES_RULESET=$(../../../scripts/ses/get-ses-ruleset.sh) 
+echo $ACTIVE_SES_RULESET
 
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
 
