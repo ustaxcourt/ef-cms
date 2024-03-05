@@ -30,7 +30,6 @@ describe('DocketEntry isPublic', () => {
     eventCode: 'SDEC',
     filers: [],
     filingDate: beforeVisibilityChangeDate,
-    isMinuteEntry: false,
     isOnDocketRecord: true,
     processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     receivedAt: '',

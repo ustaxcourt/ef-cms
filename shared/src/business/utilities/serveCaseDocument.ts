@@ -19,7 +19,7 @@ export const serveCaseDocument = async ({
     doc => doc.documentType === initialDocumentType.documentType,
   );
 
-  if (initialDocketEntry && !DocketEntry.isMinuteEntry(initialDocketEntry)) {
+  if (initialDocketEntry && !DocketEntry.isUnservable(initialDocketEntry)) {
     initialDocketEntry.setAsServed([
       {
         name: 'IRS',
