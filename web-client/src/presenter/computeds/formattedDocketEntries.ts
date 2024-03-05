@@ -2,6 +2,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
+import { MINUTE_ENTRIES_MAP } from '@shared/business/entities/EntityConstants';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import {
   fetchRootDocument,
@@ -284,6 +285,9 @@ export const formattedDocketEntries = (
 
   const caseDetail = get(state.caseDetail);
 
+  const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
+  console.log('documentsSelectedForDownload', documentsSelectedForDownload);
+
   const { docketNumber } = caseDetail;
 
   let docketRecordSort;
@@ -343,7 +347,44 @@ export const formattedDocketEntries = (
         userAssociatedWithCase,
         visibilityPolicyDateFormatted,
       });
+    })
+    .map(docketEntry => {
+      const computeMinuteEntry = (rawDocketEntry: RawDocketEntry): boolean => {
+        const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
+          key => MINUTE_ENTRIES_MAP[key].eventCode,
+        );
+
+        return MINUTE_ENTRIES_EVENT_CODES.includes(rawDocketEntry.eventCode);
+      };
+      return {
+        ...docketEntry,
+        isDocumentSelected: documentsSelectedForDownload.includes(
+          docketEntry.docketEntryId,
+        ),
+        isMinuteEntry: computeMinuteEntry(docketEntry), // should minuteEntry be set possibly fetching the docket entries? Read below for why its set here*
+      };
     });
+
+  // todo:
+  // 1. unit test
+  // *Needs to be computed in anticiapation of (isMinuteEntry being removed from DocketEntry.ts) https://github.com/ustaxcourt/ef-cms/pull/4702
+
+  const selectableDocumentsCount = docketEntriesFormatted.filter(
+    entry => !entry.isMinuteEntry,
+  ).length;
+  const documentsSelectedForDownloadCount = docketEntriesFormatted.filter(
+    entry => entry.isDocumentSelected,
+  ).length;
+
+  result.someDocumentsSelectedForDownload =
+    documentsSelectedForDownloadCount > 0 &&
+    documentsSelectedForDownloadCount < selectableDocumentsCount;
+  console.log(
+    'someDocumentsSelectedForDownload',
+    result.someDocumentsSelectedForDownload,
+  );
+  result.allDocumentsSelectedForDownload =
+    documentsSelectedForDownloadCount === selectableDocumentsCount || false;
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
