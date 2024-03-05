@@ -1,99 +1,38 @@
+import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
+
 import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
   ScanCommand,
 } from '@aws-sdk/lib-dynamodb';
-// import { SQSClient } from '@aws-sdk/client-sqs';
+import { handler } from './migration-segments';
+import { migrateItems } from './migrations/0000-validate-all-items';
+import { applicationContext as mockApplicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockClient } from 'aws-sdk-client-mock';
+import type { Context } from 'aws-lambda';
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
-// const sqsMock = mockClient(SQSClient);
+const sqsMock = mockClient(SQSClient);
 
-const deleteMessageMock = jest.fn().mockReturnValue({
-  promise: () => Promise.resolve({}),
-});
-const SQSMock = class {
-  constructor() {
-    this.deleteMessage = deleteMessageMock;
-  }
-};
-
-const documentClientMock = {
-  get: null,
-  put: null,
-  scan: null,
-};
-const DynamoDBMock = class {
-  constructor() {}
-};
-DynamoDBMock.DocumentClient = jest.fn().mockReturnValue(documentClientMock);
-DynamoDBMock.Converter = {
-  marshall: jest.fn().mockImplementation(item => item),
-};
-
-jest.mock('aws-sdk', () => {
-  return { DynamoDB: DynamoDBMock, SQS: SQSMock };
-});
-
-jest.mock('promise-retry', () => cb => {
-  return cb();
-});
-
-const mockGetRecordSize = jest.fn();
-jest.mock('./utilities/getRecordSize', () => ({
-  getRecordSize: mockGetRecordSize,
-}));
-
-jest.mock('./migrationsToRun', () => ({
-  migrationsToRun: [
-    {
-      key: 'just-a-test',
-      script: jest
-        .fn()
-        .mockReturnValue([{ pk: 'case|101-20', sk: 'case|101-20' }]),
-    },
-  ],
-}));
-
-const mockValidationMigration = jest.fn();
-jest.mock('./migrations/0000-validate-all-items', () => ({
-  migrateItems: mockValidationMigration,
-}));
-
-const mockLogger = {
-  debug: jest.fn(),
-  error: jest.fn(),
-  info: jest.fn(),
-};
+//swap out the applicationContext module used by migration-segments with our mocked version
 jest.mock('../../../../src/applicationContext', () => {
   return {
-    createApplicationContext: () => ({
-      logger: mockLogger,
-    }),
+    createApplicationContext: () => mockApplicationContext,
   };
 });
 
-import { handler } from './migration-segments';
+beforeEach(() => {
+  ddbMock.reset();
+  sqsMock.reset();
+});
+
+jest.mock('./migrations/0000-validate-all-items', () => ({
+  migrateItems: jest.fn(),
+}));
 
 describe('migration-segments', () => {
-  beforeEach(() => {
-    ddbMock.reset();
-  });
-
-  const mockLambdaEvent = {
-    Records: [
-      {
-        body: JSON.stringify({ segment: 0, totalSegments: 1 }),
-        receiptHandle: 'abc',
-      },
-    ],
-  };
-
-  const mockLambdaContext = {
-    awsRequestId: 'some-uuid',
-  };
-
+  const mockLogger = mockApplicationContext.logger;
   beforeEach(() => {
     ddbMock.on(GetCommand).resolves({
       Item: false,
@@ -107,41 +46,28 @@ describe('migration-segments', () => {
           sk: 'case|101-20',
         },
       ],
-      LastEvaluatedKey: null,
+      LastEvaluatedKey: undefined,
     });
 
-    // documentClientMock.get = () => ({
-    //   promise: () => ({ Item: false }),
-    // });
-
-    // documentClientMock.put = () => ({
-    //   promise: () => new Promise(resolve => resolve()),
-    // });
-
-    documentClientMock.scan = () => ({
-      promise: () =>
-        new Promise(resolve =>
-          resolve({
-            Items: [
-              {
-                pk: 'case|101-20',
-                sk: 'case|101-20',
-              },
-            ],
-            LastEvaluatedKey: null,
-          }),
-        ),
-    });
-
-    mockValidationMigration.mockImplementation(items => items);
+    sqsMock.on(DeleteMessageCommand).resolves({});
   });
 
-  it('should skip running a migration when it already existed as a record in the deploy table', async () => {
-    documentClientMock.get = () => ({
-      promise: () => ({ Item: true }),
-    });
+  const mockLambdaEvent = {
+    Records: [
+      {
+        body: JSON.stringify({ segment: 0, totalSegments: 1 }),
+        receiptHandle: 'abc',
+      },
+    ],
+  };
 
-    await handler(mockLambdaEvent, mockLambdaContext);
+  const mockLambdaContext: Context = {
+    awsRequestId: 'some-uuid',
+  } as Context;
+
+  it('should skip running a migration when it already existed as a record in the deploy table', async () => {
+    await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
+    expect(migrateItems).toHaveBeenCalled();
 
     expect(mockLogger.debug).not.toHaveBeenCalledWith(
       'about to run migration just-a-test',
