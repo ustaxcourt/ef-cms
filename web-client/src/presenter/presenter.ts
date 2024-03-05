@@ -108,6 +108,7 @@ import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
+import { exportCsvCustomCaseReportSequence } from '@web-client/presenter/sequences/exportCsvCustomCaseReportSequence';
 import { exportPendingReportSequence } from '@web-client/presenter/sequences/exportPendingReportSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
@@ -730,6 +731,8 @@ export const presenterSequences = {
     editCorrespondenceDocumentSequence as unknown as Function,
   editUploadCourtIssuedDocumentSequence:
     editUploadCourtIssuedDocumentSequence as unknown as Function,
+  exportCsvCustomCaseReportSequence:
+    exportCsvCustomCaseReportSequence as unknown as Function,
   exportPendingReportSequence:
     exportPendingReportSequence as unknown as Function,
   fetchUserNotificationsSequence:

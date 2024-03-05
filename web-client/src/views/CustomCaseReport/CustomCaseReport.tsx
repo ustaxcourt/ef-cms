@@ -22,6 +22,8 @@ export const CustomCaseReport = connect(
       sequences.clearOptionalCustomCaseReportFilterSequence,
     customCaseReportFilters: state.customCaseReport.filters,
     customCaseReportHelper: state.customCaseReportHelper,
+    exportCsvCustomCaseReportSequence:
+      sequences.exportCsvCustomCaseReportSequence,
     getCustomCaseReportSequence: sequences.getCustomCaseReportSequence,
     setCustomCaseReportFiltersSequence:
       sequences.setCustomCaseReportFiltersSequence,
@@ -32,6 +34,7 @@ export const CustomCaseReport = connect(
     clearOptionalCustomCaseReportFilterSequence,
     customCaseReportFilters,
     customCaseReportHelper,
+    exportCsvCustomCaseReportSequence,
     getCustomCaseReportSequence,
     setCustomCaseReportFiltersSequence,
     totalCases,
@@ -512,6 +515,7 @@ export const CustomCaseReport = connect(
               icon="file-export"
               onClick={() => {
                 debounceSubmit(200);
+                exportCsvCustomCaseReportSequence();
               }}
             >
               Export
