@@ -349,6 +349,28 @@ p {
   }
 }
 
+.other-filing-option {
+  .usa-accordion__button {
+    padding: 3px;
+    font-family: $font-source-sans;
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+  button:not([disabled]):focus {
+    outline: none;
+  }
+
+  .usa-accordion__button:hover {
+    background-color: inherit;
+  }
+
+  padding-top: 20px;
+  border-top: 1px solid #dfe1e2;
+  margin-bottom: 15px;
+  
+}
+
 .usa-alert__text:only-child {
   padding-top: 0;
 }

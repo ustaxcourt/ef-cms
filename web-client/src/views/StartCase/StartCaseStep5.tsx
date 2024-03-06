@@ -42,7 +42,7 @@ export const StartCaseStep5 = connect(
           your PDF(s) to ensure all personal information has been removed or
           redacted from all documents EXCEPT the Statement of Taxpayer
           Identification Number (STIN). You will not be able to make changes to
-          your case once you submit it without filing a motion.{' '}
+          your case once you submit it without filing a motion.
         </Hint>
 
         <div className="grid-container padding-x-0 create-case-review">
@@ -72,11 +72,38 @@ export const StartCaseStep5 = connect(
                                     id="petition-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
+                                    showIcon={false}
                                     title="Petition"
                                   />
                                 </div>
                               </div>
                             </div>
+                          </div>
+                        </div>
+                        <div className="grid-row margin-top-3">
+                          <div className="grid-col">
+                            <span className="usa-label usa-label-display">
+                              IRS notice(s)
+                            </span>
+                            {form.attachmentToPetitionFile ? (
+                              <div>
+                                <div className="grid-row">
+                                  <div className="grid-col flex-auto">
+                                    <PDFPreviewButton
+                                      data-testid="atp-preview-button"
+                                      file={form.attachmentToPetitionFile}
+                                      id="atp-preview-button"
+                                      shouldAbbreviateTitle={false}
+                                      shouldWrapText={true}
+                                      showIcon={false}
+                                      title="IRS Notice(s)"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div>N/A</div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -119,10 +146,12 @@ export const StartCaseStep5 = connect(
                             <div className="grid-row">
                               <div className="grid-col flex-auto">
                                 <PDFPreviewButton
+                                  data-testid="stin-preview-button"
                                   file={form.stinFile}
                                   id="stin-preview-button"
                                   shouldAbbreviateTitle={false}
                                   shouldWrapText={true}
+                                  showIcon={false}
                                   title="Statement of Taxpayer Identification"
                                 />
                               </div>
@@ -143,6 +172,7 @@ export const StartCaseStep5 = connect(
                                     id="cds-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
+                                    showIcon={false}
                                     title="Corporate Disclosure Statement"
                                   />
                                 </div>
@@ -167,6 +197,12 @@ export const StartCaseStep5 = connect(
                           />
                         </address>
                       )}
+                      <div className="margin-top-3 margin-bottom-2">
+                        <span className="usa-label usa-label-display">
+                          Service email
+                        </span>
+                        {user.email}
+                      </div>
                     </div>
                     <div className="tablet:grid-col-4 margin-bottom-1 party-information">
                       {startCaseHelper.hasContactSecondary && (
@@ -190,22 +226,6 @@ export const StartCaseStep5 = connect(
           </div>
         </div>
 
-        <div className="tablet:grid-col-12 margin-bottom-4 create-case-review">
-          <div className="card height-full margin-bottom-0">
-            <div className="content-wrapper">
-              <h3 className="underlined">Service Information</h3>
-              <div className="grid-row grid-gap">
-                <div className="tablet:grid-col-12 margin-bottom-1">
-                  <span className="usa-label usa-label-display">
-                    Service email
-                  </span>
-                  {user.email}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-12 bg-white submit-reminders">
             <div className="card">
@@ -216,20 +236,15 @@ export const StartCaseStep5 = connect(
                 <ol className="numbered-list">
                   <li>
                     Double check your IRS Notice to ensure your Petition is
-                    timely. &nbsp;
+                    timely.{' '}
                     <strong>
-                      In most cases, the Court must receive your Petition no
-                      later than 11:59 pm Eastern Time on the last date to file.
+                      In most cases, the Court must receive your electronically
+                      filed Petition no later than 11:59 pm Eastern Time on the
+                      last date to file.
                     </strong>
                   </li>
                   <li>
-                    Be sure you have removed or redacted all personal
-                    information from your documents, with the exception of the
-                    STIN.
-                  </li>
-                  <li>
-                    Do not include any additional documents with your Petition,
-                    except for the IRS notice.{' '}
+                    Do not combine any additional documents with your Petition.{' '}
                     <strong>
                       Documents that might be evidence can be submitted at a
                       later time.
@@ -237,8 +252,11 @@ export const StartCaseStep5 = connect(
                   </li>
                   <li>
                     Confirm that all information being submitted appears as you
-                    want it to appear. After clicking Submit to U.S. Tax Court,
-                    you will only be able to edit your case by filing a motion.
+                    want it to appear.{' '}
+                    <strong>
+                      After submitting your case to the Court, you will only be
+                      able to make changes by filing a motion.
+                    </strong>
                   </li>
                 </ol>
               </div>
