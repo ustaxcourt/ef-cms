@@ -36,10 +36,14 @@ export class ElectronicPetition extends JoiValidationEntity {
   public procedureType: string;
   public stinFile?: object;
   public stinFileSize?: number;
+  public attachmentToPetitionFile?: File;
+  public attachmentToPetitionFileSize?: number;
 
   constructor(rawCase, { applicationContext }) {
     super('ElectronicPetition');
 
+    this.attachmentToPetitionFile = rawCase.attachmentToPetitionFile;
+    this.attachmentToPetitionFileSize = rawCase.attachmentToPetitionFileSize;
     this.businessType = rawCase.businessType;
     this.caseType = rawCase.caseType;
     this.countryType = rawCase.countryType;
@@ -75,6 +79,19 @@ export class ElectronicPetition extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
+    attachmentToPetitionFile: joi.object().optional(),
+    attachmentToPetitionFileSize:
+      JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+        'attachmentToPetitionFile',
+        {
+          is: joi.exist().not(null),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        },
+      ).messages({
+        '*': 'Your ATP file size is empty',
+        'number.max': `Your ATP file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      }),
     businessType: JoiValidationConstants.STRING.valid(
       ...Object.values(BUSINESS_TYPES),
     )
