@@ -358,7 +358,6 @@ module "api-west-waf" {
 }
 
 module "api-west-green" {
-  active_ses_ruleset        = var.active_ses_ruleset
   api_object                = null_resource.api_west_object
   api_public_object         = null_resource.api_public_west_object
   send_emails_object        = null_resource.send_emails_west_object
@@ -435,7 +434,6 @@ module "api-west-green" {
 }
 
 module "api-west-blue" {
-  active_ses_ruleset        = var.active_ses_ruleset
   api_object                = null_resource.api_west_object
   api_public_object         = null_resource.api_public_west_object
   pdf_generation_object     = null_resource.pdf_generation_west_object
