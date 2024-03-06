@@ -131,4 +131,50 @@ describe('getAllCustomCaseReportDataAction', () => {
       applicationContext.getUseCases().getCustomCaseReportInteractor.mock.calls;
     expect(getCustomCaseReportInteractorCalls.length).toEqual(112);
   });
+
+  it('should set batch download totals', async () => {
+    const caseTotals = 800;
+    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
+      .fn()
+      .mockImplementation(() => {
+        return {
+          foundCases: Array.from({ length: caseTotals }, () => ({
+            highPriority: counter !== 1,
+            receivedAt: counter,
+            testProp: 'John Cruz' + counter,
+          })),
+        };
+      });
+
+    const result = await runAction(getAllCustomCaseReportDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        batchDownloads: {
+          fileCount: 0,
+          totalFiles: 0,
+        },
+        customCaseReport: {
+          filters: {
+            endDate: '12/30/2024',
+            judges: ['John The Best Judger to Judge'],
+            startDate: '12/30/1960',
+            testFilterOne: 'TEST_FILTERS_1',
+            testFilterTwo: 'TEST_FILTERS_2',
+          },
+          totalCases: caseTotals,
+        },
+        judges: [
+          {
+            name: 'John The Best Judger to Judge',
+            userId: 1,
+          },
+        ],
+      },
+    });
+
+    expect(result.state.batchDownloads.fileCount).toEqual(caseTotals);
+    expect(result.state.batchDownloads.totalFiles).toEqual(caseTotals);
+  });
 });
