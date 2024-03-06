@@ -1,5 +1,8 @@
 import { defineConfig } from 'cypress';
-import { getEmailVerificationToken } from './cypress/cypress-integration/support/database';
+import {
+  getEmailVerificationToken,
+  deleteAllFilesInFolder,
+} from './cypress/cypress-integration/support/database';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -12,6 +15,9 @@ export default defineConfig({
       on('task', {
         getEmailVerificationToken({ userId }) {
           return getEmailVerificationToken({ userId });
+        },
+        deleteAllFilesInFolder(dir) {
+          return deleteAllFilesInFolder(dir);
         },
       });
     },
