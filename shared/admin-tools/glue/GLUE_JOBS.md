@@ -22,7 +22,7 @@ Follow these steps to perform a glue job manually.
 1. Run a deployment in this lower environment to create new, empty DynamoDB tables and an empty OpenSearch cluster. The easiest way to do this is to re-run the most recent `build-and-deploy` workflow to this environment in CircleCI.
 1. After the deployment completes, disable streams in the newly-created DynamoDB tables:
    ```zsh
-   ./shared/admin-tools/dynamodb/toggle-streams.sh --off
+   ./scripts/dynamo/toggle-streams.sh --off
    ```
 1. In a **new terminal session** with environment variables pointed to the production environment, start the glue job:
    ```zsh
@@ -43,7 +43,7 @@ Follow these steps to perform a glue job manually.
    ```
 1. After the glue job and S3 documents sync are both complete, re-enable the target lower environment's DynamoDB streams so the newly-glued data will start indexing in OpenSearch:
    ```zsh
-   ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+   ./scripts/dynamo/toggle-streams.sh --on
    ```
 
 ## Automated Glue Jobs

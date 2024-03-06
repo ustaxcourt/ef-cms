@@ -142,8 +142,7 @@ else
   SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 fi
 
-ACTIVE_SES_RULESET=$(../../../scripts/ses/get-ses-ruleset.sh) 
-echo $ACTIVE_SES_RULESET
+ACTIVE_SES_RULESET=$(../../../scripts/ses/get-ses-ruleset.sh)
 
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
 

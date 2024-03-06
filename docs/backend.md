@@ -61,7 +61,9 @@ Before diving into the technical aspects of the backend, it might be useful just
 ├── terraform
 │   ├── api // a module for setting up the api for the backend
 │   ├── bin
-│   │   ├── deploy-app.sh // used for deplyoing the api
+│   │   ├── deploy-app.sh // used for deplyoing the migration infrastructure
+│   │   ├── is-migration-needed.ts // determines if a migration is needed
+│   │   ├── track-successful-migrations.ts // tracks which migration scripts have run after doing a migration
 │   ├── main
 │   │   ├── main.tf // the main terraform entrypoint
 │   └── template
@@ -93,7 +95,6 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   │   │       ├── main.tf // the main terraform entrypoint
 ├── swagger.json // the swagger .json we update when api endpoints are changed or added
 ├── switch-cognito-triggers-color.js // used to switch the color of the cognito triggers
-├── track-successful-migrations.js // tracks which migration scripts have run after doing a migration
 ├── verify-ses-email.sh // used to verify SES 
 ```
 

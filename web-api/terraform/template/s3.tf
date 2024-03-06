@@ -58,6 +58,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
   bucket = aws_s3_bucket.documents_us_east_1.bucket
   policy = data.aws_iam_policy_document.allow_access_for_glue_job.json
 }
+
 data "aws_iam_policy_document" "allow_access_for_glue_job" {
   statement {
     sid = "DelegateS3Access"
@@ -327,7 +328,7 @@ resource "aws_s3_bucket_public_access_block" "block_quarantine_west" {
 
 resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
   count  = var.environment == "prod" ? 0 : 1
-  bucket = aws_s3_bucket.smoketest_email_inbox.bucket
+  bucket = aws_s3_bucket.smoketest_email_inbox[0].bucket
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -337,7 +338,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
         Effect    = "Allow"
         Principal = { Service = "ses.amazonaws.com" }
         Action    = "s3:PutObject"
-        Resource  = "arn:aws:s3:::${aws_s3_bucket.smoketest_email_inbox.bucket}/*"
+        Resource  = "arn:aws:s3:::${aws_s3_bucket.smoketest_email_inbox[0].bucket}/*"
         Condition = {
           StringEquals = {
             "AWS:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
@@ -350,6 +351,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
 }
 
 resource "aws_s3_bucket" "smoketest_email_inbox" {
+  count    = var.environment == "prod" ? 0 : 1
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-email-inbox-${var.environment}-us-east-1"
   acl      = "private"
