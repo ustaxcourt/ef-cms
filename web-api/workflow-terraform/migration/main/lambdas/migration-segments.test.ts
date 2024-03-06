@@ -18,7 +18,7 @@ const sqsMock = mockClient(SQSClient);
 beforeEach(() => {
   ddbMock.reset();
   sqsMock.reset();
-  jest.resetAllMocks();
+  // jest.resetAllMocks();
 });
 //swap out the applicationContext module used by migration-segments with our mocked version
 jest.mock('../../../../src/applicationContext', () => {
@@ -37,11 +37,9 @@ jest.mock('./migrationsToRun', () => ({
   ],
 }));
 
-// we want to override the behavior of this module from test to test, so
-// we hoist overrideMigrateItems and _fnMigrateItems as a closure
 jest.mock('./migrations/0000-validate-all-items', () => {
   return {
-    migrateItems: jest.fn(),
+    migrateItems: jest.fn().mockImplementation(items => items),
   };
 });
 
@@ -101,7 +99,7 @@ describe('migration-segments', () => {
   });
 
   it('should throw an error when any item is invalid', async () => {
-    (migrateItems as jest.Mock).mockRejectedValue(new Error());
+    (migrateItems as jest.Mock).mockRejectedValueOnce(new Error());
     // mockValidationMigration.mockRejectedValue(new Error());
 
     await expect(handler(mockLambdaEvent, mockLambdaContext)).rejects.toThrow();
