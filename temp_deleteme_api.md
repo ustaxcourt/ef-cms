@@ -9,6 +9,7 @@ Goals
 - Figure out deployments + integration with terraform
 - Add correct environment variables.
 - custom domains
+- Some routes require an authorizer, others do not. /auth an 
 
 
 ::: Discussion :::
