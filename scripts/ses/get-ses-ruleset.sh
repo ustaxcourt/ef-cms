@@ -5,9 +5,6 @@
 # Usage
 #   ./get-ses-ruleset.sh dev
 
-# Arguments
-#   - $1 - the environment to check
-
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
 ACTIVE_SES_RULESET=$(aws ses describe-active-receipt-rule-set --region "us-east-1" | jq -r ".Metadata.Name")
