@@ -1,6 +1,6 @@
 import { attachDummyFile } from './attach-file';
 
-export function practitionerCreatesEletronicCase() {
+export function practitionerCreatesElectronicCase() {
   cy.get('[data-testid="file-a-petition"]').click();
   attachDummyFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();

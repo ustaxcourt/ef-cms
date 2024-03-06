@@ -24,6 +24,8 @@ import joi from 'joi';
 export class PaperPetition extends JoiValidationEntity {
   public applicationForWaiverOfFilingFeeFile: object;
   public applicationForWaiverOfFilingFeeFileSize: number;
+  public attachmentToPetitionFile: object;
+  public attachmentToPetitionFileSize: number;
   public caseCaption: string;
   public caseType: string;
   public filingType: string;
@@ -66,7 +68,8 @@ export class PaperPetition extends JoiValidationEntity {
       throw new TypeError('applicationContext must be defined');
     }
     super('PaperPetition');
-
+    this.attachmentToPetitionFile = rawProps.attachmentToPetitionFile;
+    this.attachmentToPetitionFileSize = rawProps.attachmentToPetitionFileSize;
     this.caseCaption = rawProps.caseCaption;
     this.caseType = rawProps.caseType;
     this.filingType = rawProps.filingType;
@@ -173,6 +176,19 @@ export class PaperPetition extends JoiValidationEntity {
         }),
       archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
       archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
+      attachmentToPetitionFile: joi.object().optional(),
+      attachmentToPetitionFileSize:
+        JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+          'attachmentToPetitionFile',
+          {
+            is: joi.exist().not(null),
+            otherwise: joi.optional().allow(null),
+            then: joi.required(),
+          },
+        ).messages({
+          '*': 'Your ATP file size is empty',
+          'number.max': `Your ATP file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
 
       caseCaption: JoiValidationConstants.CASE_CAPTION.required().messages({
         '*': 'Enter a case caption',
