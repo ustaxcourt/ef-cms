@@ -1,3 +1,6 @@
+import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
+import { petitionerAttemptsToUploadCorruptPdf } from '../../helpers/petitioner-creates-electronic-case';
+
 let createdDocketNumber;
 
 describe('File a petition', function () {
@@ -208,6 +211,13 @@ describe('creation form', () => {
     cy.goToRoute('/file-a-petition/step-1');
     cy.goToRoute('/');
     cy.get('table').find('tr').should('contain.text', createdDocketNumber);
+  });
+});
+
+describe('users should see expected validation errors when a creating case', () => {
+  it('shows the validation error modal when file uploaded is invalid', () => {
+    loginAsPetitioner();
+    petitionerAttemptsToUploadCorruptPdf();
   });
 });
 
