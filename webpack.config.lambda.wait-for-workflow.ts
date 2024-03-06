@@ -1,6 +1,7 @@
 import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-const waitForWorkflowConfig = {
+const waitForWorkflowConfig: Configuration = {
   ...config,
   entry: {
     'wait-for-workflow':

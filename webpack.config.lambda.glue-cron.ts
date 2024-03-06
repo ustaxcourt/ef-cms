@@ -1,6 +1,7 @@
 import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-const glueCronConfig = {
+const glueCronConfig: Configuration = {
   ...config,
   entry: {
     'glue-job-status':
