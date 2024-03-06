@@ -9,13 +9,6 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { RawWorkItem, WorkItem } from '../../entities/WorkItem';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to get the document qc
- * @returns {object} the work items in the section document inbox
- */
 export const getDocumentQCForSectionInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -27,7 +20,7 @@ export const getDocumentQCForSectionInteractor = async (
     judgeUserName?: string;
     section: string;
   },
-) => {
+): Promise<RawWorkItem[]> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
