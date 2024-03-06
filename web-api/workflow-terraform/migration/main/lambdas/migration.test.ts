@@ -1,19 +1,16 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getFilteredGlobalEvents, processItems } from './migration';
-import { marshall } from '@aws-sdk/util-dynamodb';
 import type { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import type { EfcmsEntity } from './migration';
 
 describe('migration', () => {
   describe('processItems', () => {
     it('call put on all records that come through', async () => {
-      const mockCaseMarshalled = marshall(MOCK_CASE);
-      const mockItems: EfcmsEntity[] = [
+      const mockItems: Record<string, any>[] = [
         {
-          ...mockCaseMarshalled,
-          pk: { S: `case|${MOCK_CASE.docketNumber}` },
-          sk: { S: `case|${MOCK_CASE.docketNumber}` },
+          ...MOCK_CASE,
+          pk: `case|${MOCK_CASE.docketNumber}`,
+          sk: `case|${MOCK_CASE.docketNumber}`,
         },
       ];
       const mockDocumentClient = {
