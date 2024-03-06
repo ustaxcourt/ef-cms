@@ -277,6 +277,7 @@ import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCa
 import { openDeletePractitionerDocumentConfirmModalSequence } from './sequences/openDeletePractitionerDocumentConfirmModalSequence';
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
+import { openDownloadDocketEntriesModalSequence } from '@web-client/presenter/sequences/openDownloadDocketEntriesModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
@@ -1023,6 +1024,8 @@ export const presenterSequences = {
     openDeleteSessionNoteConfirmModalSequence as unknown as Function,
   openDeleteUserCaseNoteConfirmModalSequence:
     openDeleteUserCaseNoteConfirmModalSequence as unknown as Function,
+  openDownloadDocketEntriesModalSequence:
+    openDownloadDocketEntriesModalSequence as unknown as Function,
   openEditCaseDeadlineModalSequence:
     openEditCaseDeadlineModalSequence as unknown as Function,
   openEditOrderTitleModalSequence:
@@ -1041,7 +1044,6 @@ export const presenterSequences = {
     openPrintGeneratedPaperServiceSequence as unknown as Function,
   openPrintableTrialSessionWorkingCopyModalSequence:
     openPrintableTrialSessionWorkingCopyModalSequence as unknown as Function,
-
   openPrioritizeCaseModalSequence:
     openPrioritizeCaseModalSequence as unknown as Function,
   openRemoveFromTrialSessionModalSequence:
