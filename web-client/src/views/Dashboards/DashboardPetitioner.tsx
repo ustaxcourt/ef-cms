@@ -3,6 +3,7 @@ import { CaseListTable } from '../CaseListTable';
 import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FilingFeeOptions } from './FilingFeeOptions';
+import { OtherFilingOptions } from '@web-client/views/Dashboards/OtherFilingOptions';
 import { SuccessNotification } from '../SuccessNotification';
 import { WhatToExpect } from '../WhatToExpect';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -30,7 +31,7 @@ export const DashboardPetitioner = connect(
               )}
             </div>
             <div className="tablet:grid-col-4">
-              {<CaseSearchBox />}
+              <CaseSearchBox />
               <div className="card">
                 <div className="content-wrapper gray">
                   <h3>Taxpayer Tools</h3>
@@ -68,8 +69,6 @@ export const DashboardPetitioner = connect(
                 </div>
               </div>
 
-              {dashboardExternalHelper.showWhatToExpect && <FilingFeeOptions />}
-
               <div className="card">
                 <div className="content-wrapper gray">
                   <h3>Free Taxpayer Help</h3>
@@ -91,37 +90,10 @@ export const DashboardPetitioner = connect(
                 </div>
               </div>
 
+              {dashboardExternalHelper.showWhatToExpect && <FilingFeeOptions />}
+
               {dashboardExternalHelper.showWhatToExpect && (
-                <div className="card">
-                  <div className="content-wrapper gray">
-                    <h3>Other Filing Options</h3>
-
-                    <hr />
-                    <p>
-                      <strong>To file by mail:</strong>
-                      <br />
-                      Send required forms and filing fee to:
-                      <br />
-                      United States Tax Court
-                      <br />
-                      400 Second Street, NW
-                      <br />
-                      Washington, DC 20217
-                    </p>
-
-                    <p>
-                      <strong>To file in person:</strong>
-                      <br />
-                      Please bring your forms and filing fee to:
-                      <br />
-                      United States Tax Court
-                      <br />
-                      400 Second Street, NW
-                      <br />
-                      Washington, DC 20217
-                    </p>
-                  </div>
-                </div>
+                <OtherFilingOptions />
               )}
 
               {!dashboardExternalHelper.showWhatToExpect && (
