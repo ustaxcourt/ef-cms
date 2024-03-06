@@ -1,37 +1,29 @@
-import { setupPercentDone } from './createCaseFromPaperAction';
+import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveCaseDetailInternalEditAction = async ({
   applicationContext,
   get,
-  store,
-}: ActionProps) => {
+  props,
+}: ActionProps<{
+  fileUploadProgressMap: FileUploadProgressMapType;
+}>) => {
   const {
     INITIAL_DOCUMENT_TYPES,
     INITIAL_DOCUMENT_TYPES_FILE_MAP,
     STATUS_TYPES,
   } = applicationContext.getConstants();
   const originalCase = get(state.caseDetail);
+  const { fileUploadProgressMap } = props;
   const caseToUpdate = get(state.form);
 
   const keys = Object.keys(INITIAL_DOCUMENT_TYPES);
 
-  const progressFunctions = setupPercentDone(
-    {
-      applicationForWaiverOfFilingFeeFile:
-        caseToUpdate['applicationForWaiverOfFilingFeeFile'],
-      corporateDisclosureFile: caseToUpdate['corporateDisclosureFile'],
-      petitionFile: caseToUpdate['petitionFile'],
-      requestForPlaceOfTrialFile: caseToUpdate['requestForPlaceOfTrialFile'],
-      stinFile: caseToUpdate['stinFile'],
-    },
-    store,
-  );
-
   for (const key of keys) {
     const fileKey = INITIAL_DOCUMENT_TYPES_FILE_MAP[key];
-    if (caseToUpdate[fileKey]) {
-      if (fileKey === 'petitionFile') {
+
+    if (fileUploadProgressMap[key]) {
+      if (key === 'petition') {
         const oldPetitionDocument = originalCase.docketEntries.find(
           document =>
             document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
@@ -40,16 +32,16 @@ export const saveCaseDetailInternalEditAction = async ({
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: caseToUpdate[fileKey],
+            document: fileUploadProgressMap[key].file,
             key: oldPetitionDocument.docketEntryId,
-            onUploadProgress: progressFunctions[fileKey],
+            onUploadProgress: fileUploadProgressMap[key].uploadProgress,
           });
       } else {
         const newDocketEntryId = await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-            document: caseToUpdate[fileKey],
-            onUploadProgress: progressFunctions[fileKey],
+            document: fileUploadProgressMap[key].file,
+            onUploadProgress: fileUploadProgressMap[key].uploadProgress,
           });
 
         let { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
