@@ -80,7 +80,7 @@ const updateCaseMessages = async ({
     return [];
   }
 
-  const caseMessages = await applicationContext
+  let caseMessages = await applicationContext
     .getPersistenceGateway()
     .getMessagesByDocketNumber({
       applicationContext,
@@ -91,12 +91,12 @@ const updateCaseMessages = async ({
     return [];
   }
 
-  const caseEntities = caseMessages.map(
+  caseMessages = caseMessages.map(
     message =>
       new Message(message, { applicationContext, caseEntity: caseToUpdate }),
   );
 
-  const validMessages = Message.validateRawCollection(caseEntities, {
+  const validMessages = Message.validateRawCollection(caseMessages, {
     applicationContext,
   });
 
