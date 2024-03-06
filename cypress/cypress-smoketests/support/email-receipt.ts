@@ -56,9 +56,11 @@ export const readAllItemsInBucket = async (bucketName: string) => {
       if (!b.LastModified) return 0;
       return b.LastModified.getTime() - a.LastModified.getTime();
     });
-    return sortedResults.length ? sortedResults : undefined;
+
+    return sortedResults.length ? sortedResults : [];
   } catch (error) {
-    return undefined;
+    console.log('Error while trying to retrieve s3 inbox items:', error);
+    return [];
   }
 };
 

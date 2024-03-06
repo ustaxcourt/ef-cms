@@ -35,13 +35,14 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
         return cy
           .task<any[]>('readAllItemsInBucket', bucketName)
           .then(items => {
-            return (
-              items[0].content.contains(testEmailAddress) &&
-              items[0].content.contains(
+            const isValid =
+              items[0] !== undefined &&
+              items[0].content.includes(testEmailAddress) &&
+              items[0].content.includes(
                 'The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.',
               ) &&
-              items.length === 1
-            );
+              items.length === 1;
+            return isValid;
           });
       });
     });
