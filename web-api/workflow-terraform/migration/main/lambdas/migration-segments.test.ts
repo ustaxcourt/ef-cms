@@ -18,7 +18,7 @@ const sqsMock = mockClient(SQSClient);
 beforeEach(() => {
   ddbMock.reset();
   sqsMock.reset();
-  jest.resetModules();
+  jest.resetAllMocks();
 });
 //swap out the applicationContext module used by migration-segments with our mocked version
 jest.mock('../../../../src/applicationContext', () => {
@@ -101,20 +101,15 @@ describe('migration-segments', () => {
   });
 
   it('should throw an error when any item is invalid', async () => {
-    mockValidationMigration.mockRejectedValue(new Error());
+    (migrateItems as jest.Mock).mockRejectedValue(new Error());
+    // mockValidationMigration.mockRejectedValue(new Error());
 
     await expect(handler(mockLambdaEvent, mockLambdaContext)).rejects.toThrow();
   });
 
   it('should logs a message when an item already existed in the destination table', async () => {
-    documentClientMock.put = () => ({
-      promise: () =>
-        new Promise((resolve, reject) =>
-          reject(new Error('The conditional request failed')),
-        ),
-    });
-
-    await handler(mockLambdaEvent, mockLambdaContext);
+    ddbMock.on(PutCommand).rejects(new Error('The conditional request failed'));
+    await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
 
     expect(mockLogger.info).toHaveBeenCalledWith(
       'The item of case|101-20 case|101-20 already existed in the destination table, probably due to a live migration.  Skipping migration for this item.',
