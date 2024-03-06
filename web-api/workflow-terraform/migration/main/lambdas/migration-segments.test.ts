@@ -1,5 +1,4 @@
 import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-
 import {
   DynamoDBDocumentClient,
   GetCommand,
@@ -47,15 +46,15 @@ describe('migration-segments', () => {
   const mockLogger = mockApplicationContext.logger;
   beforeEach(() => {
     ddbMock.on(GetCommand).resolves({
-      Item: false,
+      Item: { BOOL: false },
     });
 
     ddbMock.on(PutCommand).resolves({});
     ddbMock.on(ScanCommand).resolves({
       Items: [
         {
-          pk: 'case|101-20',
-          sk: 'case|101-20',
+          pk: { S: 'case|101-20' },
+          sk: { S: 'case|101-20' },
         },
       ],
       LastEvaluatedKey: undefined,

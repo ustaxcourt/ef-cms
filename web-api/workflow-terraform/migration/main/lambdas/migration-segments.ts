@@ -32,12 +32,17 @@ const dynamoDbDocumentClient = DynamoDBDocument.from(dynamodb, {
 
 const sqs = new SQSClient({ region: 'us-east-1' });
 
-const scanTableSegment = async (
+const scanTableSegment = async ({
   applicationContext,
+  ranMigrations,
   segment,
   totalSegments,
-  ranMigrations,
-) => {
+}: {
+  applicationContext: IApplicationContext;
+  ranMigrations: { [key: string]: boolean };
+  segment: any;
+  totalSegments: number;
+}): Promise<void> => {
   let hasMoreResults = true;
   let lastKey: Record<string, any> | undefined;
   while (hasMoreResults) {
@@ -57,9 +62,8 @@ const scanTableSegment = async (
         lastKey = results.LastEvaluatedKey;
         await processItems(applicationContext, {
           documentClient: dynamoDbDocumentClient,
-          items: results.Items,
+          items: results.Items || [],
           ranMigrations,
-          segment,
         });
       });
   }
@@ -85,11 +89,11 @@ export const migrateRecords = async (
   }: {
     documentClient: DynamoDBDocument;
     items: Record<string, any>[];
-    ranMigrations: { [key: string]: boolean };
+    ranMigrations?: { [key: string]: boolean } | undefined;
   },
 ) => {
   for (let { key, script } of migrationsToRun) {
-    if (!ranMigrations[key]) {
+    if (ranMigrations && ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
       items = await script(items, documentClient, applicationContext);
     }
@@ -183,12 +187,12 @@ export const handler: Handler = async (event: SQSEvent, context: Context) => {
     Object.assign(ranMigrations, await hasMigrationRan(key));
   }
 
-  await scanTableSegment(
+  await scanTableSegment({
     applicationContext,
+    ranMigrations,
     segment,
     totalSegments,
-    ranMigrations,
-  );
+  });
   const finish = createISODateString();
   const duration = dateStringsCompared(finish, start, { exact: true });
   applicationContext.logger.info('finishing segment', {

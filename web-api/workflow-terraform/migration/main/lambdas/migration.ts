@@ -5,7 +5,7 @@ import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
 import type { AttributeValue, DynamoDBStreamEvent, Handler } from 'aws-lambda';
 
-type EfcmsEntity = {
+export type EfcmsEntity = {
   [key: string]: AttributeValue;
 };
 

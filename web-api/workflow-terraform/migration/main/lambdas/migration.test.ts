@@ -1,23 +1,27 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getFilteredGlobalEvents, processItems } from './migration';
+import { marshall } from '@aws-sdk/util-dynamodb';
+import type { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import type { EfcmsEntity } from './migration';
 
 describe('migration', () => {
   describe('processItems', () => {
     it('call put on all records that come through', async () => {
-      const mockItems = [
+      const mockCaseMarshalled = marshall(MOCK_CASE);
+      const mockItems: EfcmsEntity[] = [
         {
-          ...MOCK_CASE,
-          pk: `case|${MOCK_CASE.docketNumber}`,
-          sk: `case|${MOCK_CASE.docketNumber}`,
+          ...mockCaseMarshalled,
+          pk: { S: `case|${MOCK_CASE.docketNumber}` },
+          sk: { S: `case|${MOCK_CASE.docketNumber}` },
         },
       ];
       const mockDocumentClient = {
         put: jest.fn().mockReturnValue({
           promise: () => null,
         }),
-      };
+      } as unknown as DynamoDBDocument;
       const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
-      const applicationContext = jest.fn();
       await processItems(applicationContext, {
         documentClient: mockDocumentClient,
         items: mockItems,
@@ -37,18 +41,20 @@ describe('migration', () => {
             dynamodb: {
               NewImage: {
                 'aws:rep:updatetime': {
-                  N: 10,
+                  N: '10',
                 },
               },
               OldImage: {
                 'aws:rep:updatetime': {
-                  N: 20,
+                  N: '20',
                 },
               },
             },
           },
         ],
       });
+      expect(items).not.toBeUndefined();
+      // @ts-ignore
       expect(items.length).toBe(1);
     });
 
@@ -143,6 +149,8 @@ describe('migration', () => {
           },
         ],
       });
+      expect(items).not.toBeUndefined();
+      // @ts-ignore
       expect(items.length).toEqual(2);
     });
   });
