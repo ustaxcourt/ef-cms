@@ -4,18 +4,21 @@ import {
   loginAsPetitionsClerk,
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
-import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
-import { practitionerCreatesEletronicCase } from '../../helpers/practitioner-creates-electronic-case';
+import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { petitionsClerkQcsAndServesElectronicCase } from '../../helpers/petitions-clerk-qcs-and-serves-electronic-case';
+import { practitionerCreatesElectronicCase } from '../../helpers/practitioner-creates-electronic-case';
 
 describe('users should be able to create cases', () => {
-  it('a petitioner should be able to create a case', () => {
+  it('a petitioner should be able to create a case and petitions clerk QCs and serves it', () => {
     loginAsPetitioner();
-    petitionerCreatesEletronicCase();
+    petitionerCreatesElectronicCase().then(docketNumber => {
+      petitionsClerkQcsAndServesElectronicCase(docketNumber);
+    });
   });
 
   it('a practitioner should be able to create a case', () => {
     loginAsPrivatePractitioner();
-    practitionerCreatesEletronicCase();
+    practitionerCreatesElectronicCase();
   });
 
   it('a petitionsclerk should be able to create and serve a paper case', () => {
