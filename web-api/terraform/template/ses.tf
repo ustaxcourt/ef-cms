@@ -181,13 +181,13 @@ resource "aws_ses_identity_notification_topic" "bounced_service_emails" {
 }
 
 resource "aws_ses_receipt_rule" "email_forwarding_rule" {
+  count         = var.environment == "prod" ? 0 : 1
   name          = "email_forwarding_rule_${var.environment}"
   rule_set_name = var.active_ses_ruleset
-  # TODO: should smoketest@ be a secret?
-  recipients   = ["smoketest@${aws_ses_domain_identity.main.domain}"]
-  enabled      = true
-  scan_enabled = true
-  depends_on   = [aws_s3_bucket_policy.allow_access_for_email_smoketests]
+  recipients    = ["smoketest@${aws_ses_domain_identity.main.domain}"]
+  enabled       = true
+  scan_enabled  = true
+  depends_on    = [aws_s3_bucket_policy.allow_access_for_email_smoketests]
   s3_action {
     bucket_name = aws_s3_bucket.smoketest_email_inbox.bucket
     position    = 1
