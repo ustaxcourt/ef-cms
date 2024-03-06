@@ -1,3 +1,4 @@
+import { isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setSelectedDocumentIdAction = ({
@@ -10,23 +11,14 @@ export const setSelectedDocumentIdAction = ({
   const { documentIds } = props;
   let documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
+  // todo: Is there a better way to represent multi-selection that checking the length of the array?
   if (documentIds.length > 1) {
-    console.log(
-      'documentsSelectedForDownload in action',
-      documentsSelectedForDownload,
-    );
-    //   const docketEntries = get(
-    //     state.formattedDocketEntries.formattedDocketEntriesOnDocketRecord,
-    //   );
-    //   const documentIds = docketEntries.map(
-    //     docketEntry => docketEntry.docketEntryId,
-    //   );
-    //   if (documentIds === documentsSelectedForDownload) {
-    //     store.set(state.documentsSelectedForDownload, []);
-    //   } else {
-    //     store.set(state.documentsSelectedForDownload, documentIds);
-    //   }
-  } else {
+    if (isEqual(documentIds, documentsSelectedForDownload)) {
+      store.set(state.documentsSelectedForDownload, []);
+    } else {
+      store.set(state.documentsSelectedForDownload, documentIds);
+    }
+  } else if (documentIds.length === 1) {
     const documentId = documentIds[0];
     const index = documentsSelectedForDownload.indexOf(documentId);
 

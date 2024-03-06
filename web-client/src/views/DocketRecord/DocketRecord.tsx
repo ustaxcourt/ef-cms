@@ -64,11 +64,11 @@ export const DocketRecord = connect(
                       id="docket-entry-selections"
                       type="checkbox"
                       onChange={e => {
-                        console.log('e', e);
                         const documentIds =
-                          formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
-                            docketEntry => docketEntry.docketEntryId,
-                          );
+                          formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
+                            .filter(entry => !entry.isMinuteEntry)
+                            .map(docketEntry => docketEntry.docketEntryId);
+                        // console.log('documentIds', documentIds);
                         setSelectedDocumentsForDownloadSequence({
                           documentIds,
                         });
