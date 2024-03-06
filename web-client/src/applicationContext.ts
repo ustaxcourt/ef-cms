@@ -120,8 +120,6 @@ import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/c
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/fileCourtIssuedDocketEntryProxy';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
-import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
-import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
 import {
@@ -142,6 +140,7 @@ import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forw
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
+import { generateDocumentIds } from '../../shared/src/business/useCases/generateDocumentIds';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
@@ -175,6 +174,7 @@ import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
+import { getCoversheetInteractor } from '@shared/proxies/getCoversheetProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getCustomCaseReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseReportProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
@@ -302,6 +302,7 @@ import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAsso
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/updateDeficiencyStatisticProxy';
+import { updateDocketEntriesPostCoversheetInteractor } from '@shared/proxies/updateDocketEntriesPostCoversheetProxy';
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updateDocketEntryWorksheetInteractor } from '@shared/proxies/pendingItems/updateDocketEntryWorksheetProxy';
 import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseStatistics/updateOtherStatisticsProxy';
@@ -441,11 +442,10 @@ const allUseCases = {
   fileCourtIssuedDocketEntryInteractor,
   fileCourtIssuedOrderInteractor,
   fileExternalDocumentInteractor,
-  filePetitionFromPaperInteractor,
-  filePetitionInteractor,
   forwardMessageInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
+  generateDocumentIds,
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generatePDFFromJPGDataInteractor,
@@ -471,6 +471,7 @@ const allUseCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
+  getCoversheetInteractor,
   getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
@@ -571,6 +572,7 @@ const allUseCases = {
   updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
   updateDeficiencyStatisticInteractor,
+  updateDocketEntriesPostCoversheetInteractor,
   updateDocketEntryMetaInteractor,
   updateDocketEntryWorksheetInteractor,
   updateOtherStatisticsInteractor,

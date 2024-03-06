@@ -184,6 +184,40 @@ export const MOCK_STIN: RawDocketEntry = {
   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
+export const ATP_DOCKET_ENTRY: RawDocketEntry = {
+  createdAt: '2019-11-21T21:49:28.192Z',
+  docketEntryId: '062c9a5d-1a65-4273-965e-25d41607bc98',
+  docketNumber: '101-18',
+  documentTitle: 'Attachment to Petition',
+  documentType: 'Attachment to Petition',
+  draftOrderState: {},
+  entityName: 'DocketEntry',
+  eventCode: 'ATP',
+  filedBy: 'Test Petitioner',
+  filedByRole: ROLES.petitioner,
+  filers: [],
+  filingDate: '2017-03-01T09:00:00.000Z',
+  index: 4,
+  isFileAttached: true,
+  isMinuteEntry: false,
+  isOnDocketRecord: true,
+  pending: false,
+  processingStatus: 'complete',
+  receivedAt: '2018-03-01T05:00:00.000Z',
+  servedAt: '2019-08-25T05:00:00.000Z',
+  servedParties: [
+    {
+      name: 'Bernard Lowe',
+    },
+    {
+      name: 'IRS',
+      role: 'irsSuperuser',
+    },
+  ],
+  stampData: {},
+  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+};
+
 export const MOCK_ANSWER_2 = {
   createdAt: '2018-11-21T20:49:28.192Z',
   docketEntryId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
