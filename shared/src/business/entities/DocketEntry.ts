@@ -74,7 +74,6 @@ export class DocketEntry extends JoiValidationEntity {
   public editState?: string;
   public isLegacySealed?: boolean;
   public isLegacyServed?: boolean;
-  public isMinuteEntry: boolean;
   public isOnDocketRecord: boolean;
   public isPaper?: boolean;
   public isPendingService?: boolean;
@@ -189,9 +188,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.isLegacy = rawDocketEntry.isLegacy;
     this.isLegacySealed = rawDocketEntry.isLegacySealed;
     this.isLegacyServed = rawDocketEntry.isLegacyServed;
-    this.isMinuteEntry =
-      rawDocketEntry.isMinuteEntry ||
-      DocketEntry.isMinuteEntry({ eventCode: rawDocketEntry.eventCode });
     this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord || false;
     this.isPaper = rawDocketEntry.isPaper;
     this.isPendingService = rawDocketEntry.isPendingService;
@@ -785,7 +781,17 @@ export class DocketEntry extends JoiValidationEntity {
     return DOCKET_ENTRY_VALIDATION_RULES;
   }
 
-  static isMinuteEntry({ eventCode }: { eventCode: string }): boolean {
+  static isMinuteEntry({
+    eventCode,
+    isFileAttached,
+  }: {
+    eventCode: string;
+    isFileAttached?: boolean;
+  }): boolean {
+    if (eventCode === 'RQT') {
+      return !isFileAttached;
+    }
+
     const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
       key => MINUTE_ENTRIES_MAP[key].eventCode,
     );
