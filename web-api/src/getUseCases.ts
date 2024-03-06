@@ -13,6 +13,7 @@ import { assignWorkItemsInteractor } from '../../shared/src/business/useCases/wo
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/business/useCases/manualAssociation/associateIrsPractitionerWithCaseInteractor';
 import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src/business/useCases/manualAssociation/associatePrivatePractitionerWithCaseInteractor';
 import { authenticateUserInteractor } from '../../shared/src/business/useCases/auth/authenticateUserInteractor';
+import { batchDownloadDocketEntriesInteractor } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { blockCaseFromTrialInteractor } from '../../shared/src/business/useCases/blockCaseFromTrialInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/business/useCases/caseAdvancedSearchInteractor';
@@ -227,6 +228,7 @@ const useCases = {
   associateIrsPractitionerWithCaseInteractor,
   associatePrivatePractitionerWithCaseInteractor,
   authenticateUserInteractor,
+  batchDownloadDocketEntriesInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
   caseAdvancedSearchInteractor,
