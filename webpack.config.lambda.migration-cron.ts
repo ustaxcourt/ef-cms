@@ -1,6 +1,7 @@
 import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-const migrationCronConfig = {
+const migrationCronConfig: Configuration = {
   ...config,
   entry: {
     'migration-status':

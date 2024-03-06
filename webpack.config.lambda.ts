@@ -1,7 +1,8 @@
 import CopyPlugin from 'copy-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import type { Configuration } from 'webpack';
 
-const lambdaConfig = {
+const lambdaConfig: Configuration = {
   externals: {
     '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
     'aws-crt': 'commonjs aws-crt',

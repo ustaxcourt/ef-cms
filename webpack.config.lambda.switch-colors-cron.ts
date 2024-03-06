@@ -1,6 +1,7 @@
 import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-const switchColorsCronConfig = {
+const switchColorsCronConfig: Configuration = {
   ...config,
   entry: {
     'switch-colors-status':

@@ -1,6 +1,7 @@
 import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-const reindexCronConfig = {
+const reindexCronConfig: Configuration = {
   ...config,
   entry: {
     'reindex-status':
