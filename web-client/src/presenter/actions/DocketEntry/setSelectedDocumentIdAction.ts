@@ -5,18 +5,37 @@ export const setSelectedDocumentIdAction = ({
   props,
   store,
 }: ActionProps<{
-  documentId: string;
+  documentIds: string[];
 }>) => {
-  const { documentId } = props;
+  const { documentIds } = props;
+  let documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
-  const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  const index = documentsSelectedForDownload.indexOf(documentId);
-
-  if (index !== -1) {
-    documentsSelectedForDownload.splice(index, 1);
+  if (documentIds.length > 1) {
+    console.log(
+      'documentsSelectedForDownload in action',
+      documentsSelectedForDownload,
+    );
+    //   const docketEntries = get(
+    //     state.formattedDocketEntries.formattedDocketEntriesOnDocketRecord,
+    //   );
+    //   const documentIds = docketEntries.map(
+    //     docketEntry => docketEntry.docketEntryId,
+    //   );
+    //   if (documentIds === documentsSelectedForDownload) {
+    //     store.set(state.documentsSelectedForDownload, []);
+    //   } else {
+    //     store.set(state.documentsSelectedForDownload, documentIds);
+    //   }
   } else {
-    documentsSelectedForDownload.push(documentId);
-  }
+    const documentId = documentIds[0];
+    const index = documentsSelectedForDownload.indexOf(documentId);
 
-  store.set(state.documentsSelectedForDownload, documentsSelectedForDownload);
+    if (index !== -1) {
+      documentsSelectedForDownload.splice(index, 1);
+    } else {
+      documentsSelectedForDownload.push(documentId);
+    }
+
+    store.set(state.documentsSelectedForDownload, documentsSelectedForDownload);
+  }
 };

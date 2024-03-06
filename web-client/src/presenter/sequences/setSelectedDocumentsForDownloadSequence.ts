@@ -2,4 +2,4 @@ import { setSelectedDocumentIdAction } from '@web-client/presenter/actions/Docke
 
 export const setSelectedDocumentsForDownloadSequence = [
   setSelectedDocumentIdAction,
-] as unknown as (props: { documentId: string }) => void;
+] as unknown as (props: { documentIds: string[] }) => void;
