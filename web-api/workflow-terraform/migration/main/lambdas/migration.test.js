@@ -1,5 +1,5 @@
-const { getFilteredGlobalEvents, processItems } = require('./migration');
-const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { getFilteredGlobalEvents, processItems } from './migration';
 
 describe('migration', () => {
   describe('processItems', () => {
