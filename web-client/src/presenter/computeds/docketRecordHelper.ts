@@ -18,8 +18,7 @@ export const docketRecordHelper = (get: Get): any => {
   const sortLabelTextMobile = sortLabelsMobile[sortOrder];
 
   const isDownloadButtonLinkDisabled = false;
-  const showDownloadLink = showPrintableDocketRecord; // question: shoud showPrintableDocketRecord be the rule for displaying downloads as well?
-
+  const showDownloadLink = showPrintableDocketRecord;
   return {
     isDownloadButtonLinkDisabled,
     showDownloadLink,

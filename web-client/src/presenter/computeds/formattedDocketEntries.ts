@@ -2,7 +2,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { MINUTE_ENTRIES_MAP } from '@shared/business/entities/EntityConstants';
+import { MINUTE_ENTRIES_MAP_WITHOUT_DOCS } from '@shared/business/entities/EntityConstants';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import {
   fetchRootDocument,
@@ -337,7 +337,7 @@ export const formattedDocketEntries = (
     .toISO();
 
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  console.log('documentsSelectedForDownload', documentsSelectedForDownload);
+  // console.log('documentsSelectedForDownload', documentsSelectedForDownload);
 
   docketEntriesFormatted = docketEntriesFormatted
     .map((entry: any, _, array) => {
@@ -356,9 +356,9 @@ export const formattedDocketEntries = (
     })
     .map(docketEntry => {
       const computeMinuteEntry = (rawDocketEntry: RawDocketEntry): boolean => {
-        const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
-          key => MINUTE_ENTRIES_MAP[key].eventCode,
-        );
+        const MINUTE_ENTRIES_EVENT_CODES = Object.keys(
+          MINUTE_ENTRIES_MAP_WITHOUT_DOCS,
+        ).map(key => MINUTE_ENTRIES_MAP_WITHOUT_DOCS[key].eventCode);
 
         return MINUTE_ENTRIES_EVENT_CODES.includes(rawDocketEntry.eventCode);
       };
@@ -370,8 +370,6 @@ export const formattedDocketEntries = (
         isMinuteEntry: computeMinuteEntry(docketEntry), // should minuteEntry be set possibly fetching the docket entries? Read below for why its set here*
       };
     });
-
-  // console.log('docketEntriesFormatted', docketEntriesFormatted);
 
   // todo:
   // 1. unit test

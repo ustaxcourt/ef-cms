@@ -150,6 +150,8 @@ export const DocketRecordHeader = connect(
     formattedDocketEntriesHelper: state.formattedDocketEntries,
     gotoPrintableDocketRecordSequence:
       sequences.gotoPrintableDocketRecordSequence,
+    openDownloadDocketEntriesModalSequence:
+      sequences.openDownloadDocketEntriesModalSequence,
     sessionMetadata: state.sessionMetadata,
     showModal: state.modal.showModal,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
@@ -161,6 +163,7 @@ export const DocketRecordHeader = connect(
     formattedCaseDetail,
     formattedDocketEntriesHelper,
     gotoPrintableDocketRecordSequence,
+    openDownloadDocketEntriesModalSequence,
     sessionMetadata,
     showModal,
     updateSessionMetadataSequence,
@@ -206,11 +209,7 @@ export const DocketRecordHeader = connect(
                         !formattedDocketEntriesHelper.isDownloadLinkEnabled
                       }
                       icon={['fas', 'cloud-download-alt']}
-                      onClick={() => {
-                        // gotoPrintableDocketRecordSequence({
-                        //   docketNumber: formattedCaseDetail.docketNumber,
-                        // });
-                      }}
+                      onClick={() => openDownloadDocketEntriesModalSequence()}
                     >
                       Download
                     </Button>
