@@ -1,7 +1,7 @@
-const CopyPlugin = require('copy-webpack-plugin');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+import CopyPlugin from 'copy-webpack-plugin';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
-module.exports = {
+const lambdaConfig = {
   externals: {
     '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
     'aws-crt': 'commonjs aws-crt',
@@ -54,3 +54,6 @@ module.exports = {
   },
   target: 'node',
 };
+
+// eslint-disable-next-line import/no-default-export
+export default lambdaConfig;
