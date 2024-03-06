@@ -831,6 +831,7 @@ const applicationContext = {
   },
   setCurrentUser,
   setCurrentUserToken,
+  setTimeout: (callback, timeout) => setTimeout(callback, timeout),
 };
 
 export { applicationContext };
