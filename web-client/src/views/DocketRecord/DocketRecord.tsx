@@ -109,7 +109,7 @@ export const DocketRecord = connect(
                       >
                         {' '}
                         <td>
-                          {!entry.isMinuteEntry && (
+                          {!entry.isMinuteEntry && entry.isFileAttached && (
                             <input
                               checked={entry.isDocumentSelected}
                               type="checkbox"
