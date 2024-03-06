@@ -1,6 +1,7 @@
-const config = require('./webpack.config.lambda');
+import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-module.exports = {
+const switchColorsCronConfig: Configuration = {
   ...config,
   entry: {
     'switch-colors-status':
@@ -12,3 +13,6 @@ module.exports = {
     path: `${__dirname}/web-api/workflow-terraform/switch-colors-cron/main/lambdas/dist`,
   },
 };
+
+// eslint-disable-next-line import/no-default-export
+export default switchColorsCronConfig;

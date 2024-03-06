@@ -1,6 +1,7 @@
-const config = require('./webpack.config.lambda');
+import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-module.exports = {
+const waitForWorkflowConfig: Configuration = {
   ...config,
   entry: {
     'wait-for-workflow':
@@ -12,3 +13,6 @@ module.exports = {
     path: `${__dirname}/web-api/workflow-terraform/wait-for-workflow-cron/main/lambdas/dist`,
   },
 };
+
+// eslint-disable-next-line import/no-default-export
+export default waitForWorkflowConfig;
