@@ -13,7 +13,7 @@ export const headerOverride = {
 export const lambdaWrapper = (lambda, options = {}) => {
   return async (req, res) => {
     // 'shouldMimicApiGatewayAsyncEndpoint' flag is set to mimic how API gateway async endpoints work locally.
-    // When invoking async endpoints on API gateway, the service immediately returns a 204 response with no body.
+    // When an async endpoint invoked in API gateway, the service immediately returns a 204 response with no body.
     // This behavior causes discrepancies between how these endpoints behave locally vs in a deployed AWS environment.
     const shouldMimicApiGatewayAsyncEndpoint =
       options.isAsync && process.env.NODE_ENV != 'production';
