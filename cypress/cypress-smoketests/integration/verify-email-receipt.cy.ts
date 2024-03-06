@@ -7,33 +7,39 @@ import {
 } from '../../cypress-integration/support/pages/my-account';
 import { navigateTo } from '../../cypress-integration/support/pages/maintenance';
 
-describe('Verify verification email', () => {
-  const BUCKET_NAME = Cypress.env('SMOKETEST_BUCKET');
-  const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
-  const UNIQUE_TIMESTAMP = Date.now();
-  const TEST_EMAIL = `smoketest+${UNIQUE_TIMESTAMP}@${EFCMS_DOMAIN}`;
+if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
+  describe('Verify verification email', () => {
+    const BUCKET_NAME = Cypress.env('SMOKETEST_BUCKET');
+    const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
+    const UNIQUE_TIMESTAMP = Date.now();
+    const TEST_EMAIL = `smoketest+${UNIQUE_TIMESTAMP}@${EFCMS_DOMAIN}`;
 
-  before(() => {
-    cy.task('deleteAllItemsInEmailBucket', BUCKET_NAME);
+    before(() => {
+      cy.task('deleteAllItemsInEmailBucket', BUCKET_NAME);
+    });
+
+    after(() => {
+      cy.task('deleteAllItemsInEmailBucket', BUCKET_NAME);
+    });
+
+    it('should update petitioner email and confirm that a verification email is received by the updated email address', () => {
+      navigateTo('petitioner9');
+      goToMyAccount();
+      clickChangeEmail();
+      changeEmailTo(TEST_EMAIL);
+      clickConfirmModal();
+      confirmEmailPendingAlert();
+
+      readItemsAndRetry({ BUCKET_NAME, TEST_EMAIL });
+    });
   });
-
-  after(() => {
-    cy.task('deleteAllItemsInEmailBucket', BUCKET_NAME);
+} else {
+  describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
+    it('should skip', () => {
+      expect(true).to.equal(true);
+    });
   });
-
-  //TODO: Skip this test when running locally (?)
-
-  it('should update petitioner email and confirm that a verification email is received by the updated email address', () => {
-    navigateTo('petitioner9');
-    goToMyAccount();
-    clickChangeEmail();
-    changeEmailTo(TEST_EMAIL);
-    clickConfirmModal();
-    confirmEmailPendingAlert();
-
-    readItemsAndRetry({ BUCKET_NAME, TEST_EMAIL });
-  });
-});
+}
 
 const readItemsAndRetry = ({
   BUCKET_NAME,
