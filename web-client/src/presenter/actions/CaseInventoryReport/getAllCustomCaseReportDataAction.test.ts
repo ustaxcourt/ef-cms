@@ -7,6 +7,10 @@ describe('getAllCustomCaseReportDataAction', () => {
   let counter = 1;
 
   beforeEach(() => {
+    applicationContext.setTimeout = jest
+      .fn()
+      .mockImplementation(callback => callback());
+
     counter = 1;
     applicationContext.getUseCases().getCustomCaseReportInteractor = jest
       .fn()
@@ -93,5 +97,38 @@ describe('getAllCustomCaseReportDataAction', () => {
         testProp: 'John Cruz2',
       },
     ]);
+  });
+
+  it('should throttle when there are 1000000 records', async () => {
+    await runAction(getAllCustomCaseReportDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        customCaseReport: {
+          filters: {
+            endDate: '12/30/2024',
+            judges: ['John The Best Judger to Judge'],
+            startDate: '12/30/1960',
+            testFilterOne: 'TEST_FILTERS_1',
+            testFilterTwo: 'TEST_FILTERS_2',
+          },
+          totalCases: 1000000,
+        },
+        judges: [
+          {
+            name: 'John The Best Judger to Judge',
+            userId: 1,
+          },
+        ],
+      },
+    });
+
+    const setTimeoutCalls = applicationContext.setTimeout.mock.calls;
+    expect(setTimeoutCalls.length).toEqual(11);
+
+    const getCustomCaseReportInteractorCalls =
+      applicationContext.getUseCases().getCustomCaseReportInteractor.mock.calls;
+    expect(getCustomCaseReportInteractorCalls.length).toEqual(112);
   });
 });
