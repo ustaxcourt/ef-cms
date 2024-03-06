@@ -314,7 +314,13 @@ export const formattedDocketEntries = (
       break;
   }
 
-  let docketEntriesFormatted = sortDocketEntries(
+  // export type for better usage
+  type DocketEntriesSelectionType = (RawDocketEntry & {
+    createdAtFormatted: string;
+    isDocumentSelected?: boolean;
+  })[];
+
+  let docketEntriesFormatted: DocketEntriesSelectionType = sortDocketEntries(
     result.formattedDocketEntries,
     docketRecordSort,
   );
@@ -365,6 +371,8 @@ export const formattedDocketEntries = (
       };
     });
 
+  // console.log('docketEntriesFormatted', docketEntriesFormatted);
+
   // todo:
   // 1. unit test
   // *Needs to be computed in anticiapation of (isMinuteEntry being removed from DocketEntry.ts) https://github.com/ustaxcourt/ef-cms/pull/4702
@@ -378,11 +386,14 @@ export const formattedDocketEntries = (
   const allDocumentsSelected =
     documentsSelectedForDownloadCount === selectableDocumentsCount;
 
+  const someDocumentsSelectedForDownload =
+    documentsSelectedForDownloadCount > 0 &&
+    documentsSelectedForDownloadCount < selectableDocumentsCount;
+
+  result.someDocumentsSelectedForDownload = someDocumentsSelectedForDownload;
+
   result.isDownloadLinkEnabled =
-    (documentsSelectedForDownloadCount > 0 &&
-      documentsSelectedForDownloadCount < selectableDocumentsCount) ||
-    allDocumentsSelected;
-  console.log('isDownloadLinkEnabled', result.isDownloadLinkEnabled);
+    someDocumentsSelectedForDownload || allDocumentsSelected;
   result.allDocumentsSelectedForDownload = allDocumentsSelected || false;
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
