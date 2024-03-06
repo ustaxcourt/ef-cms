@@ -15,21 +15,35 @@ import type { Context } from 'aws-lambda';
 const ddbMock = mockClient(DynamoDBDocumentClient);
 const sqsMock = mockClient(SQSClient);
 
+beforeEach(() => {
+  ddbMock.reset();
+  sqsMock.reset();
+  jest.resetModules();
+});
 //swap out the applicationContext module used by migration-segments with our mocked version
 jest.mock('../../../../src/applicationContext', () => {
   return {
     createApplicationContext: () => mockApplicationContext,
   };
 });
-
-beforeEach(() => {
-  ddbMock.reset();
-  sqsMock.reset();
-});
-
-jest.mock('./migrations/0000-validate-all-items', () => ({
-  migrateItems: jest.fn(),
+jest.mock('./migrationsToRun', () => ({
+  migrationsToRun: [
+    {
+      key: 'just-a-test',
+      script: jest
+        .fn()
+        .mockReturnValue([{ pk: 'case|101-20', sk: 'case|101-20' }]),
+    },
+  ],
 }));
+
+// we want to override the behavior of this module from test to test, so
+// we hoist overrideMigrateItems and _fnMigrateItems as a closure
+jest.mock('./migrations/0000-validate-all-items', () => {
+  return {
+    migrateItems: jest.fn(),
+  };
+});
 
 describe('migration-segments', () => {
   const mockLogger = mockApplicationContext.logger;
@@ -66,6 +80,10 @@ describe('migration-segments', () => {
   } as Context;
 
   it('should skip running a migration when it already existed as a record in the deploy table', async () => {
+    ddbMock.on(GetCommand).resolves({
+      Item: true,
+    });
+
     await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
     expect(migrateItems).toHaveBeenCalled();
 
@@ -75,7 +93,7 @@ describe('migration-segments', () => {
   });
 
   it('should run a migration when it did NOT already exist as a record in the deploy table', async () => {
-    await handler(mockLambdaEvent, mockLambdaContext);
+    await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
 
     expect(mockLogger.debug).toHaveBeenCalledWith(
       'about to run migration just-a-test',
