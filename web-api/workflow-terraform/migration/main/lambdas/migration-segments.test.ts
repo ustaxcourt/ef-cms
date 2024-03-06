@@ -78,7 +78,7 @@ describe('migration-segments', () => {
 
   it('should skip running a migration when it already existed as a record in the deploy table', async () => {
     ddbMock.on(GetCommand).resolves({
-      Item: true,
+      Item: { BOOL: true },
     });
 
     await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
@@ -99,9 +99,10 @@ describe('migration-segments', () => {
 
   it('should throw an error when any item is invalid', async () => {
     (migrateItems as jest.Mock).mockRejectedValueOnce(new Error());
-    // mockValidationMigration.mockRejectedValue(new Error());
 
-    await expect(handler(mockLambdaEvent, mockLambdaContext)).rejects.toThrow();
+    await expect(
+      handler(mockLambdaEvent, mockLambdaContext, jest.fn()),
+    ).rejects.toThrow();
   });
 
   it('should logs a message when an item already existed in the destination table', async () => {
@@ -114,26 +115,22 @@ describe('migration-segments', () => {
   });
 
   it('should throw an error when an error occurs while saving an item into the destination table', async () => {
-    documentClientMock.put = () => ({
-      promise: () =>
-        new Promise((resolve, reject) =>
-          reject(new Error('NOT a conditional request failed ERROR')),
-        ),
-    });
-
-    await expect(handler(mockLambdaEvent, mockLambdaContext)).rejects.toThrow(
-      'NOT a conditional request failed ERROR',
-    );
+    ddbMock
+      .on(PutCommand)
+      .rejects(new Error('NOT a conditional request failed ERROR'));
+    await expect(
+      handler(mockLambdaEvent, mockLambdaContext, jest.fn()),
+    ).rejects.toThrow('NOT a conditional request failed ERROR');
   });
 
   it('should delete a message from the sqs queue when it is successfully processed', async () => {
-    await handler(mockLambdaEvent, mockLambdaContext);
+    await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
 
     expect(deleteMessageMock).toHaveBeenCalled();
   });
 
   it('should log the duration a segment took to process', async () => {
-    await handler(mockLambdaEvent, mockLambdaContext);
+    await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
 
     expect(mockLogger.info).toHaveBeenCalledWith('about to process segment', {
       segment: 0,

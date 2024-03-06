@@ -19,7 +19,7 @@ type migrationsCallback = {
     }: {
       documentClient: DynamoDBDocument;
       items: EfcmsEntity[];
-      ranMigrations?: {};
+      ranMigrations?: { [key: string]: boolean };
     },
   ): Promise<any>;
 };
