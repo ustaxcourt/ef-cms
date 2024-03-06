@@ -9,6 +9,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getAllCustomCaseReportDataAction = async ({
   applicationContext,
   get,
+  store,
 }: ActionProps<{ selectedPage: number }>) => {
   const filterValues = get(state.customCaseReport.filters);
   const currentJudges = get(state.judges);
@@ -50,6 +51,9 @@ export const getAllCustomCaseReportDataAction = async ({
   const WAIT_TIME = 1500;
   const cases: CaseInventory[] = [];
 
+  store.set(state.batchDownloads.totalFiles, totalCount);
+  store.set(state.batchDownloads.fileCount, 0);
+
   for (let index = 0; index < loops; index++) {
     if (index && index % 10 === 0) {
       await new Promise(resolve => {
@@ -70,6 +74,7 @@ export const getAllCustomCaseReportDataAction = async ({
 
     cases.push(...iterationData.foundCases);
     searchAfter = iterationData.lastCaseId;
+    store.set(state.batchDownloads.fileCount, cases.length);
   }
 
   const formattedCases = cases.map(aCase => ({
