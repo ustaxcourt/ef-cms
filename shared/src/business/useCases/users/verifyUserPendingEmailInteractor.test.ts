@@ -298,7 +298,6 @@ describe('verifyUserPendingEmailInteractor', () => {
           changeOfAddressDocketEntry: {
             ...MOCK_DOCUMENTS[0],
             entityName: 'DocketEntry',
-            isMinuteEntry: 'false',
           },
         });
 

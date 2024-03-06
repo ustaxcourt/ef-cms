@@ -506,7 +506,6 @@ describe('formattedDocketEntries', () => {
               {
                 ...docketEntries[0],
                 isLegacyServed: true,
-                isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
                 servedAt: undefined,
@@ -538,7 +537,6 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...docketEntries[0],
-                isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
               },
@@ -634,7 +632,6 @@ describe('formattedDocketEntries', () => {
             eventCode: 'PSDE',
             index: 3,
             isFileAttached: true,
-            isMinuteEntry: false,
             isOnDocketRecord: true,
             isStricken: false,
             pending: true,
