@@ -40,7 +40,7 @@ const scanTableSegment = async ({
 }: {
   applicationContext: IApplicationContext;
   ranMigrations: { [key: string]: boolean };
-  segment: any;
+  segment: number;
   totalSegments: number;
 }): Promise<void> => {
   let hasMoreResults = true;
