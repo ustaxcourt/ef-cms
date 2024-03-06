@@ -72,10 +72,10 @@ const scanTableSegment = async ({
 const hasMigrationRan = async key => {
   const { Item } = await dynamoDbDocumentClient.get({
     Key: {
-      pk: `migration|${key}`,
+      pk: 'migration',
       sk: `migration|${key}`,
     },
-    TableName: `efcms-deploy-${process.env.STAGE}`,
+    TableName: process.env.SOURCE_TABLE,
   });
   return { [key]: !!Item };
 };
@@ -93,7 +93,7 @@ export const migrateRecords = async (
   },
 ) => {
   for (let { key, script } of migrationsToRun) {
-    if (ranMigrations && ranMigrations[key]) {
+    if (ranMigrations && !ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
       items = await script(items, documentClient, applicationContext);
     }
