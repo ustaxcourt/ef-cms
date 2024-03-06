@@ -22,6 +22,7 @@ import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkI
 import { associateIrsPractitionerWithCaseSequence } from './sequences/CaseAssociation/associateIrsPractitionerWithCaseSequence';
 import { associatePrivatePractitionerWithCaseSequence } from './sequences/CaseAssociation/associatePrivatePractitionerWithCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
+import { batchDownloadDocketEntriesSequence } from '@web-client/presenter/sequences/batchDownloadDocketEntriesSequence';
 import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequence';
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
@@ -590,6 +591,8 @@ export const presenterSequences = {
     associatePrivatePractitionerWithCaseSequence as unknown as Function,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
+  batchDownloadDocketEntriesSequence:
+    batchDownloadDocketEntriesSequence as unknown as Function,
   batchDownloadErrorSequence: batchDownloadErrorSequence as unknown as Function,
   batchDownloadReadySequence: batchDownloadReadySequence as unknown as Function,
   batchDownloadTrialSessionSequence:

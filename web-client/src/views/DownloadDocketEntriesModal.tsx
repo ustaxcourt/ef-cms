@@ -9,7 +9,7 @@ import classNames from 'classnames';
 export const DownloadDocketEntriesModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.runTrialSessionPlanningReportSequence,
+    confirmSequence: sequences.batchDownloadDocketEntriesSequence,
     documentsSelectedForDownload: state.documentsSelectedForDownload,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },

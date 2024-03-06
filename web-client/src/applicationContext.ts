@@ -49,6 +49,7 @@ import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/as
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateIrsPractitionerWithCaseProxy';
 import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associatePrivatePractitionerWithCaseProxy';
 import { authenticateUserInteractor } from '../../shared/src/proxies/auth/authenticateUserProxy';
+import { batchDownloadDocketEntriesInteractor } from '@shared/proxies/documents/batchDownloadDocketEntriesProxy';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
 import { calculateDaysElapsedSinceLastStatusChange } from '../../shared/src/business/utilities/calculateDaysElapsedSinceLastStatusChange';
@@ -400,6 +401,7 @@ const allUseCases = {
   associateIrsPractitionerWithCaseInteractor,
   associatePrivatePractitionerWithCaseInteractor,
   authenticateUserInteractor,
+  batchDownloadDocketEntriesInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
   canConsolidateInteractor,
