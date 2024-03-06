@@ -187,9 +187,9 @@ resource "aws_ses_receipt_rule" "email_forwarding_rule" {
   recipients    = ["smoketest@${aws_ses_domain_identity.main.domain}"]
   enabled       = true
   scan_enabled  = true
-  depends_on    = [aws_s3_bucket_policy.allow_access_for_email_smoketests]
+  depends_on    = [aws_s3_bucket_policy.allow_access_for_email_smoketests[0]]
   s3_action {
-    bucket_name = aws_s3_bucket.smoketest_email_inbox.bucket
+    bucket_name = aws_s3_bucket.smoketest_email_inbox[0].bucket
     position    = 1
   }
 }
