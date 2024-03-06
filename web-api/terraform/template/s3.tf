@@ -58,6 +58,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
   bucket = aws_s3_bucket.documents_us_east_1.bucket
   policy = data.aws_iam_policy_document.allow_access_for_glue_job.json
 }
+
 data "aws_iam_policy_document" "allow_access_for_glue_job" {
   statement {
     sid = "DelegateS3Access"
@@ -350,6 +351,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
 }
 
 resource "aws_s3_bucket" "smoketest_email_inbox" {
+  count    = var.environment == "prod" ? 0 : 1
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-email-inbox-${var.environment}-us-east-1"
   acl      = "private"
