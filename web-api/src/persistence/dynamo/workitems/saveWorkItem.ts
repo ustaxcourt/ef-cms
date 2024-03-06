@@ -19,11 +19,11 @@ export const saveWorkItem = ({
   const box =
     workItem.inProgress || workItem.caseIsInProgress ? 'inProgress' : 'inbox';
 
-  const gsi2pk =
+  const gsiUserBox =
     !workItem.completedAt && workItem.assigneeId
       ? `assigneeId|${box}|${workItem.assigneeId}`
       : undefined;
-  const gsi3pk =
+  const gsiSectionBox =
     !workItem.completedAt && workItem.section
       ? `section|${box}|${workItem.section}`
       : undefined;
@@ -31,8 +31,8 @@ export const saveWorkItem = ({
   return put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,
-      gsi2pk,
-      gsi3pk,
+      gsiSectionBox,
+      gsiUserBox,
       pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
       ...workItem,

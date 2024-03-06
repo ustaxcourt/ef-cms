@@ -10,15 +10,16 @@ export const getUserInboxMessages = async ({
 }): Promise<RawMessage[]> => {
   const results = (await queryFull({
     ExpressionAttributeNames: {
-      '#gsi2pk': 'gsi2pk',
+      '#gsiUserBox': 'gsiUserBox',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi2pk': `assigneeId|${userId}`,
+      ':gsiUserBox': `assigneeId|${userId}`,
       ':prefix': 'message',
     },
-    IndexName: 'gsi2',
-    KeyConditionExpression: '#gsi2pk = :gsi2pk and begins_with(#sk, :prefix)',
+    IndexName: 'gsiUserBox',
+    KeyConditionExpression:
+      '#gsiUserBox = :gsiUserBox and begins_with(#sk, :prefix)',
     applicationContext,
   })) as RawMessage[];
 

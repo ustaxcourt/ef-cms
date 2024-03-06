@@ -1,4 +1,4 @@
-const dynamoKeys = ['pk', 'sk', 'gsi1pk', 'gsi2pk', 'gsi3pk', 'ttl'];
+const dynamoKeys = ['pk', 'sk', 'gsi1pk', 'gsiUserBox', 'gsiSectionBox', 'ttl'];
 export function purgeDynamoKeys<T>(obj: T): T {
   for (const property in obj) {
     if (dynamoKeys.includes(property)) {
