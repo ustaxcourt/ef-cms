@@ -12,10 +12,12 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setProgressForFileUploadAction } from '@web-client/presenter/actions/setProgressForFileUploadAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setupFilesForCaseCreationAction } from '@web-client/presenter/actions/CaseCreation/setupFilesForCaseCreationAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -41,6 +43,8 @@ export const submitPetitionFromPaperSequence = [
           stopShowValidationAction,
           showProgressSequenceDecorator([
             setCaseTypeAction,
+            setupFilesForCaseCreationAction,
+            setProgressForFileUploadAction,
             createCaseFromPaperAction,
             {
               error: [openFileUploadErrorModal],
