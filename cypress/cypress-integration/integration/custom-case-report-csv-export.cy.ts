@@ -8,24 +8,26 @@ describe('Custom Case Report CSV export', () => {
 
     const downloadPath = Cypress.config('downloadsFolder');
 
+    let reportCount: number = -1;
     cy.get('[data-testid="custom-case-report-count"]')
       .invoke('text')
       .then(innerText => {
-        console.log('innerText', innerText);
-        cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
-          const latestFile = files
-            .sort()
-            .filter((fileName: string) => fileName.endsWith('.csv'))
-            .pop();
-
-          const filePath = `${downloadPath}/${latestFile}`;
-          cy.readFile(filePath, 'utf-8').then(fileContent => {
-            cy.wrap(fileContent.split('\n').length).should(
-              'equal',
-              +innerText + 1,
-            );
-          });
-        });
+        reportCount = +innerText;
       });
+
+    cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
+      const latestFile = files
+        .sort()
+        .filter((fileName: string) => fileName.endsWith('.csv'))
+        .pop();
+
+      const filePath = `${downloadPath}/${latestFile}`;
+      cy.readFile(filePath, 'utf-8').then(fileContent => {
+        cy.wrap(fileContent.split('\n').length).should(
+          'equal',
+          reportCount + 1,
+        );
+      });
+    });
   });
 });
