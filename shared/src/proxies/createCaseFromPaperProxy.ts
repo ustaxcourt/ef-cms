@@ -1,32 +1,31 @@
+import { CreatedCaseType } from '@shared/business/entities/EntityConstants';
 import { post } from './requests';
 
-/**
- * createCaseProxy
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.corporateDisclosureFileId the id of the corporate disclosure file
- * @param {string} providers.petitionFileId the id of the petition file
- * @param {string} providers.petitionMetadata the petition metadata
- * @param {string} providers.requestForPlaceOfTrialFileId the id of the request for place of trial file
- * @param {string} providers.stinFileId the id of the stin file
- * @returns {Promise<*>} the promise of the api call
- */
 export const createCaseFromPaperInteractor = (
   applicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
+    attachmentToPetitionFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     requestForPlaceOfTrialFileId,
     stinFileId,
+  }: {
+    applicationForWaiverOfFilingFeeFileId: string;
+    attachmentToPetitionFileId: string;
+    corporateDisclosureFileId: string;
+    petitionFileId: string;
+    petitionMetadata: CreatedCaseType;
+    requestForPlaceOfTrialFileId: string;
+    stinFileId: string;
   },
-) => {
+): Promise<RawCase> => {
   return post({
     applicationContext,
     body: {
       applicationForWaiverOfFilingFeeFileId,
+      attachmentToPetitionFileId,
       corporateDisclosureFileId,
       petitionFileId,
       petitionMetadata,

@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { formatStatistic } from './statisticsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -29,8 +31,6 @@ const getEConsentAttributesForContact = (
   return { eServiceConsentText, shouldDisplayEConsentText };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const reviewSavedPetitionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -131,6 +131,8 @@ export const reviewSavedPetitionHelper = (
     documentsByType[
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
     ];
+  const attachmentToPetitionFile =
+    documentsByType[INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType];
 
   const showStatistics = statistics && statistics.length > 0;
 
@@ -169,6 +171,7 @@ export const reviewSavedPetitionHelper = (
 
   return {
     applicationForWaiverOfFilingFeeFile,
+    attachmentToPetitionFile,
     corporateDisclosureFile,
     eConsentFieldsEnabledFeatureFlag,
     eServiceConsentTextForPrimaryContact,
