@@ -328,7 +328,7 @@ resource "aws_s3_bucket_public_access_block" "block_quarantine_west" {
 
 resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
   count  = var.environment == "prod" ? 0 : 1
-  bucket = aws_s3_bucket.smoketest_email_inbox.bucket
+  bucket = aws_s3_bucket.smoketest_email_inbox[0].bucket
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -338,7 +338,7 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
         Effect    = "Allow"
         Principal = { Service = "ses.amazonaws.com" }
         Action    = "s3:PutObject"
-        Resource  = "arn:aws:s3:::${aws_s3_bucket.smoketest_email_inbox.bucket}/*"
+        Resource  = "arn:aws:s3:::${aws_s3_bucket.smoketest_email_inbox[0].bucket}/*"
         Condition = {
           StringEquals = {
             "AWS:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
