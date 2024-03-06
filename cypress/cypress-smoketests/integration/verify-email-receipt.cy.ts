@@ -6,6 +6,7 @@ import {
   goToMyAccount,
 } from '../../cypress-integration/support/pages/my-account';
 import { navigateTo } from '../../cypress-integration/support/pages/maintenance';
+import { retry } from '../../helpers/retry';
 
 if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
   describe('Verify verification email', () => {
@@ -30,7 +31,20 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
       clickConfirmModal();
       confirmEmailPendingAlert();
 
-      readS3InboxAndRetry({ bucketName, testEmailAddress });
+      retry(() => {
+        return cy
+          .task<any[]>('readAllItemsInBucket', bucketName)
+          .then(items => {
+            const isValid =
+              items[0] !== undefined &&
+              items[0].content.includes(testEmailAddress) &&
+              items[0].content.includes(
+                'The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.',
+              ) &&
+              items.length === 1;
+            return isValid;
+          });
+      });
     });
   });
 } else {
@@ -40,28 +54,3 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
     });
   });
 }
-
-const readS3InboxAndRetry = ({
-  bucketName,
-  testEmailAddress,
-}: {
-  bucketName: string;
-  testEmailAddress: string;
-}) => {
-  const MAX_RETRIES = 3;
-  let retryCount = 0;
-  cy.task<any[]>('readAllItemsInBucket', bucketName).then(items => {
-    if (items.length === 0 && retryCount < MAX_RETRIES) {
-      retryCount++;
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(2000);
-      readS3InboxAndRetry({ bucketName, testEmailAddress });
-    } else {
-      expect(items).to.have.length(1);
-      expect(items[0].content).to.contain(
-        'The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.',
-      );
-      expect(items[0].content).to.contain(testEmailAddress);
-    }
-  });
-};
