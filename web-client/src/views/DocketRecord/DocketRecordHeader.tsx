@@ -203,7 +203,7 @@ export const DocketRecordHeader = connect(
                       aria-label="download docket records"
                       data-testid="download-docket-records-button"
                       disabled={
-                        !formattedDocketEntriesHelper.someDocumentsSelectedForDownload
+                        !formattedDocketEntriesHelper.isDownloadLinkEnabled
                       }
                       icon={['fas', 'cloud-download-alt']}
                       onClick={() => {

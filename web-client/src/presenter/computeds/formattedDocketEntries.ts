@@ -285,9 +285,6 @@ export const formattedDocketEntries = (
 
   const caseDetail = get(state.caseDetail);
 
-  const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  console.log('documentsSelectedForDownload', documentsSelectedForDownload);
-
   const { docketNumber } = caseDetail;
 
   let docketRecordSort;
@@ -333,6 +330,9 @@ export const formattedDocketEntries = (
     .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
     .toISO();
 
+  const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
+  console.log('documentsSelectedForDownload', documentsSelectedForDownload);
+
   docketEntriesFormatted = docketEntriesFormatted
     .map((entry: any, _, array) => {
       return { ...entry, rootDocument: fetchRootDocument(entry, array) };
@@ -375,16 +375,15 @@ export const formattedDocketEntries = (
   const documentsSelectedForDownloadCount = docketEntriesFormatted.filter(
     entry => entry.isDocumentSelected,
   ).length;
+  const allDocumentsSelected =
+    documentsSelectedForDownloadCount === selectableDocumentsCount;
 
-  result.someDocumentsSelectedForDownload =
-    documentsSelectedForDownloadCount > 0 &&
-    documentsSelectedForDownloadCount < selectableDocumentsCount;
-  console.log(
-    'someDocumentsSelectedForDownload',
-    result.someDocumentsSelectedForDownload,
-  );
-  result.allDocumentsSelectedForDownload =
-    documentsSelectedForDownloadCount === selectableDocumentsCount || false;
+  result.isDownloadLinkEnabled =
+    (documentsSelectedForDownloadCount > 0 &&
+      documentsSelectedForDownloadCount < selectableDocumentsCount) ||
+    allDocumentsSelected;
+  console.log('isDownloadLinkEnabled', result.isDownloadLinkEnabled);
+  result.allDocumentsSelectedForDownload = allDocumentsSelected || false;
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,

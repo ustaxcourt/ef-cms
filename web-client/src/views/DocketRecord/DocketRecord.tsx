@@ -65,6 +65,13 @@ export const DocketRecord = connect(
                       type="checkbox"
                       onChange={e => {
                         console.log('e', e);
+                        const documentIds =
+                          formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
+                            docketEntry => docketEntry.docketEntryId,
+                          );
+                        setSelectedDocumentsForDownloadSequence({
+                          documentIds,
+                        });
                       }}
                     />
                   </th>
@@ -108,7 +115,7 @@ export const DocketRecord = connect(
                               type="checkbox"
                               onChange={() => {
                                 setSelectedDocumentsForDownloadSequence({
-                                  documentId: entry.docketEntryId,
+                                  documentIds: [entry.docketEntryId],
                                 });
                               }}
                             />
