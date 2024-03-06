@@ -1,3 +1,5 @@
+import { retry } from '../../helpers/retry';
+
 describe('Custom Case Report CSV export', () => {
   it('should download the Custom Case Report data in CSV format', () => {
     cy.login('docketclerk', '/reports/custom-case');
@@ -15,6 +17,8 @@ describe('Custom Case Report CSV export', () => {
         reportCount = +innerText;
       });
 
+    retry(() => waitUntilTheCsvFileIsInTheDownloadFolder(downloadPath));
+
     cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
       const latestFile = files
         .sort()
@@ -22,7 +26,7 @@ describe('Custom Case Report CSV export', () => {
         .pop();
 
       const filePath = `${downloadPath}/${latestFile}`;
-      cy.readFile(filePath, 'utf-8').then(fileContent => {
+      return cy.readFile(filePath, 'utf-8').then(fileContent => {
         cy.wrap(fileContent.split('\n').length).should(
           'equal',
           reportCount + 1,
@@ -31,3 +35,14 @@ describe('Custom Case Report CSV export', () => {
     });
   });
 });
+
+const waitUntilTheCsvFileIsInTheDownloadFolder = (downloadPath: string) => {
+  return cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
+    const latestFile = files
+      .sort()
+      .filter((fileName: string) => fileName.endsWith('.csv'))
+      .pop();
+
+    return !!latestFile;
+  });
+};
