@@ -44,8 +44,8 @@ export const StartCaseStep2 = connect(
           </h2>
         </Focus>
         <Hint>
-          Don’t forget to remove or block out (redact) your personal information
-          on all your documents, including any IRS notice(s).
+          Don’t forget to remove or redact your personal information on all your
+          documents, including any IRS notice(s).
         </Hint>
         <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required unless otherwise noted
@@ -140,16 +140,52 @@ export const StartCaseStep2 = connect(
               </fieldset>
             </FormGroup>
             {startCaseHelper.showHasIrsNoticeOptions && (
-              <CaseTypeSelect
-                allowDefaultOption={true}
-                caseTypes={caseTypeDescriptionHelper.caseTypes}
-                className="margin-bottom-0"
-                legend="Type of notice / case"
-                validation="validateStartCaseWizardSequence"
-                value={form.caseType}
-                onChange="updateFormValueSequence"
-              />
+              <>
+                <CaseTypeSelect
+                  allowDefaultOption={true}
+                  caseTypes={caseTypeDescriptionHelper.caseTypes}
+                  legend="Type of notice / case"
+                  validation="validateStartCaseWizardSequence"
+                  value={form.caseType}
+                  onChange="updateFormValueSequence"
+                />
+                <div className="usa-form-group">
+                  <FormGroup
+                    errorText={[
+                      validationErrors.attachmentToPetitionFile,
+                      validationErrors.attachmentToPetitionFileSize,
+                    ]}
+                  >
+                    <label
+                      className={classNames(
+                        'usa-label ustc-upload-atp with-hint',
+                        startCaseHelper.showAttachmentToPetitionFileValid &&
+                          'validated',
+                      )}
+                      data-testid="atp-file-upload-label"
+                      htmlFor="atp-file-upload"
+                      id="atp-file-upload-label"
+                    >
+                      Choose a PDF (.pdf) of the IRS Notice(s) to upload if you
+                      have it.
+                    </label>
+                    <span className="usa-hint" id="atp-files-upload-hint">
+                      Make sure file is not encrypted or password protected. Max
+                      file size {constants.MAX_FILE_SIZE_MB}MB.
+                    </span>
+                    <StateDrivenFileInput
+                      aria-describedby="atp-file-upload-label"
+                      data-testid="atp-file-upload"
+                      id="atp-file-upload"
+                      name="attachmentToPetitionFile"
+                      updateFormValueSequence="updateFormValueSequence"
+                      validationSequence="validateStartCaseWizardSequence"
+                    />
+                  </FormGroup>
+                </div>
+              </>
             )}
+
             {startCaseHelper.showNotHasIrsNoticeOptions && (
               <CaseTypeSelect
                 allowDefaultOption={true}

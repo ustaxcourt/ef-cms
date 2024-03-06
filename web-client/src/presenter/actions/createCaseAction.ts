@@ -1,59 +1,61 @@
+import {
+  CreatedCaseType,
+  FileUploadProgressMapType,
+} from '@shared/business/entities/EntityConstants';
+import { ElectronicCreatedCaseType } from '@shared/business/useCases/createCaseInteractor';
 import { omit } from 'lodash';
-import { setupPercentDone } from './createCaseFromPaperAction';
 import { state } from '@web-client/presenter/app.cerebral';
-/**
- * invokes the filePetition useCase.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function used for getting petition
- * @param {object} providers.path the next object in the path
- * @param {object} providers.store the cerebral store object
- * @returns {object} the next path based on if creation was successful or error
- */
+
 export const createCaseAction = async ({
   applicationContext,
   get,
   path,
-  store,
-}: ActionProps) => {
-  const { corporateDisclosureFile, petitionFile, stinFile } = get(state.form);
+  props,
+}: ActionProps<{
+  fileUploadProgressMap: FileUploadProgressMapType;
+}>) => {
+  const { fileUploadProgressMap } = props;
+  const petitionMetadata: CreatedCaseType = get(state.form);
 
-  const form = omit(
-    {
-      ...get(state.form),
-    },
-    'trialCities',
-  );
+  const form: ElectronicCreatedCaseType = omit(petitionMetadata, 'trialCities');
 
   const user = applicationContext.getCurrentUser();
   form.contactPrimary.email = user.email;
 
-  const progressFunctions = setupPercentDone(
-    {
-      corporate: corporateDisclosureFile,
-      petition: petitionFile,
-      stin: stinFile,
-    },
-    store,
-  );
+  let caseDetail;
+  let stinFile;
 
-  let filePetitionResult;
   try {
-    filePetitionResult = await applicationContext
+    const {
+      attachmentToPetitionFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
+      stinFileId,
+    } = await applicationContext
       .getUseCases()
-      .filePetitionInteractor(applicationContext, {
-        corporateDisclosureFile,
-        corporateDisclosureUploadProgress: progressFunctions.corporate,
-        petitionFile,
+      .generateDocumentIds(applicationContext, {
+        attachmentToPetitionUploadProgress:
+          fileUploadProgressMap.attachmentToPetition,
+        corporateDisclosureUploadProgress:
+          fileUploadProgressMap.corporateDisclosure,
+        petitionUploadProgress: fileUploadProgressMap.petition,
+        stinUploadProgress: fileUploadProgressMap.stin,
+      });
+
+    stinFile = stinFileId;
+
+    caseDetail = await applicationContext
+      .getUseCases()
+      .createCaseInteractor(applicationContext, {
+        attachmentToPetitionFileId,
+        corporateDisclosureFileId,
+        petitionFileId,
         petitionMetadata: form,
-        petitionUploadProgress: progressFunctions.petition,
-        stinFile,
-        stinUploadProgress: progressFunctions.stin,
+        stinFileId: stinFile,
       });
   } catch (err) {
     return path.error();
   }
-  const { caseDetail, stinFileId } = filePetitionResult;
 
   const addCoversheet = docketEntryId => {
     return applicationContext
@@ -69,7 +71,7 @@ export const createCaseAction = async ({
     .map(d => d.docketEntryId);
 
   // for security reasons, the STIN is not in the API response, but we already know the docketEntryId
-  documentsThatNeedCoverSheet.push(stinFileId);
+  documentsThatNeedCoverSheet.push(stinFile);
 
   await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 
