@@ -116,6 +116,7 @@ export const ModalDialog = ({
         <dialog
           open
           className="modal-screen"
+          data-testid="modal-dialog"
           role="dialog"
           onClick={blurDialog}
         >
@@ -126,7 +127,10 @@ export const ModalDialog = ({
           >
             <div className="modal-header grid-container padding-x-0">
               <div className="grid-row">
-                <div className="mobile-lg:grid-col-9">
+                <div
+                  className="mobile-lg:grid-col-9"
+                  data-testid="modal-dialog-header"
+                >
                   {title && (
                     <h3
                       className="modal-header__title"

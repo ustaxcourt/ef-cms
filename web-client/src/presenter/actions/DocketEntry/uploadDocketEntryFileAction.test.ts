@@ -9,14 +9,19 @@ describe('uploadDocketEntryFileAction', () => {
     name: 'petition',
     size: 100,
   };
+  const successStub = jest.fn();
+  const errorStub = jest.fn();
 
-  let successStub;
-  let errorStub;
+  const mockProps = {
+    fileUploadProgressMap: {
+      primary: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
+    },
+  };
 
   beforeAll(() => {
-    successStub = jest.fn();
-    errorStub = jest.fn();
-
     presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
@@ -25,14 +30,18 @@ describe('uploadDocketEntryFileAction', () => {
     };
   });
 
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .uploadDocumentInteractor.mockResolvedValue(mockDocketEntryId);
+  });
+
   it('should make a call to upload the selected document with docketEntryId from state', async () => {
     await runAction(uploadDocketEntryFileAction, {
       modules: { presenter },
+      props: mockProps,
       state: {
         docketEntryId: mockDocketEntryId,
-        form: {
-          primaryDocumentFile: mockFile,
-        },
       },
     });
 
@@ -42,38 +51,29 @@ describe('uploadDocketEntryFileAction', () => {
     ).toMatchObject({
       documentFile: mockFile,
       key: mockDocketEntryId,
+      onUploadProgress: expect.any(Function),
     });
   });
 
   it('should return the error path when an error is thrown when attempting to upload the document file', async () => {
     applicationContext
       .getUseCases()
-      .uploadDocumentInteractor.mockRejectedValueOnce(new Error('whoopsie!'));
+      .uploadDocumentInteractor.mockRejectedValue(new Error('whoopsie!'));
 
     await runAction(uploadDocketEntryFileAction, {
       modules: { presenter },
-      state: {
-        form: {
-          primaryDocumentFile: {},
-        },
-      },
+      state: {},
     });
 
     expect(errorStub).toHaveBeenCalled();
   });
 
   it('should return the success path with the docketEntryId when the document was uploaded successfully', async () => {
-    await applicationContext
-      .getUseCases()
-      .uploadDocumentInteractor.mockReturnValue(mockDocketEntryId);
-
     await runAction(uploadDocketEntryFileAction, {
       modules: { presenter },
+      props: mockProps,
       state: {
         docketEntryId: mockDocketEntryId,
-        form: {
-          primaryDocumentFile: mockFile,
-        },
       },
     });
 
