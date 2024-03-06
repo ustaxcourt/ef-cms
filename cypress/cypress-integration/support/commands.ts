@@ -112,7 +112,7 @@ declare global {
       waitUntilSettled: (maxTries?: number) => void;
       showsErrorMessage: (shows?: boolean) => void;
       showsSuccessMessage: (shows?: boolean) => void;
-      listDownloadedFiles: (directory: string) => string[];
+      listDownloadedFiles: (directory: string) => Chainable<string[]>;
       showsSpinner: (shows?: boolean) => void;
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;
