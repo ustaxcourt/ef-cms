@@ -228,6 +228,8 @@ export const TODAYS_ORDERS_SORT_DEFAULT = TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
 export const STIN_DOCKET_ENTRY_TYPE = {
   documentType: 'Statement of Taxpayer Identification',
   eventCode: 'STIN',
+  sort: 1,
+  tabTitle: 'STIN',
 };
 
 const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
@@ -629,30 +631,55 @@ export const FILTER_OPTIONS = Object.values(
 );
 export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
-// TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
+    tabTitle: 'APW',
+    sort: 5,
+    fileName: 'applicationForWaiverOfFilingFeeFile',
   },
   corporateDisclosure: {
     documentTitle: 'Corporate Disclosure Statement',
     documentType: 'Corporate Disclosure Statement',
     eventCode: 'DISC',
+    tabTitle: 'CDS',
+    sort: 4,
+    fileName: 'corporateDisclosureFile',
   },
   petition: {
     documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
+    tabTitle: 'Petition',
+    sort: 0,
+    fileName: 'petitionFile',
   },
   requestForPlaceOfTrial: {
     documentTitle: 'Request for Place of Trial at [Place]',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
+    tabTitle: 'RQT',
+    sort: 3,
+    fileName: 'requestForPlaceOfTrialFile',
   },
-  stin: STIN_DOCKET_ENTRY_TYPE,
-};
+  stin: {
+    documentType: 'Statement of Taxpayer Identification',
+    eventCode: 'STIN',
+    sort: 1,
+    tabTitle: 'STIN',
+    fileName: 'stinFile',
+  },
+  attachmentToPetition: {
+    documentTitle: 'Attachment to Petition',
+    documentType: 'Attachment to Petition',
+    eventCode: 'ATP',
+    tabTitle: 'ATP',
+    sort: 2,
+    fileName: 'attachmentToPetitionFile',
+  },
+} as const;
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
@@ -660,11 +687,14 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   petition: 'petitionFile',
   requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
   stin: 'stinFile',
+  attachmentToPetition: 'attachmentToPetitionFile',
 };
 
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  attachmentToPetitionFile:
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
   corporateDisclosureFile:
     INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
   petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -1585,3 +1615,51 @@ export const JUDGE_TITLES = [
   'Chief Judge',
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
+
+export type FileUploadProgressMapType = Record<string, FileUploadProgressType>;
+
+export type FileUploadProgressType = {
+  file: any;
+  uploadProgress: (progressEvent: any) => void;
+};
+
+export type CreatedCaseType = {
+  contactPrimary: {
+    address1: string;
+    address2: string;
+    address3: string;
+    city: string;
+    countryType: string;
+    name: string;
+    paperPetitionEmail: string;
+    phone: string;
+    postalCode: string;
+    state: string;
+    email?: string;
+  };
+  caseType: string;
+  caseCaption: string;
+  attachmentToPetitionFileSize?: number;
+  attachmentToPetitionFile: Blob;
+  hasVerifiedIrsNotice: boolean;
+  isPaper: boolean;
+  mailingDate: string;
+  orderDesignatingPlaceOfTrial?: boolean;
+  orderForCds: boolean;
+  stinFile?: Blob;
+  stinFileSize?: number;
+  orderForFilingFee: boolean;
+  partyType: string;
+  petitionFile: Blob;
+  petitionFileSize: number;
+  petitionPaymentStatus: string;
+  procedureType: string;
+  receivedAt: string;
+  applicationForWaiverOfFilingFeeFile?: Blob;
+  corporateDisclosureFile?: Blob;
+  requestForPlaceOfTrialFile?: Blob;
+  status: string;
+  contactSecondary?: {
+    name: string;
+  };
+};
