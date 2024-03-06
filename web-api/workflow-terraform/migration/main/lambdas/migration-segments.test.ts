@@ -42,11 +42,15 @@ jest.mock('./migrations/0000-validate-all-items', () => {
   };
 });
 
+jest.mock('promise-retry', () => cb => {
+  return cb();
+});
+
 describe('migration-segments', () => {
   const mockLogger = mockApplicationContext.logger;
   beforeEach(() => {
     ddbMock.on(GetCommand).resolves({
-      Item: { BOOL: false },
+      Item: undefined,
     });
 
     ddbMock.on(PutCommand).resolves({});
@@ -78,7 +82,7 @@ describe('migration-segments', () => {
 
   it('should skip running a migration when it already existed as a record in the deploy table', async () => {
     ddbMock.on(GetCommand).resolves({
-      Item: { BOOL: true },
+      Item: { pk: 'migration', sk: 'migration|just-a-test' },
     });
 
     await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
@@ -118,15 +122,16 @@ describe('migration-segments', () => {
     ddbMock
       .on(PutCommand)
       .rejects(new Error('NOT a conditional request failed ERROR'));
+
     await expect(
       handler(mockLambdaEvent, mockLambdaContext, jest.fn()),
     ).rejects.toThrow('NOT a conditional request failed ERROR');
   });
 
   it('should delete a message from the sqs queue when it is successfully processed', async () => {
+    expect(sqsMock.commandCalls(DeleteMessageCommand).length).toBe(0);
     await handler(mockLambdaEvent, mockLambdaContext, jest.fn());
-
-    expect(deleteMessageMock).toHaveBeenCalled();
+    expect(sqsMock.commandCalls(DeleteMessageCommand).length).toBe(1);
   });
 
   it('should log the duration a segment took to process', async () => {
