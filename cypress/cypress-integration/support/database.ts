@@ -1,4 +1,6 @@
 import AWS from 'aws-sdk';
+import fs from 'fs';
+import path from 'path';
 
 AWS.config = new AWS.Config();
 AWS.config.region = 'us-east-1';
@@ -38,4 +40,13 @@ export const setAllowedTerminalIpAddresses = async ipAddresses => {
       TableName: 'efcms-local',
     })
     .promise();
+};
+
+export const deleteAllFilesInFolder = (directoryPath: string) => {
+  const files = fs.readdirSync(directoryPath);
+  files.forEach(file => {
+    const filePath = path.join(directoryPath, file);
+    fs.unlinkSync(filePath);
+  });
+  return null;
 };
