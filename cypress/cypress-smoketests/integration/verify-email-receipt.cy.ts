@@ -32,13 +32,17 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
       confirmEmailPendingAlert();
 
       retry(() => {
-        cy.task<any[]>('readAllItemsInBucket', bucketName).then(items => {
-          expect(items).to.have.length(1);
-          expect(items[0].content).to.contain(
-            'The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.',
-          );
-          expect(items[0].content).to.contain(testEmailAddress);
-        });
+        return cy
+          .task<any[]>('readAllItemsInBucket', bucketName)
+          .then(items => {
+            return (
+              items[0].content.contains(testEmailAddress) &&
+              items[0].content.contains(
+                'The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.',
+              ) &&
+              items.length === 1
+            );
+          });
       });
     });
   });

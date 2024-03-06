@@ -56,9 +56,9 @@ export const readAllItemsInBucket = async (bucketName: string) => {
       if (!b.LastModified) return 0;
       return b.LastModified.getTime() - a.LastModified.getTime();
     });
-    return sortedResults;
+    return sortedResults.length ? sortedResults : undefined;
   } catch (error) {
-    return [];
+    return undefined;
   }
 };
 
