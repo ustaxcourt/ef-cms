@@ -1,6 +1,7 @@
 import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-const migrationConfig = {
+const migrationConfig: Configuration = {
   ...config,
   entry: {
     migration:
