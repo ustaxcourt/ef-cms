@@ -1,10 +1,10 @@
-const config = require('./webpack.config.lambda');
+import config from './webpack.config.lambda';
 
-module.exports = {
+const migrationCronConfig = {
   ...config,
   entry: {
     'migration-status':
-      './web-api/workflow-terraform/migration-cron/main/lambdas/migration-status.js',
+      './web-api/workflow-terraform/migration-cron/main/lambdas/migration-status.ts',
   },
   output: {
     clean: true,
@@ -12,3 +12,6 @@ module.exports = {
     path: `${__dirname}/web-api/workflow-terraform/migration-cron/main/lambdas/dist`,
   },
 };
+
+// eslint-disable-next-line import/no-default-export
+export default migrationCronConfig;
