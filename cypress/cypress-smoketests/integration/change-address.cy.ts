@@ -4,14 +4,14 @@ import {
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
 import { petitionsclerkServePetition } from '../../helpers/petitionsclerk-serves-petition';
-import { practitionerCreatesEletronicCase } from '../../helpers/practitioner-creates-electronic-case';
+import { practitionerCreatesElectronicCase } from '../../helpers/practitioner-creates-electronic-case';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('change of address', () => {
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
     const newAddress = faker.location.streetAddress();
     loginAsPrivatePractitioner('privatePractitioner2');
-    practitionerCreatesEletronicCase().then(docketNumber => {
+    practitionerCreatesElectronicCase().then(docketNumber => {
       petitionsclerkServePetition(docketNumber);
       cy.login('privatePractitioner2');
       cy.get('[data-testid="case-list-table"]').should('exist');

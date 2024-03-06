@@ -607,7 +607,7 @@ export const baseState = {
   documentsSelectedForDownload: [] as string[],
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
-    // used for the progress bar shown in modal when uploading files
+    isHavingSystemIssues: false,
     isUploading: false,
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
