@@ -53,8 +53,8 @@ describe('migration-segments', () => {
     ddbMock.on(ScanCommand).resolves({
       Items: [
         {
-          pk: { S: 'case|101-20' },
-          sk: { S: 'case|101-20' },
+          pk: 'case|101-20',
+          sk: 'case|101-20',
         },
       ],
       LastEvaluatedKey: undefined,
