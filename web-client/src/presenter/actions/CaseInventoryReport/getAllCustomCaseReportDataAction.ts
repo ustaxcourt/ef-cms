@@ -53,7 +53,7 @@ export const getAllCustomCaseReportDataAction = async ({
   for (let index = 0; index < loops; index++) {
     if (index && index % 10 === 0) {
       await new Promise(resolve => {
-        setTimeout(() => resolve(null), WAIT_TIME);
+        applicationContext.setTimeout(() => resolve(null), WAIT_TIME);
       });
     }
 
