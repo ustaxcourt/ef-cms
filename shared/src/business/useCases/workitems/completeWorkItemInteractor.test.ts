@@ -10,6 +10,7 @@ import { completeWorkItemInteractor } from './completeWorkItemInteractor';
 
 describe('completeWorkItemInteractor', () => {
   let mockUser;
+  let mockAuthorizedUser;
 
   const mockWorkItem = {
     assigneeId: applicationContext.getUniqueId(),
@@ -40,14 +41,18 @@ describe('completeWorkItemInteractor', () => {
     mockUser = {
       name: 'docket clerk',
       role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
       userId: applicationContext.getUniqueId(),
+    };
+
+    mockAuthorizedUser = {
+      ...mockUser,
+      section: DOCKET_SECTION,
     };
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUser);
+      .getUserById.mockImplementation(() => mockAuthorizedUser);
 
     applicationContext
       .getPersistenceGateway()
