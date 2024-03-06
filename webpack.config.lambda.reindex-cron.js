@@ -1,10 +1,10 @@
-const config = require('./webpack.config.lambda');
+import config from './webpack.config.lambda';
 
-module.exports = {
+const reindexCronConfig = {
   ...config,
   entry: {
     'reindex-status':
-      './web-api/workflow-terraform/reindex-cron/main/lambdas/reindex-status.js',
+      './web-api/workflow-terraform/reindex-cron/main/lambdas/reindex-status.ts',
   },
   output: {
     clean: true,
@@ -12,3 +12,6 @@ module.exports = {
     path: `${__dirname}/web-api/workflow-terraform/reindex-cron/main/lambdas/dist`,
   },
 };
+
+// eslint-disable-next-line import/no-default-export
+export default reindexCronConfig;
