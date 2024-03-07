@@ -50,6 +50,7 @@ export const loginInteractor = async (
       error: err,
       sendAccountConfirmation: true,
     });
+    throw err;
   }
 };
 
@@ -64,7 +65,7 @@ export async function authErrorHandling(
     email: string;
     sendAccountConfirmation: boolean;
   },
-): Promise<never> {
+): Promise<void> {
   if (
     error.name === 'InvalidPasswordException' ||
     error.name === 'NotAuthorizedException' ||
@@ -94,8 +95,6 @@ export async function authErrorHandling(
 
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
-
-  throw error;
 }
 
 async function resendAccountConfirmation(
