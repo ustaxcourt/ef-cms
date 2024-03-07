@@ -8,10 +8,10 @@ import { genericHandler } from '../../genericHandler';
  */
 export const batchDownloadDocketEntriesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { documentIds } = event.queryStringParameters;
     await applicationContext
       .getUseCases()
-      .batchDownloadDocketEntriesInteractor(applicationContext, {
-        documentIds,
-      });
+      .batchDownloadDocketEntriesInteractor(
+        applicationContext,
+        event.queryStringParameters,
+      );
   });

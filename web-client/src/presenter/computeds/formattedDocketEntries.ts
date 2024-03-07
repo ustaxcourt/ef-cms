@@ -285,7 +285,7 @@ export const formattedDocketEntries = (
 
   const caseDetail = get(state.caseDetail);
 
-  const { docketNumber } = caseDetail;
+  const { caseCaption, docketNumber } = caseDetail;
 
   let docketRecordSort;
   if (docketNumber) {
@@ -364,8 +364,8 @@ export const formattedDocketEntries = (
       };
       return {
         ...docketEntry,
-        isDocumentSelected: documentsSelectedForDownload.includes(
-          docketEntry.docketEntryId,
+        isDocumentSelected: documentsSelectedForDownload.some(
+          docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
         ),
         isMinuteEntry: computeMinuteEntry(docketEntry), // should minuteEntry be set possibly fetching the docket entries? Read below for why its set here*
       };
@@ -376,11 +376,12 @@ export const formattedDocketEntries = (
   // *Needs to be computed in anticiapation of (isMinuteEntry being removed from DocketEntry.ts) https://github.com/ustaxcourt/ef-cms/pull/4702
 
   const selectableDocumentsCount = docketEntriesFormatted.filter(
-    entry => !entry.isMinuteEntry,
+    entry => !entry.isMinuteEntry && entry.isFileAttached,
   ).length;
   const documentsSelectedForDownloadCount = docketEntriesFormatted.filter(
     entry => entry.isDocumentSelected,
   ).length;
+
   const allDocumentsSelected =
     documentsSelectedForDownloadCount === selectableDocumentsCount;
 
@@ -397,6 +398,26 @@ export const formattedDocketEntries = (
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
   );
+
+  result.caseMetaDataForRequest = { // find better way to export, good for now
+    caseCaption,
+    docketNumber,
+  };
+
+  result.allEligibleDocumentsForDownload = {
+    caseCaption,
+    docketEntries: docketEntriesFormatted
+      .filter(docEntry => !docEntry.isMinuteEntry && docEntry.isFileAttached)
+      .map(docEntry => ({
+        docketEntryId: docEntry.docketEntryId,
+        documentTitle: docEntry.documentTitle,
+        filingDate: docEntry.filingDate,
+        index: docEntry.index,
+        isFileAttached: docEntry.isFileAttached,
+        isOnDocketRecord: docEntry.isOnDocketRecord,
+      })),
+    docketNumber,
+  };
 
   result.formattedPendingDocketEntriesOnDocketRecord =
     result.formattedDocketEntriesOnDocketRecord.filter(docketEntry =>

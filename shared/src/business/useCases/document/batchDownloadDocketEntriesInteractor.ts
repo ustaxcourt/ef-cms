@@ -1,3 +1,4 @@
+import { Case, isClosed } from '../../entities/cases/Case';
 import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -8,42 +9,86 @@ import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { isEmpty, isEqual } from 'lodash';
 
-/**
- * batchDownloadDocketEntriesInteractor
- *
- * @param {object} applicationContext the application context
- * @param {string} providers.trialSessionId the id of the trial session to be closed
- * @returns {Promise} the promise of the updateTrialSession call
- */
+export type DocumentsToDownloadInfoType = {
+  isOnDocketRecord: boolean;
+  isFileAttached?: boolean;
+  filingDate: string;
+  docketEntryId: string;
+  index?: number;
+  documentTitle: string;
+};
+
+export type DownloadDocketEntryRequestType = {
+  caseCaption: string;
+  docketNumber: string;
+  docketEntries: DocumentsToDownloadInfoType[];
+};
+
 export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: IApplicationContext,
-  { documentIds }: { documentIds: string[] },
+  requestParams: DownloadDocketEntryRequestType,
 ) => {
   const user = applicationContext.getCurrentUser();
-  console.log('documentIds in BE', documentIds);
+  console.log('requestParams in BE', requestParams);
   if (!isAuthorized(user, ROLE_PERMISSIONS.GET_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  try {
-    const documentPdfsFromS3 = await Promise.all(
-      documentIds.map(docId => {
-        console.log('docId', docId);
-        return applicationContext.getPersistenceGateway().getDocument({
-          applicationContext,
-          key: docId,
-          useTempBucket: false,
-        });
-      }),
-    );
+  const { docketEntries } = requestParams;
 
-    console.log('documentPdfsFromS3', documentPdfsFromS3);
+  let extraFiles: any = [];
+  let extraFileNames: string[] = [];
+  let s3Ids: string[] = [];
+
+  // things to bring into the BE
+  // 1. Case - caseCaption, docketNumber (caseTitle)
+  // 2. Docket Entry
+  //    - isOnDocketRecord, isFileAttached, docketEntryId (documentId), filingDate, index, documentTitle
+  //    - use `getDocketEntryOnCase` to get docket entry and get the appropriate meta data
+
+  try {
+    docketEntries.forEach(async docEntry => {
+      const docId = docEntry.docketEntryId;
+      console.log('docId', docEntry.docketEntryId);
+
+      const doc = await applicationContext.getPersistenceGateway().getDocument({
+        applicationContext,
+        key: docId,
+        useTempBucket: false,
+      });
+
+      console.log('doc', doc);
+
+      s3Ids.push(docId);
+      extraFiles.push(doc);
+      extraFileNames.push(`${docId}/0_Docket Record.pdf`);
+    });
   } catch (e) {
-    console.error('ERROR FETCHING IDS', e);
+    applicationContext.logger.error('Error fetching documents', { error: e });
+    console.error('ERROR FETCHING documents', e);
   }
 
+  // try {
+  //   await applicationContext.getPersistenceGateway().zipDocuments({
+  //     applicationContext,
+  //     extraFileNames,
+  //     extraFiles,
+  //     fileNames,
+  //     onEntry,
+  //     onError,
+  //     onProgress,
+  //     onUploadStart,
+  //     s3Ids,
+  //     zipName: 'case-documents.zip',
+  //   });
+  // } catch (error) {
+  //   applicationContext.logger.error('Error zipping documents', {
+  //     error,
+  //   });
+  // }
+
   // fetch all the documents in s3 (applicationContext.getPersistenceGateway().getDocument)
-  // process these docs
+  // process some data about these docs
   //    generae file names for each document
   //    generae pdf titles for each document
   //    set s3ids (docket entry id) for batching

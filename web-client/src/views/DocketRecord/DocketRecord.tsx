@@ -63,15 +63,10 @@ export const DocketRecord = connect(
                       }
                       id="docket-entry-selections"
                       type="checkbox"
-                      onChange={e => {
-                        const documentIds =
-                          formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
-                            .filter(entry => !entry.isMinuteEntry)
-                            .map(docketEntry => docketEntry.docketEntryId);
-                        // console.log('documentIds', documentIds);
-                        setSelectedDocumentsForDownloadSequence({
-                          documentIds,
-                        });
+                      onChange={() => {
+                        setSelectedDocumentsForDownloadSequence(
+                          formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
+                        );
                       }}
                     />
                   </th>
@@ -114,8 +109,17 @@ export const DocketRecord = connect(
                               checked={entry.isDocumentSelected}
                               type="checkbox"
                               onChange={() => {
+                                const docketEntry = {
+                                  docketEntryId: entry.docketEntryId,
+                                  documentTitle: entry.documentTitle,
+                                  filingDate: entry.filingDate,
+                                  index: entry.index,
+                                  isFileAttached: entry.isFileAttached,
+                                  isOnDocketRecord: entry.isOnDocketRecord,
+                                };
                                 setSelectedDocumentsForDownloadSequence({
-                                  documentIds: [entry.docketEntryId],
+                                  ...formattedDocketEntriesHelper.caseMetaDataForRequest,
+                                  docketEntries: [docketEntry],
                                 });
                               }}
                             />
