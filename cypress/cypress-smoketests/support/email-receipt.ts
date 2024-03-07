@@ -9,6 +9,30 @@ const s3 = new S3Client({
   region: 'us-east-1',
 });
 
+export const deleteAllItemsInEmailBucketWithRetries = async ({
+  bucketName,
+  retries,
+}: {
+  bucketName: string;
+  retries?: number;
+}) => {
+  if (retries) {
+    try {
+      return await deleteAllItemsInEmailBucket(bucketName);
+    } catch (error) {
+      console.error(
+        'Error with deleting items in email bucket. Retrying. Error: ',
+        error,
+      );
+
+      setTimeout(() => {}, 2000);
+      retries--;
+      deleteAllItemsInEmailBucketWithRetries({ bucketName, retries });
+    }
+  }
+  return await deleteAllItemsInEmailBucket(bucketName);
+};
+
 export const deleteAllItemsInEmailBucket = async (bucketName: string) => {
   try {
     const objectsList = await s3.send(
@@ -31,13 +55,25 @@ export const deleteAllItemsInEmailBucket = async (bucketName: string) => {
   return null;
 };
 
-export const readAllItemsInBucket = async (bucketName: string) => {
+export const readAllItemsInBucket = async ({
+  bucketName,
+  retries,
+}: {
+  bucketName: string;
+  retries?: number;
+}) => {
   try {
     const objectsList = await s3.send(
       new ListObjectsV2Command({ Bucket: bucketName }),
     );
 
-    if (objectsList.Contents?.length === 0) return [];
+    if (objectsList.Contents?.length === 0) {
+      if (!retries) {
+        return [];
+      }
+      retries--;
+      return await readAllItemsInBucket({ bucketName, retries });
+    }
 
     const readPromises = (objectsList.Contents || []).map(async obj => {
       const getObjectParams = { Bucket: bucketName, Key: obj.Key };

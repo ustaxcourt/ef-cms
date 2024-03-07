@@ -8,6 +8,7 @@ import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce'
 import {
   deleteAllItemsInEmailBucket,
   readAllItemsInBucket,
+  deleteAllItemsInEmailBucketWithRetries,
 } from './cypress/cypress-smoketests/support/email-receipt';
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
@@ -33,8 +34,11 @@ export default defineConfig({
         deleteAllItemsInEmailBucket(bucketName: string) {
           return deleteAllItemsInEmailBucket(bucketName);
         },
-        readAllItemsInBucket(bucketName: string) {
-          return readAllItemsInBucket(bucketName);
+        deleteAllItemsInEmailBucketWithRetries({bucketName, retries}: {bucketName: string, retries?: number}) {
+          return deleteAllItemsInEmailBucketWithRetries({bucketName, retries});
+        },
+        readAllItemsInBucket({bucketName, retries}: {bucketName: string, retries: number}) {
+          return readAllItemsInBucket({bucketName, retries});
         },
       });
     },
