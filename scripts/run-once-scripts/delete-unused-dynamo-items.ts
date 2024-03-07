@@ -3,8 +3,9 @@
  * which are no longer needed but are blocking our alpha -> beta migrations.
  */
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { chunk, isEmpty } from 'lodash';
+import type { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
 const args = process.argv.slice(2);
 const CHUNK_SIZE = 25;
@@ -26,10 +27,10 @@ const documentClient = DynamoDBDocument.from(dynamodb, {
   marshallOptions: { removeUndefinedValues: true },
 });
 
-const queryForItems = async pk => {
+const queryForItems = async (pk: string): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
-  let lastKey = null;
-  let allResults = [];
+  let lastKey: Record<string, any> | undefined;
+  let allResults: TDynamoRecord[] = [];
   while (hasMoreResults) {
     hasMoreResults = false;
 
@@ -48,27 +49,29 @@ const queryForItems = async pk => {
     hasMoreResults = !!subsetResults.LastEvaluatedKey;
     lastKey = subsetResults.LastEvaluatedKey;
 
-    allResults = [
-      ...allResults,
-      ...subsetResults.Items.map(item => ({ pk: item.pk, sk: item.sk })),
-    ];
+    if (subsetResults.Items) {
+      allResults = [
+        ...allResults,
+        ...subsetResults.Items.map(item => ({ pk: item.pk, sk: item.sk })),
+      ];
+    }
   }
   return allResults;
 };
 
-const reprocessItems = async ({ unprocessedItems }) => {
+const reprocessItems = async ({ unprocessedItems }): Promise<void> => {
   const results = await documentClient.batchWrite({
     RequestItems: unprocessedItems,
   });
 
   if (!isEmpty(results.UnprocessedItems)) {
     await reprocessItems({
-      items: results.UnprocessedItems,
+      unprocessedItems: results.UnprocessedItems,
     });
   }
 };
 
-const deleteItems = async items => {
+const deleteItems = async (items: TDynamoRecord[]): Promise<void> => {
   const chunks = chunk(items, CHUNK_SIZE);
   for (let c of chunks) {
     const results = await documentClient.batchWrite({
@@ -86,8 +89,7 @@ const deleteItems = async items => {
 
     if (!isEmpty(results.UnprocessedItems)) {
       await reprocessItems({
-        documentClient,
-        items: results.UnprocessedItems,
+        unprocessedItems: results.UnprocessedItems,
       });
     }
   }
