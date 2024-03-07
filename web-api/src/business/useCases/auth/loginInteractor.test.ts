@@ -146,6 +146,41 @@ describe('loginInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
+  it('should resend a temporary password email with a new temporary password when the user`s temporary password is expired', async () => {
+    const mockEmail = 'petitioner@example.com';
+    const mockPassword = 'MyPa$Sword!';
+    const mockExpiredTemporaryPasswordExpiredError = new NotAuthorizedException(
+      {
+        $metadata: {},
+        message: 'Temporary password has expired',
+      },
+    );
+    applicationContext
+      .getCognito()
+      .initiateAuth.mockRejectedValue(mockExpiredTemporaryPasswordExpiredError);
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      email: mockEmail,
+      userId: '6a58e2a9-d2ba-42f1-9a3f-cbd5202af334',
+    });
+
+    await expect(
+      loginInteractor(applicationContext, {
+        email: mockEmail,
+        password: mockPassword,
+      }),
+    ).rejects.toThrow(new UnauthorizedError('User temporary password expired'));
+
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0],
+    ).toEqual({
+      DesiredDeliveryMediums: ['EMAIL'],
+      MessageAction: 'RESEND',
+      TemporaryPassword: process.env.DEFAULT_ACCOUNT_PASS,
+      UserPoolId: applicationContext.environment.userPoolId,
+      Username: mockEmail,
+    });
+  });
+
   it('should throw an error when an account is not found for the provided email when attempting to resent an account confirmation email', async () => {
     const mockEmail = 'petitioner@example.com';
     const mockPassword = 'MyPa$Sword!';
