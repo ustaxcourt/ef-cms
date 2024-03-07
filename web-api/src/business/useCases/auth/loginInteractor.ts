@@ -61,6 +61,14 @@ export async function authErrorHandling(
     error.name === 'NotAuthorizedException' ||
     error.name === 'UserNotFoundException'
   ) {
+    if (
+      error?.message?.includes(
+        'Temporary password has expired and must be reset by an administrator.',
+      )
+    ) {
+      // Could resend temporary credentials
+      // throw another error to let them know that their credentials have expired and to use the new ones that were just sent to them
+    }
     throw new UnidentifiedUserError('Invalid Username or Password'); //401
   }
 
