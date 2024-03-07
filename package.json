@@ -106,7 +106,7 @@
     "build:lambda:migration-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.migration-cron.ts",
     "build:lambda:reindex-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.reindex-cron.ts",
     "build:lambda:switch-colors-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.switch-colors-cron.ts",
-    "build:lambda:rotate-info-indices": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.rotate-info-indices.js",
+    "build:lambda:rotate-info-indices": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.rotate-info-indices.ts",
     "build:lambda:wait-for-workflow-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.wait-for-workflow.ts",
     "build:public": "USTC_ENV=prod PUBLIC_SITE_URL=$PUBLIC_SITE_URL node esbuild.public.config.mjs",
     "clean:public": "rm -rf dist-public/",
