@@ -1,6 +1,6 @@
-const config = require('./webpack.config.lambda');
+import config from './webpack.config.lambda';
 
-module.exports = {
+const rotateInfoIndicesConfig = {
   ...config,
   devtool: false,
   entry: './aws/lambdas/RotateInfoIndices/src/index.js',
@@ -16,3 +16,6 @@ module.exports = {
   },
   target: 'node',
 };
+
+// eslint-disable-next-line import/no-default-export
+export default rotateInfoIndicesConfig;
