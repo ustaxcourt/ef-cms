@@ -183,6 +183,8 @@
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",
     "report:event-codes-by-year": "npx ts-node --transpile-only scripts/reports/event-codes-by-year.ts",
     "report:petition-counts": "npx ts-node --transpile-only scripts/reports/petition-counts.ts",
+    "report:trial-sessions-by-fiscal-year": "npx ts-node --transpile-only scripts/reports/trial-sessions-by-fiscal-year.ts",
+    "report:trial-sessions-by-year": "npx ts-node --transpile-only scripts/reports/trial-sessions-by-calendar-year.ts",
     "reset-cases": "./clear-env.sh",
     "secrets:rotate-circleci": "scripts/user/rotate-circleci-secrets.sh",
     "secrets:rotate-environment": "npx ts-node --transpile-only scripts/user/rotate-environment-secrets.ts",
