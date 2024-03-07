@@ -1,35 +1,13 @@
+import { elasticsearchIndexes } from './elasticsearch/elasticsearch-indexes';
+import { getClient } from './elasticsearch/client';
+import { requireEnvVars } from '../shared/admin-tools/util';
+
+requireEnvVars(['ELASTICSEARCH_ENDPOINT', 'ENV']);
+
 (async () => {
-  const AWS = require('aws-sdk');
-  const {
-    elasticsearchIndexes,
-  } = require('./elasticsearch/elasticsearch-indexes');
-  const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
-  const { Client } = require('@opensearch-project/opensearch');
-
-  AWS.config.region = 'us-east-1';
-  AWS.config.httpOptions.timeout = 300000;
-
-  const environment = {
+  const openSearchClient = await getClient({
     elasticsearchEndpoint: process.env.ELASTICSEARCH_ENDPOINT,
-    region: 'us-east-1',
-  };
-
-  const openSearchClient = new Client({
-    ...AwsSigv4Signer({
-      getCredentials: () =>
-        new Promise((resolve, reject) => {
-          AWS.config.getCredentials((err, credentials) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(credentials);
-            }
-          });
-        }),
-
-      region: 'us-east-1',
-    }),
-    node: `https://${environment.elasticsearchEndpoint}:443`,
+    environmentName: process.env.ENV,
   });
 
   await Promise.all(
