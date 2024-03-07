@@ -61,6 +61,7 @@ export const submitChangePasswordAction = async ({
               <Button
                 link
                 className="padding-0 margin-0"
+                data-testid="request-new-forgot-password-code-button"
                 onClick={() => window.location.reload()}
               >
                 request a new code
