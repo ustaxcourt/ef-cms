@@ -1,31 +1,36 @@
-const {
-  approvePendingJob,
-  cancelWorkflow,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const {
-  getMetricStatistics,
-  getMigrationQueueIsEmptyFlag,
-  getSqsQueueCount,
-  putMigrationQueueIsEmptyFlag,
-} = require('../../../../../shared/admin-tools/aws/migrationWaitHelper');
-const { handler } = require('./migration-status');
+import * as circleHelper from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import * as migrationWaitHelper from '../../../../../shared/admin-tools/aws/migrationWaitHelper';
+import { handler } from './migration-status';
+import type { Context } from 'aws-lambda';
+import type { GetMetricStatisticsOutput } from '@aws-sdk/client-cloudwatch';
 
-jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
-  approvePendingJob: jest.fn(),
-  cancelWorkflow: jest.fn(),
-}));
-jest.mock('../../../../../shared/admin-tools/aws/migrationWaitHelper', () => ({
-  getMetricStatistics: jest.fn(),
-  getMigrationQueueIsEmptyFlag: jest.fn(),
-  getSqsQueueCount: jest.fn(),
-  putMigrationQueueIsEmptyFlag: jest.fn(),
-}));
+jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper');
+const approvePendingJob = jest
+  .spyOn(circleHelper, 'approvePendingJob')
+  .mockImplementation(jest.fn());
+const cancelWorkflow = jest
+  .spyOn(circleHelper, 'cancelWorkflow')
+  .mockImplementation(jest.fn());
+
+jest.mock('../../../../../shared/admin-tools/aws/migrationWaitHelper');
+const getMetricStatistics = jest
+  .spyOn(migrationWaitHelper, 'getMetricStatistics')
+  .mockImplementation(jest.fn());
+const getMigrationQueueIsEmptyFlag = jest
+  .spyOn(migrationWaitHelper, 'getMigrationQueueIsEmptyFlag')
+  .mockImplementation(jest.fn());
+const getSqsQueueCount = jest
+  .spyOn(migrationWaitHelper, 'getSqsQueueCount')
+  .mockImplementation(jest.fn());
+const putMigrationQueueIsEmptyFlag = jest
+  .spyOn(migrationWaitHelper, 'putMigrationQueueIsEmptyFlag')
+  .mockImplementation(jest.fn());
 
 const mockContext = {
   fail: jest.fn(),
   succeed: jest.fn(),
-};
-const mockErrorStatistics = {
+} as unknown as Context;
+const mockErrorStatistics: GetMetricStatisticsOutput = {
   Datapoints: [
     {
       Sum: 0,
@@ -34,7 +39,7 @@ const mockErrorStatistics = {
   ],
   Label: 'Errors',
 };
-const mockInvocationStatistics = {
+const mockInvocationStatistics: GetMetricStatisticsOutput = {
   Datapoints: [
     {
       Sum: 5,
@@ -54,7 +59,7 @@ describe('migration-status', () => {
 
   it('should call approvePendingJob when MIGRATE_FLAG is false', async () => {
     process.env.MIGRATE_FLAG = 'false';
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(1);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(mockContext.succeed).toHaveBeenCalledWith({
@@ -77,7 +82,7 @@ describe('migration-status', () => {
         }),
       )
       .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics));
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(1);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
@@ -93,7 +98,7 @@ describe('migration-status', () => {
       .mockReturnValueOnce(Promise.resolve(mockErrorStatistics))
       .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics));
     getSqsQueueCount.mockReturnValueOnce(Promise.resolve(2)); // DL queue count
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(1);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
@@ -113,7 +118,7 @@ describe('migration-status', () => {
     getSqsQueueCount
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(55)); // migration segment queue count
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
@@ -132,7 +137,7 @@ describe('migration-status', () => {
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(0)); // migration segment queue count
     getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(false));
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
@@ -157,7 +162,7 @@ describe('migration-status', () => {
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(0)); // migration segment queue count
     getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(1);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
@@ -176,7 +181,7 @@ describe('migration-status', () => {
   it('should fail fast on any error when getting metrics statistics for errors', async () => {
     process.env.MIGRATE_FLAG = 'true';
     getMetricStatistics.mockReturnValueOnce(Promise.reject()); // error statistics
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(1);
@@ -191,7 +196,7 @@ describe('migration-status', () => {
     getMetricStatistics
       .mockReturnValueOnce(Promise.resolve(mockErrorStatistics))
       .mockReturnValueOnce(Promise.reject()); // invocation statistics
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
@@ -207,7 +212,7 @@ describe('migration-status', () => {
       .mockReturnValueOnce(Promise.resolve(mockErrorStatistics))
       .mockReturnValueOnce(Promise.resolve(mockInvocationStatistics));
     getSqsQueueCount.mockReturnValueOnce(Promise.resolve(-1)); // DL queue count
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
@@ -227,7 +232,7 @@ describe('migration-status', () => {
     getSqsQueueCount
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(-1)); // migration segment queue count
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(getMetricStatistics).toHaveBeenCalledTimes(2);
@@ -253,13 +258,13 @@ describe('migration-status', () => {
             },
           ],
           Label: 'Invocations',
-        }),
+        } as GetMetricStatisticsOutput),
       );
     getSqsQueueCount
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(0)); // migration segment queue count
     getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(mockContext.succeed).toHaveBeenCalledWith({
       dlQueueCount: 0,
       errorRate: 0,
@@ -269,16 +274,16 @@ describe('migration-status', () => {
     });
   });
 
-  it('should return a throw an error if the errors metrics statistics object is empty', async () => {
+  it('should throw an error if the errors metrics statistics object is empty', async () => {
     process.env.MIGRATE_FLAG = 'true';
     getMetricStatistics
-      .mockReturnValueOnce(Promise.resolve({}))
-      .mockReturnValueOnce(Promise.resolve({}));
+      .mockReturnValueOnce(Promise.resolve({} as GetMetricStatisticsOutput))
+      .mockReturnValueOnce(Promise.resolve({} as GetMetricStatisticsOutput));
     getSqsQueueCount
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(0)); // migration segment queue count
     getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(mockContext.succeed).toHaveBeenCalledWith({
       errorRate: -1,
       migrateFlag: 'true',
@@ -297,7 +302,7 @@ describe('migration-status', () => {
       .mockReturnValueOnce(Promise.resolve(0)) // DL queue count
       .mockReturnValueOnce(Promise.resolve(0)); // migration segment queue count
     getMigrationQueueIsEmptyFlag.mockReturnValueOnce(Promise.resolve(true));
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(mockContext.succeed).toHaveBeenCalledWith({
       dlQueueCount: 0,
       errorRate: 0,

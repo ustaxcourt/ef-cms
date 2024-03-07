@@ -1,6 +1,7 @@
-const config = require('./webpack.config.lambda');
+import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-module.exports = {
+const migrationConfig: Configuration = {
   ...config,
   entry: {
     migration:
@@ -14,3 +15,6 @@ module.exports = {
     path: `${__dirname}/web-api/workflow-terraform/migration/main/lambdas/dist`,
   },
 };
+
+// eslint-disable-next-line import/no-default-export
+export default migrationConfig;
