@@ -2,9 +2,10 @@
  * This node script can be run to remove a bunch of old dynamodb records
  * which are no longer needed but are blocking our alpha -> beta migrations.
  */
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { chunk, isEmpty } from 'lodash';
 
-const AWS = require('aws-sdk');
-const { chunk, isEmpty } = require('lodash');
 const args = process.argv.slice(2);
 const CHUNK_SIZE = 25;
 
@@ -15,11 +16,14 @@ if (args.length < 1) {
   process.exit(1);
 }
 
-const dynamoDbTableName = args[0];
+const TableName = args[0];
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
+const dynamodb = new DynamoDBClient({
+  maxAttempts: 10,
   region: 'us-east-1',
+});
+const documentClient = DynamoDBDocument.from(dynamodb, {
+  marshallOptions: { removeUndefinedValues: true },
 });
 
 const queryForItems = async pk => {
@@ -29,19 +33,17 @@ const queryForItems = async pk => {
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    const subsetResults = await documentClient
-      .query({
-        ExclusiveStartKey: lastKey,
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': pk,
-        },
-        KeyConditionExpression: '#pk = :pk',
-        TableName: dynamoDbTableName,
-      })
-      .promise();
+    const subsetResults = await documentClient.query({
+      ExclusiveStartKey: lastKey,
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': pk,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      TableName,
+    });
 
     hasMoreResults = !!subsetResults.LastEvaluatedKey;
     lastKey = subsetResults.LastEvaluatedKey;
@@ -55,11 +57,9 @@ const queryForItems = async pk => {
 };
 
 const reprocessItems = async ({ unprocessedItems }) => {
-  const results = await documentClient
-    .batchWrite({
-      RequestItems: unprocessedItems,
-    })
-    .promise();
+  const results = await documentClient.batchWrite({
+    RequestItems: unprocessedItems,
+  });
 
   if (!isEmpty(results.UnprocessedItems)) {
     await reprocessItems({
@@ -71,20 +71,18 @@ const reprocessItems = async ({ unprocessedItems }) => {
 const deleteItems = async items => {
   const chunks = chunk(items, CHUNK_SIZE);
   for (let c of chunks) {
-    const results = await documentClient
-      .batchWrite({
-        RequestItems: {
-          [dynamoDbTableName]: c.map(item => ({
-            DeleteRequest: {
-              Key: {
-                pk: item.pk,
-                sk: item.sk,
-              },
+    const results = await documentClient.batchWrite({
+      RequestItems: {
+        [TableName]: c.map(item => ({
+          DeleteRequest: {
+            Key: {
+              pk: item.pk,
+              sk: item.sk,
             },
-          })),
-        },
-      })
-      .promise();
+          },
+        })),
+      },
+    });
 
     if (!isEmpty(results.UnprocessedItems)) {
       await reprocessItems({
@@ -95,6 +93,7 @@ const deleteItems = async items => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async function () {
   const catalogItems = await queryForItems('catalog');
   await deleteItems(catalogItems);
