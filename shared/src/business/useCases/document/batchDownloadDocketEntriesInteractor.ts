@@ -4,10 +4,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { isEmpty, isEqual } from 'lodash';
+import { generateValidDocketEntryFilename } from '@shared/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
 export type DocumentsToDownloadInfoType = {
   isOnDocketRecord: boolean;
@@ -22,6 +20,7 @@ export type DownloadDocketEntryRequestType = {
   caseCaption: string;
   docketNumber: string;
   docketEntries: DocumentsToDownloadInfoType[];
+  clientConnectionId: string;
 };
 
 export const batchDownloadDocketEntriesInteractor = async (
@@ -34,12 +33,14 @@ export const batchDownloadDocketEntriesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntries } = requestParams;
-
   let extraFiles: any = [];
   let extraFileNames: string[] = [];
   let s3Ids: string[] = [];
+  let fileNames: string[] = [];
 
+  const zipName = 'case-documents.zip';
+  const { caseCaption, clientConnectionId, docketEntries, docketNumber } =
+    requestParams;
   // things to bring into the BE
   // 1. Case - caseCaption, docketNumber (caseTitle)
   // 2. Docket Entry
@@ -47,41 +48,120 @@ export const batchDownloadDocketEntriesInteractor = async (
   //    - use `getDocketEntryOnCase` to get docket entry and get the appropriate meta data
 
   try {
-    docketEntries.forEach(async docEntry => {
-      const docId = docEntry.docketEntryId;
-      console.log('docId', docEntry.docketEntryId);
+    await Promise.all(
+      docketEntries.map(docEntry => {
+        const docId = docEntry.docketEntryId;
+        console.log('docId', docEntry.docketEntryId);
+        const filename = generateValidDocketEntryFilename(docEntry); // move to utility function
+        const caseTitle = Case.getCaseTitle(caseCaption);
+        const caseFolder = `${docketNumber}, ${caseTitle}`;
 
-      const doc = await applicationContext.getPersistenceGateway().getDocument({
-        applicationContext,
-        key: docId,
-        useTempBucket: false,
-      });
+        const pdfTitle = `${caseFolder}/${filename}`;
+        const doc = applicationContext.getPersistenceGateway().getDocument({
+          applicationContext,
+          key: docId,
+          useTempBucket: false,
+        });
 
-      console.log('doc', doc);
+        console.log('doc', doc);
 
-      s3Ids.push(docId);
-      extraFiles.push(doc);
-      extraFileNames.push(`${docId}/0_Docket Record.pdf`);
-    });
+        s3Ids.push(docId);
+        fileNames.push(pdfTitle);
+        extraFiles.push(doc);
+        extraFileNames.push(`${docId}/0_Docket Record.pdf`);
+      }),
+    );
   } catch (e) {
     applicationContext.logger.error('Error fetching documents', { error: e });
     console.error('ERROR FETCHING documents', e);
   }
 
-  // try {
-  //   await applicationContext.getPersistenceGateway().zipDocuments({
-  //     applicationContext,
-  //     extraFileNames,
-  //     extraFiles,
-  //     fileNames,
-  //     onEntry,
-  //     onError,
-  //     onProgress,
-  //     onUploadStart,
-  //     s3Ids,
-  //     zipName: 'case-documents.zip',
-  //   });
-  // } catch (error) {
+  const numberOfFilesToBatch = s3Ids.length;
+
+  const onEntry = entryData => {
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'batch_download_entry',
+        ...entryData,
+        numberOfFilesToBatch,
+      },
+      userId: user.userId,
+    });
+  };
+
+  const onError = error => {
+    applicationContext.logger.error('Archive Error', { error });
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'batch_download_error',
+        error,
+      },
+      userId: user.userId,
+    });
+  };
+
+  const onProgress = progressData => {
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'batch_download_progress',
+        ...progressData,
+        numberOfDocketRecordsToGenerate: 0,
+        numberOfFilesToBatch,
+      },
+      userId: user.userId,
+    });
+  };
+
+  const onUploadStart = () => {
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'batch_download_upload_start',
+        numberOfDocketRecordsToGenerate: 0,
+        numberOfFilesToBatch,
+      },
+      userId: user.userId,
+    });
+  };
+
+  await applicationContext.getPersistenceGateway().zipDocuments({
+    applicationContext,
+    extraFileNames: [],
+    extraFiles: [],
+    fileNames,
+    onEntry,
+    onError,
+    onProgress,
+    onUploadStart,
+    s3Ids,
+    zipName,
+  });
+
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: zipName,
+      useTempBucket: true,
+    });
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'batch_download_ready',
+      url,
+    },
+    userId: user.userId,
+  });
+  // }
+  // catch (error) {
   //   applicationContext.logger.error('Error zipping documents', {
   //     error,
   //   });
