@@ -1,5 +1,6 @@
-const AWS = require('aws-sdk');
-const { chunk } = require('lodash');
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { chunk } from 'lodash';
 const args = process.argv.slice(2);
 
 if (args.length < 1) {
@@ -10,11 +11,15 @@ if (args.length < 1) {
 const tableName = args[0];
 const CHUNK_SIZE = 25;
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
+const dynamodb = new DynamoDBClient({
+  maxAttempts: 10,
   region: 'us-east-1',
 });
+const documentClient = DynamoDBDocument.from(dynamodb, {
+  marshallOptions: { removeUndefinedValues: true },
+});
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async function () {
   let hasMoreResults = true;
   let lastKey = null;
@@ -27,7 +32,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
         ExclusiveStartKey: lastKey,
         TableName: tableName,
       })
-      .promise()
       .then(async results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
@@ -37,17 +41,15 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
           count += CHUNK_SIZE;
           console.log(`reindexing chunk: ${count} total reindexed`);
 
-          await documentClient
-            .batchWrite({
-              RequestItems: {
-                [tableName]: c.map(item => ({
-                  PutRequest: {
-                    Item: { ...item, indexedTimestamp: Date.now() },
-                  },
-                })),
-              },
-            })
-            .promise();
+          await documentClient.batchWrite({
+            RequestItems: {
+              [tableName]: c.map(item => ({
+                PutRequest: {
+                  Item: { ...item, indexedTimestamp: Date.now() },
+                },
+              })),
+            },
+          });
         }
       });
   }
