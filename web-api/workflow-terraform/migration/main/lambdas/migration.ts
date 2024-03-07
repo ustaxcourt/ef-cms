@@ -1,5 +1,10 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument, PutCommandOutput } from '@aws-sdk/lib-dynamodb';
+import { BatchWriteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import {
+  DeleteRequest,
+  DynamoDBClient,
+  PutRequest,
+} from '@aws-sdk/client-dynamodb';
+import { chunk } from 'lodash';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
@@ -40,20 +45,14 @@ export const processItems = async (
     items: Record<string, any>[];
     migrateRecords: migrationsCallback;
   },
-): Promise<void> => {
-  const promises: Promise<PutCommandOutput>[] = [];
-
+): Promise<{ PutRequest: PutRequest }[]> => {
   items = await migrateRecords(applicationContext, { documentClient, items });
 
-  for (const item of items) {
-    promises.push(
-      documentClient.put({
-        Item: item,
-        TableName: process.env.DESTINATION_TABLE,
-      }),
-    );
-  }
-  await Promise.all(promises);
+  return items.map(Item => ({
+    PutRequest: {
+      Item,
+    },
+  }));
 };
 
 export const getFilteredGlobalEvents = (
@@ -65,13 +64,21 @@ export const getFilteredGlobalEvents = (
   ).map(item => item.dynamodb!.NewImage!);
 };
 
-const getRemoveEvents = (
+const generateDeleteRequests = (
   event: DynamoDBStreamEvent,
-): Record<string, any>[] | undefined => {
+): { DeleteRequest: DeleteRequest }[] => {
   const { Records } = event;
-  return Records.filter(
+  if (!Records) {
+    return [];
+  }
+  const removedItems = Records.filter(
     item => item.eventName === 'REMOVE' && !!item.dynamodb?.OldImage,
   ).map(item => item.dynamodb!.OldImage!);
+  return removedItems.map(item => ({
+    DeleteRequest: {
+      Key: { pk: item.pk.S, sk: item.sk.S } as Record<string, any>,
+    },
+  }));
 };
 
 export const handler: Handler = async (event, context) => {
@@ -88,27 +95,32 @@ export const handler: Handler = async (event, context) => {
       },
     }),
   );
+
+  let requests: { DeleteRequest?: DeleteRequest; PutRequest?: PutRequest }[] =
+    [];
+
   const items = getFilteredGlobalEvents(event);
   if (items) {
-    await processItems(applicationContext, {
+    requests = await processItems(applicationContext, {
       documentClient: docClient,
       items,
       migrateRecords: migrations,
     });
   }
 
-  const removeEvents = getRemoveEvents(event);
-  if (removeEvents) {
-    await Promise.all(
-      removeEvents.map(item =>
-        docClient.delete({
-          Key: {
-            pk: item.pk,
-            sk: item.sk,
-          },
-          TableName: process.env.DESTINATION_TABLE,
-        }),
-      ),
+  requests = [...requests, ...generateDeleteRequests(event)];
+
+  const requestChunks = chunk(requests, 25);
+  const commands: BatchWriteCommand[] = [];
+  for (const requestChunk of requestChunks) {
+    commands.push(
+      new BatchWriteCommand({
+        RequestItems: {
+          [process.env.DESTINATION_TABLE!]: requestChunk,
+        },
+      }),
     );
   }
+
+  await Promise.all(commands.map(command => docClient.send(command)));
 };

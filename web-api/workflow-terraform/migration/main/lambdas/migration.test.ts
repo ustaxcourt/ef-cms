@@ -5,7 +5,7 @@ import type { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
 describe('migration', () => {
   describe('processItems', () => {
-    it('call put on all records that come through', async () => {
+    it('migrates items and generates dynamodb PutRequest objects with the resulting data', async () => {
       const mockItems: Record<string, any>[] = [
         {
           ...MOCK_CASE,
@@ -19,14 +19,14 @@ describe('migration', () => {
         }),
       } as unknown as DynamoDBDocument;
       const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
-      await processItems(applicationContext, {
+      const result = await processItems(applicationContext, {
         documentClient: mockDocumentClient,
         items: mockItems,
         migrateRecords: mockMigrateRecords,
       });
 
       expect(mockMigrateRecords).toHaveBeenCalledTimes(1);
-      expect(mockDocumentClient.put).toHaveBeenCalledTimes(1);
+      expect(result.length).toEqual(mockItems.length);
     });
   });
 
