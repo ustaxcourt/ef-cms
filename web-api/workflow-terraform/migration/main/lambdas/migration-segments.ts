@@ -114,7 +114,7 @@ export const processItems = async (
   }: {
     documentClient: DynamoDBDocument;
     items: Record<string, any>[];
-    ranMigrations: { [key: string]: boolean };
+    ranMigrations: { [key: string]: boolean } | undefined;
   },
 ) => {
   try {
