@@ -9,7 +9,7 @@ const mockUser = {
 };
 
 describe('getUserById', () => {
-  let documentClient;
+  let documentClient: DynamoDBDocument;
 
   beforeEach(() => {
     documentClient = {
