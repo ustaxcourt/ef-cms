@@ -593,7 +593,7 @@ export const baseState = {
   createOrderAddedDocketNumbers: undefined as unknown as string[],
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
-  currentPage: 'Interstitial',
+  currentPage: 'Loading',
   currentViewMetadata: {
     caseDetail: {
       caseDetailInternalTabs: {

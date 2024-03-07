@@ -1,5 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Loading } from '@web-client/views/Loading';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -53,21 +53,7 @@ export const Interstitial = connect(
             </section>
           </>
         )}
-        {!alertHelper.showErrorAlert && (
-          <>
-            <div
-              aria-label="please wait"
-              aria-live="polite"
-              className="progress-indicator"
-            >
-              <FontAwesomeIcon
-                className="fa-spin spinner"
-                icon="sync"
-                size="6x"
-              />
-            </div>
-          </>
-        )}
+        {!alertHelper.showErrorAlert && <Loading />}
       </>
     );
   },
