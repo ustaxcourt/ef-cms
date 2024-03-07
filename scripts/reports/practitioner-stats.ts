@@ -1,5 +1,6 @@
 // usage: npx ts-node --transpile-only scripts/reports/practitioner-stats.ts 2022
 
+import { getUniqueValues } from './trial-sessions-report-helpers';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 requireEnvVars(['ENV', 'REGION']);
 
@@ -43,26 +44,6 @@ const getAllPractitioners = async (
     },
   });
   return results;
-};
-
-const getUniqueValues = ({
-  arrayOfObjects,
-  keyToFilter,
-}: {
-  arrayOfObjects: {}[];
-  keyToFilter: string;
-}) => {
-  const uniqueValues = {};
-  for (const someObj of arrayOfObjects) {
-    if (keyToFilter in someObj) {
-      if (someObj[keyToFilter] in uniqueValues) {
-        uniqueValues[someObj[keyToFilter]]++;
-      } else {
-        uniqueValues[someObj[keyToFilter]] = 1;
-      }
-    }
-  }
-  return uniqueValues;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
