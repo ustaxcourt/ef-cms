@@ -8,14 +8,16 @@ export const batchDownloadDocketEntriesAction = async ({
   const docketEntries = get(state.documentsSelectedForDownload);
 
   const caseDetail = get(state.caseDetail);
-
+  const clientConnectionId = get(state.clientConnectionId);
+  console.log('clientConnectionId', clientConnectionId);
   const { caseCaption, docketNumber } = caseDetail;
-  // console.log('documentIds', documentIds);
+
   try {
     await applicationContext
       .getUseCases()
       .batchDownloadDocketEntriesInteractor(applicationContext, {
         caseCaption,
+        clientConnectionId,
         docketEntries,
         docketNumber,
       });
