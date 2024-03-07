@@ -15,11 +15,11 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
     const testEmailAddress = `smoketest+${uniqueTimestamp}@${emailDomain}`;
 
     before(() => {
-      cy.task('deleteAllItemsInEmailBucket', bucketName);
+      cy.task('deleteAllItemsInEmailBucket', { bucketName });
     });
 
     after(() => {
-      cy.task('deleteAllItemsInEmailBucketWithRetries', {
+      cy.task('deleteAllItemsInEmailBucket', {
         bucketName,
         retries: 5,
       });

@@ -9,37 +9,27 @@ const s3 = new S3Client({
   region: 'us-east-1',
 });
 
-export const deleteAllItemsInEmailBucketWithRetries = async ({
+export const deleteAllItemsInEmailBucket = async ({
   bucketName,
-  retries,
+  retries = 0,
 }: {
   bucketName: string;
-  retries?: number;
-}) => {
-  if (retries) {
-    try {
-      return await deleteAllItemsInEmailBucket(bucketName);
-    } catch (error) {
-      console.error(
-        'Error with deleting items in email bucket. Retrying. Error: ',
-        error,
-      );
-
-      setTimeout(() => {}, 2000);
-      retries--;
-      deleteAllItemsInEmailBucketWithRetries({ bucketName, retries });
-    }
-  }
-  return await deleteAllItemsInEmailBucket(bucketName);
-};
-
-export const deleteAllItemsInEmailBucket = async (bucketName: string) => {
+  retries: number;
+}): Promise<Object[] | null> => {
   try {
     const objectsList = await s3.send(
       new ListObjectsV2Command({ Bucket: bucketName }),
     );
 
-    if (objectsList.Contents?.length === 0) return;
+    if (!objectsList.Contents || objectsList.Contents.length < 1) {
+      if (retries > 0) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        return deleteAllItemsInEmailBucket({ bucketName, retries });
+      }
+      return null;
+    }
+
+    retries--;
 
     const deleteObjectsParams = {
       Bucket: bucketName,
@@ -61,18 +51,21 @@ export const readAllItemsInBucket = async ({
 }: {
   bucketName: string;
   retries?: number;
-}) => {
+}): Promise<Object[]> => {
   try {
     const objectsList = await s3.send(
       new ListObjectsV2Command({ Bucket: bucketName }),
     );
 
-    if (objectsList.Contents?.length === 0) {
+    if (!objectsList.Contents || objectsList.Contents.length < 1) {
       if (!retries) {
         return [];
       }
+
       retries--;
-      return await readAllItemsInBucket({ bucketName, retries });
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      return readAllItemsInBucket({ bucketName, retries });
     }
 
     const readPromises = (objectsList.Contents || []).map(async obj => {
@@ -87,6 +80,7 @@ export const readAllItemsInBucket = async ({
     });
 
     const results = await Promise.all(readPromises);
+
     const sortedResults = results.sort((a, b) => {
       if (!a.LastModified) return 0;
       if (!b.LastModified) return 0;
