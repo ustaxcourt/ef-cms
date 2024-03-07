@@ -6,7 +6,6 @@ import {
   goToMyAccount,
 } from '../../cypress-integration/support/pages/my-account';
 import { navigateTo } from '../../cypress-integration/support/pages/maintenance';
-import { retry } from '../../helpers/retry';
 
 if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
   describe('Verify verification email', () => {
@@ -20,7 +19,10 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
     });
 
     after(() => {
-      cy.task('deleteAllItemsInEmailBucket', bucketName);
+      cy.task('deleteAllItemsInEmailBucketWithRetries', {
+        bucketName,
+        retries: 5,
+      });
     });
 
     it('should update petitioner email and confirm that a verification email is received by the updated email address', () => {
@@ -31,20 +33,15 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
       clickConfirmModal();
       confirmEmailPendingAlert();
 
-      retry(() => {
-        return cy
-          .task<any[]>('readAllItemsInBucket', bucketName)
-          .then(items => {
-            const isValid =
-              items[0] !== undefined &&
-              items[0].content.includes(testEmailAddress) &&
-              items[0].content.includes(
-                'The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.',
-              ) &&
-              items.length === 1;
-            return isValid;
-          });
-      });
+      cy.task<any[]>('readAllItemsInBucket', { bucketName, retries: 5 }).then(
+        items => {
+          expect(items).to.have.length(1);
+          expect(items[0].content).to.contain(
+            'The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.',
+          );
+          expect(items[0].content).to.contain(testEmailAddress);
+        },
+      );
     });
   });
 } else {
