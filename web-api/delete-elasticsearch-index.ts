@@ -4,21 +4,21 @@ import { requireEnvVars } from '../shared/admin-tools/util';
 
 requireEnvVars(['ELASTICSEARCH_ENDPOINT', 'ENV']);
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const openSearchClient = await getClient({
-    elasticsearchEndpoint: process.env.ELASTICSEARCH_ENDPOINT,
-    environmentName: process.env.ENV,
+    elasticsearchEndpoint: process.env.ELASTICSEARCH_ENDPOINT!,
+    environmentName: process.env.ENV!,
   });
 
   await Promise.all(
     elasticsearchIndexes.map(async index => {
       try {
         const indexExists = await openSearchClient.indices.exists({
-          body: {},
           index,
         });
         if (indexExists) {
-          openSearchClient.indices.delete({
+          return openSearchClient.indices.delete({
             index,
           });
         }
