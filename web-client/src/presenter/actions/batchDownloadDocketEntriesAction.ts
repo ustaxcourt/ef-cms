@@ -5,13 +5,19 @@ export const batchDownloadDocketEntriesAction = async ({
   get,
   path,
 }: ActionProps) => {
-  const documentIds = get(state.documentsSelectedForDownload);
-  console.log('documentIds', documentIds);
+  const docketEntries = get(state.documentsSelectedForDownload);
+
+  const caseDetail = get(state.caseDetail);
+
+  const { caseCaption, docketNumber } = caseDetail;
+  // console.log('documentIds', documentIds);
   try {
     await applicationContext
       .getUseCases()
       .batchDownloadDocketEntriesInteractor(applicationContext, {
-        documentIds,
+        caseCaption,
+        docketEntries,
+        docketNumber,
       });
 
     return path.success();
