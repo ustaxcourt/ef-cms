@@ -51,6 +51,21 @@ export const submitLoginAction = async ({
       });
     }
 
+    if (originalErrorMessage === 'User temporary password expired') {
+      return path.error({
+        alertError: {
+          message: (
+            <>
+              Your temporary password has expired. We have e-mailed you a new
+              temporary password, please try to log in again with the new
+              temporary password.
+            </>
+          ),
+          title: 'Temporary Password Has Expired',
+        },
+      });
+    }
+
     if (originalErrorMessage === 'User is unconfirmed') {
       return path.error({
         alertError: {
