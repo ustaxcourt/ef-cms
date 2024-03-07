@@ -138,7 +138,7 @@ describe('Forgot Password', () => {
       And it has been longer than 24 hours since they indicated they Forgot Password
       Then they should be alerted that their forgot password link has expired
        */
-  it('should notify the user that their forgot password link has expired or is wrong when the user types in the wrong confirmation code', () => {
+  it('should notify the user that their forgot password link has expired or is wrong when the user types in the wrong confirmation code and they should be able to request a new code', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
     const name = faker.person.fullName();
@@ -167,6 +167,15 @@ describe('Forgot Password', () => {
     cy.get('[data-testid="error-alert"]').should(
       'contain',
       'Invalid verification code',
+    );
+    cy.get('[data-testid="request-new-forgot-password-code-button"]').click();
+    cy.get('[data-testid="email-input"]').clear();
+    cy.get('[data-testid="email-input"]').type(email);
+    cy.get('[data-testid="send-password-reset-button"]').click();
+
+    cy.get('[data-testid="success-alert"]').should(
+      'contain',
+      'Password reset code sent',
     );
   });
 
