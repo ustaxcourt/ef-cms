@@ -1,5 +1,6 @@
-const AWS = require('aws-sdk');
-const { scanFull } = require('./utilities/scanFull');
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { scanFull } from './utilities/scanFull';
 
 const tableName = process.argv[2] ?? 'efcms-local';
 
@@ -8,14 +9,25 @@ if (!tableName) {
   process.exit(1);
 }
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'http://localhost:8000',
-  region: 'us-east-1',
-});
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  const dynamodb = new DynamoDBClient({
+    credentials: {
+      accessKeyId: 'S3RVER',
+      secretAccessKey: 'S3RVER',
+    },
+    endpoint: 'http://localhost:8000',
+    region: 'us-east-1',
+  });
 
-scanFull(tableName, documentClient).then(documents => {
-  documents.sort((a, b) => {
+  const documentClient = DynamoDBDocument.from(dynamodb, {
+    marshallOptions: { removeUndefinedValues: true },
+  });
+
+  const results = await scanFull(tableName, documentClient);
+
+  results.sort((a, b) => {
     return `${a.pk}-${a.sk}`.localeCompare(`${b.pk}-${b.sk}`);
   });
-  console.log(JSON.stringify(documents, null, 2));
-});
+  console.log(JSON.stringify(results, null, 2));
+})();
