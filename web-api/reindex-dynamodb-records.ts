@@ -22,7 +22,7 @@ const documentClient = DynamoDBDocument.from(dynamodb, {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async function () {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey: Record<string, any> | undefined;
   let count = 0;
   while (hasMoreResults) {
     hasMoreResults = false;
