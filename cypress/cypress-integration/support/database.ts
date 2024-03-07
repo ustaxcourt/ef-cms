@@ -14,7 +14,11 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
-export const getEmailVerificationToken = async ({ userId }) => {
+export const getEmailVerificationToken = async ({
+  userId,
+}: {
+  userId: string;
+}) => {
   return await documentClient
     .get({
       Key: {
@@ -25,11 +29,11 @@ export const getEmailVerificationToken = async ({ userId }) => {
     })
     .promise()
     .then(result => {
-      return result.Item.pendingEmailVerificationToken;
+      return result.Item?.pendingEmailVerificationToken;
     });
 };
 
-export const setAllowedTerminalIpAddresses = async ipAddresses => {
+export const setAllowedTerminalIpAddresses = async (ipAddresses: string[]) => {
   return await documentClient
     .put({
       Item: {
