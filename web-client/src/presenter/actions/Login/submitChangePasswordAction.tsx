@@ -1,3 +1,4 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -57,8 +58,14 @@ export const submitChangePasswordAction = async ({
           message: (
             <>
               The code you entered is incorrect or expired. You can{' '}
-              <a href="/forgot-password">request a new code</a>. If you’re still
-              having trouble, contact{' '}
+              <Button
+                link
+                className="padding-0 margin-0"
+                onClick={() => window.location.reload()}
+              >
+                request a new code
+              </Button>
+              . If you’re still having trouble, contact{' '}
               <a href="mailto:dawson.support@ustaxcourt.gov">
                 dawson.support@ustaxcourt.gov
               </a>

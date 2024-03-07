@@ -41,8 +41,7 @@ resource "aws_cognito_user_pool" "pool" {
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
       email_subject = "U.S. Tax Court DAWSON: Account Created"
-      email_message = 
-      <<EMAILMESSAGE
+      email_message = <<EMAILMESSAGE
       <div>
         <div>
           Hello DAWSON user, 
@@ -237,8 +236,7 @@ resource "aws_cognito_user_pool" "irs_pool" {
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
       email_subject = "U.S. Tax Court DAWSON: Account Created"
-      email_message = 
-      <<EMAILMESSAGE
+      email_message = <<EMAILMESSAGE
       <div>
         <div>
           Hello DAWSON user, 
