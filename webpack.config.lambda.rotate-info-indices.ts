@@ -1,6 +1,7 @@
 import config from './webpack.config.lambda';
+import type { Configuration } from 'webpack';
 
-const rotateInfoIndicesConfig = {
+const rotateInfoIndicesConfig: Configuration = {
   ...config,
   devtool: false,
   entry: './aws/lambdas/RotateInfoIndices/src/index.js',
