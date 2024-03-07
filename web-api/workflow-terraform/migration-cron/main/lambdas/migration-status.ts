@@ -1,22 +1,32 @@
-const {
+import {
   approvePendingJob,
   cancelWorkflow,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const {
+} from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import {
   getMetricStatistics,
   getMigrationQueueIsEmptyFlag,
   getSqsQueueCount,
   putMigrationQueueIsEmptyFlag,
-} = require('../../../../../shared/admin-tools/aws/migrationWaitHelper');
+} from '../../../../../shared/admin-tools/aws/migrationWaitHelper';
+import type { GetMetricStatisticsOutput } from '@aws-sdk/client-cloudwatch';
+import type { Handler } from 'aws-lambda';
 
-const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
-const workflowId = process.env.CIRCLE_WORKFLOW_ID;
+const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN!;
+const workflowId = process.env.CIRCLE_WORKFLOW_ID!;
 const dlQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_dl_queue_${process.env.STAGE}`;
 const workQueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${process.env.STAGE}`;
 const jobName = 'wait-for-migration';
 
-exports.handler = async (input, context) => {
-  const results = { migrateFlag: process.env.MIGRATE_FLAG };
+export const handler: Handler = async (_event, context) => {
+  const results: {
+    dlQueueCount?: number;
+    errorRate?: number;
+    migrateFlag: string;
+    migrationQueueIsEmptyFlag?: boolean;
+    totalActiveJobs?: number;
+  } = {
+    migrateFlag: process.env.MIGRATE_FLAG!,
+  };
   if (results.migrateFlag !== 'true') {
     await approvePendingJob({ apiToken, jobName, workflowId });
     return succeed({ context, results });
@@ -60,7 +70,7 @@ exports.handler = async (input, context) => {
   return succeed({ context, results });
 };
 
-const getSegmentErrorRate = async () => {
+const getSegmentErrorRate = async (): Promise<number> => {
   let errorResponse = {};
   let invocationResponse = {};
   try {
@@ -94,10 +104,16 @@ const getSegmentErrorRate = async () => {
   return 0;
 };
 
-const getTotals = response => {
+const getTotals = (response: GetMetricStatisticsOutput): number => {
   let total = 0;
-  for (const datapoint of response.Datapoints) {
-    total += Number(datapoint.Sum);
+  if (response && 'Datapoints' in response && response.Datapoints) {
+    for (const datapoint of response.Datapoints) {
+      if (datapoint && 'Sum' in datapoint && datapoint.Sum) {
+        total += Number(datapoint.Sum);
+      }
+    }
+  } else {
+    throw new Error('Unexpected GetMetricStatisticsOutput object structure');
   }
   return total;
 };

@@ -1,24 +1,25 @@
-const {
-  approvePendingJob,
-  cancelWorkflow,
-} = require('../../../../../shared/admin-tools/circleci/circleci-helper');
-const {
-  getRunStateOfMostRecentJobRun,
-} = require('../../../../../shared/admin-tools/aws/glueHelper');
-const { handler } = require('./glue-job-status');
+import * as circleHelper from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import * as glueHelper from '../../../../../shared/admin-tools/aws/glueHelper';
+import { handler } from './glue-job-status';
+import type { Context } from 'aws-lambda';
 
-jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
-  approvePendingJob: jest.fn(),
-  cancelWorkflow: jest.fn(),
-}));
-jest.mock('../../../../../shared/admin-tools/aws/glueHelper', () => ({
-  getRunStateOfMostRecentJobRun: jest.fn(),
-}));
+jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper');
+const approvePendingJob = jest
+  .spyOn(circleHelper, 'approvePendingJob')
+  .mockImplementation(jest.fn());
+const cancelWorkflow = jest
+  .spyOn(circleHelper, 'cancelWorkflow')
+  .mockImplementation(jest.fn());
+
+jest.mock('../../../../../shared/admin-tools/aws/glueHelper');
+const getRunStateOfMostRecentJobRun = jest
+  .spyOn(glueHelper, 'getRunStateOfMostRecentJobRun')
+  .mockImplementation(jest.fn());
 
 const mockContext = {
   fail: jest.fn(),
   succeed: jest.fn(),
-};
+} as unknown as Context;
 
 describe('glue-job-status', () => {
   console.log = () => null;
@@ -32,7 +33,7 @@ describe('glue-job-status', () => {
     getRunStateOfMostRecentJobRun.mockReturnValueOnce(
       Promise.resolve(undefined),
     );
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(mockContext.succeed).toHaveBeenCalledWith({
@@ -44,7 +45,7 @@ describe('glue-job-status', () => {
     getRunStateOfMostRecentJobRun.mockReturnValueOnce(
       Promise.resolve('RUNNING'),
     );
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(mockContext.succeed).toHaveBeenCalledWith({
@@ -56,7 +57,7 @@ describe('glue-job-status', () => {
     getRunStateOfMostRecentJobRun.mockReturnValueOnce(
       Promise.resolve('FAILED'),
     );
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(0);
     expect(cancelWorkflow).toHaveBeenCalledTimes(1);
     expect(mockContext.succeed).toHaveBeenCalledWith({
@@ -68,7 +69,7 @@ describe('glue-job-status', () => {
     getRunStateOfMostRecentJobRun.mockReturnValueOnce(
       Promise.resolve('SUCCEEDED'),
     );
-    await handler({}, mockContext);
+    await handler({}, mockContext, () => {});
     expect(approvePendingJob).toHaveBeenCalledTimes(1);
     expect(cancelWorkflow).toHaveBeenCalledTimes(0);
     expect(mockContext.succeed).toHaveBeenCalledWith({
