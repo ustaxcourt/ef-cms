@@ -3,12 +3,13 @@ import {
   getUserTokenWithRetry,
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
-import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
-import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
 import {
   deleteAllItemsInEmailBucket,
   readAllItemsInBucket,
 } from './cypress/cypress-smoketests/support/email-receipt';
+import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
+import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
+
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
 // eslint-disable-next-line import/no-default-export
@@ -22,14 +23,6 @@ export default defineConfig({
         confirmUser({ email }) {
           return confirmUser({ email });
         },
-        getUserToken({ email, password }) {
-          return CYPRESS_SMOKETESTS_LOCAL
-            ? getUserTokenLocal(email)
-            : getUserTokenWithRetry(email, password);
-        },
-        waitForNoce({ docketNumber }: { docketNumber: string }) {
-          return waitForNoce({ docketNumber });
-        },
         deleteAllItemsInEmailBucket({
           bucketName,
           retries,
@@ -39,6 +32,11 @@ export default defineConfig({
         }) {
           return deleteAllItemsInEmailBucket({ bucketName, retries });
         },
+        getUserToken({ email, password }) {
+          return CYPRESS_SMOKETESTS_LOCAL
+            ? getUserTokenLocal(email)
+            : getUserTokenWithRetry(email, password);
+        },
         readAllItemsInBucket({
           bucketName,
           retries,
@@ -47,6 +45,9 @@ export default defineConfig({
           retries: number;
         }) {
           return readAllItemsInBucket({ bucketName, retries });
+        },
+        waitForNoce({ docketNumber }: { docketNumber: string }) {
+          return waitForNoce({ docketNumber });
         },
       });
     },

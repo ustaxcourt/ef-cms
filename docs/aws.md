@@ -4,7 +4,6 @@ The goal of this part of the documentation is to outline the various AWS service
 
 !> All of our AWS resources are managed via terraform; therefore, you should never modify a AWS resource directly from the AWS console unless you are just experimenting with new values.
 
-
 ## IAM
 
 IAM is an AWS service for creating and managing users, roles, and permissions that can be used for interacting with aws via the cli, terraform, or attached to lambda functions to grant them access to other AWS resources.  By default, most AWS resources have limited access to other resources.  For example, since we use Elasticsearch and Dynamo on our project, we have to explicitly grant permissions to our lambda functions to be able to access those databases.  It's worth noting that IAM is not the same as Cognito. Cognito is for managing the users of the application and NOT of our AWS resources.
