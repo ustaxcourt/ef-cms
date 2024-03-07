@@ -17,6 +17,13 @@ Cypress.Commands.add('showsSpinner', (shows = true) => {
   }
 });
 
+Cypress.Commands.add('listDownloadedFiles', directory => {
+  return cy
+    .exec(`ls ${directory}`)
+    .its('stdout')
+    .then(stdout => stdout.split('\n').filter(Boolean));
+});
+
 Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
   if (shows) {
     cy.get('.usa-alert--success').should('exist');
@@ -105,6 +112,7 @@ declare global {
       waitUntilSettled: (maxTries?: number) => void;
       showsErrorMessage: (shows?: boolean) => void;
       showsSuccessMessage: (shows?: boolean) => void;
+      listDownloadedFiles: (directory: string) => Chainable<string[]>;
       showsSpinner: (shows?: boolean) => void;
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;
