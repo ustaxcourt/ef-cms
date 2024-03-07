@@ -1,6 +1,8 @@
 import {
   CreateTableCommand,
+  CreateTableCommandOutput,
   DeleteTableCommand,
+  DeleteTableCommandOutput,
   DynamoDBClient,
 } from '@aws-sdk/client-dynamodb';
 
@@ -13,18 +15,26 @@ const dynamodb = new DynamoDBClient({
   region: 'us-east-1',
 });
 
-const deleteTable = async ({ TableName }) => {
+const deleteTable = async ({
+  TableName,
+}: {
+  TableName: string;
+}): Promise<DeleteTableCommandOutput> => {
   const deleteTableCommand = new DeleteTableCommand({ TableName });
   try {
     return await dynamodb.send(deleteTableCommand);
   } catch (error) {
     // ResourceNotFoundException
     console.log('no table to delete');
-    return Promise.resolve();
+    return Promise.resolve({} as DeleteTableCommandOutput);
   }
 };
 
-const createTable = ({ TableName }) => {
+const createTable = ({
+  TableName,
+}: {
+  TableName: string;
+}): Promise<CreateTableCommandOutput> => {
   console.log('Creating EFCMS Table:', TableName);
   const createTableCommand = new CreateTableCommand({
     AttributeDefinitions: [
