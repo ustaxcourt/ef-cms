@@ -228,13 +228,53 @@ export const TODAYS_ORDERS_SORT_DEFAULT = TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
 export const STIN_DOCKET_ENTRY_TYPE = {
   documentType: 'Statement of Taxpayer Identification',
   eventCode: 'STIN',
+  sort: 1,
+  tabTitle: 'STIN',
 };
 
 const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
 
-export const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
-  d => d.isUnservable,
-).map(pickEventCode);
+export const MINUTE_ENTRIES_MAP = {
+  captionOfCaseIsAmended: {
+    description:
+      'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
+    documentType: 'Caption of case is amended',
+    eventCode: 'MINC',
+    isUnservable: true,
+  },
+  dockedNumberIsAmended: {
+    description:
+      'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
+    documentType: 'Docket Number is amended',
+    eventCode: 'MIND',
+    isUnservable: true,
+  },
+  filingFeePaid: {
+    description: 'Filing Fee Paid',
+    documentType: 'Filing Fee Paid',
+    eventCode: 'FEE',
+    isUnservable: true,
+  },
+  filingFeeWaived: {
+    description: 'Filing Fee Waived',
+    documentType: 'Filing Fee Waived',
+    eventCode: 'FEEW',
+    isUnservable: true,
+  },
+  requestForPlaceOfTrial: {
+    documentTitle: 'Request for Place of Trial at [Place]',
+    documentType: 'Request for Place of Trial',
+    eventCode: 'RQT',
+    isUnservable: false,
+  },
+};
+
+export const UNSERVABLE_EVENT_CODES = [
+  ...COURT_ISSUED_EVENT_CODES,
+  ...Object.values(MINUTE_ENTRIES_MAP),
+]
+  .filter(d => d.isUnservable)
+  .map(pickEventCode);
 
 export const CASE_DISMISSAL_ORDER_TYPES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.closesAndDismissesCase,
@@ -452,6 +492,7 @@ export const BRIEF_EVENTCODES = [
 ];
 
 export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
+export const AMICUS_BRIEF_DOCUMENT_TYPE = 'Amicus Brief';
 export const SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -494,6 +535,7 @@ export const SCENARIOS = [
 export const TRANSCRIPT_EVENT_CODE = 'TRAN';
 export const CORRECTED_TRANSCRIPT_EVENT_CODE = 'CTRA';
 export const REVISED_TRANSCRIPT_EVENT_CODE = 'RTRA';
+export const DECISION_EVENT_CODE = 'DEC';
 
 export const LODGED_EVENT_CODE = 'MISCL';
 
@@ -589,30 +631,55 @@ export const FILTER_OPTIONS = Object.values(
 );
 export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
-// TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
+    tabTitle: 'APW',
+    sort: 5,
+    fileName: 'applicationForWaiverOfFilingFeeFile',
   },
   corporateDisclosure: {
     documentTitle: 'Corporate Disclosure Statement',
     documentType: 'Corporate Disclosure Statement',
     eventCode: 'DISC',
+    tabTitle: 'CDS',
+    sort: 4,
+    fileName: 'corporateDisclosureFile',
   },
   petition: {
     documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
+    tabTitle: 'Petition',
+    sort: 0,
+    fileName: 'petitionFile',
   },
   requestForPlaceOfTrial: {
     documentTitle: 'Request for Place of Trial at [Place]',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
+    tabTitle: 'RQT',
+    sort: 3,
+    fileName: 'requestForPlaceOfTrialFile',
   },
-  stin: STIN_DOCKET_ENTRY_TYPE,
-};
+  stin: {
+    documentType: 'Statement of Taxpayer Identification',
+    eventCode: 'STIN',
+    sort: 1,
+    tabTitle: 'STIN',
+    fileName: 'stinFile',
+  },
+  attachmentToPetition: {
+    documentTitle: 'Attachment to Petition',
+    documentType: 'Attachment to Petition',
+    eventCode: 'ATP',
+    tabTitle: 'ATP',
+    sort: 2,
+    fileName: 'attachmentToPetitionFile',
+  },
+} as const;
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
@@ -620,47 +687,20 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   petition: 'petitionFile',
   requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
   stin: 'stinFile',
+  attachmentToPetition: 'attachmentToPetitionFile',
 };
 
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  attachmentToPetitionFile:
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
   corporateDisclosureFile:
     INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
   petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
   requestForPlaceOfTrialFile:
     INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
   stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
-};
-
-export const MINUTE_ENTRIES_MAP = {
-  captionOfCaseIsAmended: {
-    description:
-      'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
-    eventCode: 'MINC',
-    documentType: 'Caption of case is amended',
-  },
-  dockedNumberIsAmended: {
-    description:
-      'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
-    eventCode: 'MIND',
-    documentType: 'Docket Number is amended',
-  },
-  filingFeePaid: {
-    description: 'Filing Fee Paid',
-    documentType: 'Filing Fee Paid',
-    eventCode: 'FEE',
-  },
-  filingFeeWaived: {
-    description: 'Filing Fee Waived',
-    documentType: 'Filing Fee Waived',
-    eventCode: 'FEEW',
-  },
-  requestForPlaceOfTrial: {
-    documentTitle: 'Request for Place of Trial at [Place]',
-    documentType: 'Request for Place of Trial',
-    eventCode: 'RQT',
-  },
 };
 
 export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
@@ -670,18 +710,6 @@ export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
-
-export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
-  ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
-    d => d.eventCode,
-  ),
-  ...POLICY_DATE_IMPACTED_EVENTCODES,
-  'DEC',
-  'ODL',
-  'SPTN',
-  'OCS',
-  'TCRP',
-];
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
@@ -1580,15 +1608,6 @@ export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
 
-export const isDocumentBriefType = (documentType: string) => {
-  const documents = [
-    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
-    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
-  ];
-  return !!documents.find(document => document.documentType === documentType)
-    ?.eventCode;
-};
-
 export const JUDGE_TITLES = [
   'Judge',
   'Special Trial Judge',
@@ -1596,3 +1615,51 @@ export const JUDGE_TITLES = [
   'Chief Judge',
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
+
+export type FileUploadProgressMapType = Record<string, FileUploadProgressType>;
+
+export type FileUploadProgressType = {
+  file: any;
+  uploadProgress: (progressEvent: any) => void;
+};
+
+export type CreatedCaseType = {
+  contactPrimary: {
+    address1: string;
+    address2: string;
+    address3: string;
+    city: string;
+    countryType: string;
+    name: string;
+    paperPetitionEmail: string;
+    phone: string;
+    postalCode: string;
+    state: string;
+    email?: string;
+  };
+  caseType: string;
+  caseCaption: string;
+  attachmentToPetitionFileSize?: number;
+  attachmentToPetitionFile: Blob;
+  hasVerifiedIrsNotice: boolean;
+  isPaper: boolean;
+  mailingDate: string;
+  orderDesignatingPlaceOfTrial?: boolean;
+  orderForCds: boolean;
+  stinFile?: Blob;
+  stinFileSize?: number;
+  orderForFilingFee: boolean;
+  partyType: string;
+  petitionFile: Blob;
+  petitionFileSize: number;
+  petitionPaymentStatus: string;
+  procedureType: string;
+  receivedAt: string;
+  applicationForWaiverOfFilingFeeFile?: Blob;
+  corporateDisclosureFile?: Blob;
+  requestForPlaceOfTrialFile?: Blob;
+  status: string;
+  contactSecondary?: {
+    name: string;
+  };
+};
