@@ -9,7 +9,6 @@ import {
 } from './cypress/cypress-smoketests/support/email-receipt';
 import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
 import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
-
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
 // eslint-disable-next-line import/no-default-export
