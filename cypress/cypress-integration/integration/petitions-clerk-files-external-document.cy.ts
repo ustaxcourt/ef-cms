@@ -1,6 +1,6 @@
 import { externalUserSearchesDocketNumber } from '../../helpers/external-user-searches-docket-number';
 import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
-import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
 
@@ -10,7 +10,7 @@ describe(
   () => {
     it('should create an electronic petition, serve the petition, and files an "Answer" on the petition', () => {
       loginAsPetitioner();
-      petitionerCreatesEletronicCase().then(docketNumber => {
+      petitionerCreatesElectronicCase().then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
         loginAsPetitioner();
         externalUserSearchesDocketNumber(docketNumber);
