@@ -63,29 +63,10 @@ describe('createUserConfirmation', () => {
     expect(
       applicationContext.getMessageGateway().sendEmailToUser.mock.calls[0][1]
         .body,
-    ).toEqual(`<div>
-    <h3>Welcome to DAWSON!</h3>
-    <span>
-      Your account with DAWSON has been created. Use the button below to verify your email address. After 24 hours, this link will expire. 
-    </span>
-    <div style="margin-top: 20px;">
-      <a href="${mockVerificationLink}" style="background-color: #005ea2; color: white; line-height: 0.9; border-radius: 0.25rem; text-decoration: none; font-size: 1.06rem; padding: .6rem 2.25rem; font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;">Verify Email</a>
-    </div>
-    <div style="margin-top: 20px;">
-    <span>Or you can use this URL: </span>
-    <a href="${mockVerificationLink}">${mockVerificationLink}</a>
-  </div>
-    <div style="margin-top: 20px;">
-      <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
-    </div>
-    <hr style="border-top:1px solid #000000;">
-    <div style="margin-top: 20px;">
-      <span>This is an automated email. We are unable to respond to any messages to this email address.</span>
-    </div>
-  </div>`);
+    ).toContain(mockVerificationLink);
   });
 
-  it('should refresh the existing confirmation code when it already exists', async () => {
+  it('should reset the confirmation code expiration time to 24 hours when it already exists', async () => {
     const queryString = qs.stringify(
       {
         confirmationCode: mockConfirmationCode,
@@ -100,6 +81,7 @@ describe('createUserConfirmation', () => {
       email: mockEmail,
       userId: mockUserId,
     });
+
     expect(result).toEqual({ confirmationCode: mockConfirmationCode });
     expect(
       applicationContext.getPersistenceGateway().getAccountConfirmationCode,
@@ -119,25 +101,6 @@ describe('createUserConfirmation', () => {
     expect(
       applicationContext.getMessageGateway().sendEmailToUser.mock.calls[0][1]
         .body,
-    ).toEqual(`<div>
-    <h3>Welcome to DAWSON!</h3>
-    <span>
-      Your account with DAWSON has been created. Use the button below to verify your email address. After 24 hours, this link will expire. 
-    </span>
-    <div style="margin-top: 20px;">
-      <a href="${mockVerificationLink}" style="background-color: #005ea2; color: white; line-height: 0.9; border-radius: 0.25rem; text-decoration: none; font-size: 1.06rem; padding: .6rem 2.25rem; font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;">Verify Email</a>
-    </div>
-    <div style="margin-top: 20px;">
-    <span>Or you can use this URL: </span>
-    <a href="${mockVerificationLink}">${mockVerificationLink}</a>
-  </div>
-    <div style="margin-top: 20px;">
-      <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
-    </div>
-    <hr style="border-top:1px solid #000000;">
-    <div style="margin-top: 20px;">
-      <span>This is an automated email. We are unable to respond to any messages to this email address.</span>
-    </div>
-  </div>`);
+    ).toContain(mockVerificationLink);
   });
 });

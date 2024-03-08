@@ -1,11 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const Hint = connect(function Hint(props) {
-  const { children, className, exclamation, fullWidth, wider } = props;
-
+export const Hint = ({
+  children,
+  className,
+  fullWidth,
+  wider,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  fullWidth?: boolean;
+  wider?: boolean;
+}) => {
   return (
     <div
       className={classNames(
@@ -16,17 +23,15 @@ export const Hint = connect(function Hint(props) {
       )}
     >
       <span className="usa-hint ustc-form-hint-with-svg">
-        {!exclamation && (
-          <FontAwesomeIcon
-            className="fa-icon-blue-vivid"
-            icon="info-circle"
-            size="lg"
-          />
-        )}
+        <FontAwesomeIcon
+          className="fa-icon-blue-vivid"
+          icon="info-circle"
+          size="lg"
+        />
         {children}
       </span>
     </div>
   );
-});
+};
 
 Hint.displayName = 'Hint';

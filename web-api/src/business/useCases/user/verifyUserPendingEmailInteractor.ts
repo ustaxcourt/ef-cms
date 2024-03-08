@@ -26,6 +26,10 @@ export const verifyUserPendingEmailInteractor = async (
     !user.pendingEmailVerificationToken ||
     user.pendingEmailVerificationToken !== token
   ) {
+    applicationContext.logger.info(
+      'Unable to verify pending email, either the user clicked the verify link twice or their verification token did not match',
+      { email: authorizedUser.email },
+    );
     throw new UnauthorizedError('Tokens do not match');
   }
 

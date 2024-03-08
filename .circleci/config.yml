@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.1.3
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.1.4
 
 parameters:
   run_build_and_deploy:
@@ -147,7 +147,7 @@ jobs:
           name: Admin User Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
+              npx ts-node --transpile-only scripts/user/setup-admin.ts
             else
               echo "skipping…"
             fi
@@ -155,7 +155,7 @@ jobs:
           name: Test Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              ./shared/admin-tools/user/setup-test-users.sh $ENV
+              ./scripts/user/setup-test-users.sh $ENV
             else
               echo "skipping…"
             fi
@@ -176,7 +176,7 @@ jobs:
                 --query 'DomainStatus.Endpoint' \
                 --output text)
               export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
-              npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
+              npx ts-node --transpile-only ./scripts/user/setup-glued-judges.ts
             else
               ./scripts/circleci/judge/bulk-import-judge-users.sh
             fi
@@ -204,7 +204,7 @@ jobs:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              npx ts-node --transpile-only shared/admin-tools/user/verify-ustc-admin-user-disabled.js
+              npx ts-node --transpile-only scripts/user/verify-ustc-admin-user-disabled.ts
             else
               echo "skipping…"
             fi
@@ -285,7 +285,7 @@ jobs:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              node ./web-api/track-successful-migrations.js
+              npx ts-node --transpile-only ./web-api/workflow-terraform/migration/bin/track-successful-migrations.ts
             fi
       - run:
           name: Set Marker to Indicate Migration is Complete
@@ -378,7 +378,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: Create and Enable Test User
-          command: npx ts-node --transpile-only ./scripts/create-and-enable-smoketest-user.js
+          command: npx ts-node --transpile-only ./scripts/user/create-and-enable-smoketest-user.ts
       - run:
           name: 'Cypress Readonly Smoke Tests'
           command: |
@@ -388,7 +388,7 @@ jobs:
             set -e
       - run:
           name: Disable Test User
-          command: npx ts-node --transpile-only ./scripts/circleci/disable-smoketest-user.js
+          command: npx ts-node --transpile-only ./scripts/user/disable-smoketest-user.ts
       - run:
           name: Kill Build if Smoketests Failed
           command: ./scripts/kill-circle-build.sh
@@ -665,7 +665,7 @@ jobs:
       - run:
           name: Disable Dynamodb Streams
           command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --off
+            ./scripts/dynamo/toggle-streams.sh --off
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
@@ -732,7 +732,7 @@ jobs:
       - run:
           name: Enable Dynamodb Streams
           command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+            ./scripts/dynamodb/toggle-streams.sh --on
 
   cleanup-glue-job:
     docker:
