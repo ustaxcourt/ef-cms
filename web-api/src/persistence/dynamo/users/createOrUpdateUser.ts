@@ -136,12 +136,10 @@ export const isUserAlreadyCreated = async ({
 
 export const createOrUpdateUser = async ({
   applicationContext,
-  disableCognitoUser = false,
   password,
   user,
 }: {
   applicationContext: ServerApplicationContext;
-  disableCognitoUser: boolean;
   password: string;
   user: RawUser;
 }) => {
@@ -203,13 +201,6 @@ export const createOrUpdateUser = async ({
     });
     //and here
     userId = response.Username;
-  }
-
-  if (disableCognitoUser) {
-    await applicationContext.getCognito().adminDisableUser({
-      UserPoolId: userPoolId,
-      Username: userId,
-    });
   }
 
   return await createUserRecords({

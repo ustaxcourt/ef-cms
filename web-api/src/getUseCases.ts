@@ -33,7 +33,7 @@ import { createPetitionerAccountInteractor } from '../../shared/src/business/use
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
 import { createPractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor';
-import { createUserInteractor } from '../../shared/src/business/useCases/users/createUserInteractor';
+import { createUserInteractor } from './business/useCases/user/createUserInteractor';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor';
 import { deleteCounselFromCaseInteractor } from './business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
