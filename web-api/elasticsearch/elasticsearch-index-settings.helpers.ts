@@ -28,7 +28,7 @@ export const setupIndexes = async ({
         });
 
         if (!indexExists) {
-          await client.indices.create({
+          return client.indices.create({
             body: {
               mappings: {
                 dynamic: false,
@@ -39,7 +39,7 @@ export const setupIndexes = async ({
             index,
           });
         } else {
-          await client.indices.putSettings({
+          return client.indices.putSettings({
             body: {
               index: {
                 max_result_window: esSettings.index.max_result_window,
