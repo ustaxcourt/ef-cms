@@ -308,12 +308,11 @@ describe('changePasswordInteractor', () => {
       });
 
       expect(
-        applicationContext.getUserGateway().confirmForgotPassword,
-      ).toHaveBeenCalledWith({
-        ClientId: applicationContext.environment.cognitoClientId,
-        ConfirmationCode: mockCode,
-        Password: mockPassword,
-        Username: mockEmail,
+        applicationContext.getUserGateway().changePassword,
+      ).toHaveBeenCalledWith(applicationContext, {
+        code: mockCode,
+        email: mockEmail,
+        newPassword: mockPassword,
       });
       expect(
         applicationContext.getUserGateway().initiateAuth,

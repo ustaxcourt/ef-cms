@@ -1,9 +1,11 @@
 import * as client from '../../dynamodbClientService';
 import { AdminCreateUserCommandInput } from '@aws-sdk/client-cognito-identity-provider';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ROLES,
+  Role,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { isUserAlreadyCreated } from './createOrUpdateUser';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -63,7 +65,7 @@ export const createOrUpdatePractitionerUser = async ({
   user: RawUser;
 }) => {
   let userId = applicationContext.getUniqueId();
-  const practitionerRoleTypes = [
+  const practitionerRoleTypes: Role[] = [
     ROLES.privatePractitioner,
     ROLES.irsPractitioner,
     ROLES.inactivePractitioner,
@@ -85,13 +87,13 @@ export const createOrUpdatePractitionerUser = async ({
     });
   }
 
-  const userExists = await isUserAlreadyCreated({
-    applicationContext,
-    email: userEmail,
-    userPoolId: process.env.USER_POOL_ID as string,
-  });
+  const existingUser = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
+      email: userEmail,
+    });
 
-  if (!userExists) {
+  if (!existingUser) {
     let params: AdminCreateUserCommandInput = {
       DesiredDeliveryMediums: ['EMAIL'],
       UserAttributes: [
@@ -139,12 +141,6 @@ export const createOrUpdatePractitionerUser = async ({
       userId = userIdAttribute?.Value!;
     }
   } else {
-    const response = await applicationContext
-      .getUserGateway()
-      .getUserByEmail(applicationContext, {
-        email: userEmail,
-      });
-
     await applicationContext.getCognito().adminUpdateUserAttributes({
       UserAttributes: [
         {
@@ -153,22 +149,12 @@ export const createOrUpdatePractitionerUser = async ({
         },
       ],
       UserPoolId: process.env.USER_POOL_ID,
-      // and here?
       Username: userEmail,
     });
-    // and here
-    userId =
-      response.UserAttributes?.find(element => {
-        if (element.Name === 'custom:userId') {
-          return element;
-        }
-      }) ||
-      response.UserAttributes?.find(element => {
-        if (element.Name === 'sub') {
-          return element;
-        }
-      });
+
+    userId = existingUser.userId;
   }
+
   return await createUserRecords({
     applicationContext,
     user,

@@ -1,66 +1,39 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { adminUser, petitionerUser } from '@shared/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createUserInteractor } from './createUserInteractor';
 
-describe('create user', () => {
-  it('creates the user', async () => {
-    const mockUser = {
-      name: 'Test PetitionsClerk',
-      role: ROLES.petitionsClerk,
-      userId: '615b7d39-8fae-4c2f-893c-3c829598bc71',
-    };
-
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Admin',
-      role: ROLES.admin,
-      userId: 'ad3b7d39-8fae-4c2f-893c-3c829598bc71',
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .createOrUpdateUser.mockReturnValue(mockUser);
-
-    const userToCreate = {
-      barNumber: '',
-      name: 'Jesse Pinkman',
-      role: ROLES.petitionsClerk,
-      userId: '245b7d39-8fae-4c2f-893c-3c829598bc71',
-    };
-    const user = await createUserInteractor(applicationContext, {
-      user: userToCreate,
-    } as any);
-    expect(user).not.toBeUndefined();
-  });
-
-  it('throws unauthorized for any user without an "admin" role', async () => {
+describe('createUserInteractor', () => {
+  it('should throw an unauthorized error when the current user does NOT have an "admin" role', async () => {
     const mockUser = {
       name: 'Test Petitioner',
       role: ROLES.petitioner,
-      userId: '245b7d39-8fae-4c2f-893c-3c829598bc71',
+      userId: '615b7d39-8fae-4c2f-893c-3c829598bc71',
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Admin',
-      role: ROLES.petitioner,
-      userId: 'ad2b7d39-8fae-4c2f-893c-3c829598bc71',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
     applicationContext
       .getPersistenceGateway()
       .createOrUpdateUser.mockReturnValue(mockUser);
-    const userToCreate = { userId: '145b7d39-8fae-4c2f-893c-3c829598bc71' };
 
     await expect(
       createUserInteractor(applicationContext, {
-        user: userToCreate,
-      } as any),
+        user: {
+          entityName: 'User',
+          name: 'Test Petitioner',
+          password: 'P@ssw0rd',
+          role: ROLES.petitioner,
+        } as RawUser,
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should create a practitioner user when the user role is privatePractitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Admin',
-      role: ROLES.admin,
-      userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(adminUser);
     applicationContext.getPersistenceGateway().createUser.mockReturnValue({
       barNumber: 'CS20001',
       name: 'Test PrivatePractitioner',
@@ -68,21 +41,23 @@ describe('create user', () => {
       userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
     });
 
-    const userToCreate = {
-      admissionsDate: '2020-03-14',
-      admissionsStatus: 'Active',
-      birthYear: '1993',
-      employer: 'Private',
-      firstName: 'Test',
-      lastName: 'PrivatePractitioner',
-      originalBarState: 'CA',
-      practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
-    };
-
     const user = await createUserInteractor(applicationContext, {
-      user: userToCreate,
-    } as any);
+      user: {
+        admissionsDate: '2020-03-14',
+        admissionsStatus: 'Active',
+        birthYear: '1993',
+        employer: 'Private',
+        entityName: 'Practitioner',
+        firstName: 'Test',
+        lastName: 'PrivatePractitioner',
+        name: 'Test PrivatePractitioner',
+        originalBarState: 'CA',
+        password: 'P@ssw0rd',
+        practitionerType: 'Attorney',
+        role: ROLES.privatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    });
 
     expect(user).toMatchObject({
       barNumber: 'CS20001',
@@ -91,19 +66,16 @@ describe('create user', () => {
   });
 
   it('should create a practitioner user when the user role is irsPractitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admin,
-      userId: 'admin',
-    });
+    const mockAdmissionsDate = '1876-02-19';
+    applicationContext.getCurrentUser.mockReturnValue(adminUser);
     applicationContext
       .getPersistenceGateway()
       .createOrUpdateUser.mockReturnValue({
         barNumber: 'CS20001',
-        name: 'Test PrivatePractitioner',
+        name: 'Test IrsPractitioner',
         role: ROLES.irsPractitioner,
         userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
       });
-    const mockAdmissionsDate = '1876-02-19';
 
     const user = await createUserInteractor(applicationContext, {
       user: {
@@ -111,12 +83,16 @@ describe('create user', () => {
         admissionsStatus: 'Active',
         birthYear: '1993',
         employer: 'DOJ',
+        entityName: 'Practitioner',
         firstName: 'Test',
         lastName: 'IRSPractitioner',
+        name: 'Test IRS Practitioner',
         originalBarState: 'CA',
+        password: 'P@ssw0rd',
         practitionerType: 'Attorney',
         role: ROLES.irsPractitioner,
-      } as any,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+      },
     });
 
     expect(user).toMatchObject({
@@ -126,10 +102,8 @@ describe('create user', () => {
   });
 
   it('should create a practitioner user when the user role is inactivePractitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admin,
-      userId: 'admin',
-    });
+    const mockAdmissionsDate = '1876-02-19';
+    applicationContext.getCurrentUser.mockReturnValue(adminUser);
     applicationContext
       .getPersistenceGateway()
       .createOrUpdateUser.mockReturnValue({
@@ -138,7 +112,6 @@ describe('create user', () => {
         role: ROLES.inactivePractitioner,
         userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
       });
-    const mockAdmissionsDate = '1876-02-19';
 
     const user = await createUserInteractor(applicationContext, {
       user: {
@@ -146,12 +119,16 @@ describe('create user', () => {
         admissionsStatus: 'Inactive',
         birthYear: '1993',
         employer: 'DOJ',
+        entityName: 'Practitioner',
         firstName: 'Test',
-        lastName: 'IRSPractitioner',
+        lastName: 'InactivePractitioner',
+        name: 'Test Inactive Practitioner',
         originalBarState: 'CA',
+        password: 'P@ssw0rd',
         practitionerType: 'Attorney',
         role: ROLES.inactivePractitioner,
-      } as any,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
     });
 
     expect(user).toMatchObject({
@@ -161,111 +138,60 @@ describe('create user', () => {
   });
 
   it('should create a generic user and delete the barNumber when it is defined and the user is not a pracititoner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Admin',
-      role: ROLES.admin,
-      userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(adminUser);
     applicationContext
       .getPersistenceGateway()
       .createOrUpdateUser.mockReturnValue({
         barNumber: '',
         name: 'Test PrivatePractitioner',
-        role: ROLES.judh,
+        role: ROLES.judge,
         userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
       });
 
-    const userToCreate = {
-      admissionsDate: '2020-03-14',
-      admissionsStatus: 'Active',
-      birthYear: '1993',
-      employer: 'Private',
-      firstName: 'Test',
-      lastName: 'PrivatePractitioner',
-      originalBarState: 'CA',
-      practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
-    };
-
     const user = await createUserInteractor(applicationContext, {
-      user: userToCreate,
-    } as any);
+      user: {
+        barNumber: 'NOT_VALID',
+        entityName: 'User',
+        name: 'Test Petitioner',
+        password: 'P@ssw0rd',
+        role: ROLES.petitioner,
+        userId: '9f797a9b-b596-488f-aa31-eca147b9b18d',
+      },
+    });
 
     expect(user).toMatchObject({
-      barNumber: 'CS20001',
-      role: ROLES.privatePractitioner,
+      role: ROLES.petitioner,
     });
   });
 
-  it('creates a legacyJudge user and deletes bar number when it is defined', async () => {
+  it('should create a legacyJudge user and disable the user', async () => {
     const mockUser = {
       name: 'Test Legacy Judge',
       role: ROLES.legacyJudge,
       userId: '845b7d39-8fae-4c2f-893c-3c829598bc71',
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Admin',
-      role: ROLES.admin,
-      userId: 'admin',
-    });
-
+    applicationContext.getCurrentUser.mockReturnValue(adminUser);
     applicationContext
       .getPersistenceGateway()
       .createOrUpdateUser.mockReturnValue(mockUser);
 
-    const userToCreate = {
-      barNumber: '',
-      name: 'Jesse Pinkman',
-      role: ROLES.legacyJudge,
-      userId: 'legacyJudge1@example.com',
-    };
-
-    const user = await createUserInteractor(applicationContext, {
-      user: userToCreate,
-    } as any);
-
-    expect(user).not.toBeUndefined();
-    expect(
-      applicationContext.getPersistenceGateway().createOrUpdateUser,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        disableCognitoUser: true,
-      }),
-    );
-  });
-
-  it('creates a legacyJudge user and does not delete bar number when it is not defined', async () => {
-    const mockUser = {
-      name: 'Test Legacy Judge',
-      role: ROLES.legacyJudge,
-      userId: '845b7d39-8fae-4c2f-893c-3c829598bc71',
-    };
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Admin',
-      role: ROLES.admin,
-      userId: 'admin',
+    await createUserInteractor(applicationContext, {
+      user: {
+        barNumber: 'LR1234',
+        entityName: 'User',
+        name: 'Jesse Pinkman',
+        password: 'P@ssw0rd',
+        role: ROLES.legacyJudge,
+        userId: 'ce2bfd0f-f06c-4ff8-9ee3-1a385e3a8bef',
+      },
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .createOrUpdateUser.mockReturnValue(mockUser);
-
-    const userToCreate = {
-      name: 'Jesse Pinkman',
-      role: ROLES.legacyJudge,
-      userId: 'legacyJudge1@example.com',
-    };
-
-    const user = await createUserInteractor(applicationContext, {
-      user: userToCreate,
-    } as any);
-
-    expect(user).not.toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().createOrUpdateUser,
+      applicationContext.getUserGateway().disableUser,
     ).toHaveBeenCalledWith(
+      expect.anything(),
       expect.objectContaining({
-        disableCognitoUser: true,
+        userId: mockUser.userId,
       }),
     );
   });

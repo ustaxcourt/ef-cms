@@ -24,7 +24,6 @@ describe('createOrUpdateUser', () => {
 
     await createOrUpdateUser({
       applicationContext,
-      disableCognitoUser: false,
       password: mockTemporaryPassword,
       user: petitionsClerkUser,
     });
@@ -57,34 +56,7 @@ describe('createOrUpdateUser', () => {
       UserPoolId: undefined,
       Username: petitionsClerkUser.email,
     });
-    expect(
-      applicationContext.getCognito().adminDisableUser,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toHaveBeenCalled();
-  });
 
-  it('should create a user and cognito record, but disable the cognito user', async () => {
-    applicationContext
-      .getCognito()
-      .adminGetUser.mockRejectedValue(
-        new UserNotFoundException({ $metadata: {}, message: '' }),
-      );
-    applicationContext.getCognito().adminCreateUser.mockResolvedValue({
-      User: { Username: petitionsClerkUser.userId },
-    });
-
-    await createOrUpdateUser({
-      applicationContext,
-      disableCognitoUser: true,
-      password: mockTemporaryPassword,
-      user: petitionsClerkUser,
-    });
-
-    expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
-    expect(applicationContext.getCognito().adminDisableUser).toHaveBeenCalled();
-    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toHaveBeenCalled();
@@ -97,7 +69,6 @@ describe('createOrUpdateUser', () => {
 
     await createOrUpdateUser({
       applicationContext,
-      disableCognitoUser: false,
       password: mockTemporaryPassword,
       user: petitionsClerkUser,
     });

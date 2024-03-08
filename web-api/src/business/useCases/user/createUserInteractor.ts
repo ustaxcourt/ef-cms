@@ -17,7 +17,14 @@ import { createPractitionerUser } from '../../../../../shared/src/business/utili
 
 export const createUserInteractor = async (
   applicationContext: ServerApplicationContext,
-  { user }: { user: RawUser & { barNumber?: string; password: string } },
+  {
+    user,
+  }: {
+    user: (RawUser | RawPractitioner) & {
+      barNumber?: string;
+      password: string;
+    };
+  },
 ): Promise<RawUser | RawPractitioner> => {
   const requestUser = applicationContext.getCurrentUser();
 
