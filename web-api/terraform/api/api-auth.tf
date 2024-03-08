@@ -57,7 +57,7 @@ resource "aws_api_gateway_integration" "api_auth_integration_get" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_auth_integration_post" {
@@ -70,7 +70,7 @@ resource "aws_api_gateway_integration" "api_auth_integration_post" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 
@@ -84,7 +84,7 @@ resource "aws_api_gateway_integration" "api_auth_integration_delete" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_auth_integration_options" {
@@ -98,5 +98,5 @@ resource "aws_api_gateway_integration" "api_auth_integration_options" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
