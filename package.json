@@ -246,9 +246,7 @@
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
     "verify-private-s3-buckets": "./scripts/circleci/verify-private-s3-buckets.sh",
     "verify-cognito-lambda-triggers": "./scripts/circleci/verify-cognito-lambda-triggers.sh",
-    "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
-    "watch": "nodemon -e yml --exec sls offline start",
-    "dev": "sst bind next dev"
+    "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html"
   },
   "overrides": {
     "axios": "$axios",
@@ -363,7 +361,6 @@
     "sass": "1.70.0",
     "sass-loader": "14.1.0",
     "shuffle-seed": "1.1.6",
-    "sst": "^2.40.3",
     "stream-browserify": "3.0.0",
     "style-loader": "3.3.4",
     "stylelint": "16.2.1",
