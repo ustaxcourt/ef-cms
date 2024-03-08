@@ -17,7 +17,6 @@ import { migrateItems as validationMigration } from './migrations/0000-validate-
 import promiseRetry from 'promise-retry';
 import type { Context, Handler, SQSEvent } from 'aws-lambda';
 
-// import type { EfcmsEntity } from './migration';
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
 const dynamodb = new DynamoDBClient({
