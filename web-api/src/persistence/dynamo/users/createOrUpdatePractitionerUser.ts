@@ -152,6 +152,7 @@ export const createOrUpdatePractitionerUser = async ({
       Username: userEmail,
     });
 
+    // eslint-disable-next-line prefer-destructuring
     userId = existingUser.userId;
   }
 
