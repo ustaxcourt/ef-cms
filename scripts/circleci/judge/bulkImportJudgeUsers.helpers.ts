@@ -28,7 +28,7 @@ export const init = async (csvFile, outputMap) => {
   const data = readCsvFile(csvFile);
   const stream = parse(data, csvOptions);
 
-  const processCsv = new Promise(resolve => {
+  const processCsv = new Promise<void>(resolve => {
     stream.on('readable', gatherRecords(CSV_HEADERS, output));
     stream.on('end', async () => {
       for (let row of output) {
@@ -43,22 +43,16 @@ export const init = async (csvFile, outputMap) => {
               services[`gateway_api_${process.env.DEPLOYING_COLOR}`]
             }/users`;
           }
-          let result;
-          try {
-            result = await axios.post(
-              endpoint,
-              { ...row, password: process.env.DEFAULT_ACCOUNT_PASS },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
+
+          const result = await axios.post(
+            endpoint,
+            { ...row, password: process.env.DEFAULT_ACCOUNT_PASS },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
               },
-            );
-          } catch (error) {
-            throw new Error(
-              `Unable to bulk import judge user. Cause: ${error.cause}`,
-            );
-          }
+            },
+          );
           console.log(`SUCCESS ${row.name}`);
           const lowerCaseName = row.name.toLowerCase();
           const { userId } = result.data;
