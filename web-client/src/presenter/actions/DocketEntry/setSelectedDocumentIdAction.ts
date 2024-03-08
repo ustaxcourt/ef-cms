@@ -8,7 +8,7 @@ export const setSelectedDocumentIdAction = ({
   store,
 }: ActionProps<DownloadDocketEntryRequestType>) => {
   const { docketEntries } = props;
-  let documentsSelectedForDownload = get(state.documentsSelectedForDownload);
+  const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
   if (docketEntries.length > 1) {
     if (isEqual(docketEntries, documentsSelectedForDownload)) {
