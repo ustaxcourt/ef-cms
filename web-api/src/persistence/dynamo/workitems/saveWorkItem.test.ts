@@ -115,5 +115,19 @@ describe('saveWorkItem', () => {
 
       expect(putMock.mock.calls[0][0].Item.gsiSectionBox).toBeUndefined();
     });
+
+    it('persists the work item', async () => {
+      await saveWorkItem({
+        applicationContext,
+        workItem: mockWorkItem,
+      });
+
+      expect(putMock.mock.calls[0][0].Item).toMatchObject({
+        gsi1pk: `work-item|${mockWorkItem.workItemId}`,
+        pk: `case|${mockWorkItem.docketNumber}`,
+        sk: `work-item|${mockWorkItem.workItemId}`,
+        ...mockWorkItem,
+      });
+    });
   });
 });

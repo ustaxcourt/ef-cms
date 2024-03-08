@@ -1,9 +1,9 @@
-import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
 } from '@shared/business/utilities/DateHandler';
 import { queryFull } from '../../dynamodbClientService';
+import type { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 export const getDocumentQCServedForSection = ({
   applicationContext,
@@ -11,14 +11,14 @@ export const getDocumentQCServedForSection = ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-}) => {
+}): Promise<RawWorkItem[]> => {
   const afterDate = calculateISODate({
     dateString: createISODateAtStartOfDayEST(),
     howMuch: -7,
     units: 'days',
   });
 
-  return queryFull({
+  const results = queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -30,4 +30,6 @@ export const getDocumentQCServedForSection = ({
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
   }) as unknown as Promise<RawWorkItem[]>;
+
+  return results;
 };
