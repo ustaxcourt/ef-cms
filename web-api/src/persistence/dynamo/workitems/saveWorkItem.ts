@@ -9,13 +9,13 @@ import { put } from '../../dynamodbClientService';
  * @param {object} providers.workItem the work item data
  * @returns {Promise} resolves upon completion of persistence request
  */
-export const saveWorkItem = ({
+export const saveWorkItem = async ({
   applicationContext,
   workItem,
 }: {
   applicationContext: IApplicationContext;
   workItem: RawWorkItem;
-}) => {
+}): Promise<void> => {
   const box =
     workItem.inProgress || workItem.caseIsInProgress ? 'inProgress' : 'inbox';
 
@@ -28,7 +28,7 @@ export const saveWorkItem = ({
       ? `section|${box}|${workItem.section}`
       : undefined;
 
-  return put({
+  await put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,
       gsiSectionBox,

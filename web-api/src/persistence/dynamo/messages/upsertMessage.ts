@@ -8,7 +8,7 @@ export const upsertMessage = async ({
 }: {
   applicationContext: IApplicationContext;
   message: RawMessage;
-}) => {
+}): Promise<void> => {
   let gsiUserBox, gsiSectionBox;
 
   if (!message.completedAt) {
@@ -26,7 +26,7 @@ export const upsertMessage = async ({
     await putMessageInCompletedBox({ applicationContext, message });
   }
 
-  return put({
+  await put({
     Item: {
       ...message,
       gsi1pk: `message|${message.parentMessageId}`,
@@ -45,7 +45,7 @@ const putMessageInOutbox = async ({
 }: {
   applicationContext: IApplicationContext;
   message: RawMessage;
-}) => {
+}): Promise<void> => {
   const sk = message.createdAt;
   const ttl = calculateTimeToLive({
     numDays: 8,
@@ -78,7 +78,7 @@ const putMessageInCompletedBox = async ({
 }: {
   applicationContext: IApplicationContext;
   message: RawMessage;
-}) => {
+}): Promise<void> => {
   const ttl = calculateTimeToLive({
     numDays: 8,
     timestamp: message.completedAt!,

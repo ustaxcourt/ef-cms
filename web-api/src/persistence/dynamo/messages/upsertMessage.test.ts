@@ -56,7 +56,7 @@ describe('upsertMessage', () => {
       isCompleted: true,
     };
 
-    it('puts the message in the completed of the user who completed it', async () => {
+    it('puts the message in the completed box of the user who completed it', async () => {
       await upsertMessage({
         applicationContext,
         message: completedMessage,
@@ -69,7 +69,7 @@ describe('upsertMessage', () => {
       });
     });
 
-    it('puts the message in the completed of the section that completed it', async () => {
+    it('puts the message in the completed box of the section that completed it', async () => {
       await upsertMessage({
         applicationContext,
         message: completedMessage,

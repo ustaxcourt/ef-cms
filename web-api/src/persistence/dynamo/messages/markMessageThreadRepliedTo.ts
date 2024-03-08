@@ -15,7 +15,7 @@ export const markMessageThreadRepliedTo = async ({
 }: {
   applicationContext: IApplicationContext;
   parentMessageId: string;
-}) => {
+}): Promise<void> => {
   const messages = await getMessageThreadByParentId({
     applicationContext,
     parentMessageId,
