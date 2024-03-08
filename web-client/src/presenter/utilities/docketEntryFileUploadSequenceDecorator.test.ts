@@ -9,6 +9,8 @@ describe('fileUploadSequenceDecorator', () => {
     expect(result).toMatchObject([
       expect.any(Function),
       expect.any(Function),
+      expect.any(Function),
+      expect.any(Function),
       {
         error: [expect.any(Function)],
         success: [

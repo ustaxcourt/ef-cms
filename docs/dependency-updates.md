@@ -12,7 +12,6 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 note: we have 3 package.json files, be sure to update them all
   - ./package.json
-  - ./cognito-triggers-sls/package.json
   - ./web-api/runtimes/puppeteer/package.json
 
 1. `npm outdated`: Informs us of minor and major version updates that we need to update manually. For major updates, there are often breaking API changes that require refactoring.
@@ -88,10 +87,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### @aws-sdk/client-dynamodb and @aws-sdk/client-cognito-identity-provider
 
 - Left locked to 3.490.0 because they are causing websocket and cognito credential issues, respectively. Further investigation pending, maybe be related to this [urgent issue](https://github.com/aws/aws-sdk-js-v3/issues/5749)
-
-### artillery
-
-Used as dev dep for load testing. At version 2.x.x dependent package `ip` contains vulnerability to SSRF attack. Audit will tell you to downgrade to 1.7.9 but this causes even more dependent package issues. Recommendation is to continue to update this package, hopefully they'll update their dependencies. The risk for this attack vector is low. 
 
 ## Incrementing the Node Cache Key Version
 

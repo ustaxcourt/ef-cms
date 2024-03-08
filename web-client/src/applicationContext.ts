@@ -28,7 +28,6 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
-import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser, User } from '../../shared/src/business/entities/User';
@@ -117,8 +116,6 @@ import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/c
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/fileCourtIssuedDocketEntryProxy';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
-import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
-import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
 import { forgotPasswordInteractor } from '@shared/proxies/auth/forgotPasswordProxy';
 import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
@@ -140,6 +137,7 @@ import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forw
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
+import { generateDocumentIds } from '../../shared/src/business/useCases/generateDocumentIds';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
@@ -228,7 +226,6 @@ import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/t
 import { getTrialSessionsForJudgeActivityReportInteractor } from '../../shared/src/proxies/reports/getTrialSessionsForJudgeActivityReportProxy';
 import { getTrialSessionsForJudgeInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsForJudgeProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
-import { getUserByIdInteractor } from '../../shared/src/proxies/users/getUserByIdProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { getUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteProxy';
 import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
@@ -439,12 +436,11 @@ const allUseCases = {
   fileCourtIssuedDocketEntryInteractor,
   fileCourtIssuedOrderInteractor,
   fileExternalDocumentInteractor,
-  filePetitionFromPaperInteractor,
-  filePetitionInteractor,
   forgotPasswordInteractor,
   forwardMessageInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
+  generateDocumentIds,
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generatePDFFromJPGDataInteractor,
@@ -509,7 +505,6 @@ const allUseCases = {
   getTrialSessionsForJudgeActivityReportInteractor,
   getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
-  getUserByIdInteractor,
   getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
   getUserInteractor,
@@ -657,9 +652,6 @@ const applicationContext = {
   },
   getCurrentUserToken,
   getEnvironment,
-  getError: e => {
-    return ErrorFactory.getError(e);
-  },
   getFileReaderInstance: () => new FileReader(),
   getHttpClient,
   getLogger: () => ({

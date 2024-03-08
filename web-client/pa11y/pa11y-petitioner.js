@@ -43,6 +43,7 @@ module.exports = [
       'wait for element label#hasIrsNotice-0 to be visible',
       'click element label#hasIrsNotice-0',
       'wait for .case-type-select to be visible',
+      'wait for element label#atp-file-upload-label to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for Yes notice',
     url: 'http://localhost:1234/',

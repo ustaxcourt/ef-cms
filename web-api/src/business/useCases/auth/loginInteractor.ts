@@ -1,4 +1,7 @@
-import { ChallengeNameType } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AdminCreateUserCommandInput,
+  ChallengeNameType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import {
   InvalidRequest,
   NotFoundError,
@@ -41,6 +44,7 @@ export const loginInteractor = async (
       error: err,
       sendAccountConfirmation: true,
     });
+    throw err;
   }
 };
 
@@ -55,13 +59,17 @@ export async function authErrorHandling(
     email: string;
     sendAccountConfirmation: boolean;
   },
-): Promise<never> {
+): Promise<void> {
   if (
     error.name === 'InvalidPasswordException' ||
     error.name === 'NotAuthorizedException' ||
     error.name === 'UserNotFoundException'
   ) {
-    if (error?.message?.includes('Password attempts exceeded')) {
+    if (error.message?.includes('Temporary password has expired')) {
+      await resendTemporaryPassword(applicationContext, { email });
+      throw new UnauthorizedError('User temporary password expired'); //403
+    }
+    if (error.message?.includes('Password attempts exceeded')) {
       throw new Error('Password attempts exceeded');
     }
     throw new UnidentifiedUserError('Invalid Username or Password'); //401 Security Concern do not reveal if the user account does not exist or if they have an incorrect password.
@@ -76,18 +84,16 @@ export async function authErrorHandling(
 
   if (error.name === 'UserNotConfirmedException') {
     if (sendAccountConfirmation) {
-      await resendAccountConfirmation(applicationContext, email);
+      await resendAccountConfirmation(applicationContext, { email });
     }
 
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
-
-  throw error;
 }
 
 async function resendAccountConfirmation(
   applicationContext: ServerApplicationContext,
-  email: string,
+  { email }: { email: string },
 ): Promise<void> {
   const user = await applicationContext
     .getUserGateway()
@@ -105,4 +111,22 @@ async function resendAccountConfirmation(
       email,
       userId: user.userId,
     });
+}
+
+export async function resendTemporaryPassword(
+  applicationContext: ServerApplicationContext,
+  { email }: { email: string },
+): Promise<void> {
+  const input: AdminCreateUserCommandInput = {
+    DesiredDeliveryMediums: ['EMAIL'],
+    MessageAction: 'RESEND',
+    UserPoolId: applicationContext.environment.userPoolId,
+    Username: email,
+  };
+
+  if (process.env.STAGE !== 'prod') {
+    input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+  }
+
+  await applicationContext.getCognito().adminCreateUser(input);
 }

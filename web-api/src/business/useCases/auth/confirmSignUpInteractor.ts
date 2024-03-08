@@ -14,9 +14,9 @@ export const confirmSignUpInteractor = async (
     .getAccountConfirmationCode(applicationContext, { userId });
 
   if (accountConfirmationCode !== confirmationCode) {
-    applicationContext.logger.info(
-      'action: user_did_not_confirm_account_within_24hr',
-    );
+    applicationContext.logger.info('User did not confirm account within 24hr', {
+      email,
+    });
     throw new InvalidRequest('Confirmation code expired');
   }
 

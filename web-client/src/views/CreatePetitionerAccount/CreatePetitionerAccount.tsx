@@ -13,7 +13,7 @@ export const CreatePetitionerAccount = connect({}, () => {
           <div className="grid-row">
             <div className="grid-col-12">
               <ErrorNotification />
-              <WarningNotification />
+              <WarningNotification isDismissible={false} />
             </div>
           </div>
 

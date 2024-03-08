@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {Function} returns a callback function that sets currentViewMetadata.documentUploadMode on state
  */
 export const setDocumentUploadModeAction =
-  documentUploadMode =>
+  (documentUploadMode?: string) =>
   /**
    * sets the value of state.currentViewMetadata.documentUploadMode entry to the value passed in
    * @param {object} providers the providers object
