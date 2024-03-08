@@ -35,8 +35,7 @@ export const forgotPasswordInteractor = async (
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
 
-  await applicationContext.getCognito().forgotPassword({
-    ClientId: applicationContext.environment.cognitoClientId,
-    Username: email,
+  await applicationContext.getUserGateway().forgotPassword(applicationContext, {
+    email,
   });
 };
