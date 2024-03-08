@@ -59,14 +59,11 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
 
 export const genericHandler = (awsEvent, cb, options = {}) => {
   return handle(awsEvent, async () => {
-    console.log('a');
     const user = options.user || getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     const applicationContext =
       options.applicationContext ||
       createApplicationContext(user, awsEvent.logger);
-
-    console.log('b');
 
     delete awsEvent.logger;
 
@@ -79,11 +76,8 @@ export const genericHandler = (awsEvent, cb, options = {}) => {
       const { bypassMaintenanceCheck } = options;
 
       if (!bypassMaintenanceCheck) {
-        console.log('d');
-
         await checkMaintenanceMode({ applicationContext });
       }
-      console.log('c');
 
       const results = await cb({
         applicationContext,

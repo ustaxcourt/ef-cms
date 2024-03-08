@@ -1,15 +1,18 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
 import { genericHandler } from '../../genericHandler';
-import { getAsyncGateway } from '@web-api/asyncGateway';
 
-export const batchDownloadTrialSessionLambda = (event: APIGatewayProxyEvent) =>
+/**
+ * batch download trial session
+ *
+ * @param {object} event the AWS event object
+ * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
+ */
+export const batchDownloadTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || event.path;
-    const user = applicationContext.getCurrentUser();
 
-    await getAsyncGateway().runAsync(applicationContext, {
-      payload: { trialSessionId },
-      type: 'BATCH_DOWNLOAD_TRIAL_SESSION',
-      user,
-    });
+    return await applicationContext
+      .getUseCases()
+      .batchDownloadTrialSessionInteractor(applicationContext, {
+        trialSessionId,
+      });
   });

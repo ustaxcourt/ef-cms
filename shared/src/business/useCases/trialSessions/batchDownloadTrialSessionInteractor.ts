@@ -23,10 +23,9 @@ const batchDownloadTrialSessionInteractorHelper = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  // if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
-  console.log('calling getTrialSessionById');
+  if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const trialSessionDetails = await applicationContext
     .getPersistenceGateway()
@@ -38,8 +37,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
   if (!trialSessionDetails) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
-
-  console.log('calling getCalendaredCasesForTrialSession');
 
   let allSessionCases = await applicationContext
     .getPersistenceGateway()
@@ -76,7 +73,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
         caseTitle,
       };
     });
-  console.log('doing stuff');
 
   for (const caseToBatch of batchableSessionCases) {
     const docketEntriesWithFileAttached = caseToBatch.docketEntries.filter(
@@ -117,13 +113,9 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
   };
 
-  console.log('doing onDocketRecordCreation');
-
   await onDocketRecordCreation({ docketNumber: undefined });
 
   const generateDocumentAndDocketRecordForCase = async sessionCase => {
-    console.log('doing generateDocumentAndDocketRecordForCase');
-
     const result = await applicationContext
       .getUseCases()
       .generateDocketRecordPdfInteractor(applicationContext, {
@@ -198,8 +190,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
   };
 
-  console.log('doing zipDocuments');
-
   await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
     extraFileNames,
@@ -213,8 +203,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
     zipName,
   });
 
-  console.log('doing getDownloadPolicyUrl', zipName);
-
   const { url } = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
@@ -222,9 +210,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
       key: zipName,
       useTempBucket: true,
     });
-  console.log('url', url);
-
-  console.log('sending last notification');
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
