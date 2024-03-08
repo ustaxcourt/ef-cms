@@ -156,7 +156,7 @@ describe('loginInteractor', () => {
       },
     );
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockRejectedValue(mockExpiredTemporaryPasswordExpiredError);
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
       email: mockEmail,
