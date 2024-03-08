@@ -166,6 +166,7 @@ describe('createUserInteractor', () => {
 
   it('should create a legacyJudge user and disable the user', async () => {
     const mockUser = {
+      email: 'test@example.com',
       name: 'Test Legacy Judge',
       role: ROLES.legacyJudge,
       userId: '845b7d39-8fae-4c2f-893c-3c829598bc71',
@@ -178,6 +179,7 @@ describe('createUserInteractor', () => {
     await createUserInteractor(applicationContext, {
       user: {
         barNumber: 'LR1234',
+        email: 'test@example.com',
         entityName: 'User',
         name: 'Jesse Pinkman',
         password: 'P@ssw0rd',
@@ -191,7 +193,7 @@ describe('createUserInteractor', () => {
     ).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
-        userId: mockUser.userId,
+        email: mockUser.email,
       }),
     );
   });
