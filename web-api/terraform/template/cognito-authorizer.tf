@@ -1,5 +1,5 @@
 
-module "cognito_authorizer_lambda_east" {
+module "cognito_authorizer_lambda_east" { // TODO 1256: move inside of API module
   source         = "../api/lambda"
   handler        = "./web-api/terraform/template/lambdas/cognito-authorizer.ts"
   handler_method = "handler"
@@ -21,7 +21,7 @@ module "cognito_authorizer_lambda_east" {
   }
 }
 
-module "cognito_authorizer_lambda_west" {
+module "cognito_authorizer_lambda_west" { // TODO 1256: move inside of API module
   source         = "../api/lambda"
   handler        = "./web-api/terraform/template/lambdas/cognito-authorizer.ts"
   handler_method = "handler"
