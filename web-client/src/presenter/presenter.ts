@@ -591,8 +591,7 @@ export const presenterSequences = {
     associatePrivatePractitionerWithCaseSequence as unknown as Function,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
-  batchDownloadDocketEntriesSequence:
-    batchDownloadDocketEntriesSequence as unknown as Function,
+  batchDownloadDocketEntriesSequence,
   batchDownloadErrorSequence: batchDownloadErrorSequence as unknown as Function,
   batchDownloadReadySequence: batchDownloadReadySequence as unknown as Function,
   batchDownloadTrialSessionSequence:
