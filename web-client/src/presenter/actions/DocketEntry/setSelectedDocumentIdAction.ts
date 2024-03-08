@@ -7,15 +7,9 @@ export const setSelectedDocumentIdAction = ({
   props,
   store,
 }: ActionProps<DownloadDocketEntryRequestType>) => {
-  // console.log('props', props);
   const { docketEntries } = props;
   let documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  // console.log(
-  //   'documentsSelectedForDownload in action',
-  //   documentsSelectedForDownload,
-  // );
 
-  // todo: Is there a better way to represent multi-selection that checking the length of the array?
   if (docketEntries.length > 1) {
     if (isEqual(docketEntries, documentsSelectedForDownload)) {
       store.set(state.documentsSelectedForDownload, []);

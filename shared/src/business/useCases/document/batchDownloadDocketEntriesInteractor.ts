@@ -21,6 +21,7 @@ export type DownloadDocketEntryRequestType = {
   docketNumber: string;
   docketEntries: DocumentsToDownloadInfoType[];
   clientConnectionId: string;
+  printableDocketRecordFileId?: string;
 };
 
 export const batchDownloadDocketEntriesInteractor = async (
@@ -28,37 +29,55 @@ export const batchDownloadDocketEntriesInteractor = async (
   requestParams: DownloadDocketEntryRequestType,
 ) => {
   const user = applicationContext.getCurrentUser();
-  console.log('requestParams in BE', requestParams);
   if (!isAuthorized(user, ROLE_PERMISSIONS.GET_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let s3Ids: string[] = [];
-  let fileNames: string[] = [];
+  const {
+    caseCaption,
+    clientConnectionId,
+    docketEntries,
+    docketNumber,
+    printableDocketRecordFileId,
+  } = requestParams;
 
-  const zipName = 'case-documents.zip';
-  const { caseCaption, clientConnectionId, docketEntries, docketNumber } =
-    requestParams;
+  const s3Ids: string[] = [];
+  const fileNames: string[] = [];
+  const extraFileNames: string[] = [];
+  const extraFiles: string[] = [];
+  const numberOfFilesToBatch = s3Ids.length;
+  const caseTitle = Case.getCaseTitle(caseCaption);
+  const caseFolder = `${docketNumber}, ${caseTitle}`;
 
-  try {
-    await Promise.all(
-      docketEntries.map(docEntry => {
-        const docId = docEntry.docketEntryId;
-        const filename = generateValidDocketEntryFilename(docEntry); // move to utility function
-        const caseTitle = Case.getCaseTitle(caseCaption);
-        const caseFolder = `${docketNumber}, ${caseTitle}`;
-        const pdfTitle = `${caseFolder}/${filename}`;
+  const zipName = `${caseFolder}.zip`;
 
-        s3Ids.push(docId);
-        fileNames.push(pdfTitle);
-      }),
-    );
-  } catch (e) {
-    applicationContext.logger.error('Error fetching documents', { error: e });
-    console.error('ERROR FETCHING documents', e);
+  if (printableDocketRecordFileId) {
+    const pdfTitle = `${caseFolder}/${'printableDocketRecordname.pdf'}`;
+
+    const printableDocketRecordPdf: any = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: printableDocketRecordFileId,
+        useTempBucket: true,
+      });
+    extraFiles.push(printableDocketRecordPdf);
+    extraFileNames.push(pdfTitle);
   }
 
-  const numberOfFilesToBatch = s3Ids.length;
+  docketEntries.forEach(docEntry => {
+    const { docketEntryId, documentTitle, filingDate, index } = docEntry;
+    const filename = generateValidDocketEntryFilename({
+      documentTitle,
+      filingDate,
+      index,
+    });
+
+    const pdfTitle = `${caseFolder}/${filename}`;
+
+    s3Ids.push(docketEntryId);
+    fileNames.push(pdfTitle);
+  });
 
   const onEntry = entryData => {
     applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -67,6 +86,7 @@ export const batchDownloadDocketEntriesInteractor = async (
       message: {
         action: 'batch_download_entry',
         ...entryData,
+        numberOfDocketRecordsToGenerate: 0,
         numberOfFilesToBatch,
       },
       userId: user.userId,
@@ -115,8 +135,8 @@ export const batchDownloadDocketEntriesInteractor = async (
 
   await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
-    extraFileNames: [],
-    extraFiles: [],
+    extraFileNames,
+    extraFiles,
     fileNames,
     onEntry,
     onError,

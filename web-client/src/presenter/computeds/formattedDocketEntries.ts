@@ -376,7 +376,8 @@ export const formattedDocketEntries = (
   // *Needs to be computed in anticiapation of (isMinuteEntry being removed from DocketEntry.ts) https://github.com/ustaxcourt/ef-cms/pull/4702
 
   const selectableDocumentsCount = docketEntriesFormatted.filter(
-    entry => !entry.isMinuteEntry && entry.isFileAttached,
+    entry =>
+      !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord,
   ).length;
   const documentsSelectedForDownloadCount = docketEntriesFormatted.filter(
     entry => entry.isDocumentSelected,
@@ -399,7 +400,8 @@ export const formattedDocketEntries = (
     d => d.isOnDocketRecord,
   );
 
-  result.caseMetaDataForRequest = { // find better way to export, good for now
+  result.caseMetaDataForRequest = {
+    // find better way to export, good for now
     caseCaption,
     docketNumber,
   };

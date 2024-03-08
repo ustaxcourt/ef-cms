@@ -4,12 +4,13 @@ export const batchDownloadDocketEntriesAction = async ({
   applicationContext,
   get,
   path,
-}: ActionProps) => {
+  props,
+}: ActionProps<{
+  fileId: string;
+}>) => {
   const docketEntries = get(state.documentsSelectedForDownload);
-
   const caseDetail = get(state.caseDetail);
   const clientConnectionId = get(state.clientConnectionId);
-  console.log('clientConnectionId', clientConnectionId);
   const { caseCaption, docketNumber } = caseDetail;
 
   try {
@@ -20,6 +21,7 @@ export const batchDownloadDocketEntriesAction = async ({
         clientConnectionId,
         docketEntries,
         docketNumber,
+        printableDocketRecordFileId: props.fileId,
       });
 
     return path.success();
