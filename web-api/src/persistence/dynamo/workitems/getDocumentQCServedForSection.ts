@@ -12,9 +12,8 @@ export const getDocumentQCServedForSection = ({
   applicationContext: IApplicationContext;
   section: string;
 }) => {
-  const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateISODate({
-    dateString: startOfDay,
+    dateString: createISODateAtStartOfDayEST(),
     howMuch: -7,
     units: 'days',
   });
