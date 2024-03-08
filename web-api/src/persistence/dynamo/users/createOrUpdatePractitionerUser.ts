@@ -141,15 +141,11 @@ export const createOrUpdatePractitionerUser = async ({
       userId = userIdAttribute?.Value!;
     }
   } else {
-    await applicationContext.getCognito().adminUpdateUserAttributes({
-      UserAttributes: [
-        {
-          Name: 'custom:role',
-          Value: user.role,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: userEmail,
+    await applicationContext.getUserGateway().updateUser(applicationContext, {
+      attributesToUpdate: {
+        role: user.role,
+      },
+      email: userEmail,
     });
 
     // eslint-disable-next-line prefer-destructuring
