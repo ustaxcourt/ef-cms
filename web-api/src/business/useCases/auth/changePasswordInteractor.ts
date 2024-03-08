@@ -43,18 +43,19 @@ export const changePasswordInteractor = async (
     }
 
     if (tempPassword) {
-      const initiateAuthResult = await applicationContext
-        .getUserGateway()
-        .initiateAuth(applicationContext, {
-          email,
-          password: tempPassword,
-        });
+      let initiateAuthResult;
 
-      if (
-        initiateAuthResult.ChallengeName !==
-        ChallengeNameType.NEW_PASSWORD_REQUIRED
-      ) {
-        throw new Error('User is not in `FORCE_CHANGE_PASSWORD` state');
+      try {
+        initiateAuthResult = await applicationContext
+          .getUserGateway()
+          .initiateAuth(applicationContext, {
+            email,
+            password: tempPassword,
+          });
+      } catch (err: any) {
+        if (err.name !== 'NewPasswordRequired') {
+          throw new Error('User is not in `FORCE_CHANGE_PASSWORD` state');
+        }
       }
 
       const result = await applicationContext
@@ -66,7 +67,7 @@ export const changePasswordInteractor = async (
             USERNAME: email,
           },
           ClientId: applicationContext.environment.cognitoClientId,
-          Session: initiateAuthResult.Session,
+          Session: initiateAuthResult.session,
         });
 
       if (

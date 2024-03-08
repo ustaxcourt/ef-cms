@@ -1,6 +1,4 @@
 import {
-  ChallengeNameType,
-  InitiateAuthCommandOutput,
   InvalidPasswordException,
   NotAuthorizedException,
   UserNotConfirmedException,
@@ -17,13 +15,11 @@ describe('loginInteractor', () => {
   it('should throw an error when the user attempts to log in and they are in a NEW_PASSWORD_REQUIRED state', async () => {
     const mockEmail = 'petitioner@example.com';
     const mockPassword = 'MyPa$Sword!';
-    const mockNewPasswordRequiredResponse: InitiateAuthCommandOutput = {
-      $metadata: {},
-      ChallengeName: ChallengeNameType.NEW_PASSWORD_REQUIRED,
-    };
+    const mockNewPasswordRequiredError = new Error('NewPasswordRequired');
+    mockNewPasswordRequiredError.name = 'NewPasswordRequired';
     applicationContext
       .getUserGateway()
-      .initiateAuth.mockResolvedValue(mockNewPasswordRequiredResponse);
+      .initiateAuth.mockRejectedValue(mockNewPasswordRequiredError);
 
     await expect(
       loginInteractor(applicationContext, {
@@ -111,9 +107,11 @@ describe('loginInteractor', () => {
   it('should throw an error when initiateAuth does not return access, id, and refresh tokens', async () => {
     const mockEmail = 'petitioner@example.com';
     const mockPassword = 'MyPa$Sword!';
+    const initiateAuthError = new Error('InitiateAuthError');
+    initiateAuthError.name = 'InitiateAuthError';
     applicationContext
       .getUserGateway()
-      .initiateAuth.mockResolvedValue({ AuthenticationResult: {} });
+      .initiateAuth.mockRejectedValue(initiateAuthError);
 
     await expect(
       loginInteractor(applicationContext, {
@@ -208,13 +206,10 @@ describe('loginInteractor', () => {
   it('should return the access, id, refresh tokens to the user when the user is successfully authenticated', async () => {
     const mockEmail = 'petitioner@example.com';
     const mockPassword = 'MyPa$Sword!';
-    const mockSuccessFullLoginResponse: InitiateAuthCommandOutput = {
-      $metadata: {},
-      AuthenticationResult: {
-        AccessToken: 'TEST_ACCESS_TOKEN',
-        IdToken: 'TEST_ID_TOKEN',
-        RefreshToken: 'TEST_REFRESH_TOKEN',
-      },
+    const mockSuccessFullLoginResponse = {
+      accessToken: 'TEST_ACCESS_TOKEN',
+      idToken: 'TEST_ID_TOKEN',
+      refreshToken: 'TEST_REFRESH_TOKEN',
     };
     applicationContext
       .getUserGateway()
