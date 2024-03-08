@@ -4,6 +4,7 @@ import { forgotPassword } from '@web-api/gateways/user/forgotPassword';
 import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { initiateAuth } from '@web-api/gateways/user/initiateAuth';
 import { renewIdToken } from '@web-api/gateways/user/renewIdToken';
+import { updateUser } from '@web-api/gateways/user/updateUser';
 
 export const getUserGateway = () => ({
   changePassword,
@@ -12,4 +13,5 @@ export const getUserGateway = () => ({
   getUserByEmail,
   initiateAuth,
   renewIdToken,
+  updateUser,
 });
