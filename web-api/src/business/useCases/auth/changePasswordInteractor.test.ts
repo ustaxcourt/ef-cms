@@ -36,14 +36,13 @@ describe('changePasswordInteractor', () => {
   });
 
   describe('when the user is attempting to log in with a temporary password', () => {
-    let mockInitiateAuthResponse: InitiateAuthResponse;
+    let mockInitiateAuthResponse;
     let mockRespondToAuthChallengeResponse: RespondToAuthChallengeResponse;
     let mockUserWithPendingEmail: UserRecord;
 
     beforeEach(() => {
       mockInitiateAuthResponse = {
-        ChallengeName: ChallengeNameType.NEW_PASSWORD_REQUIRED,
-        Session: '0943fbef-a573-484a-8164-a1a5a35f8f3e',
+        session: '0943fbef-a573-484a-8164-a1a5a35f8f3e',
       };
 
       mockRespondToAuthChallengeResponse = {
@@ -80,12 +79,11 @@ describe('changePasswordInteractor', () => {
     });
 
     it('should throw an error when the user is NOT in NEW_PASSWORD_REQUIRED state', async () => {
-      mockInitiateAuthResponse = {
-        AuthenticationResult: {},
-      };
+      const mockIntiateAuthError = new Error('NewPasswordRequired');
+      mockIntiateAuthError.name = 'NewPasswordRequired';
       applicationContext
         .getUserGateway()
-        .initiateAuth.mockResolvedValue(mockInitiateAuthResponse);
+        .initiateAuth.mockRejectedValue(mockInitiateAuthResponse);
 
       await expect(
         changePasswordInteractor(applicationContext, {
@@ -121,7 +119,7 @@ describe('changePasswordInteractor', () => {
           USERNAME: mockEmail,
         },
         ClientId: applicationContext.environment.cognitoClientId,
-        Session: mockInitiateAuthResponse.Session,
+        Session: mockInitiateAuthResponse.session,
       });
     });
 

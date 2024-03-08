@@ -1,7 +1,4 @@
-import {
-  AdminCreateUserCommandInput,
-  ChallengeNameType,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { AdminCreateUserCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import {
   InvalidRequest,
   NotFoundError,
@@ -15,35 +12,20 @@ export const loginInteractor = async (
   { email, password }: { email: string; password: string },
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
   try {
-    const result = await applicationContext
+    return await applicationContext
       .getUserGateway()
       .initiateAuth(applicationContext, { email, password });
-
-    if (result?.ChallengeName === ChallengeNameType.NEW_PASSWORD_REQUIRED) {
-      const PasswordChangeError = new Error('NewPasswordRequired');
-      PasswordChangeError.name = 'NewPasswordRequired';
-      throw PasswordChangeError;
-    }
-
-    if (
-      !result.AuthenticationResult?.AccessToken ||
-      !result.AuthenticationResult?.IdToken ||
-      !result.AuthenticationResult?.RefreshToken
-    ) {
+  } catch (err: any) {
+    if (err.name === 'InitiateAuthError') {
       throw new Error('Unsuccessful authentication');
     }
 
-    return {
-      accessToken: result.AuthenticationResult.AccessToken,
-      idToken: result.AuthenticationResult.IdToken,
-      refreshToken: result.AuthenticationResult.RefreshToken,
-    };
-  } catch (err: any) {
     await authErrorHandling(applicationContext, {
       email,
       error: err,
       sendAccountConfirmation: true,
     });
+
     throw err;
   }
 };
