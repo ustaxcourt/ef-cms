@@ -24,17 +24,17 @@ export const submitChangePasswordSequence = [
         {
           error: [setAlertErrorAction],
           success: [
-            clearAuthStateAction,
             setTokenAction,
             getUserAction,
             setUserAction,
             setUserPermissionsAction,
+            clearAuthStateAction,
             navigateToPathAction,
           ],
           unconfirmedAccount: [
-            clearAuthStateAction,
             setAlertErrorAction,
             setSaveAlertsForNavigationAction,
+            clearAuthStateAction,
             navigateToLoginAction,
           ],
         },
