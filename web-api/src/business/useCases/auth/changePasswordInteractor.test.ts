@@ -308,7 +308,7 @@ describe('changePasswordInteractor', () => {
       });
 
       expect(
-        applicationContext.getCognito().confirmForgotPassword,
+        applicationContext.getUserGateway().confirmForgotPassword,
       ).toHaveBeenCalledWith({
         ClientId: applicationContext.environment.cognitoClientId,
         ConfirmationCode: mockCode,

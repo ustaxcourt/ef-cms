@@ -8,7 +8,6 @@ export async function initiateAuth(
   accessToken: string;
   idToken: string;
   refreshToken: string;
-  session: string | undefined;
 }> {
   const result = await applicationContext.getCognito().initiateAuth({
     AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
@@ -33,6 +32,5 @@ export async function initiateAuth(
     accessToken: result.AuthenticationResult.AccessToken,
     idToken: result.AuthenticationResult.IdToken,
     refreshToken: result.AuthenticationResult.RefreshToken,
-    session: result.Session,
   };
 }
