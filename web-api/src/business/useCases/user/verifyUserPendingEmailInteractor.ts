@@ -50,19 +50,11 @@ export const verifyUserPendingEmailInteractor = async (
     },
   );
 
-  await applicationContext.getCognito().adminUpdateUserAttributes({
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: updatedUser.email,
-      },
-      {
-        Name: 'email_verified',
-        Value: 'true',
-      },
-    ],
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: user.email,
+  await applicationContext.getUserGateway().updateUser(applicationContext, {
+    attributesToUpdate: {
+      email: updatedUser.email,
+    },
+    email: user.email,
   });
 
   await applicationContext.getWorkerGateway().queueWork(applicationContext, {
