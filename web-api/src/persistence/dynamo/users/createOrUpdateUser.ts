@@ -181,25 +181,21 @@ export const createOrUpdateUser = async ({
       UserPoolId: userPoolId,
       Username: user.email,
     });
-    // replace sub here
+
     userId = response.User!.Username;
   } else {
     const response = await applicationContext.getCognito().adminGetUser({
       UserPoolId: userPoolId,
       Username: user.email,
     });
-    await applicationContext.getCognito().adminUpdateUserAttributes({
-      UserAttributes: [
-        {
-          Name: 'custom:role',
-          Value: user.role,
-        },
-      ],
-      UserPoolId: userPoolId,
-      // and here
-      Username: response.Username,
+
+    await applicationContext.getUserGateway().updateUser(applicationContext, {
+      attributesToUpdate: {
+        role: user.role,
+      },
+      email: user.email,
     });
-    //and here
+
     userId = response.Username;
   }
 

@@ -58,7 +58,7 @@ describe('createOrUpdateUser', () => {
     });
 
     expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
+      applicationContext.getUserGateway().updateUser,
     ).not.toHaveBeenCalled();
   });
 
@@ -77,9 +77,7 @@ describe('createOrUpdateUser', () => {
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
-    ).toHaveBeenCalled();
+    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalled();
   });
 
   describe('createUserRecords', () => {
