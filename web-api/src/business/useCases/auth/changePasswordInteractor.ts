@@ -128,12 +128,20 @@ export const changePasswordInteractor = async (
         throw new NotFoundError(`User not found with email: ${email}`);
       }
 
-      await applicationContext.getCognito().confirmForgotPassword({
-        ClientId: applicationContext.environment.cognitoClientId,
-        ConfirmationCode: code,
-        Password: password,
-        Username: email,
-      });
+      if (!code) {
+        applicationContext.logger.info(
+          `Unable to change password for ${email}. No code was provided.`,
+        );
+        throw new Error('Unable to change password');
+      }
+
+      await applicationContext
+        .getUserGateway()
+        .changePassword(applicationContext, {
+          code,
+          email,
+          newPassword: password,
+        });
 
       return await applicationContext
         .getUserGateway()
