@@ -1,4 +1,3 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   ROLE_PERMISSIONS,
@@ -51,9 +50,7 @@ export const verifyUserPendingEmailInteractor = async (
     },
   );
 
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
-  await cognito.adminUpdateUserAttributes({
+  await applicationContext.getCognito().adminUpdateUserAttributes({
     UserAttributes: [
       {
         Name: 'email',

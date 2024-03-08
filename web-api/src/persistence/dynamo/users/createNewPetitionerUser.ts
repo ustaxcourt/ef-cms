@@ -1,8 +1,5 @@
 import * as client from '../../dynamodbClientService';
-import {
-  AdminCreateUserCommandInput,
-  CognitoIdentityProvider,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { AdminCreateUserCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 
@@ -72,9 +69,7 @@ export const createNewPetitionerUser = async ({
     input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
   }
 
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
-  await cognito.adminCreateUser(input);
+  await applicationContext.getCognito().adminCreateUser(input);
 
   const newUser: RawUser = await createUserRecords({
     applicationContext,

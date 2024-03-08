@@ -1,9 +1,6 @@
-import {
-  CognitoIdentityProvider,
-  UserStatusType,
-} from '@aws-sdk/client-cognito-identity-provider';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import { resendTemporaryPassword } from '@web-api/business/useCases/auth/loginInteractor';
 
 export const forgotPasswordInteractor = async (
@@ -14,8 +11,6 @@ export const forgotPasswordInteractor = async (
     email: string;
   },
 ): Promise<void> => {
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
   const user = await applicationContext
     .getUserGateway()
     .getUserByEmail(applicationContext, { email });
@@ -40,7 +35,7 @@ export const forgotPasswordInteractor = async (
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
 
-  await cognito.forgotPassword({
+  await applicationContext.getCognito().forgotPassword({
     ClientId: applicationContext.environment.cognitoClientId,
     Username: email,
   });

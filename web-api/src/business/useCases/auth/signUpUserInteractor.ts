@@ -1,10 +1,7 @@
-import {
-  CognitoIdentityProvider,
-  UserStatusType,
-} from '@aws-sdk/client-cognito-identity-provider';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 
 export type SignUpUserResponse = {
   email: string;
@@ -25,15 +22,15 @@ export const signUpUserInteractor = async (
     };
   },
 ): Promise<SignUpUserResponse> => {
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
   // Temporary code to prevent creation of duplicate accounts while Cognito is still case sensitive.
   // We do not want to allow people to make two accounts for the same email that only differ by casing.
-  const { Users: existingAccounts } = await cognito.listUsers({
-    AttributesToGet: ['email'],
-    Filter: `email = "${user.email}"`,
-    UserPoolId: applicationContext.environment.userPoolId,
-  });
+  const { Users: existingAccounts } = await applicationContext
+    .getCognito()
+    .listUsers({
+      AttributesToGet: ['email'],
+      Filter: `email = "${user.email}"`,
+      UserPoolId: applicationContext.environment.userPoolId,
+    });
 
   if (existingAccounts?.length) {
     const accountUnconfirmed = existingAccounts.some(
@@ -49,7 +46,7 @@ export const signUpUserInteractor = async (
 
   const newUser = new NewPetitionerUser(user).validate().toRawObject();
   const userId = applicationContext.getUniqueId();
-  await cognito.signUp({
+  await applicationContext.getCognito().signUp({
     ClientId: applicationContext.environment.cognitoClientId,
     Password: newUser.password,
     UserAttributes: [

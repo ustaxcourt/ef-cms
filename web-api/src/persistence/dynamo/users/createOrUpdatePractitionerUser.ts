@@ -1,10 +1,8 @@
 import * as client from '../../dynamodbClientService';
-import {
-  AdminCreateUserCommandInput,
-  CognitoIdentityProvider,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { AdminCreateUserCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { isUserAlreadyCreated } from './createOrUpdateUser';
 
 export const createUserRecords = async ({
@@ -61,7 +59,7 @@ export const createOrUpdatePractitionerUser = async ({
   applicationContext,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   user: RawUser;
 }) => {
   let userId = applicationContext.getUniqueId();
@@ -93,8 +91,6 @@ export const createOrUpdatePractitionerUser = async ({
     userPoolId: process.env.USER_POOL_ID as string,
   });
 
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
   if (!userExists) {
     let params: AdminCreateUserCommandInput = {
       DesiredDeliveryMediums: ['EMAIL'],
@@ -124,7 +120,9 @@ export const createOrUpdatePractitionerUser = async ({
       params.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
     }
 
-    const response = await cognito.adminCreateUser(params);
+    const response = await applicationContext
+      .getCognito()
+      .adminCreateUser(params);
 
     if (response?.User?.Username) {
       const userIdAttribute =
@@ -141,12 +139,13 @@ export const createOrUpdatePractitionerUser = async ({
       userId = userIdAttribute?.Value!;
     }
   } else {
-    const response = await cognito.adminGetUser({
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: userEmail,
-    });
+    const response = await applicationContext
+      .getUserGateway()
+      .getUserByEmail(applicationContext, {
+        email: userEmail,
+      });
 
-    await cognito.adminUpdateUserAttributes({
+    await applicationContext.getCognito().adminUpdateUserAttributes({
       UserAttributes: [
         {
           Name: 'custom:role',

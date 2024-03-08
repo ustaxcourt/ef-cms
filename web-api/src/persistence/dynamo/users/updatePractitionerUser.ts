@@ -1,4 +1,3 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { RawUser } from '@shared/business/entities/User';
 import { getUserById } from './getUserById';
 import { updateUserRecords } from './updateUserRecords';
@@ -18,8 +17,7 @@ export const updatePractitionerUser = async ({
   });
 
   try {
-    const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-    await cognito.adminUpdateUserAttributes({
+    await applicationContext.getCognito().adminUpdateUserAttributes({
       UserAttributes: [
         {
           Name: 'custom:role',
