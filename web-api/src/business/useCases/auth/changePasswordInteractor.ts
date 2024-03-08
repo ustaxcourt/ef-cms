@@ -155,6 +155,7 @@ export const changePasswordInteractor = async (
       error: err,
       sendAccountConfirmation: false,
     });
+    throw err;
   }
 };
 

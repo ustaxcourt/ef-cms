@@ -35,20 +35,6 @@ describe('createAccountHelper', () => {
         })?.valid,
       ).toEqual(false);
     });
-
-    it('should return object with invalid flags for all password validation fields', () => {
-      const result = runCompute(createAccountHelper, {
-        state: {
-          form: {
-            password: ' ',
-          },
-        },
-      });
-
-      result.passwordErrors.forEach(error => {
-        expect(error.valid).toEqual(false);
-      });
-    });
   });
 
   describe('confirmPassword', () => {

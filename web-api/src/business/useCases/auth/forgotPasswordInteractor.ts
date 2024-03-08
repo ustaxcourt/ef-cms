@@ -1,10 +1,10 @@
 import {
-  AdminCreateUserCommandInput,
   CognitoIdentityProvider,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { resendTemporaryPassword } from '@web-api/business/useCases/auth/loginInteractor';
 
 export const forgotPasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -36,18 +36,7 @@ export const forgotPasswordInteractor = async (
   }
 
   if (user.accountStatus === UserStatusType.FORCE_CHANGE_PASSWORD) {
-    const input: AdminCreateUserCommandInput = {
-      DesiredDeliveryMediums: ['EMAIL'],
-      MessageAction: 'RESEND',
-      UserPoolId: applicationContext.environment.userPoolId,
-      Username: email,
-    };
-
-    if (process.env.STAGE !== 'prod') {
-      input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
-    }
-
-    await cognito.adminCreateUser(input);
+    await resendTemporaryPassword(applicationContext, { email });
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
 

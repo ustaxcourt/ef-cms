@@ -54,7 +54,6 @@ import { Footer } from './Footer';
 import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
 import { GenericErrorModal } from './GenericErrorModal';
 import { Header } from './Header/Header';
-import { HeaderPublic } from '@web-client/views/Header/HeaderPublic';
 import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { JudgeActivityReport } from './JudgeActivityReport/JudgeActivityReport';
@@ -251,7 +250,7 @@ export const AppComponent = connect(
               Skip to main content
             </a>
             <UsaBanner />
-            {IsPageWithBlueBackground ? <HeaderPublic /> : <Header />}
+            <Header />
           </>
         )}
 

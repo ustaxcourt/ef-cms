@@ -127,7 +127,6 @@ describe('forgotPasswordInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().createUserConfirmation,
     ).not.toHaveBeenCalled();
-
     expect(
       applicationContext.getCognito().adminCreateUser.mock.calls[0][0],
     ).toEqual({

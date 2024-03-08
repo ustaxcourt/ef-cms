@@ -593,7 +593,7 @@ export const baseState = {
   createOrderAddedDocketNumbers: undefined as unknown as string[],
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
-  currentPage: 'Interstitial',
+  currentPage: 'Loading',
   currentViewMetadata: {
     caseDetail: {
       caseDetailInternalTabs: {
@@ -625,7 +625,7 @@ export const baseState = {
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
-    // used for the progress bar shown in modal when uploading files
+    isHavingSystemIssues: false,
     isUploading: false,
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,

@@ -253,4 +253,36 @@ describe('submitLoginAction', () => {
       },
     });
   });
+
+  it('should call the error path with a temporary password expired message when the user submits a temporary password for their account that has expired', async () => {
+    applicationContext.getUseCases().loginInteractor.mockRejectedValue({
+      originalError: { response: { data: 'User temporary password expired' } },
+    });
+
+    await runAction(submitLoginAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        authentication: {
+          form: {
+            code: '',
+            confirmPassword: '',
+            email: testEmail,
+            password: testPassword,
+          },
+          tempPassword: '',
+        },
+      },
+    });
+
+    expect(mockSuccessPath).not.toHaveBeenCalled();
+    expect(mockChangePasswordPath).not.toHaveBeenCalled();
+    expect(mockErrorPath).toHaveBeenCalledWith({
+      alertError: {
+        message: expect.anything(),
+        title: 'Temporary password has expired',
+      },
+    });
+  });
 });

@@ -23,6 +23,7 @@ type TPetitioner = {
   serviceIndicator?: string;
   state: string;
   title?: string;
+  hasConsentedToEService?: boolean;
 };
 
 type TCaseNote = {

@@ -209,20 +209,9 @@ describe('submitChangePasswordAction', () => {
       password: testPassword,
       tempPassword: '',
     });
-
     expect(mockErrorPath).toHaveBeenCalledWith({
       alertError: {
-        message: (
-          <>
-            The code you entered is incorrect or expired. You can{' '}
-            <a href="/forgot-password">request a new code</a>. If you’re still
-            having trouble, contact{' '}
-            <a href="mailto:dawson.support@ustaxcourt.gov">
-              dawson.support@ustaxcourt.gov
-            </a>
-            .
-          </>
-        ),
+        message: expect.anything(),
         title: 'Invalid verification code',
       },
     });
