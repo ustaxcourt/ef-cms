@@ -7,9 +7,7 @@ describe('renewIdToken', () => {
     const mockOutput: InitiateAuthCommandOutput = {
       $metadata: {},
     };
-    applicationContext
-      .getCognito()
-      .initiateAuth.mockResolvedValueOnce(mockOutput);
+    applicationContext.getCognito().initiateAuth.mockResolvedValue(mockOutput);
 
     await expect(
       renewIdToken(applicationContext, {
@@ -26,9 +24,7 @@ describe('renewIdToken', () => {
         IdToken: mockIdToken,
       },
     };
-    applicationContext
-      .getCognito()
-      .initiateAuth.mockResolvedValueOnce(mockOutput);
+    applicationContext.getCognito().initiateAuth.mockResolvedValue(mockOutput);
 
     const result = await renewIdToken(applicationContext, {
       refreshToken: 'some_token',
