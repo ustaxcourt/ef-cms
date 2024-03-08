@@ -39,11 +39,17 @@ export const completeWorkItem = async (
       applicationContext,
       workItemId,
     });
-  const originalWorkItemEntity = new WorkItem(originalWorkItem, {
-    applicationContext,
-  });
+  const completedWorkItem = new WorkItem(
+    {
+      ...originalWorkItem,
+      createdAt: createISODateString(),
+    },
+    {
+      applicationContext,
+    },
+  );
 
-  const completedWorkItem = originalWorkItemEntity
+  completedWorkItem
     .setAsCompleted({
       message: completedMessage,
       user,
@@ -55,19 +61,11 @@ export const completeWorkItem = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: user.userId });
 
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: authorizedUser.section,
-    userId: user.userId,
-    workItem: {
-      ...completedWorkItem,
-      createdAt: createISODateString(),
-    },
-  });
+  completedWorkItem.section = authorizedUser.section!;
 
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItem: completedWorkItem,
+    workItem: completedWorkItem.validate().toRawObject(),
   });
 
   const caseObject = await applicationContext
@@ -79,13 +77,12 @@ export const completeWorkItem = async (
 
   const caseToUpdate = new Case(caseObject, { applicationContext });
 
-  const workItemEntity = new WorkItem(completedWorkItem, {
-    applicationContext,
-  });
-
   caseToUpdate.docketEntries.forEach(doc => {
-    if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {
-      doc.workItem = workItemEntity;
+    if (
+      doc.workItem &&
+      doc.workItem.workItemId === completedWorkItem.workItemId
+    ) {
+      doc.workItem = completedWorkItem;
     }
   });
 

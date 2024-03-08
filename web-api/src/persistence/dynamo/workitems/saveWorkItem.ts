@@ -1,14 +1,7 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { put } from '../../dynamodbClientService';
+import { putWorkItemInUsersOutbox } from './putWorkItemInUsersOutbox';
 
-/**
- * saveWorkItem
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.workItem the work item data
- * @returns {Promise} resolves upon completion of persistence request
- */
 export const saveWorkItem = async ({
   applicationContext,
   workItem,
@@ -16,17 +9,26 @@ export const saveWorkItem = async ({
   applicationContext: IApplicationContext;
   workItem: RawWorkItem;
 }): Promise<void> => {
-  const box =
-    workItem.inProgress || workItem.caseIsInProgress ? 'inProgress' : 'inbox';
+  let gsiUserBox;
+  let gsiSectionBox;
 
-  const gsiUserBox =
-    !workItem.completedAt && workItem.assigneeId
+  if (workItem.completedAt) {
+    await putWorkItemInUsersOutbox({
+      applicationContext,
+      section: workItem.section,
+      userId: workItem.completedByUserId,
+      workItem,
+    });
+  } else {
+    const box =
+      workItem.inProgress || workItem.caseIsInProgress ? 'inProgress' : 'inbox';
+    gsiUserBox = workItem.assigneeId
       ? `assigneeId|${box}|${workItem.assigneeId}`
       : undefined;
-  const gsiSectionBox =
-    !workItem.completedAt && workItem.section
+    gsiSectionBox = workItem.section
       ? `section|${box}|${workItem.section}`
       : undefined;
+  }
 
   await put({
     Item: {

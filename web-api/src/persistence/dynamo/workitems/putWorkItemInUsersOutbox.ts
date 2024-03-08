@@ -1,12 +1,18 @@
 import { calculateTimeToLive } from '@web-api/persistence/dynamo/calculateTimeToLive';
 import { put } from '@web-api/persistence/dynamodbClientService';
+import type { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 export const putWorkItemInUsersOutbox = async ({
   applicationContext,
   section,
   userId,
   workItem,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  section: string;
+  userId: string;
+  workItem: RawWorkItem;
+}): Promise<void> => {
   if (!workItem.completedAt) {
     return;
   }

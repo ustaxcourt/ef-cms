@@ -151,7 +151,6 @@ import { saveDispatchNotification } from './persistence/dynamo/notifications/sav
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
 import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
-import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
 import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
 import { setMessageAsRead } from './persistence/dynamo/messages/setMessageAsRead';
 import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPriorityOnAllWorkItems';
@@ -249,7 +248,6 @@ const gatewayMethods = {
     saveDocumentFromLambda,
     saveUserConnection,
     saveWorkItem,
-    saveWorkItemForDocketClerkFilingExternalDocument,
     setExpiresAt,
     setMessageAsRead,
     setPriorityOnAllWorkItems,

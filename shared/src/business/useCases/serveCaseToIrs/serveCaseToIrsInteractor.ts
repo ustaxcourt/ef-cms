@@ -118,13 +118,6 @@ const createPetitionWorkItems = async ({
   initializeCaseWorkItem.section = PETITIONS_SECTION;
   initializeCaseWorkItem.assigneeId = user.userId;
 
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: PETITIONS_SECTION,
-    userId: user.userId,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
-  });
-
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
     workItem: initializeCaseWorkItem.validate().toRawObject(),
