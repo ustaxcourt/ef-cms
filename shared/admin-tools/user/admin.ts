@@ -213,8 +213,7 @@ export const createDawsonUser = async ({
       });
     }
   } catch (err) {
-    console.log(err);
-    throw err;
+    throw new Error(`Unable to create Dawson user. Cause: ${err.cause}`);
   }
 };
 
