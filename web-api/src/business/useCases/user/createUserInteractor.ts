@@ -1,15 +1,22 @@
-import { Practitioner, RawPractitioner } from '../../entities/Practitioner';
-import { ROLES } from '../../entities/EntityConstants';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '../../../../../shared/src/business/entities/Practitioner';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { RawUser, User } from '../../entities/User';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
-import { createPractitionerUser } from '../../utilities/createPractitionerUser';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import {
+  RawUser,
+  User,
+} from '../../../../../shared/src/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '../../../errors/errors';
+import { createPractitionerUser } from '../../../../../shared/src/business/utilities/createPractitionerUser';
 
 export const createUserInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { user }: { user: RawUser & { barNumber?: string; password: string } },
 ): Promise<RawUser | RawPractitioner> => {
   const requestUser = applicationContext.getCurrentUser();
@@ -43,10 +50,15 @@ export const createUserInteractor = async (
     .getPersistenceGateway()
     .createOrUpdateUser({
       applicationContext,
-      disableCognitoUser: user.role === ROLES.legacyJudge,
       password: user.password,
       user: userEntity.validate().toRawObject(),
     });
+
+  if (user.role === ROLES.legacyJudge) {
+    await applicationContext.getUserGateway().disableUser(applicationContext, {
+      userId,
+    });
+  }
 
   userEntity.userId = userId;
 
