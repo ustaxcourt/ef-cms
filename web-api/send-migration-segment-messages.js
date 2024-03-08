@@ -1,5 +1,6 @@
-const AWS = require('aws-sdk');
-const { chunk, shuffle } = require('lodash');
+import { DescribeTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { addToQueue } from '../shared/admin-tools/aws/sqsHelper';
+import { shuffle } from 'lodash';
 
 // We found that 200 seems to be a good number to choose.  Anything too high and migrations stop working well.
 const SEGMENT_SIZE = 200;
@@ -18,26 +19,26 @@ if (!process.env.SOURCE_TABLE) {
   throw new Error('Please set SOURCE_TABLE in your environment.');
 }
 
-const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
+const QueueUrl = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}`;
+
+const dynamodb = new DynamoDBClient({
+  maxAttempts: 10,
+  region: 'us-east-1',
+});
 
 const getItemCount = async () => {
-  const dynamo = new AWS.DynamoDB({
-    endpoint: 'dynamodb.us-east-1.amazonaws.com',
-    region: 'us-east-1',
+  const describeTableCommand = new DescribeTableCommand({
+    TableName: process.env.SOURCE_TABLE,
   });
-
   try {
-    const { Table } = await dynamo
-      .describeTable({ TableName: process.env.SOURCE_TABLE })
-      .promise();
-    return Table.ItemCount;
+    const { Table } = await dynamodb.send(describeTableCommand);
+    return Table.ItemCount || 0;
   } catch (e) {
     console.error('Error retrieving dynamo item count.', e);
   }
 };
 
-let sent = 0;
-
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const itemCount = await getItemCount();
 
@@ -50,30 +51,9 @@ let sent = 0;
     })),
   );
 
-  const chunks = chunk(segments, 10);
-  let done = 0;
-  const promises = [];
-  for (let c of chunks) {
-    promises.push(
-      sqs
-        .sendMessageBatch({
-          Entries: c.map(segment => ({
-            Id: `${sent++}`,
-            MessageBody: JSON.stringify(segment),
-          })),
-          QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}`,
-        })
-        .promise()
-        .then(() => {
-          done += c.length;
-          console.log(
-            `${done} out of ${totalSegments} messages sent successfully.`,
-          );
-        })
-        .catch(err => {
-          console.log(err);
-        }),
-    );
+  const { failed } = await addToQueue({ QueueUrl, messages: segments });
+  if (failed.length) {
+    // TODO: bail?
+    // process.exit(1);
   }
-  await Promise.all(promises);
 })();
