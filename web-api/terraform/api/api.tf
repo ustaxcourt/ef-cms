@@ -1,11 +1,13 @@
 
 module "api_lambda" {
-  source = "./lambda"
-  handler = "./web-api/terraform/template/lambdas/api.ts"
-  file_name = "api"
-  function_name = "api_${var.environment}_${var.current_color}"
-  role = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  environment = var.lambda_environment
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/api.ts"
+  handler_method = "handler"
+  lambda_name    = "api_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
 }
 
 resource "aws_api_gateway_rest_api" "gateway_for_api" {

@@ -3,11 +3,7 @@ variable "handler" {
   type = string
 }
 
-variable "file_name" {
-  type = string
-}
-
-variable "function_name" {
+variable "lambda_name" {
   type = string
 }
 
@@ -19,6 +15,16 @@ variable "environment" {
   type = any
 }
 
-variable "project_root" {
+variable "handler_method" {
   type = string
+}
+
+variable "timeout" {
+  type = string
+  default = "29"
+}
+
+variable "memory_size" {
+  type = string
+  default = "3008"
 }
