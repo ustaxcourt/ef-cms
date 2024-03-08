@@ -1,7 +1,4 @@
-import {
-  AuthFlowType,
-  ChallengeNameType,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { AuthFlowType } from '@aws-sdk/client-cognito-identity-provider';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export async function initiateAuth(
@@ -21,14 +18,6 @@ export async function initiateAuth(
     },
     ClientId: applicationContext.environment.cognitoClientId,
   });
-
-  if (result.ChallengeName) {
-    if (result.ChallengeName === ChallengeNameType.NEW_PASSWORD_REQUIRED) {
-      const PasswordChangeError = new Error('NewPasswordRequired');
-      PasswordChangeError.name = 'NewPasswordRequired';
-      throw PasswordChangeError;
-    }
-  }
 
   if (
     !result.AuthenticationResult?.AccessToken ||
