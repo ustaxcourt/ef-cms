@@ -1,34 +1,35 @@
 
+resource "random_uuid" "bundle_directory" {
+}
 
-resource "null_resource" "local_script_example" {
+resource "null_resource" "esbuild_lambda" {
   triggers = {
     always_run = timestamp()
   }
 
   provisioner "local-exec" {
-    command = "node ${var.project_root}/esbuildLambda.mjs ${var.project_root} ${var.handler} ${var.file_name}"
+    command = "node ${path.module}/esbuildLambda.mjs ${var.handler} ${random_uuid.bundle_directory.id}"
   }
-
 }
 
-data "archive_file" "lambda_function_zip" {  
-  depends_on = [null_resource.local_script_example]
+data "archive_file" "lambda_function_zip" {
+  depends_on  = [null_resource.esbuild_lambda]
   type        = "zip"
-  source_dir  = "${path.module}/../../../../dist-lambdas/${var.file_name}"
-  output_path = "${path.module}/../../../../dist-lambdas/${var.file_name}/${var.file_name}.zip"
+  source_dir  = "${path.module}/../../../../dist-lambdas/${random_uuid.bundle_directory.id}/out"
+  output_path = "${path.module}/../../../../dist-lambdas/${random_uuid.bundle_directory.id}/${random_uuid.bundle_directory.id}.zip"
 }
 
 
 # Define theAWS Lambda function
 resource "aws_lambda_function" "lambda_function" {
-  function_name    = var.function_name
-  handler          = "${var.file_name}.handler"
+  function_name    = var.lambda_name
+  handler          = "lambda.${var.handler_method}"
   runtime          = "nodejs18.x"
   role             = var.role
   filename         = data.archive_file.lambda_function_zip.output_path
   source_code_hash = data.archive_file.lambda_function_zip.output_base64sha256
-  timeout          = "29"
-  memory_size      = "3008"
+  timeout          = var.timeout
+  memory_size      = var.memory_size
 
   tracing_config {
     mode = "Active"
