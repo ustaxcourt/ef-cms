@@ -63,7 +63,7 @@ export const createUserInteractor = async (
 
   if (user.role === ROLES.legacyJudge) {
     await applicationContext.getUserGateway().disableUser(applicationContext, {
-      userId,
+      email: user.email,
     });
   }
 
