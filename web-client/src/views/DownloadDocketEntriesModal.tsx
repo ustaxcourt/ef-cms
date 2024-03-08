@@ -16,10 +16,11 @@ export const DownloadDocketEntriesModal = connect(
     cancelSequence,
     confirmSequence,
     documentsSelectedForDownload,
-    updateModalValueSequence,
   }) {
     const [isAddPrintableDocketRecordSelected, selectPrintableDocketRecord] =
       useState(false);
+    const numDocketEntries = documentsSelectedForDownload.length;
+    const docketEntriesText = `${numDocketEntries} ${numDocketEntries === 1 ? 'docket entry' : 'docket entries'}`;
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -35,22 +36,32 @@ export const DownloadDocketEntriesModal = connect(
           <FormGroup>
             <fieldset className="usa-fieldset margin-bottom-0">
               <p className="display-block" id="trial-term">
-                {`You have ${documentsSelectedForDownload.length} docket entries
+                {`You have selected ${docketEntriesText}
                 to download as a zip file.`}
               </p>
               <p className="display-block" id="trial-term">
                 Do you want to include the printable docket record?
               </p>
-              <input
-                checked={isAddPrintableDocketRecordSelected}
-                type="checkbox"
-                onChange={() =>
-                  selectPrintableDocketRecord(
-                    !isAddPrintableDocketRecordSelected,
-                  )
-                }
-              />
-              <span>Include printable docket record</span>
+              <div className="usa-checkbox">
+                <input
+                  checked={isAddPrintableDocketRecordSelected}
+                  className="usa-checkbox__input"
+                  id="include-printable-docket-record"
+                  type="checkbox"
+                  onChange={() =>
+                    selectPrintableDocketRecord(
+                      !isAddPrintableDocketRecordSelected,
+                    )
+                  }
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="include-printable-docket-record"
+                  id="include-printable-docket-record-label"
+                >
+                  Include printable docket record
+                </label>
+              </div>
             </fieldset>
           </FormGroup>
         </div>
