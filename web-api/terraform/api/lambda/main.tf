@@ -1,11 +1,14 @@
+
+
 resource "null_resource" "local_script_example" {
   triggers = {
     always_run = timestamp()
   }
 
   provisioner "local-exec" {
-    command = "bash ${path.module}/../../../../bundle-lambda.sh ${var.handler} ${var.file_name}"
+    command = "node ${var.project_root}/esbuildLambda.mjs ${var.project_root} ${var.handler} ${var.file_name}"
   }
+
 }
 
 data "archive_file" "lambda_function_zip" {  
@@ -14,6 +17,7 @@ data "archive_file" "lambda_function_zip" {
   source_dir  = "${path.module}/../../../../dist-lambdas/${var.file_name}"
   output_path = "${path.module}/../../../../dist-lambdas/${var.file_name}/${var.file_name}.zip"
 }
+
 
 # Define theAWS Lambda function
 resource "aws_lambda_function" "lambda_function" {

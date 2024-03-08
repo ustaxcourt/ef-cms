@@ -3,8 +3,12 @@
 handlerPath=$1
 zipName=$2
 
-rm -rf dist-lambdas
+echo $zipName
+echo $handlerPath
+pwd
+rm -rf dist-lambdas/$2
 
+echo "STARTING ESBUILD"
 npx esbuild $1 \
     --bundle \
     --target=esnext \
@@ -14,6 +18,7 @@ npx esbuild $1 \
     --keep-names \
     --outfile=dist-lambdas/$2/$2.mjs \
     --banner:js="import { createRequire as topLevelCreateRequire } from 'module'; const require = topLevelCreateRequire(import.meta.url);"
+echo "FINISHED ESBUILD"
 
 mkdir -p dist-lambdas/$2
 
