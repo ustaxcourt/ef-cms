@@ -43,16 +43,22 @@ export const init = async (csvFile, outputMap) => {
               services[`gateway_api_${process.env.DEPLOYING_COLOR}`]
             }/users`;
           }
-
-          const result = await axios.post(
-            endpoint,
-            { ...row, password: process.env.DEFAULT_ACCOUNT_PASS },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
+          let result;
+          try {
+            result = await axios.post(
+              endpoint,
+              { ...row, password: process.env.DEFAULT_ACCOUNT_PASS },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
               },
-            },
-          );
+            );
+          } catch (error) {
+            throw new Error(
+              `Unable to bulk import judge user. Cause: ${error.cause}`,
+            );
+          }
           console.log(`SUCCESS ${row.name}`);
           const lowerCaseName = row.name.toLowerCase();
           const { userId } = result.data;
