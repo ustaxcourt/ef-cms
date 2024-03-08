@@ -14,11 +14,9 @@ type migrationsCallback = {
   (
     applicationContext: IApplicationContext,
     {
-      documentClient,
       items,
       ranMigrations,
     }: {
-      documentClient: DynamoDBDocument;
       items: Record<string, any>[];
       ranMigrations?: { [key: string]: boolean };
     },
@@ -37,16 +35,14 @@ const docClient = DynamoDBDocument.from(dynamodb, {
 export const processItems = async (
   applicationContext: IApplicationContext,
   {
-    documentClient,
     items,
     migrateRecords,
   }: {
-    documentClient: DynamoDBDocument;
     items: Record<string, any>[];
     migrateRecords: migrationsCallback;
   },
 ): Promise<{ PutRequest: PutRequest }[]> => {
-  items = await migrateRecords(applicationContext, { documentClient, items });
+  items = await migrateRecords(applicationContext, { items });
 
   return items.map(Item => ({
     PutRequest: {
@@ -102,7 +98,6 @@ export const handler: Handler = async (event, context) => {
   const items = getFilteredGlobalEvents(event);
   if (items) {
     requests = await processItems(applicationContext, {
-      documentClient: docClient,
       items,
       migrateRecords: migrations,
     });
