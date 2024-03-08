@@ -1,4 +1,7 @@
-import { ChallengeNameType } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AuthFlowType,
+  ChallengeNameType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
 import { InvalidEntityError, NotFoundError } from '@web-api/errors/errors';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
@@ -43,19 +46,22 @@ export const changePasswordInteractor = async (
     }
 
     if (tempPassword) {
-      let initiateAuthResult;
+      const initiateAuthResult = await applicationContext
+        .getCognito()
+        .initiateAuth({
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+          AuthParameters: {
+            PASSWORD: tempPassword,
+            USERNAME: email,
+          },
+          ClientId: applicationContext.environment.cognitoClientId,
+        });
 
-      try {
-        initiateAuthResult = await applicationContext
-          .getUserGateway()
-          .initiateAuth(applicationContext, {
-            email,
-            password: tempPassword,
-          });
-      } catch (err: any) {
-        if (err.name !== 'NewPasswordRequired') {
-          throw new Error('User is not in `FORCE_CHANGE_PASSWORD` state');
-        }
+      if (
+        initiateAuthResult.ChallengeName !==
+        ChallengeNameType.NEW_PASSWORD_REQUIRED
+      ) {
+        throw new Error('User is not in `FORCE_CHANGE_PASSWORD` state');
       }
 
       const result = await applicationContext
@@ -67,7 +73,7 @@ export const changePasswordInteractor = async (
             USERNAME: email,
           },
           ClientId: applicationContext.environment.cognitoClientId,
-          Session: initiateAuthResult.session,
+          Session: initiateAuthResult.Session,
         });
 
       if (
@@ -129,33 +135,24 @@ export const changePasswordInteractor = async (
         Username: email,
       });
 
-      const result = await applicationContext
+      return await applicationContext
         .getUserGateway()
         .initiateAuth(applicationContext, {
           email,
           password,
         });
-
-      if (
-        !result.AuthenticationResult?.AccessToken ||
-        !result.AuthenticationResult?.IdToken ||
-        !result.AuthenticationResult?.RefreshToken
-      ) {
-        throw new Error(`Unable to change password for email: ${email}`);
-      }
-
-      return {
-        accessToken: result.AuthenticationResult.AccessToken,
-        idToken: result.AuthenticationResult.IdToken,
-        refreshToken: result.AuthenticationResult.RefreshToken,
-      };
     }
   } catch (err: any) {
+    if (err.name === 'InitiateAuthError') {
+      throw new Error(`Unable to change password for email: ${email}`);
+    }
+
     await authErrorHandling(applicationContext, {
       email,
       error: err,
       sendAccountConfirmation: false,
     });
+
     throw err;
   }
 };
