@@ -1,18 +1,23 @@
 #!/bin/bash
 
+handlerPath=$1
+zipName=$2
+
 rm -rf dist-lambdas
 
-npx esbuild web-api/terraform/template/lambdas/api.ts \
+npx esbuild $1 \
     --bundle \
     --target=esnext \
     --format=esm \
     --platform=node \
     --loader:.node=file \
     --keep-names \
-    --outfile=dist-lambdas/api.mjs \
-    --banner:js="import { createRequire as topLevelCreateRequire } from 'module';const require = topLevelCreateRequire(import.meta.url);"
+    --outfile=dist-lambdas/$2/$2.mjs \
+    --banner:js="import { createRequire as topLevelCreateRequire } from 'module'; const require = topLevelCreateRequire(import.meta.url);"
 
-pushd dist-lambdas
-  zip -r lambda.zip *
+mkdir -p dist-lambdas/$2
+
+pushd dist-lambdas/$2
+  zip -r $2.zip *
 popd
 

@@ -1,25 +1,34 @@
-resource "aws_lambda_function" "api_lambda" {
-  depends_on       = [var.api_object]
-  function_name    = "api_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "api.handler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "api_${var.current_color}.js.zip"
-  source_code_hash = var.api_object_hash
-  timeout          = "29"
-  memory_size      = "3008"
+# resource "aws_lambda_function" "api_lambda" {
+#   depends_on       = [var.api_object]
+#   function_name    = "api_${var.environment}_${var.current_color}"
+#   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+#   handler          = "api.handler"
+#   s3_bucket        = var.lambda_bucket_id
+#   s3_key           = "api_${var.current_color}.js.zip"
+#   source_code_hash = var.api_object_hash
+#   timeout          = "29"
+#   memory_size      = "3008"
 
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
+#   layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
-  runtime = var.node_version
+#   runtime = var.node_version
 
-  tracing_config {
-    mode = "Active"
-  }
+#   tracing_config {
+#     mode = "Active"
+#   }
 
-  environment {
-    variables = var.lambda_environment
-  }
+#   environment {
+#     variables = var.lambda_environment
+#   }
+# }
+
+module "api_lambda" {
+  source = "./lambda"
+  handler = "./web-api/terraform/template/lambdas/api.ts"
+  file_name = "api"
+  function_name = "api_${var.environment}_${var.current_color}"
+  role = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment = var.lambda_environment
 }
 
 resource "aws_api_gateway_rest_api" "gateway_for_api" {
@@ -155,7 +164,7 @@ resource "aws_api_gateway_integration" "api_integration_get" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_post" {
@@ -168,7 +177,7 @@ resource "aws_api_gateway_integration" "api_integration_post" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_put" {
@@ -181,7 +190,7 @@ resource "aws_api_gateway_integration" "api_integration_put" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_delete" {
@@ -194,7 +203,7 @@ resource "aws_api_gateway_integration" "api_integration_delete" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_options" {
@@ -207,7 +216,7 @@ resource "aws_api_gateway_integration" "api_integration_options" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_head" {
@@ -220,13 +229,13 @@ resource "aws_api_gateway_integration" "api_integration_head" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
+  uri                     = module.api_lambda.invoke_arn
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.api_lambda.function_name
+  function_name = module.api_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
 }

@@ -5,6 +5,8 @@ ENV=$1
 DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 
+# DEPLOYING_COLO=blue
+
 export DEPLOYING_COLOR
 export MIGRATE_FLAG
 
@@ -179,4 +181,5 @@ export TF_VAR_zone_name=$ZONE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
+# terraform apply -auto-approve -target=module.ef-cms_apis.module.api-east-blue.module.api_lambda
 terraform apply -auto-approve execution-plan
