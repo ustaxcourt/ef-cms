@@ -1,7 +1,6 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getFilteredGlobalEvents, processItems } from './migration';
-import type { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
 describe('migration', () => {
   describe('processItems', () => {
@@ -13,14 +12,8 @@ describe('migration', () => {
           sk: `case|${MOCK_CASE.docketNumber}`,
         },
       ];
-      const mockDocumentClient = {
-        put: jest.fn().mockReturnValue({
-          promise: () => null,
-        }),
-      } as unknown as DynamoDBDocument;
       const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
       const result = await processItems(applicationContext, {
-        documentClient: mockDocumentClient,
         items: mockItems,
         migrateRecords: mockMigrateRecords,
       });

@@ -1,5 +1,5 @@
 import { JUDGE_TITLES } from '@shared/business/entities/EntityConstants';
-import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import type { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
 const isCaseRecord = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('case|');
@@ -23,7 +23,6 @@ let judgesMap: { [key: string]: string } | null = null;
 
 export const migrateItems = async (
   items: any[],
-  _,
   applicationContext: IApplicationContext,
 ) => {
   const itemsAfter: TDynamoRecord[] = [];

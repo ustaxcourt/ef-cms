@@ -5,7 +5,6 @@ import {
 } from '@aws-sdk/client-sqs';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument, PutCommandOutput } from '@aws-sdk/lib-dynamodb';
-
 import { chunk } from 'lodash';
 import { createApplicationContext } from '@web-api/applicationContext';
 import {
@@ -61,7 +60,6 @@ const scanTableSegment = async ({
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         await processItems(applicationContext, {
-          documentClient: dynamoDbDocumentClient,
           items: results.Items || [],
           ranMigrations,
         });
@@ -83,11 +81,9 @@ const hasMigrationRan = async key => {
 export const migrateRecords = async (
   applicationContext: IApplicationContext,
   {
-    documentClient,
     items,
     ranMigrations,
   }: {
-    documentClient: DynamoDBDocument;
     items: Record<string, any>[];
     ranMigrations?: { [key: string]: boolean } | undefined;
   },
@@ -95,12 +91,12 @@ export const migrateRecords = async (
   for (let { key, script } of migrationsToRun) {
     if (ranMigrations && !ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
-      items = await script(items, documentClient, applicationContext);
+      items = await script(items, applicationContext);
     }
   }
 
   applicationContext.logger.debug('about to run validation migration');
-  items = await validationMigration(items);
+  items = validationMigration(items, applicationContext);
 
   return items;
 };
@@ -108,18 +104,15 @@ export const migrateRecords = async (
 export const processItems = async (
   applicationContext: IApplicationContext,
   {
-    documentClient,
     items,
     ranMigrations,
   }: {
-    documentClient: DynamoDBDocument;
     items: Record<string, any>[];
     ranMigrations: { [key: string]: boolean } | undefined;
   },
 ) => {
   try {
     items = await migrateRecords(applicationContext, {
-      documentClient,
       items,
       ranMigrations,
     });
@@ -134,7 +127,7 @@ export const processItems = async (
     for (let item of aChunk) {
       promises.push(
         promiseRetry(retry => {
-          return documentClient
+          return dynamoDbDocumentClient
             .put({
               ConditionExpression: 'attribute_not_exists(pk)',
               Item: item,
