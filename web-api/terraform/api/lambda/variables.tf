@@ -18,3 +18,7 @@ variable "role" {
 variable "environment" {
   type = any
 }
+
+variable "project_root" {
+  type = string
+}
