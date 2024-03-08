@@ -1,6 +1,5 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { put } from '../../dynamodbClientService';
-import { putWorkItemInUsersOutbox } from './putWorkItemInUsersOutbox';
 
 export const saveWorkItem = async ({
   applicationContext,
@@ -13,10 +12,10 @@ export const saveWorkItem = async ({
   let gsiSectionBox;
 
   if (workItem.completedAt) {
-    await putWorkItemInUsersOutbox({
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext,
       section: workItem.section,
-      userId: workItem.completedByUserId,
+      userId: workItem.completedByUserId!,
       workItem,
     });
   } else {

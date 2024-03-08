@@ -530,6 +530,7 @@ export const createTestApplicationContext = ({
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
+    putWorkItemInUsersOutbox: jest.fn(),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
