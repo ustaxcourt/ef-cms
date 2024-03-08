@@ -74,10 +74,6 @@ describe('createOrUpdatePractitionerUser', () => {
       User: { Username: userId },
     });
 
-    applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes.mockResolvedValue({});
-
     applicationContext.getDocumentClient().put.mockResolvedValue(null);
   });
 
@@ -142,7 +138,7 @@ describe('createOrUpdatePractitionerUser', () => {
     ).not.toHaveBeenCalled();
     expect(applicationContext.getCognito().adminGetUser).not.toHaveBeenCalled();
     expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
+      applicationContext.getUserGateway().updateUser,
     ).not.toHaveBeenCalled();
   });
 
@@ -158,7 +154,7 @@ describe('createOrUpdatePractitionerUser', () => {
       applicationContext.getCognito().adminCreateUser.mock.calls[0][0].Username,
     ).toBe(privatePractitionerUserWithSection.email);
     expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
+      applicationContext.getUserGateway().updateUser,
     ).not.toHaveBeenCalled();
   });
 
@@ -190,7 +186,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
+      applicationContext.getUserGateway().updateUser,
     ).not.toHaveBeenCalled();
   });
 
@@ -204,7 +200,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
+      applicationContext.getUserGateway().updateUser,
     ).not.toHaveBeenCalled();
   });
 
@@ -223,7 +219,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
+      applicationContext.getUserGateway().updateUser,
     ).not.toHaveBeenCalled();
   });
 
