@@ -26,16 +26,25 @@ const dynamodb = new DynamoDBClient({
   region: 'us-east-1',
 });
 
-const getItemCount = async () => {
+const getItemCount = async (): Promise<number> => {
+  let count = 0;
   const describeTableCommand = new DescribeTableCommand({
     TableName: process.env.SOURCE_TABLE,
   });
   try {
     const { Table } = await dynamodb.send(describeTableCommand);
-    return Table.ItemCount || 0;
+    if (
+      Table &&
+      'ItemCount' in Table &&
+      Table.ItemCount &&
+      Table.ItemCount > 0
+    ) {
+      count = Table.ItemCount;
+    }
   } catch (e) {
     console.error('Error retrieving dynamo item count.', e);
   }
+  return count;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -45,7 +54,7 @@ const getItemCount = async () => {
   const totalSegments = Math.max(1, Math.ceil(itemCount / SEGMENT_SIZE));
 
   const segments = shuffle(
-    new Array(totalSegments).fill(null).map((v, i) => ({
+    new Array(totalSegments).fill(null).map((_v, i) => ({
       segment: i,
       totalSegments,
     })),

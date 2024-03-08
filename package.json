@@ -209,7 +209,7 @@
     "start:client:esbuild": "node esbuild.config.mjs",
     "start:cognito-triggers-local": "cd cognito-triggers-sls && npx sls offline",
     "start:madge": "node ./graph-generators/index.js",
-    "start:migration": "node ./web-api/send-migration-segment-messages.js",
+    "start:migration": "npx ts-node --transpile-only web-api/send-migration-segment-messages.ts",
     "start:public:ci": "npm run clean:public && CI=true npm run start:public",
     "start:public-host": "servor dist-public index.html 5678 &",
     "start:public": "npm run start:public-host && CHECK_DEPLOY_DATE_INTERVAL=5000 WATCH=true USTC_ENV=dev IS_LOCAL=true PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn node esbuild.public.config.mjs",
