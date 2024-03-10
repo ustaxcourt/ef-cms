@@ -110,4 +110,18 @@ describe('deleteUnaliasedIndices', () => {
       index: mockUnaliasedIndices,
     });
   });
+
+  it('does not throw an error if the attempt to delete fails for whatever reason', async () => {
+    (mockedClient.indices.delete as jest.Mock).mockRejectedValue(
+      new Error('Cannot delete indices that are being snapshotted'),
+    );
+
+    await expect(
+      deleteUnaliasedIndices({ client: mockedClient }),
+    ).resolves.not.toThrow();
+
+    expect(mockedClient.indices.delete).toHaveBeenCalledWith({
+      index: mockUnaliasedIndices,
+    });
+  });
 });
