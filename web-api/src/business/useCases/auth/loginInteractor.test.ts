@@ -129,7 +129,7 @@ describe('loginInteractor', () => {
       message: '',
     });
     applicationContext
-      .getCognito()
+      .getUserGateway()
       .initiateAuth.mockRejectedValue(mockUnconfirmedAccountError);
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
       email: mockEmail,
