@@ -2,7 +2,7 @@
 module "api-east-green" {
   puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
   node_version              = var.green_node_version
-  source                    = "../api/"
+  source                    = "../../modules/api"
   environment               = var.environment
   dns_domain                = var.dns_domain
   account_id                = data.aws_caller_identity.current.account_id
@@ -44,7 +44,7 @@ module "api-east-green" {
 
 module "api-west-green" {
   puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
-  source                    = "../api/"
+  source                    = "../../modules/api"
   environment               = var.environment
   dns_domain                = var.dns_domain
   account_id                = data.aws_caller_identity.current.account_id

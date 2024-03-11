@@ -4,7 +4,7 @@ module "api-east-blue" {
   puppeteer_layer_object = null_resource.puppeteer_layer_east_object
   pool_arn               = aws_cognito_user_pool.pool.arn
   node_version           = var.blue_node_version
-  source                 = "../api/"
+  source                 = "../../modules/api"
   environment            = var.environment
   dns_domain             = var.dns_domain
   account_id             = data.aws_caller_identity.current.account_id
@@ -44,7 +44,7 @@ module "api-east-blue" {
 }
 module "api-west-blue" {
   puppeteer_layer_object = null_resource.puppeteer_layer_west_object
-  source                 = "../api/"
+  source                 = "../../modules/api"
   environment            = var.environment
   dns_domain             = var.dns_domain
   account_id             = data.aws_caller_identity.current.account_id
