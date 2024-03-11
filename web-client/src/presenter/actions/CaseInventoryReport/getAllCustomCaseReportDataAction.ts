@@ -77,6 +77,8 @@ export const getAllCustomCaseReportDataAction = async ({
     store.set(state.batchDownloads.fileCount, cases.length);
   }
 
+  console.log('cases', cases);
+
   const formattedCases = cases.map(aCase => ({
     ...aCase,
     calendaringHighPriority: aCase.highPriority ? 'yes' : '',
@@ -84,6 +86,8 @@ export const getAllCustomCaseReportDataAction = async ({
       .getUtilities()
       .formatDateString(aCase.receivedAt, FORMATS.MMDDYY),
   }));
+
+  console.log('formattedCases', formattedCases);
 
   return {
     formattedCases,
