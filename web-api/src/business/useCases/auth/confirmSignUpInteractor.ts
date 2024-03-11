@@ -1,5 +1,7 @@
 import { InvalidRequest, NotFoundError } from '@web-api/errors/errors';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { User } from '@shared/business/entities/User';
 
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -52,11 +54,17 @@ const createPetitionerUser = async (
     throw new NotFoundError(`User not found with email: ${email}`);
   }
 
-  await applicationContext
-    .getUseCases()
-    .createPetitionerAccountInteractor(applicationContext, {
-      email,
-      name: user.name,
-      userId,
-    });
+  const userEntity = new User({
+    email,
+    name: user.name,
+    role: ROLES.petitioner,
+    userId,
+  });
+
+  await applicationContext.getPersistenceGateway().persistUser({
+    applicationContext,
+    user: userEntity.validate().toRawObject(),
+  });
+
+  return userEntity.validate().toRawObject();
 };
