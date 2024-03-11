@@ -371,7 +371,6 @@ module "api-west-green" {
   source                    = "../api/"
   environment               = var.environment
   dns_domain                = var.dns_domain
-  authorizer_uri            = module.cognito_authorizer_lambda_west.invoke_arn
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
@@ -445,7 +444,6 @@ module "api-west-blue" {
   source                    = "../api/"
   environment               = var.environment
   dns_domain                = var.dns_domain
-  authorizer_uri            = module.cognito_authorizer_lambda_west.invoke_arn
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
