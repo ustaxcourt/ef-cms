@@ -78,6 +78,6 @@ module "ef-cms_apis" {
   should_es_alpha_exist      = var.should_es_alpha_exist
   should_es_beta_exist       = var.should_es_beta_exist
   slack_webhook_url          = var.slack_webhook_url
-  source                     = "../modules/everything-else-deprecated"
+  source                     = "../../modules/everything-else-deprecated"
   zone_name                  = var.zone_name
 }
