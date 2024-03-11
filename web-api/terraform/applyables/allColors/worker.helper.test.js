@@ -1,6 +1,6 @@
 const {
   applicationContext,
-} = require('../../../shared/src/business/test/createTestApplicationContext');
+} = require('../../../../shared/src/business/test/createTestApplicationContext');
 const { scanMessages } = require('./worker.helper');
 
 describe('scanMessages', () => {
