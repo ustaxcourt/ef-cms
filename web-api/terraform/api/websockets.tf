@@ -1,3 +1,15 @@
+
+module "websocket_authorizer_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/websocket-authorizer.ts"
+  handler_method = "handler"
+  lambda_name    = "websocket_authorizer_lambda_${var.environment}"
+  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
+}
+
 resource "aws_apigatewayv2_api" "websocket_api" {
   name                       = "websocket_api_${var.environment}_${var.current_color}"
   protocol_type              = "WEBSOCKET"
@@ -24,74 +36,44 @@ resource "aws_apigatewayv2_route" "default" {
   target    = "integrations/${aws_apigatewayv2_integration.websockets_default_integration.id}"
 }
 
-
-resource "aws_lambda_function" "websockets_connect_lambda" {
-  depends_on       = [var.websockets_object]
-  function_name    = "websockets_connect_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "websockets.connectHandler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "websockets_${var.current_color}.js.zip"
-  source_code_hash = var.websockets_object_hash
-  timeout          = "29"
-  memory_size      = "3008"
-
-  runtime = var.node_version
-
-  environment {
-    variables = var.lambda_environment
-  }
-
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
+module "websockets_connect_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/websockets.ts"
+  handler_method = "connectHandler"
+  lambda_name    = "websockets_connect_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
 }
 
-resource "aws_lambda_function" "websockets_default_lambda" {
-  depends_on       = [var.websockets_object]
-  function_name    = "websockets_default_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "websockets.defaultHandler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "websockets_${var.current_color}.js.zip"
-  source_code_hash = var.websockets_object_hash
-  timeout          = "29"
-  memory_size      = "3008"
-
-  runtime = var.node_version
-
-  environment {
-    variables = var.lambda_environment
-  }
-
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
+module "websockets_default_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/websockets.ts"
+  handler_method = "defaultHandler"
+  lambda_name    = "websockets_default_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
 }
 
-
-resource "aws_lambda_function" "websockets_disconnect_lambda" {
-  depends_on       = [var.websockets_object]
-  function_name    = "websockets_disconnect_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "websockets.disconnectHandler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "websockets_${var.current_color}.js.zip"
-  source_code_hash = var.websockets_object_hash
-  timeout          = "29"
-  memory_size      = "3008"
-
-  runtime = var.node_version
-
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
-
-  environment {
-    variables = var.lambda_environment
-  }
-
+module "websockets_disconnect_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/websockets.ts"
+  handler_method = "disconnectHandler"
+  lambda_name    =  "websockets_disconnect_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
 }
 
 resource "aws_apigatewayv2_integration" "websockets_connect_integration" {
   api_id                    = aws_apigatewayv2_api.websocket_api.id
   integration_type          = "AWS_PROXY"
   integration_method        = "POST"
-  integration_uri           = aws_lambda_function.websockets_connect_lambda.invoke_arn
+  integration_uri           = module.websockets_connect_lambda.invoke_arn
   passthrough_behavior      = "WHEN_NO_MATCH"
   credentials_arn           = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
   content_handling_strategy = "CONVERT_TO_TEXT"
@@ -102,7 +84,7 @@ resource "aws_apigatewayv2_integration" "websockets_disconnect_integration" {
   api_id                    = aws_apigatewayv2_api.websocket_api.id
   integration_type          = "AWS_PROXY"
   integration_method        = "POST"
-  integration_uri           = aws_lambda_function.websockets_disconnect_lambda.invoke_arn
+  integration_uri           = module.websockets_disconnect_lambda.invoke_arn
   passthrough_behavior      = "WHEN_NO_MATCH"
   credentials_arn           = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
   content_handling_strategy = "CONVERT_TO_TEXT"
@@ -113,7 +95,7 @@ resource "aws_apigatewayv2_integration" "websockets_default_integration" {
   api_id                    = aws_apigatewayv2_api.websocket_api.id
   integration_type          = "AWS_PROXY"
   integration_method        = "POST"
-  integration_uri           = aws_lambda_function.websockets_default_lambda.invoke_arn
+  integration_uri           = module.websockets_default_lambda.invoke_arn
   passthrough_behavior      = "WHEN_NO_MATCH"
   credentials_arn           = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
   content_handling_strategy = "CONVERT_TO_TEXT"
@@ -122,7 +104,7 @@ resource "aws_apigatewayv2_integration" "websockets_default_integration" {
 resource "aws_lambda_permission" "apigw_connect_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.websockets_connect_lambda.function_name
+  function_name = module.websockets_connect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
 }
@@ -131,7 +113,7 @@ resource "aws_lambda_permission" "apigw_connect_lambda" {
 resource "aws_lambda_permission" "apigw_disconnect_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.websockets_disconnect_lambda.function_name
+  function_name = module.websockets_disconnect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
 }
@@ -139,7 +121,7 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
 resource "aws_lambda_permission" "apigw_default_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.websockets_default_lambda.function_name
+  function_name = module.websockets_default_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
 }
@@ -246,7 +228,7 @@ resource "aws_apigatewayv2_authorizer" "websocket_authorizer" {
   api_id                     = aws_apigatewayv2_api.websocket_api.id
   authorizer_type            = "REQUEST"
   authorizer_credentials_arn = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
-  authorizer_uri             = var.websocket_authorizer_uri
+  authorizer_uri             = module.websocket_authorizer_lambda.invoke_arn
   identity_sources           = ["route.request.querystring.token"]
   name                       = "websocket_authorizer_${var.environment}_${var.current_color}"
 }
