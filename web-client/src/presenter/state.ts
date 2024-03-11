@@ -550,7 +550,12 @@ export const baseState = {
     documentTitle: null,
   },
   assigneeId: null,
-  batchDownloads: {},
+  batchDownloads: {} as {
+    allowRetry?: boolean;
+    zipInProgress?: boolean;
+    totalFiles?: number;
+    fileCount?: number;
+  },
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
