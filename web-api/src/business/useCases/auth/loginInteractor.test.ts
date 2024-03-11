@@ -124,13 +124,13 @@ describe('loginInteractor', () => {
   it('should resend an account confirmation email with a new confirmation code when the user`s account is not confirmed', async () => {
     const mockEmail = 'petitioner@example.com';
     const mockPassword = 'MyPa$Sword!';
-    const mockWrongEmailOrPasswordError = new UserNotConfirmedException({
+    const mockUnconfirmedAccountError = new UserNotConfirmedException({
       $metadata: {},
       message: '',
     });
     applicationContext
-      .getUserGateway()
-      .initiateAuth.mockRejectedValue(mockWrongEmailOrPasswordError);
+      .getCognito()
+      .initiateAuth.mockRejectedValue(mockUnconfirmedAccountError);
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
       email: mockEmail,
       userId: '6a58e2a9-d2ba-42f1-9a3f-cbd5202af334',
@@ -142,6 +142,9 @@ describe('loginInteractor', () => {
         password: mockPassword,
       }),
     ).rejects.toThrow(UnauthorizedError);
+    expect(
+      applicationContext.getUseCaseHelpers().createUserConfirmation,
+    ).toHaveBeenCalled();
   });
 
   it('should resend a temporary password email with a new temporary password when the user`s temporary password is expired', async () => {
@@ -175,7 +178,7 @@ describe('loginInteractor', () => {
     });
   });
 
-  it('should throw an error when an account is not found for the provided email when attempting to resent an account confirmation email', async () => {
+  it('should throw an error when an account is not found for the provided email when attempting to resend an account confirmation email', async () => {
     const mockEmail = 'petitioner@example.com';
     const mockPassword = 'MyPa$Sword!';
     const mockWrongEmailOrPasswordError = new UserNotConfirmedException({
