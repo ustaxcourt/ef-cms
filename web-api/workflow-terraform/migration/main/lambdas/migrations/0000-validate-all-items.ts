@@ -1,8 +1,7 @@
-import { createApplicationContext } from '../../../../../src/applicationContext';
-
-const applicationContext = createApplicationContext({});
-
-export const migrateItems = items => {
+export const migrateItems = (
+  items: any[],
+  applicationContext: IApplicationContext,
+) => {
   for (const item of items) {
     const entityConstructor = applicationContext.getEntityByName(
       item.entityName,
