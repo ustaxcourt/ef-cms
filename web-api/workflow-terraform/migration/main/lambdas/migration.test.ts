@@ -1,31 +1,25 @@
-const { getFilteredGlobalEvents, processItems } = require('./migration');
-const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getFilteredGlobalEvents, processItems } from './migration';
 
 describe('migration', () => {
   describe('processItems', () => {
-    it('call put on all records that come through', async () => {
-      const mockItems = [
+    it('migrates items and generates dynamodb PutRequest objects with the resulting data', async () => {
+      const mockItems: Record<string, any>[] = [
         {
           ...MOCK_CASE,
           pk: `case|${MOCK_CASE.docketNumber}`,
           sk: `case|${MOCK_CASE.docketNumber}`,
         },
       ];
-      const mockDocumentClient = {
-        put: jest.fn().mockReturnValue({
-          promise: () => null,
-        }),
-      };
       const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
-      const applicationContext = jest.fn();
-      await processItems(applicationContext, {
-        documentClient: mockDocumentClient,
+      const result = await processItems(applicationContext, {
         items: mockItems,
         migrateRecords: mockMigrateRecords,
       });
 
       expect(mockMigrateRecords).toHaveBeenCalledTimes(1);
-      expect(mockDocumentClient.put).toHaveBeenCalledTimes(1);
+      expect(result.length).toEqual(mockItems.length);
     });
   });
 
@@ -37,18 +31,20 @@ describe('migration', () => {
             dynamodb: {
               NewImage: {
                 'aws:rep:updatetime': {
-                  N: 10,
+                  N: '10',
                 },
               },
               OldImage: {
                 'aws:rep:updatetime': {
-                  N: 20,
+                  N: '20',
                 },
               },
             },
           },
         ],
       });
+      expect(items).not.toBeUndefined();
+      // @ts-ignore
       expect(items.length).toBe(1);
     });
 
@@ -143,6 +139,8 @@ describe('migration', () => {
           },
         ],
       });
+      expect(items).not.toBeUndefined();
+      // @ts-ignore
       expect(items.length).toEqual(2);
     });
   });

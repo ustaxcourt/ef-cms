@@ -570,7 +570,12 @@ export const baseState = {
     },
     tempPassword: '',
   },
-  batchDownloads: {},
+  batchDownloads: {} as {
+    allowRetry?: boolean;
+    zipInProgress?: boolean;
+    totalFiles?: number;
+    fileCount?: number;
+  },
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
