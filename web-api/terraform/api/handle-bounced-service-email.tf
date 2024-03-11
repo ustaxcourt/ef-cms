@@ -1,6 +1,5 @@
 
 module "zip_handle_bounce" {
-  count            = var.create_bounce_handler
   source         = "./lambda"
   handler        = "./web-api/terraform/template/lambdas/handle-bounce-notificatios.ts"
   handler_method = "handler"
@@ -15,7 +14,7 @@ module "zip_handle_bounce" {
 resource "aws_lambda_permission" "allow_sns" {
   count         = var.create_bounce_handler
   action        = "lambda:InvokeFunction"
-  function_name = module.zip_handle_bounce[0].function_name
+  function_name = module.zip_handle_bounce.function_name
   principal     = "sns.amazonaws.com"
   source_arn    = "arn:aws:sns:us-east-1:${var.account_id}:bounced_service_emails_${var.environment}"
 }
