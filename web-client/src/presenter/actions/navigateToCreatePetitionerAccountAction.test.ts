@@ -13,7 +13,7 @@ describe('navigateToCreatePetitionerAccountAction', () => {
     };
   });
 
-  it('navigates to Messages', async () => {
+  it('should navigate to the create petitioner account page', async () => {
     await runAction(navigateToCreatePetitionerAccountAction, {
       modules: {
         presenter,

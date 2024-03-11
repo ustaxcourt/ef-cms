@@ -1,4 +1,5 @@
 import { AccountConfirmationRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { get } from '../../dynamodbClientService';
 
@@ -18,5 +19,8 @@ export const getAccountConfirmationCode = async (
     applicationContext,
   });
 
-  return result?.confirmationCode;
+  const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  if (result.ttl && result.ttl > now) {
+    return result?.confirmationCode;
+  }
 };
