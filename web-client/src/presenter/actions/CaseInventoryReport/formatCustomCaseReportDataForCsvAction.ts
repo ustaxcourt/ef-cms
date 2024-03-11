@@ -15,7 +15,7 @@ function generateCsvString(
         if (!value) return '';
         let stringValue = aCase[propertyName]?.split('"').join('""');
         if (stringValue.includes(',')) stringValue = `"${stringValue}"`;
-        return stringValue;
+        return stringValue.split('\n').join(' ').split('  ').join(' ');
       });
       return caseValues.join(',');
     })
