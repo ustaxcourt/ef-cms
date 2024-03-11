@@ -2,7 +2,7 @@
 data "aws_caller_identity" "current" {}
 
 module "cognito_post_confirmation_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/terraform/template/lambdas/cognito-triggers.ts"
   handler_method = "handler"
   lambda_name    = "cognito_post_confirmation_lambda_${var.environment}_${var.current_color}"
@@ -13,7 +13,7 @@ module "cognito_post_confirmation_lambda" {
 }
 
 module "cognito_post_authentication_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/terraform/template/lambdas/cognito-triggers.ts"
   handler_method = "handler"
   lambda_name    = "cognito_post_authentication_lambda_${var.environment}_${var.current_color}"
@@ -24,7 +24,7 @@ module "cognito_post_authentication_lambda" {
 }
 
 module "update_petitioner_cases_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/terraform/template/lambdas/cognito-triggers.ts"
   handler_method = "updatePetitionerCasesLambda"
   lambda_name    = "update_petitioner_cases_lambda_${var.environment}_${var.current_color}"

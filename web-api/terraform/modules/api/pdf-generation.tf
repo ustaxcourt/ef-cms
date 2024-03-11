@@ -1,7 +1,7 @@
 
 
 module "maintenance_notify_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/pdfGeneration/pdf-generation.ts"
   handler_method = "handler"
   lambda_name    = "pdf_generator_${var.environment}_${var.current_color}"

@@ -1,6 +1,6 @@
 
 module "api_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/terraform/template/lambdas/api.ts"
   handler_method = "handler"
   lambda_name    = "api_${var.environment}_${var.current_color}"
@@ -130,7 +130,7 @@ resource "aws_api_gateway_method" "api_method_head" {
 }
 
 module "cognito_authorizer_lambda" {
-  source         = "../api/lambda"
+  source         = "../lambda"
   handler        = "./web-api/terraform/template/lambdas/cognito-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "cognito_authorizer_lambda_${var.environment}"

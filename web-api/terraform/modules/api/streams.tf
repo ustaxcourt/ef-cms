@@ -1,5 +1,5 @@
 module "zip_streams" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/streams/processStreamRecordsLambda.ts"
   handler_method = "processStreamRecordsLambda"
   lambda_name    = "streams_${var.environment}_${var.current_color}"

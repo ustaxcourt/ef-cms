@@ -1,6 +1,6 @@
 
 module "websocket_authorizer_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/cognitoAuthorizer/websocket-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "websocket_authorizer_lambda_${var.environment}"
@@ -37,7 +37,7 @@ resource "aws_apigatewayv2_route" "default" {
 }
 
 module "websockets_connect_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "connectHandler"
   lambda_name    = "websockets_connect_${var.environment}_${var.current_color}"
@@ -48,7 +48,7 @@ module "websockets_connect_lambda" {
 }
 
 module "websockets_default_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "defaultHandler"
   lambda_name    = "websockets_default_${var.environment}_${var.current_color}"
@@ -59,7 +59,7 @@ module "websockets_default_lambda" {
 }
 
 module "websockets_disconnect_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "disconnectHandler"
   lambda_name    =  "websockets_disconnect_${var.environment}_${var.current_color}"
