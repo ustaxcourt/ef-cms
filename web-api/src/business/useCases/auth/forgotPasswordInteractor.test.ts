@@ -105,7 +105,7 @@ describe('forgotPasswordInteractor', () => {
     });
   });
 
-  it('should throw an UnauthorizedErrorresend a password change email when user`s account is in a force change password state (with TemporaryPassword on non-prod environments)', async () => {
+  it('should throw an UnauthorizedErrorr and resend a password change email when user`s account is in a force change password state (with TemporaryPassword on non-prod environments)', async () => {
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValueOnce({
       ...mockUser,
       accountStatus: UserStatusType.FORCE_CHANGE_PASSWORD,
@@ -121,13 +121,9 @@ describe('forgotPasswordInteractor', () => {
       applicationContext.getUserGateway().getUserByEmail,
     ).toHaveBeenCalledWith(applicationContext, { email });
     expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).toHaveBeenCalledWith({
-      DesiredDeliveryMediums: ['EMAIL'],
-      MessageAction: 'RESEND',
-      TemporaryPassword: process.env.DEFAULT_ACCOUNT_PASS,
-      UserPoolId: applicationContext.environment.userPoolId,
-      Username: email,
+      applicationContext.getUseCaseHelpers().resendTemporaryPassword,
+    ).toHaveBeenCalledWith(applicationContext, {
+      email,
     });
   });
 

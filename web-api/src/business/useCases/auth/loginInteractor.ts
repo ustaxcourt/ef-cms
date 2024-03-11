@@ -1,4 +1,3 @@
-import { AdminCreateUserCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import {
   InvalidRequest,
   NotFoundError,
@@ -48,7 +47,9 @@ export async function authErrorHandling(
     error.name === 'UserNotFoundException'
   ) {
     if (error.message?.includes('Temporary password has expired')) {
-      await resendTemporaryPassword(applicationContext, { email });
+      await applicationContext
+        .getUseCaseHelpers()
+        .resendTemporaryPassword(applicationContext, { email });
       throw new UnauthorizedError('User temporary password expired'); //403
     }
 
@@ -95,22 +96,4 @@ async function resendAccountConfirmation(
       email,
       userId: user.userId,
     });
-}
-
-export async function resendTemporaryPassword(
-  applicationContext: ServerApplicationContext,
-  { email }: { email: string },
-): Promise<void> {
-  const input: AdminCreateUserCommandInput = {
-    DesiredDeliveryMediums: ['EMAIL'],
-    MessageAction: 'RESEND',
-    UserPoolId: applicationContext.environment.userPoolId,
-    Username: email,
-  };
-
-  if (process.env.STAGE !== 'prod') {
-    input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
-  }
-
-  await applicationContext.getCognito().adminCreateUser(input);
 }
