@@ -375,16 +375,22 @@ export const formattedDocketEntries = (
   // 1. unit test
   // *Needs to be computed in anticiapation of (isMinuteEntry being removed from DocketEntry.ts) https://github.com/ustaxcourt/ef-cms/pull/4702
 
-  const selectableDocumentsCount = docketEntriesFormatted.filter(
-    entry =>
-      !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord,
+  const isSelectableForDownload = entry => {
+    return (
+      !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord
+    );
+  };
+
+  const selectableDocumentsCount = docketEntriesFormatted.filter(entry =>
+    isSelectableForDownload(entry),
   ).length;
   const documentsSelectedForDownloadCount = docketEntriesFormatted.filter(
-    entry => entry.isDocumentSelected,
+    entry => entry.isDocumentSelected && isSelectableForDownload(entry),
   ).length;
 
   const allDocumentsSelected =
-    documentsSelectedForDownloadCount === selectableDocumentsCount;
+    documentsSelectedForDownloadCount === selectableDocumentsCount &&
+    selectableDocumentsCount !== 0;
 
   const someDocumentsSelectedForDownload =
     documentsSelectedForDownloadCount > 0 &&
