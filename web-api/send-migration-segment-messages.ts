@@ -62,7 +62,6 @@ const getItemCount = async (): Promise<number> => {
 
   const { failed } = await addToQueue({ QueueUrl, messages: segments });
   if (failed.length) {
-    // TODO: bail?
-    // process.exit(1);
+    process.exit(1);
   }
 })();
