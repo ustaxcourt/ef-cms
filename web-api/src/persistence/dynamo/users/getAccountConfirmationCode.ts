@@ -20,7 +20,10 @@ export const getAccountConfirmationCode = async (
   });
 
   const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
-  if (result.ttl && result.ttl > now) {
-    return result?.confirmationCode;
+
+  if (!result || (result.ttl && result.ttl < now)) {
+    return undefined;
   }
+
+  return result.confirmationCode;
 };
