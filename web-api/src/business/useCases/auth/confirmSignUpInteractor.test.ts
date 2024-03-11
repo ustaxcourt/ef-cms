@@ -55,9 +55,7 @@ describe('confirmSignUpInteractor', () => {
     expect(
       applicationContext.getCognito().adminConfirmSignUp,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getCognito().adminUpdateUserAttributes,
-    ).toHaveBeenCalled();
+    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().createPetitionerAccountInteractor,
     ).toHaveBeenCalled();
