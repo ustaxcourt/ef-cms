@@ -26,20 +26,12 @@ export const confirmSignUpInteractor = async (
   });
 
   const updatePetitionerAttributes = applicationContext
-    .getCognito()
-    .adminUpdateUserAttributes({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'true',
-        },
-        {
-          Name: 'email',
-          Value: email,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: email,
+    .getUserGateway()
+    .updateUser(applicationContext, {
+      attributesToUpdate: {
+        email,
+      },
+      email,
     });
 
   await Promise.all([
