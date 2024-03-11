@@ -1,12 +1,7 @@
-import { delay } from '@web-client/utilities/delay';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { socketProvider } from './socket';
 import { socketRouter } from './socketRouter';
 jest.mock('./socketRouter');
-jest.mock('@web-client/utilities/delay', () => ({
-  delay: jest.fn(),
-}));
-
-const mockedDelay = jest.mocked(delay);
 
 describe('socket', () => {
   let mockApp;
@@ -31,7 +26,6 @@ describe('socket', () => {
     jest.spyOn(global, 'clearInterval');
     // Prevent logs from printing during unit tests
     jest.spyOn(console, 'log').mockImplementation(() => null);
-    mockedDelay.mockResolvedValue(undefined);
     ({
       initialize: initializeSocket,
       start: startSocket,
@@ -67,7 +61,7 @@ describe('socket', () => {
       },
     };
 
-    initializeSocket(mockApp);
+    initializeSocket(mockApp, applicationContext);
   });
 
   it('should start and stop the socket', () => {
@@ -100,8 +94,8 @@ describe('socket', () => {
     oncloseFn({ code: 2000 }); // Anything other than code 1000 will cause the socket to retry connection
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    expect(mockedDelay).toHaveBeenCalledTimes(1);
-    expect(mockedDelay).toHaveBeenCalledWith(2000);
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(1);
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(2000);
 
     expect(webSocketStub).toHaveBeenCalledTimes(2);
   });
@@ -117,11 +111,11 @@ describe('socket', () => {
     oncloseFn({ code: 2000 });
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    expect(mockedDelay).toHaveBeenCalledTimes(4);
-    expect(mockedDelay).toHaveBeenCalledWith(2000);
-    expect(mockedDelay).toHaveBeenCalledWith(4000);
-    expect(mockedDelay).toHaveBeenCalledWith(8000);
-    expect(mockedDelay).toHaveBeenCalledWith(16000);
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(4);
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(2000);
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(4000);
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(8000);
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledWith(16000);
 
     expect(webSocketStub).toHaveBeenCalledTimes(5);
   });
@@ -148,7 +142,7 @@ describe('socket', () => {
     oncloseFn({ code: 2000 });
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    expect(mockedDelay).toHaveBeenCalledTimes(4);
+    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(4);
 
     // 1 initial start + 4 reconnects
     expect(webSocketStub).toHaveBeenCalledTimes(5);
