@@ -47,7 +47,7 @@ describe('migrateItems', () => {
         sk: 'case|446-22',
       },
     ];
-    const results = await migrateItems(items, null, applicationMock);
+    const results = await migrateItems(items, applicationMock);
     expect(results.length).toEqual(3);
     expect(results).toEqual([
       {
@@ -96,7 +96,7 @@ describe('migrateItems', () => {
         sk: 'case|445-22',
       },
     ];
-    const results = await migrateItems(items, null, applicationMock);
+    const results = await migrateItems(items, applicationMock);
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
@@ -138,7 +138,7 @@ describe('migrateItems', () => {
         sk: 'case|445-22',
       },
     ];
-    const results = await migrateItems(items, null, applicationMock);
+    const results = await migrateItems(items, applicationMock);
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
@@ -181,7 +181,7 @@ describe('migrateItems', () => {
         sk: 'case-worksheet|445-22',
       },
     ];
-    const results = await migrateItems(items, null, applicationMock);
+    const results = await migrateItems(items, applicationMock);
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
@@ -223,7 +223,7 @@ describe('migrateItems', () => {
         sk: 'case|445-22',
       },
     ];
-    const results = await migrateItems(items, null, applicationMock);
+    const results = await migrateItems(items, applicationMock);
     expect(results.length).toEqual(2);
     expect(results).toEqual([
       {
@@ -265,7 +265,7 @@ describe('migrateItems', () => {
         sk: 'case-deadline|123-45',
       },
     ];
-    const results = await migrateItems(items, null, applicationMock);
+    const results = await migrateItems(items, applicationMock);
     expect(results.length).toEqual(2);
     expect(results[1]).toEqual({
       associatedJudge: 'Colvin',
@@ -300,7 +300,7 @@ describe('migrateItems', () => {
         sk: 'work-item|123-45',
       },
     ];
-    const results = await migrateItems(items, null, applicationMock);
+    const results = await migrateItems(items, applicationMock);
     expect(results.length).toEqual(2);
     expect(results[1]).toEqual({
       associatedJudge: 'Colvin',
@@ -336,7 +336,7 @@ describe('migrateItems', () => {
         sk: 'work-item|123-45',
       },
     ];
-    const results = await migrateItems(items, null, applicationMock);
+    const results = await migrateItems(items, applicationMock);
     expect(results.length).toEqual(2);
     expect(results[1]).toEqual({
       associatedJudge: 'Judge Colvin',

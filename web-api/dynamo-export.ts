@@ -1,10 +1,13 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { createApplicationContext } from './src/applicationContext';
-import { processItems } from './workflow-terraform/migration/main/lambdas/migration-segments';
 import { scanFull } from './utilities/scanFull';
 
-const applicationContext = createApplicationContext({});
+const tableName = process.argv[2] ?? 'efcms-local';
+
+if (!tableName) {
+  console.error('Table name to export is required');
+  process.exit(1);
+}
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
@@ -21,11 +24,10 @@ const applicationContext = createApplicationContext({});
     marshallOptions: { removeUndefinedValues: true },
   });
 
-  const results = await scanFull(process.env.SOURCE_TABLE!, documentClient);
+  const results = await scanFull(tableName, documentClient);
 
-  await processItems(applicationContext, {
-    documentClient,
-    items: results,
-    ranMigrations: undefined,
+  results.sort((a, b) => {
+    return `${a.pk}-${a.sk}`.localeCompare(`${b.pk}-${b.sk}`);
   });
+  console.log(JSON.stringify(results, null, 2));
 })();
