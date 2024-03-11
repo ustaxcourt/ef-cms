@@ -1,7 +1,7 @@
 
 module "api_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/api/api.ts"
+  handler_file   = "./web-api/src/lambdas/api/api.ts"
   handler_method = "handler"
   lambda_name    = "api_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
@@ -131,7 +131,7 @@ resource "aws_api_gateway_method" "api_method_head" {
 
 module "cognito_authorizer_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/cognitoAuthorizer/cognito-authorizer.ts"
+  handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/cognito-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "cognito_authorizer_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"

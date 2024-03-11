@@ -4,9 +4,9 @@ locals {
 
 module "change_of_address_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/pdfGeneration/pdf-generation.ts"
+  handler_file   = "./web-api/src/lambdas/pdfGeneration/pdf-generation.ts"
   handler_method = "changeOfAddressHandler"
-  lambda_name    =  "change_of_address_${var.environment}_${var.current_color}"
+  lambda_name    = "change_of_address_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "29"
@@ -18,11 +18,11 @@ resource "aws_lambda_event_source_mapping" "change_of_address_mapping" {
   event_source_arn = aws_sqs_queue.change_of_address_queue.arn
   function_name    = module.change_of_address_lambda.arn
   batch_size       = 1
-  
+
   scaling_config {
     maximum_concurrency = 5
   }
-  
+
 }
 
 resource "aws_sqs_queue" "change_of_address_queue" {

@@ -1,6 +1,6 @@
 module "api_async_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/api-public/api-public.ts"
+  handler_file   = "./web-api/src/lambdas/api-public/api-public.ts"
   handler_method = "handler"
   lambda_name    = "api_async_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
@@ -74,7 +74,7 @@ resource "aws_api_gateway_integration" "api_async_integration_post" {
   type                    = "AWS"
   uri                     = module.api_async_lambda.invoke_arn
 
-request_templates = {
+  request_templates = {
     "application/json" = <<EOF
 {
   "body" : $input.json('$'),
@@ -127,7 +127,7 @@ resource "aws_api_gateway_integration" "api_async_integration_put" {
   type                    = "AWS"
   uri                     = module.api_async_lambda.invoke_arn
 
-request_templates = {
+  request_templates = {
     "application/json" = <<EOF
 {
   "body" : $input.json('$'),

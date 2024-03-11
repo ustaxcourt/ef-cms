@@ -1,5 +1,5 @@
 
-variable "handler" {
+variable "handler_file" {
   type = string
 }
 

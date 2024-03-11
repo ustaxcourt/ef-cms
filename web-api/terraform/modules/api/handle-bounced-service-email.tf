@@ -1,7 +1,7 @@
 
 module "zip_handle_bounce" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/email/handleBounceNotificationsLambda.ts"
+  handler_file   = "./web-api/src/lambdas/email/handleBounceNotificationsLambda.ts"
   handler_method = "handleBounceNotificationsLambda"
   lambda_name    = "bounce_handler_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"

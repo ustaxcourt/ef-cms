@@ -1,6 +1,6 @@
 module "send_emails_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/sendEmails/send-emails.ts"
+  handler_file   = "./web-api/src/lambdas/sendEmails/send-emails.ts"
   handler_method = "handler"
   lambda_name    = "send_emails_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
