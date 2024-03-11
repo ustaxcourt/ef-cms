@@ -1,5 +1,5 @@
-import { createApplicationContext } from '../../../src/applicationContext';
-import { sendWithRetry } from '../../../src/dispatchers/ses/sendBulkTemplatedEmail';
+import { createApplicationContext } from '../../applicationContext';
+import { sendWithRetry } from '../../dispatchers/ses/sendBulkTemplatedEmail';
 
 export const handler = async event => {
   const applicationContext = createApplicationContext({});

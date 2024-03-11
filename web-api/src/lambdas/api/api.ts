@@ -1,4 +1,4 @@
-import { app } from '../../../src/app';
+import { app } from '../../app';
 import awsServerlessExpress from '@vendia/serverless-express';
 
 export const handler = (event, context) => {

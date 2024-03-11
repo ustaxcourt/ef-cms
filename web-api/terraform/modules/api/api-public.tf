@@ -11,7 +11,7 @@ module "api_public_lambda" {
 
 module "public_api_authorizer_lambda" {
   source         = "./lambda"
-  handler        = "./web-api/terraform/template/lambdas/public-api-authorizer.ts"
+  handler        = "./web-api/src/lambdas/publicApiAuthorizer/public-api-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "public_api_authorizer_lambda_${var.environment}_${var.current_color}"
   role           =  "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/public_api_authorizer_role_${var.environment}"

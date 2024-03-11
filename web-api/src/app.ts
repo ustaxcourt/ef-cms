@@ -20,7 +20,7 @@ import { changePasswordLocalLambda } from './auth/changePasswordLocalLambda';
 import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabilityLambda';
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
-import { cognitoTriggersLocalLambda } from '../terraform/modules/lambdas/cognitoTriggersLocalLambda';
+import { cognitoTriggersLocalLambda } from './lambdas/cognitoTriggers/cognitoTriggersLocalLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';

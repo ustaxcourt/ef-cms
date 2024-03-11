@@ -1,4 +1,4 @@
-import { createLogger } from '../../../src/createLogger';
+import { createLogger } from '../../createLogger';
 import { transports } from 'winston';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';

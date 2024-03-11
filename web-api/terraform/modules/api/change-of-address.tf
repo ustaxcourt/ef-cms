@@ -4,7 +4,7 @@ locals {
 
 module "change_of_address_lambda" {
   source         = "./lambda"
-  handler        = "./web-api/terraform/template/lambdas/pdf-generation.ts"
+  handler        = "./web-api/src/lambdas/pdfGeneration/pdf-generation.ts"
   handler_method = "changeOfAddressHandler"
   lambda_name    =  "change_of_address_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
