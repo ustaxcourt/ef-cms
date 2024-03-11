@@ -1,5 +1,3 @@
-import { delay } from '@web-client/utilities/delay';
-
 const createWebSocketClient = ({ clientConnectionId, token }) => {
   const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
   const connectionUrl = `${notificationsUrl}?token=${token}&clientConnectionId=${clientConnectionId}`;
@@ -53,7 +51,9 @@ export const socketProvider = ({ socketRouter }) => {
                 return;
               }
               // eslint-disable-next-line promise/param-names
-              await delay(timeToWaitBeforeReconnect);
+              await applicationContext
+                .getUtilities()
+                .sleep(timeToWaitBeforeReconnect);
 
               await start();
 
