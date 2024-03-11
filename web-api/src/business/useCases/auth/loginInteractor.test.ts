@@ -169,13 +169,9 @@ describe('loginInteractor', () => {
     ).rejects.toThrow(new UnauthorizedError('User temporary password expired'));
 
     expect(
-      applicationContext.getCognito().adminCreateUser.mock.calls[0][0],
-    ).toEqual({
-      DesiredDeliveryMediums: ['EMAIL'],
-      MessageAction: 'RESEND',
-      TemporaryPassword: process.env.DEFAULT_ACCOUNT_PASS,
-      UserPoolId: applicationContext.environment.userPoolId,
-      Username: mockEmail,
+      applicationContext.getUseCaseHelpers().resendTemporaryPassword,
+    ).toHaveBeenCalledWith(applicationContext, {
+      email: mockEmail,
     });
   });
 

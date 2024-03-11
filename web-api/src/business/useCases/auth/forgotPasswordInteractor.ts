@@ -1,7 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
-import { resendTemporaryPassword } from '@web-api/business/useCases/auth/loginInteractor';
 
 export const forgotPasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -31,7 +30,9 @@ export const forgotPasswordInteractor = async (
   }
 
   if (user.accountStatus === UserStatusType.FORCE_CHANGE_PASSWORD) {
-    await resendTemporaryPassword(applicationContext, { email });
+    await applicationContext
+      .getUseCaseHelpers()
+      .resendTemporaryPassword(applicationContext, { email });
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
 
