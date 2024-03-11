@@ -1,6 +1,6 @@
 module "api_async_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/terraform/template/lambdas/api-public.ts"
+  handler        = "./web-api/src/lambdas/api-public/api-public.ts"
   handler_method = "handler"
   lambda_name    = "api_async_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"

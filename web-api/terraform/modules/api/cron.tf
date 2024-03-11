@@ -1,16 +1,3 @@
-
-module "cognito_post_authentication_lambda" {
-  source         = "../lambda"
-  handler        = "./web-api/terraform/template/lambdas/cognito-triggers.ts"
-  handler_method = "updatePetitionerCasesLambda"
-  lambda_name    = "update_petitioner_cases_lambda_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_update_petitioner_cases_lambda_role_${var.environment}"
-  environment    = var.lambda_environment
-  timeout        = "29"
-  memory_size    = "3008"
-}
-
-
 module "check_case_cron_lambda" {
   source         = "../lambda"
   handler        = "./web-api/src/lambdas/cases/checkForReadyForTrialCasesLambda.ts"
