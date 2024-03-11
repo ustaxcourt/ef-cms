@@ -12,7 +12,7 @@ module "zip_streams" {
 resource "aws_lambda_event_source_mapping" "streams_mapping" {
   count                          = var.create_streams
   event_source_arn               = var.stream_arn
-  function_name                  = module.zip_streams.arn
+  function_name                  = module.zip_streams.function_name
   starting_position              = "TRIM_HORIZON"
   bisect_batch_on_function_error = "true"
   batch_size                     = "100"
