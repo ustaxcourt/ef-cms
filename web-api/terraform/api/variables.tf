@@ -142,7 +142,7 @@ variable "stream_arn" {
   type = string
 }
 
-variable "create_triggers" {
+variable "create_triggers" { // ZACH YOU LEFT OFF HERE
   type    = number
   default = 1
 }
@@ -151,31 +151,11 @@ variable "web_acl_arn" {
   type = string
 }
 
-variable "triggers_object" {
-  type = any
-}
-
-variable "triggers_object_hash" {
-  type = string
-}
-
 variable "create_seal_in_lower" {
   type = number
 }
 
-variable "seal_in_lower_object" {
-  type = any
-}
-
-variable "seal_in_lower_object_hash" {
-  type = string
-}
-
 variable "prod_env_account_id" {
-  type = string
-}
-
-variable "lower_env_account_id" {
   type = string
 }
 
@@ -183,21 +163,8 @@ variable "create_bounce_handler" {
   type = number
 }
 
-variable "bounce_handler_object" {
-  type = any
-}
-
-variable "bounce_handler_object_hash" {
-  type = string
-}
-
 variable "node_version" {
   type = string
-}
-
-variable "use_layers" {
-  type    = bool
-  default = true
 }
 
 variable "enable_health_checks" {
@@ -207,8 +174,4 @@ variable "enable_health_checks" {
 
 variable "health_check_id" {
   type = string
-}
-
-variable "deployment_timestamp" {
-  type = number
 }
