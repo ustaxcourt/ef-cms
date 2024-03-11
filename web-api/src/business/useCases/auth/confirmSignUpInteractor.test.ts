@@ -42,9 +42,10 @@ describe('confirmSignUpInteractor', () => {
       .getPersistenceGateway()
       .getAccountConfirmationCode.mockResolvedValue(mockConfirmationCode);
     applicationContext.getCognito().adminConfirmSignUp.mockResolvedValue({});
-    applicationContext
-      .getUserGateway()
-      .getUserByEmail.mockResolvedValue({ email: mockEmail });
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      email: mockEmail,
+      name: 'Test Petitioner',
+    });
 
     await confirmSignUpInteractor(applicationContext, {
       confirmationCode: mockConfirmationCode,
@@ -57,7 +58,7 @@ describe('confirmSignUpInteractor', () => {
     ).toHaveBeenCalled();
     expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().createPetitionerAccountInteractor,
+      applicationContext.getPersistenceGateway().persistUser,
     ).toHaveBeenCalled();
   });
 });
