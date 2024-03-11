@@ -423,6 +423,8 @@ export const formattedDocketEntries = (
         index: docEntry.index,
         isFileAttached: docEntry.isFileAttached,
         isOnDocketRecord: docEntry.isOnDocketRecord,
+        isSealed: docEntry.isSealed,
+        isStricken: docEntry.isStricken,
       })),
     docketNumber,
   };

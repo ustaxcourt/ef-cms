@@ -109,17 +109,18 @@ export const DocketRecord = connect(
                               checked={entry.isDocumentSelected}
                               type="checkbox"
                               onChange={() => {
-                                const docketEntry = {
+                                const documentSelected = {
                                   docketEntryId: entry.docketEntryId,
                                   documentTitle: entry.documentTitle,
                                   filingDate: entry.filingDate,
                                   index: entry.index,
                                   isFileAttached: entry.isFileAttached,
                                   isOnDocketRecord: entry.isOnDocketRecord,
+                                  isStricken: entry.isStricken,
                                 };
                                 setSelectedDocumentsForDownloadSequence({
                                   ...formattedDocketEntriesHelper.caseMetaDataForRequest,
-                                  docketEntries: [docketEntry],
+                                  docketEntries: [documentSelected],
                                 });
                               }}
                             />
