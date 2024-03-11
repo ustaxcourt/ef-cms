@@ -5,9 +5,9 @@ const migrationConfig: Configuration = {
   ...config,
   entry: {
     migration:
-      './web-api/workflow-terraform/migration/main/lambdas/migration.js',
+      './web-api/workflow-terraform/migration/main/lambdas/migration.ts',
     'migration-segments':
-      './web-api/workflow-terraform/migration/main/lambdas/migration-segments.js',
+      './web-api/workflow-terraform/migration/main/lambdas/migration-segments.ts',
   },
   output: {
     clean: true,

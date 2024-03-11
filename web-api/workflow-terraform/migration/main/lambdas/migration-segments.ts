@@ -1,41 +1,48 @@
-const AWS = require('aws-sdk');
-const promiseRetry = require('promise-retry');
-const {
-  createApplicationContext,
-} = require('../../../../src/applicationContext');
-const {
+import {
+  DeleteMessageCommand,
+  DeleteMessageCommandInput,
+  SQSClient,
+} from '@aws-sdk/client-sqs';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument, PutCommandOutput } from '@aws-sdk/lib-dynamodb';
+import { chunk } from 'lodash';
+import { createApplicationContext } from '@web-api/applicationContext';
+import {
   createISODateString,
   dateStringsCompared,
-} = require('../../../../../shared/src/business/utilities/DateHandler');
-const {
-  migrateItems: validationMigration,
-} = require('./migrations/0000-validate-all-items');
-const { chunk } = require('lodash');
-const { createLogger } = require('../../../../src/createLogger');
-const { migrationsToRun } = require('./migrationsToRun');
+} from '@shared/business/utilities/DateHandler';
+import { createLogger } from '@web-api/createLogger';
+import { migrationsToRun } from './migrationsToRun';
+import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
+import promiseRetry from 'promise-retry';
+import type { Context, Handler, SQSEvent } from 'aws-lambda';
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
-const dynamodb = new AWS.DynamoDB({
-  maxRetries: 10,
+const dynamodb = new DynamoDBClient({
+  maxAttempts: 10,
   region: 'us-east-1',
-  retryDelayOptions: { base: 300 },
 });
-const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-  service: dynamodb,
-});
-const sqs = new AWS.SQS({ region: 'us-east-1' });
 
-const scanTableSegment = async (
+const dynamoDbDocumentClient = DynamoDBDocument.from(dynamodb, {
+  marshallOptions: { removeUndefinedValues: true },
+});
+
+const sqs = new SQSClient({ region: 'us-east-1' });
+
+const scanTableSegment = async ({
   applicationContext,
+  ranMigrations,
   segment,
   totalSegments,
-  ranMigrations,
-) => {
+}: {
+  applicationContext: IApplicationContext;
+  ranMigrations: { [key: string]: boolean };
+  segment: number;
+  totalSegments: number;
+}): Promise<void> => {
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey: Record<string, any> | undefined;
   while (hasMoreResults) {
     hasMoreResults = false;
 
@@ -48,57 +55,63 @@ const scanTableSegment = async (
         TableName: process.env.SOURCE_TABLE,
         TotalSegments: totalSegments,
       })
-      .promise()
       .then(async results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        await exports.processItems(applicationContext, {
-          documentClient: dynamoDbDocumentClient,
-          items: results.Items,
+        await processItems(applicationContext, {
+          items: results.Items || [],
           ranMigrations,
-          segment,
         });
       });
   }
 };
 
 const hasMigrationRan = async key => {
-  const { Item } = await dynamoDbDocumentClient
-    .get({
-      Key: {
-        pk: `migration|${key}`,
-        sk: `migration|${key}`,
-      },
-      TableName: `efcms-deploy-${process.env.STAGE}`,
-    })
-    .promise();
+  const { Item } = await dynamoDbDocumentClient.get({
+    Key: {
+      pk: 'migration',
+      sk: `migration|${key}`,
+    },
+    TableName: process.env.SOURCE_TABLE,
+  });
   return { [key]: !!Item };
 };
 
-exports.migrateRecords = async (
-  applicationContext,
-  { documentClient, items, ranMigrations = {} },
+export const migrateRecords = async (
+  applicationContext: IApplicationContext,
+  {
+    items,
+    ranMigrations,
+  }: {
+    items: Record<string, any>[];
+    ranMigrations?: { [key: string]: boolean } | undefined;
+  },
 ) => {
   for (let { key, script } of migrationsToRun) {
-    if (!ranMigrations[key]) {
+    if (ranMigrations && !ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
-      items = await script(items, documentClient, applicationContext);
+      items = await script(items, applicationContext);
     }
   }
 
   applicationContext.logger.debug('about to run validation migration');
-  items = await validationMigration(items);
+  items = validationMigration(items, applicationContext);
 
   return items;
 };
 
-exports.processItems = async (
-  applicationContext,
-  { documentClient, items, ranMigrations },
+export const processItems = async (
+  applicationContext: IApplicationContext,
+  {
+    items,
+    ranMigrations,
+  }: {
+    items: Record<string, any>[];
+    ranMigrations: { [key: string]: boolean } | undefined;
+  },
 ) => {
   try {
-    items = await exports.migrateRecords(applicationContext, {
-      documentClient,
+    items = await migrateRecords(applicationContext, {
       items,
       ranMigrations,
     });
@@ -109,17 +122,16 @@ exports.processItems = async (
 
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let aChunk of chunks) {
-    const promises = [];
+    const promises: Promise<string | PutCommandOutput>[] = [];
     for (let item of aChunk) {
       promises.push(
         promiseRetry(retry => {
-          return documentClient
+          return dynamoDbDocumentClient
             .put({
               ConditionExpression: 'attribute_not_exists(pk)',
               Item: item,
               TableName: process.env.DESTINATION_TABLE,
             })
-            .promise()
             .catch(e => {
               if (e.message.includes('The conditional request failed')) {
                 applicationContext.logger.info(
@@ -138,7 +150,7 @@ exports.processItems = async (
   }
 };
 
-exports.handler = async (event, context) => {
+export const handler: Handler = async (event: SQSEvent, context: Context) => {
   const applicationContext = createApplicationContext(
     {},
     createLogger({
@@ -167,12 +179,12 @@ exports.handler = async (event, context) => {
     Object.assign(ranMigrations, await hasMigrationRan(key));
   }
 
-  await scanTableSegment(
+  await scanTableSegment({
     applicationContext,
+    ranMigrations,
     segment,
     totalSegments,
-    ranMigrations,
-  );
+  });
   const finish = createISODateString();
   const duration = dateStringsCompared(finish, start, { exact: true });
   applicationContext.logger.info('finishing segment', {
@@ -180,10 +192,11 @@ exports.handler = async (event, context) => {
     segment,
     totalSegments,
   });
-  await sqs
-    .deleteMessage({
-      QueueUrl: process.env.SEGMENTS_QUEUE_URL,
-      ReceiptHandle: receiptHandle,
-    })
-    .promise();
+
+  const input: DeleteMessageCommandInput = {
+    QueueUrl: process.env.SEGMENTS_QUEUE_URL,
+    ReceiptHandle: receiptHandle,
+  };
+  const command = new DeleteMessageCommand(input);
+  await sqs.send(command);
 };
