@@ -1,43 +1,37 @@
-resource "aws_lambda_function" "check_case_cron_lambda" {
-  count            = var.create_check_case_cron
-  depends_on       = [var.cron_object]
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "cron_${var.current_color}.js.zip"
-  source_code_hash = var.cron_object_hash
-  function_name    = "check_case_cron_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "cron.checkForReadyForTrialCasesHandler"
-  timeout          = "900"
-  memory_size      = "3008"
 
-  runtime = var.node_version
-
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
-
-  environment {
-    variables = var.lambda_environment
-  }
-
+module "cognito_post_authentication_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/cognito-triggers.ts"
+  handler_method = "updatePetitionerCasesLambda"
+  lambda_name    = "update_petitioner_cases_lambda_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_update_petitioner_cases_lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
 }
 
-resource "aws_lambda_function" "health_check_cron_lambda" {
-  count            = var.create_health_check_cron
-  depends_on       = [var.cron_object]
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "cron_${var.current_color}.js.zip"
-  source_code_hash = var.cron_object_hash
-  function_name    = "health_check_cron_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "cron.setHealthCheckCacheHandler"
-  timeout          = "900"
-  memory_size      = "3008"
 
-  runtime = var.node_version
+module "check_case_cron_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/cognito-triggers.ts"
+  handler_method = "checkForReadyForTrialCasesHandler"
+  lambda_name    =  "check_case_cron_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "900"
+  memory_size    = "3008"
+}
 
-  environment {
-    variables = var.lambda_environment
-  }
 
+module "health_check_cron_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/cognito-triggers.ts"
+  handler_method = "setHealthCheckCacheHandler"
+  lambda_name    = "health_check_cron_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "900"
+  memory_size    = "3008"
 }
 
 resource "aws_cloudwatch_event_rule" "check_case_cron_rule" {
