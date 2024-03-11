@@ -244,6 +244,93 @@ describe('ElectronicPetition entity', () => {
     });
   });
 
+  describe('ATP file size', () => {
+    it('should inform you if atp file size is greater than the file max size', () => {
+      const electronicPetition = new ElectronicPetition(
+        {
+          attachmentToPetitionFile: new File([], 'test.pdf'),
+          attachmentToPetitionFileSize: MAX_FILE_SIZE_BYTES + 5,
+          caseType: CASE_TYPES_MAP.other,
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          partyType: PARTY_TYPES.nextFriendForMinor,
+          preferredTrialCity: 'Memphis, Tennessee',
+          procedureType: 'Small',
+        },
+        { applicationContext },
+      );
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .attachmentToPetitionFileSize,
+      ).toEqual(
+        `Your ATP file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      );
+    });
+
+    it('should inform you if atp file size is zero', () => {
+      const electronicPetition = new ElectronicPetition(
+        {
+          attachmentToPetitionFile: new File([], 'test.pdf'),
+          attachmentToPetitionFileSize: 0,
+          caseType: CASE_TYPES_MAP.other,
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          partyType: PARTY_TYPES.nextFriendForMinor,
+
+          preferredTrialCity: 'Memphis, Tennessee',
+          procedureType: 'Small',
+        },
+        { applicationContext },
+      );
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .attachmentToPetitionFileSize,
+      ).toEqual('Your ATP file size is empty');
+    });
+
+    it('should not error on attachmentToPetitionFileSize when attachmentToPetitionFile is undefined', () => {
+      const electronicPetition = new ElectronicPetition(
+        {
+          caseType: CASE_TYPES_MAP.other,
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          partyType: PARTY_TYPES.nextFriendForMinor,
+          preferredTrialCity: 'Memphis, Tennessee',
+          procedureType: 'Small',
+        },
+        { applicationContext },
+      );
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .attachmentToPetitionFileSize,
+      ).toBeUndefined();
+    });
+
+    it('should error on attachmentToPetitionFileSize when attachmentToPetitionFile is undefined', () => {
+      const electronicPetition = new ElectronicPetition(
+        {
+          attachmentToPetitionFile: new File([], 'testStinFile.pdf'),
+          attachmentToPetitionFileSize: undefined,
+          caseType: CASE_TYPES_MAP.other,
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          partyType: PARTY_TYPES.nextFriendForMinor,
+          preferredTrialCity: 'Memphis, Tennessee',
+          procedureType: 'Small',
+        },
+        { applicationContext },
+      );
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .attachmentToPetitionFileSize,
+      ).toEqual('Your ATP file size is empty');
+    });
+  });
+
   describe('corporate disclosure file size', () => {
     it('should inform you if corporate disclosure file size is greater than the PDF max file size', () => {
       const electronicPetition = new ElectronicPetition(
