@@ -67,7 +67,7 @@ import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/sav
 import { sendBulkTemplatedEmail } from '../../web-api/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
-import { sleep } from '../../shared/src/business/utilities/sleep';
+import { sleep } from '@shared/tools/helpers';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
