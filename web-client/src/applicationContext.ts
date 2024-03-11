@@ -277,7 +277,7 @@ import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/tria
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
-import { sleep } from '../../shared/src/business/utilities/sleep';
+import { sleep } from '@shared/tools/helpers';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';

@@ -21,7 +21,7 @@ export const PractitionerSearchForm = connect(
             <div className="grid-col-12 text-right">
               <Button
                 className="margin-right-0"
-                data-testId="add-new-practitioner"
+                data-testid="add-new-practitioner"
                 href="/users/create-practitioner"
               >
                 Add New Practitioner
