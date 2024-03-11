@@ -1,7 +1,7 @@
 
 module "websocket_authorizer_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/cognitoAuthorizer/websocket-authorizer.ts"
+  handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/websocket-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "websocket_authorizer_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
@@ -38,7 +38,7 @@ resource "aws_apigatewayv2_route" "default" {
 
 module "websockets_connect_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/websockets/websockets.ts"
+  handler_file   = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "connectHandler"
   lambda_name    = "websockets_connect_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
@@ -49,7 +49,7 @@ module "websockets_connect_lambda" {
 
 module "websockets_default_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/websockets/websockets.ts"
+  handler_file   = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "defaultHandler"
   lambda_name    = "websockets_default_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
@@ -60,9 +60,9 @@ module "websockets_default_lambda" {
 
 module "websockets_disconnect_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/websockets/websockets.ts"
+  handler_file   = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "disconnectHandler"
-  lambda_name    =  "websockets_disconnect_${var.environment}_${var.current_color}"
+  lambda_name    = "websockets_disconnect_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "29"

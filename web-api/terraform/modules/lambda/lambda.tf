@@ -8,7 +8,7 @@ resource "null_resource" "esbuild_lambda" {
   }
 
   provisioner "local-exec" {
-    command = "node ${path.module}/esbuildLambda.mjs ${var.handler} ${random_uuid.bundle_directory.id}"
+    command = "node ${path.module}/esbuildLambda.mjs ${var.handler_file} ${random_uuid.bundle_directory.id}"
   }
 }
 

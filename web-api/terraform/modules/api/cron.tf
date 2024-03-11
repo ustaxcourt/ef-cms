@@ -1,8 +1,8 @@
 module "check_case_cron_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/cases/checkForReadyForTrialCasesLambda.ts"
+  handler_file   = "./web-api/src/lambdas/cases/checkForReadyForTrialCasesLambda.ts"
   handler_method = "checkForReadyForTrialCasesLambda"
-  lambda_name    =  "check_case_cron_${var.environment}_${var.current_color}"
+  lambda_name    = "check_case_cron_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "900"
@@ -12,7 +12,7 @@ module "check_case_cron_lambda" {
 
 module "health_check_cron_lambda" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/health/setHealthCheckCacheLambda.ts"
+  handler_file   = "./web-api/src/lambdas/health/setHealthCheckCacheLambda.ts"
   handler_method = "setHealthCheckCacheLambda"
   lambda_name    = "health_check_cron_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"

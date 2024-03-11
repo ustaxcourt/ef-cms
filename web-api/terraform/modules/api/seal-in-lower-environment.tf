@@ -1,7 +1,7 @@
 
 module "zip_seal" {
   source         = "../lambda"
-  handler        = "./web-api/src/lambdas/cases/sealInLowerEnvironmentLambda.ts"
+  handler_file   = "./web-api/src/lambdas/cases/sealInLowerEnvironmentLambda.ts"
   handler_method = "sealInLowerEnvironmentLambda"
   lambda_name    = "seal_in_lower_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
