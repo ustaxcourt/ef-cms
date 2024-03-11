@@ -1,7 +1,9 @@
 import { RawUserCase } from '@shared/business/entities/UserCase';
+import { createApplicationContext } from '@web-api/applicationContext';
 import { migrateItems } from './0000-validate-all-items';
 
 describe('0000-validate-all-items', () => {
+  const applicationContext = createApplicationContext({});
   console.log = () => null;
 
   const entities = [
@@ -46,17 +48,18 @@ describe('0000-validate-all-items', () => {
     },
   ];
 
-  entities.forEach(entity => {
-    it('should validate the expected entities', () => {
-      expect(() => migrateItems([entity])).toThrow(
+  it.each(entities)(
+    'should throw an error when a $entityName entity is invalid',
+    entity => {
+      expect(() => migrateItems([entity], applicationContext)).toThrow(
         `The ${entity.entityName} entity was invalid`,
       );
-    });
-  });
+    },
+  );
 
   it('should NOT validate an entity that is not recognized', () => {
     expect(() =>
-      migrateItems([{ entityName: 'DOES_NOT_EXIST' }]),
+      migrateItems([{ entityName: 'DOES_NOT_EXIST' }], applicationContext),
     ).not.toThrow();
   });
 
@@ -66,7 +69,7 @@ describe('0000-validate-all-items', () => {
       entityName: 'UserCase',
     };
 
-    const result = migrateItems([validUserCase]);
+    const result = migrateItems([validUserCase], applicationContext);
 
     expect(result).toEqual([validUserCase]);
   });
