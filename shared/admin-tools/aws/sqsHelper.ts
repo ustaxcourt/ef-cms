@@ -1,7 +1,9 @@
 import {
+  BatchResultErrorEntry,
   GetQueueAttributesCommand,
   SQSClient,
   SendMessageBatchCommand,
+  SendMessageBatchCommandOutput,
 } from '@aws-sdk/client-sqs';
 import { chunk } from 'lodash';
 
@@ -11,36 +13,50 @@ export const addToQueue = async ({
   messages,
   QueueUrl,
 }: {
-  messages: object[];
+  messages: {}[];
   QueueUrl: string;
-}): Promise<void> => {
+}): Promise<{ failed: BatchResultErrorEntry[]; sent: number }> => {
+  const commands: SendMessageBatchCommand[] = [];
   let msgId = 0;
-  let sent = 0;
   const chunks = chunk(messages, 10);
   for (const c of chunks) {
     const Entries = c.map(message => ({
       Id: `${msgId++}`,
       MessageBody: JSON.stringify(message),
     }));
-    const sendMessageBatchCommand = new SendMessageBatchCommand({
-      Entries,
-      QueueUrl,
-    });
-    try {
-      const { Failed, Successful } = await sqsClient.send(
-        sendMessageBatchCommand,
-      );
-      if (Successful) {
-        sent += Successful.length;
-      }
-      if (Failed) {
-        console.error('Failed to send messages to the SQS Queue', Failed);
-      }
-    } catch (err) {
-      console.error('Unable to send messages to the SQS Queue', err);
+    commands.push(
+      new SendMessageBatchCommand({
+        Entries,
+        QueueUrl,
+      }),
+    );
+  }
+
+  let sent = 0;
+  let failed: BatchResultErrorEntry[] = [];
+  let results: SendMessageBatchCommandOutput[];
+  try {
+    results = await Promise.all(
+      commands.map(command => sqsClient.send(command)),
+    );
+  } catch (err) {
+    console.error('Unable to send messages to the SQS Queue', err);
+    return { failed, sent };
+  }
+
+  for (const result of results) {
+    const { Failed, Successful } = result;
+    if (Successful) {
+      sent += Successful.length;
+    }
+    if (Failed && Failed.length) {
+      failed = [...failed, ...Failed];
+      console.error('Failed to send messages to the SQS Queue', Failed);
     }
   }
+
   console.log(`Sent ${sent} of ${messages.length} messages to the SQS Queue`);
+  return { failed, sent };
 };
 
 export const countItemsInQueue = async ({
