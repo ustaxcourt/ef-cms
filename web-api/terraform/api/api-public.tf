@@ -1,31 +1,30 @@
-resource "aws_lambda_function" "api_public_lambda" {
-  depends_on       = [var.api_public_object]
-  function_name    = "api_public_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "api-public.handler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "api_public_${var.current_color}.js.zip"
-  source_code_hash = var.public_object_hash
-  timeout          = "29"
-  memory_size      = "3008"
-
-  runtime = var.node_version
-
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
-
-  tracing_config {
-    mode = "Active"
-  }
-
-  environment {
-    variables = var.lambda_environment
-  }
+module "api_public_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/api-public.ts"
+  handler_method = "handler"
+  lambda_name    = "api_public_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
 }
+
+module "public_api_authorizer_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/public-api-authorizer.ts"
+  handler_method = "handler"
+  lambda_name    = "public_api_authorizer_lambda_${var.environment}_${var.current_color}"
+  role           =  "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/public_api_authorizer_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
+}
+
 
 resource "aws_api_gateway_authorizer" "public_authorizer" {
   name                             = "public_authorizer_${var.environment}_${var.current_color}"
   rest_api_id                      = aws_api_gateway_rest_api.gateway_for_api_public.id
-  authorizer_uri                   = var.public_authorizer_uri
+  authorizer_uri                   = module.public_api_authorizer_lambda.invoke_arn
   type                             = "REQUEST"
   identity_source                  = "context.identity.sourceIp"
   authorizer_result_ttl_in_seconds = 300
@@ -91,13 +90,13 @@ resource "aws_api_gateway_integration" "api_public_integration" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_public_lambda.invoke_arn
+  uri                     = module.api_public_lambda.invoke_arn
 }
 
 resource "aws_lambda_permission" "apigw_public_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.api_public_lambda.function_name
+  function_name = module.api_public_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api_public.execution_arn}/*/*/*"
 }

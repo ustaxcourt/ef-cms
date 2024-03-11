@@ -1,25 +1,12 @@
-resource "aws_lambda_function" "api_async_lambda" {
-  depends_on       = [var.api_object]
-  function_name    = "api_async_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "api.handler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "api_${var.current_color}.js.zip"
-  source_code_hash = var.api_object_hash
-  timeout          = "900"
-  memory_size      = "7000"
-
-  runtime = var.node_version
-
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
-
-  tracing_config {
-    mode = "Active"
-  }
-
-  environment {
-    variables = var.lambda_environment
-  }
+module "api_async_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/api-public.ts"
+  handler_method = "handler"
+  lambda_name    = "api_async_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "900"
+  memory_size    = "3008"
 }
 
 resource "aws_api_gateway_resource" "api_async_base_resource" {
@@ -85,7 +72,7 @@ resource "aws_api_gateway_integration" "api_async_integration_post" {
 
   integration_http_method = "POST"
   type                    = "AWS"
-  uri                     = aws_lambda_function.api_async_lambda.invoke_arn
+  uri                     = module.api_async_lambda.invoke_arn
 
 request_templates = {
     "application/json" = <<EOF
@@ -138,7 +125,7 @@ resource "aws_api_gateway_integration" "api_async_integration_put" {
 
   integration_http_method = "POST"
   type                    = "AWS"
-  uri                     = aws_lambda_function.api_async_lambda.invoke_arn
+  uri                     = module.api_async_lambda.invoke_arn
 
 request_templates = {
     "application/json" = <<EOF
@@ -191,7 +178,7 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
 
   integration_http_method = "POST"
   type                    = "AWS"
-  uri                     = aws_lambda_function.api_async_lambda.invoke_arn
+  uri                     = module.api_async_lambda.invoke_arn
 
   request_templates = {
     "application/json" = <<EOF
@@ -333,7 +320,7 @@ resource "aws_api_gateway_integration_response" "async_response_get" {
 resource "aws_lambda_permission" "apigw_async_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.api_async_lambda.function_name
+  function_name = module.api_async_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
 }

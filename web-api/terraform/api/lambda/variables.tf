@@ -28,3 +28,9 @@ variable "memory_size" {
   type = string
   default = "3008"
 }
+
+variable "layers" {
+  type    = list(string)
+  default = null
+  description = "list of arns for lambda layers"
+}
