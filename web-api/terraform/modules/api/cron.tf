@@ -1,6 +1,6 @@
 
 module "cognito_post_authentication_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/terraform/template/lambdas/cognito-triggers.ts"
   handler_method = "updatePetitionerCasesLambda"
   lambda_name    = "update_petitioner_cases_lambda_${var.environment}_${var.current_color}"
@@ -12,7 +12,7 @@ module "cognito_post_authentication_lambda" {
 
 
 module "check_case_cron_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/cases/checkForReadyForTrialCasesLambda.ts"
   handler_method = "checkForReadyForTrialCasesLambda"
   lambda_name    =  "check_case_cron_${var.environment}_${var.current_color}"
@@ -24,7 +24,7 @@ module "check_case_cron_lambda" {
 
 
 module "health_check_cron_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/health/setHealthCheckCacheLambda.ts"
   handler_method = "setHealthCheckCacheLambda"
   lambda_name    = "health_check_cron_${var.environment}_${var.current_color}"

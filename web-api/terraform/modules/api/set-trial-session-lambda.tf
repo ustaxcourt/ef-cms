@@ -1,6 +1,6 @@
 
 module "set_trial_session_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/trial-session/trial-session.ts"
   handler_method = "handler"
   lambda_name    = "set_trial_session_${var.environment}_${var.current_color}"

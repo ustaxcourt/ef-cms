@@ -1,6 +1,6 @@
 
 module "zip_seal" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/cases/sealInLowerEnvironmentLambda.ts"
   handler_method = "sealInLowerEnvironmentLambda"
   lambda_name    = "seal_in_lower_${var.environment}_${var.current_color}"

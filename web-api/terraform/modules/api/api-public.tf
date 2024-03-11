@@ -1,5 +1,5 @@
 module "api_public_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/terraform/template/lambdas/api-public.ts"
   handler_method = "handler"
   lambda_name    = "api_public_${var.environment}_${var.current_color}"
@@ -10,7 +10,7 @@ module "api_public_lambda" {
 }
 
 module "public_api_authorizer_lambda" {
-  source         = "./lambda"
+  source         = "../lambda"
   handler        = "./web-api/src/lambdas/publicApiAuthorizer/public-api-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "public_api_authorizer_lambda_${var.environment}_${var.current_color}"
