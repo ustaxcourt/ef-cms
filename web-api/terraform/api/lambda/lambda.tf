@@ -19,8 +19,6 @@ data "archive_file" "lambda_function_zip" {
   output_path = "${path.module}/../../../../dist-lambdas/${random_uuid.bundle_directory.id}/${random_uuid.bundle_directory.id}.zip"
 }
 
-
-# Define theAWS Lambda function
 resource "aws_lambda_function" "lambda_function" {
   function_name    = var.lambda_name
   handler          = "lambda.${var.handler_method}"
@@ -30,6 +28,8 @@ resource "aws_lambda_function" "lambda_function" {
   source_code_hash = data.archive_file.lambda_function_zip.output_base64sha256
   timeout          = var.timeout
   memory_size      = var.memory_size
+
+  layers           = var.layers
 
   tracing_config {
     mode = "Active"

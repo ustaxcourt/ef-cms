@@ -2,31 +2,21 @@ locals {
   timeout_time = "90"
 }
 
-resource "aws_lambda_function" "change_of_address_lambda" {
-  depends_on       = [var.pdf_generation_object]
-  function_name    = "change_of_address_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "pdf-generation.changeOfAddressHandler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "pdf_generation_${var.current_color}.js.zip"
-  source_code_hash = var.pdf_generation_object_hash
-  timeout          = local.timeout_time
-  memory_size      = "3008"
-
-  runtime = var.node_version
-
-  tracing_config {
-    mode = "Active"
-  }
-
-  environment {
-    variables = var.lambda_environment
-  }
+module "change_of_address_lambda" {
+  source         = "./lambda"
+  handler        = "./web-api/terraform/template/lambdas/pdf-generation.ts"
+  handler_method = "changeOfAddressHandler"
+  lambda_name    =  "change_of_address_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
 }
+
 
 resource "aws_lambda_event_source_mapping" "change_of_address_mapping" {
   event_source_arn = aws_sqs_queue.change_of_address_queue.arn
-  function_name    = aws_lambda_function.change_of_address_lambda.arn
+  function_name    = module.change_of_address_lambda.arn
   batch_size       = 1
   
   scaling_config {
