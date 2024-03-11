@@ -8,38 +8,38 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateValidDocketEntryFilename } from '@shared/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
 export type DocumentsToDownloadInfoType = {
-  isOnDocketRecord: boolean;
-  isFileAttached?: boolean;
-  filingDate: string;
   docketEntryId: string;
-  index?: number;
   documentTitle: string;
+  filingDate: string;
+  index?: number;
+  isFileAttached?: boolean;
+  isOnDocketRecord: boolean;
+  isStricken: string; // feels wrong
+  isSealed: string; // feels wrong
 };
 
 export type DownloadDocketEntryRequestType = {
   caseCaption: string;
-  docketNumber: string;
-  docketEntries: DocumentsToDownloadInfoType[];
   clientConnectionId: string;
+  docketEntries: DocumentsToDownloadInfoType[];
+  docketNumber: string;
   printableDocketRecordFileId?: string;
 };
 
 export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: IApplicationContext,
-  requestParams: DownloadDocketEntryRequestType,
-) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_CASE)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const {
+  {
     caseCaption,
     clientConnectionId,
     docketEntries,
     docketNumber,
     printableDocketRecordFileId,
-  } = requestParams;
+  }: DownloadDocketEntryRequestType,
+) => {
+  const user = applicationContext.getCurrentUser();
+  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_CASE)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const s3Ids: string[] = [];
   const fileNames: string[] = [];
@@ -52,7 +52,7 @@ export const batchDownloadDocketEntriesInteractor = async (
   const zipName = `${caseFolder}.zip`;
 
   if (printableDocketRecordFileId) {
-    const pdfTitle = `${caseFolder}/${'printableDocketRecordname.pdf'}`;
+    const pdfTitle = `${caseFolder}/${'0_Docket_Record.pdf'}`;
 
     const printableDocketRecordPdf: any = await applicationContext
       .getPersistenceGateway()
@@ -73,10 +73,12 @@ export const batchDownloadDocketEntriesInteractor = async (
       index,
     });
 
-    const pdfTitle = `${caseFolder}/${filename}`;
+    const fileDirectory = docEntry.isSealed === 'true' ? 'sealed' : caseFolder;
+    const pdfTitle =
+      docEntry.isStricken === 'true' ? `STRICKEN_${filename}` : filename;
 
     s3Ids.push(docketEntryId);
-    fileNames.push(pdfTitle);
+    fileNames.push(`${fileDirectory}/${pdfTitle}`);
   });
 
   const onEntry = entryData => {
