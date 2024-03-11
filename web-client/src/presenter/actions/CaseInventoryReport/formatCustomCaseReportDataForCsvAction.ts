@@ -7,19 +7,21 @@ function generateCsvString(
   const headerString = valueMappings
     .map(([headerTitle]) => headerTitle)
     .join(',');
-  const casesString = records
-    .map(aCase => {
-      const caseValues = valueMappings.map(mapping => {
-        const propertyName = mapping[1];
-        const value = aCase[propertyName];
-        if (!value) return '';
-        let stringValue = aCase[propertyName]?.split('"').join('""');
-        if (stringValue.includes(',')) stringValue = `"${stringValue}"`;
-        return stringValue.split('\n').join(' ').split('  ').join(' ');
-      });
-      return caseValues.join(',');
-    })
-    .join('\n');
+  const stringRecords = records.map(aCase => {
+    const caseValues = valueMappings.map(mapping => {
+      const propertyName = mapping[1];
+      const value = aCase[propertyName];
+      if (!value) return '';
+      let stringValue = aCase[propertyName]?.split('"').join('""');
+      if (stringValue.includes(',')) stringValue = `"${stringValue}"`;
+      return stringValue.split('\n').join(' ').split('  ').join(' ');
+    });
+    return caseValues.join(',');
+  });
+
+  console.log('stringRecords', stringRecords);
+
+  const casesString = stringRecords.join('\n');
 
   return headerString + '\n' + casesString;
 }

@@ -1,4 +1,5 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { dashboardExternalHelper as dashboardExternalHelperComputed } from './dashboardExternalHelper';
 import { docketClerk1User } from '@shared/test/mockUsers';
@@ -12,9 +13,10 @@ describe('dashboardExternalHelper', () => {
   );
 
   it('should show "what to expect" but not case list when there are no open or closed cases', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.petitioner,
+      }) as RawUser;
     const result = runCompute(dashboardExternalHelper, {
       state: {
         closedCases: [],
@@ -25,9 +27,10 @@ describe('dashboardExternalHelper', () => {
   });
 
   it('should show case list but not "what to expect" when there is an open or closed case case', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.petitioner,
+      }) as RawUser;
     const result = runCompute(dashboardExternalHelper, {
       state: {
         closedCases: [{ something: true }],
@@ -38,9 +41,10 @@ describe('dashboardExternalHelper', () => {
   });
 
   it('should keep the showFileACase flag as false when the user role is petitioner', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.petitioner,
+      }) as RawUser;
 
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -53,9 +57,10 @@ describe('dashboardExternalHelper', () => {
   });
 
   it('should set the showFileACase flag as true when the user role is a private practitioner', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.privatePractitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.privatePractitioner,
+      }) as RawUser;
 
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -68,9 +73,10 @@ describe('dashboardExternalHelper', () => {
   });
 
   it('should keep the showStartButton flag as false when the user role is irs practitioner', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.irsPractitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.irsPractitioner,
+      }) as RawUser;
 
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -86,9 +92,10 @@ describe('dashboardExternalHelper', () => {
     const userRoles = ['petitioner', 'privatePractitioner'];
 
     userRoles.forEach(userRole => {
-      applicationContext.getCurrentUser = () => ({
-        role: userRole,
-      });
+      applicationContext.getCurrentUser = () =>
+        ({
+          role: userRole,
+        }) as RawUser;
 
       const result = runCompute(dashboardExternalHelper, {
         state: {
@@ -105,9 +112,10 @@ describe('dashboardExternalHelper', () => {
     const userRoles = ['petitioner', 'privatePractitioner'];
 
     userRoles.forEach(userRole => {
-      applicationContext.getCurrentUser = () => ({
-        role: userRole,
-      });
+      applicationContext.getCurrentUser = () =>
+        ({
+          role: userRole,
+        }) as RawUser;
 
       const result = runCompute(dashboardExternalHelper, {
         state: {
