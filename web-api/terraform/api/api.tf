@@ -129,10 +129,24 @@ resource "aws_api_gateway_method" "api_method_head" {
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
 
+module "cognito_authorizer_lambda" {
+  source         = "../api/lambda"
+  handler        = "./web-api/terraform/template/lambdas/cognito-authorizer.ts"
+  handler_method = "handler"
+  lambda_name    = "cognito_authorizer_lambda_${var.environment}"
+  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "29"
+  memory_size    = "3008"
+  providers = {
+    aws = aws.us-east-1
+  }
+}
+
 resource "aws_api_gateway_authorizer" "custom_authorizer" {
   name                   = "custom_authorizer_${var.environment}_${var.current_color}"
   rest_api_id            = aws_api_gateway_rest_api.gateway_for_api.id
-  authorizer_uri         = var.authorizer_uri
+  authorizer_uri         = module.cognito_authorizer_lambda.invoke_arn
   authorizer_credentials = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
 }
 

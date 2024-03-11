@@ -15,7 +15,6 @@ module "api-east-green" {
   source                    = "../api/"
   environment               = var.environment
   dns_domain                = var.dns_domain
-  authorizer_uri            = module.cognito_authorizer_lambda_east.invoke_arn
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   pool_arn                  = aws_cognito_user_pool.pool.arn
