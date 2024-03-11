@@ -29,9 +29,7 @@ describe('updatePractitionerUser', () => {
   };
 
   beforeEach(() => {
-    // applicationContext.getCgognito().adminUpdateUserAttributes.mockReturnValue({
-    //   promise: () => null,
-    // });
+    applicationContext.getUserGateway().updateUser.mockResolvedValue();
   });
 
   it("should log an error when an error occurs while updating the user's cognito attributes", async () => {
