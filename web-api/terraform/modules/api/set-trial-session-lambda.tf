@@ -1,7 +1,7 @@
 
 module "set_trial_session_lambda" {
   source         = "./lambda"
-  handler        = "./web-api/terraform/template/lambdas/trial-session.ts"
+  handler        = "./web-api/src/lambdas/trial-session/trial-session.ts"
   handler_method = "handler"
   lambda_name    = "set_trial_session_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"

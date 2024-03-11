@@ -1,4 +1,4 @@
-import { createApplicationContext } from '../../../src/applicationContext';
+import { createApplicationContext } from '../../applicationContext';
 
 export const handler = async event => {
   const applicationContext = createApplicationContext({});

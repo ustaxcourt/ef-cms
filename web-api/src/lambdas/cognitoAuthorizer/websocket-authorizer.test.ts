@@ -1,13 +1,13 @@
-import { createLogger } from '../../../src/createLogger';
-import { handler } from './cognito-authorizer';
+const { createLogger: actualCreateLogger } = jest.requireActual(
+  '../../../src/createLogger',
+);
+import { createLogger } from '../../createLogger';
+import { handler } from './websocket-authorizer';
 import { transports } from 'winston';
 import axios from 'axios';
 import fs from 'fs';
 import jwk from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
-const { createLogger: actualCreateLogger } = jest.requireActual(
-  '../../../src/createLogger',
-);
 jest.mock('jwk-to-pem', () => jest.fn());
 jest.mock('../../../src/createLogger', () => {
   return { createLogger: jest.fn() };
@@ -19,12 +19,12 @@ jest.mock('jsonwebtoken', () => {
   };
 });
 
-describe('cognito-authorizer', () => {
+describe('websocket-authorizer', () => {
   const TOKEN_VALUE =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
 
   const setupHappyPath = verifyObject => {
-    (axios.get as jest.Mock).mockImplementation(() => {
+    axios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'key-identifier' }] },
       });
@@ -55,16 +55,18 @@ describe('cognito-authorizer', () => {
       stream: fs.createWriteStream('/dev/null'),
     });
 
-    (createLogger as jest.Mock).mockImplementation(opts => {
+    createLogger.mockImplementation(opts => {
       opts.transports = [transport];
       return actualCreateLogger(opts);
     });
 
     event = {
-      authorizationToken:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
       methodArn:
         'arn:aws:execute-api:us-east-1:aws-account-id:api-gateway-id/stage/GET/path',
+      queryStringParameters: {
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
+      },
       type: 'TOKEN',
     };
 
@@ -73,17 +75,17 @@ describe('cognito-authorizer', () => {
       logLevel: 'debug',
     };
 
+    jest.spyOn(axios, 'get');
+    jest.spyOn(transport, 'log');
+
     jwk.decode.mockReturnValue({
       header: { kid: 'key-identifier' },
       payload: { iss: `issuer-url-${Math.random()}` },
     });
-
-    jest.spyOn(axios, 'get');
-    jest.spyOn(transport, 'log');
   });
 
   it('returns unauthorized when token is missing', async () => {
-    event.authorizationToken = '';
+    event.queryStringParameters = null;
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
@@ -97,7 +99,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if there is an error in contacting the issuer', async () => {
-    (axios.get as jest.Mock).mockImplementation(() => {
+    axios.get.mockImplementation(() => {
       throw new Error('any error');
     });
 
@@ -116,7 +118,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if the issuer doesn’t return data in expected format', async () => {
-    (axios.get as jest.Mock).mockImplementation(() => {
+    axios.get.mockImplementation(() => {
       return Promise.resolve({ data: null });
     });
 
@@ -135,7 +137,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if issuer is not the cognito user pools', async () => {
-    (axios.get as jest.Mock).mockImplementation(() => {
+    axios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'not-expected-key-identifier' }] },
       });
@@ -158,7 +160,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized if token is not verified', async () => {
-    (axios.get as jest.Mock).mockImplementation(() => {
+    axios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'key-identifier' }] },
       });
@@ -265,7 +267,7 @@ describe('cognito-authorizer', () => {
       };
     });
 
-    (axios.get as jest.Mock).mockImplementation(() => {
+    axios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'identifier-to-cache' }] },
       });
@@ -292,7 +294,6 @@ describe('cognito-authorizer', () => {
     jest.spyOn(jwk, 'decode').mockImplementation(() => {
       throw new Error();
     });
-
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
   });
 
@@ -305,19 +306,19 @@ describe('cognito-authorizer', () => {
         },
       },
     );
-
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
   });
 
-  it('should return a policy if the authorization token is provided', async () => {
+  it('should return a policy if the token is provided in the query string', async () => {
     setupHappyPath({ sub: 'test-sub' });
+
     event = {
-      authorizationToken: `Bearer ${TOKEN_VALUE}`,
       methodArn: 'a/b/c',
+      queryStringParameters: {
+        token: TOKEN_VALUE,
+      },
     };
-
     const policy = await handler(event, context);
-
     expect(policy).toBeDefined();
   });
 });
