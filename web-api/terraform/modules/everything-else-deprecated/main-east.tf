@@ -158,6 +158,6 @@ module "api-east-waf" {
   providers = {
     aws = aws.us-east-1
   }
-  source = "./waf/"
+  source = "../waf/"
 }
 

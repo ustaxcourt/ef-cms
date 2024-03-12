@@ -2,15 +2,15 @@
 
 ENV=$1
 
-DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
-MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
+DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
+MIGRATE_FLAG=$(../../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 
 export DEPLOYING_COLOR
 export MIGRATE_FLAG
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 if [ -z "${SECRETS_LOADED}" ]; then
-  pushd ../../../
+  pushd ../../../../
   # shellcheck disable=SC1091
   . ./scripts/load-environment-from-secrets.sh
   popd
@@ -51,7 +51,7 @@ echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
 
-../../../scripts/verify-terraform-version.sh
+../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENV}.tfstate"
@@ -60,14 +60,14 @@ LOCK_TABLE=efcms-terraform-lock
 rm -rf .terraform
 
 echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
-sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
+sh ../../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
 echo "checking for the dynamodb lock table..."
 aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
 result=$?
 if [ ${result} -ne 0 ]; then
   echo "dynamodb lock does not exist, creating"
-  sh ../bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
+  sh ../../bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
 else
   echo "dynamodb lock table already exists"
 fi
@@ -77,21 +77,21 @@ npm run build:assets
 # exit on any failure
 set -eo pipefail
 # build the cognito authorizer, api, and api-public with web pack
-npm run build:lambda:api
+# npm run build:lambda:api
 
 if [ -z "${CIRCLE_BRANCH}" ]; then
-  pushd ../../runtimes/puppeteer/
+  pushd ../../../runtimes/puppeteer/
   sh build-local.sh
   popd
 fi
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-  GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-  DESTINATION_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+  BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+  GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+  DESTINATION_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
   BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
   GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
-  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+  COGNITO_TRIGGER_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
 
   if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
     SHOULD_ES_ALPHA_EXIST=true
@@ -105,17 +105,17 @@ else
   SHOULD_ES_BETA_EXIST=true
 
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+    GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
   else
-    GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+    BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
   fi
 fi
 
@@ -125,15 +125,15 @@ fi
 #   // pass that to terraform (deploing_color <- deploying_node_version)
 
 if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-  GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
-  BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
-  GREEN_USE_LAYERS=$(../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
-  BLUE_USE_LAYERS=$(../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
+  GREEN_NODE_VERSION=$(../../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
+  BLUE_NODE_VERSION=$(../../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+  GREEN_USE_LAYERS=$(../../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
+  BLUE_USE_LAYERS=$(../../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
 else
-  BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
-  GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
-  BLUE_USE_LAYERS=$(../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
-  GREEN_USE_LAYERS=$(../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
+  BLUE_NODE_VERSION=$(../../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
+  GREEN_NODE_VERSION=$(../../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+  BLUE_USE_LAYERS=$(../../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
+  GREEN_USE_LAYERS=$(../../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
 fi
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
@@ -178,5 +178,5 @@ export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_zone_name=$ZONE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan -out execution-plan
-terraform apply -auto-approve execution-plan
+terraform plan
+# terraform apply -auto-approve execution-plan

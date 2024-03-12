@@ -146,5 +146,5 @@ module "api-west-waf" {
   providers = {
     aws = aws.us-west-1
   }
-  source = "./waf/"
+  source = "../waf/"
 }
