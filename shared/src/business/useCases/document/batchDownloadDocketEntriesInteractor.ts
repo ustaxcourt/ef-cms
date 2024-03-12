@@ -19,22 +19,26 @@ export type DocumentsToDownloadInfoType = {
 };
 
 export type DownloadDocketEntryRequestType = {
-  caseCaption: string;
+  documentsSelectedForDownload?: string;
   clientConnectionId: string;
-  docketEntries: DocumentsToDownloadInfoType[];
+  // docketEntries: DocumentsToDownloadInfoType[];
   docketNumber: string;
   printableDocketRecordFileId?: string;
-  isSealed?: string;
+  // isSealed?: string;
 };
+
+const isSelectableForDownload = entry => {
+  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
+};
+
+export const ALL_DOCUMENTS_SELECTED = 'all documents selected';
 
 export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: IApplicationContext,
   {
-    caseCaption,
     clientConnectionId,
-    docketEntries,
     docketNumber,
-    isSealed: isCaseSealed,
+    documentsSelectedForDownload,
     printableDocketRecordFileId,
   }: DownloadDocketEntryRequestType,
 ) => {
@@ -42,14 +46,21 @@ export const batchDownloadDocketEntriesInteractor = async (
   if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
   const s3Ids: string[] = [];
   const fileNames: string[] = [];
   const extraFileNames: string[] = [];
   const extraFiles: string[] = [];
+
+  const caseToBatch = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const { caseCaption, docketEntries, isSealed: isCaseSealed } = caseToBatch;
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseFolder = `${docketNumber}, ${caseTitle}`;
-
   const zipName = `${caseFolder}.zip`;
 
   if (printableDocketRecordFileId) {
@@ -66,25 +77,35 @@ export const batchDownloadDocketEntriesInteractor = async (
     extraFileNames.push(pdfTitle);
   }
 
-  docketEntries.forEach(docEntry => {
-    const { docketEntryId, documentTitle, filingDate, index } = docEntry;
-    const filename = generateValidDocketEntryFilename({
-      documentTitle,
-      filingDate,
-      index,
-    });
-
-    const fileDirectory =
-      isCaseSealed === 'true' || docEntry.isSealed === 'true'
-        ? 'sealed'
-        : caseFolder;
-
-    const pdfTitle =
-      docEntry.isStricken === 'true' ? `STRICKEN_${filename}` : filename;
-
-    s3Ids.push(docketEntryId);
-    fileNames.push(`${fileDirectory}/${pdfTitle}`);
+  const caseEntity = new Case(caseToBatch, { applicationContext });
+  const documentToProcess = caseEntity.getDocketEntryById({
+    docketEntryId: documentsSelectedForDownload,
   });
+
+  const docketEntriesToProcess =
+    documentsSelectedForDownload === ALL_DOCUMENTS_SELECTED
+      ? docketEntries
+      : [documentToProcess];
+
+  docketEntriesToProcess
+    .filter(entry => isSelectableForDownload(entry))
+    .forEach(docEntry => {
+      const { docketEntryId, documentTitle, filingDate, index } = docEntry;
+      const filename = generateValidDocketEntryFilename({
+        documentTitle,
+        filingDate,
+        index,
+      });
+
+      const fileDirectory =
+        isCaseSealed || docEntry.isSealed ? `${caseFolder}/sealed` : caseFolder;
+
+      const pdfTitle =
+        docEntry.isStricken === 'true' ? `STRICKEN_${filename}` : filename;
+
+      s3Ids.push(docketEntryId);
+      fileNames.push(`${fileDirectory}/${pdfTitle}`);
+    });
 
   const onEntry = entryData => {
     applicationContext.getNotificationGateway().sendNotificationToUser({
