@@ -8,6 +8,9 @@ import {
 } from './cypress/support/cognito-login';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
+import createBundler from "@bahmutov/cypress-esbuild-preprocessor";
+import { addCucumberPreprocessorPlugin } from "@badeball/cypress-cucumber-preprocessor";
+import createEsbuildPlugin from "@badeball/cypress-cucumber-preprocessor/esbuild";
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -16,7 +19,15 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
-    setupNodeEvents(on) {
+    async setupNodeEvents(on, config) {
+
+      await addCucumberPreprocessorPlugin(on, config);
+
+      on("file:preprocessor",
+      createBundler({
+        plugins: [createEsbuildPlugin(config)],
+      }))
+      
       on('task', {
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
@@ -49,8 +60,10 @@ export default defineConfig({
           });
         },
       });
+
+      return config;
     },
-    specPattern: 'cypress/cypress-integration/integration/**/*.cy.ts',
+    specPattern: 'cypress/cypress-integration/integration/**/*.cy.{ts,feature}',
     supportFile: 'cypress/cypress-integration/support/index.ts',
     testIsolation: false,
   },
