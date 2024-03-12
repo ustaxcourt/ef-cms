@@ -6,8 +6,6 @@ import { getJudgesCaseNoteForCaseAction } from '@web-client/presenter/actions/Tr
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { getShouldMarkMessageAsReadAction } from '../actions/getShouldMarkMessageAsReadAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setDefaultIsExpandedAction } from '../actions/setDefaultIsExpandedAction';
@@ -21,37 +19,30 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
 
-const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
-  showProgressSequenceDecorator([
-    setupCurrentPageAction('Interstitial'),
-    closeMobileMenuAction,
-    clearErrorAlertsAction,
-    getCaseAction,
-    setCaseAction,
-    getJudgesCaseNoteForCaseAction,
-    setJudgesCaseNoteOnCaseDetailAction,
-    setParentMessageIdAction,
-    getMessageThreadAction,
-    setMessageAction,
-    getMostRecentMessageInThreadAction,
-    getDefaultAttachmentViewerDocumentToDisplayAction,
-    setMessageDetailViewerDocumentToDisplayAction,
-    setDefaultIsExpandedAction,
-    setCaseDetailPageTabActionGenerator('messages'),
-    setupCurrentPageAction('MessageDetail'),
-    getShouldMarkMessageAsReadAction,
-    {
-      markRead: [setMessageAsReadAction],
-      noAction: [],
-    },
-    unsetDocumentIdAction,
-  ]),
-);
-
-export const gotoMessageDetailSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoMessageDetail,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoMessageDetailSequence =
+  startWebSocketConnectionSequenceDecorator(
+    showProgressSequenceDecorator([
+      setupCurrentPageAction('Interstitial'),
+      closeMobileMenuAction,
+      clearErrorAlertsAction,
+      getCaseAction,
+      setCaseAction,
+      getJudgesCaseNoteForCaseAction,
+      setJudgesCaseNoteOnCaseDetailAction,
+      setParentMessageIdAction,
+      getMessageThreadAction,
+      setMessageAction,
+      getMostRecentMessageInThreadAction,
+      getDefaultAttachmentViewerDocumentToDisplayAction,
+      setMessageDetailViewerDocumentToDisplayAction,
+      setDefaultIsExpandedAction,
+      setCaseDetailPageTabActionGenerator('messages'),
+      setupCurrentPageAction('MessageDetail'),
+      getShouldMarkMessageAsReadAction,
+      {
+        markRead: [setMessageAsReadAction],
+        noAction: [],
+      },
+      unsetDocumentIdAction,
+    ]),
+  );

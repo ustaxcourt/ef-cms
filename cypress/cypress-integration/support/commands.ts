@@ -1,5 +1,6 @@
 import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
+import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
   if (shows) {
@@ -33,12 +34,17 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
 });
 
 Cypress.Commands.add('login', (username, route = '/') => {
-  const url = `/log-in?code=${username}@example.com&path=${route}`;
-  cy.visit(url);
-  cy.waitUntilSettled(50);
-  cy.url().should('include', route);
-  cy.showsErrorMessage(false);
-  cy.url().should('not.include', '/mock-login');
+  Cypress.session.clearCurrentSessionData();
+
+  cy.visit('/login');
+  cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
+  cy.get('[data-testid="password-input"]').type(
+    getCypressEnv().defaultAccountPass,
+  );
+  cy.get('[data-testid="login-button"]').click();
+  cy.get('[data-testid="account-menu-button"]');
+  cy.visit(route);
+
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );

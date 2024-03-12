@@ -21,7 +21,7 @@ export const ErrorFactory = {
     } else if (504 === responseCode) {
       newError = new GatewayTimeoutError();
     } else if (/^4/.test(responseCode)) {
-      newError = new InvalidRequestError();
+      newError = new InvalidRequestError(e);
     } else if (/^5/.test(responseCode)) {
       newError = new ServerInvalidResponseError();
     } else if (!e.response) {

@@ -1,8 +1,13 @@
 import { defineConfig } from 'cypress';
 import {
+  confirmUser,
+  deleteAllCypressTestAccounts,
+  expireUserConfirmationCode,
+  getNewAccountVerificationCode,
   getEmailVerificationToken,
-  deleteAllFilesInFolder,
-} from './cypress/cypress-integration/support/database';
+} from './cypress/support/cognito-login';
+import { waitForNoce } from './cypress/helpers/wait-for-noce';
+import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -13,15 +18,42 @@ export default defineConfig({
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
-        getEmailVerificationToken({ userId }) {
-          return getEmailVerificationToken({ userId });
+        getEmailVerificationToken({ email }) {
+          return getEmailVerificationToken({ email });
+        },
+        confirmUser({ email }) {
+          return confirmUser({ email });
+        },
+        deleteAllCypressTestAccounts() {
+          return deleteAllCypressTestAccounts();
+        },
+        expireUserConfirmationCode(email: string) {
+          return expireUserConfirmationCode(email);
+        },
+        getNewAccountVerificationCode({ email }) {
+          return getNewAccountVerificationCode({ email });
+        },
+        waitForNoce({ docketNumber }: { docketNumber: string }) {
+          return waitForNoce({ docketNumber });
+        },
+        waitForPractitionerEmailUpdate({
+          docketNumber,
+          practitionerEmail,
+        }: {
+          docketNumber: string;
+          practitionerEmail: string;
+        }) {
+          return waitForPractitionerEmailUpdate({
+            docketNumber,
+            practitionerEmail,
+          });
         },
         deleteAllFilesInFolder(dir) {
           return deleteAllFilesInFolder(dir);
         },
       });
     },
-    specPattern: 'cypress/cypress-integration/integration/*.cy.ts',
+    specPattern: 'cypress/cypress-integration/integration/**/*.cy.ts',
     supportFile: 'cypress/cypress-integration/support/index.ts',
     testIsolation: false,
   },
@@ -32,6 +64,7 @@ export default defineConfig({
   },
   requestTimeout: 60000,
   retries: 0,
+  screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/cypress-integration/screenshots',
   video: true,
   videosFolder: 'cypress/cypress-integration/videos',

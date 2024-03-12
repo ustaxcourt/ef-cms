@@ -165,7 +165,7 @@ Open a browser to [http://localhost:1234](http://localhost:1234) and enter one o
 
 ```txt
 petitioner@example.com
-privatepractitioner@example.com
+privatePractitioner@example.com
 irspractitioner@example.com
 irssuperuser@example.com
 adc@example.com

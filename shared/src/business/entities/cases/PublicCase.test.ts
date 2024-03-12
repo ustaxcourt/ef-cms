@@ -485,7 +485,7 @@ describe('PublicCase', () => {
               postalCode: '61234',
               state: 'IL',
             },
-            email: 'privatepractitioner@example.com',
+            email: 'privatePractitioner@example.com',
             entityName: 'PrivatePractitioner',
             name: 'Test Private Practitioner',
             representing: ['28cae029-bae2-4eef-ac54-878fbbab65e3'],
