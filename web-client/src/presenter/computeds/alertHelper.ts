@@ -1,8 +1,8 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { uniq } from 'lodash';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const alertHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
