@@ -387,7 +387,7 @@ module "api-west-green" {
   region   = "us-west-1"
   validate = 0
   providers = {
-    aws = aws.us-west-1
+    aws           = aws.us-west-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
@@ -463,7 +463,7 @@ module "api-west-blue" {
   region   = "us-west-1"
   validate = 0
   providers = {
-    aws = aws.us-west-1
+    aws           = aws.us-west-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"

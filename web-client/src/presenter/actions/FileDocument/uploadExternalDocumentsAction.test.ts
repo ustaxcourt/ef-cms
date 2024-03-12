@@ -1,5 +1,4 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -18,6 +17,29 @@ describe('uploadExternalDocumentsAction', () => {
     userId: 'petitioner',
   };
 
+  const mockFile = {
+    name: 'petition',
+    size: 100,
+  };
+
+  const mockPrimaryDocumentFile = { data: 'something' };
+
+  const mockDocumentMetadata = {
+    attachments: true,
+    consolidatedCasesToFileAcross: undefined,
+    docketNumber: '101-18',
+    fileAcrossConsolidatedGroup: false,
+  };
+
+  const mockFileUploadProgressMap = {
+    primary: {
+      file: mockFile,
+      uploadProgress: jest.fn(),
+    },
+  };
+
+  const mockFiles = { primary: mockPrimaryDocumentFile };
+
   beforeAll(() => {
     presenter.providers.path = {
       error: () => null,
@@ -26,7 +48,6 @@ describe('uploadExternalDocumentsAction', () => {
   });
 
   it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor with the case docketNumber for the added document', async () => {
-    const mockPrimaryDocumentFile = { data: 'something' };
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
@@ -41,13 +62,13 @@ describe('uploadExternalDocumentsAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        documentMetadata: mockDocumentMetadata,
+        fileUploadProgressMap: mockFileUploadProgressMap,
+        files: mockFiles,
+      },
       state: {
         caseDetail: MOCK_CASE,
-        form: {
-          attachments: true,
-          fileAcrossConsolidatedGroup: false,
-          primaryDocumentFile: mockPrimaryDocumentFile,
-        },
       },
     });
 
@@ -80,7 +101,6 @@ describe('uploadExternalDocumentsAction', () => {
   });
 
   it('should call uploadExternalDocumentsInteractor with a list of consolidated cases when filing across consolidated case group', async () => {
-    const mockPrimaryDocumentFile = { data: 'something' };
     const testCase = {
       ...MOCK_CASE,
       consolidatedCases: [
@@ -104,13 +124,18 @@ describe('uploadExternalDocumentsAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        documentMetadata: {
+          ...mockDocumentMetadata,
+          attachments: true,
+          consolidatedCasesToFileAcross: testCase.consolidatedCases,
+          fileAcrossConsolidatedGroup: true,
+        },
+        fileUploadProgressMap: mockFileUploadProgressMap,
+        files: mockFiles,
+      },
       state: {
         caseDetail: testCase,
-        form: {
-          attachments: true,
-          fileAcrossConsolidatedGroup: true,
-          primaryDocumentFile: mockPrimaryDocumentFile,
-        },
       },
     });
 
@@ -151,24 +176,12 @@ describe('uploadExternalDocumentsAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        caseDetail: MOCK_CASE,
-        form: {
-          attachments: true,
+      props: {
+        documentMetadata: {
+          ...mockDocumentMetadata,
           fileAcrossConsolidatedGroup: undefined,
           hasSecondarySupportingDocuments: true,
           hasSupportingDocuments: true,
-          primaryDocumentFile: { data: 'something' },
-          secondaryDocument: {},
-          secondaryDocumentFile: { data: 'something2' },
-          secondarySupportingDocuments: [
-            {
-              supportingDocumentFile: { data: 'something5' },
-            },
-            {
-              supportingDocumentFile: { data: 'something6' },
-            },
-          ],
           supportingDocuments: [
             {
               supportingDocumentFile: { data: 'something3' },
@@ -180,6 +193,28 @@ describe('uploadExternalDocumentsAction', () => {
             },
           ],
         },
+        fileUploadProgressMap: mockFileUploadProgressMap,
+        files: {
+          ...mockFiles,
+          primarySupporting0: {
+            data: 'something3',
+          },
+          primarySupporting1: {
+            data: 'something4',
+          },
+          secondary: {
+            data: 'something2',
+          },
+          secondarySupporting0: {
+            data: 'something5',
+          },
+          secondarySupporting1: {
+            data: 'something6',
+          },
+        },
+      },
+      state: {
+        caseDetail: MOCK_CASE,
       },
     });
 
@@ -214,7 +249,6 @@ describe('uploadExternalDocumentsAction', () => {
   });
 
   it('should set documentMetadata.privatePractitioners to form.practitioner when the document to upload is a practitioner association request', async () => {
-    const mockPrimaryDocumentFile = { data: 'something' };
     const mockPrivatePractitioner = {
       name: 'Simone Baulk',
     };
@@ -232,15 +266,16 @@ describe('uploadExternalDocumentsAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        documentMetadata: {
+          ...mockDocumentMetadata,
+          fileUploadProgressMap: mockFileUploadProgressMap,
+          files: mockFiles,
+          privatePractitioners: [mockPrivatePractitioner],
+        },
+      },
       state: {
         caseDetail: MOCK_CASE,
-        form: {
-          attachments: true,
-          eventCode: PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP[0].eventCode,
-          fileAcrossConsolidatedGroup: false,
-          practitioner: [mockPrivatePractitioner],
-          primaryDocumentFile: mockPrimaryDocumentFile,
-        },
       },
     });
 
@@ -254,10 +289,6 @@ describe('uploadExternalDocumentsAction', () => {
   });
 
   it('should not set documentMetadata.privatePractitioners to form.practitioner when the document to upload does not have field filedByPractitioner', async () => {
-    const mockPrimaryDocumentFile = { data: 'something' };
-    const mockPrivatePractitioner = {
-      name: 'Simone Biles',
-    };
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
@@ -272,14 +303,17 @@ describe('uploadExternalDocumentsAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        documentMetadata: {
+          ...mockDocumentMetadata,
+          fileAcrossConsolidatedGroup: undefined,
+          fileUploadProgressMap: mockFileUploadProgressMap,
+          files: mockFiles,
+          privatePractitioners: null,
+        },
+      },
       state: {
         caseDetail: MOCK_CASE,
-        form: {
-          attachments: true,
-          fileAcrossConsolidatedGroup: undefined,
-          practitioner: [mockPrivatePractitioner],
-          primaryDocumentFile: mockPrimaryDocumentFile,
-        },
       },
     });
 
