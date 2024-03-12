@@ -6,9 +6,7 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setSectionForWorkQueueAction } from '../actions/setSectionForWorkQueueAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
@@ -18,7 +16,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { takePathForRoles } from './takePathForRoles';
 const { DOCKET_SECTION, PETITIONS_SECTION, USER_ROLES } = getConstants();
 
-const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
+export const gotoWorkQueueSequence = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
@@ -68,11 +66,3 @@ const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
   ]),
   setupCurrentPageAction('WorkQueue'),
 ]);
-
-export const gotoWorkQueueSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: goToWorkQueue,
-    unauthorized: [redirectToCognitoAction],
-  },
-];

@@ -34,6 +34,7 @@ const config: Config = {
     '!judge/update-judge-isSeniorJudge.ts',
     '!reports/**',
     '!run-once-scripts/**',
+    '!dynamo/set-maintenance-mode.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
   ],

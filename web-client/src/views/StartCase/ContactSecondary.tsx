@@ -197,6 +197,7 @@ export const ContactSecondary = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input max-width-200"
+                data-testid="contact-secondary-phone-input"
                 id="secondaryPhone"
                 name="contactSecondary.phone"
                 type="tel"
