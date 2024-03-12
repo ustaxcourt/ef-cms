@@ -2,11 +2,16 @@ import { DownloadDocketEntryRequestType } from '@shared/business/useCases/docume
 import { isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+export type SelectedDocumentInfoType = Pick<
+  DownloadDocketEntryRequestType,
+  'caseCaption' | 'docketEntries' | 'docketNumber' | 'isSealed'
+>;
+
 export const setSelectedDocumentIdAction = ({
   get,
   props,
   store,
-}: ActionProps<DownloadDocketEntryRequestType>) => {
+}: ActionProps<SelectedDocumentInfoType>) => {
   const { docketEntries } = props;
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 

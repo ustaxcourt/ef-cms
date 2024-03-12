@@ -24,6 +24,7 @@ export type DownloadDocketEntryRequestType = {
   docketEntries: DocumentsToDownloadInfoType[];
   docketNumber: string;
   printableDocketRecordFileId?: string;
+  isSealed?: string;
 };
 
 export const batchDownloadDocketEntriesInteractor = async (
@@ -33,6 +34,7 @@ export const batchDownloadDocketEntriesInteractor = async (
     clientConnectionId,
     docketEntries,
     docketNumber,
+    isSealed: isCaseSealed,
     printableDocketRecordFileId,
   }: DownloadDocketEntryRequestType,
 ) => {
@@ -73,7 +75,11 @@ export const batchDownloadDocketEntriesInteractor = async (
       index,
     });
 
-    const fileDirectory = docEntry.isSealed === 'true' ? 'sealed' : caseFolder;
+    const fileDirectory =
+      isCaseSealed === 'true' || docEntry.isSealed === 'true'
+        ? 'sealed'
+        : caseFolder;
+
     const pdfTitle =
       docEntry.isStricken === 'true' ? `STRICKEN_${filename}` : filename;
 
