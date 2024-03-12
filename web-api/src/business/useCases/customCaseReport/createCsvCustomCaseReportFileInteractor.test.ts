@@ -115,4 +115,16 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
       ),
     ).rejects.toThrow('Unauthorized');
   });
+
+  it('should throttle fetching data every 10th call', async () => {
+    applicationContext.setTimeout = jest
+      .fn()
+      .mockImplementation(callback => callback());
+
+    await createCsvCustomCaseReportFileInteractor(applicationContext, {
+      ...DEFAULT_PARAMS,
+      totalCount: 100000,
+    });
+    expect(applicationContext.setTimeout).toHaveBeenCalledTimes(1);
+  });
 });
