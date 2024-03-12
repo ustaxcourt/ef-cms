@@ -16,13 +16,13 @@ import React from 'react';
 export const CreateOrder = connect(
   {
     createOrderHelper: state.createOrderHelper,
+    documentContents: state.form.documentContents,
     editorDelta: state.form.editorDelta,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openAddDocketNumbersModalSequence:
       sequences.openAddDocketNumbersModalSequence,
     openEditOrderTitleModalSequence: sequences.openEditOrderTitleModalSequence,
     refreshPdfSequence: sequences.refreshPdfSequence,
-    richText: state.form.richText,
     showModal: state.modal.showModal,
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -30,12 +30,12 @@ export const CreateOrder = connect(
   },
   function CreateOrder({
     createOrderHelper,
+    documentContents,
     editorDelta,
     formCancelToggleCancelSequence,
     openAddDocketNumbersModalSequence,
     openEditOrderTitleModalSequence,
     refreshPdfSequence,
-    richText,
     showModal,
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
@@ -90,7 +90,7 @@ export const CreateOrder = connect(
                   </Button>
                 )}
                 <TextEditor
-                  defaultValue={richText}
+                  defaultValue={documentContents}
                   editorDelta={editorDelta}
                   updateFormValueSequence={updateFormValueSequence}
                   updateScreenMetadataSequence={updateScreenMetadataSequence}

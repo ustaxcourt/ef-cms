@@ -25,6 +25,17 @@ export const TextEditor = ({
   updateFormValueSequence,
   updateScreenMetadataSequence,
 }) => {
+  const initialDelta: any = {
+    ops: [],
+  };
+
+  if (defaultValue) {
+    initialDelta.ops.push({
+      insert: `${defaultValue}`,
+    });
+  }
+
+  const editorDeltaFormatted = editorDelta || initialDelta;
   const quillEscapeRef = useRef(null);
 
   const onKeyboard = event => {
@@ -51,7 +62,7 @@ export const TextEditor = ({
     <>
       <Suspense fallback={<div>Loading...</div>}>
         <ReactQuill
-          defaultValue={editorDelta || defaultValue}
+          defaultValue={editorDeltaFormatted}
           formats={[
             'size',
             'bold',
