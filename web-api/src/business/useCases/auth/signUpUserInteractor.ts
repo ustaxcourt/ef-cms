@@ -45,30 +45,15 @@ export const signUpUserInteractor = async (
   }
 
   const newUser = new NewPetitionerUser(user).validate().toRawObject();
-  const userId = applicationContext.getUniqueId();
-  await applicationContext.getCognito().signUp({
-    ClientId: applicationContext.environment.cognitoClientId,
-    Password: newUser.password,
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: newUser.email,
-      },
-      {
-        Name: 'name',
-        Value: newUser.name,
-      },
-      {
-        Name: 'custom:userId',
-        Value: userId,
-      },
-      {
-        Name: 'custom:role',
-        Value: ROLES.petitioner,
-      },
-    ],
-    Username: newUser.email,
-  });
+
+  const { userId } = await applicationContext
+    .getUserGateway()
+    .signUp(applicationContext, {
+      email: newUser.email,
+      name: newUser.name,
+      password: newUser.password,
+      role: ROLES.petitioner,
+    });
 
   const { confirmationCode } = await applicationContext
     .getUseCaseHelpers()
