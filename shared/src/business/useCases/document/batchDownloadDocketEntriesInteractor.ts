@@ -47,7 +47,6 @@ export const batchDownloadDocketEntriesInteractor = async (
   const fileNames: string[] = [];
   const extraFileNames: string[] = [];
   const extraFiles: string[] = [];
-  const numberOfFilesToBatch = s3Ids.length;
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseFolder = `${docketNumber}, ${caseTitle}`;
 
@@ -95,7 +94,7 @@ export const batchDownloadDocketEntriesInteractor = async (
         action: 'batch_download_entry',
         ...entryData,
         numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch,
+        numberOfFilesToBatch: s3Ids.length,
       },
       userId: user.userId,
     });
@@ -122,7 +121,7 @@ export const batchDownloadDocketEntriesInteractor = async (
         action: 'batch_download_progress',
         ...progressData,
         numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch,
+        numberOfFilesToBatch: s3Ids.length,
       },
       userId: user.userId,
     });
@@ -135,7 +134,7 @@ export const batchDownloadDocketEntriesInteractor = async (
       message: {
         action: 'batch_download_upload_start',
         numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch,
+        numberOfFilesToBatch: s3Ids.length,
       },
       userId: user.userId,
     });
