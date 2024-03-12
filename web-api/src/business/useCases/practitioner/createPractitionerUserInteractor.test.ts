@@ -31,7 +31,7 @@ describe('createPractitionerUserInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     applicationContext
       .getPersistenceGateway()
-      .createOrUpdatePractitionerUser.mockResolvedValue(({ user }) => user);
+      .createOrUpdatePractitionerUser.mockResolvedValue(mockUser);
   });
 
   it('should throw an error when the user is unauthorized to create a practitioner user', async () => {
