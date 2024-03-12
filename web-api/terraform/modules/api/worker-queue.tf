@@ -1,20 +1,12 @@
-resource "aws_lambda_function" "worker_lambda" {
-  function_name    = "worker_lambda_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "worker-handler.workerHandler"
-  timeout          = "900"
-  memory_size      = "3008"
-  runtime          = var.node_version
-  depends_on       = [var.worker_object]
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "worker_${var.current_color}.js.zip"
-  source_code_hash = var.worker_object_hash
-
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
-
-  environment {
-    variables = var.lambda_environment
-  }
+module "worker_lambda" {
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/worker-handler.ts"
+  handler_method = "workerHandler"
+  lambda_name    = "worker_lambda_${var.environment}_${var.current_color}"
+  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  environment    = var.lambda_environment
+  timeout        = "900"
+  memory_size    = "3008"
 }
 
 resource "aws_sqs_queue" "worker_queue" {
@@ -28,7 +20,7 @@ resource "aws_sqs_queue" "worker_queue" {
 
 resource "aws_lambda_event_source_mapping" "worker_event_mapping" {
   event_source_arn = aws_sqs_queue.worker_queue.arn
-  function_name    = aws_lambda_function.worker_lambda.arn
+  function_name    = module.worker_lambda.arn
   batch_size       = 1
 }
 

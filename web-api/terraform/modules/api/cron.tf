@@ -36,22 +36,22 @@ resource "aws_cloudwatch_event_rule" "health_check_cron_rule" {
 resource "aws_cloudwatch_event_target" "check_case_cron_target" {
   count     = var.create_check_case_cron
   rule      = aws_cloudwatch_event_rule.check_case_cron_rule[0].name
-  target_id = aws_lambda_function.check_case_cron_lambda[0].function_name
-  arn       = aws_lambda_function.check_case_cron_lambda[0].arn
+  target_id = module.check_case_cron_lambda.function_name
+  arn       = module.check_case_cron_lambda.arn
 }
 
 resource "aws_cloudwatch_event_target" "health_check_cron_target" {
   count     = var.create_health_check_cron
   rule      = aws_cloudwatch_event_rule.health_check_cron_rule[0].name
-  target_id = aws_lambda_function.health_check_cron_lambda[0].function_name
-  arn       = aws_lambda_function.health_check_cron_lambda[0].arn
+  target_id = module.health_check_cron_lambda[0].function_name
+  arn       = module.health_check_cron_lambda[0].arn
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_check_case_lambda" {
   count         = var.create_check_case_cron
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.check_case_cron_lambda[0].function_name
+  function_name = module.check_case_cron_lambda[0].function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.check_case_cron_rule[0].arn
 }
@@ -60,7 +60,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_health_check_lambda" 
   count         = var.create_health_check_cron
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.health_check_cron_lambda[0].function_name
+  function_name = module.health_check_cron_lambda[0].function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.health_check_cron_rule[0].arn
 }
