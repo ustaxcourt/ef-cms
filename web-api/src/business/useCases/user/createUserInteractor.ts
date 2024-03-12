@@ -40,7 +40,9 @@ export const createUserInteractor = async (
     user.role === ROLES.inactivePractitioner
   ) {
     userEntity = new Practitioner(
-      await createPractitionerUser({ applicationContext, user }),
+      await createPractitionerUser(applicationContext, {
+        user: user as RawPractitioner,
+      }),
     );
   } else {
     if (user.barNumber === '') {
