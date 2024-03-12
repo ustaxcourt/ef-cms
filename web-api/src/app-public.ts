@@ -52,7 +52,6 @@ app.use(logger());
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
-import { confirmSignUpLocalLambda } from '@web-api/auth/confirmSignUpLocalLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
@@ -66,84 +65,93 @@ import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambd
 import { ipLimiter } from './middleware/ipLimiter';
 import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
-import { resendVerificationLinkLambda } from '@web-api/lambdas/public-api/resendVerificationLinkLambda';
-import { signUpUserLambda } from '@web-api/users/signUpUserLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
 
-/**
- * public-api
- */
-app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
-app.head(
-  '/public-api/cases/:docketNumber',
-  lambdaWrapper(getPublicCaseExistsLambda),
-);
-app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
-
-app.get(
-  '/public-api/order-search',
-  ipLimiter({
-    applicationContext,
-    key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-  }),
-  advancedQueryLimiter({
-    applicationContext,
-    key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-  }),
-  lambdaWrapper(orderPublicSearchLambda),
-);
-
-app.get(
-  '/public-api/opinion-search',
-  ipLimiter({
-    applicationContext,
-    key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-  }),
-  advancedQueryLimiter({
-    applicationContext,
-    key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-  }),
-  lambdaWrapper(opinionPublicSearchLambda),
-);
+/** Case */
+{
+  app.head(
+    '/public-api/cases/:docketNumber',
+    lambdaWrapper(getPublicCaseExistsLambda),
+  );
+  app.get(
+    '/public-api/cases/:docketNumber',
+    lambdaWrapper(getPublicCaseLambda),
+  );
+  app.get(
+    '/public-api/:docketNumber/:key/public-document-download-url',
+    lambdaWrapper(getPublicDocumentDownloadUrlLambda),
+  );
+  app.post(
+    '/public-api/cases/:docketNumber/generate-docket-record',
+    lambdaWrapper(generatePublicDocketRecordPdfLambda),
+  );
+}
 
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 
-app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
-app.get(
-  '/public-api/todays-orders/:page/:todaysOrdersSort',
-  lambdaWrapper(todaysOrdersLambda),
-);
+/**
+ * Reports
+ */
+{
+  app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
+  app.get(
+    '/public-api/todays-orders/:page/:todaysOrdersSort',
+    lambdaWrapper(todaysOrdersLambda),
+  );
+}
 
-app.get(
-  '/public-api/docket-number-search/:docketNumber',
-  lambdaWrapper(getCaseForPublicDocketSearchLambda),
-);
+/** Search */
+{
+  app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
+  app.get(
+    '/public-api/order-search',
+    ipLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+    }),
+    advancedQueryLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+    }),
+    lambdaWrapper(orderPublicSearchLambda),
+  );
+  app.get(
+    '/public-api/opinion-search',
+    ipLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+    }),
+    advancedQueryLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+    }),
+    lambdaWrapper(opinionPublicSearchLambda),
+  );
+  app.get(
+    '/public-api/docket-number-search/:docketNumber',
+    lambdaWrapper(getCaseForPublicDocketSearchLambda),
+  );
+}
 
-app.post(
-  '/public-api/cases/:docketNumber/generate-docket-record',
-  lambdaWrapper(generatePublicDocketRecordPdfLambda),
-);
-app.get(
-  '/public-api/:docketNumber/:key/public-document-download-url',
-  lambdaWrapper(getPublicDocumentDownloadUrlLambda),
-);
-app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
-app.get('/public-api/cached-health', lambdaWrapper(getCachedHealthCheckLambda));
-app.get(
-  '/public-api/maintenance-mode',
-  lambdaWrapper(getMaintenanceModeLambda),
-);
+/**
+ * Application Health
+ */
+{
+  app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
+  app.get(
+    '/public-api/cached-health',
+    lambdaWrapper(getCachedHealthCheckLambda),
+  );
+  app.get(
+    '/public-api/maintenance-mode',
+    lambdaWrapper(getMaintenanceModeLambda),
+  );
+}
 
-app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
-
-app.post('/public-api/account/create', lambdaWrapper(signUpUserLambda));
-
-app.post(
-  '/account/resend-verification',
-  lambdaWrapper(resendVerificationLinkLambda),
-);
-
-// This following endpoint is used only by cognito-local
-
-app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
+/**
+ * Feature flags
+ */
+{
+  app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+}

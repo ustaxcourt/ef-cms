@@ -9,7 +9,7 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from './startCaseHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('start a case computed', () => {
+describe('startCaseHelper', () => {
   const { PARTY_TYPES } = applicationContext.getConstants();
 
   const startCaseHelper = withAppContextDecorator(
@@ -232,6 +232,67 @@ describe('start a case computed', () => {
     });
 
     expect(result.contactSecondaryLabel).toEqual('Contact Information');
+  });
+
+  it('should set and format documentTabs for displaying header contents', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          contactPrimary: { name: '' },
+          partyType: PARTY_TYPES.trust,
+        },
+      },
+    });
+
+    expect(result.documentTabs).toEqual([
+      {
+        documentTitle: 'Petition',
+        documentType: 'petitionFile',
+        eventCode: 'P',
+        fileName: 'petitionFile',
+        sort: 0,
+        tabTitle: 'Petition',
+      },
+      {
+        documentType: 'stinFile',
+        eventCode: 'STIN',
+        fileName: 'stinFile',
+        sort: 1,
+        tabTitle: 'STIN',
+      },
+      {
+        documentTitle: 'Attachment to Petition',
+        documentType: 'attachmentToPetitionFile',
+        eventCode: 'ATP',
+        fileName: 'attachmentToPetitionFile',
+        sort: 2,
+        tabTitle: 'ATP',
+      },
+      {
+        documentTitle: 'Request for Place of Trial at [Place]',
+        documentType: 'requestForPlaceOfTrialFile',
+        eventCode: 'RQT',
+        fileName: 'requestForPlaceOfTrialFile',
+        sort: 3,
+        tabTitle: 'RQT',
+      },
+      {
+        documentTitle: 'Corporate Disclosure Statement',
+        documentType: 'corporateDisclosureFile',
+        eventCode: 'DISC',
+        fileName: 'corporateDisclosureFile',
+        sort: 4,
+        tabTitle: 'CDS',
+      },
+      {
+        documentTitle: 'Application for Waiver of Filing Fee',
+        documentType: 'applicationForWaiverOfFilingFeeFile',
+        eventCode: 'APW',
+        fileName: 'applicationForWaiverOfFilingFeeFile',
+        sort: 5,
+        tabTitle: 'APW',
+      },
+    ]);
   });
 
   describe('formattedCaseType', () => {

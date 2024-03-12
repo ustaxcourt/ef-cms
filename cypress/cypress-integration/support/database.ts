@@ -1,11 +1,9 @@
-import AWS from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import fs from 'fs';
 import path from 'path';
 
-AWS.config = new AWS.Config();
-AWS.config.region = 'us-east-1';
-
-const documentClient = new AWS.DynamoDB.DocumentClient({
+const dynamoClient = new DynamoDBClient({
   credentials: {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
@@ -13,37 +11,19 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'http://localhost:8000',
   region: 'us-east-1',
 });
-
-export const getEmailVerificationToken = async ({
-  userId,
-}: {
-  userId: string;
-}) => {
-  return await documentClient
-    .get({
-      Key: {
-        pk: `user|${userId}`,
-        sk: `user|${userId}`,
-      },
-      TableName: 'efcms-local',
-    })
-    .promise()
-    .then(result => {
-      return result.Item?.pendingEmailVerificationToken;
-    });
-};
+const documentClient = DynamoDBDocument.from(dynamoClient, {
+  marshallOptions: { removeUndefinedValues: true },
+});
 
 export const setAllowedTerminalIpAddresses = async (ipAddresses: string[]) => {
-  return await documentClient
-    .put({
-      Item: {
-        ips: ipAddresses,
-        pk: 'allowed-terminal-ips',
-        sk: 'allowed-terminal-ips',
-      },
-      TableName: 'efcms-local',
-    })
-    .promise();
+  return await documentClient.put({
+    Item: {
+      ips: ipAddresses,
+      pk: 'allowed-terminal-ips',
+      sk: 'allowed-terminal-ips',
+    },
+    TableName: 'efcms-local',
+  });
 };
 
 export const deleteAllFilesInFolder = (directoryPath: string) => {

@@ -4,8 +4,6 @@ import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDo
 import { getCaseAction } from '../actions/getCaseAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -16,7 +14,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditCourtIssuedDocketEntry =
+export const gotoEditCourtIssuedDocketEntrySequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     setFromPageAction,
@@ -34,11 +32,3 @@ export const gotoEditCourtIssuedDocketEntry =
     setIsEditingDocketEntryAction(true),
     setupCurrentPageAction('CourtIssuedDocketEntry'),
   ]);
-
-export const gotoEditCourtIssuedDocketEntrySequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditCourtIssuedDocketEntry,
-    unauthorized: [redirectToCognitoAction],
-  },
-];

@@ -65,6 +65,7 @@ export const PractitionerContactForm = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
+                data-testid="practitioner-phone-input"
                 id="phone"
                 name="contact.phone"
                 type="tel"

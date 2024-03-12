@@ -35,9 +35,11 @@ describe('updatePractitionerUser', () => {
   });
 
   it("should log an error when an error occurs while updating the user's cognito attributes", async () => {
-    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
-      promise: () => Promise.reject(new Error('User not found')),
-    });
+    applicationContext
+      .getCognito()
+      .adminUpdateUserAttributes.mockReturnValue(
+        Promise.reject(new Error('User not found')),
+      );
 
     await expect(
       updatePractitionerUser({

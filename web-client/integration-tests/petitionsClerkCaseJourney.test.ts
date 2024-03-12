@@ -17,10 +17,6 @@ import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petit
 describe('Petitions clerk case journey', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

@@ -35,9 +35,9 @@ export const InvalidRequest = class InvalidRequest extends Error {
 
 /**
  * Custom unknown user error handling for middlewares
- * @type {module.UnknownUserError}
+ * @type {module.UnidentifiedUserError}
  */
-export const UnknownUserError = class UnknownUserError extends Error {
+export const UnidentifiedUserError = class UnidentifiedUserError extends Error {
   public statusCode: number;
   /**
    * constructor
