@@ -126,7 +126,7 @@ export const signOutSequence = [
   clearUserAction,
   clearMaintenanceModeAction,
   clearLoginFormAction,
-  navigateToCognitoAction,
+  navigateToLoginSequence,
 ];
 ```
 

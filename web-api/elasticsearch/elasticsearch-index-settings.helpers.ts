@@ -28,7 +28,7 @@ export const setupIndexes = async ({
         });
 
         if (!indexExists) {
-          await client.indices.create({
+          return client.indices.create({
             body: {
               mappings: {
                 dynamic: false,
@@ -39,7 +39,7 @@ export const setupIndexes = async ({
             index,
           });
         } else {
-          client.indices.putSettings({
+          return client.indices.putSettings({
             body: {
               index: {
                 max_result_window: esSettings.index.max_result_window,
@@ -81,9 +81,14 @@ export const deleteUnaliasedIndices = async ({
       return !aliasedIndices.includes(index);
     }) || [];
   if (unaliasedIndices.length) {
-    client.indices.delete({
-      index:
-        unaliasedIndices.length === 1 ? unaliasedIndices[0] : unaliasedIndices,
-    });
+    try {
+      await client.indices.delete({
+        index: unaliasedIndices,
+      });
+    } catch (err) {
+      console.log(
+        'We were unable to delete the unaliased indices; the next deployment should get this done',
+      );
+    }
   }
 };

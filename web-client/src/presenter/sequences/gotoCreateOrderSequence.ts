@@ -2,10 +2,8 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseTypeModalSequence';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
@@ -20,28 +18,23 @@ export const gotoCaseDetailWithModal = [
   navigateToCaseDetailAction,
 ];
 
-export const gotoCreateOrderSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator([
-      setRedirectUrlAction,
-      hasOrderTypeSelectedAction,
-      {
-        no: gotoCaseDetailWithModal,
-        proceed: [
-          unsetDocumentToEditAction,
-          clearModalAction,
-          setSelectedConsolidatedCasesToMultiDocketOnAction(false),
-          setupCurrentPageAction('Interstitial'),
-          stopShowValidationAction,
-          clearFormAction,
-          setCreateOrderModalDataOnFormAction,
-          setIsCreatingOrderAction,
-          convertHtml2PdfSequence,
-          setupCurrentPageAction('CreateOrder'),
-        ],
-      },
-    ]),
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoCreateOrderSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setRedirectUrlAction,
+    hasOrderTypeSelectedAction,
+    {
+      no: gotoCaseDetailWithModal,
+      proceed: [
+        unsetDocumentToEditAction,
+        clearModalAction,
+        setSelectedConsolidatedCasesToMultiDocketOnAction(false),
+        setupCurrentPageAction('Interstitial'),
+        stopShowValidationAction,
+        clearFormAction,
+        setCreateOrderModalDataOnFormAction,
+        setIsCreatingOrderAction,
+        convertHtml2PdfSequence,
+        setupCurrentPageAction('CreateOrder'),
+      ],
+    },
+  ]);

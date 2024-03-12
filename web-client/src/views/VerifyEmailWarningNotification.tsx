@@ -19,7 +19,7 @@ export const VerifyEmailWarningNotification = connect(
               />
             </div>
             <div className="desktop:grid-col-auto grid-col-11">
-              <p className="margin-0">
+              <p className="margin-0" data-testid="verify-email-warning">
                 A verification email has been sent to{' '}
                 {user && user.pendingEmail}. Verify your email to log in and
                 receive service at the new email address.

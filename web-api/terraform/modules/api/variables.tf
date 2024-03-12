@@ -96,3 +96,7 @@ variable "enable_health_checks" {
 variable "health_check_id" {
   type = string
 }
+
+variable "alert_sns_topic_arn" {
+  type = string
+}

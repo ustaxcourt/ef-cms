@@ -5,12 +5,39 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
-export const SuccessNotification = connect(
-  {
-    alertSuccess: state.alertSuccess,
-    dismissAlertSequence: sequences.dismissAlertSequence,
-  },
-  function SuccessNotification({ alertSuccess, dismissAlertSequence }) {
+type SuccessNotificationProps = {
+  isDismissible?: boolean;
+};
+
+type AlertSuccess = {
+  linkText?: string;
+  linkUrl?: string;
+  message?: string | React.ReactNode;
+  metaData?: string;
+  newTab?: string;
+  overwritable?: boolean;
+  title?: string;
+};
+
+const successNotificationDeps = {
+  alertSuccess: state.alertSuccess,
+  dismissAlertSequence: sequences.dismissAlertSequence,
+};
+
+export const SuccessNotification = connect<
+  SuccessNotificationProps,
+  typeof successNotificationDeps
+>(
+  successNotificationDeps,
+  function SuccessNotification({
+    alertSuccess,
+    dismissAlertSequence = sequences.dismissAlertSequence,
+    isDismissible = true,
+  }: {
+    alertSuccess?: AlertSuccess;
+    dismissAlertSequence?: Function;
+    isDismissible?: boolean;
+  }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;
@@ -37,9 +64,18 @@ export const SuccessNotification = connect(
             role="alert"
           >
             <div className="usa-alert__body">
+              {alertSuccess.title && (
+                <h4 className="usa-alert__heading">{alertSuccess.title}</h4>
+              )}
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
-                  <div className="tablet:grid-col-10 grid-col-8">
+                  <div
+                    className={classNames(
+                      isDismissible
+                        ? 'tablet:grid-col-10 grid-col-8'
+                        : 'tablet:grid-col-12 grid-col-10',
+                    )}
+                  >
                     <p className="usa-alert__text padding-top-0 padding-bottom-0">
                       {alertSuccess.message}
                     </p>
@@ -55,16 +91,18 @@ export const SuccessNotification = connect(
                       </Button>
                     )}
                   </div>
-                  <div className="tablet:grid-col-2 grid-col-4 usa-alert__action">
-                    <Button
-                      link
-                      className="no-underline padding-0"
-                      icon="times-circle"
-                      onClick={() => dismissAlertSequence()}
-                    >
-                      Clear
-                    </Button>
-                  </div>
+                  {isDismissible && (
+                    <div className="tablet:grid-col-2 grid-col-4 usa-alert__action">
+                      <Button
+                        link
+                        className="no-underline padding-0"
+                        icon="times-circle"
+                        onClick={() => dismissAlertSequence()}
+                      >
+                        Clear
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
