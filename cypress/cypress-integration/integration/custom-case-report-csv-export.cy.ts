@@ -36,10 +36,9 @@ describe('Custom Case Report CSV export', () => {
       const filePath = `${downloadPath}/${latestFile}`;
       // eslint-disable-next-line promise/no-nesting
       return cy.readFile(filePath, 'utf-8').then(fileContent => {
-        cy.wrap(fileContent.split('\n').length).should(
-          'equal',
-          reportCount + 1,
-        );
+        cy.wrap(
+          fileContent.split('\n').filter((str: string) => !!str).length,
+        ).should('equal', reportCount + 1);
       });
     });
   });
