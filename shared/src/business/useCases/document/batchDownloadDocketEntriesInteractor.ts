@@ -39,7 +39,7 @@ export const batchDownloadDocketEntriesInteractor = async (
   }: DownloadDocketEntryRequestType,
 ) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
