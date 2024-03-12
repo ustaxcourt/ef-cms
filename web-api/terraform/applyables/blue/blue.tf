@@ -1,4 +1,35 @@
+provider "aws" {
+  region = var.aws_region
+}
 
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us-east-1"
+}
+
+provider "aws" {
+  region = "us-west-1"
+  alias  = "us-west-1"
+}
+
+
+terraform {
+  backend "s3" {
+  }
+
+  required_providers {
+    aws = "5.37.0"
+  }
+}
+
+data "terraform_remote_state" "remote" {
+  backend = "s3"
+  config = {
+    bucket = var.all_colors_tfstate_bucket
+    key    = var.all_colors_tfstate_key
+    region = var.all_colors_tfstate_region
+  }
+}
 
 module "api-east-blue" {
   puppeteer_layer_object = null_resource.puppeteer_layer_east_object
