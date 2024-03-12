@@ -5,7 +5,7 @@ import { getCypressEnv } from '../env/cypressEnvironment';
 import type {
   DeleteRequest,
   PutRequest,
-} from '../../../web-api/src/persistence/dynamo/dynamoTypes';
+} from '@web-api/persistence/dynamo/dynamoTypes';
 
 let dynamoCache: DynamoDBClient;
 let documentCache: DynamoDBDocument;
