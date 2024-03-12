@@ -15,7 +15,7 @@ describe('downloadCsvFileAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('test', async () => {
+  it('should download csv file', async () => {
     const results = await runAction(downloadCsvFileAction, {
       modules: {
         presenter,
@@ -30,6 +30,24 @@ describe('downloadCsvFileAction', () => {
 
     expect(results.output).toEqual({
       csvString: 'csv data',
+      fileName: TEST_FILE_NAME,
+    });
+  });
+  it('should return an empty string if csv file download failed', async () => {
+    applicationContext.getHttpClient().get = jest.fn().mockRejectedValue(null);
+    const results = await runAction(downloadCsvFileAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        csvInfo: {
+          fileName: TEST_FILE_NAME,
+          url: TEST_URL,
+        },
+      },
+    });
+    expect(results.output).toEqual({
+      csvString: '',
       fileName: TEST_FILE_NAME,
     });
   });
