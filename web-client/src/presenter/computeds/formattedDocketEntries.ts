@@ -306,13 +306,7 @@ export const formattedDocketEntries = (
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
-  const {
-    ALLOWLIST_FEATURE_FLAGS,
-    DOCKET_RECORD_FILTER_OPTIONS,
-    EXHIBIT_EVENT_CODES,
-    MOTION_EVENT_CODES,
-    ORDER_EVENT_CODES,
-  } = applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
 
@@ -357,7 +351,6 @@ export const formattedDocketEntries = (
     .toISO();
 
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  /********************************************************************************/
 
   docketEntriesFormatted = docketEntriesFormatted
     .map((entry: any, _, array) => {
@@ -387,13 +380,9 @@ export const formattedDocketEntries = (
         isDocumentSelected: documentsSelectedForDownload.some(
           docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
         ),
-        isMinuteEntry: computeMinuteEntry(docketEntry), // should minuteEntry be set possibly fetching the docket entries? Read below for why its set here*
+        isMinuteEntry: computeMinuteEntry(docketEntry),
       };
     });
-
-  // todo:
-  // 1. unit test
-  // *Needs to be computed in anticiapation of (isMinuteEntry being removed from DocketEntry.ts) https://github.com/ustaxcourt/ef-cms/pull/4702
 
   const isSelectableForDownload = entry => {
     return (
@@ -442,7 +431,6 @@ export const formattedDocketEntries = (
       isSealed: docEntry.isSealed,
       isStricken: docEntry.isStricken,
     }));
-  /********************************************************************************/
 
   result.formattedPendingDocketEntriesOnDocketRecord =
     result.formattedDocketEntriesOnDocketRecord.filter(docketEntry =>
