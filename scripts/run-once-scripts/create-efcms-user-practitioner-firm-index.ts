@@ -1,5 +1,5 @@
 import { Client } from '@opensearch-project/opensearch';
-import { areAllReindexTasksFinished } from '../../shared/admin-tools/elasticsearch/check-reindex-complete';
+import { areAllReindexTasksFinished } from '../elasticsearch/check-reindex-complete';
 import { efcmsUserMappings } from '../../web-api/elasticsearch/efcms-user-mappings';
 import {
   esSettingsType,

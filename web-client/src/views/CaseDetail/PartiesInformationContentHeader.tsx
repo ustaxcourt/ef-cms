@@ -67,6 +67,7 @@ export const PartiesInformationContentHeader = connect(
                           validationErrors.practitionerSearchError &&
                             'usa-input--error',
                         )}
+                        data-testid="practitioner-search-input"
                         id="practitioner-search-field"
                         name="practitionerSearch"
                         placeholder="Enter bar no. or name"
@@ -81,6 +82,7 @@ export const PartiesInformationContentHeader = connect(
                       />
                       <button
                         className="small-search-button usa-button"
+                        data-testid="practitioner-search-submit-button"
                         id="search-for-practitioner"
                         type="submit"
                       >

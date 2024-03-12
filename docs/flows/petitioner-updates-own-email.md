@@ -5,7 +5,7 @@ API->SES: send email to petitioner with token
 SES->Petitioner: email sent
 note over Petitioner: click verify link in email
 Petitioner->UI (Petitioner): verify-email?token route
-UI (Petitioner)->API: call /async/users/verify-email
+UI (Petitioner)->API: call /users/verify-email
 note over UI (Petitioner): success! ask user to login
 API->Dynamo: update email / clear pending email
 note over API: for each case attached to user

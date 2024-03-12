@@ -9,9 +9,7 @@ import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesFor
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getOutboxMessagesForSectionAction } from '../actions/getOutboxMessagesForSectionAction';
 import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForUserAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
@@ -20,7 +18,7 @@ import { setSectionForMessageBoxAction } from '../actions/setSectionForMessageBo
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const goToMessages = startWebSocketConnectionSequenceDecorator([
+export const gotoMessagesSequence = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('Interstitial'),
   resetCacheKeyAction,
   closeMobileMenuAction,
@@ -45,11 +43,3 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
   ]),
   setupCurrentPageAction('Messages'),
 ]);
-
-export const gotoMessagesSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: goToMessages,
-    unauthorized: [redirectToCognitoAction],
-  },
-];

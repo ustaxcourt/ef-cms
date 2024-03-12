@@ -1,4 +1,4 @@
-export const navigateTo = username => {
+export const navigateTo = (username: string) => {
   cy.login(username, '/');
 };
 
@@ -16,18 +16,6 @@ export const disengageMaintenance = () => {
 
 export const getMaintenanceModal = () => {
   return cy.get('.app-maintenance-modal');
-};
-
-export const getLogoutButton = () => {
-  return cy.get('#maintenance-logout-btn');
-};
-
-export const getCancelButton = () => {
-  return cy.get('#maintenance-cancel-btn');
-};
-
-export const getLoginHeader = () => {
-  return cy.get('h1').contains('Log in');
 };
 
 export const getMaintenancePageContent = () => {

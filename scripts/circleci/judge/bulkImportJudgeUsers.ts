@@ -9,5 +9,5 @@ const main = async () => {
   }
 };
 
-main();
+void main();
 exports.main = main;

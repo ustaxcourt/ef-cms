@@ -20,8 +20,6 @@ import {
 import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  getCognitoLoginUrl,
-  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../sharedAppContext';
@@ -588,9 +586,12 @@ export const createTestApplicationContext = ({
     documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     environment: {
       appEndpoint: 'localhost:1234',
+      cognitoClientId: 'bvjrggnd3co403c0aahscinne',
       dynamoDbTableName: 'efcms-local',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
+      userPoolId: 'local_2pHzece7',
+      workerQueueUrl: 'sqs.aws',
     },
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
@@ -602,21 +603,10 @@ export const createTestApplicationContext = ({
       return mockGetChromiumBrowserReturnValue;
     }),
     getCognito: appContextProxy({
-      adminCreateUser: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
-      adminUpdateUserAttributes: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
-      initiateAuth: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
+      adminCreateUser: jest.fn(),
+      adminUpdateUserAttributes: jest.fn(),
+      initiateAuth: jest.fn(),
     }),
-    getCognitoClientId: jest.fn(),
-    getCognitoLoginUrl,
-    getCognitoRedirectUrl: jest.fn(),
-    getCognitoRequestPasswordResetUrl,
-    getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),
@@ -661,7 +651,6 @@ export const createTestApplicationContext = ({
       sendCalendarSessionEvent: jest.fn(),
       sendEmailEventToQueue: jest.fn(),
       sendSetTrialSessionCalendarEvent: jest.fn(),
-      sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
@@ -688,7 +677,11 @@ export const createTestApplicationContext = ({
     getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
+    getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
+    getWorkerGateway: appContextProxy({
+      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+    }),
     isFeatureEnabled: jest.fn(),
     logger: {
       debug: jest.fn(),
@@ -703,4 +696,4 @@ export const createTestApplicationContext = ({
   return applicationContext;
 };
 
-export const applicationContext = createTestApplicationContext();
+export const applicationContext = createTestApplicationContext() as any;

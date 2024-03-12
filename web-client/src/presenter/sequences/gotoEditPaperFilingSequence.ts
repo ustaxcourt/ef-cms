@@ -2,8 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -15,27 +13,20 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditPaperFiling = [
-  setupCurrentPageAction('Interstitial'),
-  clearScansAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  stopShowValidationAction,
-  setFromPageAction,
-  getCaseAction,
-  setCaseAction,
-  setDocketEntryIdAction,
-  setDocketEntryFormForDocketEditAction,
-  updateDocketEntryWizardDataAction,
-  setupEditPaperFilingAction,
-  setPdfPreviewUrlForEditPaperFilingAction,
-  setupCurrentPageAction('PaperFiling'),
-];
-
-export const gotoEditPaperFilingSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditPaperFiling),
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoEditPaperFilingSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    clearScansAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    stopShowValidationAction,
+    setFromPageAction,
+    getCaseAction,
+    setCaseAction,
+    setDocketEntryIdAction,
+    setDocketEntryFormForDocketEditAction,
+    updateDocketEntryWizardDataAction,
+    setupEditPaperFilingAction,
+    setPdfPreviewUrlForEditPaperFilingAction,
+    setupCurrentPageAction('PaperFiling'),
+  ]);

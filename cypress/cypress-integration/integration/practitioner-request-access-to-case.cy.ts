@@ -2,15 +2,15 @@ import { addIntervenorAsPartyToCase } from '../../helpers/addIntervenorToCase';
 import { attachDummyFile } from '../../helpers/attach-file';
 import { externalUserSearchesDocketNumber } from '../../helpers/external-user-searches-docket-number';
 import {
-  loginAsDocketClerk,
+  loginAsDocketClerk1,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
 import {
-  petitionerCreatesEletronicCase,
-  petitionerCreatesEletronicCaseWithDeseasedSpouse,
+  petitionerCreatesElectronicCase,
+  petitionerCreatesElectronicCaseWithDeceasedSpouse,
 } from '../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
+import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 import { selectRedactionAcknowledgement } from '../../helpers/select-redaction-acknowledgement';
 import { selectTypeaheadInput } from '../../helpers/select-typeahead-input';
@@ -22,7 +22,7 @@ describe('Private Practitioner requests access to case', () => {
       const secondaryFilerName = 'Sally';
 
       loginAsPetitioner();
-      petitionerCreatesEletronicCaseWithDeseasedSpouse(
+      petitionerCreatesElectronicCaseWithDeceasedSpouse(
         primaryFilerName,
         secondaryFilerName,
       ).then(docketNumber => {
@@ -59,10 +59,10 @@ describe('Private Practitioner requests access to case', () => {
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
-      petitionerCreatesEletronicCase(primaryFilerName).then(docketNumber => {
+      petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
 
-        loginAsDocketClerk();
+        loginAsDocketClerk1();
         searchByDocketNumberInHeader(docketNumber);
         addIntervenorAsPartyToCase();
 
@@ -93,7 +93,7 @@ describe('Private Practitioner requests access to case', () => {
       const secondaryFilerName = 'Sally';
 
       loginAsPetitioner();
-      petitionerCreatesEletronicCaseWithDeseasedSpouse(
+      petitionerCreatesElectronicCaseWithDeceasedSpouse(
         primaryFilerName,
         secondaryFilerName,
       ).then(docketNumber => {

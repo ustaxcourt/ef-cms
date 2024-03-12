@@ -1,5 +1,5 @@
 import { createOrder } from '../../helpers/create-order';
-import { loginAsDocketClerk } from '../../helpers/auth/login-as-helpers';
+import { loginAsDocketClerk1 } from '../../helpers/auth/login-as-helpers';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('Docket clerk creates and edits draft order with selected docket numbers', function () {
@@ -8,7 +8,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
     let draftsCount = 0;
     const leadCase = '111-19';
 
-    loginAsDocketClerk();
+    loginAsDocketClerk1();
     searchByDocketNumberInHeader(leadCase);
 
     cy.get('[data-testid^="consolidatedCasesOfLeadCase-"]')
@@ -44,7 +44,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
     const leadCase = '111-19';
     const expectedDocketNumberSelected = `${leadCase}L`;
 
-    loginAsDocketClerk();
+    loginAsDocketClerk1();
     searchByDocketNumberInHeader(leadCase);
     createOrder();
 

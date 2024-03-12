@@ -19,11 +19,12 @@ import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
-import { ChangePasswordLocal } from './ChangePasswordLocal';
+import { ChangePassword } from '@web-client/views/Login/ChangePassword';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
+import { CreatePetitionerAccount } from '@web-client/views/CreatePetitionerAccount/CreatePetitionerAccount';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
@@ -50,13 +51,14 @@ import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompres
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
+import { ForgotPassword } from '@web-client/views/Login/ForgotPassword';
 import { GenericErrorModal } from './GenericErrorModal';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { JudgeActivityReport } from './JudgeActivityReport/JudgeActivityReport';
 import { Loading } from './Loading';
-import { LogIn } from './LogIn';
+import { Login } from '@web-client/views/Login/Login';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { MyAccount } from './MyAccount';
@@ -92,11 +94,13 @@ import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCou
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { UserContactEditProgress } from './UserContactEditProgress';
+import { VerificationSent } from '@web-client/views/CreatePetitionerAccount/VerificationSent';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
 
 const pages = {
   AccessibilityStatement,
@@ -117,11 +121,12 @@ const pages = {
   CaseInventoryReport,
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
-  ChangePasswordLocal,
+  ChangePassword,
   Contact,
   ContactEdit,
   CourtIssuedDocketEntry,
   CreateOrder,
+  CreatePetitionerAccount,
   CreatePractitionerUser,
   CustomCaseReport,
   DashboardChambers,
@@ -146,11 +151,12 @@ const pages = {
   ErrorView,
   FileDocumentWizard,
   FilePetitionSuccess,
+  ForgotPassword,
   IdleLogout,
   Interstitial,
   JudgeActivityReport,
   Loading,
-  LogIn,
+  Login,
   MessageDetail,
   Messages,
   MyAccount,
@@ -183,14 +189,20 @@ const pages = {
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
+  VerificationSent,
   WorkQueue,
+};
+
+const pagesWithBlueBackground = {
+  ChangePassword,
+  CreatePetitionerAccount,
+  ForgotPassword,
+  Login,
+  VerificationSent,
 };
 
 let initialPageLoaded = false;
 
-/**
- * Root application component
- */
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
@@ -223,6 +235,7 @@ export const AppComponent = connect(
     let showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
+    const IsPageWithBlueBackground = pagesWithBlueBackground[currentPage];
 
     return (
       <>
@@ -241,10 +254,17 @@ export const AppComponent = connect(
           </>
         )}
 
-        <main id="main-content" role="main">
+        <main
+          className={classNames(
+            IsPageWithBlueBackground ? 'background-blue' : '',
+          )}
+          id="main-content"
+          role="main"
+        >
           <CurrentPage />
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
+
         <Loading />
 
         {showHeaderAndFooter && (

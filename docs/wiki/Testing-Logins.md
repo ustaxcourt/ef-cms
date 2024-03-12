@@ -7,7 +7,7 @@ The password is set to the environment variable found in the [setup documentatio
 petitioner1@example.com – petitioner5@example.com
 
 ### Private Practitioner
-privatepractitioner1@example.com – privatePractitioner10@example.com
+privatePractitioner1@example.com – privatePractitioner10@example.com
 
 ### IRS Attorney
 irspractitioner1@example.com – irsPractitioner10@example.com

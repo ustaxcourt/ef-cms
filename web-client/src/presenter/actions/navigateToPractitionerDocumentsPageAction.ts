@@ -5,12 +5,12 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {void}
  */
 
-export const navigateToPractitionerDocumentsPageAction = ({
+export const navigateToPractitionerDocumentsPageAction = async ({
   get,
   router,
 }: ActionProps) => {
   const practitionerDetail = get(state.practitionerDetail);
-  router.route(
+  await router.route(
     `/practitioner-detail/${practitionerDetail.barNumber}?tab=practitioner-documentation`,
   );
 };
