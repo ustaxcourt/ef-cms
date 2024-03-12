@@ -19,7 +19,9 @@ describe('myAccountHelper', () => {
     it('should be true when the current user is a private practitioner', () => {
       user.role = USER_ROLES.privatePractitioner;
 
-      const { showMyContactInformation } = runCompute(myAccountHelper, {});
+      const { showMyContactInformation } = runCompute(myAccountHelper, {
+        state: { state: {} },
+      });
 
       expect(showMyContactInformation).toBeTruthy();
     });
@@ -27,7 +29,9 @@ describe('myAccountHelper', () => {
     it('should be true when the current user is an IRS practitioner', () => {
       user.role = USER_ROLES.irsPractitioner;
 
-      const { showMyContactInformation } = runCompute(myAccountHelper, {});
+      const { showMyContactInformation } = runCompute(myAccountHelper, {
+        state: {},
+      });
 
       expect(showMyContactInformation).toBeTruthy();
     });
@@ -35,7 +39,9 @@ describe('myAccountHelper', () => {
     it('should be false when the current user is NOT a practitioner', () => {
       user.role = USER_ROLES.petitioner;
 
-      const { showMyContactInformation } = runCompute(myAccountHelper, {});
+      const { showMyContactInformation } = runCompute(myAccountHelper, {
+        state: {},
+      });
 
       expect(showMyContactInformation).toBeFalsy();
     });
@@ -45,7 +51,7 @@ describe('myAccountHelper', () => {
     it('should be true when the current user is a petitioner', () => {
       user.role = USER_ROLES.petitioner;
 
-      const { showPetitionerView } = runCompute(myAccountHelper, {});
+      const { showPetitionerView } = runCompute(myAccountHelper, { state: {} });
 
       expect(showPetitionerView).toBeTruthy();
     });
@@ -53,7 +59,7 @@ describe('myAccountHelper', () => {
     it('should be true when the current user is NOT a petitioner', () => {
       user.role = USER_ROLES.irsPractitioner;
 
-      const { showPetitionerView } = runCompute(myAccountHelper, {});
+      const { showPetitionerView } = runCompute(myAccountHelper, { state: {} });
 
       expect(showPetitionerView).toBeFalsy();
     });
