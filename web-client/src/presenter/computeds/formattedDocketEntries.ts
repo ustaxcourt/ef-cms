@@ -421,15 +421,6 @@ export const formattedDocketEntries = (
     .filter(docEntry => isSelectableForDownload(docEntry))
     .map(docEntry => ({
       docketEntryId: docEntry.docketEntryId,
-      documentTitle: docEntry.documentTitle,
-      eventCode: docEntry.eventCode,
-      filingDate: docEntry.filingDate,
-      index: docEntry.index,
-      isDraft: docEntry.isDraft,
-      isFileAttached: docEntry.isFileAttached,
-      isOnDocketRecord: docEntry.isOnDocketRecord,
-      isSealed: docEntry.isSealed,
-      isStricken: docEntry.isStricken,
     }));
 
   result.formattedPendingDocketEntriesOnDocketRecord =

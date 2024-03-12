@@ -21,8 +21,6 @@ export const updateBatchDownloadProgressAction = ({
     numberOfFilesToBatch,
   } = props;
 
-  console.log('socket info', props);
-
   let done = 0;
   const lastDone = get(state.batchDownloads.fileCount) || 0;
   const total = numberOfFilesToBatch + numberOfDocketRecordsToGenerate;

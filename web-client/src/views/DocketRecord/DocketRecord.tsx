@@ -27,7 +27,6 @@ export const DocketRecord = connect(
   },
 
   function DocketRecord({
-    caseDetail,
     docketRecordHelper,
     formattedDocketEntriesHelper,
     openSealDocketEntryModalSequence,
@@ -35,12 +34,6 @@ export const DocketRecord = connect(
     setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
-    const caseInfo = {
-      caseCaption: caseDetail.caseCaption,
-      docketNumber: caseDetail.docketNumber,
-      isSealed: caseDetail.isSealed,
-    };
-
     useEffect(() => {
       const documentsSelectorHeaderInput = window.document.getElementById(
         'docket-entry-selections',
@@ -73,7 +66,6 @@ export const DocketRecord = connect(
                       type="checkbox"
                       onChange={() => {
                         setSelectedDocumentsForDownloadSequence({
-                          ...caseInfo,
                           docketEntries:
                             formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
                         });
@@ -123,18 +115,8 @@ export const DocketRecord = connect(
                               onChange={() => {
                                 const documentSelected = {
                                   docketEntryId: entry.docketEntryId,
-                                  documentTitle: entry.documentTitle,
-                                  eventCode: entry.eventCode,
-                                  filingDate: entry.filingDate,
-                                  index: entry.index,
-                                  isDraft: entry.isDraft,
-                                  isFileAttached: entry.isFileAttached,
-                                  isOnDocketRecord: entry.isOnDocketRecord,
-                                  isSealed: entry.isSealed,
-                                  isStricken: entry.isStricken,
                                 };
                                 setSelectedDocumentsForDownloadSequence({
-                                  ...caseInfo,
                                   docketEntries: [documentSelected],
                                 });
                               }}

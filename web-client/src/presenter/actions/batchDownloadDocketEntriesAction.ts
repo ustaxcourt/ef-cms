@@ -1,3 +1,4 @@
+import { ALL_DOCUMENTS_SELECTED } from '../../../../shared/src/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const batchDownloadDocketEntriesAction = async ({
@@ -11,17 +12,20 @@ export const batchDownloadDocketEntriesAction = async ({
   const docketEntries = get(state.documentsSelectedForDownload);
   const caseDetail = get(state.caseDetail);
   const clientConnectionId = get(state.clientConnectionId);
-  const { caseCaption, docketNumber, isSealed } = caseDetail;
+  const { docketNumber } = caseDetail;
+  const isSingleDocumentSelected = docketEntries.length === 1;
+
+  const documentsSelectedForDownload: string = isSingleDocumentSelected
+    ? docketEntries[0].docketEntryId
+    : ALL_DOCUMENTS_SELECTED;
 
   try {
     await applicationContext
       .getUseCases()
       .batchDownloadDocketEntriesInteractor(applicationContext, {
-        caseCaption,
         clientConnectionId,
-        docketEntries,
         docketNumber,
-        isSealed,
+        documentsSelectedForDownload,
         printableDocketRecordFileId: props.fileId,
       });
 
