@@ -1,4 +1,5 @@
 import { changePassword } from '@web-api/gateways/user/changePassword';
+import { confirmSignUp } from '@web-api/gateways/user/confirmSignUp';
 import { createUser } from '@web-api/gateways/user/createUser';
 import { disableUser } from '@web-api/gateways/user/disableUser';
 import { forgotPassword } from '@web-api/gateways/user/forgotPassword';
@@ -9,6 +10,7 @@ import { updateUser } from '@web-api/gateways/user/updateUser';
 
 export const getUserGateway = () => ({
   changePassword,
+  confirmSignUp,
   createUser,
   disableUser,
   forgotPassword,
