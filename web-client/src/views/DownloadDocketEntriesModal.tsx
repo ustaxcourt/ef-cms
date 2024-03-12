@@ -9,17 +9,17 @@ export const DownloadDocketEntriesModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.batchDownloadDocketEntriesSequence,
-    documentsSelectedForDownload: state.documentsSelectedForDownload,
+    docketRecordHelper: state.docketRecordHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function DownloadDocketEntriesModal({
     cancelSequence,
     confirmSequence,
-    documentsSelectedForDownload,
+    docketRecordHelper,
   }) {
     const [isAddPrintableDocketRecordSelected, selectPrintableDocketRecord] =
       useState(false);
-    const numDocketEntries = documentsSelectedForDownload.length;
+    const numDocketEntries = docketRecordHelper.countOfDocumentsForDownload;
     const docketEntriesText = `${numDocketEntries} ${numDocketEntries === 1 ? 'docket entry' : 'docket entries'}`;
     return (
       <ModalDialog

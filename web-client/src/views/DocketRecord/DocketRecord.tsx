@@ -124,8 +124,10 @@ export const DocketRecord = connect(
                                 const documentSelected = {
                                   docketEntryId: entry.docketEntryId,
                                   documentTitle: entry.documentTitle,
+                                  eventCode: entry.eventCode,
                                   filingDate: entry.filingDate,
                                   index: entry.index,
+                                  isDraft: entry.isDraft,
                                   isFileAttached: entry.isFileAttached,
                                   isOnDocketRecord: entry.isOnDocketRecord,
                                   isSealed: entry.isSealed,

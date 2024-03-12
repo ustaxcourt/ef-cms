@@ -262,6 +262,39 @@ export const getFormattedDocketEntry = ({
   return formattedResult;
 };
 
+// todo: move to utility
+export const getDocketEntriesByFilter = (
+  applicationContext,
+  { docketEntries, docketRecordFilter },
+) => {
+  const {
+    DOCKET_RECORD_FILTER_OPTIONS,
+    EXHIBIT_EVENT_CODES,
+    MOTION_EVENT_CODES,
+    ORDER_EVENT_CODES,
+  } = applicationContext.getConstants();
+  let result = docketEntries;
+  switch (docketRecordFilter) {
+    case DOCKET_RECORD_FILTER_OPTIONS.exhibits:
+      result = docketEntries.filter(entry =>
+        EXHIBIT_EVENT_CODES.includes(entry.eventCode),
+      );
+      break;
+    case DOCKET_RECORD_FILTER_OPTIONS.motions:
+      result = docketEntries.filter(
+        entry => MOTION_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
+      );
+      break;
+    case DOCKET_RECORD_FILTER_OPTIONS.orders:
+      result = docketEntries.filter(
+        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
+      );
+      break;
+  }
+
+  return result;
+};
+
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -296,23 +329,10 @@ export const formattedDocketEntries = (
 
   const result = formatCase(applicationContext, caseDetail);
 
-  switch (docketRecordFilter) {
-    case DOCKET_RECORD_FILTER_OPTIONS.exhibits:
-      result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => EXHIBIT_EVENT_CODES.includes(entry.eventCode),
-      );
-      break;
-    case DOCKET_RECORD_FILTER_OPTIONS.motions:
-      result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => MOTION_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
-      );
-      break;
-    case DOCKET_RECORD_FILTER_OPTIONS.orders:
-      result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
-      );
-      break;
-  }
+  result.formattedDocketEntries = getDocketEntriesByFilter(applicationContext, {
+    docketEntries: result.formattedDocketEntries,
+    docketRecordFilter,
+  });
 
   // export type for better usage
   type DocketEntriesSelectionType = (RawDocketEntry & {
@@ -413,8 +433,10 @@ export const formattedDocketEntries = (
     .map(docEntry => ({
       docketEntryId: docEntry.docketEntryId,
       documentTitle: docEntry.documentTitle,
+      eventCode: docEntry.eventCode,
       filingDate: docEntry.filingDate,
       index: docEntry.index,
+      isDraft: docEntry.isDraft,
       isFileAttached: docEntry.isFileAttached,
       isOnDocketRecord: docEntry.isOnDocketRecord,
       isSealed: docEntry.isSealed,
