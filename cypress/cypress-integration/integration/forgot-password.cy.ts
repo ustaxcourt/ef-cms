@@ -66,12 +66,6 @@ describe('Forgot Password', () => {
     cy.get('[data-testid="my-cases-link"]');
   });
 
-  /*
-      Given a petitioner with a DAWSON account
-      When they indicate that they Forgot Password
-      And they click the password reset link that was emailed to them
-      Then they should be routed to the change password screen and after successful reset, be logged into their account
-       */
   it('should reset a users password and log them in when they indicate they have forgotten their password and click on the email verfication link', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
@@ -114,12 +108,6 @@ describe('Forgot Password', () => {
     cy.get('[data-testid="header-text"]').should('contain', `Welcome, ${name}`);
   });
 
-  /*
-      Given a petitioner with a DAWSON account
-      When they indicate that they Forgot Password
-      And it has been longer than 24 hours since they indicated they Forgot Password
-      Then they should be alerted that their forgot password link has expired
-       */
   it('should notify the user that their forgot password link has expired or is wrong when the user types in the wrong confirmation code and they should be able to request a new code', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
@@ -161,12 +149,6 @@ describe('Forgot Password', () => {
     );
   });
 
-  /*
-      Given an external user who has been granted e-access to DAWSON
-      When they indicate that they Forgot Password
-      And their account is unconfirmed
-      Then they should be alerted that they have been sent an email to assist them with confirmation of their account
-      */
   it('should alert a user that that they have been sent an email to assist them with the confirmation of their account when they enter an email address that has been granted e-access but has not set a password', () => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       const practitionerUserName = `cypress_test_account+${v4()}`;

@@ -4,6 +4,7 @@ import {
   When,
   //defineParameterType,
 } from '@badeball/cypress-cucumber-preprocessor';
+import { logout } from '../../../../helpers/auth/logout';
 
 // const users = [
 //   'petitionsclerk',
@@ -29,6 +30,20 @@ import {
 
 Given('I log into DAWSON as {string}', (user: string) => {
   cy.login(user);
+});
+
+Given(
+  'I log into DAWSON as {string} with {string}',
+  (user: string, password: string) => {
+    cy.visit('/login');
+    cy.get('[data-testid="email-input"]').type(`${user}@example.com`);
+    cy.get('[data-testid="password-input"]').type(password);
+    cy.get('[data-testid="login-button"]').click();
+  },
+);
+
+Given('I logout of DAWSON', () => {
+  logout();
 });
 
 When('I visit the login page', () => {
