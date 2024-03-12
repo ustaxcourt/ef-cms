@@ -10,6 +10,9 @@ export const openGainElectronicAccessToCaseModalSequence =
     clearAlertsAction,
     checkEmailAvailabilityForPetitionerAction,
     {
+      accountIsUnverified: [
+        setShowModalFactoryAction('AccountUnverifiedModal'),
+      ],
       emailAvailable: [setShowModalFactoryAction('NoMatchingEmailFoundModal')],
       emailInUse: [setShowModalFactoryAction('MatchingEmailFoundModal')],
     },

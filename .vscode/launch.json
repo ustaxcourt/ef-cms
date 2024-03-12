@@ -40,7 +40,7 @@
       "request": "launch",
       "name": "Jest: integration test current file",
       "env": {
-        "IS_LOCAL": "true",
+        "STAGE": "local",
         "CI": "false",
         "NO_SCANNER": "true",
         "SKIP_VIRUS_SCAN": "true",

@@ -1,4 +1,5 @@
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
+import { PASSWORD_VALIDATION_ERROR_MESSAGES } from './EntityValidationConstants';
 
 describe('NewPetitionerUser', () => {
   const validEntity = {
@@ -10,6 +11,7 @@ describe('NewPetitionerUser', () => {
 
   it('should return a valid NewPetitionerUser entity', () => {
     const formEntity = new NewPetitionerUser(validEntity);
+
     expect(formEntity.isValid()).toBeTruthy();
     expect(formEntity.getValidationErrors()).toBeNull();
   });
@@ -20,6 +22,7 @@ describe('NewPetitionerUser', () => {
         ...validEntity,
         email: 'hello',
       });
+
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
         email: 'Enter a valid email address',
@@ -33,6 +36,7 @@ describe('NewPetitionerUser', () => {
         ...validEntity,
         name: '',
       });
+
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
         name: 'Enter a name',
@@ -44,6 +48,7 @@ describe('NewPetitionerUser', () => {
         ...validEntity,
         name: '#'.repeat(101),
       });
+
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
         name: 'Enter a name with fewer than 100 characters',
@@ -52,106 +57,121 @@ describe('NewPetitionerUser', () => {
   });
 
   describe('password', () => {
-    it('should include "hasNoLeadingOrTrailingSpace" in the error message when provided a password with leading space', () => {
+    it('should return error message provided a password with leading space', () => {
       const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: ' 12$Azasodfkj3',
         password: ' 12$Azasodfkj3',
       });
+
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasNoLeadingOrTrailingSpace',
+        password:
+          PASSWORD_VALIDATION_ERROR_MESSAGES.hasNoLeadingOrTrailingSpace,
       });
     });
 
-    it('should include "hasNoLeadingOrTrailingSpace" in the error message when provided a password with trailing space', () => {
+    it('should return error message provided a password with trailing space', () => {
       const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: '12$Azasodfkj3 ',
         password: '12$Azasodfkj3 ',
       });
+
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasNoLeadingOrTrailingSpace',
-      });
-    });
-
-    it('should set "hasOneLowercase" in the error message when provided a password does not contain a lower case character', () => {
-      const PASSWORD = '1AWD%$DNAWK';
-      const formEntity = new NewPetitionerUser({
-        ...validEntity,
-        confirmPassword: PASSWORD,
-        password: PASSWORD,
-      });
-      expect(formEntity.isValid()).toBeFalsy();
-      expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasOneLowercase',
-      });
-    });
-
-    it('should include "hasOneNumber" in the error message when provided a password does not contain a number', () => {
-      const PASSWORD = 'aAWD%$DNAWK';
-      const formEntity = new NewPetitionerUser({
-        ...validEntity,
-        confirmPassword: PASSWORD,
-        password: PASSWORD,
-      });
-      expect(formEntity.isValid()).toBeFalsy();
-      expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasOneNumber',
-      });
-    });
-
-    it('should include "hasOneUppercase" in the error message when provided a password does not contain an upper case character', () => {
-      const PASSWORD = 'aaws%$dn1awk';
-      const formEntity = new NewPetitionerUser({
-        ...validEntity,
-        confirmPassword: PASSWORD,
-        password: PASSWORD,
-      });
-      expect(formEntity.isValid()).toBeFalsy();
-      expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasOneUppercase',
-      });
-    });
-
-    it('should include "hasSpecialCharacterOrSpace" in the error message when provided a password does not contain a special character', () => {
-      const PASSWORD = 'aaWsdn1awk';
-      const formEntity = new NewPetitionerUser({
-        ...validEntity,
-        confirmPassword: PASSWORD,
-        password: PASSWORD,
-      });
-      expect(formEntity.isValid()).toBeFalsy();
-      expect(formEntity.getValidationErrors()).toEqual({
-        password: 'hasSpecialCharacterOrSpace',
-      });
-    });
-
-    it('should include "isProperLength" in the error message when provided a password is fewer than 8 characters long', () => {
-      const PASSWORD = '1';
-      const formEntity = new NewPetitionerUser({
-        ...validEntity,
-        confirmPassword: PASSWORD,
-        password: PASSWORD,
-      });
-      expect(formEntity.isValid()).toBeFalsy();
-      expect(formEntity.getValidationErrors()).toMatchObject({
         password:
-          'hasOneLowercase|hasOneUppercase|hasSpecialCharacterOrSpace|isProperLength',
+          PASSWORD_VALIDATION_ERROR_MESSAGES.hasNoLeadingOrTrailingSpace,
       });
     });
 
-    it('should include "isProperLength" in the error message when provided a password is greater than 99 characters long', () => {
-      const PASSWORD = '12$Azasodfkj3'.repeat(13);
+    it('should return error message provided a password that does not contain a lower case character', () => {
+      const PASSWORD = '1AWD%$DNAWK';
+
       const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: PASSWORD,
         password: PASSWORD,
       });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toEqual({
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneLowercase,
+      });
+    });
+
+    it('should return error message provided a password that does not contain a number', () => {
+      const PASSWORD = 'aAWD%$DNAWK';
+
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toEqual({
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneNumber,
+      });
+    });
+
+    it('should return error message provided a password that does not contain an upper case character', () => {
+      const PASSWORD = 'aaws%$dn1awk';
+
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toEqual({
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneUppercase,
+      });
+    });
+
+    it('should return error message provided a password that does not contain a special character', () => {
+      const PASSWORD = 'aaWsdn1awk';
+
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toEqual({
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.hasSpecialCharacterOrSpace,
+      });
+    });
+
+    it('should return error message provided a password that is fewer than 8 characters long', () => {
+      const PASSWORD = '1$Ab';
+
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toMatchObject({
-        password: 'isProperLength',
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength,
+      });
+    });
+
+    it('should return error message provided a password that is greater than 99 characters long', () => {
+      const PASSWORD = '12$Azasodfkj3'.repeat(13);
+
+      const formEntity = new NewPetitionerUser({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getValidationErrors()).toMatchObject({
+        password: PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength,
       });
     });
   });
@@ -163,6 +183,7 @@ describe('NewPetitionerUser', () => {
         confirmPassword: 'somethingDifferent',
         password: '12$Azasodfkj3',
       });
+
       expect(formEntity.isValid()).toBeFalsy();
       expect(formEntity.getValidationErrors()).toEqual({
         confirmPassword: 'Passwords must match',
@@ -175,6 +196,7 @@ describe('NewPetitionerUser', () => {
         confirmPassword: '12$Azasodfkj3',
         password: '12$Azasodfkj3',
       });
+
       expect(formEntity.isValid()).toBe(true);
       expect(formEntity.getValidationErrors()).toEqual(null);
     });

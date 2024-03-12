@@ -58,7 +58,7 @@ describe('User accesses a case that does not belong to them, but is part of a co
   });
 
   describe('Private Practitioner', () => {
-    loginAs(cerebralTest, 'privatepractitioner@example.com');
+    loginAs(cerebralTest, 'privatePractitioner@example.com');
 
     it('navigate to case 104-23 and verify the links are clickable, and "request access to case" is visible', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {

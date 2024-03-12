@@ -24,7 +24,7 @@ describe('Docket clerk consolidated case work item journey', () => {
     cerebralTest.docketNumber = leadCaseDocketNumber;
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
 
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
@@ -67,7 +67,7 @@ describe('Docket clerk consolidated case work item journey', () => {
     queue: 'section',
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
 
   it('sets the docketNumber', () => {
     cerebralTest.docketNumber = consolidatedCaseDocketNumber;

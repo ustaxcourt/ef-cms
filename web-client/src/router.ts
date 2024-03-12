@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { forEach, set } from 'lodash';
-import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
+import qs from 'qs';
 import route from 'riot-route';
 
 const REPORT_PATHS_DICTIONARY: {
@@ -63,57 +63,36 @@ const back = () => {
   window.history.back();
 };
 
-const gotoMaintenancePage = app => {
-  return app.getSequence('navigateToPathSequence')({
-    path: '/maintenance',
-  });
-};
-const gotoLoginPage = app => {
-  const path = app.getState('cognitoLoginUrl');
-  externalRoute(path);
-};
-const goto404 = app => {
-  return app.getSequence('navigateToPathSequence')({
-    path: '404',
-  });
-};
-const accessRedirects = { goto404, gotoLoginPage, gotoMaintenancePage };
-
 const ifHasAccess = (
   {
     app,
     permissionToCheck,
-    redirect = accessRedirects,
-    skipMaintenanceCheck,
   }: {
     app;
     permissionToCheck?: string;
-    redirect?: any;
-    skipMaintenanceCheck?: boolean;
   },
   cb,
 ) => {
   return function () {
-    if (!app.getState('token')) {
-      return redirect.gotoLoginPage(app);
-    } else if (app.getState('maintenanceMode')) {
-      if (!skipMaintenanceCheck) {
-        return redirect.gotoMaintenancePage(app);
-      } else {
-        app.getSequence('clearAlertSequence')();
-        return cb.apply(null, arguments);
-      }
-    } else {
-      if (
-        permissionToCheck &&
-        !app.getState('permissions')[permissionToCheck]
-      ) {
-        redirect.goto404(app);
-      } else {
-        app.getSequence('clearAlertSequence')();
-        return cb.apply(null, arguments);
-      }
+    if (app.getState('maintenanceMode')) {
+      // This prevents a user from hitting the back button when maintenance mode is on and being able to access a previous page in their history.
+      return app.getSequence('navigateToPathSequence')({
+        path: '/maintenance',
+      });
     }
+
+    if (!app.getState('token')) {
+      return app.getSequence('navigateToLoginSequence')();
+    }
+
+    if (permissionToCheck && !app.getState('permissions')[permissionToCheck]) {
+      return app.getSequence('navigateToPathSequence')({
+        path: '404',
+      });
+    }
+
+    app.getSequence('clearAlertSequence')();
+    return cb.apply(null, arguments);
   };
 };
 
@@ -857,15 +836,17 @@ const router = {
       }),
     );
 
-    registerRoute('/change-password-local', () => {
-      return app.getSequence('gotoChangePasswordLocalSequence')();
-    });
-
-    registerRoute('/confirm-signup-local?..', () => {
-      const { confirmationCode, email } = route.query();
-      return app.getSequence('confirmSignUpLocalSequence')({
+    registerRoute('/confirm-signup?..', () => {
+      const { confirmationCode, email, userId } = qs.parse(
+        window.location.search,
+        {
+          ignoreQueryPrefix: true,
+        },
+      );
+      return app.getSequence('confirmSignUpSequence')({
         confirmationCode,
-        userEmail: email,
+        email,
+        userId,
       });
     });
 
@@ -1137,16 +1118,40 @@ const router = {
       return app.getSequence('gotoIdleLogoutSequence')();
     });
 
-    registerRoute('/log-in...', () => {
-      const { code, path, token } = queryStringDecoder();
-      if (code) {
-        return app.getSequence('loginWithCodeSequence')({
-          code,
-          path,
-        });
+    registerRoute('/login', () => {
+      if (!app.getState('token')) {
+        setPageTitle('Login');
+        app.getSequence('gotoLoginSequence')();
       } else {
-        return app.getSequence('loginWithTokenSequence')({ path, token });
+        app.getSequence('navigateToPathSequence')({
+          path: BASE_ROUTE,
+        });
       }
+    });
+
+    registerRoute('/forgot-password', () => {
+      setPageTitle('Forgot Password');
+      app.getSequence('goToForgotPasswordSequence')();
+    });
+
+    registerRoute('/reset-password?..', () => {
+      const { code, email } = qs.parse(window.location.search, {
+        ignoreQueryPrefix: true,
+      });
+      return app.getSequence('resetPasswordSequence')({
+        code,
+        email,
+      });
+    });
+
+    registerRoute('/create-account/petitioner', () => {
+      setPageTitle('Account Registration');
+      app.getSequence('goToCreatePetitionerAccountSequence')();
+    });
+
+    registerRoute('/create-account/verification-sent', () => {
+      setPageTitle('Verification Sent');
+      app.getSequence('goToVerificationSentSequence')();
     });
 
     registerRoute(
@@ -1378,13 +1383,10 @@ const router = {
       return app.getSequence('gotoContactSequence')();
     });
 
-    registerRoute(
-      '/maintenance',
-      ifHasAccess({ app, skipMaintenanceCheck: true }, () => {
-        setPageTitle('Maintenance');
-        return app.getSequence('gotoMaintenanceSequence')();
-      }),
-    );
+    registerRoute('/maintenance', () => {
+      setPageTitle('Maintenance');
+      return app.getSequence('gotoMaintenanceSequence')();
+    });
 
     registerRoute(
       '..',
