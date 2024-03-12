@@ -18,12 +18,6 @@ describe('Forgot Password', () => {
   });
   const password = getCypressEnv().defaultAccountPass;
 
-  /*
-      Given a petitioner with a DAWSON account
-      When they indicate that they Forgot Password
-      And they type in an email address that is not associated with a DAWSON account
-      Then they should be alerted in the same way as if the email is associated with a DAWSON account (security concern)
-       */
   it('should alert a user exactly the same way as an associated DAWSON email when they enter an unassociated DAWSON email into forgot password(security concern)', () => {
     cy.visit('/login');
     cy.get('[data-testid="forgot-password-button"]').click();
@@ -37,12 +31,6 @@ describe('Forgot Password', () => {
     );
   });
 
-  /*
-      Given a petitioner with a DAWSON account
-      When they indicate that they Forgot Password
-      And they type in an email address that is unconfirmed in DAWSON
-      Then they should be alerted that they have been sent an email to assist them with confirmation of their account
-       */
   it('should alert a user that that they have been sent an email to assist them with the confirmation of their account when they enter an email address that is an unconfirmed account', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
@@ -59,12 +47,6 @@ describe('Forgot Password', () => {
     );
   });
 
-  /*
-      Given a petitioner with a DAWSON account
-      When they indicate that they Forgot Password
-      And they do not click the password reset link that was emailed to them
-      Then they should be able to log into their account with their existing password
-       */
   it('should allow a user to login with their existing password if they have indicated they forgot their password and have not clicked the verification email', () => {
     const username = `cypress_test_account+${v4()}`;
     const email = `${username}@example.com`;
