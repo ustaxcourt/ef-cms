@@ -60,20 +60,19 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { queueUpdateAssociatedCasesWorker } from '../../web-api/src/business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
 import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
 import { sendBulkTemplatedEmail } from '../../web-api/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
-import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
-import { sleep } from '../../shared/src/business/utilities/sleep';
+import { sleep } from '@shared/tools/helpers';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateDocketEntry } from '../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
-import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { updateUser } from '../../web-api/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -212,15 +211,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           });
         }
       },
-      sendUpdatePetitionerCasesMessage: ({
-        applicationContext: appContext,
-        user,
-      }) => {
-        return updatePetitionerCasesInteractor({
-          applicationContext: appContext,
-          user,
-        });
-      },
     }),
     getMessagingClient: () => {
       if (!sqsCache) {
@@ -315,7 +305,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
   };
 
   const user = await getUserRecordById(userId);
-  await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
+  await queueUpdateAssociatedCasesWorker(apiApplicationContext, {
     user,
   });
 };
@@ -378,7 +368,7 @@ export const getConnection = connectionId => {
   });
 };
 
-export const getUserRecordById = userId => {
+export const getUserRecordById = (userId: string) => {
   return client.get({
     Key: {
       pk: `user|${userId}`,
@@ -829,18 +819,19 @@ export const uploadPetition = async (
   return response.data;
 };
 
-export const loginAs = (cerebralTest, user) =>
-  it(`login as ${user}`, async () => {
+export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
+  it(`login as ${email}`, async () => {
     await cerebralTest.runSequence('signOutSequence');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'name',
-      value: user,
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      email,
     });
 
-    await cerebralTest.runSequence('submitLocalLoginSequence', {
-      path: '/',
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      password,
     });
+
+    await cerebralTest.runSequence('submitLoginSequence');
 
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
@@ -1125,7 +1116,7 @@ export const waitForExpectedItemToExist = async ({
 
 // will run the cb every second until it returns true
 export const waitUntil = cb => {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     const waitUntilInternal = async () => {
       const value = await cb();
       if (value === false) {

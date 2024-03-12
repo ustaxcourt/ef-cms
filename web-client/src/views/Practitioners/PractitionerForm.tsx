@@ -46,6 +46,7 @@ export const PractitionerForm = connect(
                     <input
                       autoCapitalize="none"
                       className="usa-input"
+                      data-testid="first-name-input"
                       id="firstName"
                       name="firstName"
                       type="text"
@@ -71,6 +72,7 @@ export const PractitionerForm = connect(
                     <input
                       autoCapitalize="none"
                       className="usa-input"
+                      data-testid="middle-name-input"
                       id="middleName"
                       name="middleName"
                       type="text"
@@ -96,6 +98,7 @@ export const PractitionerForm = connect(
                     <input
                       autoCapitalize="none"
                       className="usa-input"
+                      data-testid="last-name-input"
                       id="lastName"
                       name="lastName"
                       type="text"
@@ -153,6 +156,7 @@ export const PractitionerForm = connect(
                           aria-describedby="birth-year-legend"
                           aria-label="birth year, four digits"
                           className="usa-input"
+                          data-testid="birth-year-input"
                           id="birthYear"
                           name="birthYear"
                           type="text"
@@ -192,6 +196,7 @@ export const PractitionerForm = connect(
                           />
                           <label
                             className="usa-radio__label"
+                            data-testid={`practitioner-type-${type}-radio`}
                             htmlFor={`practitioner-type-${type}`}
                           >
                             {type}
@@ -225,6 +230,7 @@ export const PractitionerForm = connect(
                           />
                           <label
                             className="usa-radio__label"
+                            data-testid={`employer-${option}-radio`}
                             htmlFor={`employer-${option}`}
                           >
                             {option}
@@ -299,6 +305,7 @@ export const PractitionerForm = connect(
                     </label>
                     <select
                       className="usa-select"
+                      data-testid="practitioner-bar-state-select"
                       id="originalBarState"
                       name="originalBarState"
                       value={form.originalBarState || ''}

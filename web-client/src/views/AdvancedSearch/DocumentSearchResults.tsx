@@ -34,7 +34,7 @@ export const DocumentSearchResults = connect(
                     message: 'Refine your search by adding search criteria.',
                     title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
                   }}
-                  dismissable={false}
+                  dismissible={false}
                   scrollToTop={false}
                 />
               </div>

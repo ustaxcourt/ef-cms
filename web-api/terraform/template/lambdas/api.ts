@@ -9,6 +9,10 @@ export const handler = (event, context) => {
     // awsServerlessExpress will expect this to be set correctly: event.pathParameters.proxy
     event.pathParameters.proxy = `auth/${event.pathParameters.proxy}`;
   }
+  if (event.path && event.path.startsWith('/system')) {
+    // awsServerlessExpress will expect this to be set correctly: event.pathParameters.proxy
+    event.pathParameters.proxy = `system/${event.pathParameters.proxy}`;
+  }
 
   // This is a hack needed for when we use async api gateway events.  Normal api gateway requests
   // will send event.body as a string, but for async events with the X-Amz-Invocation-Type header,

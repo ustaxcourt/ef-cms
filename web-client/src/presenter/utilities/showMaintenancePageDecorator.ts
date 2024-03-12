@@ -1,5 +1,5 @@
 import { getAllFeatureFlagsAction } from '../actions/getAllFeatureFlagsAction';
-import { getMaintenanceModeForPublicAction } from '../actions/getMaintenanceModeForPublicAction';
+import { getMaintenanceModeForPublicAction } from '../actions/Maintenance/getMaintenanceModeForPublicAction';
 import { gotoMaintenanceSequence } from '../sequences/gotoMaintenanceSequence';
 
 export const showMaintenancePageDecorator = (actionsList): any[] => {

@@ -141,7 +141,7 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       30: { eventCode: 'REPL', showLinkToDocument: true },
     };
 
-    loginAs(cerebralTest, 'privatepractitioner1@example.com');
+    loginAs(cerebralTest, 'privatePractitioner1@example.com');
 
     it('view case detail', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
