@@ -1,5 +1,14 @@
+import { DateTime } from 'luxon';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import {
+  FORMATS,
+  USTC_TZ,
+} from '../../shared/src/business/utilities/DateHandler';
+import { PARTIES_CODES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { seedEntries } from '../../web-api/storage/fixtures/seed';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
@@ -133,7 +142,7 @@ describe('View and manage the deadlines of a case', () => {
     );
   });
 
-  it('gets the v2 reconciliation report for the provided date', async () => {
+  it('gets the v2 reconciliation report for the provided date "today"', async () => {
     const { data: response } = await axios.get(
       'http://localhost:4000/v2/reconciliation-report/today',
       {
@@ -148,6 +157,128 @@ describe('View and manage the deadlines of a case', () => {
       reconciliationDate: expect.anything(),
       reportTitle: 'Reconciliation Report',
       totalDocketEntries: expect.any(Number),
+    });
+  });
+
+  it('gets the v2 reconciliation report for the provided date', async () => {
+    //use a date that will be found in our seed data
+    // const dateArg = '2022-02-01';
+    const dateArg = '2023-04-03';
+    const { data: response } = await axios.get(
+      `http://localhost:4000/v2/reconciliation-report/${dateArg}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+    );
+
+    expect(response).toMatchObject({
+      docketEntries: expect.arrayContaining([]),
+      reconciliationDate: expect.anything(),
+      reportTitle: 'Reconciliation Report',
+      totalDocketEntries: expect.any(Number),
+    });
+    expect(response.totalDocketEntries).toBeGreaterThan(0);
+  });
+
+  describe('reconciliation report', () => {
+    //execute request for reconciliation report and return response
+    const executeReconciliationReport = async qs => {
+      const { data: response } = await axios.get(
+        `http://localhost:4000/v2/reconciliation-report/${qs}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      );
+      return response;
+    };
+
+    //return an array of all docket entries that were served to IRS
+    const getDocketEntryData = () => {
+      const docketEntries = new Array<DocketEntry>();
+      for (const item of seedEntries) {
+        if (item.entityName === 'DocketEntry') {
+          const de = new DocketEntry(item, { applicationContext });
+          if (
+            [PARTIES_CODES.BOTH, PARTIES_CODES.RESPONDENT].includes(
+              de.servedPartiesCode ?? '',
+            ) &&
+            de.servedAt
+          )
+            docketEntries.push(de);
+        }
+      }
+      return docketEntries;
+    };
+
+    const docketEntries = getDocketEntryData();
+    //find a relevant case in our seed data, and extract the servedAt date to use in our tests
+    const servedAt = DateTime.fromISO(docketEntries[0].servedAt!).setZone(
+      USTC_TZ,
+    );
+    // the date (minus time) a docket entry was served
+    const saDate: string = servedAt.toFormat(FORMATS.YYYYMMDD);
+    // create an instant that occurs before, after the servedAt time
+    const saTimeBefore: string = servedAt
+      .minus({ minutes: 1 })
+      .toFormat(FORMATS.TIME_24_HOUR);
+    const saTimeAfter: string = servedAt
+      .plus({ minutes: 1 })
+      .toFormat(FORMATS.TIME_24_HOUR);
+
+    const loginUsername = 'irssuperuser@example.com';
+    if (!userMap[loginUsername]) {
+      throw new Error(`Unable to log into test as ${loginUsername}`);
+    }
+    const user = {
+      ...userMap[loginUsername],
+      sub: userMap[loginUsername].userId,
+    };
+
+    userToken = jwt.sign(user, 'secret');
+
+    it('should show all docket entries from a particular day', async () => {
+      const dateArg = saDate;
+      const response = await executeReconciliationReport(dateArg);
+      expect(response.totalDocketEntries).toBeGreaterThan(0);
+    });
+
+    it('should show docket entries that were served on a particular day after a specific start time', async () => {
+      const dateArg = saDate;
+      const response = await executeReconciliationReport(
+        `${dateArg}?start=${saTimeBefore}`,
+      );
+      let { totalDocketEntries } = response;
+      expect(totalDocketEntries).toBeGreaterThan(0);
+
+      //some docket entries should be filtered out if we choose a later time
+      const response2 = await executeReconciliationReport(
+        `${dateArg}?start=${saTimeAfter}`,
+      );
+      expect(response2.totalDocketEntries).toBeLessThan(totalDocketEntries);
+    });
+
+    it('should show docket entries that were served on a particular day before a specific end time', async () => {
+      const dateArg = saDate;
+      const response = await executeReconciliationReport(
+        `${dateArg}?end=${saTimeAfter}`,
+      );
+      let { totalDocketEntries } = response;
+      //some docket entries should be filtered out if we move up the timeEnd value
+      const response2 = await executeReconciliationReport(
+        `${dateArg}?end=${saTimeBefore}`,
+      );
+      expect(response2.totalDocketEntries).toBeLessThan(totalDocketEntries);
+    });
+
+    it('should show docket entries that were served on a particular day between a start and end time', async () => {
+      const response = await executeReconciliationReport(
+        `${saDate}?start=${saTimeBefore}&end=${saTimeAfter}`,
+      );
+      expect(response.totalDocketEntries).toBeGreaterThan(0);
     });
   });
 });

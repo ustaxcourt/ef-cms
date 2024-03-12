@@ -15,12 +15,12 @@ export const getReconciliationReportLambda = (event, options = {}) =>
     event,
     ({ applicationContext }) => {
       return v2ApiWrapper(async () => {
+        const { end, start } = event.queryStringParameters;
+        //url will contain the reconciliation date in path parameters, and times in the query string
+        const parms = { ...event.pathParameters, end, start };
         const report = await applicationContext
           .getUseCases()
-          .getReconciliationReportInteractor(
-            applicationContext,
-            event.pathParameters,
-          );
+          .getReconciliationReportInteractor(applicationContext, parms);
 
         return report;
       });
