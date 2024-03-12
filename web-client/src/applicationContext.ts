@@ -121,8 +121,6 @@ import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/c
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/fileCourtIssuedDocketEntryProxy';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
-import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
-import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
 import {
@@ -143,6 +141,7 @@ import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forw
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
+import { generateDocumentIds } from '../../shared/src/business/useCases/generateDocumentIds';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
@@ -443,11 +442,10 @@ const allUseCases = {
   fileCourtIssuedDocketEntryInteractor,
   fileCourtIssuedOrderInteractor,
   fileExternalDocumentInteractor,
-  filePetitionFromPaperInteractor,
-  filePetitionInteractor,
   forwardMessageInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
+  generateDocumentIds,
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generatePDFFromJPGDataInteractor,
