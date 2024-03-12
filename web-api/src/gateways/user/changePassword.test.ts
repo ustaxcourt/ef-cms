@@ -2,7 +2,7 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { changePassword } from '@web-api/gateways/user/changePassword';
 
 describe('changePassword', () => {
-  it('should make a call to disable the provided userId', async () => {
+  it('should make a call update the password for the account with the provided email', async () => {
     const mockEmail = 'test@example.com';
     const mockNewPassword = 'P@ssw0rd';
     const mockCode = 'afde08bd-7ccc-4163-9242-87f78cbb2452';

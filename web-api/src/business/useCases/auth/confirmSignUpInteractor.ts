@@ -22,9 +22,8 @@ export const confirmSignUpInteractor = async (
     throw new InvalidRequest('Confirmation code expired');
   }
 
-  await applicationContext.getCognito().adminConfirmSignUp({
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: email,
+  await applicationContext.getUserGateway().confirmSignUp(applicationContext, {
+    email,
   });
 
   const updatePetitionerAttributes = applicationContext
