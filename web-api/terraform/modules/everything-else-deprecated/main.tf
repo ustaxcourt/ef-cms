@@ -13,21 +13,21 @@ provider "aws" {
 }
 
 module "dynamo_table_alpha" {
-  source = "./dynamo-table"
+  source = "../dynamo-table"
 
   environment = var.environment
   table_name  = "efcms-${var.environment}-alpha"
 }
 
 module "dynamo_table_beta" {
-  source = "./dynamo-table"
+  source = "../dynamo-table"
 
   environment = var.environment
   table_name  = "efcms-${var.environment}-beta"
 }
 
 module "elasticsearch_alpha" {
-  source = "./elasticsearch"
+  source = "../elasticsearch"
 
   count = var.should_es_alpha_exist ? 1 : 0
 
@@ -44,7 +44,7 @@ module "elasticsearch_alpha" {
 }
 
 module "elasticsearch_beta" {
-  source = "./elasticsearch"
+  source = "../elasticsearch"
 
   count = var.should_es_beta_exist ? 1 : 0 
 
