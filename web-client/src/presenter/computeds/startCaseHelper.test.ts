@@ -3,6 +3,7 @@ import {
   FILING_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from './startCaseHelper';
@@ -17,9 +18,10 @@ describe('start a case computed', () => {
   );
 
   beforeAll(() => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.petitioner,
+      }) as RawUser;
   });
 
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {
@@ -102,9 +104,10 @@ describe('start a case computed', () => {
   });
 
   it('returns privatePractitioner filing types if user is privatePractitioner role', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.privatePractitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.privatePractitioner,
+      }) as RawUser;
 
     const result = runCompute(startCaseHelper, {
       state: {
@@ -117,9 +120,10 @@ describe('start a case computed', () => {
   });
 
   it('returns petitioner filing types by default if user is not petitioner or privatePractitioner role', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.irsPractitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.irsPractitioner,
+      }) as RawUser;
 
     const result = runCompute(startCaseHelper, {
       state: {
