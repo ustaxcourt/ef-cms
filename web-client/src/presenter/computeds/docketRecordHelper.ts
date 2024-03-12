@@ -18,10 +18,9 @@ export const docketRecordHelper = (get: Get): any => {
   const sortLabelTextMobile = sortLabelsMobile[sortOrder];
 
   const isDownloadButtonLinkDisabled = false;
-  const showDownloadLink = showPrintableDocketRecord;
   return {
     isDownloadButtonLinkDisabled,
-    showDownloadLink,
+    showDownloadLink: showPrintableDocketRecord,
     showEditOrSealDocketRecordEntry:
       permissions.EDIT_DOCKET_ENTRY || permissions.SEAL_DOCKET_ENTRY,
     showPrintableDocketRecord,

@@ -11,7 +11,7 @@ export const batchDownloadDocketEntriesAction = async ({
   const docketEntries = get(state.documentsSelectedForDownload);
   const caseDetail = get(state.caseDetail);
   const clientConnectionId = get(state.clientConnectionId);
-  const { caseCaption, docketNumber } = caseDetail;
+  const { caseCaption, docketNumber, isSealed } = caseDetail;
 
   try {
     await applicationContext
@@ -21,6 +21,7 @@ export const batchDownloadDocketEntriesAction = async ({
         clientConnectionId,
         docketEntries,
         docketNumber,
+        isSealed,
         printableDocketRecordFileId: props.fileId,
       });
 

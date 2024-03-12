@@ -285,7 +285,7 @@ export const formattedDocketEntries = (
 
   const caseDetail = get(state.caseDetail);
 
-  const { caseCaption, docketNumber } = caseDetail;
+  const { docketNumber } = caseDetail;
 
   let docketRecordSort;
   if (docketNumber) {
@@ -337,7 +337,7 @@ export const formattedDocketEntries = (
     .toISO();
 
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  // console.log('documentsSelectedForDownload', documentsSelectedForDownload);
+  /********************************************************************************/
 
   docketEntriesFormatted = docketEntriesFormatted
     .map((entry: any, _, array) => {
@@ -406,28 +406,21 @@ export const formattedDocketEntries = (
     d => d.isOnDocketRecord,
   );
 
-  result.caseMetaDataForRequest = {
-    // find better way to export, good for now
-    caseCaption,
-    docketNumber,
-  };
+  result.isSelectableForDownload = isSelectableForDownload;
 
-  result.allEligibleDocumentsForDownload = {
-    caseCaption,
-    docketEntries: docketEntriesFormatted
-      .filter(docEntry => !docEntry.isMinuteEntry && docEntry.isFileAttached)
-      .map(docEntry => ({
-        docketEntryId: docEntry.docketEntryId,
-        documentTitle: docEntry.documentTitle,
-        filingDate: docEntry.filingDate,
-        index: docEntry.index,
-        isFileAttached: docEntry.isFileAttached,
-        isOnDocketRecord: docEntry.isOnDocketRecord,
-        isSealed: docEntry.isSealed,
-        isStricken: docEntry.isStricken,
-      })),
-    docketNumber,
-  };
+  result.allEligibleDocumentsForDownload = docketEntriesFormatted
+    .filter(docEntry => isSelectableForDownload(docEntry))
+    .map(docEntry => ({
+      docketEntryId: docEntry.docketEntryId,
+      documentTitle: docEntry.documentTitle,
+      filingDate: docEntry.filingDate,
+      index: docEntry.index,
+      isFileAttached: docEntry.isFileAttached,
+      isOnDocketRecord: docEntry.isOnDocketRecord,
+      isSealed: docEntry.isSealed,
+      isStricken: docEntry.isStricken,
+    }));
+  /********************************************************************************/
 
   result.formattedPendingDocketEntriesOnDocketRecord =
     result.formattedDocketEntriesOnDocketRecord.filter(docketEntry =>

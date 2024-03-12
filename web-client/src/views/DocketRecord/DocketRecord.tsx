@@ -14,6 +14,7 @@ import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
+    caseDetail: state.caseDetail,
     docketRecordHelper: state.docketRecordHelper,
     formattedDocketEntriesHelper: state.formattedDocketEntries,
     openSealDocketEntryModalSequence:
@@ -26,6 +27,7 @@ export const DocketRecord = connect(
   },
 
   function DocketRecord({
+    caseDetail,
     docketRecordHelper,
     formattedDocketEntriesHelper,
     openSealDocketEntryModalSequence,
@@ -33,6 +35,12 @@ export const DocketRecord = connect(
     setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
+    const caseInfo = {
+      caseCaption: caseDetail.caseCaption,
+      docketNumber: caseDetail.docketNumber,
+      isSealed: caseDetail.isSealed,
+    };
+
     useEffect(() => {
       const documentsSelectorHeaderInput = window.document.getElementById(
         'docket-entry-selections',
@@ -64,9 +72,11 @@ export const DocketRecord = connect(
                       id="docket-entry-selections"
                       type="checkbox"
                       onChange={() => {
-                        setSelectedDocumentsForDownloadSequence(
-                          formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
-                        );
+                        setSelectedDocumentsForDownloadSequence({
+                          ...caseInfo,
+                          docketEntries:
+                            formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
+                        });
                       }}
                     />
                   </th>
@@ -104,7 +114,9 @@ export const DocketRecord = connect(
                       >
                         {' '}
                         <td>
-                          {!entry.isMinuteEntry && entry.isFileAttached && (
+                          {formattedDocketEntriesHelper.isSelectableForDownload(
+                            entry,
+                          ) && (
                             <input
                               checked={entry.isDocumentSelected}
                               type="checkbox"
@@ -116,10 +128,11 @@ export const DocketRecord = connect(
                                   index: entry.index,
                                   isFileAttached: entry.isFileAttached,
                                   isOnDocketRecord: entry.isOnDocketRecord,
+                                  isSealed: entry.isSealed,
                                   isStricken: entry.isStricken,
                                 };
                                 setSelectedDocumentsForDownloadSequence({
-                                  ...formattedDocketEntriesHelper.caseMetaDataForRequest,
+                                  ...caseInfo,
                                   docketEntries: [documentSelected],
                                 });
                               }}
