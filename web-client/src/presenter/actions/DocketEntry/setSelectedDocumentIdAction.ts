@@ -15,13 +15,16 @@ export const setSelectedDocumentIdAction = ({
   const { docketEntries } = props;
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
-  if (docketEntries.length > 1) {
+  const allDocumentsSelected = docketEntries.length > 1;
+  const singleDocumentSelected = docketEntries.length === 1;
+
+  if (allDocumentsSelected) {
     if (isEqual(docketEntries, documentsSelectedForDownload)) {
       store.set(state.documentsSelectedForDownload, []);
     } else {
       store.set(state.documentsSelectedForDownload, docketEntries);
     }
-  } else if (docketEntries.length === 1) {
+  } else if (singleDocumentSelected) {
     const document = docketEntries[0];
     const index = documentsSelectedForDownload.findIndex(
       doc => doc.docketEntryId === document.docketEntryId,

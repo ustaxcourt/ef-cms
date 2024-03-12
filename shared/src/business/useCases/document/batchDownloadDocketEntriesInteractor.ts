@@ -94,7 +94,7 @@ export const batchDownloadDocketEntriesInteractor = async (
         action: 'batch_download_entry',
         ...entryData,
         numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch: s3Ids.length,
+        numberOfFilesToBatch: s3Ids.length + extraFiles.length,
       },
       userId: user.userId,
     });
@@ -121,7 +121,7 @@ export const batchDownloadDocketEntriesInteractor = async (
         action: 'batch_download_progress',
         ...progressData,
         numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch: s3Ids.length,
+        numberOfFilesToBatch: s3Ids.length + extraFiles.length,
       },
       userId: user.userId,
     });
@@ -134,7 +134,7 @@ export const batchDownloadDocketEntriesInteractor = async (
       message: {
         action: 'batch_download_upload_start',
         numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch: s3Ids.length,
+        numberOfFilesToBatch: s3Ids.length + extraFiles.length,
       },
       userId: user.userId,
     });
