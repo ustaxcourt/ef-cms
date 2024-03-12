@@ -25,7 +25,7 @@ export const TextEditor = ({
   updateFormValueSequence,
   updateScreenMetadataSequence,
 }) => {
-  const initialDelta: any = {
+  const initialDelta: { ops: object[] } = {
     ops: [],
   };
 
