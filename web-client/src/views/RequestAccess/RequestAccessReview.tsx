@@ -60,7 +60,7 @@ export const RequestAccessReview = connect(
                 message:
                   "Don't forget to check your document(s) to ensure personal information has been removed or redacted.",
               }}
-              dismissable={false}
+              dismissible={false}
               scrollToTop={false}
             />
 

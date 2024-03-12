@@ -992,14 +992,26 @@ header.usa-header {
   color: white;
 }
 
-.floating-card-pages {
-  flex: 1;
+.background-blue {
   background-color: color($theme-color-primary-darker);
 
+  @media only screen and (min-width: $medium-screen) {
+    padding-top: 4rem;
+  }
+
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    padding-top: 2rem;
+  }
+
+  .usa-alert__body {
+    padding-right: 15px !important;
+  }
+}
+
+.create-petitioner-account {
   .usa-label {
     margin-top: 15px;
     margin-bottom: 10px;
-    font-weight: normal;
   }
 }
 
@@ -1019,6 +1031,12 @@ header.usa-header {
   input.usa-input {
     width: 100%;
     max-width: unset;
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    form {
+      max-width: 90%;
+    }
   }
 
   h1,
@@ -2024,6 +2042,10 @@ button.change-scanner-button {
   }
 }
 
+.display-block {
+  display: block;
+}
+
 .display-flex {
   display: flex;
 }
@@ -2184,4 +2206,36 @@ button.change-scanner-button {
 
 .resize-vertical-only {
   resize: vertical;
+}
+
+.max-width-unset {
+  max-width: unset;
+}
+
+.inherit-body-font-family {
+  font-family: inherit;
+}
+
+.change-password-form,
+.forgot-password-form,
+.login-form {
+  label {
+    margin-bottom: 7px;
+  }
+}
+
+.login {
+  .ustc-button--unstyled {
+    text-align: left;
+  }
+}
+
+.floating-card.usa-section {
+  @media only screen and (min-width: $medium-screen) {
+    padding-top: 6rem;
+  }
+
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    padding-bottom: 2rem;
+  }
 }
