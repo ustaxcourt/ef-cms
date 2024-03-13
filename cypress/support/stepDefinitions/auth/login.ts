@@ -1,6 +1,5 @@
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
-import { logout } from '../../../helpers/auth/logout';
 
 Given('I log into DAWSON as {string}', (user: string) => {
   cy.visit('/login');
@@ -22,7 +21,8 @@ Given(
 );
 
 Given('I logout of DAWSON', () => {
-  logout();
+  cy.get('[data-testid="account-menu-button"]').click();
+  cy.get('[data-testid="logout-button-desktop"]').click();
 });
 
 When('I visit the login page', () => {
@@ -47,6 +47,10 @@ Then('I should see the petitioner dashboard', () => {
   cy.get('[data-testid="my-cases-link"]');
 });
 
+Then('I should see the practitioner dashboard', () => {
+  cy.get('[data-testid="my-cases-link"]');
+});
+
 Then('I should see the login page', () => {
   cy.get('[data-testid="login-header"]');
   cy.url().should('contain', '/login');
@@ -58,3 +62,13 @@ Then('I should see an alert that my email address is not verified', () => {
     'Email address not verified',
   );
 });
+
+Then(
+  'I should see an alert that my email address or password is invalid',
+  () => {
+    cy.get('[data-testid="error-alert"]').should(
+      'contain',
+      'The email address or password you entered is invalid',
+    );
+  },
+);
