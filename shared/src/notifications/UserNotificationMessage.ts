@@ -9,7 +9,9 @@ export interface ServeDocumentComplete {
     message: string;
     overwritable: boolean;
   };
-  pdfUrl: string | undefined;
+  pdfUrl?: string;
+  docketEntryId?: string;
+  generateCoversheet?: boolean;
 }
 
 export interface RetryAsyncRequest {
@@ -18,7 +20,28 @@ export interface RetryAsyncRequest {
   requestToRetry: string;
 }
 
+export interface ServeToIrsComplete {
+  action: 'serve_to_irs_complete';
+  pdfUrl: string;
+}
+
+export interface ServeToIrsError {
+  action: 'serve_to_irs_error';
+}
+
+export interface SaveDocketEntryForLaterComplete {
+  action: 'save_docket_entry_for_later_complete';
+  alertSuccess: {
+    message: string;
+    overwritable: boolean;
+  };
+  docketEntryId: string;
+}
+
 export type UserNotificationMessage =
   | ServeDocumentError
   | ServeDocumentComplete
-  | RetryAsyncRequest;
+  | RetryAsyncRequest
+  | SaveDocketEntryForLaterComplete
+  | ServeToIrsComplete
+  | ServeToIrsError;

@@ -472,7 +472,7 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
 export const serveCaseToIrs = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   { clientConnectionId, docketNumber },
 ) => {
   const user = applicationContext.getCurrentUser();
