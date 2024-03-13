@@ -8,6 +8,7 @@ import {
   fetchRootDocument,
   getMeetsPolicyChangeRequirements,
 } from './Public/publicCaseDetailHelper';
+import { isSelectableForDownload } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -295,10 +296,6 @@ export const getDocketEntriesByFilter = (
   return result;
 };
 
-export const isSelectableForDownload = entry => {
-  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
-};
-
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -310,6 +307,7 @@ export const formattedDocketEntries = (
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
+  console.log('docketRecordFilter', docketRecordFilter);
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
@@ -435,5 +433,6 @@ export const formattedDocketEntries = (
   });
 
   result.docketRecordSort = docketRecordSort;
+  console.log('result', result);
   return result;
 };
