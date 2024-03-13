@@ -1,5 +1,5 @@
-# @deleteAllCypressTestAccountsAfter
 Feature: Forgot Password
+  # TODO: This only runs before each test, therefore it will not cleanup after the last test. Fix it. 
   Background: Clear Current Session
     Given a clean session
 
