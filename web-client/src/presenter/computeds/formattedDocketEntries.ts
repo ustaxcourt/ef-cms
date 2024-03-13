@@ -295,6 +295,10 @@ export const getDocketEntriesByFilter = (
   return result;
 };
 
+export const isSelectableForDownload = entry => {
+  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
+};
+
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -383,12 +387,6 @@ export const formattedDocketEntries = (
         isMinuteEntry: computeMinuteEntry(docketEntry),
       };
     });
-
-  const isSelectableForDownload = entry => {
-    return (
-      !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord
-    );
-  };
 
   const selectableDocumentsCount = docketEntriesFormatted.filter(entry =>
     isSelectableForDownload(entry),
