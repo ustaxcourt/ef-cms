@@ -801,7 +801,7 @@ app.get(
     lambdaWrapper(getCasesClosedByJudgeLambda),
   );
   app.post(
-    '/reports/csv/custom-case-report',
+    '/async/reports/csv/custom-case-report',
     lambdaWrapper(createCsvCustomCaseReportFileLambda, { isAsync: true }),
   );
 }
