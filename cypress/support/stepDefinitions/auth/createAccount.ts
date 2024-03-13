@@ -1,8 +1,8 @@
 import { Given } from '@badeball/cypress-cucumber-preprocessor';
-import { createAPetitioner } from '../../../../helpers/create-a-petitioner';
+import { createAPetitioner } from '../../../helpers/create-a-petitioner';
 import { faker } from '@faker-js/faker';
-import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
-import { verifyPetitionerAccount } from '../../../../helpers/verify-petitioner-account';
+import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
+import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
 
 Given('I create a new petitioner account for {string}', (username: string) => {
   const password = getCypressEnv().defaultAccountPass;

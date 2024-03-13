@@ -4,7 +4,7 @@ import {
   When,
   //defineParameterType,
 } from '@badeball/cypress-cucumber-preprocessor';
-import { logout } from '../../../../helpers/auth/logout';
+import { logout } from '../../../helpers/auth/logout';
 
 // const users = [
 //   'petitionsclerk',

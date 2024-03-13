@@ -1,7 +1,7 @@
-import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../../../support/cognito-login';
+import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../cognito-login';
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import { v4 } from 'uuid';
-import { verifyPasswordRequirements } from '../../../../helpers/auth/verify-password-requirements';
+import { verifyPasswordRequirements } from '../../../helpers/auth/verify-password-requirements';
 
 Given('I visit forgot password page', () => {
   cy.visit('/login');
