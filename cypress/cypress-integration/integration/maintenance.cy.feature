@@ -1,4 +1,4 @@
-Feature: DAWSON, Client App - Maintenance Mode
+Feature: Maintenance Mode
   Scenario: Maintenance mode toggles correctly
     Given I log into DAWSON as "petitionsclerk"
     When maintenance mode is enabled
@@ -8,7 +8,7 @@ Feature: DAWSON, Client App - Maintenance Mode
     Then I should see my dashboard
 
   @disableMaintenanceAfter
-  Scenario: Maintence mode shows when enabled if I attempt to login
+  Scenario: Login when maintenance is enabled
     Given maintenance mode is enabled
     When I visit the login page
     Then I should see the maintenance mode page

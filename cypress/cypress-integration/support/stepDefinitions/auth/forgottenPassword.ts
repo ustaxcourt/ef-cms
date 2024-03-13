@@ -13,6 +13,17 @@ Given('I request a new forgot password code', () => {
   cy.get('[data-testid="request-new-forgot-password-code-button"]').click();
 });
 
+Given(`I successfully reset my password to {string}`, (newPassword: string) => {
+  cy.get('[data-testid="forgot-password-code"]').type(
+    DEFAULT_FORGOT_PASSWORD_CODE,
+  );
+  cy.get('[data-testid="new-password-input"]').clear();
+  cy.get('[data-testid="new-password-input"]').type(newPassword);
+  cy.get('[data-testid="confirm-new-password-input"]').clear();
+  cy.get('[data-testid="confirm-new-password-input"]').type(newPassword);
+  cy.get('[data-testid="change-password-button"]').click();
+});
+
 When('I enter an email without an account on forgot password page', () => {
   const emailWithoutAccount = `doesNotExist${v4()}@email.com`;
   cy.get('[data-testid="email-input"]').type(emailWithoutAccount);
@@ -26,36 +37,41 @@ When(`I enter {string} on forgot password page`, (email: string) => {
 });
 
 When(
-  `I enter the default forgot password code with a new password of {string}`,
-  (brandNewPassword: string) => {
-    cy.get('[data-testid="change-password-button"]').should('be.disabled');
-
-    verifyPasswordRequirements('[data-testid="new-password-input"]');
-
-    cy.get('[data-testid="forgot-password-code"]').type(
-      DEFAULT_FORGOT_PASSWORD_CODE,
+  `I indicate I forgot my password for account {string}`,
+  (email: string) => {
+    cy.visit('/login');
+    cy.get('[data-testid="forgot-password-button"]').click();
+    cy.get('[data-testid="email-input"]').clear();
+    cy.get('[data-testid="email-input"]').type(email);
+    cy.get('[data-testid="send-password-reset-button"]').click();
+    cy.get('[data-testid="success-alert"]').should(
+      'contain',
+      'Password reset code sent',
     );
-    cy.get('[data-testid="new-password-input"]').clear();
-    cy.get('[data-testid="new-password-input"]').type(brandNewPassword);
-    cy.get('[data-testid="confirm-new-password-input"]').clear();
-    cy.get('[data-testid="confirm-new-password-input"]').type(brandNewPassword);
-    cy.get('[data-testid="change-password-button"]').click();
   },
 );
 
-When(
-  `I enter an incorrect password code with a new password of {string}`,
-  (brandNewPassword: string) => {
-    cy.get('[data-testid="forgot-password-code"]').type(
-      'totally incorrect code',
-    );
-    cy.get('[data-testid="new-password-input"]').clear();
-    cy.get('[data-testid="new-password-input"]').type(brandNewPassword);
-    cy.get('[data-testid="confirm-new-password-input"]').clear();
-    cy.get('[data-testid="confirm-new-password-input"]').type(brandNewPassword);
-    cy.get('[data-testid="change-password-button"]').click();
-  },
-);
+When(`I enter my forgot password code`, () => {
+  cy.get('[data-testid="change-password-button"]').should('be.disabled');
+
+  verifyPasswordRequirements('[data-testid="new-password-input"]');
+
+  cy.get('[data-testid="forgot-password-code"]').type(
+    DEFAULT_FORGOT_PASSWORD_CODE,
+  );
+});
+
+When('I enter a new password of {string}', (newPassword: string) => {
+  cy.get('[data-testid="new-password-input"]').clear();
+  cy.get('[data-testid="new-password-input"]').type(newPassword);
+  cy.get('[data-testid="confirm-new-password-input"]').clear();
+  cy.get('[data-testid="confirm-new-password-input"]').type(newPassword);
+  cy.get('[data-testid="change-password-button"]').click();
+});
+
+When('I enter an incorrect or expired forgot password code', () => {
+  cy.get('[data-testid="forgot-password-code"]').type('totally incorrect code');
+});
 
 Then('I should see an alert that a password reset code has been sent', () => {
   cy.get('[data-testid="success-alert"]').should(

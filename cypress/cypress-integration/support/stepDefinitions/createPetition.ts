@@ -1,9 +1,9 @@
 /* eslint-disable quotes */
-import { Then, When } from '@badeball/cypress-cucumber-preprocessor';
+import { Given, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
 
-When(
-  `I create and serve a paper petition + grant e-access for practitioner as {string}`,
+Given(
+  `I create and serve a paper petition and grant e-access for practitioner as {string}`,
   (email: string) => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       cy.login('admissionsclerk1');
@@ -23,16 +23,6 @@ When(
         '[data-testid="submit-edit-petitioner-information-button"]',
       ).click();
       cy.get('[data-testid="modal-button-confirm"]').click();
-
-      // cy.visit('/login');
-      // cy.get('[data-testid="forgot-password-button"]').click();
-      // cy.get('[data-testid="email-input"]').clear();
-      // cy.get('[data-testid="email-input"]').type(practitionerEmail);
-      // cy.get('[data-testid="send-password-reset-button"]').click();
-      // cy.get('[data-testid="warning-alert"]').should(
-      //   'contain',
-      //   'We’ve sent you an email',
-      // );
     });
   },
 );

@@ -5,14 +5,22 @@ import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import { verifyPetitionerAccount } from '../../../../helpers/verify-petitioner-account';
 
-Given(`I create a new petitioner account for {string}`, (email: string) => {
+Given(`I create a new petitioner account for {string}`, (username: string) => {
   const password = getCypressEnv().defaultAccountPass;
-  // const username = `cypress_test_account+${v4()}`;
-  // const email = `${username}@example.com`;
   const name = faker.person.fullName();
-  createAPetitioner({ email, name, password });
+  createAPetitioner({ email: `${username}@example.com`, name, password });
 });
 
-Given(`I verify my account for {string}`, (email: string) => {
-  verifyPetitionerAccount({ email });
+Given(`I verify my account for {string}`, (username: string) => {
+  verifyPetitionerAccount({ email: `${username}@example.com` });
 });
+
+Given(
+  `I have a confirmed petitioner account for {string}`,
+  (username: string) => {
+    const password = getCypressEnv().defaultAccountPass;
+    const name = faker.person.fullName();
+    createAPetitioner({ email: `${username}@example.com`, name, password });
+    verifyPetitionerAccount({ email: `${username}@example.com` });
+  },
+);
