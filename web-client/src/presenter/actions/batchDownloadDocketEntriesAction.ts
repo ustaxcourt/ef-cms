@@ -9,14 +9,14 @@ export const batchDownloadDocketEntriesAction = async ({
 }: ActionProps<{
   fileId: string;
 }>) => {
-  const docketEntries = get(state.documentsSelectedForDownload);
+  const documentIds = get(state.documentsSelectedForDownload);
   const caseDetail = get(state.caseDetail);
   const clientConnectionId = get(state.clientConnectionId);
   const { docketNumber } = caseDetail;
-  const isSingleDocumentSelected = docketEntries.length === 1;
+  const isSingleDocumentSelected = documentIds.length === 1;
 
   const documentsSelectedForDownload: string = isSingleDocumentSelected
-    ? docketEntries[0].docketEntryId
+    ? documentIds[0].docketEntryId
     : ALL_DOCUMENTS_SELECTED;
 
   try {

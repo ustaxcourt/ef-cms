@@ -1,31 +1,29 @@
-import { DownloadDocketEntryRequestType } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export type SelectedDocumentInfoType = Pick<
-  DownloadDocketEntryRequestType,
-  'caseCaption' | 'docketEntries' | 'docketNumber' | 'isSealed'
->;
+export type SelectedDocumentInfoType = {
+  documentIds: { docketEntryId: string }[];
+};
 
 export const setSelectedDocumentIdAction = ({
   get,
   props,
   store,
 }: ActionProps<SelectedDocumentInfoType>) => {
-  const { docketEntries } = props;
+  const { documentIds } = props;
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
-  const allDocumentsSelected = docketEntries.length > 1;
-  const singleDocumentSelected = docketEntries.length === 1;
+  const allDocumentsSelected = documentIds.length > 1;
+  const singleDocumentSelected = documentIds.length === 1;
 
   if (allDocumentsSelected) {
-    if (isEqual(docketEntries, documentsSelectedForDownload)) {
+    if (isEqual(documentIds, documentsSelectedForDownload)) {
       store.set(state.documentsSelectedForDownload, []);
     } else {
-      store.set(state.documentsSelectedForDownload, docketEntries);
+      store.set(state.documentsSelectedForDownload, documentIds);
     }
   } else if (singleDocumentSelected) {
-    const document = docketEntries[0];
+    const document = documentIds[0];
     const index = documentsSelectedForDownload.findIndex(
       doc => doc.docketEntryId === document.docketEntryId,
     );
