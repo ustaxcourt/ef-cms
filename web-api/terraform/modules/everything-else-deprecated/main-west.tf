@@ -21,7 +21,7 @@ resource "aws_s3_bucket" "api_lambdas_bucket_west" {
 resource "null_resource" "puppeteer_layer_west_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
   provisioner "local-exec" {
-    command = "aws s3 cp ../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
+    command = "aws s3 cp ../../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
   }
 
   triggers = {

@@ -1,4 +1,4 @@
-# this dockerfile is needed if building the puppeteer layer from a non-unix machine
+# this dockerfile is needed if building the puppeteer layer from a non-linux machine
 FROM node:18.14.1-slim
 
 WORKDIR /home/build
