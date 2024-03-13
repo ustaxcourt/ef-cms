@@ -63,7 +63,7 @@ export default defineConfig({
 
       return config;
     },
-    specPattern: 'cypress/cypress-integration/integration/**/*.cy.{ts,feature}',
+    specPattern: 'cypress/cypress-integration/integration/**/*{.cy.ts,.feature}',
     supportFile: 'cypress/cypress-integration/support/index.ts',
     testIsolation: false,
   },
