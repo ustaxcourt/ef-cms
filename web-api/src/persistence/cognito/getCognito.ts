@@ -21,7 +21,7 @@ export function getCognito() {
 
 export function getLocalCognito() {
   // KNOWN BUGS:
-  // - users is a FORCE_CHANGE_PASSWORD state will get a new password challenge when authenticating even if the wrong password is entered
+  // - users in a FORCE_CHANGE_PASSWORD state will get a new password challenge when authenticating even if the wrong password is entered
   // - respondToAuthChallenge does not associate tokens returned in authenticationResult on the user; cannot refresh app _immediately_ after changing password
 
   if (!cognitoClientCache) {
