@@ -58,6 +58,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
         url: 'url',
       });
   });
+
   it('should send websocket message with filename and url', async () => {
     await createCsvCustomCaseReportFileInteractor(
       applicationContext,
@@ -126,5 +127,44 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
       totalCount: 100000,
     });
     expect(applicationContext.setTimeout).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle values with new lines', async () => {
+    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
+      .fn()
+      .mockReturnValue({
+        foundCases: [
+          {
+            associatedJudge: 'associatedJudge',
+            calendaringHighPriority: 'calendaringHighPriority',
+            caseCaption: 'caseCaption\nextra line',
+            caseType: 'caseType',
+            docketNumber: 'docketNumber',
+            highPriority: true,
+            preferredTrialCity: 'preferredTrialCity',
+            receivedAt: 'receivedAt',
+            status: 'status',
+          },
+        ],
+      });
+
+    await createCsvCustomCaseReportFileInteractor(
+      applicationContext,
+      DEFAULT_PARAMS,
+    );
+
+    const saveFileAndGenerateUrlCalls =
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
+    expect(saveFileAndGenerateUrlCalls.length).toEqual(1);
+
+    const csvBuffer = saveFileAndGenerateUrlCalls[0][0].file;
+    const records = csvBuffer
+      .toString()
+      .split('\n')
+      .filter(x => !!x);
+
+    console.log('records', records);
+
+    expect(records.length).toEqual(2);
   });
 });

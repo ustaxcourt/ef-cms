@@ -131,19 +131,29 @@ export const createCsvCustomCaseReportFileInteractor = async (
   });
 };
 
-const getCsvString = data => {
-  return stringify(data, {
+const getCsvString = (records: any[]) => {
+  const CSV_DICTIONARY = [
+    { header: 'Docket No.', key: 'docketNumber' },
+    { header: 'Date Filed', key: 'receivedAt' },
+    { header: 'Case Title', key: 'caseCaption' },
+    { header: 'Case Status', key: 'status' },
+    { header: 'Case Type', key: 'caseType' },
+    { header: 'Judge', key: 'associatedJudge' },
+    { header: 'Requested Place of Trial', key: 'preferredTrialCity' },
+    { header: 'Calendaring High Priority', key: 'calendaringHighPriority' },
+  ];
+
+  const updatedRecords = records.map(record => {
+    CSV_DICTIONARY.forEach(({ key }) => {
+      if (!record[key]) return;
+      record[key] = record[key].split('\n').join(' ').split('  ').join(' ');
+    });
+    return record;
+  });
+
+  return stringify(updatedRecords, {
     bom: true,
-    columns: [
-      { header: 'Docket No.', key: 'docketNumber' },
-      { header: 'Date Filed', key: 'receivedAt' },
-      { header: 'Case Title', key: 'caseCaption' },
-      { header: 'Case Status', key: 'status' },
-      { header: 'Case Type', key: 'caseType' },
-      { header: 'Judge', key: 'associatedJudge' },
-      { header: 'Requested Place of Trial', key: 'preferredTrialCity' },
-      { header: 'Calendaring High Priority', key: 'calendaringHighPriority' },
-    ],
+    columns: CSV_DICTIONARY,
     header: true,
   });
 };
