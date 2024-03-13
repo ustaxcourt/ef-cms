@@ -2,4 +2,4 @@ import { navigateToCreatePetitionerAccountAction } from '@web-client/presenter/a
 
 export const navigateToCreatePetitionerAccountSequence = [
   navigateToCreatePetitionerAccountAction,
-];
+] as unknown as () => {};

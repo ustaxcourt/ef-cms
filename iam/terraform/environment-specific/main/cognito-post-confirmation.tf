@@ -1,4 +1,3 @@
-
 resource "aws_iam_role" "iam_cognito_post_confirmation_lambda_role" {
   name = "iam_cognito_post_confirmation_lambda_role_${var.environment}"
 
@@ -18,7 +17,6 @@ resource "aws_iam_role" "iam_cognito_post_confirmation_lambda_role" {
 }
 EOF
 }
-
 
 resource "aws_iam_role_policy" "iam_cognito_post_confirmation_lambda_policy" {
   name = "iam_cognito_post_confirmation_lambda_policy_${var.environment}"

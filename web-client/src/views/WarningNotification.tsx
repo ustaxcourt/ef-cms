@@ -8,8 +8,8 @@ import classNames from 'classnames';
 export const WarningNotificationComponent =
   function WarningNotificationComponent({
     alertWarning,
-    dismissable = true,
-    dismissAlertSequence,
+    dismissAlertSequence = sequences.dismissAlertSequence,
+    dismissible = true,
     iconRight = true,
     messageNotBold = false,
     scrollToTop = true,
@@ -18,11 +18,11 @@ export const WarningNotificationComponent =
       title?: string;
       linkUrl?: string;
       linkText?: string;
-      message: string;
+      message?: string | React.ReactNode;
       dismissText?: string;
       dismissIcon?: string;
     };
-    dismissable?: boolean;
+    dismissible?: boolean;
     dismissAlertSequence?: Function;
     messageNotBold?: boolean;
     scrollToTop?: boolean;
@@ -49,6 +49,7 @@ export const WarningNotificationComponent =
               'usa-alert--warning',
               isMessageOnly && 'usa-alert-warning-message-only',
             )}
+            data-testid="warning-alert"
             ref={notificationRef}
             role="alert"
           >
@@ -87,7 +88,7 @@ export const WarningNotificationComponent =
                     )}
                   </div>
                   <div className="tablet:grid-col-2 usa-alert__action">
-                    {dismissable && (
+                    {dismissible && (
                       <Button
                         link
                         className="no-underline padding-0"
@@ -108,17 +109,31 @@ export const WarningNotificationComponent =
     );
   };
 
-export const WarningNotification = connect(
-  {
-    alertWarning: state.alertWarning,
-    dismissAlertSequence: sequences.dismissAlertSequence,
-  },
-  function WarningNotification({ alertWarning, dismissAlertSequence }) {
+type WarningNotificationProps = {
+  isDismissible?: boolean;
+};
+
+const warningNotificationDeps = {
+  alertWarning: state.alertWarning,
+  dismissAlertSequence: sequences.dismissAlertSequence,
+};
+
+export const WarningNotification = connect<
+  WarningNotificationProps,
+  typeof warningNotificationDeps
+>(
+  warningNotificationDeps,
+  function WarningNotification({
+    alertWarning,
+    dismissAlertSequence,
+    isDismissible = true,
+  }) {
     if (alertWarning) {
       return (
         <WarningNotificationComponent
           alertWarning={alertWarning}
           dismissAlertSequence={dismissAlertSequence}
+          dismissible={isDismissible}
         />
       );
     } else {
