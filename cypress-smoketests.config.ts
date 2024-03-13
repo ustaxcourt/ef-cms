@@ -8,6 +8,9 @@ import {
 import { defineConfig } from 'cypress';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
+import createBundler from "@bahmutov/cypress-esbuild-preprocessor";
+import { addCucumberPreprocessorPlugin } from "@badeball/cypress-cucumber-preprocessor";
+import createEsbuildPlugin from "@badeball/cypress-cucumber-preprocessor/esbuild";
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -15,7 +18,15 @@ export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
     experimentalStudio: true,
-    setupNodeEvents(on) {
+    async setupNodeEvents(on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) {
+
+      await addCucumberPreprocessorPlugin(on, config);
+
+      on("file:preprocessor",
+      createBundler({
+        plugins: [createEsbuildPlugin(config)],
+      }))
+
       on('task', {
         confirmUser({ email }) {
           return confirmUser({ email });
@@ -48,9 +59,11 @@ export default defineConfig({
           });
         },
       });
+
+      return config;
     },
     specPattern:
-      'cypress/cypress-smoketests/integration/**/*.cy.{js,jsx,ts,tsx}',
+      'cypress/cypress-smoketests/integration/**/*{.cy.ts,.feature}',
     supportFile: 'cypress/cypress-smoketests/support/index.ts',
     testIsolation: false,
   },

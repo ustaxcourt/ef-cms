@@ -10,6 +10,7 @@ import { waitForNoce } from './cypress/helpers/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
 import createBundler from "@bahmutov/cypress-esbuild-preprocessor";
 import { addCucumberPreprocessorPlugin } from "@badeball/cypress-cucumber-preprocessor";
+// TODO: fix this ts error
 import createEsbuildPlugin from "@badeball/cypress-cucumber-preprocessor/esbuild";
 
 // eslint-disable-next-line import/no-default-export
@@ -19,7 +20,7 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
-    async setupNodeEvents(on, config) {
+    async setupNodeEvents(on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) {
 
       await addCucumberPreprocessorPlugin(on, config);
 

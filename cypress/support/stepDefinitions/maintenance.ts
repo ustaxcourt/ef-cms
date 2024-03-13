@@ -24,9 +24,6 @@ Then('I should see the maintenance mode page', () => {
   cy.get('.maintenance-content').should('exist');
 });
 
-//  Background = BeforeEach
-//  Background: Disable Maintenance Mode
-//    When maintenance mode is disabled
 After({ tags: '@disableMaintenanceAfter' }, () => {
   disengageMaintenance();
 });
