@@ -200,7 +200,7 @@ export const DocketRecordHeader = connect(
                       Printable Docket Record
                     </Button>
                   )}
-                  {docketRecordHelper.showDownloadLink && (
+                  {docketRecordHelper.showBatchDownloadControls && (
                     <Button
                       link
                       aria-label="download docket records"
