@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { DocumentsToDownloadInfoType } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { JudgeActivityReportState } from './judgeActivityReportState';
@@ -610,7 +609,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
-  documentsSelectedForDownload: [] as DocumentsToDownloadInfoType[],
+  documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
     isHavingSystemIssues: false,
