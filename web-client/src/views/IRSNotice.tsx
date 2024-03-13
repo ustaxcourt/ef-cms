@@ -52,6 +52,7 @@ export const IRSNotice = connect(
                 aria-describedby="irs-verified-notice-radios"
                 checked={form.hasVerifiedIrsNotice === true}
                 className="usa-radio__input"
+                data-testid="hasVerifiedIrsNotice-yes-radio"
                 id="hasVerifiedIrsNotice-yes"
                 name="hasVerifiedIrsNotice"
                 type="radio"
@@ -68,6 +69,7 @@ export const IRSNotice = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid="has-irs-verified-notice-yes"
                 htmlFor="hasVerifiedIrsNotice-yes"
                 id="has-irs-verified-notice-yes"
               >
@@ -79,6 +81,7 @@ export const IRSNotice = connect(
                 aria-describedby="irs-verified-notice-radios"
                 checked={form.hasVerifiedIrsNotice === false}
                 className="usa-radio__input"
+                data-testid="hasVerifiedIrsNotice-no-radio"
                 id="hasVerifiedIrsNotice-no"
                 name="hasVerifiedIrsNotice"
                 type="radio"

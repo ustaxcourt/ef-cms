@@ -1,9 +1,8 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
+import { addEditDocketEntryWorksheetModalHelper as addEditDocketEntryWorksheetModalHelperComputed } from './addEditDocketEntryWorksheetModalHelper';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '@web-client/withAppContext';
-
-import { addEditDocketEntryWorksheetModalHelper as addEditDocketEntryWorksheetModalHelperComputed } from './addEditDocketEntryWorksheetModalHelper';
 
 describe('addEditDocketEntryWorksheetModalHelper', () => {
   const addEditDocketEntryWorksheetModalHelper = withAppContextDecorator(

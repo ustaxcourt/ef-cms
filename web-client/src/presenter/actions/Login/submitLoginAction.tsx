@@ -51,6 +51,26 @@ export const submitLoginAction = async ({
       });
     }
 
+    if (originalErrorMessage === 'User temporary password expired') {
+      return path.error({
+        alertError: {
+          message: (
+            <>
+              The temporary password you entered has expired. We sent an email
+              with a new temporary password that expires in 7 days. If you don’t
+              see it, check your spam folder. If you’re still having trouble,
+              email{' '}
+              <a href="mailto:dawson.support@ustaxcourt.gov">
+                dawson.support@ustaxcourt.gov
+              </a>
+              .
+            </>
+          ),
+          title: 'Temporary password has expired',
+        },
+      });
+    }
+
     if (originalErrorMessage === 'User is unconfirmed') {
       return path.error({
         alertError: {

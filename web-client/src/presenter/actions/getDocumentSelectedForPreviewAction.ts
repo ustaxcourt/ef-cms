@@ -1,12 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Returns the in-memory file if there is one, otherwise returns the document from case detail.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.get the cerebral get method
- * @returns {object} the file from browser memory or document from the case detail
- */
 export const getDocumentSelectedForPreviewAction = ({
   applicationContext,
   get,
@@ -15,6 +8,7 @@ export const getDocumentSelectedForPreviewAction = ({
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
   );
+
   const file = get(state.form[documentSelectedForPreview]);
 
   if (file) {
@@ -28,5 +22,7 @@ export const getDocumentSelectedForPreviewAction = ({
     document => document.documentType === documentTypeSelectedForPreview,
   );
 
-  return { documentInS3: selectedDocument };
+  return {
+    documentInS3: selectedDocument,
+  };
 };

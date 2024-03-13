@@ -122,7 +122,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       verifyUserPendingEmailInteractor(applicationContext, {
         token: TOKEN,
       }),
-    ).resolves.not.toThrow('Tokens do not match');
+    ).resolves.not.toThrow();
 
     const adminUpdateUserAttributesResult =
       applicationContext.getCognito().adminUpdateUserAttributes.mock

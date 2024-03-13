@@ -434,29 +434,35 @@ export const ScanBatchPreviewer = connect(
               selectDocumentForScanSequence();
             }}
           >
-            {documentTabsList.map(documentTab => (
-              <Tab
-                data-testid={`tabButton-${documentTab.documentType}`}
-                icon={
-                  scanHelper[`${documentTab.documentType}Completed`] && (
-                    <FontAwesomeIcon
-                      color="green"
-                      icon={['fas', 'check-circle']}
-                    />
-                  )
-                }
-                key={documentTab.documentType}
-                tabName={documentTab.documentType}
-                title={documentTab.title}
-              />
-            ))}
+            {documentTabsList.map(documentTab => {
+              const isFileUploaded =
+                scanHelper[`${documentTab.eventCode}FileCompleted`];
+              return (
+                <Tab
+                  data-testid={`tabButton-${documentTab.documentType}`}
+                  icon={
+                    isFileUploaded && (
+                      <>
+                        <FontAwesomeIcon
+                          color="green"
+                          data-testid={`icon-${documentTab.documentType}`}
+                          icon={['fas', 'check-circle']}
+                        />
+                      </>
+                    )
+                  }
+                  key={`tabButton-${documentTab.documentType}`}
+                  tabName={documentTab.documentType}
+                  title={documentTab.tabTitle}
+                />
+              );
+            })}
           </Tabs>
         );
       }
 
       return null;
     };
-
     return (
       <>
         {showModal === 'ConfirmRescanBatchModal' && (

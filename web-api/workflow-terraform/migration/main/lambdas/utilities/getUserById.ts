@@ -1,14 +1,16 @@
-export const getUserById = (
-  documentClient: AWS.DynamoDB.DocumentClient,
+import type { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import type { RawUser } from '@shared/business/entities/User';
+
+export const getUserById = async (
+  documentClient: DynamoDBDocument,
   userId: string,
-) => {
-  return documentClient
-    .get({
-      Key: {
-        pk: `user|${userId}`,
-        sk: `user|${userId}`,
-      },
-      TableName: process.env.SOURCE_TABLE!,
-    })
-    .promise() as Promise<{ Item: RawUser | undefined }>;
+): Promise<RawUser> => {
+  const result = await documentClient.get({
+    Key: {
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
+    },
+    TableName: process.env.SOURCE_TABLE!,
+  });
+  return result.Item as RawUser;
 };

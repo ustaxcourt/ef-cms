@@ -54,6 +54,13 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
 
+  cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
+  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('input#attachmentToPetitionFile-file').attachFile(
+    '../fixtures/w3-dummy.pdf',
+  );
+  cy.get('[data-testid="remove-pdf"]');
+
   cy.get('[data-testid="tabButton-corporateDisclosureFile"]').click();
   cy.get('[data-testid="button-upload-pdf"]').click();
   cy.get('input#corporateDisclosureFile-file').attachFile(
@@ -90,10 +97,11 @@ export function createAndServePaperPetition(
 
       const expectedDocuments = [
         { eventCode: 'P', index: 1, servedTo: 'R' },
-        { eventCode: 'APW', index: 2, servedTo: 'R' },
-        { eventCode: 'DISC', index: 3, servedTo: 'R' },
-        { eventCode: 'RQT', index: 4, servedTo: 'R' },
-        { eventCode: 'NOTR', index: 5, servedTo: 'P' },
+        { eventCode: 'ATP', index: 2, servedTo: 'R' },
+        { eventCode: 'APW', index: 3, servedTo: 'R' },
+        { eventCode: 'DISC', index: 4, servedTo: 'R' },
+        { eventCode: 'RQT', index: 5, servedTo: 'R' },
+        { eventCode: 'NOTR', index: 6, servedTo: 'P' },
       ];
 
       expectedDocuments.forEach(({ eventCode, index, servedTo }) => {

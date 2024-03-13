@@ -120,6 +120,20 @@ describe('ChangePasswordForm', () => {
       });
     });
 
+    it('should be valid when password contains a non-leading/non-trailing space as a special character', () => {
+      const inValidChangePasswordForm = {
+        email,
+        password: 'test Password 1',
+      };
+      inValidChangePasswordForm['confirmPassword'] =
+        inValidChangePasswordForm.password;
+      const changePasswordForm = new ChangePasswordForm(
+        inValidChangePasswordForm,
+      );
+
+      expect(changePasswordForm.isValid()).toBe(true);
+    });
+
     it('should not be valid when password does not contain an uppercase character', () => {
       const inValidChangePasswordForm = {
         email,
