@@ -8,5 +8,10 @@ Goals
 - switch all lambdas to new deployment strategy
 
 
-::: Discussion :::
-- Should sst rely on terraform resources or should terraform rely on sst resources? (sst deploy -> terraform deploy)
+:::Things Being destroyed during first deploy:::
+- API
+- Route53 records
+- Send email queue
+- ALL queues(worker, send_email, trialsession)
+- ACM certs
+- api Domain names
