@@ -570,6 +570,7 @@ export const baseState = {
     },
     tempPassword: '',
   },
+  batchDownloadUrl: '',
   batchDownloads: {} as {
     allowRetry?: boolean;
     zipInProgress?: boolean;
