@@ -8,7 +8,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateValidDocketEntryFilename } from '@shared/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
 export type DownloadDocketEntryRequestType = {
-  documentsSelectedForDownload?: string;
+  documentsSelectedForDownload: string[];
   clientConnectionId: string;
   docketNumber: string;
   printableDocketRecordFileId?: string;
@@ -17,8 +17,6 @@ export type DownloadDocketEntryRequestType = {
 export const isSelectableForDownload = entry => {
   return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
 };
-
-export const ALL_DOCUMENTS_SELECTED = 'all documents selected';
 
 export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: IApplicationContext,
@@ -51,7 +49,7 @@ export const batchDownloadDocketEntriesInteractor = async (
   const extraFileNames: string[] = [];
   const extraFiles: string[] = [];
 
-  const { caseCaption, docketEntries, isSealed: isCaseSealed } = caseToBatch;
+  const { caseCaption, isSealed: isCaseSealed } = caseToBatch;
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseFolder = `${docketNumber}, ${caseTitle}`;
   const zipName = `${caseFolder}.zip`;
@@ -71,14 +69,12 @@ export const batchDownloadDocketEntriesInteractor = async (
   }
 
   const caseEntity = new Case(caseToBatch, { applicationContext });
-  const documentToProcess = caseEntity.getDocketEntryById({
-    docketEntryId: documentsSelectedForDownload,
-  });
 
-  const documentsToProcess =
-    documentsSelectedForDownload === ALL_DOCUMENTS_SELECTED
-      ? docketEntries
-      : [documentToProcess];
+  const documentsToProcess = documentsSelectedForDownload.map(docketEntryId =>
+    caseEntity.getDocketEntryById({
+      docketEntryId,
+    }),
+  );
 
   documentsToProcess
     .filter(entry => isSelectableForDownload(entry))
