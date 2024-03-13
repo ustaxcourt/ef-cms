@@ -1,7 +1,7 @@
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
 import {
   loginAsPetitioner,
-  loginAsPetitionsClerk,
+  loginAsPetitionsClerk1,
   loginAsPrivatePractitioner,
 } from '../../helpers/auth/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
@@ -21,8 +21,8 @@ describe('users should be able to create cases', () => {
     practitionerCreatesElectronicCase();
   });
 
-  it.only('a petitionsclerk should be able to create and serve a paper case', () => {
-    loginAsPetitionsClerk();
+  it('a petitionsclerk should be able to create and serve a paper case', () => {
+    loginAsPetitionsClerk1();
     createAndServePaperPetition();
   });
 });

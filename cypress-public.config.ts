@@ -22,7 +22,7 @@ export default defineConfig({
         },
       });
     },
-    specPattern: 'cypress/cypress-integration/integration/public/*.cy.ts',
+    specPattern: 'cypress/cypress-integration/integration/public/**/*.cy.ts',
     supportFile: 'cypress/cypress-integration/support/index.ts',
     testIsolation: false,
   },
@@ -32,6 +32,7 @@ export default defineConfig({
     toConsole: true,
   },
   requestTimeout: 12000,
+  screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/cypress-integration/screenshots',
   video: true,
   videosFolder: 'cypress/cypress-integration/videos',

@@ -110,6 +110,7 @@ export const AddPrivatePractitionerModal = connect(
                             counsel.isAlreadyInCase && 'hide-radio',
                             'usa-radio__label',
                           )}
+                          data-testid={`counsel-${idx}-radio`}
                           htmlFor={`counsel-${idx}`}
                         >
                           {counsel.name} ({counsel.barNumber})
@@ -129,7 +130,7 @@ export const AddPrivatePractitionerModal = connect(
                 Who is this counsel representing?
               </legend>
 
-              {formattedCaseDetail.petitioners.map(petitioner => (
+              {formattedCaseDetail.petitioners.map((petitioner, index) => (
                 <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
                     aria-describedby="representing-legend"
@@ -150,7 +151,7 @@ export const AddPrivatePractitionerModal = connect(
                   />
                   <label
                     className="usa-checkbox__label"
-                    data-testid={`representing-${petitioner.name}`}
+                    data-testid={`practitioner-representing-${index}`}
                     htmlFor={`representing-${petitioner.contactId}`}
                   >
                     {petitioner.displayName}

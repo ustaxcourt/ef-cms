@@ -1,3 +1,7 @@
+import {
+  APIGatewayAuthorizerResult,
+  APIGatewayRequestAuthorizerEvent,
+} from 'aws-lambda';
 import { createLogger } from '../../../src/createLogger';
 import { transports } from 'winston';
 import axios from 'axios';
@@ -61,71 +65,88 @@ const throw401GatewayError = () => {
   throw new Error('Unauthorized');
 };
 
-export const createAuthorizer = getToken => async (event, context) => {
-  const logger = getLogger(context);
+export const createAuthorizer =
+  getToken => async (event: APIGatewayRequestAuthorizerEvent, context) => {
+    const logger = getLogger(context);
 
-  let token;
-  try {
-    token = getToken(event);
-  } catch (error) {
-    logger.info('An error occured trying to get the token out of the event');
-    throw401GatewayError();
-  }
+    let token;
+    try {
+      token = getToken(event);
+    } catch (error) {
+      logger.info('An error occured trying to get the token out of the event');
+      throw401GatewayError();
+    }
 
-  if (!token) {
-    logger.info('No authorizationToken found in the header');
-    throw401GatewayError();
-  }
+    if (!token) {
+      logger.info('No authorizationToken found in the header');
+      throw401GatewayError();
+    }
 
-  let iss, kid;
+    let iss, kid;
 
-  try {
-    const decodedToken = decodeToken(token);
-    ({ iss, kid } = decodedToken);
-  } catch (error) {
-    logger.info(
-      'The token provided in the header could not be decoded successfully',
+    try {
+      const decodedToken = decodeToken(token);
+      ({ iss, kid } = decodedToken);
+    } catch (error) {
+      logger.info(
+        'The token provided in the header could not be decoded successfully',
+      );
+      throw401GatewayError();
+    }
+
+    let keys;
+    try {
+      keys = await getKeysForIssuer(iss);
+    } catch (error) {
+      logger.warn(
+        'Could not fetch keys for token issuer, considering request unauthorized',
+        error,
+      );
+      throw401GatewayError();
+    }
+
+    const key = keys.find(k => k.kid === kid);
+
+    if (!key) {
+      logger.warn(
+        'The key used to sign the authorization token was not found in the user pool’s keys, considering request unauthorized',
+        {
+          issuer: iss,
+          keys,
+          requestedKeyId: kid,
+        },
+      );
+      throw401GatewayError();
+    }
+
+    let payload;
+    try {
+      payload = await verify(key, token);
+    } catch (error) {
+      logger.warn(
+        'The token is not valid, considering request unauthorized',
+        error,
+      );
+      throw401GatewayError();
+    }
+
+    const allowPolicy = createAllowPolicy(
+      event,
+      payload['custom:userId'] || payload.sub,
     );
-    throw401GatewayError();
-  }
 
-  let keys;
-  try {
-    keys = await getKeysForIssuer(iss);
-  } catch (error) {
-    logger.warn(
-      'Could not fetch keys for token issuer, considering request unauthorized',
-      error,
-    );
-    throw401GatewayError();
-  }
+    logger.info('Request authorized', {
+      metadata: { policy: allowPolicy },
+    });
 
-  const key = keys.find(k => k.kid === kid);
+    return allowPolicy;
+  };
 
-  if (!key) {
-    logger.warn(
-      'The key used to sign the authorization token was not found in the user pool’s keys, considering request unauthorized',
-      {
-        issuer: iss,
-        keys,
-        requestedKeyId: kid,
-      },
-    );
-    throw401GatewayError();
-  }
-
-  let payload;
-  try {
-    payload = await verify(key, token);
-  } catch (error) {
-    logger.warn(
-      'The token is not valid, considering request unauthorized',
-      error,
-    );
-    throw401GatewayError();
-  }
-
-  const policy = {
+function createAllowPolicy(
+  event: APIGatewayRequestAuthorizerEvent,
+  principalId: string,
+): APIGatewayAuthorizerResult {
+  return {
     policyDocument: {
       Statement: [
         {
@@ -136,12 +157,6 @@ export const createAuthorizer = getToken => async (event, context) => {
       ],
       Version: '2012-10-17',
     },
-    principalId: payload['custom:userId'] || payload.sub,
+    principalId,
   };
-
-  logger.info('Request authorized', {
-    metadata: { policy },
-  });
-
-  return policy;
-};
+}

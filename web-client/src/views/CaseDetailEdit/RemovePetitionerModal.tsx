@@ -46,7 +46,7 @@ export const RemovePetitionerModal = connect(
             alertWarning={{
               title: `Are you sure you want to remove ${form.contact.name} from this case?`,
             }}
-            dismissable={false}
+            dismissible={false}
             scrollToTop={false}
           />
           <FormGroup errorText={validationErrors.caseCaption}>

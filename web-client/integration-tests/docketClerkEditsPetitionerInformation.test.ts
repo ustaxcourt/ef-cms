@@ -7,13 +7,9 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const cerebralTest = setupTest();
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 describe('docket clerk edits the petitioner information', () => {
-  beforeEach(() => {
-    jest.setTimeout(50000);
-  });
+  const cerebralTest = setupTest();
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   afterAll(() => {
     cerebralTest.closeSocket();

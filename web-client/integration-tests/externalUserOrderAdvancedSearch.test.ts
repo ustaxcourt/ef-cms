@@ -57,13 +57,13 @@ describe('external users perform an advanced search for orders', () => {
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(cerebralTest, 'privatepractitioner1@example.com');
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
   unassociatedUserSearchesForServedOrderInUnsealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
@@ -85,7 +85,7 @@ describe('external users perform an advanced search for orders', () => {
   docketClerkSealsCase(cerebralTest);
   petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
 
-  loginAs(cerebralTest, 'privatepractitioner1@example.com');
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
   it('search for order in sealed case as the second practitioner associated to the petitioner', async () => {
     await refreshElasticsearchIndex();
 
@@ -140,7 +140,7 @@ describe('external users perform an advanced search for orders', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 
-  loginAs(cerebralTest, 'privatepractitioner1@example.com');
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
   it('search for order in sealed case as an unassociated practitioner', async () => {
     await refreshElasticsearchIndex();
 
@@ -155,13 +155,13 @@ describe('external users perform an advanced search for orders', () => {
     ).toEqual([]);
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(cerebralTest, 'privatepractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
@@ -179,7 +179,7 @@ describe('external users perform an advanced search for orders', () => {
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(cerebralTest, 'privatepractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('search for sealed order in unsealed case as an unassociated practitioner', async () => {
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
@@ -204,7 +204,7 @@ describe('external users perform an advanced search for orders', () => {
     );
   });
 
-  ['privatepractitioner@example.com', 'irspractitioner@example.com'].forEach(
+  ['privatePractitioner@example.com', 'irspractitioner@example.com'].forEach(
     email => {
       loginAs(cerebralTest, email);
       it(`search for an order that has been sealed from the public in an unsealed case as an associated ${email} user`, async () => {
