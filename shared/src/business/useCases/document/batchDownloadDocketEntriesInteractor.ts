@@ -89,8 +89,7 @@ export const batchDownloadDocketEntriesInteractor = async (
       const fileDirectory =
         isCaseSealed || docInfo.isSealed ? `${caseFolder}/sealed` : caseFolder;
 
-      const pdfTitle =
-        docInfo.isStricken === 'true' ? `STRICKEN_${filename}` : filename;
+      const pdfTitle = docInfo.isStricken ? `STRICKEN_${filename}` : filename;
 
       s3Ids.push(docketEntryId);
       fileNames.push(`${fileDirectory}/${pdfTitle}`);
