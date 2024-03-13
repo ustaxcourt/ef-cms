@@ -397,7 +397,10 @@ export const formattedDocketEntries = (
     documentsSelectedForDownloadCount === selectableDocumentsCount &&
     selectableDocumentsCount !== 0;
 
+  const canBatchDownload = permissions.BATCH_DOWNLOAD_CASE_DOCUMENTS;
+
   const someDocumentsSelectedForDownload =
+    canBatchDownload &&
     documentsSelectedForDownloadCount > 0 &&
     documentsSelectedForDownloadCount < selectableDocumentsCount;
 
