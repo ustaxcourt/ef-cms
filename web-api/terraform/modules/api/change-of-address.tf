@@ -7,7 +7,7 @@ module "change_of_address_lambda" {
   handler_file   = "./web-api/src/lambdas/pdfGeneration/pdf-generation.ts"
   handler_method = "changeOfAddressHandler"
   lambda_name    = "change_of_address_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"

@@ -131,6 +131,7 @@
     "delete:elasticsearch-cluster": "./scripts/elasticsearch/delete-elasticsearch-cluster.sh",
     "deploy:account-specific": "cd iam/terraform/account-specific/main && ../bin/deploy-app.sh",
     "deploy:api": "cd web-api/terraform/applyables/allColors && ../../bin/deploy-app.sh",
+    "deploy:blue": "cd web-api/terraform/applyables/blue && STATE_SUFFIX=blue ../../bin/deploy-app.sh",
     "deploy:ci-image": "./docker-to-ecr.sh",
     "deploy:environment-specific": "cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh",
     "deploy:glue-cron": "cd web-api/workflow-terraform/glue-cron/main && ../bin/deploy-app.sh",

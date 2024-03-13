@@ -54,7 +54,13 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="documents-${ENV}.tfstate"
+ALL_COLORS_KEY="documents-${ENV}.tfstate"
+if [ -z "${STATE_SUFFIX}" ]; then
+  KEY="documents-${ENV}.tfstate"
+else
+  KEY="documents-${ENV}-${STATE_SUFFIX}.tfstate"
+fi
+
 LOCK_TABLE=efcms-terraform-lock
 
 rm -rf .terraform
@@ -176,7 +182,9 @@ export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
 export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_zone_name=$ZONE_NAME
+export TF_VAR_all_colors_tfstate_bucket=$BUCKET
+export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan -out execution-plan
-terraform apply -auto-approve execution-plan
+terraform plan # -out execution-plan
+# terraform apply -auto-approve execution-plan

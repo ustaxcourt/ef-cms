@@ -18,18 +18,6 @@ resource "aws_s3_bucket" "api_lambdas_bucket_west" {
 }
 
 
-resource "null_resource" "puppeteer_layer_west_object" {
-  depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
-  provisioner "local-exec" {
-    command = "aws s3 cp ../../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
-}
-
-
 resource "aws_acm_certificate" "api_gateway_cert_west" {
   domain_name       = "*.${var.dns_domain}"
   validation_method = "DNS"
@@ -68,20 +56,6 @@ resource "aws_acm_certificate_validation" "wildcard_dns_validation_west" {
 }
 
 
-
-data "aws_s3_bucket_object" "puppeteer_blue_west_object" {
-  depends_on = [null_resource.puppeteer_layer_west_object]
-  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
-  key        = "blue_puppeteer_lambda_layer.zip"
-  provider   = aws.us-west-1
-}
-
-data "aws_s3_bucket_object" "puppeteer_green_west_object" {
-  depends_on = [null_resource.puppeteer_layer_west_object]
-  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
-  key        = "green_puppeteer_lambda_layer.zip"
-  provider   = aws.us-west-1
-}
 
 resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
   depends_on               = [aws_acm_certificate.api_gateway_cert_west]

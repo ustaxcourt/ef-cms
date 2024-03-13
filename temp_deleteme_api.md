@@ -6,6 +6,7 @@ Goals
 :::TO DO:::
 - Delete webpack
 - switch all lambdas to new deployment strategy
+- investigate package access scripts (may need for new esbuild lambdas)
 
 :::Deployment steps:::
 - on staging branch deploy with all resource "aws_api_gateway_deployment" lifecycles deleted

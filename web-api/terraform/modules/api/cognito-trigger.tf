@@ -1,6 +1,3 @@
-
-data "aws_caller_identity" "current" {}
-
 module "cognito_post_confirmation_lambda" {
   source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/cognitoTriggers/cognito-triggers.ts"

@@ -1,6 +1,14 @@
 
+
+data "aws_dynamodb_table" "green_dynamo_table" {
+  depends_on = [
+    module.dynamo_table_alpha,
+    module.dynamo_table_beta,
+  ]
+  name = var.green_table_name
+}
+
 module "api-east-green" {
-  puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
   node_version              = var.green_node_version
   source                    = "../../modules/api"
   environment               = var.environment
@@ -24,7 +32,6 @@ module "api-east-green" {
   }
   current_color                  = "green"
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_east.id
-  puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_east_object.etag
   create_check_case_cron         = 1
   create_health_check_cron       = 1
   create_streams                 = 1
@@ -66,7 +73,6 @@ module "api-west-green" {
   current_color                  = "green"
   node_version                   = var.green_node_version
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_west.id
-  puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
   pool_arn                       = aws_cognito_user_pool.pool.arn
   create_check_case_cron         = 0
   create_health_check_cron       = 1
