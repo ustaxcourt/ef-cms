@@ -14,7 +14,7 @@ export type DownloadDocketEntryRequestType = {
   printableDocketRecordFileId?: string;
 };
 
-const isSelectableForDownload = entry => {
+export const isSelectableForDownload = entry => {
   return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
 };
 
