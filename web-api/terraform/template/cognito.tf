@@ -7,10 +7,12 @@ resource "aws_cognito_user_pool" "pool" {
     default_email_option = "CONFIRM_WITH_CODE"
     email_message        = <<EMAILMESSAGE
     <div>
-    <span>
-    Hello DAWSON user, <br/> 
+    <div>
+      Hello DAWSON user, 
+    </div>
+    <div style="margin-top: 20px;">
     You have requested a password reset. Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>
-    </span>
+    </div>
     <div style="margin-top: 20px;">
       <span style="font-weight: bold; font-size: 20px;">{####}</span>
     </div>
@@ -24,7 +26,7 @@ resource "aws_cognito_user_pool" "pool" {
     </div>
   </div>
   EMAILMESSAGE
-    email_subject        = "U.S. Tax Court DAWSON Password Reset Code"
+    email_subject        = "U.S. Tax Court DAWSON: Password Reset Code"
   }
 
   account_recovery_setting {
@@ -38,8 +40,50 @@ resource "aws_cognito_user_pool" "pool" {
     allow_admin_create_user_only = false
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
-      email_subject = "An account has been set up for you with the U.S. Tax Court"
-      email_message = "Welcome to DAWSON, the new U.S. Tax Court case management system.  An account has been created for you to access your cases online.<br /><br />Please verify that your contact information is correct in the system, and make any required changes.<br /><br /><hr /><br /><br /><b>Your username:</b> {username}</br /><br /><b>Temporary password:</b> <span style=\"font-family: 'Courier New', Courier, monospace;\">{####}</span><br /><br /><b>This temporary password is valid for 7 days. </b> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a><br /><br />NOTE:<br />1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.<br />2. Please copy and paste the temporary password versus trying to retype it.<br />3. Please make sure you do not pick up an extra space at the beginning or end of the password when copying and pasting.<br />4. If your password ends with a special character or punctuation (.?,), that is part of your temporary password. <br /><br />"
+      email_subject = "U.S. Tax Court DAWSON: Account Created"
+      email_message = <<EMAILMESSAGE
+      <div>
+        <div>
+          Hello DAWSON user, 
+        </div>
+        <div style="margin-top: 20px;">
+          Welcome to DAWSON, the U.S. Tax Court case management system. An account has been created for you to access your cases online.
+        </div>
+        <div style="margin-top: 20px;">
+          Please verify that your contact information is correct in the system, and make any required changes.
+        </div>
+        <div style="margin-top: 20px;"> 
+          <span style="font-weight: bold;">Your username: </span>{username}
+        </div>
+        <div> 
+          <span style="font-weight: bold;">Temporary password: </span> <span style="font-family: 'Courier New', Courier, monospace;">{####}</span>
+        </div>
+        <div style="margin-top: 20px;">
+          <span style="font-weight: bold;">This temporary password is valid for 7 days.</span> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a>
+        </div>
+        <div style="margin-top: 20px;">NOTE:</div>
+        <div>
+          1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.
+        </div>
+        <div>
+          2. Please copy and paste the temporary password versus trying to retype it.
+        </div>
+        <div>
+          3. Please make sure you do not pick up an extra space at the beginning or end of the password when copying and pasting.
+        </div>
+        <div>
+          4. If your password ends with a special character or punctuation (.?,), that is part of your temporary password.
+        </div>
+
+        <div style="margin-top: 20px;">
+          <span>If you did not request an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+        </div>
+        <hr style="border-top:1px solid #000000;">
+        <div style="margin-top: 20px;">
+          <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
+        </div>
+      </div>
+    EMAILMESSAGE
     }
   }
 
@@ -181,8 +225,50 @@ resource "aws_cognito_user_pool" "irs_pool" {
     allow_admin_create_user_only = true
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
-      email_subject = "U.S. Tax Court account creation"
-      email_message = "An account has been created for you on the <a href='https://app.${var.dns_domain}/'>U.S. Tax Court site</a>. Your username is {username} and temporary password is {####}. Please log in and change your password."
+      email_subject = "U.S. Tax Court DAWSON: Account Created"
+      email_message = <<EMAILMESSAGE
+      <div>
+        <div>
+          Hello DAWSON user, 
+        </div>
+        <div style="margin-top: 20px;">
+          Welcome to DAWSON, the U.S. Tax Court case management system. An account has been created for you to access your cases online.
+        </div>
+        <div style="margin-top: 20px;">
+          Please verify that your contact information is correct in the system, and make any required changes.
+        </div>
+        <div style="margin-top: 20px;"> 
+          <span style="font-weight: bold;">Your username: </span>{username}
+        </div>
+        <div> 
+          <span style="font-weight: bold;">Temporary password: </span> <span style="font-family: 'Courier New', Courier, monospace;">{####}</span>
+        </div>
+        <div style="margin-top: 20px;">
+          <span style="font-weight: bold;">This temporary password is valid for 7 days.</span> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a>
+        </div>
+        <div style="margin-top: 20px;">NOTE:</div>
+        <div>
+          1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.
+        </div>
+        <div>
+          2. Please copy and paste the temporary password versus trying to retype it.
+        </div>
+        <div>
+          3. Please make sure you do not pick up an extra space at the beginning or end of the password when copying and pasting.
+        </div>
+        <div>
+          4. If your password ends with a special character or punctuation (.?,), that is part of your temporary password.
+        </div>
+
+        <div style="margin-top: 20px;">
+          <span>If you did not request an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+        </div>
+        <hr style="border-top:1px solid #000000;">
+        <div style="margin-top: 20px;">
+          <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
+        </div>
+      </div>
+    EMAILMESSAGE      
     }
   }
 

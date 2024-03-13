@@ -7,16 +7,16 @@ import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 
 // # Arguments
 // #   - $1 - true to engage maintenance mode, false to disengage maintenance mode
-// #   - $2 - the environment to set the flag
 
 const args = process.argv.slice(2);
 const enableMaintenanceMode: boolean = args[0] === 'true';
-const env: string = args[1];
+
+const { ENV } = process.env;
 
 if (typeof enableMaintenanceMode !== 'boolean') {
   throw new Error('A value for enable maintenance mode is required.');
 }
-if (typeof env !== 'string') {
+if (typeof ENV !== 'string') {
   throw new Error('A value for env is required.');
 }
 
@@ -29,7 +29,7 @@ async function setMaintenanceMode() {
   });
   const currentColorRecord = await documentClient.get({
     Key: { pk: 'current-color', sk: 'current-color' },
-    TableName: `efcms-deploy-${env}`,
+    TableName: `efcms-deploy-${ENV}`,
   });
   const activeColor: 'blue' | 'green' | undefined =
     currentColorRecord?.Item?.current;
@@ -48,11 +48,11 @@ async function setMaintenanceMode() {
   });
 
   console.log(
-    `Setting Maintenance mode to ${enableMaintenanceMode} for ${env}`,
+    `Setting Maintenance mode to ${enableMaintenanceMode} for ${ENV}`,
   );
 
   const command = new InvokeCommand({
-    FunctionName: `send_maintenance_notifications_${env}_${activeColor}`,
+    FunctionName: `send_maintenance_notifications_${ENV}_${activeColor}`,
     InvocationType: 'RequestResponse',
     Payload: Buffer.from(
       JSON.stringify({

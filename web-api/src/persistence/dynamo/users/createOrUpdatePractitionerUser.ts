@@ -154,10 +154,8 @@ export const createOrUpdatePractitionerUser = async ({
         },
       ],
       UserPoolId: process.env.USER_POOL_ID,
-      // and here?
       Username: userEmail,
     });
-    // and here
     userId =
       response.UserAttributes?.find(element => {
         if (element.Name === 'custom:userId') {
