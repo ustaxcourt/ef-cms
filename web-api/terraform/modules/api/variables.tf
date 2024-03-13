@@ -6,10 +6,6 @@ variable "dns_domain" {
   type = string
 }
 
-variable "account_id" {
-  type = string
-}
-
 variable "zone_id" {
   type = string
 }
@@ -35,14 +31,6 @@ variable "current_color" {
 }
 
 variable "lambda_bucket_id" {
-  type = string
-}
-
-variable "puppeteer_layer_object" {
-  type = any
-}
-
-variable "puppeteer_object_hash" {
   type = string
 }
 
