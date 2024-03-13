@@ -47,6 +47,7 @@ import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getNotificationGateway } from '@web-api/getNotificationGateway';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -54,13 +55,10 @@ import { getUserGateway } from '@web-api/getUserGateway';
 import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
-import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
 import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
-import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
-import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
@@ -314,11 +312,7 @@ export const createApplicationContext = (
         },
       });
     },
-    getNotificationGateway: () => ({
-      retrySendNotificationToConnections,
-      sendNotificationToConnection,
-      sendNotificationToUser,
-    }),
+    getNotificationGateway,
     getNotificationService: () => {
       if (notificationServiceCache) {
         return notificationServiceCache;
