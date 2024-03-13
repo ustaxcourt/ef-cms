@@ -1,5 +1,5 @@
 import { Case } from '../../entities/cases/Case';
-// import { NotFoundError } from '../../../../../web-api/src/errors/errors';
+import { NotFoundError } from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -7,24 +7,11 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateValidDocketEntryFilename } from '@shared/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
-export type DocumentsToDownloadInfoType = {
-  docketEntryId: string;
-  documentTitle: string;
-  filingDate: string;
-  index?: number;
-  isFileAttached?: boolean;
-  isOnDocketRecord: boolean;
-  isStricken: string; // feels wrong
-  isSealed: string; // feels wrong
-};
-
 export type DownloadDocketEntryRequestType = {
   documentsSelectedForDownload?: string;
   clientConnectionId: string;
-  // docketEntries: DocumentsToDownloadInfoType[];
   docketNumber: string;
   printableDocketRecordFileId?: string;
-  // isSealed?: string;
 };
 
 const isSelectableForDownload = entry => {
@@ -43,13 +30,10 @@ export const batchDownloadDocketEntriesInteractor = async (
   }: DownloadDocketEntryRequestType,
 ) => {
   const user = applicationContext.getCurrentUser();
+
   if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS)) {
     throw new UnauthorizedError('Unauthorized');
   }
-  const s3Ids: string[] = [];
-  const fileNames: string[] = [];
-  const extraFileNames: string[] = [];
-  const extraFiles: string[] = [];
 
   const caseToBatch = await applicationContext
     .getPersistenceGateway()
@@ -57,6 +41,15 @@ export const batchDownloadDocketEntriesInteractor = async (
       applicationContext,
       docketNumber,
     });
+
+  if (!caseToBatch) {
+    throw new NotFoundError(`Case: ${docketNumber} was not found.`);
+  }
+
+  const s3Ids: string[] = [];
+  const fileNames: string[] = [];
+  const extraFileNames: string[] = [];
+  const extraFiles: string[] = [];
 
   const { caseCaption, docketEntries, isSealed: isCaseSealed } = caseToBatch;
   const caseTitle = Case.getCaseTitle(caseCaption);
@@ -82,15 +75,15 @@ export const batchDownloadDocketEntriesInteractor = async (
     docketEntryId: documentsSelectedForDownload,
   });
 
-  const docketEntriesToProcess =
+  const documentsToProcess =
     documentsSelectedForDownload === ALL_DOCUMENTS_SELECTED
       ? docketEntries
       : [documentToProcess];
 
-  docketEntriesToProcess
+  documentsToProcess
     .filter(entry => isSelectableForDownload(entry))
-    .forEach(docEntry => {
-      const { docketEntryId, documentTitle, filingDate, index } = docEntry;
+    .forEach(docInfo => {
+      const { docketEntryId, documentTitle, filingDate, index } = docInfo;
       const filename = generateValidDocketEntryFilename({
         documentTitle,
         filingDate,
@@ -98,10 +91,10 @@ export const batchDownloadDocketEntriesInteractor = async (
       });
 
       const fileDirectory =
-        isCaseSealed || docEntry.isSealed ? `${caseFolder}/sealed` : caseFolder;
+        isCaseSealed || docInfo.isSealed ? `${caseFolder}/sealed` : caseFolder;
 
       const pdfTitle =
-        docEntry.isStricken === 'true' ? `STRICKEN_${filename}` : filename;
+        docInfo.isStricken === 'true' ? `STRICKEN_${filename}` : filename;
 
       s3Ids.push(docketEntryId);
       fileNames.push(`${fileDirectory}/${pdfTitle}`);
