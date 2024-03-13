@@ -1,4 +1,3 @@
-import { getDocketEntriesByFilter } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const batchDownloadDocketEntriesAction = async ({
@@ -12,20 +11,16 @@ export const batchDownloadDocketEntriesAction = async ({
   const documentIds = get(state.documentsSelectedForDownload);
   const caseDetail = get(state.caseDetail);
   const clientConnectionId = get(state.clientConnectionId);
-  const { docketEntries, docketNumber } = caseDetail;
   const { docketRecordFilter } = get(state.sessionMetadata);
+  const { docketEntries, docketNumber } = caseDetail;
 
-  const documentsToDownload: RawDocketEntry[] = documentIds.map(docSelected => {
-    const docketEntryIdKey = Object.keys(docSelected)[0];
-    return docketEntries.find(
-      docEntry => docEntry[docketEntryIdKey] === docSelected[docketEntryIdKey],
-    );
-  });
-
-  const filteredDocuments = getDocketEntriesByFilter(applicationContext, {
-    docketEntries: documentsToDownload,
-    docketRecordFilter,
-  });
+  const filteredDocumentsIds = applicationContext
+    .getUtilities()
+    .getCaseDocketEntriesByFilter(applicationContext, {
+      docketEntries,
+      docketRecordFilter,
+      documentIdsToProcess: documentIds,
+    });
 
   try {
     await applicationContext
@@ -33,9 +28,7 @@ export const batchDownloadDocketEntriesAction = async ({
       .batchDownloadDocketEntriesInteractor(applicationContext, {
         clientConnectionId,
         docketNumber,
-        documentsSelectedForDownload: filteredDocuments.map(
-          docInfo => docInfo.docketEntryId,
-        ),
+        documentsSelectedForDownload: filteredDocumentsIds,
         printableDocketRecordFileId: props.fileId,
       });
 
