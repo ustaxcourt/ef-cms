@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../../../support/cognito-login';
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import { v4 } from 'uuid';
@@ -13,7 +12,7 @@ Given('I request a new forgot password code', () => {
   cy.get('[data-testid="request-new-forgot-password-code-button"]').click();
 });
 
-Given(`I successfully reset my password to {string}`, (newPassword: string) => {
+Given('I successfully reset my password to {string}', (newPassword: string) => {
   cy.get('[data-testid="forgot-password-code"]').type(
     DEFAULT_FORGOT_PASSWORD_CODE,
   );
@@ -30,14 +29,14 @@ When('I enter an email without an account on forgot password page', () => {
   cy.get('[data-testid="send-password-reset-button"]').click();
 });
 
-When(`I enter {string} on forgot password page`, (email: string) => {
+When('I enter {string} on forgot password page', (email: string) => {
   cy.get('[data-testid="email-input"]').clear();
   cy.get('[data-testid="email-input"]').type(email);
   cy.get('[data-testid="send-password-reset-button"]').click();
 });
 
 When(
-  `I indicate I forgot my password for account {string}`,
+  'I indicate I forgot my password for account {string}',
   (email: string) => {
     cy.visit('/login');
     cy.get('[data-testid="forgot-password-button"]').click();
@@ -51,7 +50,7 @@ When(
   },
 );
 
-When(`I enter my forgot password code`, () => {
+When('I enter my forgot password code', () => {
   cy.get('[data-testid="change-password-button"]').should('be.disabled');
 
   verifyPasswordRequirements('[data-testid="new-password-input"]');
