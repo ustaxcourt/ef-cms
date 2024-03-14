@@ -6,6 +6,7 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
+import { deleteAllFilesInFolder } from './cypress/cypress-integration/support/database';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
 
@@ -23,6 +24,9 @@ export default defineConfig({
         },
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
+        },
+        deleteAllFilesInFolder(dir) {
+          return deleteAllFilesInFolder(dir);
         },
         expireUserConfirmationCode(email: string) {
           return expireUserConfirmationCode(email);
