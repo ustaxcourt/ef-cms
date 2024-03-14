@@ -11,7 +11,7 @@ describe('setSelectedDocumentIdAction', () => {
     docketEntryId: 'ae944d7c-63zz-459b-8a72-1a3c9e71ef74',
   };
 
-  const docketEntries = [mockDocumentOne];
+  const documentIds = [mockDocumentOne];
 
   it('should add a document id state.documentsSelectedForDownload if it has not been previously set', async () => {
     const result = await runAction(setSelectedDocumentIdAction, {
@@ -19,7 +19,7 @@ describe('setSelectedDocumentIdAction', () => {
         presenter,
       },
       props: {
-        docketEntries,
+        documentIds,
       },
       state: {
         documentsSelectedForDownload: [mockDocumentTwo],
@@ -38,7 +38,7 @@ describe('setSelectedDocumentIdAction', () => {
         presenter,
       },
       props: {
-        docketEntries,
+        documentIds,
       },
       state: {
         documentsSelectedForDownload: [mockDocumentOne, mockDocumentTwo],
@@ -56,7 +56,7 @@ describe('setSelectedDocumentIdAction', () => {
         presenter,
       },
       props: {
-        docketEntries: [mockDocumentOne, mockDocumentTwo],
+        documentIds: [mockDocumentOne, mockDocumentTwo],
       },
       state: {
         documentsSelectedForDownload: [mockDocumentOne],
@@ -75,7 +75,7 @@ describe('setSelectedDocumentIdAction', () => {
         presenter,
       },
       props: {
-        docketEntries: [mockDocumentOne, mockDocumentTwo],
+        documentIds: [mockDocumentOne, mockDocumentTwo],
       },
       state: {
         documentsSelectedForDownload: [mockDocumentOne, mockDocumentTwo],
@@ -83,5 +83,22 @@ describe('setSelectedDocumentIdAction', () => {
     });
 
     expect(result.state.documentsSelectedForDownload).toEqual([]);
+  });
+
+  it('should not do anything if incoming document ids is an empty array (invalid)', async () => {
+    const result = await runAction(setSelectedDocumentIdAction, {
+      modules: {
+        presenter,
+      },
+      props: { documentIds: [] },
+      state: {
+        documentsSelectedForDownload: [mockDocumentOne, mockDocumentTwo],
+      },
+    });
+
+    expect(result.state.documentsSelectedForDownload).toEqual([
+      mockDocumentOne,
+      mockDocumentTwo,
+    ]);
   });
 });
