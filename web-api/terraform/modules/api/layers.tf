@@ -19,7 +19,7 @@ resource "aws_lambda_layer_version" "puppeteer_layer" {
   s3_bucket           = var.lambda_bucket_id
   s3_key              = "${var.current_color}_puppeteer_lambda_layer.zip"
   layer_name          = "puppeteer-${var.environment}-${var.current_color}"
-  source_code_hash    = data.aws_s3_bucket_object.puppeteer_object.etag
+  source_code_hash    = data.aws_s3_object.puppeteer_object.etag
   compatible_runtimes = [var.node_version]
 }
 
