@@ -8,8 +8,11 @@ import {
   fetchRootDocument,
   getMeetsPolicyChangeRequirements,
 } from './Public/publicCaseDetailHelper';
-import { isSelectableForDownload } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
+
+export const isSelectableForDownload = entry => {
+  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
+};
 
 type DocketEntriesSelectionType = (RawDocketEntry & {
   createdAtFormatted: string;

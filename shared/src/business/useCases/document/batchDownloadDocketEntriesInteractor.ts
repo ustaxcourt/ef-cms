@@ -14,11 +14,7 @@ export type DownloadDocketEntryRequestType = {
   printableDocketRecordFileId?: string;
 };
 
-export const isSelectableForDownload = entry => {
-  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
-};
-
-export const batchDownloadDocketEntriesInteractor = async (
+const batchDownloadDocketEntriesHelper = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -54,6 +50,31 @@ export const batchDownloadDocketEntriesInteractor = async (
   const caseFolder = `${docketNumber}, ${caseTitle}`;
   const zipName = `${caseFolder}.zip`;
 
+  const caseEntity = new Case(caseToBatch, { applicationContext });
+
+  const documentsToProcess = documentsSelectedForDownload.map(docketEntryId =>
+    caseEntity.getDocketEntryById({
+      docketEntryId,
+    }),
+  );
+
+  documentsToProcess.forEach(docInfo => {
+    const { docketEntryId, documentTitle, filingDate, index } = docInfo;
+    const filename = generateValidDocketEntryFilename({
+      documentTitle,
+      filingDate,
+      index,
+    });
+
+    const fileDirectory =
+      isCaseSealed || docInfo.isSealed ? `${caseFolder}/sealed` : caseFolder;
+
+    const pdfTitle = docInfo.isStricken ? `STRICKEN_${filename}` : filename;
+
+    s3Ids.push(docketEntryId);
+    fileNames.push(`${fileDirectory}/${pdfTitle}`);
+  });
+
   if (printableDocketRecordFileId) {
     const pdfTitle = `${caseFolder}/${'0_Docket_Record.pdf'}`;
 
@@ -67,33 +88,6 @@ export const batchDownloadDocketEntriesInteractor = async (
     extraFiles.push(printableDocketRecordPdf);
     extraFileNames.push(pdfTitle);
   }
-
-  const caseEntity = new Case(caseToBatch, { applicationContext });
-
-  const documentsToProcess = documentsSelectedForDownload.map(docketEntryId =>
-    caseEntity.getDocketEntryById({
-      docketEntryId,
-    }),
-  );
-
-  documentsToProcess
-    .filter(entry => isSelectableForDownload(entry))
-    .forEach(docInfo => {
-      const { docketEntryId, documentTitle, filingDate, index } = docInfo;
-      const filename = generateValidDocketEntryFilename({
-        documentTitle,
-        filingDate,
-        index,
-      });
-
-      const fileDirectory =
-        isCaseSealed || docInfo.isSealed ? `${caseFolder}/sealed` : caseFolder;
-
-      const pdfTitle = docInfo.isStricken ? `STRICKEN_${filename}` : filename;
-
-      s3Ids.push(docketEntryId);
-      fileNames.push(`${fileDirectory}/${pdfTitle}`);
-    });
 
   const onEntry = entryData => {
     applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -178,4 +172,33 @@ export const batchDownloadDocketEntriesInteractor = async (
     },
     userId: user.userId,
   });
+};
+
+export const batchDownloadDocketEntriesInteractor = async (
+  applicationContext: IApplicationContext,
+  downloadDocketEntryRequestInfo: DownloadDocketEntryRequestType,
+) => {
+  try {
+    await batchDownloadDocketEntriesHelper(
+      applicationContext,
+      downloadDocketEntryRequestInfo,
+    );
+  } catch (error) {
+    const { userId } = applicationContext.getCurrentUser();
+    const { docketNumber } = downloadDocketEntryRequestInfo;
+
+    const erMsg = error.message || 'unknown error';
+    applicationContext.logger.error(
+      `Error batch downloading documents from case: ${docketNumber} - ${erMsg}`,
+      { error },
+    );
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_error',
+        error,
+      },
+      userId,
+    });
+  }
 };
