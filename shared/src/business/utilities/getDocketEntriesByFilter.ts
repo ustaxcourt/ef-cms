@@ -5,13 +5,14 @@ export const getDocketEntriesByFilter = (
     docketRecordFilter,
   }: { docketEntries: RawDocketEntry[]; docketRecordFilter: string },
 ): RawDocketEntry[] => {
+  let result = docketEntries;
   const {
     DOCKET_RECORD_FILTER_OPTIONS,
     EXHIBIT_EVENT_CODES,
     MOTION_EVENT_CODES,
     ORDER_EVENT_CODES,
   } = applicationContext.getConstants();
-  let result = docketEntries;
+
   switch (docketRecordFilter) {
     case DOCKET_RECORD_FILTER_OPTIONS.exhibits:
       result = docketEntries.filter(entry =>
