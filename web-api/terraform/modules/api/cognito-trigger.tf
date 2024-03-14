@@ -43,7 +43,7 @@ resource "aws_sqs_queue" "update_petitioner_cases_queue" {
 
 resource "aws_lambda_event_source_mapping" "update_petitioner_cases_mapping" {
   event_source_arn = aws_sqs_queue.update_petitioner_cases_queue[0].arn
-  function_name    = module.update_petitioner_cases_lambda[0].arn
+  function_name    = module.update_petitioner_cases_lambda.arn
   batch_size       = 1
   count            = var.create_triggers
 }
@@ -57,7 +57,7 @@ resource "aws_sqs_queue" "update_petitioner_cases_dl_queue" {
 resource "aws_lambda_permission" "allow_post_auth_trigger" {
   statement_id  = "AllowPostAuthenticationExecutionFromCognito"
   action        = "lambda:InvokeFunction"
-  function_name = module.cognito_post_authentication_lambda[0].function_name
+  function_name = module.cognito_post_authentication_lambda.function_name
   principal     = "cognito-idp.amazonaws.com"
   count         = var.create_triggers
   source_arn    = var.pool_arn
@@ -66,7 +66,7 @@ resource "aws_lambda_permission" "allow_post_auth_trigger" {
 resource "aws_lambda_permission" "allow_trigger" {
   statement_id  = "AllowPostConfirmationExecutionFromCognito"
   action        = "lambda:InvokeFunction"
-  function_name = module.cognito_post_confirmation_lambda[0].function_name
+  function_name = module.cognito_post_confirmation_lambda.function_name
   principal     = "cognito-idp.amazonaws.com"
   count         = var.create_triggers
   source_arn    = var.pool_arn

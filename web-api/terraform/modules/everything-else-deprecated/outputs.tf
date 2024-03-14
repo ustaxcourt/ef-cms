@@ -32,11 +32,11 @@ output "api_lambdas_bucket_west_id" {
 }
 
 output "west_web_acl_arn" {
-  value = module.api-west-waf.web-acl-arn
+  value = module.api-west-waf.web_acl_arn
 }
 
 output "east_web_acl_arn" {
-  value = module.api-east-waf.web-acl-arn
+  value = module.api-east-waf.web_acl_arn
 }
 
 output "aws_route53_health_check_failover_west_id" {
