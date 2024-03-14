@@ -1,9 +1,9 @@
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 
-Given('I log into DAWSON as {string}', (user: string) => {
+Given('I log into DAWSON as {string}', (username: string) => {
   cy.visit('/login');
-  cy.get('[data-testid="email-input"]').type(`${user}@example.com`);
+  cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
   cy.get('[data-testid="password-input"]').type(
     getCypressEnv().defaultAccountPass,
   );
@@ -12,9 +12,9 @@ Given('I log into DAWSON as {string}', (user: string) => {
 
 Given(
   'I log into DAWSON as {string} with {string}',
-  (user: string, password: string) => {
+  (username: string, password: string) => {
     cy.visit('/login');
-    cy.get('[data-testid="email-input"]').type(`${user}@example.com`);
+    cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
     cy.get('[data-testid="password-input"]').type(password);
     cy.get('[data-testid="login-button"]').click();
   },
@@ -72,3 +72,12 @@ Then(
     );
   },
 );
+
+Then('I should be able to log in as {string}', (username: string) => {
+  cy.visit('/login');
+  cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
+  cy.get('[data-testid="password-input"]').type(
+    getCypressEnv().defaultAccountPass,
+  );
+  cy.get('[data-testid="login-button"]').click();
+});
