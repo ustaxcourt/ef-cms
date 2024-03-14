@@ -1129,7 +1129,7 @@ const router = {
       }
     });
 
-    registerRoute('/log-in', () => {
+    registerRoute('/log-in...', () => {
       setPageTitle('Login');
       return app.getSequence('gotoOldLoginSequence')();
     });
