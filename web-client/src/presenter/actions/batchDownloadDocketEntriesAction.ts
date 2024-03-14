@@ -9,10 +9,9 @@ export const batchDownloadDocketEntriesAction = async ({
   fileId: string;
 }>) => {
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  const caseDetail = get(state.caseDetail);
+  const { docketEntries, docketNumber } = get(state.caseDetail);
   const clientConnectionId = get(state.clientConnectionId);
   const { docketRecordFilter } = get(state.sessionMetadata);
-  const { docketEntries, docketNumber } = caseDetail;
 
   const filteredDocumentsIds = applicationContext
     .getUtilities()

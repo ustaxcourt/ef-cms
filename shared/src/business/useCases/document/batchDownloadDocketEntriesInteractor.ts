@@ -189,7 +189,7 @@ export const batchDownloadDocketEntriesInteractor = async (
 
     const erMsg = error.message || 'unknown error';
     applicationContext.logger.error(
-      `Error batch downloading documents from case: ${docketNumber} - ${erMsg}`,
+      `Error batch-downloading documents from case: ${docketNumber} - ${erMsg}`,
       { error },
     );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
