@@ -4,7 +4,9 @@ export const setAsyncSyncResultAction = ({
 }: ActionProps) => {
   const { asyncSyncId, response } = props;
 
-  applicationContext
+  const callback = applicationContext
     .getAsynSyncUtil()
-    .setAsyncSyncResult(asyncSyncId, response);
+    .getAsyncSyncResult(asyncSyncId);
+
+  if (callback) callback(response);
 };

@@ -133,6 +133,17 @@ export const asyncSyncPost = ({
   getMemoized.clear();
 
   return new Promise((resolve, reject) => {
+    const callback = results => {
+      if (results.statusCode === '200') {
+        resolve(results.body);
+      }
+      reject(results);
+    };
+
+    applicationContext
+      .getAsynSyncUtil()
+      .setAsyncSyncResult(asyncSyncId, callback);
+
     applicationContext
       .getHttpClient()
       .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
@@ -143,19 +154,6 @@ export const asyncSyncPost = ({
         },
         ...options,
       });
-
-    const asyncSyncInterval = setInterval(() => {
-      const results = applicationContext
-        .getAsynSyncUtil()
-        .getAsyncSyncResult(asyncSyncId);
-      if (results) {
-        clearInterval(asyncSyncInterval);
-        if (results.statusCode === '200') {
-          resolve(results.body);
-        }
-        reject(results);
-      }
-    }, 2000);
   }).catch(err => {
     throw err;
   });
