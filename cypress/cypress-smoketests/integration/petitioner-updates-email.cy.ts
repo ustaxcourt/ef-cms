@@ -23,13 +23,6 @@ describe('Petitioner Updates e-mail', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
-  /*
-    Given a petitioner with a DAWSON account
-    When they log in and change their email
-    And they do not verify their new email
-    And attempt to log in
-    Then they should be alerted that they need to confirm their new email
-  */
   it('should alert the petitioner that they need to verify their new email address when the user changes their email but does not verify their new email', () => {
     const username = `cypress_test_account+old${v4()}`;
     const email = `${username}@example.com`;

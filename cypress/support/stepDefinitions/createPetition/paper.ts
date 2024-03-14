@@ -1,5 +1,5 @@
 import { Given, Then } from '@badeball/cypress-cucumber-preprocessor';
-import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
 
 Given(
   'I create and serve a paper petition and grant e-access for practitioner as {string}',
