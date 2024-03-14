@@ -34,14 +34,17 @@ export const DocketRecord = connect(
     setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
-    useEffect(() => {
-      const documentsSelectorHeaderInput = window.document.getElementById(
-        'docket-entry-selections',
-      ) as HTMLInputElement;
-      if (formattedDocketEntriesHelper.someDocumentsSelectedForDownload) {
-        documentsSelectorHeaderInput.indeterminate = true;
-      } else documentsSelectorHeaderInput.indeterminate = false;
-    }, [formattedDocketEntriesHelper.someDocumentsSelectedForDownload]);
+    if (docketRecordHelper.showBatchDownloadControls) {
+      // TODO: make good-er
+      useEffect(() => {
+        const documentsSelectorHeaderInput = window.document.getElementById(
+          'docket-entry-selections',
+        ) as HTMLInputElement;
+        if (formattedDocketEntriesHelper.someDocumentsSelectedForDownload) {
+          documentsSelectorHeaderInput.indeterminate = true;
+        } else documentsSelectorHeaderInput.indeterminate = false;
+      }, [formattedDocketEntriesHelper.someDocumentsSelectedForDownload]);
+    }
 
     return (
       <>
@@ -57,21 +60,23 @@ export const DocketRecord = connect(
             >
               <thead>
                 <tr>
-                  <th>
-                    <input
-                      checked={
-                        formattedDocketEntriesHelper.allDocumentsSelectedForDownload
-                      }
-                      id="docket-entry-selections"
-                      type="checkbox"
-                      onChange={() => {
-                        setSelectedDocumentsForDownloadSequence({
-                          documentIds:
-                            formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
-                        });
-                      }}
-                    />
-                  </th>
+                  {docketRecordHelper.showBatchDownloadControls && (
+                    <th>
+                      <input
+                        checked={
+                          formattedDocketEntriesHelper.allDocumentsSelectedForDownload
+                        }
+                        id="docket-entry-selections"
+                        type="checkbox"
+                        onChange={() => {
+                          setSelectedDocumentsForDownloadSequence({
+                            documentIds:
+                              formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
+                          });
+                        }}
+                      />
+                    </th>
+                  )}
                   <th className="center-column hide-on-mobile">
                     <span>
                       <span className="usa-sr-only">Number</span>
@@ -105,24 +110,26 @@ export const DocketRecord = connect(
                         key={entry.docketEntryId}
                       >
                         {' '}
-                        <td>
-                          {formattedDocketEntriesHelper.isSelectableForDownload(
-                            entry,
-                          ) && (
-                            <input
-                              checked={entry.isDocumentSelected}
-                              type="checkbox"
-                              onChange={() => {
-                                const documentIdSelected = {
-                                  docketEntryId: entry.docketEntryId,
-                                };
-                                setSelectedDocumentsForDownloadSequence({
-                                  documentIds: [documentIdSelected],
-                                });
-                              }}
-                            />
-                          )}
-                        </td>
+                        {docketRecordHelper.showBatchDownloadControls && (
+                          <td>
+                            {formattedDocketEntriesHelper.isSelectableForDownload(
+                              entry,
+                            ) && (
+                              <input
+                                checked={entry.isDocumentSelected}
+                                type="checkbox"
+                                onChange={() => {
+                                  const documentIdSelected = {
+                                    docketEntryId: entry.docketEntryId,
+                                  };
+                                  setSelectedDocumentsForDownloadSequence({
+                                    documentIds: [documentIdSelected],
+                                  });
+                                }}
+                              />
+                            )}
+                          </td>
+                        )}
                         <td className="center-column hide-on-mobile">
                           {entry.index}
                         </td>
