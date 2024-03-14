@@ -28,6 +28,7 @@ import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
+import { getCaseDocumentsByFilter } from '@shared/business/utilities/getCaseDocumentsByFilter';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import {
@@ -69,6 +70,7 @@ const utilities = {
   formatNow,
   formatPendingItem,
   getAddressPhoneDiff,
+  getCaseDocumentsByFilter,
   getCropBox,
   getDescriptionDisplay,
   getDocQcSectionForUser,

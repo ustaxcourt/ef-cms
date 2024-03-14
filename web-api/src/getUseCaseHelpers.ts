@@ -23,7 +23,6 @@ import { generateChangeOfAddressHelper } from '../../shared/src/business/useCase
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
-import { getCaseDocumentsByFilter } from '../../shared/src/business/utilities/getCaseDocumentsByFilter';
 import { getJudgeForUserHelper } from '@shared/business/useCaseHelper/getJudgeForUserHelper';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
@@ -72,7 +71,6 @@ const useCaseHelpers = {
   generateNoticeOfChangeToInPersonProceeding,
   generatePdfFromHtmlHelper,
   generateStampedCoversheetInteractor,
-  getCaseDocumentsByFilter,
   getJudgeForUserHelper,
   getJudgeInSectionHelper,
   getUserIdForNote,
