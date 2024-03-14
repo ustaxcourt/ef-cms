@@ -16,7 +16,7 @@ const defaults = {
   chromeLaunchConfig: {
     args: ['--no-sandbox'],
   },
-  concurrency: 8,
+  concurrency: 6,
   debug: false,
   'include-notices': true,
   'include-warnings': true,
