@@ -109,6 +109,10 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'retry_async_request':
         await app.getSequence('retryAsyncRequestSequence')(message);
         break;
+      case 'async_sync_result':
+        console.log('async_sync_result', message);
+        await app.getSequence('setAsyncSyncResultSequence')(message);
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);

@@ -122,6 +122,45 @@ export const post = async ({
   }
 };
 
+export const asyncSyncPost = ({
+  applicationContext,
+  body,
+  endpoint,
+  headers = {},
+  options = {},
+  asyncSyncId = applicationContext.getUniqueId(),
+}) => {
+  getMemoized.clear();
+
+  return new Promise((resolve, reject) => {
+    applicationContext
+      .getHttpClient()
+      .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
+        headers: {
+          ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
+          ...headers,
+          asyncSyncId,
+        },
+        ...options,
+      });
+
+    const asyncSyncInterval = setInterval(() => {
+      const results = applicationContext
+        .getAsynSyncUtil()
+        .getAsyncSyncResult(asyncSyncId);
+      if (results) {
+        clearInterval(asyncSyncInterval);
+        if (results.statusCode === '200') {
+          resolve(results.body);
+        }
+        reject(results);
+      }
+    }, 2000);
+  }).catch(err => {
+    throw err;
+  });
+};
+
 /**
  *
  *put

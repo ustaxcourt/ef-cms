@@ -384,6 +384,15 @@ const setCurrentUserToken = newToken => {
   token = newToken;
 };
 
+const asyncSyncResults = {};
+const setAsyncSyncResult = (id: string, results: any) => {
+  asyncSyncResults[id] = results;
+};
+
+const getAsyncSyncResult = (id: string) => {
+  return asyncSyncResults[id];
+};
+
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
@@ -636,6 +645,10 @@ const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
+  getAsynSyncUtil: () => ({
+    getAsyncSyncResult,
+    setAsyncSyncResult,
+  }),
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
   },

@@ -366,9 +366,14 @@ app.use(logger());
     '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
     lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
+
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/coversheet',
-    lambdaWrapper(addCoversheetLambda),
+    '/async/case-documents/:docketNumber/:docketEntryId/coversheet',
+    lambdaWrapper(
+      addCoversheetLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
