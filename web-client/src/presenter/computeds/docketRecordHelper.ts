@@ -34,6 +34,7 @@ export const docketRecordHelper = (
 
   return {
     countOfDocumentsForDownload: documentsIdsForDownload.length,
+    showBatchDownloadControls: permissions.BATCH_DOWNLOAD_CASE_DOCUMENTS,
     showDownloadLink: showPrintableDocketRecord,
     showEditOrSealDocketRecordEntry:
       permissions.EDIT_DOCKET_ENTRY || permissions.SEAL_DOCKET_ENTRY,
