@@ -10,14 +10,14 @@ import {
 } from './Public/publicCaseDetailHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const isSelectableForDownload = entry => {
-  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
-};
-
 type DocketEntriesSelectionType = (RawDocketEntry & {
   createdAtFormatted: string;
   isDocumentSelected?: boolean;
 })[];
+
+export const isSelectableForDownload = entry => {
+  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
+};
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay: any[] = [];
@@ -406,6 +406,5 @@ export const formattedDocketEntries = (
   });
 
   result.docketRecordSort = docketRecordSort;
-  console.log('result', result);
   return result;
 };
