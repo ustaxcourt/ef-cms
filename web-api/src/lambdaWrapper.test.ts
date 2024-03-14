@@ -176,4 +176,25 @@ describe('lambdaWrapper', () => {
 
     expect(res.status).toHaveBeenCalledWith(204);
   });
+
+  it('should return 204 when simulating an async/sync function', async () => {
+    getCurrentInvoke.mockReturnValue({
+      event: { requestContext: { authorizer: { isTerminalUser: 'false' } } },
+    });
+    await lambdaWrapper(
+      () => {
+        return {
+          body: 'hello world',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+      },
+      { isAsyncSync: true },
+    )(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(204);
+  });
+
+  it('should send notification to user');
 });
