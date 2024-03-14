@@ -1,4 +1,4 @@
-import { post } from '../requests';
+import { asyncSyncPost } from '../requests';
 
 /**
  * addCoversheetInteractor
@@ -13,8 +13,8 @@ export const addCoversheetInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
-  return post({
+  return asyncSyncPost({
     applicationContext,
-    endpoint: `/case-documents/${docketNumber}/${docketEntryId}/coversheet`,
+    endpoint: `/async/case-documents/${docketNumber}/${docketEntryId}/coversheet`,
   });
 };
