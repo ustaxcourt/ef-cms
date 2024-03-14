@@ -34,6 +34,7 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../../shared/src/business/utilities/getWorkQueueFilters';
+import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
@@ -71,6 +72,7 @@ const utilities = {
   getCropBox,
   getDescriptionDisplay,
   getDocQcSectionForUser,
+  getDocketEntriesByFilter,
   getDocumentTitleWithAdditionalInfo,
   getDocumentTypeForAddressChange,
   getFormattedCaseDetail,

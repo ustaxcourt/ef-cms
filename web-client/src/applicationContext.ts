@@ -156,7 +156,7 @@ import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getB
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
-import { getCaseDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
+import { getCaseDocumentsByFilter } from '@shared/business/utilities/getCaseDocumentsByFilter';
 import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
@@ -180,6 +180,7 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../../shared/src/business/utilities/getWorkQueueFilters';
+import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocument } from '@web-client/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
@@ -755,7 +756,7 @@ const applicationContext = {
       generateExternalDocumentTitle,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
-      getCaseDocketEntriesByFilter,
+      getCaseDocumentsByFilter,
       getClinicLetterKey,
       getContactPrimary,
       getContactSecondary,
@@ -763,6 +764,7 @@ const applicationContext = {
       getDateFormat,
       getDescriptionDisplay,
       getDocQcSectionForUser,
+      getDocketEntriesByFilter,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
       getFormattedCaseDetail,

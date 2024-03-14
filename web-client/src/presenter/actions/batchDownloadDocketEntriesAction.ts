@@ -8,7 +8,7 @@ export const batchDownloadDocketEntriesAction = async ({
 }: ActionProps<{
   fileId: string;
 }>) => {
-  const documentIds = get(state.documentsSelectedForDownload);
+  const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
   const caseDetail = get(state.caseDetail);
   const clientConnectionId = get(state.clientConnectionId);
   const { docketRecordFilter } = get(state.sessionMetadata);
@@ -16,10 +16,10 @@ export const batchDownloadDocketEntriesAction = async ({
 
   const filteredDocumentsIds = applicationContext
     .getUtilities()
-    .getCaseDocketEntriesByFilter(applicationContext, {
+    .getCaseDocumentsByFilter(applicationContext, {
       docketEntries,
       docketRecordFilter,
-      documentIdsToProcess: documentIds,
+      documentsToProcess: documentsSelectedForDownload,
     });
 
   try {

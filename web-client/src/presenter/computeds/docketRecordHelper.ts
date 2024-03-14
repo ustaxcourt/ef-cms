@@ -24,16 +24,16 @@ export const docketRecordHelper = (
 
   const sortLabelTextMobile = sortLabelsMobile[sortOrder];
 
-  const filteredDocumentsIds = applicationContext
+  const documentsIdsForDownload = applicationContext
     .getUtilities()
-    .getCaseDocketEntriesByFilter(applicationContext, {
+    .getCaseDocumentsByFilter(applicationContext, {
       docketEntries,
       docketRecordFilter,
-      documentIdsToProcess: documentsSelectedForDownload,
+      documentsToProcess: documentsSelectedForDownload,
     });
 
   return {
-    countOfDocumentsForDownload: filteredDocumentsIds.length,
+    countOfDocumentsForDownload: documentsIdsForDownload.length,
     showDownloadLink: showPrintableDocketRecord,
     showEditOrSealDocketRecordEntry:
       permissions.EDIT_DOCKET_ENTRY || permissions.SEAL_DOCKET_ENTRY,
