@@ -11,6 +11,11 @@ import {
 import { isSelectableForDownload } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
+type DocketEntriesSelectionType = (RawDocketEntry & {
+  createdAtFormatted: string;
+  isDocumentSelected?: boolean;
+})[];
+
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay: any[] = [];
 
@@ -263,39 +268,6 @@ export const getFormattedDocketEntry = ({
   return formattedResult;
 };
 
-// todo: move to utility
-export const getDocketEntriesByFilter = (
-  applicationContext,
-  { docketEntries, docketRecordFilter },
-) => {
-  const {
-    DOCKET_RECORD_FILTER_OPTIONS,
-    EXHIBIT_EVENT_CODES,
-    MOTION_EVENT_CODES,
-    ORDER_EVENT_CODES,
-  } = applicationContext.getConstants();
-  let result = docketEntries;
-  switch (docketRecordFilter) {
-    case DOCKET_RECORD_FILTER_OPTIONS.exhibits:
-      result = docketEntries.filter(entry =>
-        EXHIBIT_EVENT_CODES.includes(entry.eventCode),
-      );
-      break;
-    case DOCKET_RECORD_FILTER_OPTIONS.motions:
-      result = docketEntries.filter(
-        entry => MOTION_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
-      );
-      break;
-    case DOCKET_RECORD_FILTER_OPTIONS.orders:
-      result = docketEntries.filter(
-        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
-      );
-      break;
-  }
-
-  return result;
-};
-
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -307,7 +279,6 @@ export const formattedDocketEntries = (
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
-  console.log('docketRecordFilter', docketRecordFilter);
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
@@ -325,16 +296,12 @@ export const formattedDocketEntries = (
 
   const result = formatCase(applicationContext, caseDetail);
 
-  result.formattedDocketEntries = getDocketEntriesByFilter(applicationContext, {
-    docketEntries: result.formattedDocketEntries,
-    docketRecordFilter,
-  });
-
-  // export type for better usage
-  type DocketEntriesSelectionType = (RawDocketEntry & {
-    createdAtFormatted: string;
-    isDocumentSelected?: boolean;
-  })[];
+  result.formattedDocketEntries = applicationContext
+    .getUtilities()
+    .getDocketEntriesByFilter(applicationContext, {
+      docketEntries: result.formattedDocketEntries,
+      docketRecordFilter,
+    });
 
   let docketEntriesFormatted: DocketEntriesSelectionType = sortDocketEntries(
     result.formattedDocketEntries,

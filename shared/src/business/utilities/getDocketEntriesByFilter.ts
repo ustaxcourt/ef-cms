@@ -1,30 +1,34 @@
-import { getDocketEntriesByFilter } from '@web-client/presenter/computeds/formattedDocketEntries';
-
-export const getCaseDocketEntriesByFilter = (
+export const getDocketEntriesByFilter = (
   applicationContext,
   {
     docketEntries,
     docketRecordFilter,
-    documentIdsToProcess,
-  }: {
-    docketEntries: RawDocketEntry[];
-    docketRecordFilter: string;
-    documentIdsToProcess: { docketEntryId: string }[];
-  },
-): string[] => {
-  const documentsToProcess = documentIdsToProcess.map(docSelected => {
-    const docketEntryIdKey = Object.keys(docSelected)[0];
-    return docketEntries.find(
-      docEntry => docEntry[docketEntryIdKey] === docSelected[docketEntryIdKey],
-    );
-  });
+  }: { docketEntries: RawDocketEntry[]; docketRecordFilter: string },
+): RawDocketEntry[] => {
+  const {
+    DOCKET_RECORD_FILTER_OPTIONS,
+    EXHIBIT_EVENT_CODES,
+    MOTION_EVENT_CODES,
+    ORDER_EVENT_CODES,
+  } = applicationContext.getConstants();
+  let result = docketEntries;
+  switch (docketRecordFilter) {
+    case DOCKET_RECORD_FILTER_OPTIONS.exhibits:
+      result = docketEntries.filter(entry =>
+        EXHIBIT_EVENT_CODES.includes(entry.eventCode),
+      );
+      break;
+    case DOCKET_RECORD_FILTER_OPTIONS.motions:
+      result = docketEntries.filter(
+        entry => MOTION_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
+      );
+      break;
+    case DOCKET_RECORD_FILTER_OPTIONS.orders:
+      result = docketEntries.filter(
+        entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
+      );
+      break;
+  }
 
-  const filteredDocuments = getDocketEntriesByFilter(applicationContext, {
-    docketEntries: documentsToProcess,
-    docketRecordFilter,
-  });
-
-  const filteredDocumentsIds = filteredDocuments.map(doc => doc.docketEntryId);
-
-  return filteredDocumentsIds;
+  return result;
 };
