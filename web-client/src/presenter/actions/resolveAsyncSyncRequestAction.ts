@@ -6,7 +6,7 @@ export const resolveAsyncSyncRequestAction = ({
 
   const callback = applicationContext
     .getAsynSyncUtil()
-    .getAsyncSyncResult(asyncSyncId);
+    .getAsyncSyncCompleter(asyncSyncId);
 
   if (callback) callback(response);
 };
