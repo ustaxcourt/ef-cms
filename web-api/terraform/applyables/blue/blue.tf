@@ -91,13 +91,13 @@ data "aws_dynamodb_table" "blue_dynamo_table" {
 }
 
 module "api-east-blue" {
-  source                 = "../../modules/api"
-  alert_sns_topic_arn    = data.aws_sns_topic.system_health_alarms.arn
-  environment            = var.environment
-  pool_arn               = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
-  node_version           = var.blue_node_version
-  dns_domain             = var.dns_domain
-  zone_id                = data.aws_route53_zone.zone.id
+  source              = "../../modules/api"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms.arn
+  environment         = var.environment
+  pool_arn            = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
+  node_version        = var.blue_node_version
+  dns_domain          = var.dns_domain
+  zone_id             = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
@@ -106,8 +106,7 @@ module "api-east-blue" {
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-east-1"
   })
-  region   = "us-east-1"
-  validate = 1
+  region = "us-east-1"
   providers = {
     aws           = aws.us-east-1
     aws.us-east-1 = aws.us-east-1
@@ -130,11 +129,11 @@ module "api-east-blue" {
   create_bounce_handler = 1
 }
 module "api-west-blue" {
-  source                 = "../../modules/api"
-  alert_sns_topic_arn   = data.aws_sns_topic.system_health_alarms_west.arn
-  environment            = var.environment
-  dns_domain             = var.dns_domain
-  zone_id                = data.aws_route53_zone.zone.id
+  source              = "../../modules/api"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
+  environment         = var.environment
+  dns_domain          = var.dns_domain
+  zone_id             = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
@@ -143,8 +142,7 @@ module "api-west-blue" {
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-west-1"
   })
-  region   = "us-west-1"
-  validate = 0
+  region = "us-west-1"
   providers = {
     aws           = aws.us-west-1
     aws.us-east-1 = aws.us-east-1

@@ -3,7 +3,7 @@ module "websocket_authorizer_lambda" {
   source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/websocket-authorizer.ts"
   handler_method = "handler"
-  lambda_name    = "websocket_authorizer_lambda_${var.environment}"
+  lambda_name    = "websocket_authorizer_lambda_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "29"
@@ -172,7 +172,6 @@ resource "aws_acm_certificate" "websockets" {
 resource "aws_acm_certificate_validation" "validate_websockets" {
   certificate_arn         = aws_acm_certificate.websockets.arn
   validation_record_fqdns = [for record in aws_route53_record.websockets_route53 : record.fqdn]
-  count                   = var.validate
 }
 
 resource "aws_route53_record" "websockets_route53" {
@@ -195,7 +194,7 @@ resource "aws_apigatewayv2_domain_name" "websockets_domain" {
   domain_name = "ws-${var.current_color}.${var.dns_domain}"
 
   domain_name_configuration {
-    certificate_arn = aws_acm_certificate.websockets.arn
+    certificate_arn = aws_acm_certificate_validation.validate_websockets.certificate_arn
     endpoint_type   = "REGIONAL"
     security_policy = "TLS_1_2"
   }

@@ -133,14 +133,11 @@ module "cognito_authorizer_lambda" {
   source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/cognito-authorizer.ts"
   handler_method = "handler"
-  lambda_name    = "cognito_authorizer_lambda_${var.environment}"
+  lambda_name    = "cognito_authorizer_lambda_${var.environment}_${var.current_color}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
-  providers = {
-    aws = aws.us-east-1
-  }
 }
 
 # 
@@ -394,7 +391,6 @@ resource "aws_acm_certificate" "api_gateway_cert" {
 resource "aws_acm_certificate_validation" "validate_api_gateway_cert" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert.arn
   validation_record_fqdns = [for record in aws_route53_record.api_route53_record : record.fqdn]
-  count                   = var.validate
 }
 
 resource "aws_route53_record" "api_route53_record" {
@@ -414,8 +410,7 @@ resource "aws_route53_record" "api_route53_record" {
 }
 
 resource "aws_api_gateway_domain_name" "api_custom" {
-  depends_on               = [aws_acm_certificate.api_gateway_cert]
-  regional_certificate_arn = aws_acm_certificate.api_gateway_cert.arn
+  regional_certificate_arn = aws_acm_certificate_validation.validate_api_gateway_cert.certificate_arn
   domain_name              = "api-${var.current_color}.${var.dns_domain}"
   security_policy          = "TLS_1_2"
   endpoint_configuration {

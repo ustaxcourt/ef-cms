@@ -191,7 +191,6 @@ resource "aws_acm_certificate" "api_gateway_cert_public" {
 resource "aws_acm_certificate_validation" "validate_api_gateway_cert_public" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert_public.arn
   validation_record_fqdns = [for record in aws_route53_record.api_public_route53_record : record.fqdn]
-  count                   = var.validate
 }
 
 resource "aws_route53_record" "api_public_route53_record" {
@@ -211,8 +210,7 @@ resource "aws_route53_record" "api_public_route53_record" {
 }
 
 resource "aws_api_gateway_domain_name" "api_public_custom" {
-  depends_on               = [aws_acm_certificate.api_gateway_cert_public]
-  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_public.arn
+  regional_certificate_arn = aws_acm_certificate_validation.validate_api_gateway_cert_public.certificate_arn
   domain_name              = "public-api-${var.current_color}.${var.dns_domain}"
 
   security_policy = "TLS_1_2"
