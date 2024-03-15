@@ -6,7 +6,7 @@ Goals
 :::TO DO:::
 - Delete webpack
 - switch all lambdas to new deployment strategy
-- investigate package access scripts (may need for new esbuild lambdas)
+- Investigate how web-api/terraform/bin/deploy-app.sh deploys to green vs blue depending on DEPLOYING_COLOR
 
 :::Deployment steps:::
 - on staging branch deploy with all resource "aws_api_gateway_deployment" lifecycles deleted
