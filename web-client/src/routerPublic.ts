@@ -4,7 +4,7 @@ import route from 'riot-route';
 route.base('/');
 
 const externalRoute = path => {
-  window.location.replace(path);
+  window.location.href = path;
 };
 
 const back = () => {
@@ -29,16 +29,6 @@ const router = {
     route('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicCaseDetailSequence')({ docketNumber });
-    });
-
-    route('/create-account/petitioner', () => {
-      setPageTitle('Account Registration');
-      app.getSequence('goToCreatePetitionerAccountSequence')();
-    });
-
-    route('/create-account/verification-sent', () => {
-      setPageTitle('Verification Sent');
-      app.getSequence('goToVerificationSentSequence')();
     });
 
     route('/case-detail/*/printable-docket-record', docketNumber => {
@@ -78,11 +68,6 @@ const router = {
       return app.getSequence('gotoContactSequence')();
     });
 
-    route('/email-verification-success', () => {
-      setPageTitle('Email Verification Success');
-      return app.getSequence('gotoPublicEmailVerificationSuccessSequence')();
-    });
-
     route('/email-verification-instructions', () => {
       setPageTitle('Email Verification Instructions');
       return app.getSequence(
@@ -95,12 +80,8 @@ const router = {
       return app.getSequence('gotoMaintenanceSequence')();
     });
 
-    route('/confirm-signup-local?..', () => {
-      const { confirmationCode, email } = route.query();
-      return app.getSequence('confirmSignUpLocalSequence')({
-        confirmationCode,
-        userEmail: email,
-      });
+    route('/login', () => {
+      return app.getSequence('redirectToLoginSequence')();
     });
 
     route('..', () => {
