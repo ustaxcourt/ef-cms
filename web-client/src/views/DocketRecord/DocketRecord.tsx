@@ -34,17 +34,16 @@ export const DocketRecord = connect(
     setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
-    if (docketRecordHelper.showBatchDownloadControls) {
-      // TODO: make good-er
-      useEffect(() => {
-        const documentsSelectorHeaderInput = window.document.getElementById(
-          'docket-entry-selections',
-        ) as HTMLInputElement;
-        if (formattedDocketEntriesHelper.someDocumentsSelectedForDownload) {
-          documentsSelectorHeaderInput.indeterminate = true;
-        } else documentsSelectorHeaderInput.indeterminate = false;
-      }, [formattedDocketEntriesHelper.someDocumentsSelectedForDownload]);
-    }
+    useEffect(() => {
+      if (!docketRecordHelper.showBatchDownloadControls) return;
+
+      const documentsSelectorHeaderInput = window.document.getElementById(
+        'docket-entry-selections',
+      ) as HTMLInputElement;
+      if (formattedDocketEntriesHelper.someDocumentsSelectedForDownload) {
+        documentsSelectorHeaderInput.indeterminate = true;
+      } else documentsSelectorHeaderInput.indeterminate = false;
+    }, [formattedDocketEntriesHelper.someDocumentsSelectedForDownload]);
 
     return (
       <>
@@ -112,9 +111,7 @@ export const DocketRecord = connect(
                         {' '}
                         {docketRecordHelper.showBatchDownloadControls && (
                           <td>
-                            {formattedDocketEntriesHelper.isSelectableForDownload(
-                              entry,
-                            ) && (
+                            {entry.isSelectableForDownload && (
                               <input
                                 checked={entry.isDocumentSelected}
                                 type="checkbox"

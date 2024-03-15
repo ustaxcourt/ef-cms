@@ -5,16 +5,21 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const docketRecordHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  countOfDocumentsForDownload: number;
+  showBatchDownloadControls: boolean;
+  showEditOrSealDocketRecordEntry: boolean;
+  showPrintableDocketRecord: boolean;
+  sortLabelTextMobile: string;
+} => {
   const permissions = get(state.permissions);
-  const showPrintableDocketRecord = get(
-    state.caseDetail.canAllowPrintableDocketRecord,
-  );
-  const { docketRecordSort } = get(state.sessionMetadata);
-  const docketNumber = get(state.caseDetail.docketNumber);
-  const docketEntries = get(state.caseDetail.docketEntries);
+  const { docketRecordFilter, docketRecordSort } = get(state.sessionMetadata);
+  const {
+    canAllowPrintableDocketRecord: showPrintableDocketRecord,
+    docketEntries,
+    docketNumber,
+  } = get(state.caseDetail);
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  const { docketRecordFilter } = get(state.sessionMetadata);
 
   const sortOrder = docketRecordSort[docketNumber];
   const sortLabelsMobile = {
@@ -35,7 +40,6 @@ export const docketRecordHelper = (
   return {
     countOfDocumentsForDownload: documentsIdsForDownload.length,
     showBatchDownloadControls: permissions.BATCH_DOWNLOAD_CASE_DOCUMENTS,
-    showDownloadLink: showPrintableDocketRecord,
     showEditOrSealDocketRecordEntry:
       permissions.EDIT_DOCKET_ENTRY || permissions.SEAL_DOCKET_ENTRY,
     showPrintableDocketRecord,
