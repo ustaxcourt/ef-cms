@@ -1,6 +1,9 @@
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { lambdaWrapper } from './lambdaWrapper';
 jest.mock('@vendia/serverless-express');
+jest.mock('@web-api/middleware/apiGatewayHelper');
 import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 describe('lambdaWrapper', () => {
   let req, res;
@@ -28,6 +31,8 @@ describe('lambdaWrapper', () => {
       }),
     };
     JSON.parse = jest.fn();
+
+    (getUserFromAuthHeader as jest.Mock).mockReturnValue({ userId: 'user-id' });
   });
 
   it('sets res.headers', async () => {
@@ -132,7 +137,7 @@ describe('lambdaWrapper', () => {
   });
 
   it('sets X-Terminal-User if it was set in api gateway event context', async () => {
-    getCurrentInvoke.mockReturnValue({
+    (getCurrentInvoke as jest.Mock).mockReturnValue({
       event: { requestContext: { authorizer: { isTerminalUser: 'true' } } },
     });
     await lambdaWrapper(() => {
@@ -159,7 +164,7 @@ describe('lambdaWrapper', () => {
   });
 
   it('returns 204 when it is simulating an async function', async () => {
-    getCurrentInvoke.mockReturnValue({
+    (getCurrentInvoke as jest.Mock).mockReturnValue({
       event: { requestContext: { authorizer: { isTerminalUser: 'false' } } },
     });
     await lambdaWrapper(
@@ -178,9 +183,6 @@ describe('lambdaWrapper', () => {
   });
 
   it('should return 204 when simulating an async/sync function', async () => {
-    getCurrentInvoke.mockReturnValue({
-      event: { requestContext: { authorizer: { isTerminalUser: 'false' } } },
-    });
     await lambdaWrapper(
       () => {
         return {
@@ -196,5 +198,24 @@ describe('lambdaWrapper', () => {
     expect(res.status).toHaveBeenCalledWith(204);
   });
 
-  it('should send notification to user');
+  it('should send notification to user when asyncsyncid is present', async () => {
+    req.headers.asyncsyncid = 'some-id';
+
+    await lambdaWrapper(
+      () => 'LAMBDA_RESULTS',
+      { isAsyncSync: true },
+      applicationContext,
+    )(req, res);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      message: {
+        action: 'async_sync_result',
+        asyncSyncId: 'some-id',
+        response: 'LAMBDA_RESULTS',
+      },
+      userId: 'user-id',
+    });
+  });
 });
