@@ -14,17 +14,17 @@ describe('batchDownloadDocketEntriesInteractor', () => {
 
   const MOCK_URL = 'document_url_containing_id';
   const mockClientConnectionId = '987654';
-  const PETITION_DOCUMENT = MOCK_DOCUMENTS[0];
+  const PETITION_DOCKET_ENTRY = MOCK_DOCUMENTS[0];
 
   const mockDocketEntries = [
-    PETITION_DOCUMENT,
+    PETITION_DOCKET_ENTRY,
     ATP_DOCKET_ENTRY,
     MOCK_MINUTE_ENTRY,
     STANDING_PRETRIAL_ORDER_ENTRY,
   ];
 
   const mockDocumentsSelectedForDownload: string[] = [
-    PETITION_DOCUMENT.docketEntryId,
+    PETITION_DOCKET_ENTRY.docketEntryId,
     ATP_DOCKET_ENTRY.docketEntryId,
     STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
   ];
@@ -137,7 +137,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [
-        PETITION_DOCUMENT.docketEntryId,
+        PETITION_DOCKET_ENTRY.docketEntryId,
         ATP_DOCKET_ENTRY.docketEntryId,
         STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
       ],
@@ -165,7 +165,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [
-        PETITION_DOCUMENT.docketEntryId,
+        PETITION_DOCKET_ENTRY.docketEntryId,
         ATP_DOCKET_ENTRY.docketEntryId,
         STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
       ],

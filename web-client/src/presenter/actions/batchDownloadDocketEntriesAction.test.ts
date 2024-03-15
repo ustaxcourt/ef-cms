@@ -28,10 +28,10 @@ describe('batchDownloadDocketEntriesAction', () => {
   const clientConnectionId = '987654';
 
   const fileId = '12345';
-  const PETITION_DOCUMENT = MOCK_DOCUMENTS[0];
+  const PETITION_DOCKET_ENTRY = MOCK_DOCUMENTS[0];
 
   const mockDocketEntries = [
-    PETITION_DOCUMENT,
+    PETITION_DOCKET_ENTRY,
     ATP_DOCKET_ENTRY,
     STANDING_PRETRIAL_ORDER_ENTRY,
   ];
@@ -42,7 +42,7 @@ describe('batchDownloadDocketEntriesAction', () => {
   };
 
   const documentsSelectedForDownload: { docketEntryId: string }[] = [
-    { docketEntryId: PETITION_DOCUMENT.docketEntryId },
+    { docketEntryId: PETITION_DOCKET_ENTRY.docketEntryId },
     { docketEntryId: ATP_DOCKET_ENTRY.docketEntryId },
     { docketEntryId: STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId },
   ];
@@ -97,7 +97,7 @@ describe('batchDownloadDocketEntriesAction', () => {
       clientConnectionId,
       docketNumber: MOCK_CASE.docketNumber,
       documentsSelectedForDownload: [
-        PETITION_DOCUMENT.docketEntryId,
+        PETITION_DOCKET_ENTRY.docketEntryId,
         ATP_DOCKET_ENTRY.docketEntryId,
         STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
       ],
