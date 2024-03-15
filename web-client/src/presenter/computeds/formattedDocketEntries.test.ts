@@ -50,6 +50,7 @@ describe('formattedDocketEntries', () => {
   const getBaseState = user => {
     globalUser = user;
     return {
+      documentsSelectedForDownload: [],
       featureFlags: {
         [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
           '2023-05-01',
@@ -340,6 +341,30 @@ describe('formattedDocketEntries', () => {
     );
 
     expect(amat.showLinkToDocument).toEqual(true);
+  });
+
+  it('should mark the document selected when it is selected', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isFileAttached: true,
+            },
+          ],
+        },
+        documentsSelectedForDownload: [
+          { docketEntryId: mockDocketEntry.docketEntryId },
+        ],
+      },
+    });
+    console.log('mockDocketEntry.docketEntryId', mockDocketEntry.docketEntryId);
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      isDocumentSelected: true,
+    });
   });
 
   describe('sorts docket records', () => {
