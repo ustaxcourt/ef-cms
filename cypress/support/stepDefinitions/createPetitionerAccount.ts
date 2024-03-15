@@ -1,31 +1,37 @@
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
+import { cypressState } from '../state';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
+import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
 Given('I navigate to the petitioner account creation page', () => {
   cy.visit('/create-account/petitioner');
 });
 
-Given('I create a new petitioner account for {string}', (username: string) => {
+Given('I create a new petitioner account', () => {
   const password = getCypressEnv().defaultAccountPass;
   const name = faker.person.fullName();
-  createAPetitioner({ email: `${username}@example.com`, name, password });
+  const email = `cypress_test_account+${v4()}@example.com`;
+
+  cypressState.currentUser = { email, name };
+
+  createAPetitioner({ email, name, password });
 });
 
-Given(
-  'I have a confirmed petitioner account for {string}',
-  (username: string) => {
-    const password = getCypressEnv().defaultAccountPass;
-    const name = faker.person.fullName();
-    createAPetitioner({ email: `${username}@example.com`, name, password });
-    verifyPetitionerAccount({ email: `${username}@example.com` });
-  },
-);
+Given('I am a petitioner with a new account', () => {
+  const password = getCypressEnv().defaultAccountPass;
+  const name = faker.person.fullName();
+  const email = `cypress_test_account+${v4()}@example.com`;
+  cypressState.currentUser = { email, name };
 
-Given('I verify my account for {string}', (username: string) => {
-  verifyPetitionerAccount({ email: `${username}@example.com` });
+  createAPetitioner({ email, name, password });
+  verifyPetitionerAccount({ email });
+});
+
+Given('I verify my petitioner account', () => {
+  verifyPetitionerAccount({ email: cypressState.currentUser.email });
 });
 
 When('I enter an invalid email address', () => {
@@ -57,8 +63,10 @@ When('I enter a confirm password that does not match my password', () => {
 });
 
 When(
-  'I attempt to verify {string} with an incorrect confirmation code',
-  (email: string) => {
+  'I attempt to verify my petitioner account with an incorrect confirmation code',
+  () => {
+    const { email } = cypressState.currentUser;
+
     cy.task('getNewAccountVerificationCode', { email }).as('USER_COGNITO_INFO');
 
     cy.get('@USER_COGNITO_INFO')
@@ -80,8 +88,10 @@ When(
 );
 
 When(
-  'I attempt to verify {string} with an expired confirmation code',
-  (email: string) => {
+  'I attempt to verify my petitioner account with an expired confirmation code',
+  () => {
+    const { email } = cypressState.currentUser;
+
     cy.task('getNewAccountVerificationCode', { email }).as('USER_COGNITO_INFO');
 
     cy.get('@USER_COGNITO_INFO')

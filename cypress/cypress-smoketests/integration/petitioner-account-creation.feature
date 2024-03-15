@@ -32,17 +32,17 @@ Feature: Petitioner Account Creation
     Then I should see a validation error for my confirm password
 
   Scenario: Incorrect account confirmation code
-    Given I create a new petitioner account for "cypress_test_account+incorrectConfirmationCode"
-    When I attempt to verify "cypress_test_account+incorrectConfirmationCode@example.com" with an incorrect confirmation code
+    Given I create a new petitioner account
+    When I attempt to verify my petitioner account with an incorrect confirmation code
     Then I should see an error that "Verification email link expired"
 
   Scenario: Expired account confirmation code
-    Given I create a new petitioner account for "cypress_test_account+incorrectConfirmationCode"
-    When I attempt to verify "cypress_test_account+incorrectConfirmationCode@example.com" with an expired confirmation code
+    Given I create a new petitioner account
+    When I attempt to verify my petitioner account with an expired confirmation code
     Then I should see an error that "Verification email link expired"
 
   # Happy path
   Scenario: Create account and login
-    Given I create a new petitioner account for "cypress_test_account+petitioner45"
-    When I verify my account for "cypress_test_account+petitioner45"
-    Then I should be able to log in as "cypress_test_account+petitioner45"
+    Given I create a new petitioner account
+    When I verify my petitioner account
+    Then I should be able to log in

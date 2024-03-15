@@ -3,19 +3,21 @@ Feature: Login
     Given a clean session
 
   Scenario: Login with unconfirmed account
-    Given I create a new petitioner account for "cypress_test_account+unconfirmed"
-    When I log into DAWSON as "cypress_test_account+unconfirmed"
+    Given I create a new petitioner account
+    When I log into DAWSON
     Then I should see an alert that my email address is not verified
 
   Scenario: Login with incorrect password
-    Given I have a confirmed petitioner account for "cypress_test_account+confirmed"
-    When I log into DAWSON as "cypress_test_account+confirmed" with "wrongPassword!1"
+    Given I am a petitioner with a new account
+    When I log into DAWSON with an incorrect password
     Then I should see an alert that my email address or password is invalid
 
-  Scenario: Login after granted e-access
-    Given I create and serve a paper petition and grant e-access for practitioner as "cypress_test_account+confirmed@example.com"
-    And I should see an alert that my changes to the petition have been saved
+  Background: 
+    Given I log into DAWSON as "petitionsclerk1"
+    And I create and serve a paper petition
+    And I grant electronic access to a petitioner
     And I logout of DAWSON
-    When I log into DAWSON as "cypress_test_account+confirmed"
+  Scenario: Login after granted e-access
+    When I log into DAWSON
     And I enter a new password of "brandNewPassword1204$^"
-    Then I should see the practitioner dashboard
+    Then I should see the petitioner dashboard

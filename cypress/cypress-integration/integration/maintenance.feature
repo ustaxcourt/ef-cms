@@ -1,4 +1,7 @@
 Feature: Maintenance Mode
+  Background: Clear Current Session
+    Given a clean session
+    
   Scenario: Maintenance mode toggles correctly
     Given I log into DAWSON as "petitionsclerk"
     When maintenance mode is enabled

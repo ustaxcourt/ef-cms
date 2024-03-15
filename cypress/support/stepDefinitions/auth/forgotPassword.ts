@@ -1,5 +1,6 @@
 import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../cognito-login';
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
+import { cypressState } from '../../state';
 import { v4 } from 'uuid';
 import { verifyPasswordRequirements } from '../../../helpers/auth/verify-password-requirements';
 
@@ -25,30 +26,32 @@ Given('I successfully reset my password to {string}', (newPassword: string) => {
 
 When('I enter an email without an account on forgot password page', () => {
   const emailWithoutAccount = `doesNotExist${v4()}@email.com`;
+
   cy.get('[data-testid="email-input"]').type(emailWithoutAccount);
   cy.get('[data-testid="send-password-reset-button"]').click();
 });
 
-When('I enter {string} on forgot password page', (email: string) => {
+When('I enter my email on the forgot password page', () => {
+  const { email } = cypressState.currentUser;
+
   cy.get('[data-testid="email-input"]').clear();
   cy.get('[data-testid="email-input"]').type(email);
   cy.get('[data-testid="send-password-reset-button"]').click();
 });
 
-When(
-  'I indicate I forgot my password for account {string}',
-  (email: string) => {
-    cy.visit('/login');
-    cy.get('[data-testid="forgot-password-button"]').click();
-    cy.get('[data-testid="email-input"]').clear();
-    cy.get('[data-testid="email-input"]').type(email);
-    cy.get('[data-testid="send-password-reset-button"]').click();
-    cy.get('[data-testid="success-alert"]').should(
-      'contain',
-      'Password reset code sent',
-    );
-  },
-);
+When('I request a password reset for my account', () => {
+  const { email } = cypressState.currentUser;
+
+  cy.visit('/login');
+  cy.get('[data-testid="forgot-password-button"]').click();
+  cy.get('[data-testid="email-input"]').clear();
+  cy.get('[data-testid="email-input"]').type(email);
+  cy.get('[data-testid="send-password-reset-button"]').click();
+  cy.get('[data-testid="success-alert"]').should(
+    'contain',
+    'Password reset code sent',
+  );
+});
 
 When('I enter my forgot password code', () => {
   cy.get('[data-testid="change-password-button"]').should('be.disabled');
