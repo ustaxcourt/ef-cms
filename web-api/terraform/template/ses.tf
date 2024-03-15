@@ -99,7 +99,7 @@ resource "aws_ses_template" "document_served" {
 EOF
 }
 
-#Petition Service Email Template
+# Petition Service Email Template
 resource "aws_ses_template" "petition_served" {
   name    = "petition_served_${var.environment}"
   subject = "eService Notification from US Tax Court on Case {{docketNumber}}"
@@ -108,16 +108,16 @@ resource "aws_ses_template" "petition_served" {
 EOF
 }
 
-#Email Change Verification Email Template
+# Email Change Verification Email Template
 resource "aws_ses_template" "email_change_verification" {
   name    = "email_change_verification_${var.environment}"
-  subject = "U.S. Tax Court: Verify Your New Email"
+  subject = "U.S. Tax Court DAWSON: Verify Your New Email"
   html    = <<EOF
   {{emailContent}}
 EOF
 }
 
-#IRS Super User Bounce Report Email Template
+# IRS Super User Bounce Report Email Template
 resource "aws_ses_template" "bounce_alert" {
   name    = "bounce_alert_${var.environment}"
   subject = "ALERT: Email to the IRS Super User has bounced"

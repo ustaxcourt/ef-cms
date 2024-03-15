@@ -1043,7 +1043,9 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
-};
+} as const;
+const ROLES_TYPES = Object.values(ROLES);
+export type Role = (typeof ROLES_TYPES)[number];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
@@ -1067,8 +1069,7 @@ export const COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
   INTERNATIONAL: 'international',
 } as const;
-const CountryTypesArray = Object.values(COUNTRY_TYPES);
-export type CountryTypes = (typeof CountryTypesArray)[number];
+export type CountryTypes = (typeof COUNTRY_TYPES)[keyof typeof COUNTRY_TYPES];
 
 export const US_STATES = {
   AK: 'Alaska',

@@ -31,6 +31,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 //if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
 import { config, library } from '@fortawesome/fontawesome-svg-core';
+import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -112,15 +113,10 @@ import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 import { isFunction, mapValues } from 'lodash';
-import { isOnMockLogin } from './utilities/isOnMockLogin';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
-import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACognitoLogin';
-import { wasLoginUsingTokenInUrl } from './utilities/wasLoginUsingTokenInUrl';
 import { withAppContextDecorator } from './withAppContext';
-
-import { createRoot } from 'react-dom/client';
 import App from 'cerebral';
 import React from 'react';
 
@@ -145,51 +141,8 @@ const app = {
       }
       return value;
     });
-    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.constants = applicationContext.getConstants();
-    presenter.state.cognitoLocalEnabled =
-      applicationContext.getCognitoLocalEnabled();
-
-    const shouldRefreshToken =
-      !wasAppLoadedFromACognitoLogin(window.location.href) &&
-      !wasLoginUsingTokenInUrl(window.location.href) &&
-      !isOnMockLogin(window.location.href);
-
-    if (shouldRefreshToken) {
-      try {
-        const response = await applicationContext
-          .getUseCases()
-          .refreshTokenInteractor(applicationContext);
-        presenter.state.token = response.token;
-        applicationContext.setCurrentUserToken(response.token);
-      } catch (err) {
-        window.location.href = presenter.state.cognitoLoginUrl;
-      }
-
-      const user = await applicationContext
-        .getUseCases()
-        .getUserInteractor(applicationContext);
-      presenter.state.user = user;
-      applicationContext.setCurrentUser(user);
-    }
-
-    if (presenter.state.token) {
-      try {
-        const maintenanceMode = await applicationContext
-          .getUseCases()
-          .getMaintenanceModeInteractor(applicationContext);
-        presenter.state.maintenanceMode = maintenanceMode;
-      } catch (err) {
-        window.location.href = presenter.state.cognitoLoginUrl;
-      }
-    }
-
     presenter.state.clientConnectionId = applicationContext.getUniqueId();
-
-    const userPermissions = applicationContext.getCurrentUserPermissions();
-    if (userPermissions) {
-      presenter.state.permissions = userPermissions;
-    }
 
     config.autoAddCss = false;
     library.add(
@@ -308,9 +261,25 @@ const app = {
       returnSequencePromise: true,
     });
 
-    if (shouldRefreshToken) {
-      await cerebralApp.getSequence('startRefreshIntervalSequence')();
-    }
+    const container = window.document.querySelector('#app');
+    const root = createRoot(container);
+
+    root.render(
+      <Container app={cerebralApp}>
+        {!process.env.CI && (
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+          </>
+        )}
+
+        <AppComponent />
+
+        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+      </Container>,
+    );
+
+    await cerebralApp.getSequence('initAppSequence')();
 
     initializeSocketProvider(cerebralApp, applicationContext);
 
@@ -332,24 +301,6 @@ const app = {
       });
     };
     router.initialize(cerebralApp, wrappedRoute);
-
-    const container = window.document.querySelector('#app');
-    const root = createRoot(container);
-
-    root.render(
-      <Container app={cerebralApp}>
-        {!process.env.CI && (
-          <>
-            <IdleActivityMonitor />
-            <AppInstanceManager />
-          </>
-        )}
-
-        <AppComponent />
-
-        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
   },
 };
 

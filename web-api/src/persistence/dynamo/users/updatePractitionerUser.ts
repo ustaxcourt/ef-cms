@@ -1,3 +1,4 @@
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { RawUser } from '@shared/business/entities/User';
 import { getUserById } from './getUserById';
 import { updateUserRecords } from './updateUserRecords';
@@ -17,19 +18,17 @@ export const updatePractitionerUser = async ({
   });
 
   try {
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
-        UserAttributes: [
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email ? user.email : user.pendingEmail,
-      })
-      .promise();
+    const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+    await cognito.adminUpdateUserAttributes({
+      UserAttributes: [
+        {
+          Name: 'custom:role',
+          Value: user.role,
+        },
+      ],
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: user.email ? user.email : user.pendingEmail,
+    });
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;

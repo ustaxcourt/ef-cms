@@ -15,7 +15,7 @@ export const sendNotificationToUser = async ({
 }: {
   applicationContext: IApplicationContext;
   clientConnectionId?: string;
-  message: string;
+  message: any;
   userId: string;
 }) => {
   let connections = await applicationContext

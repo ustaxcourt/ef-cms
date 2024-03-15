@@ -6,8 +6,6 @@ import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setIrsPractitionerUsersAction } from '@web-client/presenter/actions/TrialSession/setIrsPractitionerUsersAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionDetailsOnFormAction } from '../actions/TrialSession/setTrialSessionDetailsOnFormAction';
@@ -18,30 +16,23 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoEditTrialSession = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getIrsPractitionerUsersAction,
-  setIrsPractitionerUsersAction,
-  getTrialSessionsAction,
-  setTrialSessionsAction,
-  getTrialSessionDetailsAction,
-  setTrialSessionDetailsAction,
-  setTrialSessionDetailsOnFormAction,
-  computeTrialSessionStartTimeAction,
-  setTrialStartTimeAction,
-  getSetJudgesSequence,
-  getUsersInSectionAction({ section: 'trialClerks' }),
-  setUsersByKeyAction('trialClerks'),
-  setupCurrentPageAction('EditTrialSession'),
-]);
-
-export const gotoEditTrialSessionSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditTrialSession,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoEditTrialSessionSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getIrsPractitionerUsersAction,
+    setIrsPractitionerUsersAction,
+    getTrialSessionsAction,
+    setTrialSessionsAction,
+    getTrialSessionDetailsAction,
+    setTrialSessionDetailsAction,
+    setTrialSessionDetailsOnFormAction,
+    computeTrialSessionStartTimeAction,
+    setTrialStartTimeAction,
+    getSetJudgesSequence,
+    getUsersInSectionAction({ section: 'trialClerks' }),
+    setUsersByKeyAction('trialClerks'),
+    setupCurrentPageAction('EditTrialSession'),
+  ]);

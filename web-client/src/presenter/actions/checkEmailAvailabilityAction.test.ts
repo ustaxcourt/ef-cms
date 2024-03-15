@@ -19,6 +19,12 @@ describe('checkEmailAvailabilityAction', () => {
       emailAvailable: pathEmailAvailableStub,
       emailInUse: pathEmailInUseStub,
     };
+
+    applicationContext
+      .getUseCases()
+      .checkEmailAvailabilityInteractor.mockResolvedValue({
+        isEmailAvailable: true,
+      });
   });
 
   it('should call checkEmailAvailabilityInteractor with state.form.updatedEmail', async () => {
@@ -54,10 +60,6 @@ describe('checkEmailAvailabilityAction', () => {
   });
 
   it('should call path.emailAvailable when checkEmailAvailabilityInteractor returns true', async () => {
-    applicationContext
-      .getUseCases()
-      .checkEmailAvailabilityInteractor.mockReturnValue(true);
-
     await runAction(checkEmailAvailabilityAction, {
       modules: {
         presenter,
@@ -73,7 +75,9 @@ describe('checkEmailAvailabilityAction', () => {
   it('should call path.emailInUse with an error when checkEmailAvailabilityInteractor returns false', async () => {
     applicationContext
       .getUseCases()
-      .checkEmailAvailabilityInteractor.mockReturnValue(false);
+      .checkEmailAvailabilityInteractor.mockResolvedValueOnce({
+        isEmailAvailable: false,
+      });
 
     await runAction(checkEmailAvailabilityAction, {
       modules: {

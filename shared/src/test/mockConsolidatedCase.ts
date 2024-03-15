@@ -96,7 +96,7 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
             postalCode: '61234',
             state: 'IL',
           },
-          email: 'privatepractitioner@example.com',
+          email: 'privatePractitioner@example.com',
           entityName: 'PrivatePractitioner',
           firmName: 'GW Law Offices',
           gsi1pk: 'leadCase|102-67',
@@ -335,7 +335,7 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
             postalCode: '61234',
             state: 'IL',
           },
-          email: 'privatepractitioner@example.com',
+          email: 'privatePractitioner@example.com',
           entityName: 'PrivatePractitioner',
           firmName: 'GW Law Offices',
           gsi1pk: 'leadCase|102-67',
@@ -557,7 +557,7 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
       servedAt: '2023-08-08T17:32:21.434Z',
       servedParties: [
         {
-          email: 'privatepractitioner@example.com',
+          email: 'privatePractitioner@example.com',
           name: 'Test Private Practitioner',
         },
       ],
@@ -629,7 +629,7 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
       servedAt: '2023-08-15T16:48:20.679Z',
       servedParties: [
         {
-          email: 'privatepractitioner@example.com',
+          email: 'privatePractitioner@example.com',
           name: 'Test Private Practitioner',
         },
         {
@@ -723,7 +723,7 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
         postalCode: '61234',
         state: 'IL',
       },
-      email: 'privatepractitioner@example.com',
+      email: 'privatePractitioner@example.com',
       entityName: 'PrivatePractitioner',
       firmName: 'GW Law Offices',
       name: 'Test Private Practitioner',

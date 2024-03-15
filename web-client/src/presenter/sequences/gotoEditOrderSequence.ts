@@ -3,8 +3,6 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getDocumentContentsAction } from '../actions/getDocumentContentsAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
@@ -18,7 +16,7 @@ import { unsetCreateOrderAddedDocketNumbers } from '@web-client/presenter/action
 import { unsetCreateOrderSelectedCases } from '@web-client/presenter/actions/unsetCreateOrderSelectedCases';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
-const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
+export const gotoEditOrderSequence = startWebSocketConnectionSequenceDecorator([
   setRedirectUrlAction,
   unsetDocumentToEditAction,
   unsetCreateOrderSelectedCases,
@@ -36,15 +34,7 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setParentMessageIdAction,
   convertHtml2PdfSequence,
   setupCurrentPageAction('CreateOrder'),
-]);
-
-export const gotoEditOrderSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditOrder,
-    unauthorized: [redirectToCognitoAction],
-  },
-] as unknown as (props: {
+]) as unknown as (props: {
   docketEntryIdToEdit: string;
   docketNumber: string;
 }) => void;

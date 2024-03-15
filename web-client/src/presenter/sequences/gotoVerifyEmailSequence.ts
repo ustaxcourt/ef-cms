@@ -1,18 +1,15 @@
 import { clearUserAction } from '../actions/clearUserAction';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToPublicEmailVerificationInstructionsAction } from '../actions/Public/navigateToPublicEmailVerificationInstructionsAction';
-import { navigateToPublicEmailVerificationSuccessAction } from '../actions/Public/navigateToPublicEmailVerificationSuccessAction';
-import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+import { navigateToLoginAction } from '@web-client/presenter/actions/Login/navigateToLoginAction';
+import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
+import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
 import { verifyUserPendingEmailAction } from '../actions/verifyUserPendingEmailAction';
 
 export const gotoVerifyEmailSequence = [
-  isLoggedInAction,
+  verifyUserPendingEmailAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator([
-      verifyUserPendingEmailAction,
-      clearUserAction,
-      navigateToPublicEmailVerificationSuccessAction,
-    ]),
-    unauthorized: [navigateToPublicEmailVerificationInstructionsAction],
+    error: [setAlertErrorAction],
+    success: [setAlertSuccessAction],
   },
-];
+  clearUserAction,
+  navigateToLoginAction,
+] as unknown as (props: { token: string }) => void;
