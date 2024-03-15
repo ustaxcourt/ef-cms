@@ -2,6 +2,7 @@ import {
   ATP_DOCKET_ENTRY,
   MOCK_DOCUMENTS,
   MOCK_MINUTE_ENTRY,
+  STANDING_PRETRIAL_ORDER_ENTRY,
 } from '@shared/test/mockDocketEntry';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { ROLES } from '@shared/business/entities/EntityConstants';
@@ -14,31 +15,18 @@ describe('batchDownloadDocketEntriesInteractor', () => {
   const MOCK_URL = 'document_url_containing_id';
   const mockClientConnectionId = '987654';
   const PETITION_DOCUMENT = MOCK_DOCUMENTS[0];
-  const ORDER_DOCUMENT = {
-    docketEntryId: '25ae8e71-9dc4-40c6-bece-89acb974a82e',
-    documentTitle: 'Order',
-    documentType: 'Order',
-    entityName: 'DocketEntry',
-    eventCode: 'O',
-    filingDate: '2018-03-01T00:03:00.000Z',
-    index: 2,
-    isDraft: false,
-    isFileAttached: true,
-    isMinuteEntry: false,
-    isOnDocketRecord: true,
-    userId: 'abc-123',
-  };
+
   const mockDocketEntries = [
     PETITION_DOCUMENT,
     ATP_DOCKET_ENTRY,
     MOCK_MINUTE_ENTRY,
-    ORDER_DOCUMENT,
+    STANDING_PRETRIAL_ORDER_ENTRY,
   ];
 
   const mockDocumentsSelectedForDownload: string[] = [
     PETITION_DOCUMENT.docketEntryId,
     ATP_DOCKET_ENTRY.docketEntryId,
-    ORDER_DOCUMENT.docketEntryId,
+    STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
   ];
 
   let requestParams: {
@@ -149,9 +137,9 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [
-        '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-        '062c9a5d-1a65-4273-965e-25d41607bc98',
-        '25ae8e71-9dc4-40c6-bece-89acb974a82e',
+        PETITION_DOCUMENT.docketEntryId,
+        ATP_DOCKET_ENTRY.docketEntryId,
+        STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
       ],
       zipName: '101-18, Test Petitioner.zip',
     });
@@ -177,9 +165,9 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [
-        '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-        '062c9a5d-1a65-4273-965e-25d41607bc98',
-        '25ae8e71-9dc4-40c6-bece-89acb974a82e',
+        PETITION_DOCUMENT.docketEntryId,
+        ATP_DOCKET_ENTRY.docketEntryId,
+        STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
       ],
       zipName: '101-18, Test Petitioner.zip',
     });
