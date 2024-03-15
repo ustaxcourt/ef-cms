@@ -1,44 +1,25 @@
-variable "aws_region" {
-  default = "us-east-1"
+variable "all_colors_tfstate_bucket" {
+  type = string
+}
+
+variable "all_colors_tfstate_key" {
+  type = string
+}
+
+variable "green_node_version" {
+  type = string
 }
 
 variable "environment" {
   type = string
 }
 
-variable "dns_domain" {
-  type = string
+variable "aws_region" {
+  type    = string
+  default = "us-east-1"
 }
 
 variable "zone_name" {
-  type = string
-}
-
-variable "cognito_suffix" {
-  type = string
-}
-
-variable "email_dmarc_policy" {
-  type = string
-}
-
-variable "es_instance_count" {
-  type = string
-}
-
-variable "es_instance_type" {
-  type = string
-}
-
-variable "irs_superuser_email" {
-  type = string
-}
-
-variable "deploying_color" {
-  type = string
-}
-
-variable "default_account_pass" {
   type = string
 }
 
@@ -46,74 +27,10 @@ variable "green_table_name" {
   type = string
 }
 
+variable "dns_domain" {
+  type = string
+}
 variable "green_elasticsearch_domain" {
-  type = string
-}
-
-variable "destination_table" {
-  type = string
-}
-
-variable "disable_emails" {
-  type    = bool
-  default = false
-}
-
-variable "es_volume_size" {
-  type = number
-}
-
-variable "log_level" {
-  type    = string
-  default = "info"
-}
-
-variable "alert_sns_topic_arn" {
-  type = string
-}
-
-variable "bounced_email_recipient" {
-  type = string
-}
-
-variable "bounce_alert_recipients" {
-  type = string
-}
-
-variable "slack_webhook_url" {
-  type = string
-}
-
-variable "scanner_resource_uri" {
-  type = string
-}
-
-variable "cognito_table_name" {
-  type = string
-}
-
-variable "prod_env_account_id" {
-  type = string
-}
-
-variable "lower_env_account_id" {
-  type = string
-}
-
-variable "should_es_alpha_exist" {
-  type = bool
-}
-
-variable "should_es_beta_exist" {
-  type = bool
-}
-
-variable "green_node_version" {
-  type = string
-}
-
-
-variable "green_use_layers" {
   type = string
 }
 
@@ -122,6 +39,47 @@ variable "enable_health_checks" {
   type = string
 }
 
+variable "prod_env_account_id" {
+  type = string
+}
+
+
 variable "deployment_timestamp" {
   type = number
 }
+
+
+variable "lower_env_account_id" {
+  type = string
+}
+
+variable "bounce_alert_recipients" {
+  type = string
+}
+variable "bounced_email_recipient" {
+  type = string
+}
+variable "cognito_suffix" {
+  type = string
+}
+variable "default_account_pass" {
+  type = string
+}
+variable "disable_emails" {
+  type = string
+}
+variable "irs_superuser_email" {
+  type = string
+}
+variable "log_level" {
+  type    = string
+  default = "info"
+}
+variable "scanner_resource_uri" {
+  type = string
+}
+variable "slack_webhook_url" {
+  type = string
+}
+
+
