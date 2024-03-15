@@ -186,5 +186,5 @@ export TF_VAR_all_colors_tfstate_bucket=$BUCKET
 export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan # -out execution-plan
-# terraform apply -auto-approve execution-plan
+terraform plan -out execution-plan
+terraform apply -auto-approve execution-plan

@@ -22,10 +22,6 @@ variable "region" {
   type = string
 }
 
-variable "validate" {
-  type = number
-}
-
 variable "current_color" {
   type = string
 }
