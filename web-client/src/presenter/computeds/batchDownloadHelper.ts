@@ -7,9 +7,11 @@ export const batchDownloadHelper = (get: Get): any => {
   const progressDescription =
     get(state.batchDownloads.title) || 'Compressing Files';
 
+  const percentComplete = Math.floor((fileCount * 100) / totalFiles) || 0;
+
   const result = {
     addedFiles: fileCount,
-    percentComplete: Math.floor((fileCount * 100) / totalFiles),
+    percentComplete,
     progressDescription,
     totalFiles,
   };

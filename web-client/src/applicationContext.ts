@@ -242,6 +242,7 @@ import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/g
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
+import { logOldLoginAttemptInteractor } from '@shared/proxies/auth/logOldLoginAttemptProxy';
 import { loginInteractor } from '@shared/proxies/auth/loginProxy';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/proxies/opinionAdvancedSearchProxy';
@@ -523,6 +524,7 @@ const allUseCases = {
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
+  logOldLoginAttemptInteractor,
   loginInteractor,
   opinionAdvancedSearchInteractor,
   orderAdvancedSearchInteractor,

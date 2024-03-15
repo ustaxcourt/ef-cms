@@ -142,6 +142,7 @@ import { getUsersInSectionInteractor } from '../../shared/src/business/useCases/
 import { getUsersPendingEmailInteractor } from '../../shared/src/business/useCases/users/getUsersPendingEmailInteractor';
 import { getWorkItemInteractor } from '../../shared/src/business/useCases/workitems/getWorkItemInteractor';
 import { handleBounceNotificationInteractor } from '../../shared/src/business/useCases/email/handleBounceNotificationInteractor';
+import { logOldLoginAttemptInteractor } from '@web-api/business/useCases/logOldLoginAttemptInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
 import { onConnectInteractor } from '../../shared/src/business/useCases/notifications/onConnectInteractor';
 import { onDisconnectInteractor } from '../../shared/src/business/useCases/notifications/onDisconnectInteractor';
@@ -358,6 +359,7 @@ const useCases = {
   getUsersPendingEmailInteractor,
   getWorkItemInteractor,
   handleBounceNotificationInteractor,
+  logOldLoginAttemptInteractor,
   loginInteractor,
   onConnectInteractor,
   onDisconnectInteractor,
