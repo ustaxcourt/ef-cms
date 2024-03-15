@@ -13,14 +13,13 @@ export const docketRecordHelper = (
   sortLabelTextMobile: string;
 } => {
   const permissions = get(state.permissions);
-  const showPrintableDocketRecord = get(
-    state.caseDetail.canAllowPrintableDocketRecord,
-  );
-  const { docketRecordSort } = get(state.sessionMetadata);
-  const docketNumber = get(state.caseDetail.docketNumber);
-  const docketEntries = get(state.caseDetail.docketEntries);
+  const { docketRecordFilter, docketRecordSort } = get(state.sessionMetadata);
+  const {
+    canAllowPrintableDocketRecord: showPrintableDocketRecord,
+    docketEntries,
+    docketNumber,
+  } = get(state.caseDetail);
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
-  const { docketRecordFilter } = get(state.sessionMetadata);
 
   const sortOrder = docketRecordSort[docketNumber];
   const sortLabelsMobile = {
