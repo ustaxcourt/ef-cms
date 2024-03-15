@@ -5,7 +5,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const docketRecordHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  countOfDocumentsForDownload: number;
+  showBatchDownloadControls: boolean;
+  showEditOrSealDocketRecordEntry: boolean;
+  showPrintableDocketRecord: boolean;
+  sortLabelTextMobile: string;
+} => {
   const permissions = get(state.permissions);
   const showPrintableDocketRecord = get(
     state.caseDetail.canAllowPrintableDocketRecord,
@@ -35,7 +41,6 @@ export const docketRecordHelper = (
   return {
     countOfDocumentsForDownload: documentsIdsForDownload.length,
     showBatchDownloadControls: permissions.BATCH_DOWNLOAD_CASE_DOCUMENTS,
-    showDownloadLink: showPrintableDocketRecord,
     showEditOrSealDocketRecordEntry:
       permissions.EDIT_DOCKET_ENTRY || permissions.SEAL_DOCKET_ENTRY,
     showPrintableDocketRecord,
