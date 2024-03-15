@@ -382,8 +382,6 @@ export const formattedDocketEntries = (
     d => d.isOnDocketRecord,
   );
 
-  result.isSelectableForDownload = isSelectableForDownload;
-
   result.allEligibleDocumentsForDownload = docketEntriesFormatted
     .filter(docEntry => isSelectableForDownload(docEntry))
     .map(docEntry => ({
