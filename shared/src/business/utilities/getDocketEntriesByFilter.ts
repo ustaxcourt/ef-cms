@@ -1,10 +1,15 @@
+export type DocumentsInfoToFilterType = {
+  eventCode: string;
+  isDraft: boolean;
+}[];
+
 export const getDocketEntriesByFilter = (
   applicationContext,
   {
     docketEntries,
     docketRecordFilter,
-  }: { docketEntries: RawDocketEntry[]; docketRecordFilter: string },
-): RawDocketEntry[] => {
+  }: { docketEntries: DocumentsInfoToFilterType; docketRecordFilter: string },
+): DocumentsInfoToFilterType => {
   let result = docketEntries;
   const {
     DOCKET_RECORD_FILTER_OPTIONS,
