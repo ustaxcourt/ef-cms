@@ -328,6 +328,7 @@ import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
+import { resolveAsyncSyncRequestSequence } from '@web-client/presenter/sequences/resolveAsyncSyncRequestSequence';
 import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
@@ -354,7 +355,6 @@ import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocu
 import { serveThirtyDayNoticeOfTrialSequence } from './sequences/serveThirtyDayNoticeOfTrialSequence';
 import { serveToIrsCompleteSequence } from './sequences/serveToIrsCompleteSequence';
 import { serveToIrsErrorSequence } from './sequences/serveToIrsErrorSequence';
-import { setAsyncSyncResultSequence } from '@web-client/presenter/sequences/setAsyncSyncResultSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -1117,6 +1117,8 @@ export const presenterSequences = {
     resetHeaderAccordionsSequence as unknown as Function,
   resetIdleTimerSequence: resetIdleTimerSequence as unknown as Function,
   resetPasswordSequence,
+  resolveAsyncSyncRequestSequence:
+    resolveAsyncSyncRequestSequence as unknown as Function,
   retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
@@ -1157,7 +1159,6 @@ export const presenterSequences = {
     serveThirtyDayNoticeOfTrialSequence as unknown as Function,
   serveToIrsCompleteSequence: serveToIrsCompleteSequence as unknown as Function,
   serveToIrsErrorSequence: serveToIrsErrorSequence as unknown as Function,
-  setAsyncSyncResultSequence: setAsyncSyncResultSequence as unknown as Function,
   setCaseDetailPageTabSequence:
     setCaseDetailPageTabSequence as unknown as Function,
   setCaseDetailPrimaryTabSequence:
