@@ -261,6 +261,8 @@
     "@babel/preset-react": "7.23.3",
     "@babel/preset-typescript": "7.23.3",
     "@babel/register": "7.23.7",
+    "@badeball/cypress-cucumber-preprocessor": "20.0.2",
+    "@bahmutov/cypress-esbuild-preprocessor": "2.2.0",
     "@faker-js/faker": "8.4.1",
     "@miovision/eslint-plugin-disallow-date": "2.0.0",
     "@types/aws-lambda": "8.10.134",
