@@ -1,4 +1,8 @@
-import { ATP_DOCKET_ENTRY, MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import {
+  ATP_DOCKET_ENTRY,
+  MOCK_DOCUMENTS,
+  STANDING_PRETRIAL_ORDER_ENTRY,
+} from '@shared/test/mockDocketEntry';
 import { DOCKET_RECORD_FILTER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -25,25 +29,11 @@ describe('batchDownloadDocketEntriesAction', () => {
 
   const fileId = '12345';
   const PETITION_DOCUMENT = MOCK_DOCUMENTS[0];
-  const ORDER_DOCUMENT = {
-    docketEntryId: '25ae8e71-9dc4-40c6-bece-89acb974a82e',
-    documentTitle: 'Order',
-    documentType: 'Order',
-    entityName: 'DocketEntry',
-    eventCode: 'O',
-    filingDate: '2018-03-01T00:03:00.000Z',
-    index: 2,
-    isDraft: false,
-    isFileAttached: true,
-    isMinuteEntry: false,
-    isOnDocketRecord: true,
-    userId: 'abc-123',
-  };
 
   const mockDocketEntries = [
     PETITION_DOCUMENT,
     ATP_DOCKET_ENTRY,
-    ORDER_DOCUMENT,
+    STANDING_PRETRIAL_ORDER_ENTRY,
   ];
 
   const caseDetail = {
@@ -54,7 +44,7 @@ describe('batchDownloadDocketEntriesAction', () => {
   const documentsSelectedForDownload: { docketEntryId: string }[] = [
     { docketEntryId: PETITION_DOCUMENT.docketEntryId },
     { docketEntryId: ATP_DOCKET_ENTRY.docketEntryId },
-    { docketEntryId: ORDER_DOCUMENT.docketEntryId },
+    { docketEntryId: STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId },
   ];
 
   beforeEach(() => {
@@ -109,7 +99,7 @@ describe('batchDownloadDocketEntriesAction', () => {
       documentsSelectedForDownload: [
         PETITION_DOCUMENT.docketEntryId,
         ATP_DOCKET_ENTRY.docketEntryId,
-        ORDER_DOCUMENT.docketEntryId,
+        STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
       ],
       printableDocketRecordFileId: '12345',
     });
@@ -137,7 +127,9 @@ describe('batchDownloadDocketEntriesAction', () => {
     ).toMatchObject({
       clientConnectionId,
       docketNumber: MOCK_CASE.docketNumber,
-      documentsSelectedForDownload: [ORDER_DOCUMENT.docketEntryId],
+      documentsSelectedForDownload: [
+        STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
+      ],
       printableDocketRecordFileId: '12345',
     });
     expect(pathSuccessStub).toHaveBeenCalled();
