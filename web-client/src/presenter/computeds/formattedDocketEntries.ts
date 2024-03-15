@@ -353,6 +353,7 @@ export const formattedDocketEntries = (
           docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
         ),
         isMinuteEntry: computeMinuteEntry(docketEntry),
+        isSelectableForDownload: isSelectableForDownload(docketEntry),
       };
     });
 
@@ -367,10 +368,7 @@ export const formattedDocketEntries = (
     documentsSelectedForDownloadCount === selectableDocumentsCount &&
     selectableDocumentsCount !== 0;
 
-  const canBatchDownload = permissions.BATCH_DOWNLOAD_CASE_DOCUMENTS; // do we need to revert this?
-
   const someDocumentsSelectedForDownload =
-    canBatchDownload &&
     documentsSelectedForDownloadCount > 0 &&
     documentsSelectedForDownloadCount < selectableDocumentsCount;
 

@@ -112,9 +112,7 @@ export const DocketRecord = connect(
                         {' '}
                         {docketRecordHelper.showBatchDownloadControls && (
                           <td>
-                            {formattedDocketEntriesHelper.isSelectableForDownload(
-                              entry,
-                            ) && (
+                            {entry.isSelectableForDownload && (
                               <input
                                 checked={entry.isDocumentSelected}
                                 type="checkbox"
