@@ -10,16 +10,21 @@ export const getCaseDocumentsByFilter = (
     documentsToProcess: { docketEntryId: string }[];
   },
 ): string[] => {
-  const documents = documentsToProcess.map(docSelected => {
-    return docketEntries.find(
+  const formattedDocketEntries = documentsToProcess.map(docSelected => {
+    const foundDocument = docketEntries.find(
       docEntry => docEntry.docketEntryId === docSelected.docketEntryId,
     );
+    return {
+      docketEntryId: foundDocument?.docketEntryId,
+      eventCode: foundDocument?.eventCode,
+      isDraft: foundDocument?.isDraft,
+    };
   });
 
   const filteredDocuments = applicationContext
     .getUtilities()
     .getDocketEntriesByFilter(applicationContext, {
-      docketEntries: documents,
+      docketEntries: formattedDocketEntries,
       docketRecordFilter,
     });
 
