@@ -572,7 +572,6 @@ describe('Messages', () => {
         'trialClerk',
         'reportersOffice',
         'petitionsClerk',
-        'general',
       ].forEach(account => {
         it(`should display the filters for Court User "${account}"`, () => {
           cy.login(account, '/messages/my/inbox');

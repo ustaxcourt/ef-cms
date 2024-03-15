@@ -6,15 +6,16 @@ export const getSectionInboxMessages = async ({
 }) => {
   const results = await queryFull({
     ExpressionAttributeNames: {
-      '#gsi4pk': 'gsi4pk',
+      '#gsiSectionBox': 'gsiSectionBox',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi4pk': `section|inbox|${section}`,
+      ':gsiSectionBox': `section|${section}`,
       ':prefix': 'message',
     },
-    IndexName: 'gsi4',
-    KeyConditionExpression: '#gsi4pk = :gsi4pk and begins_with(#sk, :prefix)',
+    IndexName: 'gsiSectionBox',
+    KeyConditionExpression:
+      '#gsiSectionBox = :gsiSectionBox and begins_with(#sk, :prefix)',
     applicationContext,
   });
 

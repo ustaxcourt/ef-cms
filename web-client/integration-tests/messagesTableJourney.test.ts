@@ -139,7 +139,7 @@ describe('messages table journey', () => {
     expect(orignalMessage).toBeDefined();
   });
 
-  it('petitions clerk 1 verify the message is also in section completed', async () => {
+  it('petitions clerk 1 verifies the message is also in section completed', async () => {
     await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'completed',
       queue: 'section',

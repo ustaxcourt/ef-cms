@@ -1,30 +1,29 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { queryFull } from '../../dynamodbClientService';
 
-export const getDocumentQCInboxForUser = async ({
+export const getDocumentQCForUser = async ({
   applicationContext,
+  box,
   userId,
 }: {
   applicationContext: IApplicationContext;
+  box: 'inbox' | 'inProgress';
   userId: string;
 }): Promise<RawWorkItem[]> => {
-  applicationContext.logger.info('getDocumentQCInboxForUser start');
-
   const workItems: RawWorkItem[] = (await queryFull({
     ExpressionAttributeNames: {
-      '#gsi2pk': 'gsi2pk',
+      '#gsiUserBox': 'gsiUserBox',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':gsi2pk': `assigneeId|${userId}`,
+      ':gsiUserBox': `assigneeId|${box}|${userId}`,
       ':prefix': 'work-item',
     },
-    IndexName: 'gsi2',
-    KeyConditionExpression: '#gsi2pk = :gsi2pk and begins_with(#sk, :prefix)',
+    IndexName: 'gsiUserBox',
+    KeyConditionExpression:
+      '#gsiUserBox = :gsiUserBox and begins_with(#sk, :prefix)',
     applicationContext,
   })) as any;
-
-  applicationContext.logger.info('getDocumentQCInboxForUser end');
 
   return workItems.sort((a, b) => {
     if (a.highPriority) {

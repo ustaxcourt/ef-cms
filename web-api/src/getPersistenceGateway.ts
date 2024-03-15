@@ -76,7 +76,6 @@ import {
 import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getCognitoUserIdByEmail } from './persistence/cognito/getCognitoUserIdByEmail';
-import { getCompletedSectionInboxMessages } from './persistence/elasticsearch/messages/getCompletedSectionInboxMessages';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConsolidatedCasesCount } from '@web-api/persistence/dynamo/cases/getConsolidatedCasesCount';
 import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidatedCases';
@@ -88,8 +87,8 @@ import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/d
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
-import { getDocumentQCInboxForSection } from './persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
-import { getDocumentQCInboxForUser } from './persistence/dynamo/workitems/getDocumentQCInboxForUser';
+import { getDocumentQCForSection } from './persistence/dynamo/workitems/getDocumentQCForSection';
+import { getDocumentQCForUser } from './persistence/dynamo/workitems/getDocumentQCForUser';
 import { getDocumentQCServedForSection } from './persistence/dynamo/workitems/getDocumentQCServedForSection';
 import { getDocumentQCServedForUser } from './persistence/dynamo/workitems/getDocumentQCServedForUser';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
@@ -110,8 +109,9 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getPublicDownloadPolicyUrl } from './persistence/s3/getPublicDownloadPolicyUrl';
 import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTrialCases';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
-import { getSectionInboxMessages } from './persistence/elasticsearch/messages/getSectionInboxMessages';
-import { getSectionOutboxMessages } from './persistence/elasticsearch/messages/getSectionOutboxMessages';
+import { getSectionCompletedMessages } from './persistence/dynamo/messages/getSectionCompletedMessages';
+import { getSectionInboxMessages } from './persistence/dynamo/messages/getSectionInboxMessages';
+import { getSectionOutboxMessages } from './persistence/dynamo/messages/getSectionOutboxMessages';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
@@ -125,12 +125,9 @@ import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
 import { getUserCaseNote } from './persistence/dynamo/userCaseNotes/getUserCaseNote';
 import { getUserCaseNoteForCases } from './persistence/dynamo/userCaseNotes/getUserCaseNoteForCases';
-import { getUserCompletedMessages } from './persistence/elasticsearch/messages/getUserCompletedMessages';
-import {
-  getUserInboxMessageCount,
-  getUserInboxMessages,
-} from './persistence/elasticsearch/messages/getUserInboxMessages';
-import { getUserOutboxMessages } from './persistence/elasticsearch/messages/getUserOutboxMessages';
+import { getUserCompletedMessages } from './persistence/dynamo/messages/getUserCompletedMessages';
+import { getUserInboxMessages } from './persistence/dynamo/messages/getUserInboxMessages';
+import { getUserOutboxMessages } from './persistence/dynamo/messages/getUserOutboxMessages';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
@@ -143,7 +140,6 @@ import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
 import { markMessageThreadRepliedTo } from './persistence/dynamo/messages/markMessageThreadRepliedTo';
 import { persistUser } from './persistence/dynamo/users/persistUser';
-import { putWorkItemInOutbox } from './persistence/dynamo/workitems/putWorkItemInOutbox';
 import { putWorkItemInUsersOutbox } from './persistence/dynamo/workitems/putWorkItemInUsersOutbox';
 import { refreshToken } from './persistence/cognito/refreshToken';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
@@ -155,7 +151,6 @@ import { saveDispatchNotification } from './persistence/dynamo/notifications/sav
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
 import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
-import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
 import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
 import { setMessageAsRead } from './persistence/dynamo/messages/setMessageAsRead';
 import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPriorityOnAllWorkItems';
@@ -247,14 +242,12 @@ const gatewayMethods = {
     incrementKeyCount,
     markMessageThreadRepliedTo,
     persistUser,
-    putWorkItemInOutbox,
     putWorkItemInUsersOutbox,
     removeCaseFromHearing,
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
     saveWorkItem,
-    saveWorkItemForDocketClerkFilingExternalDocument,
     setExpiresAt,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
@@ -328,7 +321,6 @@ const gatewayMethods = {
   getCasesMetadataByLeadDocketNumber,
   getClientId,
   getCognitoUserIdByEmail,
-  getCompletedSectionInboxMessages,
   getConfigurationItemValue,
   getConsolidatedCasesCount,
   getCountOfConsolidatedCases,
@@ -341,8 +333,8 @@ const gatewayMethods = {
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
-  getDocumentQCInboxForSection,
-  getDocumentQCInboxForUser,
+  getDocumentQCForSection,
+  getDocumentQCForUser,
   getDocumentQCServedForSection,
   getDocumentQCServedForUser,
   getDownloadPolicyUrl,
@@ -365,6 +357,7 @@ const gatewayMethods = {
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
+  getSectionCompletedMessages,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getSesStatus,
@@ -381,7 +374,6 @@ const gatewayMethods = {
   getUserCaseNote,
   getUserCaseNoteForCases,
   getUserCompletedMessages,
-  getUserInboxMessageCount,
   getUserInboxMessages,
   getUserOutboxMessages,
   getUsersById,

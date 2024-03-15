@@ -93,7 +93,7 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../utilities/getWorkQueueFilters';
-import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../../../web-api/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
+import { getDocumentQCForSection } from '../../../../web-api/src/persistence/dynamo/workitems/getDocumentQCForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
@@ -106,7 +106,6 @@ import { getUserById as getUserByIdPersistence } from '../../../../web-api/src/p
 import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '../../../../web-api/src/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '../../../../web-api/src/persistence/dynamo/helpers/incrementCounter';
-import { putWorkItemInOutbox } from '../../../../web-api/src/persistence/dynamo/workitems/putWorkItemInOutbox';
 import { removeCounselFromRemovedPetitioner } from '../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -494,11 +493,10 @@ export const createTestApplicationContext = ({
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn(),
-    getDocumentQCInboxForSection: jest.fn(),
-    getDocumentQCInboxForUser: jest.fn(),
-    getDocumentQCServedForSection: jest
+    getDocumentQCForSection: jest
       .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
+      .mockImplementation(getDocumentQCForSection),
+    getDocumentQCForUser: jest.fn(),
     getDownloadPolicyUrl: jest
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
@@ -532,7 +530,7 @@ export const createTestApplicationContext = ({
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
-    putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
+    putWorkItemInUsersOutbox: jest.fn(),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),

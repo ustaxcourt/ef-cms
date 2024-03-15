@@ -25,7 +25,7 @@ export const getCompletedMessagesForSectionInteractor = async (
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getCompletedSectionInboxMessages({
+    .getSectionCompletedMessages({
       applicationContext,
       section,
     });

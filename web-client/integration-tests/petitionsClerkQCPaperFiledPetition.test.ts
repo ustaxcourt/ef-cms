@@ -35,7 +35,9 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
     receivedAtFormatted: '01/01/01',
     shouldShowIrsNoticeDate: false,
   });
-  petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest);
+  petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest, {
+    box: 'inProgress',
+  });
   petitionsClerkViewsSectionInProgress(cerebralTest);
   petitionsClerkEditsSavedPetition(cerebralTest);
   petitionsClerkRemovesAndReaddsPetitionFile(cerebralTest, fakeFile);

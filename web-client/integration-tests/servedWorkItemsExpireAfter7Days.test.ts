@@ -99,18 +99,24 @@ describe('verify old served work items do not show up in the outbox', () => {
       workItemId: `${workItemId6}`,
     };
 
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
+    await appContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext: appContext,
+      section: PETITIONS_SECTION,
+      userId: workItem8Days.completedByUserId,
       workItem: workItem8Days,
     });
 
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
+    await appContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext: appContext,
+      section: PETITIONS_SECTION,
+      userId: workItem7Days.completedByUserId,
       workItem: workItem7Days,
     });
 
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
+    await appContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext: appContext,
+      section: PETITIONS_SECTION,
+      userId: workItem6Days.completedByUserId,
       workItem: workItem6Days,
     });
   });

@@ -340,9 +340,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -370,9 +368,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -388,7 +384,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|dbcb915a-5ed1-45c4-9d6d-b66679a55029",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "100-22W",
     "updatedAt": "2022-02-01T17:21:07.511Z",
     "completedAt": "2022-02-01T17:21:07.638Z",
@@ -645,9 +642,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.325Z",
@@ -685,9 +680,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.327Z",
@@ -725,9 +718,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.316Z",
@@ -746,7 +737,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|c3786b1e-0b95-481c-9ffb-efed1930f600",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "101-11",
     "updatedAt": "2021-10-29T13:41:06.781Z",
     "completedAt": "2021-10-29T13:41:09.339Z",
@@ -786,7 +778,8 @@
     "assigneeName": "Test Docketclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|d71e75cc-63a5-48de-bd02-cce5db481e41",
-    "gsi2pk": "assigneeId|2805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|2805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "101-11",
     "updatedAt": "2021-10-29T13:42:43.040Z",
     "completedAt": "2021-10-29T13:42:43.040Z",
@@ -906,9 +899,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.912Z",
@@ -993,9 +984,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.921Z",
@@ -1033,9 +1022,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.924Z",
@@ -1054,7 +1041,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|186c80b7-9fda-47b9-b485-982d92b6de53",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "101-16",
     "updatedAt": "2021-10-29T13:06:21.411Z",
     "completedAt": "2021-10-29T13:06:24.935Z",
@@ -1094,7 +1082,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|b8632aec-0a6e-4084-b29e-a7131e0eb24d",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "101-16",
     "updatedAt": "2021-10-29T13:07:19.785Z",
     "completedAt": "2021-10-29T13:07:19.785Z",
@@ -1499,9 +1488,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
@@ -1529,9 +1516,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|101-20",
     "docketNumber": "101-20"
@@ -1958,9 +1943,7 @@
     "eventCode": "EVID",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -2183,9 +2166,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-21",
     "docketNumber": "101-21"
   },
@@ -2813,9 +2794,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "pending",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-21",
     "docketNumber": "101-21"
   },
@@ -3002,9 +2981,7 @@
     "eventCode": "MOTR",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -3849,9 +3826,7 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"filersMap\":{\"7805d1ab-18d0-43ec-bafb-654e83405416\":true},\"filers\":[\"7805d1ab-18d0-43ec-bafb-654e83405416\"],\"practitioner\":[],\"dateReceivedMonth\":1,\"dateReceivedDay\":1,\"dateReceivedYear\":2018,\"primaryDocumentFileSize\":100,\"eventCode\":\"A\",\"category\":\"Answer (filed by respondent only)\",\"documentType\":\"Answer\",\"documentTitle\":\"Answer\",\"scenario\":\"Standard\",\"pending\":true,\"certificateOfServiceDate\":null,\"dateReceived\":\"2018-01-01T05:00:00.000Z\",\"createdAt\":\"2018-01-01T05:00:00.000Z\",\"docketNumber\":\"101-21\",\"isFileAttached\":false,\"isPaper\":true,\"receivedAt\":\"2018-01-01T05:00:00.000Z\"}",
     "pk": "case|101-21",
@@ -6739,7 +6714,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:50.122Z"
+    "updatedAt": "2021-03-01T16:27:50.122Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6770,7 +6746,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:46.077Z"
+    "updatedAt": "2021-03-01T16:27:46.077Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6801,7 +6778,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:47.278Z"
+    "updatedAt": "2021-03-01T16:28:47.278Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6832,7 +6810,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:45.843Z"
+    "updatedAt": "2021-03-01T16:29:45.843Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6863,7 +6842,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:44.748Z"
+    "updatedAt": "2021-03-01T16:28:44.748Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6894,7 +6874,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:12.810Z"
+    "updatedAt": "2021-03-01T16:29:12.810Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6925,7 +6906,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:52.245Z"
+    "updatedAt": "2021-03-01T16:27:52.245Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6956,7 +6938,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:16.921Z"
+    "updatedAt": "2021-03-01T16:30:16.921Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6987,7 +6970,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:22.730Z"
+    "updatedAt": "2021-03-01T16:31:22.730Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7018,7 +7002,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:32.037Z"
+    "updatedAt": "2021-03-01T16:28:32.037Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7049,7 +7034,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:26.905Z"
+    "updatedAt": "2021-03-01T16:28:26.905Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7080,7 +7066,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:06.665Z"
+    "updatedAt": "2021-03-01T16:28:06.665Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7111,7 +7098,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:56.370Z"
+    "updatedAt": "2021-03-01T16:27:56.370Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7142,7 +7130,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:24.437Z"
+    "updatedAt": "2021-03-01T16:28:24.437Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7173,7 +7162,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:45.447Z"
+    "updatedAt": "2021-03-01T16:30:45.447Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7204,7 +7194,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:19.407Z"
+    "updatedAt": "2021-03-01T16:28:19.407Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7235,7 +7226,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:16.873Z"
+    "updatedAt": "2021-03-01T16:28:16.873Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7266,7 +7258,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:44.041Z"
+    "updatedAt": "2021-03-01T16:27:44.041Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7297,7 +7290,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:26:56.920Z"
+    "updatedAt": "2021-03-01T16:26:56.920Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7328,7 +7322,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:25.692Z"
+    "updatedAt": "2021-03-01T16:27:25.692Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7359,7 +7354,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:01.588Z"
+    "updatedAt": "2021-03-01T16:28:01.588Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7390,7 +7386,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:49.777Z"
+    "updatedAt": "2021-03-01T16:28:49.777Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7421,7 +7418,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:07.066Z"
+    "updatedAt": "2021-03-01T16:31:07.066Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7452,7 +7450,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:54.851Z"
+    "updatedAt": "2021-03-01T16:28:54.851Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7483,7 +7482,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:28.033Z"
+    "updatedAt": "2021-03-01T16:29:28.033Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7514,7 +7514,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:43.305Z"
+    "updatedAt": "2021-03-01T16:29:43.305Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7545,7 +7546,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:16.688Z"
+    "updatedAt": "2021-03-01T16:31:16.688Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7576,7 +7578,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:19.740Z"
+    "updatedAt": "2021-03-01T16:31:19.740Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7607,7 +7610,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:04.224Z"
+    "updatedAt": "2021-03-01T16:28:04.224Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7638,7 +7642,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:01.131Z"
+    "updatedAt": "2021-03-01T16:30:01.131Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7669,7 +7674,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:40.763Z"
+    "updatedAt": "2021-03-01T16:29:40.763Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7700,7 +7706,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:27.715Z"
+    "updatedAt": "2021-03-01T16:27:27.715Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7731,7 +7738,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:17.629Z"
+    "updatedAt": "2021-03-01T16:27:17.629Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7762,7 +7770,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:11.784Z"
+    "updatedAt": "2021-03-01T16:28:11.784Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7793,7 +7802,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:17.931Z"
+    "updatedAt": "2021-03-01T16:29:17.931Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7824,7 +7834,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:25.767Z"
+    "updatedAt": "2021-03-01T16:31:25.767Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7855,7 +7866,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:30.603Z"
+    "updatedAt": "2021-03-01T16:29:30.603Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7886,7 +7898,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:53.430Z"
+    "updatedAt": "2021-03-01T16:29:53.430Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7917,7 +7930,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:22.841Z"
+    "updatedAt": "2021-03-01T16:29:22.841Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7948,7 +7962,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:32.533Z"
+    "updatedAt": "2021-03-01T16:30:32.533Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7979,7 +7994,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:40.283Z"
+    "updatedAt": "2021-03-01T16:30:40.283Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8010,7 +8026,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:59.070Z"
+    "updatedAt": "2021-03-01T16:27:59.070Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8041,7 +8058,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:37.951Z"
+    "updatedAt": "2021-03-01T16:27:37.951Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8072,7 +8090,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:13.622Z"
+    "updatedAt": "2021-03-01T16:31:13.622Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8103,7 +8122,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:48.142Z"
+    "updatedAt": "2021-03-01T16:27:48.142Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8134,7 +8154,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:05.233Z"
+    "updatedAt": "2021-03-01T16:29:05.233Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8165,7 +8186,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:19.559Z"
+    "updatedAt": "2021-03-01T16:30:19.559Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8196,7 +8218,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:15.533Z"
+    "updatedAt": "2021-03-01T16:29:15.533Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8215,7 +8238,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|7a81a95d-c695-4cc1-97db-19ecfacbd1f0",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|inProgress|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|inProgress|docket",
     "docketNumberWithSuffix": "101-21L",
     "docketEntry": {
       "eventCode": "A",
@@ -8263,7 +8287,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:03.885Z"
+    "updatedAt": "2021-03-01T16:30:03.885Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8294,7 +8319,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:00.340Z"
+    "updatedAt": "2021-03-01T16:31:00.340Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8325,7 +8351,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:35.653Z"
+    "updatedAt": "2021-03-01T16:29:35.653Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8356,7 +8383,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:29.785Z"
+    "updatedAt": "2021-03-01T16:27:29.785Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8387,12 +8415,14 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:57.653Z"
+    "updatedAt": "2021-03-01T16:28:57.653Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
     "gsi1pk": "work-item|8a3a681a-d388-4799-bbe1-8efec124b45d",
+    "gsiSectionBox": "section|inbox|petitions",
     "caseTitle": "Mona Schultz",
     "section": "petitions",
     "workItemId": "8a3a681a-d388-4799-bbe1-8efec124b45d",
@@ -8450,7 +8480,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:02.708Z"
+    "updatedAt": "2021-03-01T16:29:02.708Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8481,7 +8512,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:42.821Z"
+    "updatedAt": "2021-03-01T16:30:42.821Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8512,7 +8544,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:29.483Z"
+    "updatedAt": "2021-03-01T16:28:29.483Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8543,7 +8576,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:19.584Z"
+    "updatedAt": "2021-03-01T16:27:19.584Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8574,7 +8608,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:27.150Z"
+    "updatedAt": "2021-03-01T16:30:27.150Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8605,7 +8640,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:52.267Z"
+    "updatedAt": "2021-03-01T16:28:52.267Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8636,7 +8672,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:54.301Z"
+    "updatedAt": "2021-03-01T16:27:54.301Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8667,7 +8704,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:39.971Z"
+    "updatedAt": "2021-03-01T16:27:39.971Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8698,7 +8736,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:07.824Z"
+    "updatedAt": "2021-03-01T16:29:07.824Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8729,7 +8768,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:20.465Z"
+    "updatedAt": "2021-03-01T16:29:20.465Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8760,7 +8800,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:11.786Z"
+    "updatedAt": "2021-03-01T16:30:11.786Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8791,7 +8832,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:03.904Z"
+    "updatedAt": "2021-03-01T16:31:03.904Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8822,7 +8864,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:38.243Z"
+    "updatedAt": "2021-03-01T16:29:38.243Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8853,7 +8896,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:10.313Z"
+    "updatedAt": "2021-03-01T16:29:10.313Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8884,7 +8928,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:57.123Z"
+    "updatedAt": "2021-03-01T16:30:57.123Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8915,7 +8960,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:14.363Z"
+    "updatedAt": "2021-03-01T16:30:14.363Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8946,7 +8992,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:14.280Z"
+    "updatedAt": "2021-03-01T16:28:14.280Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8977,7 +9024,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:06.373Z"
+    "updatedAt": "2021-03-01T16:30:06.373Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9008,7 +9056,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:48.049Z"
+    "updatedAt": "2021-03-01T16:30:48.049Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9039,7 +9088,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:22.025Z"
+    "updatedAt": "2021-03-01T16:28:22.025Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9070,7 +9120,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:53.891Z"
+    "updatedAt": "2021-03-01T16:30:53.891Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9101,7 +9152,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:25.475Z"
+    "updatedAt": "2021-03-01T16:29:25.475Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9132,7 +9184,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:31.900Z"
+    "updatedAt": "2021-03-01T16:27:31.900Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9163,7 +9216,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:00.247Z"
+    "updatedAt": "2021-03-01T16:29:00.247Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9194,7 +9248,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:56.048Z"
+    "updatedAt": "2021-03-01T16:29:56.048Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9225,7 +9280,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:33.852Z"
+    "updatedAt": "2021-03-01T16:27:33.852Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9256,7 +9312,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:37.251Z"
+    "updatedAt": "2021-03-01T16:28:37.251Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9287,7 +9344,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:39.798Z"
+    "updatedAt": "2021-03-01T16:28:39.798Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9318,7 +9376,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:58.603Z"
+    "updatedAt": "2021-03-01T16:29:58.603Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9349,7 +9408,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:22.031Z"
+    "updatedAt": "2021-03-01T16:30:22.031Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9380,7 +9440,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:34.582Z"
+    "updatedAt": "2021-03-01T16:28:34.582Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9395,7 +9456,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|df474063-f849-4c55-8934-5f43be7dd4c2",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "101-21L",
     "updatedAt": "2021-03-01T16:27:08.589Z",
     "completedAt": "2021-03-01T16:27:08.643Z",
@@ -9450,7 +9512,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:41.991Z"
+    "updatedAt": "2021-03-01T16:27:41.991Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9481,7 +9544,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:42.212Z"
+    "updatedAt": "2021-03-01T16:28:42.212Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9512,7 +9576,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:29.747Z"
+    "updatedAt": "2021-03-01T16:30:29.747Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9543,7 +9608,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:28:09.260Z"
+    "updatedAt": "2021-03-01T16:28:09.260Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9574,7 +9640,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:31:10.245Z"
+    "updatedAt": "2021-03-01T16:31:10.245Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9605,7 +9672,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:23.737Z"
+    "updatedAt": "2021-03-01T16:27:23.737Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9620,7 +9688,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|ebb32cfc-9d54-455b-bdf7-978d15ba7cf8",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "101-21L",
     "updatedAt": "2021-03-01T16:27:03.544Z",
     "completedAt": "2021-03-01T16:27:03.606Z",
@@ -9675,7 +9744,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:24.563Z"
+    "updatedAt": "2021-03-01T16:30:24.563Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9706,7 +9776,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:51.007Z"
+    "updatedAt": "2021-03-01T16:30:51.007Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9737,7 +9808,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:15.774Z"
+    "updatedAt": "2021-03-01T16:27:15.774Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9768,7 +9840,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:35.133Z"
+    "updatedAt": "2021-03-01T16:30:35.133Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9799,7 +9872,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:50.956Z"
+    "updatedAt": "2021-03-01T16:29:50.956Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9830,7 +9904,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:21.672Z"
+    "updatedAt": "2021-03-01T16:27:21.672Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9861,7 +9936,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:48.373Z"
+    "updatedAt": "2021-03-01T16:29:48.373Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9892,7 +9968,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:09.175Z"
+    "updatedAt": "2021-03-01T16:30:09.175Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9923,7 +10000,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:30:37.776Z"
+    "updatedAt": "2021-03-01T16:30:37.776Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9954,7 +10032,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:29:33.051Z"
+    "updatedAt": "2021-03-01T16:29:33.051Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9985,7 +10064,8 @@
     "pk": "case|101-21",
     "docketNumber": "101-21",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-03-01T16:27:35.916Z"
+    "updatedAt": "2021-03-01T16:27:35.916Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -10142,9 +10222,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10172,9 +10250,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10190,7 +10266,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|55cd0550-6191-4014-bef8-da56f8cf3685",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "101-22W",
     "updatedAt": "2022-02-15T16:52:14.160Z",
     "completedAt": "2022-02-15T16:52:14.314Z",
@@ -10414,9 +10491,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-23",
     "docketNumber": "101-23"
   },
@@ -10445,9 +10520,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|101-23",
     "docketNumber": "101-23"
   },
@@ -10763,9 +10836,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
@@ -10837,9 +10908,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|102-20",
     "docketNumber": "102-20"
@@ -10868,9 +10937,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -11042,9 +11109,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -11073,9 +11138,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -11269,9 +11332,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "filers": ["5da54af1-1969-4011-8275-a949084b7928"],
     "servedPartiesCode": "R",
     "pk": "case|102-67",
     "servedAt": "2023-04-03T15:52:59.426Z",
@@ -11310,9 +11371,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "filers": ["5da54af1-1969-4011-8275-a949084b7928"],
     "servedPartiesCode": "R",
     "pk": "case|102-67",
     "servedAt": "2023-04-03T15:52:59.423Z",
@@ -11452,9 +11511,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|102-67",
-    "representing": [
-      "5da54af1-1969-4011-8275-a949084b7928"
-    ],
+    "representing": ["5da54af1-1969-4011-8275-a949084b7928"],
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
@@ -11546,7 +11603,8 @@
     "pk": "case|102-67",
     "docketNumber": "102-67",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2023-08-08T17:32:21.433Z"
+    "updatedAt": "2023-08-08T17:32:21.433Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -11730,9 +11788,7 @@
     "eventCode": "SIAB",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "23d9342c-577d-4cc4-a44d-aae2dca9a436"
-    ],
+    "filers": ["23d9342c-577d-4cc4-a44d-aae2dca9a436"],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "pk": "case|103-19",
@@ -11815,7 +11871,8 @@
     "highPriority": false,
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
-    "gsi2pk": "assigneeId|dabbad00-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|inbox|dabbad00-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|inbox|colvinsChambers",
     "docketNumberWithSuffix": "103-19S",
     "docketEntry": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -11963,9 +12020,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "servedAt": "2020-01-23T21:45:34.521Z",
     "pk": "case|103-20",
@@ -12007,9 +12062,7 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
@@ -12084,9 +12137,7 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "NOEI",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
     "servedAt": "2020-09-21T20:55:12.840Z",
@@ -12156,9 +12207,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|103-20",
     "servedAt": "2020-09-25T19:27:16.630Z",
@@ -12186,9 +12235,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
@@ -12239,9 +12286,7 @@
       "countryType": "domestic"
     },
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "firmName": "GW Law Offices",
     "pk": "case|103-20",
@@ -12336,7 +12381,8 @@
     "pk": "case|103-20",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-20",
-    "updatedAt": "2020-01-23T21:45:34.520Z"
+    "updatedAt": "2020-01-23T21:45:34.520Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Colvin",
@@ -12370,7 +12416,8 @@
     "docketNumber": "103-20",
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2022-12-01T20:02:10.611Z"
+    "updatedAt": "2022-12-01T20:02:10.611Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -12583,9 +12630,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "DISC",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.587Z",
@@ -12624,9 +12669,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.588Z",
@@ -12700,9 +12743,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "93dc623e-6ba3-487b-a336-c2fe18db8188"
-    ],
+    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.589Z",
@@ -12801,7 +12842,8 @@
     "pk": "case|103-67",
     "docketNumber": "103-67",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2023-08-08T17:32:21.452Z"
+    "updatedAt": "2023-08-08T17:32:21.452Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -12927,9 +12969,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-17",
@@ -12966,9 +13006,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MISC",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -13002,9 +13040,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13022,7 +13058,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "104-17",
     "updatedAt": "2020-04-14T19:59:46.118Z",
     "completedAt": "2020-04-14T19:59:46.850Z",
@@ -13179,9 +13216,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-18",
@@ -13218,9 +13253,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -13254,9 +13287,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13274,7 +13305,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "104-18",
     "updatedAt": "2020-04-14T19:59:46.118Z",
     "completedAt": "2020-04-14T19:59:46.850Z",
@@ -13681,9 +13713,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
@@ -13720,9 +13750,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
     "pk": "case|104-20",
@@ -13756,9 +13784,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
     "pk": "case|104-20",
@@ -13776,7 +13802,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "104-20",
     "updatedAt": "2020-04-14T19:59:46.118Z",
     "completedAt": "2020-04-14T19:59:46.850Z",
@@ -13902,9 +13929,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "40eb0890-aab3-4925-8769-e056b30c502d"
-    ],
+    "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
     "servedPartiesCode": "R",
     "pk": "case|104-23",
     "servedAt": "2023-01-06T22:33:13.813Z",
@@ -13972,9 +13997,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "40eb0890-aab3-4925-8769-e056b30c502d"
-    ],
+    "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
     "servedPartiesCode": "R",
     "pk": "case|104-23",
     "servedAt": "2023-01-06T22:33:13.821Z",
@@ -14070,9 +14093,7 @@
       "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
       "eventCode": "P",
       "processingStatus": "complete",
-      "filers": [
-        "40eb0890-aab3-4925-8769-e056b30c502d"
-      ],
+      "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
       "servedPartiesCode": "R",
       "pk": "case|104-23",
       "servedAt": "2023-01-06T22:33:13.813Z",
@@ -14476,7 +14497,8 @@
     "pk": "case|104-67",
     "docketNumber": "104-67",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2023-08-08T17:32:21.458Z"
+    "updatedAt": "2023-08-08T17:32:21.458Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -14661,9 +14683,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "28cae029-bae2-4eef-ac54-878fbbab65e3"
-    ],
+    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -14893,9 +14913,7 @@
     "eventCode": "M000",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "freeText": "For testing Stamp Data",
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
@@ -14933,9 +14951,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "pk": "case|105-20",
@@ -14971,9 +14987,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "servedAt": "2020-04-29T15:51:29.168Z",
     "pk": "case|105-20",
@@ -15042,9 +15056,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -15122,7 +15134,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|551a67f8-ec18-4baa-89b8-797dbc31e52a",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-20",
     "updatedAt": "2022-08-05T20:25:50.076Z",
     "completedAt": "2022-08-05T20:25:50.219Z",
@@ -15310,9 +15323,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "29425430-3b75-456d-9e25-6f906b8f11d1"
-    ],
+    "filers": ["29425430-3b75-456d-9e25-6f906b8f11d1"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -15352,9 +15363,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "R",
     "pk": "case|105-23",
     "servedAt": "2023-07-26T17:04:05.684Z",
@@ -15511,9 +15520,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -15552,9 +15559,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "SIMB",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
     "docketNumber": "105-23"
@@ -15647,9 +15652,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -15842,9 +15845,7 @@
     "eventCode": "BRF",
     "processingStatus": "complete",
     "lodged": true,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -15975,9 +15976,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "SIAB",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16016,9 +16015,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "R",
     "pk": "case|105-23",
     "servedAt": "2023-07-26T17:04:05.693Z",
@@ -16067,9 +16064,7 @@
     "eventCode": "SEOB",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -16184,9 +16179,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16262,9 +16255,7 @@
         "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
         "eventCode": "AMAT",
         "processingStatus": "complete",
-        "filers": [
-          "7805d1ab-18d0-43ec-bafb-654e83405418"
-        ],
+        "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
         "servedPartiesCode": "B",
         "certificateOfServiceDate": null,
         "servedAt": "2023-07-26T17:29:33.751Z",
@@ -16292,9 +16283,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "M014",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16348,9 +16337,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16405,9 +16392,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16612,9 +16597,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "REPL",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16838,9 +16821,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "REDC",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16926,9 +16907,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405418"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
     "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "serviceIndicator": "Electronic",
@@ -16962,7 +16941,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|0510d265-c6bd-4ef5-80e9-26e6fca4f53c",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:24:39.642Z",
     "completedAt": "2023-07-26T17:26:46.557Z",
@@ -17039,9 +17019,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -17081,7 +17059,8 @@
     "pk": "case|105-23",
     "docketNumber": "105-23",
     "sentByUserId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "updatedAt": "2023-07-26T18:56:11.184Z"
+    "updatedAt": "2023-07-26T18:56:11.184Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -17095,7 +17074,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|0b7b0e5a-34d7-4c00-85cd-bafff8300cea",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:25:38.205Z",
     "completedAt": "2023-07-26T17:27:24.652Z",
@@ -17177,9 +17157,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -17202,7 +17180,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|0ef72276-20fa-41d9-94e8-58f863ed009b",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:14:17.069Z",
     "completedAt": "2023-07-26T17:16:14.156Z",
@@ -17309,7 +17288,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|182cc3d0-cf44-411d-8fad-4d237cd553ea",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:15:28.245Z",
     "completedAt": "2023-07-26T17:16:51.290Z",
@@ -17420,7 +17400,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|1e97f8a8-2d95-44db-b7ed-a4d2334ca607",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:14:50.854Z",
     "completedAt": "2023-07-26T17:16:35.017Z",
@@ -17525,7 +17506,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|22e979ef-873f-4ed7-9dc6-1890510c37c3",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:25:00.575Z",
     "completedAt": "2023-07-26T17:26:52.640Z",
@@ -17608,9 +17590,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -17650,7 +17630,8 @@
     "pk": "case|105-23",
     "docketNumber": "105-23",
     "sentByUserId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "updatedAt": "2023-07-26T18:44:35.001Z"
+    "updatedAt": "2023-07-26T18:44:35.001Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -17664,7 +17645,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|3822c600-65d1-41d2-8e42-0e1aede1511d",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:13:38.964Z",
     "completedAt": "2023-07-26T17:16:03.511Z",
@@ -17788,7 +17770,8 @@
     "pk": "case|105-23",
     "docketNumber": "105-23",
     "sentByUserId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "updatedAt": "2023-07-26T17:29:56.285Z"
+    "updatedAt": "2023-07-26T17:29:56.285Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -17803,7 +17786,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|54a18060-961f-4dce-bd45-bb460e845ad5",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:25:57.568Z",
     "completedAt": "2023-07-26T17:26:59.421Z",
@@ -17882,9 +17866,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -17909,7 +17891,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|5dc708c5-f8b7-4268-af8f-eb46c09cdcbb",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:12:46.032Z",
     "completedAt": "2023-07-26T17:15:49.508Z",
@@ -18010,7 +17993,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|77a13efe-5c4f-4da6-a4a3-5aaef13a48b4",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:13:59.506Z",
     "completedAt": "2023-07-26T17:16:09.199Z",
@@ -18117,7 +18101,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|8ddf8f6c-0ea5-4a60-ae7e-8c74dd9dbb52",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:13:19.795Z",
     "completedAt": "2023-07-26T17:15:58.875Z",
@@ -18218,7 +18203,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|92d3f224-a5f4-4cc0-b0cf-415f7d8c190e",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:13:03.949Z",
     "completedAt": "2023-07-26T17:15:54.106Z",
@@ -18320,7 +18306,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|952bc117-39e8-4999-892b-ce9c32666c6e",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:26:16.106Z",
     "completedAt": "2023-07-26T17:27:09.509Z",
@@ -18405,9 +18392,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -18433,7 +18418,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|957630ff-b1a4-4b3c-bdf6-cc803e282283",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:28:33.233Z",
     "completedAt": "2023-07-26T17:28:33.233Z",
@@ -18489,7 +18475,8 @@
     "pk": "case|105-23",
     "docketNumber": "105-23",
     "sentByUserId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "updatedAt": "2023-07-26T18:58:50.921Z"
+    "updatedAt": "2023-07-26T18:58:50.921Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -18504,7 +18491,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|a10d2445-7598-4a1c-8224-02f4c2752463",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:28:58.253Z",
     "completedAt": "2023-07-26T17:28:58.253Z",
@@ -18561,7 +18549,8 @@
     "pk": "case|105-23",
     "docketNumber": "105-23",
     "sentByUserId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "updatedAt": "2023-07-26T18:56:11.194Z"
+    "updatedAt": "2023-07-26T18:56:11.194Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -18592,7 +18581,8 @@
     "pk": "case|105-23",
     "docketNumber": "105-23",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2023-07-26T17:12:26.529Z"
+    "updatedAt": "2023-07-26T17:12:26.529Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -18606,7 +18596,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|afd1417b-5688-41aa-9b53-7b0bf78c1073",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:25:22.270Z",
     "completedAt": "2023-07-26T17:27:17.588Z",
@@ -18689,9 +18680,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -18715,7 +18704,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|e6b4a293-f3ba-4554-a9e7-a37d4cc6ec3d",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:15:09.212Z",
     "completedAt": "2023-07-26T17:16:42.966Z",
@@ -18821,7 +18811,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|e9cbcde8-08a7-4b24-b0ad-f8556f59f0d9",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:14:35.403Z",
     "completedAt": "2023-07-26T17:16:24.041Z",
@@ -18927,7 +18918,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|f3910aae-3cb0-4238-9a86-45964c1c358c",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T18:58:04.852Z",
     "completedAt": "2023-07-26T18:58:04.853Z",
@@ -18982,7 +18974,8 @@
     "pk": "case|105-23",
     "docketNumber": "105-23",
     "sentByUserId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "updatedAt": "2023-07-26T17:29:33.750Z"
+    "updatedAt": "2023-07-26T17:29:33.750Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -18998,7 +18991,8 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|ff575b8d-79e9-4503-b14c-b23909c2f1f1",
-    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "105-23",
     "updatedAt": "2023-07-26T17:03:31.710Z",
     "completedAt": "2023-07-26T17:04:07.414Z",
@@ -19249,9 +19243,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "filers": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "servedPartiesCode": "R",
     "pk": "case|105-67",
     "servedAt": "2023-04-03T15:52:36.489Z",
@@ -19290,9 +19282,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "filers": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "servedPartiesCode": "R",
     "pk": "case|105-67",
     "servedAt": "2023-04-03T15:52:36.482Z",
@@ -19324,9 +19314,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|102-67",
-    "representing": [
-      "bc936c44-ff22-478b-a9e9-971f250d599c"
-    ],
+    "representing": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
@@ -19419,7 +19407,8 @@
     "pk": "case|105-67",
     "docketNumber": "105-67",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2023-08-08T17:32:21.464Z"
+    "updatedAt": "2023-08-08T17:32:21.464Z",
+    "gsiSectionBox": "section|inbox|docket"
   },
   {
     "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
@@ -19546,9 +19535,7 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -19640,9 +19627,7 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -19660,7 +19645,7 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "106-19",
     "updatedAt": "2019-07-12T17:11:27.244Z",
     "completedAt": "2019-07-12T17:11:27.244Z",
@@ -19713,7 +19698,8 @@
     "highPriority": false,
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "gsi2pk": "assigneeId|dabbad00-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|inbox|dabbad00-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|inbox|colvinsChambers",
     "docketNumberWithSuffix": "106-19",
     "docketEntry": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -19744,7 +19730,8 @@
     "assigneeName": "Test ADC",
     "entityName": "WorkItem",
     "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
-    "gsi2pk": "assigneeId|6805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|inbox|6805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|inbox|adc",
     "docketNumberWithSuffix": "106-19",
     "docketEntry": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -19884,9 +19871,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "servedPartiesCode": "R",
     "pk": "case|106-23",
     "servedAt": "2023-01-06T22:34:39.112Z",
@@ -19984,9 +19969,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "servedPartiesCode": "R",
     "pk": "case|106-23",
     "servedAt": "2023-01-06T22:34:39.108Z",
@@ -20025,9 +20008,7 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|104-23",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405417"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -20428,9 +20409,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -20464,7 +20443,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|39b3ac72-0173-4851-829b-e0878def646c",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "107-19L",
     "updatedAt": "2021-12-15T21:25:25.325Z",
     "completedAt": "2021-12-15T21:25:25.326Z",
@@ -20756,7 +20736,8 @@
     "assigneeName": "IRS Holding Queue",
     "entityName": "WorkItem",
     "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-    "gsi2pk": "assigneeId|63784910-c1af-4476-8988-a02f92da8e09",
+    "gsiUserBox": "assigneeId|outbox|63784910-c1af-4476-8988-a02f92da8e09",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "108-19",
     "updatedAt": "2019-08-16T19:21:46.147Z",
     "completedAt": "2019-08-16T19:22:13.925Z",
@@ -21129,9 +21110,7 @@
       "countryType": "domestic"
     },
     "name": "Ronald Buch Jr.",
-    "representing": [
-      "6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"
-    ],
+    "representing": ["6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"],
     "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
     "firmName": "Firmly Grasped, LLP",
     "pk": "case|110-19",
@@ -21332,9 +21311,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.564Z",
@@ -21371,9 +21348,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.554Z",
@@ -21406,9 +21381,7 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "editState": "{}",
     "pk": "case|111-19",
@@ -21432,7 +21405,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|030ec8bd-a021-4b58-9624-ea62ab31dacb",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|inProgress|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|inProgress|docket",
     "docketNumberWithSuffix": "111-19L",
     "docketEntry": {
       "eventCode": "A",
@@ -21464,7 +21438,8 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|dffa984d-2caf-42b5-8d69-59728b32f13f",
-    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "111-19L",
     "updatedAt": "2022-09-28T16:48:27.729Z",
     "completedAt": "2022-09-28T16:48:30.590Z",
@@ -21481,9 +21456,7 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Guy Fieri",
       "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -21585,9 +21558,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.670Z",
@@ -21624,9 +21595,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.667Z",
@@ -21712,7 +21681,8 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|e7fb2a37-d371-4cdc-ba55-83561dde5f28",
-    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "112-19L",
     "updatedAt": "2022-09-28T16:48:47.111Z",
     "completedAt": "2022-09-28T16:48:49.683Z",
@@ -21729,9 +21699,7 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Brian Earl Spilner",
       "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
@@ -21859,9 +21827,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.643Z",
@@ -21898,9 +21864,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.636Z",
@@ -21955,7 +21919,8 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|9f326cac-c07c-42c4-8639-42d0dfb3672d",
-    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "113-19L",
     "updatedAt": "2022-09-28T16:48:47.111Z",
     "completedAt": "2022-09-28T19:47:03.663Z",
@@ -22061,9 +22026,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
     "pk": "case|117-20",
@@ -22092,9 +22055,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|117-20",
     "docketNumber": "117-20"
@@ -22274,9 +22235,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
     "pk": "case|120-20",
@@ -22309,9 +22268,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|120-20",
     "docketNumber": "120-20"
@@ -22421,9 +22378,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "pk": "case|121-20",
     "docketNumber": "121-20"
@@ -22466,9 +22421,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "APW",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
@@ -22513,9 +22466,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
@@ -22539,7 +22490,8 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|b99d6fab-d009-4f22-8bdf-e42157cecfe9",
-    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|inbox|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "121-20",
     "docketEntry": {
       "isPaper": true,
@@ -22649,9 +22601,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -22710,9 +22660,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -22843,9 +22791,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -22896,9 +22842,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -23040,9 +22984,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
-    ],
+    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.162Z",
@@ -23079,9 +23021,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
-    ],
+    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.222Z",
@@ -23182,7 +23122,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|5ea16d24-7088-4cb9-b137-59900836a96e",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "124-20",
     "associatedJudgeId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-30T20:23:57.361Z",
@@ -23304,9 +23245,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -23357,9 +23296,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -23489,9 +23426,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
-    ],
+    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -23518,9 +23453,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
-    ],
+    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -23674,9 +23607,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -23728,9 +23659,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -23860,9 +23789,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -23890,9 +23817,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -24097,9 +24022,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "05b98fff-e4ca-4114-b8ec-7218effc982e"
-    ],
+    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.081Z",
@@ -24136,9 +24059,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "05b98fff-e4ca-4114-b8ec-7218effc982e"
-    ],
+    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.130Z",
@@ -24200,7 +24121,8 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|aebe6b3d-71d8-4788-8991-6de482737bcc",
-    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "129-20",
     "updatedAt": "2020-11-30T22:57:58.406Z",
     "completedAt": "2020-11-30T22:58:08.206Z",
@@ -24933,9 +24855,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -24964,9 +24884,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -25134,9 +25052,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25165,9 +25081,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25267,9 +25181,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25298,9 +25210,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25525,9 +25435,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -25556,9 +25464,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -25726,9 +25632,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -25782,9 +25686,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -25952,9 +25854,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -26008,9 +25908,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -26203,9 +26101,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -26233,9 +26129,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -26402,9 +26296,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -26457,9 +26349,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -26651,9 +26541,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -26681,9 +26569,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -26804,9 +26690,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -26880,9 +26764,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -27074,9 +26956,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -27129,9 +27009,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -27179,7 +27057,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|d48e3364-ab16-4c79-8857-80239d1a418c",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "310-21W",
     "updatedAt": "2021-06-07T20:28:16.124Z",
     "completedAt": "2021-06-07T20:28:16.318Z",
@@ -27422,9 +27301,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -27452,9 +27329,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -27470,7 +27345,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|234a49d8-f304-42d6-8bd8-020563c77d16",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "311-21W",
     "updatedAt": "2021-06-14T15:16:23.112Z",
     "completedAt": "2021-06-14T15:16:23.253Z",
@@ -27719,9 +27595,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -27749,9 +27623,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -27792,7 +27664,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|3be01a88-d59e-464b-833f-6cf9e1126a65",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "312-21W",
     "updatedAt": "2021-10-25T18:55:28.576Z",
     "completedAt": "2021-10-25T18:55:28.700Z",
@@ -28050,9 +27923,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.976Z",
@@ -28090,9 +27961,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.967Z",
@@ -28130,9 +27999,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.979Z",
@@ -28150,7 +28017,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|2bab4861-ead9-424d-929a-19ad1acc2356",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "313-21",
     "updatedAt": "2021-10-25T18:57:31.746Z",
     "completedAt": "2021-10-25T18:57:31.747Z",
@@ -28189,7 +28057,8 @@
     "assigneeName": "Test Petitionsclerk1",
     "entityName": "WorkItem",
     "sk": "work-item|dcbdaca4-0bcc-4726-95e7-09b9dc59241d",
-    "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|4805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "313-21",
     "updatedAt": "2021-10-25T18:56:28.866Z",
     "completedAt": "2021-10-25T18:56:39.991Z",
@@ -28372,9 +28241,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -28402,9 +28269,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -28452,7 +28317,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|d716e1a9-529d-472d-924c-bd27b9efdcab",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "314-21W",
     "updatedAt": "2021-10-29T13:04:35.896Z",
     "completedAt": "2021-10-29T13:04:35.996Z",
@@ -28669,9 +28535,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -28724,9 +28588,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -28742,7 +28604,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|c91e875b-2a86-4318-a490-43d63a70ecd4",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "315-21W",
     "updatedAt": "2021-10-29T13:39:47.812Z",
     "completedAt": "2021-10-29T13:39:47.918Z",
@@ -28991,9 +28854,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -29046,9 +28907,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -29096,7 +28955,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|99da1552-ddba-4ed0-a5d1-5aa8b706686f",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "316-21W",
     "updatedAt": "2021-12-01T23:43:55.483Z",
     "completedAt": "2021-12-01T23:43:55.598Z",
@@ -29313,9 +29173,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -29368,9 +29226,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -29418,7 +29274,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|5ea01459-12d0-456d-8ce8-b91b2709c037",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "317-21W",
     "updatedAt": "2021-12-02T13:52:45.800Z",
     "completedAt": "2021-12-02T13:52:45.888Z",
@@ -29660,9 +29517,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -29690,9 +29545,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -29708,7 +29561,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|afda1ef3-86f3-41ca-b038-967fac6b6e91",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "318-21W",
     "updatedAt": "2021-12-02T16:16:32.112Z",
     "completedAt": "2021-12-02T16:16:32.227Z",
@@ -29957,9 +29811,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -29987,9 +29839,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -30030,7 +29880,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|0e522fe6-ae74-4af2-9456-bf9d6cb3e82d",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "319-21W",
     "updatedAt": "2021-12-02T16:26:44.864Z",
     "completedAt": "2021-12-02T16:26:44.977Z",
@@ -30310,9 +30161,7 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -30352,9 +30201,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-08T15:19:17.214Z",
@@ -30395,9 +30242,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "A",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|320-21",
@@ -30435,9 +30280,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-05T15:19:17.229Z",
@@ -30481,7 +30324,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|0b76f194-4661-4993-9b57-3e5f98193bd9",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "320-21S",
     "updatedAt": "2022-10-28T20:45:59.209Z",
     "completedAt": "2022-10-28T20:46:18.747Z",
@@ -30561,9 +30405,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -30590,6 +30432,7 @@
     "assigneeName": null,
     "entityName": "WorkItem",
     "sk": "work-item|0be1067a-f8cd-42cc-a1ab-5f93701fb49e",
+    "gsiSectionBox": "section|inbox|docket",
     "docketNumberWithSuffix": "320-21S",
     "docketEntry": {
       "eventCode": "A",
@@ -30619,7 +30462,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "320-21S",
     "updatedAt": "2021-11-09T15:22:52.474Z",
     "completedAt": "2021-11-09T15:22:52.475Z",
@@ -30658,7 +30502,8 @@
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
     "sk": "work-item|64f31afa-7aff-4243-b795-d7e79a057692",
-    "gsi2pk": "assigneeId|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|petitions",
     "docketNumberWithSuffix": "320-21S",
     "updatedAt": "2021-11-05T15:09:29.304Z",
     "completedAt": "2021-11-08T15:19:17.250Z",
@@ -40067,9 +39912,7 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatepractitioner@example.com"
@@ -40128,7 +39971,8 @@
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
     "sk": "work-item|4a3e2ec3-f9d8-40f3-abf9-526aab1e8c46",
-    "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiUserBox": "assigneeId|outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsiSectionBox": "section|outbox|docket",
     "docketNumberWithSuffix": "999-15",
     "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2021-12-02T16:18:37.515Z",
@@ -43253,9 +43097,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44409,9 +44251,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -44517,9 +44357,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -44622,9 +44460,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44735,9 +44571,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44845,9 +44679,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -44952,9 +44784,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -46459,9 +46289,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -47603,9 +47431,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -47710,9 +47536,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -47815,9 +47639,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -47927,9 +47749,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -48035,9 +47855,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -48141,9 +47959,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -52998,9 +52814,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405416"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -54429,9 +54243,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -54536,9 +54348,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -54641,9 +54451,7 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -54753,9 +54561,7 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -54861,9 +54667,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -54967,9 +54771,7 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": [
-        "7805d1ab-18d0-43ec-bafb-654e83405418"
-      ],
+      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",

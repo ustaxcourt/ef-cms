@@ -10,6 +10,7 @@ import { completeWorkItemInteractor } from './completeWorkItemInteractor';
 
 describe('completeWorkItemInteractor', () => {
   let mockUser;
+  let mockAuthorizedUser;
 
   const mockWorkItem = {
     assigneeId: applicationContext.getUniqueId(),
@@ -43,15 +44,19 @@ describe('completeWorkItemInteractor', () => {
       userId: applicationContext.getUniqueId(),
     };
 
+    mockAuthorizedUser = {
+      ...mockUser,
+      section: DOCKET_SECTION,
+    };
+
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockAuthorizedUser);
 
     applicationContext
       .getPersistenceGateway()
       .getWorkItemById.mockResolvedValue(mockWorkItem);
-
-    applicationContext
-      .getPersistenceGateway()
-      .putWorkItemInOutbox.mockReturnValue({});
 
     applicationContext
       .getPersistenceGateway()

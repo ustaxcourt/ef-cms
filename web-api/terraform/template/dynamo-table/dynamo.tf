@@ -36,22 +36,12 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   }
 
    attribute {
-    name = "gsi2pk"
+    name = "gsiUserBox"
     type = "S"
   }
 
   attribute {
-    name = "gsi3pk"
-    type = "S"
-  }
-
-  attribute {
-    name = "gsi4pk"
-    type = "S"
-  }
-
-  attribute {
-    name = "gsi5pk"
+    name = "gsiSectionBox"
     type = "S"
   }
 
@@ -67,36 +57,22 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   }
 
   global_secondary_index {
-    name            = "gsi2"
-    hash_key        = "gsi2pk"
+    name            = "gsiUserBox"
+    hash_key        = "gsiUserBox"
     range_key       = "sk"
     projection_type = "ALL"
   }
 
   global_secondary_index {
-    name            = "gsi3"
-    hash_key        = "gsi3pk"
-    range_key       = "sk"
-    projection_type = "ALL"
-  }
-
-  global_secondary_index {
-    name            = "gsi4"
-    hash_key        = "gsi4pk"
-    range_key       = "sk"
-    projection_type = "ALL"
-  }
-
-  global_secondary_index {
-    name            = "gsi5"
-    hash_key        = "gsi5pk"
+    name            = "gsiSectionBox"
+    hash_key        = "gsiSectionBox"
     range_key       = "sk"
     projection_type = "ALL"
   }
 
   # if glue job, and 10252 is only in test
-    # we need to run the "migration" after in order to repopulate the gsi3pk
-    # ... because the data itself woudn't have the gsi3pk key:value pair saved
+    # we need to run the "migration" after in order to repopulate the gsiSectionBox
+    # ... because the data itself woudn't have the gsiSectionBox key:value pair saved
   # if glue job and 10252 is in prod and test
     # we don't need to do anything special
 

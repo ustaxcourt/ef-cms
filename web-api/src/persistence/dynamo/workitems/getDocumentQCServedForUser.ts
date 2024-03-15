@@ -2,7 +2,7 @@ import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { queryFull } from '../../dynamodbClientService';
 
 export const getDocumentQCServedForUser = ({
@@ -12,9 +12,8 @@ export const getDocumentQCServedForUser = ({
   applicationContext: IApplicationContext;
   userId: string;
 }) => {
-  const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateISODate({
-    dateString: startOfDay,
+    dateString: createISODateAtStartOfDayEST(),
     howMuch: -7,
     units: 'days',
   });

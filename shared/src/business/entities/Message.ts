@@ -1,4 +1,5 @@
 import { CASE_STATUS_TYPES } from './EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
@@ -32,8 +33,16 @@ export class Message extends JoiValidationEntity {
   public to: string;
   public toSection: string;
   public toUserId: string;
+  public trialLocation?: string;
+  public trialDate?: string;
 
-  constructor(rawMessage, { applicationContext }) {
+  constructor(
+    rawMessage,
+    {
+      applicationContext,
+      caseEntity,
+    }: { applicationContext: IApplicationContext; caseEntity?: RawCase },
+  ) {
     super('Message');
 
     if (!applicationContext) {
@@ -43,17 +52,27 @@ export class Message extends JoiValidationEntity {
     this.attachments = (rawMessage.attachments || []).map(attachment => ({
       documentId: attachment.documentId,
     }));
-    this.caseStatus = rawMessage.caseStatus;
-    this.caseTitle = rawMessage.caseTitle;
+
+    // case fields
+    this.caseStatus = caseEntity?.status || rawMessage.caseStatus;
+    this.caseTitle = caseEntity
+      ? Case.getCaseTitle(caseEntity.caseCaption)
+      : rawMessage.caseTitle;
+    this.docketNumber = caseEntity?.docketNumber || rawMessage.docketNumber;
+    this.docketNumberWithSuffix =
+      caseEntity?.docketNumberWithSuffix || rawMessage.docketNumberWithSuffix;
+    this.leadDocketNumber =
+      caseEntity?.leadDocketNumber || rawMessage.leadDocketNumber;
+    this.trialDate = caseEntity?.trialDate || rawMessage.trialDate;
+    this.trialLocation = caseEntity?.trialLocation || rawMessage.trialLocation;
+
+    // message fields
     this.completedAt = rawMessage.completedAt;
     this.completedBy = rawMessage.completedBy;
     this.completedBySection = rawMessage.completedBySection;
     this.completedByUserId = rawMessage.completedByUserId;
     this.completedMessage = rawMessage.completedMessage;
     this.createdAt = rawMessage.createdAt || createISODateString();
-    this.leadDocketNumber = rawMessage.leadDocketNumber;
-    this.docketNumber = rawMessage.docketNumber;
-    this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
     this.from = rawMessage.from;
     this.fromSection = rawMessage.fromSection;
     this.fromUserId = rawMessage.fromUserId;
@@ -68,6 +87,16 @@ export class Message extends JoiValidationEntity {
     this.toSection = rawMessage.toSection;
     this.toUserId = rawMessage.toUserId;
   }
+
+  static CASE_PROPERTIES = [
+    'status',
+    'caseCaption',
+    'docketNumber',
+    'docketNumberWithSuffix',
+    'leadDocketNumber',
+    'trialDate',
+    'trialLocation',
+  ];
 
   static VALIDATION_RULES = {
     attachments: joi

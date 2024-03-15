@@ -2,10 +2,7 @@ import { chooseWorkQueueAction } from '../actions/chooseWorkQueueAction';
 import { clearSelectAllWorkItemsCheckboxAction } from '../actions/clearSelectAllWorkItemsCheckboxAction';
 import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
 import { getConstants } from '../../getConstants';
-import { getDocumentQCInboxForSectionAction } from '../actions/getDocumentQCInboxForSectionAction';
-import { getDocumentQCInboxForUserAction } from '../actions/getDocumentQCInboxForUserAction';
-import { getDocumentQCServedForSectionAction } from '../actions/getDocumentQCServedForSectionAction';
-import { getDocumentQCServedForUserAction } from '../actions/getDocumentQCServedForUserAction';
+import { getDocumentQCAction } from '../actions/getDocumentQCAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { parallel } from 'cerebral/factories';
@@ -47,18 +44,18 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
     [
       chooseWorkQueueAction,
       {
-        documentqcmyinProgress: [getDocumentQCInboxForUserAction],
-        documentqcmyinbox: [getDocumentQCInboxForUserAction],
-        documentqcmyoutbox: [getDocumentQCServedForUserAction],
+        documentqcmyinProgress: [getDocumentQCAction],
+        documentqcmyinbox: [getDocumentQCAction],
+        documentqcmyoutbox: [getDocumentQCAction],
         documentqcsectioninProgress: [
           clearSelectAllWorkItemsCheckboxAction,
-          getDocumentQCInboxForSectionAction,
+          getDocumentQCAction,
         ],
         documentqcsectioninbox: [
           clearSelectAllWorkItemsCheckboxAction,
-          getDocumentQCInboxForSectionAction,
+          getDocumentQCAction,
         ],
-        documentqcsectionoutbox: [getDocumentQCServedForSectionAction],
+        documentqcsectionoutbox: [getDocumentQCAction],
       },
       setWorkItemsAction,
     ],

@@ -83,10 +83,8 @@ import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
-import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocumentQCInboxForSectionLambda';
-import { getDocumentQCInboxForUserLambda } from './lambdas/workitems/getDocumentQCInboxForUserLambda';
-import { getDocumentQCServedForSectionLambda } from './lambdas/workitems/getDocumentQCServedForSectionLambda';
-import { getDocumentQCServedForUserLambda } from './lambdas/workitems/getDocumentQCServedForUserLambda';
+import { getDocumentQCForSectionLambda } from './lambdas/workitems/getDocumentQCForSectionLambda';
+import { getDocumentQCForUserLambda } from './lambdas/workitems/getDocumentQCForUserLambda';
 import { getEligibleCasesForTrialSessionLambda } from './lambdas/trialSessions/getEligibleCasesForTrialSessionLambda';
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './lambdas/trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMessagesForSectionLambda';
@@ -802,14 +800,10 @@ app.get(
  */
 {
   app.get(
-    '/sections/:section/document-qc/served',
-    lambdaWrapper(getDocumentQCServedForSectionLambda),
+    '/sections/:section/document-qc/:box',
+    lambdaWrapper(getDocumentQCForSectionLambda),
   );
   app.get('/sections/:section/users', lambdaWrapper(getUsersInSectionLambda));
-  app.get(
-    '/sections/:section/document-qc/inbox',
-    lambdaWrapper(getDocumentQCInboxForSectionLambda),
-  );
   app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
 }
 
@@ -923,12 +917,8 @@ app.get(
     lambdaWrapper(privatePractitionerPendingCaseAssociationLambda),
   );
   app.get(
-    '/users/:userId/document-qc/inbox',
-    lambdaWrapper(getDocumentQCInboxForUserLambda),
-  );
-  app.get(
-    '/users/:userId/document-qc/served',
-    lambdaWrapper(getDocumentQCServedForUserLambda),
+    '/users/:userId/document-qc/:box',
+    lambdaWrapper(getDocumentQCForUserLambda),
   );
   app.put(
     '/async/users/:userId/contact-info',

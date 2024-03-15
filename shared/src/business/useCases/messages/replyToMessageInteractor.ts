@@ -1,4 +1,3 @@
-import { Case } from '../../entities/cases/Case';
 import { Message, RawMessage } from '../../entities/Message';
 import {
   ROLE_PERMISSIONS,
@@ -30,10 +29,9 @@ export const replyToMessage = async (
     parentMessageId,
   });
 
-  const { caseCaption, docketNumberWithSuffix, status } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseEntity = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const fromUser = await applicationContext
     .getPersistenceGateway()
@@ -46,10 +44,6 @@ export const replyToMessage = async (
   const validatedRawMessage = new Message(
     {
       attachments,
-      caseStatus: status,
-      caseTitle: Case.getCaseTitle(caseCaption),
-      docketNumber,
-      docketNumberWithSuffix,
       from: fromUser.name,
       fromSection: fromUser.section,
       fromUserId: fromUser.userId,
@@ -60,7 +54,7 @@ export const replyToMessage = async (
       toSection,
       toUserId,
     },
-    { applicationContext },
+    { applicationContext, caseEntity },
   )
     .validate()
     .toRawObject();

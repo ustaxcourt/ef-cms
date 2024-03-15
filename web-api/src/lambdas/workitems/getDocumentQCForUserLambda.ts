@@ -1,19 +1,19 @@
 import { genericHandler } from '../../genericHandler';
 
 /**
- * returns all sent work items in a particular section
+ * returns the users inbox
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getDocumentQCInboxForSectionLambda = event =>
+export const getDocumentQCForUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { section } = event.pathParameters || {};
+    const { box, userId } = event.pathParameters || {};
 
     return await applicationContext
       .getUseCases()
-      .getDocumentQCInboxForSectionInteractor(applicationContext, {
-        section,
-        ...event.queryStringParameters,
+      .getDocumentQCForUserInteractor(applicationContext, {
+        box,
+        userId,
       });
   });

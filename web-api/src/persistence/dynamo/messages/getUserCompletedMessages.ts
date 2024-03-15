@@ -1,35 +1,35 @@
+import { RawMessage } from '@shared/business/entities/Message';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
 } from '@shared/business/utilities/DateHandler';
-import { queryFull } from '../../dynamodbClientService';
-import type { RawWorkItem } from '@shared/business/entities/WorkItem';
+import { queryFull } from '@web-api/persistence/dynamodbClientService';
 
-export const getDocumentQCServedForSection = ({
+export const getUserCompletedMessages = async ({
   applicationContext,
-  section,
+  userId,
 }: {
   applicationContext: IApplicationContext;
-  section: string;
-}): Promise<RawWorkItem[]> => {
+  userId: string;
+}): Promise<RawMessage[]> => {
   const afterDate = calculateISODate({
     dateString: createISODateAtStartOfDayEST(),
     howMuch: -7,
     units: 'days',
   });
 
-  const results = queryFull({
+  const results = (await queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
       ':afterDate': afterDate,
-      ':pk': `section-outbox|${section}`,
+      ':pk': `message|completed|user|${userId}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
-  }) as unknown as Promise<RawWorkItem[]>;
+  })) as unknown as RawMessage[];
 
   return results;
 };

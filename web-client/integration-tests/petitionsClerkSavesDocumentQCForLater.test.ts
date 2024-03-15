@@ -43,7 +43,9 @@ describe('Petitions Clerk Saves Document QC for Later', () => {
     await refreshElasticsearchIndex();
   });
 
-  petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest);
+  petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest, {
+    box: 'inbox',
+  });
 
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();

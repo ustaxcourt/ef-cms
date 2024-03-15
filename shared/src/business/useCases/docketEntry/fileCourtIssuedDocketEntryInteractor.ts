@@ -166,33 +166,16 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      const saveItems = [
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        }),
-      ];
-
       const rawValidWorkItem = workItem.validate().toRawObject();
-      if (isUnservable) {
-        saveItems.push(
-          applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-            applicationContext,
-            section: user.section,
-            userId: user.userId,
-            workItem: rawValidWorkItem,
-          }),
-        );
-      } else {
-        saveItems.push(
-          applicationContext.getPersistenceGateway().saveWorkItem({
-            applicationContext,
-            workItem: rawValidWorkItem,
-          }),
-        );
-      }
 
-      return Promise.all(saveItems);
+      await applicationContext.getPersistenceGateway().saveWorkItem({
+        applicationContext,
+        workItem: rawValidWorkItem,
+      });
+      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: caseEntity,
+      });
     }),
   );
 

@@ -39,7 +39,14 @@ describe('chooseWorkQueueSequence', () => {
       queue: 'section',
     });
     expect(
-      applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor,
-    ).toHaveBeenCalled();
+      applicationContext.getUseCases().getDocumentQCInteractor.mock.calls[0][1],
+    ).toMatchObject({
+      box: 'inbox',
+      judgeUser: {},
+      recipient: {
+        group: 'section',
+        identifier: PETITIONS_SECTION,
+      },
+    });
   });
 });

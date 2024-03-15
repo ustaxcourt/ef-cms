@@ -1,6 +1,4 @@
 /* eslint-disable max-lines */
-jest.mock('../../entities/Message');
-jest.mock('../../entities/CaseDeadline');
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -18,6 +16,9 @@ import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { v4 as uuidv4 } from 'uuid';
+
+jest.spyOn(Message, 'validateRawCollection');
+jest.spyOn(CaseDeadline, 'validateRawCollection');
 
 describe('updateCaseAndAssociations', () => {
   let updateCaseMock = jest.fn();

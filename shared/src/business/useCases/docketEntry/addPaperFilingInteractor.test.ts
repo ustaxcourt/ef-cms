@@ -226,10 +226,6 @@ describe('addPaperFilingInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).not.toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
