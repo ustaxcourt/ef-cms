@@ -14,7 +14,7 @@ describe('petitions clerk removes petitioner during petition QC', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('Create test case with a primary and secondary petitioner', async () => {
     const caseDetail = await uploadPetition(
       cerebralTest,
@@ -30,7 +30,7 @@ describe('petitions clerk removes petitioner during petition QC', () => {
         },
         partyType: PARTY_TYPES.petitionerSpouse,
       },
-      'privatepractitioner@example.com',
+      'privatePractitioner@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;

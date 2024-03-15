@@ -620,3 +620,35 @@ export const CASE_STATUS_RULE = joi
   })
   .meta({ tags: ['Restricted'] })
   .description('Status of the case.');
+
+export const PASSWORD_VALIDATION_ERROR_MESSAGES = {
+  hasNoLeadingOrTrailingSpace: 'Must not contain leading or trailing space',
+  hasOneLowercase: 'Must contain lower case letter',
+  hasOneNumber: 'Must contain number',
+  hasOneUppercase: 'Must contain upper case letter',
+  hasSpecialCharacterOrSpace: 'Must contain special character or space',
+  isProperLength: 'Must be between 8-99 characters long',
+};
+export const PASSWORD_RULE = joi
+  .string()
+  .required()
+  .min(8)
+  .max(99)
+  .pattern(new RegExp(/[a-z]/), { name: 'hasOneLowercase' })
+  .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneLowercase)
+  .pattern(new RegExp(/[A-Z]/), { name: 'hasOneUppercase' })
+  .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneUppercase)
+  .pattern(new RegExp(/[\^$*.[\]{}()\s?\-“!@#%&/,><’:;|_~`]/), {
+    name: 'hasOneSpecialCharacter',
+  })
+  .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasSpecialCharacterOrSpace)
+  .pattern(new RegExp(/[0-9]/), { name: 'hasOneNumber' })
+  .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasOneNumber)
+  .pattern(new RegExp(/^(?!.*\s$)(?!^\s).*$/), {
+    name: 'hasNoLeadingOrTrailingSpace',
+  })
+  .message(PASSWORD_VALIDATION_ERROR_MESSAGES.hasNoLeadingOrTrailingSpace)
+  .messages({
+    'string.max': PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength,
+    'string.min': PASSWORD_VALIDATION_ERROR_MESSAGES.isProperLength,
+  });

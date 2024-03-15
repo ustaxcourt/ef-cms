@@ -8,11 +8,9 @@ import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTri
 import { getUserCaseNoteForCasesAction } from '../actions/TrialSession/getUserCaseNoteForCasesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { gotoTrialSessionDetailSequence } from './gotoTrialSessionDetailSequence';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { isUserAssociatedWithTrialSessionAction } from '../actions/TrialSession/isUserAssociatedWithTrialSessionAction';
 import { mergeCaseOrderIntoCalendaredCasesAction } from '../actions/TrialSession/mergeCaseOrderIntoCalendaredCasesAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCaseNotesOntoCalendaredCasesAction } from '../actions/TrialSession/setCaseNotesOntoCalendaredCasesAction';
@@ -52,41 +50,34 @@ const checkUserAssociationAndProceed = [
   },
 ];
 
-const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
-  setupCurrentPageAction('Interstitial'),
-  clearErrorAlertsAction,
-  setTrialSessionIdAction,
-  getTrialSessionDetailsAction,
-  setTrialSessionDetailsAction,
-  getJudgeForCurrentUserAction,
-  setJudgeUserAction,
-  runPathForUserRoleAction,
-  {
-    ...takePathForRoles(
-      [
-        USER_ROLES.adc,
-        USER_ROLES.admissionsClerk,
-        USER_ROLES.clerkOfCourt,
-        USER_ROLES.caseServicesSupervisor,
-        USER_ROLES.docketClerk,
-        USER_ROLES.petitionsClerk,
+export const gotoTrialSessionWorkingCopySequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    clearErrorAlertsAction,
+    setTrialSessionIdAction,
+    getTrialSessionDetailsAction,
+    setTrialSessionDetailsAction,
+    getJudgeForCurrentUserAction,
+    setJudgeUserAction,
+    runPathForUserRoleAction,
+    {
+      ...takePathForRoles(
+        [
+          USER_ROLES.adc,
+          USER_ROLES.admissionsClerk,
+          USER_ROLES.clerkOfCourt,
+          USER_ROLES.caseServicesSupervisor,
+          USER_ROLES.docketClerk,
+          USER_ROLES.petitionsClerk,
+        ],
+        gotoTrialSessionDetailSequence,
+      ),
+      chambers: [
+        getUsersInSectionAction({}),
+        setUsersAction,
+        ...checkUserAssociationAndProceed,
       ],
-      gotoTrialSessionDetailSequence,
-    ),
-    chambers: [
-      getUsersInSectionAction({}),
-      setUsersAction,
-      ...checkUserAssociationAndProceed,
-    ],
-    judge: checkUserAssociationAndProceed,
-    trialclerk: checkUserAssociationAndProceed,
-  },
-]);
-
-export const gotoTrialSessionWorkingCopySequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoTrialSessionDetails,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+      judge: checkUserAssociationAndProceed,
+      trialclerk: checkUserAssociationAndProceed,
+    },
+  ]);
