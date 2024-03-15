@@ -1,4 +1,4 @@
-export const setAsyncSyncResultAction = ({
+export const resolveAsyncSyncRequestAction = ({
   applicationContext,
   props,
 }: ActionProps) => {
