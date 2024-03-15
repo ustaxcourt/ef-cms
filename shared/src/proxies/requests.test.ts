@@ -111,7 +111,7 @@ describe('requests that perform writes', () => {
 });
 
 describe('Asyn Sync Request', () => {
-  it('should test', async () => {
+  it('should setup the callback and trigger an http request', async () => {
     let promiseCallback;
 
     applicationContext.getUniqueId = jest
@@ -127,7 +127,7 @@ describe('Asyn Sync Request', () => {
         });
       });
 
-    const setAsyncSyncResultMock = jest
+    const setAsyncSyncCompleterMock = jest
       .fn()
       .mockImplementation((_, callback) => {
         promiseCallback = callback;
@@ -137,7 +137,7 @@ describe('Asyn Sync Request', () => {
       applicationContext: {
         ...applicationContext,
         getAsynSyncUtil: () => ({
-          setAsyncSyncResult: setAsyncSyncResultMock,
+          setAsyncSyncCompleter: setAsyncSyncCompleterMock,
         }),
       },
       body: 'REQUEST_BODY',
@@ -146,7 +146,7 @@ describe('Asyn Sync Request', () => {
 
     await asyncSyncPost(request);
 
-    const setAsyncSyncResultCalls = setAsyncSyncResultMock.mock.calls;
+    const setAsyncSyncResultCalls = setAsyncSyncCompleterMock.mock.calls;
     expect(setAsyncSyncResultCalls.length).toEqual(1);
     expect(setAsyncSyncResultCalls[0][0]).toEqual('TEST_ID');
     expect(typeof setAsyncSyncResultCalls[0][1]).toEqual('function');
