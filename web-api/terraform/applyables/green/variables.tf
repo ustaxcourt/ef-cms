@@ -38,19 +38,11 @@ variable "deploying_color" {
   type = string
 }
 
-variable "blue_table_name" {
-  type = string
-}
-
 variable "default_account_pass" {
   type = string
 }
 
 variable "green_table_name" {
-  type = string
-}
-
-variable "blue_elasticsearch_domain" {
   type = string
 }
 
@@ -120,16 +112,8 @@ variable "green_node_version" {
   type = string
 }
 
-variable "blue_node_version" {
-  type = string
-}
-
 
 variable "green_use_layers" {
-  type = string
-}
-
-variable "blue_use_layers" {
   type = string
 }
 
