@@ -51,6 +51,10 @@ data "aws_route53_zone" "zone" {
   private_zone = "false"
 }
 
+data "aws_dynamodb_table" "blue_dynamo_table" {
+  name = var.blue_table_name
+}
+
 data "null_data_source" "locals" {
   inputs = {
     AWS_ACCOUNT_ID                     = data.aws_caller_identity.current.account_id
@@ -84,10 +88,6 @@ data "null_data_source" "locals" {
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
   }
-}
-
-data "aws_dynamodb_table" "blue_dynamo_table" {
-  name = var.blue_table_name
 }
 
 module "api-east-blue" {
