@@ -11,7 +11,11 @@ Goals
 :::Deployment steps:::
 - on staging branch deploy with all resource "aws_api_gateway_deployment" lifecycles deleted
 - Manually delete all custom domain names for the environment
+- manually delete resources in aws console
+  - cloudwatch log group /aws/apigateway/gateway_api_public_exp5_green in us-east-1
+  - cloudwatch log group /aws/apigateway/gateway_api_public_exp5_green in us-west-1
 - switch to 'terraform-module-esbuild' and deploy
+
 
 
 
