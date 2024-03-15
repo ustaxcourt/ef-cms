@@ -27,6 +27,7 @@ const apiConfig: webpack.Configuration = {
     'websocket-authorizer':
       './web-api/terraform/template/lambdas/websocket-authorizer.ts',
     websockets: './web-api/terraform/template/lambdas/websockets.ts',
+    'worker-handler': './web-api/terraform/template/lambdas/worker-handler.ts',
   },
   output: {
     clean: true,

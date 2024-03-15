@@ -1,4 +1,3 @@
-
 .cache/
 .DS_Store
 .dynamodb/
@@ -70,3 +69,4 @@ metadata.json
 metadata-public.json
 stats.html
 other/
+.cognito/db/local_2pHzece7.json

@@ -27,10 +27,6 @@ describe('verify old served work items do not show up in the outbox', () => {
   let workItemId7;
   let workItemId8;
 
-  beforeAll(() => {
-    jest.setTimeout(300000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });

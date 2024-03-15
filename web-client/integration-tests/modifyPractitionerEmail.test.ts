@@ -15,7 +15,7 @@ describe('Modify Practitioner Email', () => {
 
   cerebralTest.createdDocketNumbers = [];
 
-  const practitionerEmail = 'privatepractitioner2@example.com';
+  const practitionerEmail = 'privatePractitioner2@example.com';
 
   let caseDetail;
 

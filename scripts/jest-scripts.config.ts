@@ -17,6 +17,7 @@ const config: Config = {
     '!dynamo/fix-race-condition-served-in-drafts.ts',
     '!dynamo/read-segment.ts',
     '!dynamo/set-local-migration-complete-marker.ts',
+    '!dynamo/set-maintenance-mode.ts',
     '!elasticsearch/create-temporary-indices.ts',
     '!elasticsearch/docket-entry-search.ts',
     '!elasticsearch/docket-inbox.ts',

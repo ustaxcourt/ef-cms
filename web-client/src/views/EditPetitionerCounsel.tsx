@@ -119,6 +119,7 @@ export const EditPetitionerCounsel = connect(
 
           <div>
             <Button
+              data-testid="submit-edit-petitioner-information-button"
               id="submit-edit-petitioner-information"
               onClick={() => {
                 submitEditPetitionerCounselSequence();

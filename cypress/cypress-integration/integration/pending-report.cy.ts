@@ -2,7 +2,7 @@ import {
   FORMATS,
   formatNow,
 } from '../../../shared/src/business/utilities/DateHandler';
-import { loginAsDocketClerk } from '../../helpers/auth/login-as-helpers';
+import { loginAsDocketClerk1 } from '../../helpers/auth/login-as-helpers';
 import path from 'path';
 
 describe('Pending report', () => {
@@ -12,7 +12,7 @@ describe('Pending report', () => {
 
   describe('View pending report', () => {
     it('should navigate to the pending report, select chief judge from the dropdown, verify the results, export said results as csv, and navigate to the pending report pdf page', () => {
-      loginAsDocketClerk();
+      loginAsDocketClerk1();
 
       cy.get('[data-testid="dropdown-select-report"]').click();
       cy.get('[data-testid="select-pending-report"]').click();

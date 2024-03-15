@@ -67,7 +67,7 @@ describe('Docket Clerk unseals a case', () => {
   associatedUserAdvancedSearchForCase(cerebralTest);
 
   //unassociated user can still find the case
-  loginAs(cerebralTest, 'privatepractitioner3@example.com');
+  loginAs(cerebralTest, 'privatePractitioner3@example.com');
   unassociatedUserViewsCaseDetailForUnsealedCase(cerebralTest);
   unassociatedUserAdvancedSearchForUnsealedCase(cerebralTest);
 });
