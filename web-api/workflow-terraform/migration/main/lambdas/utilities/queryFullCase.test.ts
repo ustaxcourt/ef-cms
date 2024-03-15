@@ -9,17 +9,13 @@ describe('queryFullCase', () => {
     documentClient = {
       query: jest
         .fn()
-        .mockReturnValueOnce({
-          promise: () => ({
-            Items: [item1],
-            LastEvaluatedKey: '1',
-          }),
+        .mockResolvedValueOnce({
+          Items: [item1],
+          LastEvaluatedKey: '1',
         })
-        .mockReturnValueOnce({
-          promise: () => ({
-            Items: [item2],
-            LastEvaluatedKey: null,
-          }),
+        .mockResolvedValueOnce({
+          Items: [item2],
+          LastEvaluatedKey: null,
         }),
     };
   });

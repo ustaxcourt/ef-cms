@@ -38,7 +38,7 @@ const dynamodbClient = new AWS.DynamoDB(config);
 const dynamodbStreamsClient = new AWS.DynamoDBStreams(config);
 const tableName = 'efcms-local';
 
-let chunks = [];
+let chunks: any[] = [];
 
 /**
  * This endpoint it hit to know when the streams queue is empty.  An empty queue
@@ -55,7 +55,7 @@ localStreamsApp.get('/isDone', (req, res) => {
       TableName: tableName,
     })
     .promise()
-    .then(results => results.Table.LatestStreamArn);
+    .then(results => results?.Table?.LatestStreamArn!);
 
   const { StreamDescription } = await dynamodbStreamsClient
     .describeStream({
@@ -82,7 +82,7 @@ localStreamsApp.get('/isDone', (req, res) => {
     );
   };
 
-  StreamDescription.Shards.forEach(shard => processShard(shard));
+  StreamDescription?.Shards?.forEach(shard => processShard(shard));
 })();
 
 let isSecondRun = fs.existsSync('./first-run.txt');
@@ -114,23 +114,23 @@ localStreamsApp.listen(5005);
 const connections = {};
 
 const server = http.createServer((request, response) => {
-  let body = '';
+  let requestBody = '';
   request.on('data', chunk => {
-    body += chunk.toString();
+    requestBody += chunk.toString();
   });
-  request.on('end', () => {
+  request.on('end', async () => {
     const split = request.url!.split('/');
     const connectionId = split[split.length - 1];
     if (connections[connectionId]) {
-      connections[connectionId].sendUTF(body);
+      connections[connectionId].sendUTF(requestBody);
       response.writeHead(200);
-      response.end();
+      return response.end();
     } else if (request.url?.includes('isDone')) {
       response.writeHead(200);
-      response.end();
+      return response.end();
     } else {
       response.writeHead(410);
-      response.end();
+      return response.end();
     }
   });
 });

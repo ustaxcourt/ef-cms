@@ -54,19 +54,17 @@ export const Interstitial = connect(
           </>
         )}
         {!alertHelper.showErrorAlert && (
-          <>
-            <div
-              aria-label="please wait"
-              aria-live="polite"
-              className="progress-indicator"
-            >
-              <FontAwesomeIcon
-                className="fa-spin spinner"
-                icon="sync"
-                size="6x"
-              />
-            </div>
-          </>
+          <div
+            aria-label="please wait"
+            aria-live="polite"
+            className="loading-overlay progress-indicator"
+          >
+            <FontAwesomeIcon
+              className="fa-spin spinner"
+              icon="sync"
+              size="6x"
+            />
+          </div>
         )}
       </>
     );

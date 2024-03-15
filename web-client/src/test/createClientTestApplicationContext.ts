@@ -22,8 +22,6 @@ import {
 } from '@shared/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  getCognitoLoginUrl,
-  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
@@ -569,11 +567,6 @@ const createTestApplicationContext = () => {
         promise: jest.fn(),
       }),
     }),
-    getCognitoClientId: jest.fn(),
-    getCognitoLoginUrl,
-    getCognitoRedirectUrl: jest.fn(),
-    getCognitoRequestPasswordResetUrl,
-    getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),
@@ -616,7 +609,6 @@ const createTestApplicationContext = () => {
       sendCalendarSessionEvent: jest.fn(),
       sendEmailEventToQueue: jest.fn(),
       sendSetTrialSessionCalendarEvent: jest.fn(),
-      sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
@@ -628,6 +620,7 @@ const createTestApplicationContext = () => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
+    getPrivateUrl: jest.fn(),
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
     getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),

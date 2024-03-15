@@ -10,6 +10,6 @@ import { get } from '../requests';
 export const getMaintenanceModeInteractor = applicationContext => {
   return get({
     applicationContext,
-    endpoint: '/maintenance-mode',
+    endpoint: '/system/maintenance-mode',
   });
 };

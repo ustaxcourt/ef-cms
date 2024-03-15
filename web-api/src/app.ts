@@ -12,19 +12,17 @@ import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocu
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
 import { associateIrsPractitionerWithCaseLambda } from './lambdas/manualAssociation/associateIrsPractitionerWithCaseLambda';
 import { associatePrivatePractitionerWithCaseLambda } from './lambdas/manualAssociation/associatePrivatePractitionerWithCaseLambda';
-import { authenticateUserLambda } from './lambdas/auth/authenticateUserLambda';
 import { batchDownloadTrialSessionLambda } from './lambdas/trialSessions/batchDownloadTrialSessionLambda';
 import { blockCaseFromTrialLambda } from './lambdas/cases/blockCaseFromTrialLambda';
 import { caseAdvancedSearchLambda } from './lambdas/cases/caseAdvancedSearchLambda';
-import { changePasswordLocalLambda } from './auth/changePasswordLocalLambda';
+import { changePasswordLambda } from '@web-api/lambdas/auth/changePasswordLambda';
 import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabilityLambda';
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
-import { cognitoTriggersLocalLambda } from '../terraform/template/lambdas/cognitoTriggersLocalLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
-import { confirmSignUpLocalLambda } from './auth/confirmSignUpLocalLambda';
+import { confirmSignUpLambda } from './lambdas/auth/confirmSignUpLambda';
 import { createApplicationContext } from './applicationContext';
 import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
@@ -55,6 +53,7 @@ import { fileCorrespondenceDocumentLambda } from './lambdas/correspondence/fileC
 import { fileCourtIssuedDocketEntryLambda } from './lambdas/documents/fileCourtIssuedDocketEntryLambda';
 import { fileCourtIssuedOrderToCaseLambda } from './lambdas/documents/fileCourtIssuedOrderToCaseLambda';
 import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExternalDocumentToCaseLambda';
+import { forgotPasswordLambda } from '@web-api/lambdas/auth/forgotPasswordLambda';
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
 import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
@@ -124,19 +123,21 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logOldLoginAttemptLambda } from '@web-api/lambdas/auth/oldLoginAttemptLambda';
 import { logger } from './logger';
+import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
 import { prioritizeCaseLambda } from './lambdas/cases/prioritizeCaseLambda';
 import { privatePractitionerCaseAssociationLambda } from './lambdas/cases/privatePractitionerCaseAssociationLambda';
 import { privatePractitionerPendingCaseAssociationLambda } from './lambdas/cases/privatePractitionerPendingCaseAssociationLambda';
-import { refreshAuthTokenLambda } from './lambdas/auth/refreshAuthTokenLambda';
 import { removeCaseFromTrialLambda } from './lambdas/trialSessions/removeCaseFromTrialLambda';
 import { removeCasePendingItemLambda } from './lambdas/cases/removeCasePendingItemLambda';
 import { removeConsolidatedCasesLambda } from './lambdas/cases/removeConsolidatedCasesLambda';
 import { removePdfFromDocketEntryLambda } from './lambdas/documents/removePdfFromDocketEntryLambda';
 import { removePetitionerAndUpdateCaptionLambda } from './lambdas/cases/removePetitionerAndUpdateCaptionLambda';
 import { removeSignatureFromDocumentLambda } from './lambdas/documents/removeSignatureFromDocumentLambda';
+import { renewIdTokenLambda } from './lambdas/auth/renewIdTokenLambda';
 import { replyToMessageLambda } from './lambdas/messages/replyToMessageLambda';
 import { runTrialSessionPlanningReportLambda } from './lambdas/trialSessions/runTrialSessionPlanningReportLambda';
 import { saveCalendarNoteLambda } from './lambdas/trialSessions/saveCalendarNoteLambda';
@@ -156,6 +157,7 @@ import { setMessageAsReadLambda } from './lambdas/messages/setMessageAsReadLambd
 import { setNoticesForCalendaredTrialSessionLambda } from './lambdas/trialSessions/setNoticesForCalendaredTrialSessionLambda';
 import { setTrialSessionCalendarLambda } from './lambdas/trialSessions/setTrialSessionCalendarLambda';
 import { setWorkItemAsReadLambda } from './lambdas/workitems/setWorkItemAsReadLambda';
+import { signUpUserLambda } from '@web-api/users/signUpUserLambda';
 import { strikeDocketEntryLambda } from './lambdas/documents/strikeDocketEntryLambda';
 import { swaggerJsonLambda } from './lambdas/swagger/swaggerJsonLambda';
 import { swaggerLambda } from './lambdas/swagger/swaggerLambda';
@@ -210,7 +212,10 @@ const allowAccessOriginFunction = (origin, callback) => {
 
   //if the backend is running locally or if an official deployed front-end called the backend, parrot out the Origin
   //this is required for the browser to support receiving and sending cookies
-  if (process.env.IS_LOCAL || origin.includes(process.env.EFCMS_DOMAIN)) {
+  if (
+    applicationContext.environment.stage === 'local' ||
+    origin.includes(process.env.EFCMS_DOMAIN)
+  ) {
     callback(null, origin);
     return;
   }
@@ -934,10 +939,7 @@ app.get(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put(
-    '/async/users/verify-email',
-    lambdaWrapper(verifyUserPendingEmailLambda, { isAsync: true }),
-  );
+  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),
@@ -999,17 +1001,12 @@ app.get(
 }
 
 /**
- * maintenance-mode
+ * system
  */
 {
-  app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
-}
-
-/**
- * feature-flag
- */
-{
-  app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+  app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
+  app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+  app.get('/system/metrics/old-login', lambdaWrapper(logOldLoginAttemptLambda));
 }
 
 /**
@@ -1018,27 +1015,20 @@ app.get(
 {
   app
     .route('/auth/login')
-    .post(lambdaWrapper(authenticateUserLambda))
-    .delete(lambdaWrapper(deleteAuthCookieLambda));
-  app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
+    .delete(lambdaWrapper(deleteAuthCookieLambda))
+    .post(lambdaWrapper(loginLambda));
+  app.post('/auth/refresh', lambdaWrapper(renewIdTokenLambda));
+  app.post('/auth/confirm-signup', lambdaWrapper(confirmSignUpLambda));
+  app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
+  app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
+  app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
 }
 
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
-if (process.env.IS_LOCAL) {
+if (applicationContext.environment.stage === 'local') {
   app.get(
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
-  // This following endpoints are used by cognito-local
-  app.post(
-    '/cognito-triggers-local',
-    lambdaWrapper(cognitoTriggersLocalLambda, {
-      isAsync: true,
-    }),
-  );
-
-  app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
-
-  app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
 }

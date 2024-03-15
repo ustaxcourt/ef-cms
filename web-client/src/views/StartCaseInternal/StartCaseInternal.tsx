@@ -19,6 +19,7 @@ export const StartCaseInternal = connect(
     documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
+    startCaseHelper: state.startCaseHelper,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
@@ -27,6 +28,7 @@ export const StartCaseInternal = connect(
     documentSelectedForScan,
     formCancelToggleCancelSequence,
     showModal,
+    startCaseHelper,
     submitPetitionFromPaperSequence,
     validatePetitionFromPaperSequence,
   }) {
@@ -75,28 +77,7 @@ export const StartCaseInternal = connect(
               </div>
               <div className="grid-col-7">
                 <ScanBatchPreviewer
-                  documentTabs={[
-                    {
-                      documentType: 'petitionFile',
-                      title: 'Petition',
-                    },
-                    {
-                      documentType: 'stinFile',
-                      title: 'STIN',
-                    },
-                    {
-                      documentType: 'requestForPlaceOfTrialFile',
-                      title: 'RQT',
-                    },
-                    {
-                      documentType: 'corporateDisclosureFile',
-                      title: 'CDS',
-                    },
-                    {
-                      documentType: 'applicationForWaiverOfFilingFeeFile',
-                      title: 'APW',
-                    },
-                  ]}
+                  documentTabs={startCaseHelper.documentTabs}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
                   validateSequence={validatePetitionFromPaperSequence}

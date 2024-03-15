@@ -1,3 +1,4 @@
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { throttle } from 'lodash';
 
@@ -5,7 +6,6 @@ const throttledStatus = throttle(statusMessage => statusMessage, 3000, {
   leading: true,
 });
 
-import { Get } from 'cerebral';
 export const fileUploadStatusHelper = (get: Get): any => {
   const timeRemaining = get(state.fileUploadProgress.timeRemaining);
   const percentComplete = get(state.fileUploadProgress.percentComplete);

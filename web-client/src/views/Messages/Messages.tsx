@@ -31,7 +31,9 @@ export const Messages = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1 tabIndex={-1}>{messagesHelper.messagesTitle}</h1>
+            <h1 data-testid="messages-banner" tabIndex={-1}>
+              {messagesHelper.messagesTitle}
+            </h1>
             <span
               aria-label="unread messages count"
               className="unread margin-right-2"

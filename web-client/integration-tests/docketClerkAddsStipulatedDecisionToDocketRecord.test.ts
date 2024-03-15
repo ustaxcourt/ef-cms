@@ -52,7 +52,7 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('unassociated privatePractitioner views Stipulated Decision on docket record after policy change date', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);

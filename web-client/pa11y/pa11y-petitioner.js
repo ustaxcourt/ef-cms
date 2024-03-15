@@ -1,38 +1,79 @@
+const { loginAs } = require('./helpers');
+
 module.exports = [
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/',
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/before-starting-a-case',
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-1',
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/my-account',
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/change-login-and-service-email',
   {
     actions: [
-      'wait for element label#hasIrsNotice-0 to be visible',
-      'click element label#hasIrsNotice-0',
-      'wait for .case-type-select to be visible',
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/',
     ],
-    notes: 'expose hidden elements on start-a-case for Yes notice',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-2&info=reveal-hidden-elements-yes-notice',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/before-starting-a-case',
+    ],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-1',
+    ],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/my-account',
+    ],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/change-login-and-service-email',
+    ],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-2',
+      'wait for element label#hasIrsNotice-0 to be visible',
+      'click element label#hasIrsNotice-0',
+      'wait for .case-type-select to be visible',
+      'wait for element label#atp-file-upload-label to be visible',
+    ],
+    notes: 'expose hidden elements on start-a-case for Yes notice',
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-2',
       'wait for element label#hasIrsNotice-1 to be visible',
       'click element label#hasIrsNotice-1',
       'wait for .case-type-select to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for No notice',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-2&info=reveal-hidden-elements-no-notice',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-0 to be visible',
       'click element label#filing-type-0',
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Petitioner',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-1 to be visible',
       'click element label#filing-type-1',
       'wait for element label#is-spouse-deceased-0 to be visible',
@@ -41,10 +82,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-deceased-spouse',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for label#filing-type-1 to be visible',
       'click element label#filing-type-1',
       'wait for label#is-spouse-deceased-0 to be visible',
@@ -61,10 +104,12 @@ module.exports = [
       'expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse with international addresses',
       "Use 'set field' and then 'check field' to trigger the onChange event on the select",
     ],
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-deceased-spouse-international',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-1 to be visible',
       'click element label#filing-type-1',
       'wait for element label#is-spouse-deceased-1 to be visible',
@@ -73,10 +118,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Petitioner & Spouse',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-spouse',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-2 to be visible',
       'click element label#filing-type-2',
       'wait for element label#is-business-type-0 to be visible',
@@ -84,10 +131,12 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Corporation',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-corporation',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-2 to be visible',
       'click element label#filing-type-2',
       'wait for element label#is-business-type-1 to be visible',
@@ -96,10 +145,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Partnership (Tax Matters)',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-tax-matters',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-2 to be visible',
       'click element label#filing-type-2',
       'wait for element label#is-business-type-2 to be visible',
@@ -108,10 +159,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Partnership (Other Than Tax Matters)',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-other',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-2 to be visible',
       'click element label#filing-type-2',
       'wait for element label#is-business-type-3 to be visible',
@@ -120,10 +173,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Partnership (BBA)',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-bba',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-0 to be visible',
@@ -134,10 +189,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Estate With Executor',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-estate-with-executor',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-0 to be visible',
@@ -148,10 +205,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Estate Without Executor',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-estate-without-executor',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-0 to be visible',
@@ -161,10 +220,12 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Trust',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-trust',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-1 to be visible',
@@ -174,10 +235,12 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Conservator',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-conservator',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-1 to be visible',
@@ -187,10 +250,12 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Guardian',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-guardian',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-1 to be visible',
@@ -200,10 +265,12 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Custodian',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-custodian',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-1 to be visible',
@@ -213,10 +280,12 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Minor',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-minor',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-1 to be visible',
@@ -227,10 +296,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Legally Incompetent Person',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-incompetent-person',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-2 to be visible',
@@ -238,10 +309,12 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Donor',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-donor',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-3 to be visible',
@@ -249,10 +322,12 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Transferee',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-transferee',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
       'wait for element label#is-other-type-4 to be visible',
@@ -261,10 +336,12 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Surviving Spouse',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-surviving-spouse',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/file-a-petition-pa11y/step-4',
       'wait for button.case-difference to be visible',
       'wait for #case-difference-container to be hidden',
       'click element button.case-difference',
@@ -274,13 +351,33 @@ module.exports = [
       'wait for #preferred-trial-city to be visible',
     ],
     notes: 'expose all hidden elements on start-a-case',
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-4&info=reveal-hidden-elements',
+    url: 'http://localhost:1234/',
   },
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19',
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document',
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document/review',
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/case-detail/101-19',
+    ],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/case-detail/101-19/file-a-document',
+    ],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/case-detail/101-19/file-a-document/review',
+    ],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/case-detail/101-19/file-a-document',
       'wait for element #react-select-2-input to be visible',
       'click #react-select-2-input',
       'wait for element .select-react-element__menu to be visible',
@@ -289,10 +386,12 @@ module.exports = [
     notes: [
       'Check accessibility of elements after choosing a Nonstandard H document',
     ],
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-1',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/case-detail/101-19/file-a-document',
       'wait for element #document-type to be visible',
       'click #document-type',
       'set field #document-type input to Motion for Leave to File Out of Time',
@@ -308,10 +407,11 @@ module.exports = [
       'wait for element #secondary-document to be visible',
     ],
     notes: ['File a document, step 2'],
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
       'wait for element #case-list to be visible',
       'wait for element #pay_filing_fee to be visible',
       'click element .payment-options',
@@ -320,16 +420,29 @@ module.exports = [
     notes: [
       'Check accessibility of view filing fee payment options with filed cases',
     ],
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=',
+    url: 'http://localhost:1234/',
   },
   {
     actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
       'wait for element #pay_filing_fee to be visible',
       'click element #pay_filing_fee',
     ],
     notes: ['Check accessibility of Pay filing fee button'],
-    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=',
+    url: 'http://localhost:1234/',
   },
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/contacts/primary/edit',
-  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/contacts/secondary/edit',
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/case-detail/101-19/contacts/primary/edit',
+    ],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: [
+      ...loginAs({ username: 'petitioner@example.com' }),
+      'navigate to http://localhost:1234/case-detail/101-19/contacts/secondary/edit',
+    ],
+    url: 'http://localhost:1234/',
+  },
 ];

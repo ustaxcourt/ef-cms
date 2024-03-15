@@ -49,19 +49,19 @@ else
   fi
 fi
 
-if [ -n "${USE_COGNITO_LOCAL}" ]; then
-  echo "Starting local lambda for cognito triggers"
-  npm run start:cognito-triggers-local &
-  echo "Starting cognito-local"
-  CODE=123456 npx cognito-local &
-fi
+echo "Seeding cognito-local users"
+npx ts-node .cognito/seedCognitoLocal.ts --transpile-only
 
 rm first-run.txt
-nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress/helpers/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
+echo "Starting cognito-local"
+CODE="385030" npx cognito-local &
+COGNITO_PID=$!
+nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
 if [[ -z "$CI" ]]; then
   echo "Stopping dynamodb, elasticsearch, and s3rver"
   pkill -P "$DYNAMO_PID"
   pkill -P "$ESEARCH_PID"
   pkill -P "$S3RVER_PID"
+  pkill -P "$COGNITO_PID"
 fi
