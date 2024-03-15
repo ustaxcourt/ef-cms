@@ -693,30 +693,10 @@ export const MINUTE_ENTRIES_MAP = {
   },
 };
 
-export const MINUTE_ENTRIES_MAP_WITHOUT_DOCS = {
-  captionOfCaseIsAmended: {
-    description:
-      'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
-    eventCode: 'MINC',
-    documentType: 'Caption of case is amended',
-  },
-  dockedNumberIsAmended: {
-    description:
-      'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
-    eventCode: 'MIND',
-    documentType: 'Docket Number is amended',
-  },
-  filingFeePaid: {
-    description: 'Filing Fee Paid',
-    documentType: 'Filing Fee Paid',
-    eventCode: 'FEE',
-  },
-  filingFeeWaived: {
-    description: 'Filing Fee Waived',
-    documentType: 'Filing Fee Waived',
-    eventCode: 'FEEW',
-  },
-};
+export const MINUTE_ENTRIES_WITHOUT_DOCS_MAP = omit(
+  MINUTE_ENTRIES_MAP,
+  'requestForPlaceOfTrial',
+);
 
 export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPTO',

@@ -53,6 +53,7 @@ describe('getDocketEntriesByFilter', () => {
     });
     expect(result).toEqual(expectedResults);
   });
+
   it('should return all the documents if the filter is "exhibits"', () => {
     const expectedResults = [EXHIBITS_EVENT_CODE];
 

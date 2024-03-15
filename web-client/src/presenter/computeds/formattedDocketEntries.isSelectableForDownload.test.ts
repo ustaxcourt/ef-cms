@@ -21,7 +21,7 @@ describe('formattedDocketEntries.isSelectableForDownload', () => {
     expect(result).toBe(false);
   });
 
-  it('should return false if the entry is on the docket record', () => {
+  it('should return false if the entry is not on the docket record', () => {
     const entry = {
       isFileAttached: true,
       isMinuteEntry: false,
