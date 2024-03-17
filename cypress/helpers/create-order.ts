@@ -1,7 +1,6 @@
 export const createOrder = () => {
   const orderTitle = 'Order first title';
   const orderEventCode = 'O';
-
   cy.get('[data-testid="case-detail-menu-button"]').click();
   cy.get('[data-testid="menu-button-create-order"]').click();
   cy.get('[data-testid="event-code-select"]').select(orderEventCode);

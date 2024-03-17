@@ -19,12 +19,9 @@ export const logger =
 
     if (process.env.NODE_ENV === 'production') {
       const requestBody = cloneDeep(req.body);
+
       if (requestBody) {
-        for (const k of ['password', 'confirmPassword']) {
-          if (requestBody[k]) {
-            requestBody[k] = '*** REDACTED ***';
-          }
-        }
+        redactPasswordFields(requestBody);
       }
       const currentInvoke = getCurrentInvoke();
       createdLogger.defaultMeta = {
@@ -69,3 +66,15 @@ export const logger =
 
     return next();
   };
+
+function redactPasswordFields(obj) {
+  const passwordRegex = /password/i;
+
+  for (const key in obj) {
+    if (typeof obj[key] === 'object' || Array.isArray(obj[key])) {
+      redactPasswordFields(obj[key]);
+    } else if (typeof key === 'string' && passwordRegex.test(key)) {
+      obj[key] = '*** REDACTED ***';
+    }
+  }
+}

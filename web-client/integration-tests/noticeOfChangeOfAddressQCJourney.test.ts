@@ -56,14 +56,14 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   practitionerUpdatesAddress(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService(cerebralTest);
   docketClerkEditsServiceIndicatorForPetitioner(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   practitionerUpdatesAddress(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');

@@ -10,9 +10,12 @@ export const getAllFeatureFlagsInteractor = async (
     (flag: any) => flag.key,
   );
 
-  // we use IS_LOCAL so that we emulate a fresh lambda invocation each time.
+  // we use ENV so that we emulate a fresh lambda invocation each time.
   // caching the feature flags locally causes integration tests to fail.
-  if (isEmpty(allFeatureFlags) || process.env.IS_LOCAL) {
+  if (
+    isEmpty(allFeatureFlags) ||
+    applicationContext.environment.stage === 'local'
+  ) {
     await Promise.all(
       allowlistFeatures.map(async featureFlagKey => {
         const result = await applicationContext

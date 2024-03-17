@@ -85,7 +85,7 @@ export const CourtIssuedDocketEntry = connect(
                 message:
                   'Document cannot be served until the Petition is served.',
               }}
-              dismissable={false}
+              dismissible={false}
               scrollToTop={false}
             />
           )}

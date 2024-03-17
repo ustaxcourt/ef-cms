@@ -14,6 +14,7 @@ export default defineConfig({
     toConsole: true,
   },
   requestTimeout: 20000,
+  screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/cypress-readonly/screenshots',
   video: true,
   videoCompression: 10,

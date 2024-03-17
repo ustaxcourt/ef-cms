@@ -95,7 +95,7 @@ describe('unauthed user views practitioner filed brief', () => {
   });
 
   describe('privatePractitioner files a seriatim brief on the case', () => {
-    loginAs(testClient, 'privatepractitioner@example.com');
+    loginAs(testClient, 'privatePractitioner@example.com');
     it('Practitioner files document for brief', async () => {
       await testClient.runSequence('gotoCaseDetailSequence', {
         docketNumber: testClient.docketNumber,
@@ -174,7 +174,7 @@ describe('unauthed user views practitioner filed brief', () => {
   });
 
   describe('privatePractitioner3 searches for the case and views the seriatim brief document', () => {
-    loginAs(testClient, 'privatepractitioner3@example.com');
+    loginAs(testClient, 'privatePractitioner3@example.com');
     practitionerSearchesForCase(testClient);
     it('unassociated practitioner is able to view the previously filed seriatim brief and access the document link', async () => {
       let { formattedDocketEntriesOnDocketRecord } =
@@ -193,7 +193,7 @@ describe('unauthed user views practitioner filed brief', () => {
   });
 
   describe('privatePractitioner files a servable simultaneous opening brief on the case', () => {
-    loginAs(testClient, 'privatepractitioner@example.com');
+    loginAs(testClient, 'privatePractitioner@example.com');
     it('Practitioner files document for brief', async () => {
       await testClient.runSequence('gotoCaseDetailSequence', {
         docketNumber: testClient.docketNumber,
@@ -298,7 +298,7 @@ describe('unauthed user views practitioner filed brief', () => {
   });
 
   describe('privatePractitioner files a qcable seriatim opening brief on the case', () => {
-    loginAs(testClient, 'privatepractitioner@example.com');
+    loginAs(testClient, 'privatePractitioner@example.com');
     it('Practitioner files document for brief', async () => {
       await testClient.runSequence('gotoCaseDetailSequence', {
         docketNumber: testClient.docketNumber,

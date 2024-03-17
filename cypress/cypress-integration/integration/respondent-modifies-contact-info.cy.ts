@@ -1,6 +1,6 @@
 import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
+import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { petitionsclerkAddsRespondentToCase } from '../../helpers/petitionsclerk-adds-respondent-to-case';
 import { respondentModifiesContactInfo } from '../../helpers/respondent-modifies-contact-info';
 

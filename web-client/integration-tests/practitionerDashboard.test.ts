@@ -22,7 +22,7 @@ describe('Practitioner Dashboard', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'privatepractitioner1@example.com');
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
   it('get open case count before association', async () => {
     await cerebralTest.runSequence('gotoDashboardSequence');
 
@@ -33,7 +33,7 @@ describe('Practitioner Dashboard', () => {
 
   createConsolidatedGroup(cerebralTest, {}, 2);
 
-  loginAs(cerebralTest, 'privatepractitioner1@example.com');
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
 
   it('Practitioner requests access to 2 cases', async () => {
     for (let i = 0; i < 2; i++) {

@@ -1,3 +1,4 @@
+import { UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { isEmailAvailable } from './isEmailAvailable';
 
@@ -6,9 +7,9 @@ describe('isEmailAvailable', () => {
   const mockFoundUser = { email: mockEmail };
 
   it('returns false when there is a corresponding user with the provided email found in cognito', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => Promise.resolve({ mockFoundUser }),
-    });
+    applicationContext
+      .getCognito()
+      .adminGetUser.mockReturnValue({ mockFoundUser });
 
     await expect(
       isEmailAvailable({
@@ -19,13 +20,11 @@ describe('isEmailAvailable', () => {
   });
 
   it('returns true when there is no corresponding user with the provided email found in cognito', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => {
-        const e = new Error();
-        e.code = 'UserNotFoundException';
-        return Promise.reject(e);
-      },
-    });
+    applicationContext
+      .getCognito()
+      .adminGetUser.mockRejectedValue(
+        new UserNotFoundException({ $metadata: {}, message: '' }),
+      );
 
     await expect(
       isEmailAvailable({
