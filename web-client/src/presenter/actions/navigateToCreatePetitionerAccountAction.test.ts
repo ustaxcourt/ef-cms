@@ -13,7 +13,7 @@ describe('navigateToCreatePetitionerAccountAction', () => {
     };
   });
 
-  it('should call route with the correct url for create petitioner', async () => {
+  it('should navigate to the create petitioner account page', async () => {
     await runAction(navigateToCreatePetitionerAccountAction, {
       modules: {
         presenter,

@@ -1,7 +1,7 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const headerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -46,6 +46,7 @@ export const headerHelper = (
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
+    isLoggedIn,
     pageIsDashboard: isDashboard && isExternalUser,
     pageIsDocumentQC: isWorkQueue,
     pageIsHome,
@@ -60,6 +61,7 @@ export const headerHelper = (
       userRole !== USER_ROLES.general &&
       !isCaseServicesSupervisor,
     showMessagesAndQCDropDown: isCaseServicesSupervisor,
+    showMobileAccountMenu: isLoggedIn,
     showMyAccount: [
       USER_ROLES.privatePractitioner,
       USER_ROLES.irsPractitioner,
@@ -81,5 +83,6 @@ export const headerHelper = (
     showVerifyEmailWarningNotification: !!user?.pendingEmail,
     unreadMessageCount,
     userName: user && user.name,
+    ustcSealLink: isLoggedIn ? '/' : applicationContext.getPublicSiteUrl(),
   };
 };

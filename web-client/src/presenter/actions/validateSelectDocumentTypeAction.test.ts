@@ -3,10 +3,10 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateSelectDocumentTypeAction } from './validateSelectDocumentTypeAction';
 
-const errorMock = jest.fn();
-const successMock = jest.fn();
-
 describe('validateSelectDocumentTypeAction', () => {
+  const errorMock = jest.fn();
+  const successMock = jest.fn();
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
