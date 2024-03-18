@@ -66,6 +66,7 @@ export const DocketRecord = connect(
                         checked={
                           formattedDocketEntriesHelper.allDocumentsSelectedForDownload
                         }
+                        data-testid="all-selectable-docket-entries-checkbox"
                         id="all-selectable-docket-entries-checkbox"
                         type="checkbox"
                         onChange={() => {
