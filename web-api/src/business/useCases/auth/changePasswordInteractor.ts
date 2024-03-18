@@ -16,7 +16,6 @@ import {
 import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
-
 import jwt from 'jsonwebtoken';
 
 export const changePasswordInteractor = async (
