@@ -15,7 +15,7 @@ describe('fileDocumentHelper', () => {
   const state = {
     caseDetail: MOCK_CASE,
     featureFlags: {},
-    form: {},
+    form: {} as any,
     validationErrors: {},
   };
 
@@ -452,19 +452,19 @@ describe('fileDocumentHelper', () => {
             contactId: mockPrimaryContactId,
             contactType: CONTACT_TYPES.primary,
             name: 'bob',
-          },
+          } as TPetitioner,
           {
             contactId: mockTaxMattersContactId,
             contactType: CONTACT_TYPES.participant,
             name: 'sally',
-          },
+          } as TPetitioner,
           {
             contactId: mockIntervenorContactId,
             contactType: CONTACT_TYPES.intervenor,
             name: 'rick',
-          },
+          } as TPetitioner,
         ],
-      };
+      } as RawCase;
     });
 
     it('should be set to the names of all filing petitioners and their titles', () => {
