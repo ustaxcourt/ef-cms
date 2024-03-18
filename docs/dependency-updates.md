@@ -10,7 +10,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 ### Do the following for all package.json files
 
-note: we have 3 package.json files, be sure to update them all
+note: we have 2 package.json files, be sure to update them all
   - ./package.json
   - ./web-api/runtimes/puppeteer/package.json
 
@@ -27,14 +27,14 @@ note: we have 3 package.json files, be sure to update them all
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
       - Change the version in `scripts/verify-terraform-version.sh`
     - `aws-cli`: check for a newer version on [AWS CLI](https://github.com/aws/aws-cli/tags) and use the latest version you can find for 2.x, replace it in the DockerFile
-    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node) if an update is available for the current node version the project is using.
+    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-18) if an update is available for the current node version the project is using.
 
    To publish a new ECR docker image:
 
    - Increment the docker image version being used in `.circleci/config.yml` in the docker variable: 
-   `define: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.1.0` -> `ef-cms-us-east-1:3.1.1`
+   `define: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.1.6` -> `ef-cms-us-east-1:3.1.7`
    - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher). 
-     - example: `export DESTINATION_TAG=3.0.19 && npm run deploy:ci-image`
+     - example: `export DESTINATION_TAG=3.1.6 && npm run deploy:ci-image`
 		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
