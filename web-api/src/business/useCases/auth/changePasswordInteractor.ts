@@ -16,6 +16,7 @@ import {
 import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
+import { trim } from 'lodash';
 import jwt from 'jsonwebtoken';
 
 export const changePasswordInteractor = async (
@@ -130,7 +131,7 @@ export const changePasswordInteractor = async (
 
       await applicationContext.getCognito().confirmForgotPassword({
         ClientId: applicationContext.environment.cognitoClientId,
-        ConfirmationCode: code,
+        ConfirmationCode: trim(code), // remove trailing or lead spaces
         Password: password,
         Username: email,
       });
