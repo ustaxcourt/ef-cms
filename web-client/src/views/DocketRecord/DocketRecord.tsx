@@ -38,7 +38,7 @@ export const DocketRecord = connect(
       if (!docketRecordHelper.showBatchDownloadControls) return;
 
       const documentsSelectorHeaderInput = window.document.getElementById(
-        'docket-entry-selections',
+        'all-selectable-docket-entries-checkbox',
       ) as HTMLInputElement;
       if (formattedDocketEntriesHelper.someDocumentsSelectedForDownload) {
         documentsSelectorHeaderInput.indeterminate = true;
@@ -62,10 +62,11 @@ export const DocketRecord = connect(
                   {docketRecordHelper.showBatchDownloadControls && (
                     <th>
                       <input
+                        aria-label="all-selectable-docket-entries-checkbox"
                         checked={
                           formattedDocketEntriesHelper.allDocumentsSelectedForDownload
                         }
-                        id="docket-entry-selections"
+                        id="all-selectable-docket-entries-checkbox"
                         type="checkbox"
                         onChange={() => {
                           setSelectedDocumentsForDownloadSequence({
@@ -113,7 +114,9 @@ export const DocketRecord = connect(
                           <td>
                             {entry.isSelectableForDownload && (
                               <input
+                                aria-label={`${entry.index}-${entry.documentTitle}`}
                                 checked={entry.isDocumentSelected}
+                                id={`${entry.index}-${entry.documentTitle}`}
                                 type="checkbox"
                                 onChange={() => {
                                   const documentIdSelected = {
