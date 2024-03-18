@@ -12,7 +12,7 @@ export const LoginAndServiceEmailAddress = connect(
   function LoginAndServiceEmailAddress({ navigateToPathSequence, user }) {
     return (
       <div className="card">
-        <div className="content-wrapper gray">
+        <div className="content-wrapper gray" data-testid="user-service-email">
           <h3>Login & Service Email Address</h3>
           <hr />
           {user.email}
@@ -20,6 +20,7 @@ export const LoginAndServiceEmailAddress = connect(
             <Button
               link
               className="text-left"
+              data-testid="change-email-button"
               icon="edit"
               onClick={() =>
                 navigateToPathSequence({

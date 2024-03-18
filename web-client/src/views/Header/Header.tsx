@@ -139,6 +139,7 @@ const NavigationItems = (
               'usa-nav__link',
               headerHelper.pageIsMyCases && 'usa-current',
             )}
+            data-testid="my-cases-link"
             href="/"
             onClick={() => toggleMobileMenuSequence()}
           >
@@ -198,14 +199,17 @@ const NavigationItems = (
         </li>
       )}
       <li className="usa-nav__primary-item nav-medium">
-        <a
+        <button
           className="usa-nav__link"
-          href="/"
+          data-testid="logout-button-mobile"
           id="log-out"
-          onClick={() => signOutSequence()}
+          onClick={() => {
+            toggleMobileMenuSequence();
+            signOutSequence();
+          }}
         >
           Log Out
-        </a>
+        </button>
       </li>
     </ul>
   );
@@ -221,7 +225,6 @@ export const Header = connect(
     templateHelper: state.templateHelper,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
-    user: state.user,
   },
   function Header({
     headerHelper,
@@ -232,7 +235,6 @@ export const Header = connect(
     templateHelper,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
-    user,
   }) {
     const headerRef = useRef(null);
 
@@ -274,16 +276,24 @@ export const Header = connect(
               <div className="usa-nav-container">
                 <div className="usa-navbar">
                   <div className="usa-logo">
-                    <a href="/">
+                    <a href={headerHelper.ustcSealLink}>
                       <img alt="USTC Seal" src={seal} />
                     </a>
                   </div>
-                  <button
-                    className="usa-menu-btn"
-                    onClick={() => toggleMobileMenuSequence()}
-                  >
-                    Menu
-                  </button>
+                  {!headerHelper.isLoggedIn && (
+                    <h1 className="header-welcome text-no-wrap">
+                      Welcome to DAWSON
+                    </h1>
+                  )}
+                  {headerHelper.showMobileAccountMenu && (
+                    <button
+                      className="usa-menu-btn"
+                      data-testid="account-menu-button-mobile"
+                      onClick={() => toggleMobileMenuSequence()}
+                    >
+                      Menu
+                    </button>
+                  )}
                 </div>
                 <nav
                   className={classNames(
@@ -301,7 +311,7 @@ export const Header = connect(
                   >
                     Close
                   </Button>
-                  {user &&
+                  {headerHelper.isLoggedIn &&
                     NavigationItems(headerHelper, {
                       isDocumentQCMenuOpen: menuHelper.isDocumentQCMenuOpen,
                       isMessagesMenuOpen: menuHelper.isMessagesMenuOpen,

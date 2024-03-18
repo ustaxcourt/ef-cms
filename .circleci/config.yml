@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.1.4
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.1.6
 
 parameters:
   run_build_and_deploy:
@@ -189,10 +189,6 @@ jobs:
           command: |
             ./web-client/deploy-public.sh
       - run:
-          name: 'Deploy - Web API - Cognito Customize'
-          command: |
-            cd web-api && ./setup-cognito-ui.sh $ENV
-      - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             npm run verify-authorizers -- $ENV
@@ -204,10 +200,6 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: 'Deploy - Verify Cognito Lambda Triggers'
-          command: |
-            npm run verify-cognito-lambda-triggers -- $ENV
       - run:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
@@ -364,9 +356,6 @@ jobs:
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
-      - run:
-          name: 'Pa11y Smoke Tests'
-          command: npm run test:pa11y:smoketests
       - store_artifacts:
           path: /root/project/cypress/cypress-smoketests/videos/
 
@@ -933,14 +922,16 @@ workflows:
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
-            - smoketests
+            - disable-reindex-cron
       - smoketests-readonly:
           <<: *only-deployed-lower-environments
           requires:
-            - loadtests
+            - disable-reindex-cron
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
+            - smoketests
+            - loadtests
             - smoketests-readonly
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
