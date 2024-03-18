@@ -84,6 +84,10 @@ variable "alert_sns_topic_arn" {
   type = string
 }
 
+variable "alert_sns_topic_west_arn" {
+  type = string
+}
+
 variable "bounced_email_recipient" {
   type = string
 }
@@ -165,5 +169,6 @@ variable "template_lambdas" {
     "trial-session.js",
     "websocket-authorizer.js",
     "websockets.js",
+    "worker-handler.js",
   ]
 }

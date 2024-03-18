@@ -68,6 +68,7 @@ export const ChangeLoginAndServiceEmail = connect(
                 <input
                   autoCapitalize="none"
                   className="usa-input"
+                  data-testid="change-login-email-input"
                   id="email"
                   name="email"
                   type="text"
@@ -88,6 +89,7 @@ export const ChangeLoginAndServiceEmail = connect(
                 <input
                   autoCapitalize="none"
                   className="usa-input"
+                  data-testid="confirm-change-login-email-input"
                   id="confirm-email"
                   name="confirmEmail"
                   type="text"
@@ -106,6 +108,7 @@ export const ChangeLoginAndServiceEmail = connect(
           <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">
               <Button
+                data-testid="save-change-login-email-button"
                 onClick={() => submitChangeLoginAndServiceEmailSequence()}
               >
                 Save

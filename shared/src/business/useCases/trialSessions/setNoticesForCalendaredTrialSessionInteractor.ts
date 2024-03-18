@@ -83,7 +83,7 @@ export const setNoticesForCalendaredTrialSession = async (
       trialSessionProcessingStatus === 'complete')
   ) {
     applicationContext.logger.warn(
-      `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
+      `A duplicate event was received for setting the notices for trial session: ${trialSessionId}`,
     );
     return;
   }

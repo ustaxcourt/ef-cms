@@ -58,13 +58,11 @@ for ENV in "${ENVIRONMENTS[@]}"; do
     process_group "/aws/apigateway/gateway_api_public_${ENV}_${COLOR}"
     process_group "/aws/lambda/websockets_connect_${ENV}_${COLOR}"
     process_group "/aws/lambda/websockets_disconnect_${ENV}_${COLOR}"
-    process_group "/aws/lambda/cognito_post_confirmation_lambda_${ENV}_${COLOR}"
     process_group "/aws/lambda/cognito_post_authentication_lambda_${ENV}_${COLOR}"
     process_group "/aws/lambda/send_emails_${ENV}_${COLOR}"
     process_group "/aws/lambda/set_trial_session_${ENV}_${COLOR}"
   done
 
-  process_group "/aws/lambda/cognito_post_confirmation_lambda_${ENV}"
   process_group "/aws/ecs/clamav_fargate_${ENV}"
   process_group "/aws/lambda/legacy_documents_migration_lambda_${ENV}"
 done

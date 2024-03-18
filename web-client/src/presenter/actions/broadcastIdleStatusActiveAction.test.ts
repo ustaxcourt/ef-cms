@@ -3,9 +3,9 @@ import { broadcastIdleStatusActiveAction } from './broadcastIdleStatusActiveActi
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('broadcastIdleStatusActiveAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should invoke postMessage with the expected arguments', async () => {
     await runAction(broadcastIdleStatusActiveAction, {
       modules: {

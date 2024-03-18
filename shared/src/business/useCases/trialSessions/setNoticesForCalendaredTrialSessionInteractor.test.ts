@@ -116,7 +116,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
     ).not.toHaveBeenCalled();
     expect(applicationContext.logger.warn).toHaveBeenCalledWith(
-      `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
+      `A duplicate event was received for setting the notices for trial session: ${trialSessionId}`,
     );
 
     applicationContext

@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 
+import { AccountUnverifiedModal } from '@web-client/views/CaseDetail/AccountUnverifiedModal';
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
@@ -223,7 +224,7 @@ export const EditPetitionerInformationInternal = connect(
               alertWarning={{
                 title: `${screenMetadata.userPendingEmail} is not verified. When petitioner verifies email, service will update to electronic at the verified email address.`,
               }}
-              dismissable={false}
+              dismissible={false}
               scrollToTop={false}
             />
           )}
@@ -273,6 +274,7 @@ export const EditPetitionerInformationInternal = connect(
                     <input
                       autoCapitalize="none"
                       className="usa-input"
+                      data-testid="internal-edit-petitioner-email-input"
                       id="updatedEmail"
                       name="contact.updatedEmail"
                       type="text"
@@ -298,6 +300,7 @@ export const EditPetitionerInformationInternal = connect(
                     <input
                       autoCapitalize="none"
                       className="usa-input"
+                      data-testid="internal-confirm-petitioner-email-input"
                       id="confirm-email"
                       name="contact.confirmEmail"
                       type="text"
@@ -317,6 +320,7 @@ export const EditPetitionerInformationInternal = connect(
 
           <div>
             <Button
+              data-testid="submit-edit-petitioner-information-button"
               id="submit-edit-petitioner-information"
               onClick={() => {
                 submitEditPetitionerSequence({ contactToSeal: form.contact });
@@ -354,6 +358,7 @@ export const EditPetitionerInformationInternal = connect(
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
         {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
+        {showModal === 'AccountUnverifiedModal' && <AccountUnverifiedModal />}
         {showModal === 'NoMatchingEmailFoundModal' && (
           <NoMatchingEmailFoundModal />
         )}

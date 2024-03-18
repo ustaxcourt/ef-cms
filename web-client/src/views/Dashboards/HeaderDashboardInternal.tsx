@@ -27,6 +27,7 @@ export const HeaderDashboardInternal = connect(
               <Button
                 link
                 className="button-switch-box"
+                data-testid="switch-to-section-document-qc-button"
                 onClick={() => {
                   navigateToPathSequence({
                     path: workQueueHelper.getQueuePath({

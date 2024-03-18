@@ -1,4 +1,5 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   createOrUpdatePractitionerUser,
@@ -57,13 +58,11 @@ describe('createOrUpdatePractitionerUser', () => {
   };
 
   const setupNonExistingUserMock = () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => {
-        const error = new Error();
-        (error as any).code = 'UserNotFoundException';
-        return Promise.reject(error);
-      },
-    });
+    applicationContext
+      .getCognito()
+      .adminGetUser.mockRejectedValue(
+        new UserNotFoundException({ $metadata: {}, message: '' }),
+      );
   };
 
   beforeAll(() => {
@@ -216,16 +215,12 @@ describe('createOrUpdatePractitionerUser', () => {
   });
 
   it('should call cognito adminCreateUser for a private practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
-    applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: () => Promise.resolve({}),
-    });
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => {
-        const error = new Error();
-        (error as any).code = 'UserNotFoundException';
-        return Promise.reject(error);
-      },
-    });
+    applicationContext.getCognito().adminCreateUser.mockResolvedValue({});
+    applicationContext
+      .getCognito()
+      .adminGetUser.mockRejectedValue(
+        new UserNotFoundException({ $metadata: {}, message: '' }),
+      );
 
     await createOrUpdatePractitionerUser({
       applicationContext,
@@ -293,6 +288,7 @@ describe('createOrUpdatePractitionerUser', () => {
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith({
+      DesiredDeliveryMediums: ['EMAIL'],
       UserAttributes: [
         {
           Name: 'email_verified',
@@ -312,43 +308,6 @@ describe('createOrUpdatePractitionerUser', () => {
         },
       ],
       UserPoolId: undefined,
-      Username: 'test@example.com',
-    });
-  });
-
-  it('should call adminCreateUser with the correct params when USE_COGNITO_LOCAL is true', async () => {
-    process.env.USE_COGNITO_LOCAL = 'true';
-    process.env.USER_POOL_ID = 'localUserPoolId';
-
-    // setupNonExistingUserMock();
-
-    await createOrUpdatePractitionerUser({
-      applicationContext,
-      user: privatePractitionerUser as any,
-    });
-
-    expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).toHaveBeenCalledWith({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: 'test@example.com',
-        },
-        {
-          Name: 'custom:role',
-          Value: 'privatePractitioner',
-        },
-        {
-          Name: 'name',
-          Value: 'Test Private Practitioner',
-        },
-      ],
-      UserPoolId: 'localUserPoolId',
       Username: 'test@example.com',
     });
   });

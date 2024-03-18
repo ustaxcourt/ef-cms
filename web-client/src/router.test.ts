@@ -1,5 +1,5 @@
 import { ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
-import { ifHasAccess, route, router } from '@web-client/router';
+import { route, router } from '@web-client/router';
 
 describe('router', () => {
   const getUserMock = jest.fn();
@@ -7,12 +7,6 @@ describe('router', () => {
   const getPermissionsMock = jest.fn().mockReturnValue({ foo: true });
   const sequenceMock = jest.fn().mockReturnValue('Yay');
   const getSequenceMock = jest.fn().mockReturnValue(sequenceMock);
-  const callbackFn = jest.fn();
-  const redirect = {
-    goto404: jest.fn(),
-    gotoLoginPage: jest.fn(),
-    gotoMaintenancePage: jest.fn(),
-  };
   const stateMock = jest.fn();
 
   const appMock = {
@@ -34,64 +28,6 @@ describe('router', () => {
       }
     },
   };
-
-  describe('ifHasAccess function generator', () => {
-    it('redirects to login page if user is not defined', () => {
-      getUserMock.mockReturnValue(undefined);
-      ifHasAccess({ app: appMock, redirect }, callbackFn)();
-      expect(redirect.goto404).not.toHaveBeenCalled();
-      expect(redirect.gotoMaintenancePage).not.toHaveBeenCalled();
-      expect(callbackFn).not.toHaveBeenCalled();
-      expect(redirect.gotoLoginPage).toHaveBeenCalled();
-    });
-
-    it('redirects to maintenance page if maintenanceMode is true', () => {
-      getUserMock.mockReturnValue({ username: 'Karl Childers' });
-      getMaintenanceModeMock.mockReturnValue(true);
-
-      ifHasAccess({ app: appMock, redirect }, callbackFn)();
-      expect(redirect.goto404).not.toHaveBeenCalled();
-      expect(callbackFn).not.toHaveBeenCalled();
-      expect(redirect.gotoMaintenancePage).toHaveBeenCalled();
-    });
-
-    it('redirects to 404 if user does not have the correct permissions', () => {
-      getUserMock.mockReturnValue({ username: 'Karl Childers' });
-      getMaintenanceModeMock.mockReturnValue(false);
-      stateMock.mockReturnValue({ permissions: undefined });
-      ifHasAccess(
-        {
-          app: appMock,
-          permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH,
-          redirect,
-        },
-        callbackFn,
-      )();
-      expect(redirect.gotoLoginPage).not.toHaveBeenCalled();
-      expect(redirect.gotoMaintenancePage).not.toHaveBeenCalled();
-      expect(callbackFn).not.toHaveBeenCalled();
-      expect(redirect.goto404).toHaveBeenCalled();
-    });
-
-    it('runs the callback function argument if user has correct permissions', () => {
-      getPermissionsMock.mockReturnValue({
-        [ROLE_PERMISSIONS.ADVANCED_SEARCH]: true,
-      });
-
-      ifHasAccess(
-        {
-          app: appMock,
-          permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH,
-          redirect,
-        },
-        callbackFn,
-      )();
-      expect(redirect.gotoLoginPage).not.toHaveBeenCalled();
-      expect(redirect.gotoMaintenancePage).not.toHaveBeenCalled();
-      expect(redirect.goto404).not.toHaveBeenCalled();
-      expect(callbackFn).toHaveBeenCalled();
-    });
-  });
 
   describe('router function', () => {
     beforeAll(() => {
