@@ -693,6 +693,11 @@ export const MINUTE_ENTRIES_MAP = {
   },
 };
 
+export const MINUTE_ENTRIES_WITHOUT_DOCS_MAP = omit(
+  MINUTE_ENTRIES_MAP,
+  'requestForPlaceOfTrial',
+);
+
 export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPTO',
 )!;
