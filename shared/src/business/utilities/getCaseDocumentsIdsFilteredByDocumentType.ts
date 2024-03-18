@@ -1,4 +1,4 @@
-export const getCaseDocumentsByFilter = (
+export const getCaseDocumentsIdsFilteredByDocumentType = (
   applicationContext,
   {
     docketEntries,
