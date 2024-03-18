@@ -77,7 +77,7 @@ import { getAllFeatureFlagsInteractor } from '../useCases/featureFlag/getAllFeat
 import { getAllWebSocketConnections } from '../../../../web-api/src/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '../../../../web-api/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getCaseDocumentsByFilter } from '@shared/business/utilities/getCaseDocumentsByFilter';
+import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import {
   getChambersSections,
   getChambersSectionsLabels,
@@ -256,9 +256,9 @@ export const createTestApplicationContext = ({
       .fn()
       .mockImplementation(DateHandler.getBusinessDateInFuture),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
-    getCaseDocumentsByFilter: jest
+    getCaseDocumentsIdsFilteredByDocumentType: jest
       .fn()
-      .mockImplementation(getCaseDocumentsByFilter),
+      .mockImplementation(getCaseDocumentsIdsFilteredByDocumentType),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),

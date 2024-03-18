@@ -5,9 +5,9 @@ import {
 } from '@shared/test/mockDocketEntry';
 import { DOCKET_RECORD_FILTER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getCaseDocumentsByFilter } from './getCaseDocumentsByFilter';
+import { getCaseDocumentsIdsFilteredByDocumentType } from './getCaseDocumentsIdsFilteredByDocumentType';
 
-describe('getCaseDocumentsByFilter', () => {
+describe('getCaseDocumentsIdsFilteredByDocumentType', () => {
   const PETITION_DOCKET_ENTRY = MOCK_DOCUMENTS[0];
 
   const mockDocketEntries = [
@@ -27,11 +27,14 @@ describe('getCaseDocumentsByFilter', () => {
       STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
     ];
 
-    const result = getCaseDocumentsByFilter(applicationContext, {
-      docketEntries: mockDocketEntries,
-      docketRecordFilter: 'All documents',
-      documentsToProcess,
-    });
+    const result = getCaseDocumentsIdsFilteredByDocumentType(
+      applicationContext,
+      {
+        docketEntries: mockDocketEntries,
+        docketRecordFilter: 'All documents',
+        documentsToProcess,
+      },
+    );
 
     expect(result).toEqual(expectedResults);
   });
@@ -39,11 +42,14 @@ describe('getCaseDocumentsByFilter', () => {
   it('should return ids of the documents by selected the filter', () => {
     const expectedResults = [STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId];
 
-    const result = getCaseDocumentsByFilter(applicationContext, {
-      docketEntries: mockDocketEntries,
-      docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.orders,
-      documentsToProcess,
-    });
+    const result = getCaseDocumentsIdsFilteredByDocumentType(
+      applicationContext,
+      {
+        docketEntries: mockDocketEntries,
+        docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.orders,
+        documentsToProcess,
+      },
+    );
 
     expect(result).toEqual(expectedResults);
   });
