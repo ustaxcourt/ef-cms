@@ -31,7 +31,7 @@ export const docketRecordHelper = (
 
   const documentsIdsForDownload = applicationContext
     .getUtilities()
-    .getCaseDocumentsByFilter(applicationContext, {
+    .getCaseDocumentsIdsFilteredByDocumentType(applicationContext, {
       docketEntries,
       docketRecordFilter,
       documentsToProcess: documentsSelectedForDownload,

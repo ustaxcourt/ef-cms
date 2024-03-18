@@ -75,7 +75,7 @@ import {
 import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getCaseDocumentsByFilter } from '@shared/business/utilities/getCaseDocumentsByFilter';
+import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import {
   getChambersSections,
   getChambersSectionsLabels,
@@ -252,9 +252,9 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(DateHandler.getBusinessDateInFuture),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
-    getCaseDocumentsByFilter: jest
+    getCaseDocumentsIdsFilteredByDocumentType: jest
       .fn()
-      .mockImplementation(getCaseDocumentsByFilter),
+      .mockImplementation(getCaseDocumentsIdsFilteredByDocumentType),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),

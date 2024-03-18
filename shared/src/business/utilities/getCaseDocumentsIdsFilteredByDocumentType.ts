@@ -1,4 +1,4 @@
-export const getCaseDocumentsByFilter = (
+export const getCaseDocumentsIdsFilteredByDocumentType = (
   applicationContext,
   {
     docketEntries,
@@ -11,14 +11,9 @@ export const getCaseDocumentsByFilter = (
   },
 ): string[] => {
   const formattedDocketEntries = documentsToProcess.map(docSelected => {
-    const foundDocument = docketEntries.find(
+    return docketEntries.find(
       docEntry => docEntry.docketEntryId === docSelected.docketEntryId,
     );
-    return {
-      docketEntryId: foundDocument?.docketEntryId,
-      eventCode: foundDocument?.eventCode,
-      isDraft: foundDocument?.isDraft,
-    };
   });
 
   const filteredDocuments = applicationContext

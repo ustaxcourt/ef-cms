@@ -15,7 +15,7 @@ export const batchDownloadDocketEntriesAction = async ({
 
   const filteredDocumentsIds = applicationContext
     .getUtilities()
-    .getCaseDocumentsByFilter(applicationContext, {
+    .getCaseDocumentsIdsFilteredByDocumentType(applicationContext, {
       docketEntries,
       docketRecordFilter,
       documentsToProcess: documentsSelectedForDownload,
