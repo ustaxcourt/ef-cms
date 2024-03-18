@@ -922,16 +922,14 @@ workflows:
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
+            - smoketests
       - smoketests-readonly:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
+            - loadtests
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - smoketests
-            - loadtests
             - smoketests-readonly
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
