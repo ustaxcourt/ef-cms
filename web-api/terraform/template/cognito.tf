@@ -156,6 +156,12 @@ resource "aws_cognito_user_pool" "pool" {
   }
 }
 
+# TODO 10007 Cleanup: Remove this block when we no longer need to handle users who bookmarked the legacy login URL
+resource "aws_cognito_user_pool_domain" "main" {
+  domain       = "auth-${var.environment}-${var.cognito_suffix}"
+  user_pool_id = aws_cognito_user_pool.pool.id
+}
+
 resource "aws_cognito_user_pool_client" "client" {
   name = "client"
 
