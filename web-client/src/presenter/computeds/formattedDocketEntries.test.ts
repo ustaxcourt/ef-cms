@@ -471,7 +471,7 @@ describe('formattedDocketEntries', () => {
               ...mockDocketEntry,
               docketEntryId: 'minute entry, ineligible',
               eventCode: 'FEE',
-              isFileAttached: true,
+              isFileAttached: false,
             },
             {
               ...mockDocketEntry,
