@@ -1,20 +1,22 @@
 {
   "name": "chrome-aws-lambda-layer",
-  "version": "0.0.2",
   "description": "Layer Only Packaging",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [
-    "Lambda",
-    "Layers"
-  ],
+  "version": "0.0.2",
   "license": "CC0-1.0",
+  "engines": {
+    "node": ">=18.16.1 <19.0.0",
+    "npm": ">=9.0.0 <10.0.0"
+  },
   "dependencies": {
     "@sparticuz/chromium": "112.0.2",
     "pug": "3.0.2",
     "puppeteer-core": "19.8.5",
     "sass": "1.72.0"
   },
-  "overrides": {
-  }
+  "scripts": {},
+  "main": "index.js",
+  "keywords": [
+    "Lambda",
+    "Layers"
+  ]
 }
