@@ -138,7 +138,7 @@ jobs:
           no_output_timeout: 20m
           name: 'Deploy - Color ${DEPLOYING_COLOR} Terraform'
           command: |
-            if [ "${DEPLOYING_COLOR}" == "blue" ]
+            if [ "${DEPLOYING_COLOR}" == "blue" ]; then
               npm run deploy:blue $ENV
             else
               npm run deploy:green $ENV
