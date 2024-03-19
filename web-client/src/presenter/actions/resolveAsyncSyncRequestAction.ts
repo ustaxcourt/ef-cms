@@ -10,4 +10,6 @@ export const resolveAsyncSyncRequestAction = ({
     .getAsyncSyncCompleter(asyncSyncId);
 
   if (callback) callback(response);
+
+  applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter(asyncSyncId);
 };
