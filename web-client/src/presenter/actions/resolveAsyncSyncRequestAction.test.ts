@@ -10,11 +10,13 @@ describe('resolveAsyncSyncRequestAction', () => {
   };
 
   const mockGetAsyncSyncCompleter = jest.fn(id => asyncSyncCompleterDict[id]);
+  const mockRemoveAsyncSyncCompleter = jest.fn(() => {});
 
   presenter.providers.applicationContext = {
     ...applicationContext,
     getAsynSyncUtil: jest.fn().mockReturnValue({
       getAsyncSyncCompleter: mockGetAsyncSyncCompleter,
+      removeAsyncSyncCompleter: mockRemoveAsyncSyncCompleter,
     }),
   };
 
@@ -34,5 +36,6 @@ describe('resolveAsyncSyncRequestAction', () => {
 
     expect(mockGetAsyncSyncCompleter).toHaveBeenCalledWith(asyncSyncId);
     expect(asyncSyncCompleterDict[asyncSyncId]).toHaveBeenCalledWith(response);
+    expect(mockRemoveAsyncSyncCompleter).toHaveBeenCalledWith(asyncSyncId);
   });
 });
