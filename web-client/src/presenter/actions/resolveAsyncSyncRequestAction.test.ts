@@ -35,4 +35,21 @@ describe('resolveAsyncSyncRequestAction', () => {
     expect(mockGetAsyncSyncCompleter).toHaveBeenCalledWith(asyncSyncId);
     expect(asyncSyncCompleterDict[asyncSyncId]).toHaveBeenCalledWith(response);
   });
+
+  it('should not call the callback if the response status code is a 503', async () => {
+    const asyncSyncId = 'asyncSyncId1';
+    const response = { statusCode: 503 };
+
+    await runAction(resolveAsyncSyncRequestAction as any, {
+      modules: {
+        presenter,
+      },
+      props: {
+        asyncSyncId,
+        response,
+      },
+    });
+
+    expect(mockGetAsyncSyncCompleter).not.toHaveBeenCalled();
+  });
 });
