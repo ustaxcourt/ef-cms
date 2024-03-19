@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CaseInventory,
   CustomCaseReportFilters,
@@ -97,6 +98,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
   const formattedCases = cases.map(aCase => ({
     ...aCase,
     calendaringHighPriority: aCase.highPriority ? 'yes' : '',
+    caseCaption: Case.getCaseTitle(aCase.caseCaption),
     receivedAt: applicationContext
       .getUtilities()
       .formatDateString(aCase.receivedAt, FORMATS.MMDDYY),
