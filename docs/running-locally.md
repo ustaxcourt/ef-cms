@@ -161,7 +161,7 @@ Now that your application is running locally, try to log in with some of the loc
 
 Open a browser to [http://localhost:1234](http://localhost:1234) and enter one of the following mock user emails.
 
-?> There is no password required for logins during local development.
+?> Use the password `Testing1234$` for logins during local development.
 
 ```txt
 petitioner@example.com
