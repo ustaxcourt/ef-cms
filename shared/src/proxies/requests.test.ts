@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { asyncSyncHandler, asyncSyncPost, post, put, remove } from './requests';
+import { asyncSyncHandler, post, put, remove } from './requests';
 
 const mockFail503 = Promise.reject({
   response: {
@@ -110,59 +110,7 @@ describe('requests that perform writes', () => {
   });
 });
 
-describe('Asyn Sync Request', () => {
-  it('should setup the callback and trigger an http request', async () => {
-    let promiseCallback;
-
-    applicationContext.getUniqueId = jest
-      .fn()
-      .mockImplementation(() => 'TEST_ID');
-
-    applicationContext.getHttpClient().post = jest
-      .fn()
-      .mockImplementation(() => {
-        promiseCallback({
-          body: 'body',
-          statusCode: '200',
-        });
-      });
-
-    const setAsyncSyncCompleterMock = jest
-      .fn()
-      .mockImplementation((_, callback) => {
-        promiseCallback = callback;
-      });
-
-    const request = {
-      applicationContext: {
-        ...applicationContext,
-        getAsynSyncUtil: () => ({
-          setAsyncSyncCompleter: setAsyncSyncCompleterMock,
-        }),
-      },
-      body: 'REQUEST_BODY',
-      endpoint: 'TEST_ENDPOINT',
-    };
-
-    await asyncSyncPost(request);
-
-    const setAsyncSyncResultCalls = setAsyncSyncCompleterMock.mock.calls;
-    expect(setAsyncSyncResultCalls.length).toEqual(1);
-    expect(setAsyncSyncResultCalls[0][0]).toEqual('TEST_ID');
-    expect(typeof setAsyncSyncResultCalls[0][1]).toEqual('function');
-
-    const postCalls = applicationContext.getHttpClient().post.mock.calls;
-    expect(postCalls.length).toEqual(1);
-    const [URL, BODY, OPTIONS] = postCalls[0];
-    expect(URL).toEqual('http://localhostTEST_ENDPOINT');
-    expect(BODY).toEqual('REQUEST_BODY');
-    expect(OPTIONS).toMatchObject({
-      headers: {
-        asyncSyncId: 'TEST_ID',
-      },
-    });
-  });
-
+describe('Asyn Sync Handler', () => {
   it('should setup the callback and execute the request', async () => {
     let promiseCallback;
 
