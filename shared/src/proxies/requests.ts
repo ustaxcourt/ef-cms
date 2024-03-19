@@ -88,7 +88,8 @@ export const get = process.env.CI ? internalGet : getMemoized;
  */
 export const post = async ({
   applicationContext,
-  body,
+  asyncSyncId = undefined,
+  body = {},
   endpoint,
   headers = {},
   options = {},
@@ -102,6 +103,7 @@ export const post = async ({
         headers: {
           ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
           ...headers,
+          asyncSyncId,
         },
         ...options,
       })
@@ -113,6 +115,7 @@ export const post = async ({
         .sleep(err.response?.headers['Retry-After'] || 5000);
       return post({
         applicationContext,
+        asyncSyncId,
         body,
         endpoint,
         retry: retry + 1,
@@ -154,6 +157,31 @@ export const asyncSyncPost = ({
         },
         ...options,
       });
+  }).catch(err => {
+    throw err;
+  });
+};
+
+export const asyncSyncHandler = (
+  applicationContext,
+  request,
+  asyncSyncId = applicationContext.getUniqueId(),
+) => {
+  getMemoized.clear();
+
+  return new Promise((resolve, reject) => {
+    const callback = results => {
+      if (results.statusCode === '200') {
+        resolve(results.body);
+      }
+      reject(results);
+    };
+
+    applicationContext
+      .getAsynSyncUtil()
+      .setAsyncSyncResult(asyncSyncId, callback);
+
+    request(asyncSyncId);
   }).catch(err => {
     throw err;
   });

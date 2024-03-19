@@ -416,8 +416,12 @@ app.use(logger());
     lambdaWrapper(fileCorrespondenceDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/court-issued-order',
-    lambdaWrapper(fileCourtIssuedOrderToCaseLambda),
+    '/async/case-documents/:docketNumber/court-issued-order',
+    lambdaWrapper(
+      fileCourtIssuedOrderToCaseLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
 
   // PUT

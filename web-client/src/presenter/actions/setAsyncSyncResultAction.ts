@@ -3,6 +3,7 @@ export const setAsyncSyncResultAction = ({
   props,
 }: ActionProps) => {
   const { asyncSyncId, response } = props;
+  if (response.statusCode === 503) return;
 
   const callback = applicationContext
     .getAsynSyncUtil()
