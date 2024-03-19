@@ -18,7 +18,7 @@ After installing git, be sure to clone the project locally:
 
 All of our application code is built using Javascript:
 
-- Our frontend is written React, Cerebral, and bundled using webpack.
+- Our frontend is written React, Cerebral, and bundled using esbuild.
 - Our backend APIs are written using express and a serverless wrapper.
 
 Because of this, you will need to make sure you node and npm installed locked to the following versions:
