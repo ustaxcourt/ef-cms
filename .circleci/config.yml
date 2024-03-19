@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.1.5
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.1.6
 
 parameters:
   run_build_and_deploy:
@@ -152,43 +152,43 @@ jobs:
           name: Setup Elasticsearch Index Settings
           command: |
             ./web-api/setup-elasticsearch-index.sh $ENV
-      # - run: TODO 10007 Cleanup: Put this step back after 10007 has been deployed
-      #     name: Admin User Setup
-      #     command: |
-      #       if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-      #         npx ts-node --transpile-only scripts/user/setup-admin.ts
-      #       else
-      #         echo "skipping…"
-      #       fi
-      # - run:
-      #     name: Test Users Setup
-      #     command: |
-      #       if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-      #         ./scripts/user/setup-test-users.sh $ENV
-      #       else
-      #         echo "skipping…"
-      #       fi
-      # - run:
-      #     name: Judge Users Setup
-      #     environment:
-      #       FILE_NAME: ./scripts/circleci/judge/judge_users.csv
-      #     command: |
-      #       if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
-      #         echo "skipping…"
-      #         exit 0
-      #       fi
-      #       if [ "${CIRCLE_BRANCH}" == "test" ]; then
-      #         SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-      #         ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-      #           --domain-name "${SOURCE_DOMAIN}" \
-      #           --region "us-east-1" \
-      #           --query 'DomainStatus.Endpoint' \
-      #           --output text)
-      #         export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
-      #         npx ts-node --transpile-only ./scripts/user/setup-glued-judges.ts
-      #       else
-      #         ./scripts/circleci/judge/bulk-import-judge-users.sh
-      #       fi
+      - run:
+          name: Admin User Setup
+          command: |
+            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
+              npx ts-node --transpile-only scripts/user/setup-admin.ts
+            else
+              echo "skipping…"
+            fi
+      - run:
+          name: Test Users Setup
+          command: |
+            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
+              ./scripts/user/setup-test-users.sh $ENV
+            else
+              echo "skipping…"
+            fi
+      - run:
+          name: Judge Users Setup
+          environment:
+            FILE_NAME: ./scripts/circleci/judge/judge_users.csv
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
+              echo "skipping…"
+              exit 0
+            fi
+            if [ "${CIRCLE_BRANCH}" == "test" ]; then
+              SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${SOURCE_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
+              npx ts-node --transpile-only ./scripts/user/setup-glued-judges.ts
+            else
+              ./scripts/circleci/judge/bulk-import-judge-users.sh
+            fi
       - run:
           name: 'Deploy - Web Client - S3'
           command: |
@@ -209,10 +209,6 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: 'Deploy - Verify Cognito Lambda Triggers'
-          command: |
-            npm run verify-cognito-lambda-triggers -- $ENV
       - run:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
@@ -363,9 +359,9 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-      # - run: TODO 10007 Cleanup: Put this step back after 10007 has been deployed
-      #     name: 'Disable Maintenance Mode'
-      #     command: npm run maintenance:disengage $ENV
+      - run:
+          name: 'Disable Maintenance Mode'
+          command: npm run maintenance:disengage $ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
@@ -870,42 +866,6 @@ jobs:
           command: |
             npm run destroy:glue-cron -- $ENV
 
-  engage-maintenance-mode: # TODO 10007 Cleanup: Remove after 10007 has been deployed to ustc/prod
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: 'Engage Maintenance Mode'
-          command: npm run maintenance:engage $ENV
-
-  disengage-maintenance-mode: # TODO 10007 Cleanup: Remove after 10007 has been deployed to ustc/prod
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: 'Disengage Maintenance Mode'
-          command: npm run maintenance:disengage $ENV
-
 only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>
   filters:
@@ -940,12 +900,8 @@ workflows:
   build-and-deploy:
     when: << pipeline.parameters.run_build_and_deploy >>
     jobs:
-      - engage-maintenance-mode: # TODO 10007 Cleanup: Remove after 10007 has been deployed to ustc/dev
-          <<: *only-deployed-lower-environments
       - deploy:
           <<: *only-deployed-lower-environments
-          requires:
-            - engage-maintenance-mode
       - migrate:
           <<: *only-deployed-lower-environments
           requires:
@@ -968,22 +924,24 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - wait-for-reindex
-      # - smoketests: # TODO 10007 Cleanup: Add back running readonly smoketests after 10007 has been deployed
-      #     <<: *only-deployed-lower-environments
-      #     requires:
-      #       - disable-reindex-cron
-      # - loadtests:
-      #     <<: *only-deployed-lower-environments
-      #     requires:
-      #       - disable-reindex-cron
-      # - smoketests-readonly: # TODO 10007 Cleanup: Add back running readonly smoketests after 10007 has been deployed to ustc/prod
-      #     <<: *only-deployed-lower-environments
-      #     requires:
-      #       - loadtests
-      - switch-colors:
+      - smoketests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
+      - loadtests:
+          <<: *only-deployed-lower-environments
+          requires:
+            - disable-reindex-cron
+      - smoketests-readonly:
+          <<: *only-deployed-lower-environments
+          requires:
+            - disable-reindex-cron
+      - switch-colors:
+          <<: *only-deployed-lower-environments
+          requires:
+            - smoketests
+            - loadtests
+            - smoketests-readonly
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
           requires:
@@ -992,21 +950,12 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - switch-colors
-      - disengage-maintenance-mode: # TODO 10007 Cleanup: Remove after 10007 has been deployed to ustc/dev
-          <<: *only-deployed-lower-environments
-          requires:
-            - cleanup
-            - delete-api-mappings
 
   build-and-deploy-with-context:
     when: << pipeline.parameters.run_build_and_deploy_with_context >>
     jobs:
-      - engage-maintenance-mode: # TODO 10007 Cleanup: Remove after 10007 has been deployed to ustc/prod
-          <<: *only-prod
       - deploy:
           <<: *only-prod
-          requires:
-            - engage-maintenance-mode
       - migrate:
           <<: *only-prod
           requires:
@@ -1029,18 +978,18 @@ workflows:
           <<: *only-prod
           requires:
             - wait-for-reindex
-      # - loadtests: # TODO 10007 Cleanup: Add back running loadtests after 10007 has been deployed to ustc/prod
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      # - smoketests-readonly: # TODO 10007 Cleanup: Add back running readonly smoketests after 10007 has been deployed to ustc/prod
-      #     <<: *only-prod
-      #     requires:
-      #       - loadtests
-      - deploy-switch-colors-cron:
+      - loadtests:
           <<: *only-prod
           requires:
             - disable-reindex-cron
+      - smoketests-readonly:
+          <<: *only-prod
+          requires:
+            - loadtests
+      - deploy-switch-colors-cron:
+          <<: *only-prod
+          requires:
+            - smoketests-readonly
       - wait-for-switch:
           <<: *only-prod
           type: approval
@@ -1067,10 +1016,6 @@ workflows:
           requires:
             - backup-source-dynamo-table
             - delete-api-mappings
-      - disengage-maintenance-mode: # TODO 10007 Cleanup: Remove after 10007 has been deployed to ustc/prod
-          <<: *only-prod
-          requires:
-            - cleanup
 
   build-and-deploy-empty:
     when: << pipeline.parameters.run_build_and_deploy_empty >>
