@@ -134,7 +134,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
 const getCsvString = (records: any[]) => {
   const CSV_DICTIONARY = [
     { header: 'Docket No.', key: 'docketNumber' },
-    { header: 'Date Filed', key: 'receivedAt' },
+    { header: 'Date Created', key: 'receivedAt' },
     { header: 'Case Title', key: 'caseCaption' },
     { header: 'Case Status', key: 'status' },
     { header: 'Case Type', key: 'caseType' },
