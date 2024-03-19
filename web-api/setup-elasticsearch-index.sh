@@ -22,7 +22,7 @@ ENV=$1
 
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
-pushd ./web-api/terraform/main
+pushd ./web-api/terraform/applyables/allColors
 ../bin/deploy-init.sh "${ENV}"
 
 
