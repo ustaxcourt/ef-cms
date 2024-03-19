@@ -20,17 +20,22 @@ variable "handler_method" {
 }
 
 variable "timeout" {
-  type = string
+  type    = string
   default = "29"
 }
 
+variable "publish" {
+  type    = bool
+  default = false
+}
+
 variable "memory_size" {
-  type = string
+  type    = string
   default = "3008"
 }
 
 variable "layers" {
-  type    = list(string)
-  default = null
+  type        = list(string)
+  default     = null
   description = "list of arns for lambda layers"
 }
