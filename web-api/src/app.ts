@@ -28,6 +28,7 @@ import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadl
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
 import { createCourtIssuedOrderPdfFromHtmlLambda } from './lambdas/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda';
+import { createCsvCustomCaseReportFileLambda } from '@web-api/lambdas/reports/createCsvCustomCaseReportFileLambda';
 import { createMessageLambda } from './lambdas/messages/createMessageLambda';
 import { createPractitionerDocumentLambda } from './lambdas/practitioners/createPractitionerDocumentLambda';
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
@@ -808,6 +809,10 @@ app.get(
   app.post(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
+  );
+  app.post(
+    '/async/reports/csv/custom-case-report',
+    lambdaWrapper(createCsvCustomCaseReportFileLambda, { isAsync: true }),
   );
 }
 

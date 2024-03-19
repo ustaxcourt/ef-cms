@@ -575,6 +575,7 @@ export const baseState = {
     zipInProgress?: boolean;
     totalFiles?: number;
     fileCount?: number;
+    title: string;
   },
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
