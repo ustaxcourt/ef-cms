@@ -8,22 +8,15 @@ import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const openConfirmPaperServiceModalSequence = [
   clearAlertsAction,
   clearModalStateAction,
-  startShowValidationAction,
-  isDocketEntryMultiDocketableAction,
-  {
-    no: [],
-    yes: [setMultiDocketingCheckboxesAction],
-  },
   setDocumentIsRequiredAction,
-  generateTitleForPaperFilingAction,
-  setFilersFromFilersMapAction,
+  startShowValidationAction,
   validateDocketEntryAction,
   {
     error: [
@@ -32,6 +25,13 @@ export const openConfirmPaperServiceModalSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
+      isDocketEntryMultiDocketableAction,
+      {
+        no: [],
+        yes: [setMultiDocketingCheckboxesAction],
+      },
+      generateTitleForPaperFilingAction,
+      setFilersFromFilersMapAction,
       setShowModalFactoryAction('ConfirmInitiatePaperFilingServiceModal'),
     ],
   },
