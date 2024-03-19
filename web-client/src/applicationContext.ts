@@ -389,6 +389,10 @@ const setAsyncSyncCompleter = (id: string, results: any) => {
   asyncSyncCompleterDict[id] = results;
 };
 
+const removeAsyncSyncCompleter = (id: string) => {
+  delete asyncSyncCompleterDict[id];
+};
+
 const getAsyncSyncCompleter = (id: string) => {
   return asyncSyncCompleterDict[id];
 };
@@ -647,6 +651,7 @@ const applicationContext = {
   },
   getAsynSyncUtil: () => ({
     getAsyncSyncCompleter,
+    removeAsyncSyncCompleter,
     setAsyncSyncCompleter,
   }),
   getBaseUrl: () => {
