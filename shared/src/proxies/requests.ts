@@ -145,8 +145,6 @@ export const asyncSyncHandler = (
       .setAsyncSyncCompleter(asyncSyncId, callback);
 
     request(asyncSyncId);
-  }).catch(err => {
-    throw err;
   });
 };
 
