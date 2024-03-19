@@ -125,43 +125,6 @@ export const post = async ({
   }
 };
 
-export const asyncSyncPost = ({
-  applicationContext,
-  body,
-  endpoint,
-  headers = {},
-  options = {},
-  asyncSyncId = applicationContext.getUniqueId(),
-}) => {
-  getMemoized.clear();
-
-  return new Promise((resolve, reject) => {
-    const callback = results => {
-      if (results.statusCode === '200') {
-        resolve(results.body);
-      }
-      reject(results);
-    };
-
-    applicationContext
-      .getAsynSyncUtil()
-      .setAsyncSyncCompleter(asyncSyncId, callback);
-
-    applicationContext
-      .getHttpClient()
-      .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-        headers: {
-          ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
-          ...headers,
-          asyncSyncId,
-        },
-        ...options,
-      });
-  }).catch(err => {
-    throw err;
-  });
-};
-
 export const asyncSyncHandler = (
   applicationContext,
   request,
