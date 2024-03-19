@@ -87,19 +87,19 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   cy.get('button#modal-button-confirm').click();
 
   // petition
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('[data-testid="remove-pdf"]');
 
   //stin
   cy.get('[data-testid="tabButton-stinFile"]').click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('[data-testid="remove-pdf"]');
 
   //rqt
   cy.get('[data-testid="tabButton-requestForPlaceOfTrialFile"]').click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
@@ -110,7 +110,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
 
   //atp
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#attachmentToPetitionFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
