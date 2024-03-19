@@ -93,7 +93,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
     const saveFileAndGenerateUrlCalls =
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
     const csvStringBuffer = Buffer.from(
-      'Docket No.,Date Filed,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumber,Invalid DateTime,caseCaption,status,caseType,associatedJudge,preferredTrialCity,yes\n',
+      'Docket No.,Date Created,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumber,Invalid DateTime,caseCaption,status,caseType,associatedJudge,preferredTrialCity,yes\n',
     );
     const bomBuffer = Buffer.from([239, 187, 191]);
 
