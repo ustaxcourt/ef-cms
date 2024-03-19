@@ -7,5 +7,6 @@ module "header_security_lambda" {
   lambda_name    = "header_security_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_lambda_role_${var.environment}"
   environment    = {}
+  publish        = true
 
 }

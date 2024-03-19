@@ -28,8 +28,8 @@ resource "aws_lambda_function" "lambda_function" {
   source_code_hash = data.archive_file.lambda_function_zip.output_base64sha256
   timeout          = var.timeout
   memory_size      = var.memory_size
-
   layers           = var.layers
+  publish          = var.publish
 
   tracing_config {
     mode = "Active"
