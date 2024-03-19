@@ -145,7 +145,7 @@ export const asyncSyncPost = ({
 
     applicationContext
       .getAsynSyncUtil()
-      .setAsyncSyncResult(asyncSyncId, callback);
+      .setAsyncSyncCompleter(asyncSyncId, callback);
 
     applicationContext
       .getHttpClient()
