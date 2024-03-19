@@ -131,9 +131,18 @@ jobs:
             ./setup-for-blue-green-migration.sh
       - run:
           no_output_timeout: 20m
-          name: 'Deploy - Web API - Terraform'
+          name: 'Deploy - All Color Terraform'
           command: |
             cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
+      - run:
+          no_output_timeout: 20m
+          name: 'Deploy - Color ${DEPLOYING_COLOR} Terraform'
+          command: |
+            if [ "${DEPLOYING_COLOR}" == "blue" ]
+              npm run deploy:blue $ENV
+            else
+              npm run deploy:green $ENV
+            fi
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web Client - Terraform'
