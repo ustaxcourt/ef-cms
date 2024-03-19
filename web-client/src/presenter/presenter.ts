@@ -175,6 +175,7 @@ import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
+import { gotoOldLoginSequence } from '@web-client/presenter/sequences/Login/gotoOldLoginSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
@@ -846,6 +847,7 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
+  gotoOldLoginSequence: gotoOldLoginSequence as unknown as Function,
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
   gotoPetitionQcSequence: gotoPetitionQcSequence as unknown as Function,
