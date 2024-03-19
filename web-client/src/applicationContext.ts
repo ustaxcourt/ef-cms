@@ -384,13 +384,13 @@ const setCurrentUserToken = newToken => {
   token = newToken;
 };
 
-const asyncSyncResults = {};
-const setAsyncSyncResult = (id: string, results: any) => {
-  asyncSyncResults[id] = results;
+const asyncSyncCompleterDict = {};
+const setAsyncSyncCompleter = (id: string, results: any) => {
+  asyncSyncCompleterDict[id] = results;
 };
 
-const getAsyncSyncResult = (id: string) => {
-  return asyncSyncResults[id];
+const getAsyncSyncCompleter = (id: string) => {
+  return asyncSyncCompleterDict[id];
 };
 
 const allUseCases = {
@@ -646,8 +646,8 @@ const applicationContext = {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
   getAsynSyncUtil: () => ({
-    getAsyncSyncResult,
-    setAsyncSyncResult,
+    getAsyncSyncCompleter,
+    setAsyncSyncCompleter,
   }),
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';

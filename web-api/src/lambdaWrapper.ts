@@ -57,6 +57,7 @@ export const lambdaWrapper = (
     });
 
     const { asyncsyncid } = req.headers;
+
     if (options.isAsyncSync && asyncsyncid && applicationContext) {
       const user = getUserFromAuthHeader(event);
       await applicationContext.getNotificationGateway().sendNotificationToUser({
