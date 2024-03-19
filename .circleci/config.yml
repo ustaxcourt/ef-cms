@@ -133,7 +133,7 @@ jobs:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |
-            cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
+            npm run deploy:allColors $ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Color ${DEPLOYING_COLOR} Terraform'
