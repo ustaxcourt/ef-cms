@@ -179,7 +179,7 @@ export const asyncSyncHandler = (
 
     applicationContext
       .getAsynSyncUtil()
-      .setAsyncSyncResult(asyncSyncId, callback);
+      .setAsyncSyncCompleter(asyncSyncId, callback);
 
     request(asyncSyncId);
   }).catch(err => {
