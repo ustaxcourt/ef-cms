@@ -12,7 +12,7 @@ export function createAndServePaperFiling(
   selectTypeaheadInput('document-type', documentType);
   cy.get('[data-testid="filed-by-option"]').click();
   cy.get('[data-testid="objections-No"]').click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
 
   cy.get('input#primaryDocumentFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
