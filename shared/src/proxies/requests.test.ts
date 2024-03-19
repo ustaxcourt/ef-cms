@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { asyncSyncPost, post, put, remove } from './requests';
+import { asyncSyncHandler, asyncSyncPost, post, put, remove } from './requests';
 
 const mockFail503 = Promise.reject({
   response: {
@@ -161,5 +161,46 @@ describe('Asyn Sync Request', () => {
         asyncSyncId: 'TEST_ID',
       },
     });
+  });
+
+  it('should setup the callback and execute the request', async () => {
+    let promiseCallback;
+
+    applicationContext.getUniqueId = jest
+      .fn()
+      .mockImplementation(() => 'TEST_ID');
+
+    const setAsyncSyncCompleterMock = jest
+      .fn()
+      .mockImplementation((_, callback) => {
+        promiseCallback = callback;
+      });
+
+    const requestMock = jest.fn(() => {
+      promiseCallback({
+        body: 'body',
+        statusCode: '200',
+      });
+    });
+
+    await asyncSyncHandler(
+      {
+        ...applicationContext,
+        getAsynSyncUtil: () => ({
+          setAsyncSyncCompleter: setAsyncSyncCompleterMock,
+        }),
+      },
+      requestMock,
+    );
+
+    const setAsyncSyncResultCalls = setAsyncSyncCompleterMock.mock.calls;
+    expect(setAsyncSyncResultCalls.length).toEqual(1);
+    expect(setAsyncSyncResultCalls[0][0]).toEqual('TEST_ID');
+    expect(typeof setAsyncSyncResultCalls[0][1]).toEqual('function');
+
+    const requestCalls = requestMock.mock.calls;
+    expect(requestCalls.length).toEqual(1);
+    const ASYNC_SYNC_ID = requestCalls[0][0];
+    expect(ASYNC_SYNC_ID).toEqual('TEST_ID');
   });
 });
