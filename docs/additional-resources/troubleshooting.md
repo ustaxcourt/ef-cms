@@ -213,20 +213,6 @@ Solution:
 - Go back to 'General Settings' for the cognito pool
 - Click 'Delete Pool'
 
-## Error archiving file /template/lambdas/dist/<some-file.js>
-
-Problem:
-
-- Files built by webpack during the deploy are not available
-
-Solution:
-
-- Run the web-api webpack build to bundle the files into the expected folder
-
-    ```bash
-    npm run build:lambda:api
-    ```
-
 ## Error deleting Lambda@Edge function
 
 Problem:
