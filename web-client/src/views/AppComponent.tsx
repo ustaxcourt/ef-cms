@@ -62,6 +62,7 @@ import { Login } from '@web-client/views/Login/Login';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { MyAccount } from './MyAccount';
+import { OldLogin } from './OldLogin';
 import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
@@ -160,6 +161,7 @@ const pages = {
   MessageDetail,
   Messages,
   MyAccount,
+  OldLogin,
   PaperFiling,
   PendingReport,
   PetitionQc,
