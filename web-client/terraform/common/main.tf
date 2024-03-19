@@ -31,8 +31,8 @@ module "ui-green" {
   cloudfront_default_ttl = var.cloudfront_default_ttl
   zone_name              = var.zone_name
   viewer_protocol_policy = var.viewer_protocol_policy
-  header_security_arn    = aws_lambda_function.header_security_lambda.qualified_arn
-  strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
+  header_security_arn    = module.header_security_lambda.qualified_arn
+  strip_basepath_arn     = module.strip_basepath_lambda.qualified_arn
   public_certificate     = module.ui-public-certificate
   private_certificate    = data.aws_acm_certificate.private_certificate
   providers = {
@@ -50,8 +50,8 @@ module "ui-blue" {
   cloudfront_default_ttl = var.cloudfront_default_ttl
   zone_name              = var.zone_name
   viewer_protocol_policy = var.viewer_protocol_policy
-  header_security_arn    = aws_lambda_function.header_security_lambda.qualified_arn
-  strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
+  header_security_arn    = module.header_security_lambda.qualified_arn
+  strip_basepath_arn     = module.strip_basepath_lambda.qualified_arn
   public_certificate     = module.ui-public-certificate
   private_certificate    = data.aws_acm_certificate.private_certificate
   providers = {

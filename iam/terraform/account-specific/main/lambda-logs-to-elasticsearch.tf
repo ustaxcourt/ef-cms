@@ -1,34 +1,25 @@
-data "archive_file" "zip_logs_to_es_lambda" {
-  type        = "zip"
-  output_path = "${path.cwd}/../../../../aws/lambdas/LogsToElasticSearch_info.zip"
-  source_dir = "${path.cwd}/../../../../aws/lambdas/LogsToElasticSearch_info/"
-}
-
-resource "aws_lambda_function" "logs_to_es" {
-  filename      = data.archive_file.zip_logs_to_es_lambda.output_path
-  function_name = "LogsToElasticSearch_info"
-  handler       = "index.handler"
-  role          = aws_iam_role.lambda_elasticsearch_execution_role.arn
-  runtime       = "nodejs18.x"
-
-  source_code_hash = "${filebase64sha256(data.archive_file.zip_logs_to_es_lambda.output_path)}-${aws_iam_role.lambda_elasticsearch_execution_role.name}"
-
-  environment {
-    variables = {
+module "logs_to_es" {
+  source         = "../../../../web-api/terraform/modules/lambda"
+  handler_file   = "./aws/lambdas/LogsToElasticSearch_info/index.js"
+  handler_method = "handler"
+  lambda_name    = "LogsToElasticSearch_info"
+  role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
+  environment    = {
       es_endpoint = aws_opensearch_domain.efcms-logs.endpoint
-    }
   }
+  timeout        = "900"
+  memory_size    = "3008"
 }
 
 resource "aws_cloudwatch_log_group" "logs_to_elasticsearch" {
-  name              = "/aws/lambda/${aws_lambda_function.logs_to_es.function_name}"
+  name              = "/aws/lambda/${module.logs_to_es.function_name}"
   retention_in_days = 14
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.logs_to_es.function_name
+  function_name = module.logs_to_es.function_name
   principal     = "logs.amazonaws.com"
 }
 
@@ -36,7 +27,7 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 module "regional-log-subscription-filters-east" {
   source                           = "./regional-log-subscription-filters"
   log_group_environments           = var.log_group_environments
-  logs_to_elasticsearch_lambda_arn = aws_lambda_function.logs_to_es.arn
+  logs_to_elasticsearch_lambda_arn = module.logs_to_es.arn
 
   providers = {
     aws = aws.us-east-1
@@ -46,7 +37,7 @@ module "regional-log-subscription-filters-east" {
 module "regional-log-subscription-filters-west" {
   source                           = "./regional-log-subscription-filters"
   log_group_environments           = var.log_group_environments
-  logs_to_elasticsearch_lambda_arn = aws_lambda_function.logs_to_es.arn
+  logs_to_elasticsearch_lambda_arn = module.logs_to_es.arn
 
   providers = {
     aws = aws.us-west-1
@@ -55,7 +46,7 @@ module "regional-log-subscription-filters-west" {
 
 resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   count           = length(var.log_group_environments)
-  destination_arn = aws_lambda_function.logs_to_es.arn
+  destination_arn = module.logs_to_es.arn
   filter_pattern  = ""
   name            = "cognito_authorizer_${element(var.log_group_environments, count.index)}_lambda_filter"
   log_group_name  = "/aws/lambda/cognito_authorizer_lambda_${element(var.log_group_environments, count.index)}"
@@ -63,7 +54,7 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
 
 resource "aws_cloudwatch_log_subscription_filter" "cognito_post_authentication_lambda_filter" {
   count           = length(var.log_group_environments)
-  destination_arn = aws_lambda_function.logs_to_es.arn
+  destination_arn = module.logs_to_es.arn
   filter_pattern  = ""
   name            = "cognito_post_authentication_lambda_${element(var.log_group_environments, count.index)}_filter"
   log_group_name  = "/aws/lambda/cognito_post_authentication_lambda_${element(var.log_group_environments, count.index)}"
@@ -71,7 +62,7 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_post_authentication_l
 
 resource "aws_cloudwatch_log_subscription_filter" "clamav_fargate_filter" {
   count           = length(var.log_group_environments)
-  destination_arn = aws_lambda_function.logs_to_es.arn
+  destination_arn = module.logs_to_es.arn
   filter_pattern  = ""
   name            = "clamav_fargate_${element(var.log_group_environments, count.index)}_filter"
   log_group_name  = "/aws/ecs/clamav_fargate_${element(var.log_group_environments, count.index)}"
