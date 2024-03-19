@@ -17,6 +17,8 @@ export const openConfirmPaperServiceModalSequence = [
   clearModalStateAction,
   setDocumentIsRequiredAction,
   startShowValidationAction,
+  generateTitleForPaperFilingAction,
+  setFilersFromFilersMapAction,
   validateDocketEntryAction,
   {
     error: [
@@ -30,8 +32,6 @@ export const openConfirmPaperServiceModalSequence = [
         no: [],
         yes: [setMultiDocketingCheckboxesAction],
       },
-      generateTitleForPaperFilingAction,
-      setFilersFromFilersMapAction,
       setShowModalFactoryAction('ConfirmInitiatePaperFilingServiceModal'),
     ],
   },
