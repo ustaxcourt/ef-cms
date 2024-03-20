@@ -671,7 +671,10 @@ app.delete(
  * documents
  */
 {
-  app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
+  app.post(
+    '/async/documents/:key/validate',
+    lambdaWrapper(validatePdfLambda, { isAsyncSync: true }, applicationContext),
+  );
   app.get(
     '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),
