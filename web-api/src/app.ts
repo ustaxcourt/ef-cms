@@ -439,8 +439,12 @@ app.use(logger());
     lambdaWrapper(editPaperFilingLambda, { isAsync: true }),
   );
   app.put(
-    '/case-documents/:docketNumber/docket-entry-meta',
-    lambdaWrapper(updateDocketEntryMetaLambda),
+    '/async/case-documents/:docketNumber/docket-entry-meta',
+    lambdaWrapper(
+      updateDocketEntryMetaLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.put(
     '/async/case-documents/:docketNumber/docket-entry-complete',
