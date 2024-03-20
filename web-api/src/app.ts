@@ -360,8 +360,12 @@ app.use(logger());
   );
   // POST
   app.post(
-    '/case-documents/:docketEntryId/append-pdf',
-    lambdaWrapper(appendAmendedPetitionFormLambda),
+    '/async/case-documents/:docketEntryId/append-pdf',
+    lambdaWrapper(
+      appendAmendedPetitionFormLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
