@@ -8,6 +8,7 @@ module "header_security_lambda" {
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_lambda_role_${var.environment}"
   environment    = {}
   publish        = true
+  use_source_maps = false
 }
 
 moved {

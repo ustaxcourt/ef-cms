@@ -39,3 +39,8 @@ variable "layers" {
   default     = null
   description = "list of arns for lambda layers"
 }
+
+variable "use_source_maps" {
+  type = bool
+  default = true
+}

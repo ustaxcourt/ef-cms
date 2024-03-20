@@ -36,6 +36,6 @@ resource "aws_lambda_function" "lambda_function" {
   }
 
   environment {
-    variables = var.environment
+    variables = var.use_source_maps ? merge(var.environment, { NODE_OPTIONS = "--enable-source-maps" }) : var.environment
   }
 }
