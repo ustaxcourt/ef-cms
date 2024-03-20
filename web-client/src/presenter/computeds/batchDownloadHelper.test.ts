@@ -26,7 +26,7 @@ describe('batchDownloadHelper', () => {
     });
     expect(result).toMatchObject({
       addedFiles: 0,
-      percentComplete: NaN,
+      percentComplete: 0,
       totalFiles: 0,
     });
   });

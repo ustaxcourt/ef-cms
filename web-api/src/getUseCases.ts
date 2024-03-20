@@ -28,6 +28,7 @@ import { createCaseDeadlineInteractor } from '../../shared/src/business/useCases
 import { createCaseFromPaperInteractor } from '../../shared/src/business/useCases/createCaseFromPaperInteractor';
 import { createCaseInteractor } from '../../shared/src/business/useCases/createCaseInteractor';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
+import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
 import { createMessageInteractor } from '../../shared/src/business/useCases/messages/createMessageInteractor';
 import { createPetitionerAccountInteractor } from '../../shared/src/business/useCases/users/createPetitionerAccountInteractor';
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
@@ -140,6 +141,7 @@ import { getUsersInSectionInteractor } from '../../shared/src/business/useCases/
 import { getUsersPendingEmailInteractor } from '../../shared/src/business/useCases/users/getUsersPendingEmailInteractor';
 import { getWorkItemInteractor } from '../../shared/src/business/useCases/workitems/getWorkItemInteractor';
 import { handleBounceNotificationInteractor } from '../../shared/src/business/useCases/email/handleBounceNotificationInteractor';
+import { logOldLoginAttemptInteractor } from '@web-api/business/useCases/logOldLoginAttemptInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
 import { onConnectInteractor } from '../../shared/src/business/useCases/notifications/onConnectInteractor';
 import { onDisconnectInteractor } from '../../shared/src/business/useCases/notifications/onDisconnectInteractor';
@@ -242,6 +244,7 @@ const useCases = {
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
+  createCsvCustomCaseReportFileInteractor,
   createMessageInteractor,
   createPetitionerAccountInteractor,
   createPractitionerDocumentInteractor,
@@ -354,6 +357,7 @@ const useCases = {
   getUsersPendingEmailInteractor,
   getWorkItemInteractor,
   handleBounceNotificationInteractor,
+  logOldLoginAttemptInteractor,
   loginInteractor,
   onConnectInteractor,
   onDisconnectInteractor,

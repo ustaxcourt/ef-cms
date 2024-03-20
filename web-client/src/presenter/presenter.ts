@@ -105,8 +105,10 @@ import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
+import { downloadCsvFileSequence } from '@web-client/presenter/sequences/downloadCsvFileSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
+import { exportCsvCustomCaseReportSequence } from '@web-client/presenter/sequences/exportCsvCustomCaseReportSequence';
 import { exportPendingReportSequence } from '@web-client/presenter/sequences/exportPendingReportSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
@@ -173,6 +175,7 @@ import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
+import { gotoOldLoginSequence } from '@web-client/presenter/sequences/Login/gotoOldLoginSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
@@ -731,10 +734,13 @@ export const presenterSequences = {
   dismissModalSequence: dismissModalSequence as unknown as Function,
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
+  downloadCsvFileSequence: downloadCsvFileSequence as unknown as Function,
   editCorrespondenceDocumentSequence:
     editCorrespondenceDocumentSequence as unknown as Function,
   editUploadCourtIssuedDocumentSequence:
     editUploadCourtIssuedDocumentSequence as unknown as Function,
+  exportCsvCustomCaseReportSequence:
+    exportCsvCustomCaseReportSequence as unknown as Function,
   exportPendingReportSequence:
     exportPendingReportSequence as unknown as Function,
   fetchUserNotificationsSequence:
@@ -841,6 +847,7 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
+  gotoOldLoginSequence: gotoOldLoginSequence as unknown as Function,
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
   gotoPetitionQcSequence: gotoPetitionQcSequence as unknown as Function,

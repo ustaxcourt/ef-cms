@@ -28,6 +28,7 @@ import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadl
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
 import { createCourtIssuedOrderPdfFromHtmlLambda } from './lambdas/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda';
+import { createCsvCustomCaseReportFileLambda } from '@web-api/lambdas/reports/createCsvCustomCaseReportFileLambda';
 import { createMessageLambda } from './lambdas/messages/createMessageLambda';
 import { createPractitionerDocumentLambda } from './lambdas/practitioners/createPractitionerDocumentLambda';
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
@@ -125,6 +126,7 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logOldLoginAttemptLambda } from '@web-api/lambdas/auth/oldLoginAttemptLambda';
 import { logger } from './logger';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
@@ -799,6 +801,10 @@ app.get(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
   );
+  app.post(
+    '/async/export/reports/custom-case-report/csv',
+    lambdaWrapper(createCsvCustomCaseReportFileLambda, { isAsync: true }),
+  );
 }
 
 /**
@@ -1015,6 +1021,7 @@ app.get(
 {
   app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+  app.get('/system/metrics/old-login', lambdaWrapper(logOldLoginAttemptLambda));
 }
 
 /**
