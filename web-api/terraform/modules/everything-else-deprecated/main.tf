@@ -46,7 +46,7 @@ module "elasticsearch_alpha" {
 resource "aws_ssm_parameter" "elasticsearch_alpha_endpoint_ssm" {
   name  = "terraform-${var.environment}-elasticsearch-endpoint-alpha"
   type  = "String"
-  value = length(module.elasticsearch_alpha) > 0 ? module.elasticsearch_alpha[0].endpoint : ""
+  value = length(module.elasticsearch_alpha) > 0 ? module.elasticsearch_alpha[0].endpoint : "Alpha Endpoint Does Not Exist"
 }
 
 module "elasticsearch_beta" {
@@ -69,5 +69,5 @@ module "elasticsearch_beta" {
 resource "aws_ssm_parameter" "elasticsearch_beta_endpoint_ssm" {
   name  = "terraform-${var.environment}-elasticsearch-endpoint-beta"
   type  = "String"
-  value = length(module.elasticsearch_beta) > 0 ? module.elasticsearch_beta[0].endpoint : ""
+  value = length(module.elasticsearch_beta) > 0 ? module.elasticsearch_beta[0].endpoint : "Beta Endpoint Does Not Exist"
 }
