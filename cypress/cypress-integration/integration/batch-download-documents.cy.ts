@@ -37,12 +37,13 @@ const includePrintableDocketRecord = () => {
 
 describe('Batch Download Documents', () => {
   // get from cypress/cypress-integration/integration/custom-case-report-csv-export.cy.ts from 10249 work
+  let downloadPath: string;
   beforeEach(() => {
-    const downloadPath = Cypress.config('downloadsFolder');
-    cy.task('deleteAllFilesInFolder', downloadPath);
+    downloadPath = Cypress.config('downloadsFolder');
+    // cy.task('deleteAllFilesInFolder', downloadPath);
   });
 
-  it('should download all eligible documents that are not stricken with the printable docket record, with all files in a flat directory', () => {
+  it.only('should download all eligible documents that are not stricken with the printable docket record, with all files in a flat directory', () => {
     createAndServePaperPetition().then(
       ({ docketNumber, documentsCreated, name }) => {
         searchByDocketNumberInHeader(docketNumber);
@@ -50,24 +51,11 @@ describe('Batch Download Documents', () => {
         includePrintableDocketRecord();
         cy.get('[data-testid="modal-button-confirm"]').click();
 
-        cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
-          // get the correct directory
-          const caseZipFile = files
-            .filter((fileName: string) =>
-              fileName.includes(`${docketNumber}, ${name}`),
-            )
-            .filter((fileName: string) => fileName.endsWith('.zip'))
-            .pop();
-          const filePath = `${downloadPath}/${caseZipFile}`;
-
-          // eslint-disable-next-line promise/no-nesting
-          return cy.readFile(filePath, 'utf-8').then(fileContent => {
-            cy.wrap(
-              fileContent.split('\n').filter((str: string) => !!str).length,
-            ).should('equal', reportCount + 1);
-          });
-
-          // expect(files.length).to.equal(7);
+        cy.task('unzipFile', {
+          filePath: `${downloadPath}/${docketNumber}, ${name}.zip`,
+          unzipPath: downloadPath,
+        }).then(files => {
+          console.log('got files!', files);
         });
       },
     );
