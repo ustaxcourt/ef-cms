@@ -2,9 +2,6 @@ name: Typescript Reduce Type Errors
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   ReduceTypeErrors:
