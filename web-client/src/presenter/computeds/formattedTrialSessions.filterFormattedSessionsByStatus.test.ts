@@ -1,7 +1,7 @@
 import { filterFormattedSessionsByStatus } from './formattedTrialSessions';
 
 describe('formattedTrialSessions filterFormattedSessionsByStatus', () => {
-  let TRIAL_SESSIONS_LIST = [];
+  let TRIAL_SESSIONS_LIST: any[] = [];
   let trialTerms;
 
   beforeEach(() => {

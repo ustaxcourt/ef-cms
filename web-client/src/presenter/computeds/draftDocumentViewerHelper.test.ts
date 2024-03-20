@@ -38,7 +38,7 @@ describe('draftDocumentViewerHelper', () => {
     isDraft: true,
   };
 
-  beforeAll(() => {
+  beforeEach(() => {
     applicationContext.getCurrentUser = jest
       .fn()
       .mockReturnValue(docketClerkUser);

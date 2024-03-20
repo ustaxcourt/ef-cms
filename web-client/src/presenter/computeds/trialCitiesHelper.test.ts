@@ -51,7 +51,7 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
 
 describe('trialCitiesHelper should return a lists of trial cities ("Standalone Remote" optional) in an alphabetical order', () => {
   it('returns all the trial cities with Standalone Remote as the first option', () => {
-    const result = runCompute(trialCitiesHelper);
+    const result = runCompute(trialCitiesHelper, { state: {} });
     const trialCitiesResult = result('AllPlusStandalone');
     expect(trialCitiesResult).toEqual({
       shouldAddStandalone: true,
@@ -65,7 +65,7 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
   });
 
   it('returns all the trial cities to correspond to the "Small" parameter', () => {
-    const result = runCompute(trialCitiesHelper);
+    const result = runCompute(trialCitiesHelper, { state: {} });
     const trialCitiesResult = result('Small');
     expect(trialCitiesResult).toEqual({
       shouldAddStandalone: false,
@@ -80,7 +80,7 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
   });
 
   it('returns all trialCitiesByState if param is "All"', () => {
-    const result = runCompute(trialCitiesHelper);
+    const result = runCompute(trialCitiesHelper, { state: {} });
     const trialCitiesResult = result('All');
     expect(trialCitiesResult).toEqual({
       shouldAddStandalone: false,
@@ -94,7 +94,7 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
   });
 
   it('returns regular trialCitiesByState if param is "Regular"', () => {
-    const result = runCompute(trialCitiesHelper);
+    const result = runCompute(trialCitiesHelper, { state: {} });
     const trialCitiesResult = result('Regular');
     expect(trialCitiesResult).toEqual({
       shouldAddStandalone: false,
@@ -106,7 +106,7 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
   });
 
   it('returns regular trialCitiesByState by default if param is not "small" or "all"', () => {
-    const result = runCompute(trialCitiesHelper);
+    const result = runCompute(trialCitiesHelper, { state: {} });
     const trialCitiesResult = result('not small or all');
     expect(trialCitiesResult).toEqual({
       shouldAddStandalone: false,

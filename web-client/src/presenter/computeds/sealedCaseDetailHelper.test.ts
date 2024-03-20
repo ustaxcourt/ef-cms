@@ -28,9 +28,12 @@ describe('sealedCaseDetailHelper', () => {
       },
     };
 
-    const result = runCompute(sealedCaseDetailHelperDecorator, {
-      state: stateWithoutCaseCaption,
-    });
+    const result: { caseCaption: string } = runCompute(
+      sealedCaseDetailHelperDecorator,
+      {
+        state: stateWithoutCaseCaption,
+      },
+    );
 
     expect(result.caseCaption).toBe('');
   });
@@ -51,7 +54,9 @@ describe('sealedCaseDetailHelper', () => {
   it('should indicate whether a case is sealed', () => {
     state.caseDetail.isSealed = true;
 
-    const result = runCompute(sealedCaseDetailHelperDecorator, { state });
+    const result: {
+      isCaseSealed: boolean;
+    } = runCompute(sealedCaseDetailHelperDecorator, { state });
 
     expect(result.isCaseSealed).toBe(true);
   });

@@ -36,6 +36,7 @@ describe('saveFileAndGenerateUrl', () => {
 
     await saveFileAndGenerateUrl({
       applicationContext,
+      contentType: 'text/csv',
       file: Buffer.from('abc', 'utf-8'),
       fileNamePrefix: 'paper-service-pdf/',
     });
@@ -44,5 +45,9 @@ describe('saveFileAndGenerateUrl', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0].key,
     ).toEqual(`paper-service-pdf/${mockUUID}`);
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].contentType,
+    ).toEqual('text/csv');
   });
 });

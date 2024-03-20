@@ -19,11 +19,14 @@ export const updateBatchDownloadProgressAction = ({
     numberOfDocketRecordsGenerated,
     numberOfDocketRecordsToGenerate,
     numberOfFilesToBatch,
+    numberOfRecordsDownloaded,
+    totalFiles,
   } = props;
 
   let done = 0;
   const lastDone = get(state.batchDownloads.fileCount) || 0;
-  const total = numberOfFilesToBatch + numberOfDocketRecordsToGenerate;
+  const total =
+    numberOfFilesToBatch + numberOfDocketRecordsToGenerate || totalFiles;
 
   switch (action) {
     case 'batch_download_docket_generated':
@@ -34,6 +37,9 @@ export const updateBatchDownloadProgressAction = ({
       break;
     case 'batch_download_progress':
       done = numberOfDocketRecordsToGenerate + entries.processed;
+      break;
+    case 'batch_download_csv_data':
+      done = numberOfRecordsDownloaded;
       break;
   }
 

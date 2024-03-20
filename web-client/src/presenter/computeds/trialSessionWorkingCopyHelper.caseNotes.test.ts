@@ -71,12 +71,12 @@ describe('trial session working copy computed', () => {
     expect(
       formattedCases.find(
         ({ docketNumber }) => docketNumber === mockCaseWithNotes,
-      ).calendarNotes,
+      )!.calendarNotes,
     ).toEqual(mockNote);
     expect(
       formattedCases.find(
         ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
-      ).calendarNotes,
+      )!.calendarNotes,
     ).toEqual('');
   });
 
@@ -115,12 +115,12 @@ describe('trial session working copy computed', () => {
     expect(
       formattedCases.find(
         ({ docketNumber }) => docketNumber === mockCaseWithNotes,
-      ).userNotes,
+      )!.userNotes,
     ).toEqual(mockNote);
     expect(
       formattedCases.find(
         ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
-      ).userNotes,
+      )!.userNotes,
     ).toEqual('');
   });
 });

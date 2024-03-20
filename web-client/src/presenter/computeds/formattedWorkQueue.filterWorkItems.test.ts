@@ -67,7 +67,7 @@ const adc = {
   userId: 'd3',
 };
 
-const generateWorkItem = (data, docketEntry) => {
+const generateWorkItem = (data, docketEntry = {}) => {
   const baseWorkItem = {
     assigneeId: null,
     assigneeName: null,
@@ -207,7 +207,7 @@ describe('filterWorkItems', () => {
       applicationContext,
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
-    });
+    } as any);
     let assigned = null;
     let unassigned = null;
 
@@ -231,11 +231,10 @@ describe('filterWorkItems', () => {
   it('Returns sent work items for a Petitions Clerk in Section Document QC Outbox', () => {
     applicationContext.getCurrentUser.mockReturnValueOnce(petitionsClerk1);
     const filtered = filterWorkItems({
-      USER_ROLES: ROLES,
       applicationContext,
       workItems: workQueueOutbox,
       ...SECTION_DOCUMENT_QC_OUTBOX,
-    });
+    } as any);
     let sentByUser = null;
     let sentByOtherUser = null;
 
@@ -267,7 +266,7 @@ describe('filterWorkItems', () => {
       applicationContext,
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
-    });
+    } as any);
     let assigned = null;
     let unassigned = null;
 
@@ -294,7 +293,7 @@ describe('filterWorkItems', () => {
       applicationContext,
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
-    });
+    } as any);
 
     expect(filtered).toMatchObject([
       workItemDocketMyDocumentQCInbox,
@@ -308,7 +307,7 @@ describe('filterWorkItems', () => {
       applicationContext,
       workItems: workQueueInProgress,
       ...MY_DOCUMENT_QC_IN_PROGRESS,
-    });
+    } as any);
 
     expect(filtered).toEqual([workItemDocketMyDocumentQCInProgress]);
   });
@@ -319,7 +318,7 @@ describe('filterWorkItems', () => {
       applicationContext,
       workItems: workQueueInProgress,
       ...SECTION_DOCUMENT_QC_IN_PROGRESS,
-    });
+    } as any);
 
     expect(filtered).toEqual([
       workItemDocketMyDocumentQCInProgress,
@@ -334,7 +333,7 @@ describe('filterWorkItems', () => {
       section: DOCKET_SECTION,
       workItems: workQueueInProgress,
       ...SECTION_DOCUMENT_QC_IN_PROGRESS,
-    });
+    } as any);
 
     expect(
       applicationContext.getUtilities().getWorkQueueFilters.mock.calls[0][0],
