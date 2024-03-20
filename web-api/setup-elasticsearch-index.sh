@@ -23,13 +23,13 @@ ENV=$1
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
 if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
-  ELASTICSEARCH_ENDPOINT=aws ssm get-parameter \
+  ELASTICSEARCH_ENDPOINT=$(aws ssm get-parameter \
     --name "terraform-${ENV}-elasticsearch-endpoint-alpha" \
-    --with-decryption | jq -r ".Parameter.Value"
+    --with-decryption | jq -r ".Parameter.Value")
 else
-  ELASTICSEARCH_ENDPOINT=aws ssm get-parameter \
+  ELASTICSEARCH_ENDPOINT=$(aws ssm get-parameter \
     --name "terraform-${ENV}-elasticsearch-endpoint-beta" \
-    --with-decryption | jq -r ".Parameter.Value"
+    --with-decryption | jq -r ".Parameter.Value")
 fi
 
 echo "- DESTINATION_DOMAIN: ${DESTINATION_DOMAIN}"
