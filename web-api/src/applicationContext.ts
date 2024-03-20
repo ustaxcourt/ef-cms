@@ -434,6 +434,7 @@ export const createApplicationContext = (
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);
     },
+    setTimeout: (callback, timeout) => setTimeout(callback, timeout),
   };
 };
 
