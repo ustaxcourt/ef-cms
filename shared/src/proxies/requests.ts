@@ -103,7 +103,7 @@ export const post = async ({
         headers: {
           ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
           ...headers,
-          asyncSyncId,
+          Asyncsyncid: asyncSyncId,
         },
         ...options,
       })
