@@ -1,4 +1,3 @@
-
 module "strip_basepath_lambda" {
   source         = "../../../web-api/terraform/modules/lambda"
   handler_file   = "./web-client/terraform/common/cloudfront-edge/strip-basepath-lambda.js"
@@ -9,3 +8,7 @@ module "strip_basepath_lambda" {
   publish        = true
 }
 
+moved {
+  from = aws_lambda_function.strip_basepath_lambda
+  to   = module.strip_basepath_lambda.aws_lambda_function.lambda_function
+}

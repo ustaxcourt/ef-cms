@@ -4,7 +4,7 @@ Goals
 - Add sourcemaps
 
 :::TO DO:::
-- Delete webpack
+- Add NODE_OPTIONS --enable-source-maps to all terraform lambdas
 - switch all lambdas to new deployment strategy
 - Investigate how web-api/terraform/bin/deploy-app.sh deploys to green vs blue depending on DEPLOYING_COLOR
 - Revisit parallelism=2 in terraform web-api/terraform/bin/deploy-app.sh
