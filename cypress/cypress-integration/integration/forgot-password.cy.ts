@@ -135,6 +135,36 @@ describe('Forgot Password', () => {
   /*
       Given a petitioner with a DAWSON account
       When they indicate that they Forgot Password
+      And they click the password reset link that was emailed to them
+      Then they should be routed to the change password screen and after successful reset even if their code contains trailing or leading spaces, be logged into their account
+       */
+  it('should reset a users password and log them in when they indicate they have forgotten their password and click on the email verification link even if their code contains trailing and leading spaces', () => {
+    const username = `cypress_test_account+${v4()}`;
+    const email = `${username}@example.com`;
+    const name = faker.person.fullName();
+    createAPetitioner({ email, name, password });
+    verifyPetitionerAccount({ email });
+
+    cy.get('[data-testid="forgot-password-button"]').click();
+    cy.get('[data-testid="email-input"]').clear();
+    cy.get('[data-testid="email-input"]').type(email);
+    cy.get('[data-testid="send-password-reset-button"]').click();
+
+    cy.get('[data-testid="forgot-password-code"]').type(
+      ` ${DEFAULT_FORGOT_PASSWORD_CODE} `,
+    );
+    const brandNewPassword = 'brandNewPassword1204$^';
+    cy.get('[data-testid="new-password-input"]').clear();
+    cy.get('[data-testid="new-password-input"]').type(brandNewPassword);
+    cy.get('[data-testid="confirm-new-password-input"]').clear();
+    cy.get('[data-testid="confirm-new-password-input"]').type(brandNewPassword);
+    cy.get('[data-testid="change-password-button"]').click();
+    cy.get('[data-testid="header-text"]').should('contain', `Welcome, ${name}`);
+  });
+
+  /*
+      Given a petitioner with a DAWSON account
+      When they indicate that they Forgot Password
       And it has been longer than 24 hours since they indicated they Forgot Password
       Then they should be alerted that their forgot password link has expired
        */
