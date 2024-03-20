@@ -8,6 +8,6 @@ export const createCsvCustomCaseReportFileInteractor = (
   return post({
     applicationContext,
     body: data,
-    endpoint: '/async/reports/custom-case-report/csv',
+    endpoint: '/async/export/reports/custom-case-report/csv',
   });
 };

@@ -802,7 +802,7 @@ app.get(
     lambdaWrapper(getCasesClosedByJudgeLambda),
   );
   app.post(
-    '/async/reports/custom-case-report/csv',
+    '/async/export/reports/custom-case-report/csv',
     lambdaWrapper(createCsvCustomCaseReportFileLambda, { isAsync: true }),
   );
 }
