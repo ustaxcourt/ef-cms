@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { state } from '@web-client/presenter/app.cerebral';
+import { trim } from 'lodash';
 import React from 'react';
 
 export const submitChangePasswordAction = async ({
@@ -20,7 +21,7 @@ export const submitChangePasswordAction = async ({
     const { accessToken, idToken, refreshToken } = await applicationContext
       .getUseCases()
       .changePasswordInteractor(applicationContext, {
-        code,
+        code: trim(code), // remove trailing and lead spaces
         confirmPassword,
         email,
         password,
