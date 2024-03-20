@@ -14,7 +14,7 @@ export const startDelayedLogoutAction = ({
   const oldTimer = get(state.logoutTimer);
   clearTimeout(oldTimer);
 
-  const logoutTimer = setTimeout(() => {
+  const logoutTimer = applicationContext.setTimeout(() => {
     store.set(state.shouldIdleLogout, true);
   }, applicationContext.getConstants().SESSION_MODAL_TIMEOUT);
 
