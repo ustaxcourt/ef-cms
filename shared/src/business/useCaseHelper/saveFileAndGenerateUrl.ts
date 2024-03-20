@@ -1,5 +1,6 @@
 export const saveFileAndGenerateUrl = async ({
   applicationContext,
+  contentType = 'application/pdf',
   file,
   fileNamePrefix,
   urlTtl,
@@ -8,6 +9,7 @@ export const saveFileAndGenerateUrl = async ({
   applicationContext: IApplicationContext;
   file: Buffer;
   fileNamePrefix?: string;
+  contentType?: string;
   useTempBucket?: boolean;
   urlTtl?: number; // time to live of link in seconds
 }): Promise<{
@@ -20,6 +22,7 @@ export const saveFileAndGenerateUrl = async ({
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
+    contentType,
     document: file,
     key: fileName,
     useTempBucket,
