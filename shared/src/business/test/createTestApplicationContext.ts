@@ -700,6 +700,7 @@ export const createTestApplicationContext = ({
     runVirusScan: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
+    setTimeout: jest.fn().mockImplementation(callback => callback()),
   };
   return applicationContext;
 };
