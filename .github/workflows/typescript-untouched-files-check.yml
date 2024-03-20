@@ -26,7 +26,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.16.1'
+          node-version: '20.11.1'
 
       - name: NPM Install in your branch
         run: npm ci

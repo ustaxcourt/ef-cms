@@ -5,8 +5,8 @@
   "license": "CC0-1.0",
   "repository": "https://github.com/ustaxcourt/ef-cms",
   "engines": {
-    "node": ">=18.16.1 <19.0.0",
-    "npm": ">=9.0.0 <10.0.0"
+    "node": ">=20.11.1 <21.0.0",
+    "npm": ">=10.2.4 <11.0.0"
   },
   "dependencies": {
     "@18f/us-federal-holidays": "4.0.0",
@@ -255,9 +255,9 @@
     "@aws-sdk/client-secrets-manager": "3.535.0",
     "@aws-sdk/types": "3.535.0",
     "@babel/cli": "7.24.1",
-    "@babel/core": "7.24.1",
+    "@babel/core": "7.24.3",
     "@babel/eslint-parser": "7.24.1",
-    "@babel/preset-env": "7.24.1",
+    "@babel/preset-env": "7.24.3",
     "@babel/preset-react": "7.24.1",
     "@babel/preset-typescript": "7.24.1",
     "@babel/register": "7.23.7",
@@ -274,8 +274,8 @@
     "@types/react-paginate": "7.1.4",
     "@types/uuid": "9.0.8",
     "@types/websocket": "1.0.10",
-    "@typescript-eslint/eslint-plugin": "7.2.0",
-    "@typescript-eslint/parser": "7.2.0",
+    "@typescript-eslint/eslint-plugin": "7.3.1",
+    "@typescript-eslint/parser": "7.3.1",
     "@vendia/serverless-express": "4.12.6",
     "adm-zip": "0.5.12",
     "ajv": "8.12.0",
