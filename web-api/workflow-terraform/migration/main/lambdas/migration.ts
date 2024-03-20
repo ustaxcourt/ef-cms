@@ -104,6 +104,7 @@ export const handler: Handler = async (event, context) => {
   }
 
   requests = [...requests, ...generateDeleteRequests(event)];
+  applicationContext.logger.info('JIMBO compiled these requests:', requests);
 
   const requestChunks = chunk(requests, 25);
   const commands: BatchWriteCommand[] = [];
