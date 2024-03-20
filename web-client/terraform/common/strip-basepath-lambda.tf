@@ -6,6 +6,7 @@ module "strip_basepath_lambda" {
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_lambda_role_${var.environment}"
   environment    = {}
   publish        = true
+  use_source_maps = false
 }
 
 moved {
