@@ -140,8 +140,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
     await generateDocumentAndDocketRecordForCase(sessionCase);
   }
 
-  const onEntry = entryData => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onEntry = async entryData => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_entry',
@@ -153,9 +153,9 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
   };
 
-  const onError = error => {
+  const onError = async error => {
     applicationContext.logger.error('Archive Error', { error });
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_error',
@@ -165,8 +165,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
   };
 
-  const onProgress = progressData => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onProgress = async progressData => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_progress',
@@ -178,8 +178,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
   };
 
-  const onUploadStart = () => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onUploadStart = async () => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_upload_start',
@@ -262,6 +262,7 @@ export const batchDownloadTrialSessionInteractor = async (
       `Error when batch downloading trial session with id ${trialSessionId} - ${erMsg}`,
       { error },
     );
+
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
