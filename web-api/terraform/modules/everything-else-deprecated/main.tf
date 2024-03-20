@@ -43,6 +43,12 @@ module "elasticsearch_alpha" {
   }
 }
 
+resource "aws_ssm_parameter" "elasticsearch_alpha_endpoint_ssm" {
+  name  = "terraform-${var.environment}-elasticsearch-endpoint-alpha"
+  type  = "String"
+  value = module.elasticsearch_alpha.endpoint
+}
+
 module "elasticsearch_beta" {
   source = "../elasticsearch"
 
@@ -58,4 +64,10 @@ module "elasticsearch_beta" {
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
+}
+
+resource "aws_ssm_parameter" "elasticsearch_beta_endpoint_ssm" {
+  name  = "terraform-${var.environment}-elasticsearch-endpoint-beta"
+  type  = "String"
+  value = module.elasticsearch_beta.endpoint
 }
