@@ -93,7 +93,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
     const saveFileAndGenerateUrlCalls =
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
     const csvStringBuffer = Buffer.from(
-      'Docket No.,Date Filed,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumber,Invalid DateTime,caseCaption,status,caseType,associatedJudge,preferredTrialCity,yes\n',
+      'Docket No.,Date Created,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumber,Invalid DateTime,caseCaption,status,caseType,associatedJudge,preferredTrialCity,yes\n',
     );
     const bomBuffer = Buffer.from([239, 187, 191]);
 
@@ -163,8 +163,44 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
       .split('\n')
       .filter(x => !!x);
 
-    console.log('records', records);
-
     expect(records.length).toEqual(2);
+  });
+
+  it('should get case title correctly', async () => {
+    applicationContext.getUseCases().getCustomCaseReportInteractor = jest
+      .fn()
+      .mockReturnValue({
+        foundCases: [
+          {
+            associatedJudge: 'associatedJudge',
+            calendaringHighPriority: 'calendaringHighPriority',
+            caseCaption: 'caseCaption, Petitioner',
+            caseType: 'caseType',
+            docketNumber: 'docketNumber',
+            highPriority: true,
+            preferredTrialCity: 'preferredTrialCity',
+            receivedAt: 'receivedAt',
+            status: 'status',
+          },
+        ],
+      });
+
+    await createCsvCustomCaseReportFileInteractor(
+      applicationContext,
+      DEFAULT_PARAMS,
+    );
+
+    const saveFileAndGenerateUrlCalls =
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
+
+    const csvBuffer = saveFileAndGenerateUrlCalls[0][0].file;
+    const records = csvBuffer
+      .toString()
+      .split('\n')
+      .filter(x => !!x);
+
+    expect(records[1]).toEqual(
+      'docketNumber,Invalid DateTime,caseCaption,status,caseType,associatedJudge,preferredTrialCity,yes',
+    );
   });
 });
