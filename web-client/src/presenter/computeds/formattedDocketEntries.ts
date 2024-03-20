@@ -2,7 +2,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { MINUTE_ENTRIES_WITHOUT_DOCS_MAP } from '@shared/business/entities/EntityConstants';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import {
   fetchRootDocument,
@@ -340,19 +339,11 @@ export const formattedDocketEntries = (
       });
     })
     .map(docketEntry => {
-      const computeMinuteEntry = (rawDocketEntry: RawDocketEntry): boolean => {
-        const MINUTE_ENTRIES_EVENT_CODES = Object.keys(
-          MINUTE_ENTRIES_WITHOUT_DOCS_MAP,
-        ).map(key => MINUTE_ENTRIES_WITHOUT_DOCS_MAP[key].eventCode);
-
-        return MINUTE_ENTRIES_EVENT_CODES.includes(rawDocketEntry.eventCode);
-      };
       return {
         ...docketEntry,
         isDocumentSelected: documentsSelectedForDownload.some(
           docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
         ),
-        isMinuteEntry: computeMinuteEntry(docketEntry),
         isSelectableForDownload: isSelectableForDownload(docketEntry),
       };
     });

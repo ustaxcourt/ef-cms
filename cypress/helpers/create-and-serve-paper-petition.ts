@@ -135,6 +135,10 @@ export function createAndServePaperPetition(
 
       cy.get('[data-testid="tab-docket-record"]').click();
 
-      return cy.wrap({ docketNumber: docketNumber!, name });
+      return cy.wrap({
+        docketNumber: docketNumber!,
+        documentsCreated: expectedDocuments,
+        name,
+      });
     });
 }

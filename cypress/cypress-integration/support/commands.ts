@@ -72,6 +72,12 @@ Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
     observer.observe(doc.body, { childList: true, subtree: true });
   });
 
+  Cypress.Commands.add('unzipFile', downloadPath => {
+    cy.task('unzip', downloadPath).then(unzippedFiles => {
+      return cy.wrap(unzippedFiles);
+    });
+  });
+
   /**
    *
    */
