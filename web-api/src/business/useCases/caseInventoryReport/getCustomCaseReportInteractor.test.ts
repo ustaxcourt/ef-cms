@@ -17,7 +17,7 @@ describe('getCustomCaseReportInteractor', () => {
       pageSize: 100,
       preferredTrialCities: ['Birmingham, Alabama'],
       procedureType: 'All',
-      searchAfter: { pk: '', receivedAt: 827493 },
+      searchAfter: { pk: '123-45', receivedAt: 827493 },
       startDate: '2022-01-01T17:21:05.483Z',
     };
     applicationContext.getCurrentUser.mockReturnValue({
@@ -48,10 +48,6 @@ describe('getCustomCaseReportInteractor', () => {
           pageSize: 10,
           preferredTrialCities: undefined,
           procedureType: 'All',
-          searchAfter: {
-            pk: '',
-            receivedAt: 1,
-          },
         } as any),
       ).resolves.not.toThrow();
     });
