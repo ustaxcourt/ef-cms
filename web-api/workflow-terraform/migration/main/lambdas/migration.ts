@@ -8,6 +8,7 @@ import { chunk } from 'lodash';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 import type { DynamoDBStreamEvent, Handler } from 'aws-lambda';
 
 type migrationsCallback = {
@@ -44,9 +45,9 @@ export const processItems = async (
 ): Promise<{ PutRequest: PutRequest }[]> => {
   items = await migrateRecords(applicationContext, { items });
 
-  return items.map(Item => ({
+  return items.map(item => ({
     PutRequest: {
-      Item,
+      Item: unmarshall(item),
     },
   }));
 };
