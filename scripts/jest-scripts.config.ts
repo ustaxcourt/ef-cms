@@ -6,6 +6,7 @@ const config: Config = {
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: [
+    '**/*.{js,ts}',
     '!checkUntouchedFiles.ts',
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
@@ -36,7 +37,6 @@ const config: Config = {
     '!set-maintenance-mode-locally.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
-    '**/*.{js,ts}',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
