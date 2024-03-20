@@ -6,6 +6,7 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
+import { unzipFile } from './cypress/helpers/unzip-file';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
 
@@ -32,6 +33,9 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        unzipFile({ downloadPath, filePath }) {
+          return unzipFile({ downloadPath, filePath });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
