@@ -34,51 +34,18 @@ export const DocketRecord = connect(
     setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
-    // solution 1
     useEffect(() => {
       if (!docketRecordHelper.showBatchDownloadControls) return;
 
       const documentsSelectorHeaderInput = window.document.getElementById(
         'all-selectable-docket-entries-checkbox',
       ) as HTMLInputElement;
-      if (formattedDocketEntriesHelper.someDocumentsSelectedForDownload) {
-        documentsSelectorHeaderInput.indeterminate = true;
-      } else documentsSelectorHeaderInput.indeterminate = false;
-    }, [formattedDocketEntriesHelper.someDocumentsSelectedForDownload]);
-
-    // solution 2
-    // useEffect(() => {
-    //   if (!docketRecordHelper.showBatchDownloadControls) return;
-
-    //   const documentsSelectorHeaderInput = window.document.getElementById(
-    //     'all-selectable-docket-entries-checkbox',
-    //   ) as HTMLInputElement;
-    //   documentsSelectorHeaderInput.indeterminate =
-    //     !!formattedDocketEntriesHelper.someDocumentsSelectedForDownload;
-    // }, [formattedDocketEntriesHelper.someDocumentsSelectedForDownload]);
-
-    // console.log(
-    //   'docketRecordHelper.showBatchDownloadControls',
-    //   docketRecordHelper.showBatchDownloadControls,
-    // );
-    // console.log(
-    //   'formattedDocketEntriesHelper.someDocumentsSelectedForDownload',
-    //   formattedDocketEntriesHelper.someDocumentsSelectedForDownload,
-    // );
-
-    // solution 3
-    // useEffect(() => {
-    //   if (!docketRecordHelper.showBatchDownloadControls) return;
-
-    //   const documentsSelectorHeaderInput = window.document.getElementById(
-    //     'all-selectable-docket-entries-checkbox',
-    //   ) as HTMLInputElement;
-    //   documentsSelectorHeaderInput.indeterminate =
-    //     !!formattedDocketEntriesHelper.someDocumentsSelectedForDownload;
-    // }, [
-    //   docketRecordHelper.showBatchDownloadControls,
-    //   formattedDocketEntriesHelper.someDocumentsSelectedForDownload,
-    // ]);
+      documentsSelectorHeaderInput.indeterminate =
+        !!formattedDocketEntriesHelper.someDocumentsSelectedForDownload;
+    }, [
+      docketRecordHelper.showBatchDownloadControls,
+      formattedDocketEntriesHelper.someDocumentsSelectedForDownload,
+    ]);
 
     return (
       <>
