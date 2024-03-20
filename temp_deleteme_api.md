@@ -4,7 +4,8 @@ Goals
 - Add sourcemaps
 
 :::TO DO:::
-- Investigate how web-api/terraform/bin/deploy-app.sh deploys to green vs blue depending on DEPLOYING_COLOR
+- Refactor deploy-app.sh to not need information about colors.
+- Cleanup green/blue use_layers and node_versions
 
 :::Deployment steps:::
 - on staging branch deploy with all resource "aws_api_gateway_deployment" lifecycles deleted
