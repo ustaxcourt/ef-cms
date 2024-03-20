@@ -439,8 +439,12 @@ app.use(logger());
     lambdaWrapper(updateDocketEntryMetaLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/docket-entry-complete',
-    lambdaWrapper(completeDocketEntryQCLambda),
+    '/async/case-documents/:docketNumber/docket-entry-complete',
+    lambdaWrapper(
+      completeDocketEntryQCLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.put(
     '/case-documents/:docketNumber/court-issued-docket-entry',
