@@ -37,7 +37,7 @@ export const IndividualWorkQueueInProgress = connect(
           {formattedWorkQueue.map(item => {
             return (
               <tbody key={item.workItemId}>
-                <tr>
+                <tr data-testid={`${item.docketNumber}-qc-item-row`}>
                   <td className="consolidated-case-column">
                     {item.inConsolidatedGroup && (
                       <span
@@ -68,7 +68,11 @@ export const IndividualWorkQueueInProgress = connect(
                   </td>
                   <td className="message-queue-row max-width-25">
                     <div className="message-document-title">
-                      <a className="case-link" href={item.editLink}>
+                      <a
+                        className="case-link"
+                        data-testid="qc-link"
+                        href={item.editLink}
+                      >
                         {item.docketEntry.descriptionDisplay ||
                           item.docketEntry.documentType}
                       </a>
