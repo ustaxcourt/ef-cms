@@ -49,6 +49,7 @@
     "core-js": "3.36.0",
     "cors": "2.8.5",
     "csv-stringify": "6.4.6",
+    "decompress": "^4.2.1",
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "1.1.9",
     "english-ordinals": "3.3.0",

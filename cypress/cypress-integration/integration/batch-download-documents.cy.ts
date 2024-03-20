@@ -29,22 +29,48 @@ const includePrintableDocketRecord = () => {
   ).click();
 };
 
+// const verifyDownloadedFiles = (downloadPath: string) => {
+//   cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
+//     return files.length === 7;
+//   });
+// };
+
 describe('Batch Download Documents', () => {
   // get from cypress/cypress-integration/integration/custom-case-report-csv-export.cy.ts from 10249 work
-  // beforeEach(() => {
-  //   const downloadPath = Cypress.config('downloadsFolder');
-  // cy.task('deleteAllFilesInFolder', downloadPath);
-  // });
+  beforeEach(() => {
+    const downloadPath = Cypress.config('downloadsFolder');
+    cy.task('deleteAllFilesInFolder', downloadPath);
+  });
 
   it('should download all eligible documents that are not stricken with the printable docket record, with all files in a flat directory', () => {
-    createAndServePaperPetition().then(({ docketNumber, documentsCreated }) => {
-      searchByDocketNumberInHeader(docketNumber);
-      confirmDownloadOfDocuments(documentsCreated);
-      includePrintableDocketRecord();
-      cy.get('[data-testid="modal-button-confirm"]').click();
+    createAndServePaperPetition().then(
+      ({ docketNumber, documentsCreated, name }) => {
+        searchByDocketNumberInHeader(docketNumber);
+        confirmDownloadOfDocuments(documentsCreated);
+        includePrintableDocketRecord();
+        cy.get('[data-testid="modal-button-confirm"]').click();
 
-      //TODO: verify download
-    });
+        cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
+          // get the correct directory
+          const caseZipFile = files
+            .filter((fileName: string) =>
+              fileName.includes(`${docketNumber}, ${name}`),
+            )
+            .filter((fileName: string) => fileName.endsWith('.zip'))
+            .pop();
+          const filePath = `${downloadPath}/${caseZipFile}`;
+
+          // eslint-disable-next-line promise/no-nesting
+          return cy.readFile(filePath, 'utf-8').then(fileContent => {
+            cy.wrap(
+              fileContent.split('\n').filter((str: string) => !!str).length,
+            ).should('equal', reportCount + 1);
+          });
+
+          // expect(files.length).to.equal(7);
+        });
+      },
+    );
   });
 
   it('should download all eligible documents with some stricken and some sealed, labeling files and adding sealed docs to sealed directory', () => {
