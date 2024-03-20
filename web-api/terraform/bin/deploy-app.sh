@@ -157,7 +157,6 @@ export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
 export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
-export TF_VAR_deploying_color=$DEPLOYING_COLOR
 export TF_VAR_deployment_timestamp=$DEPLOYMENT_TIMESTAMP
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_disable_emails=$DISABLE_EMAILS

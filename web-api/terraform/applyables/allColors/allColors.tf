@@ -32,25 +32,6 @@ data "aws_sns_topic" "system_health_alarms_west" {
   provider = aws.us-west-1
 }
 
-resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
-  alarm_name          = "efcms_${var.environment}_${var.deploying_color}: SendEmails-DLQueueCheck"
-  alarm_description   = "Alarm that triggers when a message is sent to send_emails_dl_queue_${var.environment}_${var.deploying_color}.fifo"
-  namespace           = "AWS/SQS"
-  metric_name         = "NumberOfMessagesSent"
-  comparison_operator = "GreaterThanThreshold"
-  statistic           = "Sum"
-  threshold           = 0
-  evaluation_periods  = 1
-  period              = 300
-
-  dimensions = {
-    QueueName = "send_emails_dl_queue_${var.environment}_${var.deploying_color}.fifo"
-  }
-
-  alarm_actions = [data.aws_sns_topic.system_health_alarms.arn]
-}
-
-
 module "ef-cms_apis" {
   alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
   alert_sns_topic_west_arn   = data.aws_sns_topic.system_health_alarms_west.arn
@@ -63,7 +44,6 @@ module "ef-cms_apis" {
   cognito_suffix             = var.cognito_suffix
   cognito_table_name         = var.cognito_table_name
   default_account_pass       = var.default_account_pass
-  deploying_color            = var.deploying_color
   deployment_timestamp       = var.deployment_timestamp
   destination_table          = var.destination_table
   disable_emails             = var.disable_emails
