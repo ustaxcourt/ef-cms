@@ -49,7 +49,7 @@ describe('getCustomCaseReportAction', () => {
       ...filterValues,
       endDate: '2022-05-15T03:59:59.999Z',
       pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
-      searchAfter: { pk: '', receivedAt: 0 },
+      searchAfter: { pk: null, receivedAt: null },
       startDate: '2022-05-10T04:00:00.000Z',
     };
   });
@@ -65,7 +65,7 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
+          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
       },
     });
@@ -80,7 +80,7 @@ describe('getCustomCaseReportAction', () => {
       mockCustomCaseReportResponse.totalCount,
     );
     expect(result.state.customCaseReport.lastIdsOfPages).toMatchObject([
-      { pk: '', receivedAt: 0 },
+      { pk: null, receivedAt: null },
       lastCaseId,
     ]);
   });
@@ -113,7 +113,7 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: '', receivedAt: 0 }, page1SearchId],
+          lastIdsOfPages: [{ pk: null, receivedAt: null }, page1SearchId],
         },
       },
     });
@@ -128,7 +128,7 @@ describe('getCustomCaseReportAction', () => {
       mockCustomCaseReportResponse.totalCount,
     );
     expect(result.state.customCaseReport.lastIdsOfPages).toMatchObject([
-      { pk: '', receivedAt: 0 },
+      { pk: null, receivedAt: null },
       page1SearchId,
       page2SearchId,
     ]);
@@ -145,7 +145,7 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: { ...filterValues, highPriority: false },
-          lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
+          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
       },
     });
@@ -174,7 +174,7 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
+          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
       },
     });
@@ -209,7 +209,7 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
+          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
         judges: [judgeSotomayor, judgeColvin],
       },

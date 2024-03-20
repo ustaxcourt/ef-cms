@@ -12,7 +12,6 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { isEmpty } from 'lodash';
 
 export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];
@@ -28,10 +27,7 @@ export type CustomCaseReportFilters = {
 
 export type GetCustomCaseReportRequest = CustomCaseReportFilters & {
   pageSize: number;
-  searchAfter?: {
-    receivedAt: number;
-    pk: string;
-  };
+  searchAfter: CustomCaseReportSearchAfter;
 };
 
 export type GetCustomCaseReportResponse = {
@@ -55,6 +51,11 @@ export type CaseInventory = Pick<
   | 'highPriority'
 >;
 
+export type CustomCaseReportSearchAfter = {
+  pk: string | null;
+  receivedAt: number | null;
+};
+
 export const getCustomCaseReportInteractor = async (
   applicationContext: IApplicationContext,
   params: GetCustomCaseReportRequest,
@@ -68,10 +69,6 @@ export const getCustomCaseReportInteractor = async (
   params.caseTypes = params.caseTypes || [];
   params.judges = params.judges || [];
   params.preferredTrialCities = params.preferredTrialCities || [];
-  params.searchAfter =
-    isEmpty(params.searchAfter?.pk) || isEmpty(params.searchAfter?.receivedAt)
-      ? undefined
-      : params.searchAfter;
 
   new CustomCaseReportSearch(params).validate();
 

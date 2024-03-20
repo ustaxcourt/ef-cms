@@ -2,6 +2,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   CaseInventory,
   CustomCaseReportFilters,
+  CustomCaseReportSearchAfter,
   GetCustomCaseReportResponse,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
@@ -39,7 +40,10 @@ export const createCsvCustomCaseReportFileInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let searchAfter;
+  let searchAfter: CustomCaseReportSearchAfter = {
+    pk: null,
+    receivedAt: null,
+  };
   const pageSize = 9000;
 
   const loops = Math.floor(totalCount / pageSize) + 1;
