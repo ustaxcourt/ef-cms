@@ -99,7 +99,7 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
           pk: joi.string().allow('').required(),
           receivedAt: joi.number().required(),
         })
-        .required(),
+        .optional(),
       startDate: JoiValidationConstants.ISO_DATE.max('now')
         .description(
           'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
