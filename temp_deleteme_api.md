@@ -5,7 +5,6 @@ Goals
 
 :::TO DO:::
 - Investigate how web-api/terraform/bin/deploy-app.sh deploys to green vs blue depending on DEPLOYING_COLOR
-- Revisit parallelism=2 in terraform web-api/terraform/bin/deploy-app.sh
 
 :::Deployment steps:::
 - on staging branch deploy with all resource "aws_api_gateway_deployment" lifecycles deleted
