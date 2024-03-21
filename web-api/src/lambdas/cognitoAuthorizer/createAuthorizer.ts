@@ -13,7 +13,7 @@ const transport = new transports.Console({
   handleRejections: true,
 });
 
-const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_MAIN}`;
+const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID}`;
 const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`;
 
 const getLogger = context => {
