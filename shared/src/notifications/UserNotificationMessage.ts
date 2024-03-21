@@ -159,8 +159,8 @@ export interface BatchDownloadDocketGenerated {
 
 export interface ContactUpdateProgress {
   action: 'user_contact_update_progress' | 'admin_contact_update_progress';
-  completedCases: number;
-  totalCases: number;
+  completedCases?: number;
+  totalCases?: number;
 }
 
 export type UserNotificationMessage =
