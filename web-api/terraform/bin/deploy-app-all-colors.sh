@@ -31,8 +31,6 @@ fi
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
-echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
-echo "  - BOUNCE_ALERT_RECIPIENTS=${BOUNCE_ALERT_RECIPIENTS}"
 echo "  - DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
@@ -131,35 +129,19 @@ fi
 
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
 
-export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
-export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
-export TF_VAR_bounce_alert_recipients=$BOUNCE_ALERT_RECIPIENTS
-export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
-export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
-export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
-export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
-export TF_VAR_deployment_timestamp=$DEPLOYMENT_TIMESTAMP
-export TF_VAR_destination_table=$DESTINATION_TABLE
-export TF_VAR_disable_emails=$DISABLE_EMAILS
+export TF_VAR_environment=$ENV
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_zone_name=$ZONE_NAME
+export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
-export TF_VAR_environment=$ENV
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
-export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
-export TF_VAR_green_table_name=$GREEN_TABLE_NAME
-export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
-export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
 export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
-export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
-export TF_VAR_zone_name=$ZONE_NAME
-export TF_VAR_all_colors_tfstate_bucket=$BUCKET
-export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan

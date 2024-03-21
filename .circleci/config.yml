@@ -147,7 +147,7 @@ jobs:
           no_output_timeout: 20m
           name: 'Deploy - Web Client - Terraform'
           command: |
-            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
+            npm run deploy:ui $ENV
       - run:
           name: Setup Elasticsearch Index Settings
           command: |
