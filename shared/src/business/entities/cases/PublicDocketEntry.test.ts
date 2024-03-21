@@ -21,6 +21,11 @@ describe('PublicDocketEntry', () => {
       isPaper: true,
       lodged: true,
       objections: 'Yes',
+      previousDocument: {
+        docketEntryId: 'something else else',
+        documentTitle: 'blah',
+        documentType: 'fhqwhgads',
+      },
       processingStatus: 'testing',
       receivedAt: 'testing',
       sealedTo: 'Public',
@@ -64,6 +69,11 @@ describe('PublicDocketEntry', () => {
       lodged: true,
       numberOfPages: undefined,
       objections: 'Yes',
+      previousDocument: {
+        docketEntryId: 'something else else',
+        documentTitle: 'blah',
+        documentType: 'fhqwhgads',
+      },
       processingStatus: 'testing',
       receivedAt: 'testing',
       sealedTo: 'Public',
