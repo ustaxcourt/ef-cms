@@ -119,6 +119,33 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       userId: 'abc-123',
     });
   });
+
+  it('throws an NotFound error if a case does not exist', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue(false);
+
+    await batchDownloadDocketEntriesInteractor(
+      applicationContext,
+      requestParams,
+    );
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      `Error batch-downloading documents from case: ${requestParams.docketNumber} - Case: ${requestParams.docketNumber} was not found.`,
+      expect.anything(),
+    );
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      message: {
+        action: 'batch_download_error',
+        error: expect.anything(),
+      },
+      userId: 'abc-123',
+    });
+  });
+
   it('should NOT a add the printable docket record with the list of case documents from persistence', async () => {
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
