@@ -38,8 +38,8 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
-        unzipFile({ downloadPath, filePath }) {
-          return unzipFile({ downloadPath, filePath });
+        unzipFile({ destinationPath, filePath }) {
+          return unzipFile({ destinationPath, filePath });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
