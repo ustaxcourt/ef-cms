@@ -1,15 +1,23 @@
 import { createApplicationContext } from '../../../src/applicationContext';
 
-/**
- * handler
- * @returns {string} id for the temporary stored pdf
- */
 export const handler = async event => {
-  const applicationContext = createApplicationContext();
+  const { default: chromium } = await import('@sparticuz/chromium');
+  const { default: puppeteerCore } = await import('puppeteer-core');
+
+  const applicationContext = createApplicationContext({});
+
+  const browser = await puppeteerCore.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath(),
+    headless: chromium.headless,
+  });
 
   const results = await applicationContext
     .getUseCaseHelpers()
-    .generatePdfFromHtmlHelper(applicationContext, event);
+    .generatePdfFromHtmlHelper(applicationContext, event, browser);
+
+  await browser.close();
 
   const tempId = applicationContext.getUniqueId();
 
@@ -22,6 +30,9 @@ export const handler = async event => {
 
   return tempId;
 };
+
+/**
+    return tempId;
 
 /**
  * changeOfAddressHandler
