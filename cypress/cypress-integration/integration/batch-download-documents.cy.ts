@@ -112,7 +112,7 @@ describe('Batch Download Documents', () => {
     createAndServePaperPetition().then(
       ({ docketNumber, documentsCreated, name }) => {
         const zipName = `${docketNumber}, ${name}.zip`;
-        let expectedFileCount = documentsCreated.length;
+        const expectedFileCount = documentsCreated.length;
         let expectedSealedCount = 0;
         let expectedStrickenCount = 0;
         loginAsDocketClerk();
