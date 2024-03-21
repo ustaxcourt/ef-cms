@@ -110,7 +110,16 @@ describe('requests that perform writes', () => {
   });
 });
 
-describe('Asyn Sync Handler', () => {
+describe('Async Sync Handler', () => {
+  let getAsyncSyncCompleterMock;
+
+  beforeEach(() => {
+    applicationContext.setTimeout = jest
+      .fn()
+      .mockImplementation(callback => callback());
+    getAsyncSyncCompleterMock = jest.fn(() => () => false);
+  });
+
   it('should setup the callback and execute the request', async () => {
     let promiseCallback;
 
@@ -150,5 +159,37 @@ describe('Asyn Sync Handler', () => {
     expect(requestCalls.length).toEqual(1);
     const ASYNC_SYNC_ID = requestCalls[0][0];
     expect(ASYNC_SYNC_ID).toEqual('TEST_ID');
+  });
+
+  it('should handle 504 timeout', async () => {
+    applicationContext.getUniqueId = jest
+      .fn()
+      .mockImplementation(() => 'TEST_ID');
+
+    const setAsyncSyncCompleterMock = jest.fn().mockImplementation(() => {});
+
+    const requestMock = jest.fn(() => {});
+
+    getAsyncSyncCompleterMock = jest.fn().mockImplementation(() => true);
+
+    const removeAsyncSyncCompleterMock = jest.fn();
+
+    const results = await asyncSyncHandler(
+      {
+        ...applicationContext,
+        getAsynSyncUtil: () => ({
+          getAsyncSyncCompleter: getAsyncSyncCompleterMock,
+          removeAsyncSyncCompleter: removeAsyncSyncCompleterMock,
+          setAsyncSyncCompleter: setAsyncSyncCompleterMock,
+        }),
+      },
+      requestMock,
+    ).catch(e => e);
+
+    expect(getAsyncSyncCompleterMock).toHaveBeenCalledTimes(1);
+    expect(removeAsyncSyncCompleterMock).toHaveBeenCalledTimes(1);
+    expect(removeAsyncSyncCompleterMock).toHaveBeenCalledWith('TEST_ID');
+
+    expect(results).toEqual({ statusCode: 504 });
   });
 });
