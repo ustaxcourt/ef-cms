@@ -69,7 +69,7 @@ const checkFileCounts = ({
 };
 
 describe('Batch Download Documents', () => {
-  beforeEach(() => {
+  afterEach(() => {
     const downloadPath = Cypress.config('downloadsFolder');
     cy.task('deleteAllFilesInFolder', downloadPath);
   });
