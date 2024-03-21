@@ -155,7 +155,7 @@ export const asyncSyncHandler = (
         applicationContext
           .getAsynSyncUtil()
           .removeAsyncSyncCompleter(asyncSyncId);
-        throw { statusCode: 504 };
+        reject({ statusCode: 504 });
       },
       60 * 15 * 1000,
     );
