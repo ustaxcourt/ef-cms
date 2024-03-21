@@ -1,20 +1,18 @@
 import decompress from 'decompress';
 
 export function unzipFile({
+  destinationPath,
   filePath,
-  unzipPath,
 }: {
-  unzipPath: string;
+  destinationPath: string;
   filePath: string;
-}) {
-  return decompress(filePath, unzipPath);
-  // .then(files => {
-  //   console.log('files', files);
-  //   return files;
-  // })
-  // .catch(err => {
-  //   console.error('Err extracting files', err);
-  //   return err;
-  // });
-  // const outputDir = '';
+}): string[] {
+  return decompress(filePath, destinationPath)
+    .then(files => {
+      return files.map(file => file.path);
+    })
+    .catch(err => {
+      console.error('Err extracting files', err);
+      return err;
+    });
 }
