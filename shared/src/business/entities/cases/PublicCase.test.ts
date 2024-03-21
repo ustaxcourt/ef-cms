@@ -199,7 +199,6 @@ describe('PublicCase', () => {
           {
             docketEntryId: '123',
             documentType: 'Order that case is assigned',
-            isMinuteEntry: false,
             isOnDocketRecord: true,
           },
           { docketEntryId: '234', documentType: 'Order', isDraft: true },
@@ -214,7 +213,6 @@ describe('PublicCase', () => {
       {
         docketEntryId: '123',
         documentType: 'Order that case is assigned',
-        isMinuteEntry: false,
         isOnDocketRecord: true,
       },
     ]);

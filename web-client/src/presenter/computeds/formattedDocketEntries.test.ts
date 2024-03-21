@@ -9,6 +9,7 @@ import {
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  casePetitioner,
   docketClerkUser,
   petitionerUser,
   petitionsClerkUser,
@@ -25,17 +26,19 @@ describe('formattedDocketEntries', () => {
   const getDateISO = () =>
     applicationContext.getUtilities().createISODateString();
 
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
+    applicationContext.getConstants();
+
   const mockDocketEntry = {
     createdAt: getDateISO(),
     docketEntryId: '123',
     documentTitle: 'Petition',
     filedBy: 'Jessica Frase Marine',
     filingDate: '2019-02-28T21:14:39.488Z',
+    index: 5,
     isOnDocketRecord: true,
+    processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
   };
-
-  const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
-    applicationContext.getConstants();
 
   const formattedDocketEntries = withAppContextDecorator(
     formattedDocketEntriesComputed,
@@ -325,6 +328,7 @@ describe('formattedDocketEntries', () => {
               docketEntryId: '0f52c863-6702-4243-9ea7-e0af17294067',
               documentType: 'Seriatim Answering Brief',
               eventCode: 'SEAB',
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2050-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               isFileAttached: true,
@@ -502,10 +506,13 @@ describe('formattedDocketEntries', () => {
               {
                 ...docketEntries[0],
                 isLegacyServed: true,
-                isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
+                servedAt: undefined,
               },
+            ],
+            petitioners: [
+              { ...casePetitioner, contactId: petitionerUser.userId },
             ],
           },
           screenMetadata: {
@@ -530,7 +537,6 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...docketEntries[0],
-                isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
               },
@@ -626,7 +632,6 @@ describe('formattedDocketEntries', () => {
             eventCode: 'PSDE',
             index: 3,
             isFileAttached: true,
-            isMinuteEntry: false,
             isOnDocketRecord: true,
             isStricken: false,
             pending: true,

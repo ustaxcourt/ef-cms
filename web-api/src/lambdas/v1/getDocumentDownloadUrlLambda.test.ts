@@ -1,3 +1,5 @@
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
 import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { createSilentApplicationContext } from '../../../../shared/src/business/test/createSilentApplicationContext';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
@@ -100,15 +102,15 @@ describe('getDocumentDownloadUrlLambda', () => {
             docketNumber: '123-20',
             judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
             pk: 'case|123-20',
-            sk: 'case|23',
-            status: 'New',
+            sk: 'case|123-20',
+            status: CASE_STATUS_TYPES.generalDocket,
           },
           {
-            archived: false,
+            ...MOCK_PETITION,
             // docket entry does not match the requested entry
             docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
             pk: 'case|123-20',
-            sk: 'docket-entry|124',
+            sk: 'docket-entry|26c6a0e5-5d11-45f0-9904-04d103ada04f',
           },
         ],
       }),
@@ -188,14 +190,15 @@ describe('getDocumentDownloadUrlLambda', () => {
               docketNumber: '123-20',
               judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
               pk: 'case|123-20',
-              sk: 'case|23',
-              status: 'New',
+              sk: 'case|123-20',
+              status: CASE_STATUS_TYPES.generalDocket,
             },
             {
-              archived: false,
+              ...MOCK_PETITION,
               docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
               pk: 'case|123-20',
-              sk: 'docket-entry|124',
+              servedAt: '2018-03-01T05:00:00.000Z',
+              sk: 'docket-entry|26c6a0e5-5d11-45f0-9904-04d103ada04f',
             },
           ],
         }),

@@ -26,7 +26,6 @@ describe('getShowEditDocketRecordEntry', () => {
         documentType: 'Corporate Disclosure Statement',
         eventCode: 'DISC',
         isCourtIssuedDocument: false,
-        isMinuteEntry: false,
         qcWorkItemsCompleted: true,
         servedAt: '2020-10-21T13:47:20.482Z',
       },
@@ -74,7 +73,6 @@ describe('getShowEditDocketRecordEntry', () => {
       entry: {
         eventCode: 'FEE',
         isCourtIssuedDocument: false,
-        isMinuteEntry: true,
         qcWorkItemsCompleted: true,
       },
       userPermissions: { EDIT_DOCKET_ENTRY: true },

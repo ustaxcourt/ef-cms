@@ -1,10 +1,13 @@
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
 
 export const getShowNotServedForDocument = ({
   caseDetail,
   docketEntryId,
-  draftDocuments,
-  UNSERVABLE_EVENT_CODES,
+  draftDocuments = [],
+}: {
+  caseDetail: RawCase;
+  docketEntryId: string;
+  draftDocuments?: RawDocketEntry[];
 }) => {
   let showNotServed = false;
 
@@ -13,16 +16,15 @@ export const getShowNotServedForDocument = ({
   );
 
   if (caseDocument) {
-    const isUnservable = UNSERVABLE_EVENT_CODES.includes(
-      caseDocument.eventCode,
-    );
-
     const isDraftDocument =
       draftDocuments &&
       !!draftDocuments.find(draft => draft.docketEntryId === docketEntryId);
 
     showNotServed =
-      !isUnservable && !DocketEntry.isServed(caseDocument) && !isDraftDocument;
+      !isDraftDocument &&
+      computeIsNotServedDocument({
+        formattedEntry: caseDocument,
+      });
   }
 
   return showNotServed;

@@ -234,9 +234,47 @@ export const STIN_DOCKET_ENTRY_TYPE = {
 
 const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
 
-export const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
-  d => d.isUnservable,
-).map(pickEventCode);
+export const MINUTE_ENTRIES_MAP = {
+  captionOfCaseIsAmended: {
+    description:
+      'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
+    documentType: 'Caption of case is amended',
+    eventCode: 'MINC',
+    isUnservable: true,
+  },
+  dockedNumberIsAmended: {
+    description:
+      'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
+    documentType: 'Docket Number is amended',
+    eventCode: 'MIND',
+    isUnservable: true,
+  },
+  filingFeePaid: {
+    description: 'Filing Fee Paid',
+    documentType: 'Filing Fee Paid',
+    eventCode: 'FEE',
+    isUnservable: true,
+  },
+  filingFeeWaived: {
+    description: 'Filing Fee Waived',
+    documentType: 'Filing Fee Waived',
+    eventCode: 'FEEW',
+    isUnservable: true,
+  },
+  requestForPlaceOfTrial: {
+    documentTitle: 'Request for Place of Trial at [Place]',
+    documentType: 'Request for Place of Trial',
+    eventCode: 'RQT',
+    isUnservable: false,
+  },
+};
+
+export const UNSERVABLE_EVENT_CODES = [
+  ...COURT_ISSUED_EVENT_CODES,
+  ...Object.values(MINUTE_ENTRIES_MAP),
+]
+  .filter(d => d.isUnservable)
+  .map(pickEventCode);
 
 export const CASE_DISMISSAL_ORDER_TYPES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.closesAndDismissesCase,
@@ -454,6 +492,7 @@ export const BRIEF_EVENTCODES = [
 ];
 
 export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
+export const AMICUS_BRIEF_DOCUMENT_TYPE = 'Amicus Brief';
 export const SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -496,6 +535,7 @@ export const SCENARIOS = [
 export const TRANSCRIPT_EVENT_CODE = 'TRAN';
 export const CORRECTED_TRANSCRIPT_EVENT_CODE = 'CTRA';
 export const REVISED_TRANSCRIPT_EVENT_CODE = 'RTRA';
+export const DECISION_EVENT_CODE = 'DEC';
 
 export const LODGED_EVENT_CODE = 'MISCL';
 
@@ -663,36 +703,6 @@ export const INITIAL_DOCUMENT_TYPES_MAP = {
   stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
 };
 
-export const MINUTE_ENTRIES_MAP = {
-  captionOfCaseIsAmended: {
-    description:
-      'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
-    eventCode: 'MINC',
-    documentType: 'Caption of case is amended',
-  },
-  dockedNumberIsAmended: {
-    description:
-      'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
-    eventCode: 'MIND',
-    documentType: 'Docket Number is amended',
-  },
-  filingFeePaid: {
-    description: 'Filing Fee Paid',
-    documentType: 'Filing Fee Paid',
-    eventCode: 'FEE',
-  },
-  filingFeeWaived: {
-    description: 'Filing Fee Waived',
-    documentType: 'Filing Fee Waived',
-    eventCode: 'FEEW',
-  },
-  requestForPlaceOfTrial: {
-    documentTitle: 'Request for Place of Trial at [Place]',
-    documentType: 'Request for Place of Trial',
-    eventCode: 'RQT',
-  },
-};
-
 export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPTO',
 )!;
@@ -700,18 +710,6 @@ export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
-
-export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
-  ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
-    d => d.eventCode,
-  ),
-  ...POLICY_DATE_IMPACTED_EVENTCODES,
-  'DEC',
-  'ODL',
-  'SPTN',
-  'OCS',
-  'TCRP',
-];
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
@@ -1610,15 +1608,6 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
-
-export const isDocumentBriefType = (documentType: string) => {
-  const documents = [
-    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
-    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
-  ];
-  return !!documents.find(document => document.documentType === documentType)
-    ?.eventCode;
-};
 
 export const JUDGE_TITLES = [
   'Judge',

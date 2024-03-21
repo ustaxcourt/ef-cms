@@ -60,7 +60,7 @@ export const updateDocketEntryMeta = async (
   if (
     !DocketEntry.isServed(originalDocketEntry) &&
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
-    !originalDocketEntry.isMinuteEntry
+    !DocketEntry.isMinuteEntry(originalDocketEntry)
   ) {
     throw new Error('Unable to update unserved docket entry.');
   }
@@ -210,7 +210,7 @@ export const shouldGenerateCoversheetForDocketEntry = ({
       shouldAddNewCoverSheet ||
       documentTitleUpdated) &&
     (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
-    !originalDocketEntry.isMinuteEntry
+    !DocketEntry.isMinuteEntry(originalDocketEntry)
   );
 };
 
