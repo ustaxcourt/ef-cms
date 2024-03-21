@@ -6,6 +6,7 @@ Goals
 :::TO DO:::
 - Refactor deploy-app.sh to not need information about colors.
 - Investigate if we want blue/green deployment for UI
+  - Defer until we have finished validating API blue/green deployments
 
 :::Deployment steps:::
 - on staging branch deploy with all resource "aws_api_gateway_deployment" lifecycles deleted

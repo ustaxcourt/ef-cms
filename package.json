@@ -122,7 +122,7 @@
     "delete:dynamo-table": "./scripts/dynamo/delete-dynamo-table.sh",
     "delete:elasticsearch-cluster": "./scripts/elasticsearch/delete-elasticsearch-cluster.sh",
     "deploy:account-specific": "cd iam/terraform/account-specific/main && ../bin/deploy-app.sh",
-    "deploy:allColors": "cd web-api/terraform/applyables/allColors && ../../bin/deploy-app.sh",
+    "deploy:allColors": "cd web-api/terraform/applyables/allColors && ../../bin/deploy-app-all-colors.sh",
     "deploy:blue": "cd web-api/terraform/applyables/blue && COLOR=blue ../../bin/deploy-app-color.sh",
     "deploy:green": "cd web-api/terraform/applyables/green && COLOR=green ../../bin/deploy-app-color.sh",
     "deploy:ci-image": "./docker-to-ecr.sh",
