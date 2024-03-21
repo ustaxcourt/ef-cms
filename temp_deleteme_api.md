@@ -5,9 +5,7 @@ Goals
 
 :::TO DO:::
 - Refactor deploy-app.sh to not need information about colors.
-- Cleanup green/blue use_layers and node_versions
 - Investigate if we want blue/green deployment for UI
-- investigate "An error occurred (MalformedPolicy) when calling the PutBucketPolicy operation: Policies must be valid JSON and the first byte must be '{'" when running terraform apply for web api
 
 :::Deployment steps:::
 - on staging branch deploy with all resource "aws_api_gateway_deployment" lifecycles deleted
