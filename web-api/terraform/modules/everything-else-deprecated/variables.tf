@@ -124,15 +124,6 @@ variable "blue_node_version" {
   type = string
 }
 
-
-variable "green_use_layers" {
-  type = string
-}
-
-variable "blue_use_layers" {
-  type = string
-}
-
 variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string
