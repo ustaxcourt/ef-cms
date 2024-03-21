@@ -131,13 +131,9 @@ fi
 if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
   GREEN_NODE_VERSION=$(../../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
   BLUE_NODE_VERSION=$(../../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
-  GREEN_USE_LAYERS=$(../../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
-  BLUE_USE_LAYERS=$(../../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
 else
   BLUE_NODE_VERSION=$(../../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
   GREEN_NODE_VERSION=$(../../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
-  BLUE_USE_LAYERS=$(../../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
-  GREEN_USE_LAYERS=$(../../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
 fi
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
@@ -151,7 +147,6 @@ DEPLOYMENT_TIMESTAMP=$(date "+%s")
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
-export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
 export TF_VAR_bounce_alert_recipients=$BOUNCE_ALERT_RECIPIENTS
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
@@ -170,7 +165,6 @@ export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_green_node_version=$GREEN_NODE_VERSION
 export TF_VAR_green_table_name=$GREEN_TABLE_NAME
-export TF_VAR_green_use_layers=$GREEN_USE_LAYERS
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
