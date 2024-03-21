@@ -13,14 +13,16 @@ export const completeDocketEntryQCInteractor = (
   { entryMetadata },
 ) => {
   const { docketNumber } = entryMetadata;
-  return asyncSyncHandler(applicationContext, async asyncSyncId =>
-    put({
-      applicationContext,
-      asyncSyncId,
-      body: {
-        entryMetadata,
-      },
-      endpoint: `/async/case-documents/${docketNumber}/docket-entry-complete`,
-    }),
+  return asyncSyncHandler(
+    applicationContext,
+    async asyncSyncId =>
+      await put({
+        applicationContext,
+        asyncSyncId,
+        body: {
+          entryMetadata,
+        },
+        endpoint: `/async/case-documents/${docketNumber}/docket-entry-complete`,
+      }),
   );
 };
