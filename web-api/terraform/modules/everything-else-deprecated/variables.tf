@@ -116,14 +116,6 @@ variable "should_es_beta_exist" {
   type = bool
 }
 
-variable "green_node_version" {
-  type = string
-}
-
-variable "blue_node_version" {
-  type = string
-}
-
 variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string

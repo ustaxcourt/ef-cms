@@ -37,7 +37,6 @@ module "ef-cms_apis" {
   alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
   alert_sns_topic_west_arn   = data.aws_sns_topic.system_health_alarms_west.arn
   blue_elasticsearch_domain  = var.blue_elasticsearch_domain
-  blue_node_version          = var.blue_node_version
   blue_table_name            = var.blue_table_name
   bounce_alert_recipients    = var.bounce_alert_recipients
   bounced_email_recipient    = var.bounced_email_recipient
@@ -55,7 +54,6 @@ module "ef-cms_apis" {
   es_instance_type           = var.es_instance_type
   es_volume_size             = var.es_volume_size
   green_elasticsearch_domain = var.green_elasticsearch_domain
-  green_node_version         = var.green_node_version
   green_table_name           = var.green_table_name
   irs_superuser_email        = var.irs_superuser_email
   lower_env_account_id       = var.lower_env_account_id

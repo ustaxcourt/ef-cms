@@ -101,14 +101,6 @@ variable "should_es_beta_exist" {
   type = bool
 }
 
-variable "blue_node_version" {
-  type = string
-}
-
-variable "green_node_version" {
-  type = string
-}
-
 variable "default_account_pass" {
   type = string
 }

@@ -95,7 +95,6 @@ module "api-east-blue" {
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms.arn
   environment         = var.environment
   pool_arn            = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
-  node_version        = var.blue_node_version
   dns_domain          = var.dns_domain
   zone_id             = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
@@ -148,7 +147,6 @@ module "api-west-blue" {
     aws.us-east-1 = aws.us-east-1
   }
   current_color            = "blue"
-  node_version             = var.blue_node_version
   lambda_bucket_id         = data.terraform_remote_state.remote.outputs.api_lambdas_bucket_west_id
   create_check_case_cron   = 0
   create_health_check_cron = 1

@@ -6,10 +6,6 @@ variable "all_colors_tfstate_key" {
   type = string
 }
 
-variable "green_node_version" {
-  type = string
-}
-
 variable "environment" {
   type = string
 }
