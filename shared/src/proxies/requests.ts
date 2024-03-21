@@ -146,12 +146,13 @@ export const asyncSyncHandler = (
 
     request(asyncSyncId);
 
-    setTimeout(
+    applicationContext.setTimeout(
       () => {
         const uncalledCallback = applicationContext
           .getAsynSyncUtil()
           .getAsyncSyncCompleter(asyncSyncId);
         if (!uncalledCallback) return;
+
         applicationContext
           .getAsynSyncUtil()
           .removeAsyncSyncCompleter(asyncSyncId);
