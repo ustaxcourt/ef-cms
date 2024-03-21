@@ -361,8 +361,12 @@ app.use(logger());
   );
   // POST
   app.post(
-    '/case-documents/:docketEntryId/append-pdf',
-    lambdaWrapper(appendAmendedPetitionFormLambda),
+    '/async/case-documents/:docketEntryId/append-pdf',
+    lambdaWrapper(
+      appendAmendedPetitionFormLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
@@ -436,12 +440,20 @@ app.use(logger());
     lambdaWrapper(editPaperFilingLambda, { isAsync: true }),
   );
   app.put(
-    '/case-documents/:docketNumber/docket-entry-meta',
-    lambdaWrapper(updateDocketEntryMetaLambda),
+    '/async/case-documents/:docketNumber/docket-entry-meta',
+    lambdaWrapper(
+      updateDocketEntryMetaLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.put(
-    '/case-documents/:docketNumber/docket-entry-complete',
-    lambdaWrapper(completeDocketEntryQCLambda),
+    '/async/case-documents/:docketNumber/docket-entry-complete',
+    lambdaWrapper(
+      completeDocketEntryQCLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.put(
     '/case-documents/:docketNumber/court-issued-docket-entry',
@@ -660,7 +672,10 @@ app.delete(
  * documents
  */
 {
-  app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
+  app.post(
+    '/async/documents/:key/validate',
+    lambdaWrapper(validatePdfLambda, { isAsyncSync: true }, applicationContext),
+  );
   app.get(
     '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),

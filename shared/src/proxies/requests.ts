@@ -103,7 +103,7 @@ export const post = async ({
         headers: {
           ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
           ...headers,
-          asyncSyncId,
+          Asyncsyncid: asyncSyncId,
         },
         ...options,
       })
@@ -160,6 +160,7 @@ export const asyncSyncHandler = (
 
 export const put = async ({
   applicationContext,
+  asyncSyncId = undefined,
   body,
   endpoint,
   retry = 0,
@@ -169,7 +170,10 @@ export const put = async ({
     const res = await applicationContext
       .getHttpClient()
       .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-        headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
+        headers: {
+          ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
+          Asyncsyncid: asyncSyncId,
+        },
       })
       .then(response => response.data);
 
@@ -181,6 +185,7 @@ export const put = async ({
         .sleep(err.response?.headers['Retry-After'] || 5000);
       return put({
         applicationContext,
+        asyncSyncId,
         body,
         endpoint,
         retry: retry + 1,
