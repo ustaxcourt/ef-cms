@@ -157,29 +157,30 @@ export interface BatchDownloadDocketGenerated {
   numberOfFilesToBatch: number;
 }
 
-export type UserNotificationMessage = ServeDocumentError;
-// | ServeDocumentComplete
-// | RetryAsyncRequest
-// | SaveDocketEntryForLaterComplete
-// | ServeToIrsComplete
-// | ServeToIrsError
-// | AdminContactFullUpdateComplete
-// | AdminContactInitialUpdateComplete
-// | DownloadCsvFile
-// | BatchDownloadCsvFile
-// | UserContactUpdateError
-// | UserContactFullUpdateComplete
-// | UserContactInitialUpdateComplete
-// | UpdateTrialSessionComplete
-// | NoticeGenerationComplete
-// | NoticeGenerationStart
-// | ThirtyDayNoticePaperServiceComplete
-// | PaperServiceUpdated
-// | PaperServiceStarted
-// | SetTrialCalendarPaperServiceComplete
-// | NoticeGenerationUpdated
-// | BatchDownloadError
-// | BatchDownloadReady
-// | BatchDownloadUploadStart
-// | BatchDownloadProgress
-// | BatchDownloadDocketGenerated;
+export type UserNotificationMessage =
+  | ServeDocumentError
+  | ServeDocumentComplete
+  | RetryAsyncRequest
+  | SaveDocketEntryForLaterComplete
+  | ServeToIrsComplete
+  | ServeToIrsError
+  | AdminContactFullUpdateComplete
+  | AdminContactInitialUpdateComplete
+  | DownloadCsvFile
+  | BatchDownloadCsvFile
+  | UserContactUpdateError
+  | UserContactFullUpdateComplete
+  | UserContactInitialUpdateComplete
+  | UpdateTrialSessionComplete
+  | NoticeGenerationComplete
+  | NoticeGenerationStart
+  | ThirtyDayNoticePaperServiceComplete
+  | PaperServiceUpdated
+  | PaperServiceStarted
+  | SetTrialCalendarPaperServiceComplete
+  | NoticeGenerationUpdated
+  | BatchDownloadError
+  | BatchDownloadReady
+  | BatchDownloadUploadStart
+  | BatchDownloadProgress
+  | BatchDownloadDocketGenerated;
