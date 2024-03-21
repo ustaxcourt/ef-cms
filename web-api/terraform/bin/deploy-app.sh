@@ -123,19 +123,6 @@ else
   fi
 fi
 
-# // 1. fetch current node version (16.x) from dynamo
-#   // pass that to terraform (current_color <- current_node_version)
-# // 2. fetch deploying node version (18.x) from dynamo
-#   // pass that to terraform (deploing_color <- deploying_node_version)
-
-if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-  GREEN_NODE_VERSION=$(../../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
-  BLUE_NODE_VERSION=$(../../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
-else
-  BLUE_NODE_VERSION=$(../../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
-  GREEN_NODE_VERSION=$(../../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
-fi
-
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
   SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 else
@@ -145,7 +132,6 @@ fi
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
 
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
-export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_bounce_alert_recipients=$BOUNCE_ALERT_RECIPIENTS
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
@@ -163,7 +149,6 @@ export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
-export TF_VAR_green_node_version=$GREEN_NODE_VERSION
 export TF_VAR_green_table_name=$GREEN_TABLE_NAME
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID

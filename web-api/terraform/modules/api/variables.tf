@@ -68,10 +68,6 @@ variable "create_bounce_handler" {
   type = number
 }
 
-variable "node_version" {
-  type = string
-}
-
 variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string
