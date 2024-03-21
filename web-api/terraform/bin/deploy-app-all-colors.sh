@@ -2,10 +2,8 @@
 
 ENV=$1
 
-DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 MIGRATE_FLAG=$(../../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 
-export DEPLOYING_COLOR
 export MIGRATE_FLAG
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
@@ -17,33 +15,25 @@ if [ -z "${SECRETS_LOADED}" ]; then
 fi
 
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
-[ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
-[ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
-[ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
 [ -z "${ENABLE_HEALTH_CHECKS}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
 [ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
-[ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
-echo "  - DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
-echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
-echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
 echo "  - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}"
 echo "  - ENV=${ENV}"
 echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
-echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
 echo "  - LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
@@ -52,13 +42,7 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
-ALL_COLORS_KEY="documents-${ENV}.tfstate"
-if [ -z "${STATE_SUFFIX}" ]; then
-  KEY="documents-${ENV}.tfstate"
-else
-  KEY="documents-${ENV}-${STATE_SUFFIX}.tfstate"
-fi
-
+KEY="documents-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 
 rm -rf .terraform
@@ -76,24 +60,11 @@ else
   echo "dynamodb lock table already exists"
 fi
 
-npm run build:assets
-
 # exit on any failure
 set -eo pipefail
 
-if [ -z "${CIRCLE_BRANCH}" ]; then
-  pushd ../../../runtimes/puppeteer/
-  sh build-local.sh
-  popd
-fi
-
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-  GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
   DESTINATION_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-  BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
-  GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
-  COGNITO_TRIGGER_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
 
   if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
     SHOULD_ES_ALPHA_EXIST=true
@@ -105,26 +76,6 @@ if [ "${MIGRATE_FLAG}" == 'false' ]; then
 else
   SHOULD_ES_ALPHA_EXIST=true
   SHOULD_ES_BETA_EXIST=true
-
-  if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
-  else
-    GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
-  fi
-fi
-
-if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
-  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
-else
-  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 fi
 
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
