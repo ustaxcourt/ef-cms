@@ -27,6 +27,7 @@ interface NotificationError extends Error {
 type TConnection = {
   connectionId: string;
   endpoint: string;
+  clientConnectionId: string;
   pk: string;
   sk: string;
 };

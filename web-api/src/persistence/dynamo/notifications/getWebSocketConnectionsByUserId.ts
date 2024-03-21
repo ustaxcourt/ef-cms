@@ -14,7 +14,7 @@ export const getWebSocketConnectionsByUserId = ({
 }: {
   applicationContext: IApplicationContext;
   userId: string;
-}) =>
+}): Promise<TConnection[]> =>
   query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -26,4 +26,4 @@ export const getWebSocketConnectionsByUserId = ({
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
-  });
+  }) as Promise<TConnection[]>;
