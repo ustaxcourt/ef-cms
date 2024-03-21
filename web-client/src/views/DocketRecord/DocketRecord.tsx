@@ -40,10 +40,12 @@ export const DocketRecord = connect(
       const documentsSelectorHeaderInput = window.document.getElementById(
         'all-selectable-docket-entries-checkbox',
       ) as HTMLInputElement;
-      if (formattedDocketEntriesHelper.someDocumentsSelectedForDownload) {
-        documentsSelectorHeaderInput.indeterminate = true;
-      } else documentsSelectorHeaderInput.indeterminate = false;
-    }, [formattedDocketEntriesHelper.someDocumentsSelectedForDownload]);
+      documentsSelectorHeaderInput.indeterminate =
+        !!formattedDocketEntriesHelper.someDocumentsSelectedForDownload;
+    }, [
+      docketRecordHelper.showBatchDownloadControls,
+      formattedDocketEntriesHelper.someDocumentsSelectedForDownload,
+    ]);
 
     return (
       <>
