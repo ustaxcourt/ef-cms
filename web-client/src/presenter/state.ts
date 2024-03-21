@@ -632,7 +632,6 @@ export const baseState = {
   docketRecordIndex: 0,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
-  featureFlags: [],
   fileUploadProgress: {
     isHavingSystemIssues: false,
     isUploading: false,
