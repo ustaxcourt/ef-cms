@@ -287,12 +287,12 @@ export const getConstants = () => ({
   SESSION_MODAL_TIMEOUT:
     (process.env.SESSION_MODAL_TIMEOUT &&
       parseInt(process.env.SESSION_MODAL_TIMEOUT)) ||
-    5 * MINUTES,
+    1 * MINUTES,
   SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
   SESSION_TIMEOUT:
     (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
-    55 * MINUTES,
+    1 * MINUTES,
   SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,

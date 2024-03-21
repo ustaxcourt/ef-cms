@@ -1,4 +1,5 @@
 import './commands';
+import 'cypress-axe';
 
 before(() => {
   // Skip subsequent tests in spec when one fails.

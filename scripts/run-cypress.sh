@@ -41,8 +41,13 @@ BROWSER=edge
 RUN_SPECIFIC_TEST=""
 
 # Get the options
-while getopts ":chloprst:" option; do
+while getopts ":a:chloprst:" option; do
    case $option in
+      a)
+         #unset INTEGRATION
+         SMOKETESTS=-smoketests
+         READONLY=-accessibility
+         ;;
       c) # run against currently deployed color
          CURRENT=true
          ;;
