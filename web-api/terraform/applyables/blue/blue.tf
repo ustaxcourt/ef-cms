@@ -1,7 +1,7 @@
 
 
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 provider "aws" {
@@ -74,7 +74,7 @@ data "null_data_source" "locals" {
     EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"
     EMAIL_SOURCE                       = "U.S. Tax Court <noreply@${var.dns_domain}>"
     IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
-    LOG_LEVEL                          = var.log_level
+    LOG_LEVEL                          = "info"
     MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
     MASTER_REGION                      = "us-east-1"
     NODE_ENV                           = "production"
