@@ -71,6 +71,8 @@ import pug from 'pug';
 import sass from 'sass';
 import util from 'util';
 
+console.log('TEST');
+
 const execPromise = util.promisify(exec);
 
 const environment = {
