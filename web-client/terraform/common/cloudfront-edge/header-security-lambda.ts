@@ -5,7 +5,7 @@
  * @param {object} handlerContext the context
  * @param {object} callback the callback
  */
-exports.handler = (awsEvent, handlerContext, callback) => {
+export const handler = (awsEvent, handlerContext, callback) => {
   //Get contents of response
   const { request, response } = awsEvent.Records[0].cf;
   const { headers } = response;
