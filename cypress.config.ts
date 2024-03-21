@@ -7,6 +7,7 @@ import {
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
 import { deleteAllFilesInFolder } from './cypress/cypress-integration/support/database';
+import { unzipFile } from './cypress/helpers/unzip-file';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
 
@@ -36,6 +37,9 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        unzipFile({ destinationPath, filePath }) {
+          return unzipFile({ destinationPath, filePath });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });

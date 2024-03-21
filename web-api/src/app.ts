@@ -12,6 +12,7 @@ import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocu
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
 import { associateIrsPractitionerWithCaseLambda } from './lambdas/manualAssociation/associateIrsPractitionerWithCaseLambda';
 import { associatePrivatePractitionerWithCaseLambda } from './lambdas/manualAssociation/associatePrivatePractitionerWithCaseLambda';
+import { batchDownloadDocketEntriesLambda } from '@web-api/lambdas/documents/batchDownloadDocketEntriesLambda';
 import { batchDownloadTrialSessionLambda } from './lambdas/trialSessions/batchDownloadTrialSessionLambda';
 import { blockCaseFromTrialLambda } from './lambdas/cases/blockCaseFromTrialLambda';
 import { caseAdvancedSearchLambda } from './lambdas/cases/caseAdvancedSearchLambda';
@@ -664,6 +665,10 @@ app.delete(
 app.get(
   '/documents/:key/virus-scan',
   lambdaWrapper(getStatusOfVirusScanLambda),
+);
+app.get(
+  '/async/documents/batch-download',
+  lambdaWrapper(batchDownloadDocketEntriesLambda, { isAsync: true }),
 );
 
 /**
