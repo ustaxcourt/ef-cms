@@ -116,7 +116,6 @@ import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/
 import { getTrialSessionsForJudgeLambda } from './lambdas/trialSessions/getTrialSessionsForJudgeLambda';
 import { getTrialSessionsLambda } from './lambdas/trialSessions/getTrialSessionsLambda';
 import { getUploadPolicyLambda } from './lambdas/documents/getUploadPolicyLambda';
-import { getUserByIdLambda } from './lambdas/users/getUserByIdLambda';
 import { getUserCaseNoteForCasesLambda } from './lambdas/caseNote/getUserCaseNoteForCasesLambda';
 import { getUserCaseNoteLambda } from './lambdas/caseNote/getUserCaseNoteLambda';
 import { getUserLambda } from './lambdas/users/getUserLambda';
@@ -972,7 +971,6 @@ app.get(
     '/users/irsPractitioners/search',
     lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
   );
-  app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
   app.get('/users-by-role', lambdaWrapper(getAllUsersByRoleLambda));
   app.get('/users', lambdaWrapper(getUserLambda));
   app.post('/users', lambdaWrapper(createUserLambda));
