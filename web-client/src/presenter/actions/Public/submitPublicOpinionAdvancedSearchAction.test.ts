@@ -71,7 +71,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
     applicationContext
       .getUseCases()
       .opinionPublicSearchInteractor.mockImplementation(() => {
-        const e = new Error();
+        const e = new Error() as any;
         e.originalError = {
           response: {
             data: {
@@ -133,7 +133,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
     applicationContext
       .getUseCases()
       .opinionPublicSearchInteractor.mockImplementation(() => {
-        const e = new Error();
+        const e = new Error() as any;
         e.message = 'bad request';
         e.originalError = {
           response: {
