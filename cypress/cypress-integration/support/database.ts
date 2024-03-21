@@ -29,9 +29,10 @@ export const setAllowedTerminalIpAddresses = async (ipAddresses: string[]) => {
 export const deleteAllFilesInFolder = (directoryPath: string) => {
   if (!fs.existsSync(directoryPath)) return null;
   const files = fs.readdirSync(directoryPath);
+
   files.forEach(file => {
     const filePath = path.join(directoryPath, file);
-    fs.unlinkSync(filePath);
+    if (!fs.existsSync(filePath)) fs.unlinkSync(filePath);
   });
   return null;
 };
