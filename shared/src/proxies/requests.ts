@@ -145,6 +145,20 @@ export const asyncSyncHandler = (
       .setAsyncSyncCompleter(asyncSyncId, callback);
 
     request(asyncSyncId);
+
+    setTimeout(
+      () => {
+        const uncalledCallback = applicationContext
+          .getAsynSyncUtil()
+          .getAsyncSyncCompleter(asyncSyncId);
+        if (!uncalledCallback) return;
+        applicationContext
+          .getAsynSyncUtil()
+          .removeAsyncSyncCompleter(asyncSyncId);
+        throw { statusCode: 504 };
+      },
+      60 * 15 * 1000,
+    );
   });
 };
 
