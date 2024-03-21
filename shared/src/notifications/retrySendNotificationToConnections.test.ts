@@ -26,7 +26,7 @@ const mockConnections = [
     pk: 'connections-04',
     sk: 'sk-04',
   },
-];
+] as TConnection[];
 
 const mockMessageStringified = JSON.stringify('hello, computer');
 

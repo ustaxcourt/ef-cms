@@ -1,3 +1,4 @@
+import { UserNotificationMessage } from '@shared/notifications/UserNotificationMessage';
 import { applicationContext } from '../business/test/createTestApplicationContext';
 import { sendNotificationToUser } from './sendNotificationToUser';
 
@@ -40,7 +41,9 @@ describe('send websocket notification to browser', () => {
   });
 
   it('should send notification to user', async () => {
-    const mockMessage = 'hello, computer';
+    const mockMessage: UserNotificationMessage = {
+      action: 'user_contact_initial_update_complete',
+    };
 
     await sendNotificationToUser({
       applicationContext,

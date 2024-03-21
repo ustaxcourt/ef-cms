@@ -157,6 +157,12 @@ export interface BatchDownloadDocketGenerated {
   numberOfFilesToBatch: number;
 }
 
+export interface ContactUpdateProgress {
+  action: 'user_contact_update_progress' | 'admin_contact_update_progress';
+  completedCases: number;
+  totalCases: number;
+}
+
 export type UserNotificationMessage =
   | ServeDocumentError
   | ServeDocumentComplete
@@ -183,4 +189,5 @@ export type UserNotificationMessage =
   | BatchDownloadReady
   | BatchDownloadUploadStart
   | BatchDownloadProgress
-  | BatchDownloadDocketGenerated;
+  | BatchDownloadDocketGenerated
+  | ContactUpdateProgress;

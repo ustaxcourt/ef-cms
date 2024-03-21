@@ -6,7 +6,7 @@ const mockConnection = {
   endpoint: 'endpoint-01',
   pk: 'connections-01',
   sk: 'sk-01',
-};
+} as TConnection;
 
 const mockMessage = 'hello, computer';
 
