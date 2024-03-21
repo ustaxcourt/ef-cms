@@ -110,6 +110,9 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'retry_async_request':
         await app.getSequence('retryAsyncRequestSequence')(message);
         break;
+      case 'async_sync_result':
+        await app.getSequence('resolveAsyncSyncRequestSequence')(message);
+        break;
       case 'download_csv_file':
         await app.getSequence('downloadCsvFileSequence')(message);
         break;

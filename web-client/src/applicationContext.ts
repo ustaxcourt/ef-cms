@@ -388,6 +388,19 @@ const setCurrentUserToken = newToken => {
   token = newToken;
 };
 
+const asyncSyncCompleterDict = {};
+const setAsyncSyncCompleter = (id: string, results: any) => {
+  asyncSyncCompleterDict[id] = results;
+};
+
+const removeAsyncSyncCompleter = (id: string) => {
+  delete asyncSyncCompleterDict[id];
+};
+
+const getAsyncSyncCompleter = (id: string) => {
+  return asyncSyncCompleterDict[id];
+};
+
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
@@ -642,6 +655,11 @@ const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
+  getAsynSyncUtil: () => ({
+    getAsyncSyncCompleter,
+    removeAsyncSyncCompleter,
+    setAsyncSyncCompleter,
+  }),
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
   },
