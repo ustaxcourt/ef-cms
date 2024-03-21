@@ -129,6 +129,8 @@ console.log(
   getTotalCountOfErrors(targetTypescriptErrorMap),
 );
 
+console.log('Total Count of Modified Files -> ', modifiedFiles.length);
+
 const fileToCheck = getFilesToCheck(
   branchTypescriptErrorMap,
   targetTypescriptErrorMap,
