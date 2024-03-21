@@ -475,6 +475,7 @@ export const serveCaseToIrs = async (
   applicationContext,
   { clientConnectionId, docketNumber },
 ) => {
+  console.log('1', clientConnectionId, docketNumber);
   const user = applicationContext.getCurrentUser();
   try {
     if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
@@ -486,14 +487,21 @@ export const serveCaseToIrs = async (
         applicationContext,
         docketNumber,
       });
+    console.log('3');
 
     let caseEntity = new Case(caseToBatch, { applicationContext });
 
+    console.log('4');
+
     caseEntity.markAsSentToIRS();
+
+    console.log('5');
 
     if (caseEntity.isPaper) {
       addDocketEntries({ caseEntity });
     }
+
+    console.log('6');
 
     for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
       await applicationContext.getUtilities().serveCaseDocument({
@@ -502,17 +510,20 @@ export const serveCaseToIrs = async (
         initialDocumentTypeKey,
       });
     }
+    console.log('7');
 
     addDocketEntryForPaymentStatus({
       applicationContext,
       caseEntity,
       user,
     });
+    console.log('8');
 
     caseEntity
       .updateCaseCaptionDocketRecord({ applicationContext })
       .updateDocketNumberRecord({ applicationContext })
       .validate();
+    console.log('9');
 
     const generatedDocuments: Promise<any>[] = [];
 
@@ -529,6 +540,7 @@ export const serveCaseToIrs = async (
           }),
       );
     }
+    console.log('10');
 
     const petitionDocument = caseEntity.docketEntries.find(
       doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -554,6 +566,7 @@ export const serveCaseToIrs = async (
         }),
       );
     }
+    console.log('11');
 
     const todayPlus30 = getBusinessDateInFuture({
       numberOfDays: 30,
@@ -572,6 +585,7 @@ export const serveCaseToIrs = async (
         }),
       );
     }
+    console.log('12');
 
     if (caseEntity.orderForAmendedPetitionAndFilingFee) {
       const { orderForAmendedPetitionAndFilingFee } =
@@ -591,6 +605,7 @@ export const serveCaseToIrs = async (
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
+    console.log('13');
 
     if (caseEntity.orderForAmendedPetition) {
       const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
@@ -604,6 +619,7 @@ export const serveCaseToIrs = async (
         }),
       );
     }
+    console.log('14');
 
     if (caseEntity.orderToShowCause) {
       // OSCP, not OSC
@@ -618,6 +634,7 @@ export const serveCaseToIrs = async (
         }),
       );
     }
+    console.log('15');
 
     await Promise.all(generatedDocuments);
 
@@ -626,22 +643,26 @@ export const serveCaseToIrs = async (
       caseEntity,
       user,
     });
+    console.log('16');
 
     await createCoversheetsForServedEntries({
       applicationContext,
       caseEntity,
     });
+    console.log('17');
 
     const urlToReturn = await generateNoticeOfReceipt({
       applicationContext,
       caseEntity,
       userServingPetition: user,
     });
+    console.log('18');
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
       caseToUpdate: caseEntity,
     });
+    console.log('19');
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
