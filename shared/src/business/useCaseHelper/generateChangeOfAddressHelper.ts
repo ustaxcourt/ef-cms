@@ -40,7 +40,7 @@ export const generateChangeOfAddressHelper = async ({
   jobId: string;
   user: RawPractitioner;
   requestUserId?: string;
-  websocketMessagePrefix: string;
+  websocketMessagePrefix: 'user' | 'admin';
 }) => {
   try {
     const newData = contactInfo;

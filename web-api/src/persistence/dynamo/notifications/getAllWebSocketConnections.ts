@@ -22,4 +22,4 @@ export const getAllWebSocketConnections = ({
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
-  });
+  }) as Promise<TConnection[]>;

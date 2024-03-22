@@ -269,7 +269,10 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (applicationContext, originalRequest) => {
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest,
+) => {
   const user = applicationContext.getCurrentUser();
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
