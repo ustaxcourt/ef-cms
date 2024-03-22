@@ -43,30 +43,34 @@ export const DownloadDocketEntriesModal = connect(
               >
                 {`You have selected ${docketEntriesText} to download as a zip file.`}
               </p>
-              <p className="display-block" id="trial-term">
-                Do you want to include the printable docket record?
-              </p>
-              <div className="usa-checkbox">
-                <input
-                  checked={isAddPrintableDocketRecordSelected}
-                  className="usa-checkbox__input"
-                  id="include-printable-docket-record-checkbox"
-                  type="checkbox"
-                  onChange={() =>
-                    selectPrintableDocketRecord(
-                      !isAddPrintableDocketRecordSelected,
-                    )
-                  }
-                />
-                <label
-                  className="usa-checkbox__label"
-                  data-testid="include-printable-docket-record-checkbox-checkbox-label"
-                  htmlFor="include-printable-docket-record-checkbox"
-                  id="include-printable-docket-record-checkbox-checkbox-label"
-                >
-                  Include printable docket record
-                </label>
-              </div>
+              {docketRecordHelper.showPrintableDocketRecord && (
+                <>
+                  <p className="display-block" id="trial-term">
+                    Do you want to include the printable docket record?
+                  </p>
+                  <div className="usa-checkbox">
+                    <input
+                      checked={isAddPrintableDocketRecordSelected}
+                      className="usa-checkbox__input"
+                      id="include-printable-docket-record-checkbox"
+                      type="checkbox"
+                      onChange={() =>
+                        selectPrintableDocketRecord(
+                          !isAddPrintableDocketRecordSelected,
+                        )
+                      }
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      data-testid="include-printable-docket-record-checkbox-checkbox-label"
+                      htmlFor="include-printable-docket-record-checkbox"
+                      id="include-printable-docket-record-checkbox-checkbox-label"
+                    >
+                      Include printable docket record
+                    </label>
+                  </div>
+                </>
+              )}
             </fieldset>
           </FormGroup>
         </div>
