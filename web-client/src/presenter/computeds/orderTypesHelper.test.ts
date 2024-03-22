@@ -5,8 +5,12 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('orderTypesHelper', () => {
-  let user = {
-    role: ROLES.docketClerk,
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  let user: {
+    role: string;
+  } = {
+    role: USER_ROLES.docketClerk,
   };
 
   const orderTypesHelper = withAppContextDecorator(orderTypesHelperComputed, {
