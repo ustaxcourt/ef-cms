@@ -1,13 +1,13 @@
 import { DownloadDocketEntryRequestType } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
-import { get } from '../requests';
+import { post } from '../requests';
 
 export const batchDownloadDocketEntriesInteractor = (
   applicationContext,
   params: DownloadDocketEntryRequestType,
 ) => {
-  return get({
+  return post({
     applicationContext,
-    endpoint: '/async/documents/batch-download',
-    params,
+    body: params,
+    endpoint: '/async/case-documents/batch-download',
   });
 };

@@ -12,6 +12,6 @@ export const batchDownloadDocketEntriesLambda = event =>
       .getUseCases()
       .batchDownloadDocketEntriesInteractor(
         applicationContext,
-        event.queryStringParameters,
+        JSON.parse(event.body),
       );
   });
