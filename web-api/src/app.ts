@@ -429,6 +429,10 @@ app.use(logger());
       applicationContext,
     ),
   );
+  app.post(
+    '/async/case-documents/batch-download',
+    lambdaWrapper(batchDownloadDocketEntriesLambda, { isAsync: true }),
+  );
 
   // PUT
   app.put(
@@ -689,10 +693,6 @@ app.delete(
 app.get(
   '/documents/:key/virus-scan',
   lambdaWrapper(getStatusOfVirusScanLambda),
-);
-app.get(
-  '/async/documents/batch-download',
-  lambdaWrapper(batchDownloadDocketEntriesLambda, { isAsync: true }),
 );
 
 /**
