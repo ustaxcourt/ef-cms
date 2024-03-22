@@ -107,29 +107,11 @@ function getFilesToCheck(
   return fileToCheck;
 }
 
-function getTotalCountOfErrors(map: { [fileName: string]: number }): number {
-  return Object.values(map).reduce(
-    (accumulator, currentValue) => accumulator + currentValue,
-    0,
-  );
-}
-
 const branchDirPath = './';
 const targetDirPath = './targetBranch';
 const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
 const targetTypescriptErrorMap = getTypescriptErrorMap(targetDirPath);
 const modifiedFiles = getModifiedFiles(branchDirPath, targetDirPath);
-
-console.log(
-  'Total Count in current branch -> ',
-  getTotalCountOfErrors(branchTypescriptErrorMap),
-);
-console.log(
-  'Total Count in target branch -> ',
-  getTotalCountOfErrors(targetTypescriptErrorMap),
-);
-
-console.log('Total Count of Modified Files -> ', modifiedFiles.length);
 
 const fileToCheck = getFilesToCheck(
   branchTypescriptErrorMap,
