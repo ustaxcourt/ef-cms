@@ -23,11 +23,11 @@ export const generatePdfFromHtmlHelper = async (
     overwriteFooter,
   }: {
     contentHtml: string;
-    displayHeaderFooter: boolean;
+    displayHeaderFooter?: boolean;
     docketNumber?: string;
     footerHtml?: string;
     headerHtml?: string;
-    overwriteFooter?: string;
+    overwriteFooter?: boolean;
   },
   browser,
 ) => {
