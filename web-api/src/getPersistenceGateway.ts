@@ -110,6 +110,7 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getPublicDownloadPolicyUrl } from './persistence/s3/getPublicDownloadPolicyUrl';
 import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTrialCases';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
+import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSectionInboxMessages } from './persistence/elasticsearch/messages/getSectionInboxMessages';
 import { getSectionOutboxMessages } from './persistence/elasticsearch/messages/getSectionOutboxMessages';
 import { getSesStatus } from './persistence/ses/getSesStatus';
@@ -358,6 +359,7 @@ const gatewayMethods = {
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
+  getRequestResults,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getSesStatus,
