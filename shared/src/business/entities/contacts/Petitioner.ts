@@ -17,7 +17,7 @@ export class Petitioner extends JoiValidationEntity {
   public countryType: string;
   public email?: string;
   public paperPetitionEmail?: string;
-  public hasConsentedToEService?: string;
+  public hasConsentedToEService?: boolean;
   public hasEAccess?: boolean;
   public inCareOf?: string;
   public isAddressSealed: boolean;
