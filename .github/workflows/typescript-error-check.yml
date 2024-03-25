@@ -9,16 +9,16 @@ jobs:
 
     steps:
       - name: Checkout USTC Staging
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ustaxcourt/ef-cms
           ref: staging
           path: stagingBranch
       - name: Checkout current branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: branchToBeCompared
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: '20.11.0'
       - name: NPM Install in your branch
