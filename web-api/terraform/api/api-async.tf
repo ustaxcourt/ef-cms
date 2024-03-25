@@ -202,7 +202,7 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
   "httpMethod" : "$context.httpMethod",
   "headers" : {
     "Authorization": "$input.params('Authorization')",
-		"asyncsyncid": "$input.params('Asyncsyncid')",
+    "asyncsyncid": "$input.params('Asyncsyncid')",
     "content-type": "$input.params('Content-Type')"
   },
   "requestContext" : {
