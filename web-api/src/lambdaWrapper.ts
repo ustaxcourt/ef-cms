@@ -60,13 +60,10 @@ export const lambdaWrapper = (
 
     if (options.isAsyncSync && asyncsyncid && applicationContext) {
       const user = getUserFromAuthHeader(event);
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
+      await applicationContext.getNotificationGateway().saveRequestResponse({
         applicationContext,
-        message: {
-          action: 'async_sync_result',
-          asyncSyncId: asyncsyncid,
-          response,
-        },
+        requestId: asyncsyncid,
+        response,
         userId: user.userId,
       });
     }

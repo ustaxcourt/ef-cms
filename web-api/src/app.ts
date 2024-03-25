@@ -161,6 +161,7 @@ import { setNoticesForCalendaredTrialSessionLambda } from './lambdas/trialSessio
 import { setTrialSessionCalendarLambda } from './lambdas/trialSessions/setTrialSessionCalendarLambda';
 import { setWorkItemAsReadLambda } from './lambdas/workitems/setWorkItemAsReadLambda';
 import { signUpUserLambda } from '@web-api/users/signUpUserLambda';
+import { startPollingForResultsLambda } from '@web-api/lambdas/polling/startPollingForResultsLambda';
 import { strikeDocketEntryLambda } from './lambdas/documents/strikeDocketEntryLambda';
 import { swaggerJsonLambda } from './lambdas/swagger/swaggerJsonLambda';
 import { swaggerLambda } from './lambdas/swagger/swaggerLambda';
@@ -828,6 +829,16 @@ app.get(
   app.post(
     '/async/export/reports/custom-case-report/csv',
     lambdaWrapper(createCsvCustomCaseReportFileLambda, { isAsync: true }),
+  );
+}
+
+/**
+ * results
+ */
+{
+  app.get(
+    '/results/fetch/:requestId',
+    lambdaWrapper(startPollingForResultsLambda),
   );
 }
 
