@@ -21,7 +21,9 @@ note: we have 2 package.json files, be sure to update them all
    > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-3. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
+3. If there are major updates to `@uswds/uswds`, `stylelint`, `stylelint-loader`, or other UI-related packages, check patch notes and make UX aware of any potential UI regressions.
+
+4. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
@@ -39,7 +41,7 @@ note: we have 2 package.json files, be sure to update them all
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
+5. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 	- ./iam/terraform/account-specific/main/main.tf
 	- ./iam/terraform/environment-specific/main/main.tf
 	- ./shared/admin-tools/glue/glue_migrations/main.tf
@@ -55,11 +57,11 @@ note: we have 2 package.json files, be sure to update them all
 
 	> aws = "<LATEST_VERSION>"
 
-5. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+6. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
 
-6. Check through the list of caveats to see if any of the documented issues have been resolved.
+7. Check through the list of caveats to see if any of the documented issues have been resolved.
 
-7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+8. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
 
