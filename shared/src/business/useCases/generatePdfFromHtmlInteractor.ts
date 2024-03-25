@@ -25,7 +25,7 @@ export const generatePdfFromHtmlInteractor = async (
       args: ['--no-sandbox'],
     });
 
-    return await applicationContext
+    const result = await applicationContext
       .getUseCaseHelpers()
       .generatePdfFromHtmlHelper(
         applicationContext,
@@ -39,6 +39,10 @@ export const generatePdfFromHtmlInteractor = async (
         },
         browserLocal,
       );
+
+    await browserLocal.close();
+
+    return result;
   }
 
   const { currentColor, region, stage } = applicationContext.environment;
