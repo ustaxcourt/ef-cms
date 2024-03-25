@@ -16,7 +16,7 @@ export const generatePdfFromHtmlInteractor = async (
     docketNumber?: string;
     footerHtml?: string;
     headerHtml?: string;
-    overwriteFooter?: string;
+    overwriteFooter?: boolean;
   },
 ): Promise<Buffer | Body | undefined> => {
   if (applicationContext.environment.stage === 'local') {
