@@ -77,7 +77,6 @@ export const TextEditor = ({
               ],
             ],
           }}
-          preserveWhitespace={true}
           tabIndex={0}
           onChange={(content, delta, source, editor) => {
             const fullDelta = editor.getContents();
