@@ -233,7 +233,7 @@ export const ScanBatchPreviewer = connect(
                   />
                   <label
                     className="usa-radio__label"
-                    data-testid="button-upload-pdf"
+                    data-testid="upload-pdf-button"
                     htmlFor="uploadMode"
                     id="upload-mode-upload"
                   >

@@ -12,6 +12,7 @@ import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocu
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
 import { associateIrsPractitionerWithCaseLambda } from './lambdas/manualAssociation/associateIrsPractitionerWithCaseLambda';
 import { associatePrivatePractitionerWithCaseLambda } from './lambdas/manualAssociation/associatePrivatePractitionerWithCaseLambda';
+import { batchDownloadDocketEntriesLambda } from '@web-api/lambdas/documents/batchDownloadDocketEntriesLambda';
 import { batchDownloadTrialSessionLambda } from './lambdas/trialSessions/batchDownloadTrialSessionLambda';
 import { blockCaseFromTrialLambda } from './lambdas/cases/blockCaseFromTrialLambda';
 import { caseAdvancedSearchLambda } from './lambdas/cases/caseAdvancedSearchLambda';
@@ -115,7 +116,6 @@ import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/
 import { getTrialSessionsForJudgeLambda } from './lambdas/trialSessions/getTrialSessionsForJudgeLambda';
 import { getTrialSessionsLambda } from './lambdas/trialSessions/getTrialSessionsLambda';
 import { getUploadPolicyLambda } from './lambdas/documents/getUploadPolicyLambda';
-import { getUserByIdLambda } from './lambdas/users/getUserByIdLambda';
 import { getUserCaseNoteForCasesLambda } from './lambdas/caseNote/getUserCaseNoteForCasesLambda';
 import { getUserCaseNoteLambda } from './lambdas/caseNote/getUserCaseNoteLambda';
 import { getUserLambda } from './lambdas/users/getUserLambda';
@@ -429,6 +429,10 @@ app.use(logger());
       { isAsyncSync: true },
       applicationContext,
     ),
+  );
+  app.post(
+    '/async/case-documents/batch-download',
+    lambdaWrapper(batchDownloadDocketEntriesLambda, { isAsync: true }),
   );
 
   // PUT
@@ -1002,7 +1006,6 @@ app.get(
     '/users/irsPractitioners/search',
     lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
   );
-  app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
   app.get('/users-by-role', lambdaWrapper(getAllUsersByRoleLambda));
   app.get('/users', lambdaWrapper(getUserLambda));
   app.post('/users', lambdaWrapper(createUserLambda));
