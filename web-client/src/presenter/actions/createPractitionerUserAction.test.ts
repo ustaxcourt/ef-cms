@@ -4,13 +4,10 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('createPractitionerUserAction', () => {
-  let successMock;
-  let errorMock;
+  const successMock = jest.fn();
+  const errorMock = jest.fn();
 
-  beforeAll(() => {
-    successMock = jest.fn();
-    errorMock = jest.fn();
-
+  beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
@@ -23,9 +20,6 @@ describe('createPractitionerUserAction', () => {
     await runAction(createPractitionerUserAction, {
       modules: {
         presenter,
-      },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
       },
       state: {
         form: {
@@ -42,7 +36,7 @@ describe('createPractitionerUserAction', () => {
     });
   });
 
-  it('should return path.success with a success message and practitioner information when the practitioner user was successfully created', async () => {
+  it('should return path.success with a success message and practitioner bar number when the practitioner user was successfully created', async () => {
     const mockPractitioner = {
       barNumber: 'AB1234',
       name: 'Donna Harking',
@@ -56,9 +50,7 @@ describe('createPractitionerUserAction', () => {
         presenter,
       },
       state: {
-        form: {
-          user: {},
-        },
+        form: {},
       },
     });
 
@@ -67,11 +59,10 @@ describe('createPractitionerUserAction', () => {
         message: 'Practitioner added.',
       },
       barNumber: mockPractitioner.barNumber,
-      practitionerUser: mockPractitioner,
     });
   });
 
-  it('should return path.error when the practitioner to create is invalid', async () => {
+  it('should return path.error when an error occurred while creating the practitioner', async () => {
     applicationContext
       .getUseCases()
       .createPractitionerUserInteractor.mockImplementation(() => {
@@ -83,13 +74,10 @@ describe('createPractitionerUserAction', () => {
         presenter,
       },
       state: {
-        form: {
-          user: {},
-        },
+        form: {},
       },
     });
 
-    expect(errorMock).toHaveBeenCalled();
     expect(errorMock).toHaveBeenCalledWith({
       alertError: {
         message: 'Please try again.',

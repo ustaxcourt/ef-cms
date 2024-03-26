@@ -12,12 +12,6 @@ describe('updateUserRecords', () => {
     section: 'inactivePractitioner',
   };
 
-  beforeEach(() => {
-    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
-      promise: () => null,
-    });
-  });
-
   it('should successfully update a private practitioner user to inactivePractitioner', async () => {
     const oldUser = {
       barNumber: 'PT1234',

@@ -1,26 +1,18 @@
-import { Case } from '../../entities/cases/Case';
-import { ROLES } from '../../entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-/**
- * deleteCounselFromCase
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case the user is attached to
- * @param {string} providers.userId the id of the user to be removed from the case
- * @returns {Promise} the promise of the update case call
- */
 export const deleteCounselFromCase = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, userId }: { docketNumber: string; userId: string },
-) => {
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
@@ -61,14 +53,10 @@ export const deleteCounselFromCase = async (
     userId,
   });
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity,
-    });
-
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 };
 
 export const setupServiceIndicatorForUnrepresentedPetitioners = (

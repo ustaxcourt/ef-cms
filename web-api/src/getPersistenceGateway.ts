@@ -147,7 +147,6 @@ import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/removePractitionerOnCase';
-import { renewIdToken } from './persistence/cognito/renewIdToken';
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
@@ -388,7 +387,6 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removeLock,
   removePrivatePractitionerOnCase,
-  renewIdToken,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   verifyCaseForUser,

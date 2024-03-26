@@ -43,12 +43,6 @@ data "archive_file" "zip_trial_session" {
   excludes = setsubtract(var.template_lambdas, ["trial-session.js"])
 }
 
-data "archive_file" "zip_triggers" {
-  type        = "zip"
-  output_path = "${path.module}/../template/lambdas/cognito-triggers.js.zip"
-  source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = setsubtract(var.template_lambdas, ["cognito-triggers.js"])
-}
 data "archive_file" "zip_worker" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/worker-handler.js.zip"
@@ -79,17 +73,6 @@ resource "null_resource" "api_east_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
   provisioner "local-exec" {
     command = "aws s3 cp ${data.archive_file.zip_api.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/api_${var.deploying_color}.js.zip"
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
-}
-
-resource "null_resource" "triggers_east_object" {
-  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
-  provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.zip_triggers.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/triggers_${var.deploying_color}.js.zip"
   }
 
   triggers = {
@@ -415,12 +398,6 @@ data "aws_s3_bucket_object" "seal_in_lower_green_east_object" {
   key        = "seal_in_lower_green.js.zip"
 }
 
-data "aws_s3_bucket_object" "triggers_green_east_object" {
-  depends_on = [null_resource.triggers_east_object]
-  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
-  key        = "triggers_green.js.zip"
-}
-
 data "aws_s3_object" "worker_green_east_object" {
   depends_on = [null_resource.worker_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
@@ -455,13 +432,6 @@ data "aws_s3_bucket_object" "trial_session_green_east_object" {
   depends_on = [null_resource.trial_session_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
   key        = "trial_session_green.js.zip"
-}
-
-
-data "aws_s3_bucket_object" "triggers_blue_east_object" {
-  depends_on = [null_resource.triggers_east_object]
-  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
-  key        = "triggers_blue.js.zip"
 }
 
 data "aws_s3_bucket_object" "bounce_handler_blue_east_object" {
@@ -576,7 +546,6 @@ module "api-east-green" {
   public_authorizer_uri      = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
   account_id                 = data.aws_caller_identity.current.account_id
   zone_id                    = data.aws_route53_zone.zone.id
-  pool_arn                   = aws_cognito_user_pool.pool.arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "green"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
@@ -611,8 +580,6 @@ module "api-east-green" {
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.green_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
-  triggers_object                = null_resource.triggers_east_object
-  triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
   worker_object                  = null_resource.worker_east_object
   worker_object_hash             = data.aws_s3_object.worker_green_east_object.etag
   enable_health_checks           = var.enable_health_checks
@@ -645,7 +612,6 @@ module "api-east-blue" {
   create_maintenance_notify  = 1
   cron_object                = null_resource.cron_east_object
   streams_object             = null_resource.streams_east_object
-  pool_arn                   = aws_cognito_user_pool.pool.arn
   node_version               = var.blue_node_version
   source                     = "../api/"
   environment                = var.environment
@@ -689,8 +655,6 @@ module "api-east-blue" {
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
-  triggers_object                = null_resource.triggers_east_object
-  triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
   worker_object                  = null_resource.worker_east_object
   worker_object_hash             = data.aws_s3_object.worker_blue_east_object.etag
   enable_health_checks           = var.enable_health_checks

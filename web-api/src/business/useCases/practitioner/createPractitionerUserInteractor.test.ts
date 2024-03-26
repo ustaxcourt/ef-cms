@@ -1,15 +1,21 @@
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { admissionsClerkUser, petitionerUser } from '@shared/test/mockUsers';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createPractitionerUserInteractor } from './createPractitionerUserInteractor';
 
-describe('create practitioner user', () => {
-  const mockUser = {
+describe('createPractitionerUserInteractor', () => {
+  const mockUser: RawPractitioner = {
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     barNumber: 'AT5678',
-    birthYear: 2019,
+    birthYear: '2019',
     employer: 'Private',
+    entityName: 'Practitioner',
     firmName: 'GW Law Offices',
     firstName: 'bob',
     lastName: 'sagot',
@@ -17,42 +23,36 @@ describe('create practitioner user', () => {
     originalBarState: 'IL',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     userId: '07044afe-641b-4d75-a84f-0698870b7650',
-  } as any;
-
-  let testUser;
+  };
 
   beforeEach(() => {
-    testUser = {
-      role: ROLES.admissionsClerk,
-      userId: 'admissionsclerk',
-    };
-
-    applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => testUser);
+    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     applicationContext
       .getPersistenceGateway()
       .createOrUpdatePractitionerUser.mockResolvedValue(mockUser);
   });
 
-  it('creates the practitioner user', async () => {
-    const user = await createPractitionerUserInteractor(applicationContext, {
-      user: mockUser,
-    });
-    expect(user).not.toBeUndefined();
-  });
-
-  it('throws unauthorized for a non-internal user', async () => {
-    testUser = {
-      role: ROLES.petitioner,
-      userId: '6a2a8f95-0223-442e-8e55-5f094c6bca15',
-    };
+  it('should throw an error when the user is unauthorized to create a practitioner user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     await expect(
       createPractitionerUserInteractor(applicationContext, {
         user: mockUser,
       }),
     ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('should return the practitioner`s bar number', async () => {
+    const { barNumber } = await createPractitionerUserInteractor(
+      applicationContext,
+      {
+        user: mockUser,
+      },
+    );
+
+    expect(barNumber).toEqual(mockUser.barNumber);
   });
 
   it('should set practitioner.pendingEmail to practitioner.email and set practitioner.email to undefined', async () => {
@@ -68,7 +68,6 @@ describe('create practitioner user', () => {
     const mockUserCall =
       applicationContext.getPersistenceGateway().createOrUpdatePractitionerUser
         .mock.calls[0][0].user;
-
     expect(mockUserCall.email).toBeUndefined();
     expect(mockUserCall.pendingEmail).toEqual(mockEmail);
     expect(mockUserCall.serviceIndicator).toEqual(

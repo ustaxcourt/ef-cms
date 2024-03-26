@@ -86,10 +86,6 @@ variable "scanner_resource_uri" {
   type = string
 }
 
-variable "cognito_table_name" {
-  type = string
-}
-
 variable "prod_env_account_id" {
   type = string
 }

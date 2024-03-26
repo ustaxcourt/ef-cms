@@ -1,8 +1,5 @@
-import {
-  AdminCreateUserCommandInput,
-  CognitoIdentityProvider,
-} from '@aws-sdk/client-cognito-identity-provider';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { put } from '../../dynamodbClientService';
 
 export const updateUserRecords = async ({
@@ -10,35 +7,35 @@ export const updateUserRecords = async ({
   updatedUser,
   userId,
 }: {
-  applicationContext: IApplicationContext;
-  updatedUser: any;
+  applicationContext: ServerApplicationContext;
+  updatedUser: RawPractitioner;
   userId: string;
-}) => {
-  await put({
-    Item: {
-      ...updatedUser,
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-      userId,
-    },
-    applicationContext,
-  });
-
-  await put({
-    Item: {
-      pk: `${updatedUser.role}|${updatedUser.name.toUpperCase()}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-
-  await put({
-    Item: {
-      pk: `${updatedUser.role}|${updatedUser.barNumber.toUpperCase()}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
+}): Promise<RawPractitioner> => {
+  await Promise.all([
+    put({
+      Item: {
+        ...updatedUser,
+        pk: `user|${userId}`,
+        sk: `user|${userId}`,
+        userId,
+      },
+      applicationContext,
+    }),
+    put({
+      Item: {
+        pk: `${updatedUser.role}|${updatedUser.name.toUpperCase()}`,
+        sk: `user|${userId}`,
+      },
+      applicationContext,
+    }),
+    put({
+      Item: {
+        pk: `${updatedUser.role}|${updatedUser.barNumber.toUpperCase()}`,
+        sk: `user|${userId}`,
+      },
+      applicationContext,
+    }),
+  ]);
 
   return {
     ...updatedUser,
@@ -50,52 +47,23 @@ export const createNewPractitionerUser = async ({
   applicationContext,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   user: RawPractitioner;
-}) => {
-  const { userId } = user;
-
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
-  const params: AdminCreateUserCommandInput = {
-    DesiredDeliveryMediums: ['EMAIL'],
-    UserAttributes: [
-      {
-        Name: 'email_verified',
-        Value: 'True',
-      },
-      {
-        Name: 'email',
-        Value: user.pendingEmail,
-      },
-      {
-        Name: 'custom:role',
-        Value: user.role,
-      },
-      {
-        Name: 'name',
-        Value: user.name,
-      },
-      {
-        Name: 'custom:userId',
-        Value: user.userId,
-      },
-    ],
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: user.pendingEmail,
-  };
-
-  if (process.env.STAGE !== 'prod') {
-    params.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
-  }
-
-  await cognito.adminCreateUser(params);
-
-  const updatedUser = await updateUserRecords({
-    applicationContext,
-    updatedUser: user,
-    userId,
+}): Promise<RawPractitioner> => {
+  await applicationContext.getUserGateway().createUser(applicationContext, {
+    attributesToUpdate: {
+      email: user.pendingEmail,
+      name: user.name,
+      role: user.role,
+      userId: user.userId,
+    },
+    email: user.pendingEmail!,
+    resendInvitationEmail: false,
   });
 
-  return updatedUser;
+  return await updateUserRecords({
+    applicationContext,
+    updatedUser: user,
+    userId: user.userId,
+  });
 };

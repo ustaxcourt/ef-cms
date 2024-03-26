@@ -18,6 +18,13 @@ import {
   getJudgesChambersWithLegacy,
 } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
+export const adminUser: RawUser = {
+  entityName: 'User',
+  name: 'Test admin',
+  role: ROLES.admin,
+  userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
+};
+
 export const adcUser = {
   name: 'ADC',
   role: ROLES.adc,
