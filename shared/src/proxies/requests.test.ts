@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { post, put, remove } from './requests';
+import { asyncSyncHandler, post, put, remove } from './requests';
 
 const mockFail503 = Promise.reject({
   response: {
@@ -107,5 +107,89 @@ describe('requests that perform writes', () => {
         );
       });
     });
+  });
+});
+
+describe('Async Sync Handler', () => {
+  let getAsyncSyncCompleterMock;
+
+  beforeEach(() => {
+    applicationContext.setTimeout = jest
+      .fn()
+      .mockImplementation(callback => callback());
+    getAsyncSyncCompleterMock = jest.fn(() => () => false);
+  });
+
+  it('should setup the callback and execute the request', async () => {
+    let promiseCallback;
+
+    applicationContext.getUniqueId = jest
+      .fn()
+      .mockImplementation(() => 'TEST_ID');
+
+    const setAsyncSyncCompleterMock = jest
+      .fn()
+      .mockImplementation((_, callback) => {
+        promiseCallback = callback;
+      });
+
+    const requestMock = jest.fn(() => {
+      promiseCallback({
+        body: 'body',
+        statusCode: '200',
+      });
+    });
+
+    await asyncSyncHandler(
+      {
+        ...applicationContext,
+        getAsynSyncUtil: () => ({
+          setAsyncSyncCompleter: setAsyncSyncCompleterMock,
+        }),
+      },
+      requestMock,
+    );
+
+    const setAsyncSyncResultCalls = setAsyncSyncCompleterMock.mock.calls;
+    expect(setAsyncSyncResultCalls.length).toEqual(1);
+    expect(setAsyncSyncResultCalls[0][0]).toEqual('TEST_ID');
+    expect(typeof setAsyncSyncResultCalls[0][1]).toEqual('function');
+
+    const requestCalls = requestMock.mock.calls;
+    expect(requestCalls.length).toEqual(1);
+    const ASYNC_SYNC_ID = requestCalls[0][0];
+    expect(ASYNC_SYNC_ID).toEqual('TEST_ID');
+  });
+
+  it('should handle 504 timeout', async () => {
+    applicationContext.getUniqueId = jest
+      .fn()
+      .mockImplementation(() => 'TEST_ID');
+
+    const setAsyncSyncCompleterMock = jest.fn().mockImplementation(() => {});
+
+    const requestMock = jest.fn(() => {});
+
+    getAsyncSyncCompleterMock = jest.fn().mockImplementation(() => true);
+
+    const removeAsyncSyncCompleterMock = jest.fn();
+
+    const results = await asyncSyncHandler(
+      {
+        ...applicationContext,
+        getAsynSyncUtil: () => ({
+          getAsyncSyncCompleter: getAsyncSyncCompleterMock,
+          removeAsyncSyncCompleter: removeAsyncSyncCompleterMock,
+          setAsyncSyncCompleter: setAsyncSyncCompleterMock,
+        }),
+      },
+      requestMock,
+    ).catch(e => e);
+
+    expect(getAsyncSyncCompleterMock).toHaveBeenCalledTimes(1);
+    expect(removeAsyncSyncCompleterMock).toHaveBeenCalledTimes(1);
+    expect(removeAsyncSyncCompleterMock).toHaveBeenCalledWith('TEST_ID');
+
+    expect(results).toEqual({ statusCode: 504 });
   });
 });

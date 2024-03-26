@@ -32,14 +32,7 @@ export const deleteAllFilesInFolder = (directoryPath: string) => {
 
   files.forEach(file => {
     const filePath = path.join(directoryPath, file);
-    const stats = fs.statSync(filePath);
-
-    if (stats.isDirectory()) {
-      deleteAllFilesInFolder(filePath);
-      fs.rmdirSync(filePath);
-    } else {
-      fs.unlinkSync(filePath);
-    }
+    fs.unlinkSync(filePath);
   });
   return null;
 };

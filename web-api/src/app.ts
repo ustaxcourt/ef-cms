@@ -116,7 +116,6 @@ import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/
 import { getTrialSessionsForJudgeLambda } from './lambdas/trialSessions/getTrialSessionsForJudgeLambda';
 import { getTrialSessionsLambda } from './lambdas/trialSessions/getTrialSessionsLambda';
 import { getUploadPolicyLambda } from './lambdas/documents/getUploadPolicyLambda';
-import { getUserByIdLambda } from './lambdas/users/getUserByIdLambda';
 import { getUserCaseNoteForCasesLambda } from './lambdas/caseNote/getUserCaseNoteForCasesLambda';
 import { getUserCaseNoteLambda } from './lambdas/caseNote/getUserCaseNoteLambda';
 import { getUserLambda } from './lambdas/users/getUserLambda';
@@ -362,16 +361,25 @@ app.use(logger());
   );
   // POST
   app.post(
-    '/case-documents/:docketEntryId/append-pdf',
-    lambdaWrapper(appendAmendedPetitionFormLambda),
+    '/async/case-documents/:docketEntryId/append-pdf',
+    lambdaWrapper(
+      appendAmendedPetitionFormLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
     lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
+
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/coversheet',
-    lambdaWrapper(addCoversheetLambda),
+    '/async/case-documents/:docketNumber/:docketEntryId/coversheet',
+    lambdaWrapper(
+      addCoversheetLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
@@ -414,8 +422,12 @@ app.use(logger());
     lambdaWrapper(fileCorrespondenceDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/court-issued-order',
-    lambdaWrapper(fileCourtIssuedOrderToCaseLambda),
+    '/async/case-documents/:docketNumber/court-issued-order',
+    lambdaWrapper(
+      fileCourtIssuedOrderToCaseLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/async/case-documents/batch-download',
@@ -432,12 +444,20 @@ app.use(logger());
     lambdaWrapper(editPaperFilingLambda, { isAsync: true }),
   );
   app.put(
-    '/case-documents/:docketNumber/docket-entry-meta',
-    lambdaWrapper(updateDocketEntryMetaLambda),
+    '/async/case-documents/:docketNumber/docket-entry-meta',
+    lambdaWrapper(
+      updateDocketEntryMetaLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.put(
-    '/case-documents/:docketNumber/docket-entry-complete',
-    lambdaWrapper(completeDocketEntryQCLambda),
+    '/async/case-documents/:docketNumber/docket-entry-complete',
+    lambdaWrapper(
+      completeDocketEntryQCLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.put(
     '/case-documents/:docketNumber/court-issued-docket-entry',
@@ -656,7 +676,10 @@ app.delete(
  * documents
  */
 {
-  app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
+  app.post(
+    '/async/documents/:key/validate',
+    lambdaWrapper(validatePdfLambda, { isAsyncSync: true }, applicationContext),
+  );
   app.get(
     '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),
@@ -972,7 +995,6 @@ app.get(
     '/users/irsPractitioners/search',
     lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
   );
-  app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
   app.get('/users-by-role', lambdaWrapper(getAllUsersByRoleLambda));
   app.get('/users', lambdaWrapper(getUserLambda));
   app.post('/users', lambdaWrapper(createUserLambda));
