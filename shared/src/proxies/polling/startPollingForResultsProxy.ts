@@ -18,6 +18,7 @@ export const startPollingForResultsInteractor = async (
 
     const nowUnixTimeInSeconds = Math.floor(Date.now() / 1000);
     if (expirationTimestamp < nowUnixTimeInSeconds) {
+      applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter(requestId);
       return resolver({ statusCode: 504 });
     }
 
