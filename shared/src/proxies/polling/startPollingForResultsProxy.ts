@@ -4,8 +4,10 @@ export const startPollingForResultsInteractor = async (
   applicationContext,
   requestId: string,
   expirationTimestamp: number,
+  attemptNumber = 1,
 ) => {
-  await applicationContext.getUtilities().sleep(1500);
+  const WAIT_TIME = attemptNumber < 10 ? 1500 : 5000;
+  await applicationContext.getUtilities().sleep(WAIT_TIME);
   return await get({
     applicationContext,
     endpoint: `/results/fetch/${requestId}`,
@@ -24,6 +26,7 @@ export const startPollingForResultsInteractor = async (
         applicationContext,
         requestId,
         expirationTimestamp,
+        attemptNumber + 1,
       );
     }
 
@@ -34,6 +37,7 @@ export const startPollingForResultsInteractor = async (
         applicationContext,
         requestId,
         expirationTimestamp,
+        attemptNumber + 1,
       );
 
     if (resolver) resolver(responseObj);
