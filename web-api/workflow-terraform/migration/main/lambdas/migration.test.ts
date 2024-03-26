@@ -1,17 +1,17 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getFilteredGlobalEvents, processItems } from './migration';
+import { marshall } from '@aws-sdk/util-dynamodb';
 
 describe('migration', () => {
   describe('processItems', () => {
     it('migrates items and generates dynamodb PutRequest objects with the resulting data', async () => {
-      const mockItems: Record<string, any>[] = [
-        {
-          ...MOCK_CASE,
-          pk: `case|${MOCK_CASE.docketNumber}`,
-          sk: `case|${MOCK_CASE.docketNumber}`,
-        },
-      ];
+      const mockCase = marshall({
+        ...MOCK_CASE,
+        pk: `case|${MOCK_CASE.docketNumber}`,
+        sk: `case|${MOCK_CASE.docketNumber}`,
+      });
+      const mockItems: Record<string, any>[] = [mockCase];
       const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
       const result = await processItems(applicationContext, {
         items: mockItems,
