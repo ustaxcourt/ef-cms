@@ -27,12 +27,9 @@ cleanOutputDirectory(
 
 await esbuild.build({
   external: ['@sparticuz/chromium', 'puppeteer-core'],
-  banner: {
-    js: "import { createRequire as topLevelCreateRequire } from 'module'; const require = topLevelCreateRequire(import.meta.url);",
-  },
   bundle: true,
   entryPoints: [path.resolve(__dirname, '../../../../', handlerPath)],
-  format: 'esm',
+  format: 'cjs',
   keepNames: true,
   sourcemap: true,
   loader: {
@@ -41,7 +38,7 @@ await esbuild.build({
   outfile: path.resolve(
     __dirname,
     '../../../../',
-    `dist-lambdas/${fileName}/out/lambda.mjs`,
+    `dist-lambdas/${fileName}/out/lambda.cjs`,
   ),
   platform: 'node',
   target: 'esnext',
