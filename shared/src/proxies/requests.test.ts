@@ -111,13 +111,14 @@ describe('requests that perform writes', () => {
 });
 
 describe('Async Sync Handler', () => {
-  let getAsyncSyncCompleterMock;
-
+  const MOCKED_ID = 'MOCKED_ID';
   beforeEach(() => {
     applicationContext.setTimeout = jest
       .fn()
       .mockImplementation(callback => callback());
-    getAsyncSyncCompleterMock = jest.fn(() => () => false);
+    applicationContext.getUseCases().startPollingForResultsInteractor = jest
+      .fn()
+      .mockImplementation(() => {});
   });
 
   it('should setup the callback and execute the request', async () => {
@@ -125,15 +126,16 @@ describe('Async Sync Handler', () => {
 
     applicationContext.getUniqueId = jest
       .fn()
-      .mockImplementation(() => 'TEST_ID');
+      .mockImplementation(() => MOCKED_ID);
 
     const setAsyncSyncCompleterMock = jest
       .fn()
       .mockImplementation((_, callback) => {
         promiseCallback = callback;
       });
+    const removeAsyncSyncCompleterMock = jest.fn();
 
-    const requestMock = jest.fn(() => {
+    const requestMock = jest.fn().mockImplementation(() => {
       promiseCallback({
         body: 'body',
         statusCode: '200',
@@ -144,6 +146,7 @@ describe('Async Sync Handler', () => {
       {
         ...applicationContext,
         getAsynSyncUtil: () => ({
+          removeAsyncSyncCompleter: removeAsyncSyncCompleterMock,
           setAsyncSyncCompleter: setAsyncSyncCompleterMock,
         }),
       },
@@ -152,44 +155,18 @@ describe('Async Sync Handler', () => {
 
     const setAsyncSyncResultCalls = setAsyncSyncCompleterMock.mock.calls;
     expect(setAsyncSyncResultCalls.length).toEqual(1);
-    expect(setAsyncSyncResultCalls[0][0]).toEqual('TEST_ID');
+    expect(setAsyncSyncResultCalls[0][0]).toEqual(MOCKED_ID);
     expect(typeof setAsyncSyncResultCalls[0][1]).toEqual('function');
 
     const requestCalls = requestMock.mock.calls;
     expect(requestCalls.length).toEqual(1);
     const ASYNC_SYNC_ID = requestCalls[0][0];
-    expect(ASYNC_SYNC_ID).toEqual('TEST_ID');
-  });
+    expect(ASYNC_SYNC_ID).toEqual(MOCKED_ID);
 
-  it('should handle 504 timeout', async () => {
-    applicationContext.getUniqueId = jest
-      .fn()
-      .mockImplementation(() => 'TEST_ID');
+    expect(removeAsyncSyncCompleterMock).toHaveBeenCalledWith(MOCKED_ID);
 
-    const setAsyncSyncCompleterMock = jest.fn().mockImplementation(() => {});
-
-    const requestMock = jest.fn(() => {});
-
-    getAsyncSyncCompleterMock = jest.fn().mockImplementation(() => true);
-
-    const removeAsyncSyncCompleterMock = jest.fn();
-
-    const results = await asyncSyncHandler(
-      {
-        ...applicationContext,
-        getAsynSyncUtil: () => ({
-          getAsyncSyncCompleter: getAsyncSyncCompleterMock,
-          removeAsyncSyncCompleter: removeAsyncSyncCompleterMock,
-          setAsyncSyncCompleter: setAsyncSyncCompleterMock,
-        }),
-      },
-      requestMock,
-    ).catch(e => e);
-
-    expect(getAsyncSyncCompleterMock).toHaveBeenCalledTimes(1);
-    expect(removeAsyncSyncCompleterMock).toHaveBeenCalledTimes(1);
-    expect(removeAsyncSyncCompleterMock).toHaveBeenCalledWith('TEST_ID');
-
-    expect(results).toEqual({ statusCode: 504 });
+    expect(
+      applicationContext.getUseCases().startPollingForResultsInteractor,
+    ).toHaveBeenCalled();
   });
 });
