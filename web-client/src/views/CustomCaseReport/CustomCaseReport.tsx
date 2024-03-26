@@ -22,6 +22,8 @@ export const CustomCaseReport = connect(
       sequences.clearOptionalCustomCaseReportFilterSequence,
     customCaseReportFilters: state.customCaseReport.filters,
     customCaseReportHelper: state.customCaseReportHelper,
+    exportCsvCustomCaseReportSequence:
+      sequences.exportCsvCustomCaseReportSequence,
     getCustomCaseReportSequence: sequences.getCustomCaseReportSequence,
     setCustomCaseReportFiltersSequence:
       sequences.setCustomCaseReportFiltersSequence,
@@ -32,6 +34,7 @@ export const CustomCaseReport = connect(
     clearOptionalCustomCaseReportFilterSequence,
     customCaseReportFilters,
     customCaseReportHelper,
+    exportCsvCustomCaseReportSequence,
     getCustomCaseReportSequence,
     setCustomCaseReportFiltersSequence,
     totalCases,
@@ -40,6 +43,15 @@ export const CustomCaseReport = connect(
     const [hasRunCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
     const [activePage, setActivePage] = useState(0);
     const paginatorTop = useRef(null);
+
+    const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
+
+    const debounceSubmit = timeout => {
+      setIsSubmitDebounced(true);
+      setTimeout(() => {
+        setIsSubmitDebounced(false);
+      }, timeout);
+    };
 
     return (
       <>
@@ -454,6 +466,7 @@ export const CustomCaseReport = connect(
             </label>
           </div>
           <Button
+            data-testid="run-custom-case-report"
             id="run-custom-case-report"
             tooltip="Run Report"
             onClick={() => {
@@ -492,10 +505,28 @@ export const CustomCaseReport = connect(
             )}
           </div>
           <div className="text-right margin-bottom-2">
+            <Button
+              link
+              aria-label="export pending report"
+              className="margin-top-2"
+              data-testid="export-pending-report"
+              disabled={
+                isSubmitDebounced || +formatPositiveNumber(totalCases) === 0
+              }
+              icon="file-export"
+              onClick={() => {
+                debounceSubmit(200);
+                exportCsvCustomCaseReportSequence();
+              }}
+            >
+              Export
+            </Button>
             <span className="text-bold" id="custom-case-result-count">
               Count: &nbsp;
             </span>
-            {formatPositiveNumber(totalCases)}
+            <span data-testid="custom-case-report-count">
+              {formatPositiveNumber(totalCases)}
+            </span>
           </div>
           <ReportTable
             cases={customCaseReportHelper.cases}

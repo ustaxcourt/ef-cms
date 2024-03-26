@@ -5,8 +5,8 @@ import { startDelayedLogoutAction } from './startDelayedLogoutAction';
 
 describe('startDelayedLogoutAction', () => {
   beforeAll(() => {
+    applicationContext.setTimeout = cb => cb();
     presenter.providers.applicationContext = applicationContext;
-    global.setTimeout = cb => cb();
   });
 
   it('creates a timer and stores it in state', async () => {
