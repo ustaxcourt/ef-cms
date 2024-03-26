@@ -118,3 +118,10 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
     (onMessageCallbackFn || noop)(message);
   };
 };
+
+/***********************************************************
+  Please note: Socket routers cannot be used by IRS users
+  If the feature is needed for IRS users, consider using a
+  different approach for notifying the user with asynchronous
+  updates.
+ **********************************************************/
