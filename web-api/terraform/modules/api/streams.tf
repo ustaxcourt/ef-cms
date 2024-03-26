@@ -6,7 +6,7 @@ module "zip_streams" {
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "60"
-  memory_size    = "768"
+  memory_size    = "3008"
 }
 
 resource "aws_lambda_event_source_mapping" "streams_mapping" {
