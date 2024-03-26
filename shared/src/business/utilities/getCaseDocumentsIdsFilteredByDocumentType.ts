@@ -1,16 +1,16 @@
 export const getCaseDocumentsIdsFilteredByDocumentType = (
   applicationContext,
   {
+    docIdsSelectedForDownload,
     docketEntries,
     docketRecordFilter,
-    documentsToProcess,
   }: {
     docketEntries: RawDocketEntry[];
     docketRecordFilter: string;
-    documentsToProcess: { docketEntryId: string }[];
+    docIdsSelectedForDownload: { docketEntryId: string }[];
   },
 ): string[] => {
-  const formattedDocketEntries = documentsToProcess.map(docSelected => {
+  const docketEntriesToDownload = docIdsSelectedForDownload.map(docSelected => {
     return docketEntries.find(
       docEntry => docEntry.docketEntryId === docSelected.docketEntryId,
     );
@@ -19,7 +19,7 @@ export const getCaseDocumentsIdsFilteredByDocumentType = (
   const filteredDocuments = applicationContext
     .getUtilities()
     .getDocketEntriesByFilter(applicationContext, {
-      docketEntries: formattedDocketEntries,
+      docketEntries: docketEntriesToDownload,
       docketRecordFilter,
     });
 

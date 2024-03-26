@@ -16,7 +16,7 @@ describe('getCaseDocumentsIdsFilteredByDocumentType', () => {
     STANDING_PRETRIAL_ORDER_ENTRY,
   ];
 
-  const documentsToProcess = mockDocketEntries.map(docEntry => ({
+  const docIdsSelectedForDownload = mockDocketEntries.map(docEntry => ({
     docketEntryId: docEntry.docketEntryId,
   }));
 
@@ -30,9 +30,9 @@ describe('getCaseDocumentsIdsFilteredByDocumentType', () => {
     const result = getCaseDocumentsIdsFilteredByDocumentType(
       applicationContext,
       {
+        docIdsSelectedForDownload,
         docketEntries: mockDocketEntries,
         docketRecordFilter: 'All documents',
-        documentsToProcess,
       },
     );
 
@@ -45,9 +45,9 @@ describe('getCaseDocumentsIdsFilteredByDocumentType', () => {
     const result = getCaseDocumentsIdsFilteredByDocumentType(
       applicationContext,
       {
+        docIdsSelectedForDownload,
         docketEntries: mockDocketEntries,
         docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.orders,
-        documentsToProcess,
       },
     );
 
