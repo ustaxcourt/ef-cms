@@ -198,7 +198,7 @@ describe('lambdaWrapper', () => {
     expect(res.status).toHaveBeenCalledWith(204);
   });
 
-  it('should send notification to user when asyncsyncid is present', async () => {
+  it('should save response to database when asyncsyncid is present', async () => {
     req.headers.asyncsyncid = 'some-id';
 
     await lambdaWrapper(
@@ -207,14 +207,11 @@ describe('lambdaWrapper', () => {
       applicationContext,
     )(req, res);
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
+      applicationContext.getNotificationGateway().saveRequestResponse,
     ).toHaveBeenCalledWith({
       applicationContext,
-      message: {
-        action: 'async_sync_result',
-        asyncSyncId: 'some-id',
-        response: 'LAMBDA_RESULTS',
-      },
+      requestId: 'some-id',
+      response: 'LAMBDA_RESULTS',
       userId: 'user-id',
     });
   });
