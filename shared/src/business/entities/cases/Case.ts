@@ -808,7 +808,7 @@ export class Case extends JoiValidationEntity {
   }
 
   hasPrivatePractitioners() {
-    return this.privatePractitioners!.length > 0;
+    return this.privatePractitioners && this.privatePractitioners.length > 0;
   }
 
   assignContacts({ applicationContext, rawCase }) {
@@ -1916,7 +1916,8 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   fileCorrespondence(correspondenceEntity) {
-    this.correspondence = [...this.correspondence!, correspondenceEntity];
+    const correspondence = this.correspondence ? this.correspondence : [];
+    this.correspondence = [...correspondence, correspondenceEntity];
 
     return this;
   }
