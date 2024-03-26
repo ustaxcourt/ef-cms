@@ -19,7 +19,7 @@ export const docketRecordHelper = (
     docketEntries,
     docketNumber,
   } = get(state.caseDetail);
-  const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
+  const docIdsSelectedForDownload = get(state.documentsSelectedForDownload);
 
   const sortOrder = docketRecordSort[docketNumber];
   const sortLabelsMobile = {
@@ -32,9 +32,9 @@ export const docketRecordHelper = (
   const documentsIdsForDownload = applicationContext
     .getUtilities()
     .getCaseDocumentsIdsFilteredByDocumentType(applicationContext, {
+      docIdsSelectedForDownload,
       docketEntries,
       docketRecordFilter,
-      documentsToProcess: documentsSelectedForDownload,
     });
 
   return {
