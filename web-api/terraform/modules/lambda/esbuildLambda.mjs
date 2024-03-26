@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+import { copy } from 'esbuild-plugin-copy';
 import { fileURLToPath } from 'url';
 import esbuild from 'esbuild';
 import fs from 'fs';
@@ -21,26 +22,39 @@ function cleanOutputDirectory(outputDir) {
   }
 }
 
+function getPathFromRoot(filePath) {
+  return path.resolve(__dirname, '../../../../', filePath);
+}
+
 // Clean the output directory before every build
-cleanOutputDirectory(
-  path.resolve(__dirname, '../../../../', `dist-lambdas/${fileName}/`),
-);
+cleanOutputDirectory(getPathFromRoot(`dist-lambdas/${fileName}/`));
 
 await esbuild.build({
   bundle: true,
-  entryPoints: [path.resolve(__dirname, '../../../../', handlerPath)],
+  entryPoints: [getPathFromRoot(handlerPath)],
   external: ['@sparticuz/chromium', 'puppeteer-core'],
   format: 'cjs',
   keepNames: true,
   loader: {
     '.node': 'file',
   },
-  outfile: path.resolve(
-    __dirname,
-    '../../../../',
-    `dist-lambdas/${fileName}/out/lambda.cjs`,
-  ),
+  outfile: getPathFromRoot(`dist-lambdas/${fileName}/out/lambda.cjs`),
   platform: 'node',
+  plugins: [
+    copy({
+      assets: [
+        {
+          from: [
+            getPathFromRoot(
+              'node_modules/pdfjs-dist/legacy/build/pdf.worker.js',
+            ),
+          ],
+          keepStructure: true,
+          to: [getPathFromRoot(`dist-lambdas/${fileName}/out`)],
+        },
+      ],
+    }),
+  ],
   sourcemap: true,
   target: 'esnext',
 });
