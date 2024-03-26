@@ -138,6 +138,10 @@ export const asyncSyncHandler = (
         resolve(results.body);
       }
       reject(results);
+
+      applicationContext
+        .getAsynSyncUtil()
+        .removeAsyncSyncCompleter(asyncSyncId);
     };
 
     applicationContext
@@ -146,24 +150,14 @@ export const asyncSyncHandler = (
 
     request(asyncSyncId);
 
-    applicationContext.setTimeout(
-      () => {
-        const uncalledCallback = applicationContext
-          .getAsynSyncUtil()
-          .getAsyncSyncCompleter(asyncSyncId);
-        if (!uncalledCallback) return;
-
-        applicationContext
-          .getAsynSyncUtil()
-          .removeAsyncSyncCompleter(asyncSyncId);
-        reject({ statusCode: 504 });
-      },
-      60 * 15 * 1000,
-    );
-
+    const expirationTimestamp = Math.floor(Date.now() / 1000) + 16 * 60;
     applicationContext
       .getUseCases()
-      .startPollingForResultsInteractor(applicationContext, asyncSyncId);
+      .startPollingForResultsInteractor(
+        applicationContext,
+        asyncSyncId,
+        expirationTimestamp,
+      );
   });
 };
 
