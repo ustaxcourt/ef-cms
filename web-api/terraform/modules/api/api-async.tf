@@ -6,7 +6,7 @@ module "api_async_lambda" {
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "900"
-  memory_size    = "3008"
+  memory_size    = "7000"
 }
 
 resource "aws_api_gateway_resource" "api_async_base_resource" {
