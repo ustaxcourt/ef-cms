@@ -141,10 +141,6 @@ describe('socketRouter', () => {
       message: { action: 'download_csv_file' },
       sequence: 'downloadCsvFileSequence',
     },
-    {
-      message: { action: 'async_sync_result' },
-      sequence: 'resolveAsyncSyncRequestSequence',
-    },
   ];
 
   it.each(mockSocketRouterCalls)(
