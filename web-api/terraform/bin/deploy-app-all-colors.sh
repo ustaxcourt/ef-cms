@@ -78,7 +78,7 @@ else
   SHOULD_ES_BETA_EXIST=true
 fi
 
-ACTIVE_SES_RULESET=$(../../../scripts/ses/get-ses-ruleset.sh)
+ACTIVE_SES_RULESET=$(../../../../scripts/ses/get-ses-ruleset.sh)
 
 export TF_VAR_environment=$ENV
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
