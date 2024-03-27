@@ -1,0 +1,29 @@
+::: 10208 :::
+
+Ideas for Approach:
+- Keep Existing Case Sensitive User Pool
+  - Make DAWSON case insensitive, use list users function to find correct account (will need logic) to login with. 
+      (No cleanup required + Additional work for login & forgot password)
+  - Make All user's emails/usernames lower case via migration script (will need logic to handle conflicts), covert user input toLowerCase(). 
+      (Cleanup required +  Resolves Both Login + Forgot Password)
+- Migrate to New Case Insensitive User Pool 
+      (Cleanup required + Resolves Both Login + Forgot Password)
+  - Lambda Trigger (Can be on login and forgot password)
+  - One time script
+  - One time lambda function
+  - CSV Import per Jim D. (Resets user passwords)
+
+Assumptions:
+- Password is always case sensitive.
+- Login and Forgot Password should function same (whether it should be a single ticket is TBD).
+
+
+Questions:
+- How many accounts are duplicated with different casing?
+- What if duplicated accounts are on different cases?
+
+Random: 
+- Auth0 treats email as case insensitive by lowerCasing for you.
+
+Links:
+- https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-case-sensitivity.html
