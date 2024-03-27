@@ -15,3 +15,7 @@ Assumptions:
 Questions:
 - How many accounts are duplicated with different casing?
 - What if duplicated accounts are on different cases?
+- Given we Migrate to New Case Insensitive User Pool, do we achieve this as a one time script, lambda function, or unique trigger?
+
+Random: 
+- Auth0 treats email as case insensitive by lowerCasing for you.
