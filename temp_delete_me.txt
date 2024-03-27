@@ -2,9 +2,12 @@
 
 Ideas for Approach:
 - Keep Existing Case Sensitive User Pool
-  - Make DAWSON case insensitive, use list users function to find correct account (will need logic) to login with. (No cleanup required)
-  - Make All user's emails/usernames lower case via migration script (will need logic to handle conflicts), covert user input toLowerCase(). (Cleanup required)
-- Migrate to New Case Insensitive User Pool (Cleanup required)
+  - Make DAWSON case insensitive, use list users function to find correct account (will need logic) to login with. 
+      (No cleanup required + Additional work for login & forgot password)
+  - Make All user's emails/usernames lower case via migration script (will need logic to handle conflicts), covert user input toLowerCase(). 
+      (Cleanup required +  Resolves Both Login + Forgot Password)
+- Migrate to New Case Insensitive User Pool 
+      (Cleanup required + Resolves Both Login + Forgot Password)
 
 Assumptions:
 - Password is always case sensitive.
