@@ -6,6 +6,10 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
+import {
+  deleteAllItemsInEmailBucket,
+  readAllItemsInBucket,
+} from './cypress/cypress-smoketests/support/email-receipt';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
 
@@ -23,6 +27,15 @@ export default defineConfig({
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
         },
+        deleteAllItemsInEmailBucket({
+          bucketName,
+          retries,
+        }: {
+          bucketName: string;
+          retries: number;
+        }) {
+          return deleteAllItemsInEmailBucket({ bucketName, retries });
+        },
         expireUserConfirmationCode(email: string) {
           return expireUserConfirmationCode(email);
         },
@@ -31,6 +44,15 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        readAllItemsInBucket({
+          bucketName,
+          retries,
+        }: {
+          bucketName: string;
+          retries: number;
+        }) {
+          return readAllItemsInBucket({ bucketName, retries });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
