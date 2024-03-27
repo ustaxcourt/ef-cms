@@ -19,3 +19,6 @@ Questions:
 
 Random: 
 - Auth0 treats email as case insensitive by lowerCasing for you.
+
+Links:
+- https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-case-sensitivity.html
