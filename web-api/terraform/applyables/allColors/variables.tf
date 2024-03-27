@@ -2,6 +2,10 @@ variable "environment" {
   type = string
 }
 
+variable "active_ses_ruleset" {
+  type = string
+}
+
 variable "dns_domain" {
   type = string
 }

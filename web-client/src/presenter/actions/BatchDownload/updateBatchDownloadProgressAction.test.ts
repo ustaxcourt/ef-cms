@@ -47,4 +47,30 @@ describe('updateBatchDownloadProgressAction', () => {
     });
     expect(result.state.batchDownloads.fileCount).toEqual(10);
   });
+
+  it('should handle "batch_download_csv_data" messages correctly', async () => {
+    const numberOfRecordsDownloaded = 999;
+    const totalFiles = 999;
+    const result = await runAction(updateBatchDownloadProgressAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        action: 'batch_download_csv_data',
+        numberOfRecordsDownloaded,
+        totalFiles,
+      },
+      state: {
+        batchDownloads: {
+          fileCount: -1,
+          totalFiles: -1,
+        },
+      },
+    });
+
+    expect(result.state.batchDownloads.fileCount).toEqual(
+      numberOfRecordsDownloaded,
+    );
+    expect(result.state.batchDownloads.totalFiles).toEqual(totalFiles);
+  });
 });

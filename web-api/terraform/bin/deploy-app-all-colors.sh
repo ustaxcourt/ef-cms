@@ -78,11 +78,12 @@ else
   SHOULD_ES_BETA_EXIST=true
 fi
 
-DEPLOYMENT_TIMESTAMP=$(date "+%s")
+ACTIVE_SES_RULESET=$(../../../scripts/ses/get-ses-ruleset.sh)
 
 export TF_VAR_environment=$ENV
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_zone_name=$ZONE_NAME
+export TF_VAR_active_ses_ruleset=$ACTIVE_SES_RULESET
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
