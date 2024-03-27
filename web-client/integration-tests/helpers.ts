@@ -1,23 +1,11 @@
 /* eslint-disable max-lines */
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
-import * as pdfLib from 'pdf-lib';
 import { Agent } from 'http';
-import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import {
-  FORMATS,
-  calculateDifferenceInDays,
-  calculateISODate,
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
+import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { JSDOM } from 'jsdom';
-import { S3, SQS } from 'aws-sdk';
-import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import {
   back,
   createObjectURL,
@@ -25,15 +13,7 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
-import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { applicationContext as clientApplicationContext } from '../src/applicationContext';
-import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
-import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
-import {
-  createLock,
-  getLock,
-  removeLock,
-} from '../../web-api/src/persistence/dynamo/locks/acquireLock';
 import {
   fakeData,
   getFakeFile,
@@ -42,49 +22,24 @@ import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/p
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
-import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
-import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
-import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
-import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
-import {
-  getCasesForUser,
-  getDocketNumbersByUser,
-} from '../../web-api/src/persistence/dynamo/users/getCasesForUser';
-import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
-import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
 import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
-import { getUniqueId } from '../../shared/src/sharedAppContext';
-import { getUserById } from '../../web-api/src/persistence/dynamo/users/getUserById';
 import {
   image1,
   image2,
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
-import { queueUpdateAssociatedCasesWorker } from '../../web-api/src/business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
-import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
-import { sendBulkTemplatedEmail } from '../../web-api/src/dispatchers/ses/sendBulkTemplatedEmail';
-import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
-import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
-import { sleep } from '@shared/tools/helpers';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
-import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
-import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateDocketEntry } from '../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
-import { updateUser } from '../../web-api/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
 import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
-import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
-import sass from 'sass';
 
 const applicationContext =
   clientApplicationContext as unknown as IApplicationContext;
@@ -102,8 +57,6 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
-let s3Cache;
-let sqsCache;
 let dynamoDbCache;
 let httpCache;
 
@@ -203,8 +156,6 @@ export const getUserRecordById = (userId: string) => {
     applicationContext,
   });
 };
-
-export const describeif = condition => (condition ? describe : describe.skip);
 
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
@@ -830,6 +781,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
       route,
     });
   });
+
   initializeSocketProvider(cerebralTest);
 
   return cerebralTest;
