@@ -53,6 +53,7 @@ resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
 
 module "ef-cms_apis" {
   alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
+  active_ses_ruleset         = var.active_ses_ruleset
   alert_sns_topic_west_arn   = data.aws_sns_topic.system_health_alarms_west.arn
   blue_elasticsearch_domain  = var.blue_elasticsearch_domain
   blue_node_version          = var.blue_node_version
