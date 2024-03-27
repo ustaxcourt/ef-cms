@@ -11,9 +11,12 @@ Ideas for Approach:
   - Lambda Trigger (Can be on login and forgot password)
   - One time script
   - One time lambda function
+  - CSV Import per Jim D. (Resets user passwords)
 
 Assumptions:
 - Password is always case sensitive.
+- Login and Forgot Password should function same (whether it should be a single ticket is TBD).
+
 
 Questions:
 - How many accounts are duplicated with different casing?
