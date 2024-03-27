@@ -79,7 +79,7 @@ import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import pug from 'pug';
 import qs from 'qs';
@@ -135,181 +135,6 @@ export const fakeFile = (() => {
 export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
-
-export const callCognitoTriggerForPendingEmail = async userId => {
-  // mock application context similar to that in cognito-triggers.js
-  const environment = {
-    s3Endpoint: process.env.S3_ENDPOINT || 'http://0.0.0.0:9000',
-    stage: process.env.STAGE || 'local',
-  };
-  const apiApplicationContext = {
-    environment: {
-      currentColor: 'blue',
-    },
-    getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser,
-    getConstants: () => ({ MAX_SES_RETRIES: 6 }),
-    getCurrentUser: () => ({}),
-    getDispatchers: () => ({
-      sendBulkTemplatedEmail,
-    }),
-    getDocumentClient: () => {
-      if (!dynamoDbCache) {
-        const dynamoDbClient = new DynamoDBClient({
-          endpoint: 'http://localhost:8000',
-          region: 'us-east-1',
-        });
-        dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
-          marshallOptions: { removeUndefinedValues: true },
-        });
-      }
-
-      return dynamoDbCache;
-    },
-    getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
-    getDocumentsBucketName: () => {
-      return (
-        process.env.DOCUMENTS_BUCKET_NAME || 'noop-documents-local-us-east-1'
-      );
-    },
-    getEmailClient: () => {
-      return {
-        getSendStatistics: () => {
-          // mock this out so the health checks pass on smoke tests
-          return {
-            promise: () => ({
-              SendDataPoints: [
-                {
-                  Rejects: 0,
-                },
-              ],
-            }),
-          };
-        },
-        sendBulkTemplatedEmail: () => {
-          return {
-            promise: () => {
-              return { Status: [] };
-            },
-          };
-        },
-      };
-    },
-    getEnvironment: () => ({
-      dynamoDbTableName: 'efcms-local',
-      stage: process.env.STAGE,
-    }),
-    getIrsSuperuserEmail: () =>
-      process.env.IRS_SUPERUSER_EMAIL || 'irssuperuser@example.com',
-    getMessageGateway: () => ({
-      sendEmailEventToQueue: async ({
-        applicationContext: appContext,
-        emailParams,
-      }) => {
-        if (environment.stage !== 'local') {
-          await sendEmailEventToQueue({
-            applicationContext: appContext,
-            emailParams,
-          });
-        }
-      },
-    }),
-    getMessagingClient: () => {
-      if (!sqsCache) {
-        sqsCache = new SQS({
-          apiVersion: '2012-11-05',
-        });
-      }
-      return sqsCache;
-    },
-    getNodeSass: () => {
-      return sass;
-    },
-    getPdfLib: () => {
-      return pdfLib;
-    },
-    getPersistenceGateway: () => ({
-      createLock,
-      getCaseByDocketNumber,
-      getCasesForUser,
-      getDocketNumbersByUser,
-      getDownloadPolicyUrl: () => {
-        return {
-          url: 'http://example.com',
-        };
-      },
-      getLock,
-      getUserById,
-      removeLock,
-      saveDocumentFromLambda,
-      saveWorkItem,
-      updateCase,
-      updateDocketEntry,
-      updateUser,
-    }),
-    getPug: () => {
-      return pug;
-    },
-    getStorageClient: () => {
-      if (!s3Cache) {
-        s3Cache = new S3({
-          endpoint: environment.s3Endpoint,
-          region: 'us-east-1',
-          s3ForcePathStyle: true,
-        });
-      }
-      return s3Cache;
-    },
-    getTempDocumentsBucketName: () => {
-      return process.env.DOCUMENTS_BUCKET_NAME || '';
-    },
-    getUniqueId,
-    getUseCaseHelpers: () => ({
-      acquireLock,
-      countPagesInDocument,
-      generateAndServeDocketEntry,
-      generatePdfFromHtmlHelper,
-      sendServedPartiesEmails,
-      updateCaseAndAssociations,
-    }),
-    getUseCases: () => ({
-      generatePdfFromHtmlInteractor,
-      getAllFeatureFlagsInteractor: () => ({
-        'chief-judge-name': 'Maurice B. Foley',
-        'consolidated-cases-add-docket-numbers': true,
-        'consolidated-cases-group-access-petitioner': true,
-        'document-visibility-policy-change-date': '2023-05-01',
-        'e-consent-fields-enabled-feature-flag': true,
-        'external-opinion-search-enabled': true,
-        'external-order-search-enabled': true,
-        'internal-opinion-search-enabled': true,
-        'internal-order-search-enabled': true,
-        'updated-trial-status-types': true,
-      }),
-    }),
-    getUtilities: () => ({
-      calculateDifferenceInDays,
-      calculateISODate,
-      createISODateString,
-      formatDateString,
-      formatNow,
-      getDocumentTypeForAddressChange,
-      prepareDateFromString,
-      sleep,
-    }),
-    logger: {
-      debug: () => {},
-      error: () => {},
-      info: () => {},
-      warn: () => {},
-    },
-  };
-
-  const user = await getUserRecordById(userId);
-  await queueUpdateAssociatedCasesWorker(apiApplicationContext, {
-    user,
-  });
-};
 
 export const getFormattedDocumentQCMyInbox = async cerebralTest => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
@@ -857,24 +682,23 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     },
   );
 
-  // presenter.providers.applicationContext = applicationContext;
-  presenter.providers.applicationContext = {
-    ...applicationContext,
-    getHttpClient: (): AxiosInstance => {
-      const stackError = new Error(); // Look at the stack trace for more information on the error.
-      httpCache =
-        httpCache ||
-        axios.create({
-          httpAgent: new Agent({ keepAlive: false }),
-        });
+  presenter.providers.applicationContext = applicationContext;
 
-      httpCache.interceptors.response.use(undefined, error => {
-        error.stack = stackError.stack;
-        throw error;
+  presenter.providers.applicationContext.getHttpClient = () => {
+    const stackError = new Error(); // Look at the stack trace for more information on the error.
+
+    httpCache =
+      httpCache ||
+      axios.create({
+        httpAgent: new Agent({ keepAlive: false }),
       });
 
-      return httpCache;
-    },
+    httpCache.interceptors.response.use(undefined, error => {
+      error.stack = stackError.stack;
+      throw error;
+    });
+
+    return httpCache;
   };
 
   const {
