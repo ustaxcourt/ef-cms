@@ -4,9 +4,9 @@ import type { Configuration } from 'webpack';
 
 const lambdaConfig: Configuration = {
   externals: {
-    '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
-    'aws-crt': 'commonjs aws-crt',
-    'puppeteer-core': 'commonjs puppeteer-core',
+    '@sparticuz/chromium': '@sparticuz/chromium',
+    'aws-crt': 'aws-crt',
+    'puppeteer-core': 'puppeteer-core',
   },
   mode: 'production',
   module: {
