@@ -837,7 +837,7 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
-export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
+export const setupTest = ({ constantsOverrides = {} } = {}) => {
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
@@ -933,7 +933,6 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   const originalUseCases = applicationContext.getUseCases();
   const allUseCases = {
     ...originalUseCases,
-    ...useCases,
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   };
 
