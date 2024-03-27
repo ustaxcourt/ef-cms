@@ -283,6 +283,7 @@ import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
 import { sleep } from '@shared/tools/helpers';
+import { startPollingForResultsInteractor } from '@shared/proxies/polling/startPollingForResultsProxy';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
@@ -389,8 +390,8 @@ const setCurrentUserToken = newToken => {
 };
 
 const asyncSyncCompleterDict = {};
-const setAsyncSyncCompleter = (id: string, results: any) => {
-  asyncSyncCompleterDict[id] = results;
+const setAsyncSyncCompleter = (id: string, callback: any) => {
+  asyncSyncCompleterDict[id] = callback;
 };
 
 const removeAsyncSyncCompleter = (id: string) => {
@@ -569,6 +570,7 @@ const allUseCases = {
   setTrialSessionCalendarInteractor,
   setWorkItemAsReadInteractor,
   signUpUserInteractor,
+  startPollingForResultsInteractor,
   strikeDocketEntryInteractor,
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,

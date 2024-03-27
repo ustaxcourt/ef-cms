@@ -110,9 +110,6 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'retry_async_request':
         await app.getSequence('retryAsyncRequestSequence')(message);
         break;
-      case 'async_sync_result':
-        await app.getSequence('resolveAsyncSyncRequestSequence')(message);
-        break;
       case 'download_csv_file':
         await app.getSequence('downloadCsvFileSequence')(message);
         break;
@@ -121,3 +118,10 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
     (onMessageCallbackFn || noop)(message);
   };
 };
+
+/***********************************************************
+  Please note: Socket routers cannot be used by IRS users
+  If the feature is needed for IRS users, consider using a
+  different approach for notifying the user with asynchronous
+  updates.
+ **********************************************************/

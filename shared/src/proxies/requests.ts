@@ -134,10 +134,15 @@ export const asyncSyncHandler = (
 
   return new Promise((resolve, reject) => {
     const callback = results => {
-      if (results.statusCode === '200') {
+      applicationContext
+        .getAsynSyncUtil()
+        .removeAsyncSyncCompleter(asyncSyncId);
+
+      if (+results.statusCode === 200) {
         resolve(results.body);
+      } else {
+        reject(results);
       }
-      reject(results);
     };
 
     applicationContext
@@ -146,20 +151,14 @@ export const asyncSyncHandler = (
 
     request(asyncSyncId);
 
-    applicationContext.setTimeout(
-      () => {
-        const uncalledCallback = applicationContext
-          .getAsynSyncUtil()
-          .getAsyncSyncCompleter(asyncSyncId);
-        if (!uncalledCallback) return;
-
-        applicationContext
-          .getAsynSyncUtil()
-          .removeAsyncSyncCompleter(asyncSyncId);
-        reject({ statusCode: 504 });
-      },
-      60 * 15 * 1000,
-    );
+    const expirationTimestamp = Math.floor(Date.now() / 1000) + 16 * 60;
+    applicationContext
+      .getUseCases()
+      .startPollingForResultsInteractor(
+        applicationContext,
+        asyncSyncId,
+        expirationTimestamp,
+      );
   });
 };
 
