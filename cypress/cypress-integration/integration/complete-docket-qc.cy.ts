@@ -1,4 +1,7 @@
-import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
+import { attachDummyFile } from '../../helpers/attach-file';
+import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('Document QC Complete', () => {
@@ -12,11 +15,35 @@ describe('Document QC Complete', () => {
   //createAndServePaperPetition().then
   //add file to qc
   //alias the docke number
+  beforeEach(() => {
+    loginAsPetitioner();
+    petitionerCreatesElectronicCase().then(docketNumber => {
+      cy.wrap(docketNumber).as('DOCKET_NUMBER');
+      cy.login('petitionsclerk1');
+      petitionsClerkServesPetition(docketNumber);
+      loginAsPetitioner();
 
+      // add file to QC
+      cy.get('[data-testid="docket-search-field"]').type(docketNumber);
+      cy.get('[data-testid="search-by-docket-number"]').click();
+      cy.get('[data-testid="button-file-document"]').click();
+      cy.get('[data-testid="ready-to-file"]').click();
+      cy.get('[data-testid="document-type"]').click();
+
+      cy.get('[data-testid="document-type"]').click();
+      cy.get('[data-testid="document-type"]').type('Exhibit(s)');
+      cy.get('#react-select-2-option-0').click();
+      cy.get('[data-testid="submit-document"]').click();
+      attachDummyFile('primary-document');
+      cy.get('#submit-document').click();
+      cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+      cy.get('#redaction-acknowledgement').check();
+      cy.get('[data-testid="file-document-review-submit-document"]').click();
+    });
+  });
   it('should test', () => {
-    createAndServePaperPetition().then(({ docketNumber }) => {
-      console.log('docketNumber', docketNumber);
-      //login as admissionsclerk@example.com
+    cy.get('@DOCKET_NUMBER').then(docketNumber => {
+      // login as admissionsclerk@example.com
       cy.login('admissionsclerk');
       searchByDocketNumberInHeader(docketNumber);
 
@@ -88,6 +115,7 @@ describe('Document QC Complete', () => {
 
       //click on Document QC > Docket Section QC
       cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
+
       //assert seeded docket number is there
       //click on Document QC > petitions Section QC
       //assert seeded docket number is there
