@@ -38,18 +38,19 @@ export const Login = connect(
               <ErrorNotification />
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">
-                  <div className="flex-align-self-center">
+                  <div
+                    className="flex-align-self-center"
+                    style={{ background: '#ffffff' }}
+                  >
+                    <h3 style={{ color: '#ecebeb' }}>Log in to DAWSON</h3>
                     <h1
                       className="margin-bottom-1 inherit-body-font-family"
                       data-testid="login-header"
-                    >
-                      Log in to DAWSON
-                    </h1>
+                    ></h1>
+
                     <span>Email address and password are case sensitive.</span>
                     <form className="usa-form margin-top-4 max-width-unset login-form">
-                      <label className="usa-label" htmlFor="email">
-                        Email address
-                      </label>
+                      <label className="usa-label">Email address</label>
                       <input
                         required
                         autoCapitalize="off"
@@ -118,7 +119,7 @@ export const Login = connect(
                     >
                       Forgot password?
                     </Button>
-                    <span>
+                    <span style={{ color: 'white' }}>
                       Don&apos;t have an account?{' '}
                       <Button
                         className="padding-top-0"
