@@ -9,6 +9,8 @@ describe('Judge`s chambers stamps an order', () => {
       petitionsClerkServesPetition(docketNumber);
 
       cy.login('docketclerk1', `case-detail/${docketNumber}`);
+
+      // File Motion for Continuance
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-add-paper-filing"]').click();
       cy.get('input#date-received-picker').type('11/01/2023');
@@ -17,7 +19,7 @@ describe('Judge`s chambers stamps an order', () => {
       ).type('Motion for Continuance');
       cy.get('#react-select-2-option-0').click({ force: true });
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
-      cy.get('[data-testid="button-upload-pdf"]').click();
+      cy.get('[data-testid="upload-pdf-button"]').click();
       cy.get('input#primaryDocumentFile-file').attachFile(
         '../fixtures/w3-dummy.pdf',
       );
@@ -29,6 +31,7 @@ describe('Judge`s chambers stamps an order', () => {
         'Print and mail to complete paper service.',
       );
 
+      // Apply a stamp
       cy.login('colvinschambers', `case-detail/${docketNumber}`);
       cy.get('[data-testid="document-viewer-link-M006"]').last().click();
       cy.get('[data-testid="apply-stamp"]').click();
@@ -45,6 +48,19 @@ describe('Judge`s chambers stamps an order', () => {
       cy.get('input#due-date-input-statusReportDueDate-picker').should(
         'have.value',
         '',
+      );
+
+      // Apply stamp
+      cy.get('[data-testid="clear-optional-fields"]').click();
+      cy.get('[data-testid="motion-disposition-Granted"]').click();
+      cy.get('[data-testid="save-signature-button"]').click();
+
+      // Make sure it's there
+      cy.get('[data-testid="success-alert"]').contains(
+        'Motion for Continuance stamped successfully.',
+      );
+      cy.get('[data-testid="docket-entry-description-1"]').contains(
+        'Motion for Continuance GRANTED',
       );
     });
   });
