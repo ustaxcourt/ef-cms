@@ -1,5 +1,7 @@
+import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
+
 export const getCaseDocumentsIdsFilteredByDocumentType = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     docIdsSelectedForDownload,
     docketEntries,
