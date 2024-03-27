@@ -1,4 +1,3 @@
-import { Agent } from 'http';
 import axios, { AxiosInstance } from 'axios';
 
 let axiosClient: AxiosInstance;
@@ -9,11 +8,7 @@ export const getHttpClient = (): AxiosInstance => {
   When axios throws an error, the stack trace does not show who called axios. This helps accurately display a stack trace when axios throws an error.
   */
   const stackError = new Error(); // Look at the stack trace for more information on the error.
-  axiosClient =
-    axiosClient ||
-    axios.create({
-      httpAgent: new Agent({ keepAlive: false }),
-    });
+  axiosClient = axiosClient || axios.create();
 
   axiosClient.interceptors.response.use(undefined, error => {
     error.stack = stackError.stack;
