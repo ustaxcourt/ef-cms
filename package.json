@@ -40,7 +40,7 @@
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1581.0",
     "aws-xray-sdk": "3.5.4",
-    "axios": "1.6.8",
+    "axios": "1.6.7",
     "broadcast-channel": "7.0.0",
     "canvas": "2.11.2",
     "cerebral": "5.2.1",
