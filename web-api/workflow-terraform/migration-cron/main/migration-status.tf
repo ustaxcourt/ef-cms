@@ -5,7 +5,6 @@ module "migration_status_lambda" {
   lambda_name    = "migration_status_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_role_${var.environment}"
   timeout     = "900"
-  memory_size = "768"
   environment = {
        STAGE                     = var.environment
        NODE_ENV                  = "production"

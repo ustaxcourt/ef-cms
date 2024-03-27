@@ -13,7 +13,6 @@ module "switch_colors_status_lambda" {
     CIRCLE_WORKFLOW_ID        = var.circle_workflow_id
   }
   timeout     = "900"
-  memory_size = "768"
 }
 
 resource "aws_cloudwatch_event_rule" "check_switch_colors_status_cron_rule-sunday" {

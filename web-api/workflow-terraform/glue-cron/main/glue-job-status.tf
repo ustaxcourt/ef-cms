@@ -12,7 +12,6 @@ module "glue_job_status_lambda" {
     CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
   }
   timeout     = "29"
-  memory_size = "768"
 }
 
 resource "aws_cloudwatch_event_rule" "check_glue_job_status_cron_rule" {

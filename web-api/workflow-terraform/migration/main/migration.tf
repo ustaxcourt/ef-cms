@@ -15,7 +15,6 @@ module "migration_lambda" {
     ELASTICSEARCH_ENDPOINT = var.elasticsearch_domain
   }
   timeout     = "30"
-  memory_size = "768"
 }
 
 resource "aws_lambda_event_source_mapping" "streams_mapping" {

@@ -18,8 +18,6 @@ module "migration_segments_lambda" {
     ELASTICSEARCH_ENDPOINT = var.elasticsearch_domain
   }
   timeout     = "900"
-  memory_size = "768"
-
 }
 
 
