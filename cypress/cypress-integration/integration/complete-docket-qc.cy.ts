@@ -37,8 +37,8 @@ describe('Document QC Complete', () => {
       attachDummyFile('primary-document');
       cy.get('#submit-document').click();
       cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-      cy.get('#redaction-acknowledgement').check();
       cy.get('[data-testid="file-document-review-submit-document"]').click();
+      cy.get('[data-testid="success-alert"]').should('exist');
     });
   });
   it('should test', () => {
@@ -114,11 +114,15 @@ describe('Document QC Complete', () => {
       );
 
       //click on Document QC > Docket Section QC
-      cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
-
       //assert seeded docket number is there
+      cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
+      cy.get(`[data-testid="work-item-${docketNumber}"]`).should('exist');
+
       //click on Document QC > petitions Section QC
       //assert seeded docket number is there
+      cy.visit('/document-qc/section/inbox/selectedSection?section=petitions');
+      cy.get(`[data-testid="work-item-${docketNumber}"]`).should('exist');
+
       //assign seeded case  to self from petitions QC
       //click on Document QC > My DocumentQC
       //assert seeded is there
