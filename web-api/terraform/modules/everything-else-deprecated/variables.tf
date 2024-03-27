@@ -1,3 +1,6 @@
+variable "active_ses_ruleset" {
+  type = string
+}
 
 variable "environment" {
   type = string
