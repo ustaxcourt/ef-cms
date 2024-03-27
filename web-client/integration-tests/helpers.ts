@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import * as pdfLib from 'pdf-lib';
+import { Agent } from 'http';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
@@ -78,7 +79,7 @@ import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import jwt from 'jsonwebtoken';
 import pug from 'pug';
 import qs from 'qs';
@@ -104,6 +105,7 @@ const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 let s3Cache;
 let sqsCache;
 let dynamoDbCache;
+let httpCache;
 
 Object.assign(applicationContext, {
   getDocumentClient: () => {
@@ -855,7 +857,25 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     },
   );
 
-  presenter.providers.applicationContext = applicationContext;
+  // presenter.providers.applicationContext = applicationContext;
+  presenter.providers.applicationContext = {
+    ...applicationContext,
+    getHttpClient: (): AxiosInstance => {
+      const stackError = new Error(); // Look at the stack trace for more information on the error.
+      httpCache =
+        httpCache ||
+        axios.create({
+          httpAgent: new Agent({ keepAlive: false }),
+        });
+
+      httpCache.interceptors.response.use(undefined, error => {
+        error.stack = stackError.stack;
+        throw error;
+      });
+
+      return httpCache;
+    },
+  };
 
   const {
     initialize: initializeSocketProvider,
