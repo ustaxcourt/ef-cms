@@ -16,7 +16,6 @@ module "wait_for_workflow_lambda" {
     APPROVAL_JOB_NAME         = var.approval_job_name
   }
   timeout     = "29"
-  memory_size = "768"
 }
 
 resource "aws_cloudwatch_event_rule" "wait_for_workflow_cron_rule" {

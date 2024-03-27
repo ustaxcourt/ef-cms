@@ -7,7 +7,6 @@ module "zip_handle_bounce" {
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   environment    = var.lambda_environment
   timeout        = "60"
-  memory_size    = "768"
 }
 
 

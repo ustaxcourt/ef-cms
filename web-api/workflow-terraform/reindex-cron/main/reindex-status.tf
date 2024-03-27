@@ -5,7 +5,6 @@ module "reindex_status_lambda" {
   lambda_name    = "reindex_status_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_role_${var.environment}"
   timeout        = "900"
-  memory_size    = "768"
   environment = {
     ACCOUNT_ID                = data.aws_caller_identity.current.account_id
     CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
