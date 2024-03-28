@@ -156,7 +156,7 @@ resource "aws_cognito_user_pool" "pool_case_insensitive" {
   }
 
   lifecycle {
-
+    prevent_destroy = true
     # the lambda_config isn't specified in this block because we only want to change its configuration during the color-change step of a deployment
     # but we also don't want the lambda_config to be deleted, so we need to ignore its configuration
     ignore_changes = [lambda_config]
@@ -179,6 +179,11 @@ resource "aws_cognito_user_pool_client" "client_case_insensitive" {
   refresh_token_validity = 1
   access_token_validity  = 1
   id_token_validity      = 1
+
+  callback_urls = [
+    "http://localhost:1234/log-in",
+    "https://app.${var.dns_domain}/log-in",
+  ]
 
   allowed_oauth_flows          = ["code", "implicit"]
   allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]

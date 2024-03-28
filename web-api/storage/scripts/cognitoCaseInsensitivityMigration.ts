@@ -1,5 +1,6 @@
 import {
   AdminCreateUserCommandInput,
+  AttributeType,
   ListUsersCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { createApplicationContext } from '@web-api/applicationContext';
@@ -27,12 +28,38 @@ async function cognitoCaseInsensitivityMigration({
       console.log('batch of users to update', data);
 
       for (const user of data.Users!) {
-        const userEmail = user.Attributes?.find(attr => {
-          return attr.Name === 'email';
-        })?.Value;
+        let customUserId,
+          userSub,
+          userEmail = '';
+        let userAttributes: AttributeType[] = [];
+
+        for (const attr of user.Attributes!) {
+          //extract email, sub, and custom:userId
+          if (attr.Name === 'email') {
+            userEmail = attr.Value!;
+          }
+
+          if (attr.Name === 'sub') {
+            userSub = attr.Value!;
+          }
+
+          if (attr.Name === 'custom:userId') {
+            customUserId = attr.Value!;
+          }
+
+          //filter out sub as cannot set
+          if (attr.Name !== 'sub') {
+            userAttributes.push(attr);
+          }
+        }
+
+        //if no custom:userId create one
+        if (customUserId === undefined) {
+          customUserId = userSub;
+        }
 
         const adminUpdateUserParams: AdminCreateUserCommandInput = {
-          UserAttributes: [...user.Attributes!],
+          UserAttributes: [...userAttributes!],
           UserPoolId: destinationUserPool, // destination
           Username: userEmail,
         };
@@ -51,7 +78,7 @@ async function cognitoCaseInsensitivityMigration({
 
 async function main() {
   await cognitoCaseInsensitivityMigration({
-    destinationUserPool: '',
+    destinationUserPool: 'us-east-1_wHalQIjdG',
     sourceUserPool: applicationContext.environment.userPoolId,
   });
 }
