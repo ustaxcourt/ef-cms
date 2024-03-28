@@ -1,26 +1,26 @@
 ::: 10208 :::
 
 Ideas for Approach:
-- Keep Existing Case Sensitive User Pool
+- Keep Existing Case Sensitive User Pool (Dawson carries the lift)
   - Make DAWSON case insensitive, use list users function to find correct account (will need logic) to login with. 
-      (No cleanup required + Additional work for login & forgot password)
+      (No cleanup required + Additional work for login, forgot password, & e-access)
   - Make All user's emails/usernames lower case via migration script (will need logic to handle conflicts), covert user input toLowerCase(). 
-      (Cleanup required +  Resolves Both Login + Forgot Password)
-- Migrate to New Case Insensitive User Pool 
+      (Cleanup required +  Resolves Both Login + Forgot Password + E-Access)
+- Migrate to New Case Insensitive User Pool (off load logic to aws)
       (Cleanup required + Resolves Both Login + Forgot Password)
-  - Lambda Trigger (Can be on login and forgot password)
-  - One time script
-  - One time lambda function
+  - Lambda Trigger (Can be on login and forgot password, e-access separate)
+  - One time script + TF Infrastructure Update
+  - One time lambda function + TF Infrastructure Update
   - CSV Import per Jim D. (Resets user passwords)
 
 Assumptions:
-- Password is always case sensitive.
+- Password is always case sensitive. 
 - Login and Forgot Password should function same (whether it should be a single ticket is TBD).
-
 
 Questions:
 - How many accounts are duplicated with different casing?
 - What if duplicated accounts are on different cases?
+- Do we want to update custom:userId as apart of this ticket? (Bonus)
 
 Random: 
 - Auth0 treats email as case insensitive by lowerCasing for you.
