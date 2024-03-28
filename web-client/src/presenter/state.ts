@@ -743,6 +743,7 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
+  stepIndicatorInfo: { currentStep: 0, steps: ['no steps defined yet'] },
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
   },
