@@ -17,15 +17,34 @@ export const generatePrintableCaseInventoryReportInteractor = async (
     throw new Error('Either judge or status must be provided');
   }
 
+  applicationContext.logger.info(
+    'generatePrintableCaseInventoryReportInteractor - authorized',
+  );
   const { foundCases } = await applicationContext
     .getPersistenceGateway()
     .getCaseInventoryReport({ applicationContext, associatedJudge, status });
 
-  return await applicationContext
+  applicationContext.logger.info(
+    'generatePrintableCaseInventoryReportInteractor - fetched cases',
+    {
+      foundCases: foundCases.length,
+    },
+  );
+
+  const result = await applicationContext
     .getUseCaseHelpers()
     .generateCaseInventoryReportPdf({
       applicationContext,
       cases: foundCases,
       filters: { associatedJudge, status },
     });
+
+  applicationContext.logger.info(
+    'generatePrintableCaseInventoryReportInteractor - built pdf',
+    {
+      result,
+    },
+  );
+
+  return result;
 };
