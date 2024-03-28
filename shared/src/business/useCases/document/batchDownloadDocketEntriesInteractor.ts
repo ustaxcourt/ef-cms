@@ -166,6 +166,7 @@ const batchDownloadDocketEntriesHelper = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'batch_download_ready',
       url,
@@ -185,7 +186,7 @@ export const batchDownloadDocketEntriesInteractor = async (
     );
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
-    const { docketNumber } = downloadDocketEntryRequestInfo;
+    const { clientConnectionId, docketNumber } = downloadDocketEntryRequestInfo;
 
     const erMsg = error.message || 'unknown error';
     applicationContext.logger.error(
@@ -194,6 +195,7 @@ export const batchDownloadDocketEntriesInteractor = async (
     );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
+      clientConnectionId,
       message: {
         action: 'batch_download_error',
         error,
