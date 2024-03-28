@@ -9,7 +9,7 @@ describe('Work item assignment', () => {
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
-      cy.get('[data-testid="dropdown-select-assignee"]').select(
+      cy.get('[data-testid="dropdown-filter-assignee"]').select(
         'Test Petitionsclerk',
       );
       cy.login('petitionsclerk', '/document-qc/section/inbox');
@@ -24,7 +24,7 @@ describe('Work item assignment', () => {
           elm.length,
         );
       });
-      cy.get('[data-testid="dropdown-select-assignee"]').select('Unassigned');
+      cy.get('[data-testid="dropdown-filter-assignee"]').select('Unassigned');
       cy.get('[data-testid="select-work-item"]:checked').should(
         'have.length',
         0,
