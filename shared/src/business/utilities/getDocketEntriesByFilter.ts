@@ -1,5 +1,7 @@
+import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
+
 export const getDocketEntriesByFilter = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     docketEntries,
     docketRecordFilter,
@@ -28,6 +30,8 @@ export const getDocketEntriesByFilter = (
       result = docketEntries.filter(
         entry => ORDER_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
       );
+      break;
+    default:
       break;
   }
 
