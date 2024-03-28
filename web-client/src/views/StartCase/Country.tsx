@@ -25,35 +25,65 @@ export const Country = connect(
     validationErrors,
   }) {
     return (
-      <React.Fragment>
+      <>
         <FormGroup errorText={validationErrors?.[type]?.countryType}>
-          <label className="usa-label" htmlFor={`${type}.countryType`}>
-            Country
-          </label>
-          <select
-            className={`${type}-country-type usa-select`}
-            id={`${type}.countryType`}
-            name={`${type}.countryType`}
-            value={data[type].countryType}
-            onChange={e => {
-              const method = onChangeCountryType || updateFormValueSequence;
-              method({
-                key: e.target.name,
-                value: e.target.value,
-              });
+          <legend className="usa-label">Country</legend>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              checked={data[type].countryType === 'domestic'}
+              className={`${type}-country-type usa-r usa-radio__input`}
+              id={`${type}.countryType`}
+              name={`${type}.countryType`}
+              type="radio"
+              value="domestic"
+              onChange={e => {
+                const method = onChangeCountryType || updateFormValueSequence;
+                method({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
 
-              if (validateStartCaseSequence) {
-                validateStartCaseSequence();
-              }
-            }}
-          >
-            <option value={constants.COUNTRY_TYPES.DOMESTIC}>
-              - United States -
-            </option>
-            <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
-              - International -
-            </option>
-          </select>
+                if (validateStartCaseSequence) {
+                  validateStartCaseSequence();
+                }
+              }}
+            />
+            <label
+              className="usa-radio__label"
+              data-testid="international-country-btn"
+              htmlFor={`${type}.countryType`}
+              id="country-radio-label-international"
+            >
+              United States
+            </label>
+            <input
+              checked={data[type].countryType === 'international'}
+              className={`${type}-country-type usa-r usa-radio__input`}
+              id={`${type}.countryType`}
+              name={`${type}.countryType`}
+              type="radio"
+              value="international"
+              onChange={e => {
+                const method = onChangeCountryType || updateFormValueSequence;
+                method({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+
+                if (validateStartCaseSequence) {
+                  validateStartCaseSequence();
+                }
+              }}
+            />
+            <label
+              className="usa-radio__label"
+              data-testid="international-country-btn"
+              htmlFor={`${type}.countryType`}
+              id="country-radio-label-international"
+            >
+              International
+            </label>
+          </div>
         </FormGroup>
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <FormGroup errorText={validationErrors?.[type]?.country}>
@@ -81,7 +111,7 @@ export const Country = connect(
             />
           </FormGroup>
         )}
-      </React.Fragment>
+      </>
     );
   },
 );
