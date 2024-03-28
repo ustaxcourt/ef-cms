@@ -20,10 +20,11 @@ export const generatePdfFromHtmlInteractor = async (
   },
 ): Promise<Buffer | Body | undefined> => {
   if (applicationContext.environment.stage === 'local') {
-    const { default: puppeteer } = await import('puppeteer');
-    const browserLocal = await puppeteer.launch({
-      args: ['--no-sandbox'],
-    });
+    // const { default: puppeteer } = await import('puppeteer');
+    // const browserLocal = await puppeteer.launch({
+    //   args: ['--no-sandbox'],
+    // });
+    const browserLocal = await applicationContext.getChromiumBrowser();
 
     const result = await applicationContext
       .getUseCaseHelpers()

@@ -1,17 +1,19 @@
 import { createApplicationContext } from '../../../src/applicationContext';
 
 export const handler = async event => {
-  const { default: chromium } = await import('@sparticuz/chromium');
-  const { default: puppeteerCore } = await import('puppeteer-core');
+  // const { default: chromium } = await import('@sparticuz/chromium');
+  // const { default: puppeteerCore } = await import('puppeteer-core');
 
   const applicationContext = createApplicationContext({});
 
-  const browser = await puppeteerCore.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
-    headless: chromium.headless,
-  });
+  // const browser = await puppeteerCore.launch({
+  //   args: chromium.args,
+  //   defaultViewport: chromium.defaultViewport,
+  //   executablePath: await chromium.executablePath(),
+  //   headless: chromium.headless,
+  // });
+
+  const browser = await applicationContext.getChromiumBrowser();
 
   const results = await applicationContext
     .getUseCaseHelpers()
