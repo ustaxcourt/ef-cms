@@ -35,6 +35,7 @@ import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocketEntryQc } from './DocketEntryQc';
+import { DownloadDocketEntriesModal } from '@web-client/views/DownloadDocketEntriesModal';
 import { EditCaseDetails } from './CaseDetail/EditCaseDetails';
 import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceDocument';
 import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
@@ -287,6 +288,9 @@ export const AppComponent = connect(
               <FileCompressionErrorModal />
             )}
             {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
+            {showModal === 'DownloadDocketEntriesModal' && (
+              <DownloadDocketEntriesModal />
+            )}
           </>
         )}
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}

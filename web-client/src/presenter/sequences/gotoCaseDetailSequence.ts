@@ -1,3 +1,4 @@
+import { clearDocumentsSelectedForDownload } from '@web-client/presenter/actions/clearDocumentsSelectedForDownload';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
@@ -75,6 +76,7 @@ const gotoCaseDetailInternalWithNotes =
 export const gotoCaseDetailSequence = [
   setupCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
+  clearDocumentsSelectedForDownload,
   clearFormAction,
   clearModalAction,
   closeMobileMenuAction,

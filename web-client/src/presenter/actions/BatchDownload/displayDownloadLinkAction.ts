@@ -12,6 +12,6 @@ export const displayDownloadLinkAction = ({
   router,
   store,
 }: ActionProps) => {
-  store.set(state.batchTrialSessionAllCasesDownloadUrl, props.url);
+  store.set(state.batchDownloadUrl, props.url);
   router.openInNewTab(props.url, false);
 };
