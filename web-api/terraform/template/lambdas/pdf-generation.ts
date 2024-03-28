@@ -32,9 +32,6 @@ export const handler = async event => {
 };
 
 /**
-    return tempId;
-
-/**
  * changeOfAddressHandler
  * @returns {string} id for the temporary stored pdf
  */
