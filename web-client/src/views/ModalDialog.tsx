@@ -17,6 +17,7 @@ export const ModalDialog = ({
   confirmLabel,
   confirmSequence,
   confirmTarget = '_self',
+  dataTestId = 'modal-dialog',
   disableSubmit = false,
   message,
   messageClass = 'margin-bottom-5',
@@ -37,6 +38,7 @@ export const ModalDialog = ({
   confirmLabel?: string;
   confirmSequence: any;
   confirmTarget?: string;
+  dataTestId: string;
   disableSubmit?: boolean;
   message?: string;
   preventCancelOnBlur?: boolean;
@@ -116,7 +118,7 @@ export const ModalDialog = ({
         <dialog
           open
           className="modal-screen"
-          data-testid="modal-dialog"
+          data-testid={dataTestId}
           role="dialog"
           onClick={blurDialog}
         >
