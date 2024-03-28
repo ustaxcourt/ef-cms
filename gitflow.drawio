@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="F2tONFXF3S80tZAxkaJ6" name="Page-1">
-        <mxGraphModel dx="1738" dy="584" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="2058" dy="584" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -253,8 +253,10 @@
                 <mxCell id="104" value="&lt;font color=&quot;#ffffff&quot;&gt;flexion dev&lt;/font&gt;" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=#BD7000;fillColor=#f0a30a;shape=mxgraph.azure.user;fontColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="320" y="1615" width="47.5" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="105" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontColor=#FFFFFF;" parent="1" source="106" target="111" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
+                <mxCell id="105" value="deployment&lt;br&gt;window&lt;br&gt;opens" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontColor=#FFFFFF;" parent="1" source="106" target="111" edge="1">
+                    <mxGeometry x="0.0303" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="131" style="edgeStyle=none;html=1;startArrow=none;" edge="1" parent="1" source="141">
                     <mxGeometry relative="1" as="geometry">
@@ -266,7 +268,7 @@
                     <mxGeometry x="787.5" y="1610" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="111" value="prod" style="whiteSpace=wrap;html=1;fillColor=#e3c800;fontColor=#000000;strokeColor=#B09500;" parent="1" vertex="1">
-                    <mxGeometry x="957.5" y="1610" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="990" y="1610" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="112" value="flexion/exp1" style="whiteSpace=wrap;html=1;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" parent="1" vertex="1">
                     <mxGeometry x="142.5" y="1610" width="120" height="60" as="geometry"/>
@@ -327,7 +329,7 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="134" value="feature-2-intermediary" style="whiteSpace=wrap;html=1;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" vertex="1" parent="1">
-                    <mxGeometry x="435" y="1770" width="110" height="60" as="geometry"/>
+                    <mxGeometry x="440" y="1770" width="110" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="142" value="" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="106" target="141">
                     <mxGeometry relative="1" as="geometry">
