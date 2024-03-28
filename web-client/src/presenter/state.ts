@@ -570,6 +570,7 @@ export const baseState = {
     },
     tempPassword: '',
   },
+  batchDownloadUrl: '',
   batchDownloads: {} as {
     allowRetry?: boolean;
     zipInProgress?: boolean;
@@ -629,6 +630,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
+  documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
     isHavingSystemIssues: false,

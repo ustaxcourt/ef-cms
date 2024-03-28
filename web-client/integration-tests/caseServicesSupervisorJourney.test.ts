@@ -234,5 +234,5 @@ describe('Case Services Supervisor Messages Journey', () => {
           workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
       );
     expect(workItem).toBeDefined();
-  });
+  }, 100000);
 });

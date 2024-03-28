@@ -1,4 +1,4 @@
-import { put } from '../requests';
+import { asyncSyncHandler, put } from '../requests';
 
 /**
  * updateDocketEntryMetaProxy
@@ -14,12 +14,17 @@ export const updateDocketEntryMetaInteractor = (
   applicationContext,
   { docketEntryMeta, docketNumber, docketRecordIndex },
 ) => {
-  return put({
+  return asyncSyncHandler(
     applicationContext,
-    body: {
-      docketEntryMeta,
-      docketRecordIndex,
-    },
-    endpoint: `/case-documents/${docketNumber}/docket-entry-meta`,
-  });
+    async asyncSyncId =>
+      await put({
+        applicationContext,
+        asyncSyncId,
+        body: {
+          docketEntryMeta,
+          docketRecordIndex,
+        },
+        endpoint: `/async/case-documents/${docketNumber}/docket-entry-meta`,
+      }),
+  );
 };
