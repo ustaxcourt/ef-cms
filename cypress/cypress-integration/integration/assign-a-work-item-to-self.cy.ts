@@ -9,7 +9,7 @@ describe('Work item assignment', () => {
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
-      cy.get('[data-testid="dropdown-filter-assignee"]').select(
+      cy.get('[data-testid="dropdown-select-assignee"]').select(
         'Test Petitionsclerk',
       );
       cy.login('petitionsclerk', '/document-qc/section/inbox');
