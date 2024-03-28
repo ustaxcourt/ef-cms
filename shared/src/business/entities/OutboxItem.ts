@@ -42,7 +42,6 @@ export class OutboxItem extends JoiValidationEntity {
       'isCourtIssuedDocument',
       'isFileAttached',
       'isLegacyServed',
-      'isMinuteEntry',
       'isOrder',
       'isPaper',
       'isUnservable',

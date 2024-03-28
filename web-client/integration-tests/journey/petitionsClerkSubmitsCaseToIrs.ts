@@ -1,4 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
 
@@ -63,8 +64,10 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
 
     const documents = cerebralTest.getState('caseDetail.docketEntries');
     for (const document of documents) {
-      if (!document.isMinuteEntry && !document.isDraft) {
+      if (!DocketEntry.isMinuteEntry(document) && !document.isDraft) {
         expect(document.servedAt).toBeDefined();
+      } else {
+        expect(document.servedAt).toBeUndefined();
       }
     }
   });

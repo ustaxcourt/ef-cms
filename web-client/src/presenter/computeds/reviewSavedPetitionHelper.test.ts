@@ -109,7 +109,8 @@ describe('reviewSavedPetitionHelper', () => {
             {
               documentType:
                 INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-              isMinuteEntry: true,
+              eventCode:
+                INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
             },
           ],
           hasVerifiedIrsNotice: true,

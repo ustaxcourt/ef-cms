@@ -1,14 +1,5 @@
-import {
-  COURT_ISSUED_EVENT_CODES,
-  DOCKET_NUMBER_SUFFIXES,
-  ORDER_TYPES,
-  PARTY_TYPES,
-  POLICY_DATE_IMPACTED_EVENTCODES,
-  ROLES,
-  TRANSCRIPT_EVENT_CODE,
-  isDocumentBriefType,
-} from '../EntityConstants';
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { DOCKET_NUMBER_SUFFIXES, PARTY_TYPES, ROLES } from '../EntityConstants';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
@@ -17,7 +8,6 @@ import { PublicContact } from './PublicContact';
 import { PublicDocketEntry } from './PublicDocketEntry';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { isSealedCase } from './Case';
-import { map } from 'lodash';
 import joi from 'joi';
 
 export class PublicCase extends JoiValidationEntity {
@@ -108,41 +98,6 @@ export class PublicCase extends JoiValidationEntity {
       )
       .map(docketEntry => new PublicDocketEntry(docketEntry))
       .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
-  }
-
-  static isPrivateDocument(
-    docketEntry: any,
-    visibilityChangeDate: string,
-  ): boolean {
-    if (docketEntry.isStricken) return true;
-    if (docketEntry.eventCode === TRANSCRIPT_EVENT_CODE) return true;
-    if (!docketEntry.isOnDocketRecord) return true;
-
-    const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
-
-    const filedAfterPolicyChange =
-      docketEntry.filingDate >= visibilityChangeDate;
-
-    const hasPolicyDateImpactedEventCode =
-      POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntry.eventCode);
-    const isOrder = orderDocumentTypes.includes(docketEntry.documentType);
-    const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
-      ({ eventCode }) => eventCode,
-    ).includes(docketEntry.eventCode);
-
-    let isPublicDocumentType =
-      isOrder || isCourtIssuedDocument || hasPolicyDateImpactedEventCode;
-
-    const isAmendmentToABrief =
-      ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
-        docketEntry.eventCode,
-      ) && isDocumentBriefType(docketEntry.previousDocument.documentType);
-
-    if (isAmendmentToABrief) {
-      isPublicDocumentType = filedAfterPolicyChange;
-    }
-
-    return !isPublicDocumentType;
   }
 
   static VALIDATION_RULES = {

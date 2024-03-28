@@ -5,11 +5,25 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { cloneDeep } from 'lodash';
+import {
+  docketClerk1User,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { getFormattedDocketEntry } from './formattedDocketEntries';
 import { simpleDocketEntries } from './formattedCaseDetail.test';
 
+let mockIsNotServedDocument;
+jest.mock('@shared/business/utilities/getFormattedCaseDetail', () => ({
+  computeIsNotServedDocument: jest
+    .fn()
+    .mockImplementation(() => mockIsNotServedDocument),
+}));
+
 describe('getFormattedDocketEntry', () => {
   let simpleDocketEntry;
+  let mockCase;
+  let baseParams;
 
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
@@ -20,20 +34,6 @@ describe('getFormattedDocketEntry', () => {
     eventCode: 'P',
   };
 
-  const baseParams = {
-    applicationContext,
-    docketNumber: MOCK_CASE.docketNumber,
-    entry: simpleDocketEntry,
-    formattedCase: {
-      ...MOCK_CASE,
-      filedByRole: ROLES.privatePractitioner,
-    },
-    isExternalUser: false,
-    permissions: {},
-    userAssociatedWithCase: true,
-    visibilityPolicyDateFormatted: '',
-  };
-
   // some of these values are computed in getFormattedCaseDetail and
   // sent in to formattedCaseDetail
   const servedCourtIssuedDocketEntry = {
@@ -41,16 +41,32 @@ describe('getFormattedDocketEntry', () => {
     archived: false,
     createdAt: '2019-02-28T21:14:39.488Z',
     eventCode: 'O',
-    isAvailableToUser: true,
     isCourtIssuedDocument: true,
     isDraft: false,
     isFileAttached: true,
     isOnDocketRecord: true,
+    processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     qcWorkItemsCompleted: true,
     servedAt: '2019-02-28T21:14:39.488Z',
   };
 
   beforeEach(() => {
+    mockIsNotServedDocument = false;
+    mockCase = cloneDeep(MOCK_CASE);
+    baseParams = {
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+      entry: simpleDocketEntry,
+      formattedCase: {
+        ...MOCK_CASE,
+        filedByRole: ROLES.privatePractitioner,
+      },
+      permissions: {},
+      rawCase: mockCase,
+      user: docketClerk1User,
+      visibilityPolicyDateFormatted: '',
+    };
+
     simpleDocketEntry = {
       ...simpleDocketEntries[0],
       rootDocument,
@@ -65,8 +81,8 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
-        isExternalUser: false,
         permissions: { UPDATE_CASE: false },
+        user: docketClerk1User,
       });
 
       expect(result.showLoadingIcon).toBeTruthy();
@@ -79,9 +95,8 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
-
-        isExternalUser: false,
         permissions: { UPDATE_CASE: true },
+        user: docketClerk1User,
       });
 
       expect(result.showLoadingIcon).toBeFalsy();
@@ -94,9 +109,8 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         },
-
-        isExternalUser: false,
         permissions: { UPDATE_CASE: false },
+        user: docketClerk1User,
       });
 
       expect(result.showLoadingIcon).toBeFalsy();
@@ -109,9 +123,8 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
-
-        isExternalUser: true,
         permissions: { UPDATE_CASE: false },
+        user: privatePractitionerUser,
       });
 
       expect(result.showLoadingIcon).toBeFalsy();
@@ -274,25 +287,21 @@ describe('getFormattedDocketEntry', () => {
   });
 
   describe('showNotServed', () => {
-    it('should be true if entry.isNotServedDocument is true', () => {
+    it('should be true if computeIsNotServedDocument returns true', () => {
+      mockIsNotServedDocument = true;
       const result = getFormattedDocketEntry({
         ...baseParams,
-        entry: {
-          ...simpleDocketEntry,
-          isNotServedDocument: true,
-        },
+        entry: simpleDocketEntry,
       });
 
       expect(result.showNotServed).toBeTruthy();
     });
 
-    it('should be false if entry.isNotServedDocument is false', () => {
+    it('should be false if computeIsNotServedDocument returns false', () => {
+      mockIsNotServedDocument = false;
       const result = getFormattedDocketEntry({
         ...baseParams,
-        entry: {
-          ...simpleDocketEntry,
-          isNotServedDocument: false,
-        },
+        entry: simpleDocketEntry,
       });
 
       expect(result.showNotServed).toBeFalsy();
@@ -332,8 +341,6 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
-
-        isExternalUser: false,
       });
 
       expect(result.showDocumentViewerLink).toBeTruthy();
@@ -345,8 +352,6 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...simpleDocketEntry,
         },
-
-        isExternalUser: false,
       });
 
       expect(result.showDocumentViewerLink).toBeFalsy();
@@ -358,8 +363,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
-
-        isExternalUser: true,
+        user: privatePractitionerUser,
       });
 
       expect(result.showDocumentViewerLink).toBeFalsy();
@@ -373,8 +377,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
-
-        isExternalUser: true,
+        user: privatePractitionerUser,
       });
 
       expect(result.showLinkToDocument).toBeTruthy();
@@ -386,8 +389,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...simpleDocketEntry,
         },
-
-        isExternalUser: true,
+        user: privatePractitionerUser,
       });
 
       expect(result.showLinkToDocument).toBeFalsy();
@@ -400,8 +402,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           eventCode: 'SEAB',
         },
-
-        isExternalUser: true,
+        user: privatePractitionerUser,
       });
 
       expect(result.showLinkToDocument).toBeFalsy();
@@ -413,23 +414,21 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
-
-        isExternalUser: false,
       });
 
       expect(result.showLinkToDocument).toBeFalsy();
     });
 
     it('should be true for an external user when filedAfterPolicyChange is true and the document was filed by a practitioner', () => {
+      const entry = {
+        ...servedCourtIssuedDocketEntry,
+        eventCode: BRIEF_EVENTCODES[0],
+        filedByRole: ROLES.privatePractitioner,
+      };
       const result = getFormattedDocketEntry({
         ...baseParams,
-        entry: {
-          ...servedCourtIssuedDocketEntry,
-          eventCode: BRIEF_EVENTCODES[0],
-          isFileAttached: true,
-          rootDocument,
-        },
-        isExternalUser: true,
+        entry,
+        user: privatePractitionerUser,
       });
 
       expect(result.showLinkToDocument).toBe(true);
@@ -443,12 +442,11 @@ describe('getFormattedDocketEntry', () => {
           eventCode: BRIEF_EVENTCODES[0],
           rootDocument,
         },
-        filedAfterPolicyChange: false,
         formattedCase: {
           ...MOCK_CASE,
           filedByRole: ROLES.privatePractitioner,
         },
-        isExternalUser: true,
+        user: privatePractitionerUser,
       });
 
       expect(result.showLinkToDocument).toBe(false);
@@ -524,8 +522,7 @@ describe('getFormattedDocketEntry', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: mockSealedDocketEntry,
-        isExternalUser: true,
-        userAssociatedWithCase: false,
+        user: privatePractitionerUser,
       });
 
       expect(result.showDocumentDescriptionWithoutLink).toBe(true);
@@ -545,8 +542,11 @@ describe('getFormattedDocketEntry', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: mockSealedDocketEntry,
-        isExternalUser: true,
-        userAssociatedWithCase: true,
+        rawCase: {
+          ...mockCase,
+          privatePractitioners: [privatePractitionerUser],
+        },
+        user: privatePractitionerUser,
       });
 
       expect(result.showDocumentDescriptionWithoutLink).toBe(false);

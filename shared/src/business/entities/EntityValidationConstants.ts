@@ -225,7 +225,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'Indicates whether or not the legacy document was served prior to being migrated to the new system.',
     ),
-  isMinuteEntry: joi.boolean().required(),
   isOnDocketRecord: joi.boolean().required(),
   isPaper: joi.boolean().optional(),
   isSealed: joi

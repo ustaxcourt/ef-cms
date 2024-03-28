@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
 
@@ -74,7 +75,7 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     for (const docketEntry of docketEntries) {
       if (
-        !docketEntry.isMinuteEntry &&
+        !DocketEntry.isMinuteEntry(docketEntry) &&
         docketEntry.eventCode !== 'NOTR' &&
         !docketEntry.isDraft
       ) {

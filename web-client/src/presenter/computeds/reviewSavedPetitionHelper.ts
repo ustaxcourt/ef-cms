@@ -1,4 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { formatStatistic } from './statisticsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -91,7 +92,7 @@ export const reviewSavedPetitionHelper = (
   }
 
   const documentsByType = (docketEntries || [])
-    .filter(d => !d.isMinuteEntry)
+    .filter(d => !DocketEntry.isMinuteEntry(d))
     .reduce((acc, docketEntry) => {
       acc[docketEntry.documentType] = docketEntry;
       return acc;

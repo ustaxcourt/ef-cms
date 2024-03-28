@@ -17,4 +17,13 @@ describe('uploadDocument', () => {
 
     expect(key).toEqual(KEY);
   });
+
+  it('calculates a docId if one is not specified', async () => {
+    await uploadDocumentFromClient({
+      applicationContext,
+      document: 'test',
+      key: '',
+    });
+    expect(applicationContext.getUniqueId).toHaveBeenCalled();
+  });
 });

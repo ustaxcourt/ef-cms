@@ -152,7 +152,6 @@ describe('messages journey', () => {
       index: 0,
       isDraft: false,
       isFileAttached: true,
-      isMinuteEntry: false,
       isOnDocketRecord: false,
       isStricken: false,
       partyPrimary: true,
