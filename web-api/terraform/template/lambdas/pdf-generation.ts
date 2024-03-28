@@ -6,8 +6,6 @@ export const handler = async event => {
 
   const applicationContext = createApplicationContext({});
 
-  chromium.setGraphicsMode = false;
-
   const browser = await puppeteerCore.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
