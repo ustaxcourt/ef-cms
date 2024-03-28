@@ -5,6 +5,15 @@ import { Get } from 'cerebral';
 import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 
+type DocketEntriesSelectionType = (RawDocketEntry & {
+  createdAtFormatted: string;
+  isDocumentSelected?: boolean;
+})[];
+
+export const isSelectableForDownload = entry => {
+  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
+};
+
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay: any[] = [];
 
@@ -193,12 +202,7 @@ export const formattedDocketEntries = (
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const { docketRecordFilter } = get(state.sessionMetadata);
-  const {
-    ALLOWLIST_FEATURE_FLAGS,
-    DOCKET_RECORD_FILTER_OPTIONS,
-    EXHIBIT_EVENT_CODES,
-    MOTION_EVENT_CODES,
-  } = applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
   let docketRecordSort;
@@ -217,47 +221,73 @@ export const formattedDocketEntries = (
     .getUtilities()
     .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
     .toISO();
-
   const result = formatCase(applicationContext, caseDetail);
+  const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
-  switch (docketRecordFilter) {
-    case DOCKET_RECORD_FILTER_OPTIONS.exhibits:
-      result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => EXHIBIT_EVENT_CODES.includes(entry.eventCode),
-      );
-      break;
-    case DOCKET_RECORD_FILTER_OPTIONS.motions:
-      result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => MOTION_EVENT_CODES.includes(entry.eventCode) && !entry.isDraft,
-      );
-      break;
-    case DOCKET_RECORD_FILTER_OPTIONS.orders:
-      result.formattedDocketEntries = result.formattedDocketEntries.filter(
-        entry => DocketEntry.isOrder(entry.eventCode) && !entry.isDraft,
-      );
-      break;
-  }
+  result.formattedDocketEntries = applicationContext
+    .getUtilities()
+    .getDocketEntriesByFilter(applicationContext, {
+      docketEntries: result.formattedDocketEntries,
+      docketRecordFilter,
+    });
 
-  let docketEntriesFormatted = sortDocketEntries(
+  let docketEntriesFormatted: DocketEntriesSelectionType = sortDocketEntries(
     result.formattedDocketEntries,
     docketRecordSort,
   );
 
-  docketEntriesFormatted = docketEntriesFormatted.map(entry =>
-    getFormattedDocketEntry({
-      applicationContext,
-      docketNumber,
-      entry,
-      permissions,
-      rawCase: caseDetail,
-      user,
-      visibilityPolicyDateFormatted,
-    }),
-  );
+  docketEntriesFormatted = docketEntriesFormatted
+    .map(entry =>
+      getFormattedDocketEntry({
+        applicationContext,
+        docketNumber,
+        entry,
+        permissions,
+        rawCase: caseDetail,
+        user,
+        visibilityPolicyDateFormatted,
+      }),
+    )
+    .map(docketEntry => {
+      return {
+        ...docketEntry,
+        isDocumentSelected: documentsSelectedForDownload.some(
+          docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
+        ),
+        isSelectableForDownload: isSelectableForDownload(docketEntry),
+      };
+    });
+
+  const selectableDocumentsCount = docketEntriesFormatted.filter(entry =>
+    isSelectableForDownload(entry),
+  ).length;
+  const documentsSelectedForDownloadCount = docketEntriesFormatted.filter(
+    entry => entry.isDocumentSelected && isSelectableForDownload(entry),
+  ).length;
+
+  const allDocumentsSelected =
+    documentsSelectedForDownloadCount === selectableDocumentsCount &&
+    selectableDocumentsCount !== 0;
+
+  const someDocumentsSelectedForDownload =
+    documentsSelectedForDownloadCount > 0 &&
+    documentsSelectedForDownloadCount < selectableDocumentsCount;
+
+  result.someDocumentsSelectedForDownload = someDocumentsSelectedForDownload;
+
+  result.isDownloadLinkEnabled =
+    someDocumentsSelectedForDownload || allDocumentsSelected;
+  result.allDocumentsSelectedForDownload = allDocumentsSelected || false;
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
   );
+
+  result.allEligibleDocumentsForDownload = docketEntriesFormatted
+    .filter(docEntry => isSelectableForDownload(docEntry))
+    .map(docEntry => ({
+      docketEntryId: docEntry.docketEntryId,
+    }));
 
   result.formattedPendingDocketEntriesOnDocketRecord =
     result.formattedDocketEntriesOnDocketRecord.filter(docketEntry =>

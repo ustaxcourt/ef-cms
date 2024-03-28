@@ -464,7 +464,9 @@ export const sortUndefined = (
 };
 
 export const sortDocketEntries = (
-  docketEntries: (RawDocketEntry & { createdAtFormatted: string })[] = [],
+  docketEntries: (RawDocketEntry & {
+    createdAtFormatted: string | undefined;
+  })[] = [],
   sortByString = '',
 ) => {
   const sortFunc = getDocketRecordSortFunc(sortByString);
