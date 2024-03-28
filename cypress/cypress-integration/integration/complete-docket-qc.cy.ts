@@ -5,67 +5,48 @@ import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serve
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('Document QC Complete', () => {
-  // const seededDocketNumber = '105-20';
   const seedCaseServicesSupervisorUserid =
     '35959d1a-0981-40b2-a93d-f65c7977db52';
   const docketSectionMessage = 'To CSS under Docket Section';
   const petitionsSectionMessage = 'To CSS under Petitions Section';
 
-  //beforeEach
-  //createAndServePaperPetition().then
-  //add file to qc
-  //alias the docke number
-  beforeEach(() => {
+  before(() => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('DOCKET_NUMBER');
-      cy.login('petitionsclerk1');
       petitionsClerkServesPetition(docketNumber);
-      loginAsPetitioner();
+      petitionerFilesADocument(docketNumber);
+    });
 
-      // add file to QC
-      cy.get('[data-testid="docket-search-field"]').type(docketNumber);
-      cy.get('[data-testid="search-by-docket-number"]').click();
-      cy.get('[data-testid="button-file-document"]').click();
-      cy.get('[data-testid="ready-to-file"]').click();
-      cy.get('[data-testid="document-type"]').click();
-
-      cy.get('[data-testid="document-type"]').click();
-      cy.get('[data-testid="document-type"]').type('Exhibit(s)');
-      cy.get('#react-select-2-option-0').click();
-      cy.get('[data-testid="submit-document"]').click();
-      attachDummyFile('primary-document');
-      cy.get('#submit-document').click();
-      cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-      cy.get('[data-testid="file-document-review-submit-document"]').click();
-      cy.get('[data-testid="success-alert"]').should('exist');
+    loginAsPetitioner();
+    petitionerCreatesElectronicCase().then(docketNumber => {
+      cy.wrap(docketNumber).as('UNSERVED_DOCKET_NUMBER');
     });
   });
-  it('should test', () => {
-    cy.get('@DOCKET_NUMBER').then(docketNumber => {
-      // login as admissionsclerk@example.com
+
+  beforeEach(() => {
+    cy.keepAliases();
+  });
+
+  it('should organize messages correctly in each section', () => {
+    cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       cy.login('admissionsclerk');
       searchByDocketNumberInHeader(docketNumber);
 
-      // create  a message to dockeet
       sendMessages(
         seedCaseServicesSupervisorUserid,
         docketSectionMessage,
         'docket',
       );
 
-      //create a message to peetitions
       sendMessages(
         seedCaseServicesSupervisorUserid,
         petitionsSectionMessage,
         'petitions',
       );
 
-      //login caseservicessupervisor@example.com
-      //go to my inbox messages
       cy.login('caseservicessupervisor', '/messages/my/inbox');
 
-      //assert both exist in message tabs
       assertMessageRecordCountForDocketNumberAndSubject(
         docketNumber,
         docketSectionMessage,
@@ -79,9 +60,6 @@ describe('Document QC Complete', () => {
         'individual',
       );
 
-      //go to DOCKET_SECTION sectin inbox messages
-      //docket message should be defined
-      // petition should not
       cy.visit('/messages/section/inbox/selectedSection?section=docket');
       assertMessageRecordCountForDocketNumberAndSubject(
         docketNumber,
@@ -96,9 +74,6 @@ describe('Document QC Complete', () => {
         'section',
       );
 
-      //go to petition_SECTION sectin inbox messages
-      //petition message should be defined
-      // docket should not
       cy.visit('/messages/section/inbox/selectedSection?section=petitions');
       assertMessageRecordCountForDocketNumberAndSubject(
         docketNumber,
@@ -112,30 +87,89 @@ describe('Document QC Complete', () => {
         1,
         'section',
       );
+    });
+  });
 
-      //click on Document QC > Docket Section QC
-      //assert seeded docket number is there
-      cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
+  it('should have the served case document qc assigned and completed', () => {
+    cy.login(
+      'caseservicessupervisor',
+      '/document-qc/section/inbox/selectedSection?section=docket',
+    );
+    cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       cy.get(`[data-testid="work-item-${docketNumber}"]`).should('exist');
 
-      //click on Document QC > petitions Section QC
-      //assert seeded docket number is there
-      cy.visit('/document-qc/section/inbox/selectedSection?section=petitions');
-      cy.get(`[data-testid="work-item-${docketNumber}"]`).should('exist');
+      cy.get(`[data-testid="work-item-${docketNumber}"]`)
+        .find('[data-testid="checkbox-assign-work-item"]')
+        .click();
 
-      //assign seeded case  to self from petitions QC
-      //click on Document QC > My DocumentQC
-      //assert seeded is there
-      //assign seeded case  to docketclerk from docket QC
-      //click on Document QC > Docket section qc
-      //assert case is there
-      //go to seeded qc
-      //complete/
-      //no errors
-      //assert seedeed docket qc in outbox
+      cy.get('[data-testid="dropdown-select-assignee"]').select(
+        'Test Docketclerk',
+      );
+
+      cy.get(`[data-testid="work-item-${docketNumber}"]`)
+        .find('[data-testid="table-column-work-item-assigned-to"]')
+        .should('have.text', 'Test Docketclerk');
+
+      cy.get(`[data-testid="work-item-${docketNumber}"]`)
+        .find('.message-document-title')
+        .find('a')
+        .click();
+
+      cy.get('#save-and-finish').click();
+
+      cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
+
+      cy.visit('/document-qc/my/outbox');
+      cy.get(`[data-testid="section-work-item-outbox-${docketNumber}"]`).should(
+        'exist',
+      );
+    });
+  });
+
+  it('should have the unserved case in the petition qc assigned', () => {
+    cy.login(
+      'caseservicessupervisor',
+      '/document-qc/section/inbox/selectedSection?section=petitions',
+    );
+    cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
+      cy.get(`[data-testid="work-item-${unservedDocketNumber}"]`).should(
+        'exist',
+      );
+
+      cy.get(`[data-testid="work-item-${unservedDocketNumber}"]`)
+        .find('[data-testid="checkbox-assign-work-item"]')
+        .click();
+
+      cy.get('[data-testid="dropdown-select-assignee"]').select(
+        'Test Case Services Supervisor',
+      );
+
+      cy.visit('/document-qc/my/inbox');
+      cy.get(
+        `[data-testid="message-queue-docket-number-${unservedDocketNumber}"]`,
+      ).should('be.visible');
     });
   });
 });
+
+function petitionerFilesADocument(docketNumber: string) {
+  loginAsPetitioner();
+  cy.get('[data-testid="docket-search-field"]').type(docketNumber);
+  cy.get('[data-testid="search-by-docket-number"]').click();
+  cy.get('[data-testid="button-file-document"]').click();
+  cy.get('[data-testid="ready-to-file"]').click();
+  cy.get('[data-testid="document-type"]').click();
+
+  cy.get('[data-testid="document-type"]').click();
+  cy.get('[data-testid="document-type"]').type('Exhibit(s)');
+  cy.get('#react-select-2-option-0').click();
+  cy.get('[data-testid="submit-document"]').click();
+  attachDummyFile('primary-document');
+  cy.get('#submit-document').click();
+  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+  cy.get('[data-testid="file-document-review-submit-document"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
+}
 
 function assertMessageRecordCountForDocketNumberAndSubject(
   docketNumber: string,
