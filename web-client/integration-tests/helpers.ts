@@ -636,8 +636,12 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.applicationContext.getHttpClient = () => {
-    const stackError = new Error(); // Look at the stack trace for more information on the error.
-
+    // HTTP Client is overridden for integration tests because with the introduction
+    // of Node 20 we saw an increase in ECONNRESET failures in the pipeline. Setting
+    // a custom http agent with keepAlive false resolved those issues.
+    // This appears to be a known issue in Node, see
+    // https://github.com/nodejs/node/issues/47130
+    const stackError = new Error();
     httpCache =
       httpCache ||
       axios.create({
