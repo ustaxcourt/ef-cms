@@ -1,5 +1,7 @@
 import { InvalidRequest, NotFoundError } from '@web-api/errors/errors';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { User } from '@shared/business/entities/User';
 
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -20,26 +22,17 @@ export const confirmSignUpInteractor = async (
     throw new InvalidRequest('Confirmation code expired');
   }
 
-  await applicationContext.getCognito().adminConfirmSignUp({
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: email,
+  await applicationContext.getUserGateway().confirmSignUp(applicationContext, {
+    email,
   });
 
   const updatePetitionerAttributes = applicationContext
-    .getCognito()
-    .adminUpdateUserAttributes({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'true',
-        },
-        {
-          Name: 'email',
-          Value: email,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: email,
+    .getUserGateway()
+    .updateUser(applicationContext, {
+      attributesToUpdate: {
+        email,
+      },
+      email,
     });
 
   await Promise.all([
@@ -60,11 +53,17 @@ const createPetitionerUser = async (
     throw new NotFoundError(`User not found with email: ${email}`);
   }
 
-  await applicationContext
-    .getUseCases()
-    .createPetitionerAccountInteractor(applicationContext, {
-      email,
-      name: user.name,
-      userId,
-    });
+  const userEntity = new User({
+    email,
+    name: user.name,
+    role: ROLES.petitioner,
+    userId,
+  });
+
+  await applicationContext.getPersistenceGateway().persistUser({
+    applicationContext,
+    user: userEntity.validate().toRawObject(),
+  });
+
+  return userEntity.validate().toRawObject();
 };

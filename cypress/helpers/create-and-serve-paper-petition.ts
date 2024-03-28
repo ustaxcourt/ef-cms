@@ -51,25 +51,25 @@ export function createAndServePaperPetition(
   );
 
   cy.get('[data-testid="tabButton-stinFile"]').click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
 
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#attachmentToPetitionFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
   cy.get('[data-testid="remove-pdf"]');
 
   cy.get('[data-testid="tabButton-corporateDisclosureFile"]').click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#corporateDisclosureFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
   cy.get(
     '[data-testid="tabButton-applicationForWaiverOfFilingFeeFile"]',
   ).click();
-  cy.get('[data-testid="button-upload-pdf"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#applicationForWaiverOfFilingFeeFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
@@ -135,6 +135,10 @@ export function createAndServePaperPetition(
 
       cy.get('[data-testid="tab-docket-record"]').click();
 
-      return cy.wrap({ docketNumber: docketNumber!, name });
+      return cy.wrap({
+        docketNumber: docketNumber!,
+        documentsCreated: expectedDocuments,
+        name,
+      });
     });
 }
