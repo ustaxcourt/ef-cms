@@ -31,7 +31,6 @@ export const Button = props => {
   const classes = classNames(
     className,
     'usa-button',
-    tooltip && 'usa-tooltip',
     !overrideMargin && `margin-${marginDirection}-205`,
     overrideMargin,
     icon && !shouldWrapText && 'no-wrap',
