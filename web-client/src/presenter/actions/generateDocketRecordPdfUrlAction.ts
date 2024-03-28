@@ -24,7 +24,7 @@ export const generateDocketRecordPdfUrlAction = async ({
     isIndirectlyAssociated = true;
   }
 
-  const { url } = await applicationContext
+  const { fileId, url } = await applicationContext
     .getUseCases()
     .generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
@@ -33,5 +33,5 @@ export const generateDocketRecordPdfUrlAction = async ({
       isIndirectlyAssociated,
     });
 
-  return { pdfUrl: url };
+  return { fileId, pdfUrl: url };
 };
