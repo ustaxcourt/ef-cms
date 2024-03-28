@@ -22,7 +22,7 @@ export const formattedDashboardTrialSessions = (
       applicationContext
         .getUtilities()
         .prepareDateFromString(session.startDate)
-        .toISO() < applicationContext.getUtilities().createISODateString()
+        .toISO()! < applicationContext.getUtilities().createISODateString()
     );
   };
 

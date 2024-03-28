@@ -176,6 +176,52 @@ export const ATP_DOCKET_ENTRY: RawDocketEntry = {
   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
+export const STANDING_PRETRIAL_ORDER_ENTRY: RawDocketEntry = {
+  addToCoversheet: false,
+  createdAt: '2023-08-15T16:47:51.688Z',
+  docketEntryId: 'c7ea55fe-1716-47bb-b2c5-8112fea11d14',
+  docketNumber: '102-67',
+  documentContentsId: '20cdeb6a-5f13-48b0-b433-8c0b36be5eb1',
+  documentTitle: 'Standing Pretrial Order',
+  documentType: 'Standing Pretrial Order',
+  draftOrderState: {},
+  editState:
+    '{"freeText":"test","date":null,"documentType":"Standing Pretrial Order","documentTitle":"Standing Pretrial Order","generatedDocumentTitle":"Standing Pretrial Order","eventCode":"SPTO","scenario":"Type B","docketEntryId":"c7ea55fe-1716-47bb-b2c5-8112fea11d14","docketNumber":"102-67"}',
+  entityName: 'DocketEntry',
+  eventCode: 'SPTO',
+  filedByRole: 'docketclerk',
+  filers: [],
+  filingDate: '2023-08-15T16:48:20.679Z',
+  freeText: 'test',
+  index: 6,
+  isDraft: false,
+  isFileAttached: true,
+  isMinuteEntry: false,
+  isOnDocketRecord: true,
+  isPendingService: false,
+  isStricken: false,
+  numberOfPages: 2,
+  pending: false,
+  processingStatus: 'complete',
+  receivedAt: '2023-08-15T04:00:00.000Z',
+  relationship: 'primaryDocument',
+  scenario: 'Type B',
+  servedAt: '2023-08-15T16:48:20.679Z',
+  servedParties: [
+    {
+      email: 'privatePractitioner@example.com',
+      name: 'Test Private Practitioner',
+    },
+    {
+      email: 'irspractitioner@example.com',
+      name: 'Test IRS Practitioner',
+    },
+  ],
+  servedPartiesCode: 'B',
+  stampData: {},
+  userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+};
+
 export const MOCK_DOCUMENTS: RawDocketEntry[] = [
   {
     createdAt: '2018-11-21T20:49:28.192Z',
