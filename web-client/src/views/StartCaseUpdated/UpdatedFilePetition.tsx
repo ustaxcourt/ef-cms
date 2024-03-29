@@ -1,6 +1,7 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { StepIndicator } from '@web-client/views/StepIndicator';
 import { UpdatedFilePetitionStep1 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep1';
+import { UpdatedFilePetitionStep2 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep2';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -17,6 +18,7 @@ export const UpdatedFilePetition = connect(
         <section className="usa-section grid-container">
           <StepIndicator />
           {currentStep === 0 && <UpdatedFilePetitionStep1 />}
+          {currentStep === 1 && <UpdatedFilePetitionStep2 />}
         </section>
       </>
     );
