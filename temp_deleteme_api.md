@@ -4,8 +4,6 @@ Goals
 - Add sourcemaps
 
 :::TO DO:::
-- Create Rollback steps for reverting the deployment
-- Delete webpack related packages
 - disable health checks on exp5
 
 :::Deployment steps:::
