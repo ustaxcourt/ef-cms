@@ -7,6 +7,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep1 = connect(
@@ -14,14 +15,20 @@ export const UpdatedFilePetitionStep1 = connect(
     constants: state.constants,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updatedFilePetitionCompleteStep1Sequence:
+      sequences.updatedFilePetitionCompleteStep1Sequence,
+    validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep1({
     constants,
     form,
+    updatedFilePetitionCompleteStep1Sequence,
     updateFormValueSequence,
+    validationErrors,
   }) {
     return (
       <>
+        <ErrorNotification />
         <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required
         </p>
@@ -40,7 +47,6 @@ export const UpdatedFilePetitionStep1 = connect(
             compliant Petition`}
           </label>
         </div>
-
         <WarningNotificationComponent
           alertWarning={{
             message:
@@ -65,14 +71,11 @@ export const UpdatedFilePetitionStep1 = connect(
         >
           Petition form (T.C. Form 2)
         </Button>
-
         <FormGroup
-          errorText={
-            [
-              // validationErrors.stinFile,
-              // validationErrors.stinFileSize,
-            ]
-          }
+          errorText={[
+            validationErrors.petitionFile,
+            validationErrors.petitionFileSize,
+          ]}
         >
           <label
             className={classNames(
@@ -94,12 +97,12 @@ export const UpdatedFilePetitionStep1 = connect(
             data-testid="petition-file"
             id="petition-file"
             name="petitionFile"
-            // updateFormValueSequence="updateStartCaseFormValueSequence"
+            updateFormValueSequence="updateFormValueSequence"
             // validationSequence="validateStartCaseWizardSequence"
           />
         </FormGroup>
-
         <div className="grid-row grid-gap">
+          {/* #validationErrors.ack */}
           <span className="margin-bottom-1 font-sans-pro">
             <b>Please read and acknowledge before submitting your filing</b>
           </span>
@@ -143,15 +146,14 @@ export const UpdatedFilePetitionStep1 = connect(
             </div>
           </div>
         </div>
-
         <Button
+          disabled={!form.redactionAcknowledgement}
           onClick={() => {
-            console.log('Verify and go to next step');
+            updatedFilePetitionCompleteStep1Sequence();
           }}
         >
           Next
         </Button>
-
         <Button
           link
           onClick={() =>
