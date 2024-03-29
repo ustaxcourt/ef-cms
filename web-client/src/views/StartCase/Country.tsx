@@ -30,12 +30,14 @@ export const Country = connect(
           <legend className="usa-label">Country</legend>
           <div className="usa-radio usa-radio__inline">
             <input
-              checked={data[type].countryType === 'domestic'}
-              className={`${type}-country-type usa-r usa-radio__input`}
+              checked={
+                data[type].countryType === constants.COUNTRY_TYPES.DOMESTIC
+              }
+              className="usa-radio__input"
               id={`${type}.countryType`}
               name={`${type}.countryType`}
               type="radio"
-              value="domestic"
+              value={constants.COUNTRY_TYPES.DOMESTIC}
               onChange={e => {
                 const method = onChangeCountryType || updateFormValueSequence;
                 method({
@@ -57,12 +59,14 @@ export const Country = connect(
               United States
             </label>
             <input
-              checked={data[type].countryType === 'international'}
-              className={`${type}-country-type usa-r usa-radio__input`}
+              checked={
+                data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL
+              }
+              className="usa-radio__input"
               id={`${type}.countryType`}
               name={`${type}.countryType`}
               type="radio"
-              value="international"
+              value={constants.COUNTRY_TYPES.INTERNATIONAL}
               onChange={e => {
                 const method = onChangeCountryType || updateFormValueSequence;
                 method({

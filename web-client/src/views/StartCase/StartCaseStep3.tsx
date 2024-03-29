@@ -22,6 +22,7 @@ export const StartCaseStep3 = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
@@ -36,6 +37,7 @@ export const StartCaseStep3 = connect(
     PARTY_TYPES,
     showModal,
     startCaseHelper,
+    updateFormValueSequence,
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
     validationErrors,
@@ -349,8 +351,8 @@ export const StartCaseStep3 = connect(
           showPrimaryContact={startCaseHelper.showPrimaryContact}
           showSecondaryContact={startCaseHelper.showSecondaryContact}
           useSameAsPrimary={true}
-          onBlur="validateStartCaseWizardSequence"
-          onChange="updateFormValueSequence"
+          onBlur={() => validateStartCaseWizardSequence}
+          onChange={() => updateFormValueSequence}
         />
 
         {startCaseHelper.showCorporateDisclosure && (

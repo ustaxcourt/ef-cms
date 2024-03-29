@@ -10,13 +10,18 @@ export const PartyInformation = connect(
     caseDetailEditHelper: state.caseDetailEditHelper,
     form: state.form,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
+    updateFormValueAndCaseCaptionSequence:
+      sequences.updateFormValueAndCaseCaptionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   function PartyInformation({
     caseDetailEditHelper,
     form,
     updateCasePartyTypeSequence,
+    updateFormValueAndCaseCaptionSequence,
     updateFormValueSequence,
+    validateCaseDetailSequence,
   }) {
     return (
       <div className="blue-container document-detail-one-third">
@@ -87,8 +92,8 @@ export const PartyInformation = connect(
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
               useSameAsPrimary={true}
-              onBlur="validateCaseDetailSequence"
-              onChange="updateFormValueAndCaseCaptionSequence"
+              onBlur={() => validateCaseDetailSequence}
+              onChange={() => updateFormValueAndCaseCaptionSequence}
             />
           </div>
         )}

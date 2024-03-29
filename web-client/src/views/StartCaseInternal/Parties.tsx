@@ -9,6 +9,8 @@ export const Parties = connect(
   {
     form: state.form,
     startCaseInternalHelper: state.startCaseInternalHelper,
+    updateFormValueAndCaseCaptionSequence:
+      sequences.updateFormValueAndCaseCaptionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateStartCaseInternalPartyTypeSequence:
       sequences.updateStartCaseInternalPartyTypeSequence,
@@ -19,6 +21,7 @@ export const Parties = connect(
   function Parties({
     form,
     startCaseInternalHelper,
+    updateFormValueAndCaseCaptionSequence,
     updateFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
     validatePetitionFromPaperSequence,
@@ -92,8 +95,8 @@ export const Parties = connect(
                 startCaseInternalHelper.showSecondaryContact
               }
               useSameAsPrimary={true}
-              onBlur="validatePetitionFromPaperSequence"
-              onChange="updateFormValueAndCaseCaptionSequence"
+              onBlur={() => validatePetitionFromPaperSequence}
+              onChange={() => updateFormValueAndCaseCaptionSequence}
             />
           </div>
         )}
