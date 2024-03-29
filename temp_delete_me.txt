@@ -22,6 +22,13 @@ Questions:
 - What if duplicated accounts are on different cases?
 - Do we want to update custom:userId as apart of this ticket? (Bonus)
 
+Details:
+- 11 @ustacourt.gov accounts
+- 153 no cases created from any of the users; disable all but one
+- 28 need to consolidate to one account
+- 481 have an account with 0 cases that needs to be disabled
+- 24 already have an account with 0 cases that has been disabled (nothing to do?)
+
 Random: 
 - Auth0 treats email as case insensitive by lowerCasing for you.
 

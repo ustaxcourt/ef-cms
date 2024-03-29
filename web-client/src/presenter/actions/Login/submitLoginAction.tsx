@@ -15,7 +15,10 @@ export const submitLoginAction = async ({
   try {
     const { accessToken, idToken, refreshToken } = await applicationContext
       .getUseCases()
-      .loginInteractor(applicationContext, { email, password });
+      .loginInteractor(applicationContext, {
+        email: email.toLowerCase(), 
+        password,
+      });
 
     return path.success({ accessToken, idToken, refreshToken });
   } catch (err: any) {
