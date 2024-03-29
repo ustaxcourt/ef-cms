@@ -60,10 +60,10 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { type RawUser, User } from '../User';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
-import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
@@ -137,7 +137,7 @@ export class Case extends JoiValidationEntity {
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: any[];
-  public correspondence?: any[];
+  public correspondence: any[];
   public archivedCorrespondences?: any[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
@@ -161,6 +161,7 @@ export class Case extends JoiValidationEntity {
     }
 
     this.petitioners = [];
+    this.correspondence = [];
     const currentUser = applicationContext.getCurrentUser();
 
     if (!filtered || User.isInternalUser(currentUser.role)) {
@@ -1120,7 +1121,6 @@ export class Case extends JoiValidationEntity {
           eventCode: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.eventCode,
           filingDate: createISODateString(),
           isFileAttached: false,
-          isMinuteEntry: true,
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
@@ -1171,7 +1171,6 @@ export class Case extends JoiValidationEntity {
           eventCode: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.eventCode,
           filingDate: createISODateString(),
           isFileAttached: false,
-          isMinuteEntry: true,
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
@@ -1916,8 +1915,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   fileCorrespondence(correspondenceEntity) {
-    const correspondence = this.correspondence ? this.correspondence : [];
-    this.correspondence = [...correspondence, correspondenceEntity];
+    this.correspondence = [...this.correspondence, correspondenceEntity];
 
     return this;
   }
@@ -2009,6 +2007,22 @@ export class Case extends JoiValidationEntity {
       !this.blocked &&
       (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
     );
+  }
+
+  userHasAccessToCase(user: RawUser): boolean {
+    return Case.userHasAccessToCase(this, user);
+  }
+
+  static userHasAccessToCase(
+    rawCase: RawCase | RawPublicCase,
+    user: RawUser,
+  ): boolean {
+    return rawCase.leadDocketNumber
+      ? isUserPartOfGroup({
+          consolidatedCases: rawCase.consolidatedCases,
+          userId: user.userId,
+        })
+      : isAssociatedUser({ caseRaw: rawCase, user });
   }
 }
 
@@ -2197,7 +2211,10 @@ export const isAssociatedUser = function ({ caseRaw, user }) {
  * @param {String} userId the user's id
  * @returns {boolean} true if the user is a party of the case
  */
-export const isUserPartOfGroup = function ({ consolidatedCases, userId }) {
+export const isUserPartOfGroup = function ({
+  consolidatedCases,
+  userId,
+}): boolean {
   return consolidatedCases.some(aCase =>
     userIsDirectlyAssociated({ aCase, userId }),
   );
@@ -2209,7 +2226,7 @@ export const isUserPartOfGroup = function ({ consolidatedCases, userId }) {
  * @param {String} options.userId the user's id
  * @returns {boolean} true if the user is a party of the case
  */
-export const userIsDirectlyAssociated = function ({ aCase, userId }) {
+export const userIsDirectlyAssociated = function ({ aCase, userId }): boolean {
   const userIsPartyToCase = [
     ...(aCase.petitioners || []),
     ...(aCase.privatePractitioners || []),

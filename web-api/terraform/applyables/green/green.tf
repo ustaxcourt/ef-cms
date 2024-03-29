@@ -154,7 +154,6 @@ module "api-west-green" {
   pool_arn                 = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
   stream_arn               = ""
   web_acl_arn              = data.terraform_remote_state.remote.outputs.west_web_acl_arn
-  create_triggers          = 0
   enable_health_checks     = var.enable_health_checks
   health_check_id          = data.terraform_remote_state.remote.outputs.aws_route53_health_check_failover_west_id
 

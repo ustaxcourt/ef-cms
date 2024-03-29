@@ -47,11 +47,6 @@ variable "stream_arn" {
   type = string
 }
 
-variable "create_triggers" {
-  type    = number
-  default = 1
-}
-
 variable "web_acl_arn" {
   type = string
 }

@@ -359,6 +359,11 @@ export const createTestApplicationContext = ({
     put: jest.fn(),
   };
 
+  const mockAsyncSync = appContextProxy({
+    getAsyncSyncCompleter: jest.fn(),
+    removeAsyncSyncCompleter: jest.fn(),
+  });
+
   const mockGetUseCases = appContextProxy({
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
@@ -603,6 +608,7 @@ export const createTestApplicationContext = ({
     },
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
+    getAsynSyncUtil: mockAsyncSync,
     getBaseUrl: () => 'http://localhost',
     getBounceAlertRecipients: jest.fn(),
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),

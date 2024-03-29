@@ -22,7 +22,9 @@ export const CSV_HEADERS = [
 
 export const init = async (csvFile, outputMap) => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
-  let output = [];
+  let output: {
+    name: string;
+  }[] = [];
 
   const token = await getToken();
   const data = readCsvFile(csvFile);
