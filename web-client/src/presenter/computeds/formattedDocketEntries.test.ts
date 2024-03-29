@@ -9,6 +9,7 @@ import {
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  casePetitioner,
   docketClerkUser,
   petitionerUser,
   petitionsClerkUser,
@@ -25,17 +26,19 @@ describe('formattedDocketEntries', () => {
   const getDateISO = () =>
     applicationContext.getUtilities().createISODateString();
 
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
+    applicationContext.getConstants();
+
   const mockDocketEntry = {
     createdAt: getDateISO(),
     docketEntryId: '123',
     documentTitle: 'Petition',
     filedBy: 'Jessica Frase Marine',
     filingDate: '2019-02-28T21:14:39.488Z',
+    index: 5,
     isOnDocketRecord: true,
+    processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
   };
-
-  const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
-    applicationContext.getConstants();
 
   const formattedDocketEntries = withAppContextDecorator(
     formattedDocketEntriesComputed,
@@ -50,6 +53,7 @@ describe('formattedDocketEntries', () => {
   const getBaseState = user => {
     globalUser = user;
     return {
+      documentsSelectedForDownload: [],
       featureFlags: {
         [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
           '2023-05-01',
@@ -325,6 +329,7 @@ describe('formattedDocketEntries', () => {
               docketEntryId: '0f52c863-6702-4243-9ea7-e0af17294067',
               documentType: 'Seriatim Answering Brief',
               eventCode: 'SEAB',
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2050-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               isFileAttached: true,
@@ -340,6 +345,154 @@ describe('formattedDocketEntries', () => {
     );
 
     expect(amat.showLinkToDocument).toEqual(true);
+  });
+
+  it('should mark the document selected when it is selected', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isFileAttached: true,
+            },
+          ],
+        },
+        documentsSelectedForDownload: [
+          { docketEntryId: mockDocketEntry.docketEntryId },
+        ],
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      isDocumentSelected: true,
+    });
+  });
+
+  it('should mark some documents selected when more than one but not all are selected', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isFileAttached: true,
+            },
+            {
+              ...mockDocketEntry,
+              docketEntryId: 'some other docketEntry ID',
+              isFileAttached: true,
+            },
+          ],
+        },
+        documentsSelectedForDownload: [
+          { docketEntryId: mockDocketEntry.docketEntryId },
+        ],
+      },
+    });
+    expect(result).toMatchObject({
+      allDocumentsSelectedForDownload: false,
+      isDownloadLinkEnabled: true,
+      someDocumentsSelectedForDownload: true,
+    });
+  });
+
+  it('should mark all documents selected when all are selected', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isFileAttached: true,
+            },
+            {
+              ...mockDocketEntry,
+              docketEntryId: 'some other docketEntry ID',
+              isFileAttached: true,
+            },
+          ],
+        },
+        documentsSelectedForDownload: [
+          { docketEntryId: mockDocketEntry.docketEntryId },
+          { docketEntryId: 'some other docketEntry ID' },
+        ],
+      },
+    });
+    expect(result).toMatchObject({
+      allDocumentsSelectedForDownload: true,
+      isDownloadLinkEnabled: true,
+      someDocumentsSelectedForDownload: false,
+    });
+  });
+
+  it('should leave the download link disabled if no documents are selected for download', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isFileAttached: true,
+            },
+            {
+              ...mockDocketEntry,
+              docketEntryId: 'some other docketEntry ID',
+              isFileAttached: true,
+            },
+          ],
+        },
+        documentsSelectedForDownload: [],
+      },
+    });
+    expect(result).toMatchObject({
+      allDocumentsSelectedForDownload: false,
+      isDownloadLinkEnabled: false,
+      someDocumentsSelectedForDownload: false,
+    });
+  });
+
+  it('should keep track of which documents on the docket entry are eligible to be downloaded', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              docketEntryId: 'petition, eligible',
+              isFileAttached: true,
+            },
+            {
+              ...mockDocketEntry,
+              docketEntryId: 'minute entry, ineligible',
+              eventCode: 'FEE',
+              isFileAttached: false,
+            },
+            {
+              ...mockDocketEntry,
+              docketEntryId: 'stin, eligible',
+              isFileAttached: true,
+            },
+          ],
+        },
+        documentsSelectedForDownload: [],
+      },
+    });
+    expect(result).toMatchObject({
+      allEligibleDocumentsForDownload: [
+        { docketEntryId: 'petition, eligible' },
+        { docketEntryId: 'stin, eligible' },
+      ],
+    });
   });
 
   describe('sorts docket records', () => {
@@ -502,10 +655,13 @@ describe('formattedDocketEntries', () => {
               {
                 ...docketEntries[0],
                 isLegacyServed: true,
-                isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
+                servedAt: undefined,
               },
+            ],
+            petitioners: [
+              { ...casePetitioner, contactId: petitionerUser.userId },
             ],
           },
           screenMetadata: {
@@ -530,7 +686,6 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...docketEntries[0],
-                isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
               },
@@ -626,7 +781,6 @@ describe('formattedDocketEntries', () => {
             eventCode: 'PSDE',
             index: 3,
             isFileAttached: true,
-            isMinuteEntry: false,
             isOnDocketRecord: true,
             isStricken: false,
             pending: true,

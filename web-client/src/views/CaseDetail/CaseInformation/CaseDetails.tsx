@@ -52,6 +52,7 @@ export const CaseDetails = connect(
               <Button
                 link
                 className="red-warning"
+                data-testid="seal-case-button"
                 icon="lock"
                 onClick={() => {
                   openCleanModalSequence({
@@ -69,6 +70,7 @@ export const CaseDetails = connect(
               <Button
                 link
                 className="red-warning"
+                data-testid="unseal-case-button"
                 icon="unlock"
                 onClick={() => {
                   openCleanModalSequence({

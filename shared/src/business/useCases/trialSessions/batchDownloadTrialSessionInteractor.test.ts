@@ -27,7 +27,6 @@ describe('batchDownloadTrialSessionInteractor', () => {
         index: 4,
         isDraft: false,
         isFileAttached: true,
-        isMinuteEntry: false,
         isOnDocketRecord: true,
         userId: 'abc-123',
       },
@@ -41,7 +40,6 @@ describe('batchDownloadTrialSessionInteractor', () => {
         index: 5,
         isDraft: false,
         isFileAttached: false,
-        isMinuteEntry: false,
         isOnDocketRecord: true,
         userId: 'abc-123',
       },
@@ -189,6 +187,32 @@ describe('batchDownloadTrialSessionInteractor', () => {
 
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
       'Error when batch downloading trial session with id 123 - unknown error',
+      expect.anything(),
+    );
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      message: {
+        action: 'batch_download_error',
+        error: expect.anything(),
+      },
+      userId: 'abc-123',
+    });
+  });
+
+  it('throws an NotFound error if a case does not exist', async () => {
+    const mockTrialSessionId = '100-10';
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue(false);
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: mockTrialSessionId,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      `Error when batch downloading trial session with id ${mockTrialSessionId} - Trial session ${mockTrialSessionId} was not found.`,
       expect.anything(),
     );
     expect(
