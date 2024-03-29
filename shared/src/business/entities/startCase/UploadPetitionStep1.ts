@@ -23,7 +23,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
     acknowledgeChecked: joi.boolean().when('petitionFileSource', {
       is: JoiValidationConstants.STRING.valid('upload'),
       otherwise: joi.optional(),
-      then: joi.boolean().required().truthy(),
+      then: joi.boolean().required().valid(true),
     }),
     petitionFile: joi.object().when('petitionFileSource', {
       is: JoiValidationConstants.STRING.valid('upload'),
@@ -55,4 +55,6 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
   }
 }
 
-export type RawUploadPetitionStep1 = ExcludeMethods<UploadPetitionStep1>;
+export type RawUploadPetitionStep1 = ExcludeMethods<
+  Omit<UploadPetitionStep1, 'entityName'>
+>;
