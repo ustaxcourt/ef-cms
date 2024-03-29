@@ -92,6 +92,7 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -189,6 +190,7 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,

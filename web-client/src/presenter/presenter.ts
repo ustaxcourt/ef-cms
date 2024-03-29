@@ -203,6 +203,7 @@ import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDeta
 import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
+import { gotoUpdatedPetitionFlowSequence } from '@web-client/presenter/sequences/gotoUpdatedPetitionFlowSequence';
 import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
@@ -896,6 +897,8 @@ export const presenterSequences = {
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
   gotoTrialSessionsSequence: gotoTrialSessionsSequence as unknown as Function,
+  gotoUpdatedPetitionFlowSequence:
+    gotoUpdatedPetitionFlowSequence as unknown as Function,
   gotoUploadCorrespondenceDocumentSequence:
     gotoUploadCorrespondenceDocumentSequence as unknown as Function,
   gotoUploadCourtIssuedDocumentSequence:
