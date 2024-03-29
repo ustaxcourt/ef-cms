@@ -8,9 +8,6 @@ import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { caseAdvancedSearch } from './persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearch as casePublicSearchPersistence } from './persistence/elasticsearch/casePublicSearch';
-import { confirmAuthCode } from './persistence/cognito/confirmAuthCode';
-import { confirmAuthCodeCognitoLocal } from '@web-api/persistence/cognito/confirmAuthCodeCognitoLocal';
-import { confirmAuthCodeLocal } from './persistence/cognito/confirmAuthCodeLocal';
 import { createCase } from './persistence/dynamo/cases/createCase';
 import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
@@ -33,6 +30,7 @@ import { decrementJobCounter } from './persistence/dynamo/trialSessions/decremen
 import { deleteCaseDeadline } from './persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
+import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import {
   deleteKeyCount,
@@ -52,6 +50,10 @@ import { deleteWorkItem } from './persistence/dynamo/workitems/deleteWorkItem';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
+import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
+import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/getAccountConfirmationCode';
+import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/elasticsearch/docketEntry/getAllPendingMotionDocketEntriesForJudge';
+import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
@@ -59,28 +61,30 @@ import { getCaseByDocketNumber } from './persistence/dynamo/cases/getCaseByDocke
 import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange';
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
+import { getCaseMetadataByDocketNumber } from './persistence/dynamo/cases/getCaseMetadataByDocketNumber';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
-import {
-  getCasesAssociatedWithUser,
-  getDocketNumbersByUser,
-} from './persistence/dynamo/cases/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
 import { getCasesByFilters } from './persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
-import { getCasesForUser } from './persistence/dynamo/users/getCasesForUser';
+import {
+  getCasesForUser,
+  getDocketNumbersByUser,
+} from './persistence/dynamo/users/getCasesForUser';
 import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getCognitoUserIdByEmail } from './persistence/cognito/getCognitoUserIdByEmail';
 import { getCompletedSectionInboxMessages } from './persistence/elasticsearch/messages/getCompletedSectionInboxMessages';
 import { getCompletedUserInboxMessages } from './persistence/elasticsearch/messages/getCompletedUserInboxMessages';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
+import { getConsolidatedCasesCount } from '@web-api/persistence/dynamo/cases/getConsolidatedCasesCount';
 import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidatedCases';
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocketEntryOnCase } from './persistence/dynamo/cases/getDocketEntryOnCase';
+import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
@@ -137,12 +141,13 @@ import { markMessageThreadRepliedTo } from './persistence/dynamo/messages/markMe
 import { persistUser } from './persistence/dynamo/users/persistUser';
 import { putWorkItemInOutbox } from './persistence/dynamo/workitems/putWorkItemInOutbox';
 import { putWorkItemInUsersOutbox } from './persistence/dynamo/workitems/putWorkItemInUsersOutbox';
-import { refreshToken } from './persistence/cognito/refreshToken';
+import { refreshConfirmationCodeExpiration } from '@web-api/persistence/dynamo/users/refreshConfirmationCodeExpiration';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
 import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/removePractitionerOnCase';
+import { renewIdToken } from './persistence/cognito/renewIdToken';
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
@@ -161,6 +166,7 @@ import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/u
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
+import { updateDocketEntryWorksheet } from '@web-api/persistence/dynamo/pendingMotion/updateDocketEntryWorksheet';
 import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
@@ -172,7 +178,6 @@ import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTri
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { updateUser } from './persistence/dynamo/users/updateUser';
 import { updateUserCaseNote } from './persistence/dynamo/userCaseNotes/updateUserCaseNote';
-import { updateUserEmail } from './persistence/dynamo/users/updateUserEmail';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
@@ -207,7 +212,7 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
     };
   }
 
-  Object.keys(persistenceGatewayMethods).forEach(key => {
+  Object.keys(persistenceGatewayMethods as object).forEach(key => {
     persistenceGatewayMethods[key] = decorate(persistenceGatewayMethods[key]);
   });
   return persistenceGatewayMethods;
@@ -259,6 +264,7 @@ const gatewayMethods = {
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
+    updateDocketEntryWorksheet,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updateMessage,
@@ -268,24 +274,19 @@ const gatewayMethods = {
     updateTrialSessionWorkingCopy,
     updateUser,
     updateUserCaseNote,
-    updateUserEmail,
     updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
-  confirmAuthCode: process.env.IS_LOCAL
-    ? process.env.USE_COGNITO_LOCAL
-      ? confirmAuthCodeCognitoLocal
-      : confirmAuthCodeLocal
-    : confirmAuthCode,
   createChangeOfAddressJob,
   createLock,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
+  deleteDocketEntryWorksheetRecord,
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
@@ -297,6 +298,10 @@ const gatewayMethods = {
   deleteUserFromCase,
   deleteWorkItem,
   fetchEventCodesCountForJudges,
+  generateAccountConfirmationCode,
+  getAccountConfirmationCode,
+  getAllPendingMotionDocketEntriesForJudge,
+  getAllUsersByRole,
   getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
@@ -304,9 +309,9 @@ const gatewayMethods = {
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
+  getCaseMetadataByDocketNumber,
   getCaseMetadataWithCounsel,
   getCaseWorksheetsByDocketNumber,
-  getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByFilters,
   getCasesByLeadDocketNumber,
@@ -315,14 +320,16 @@ const gatewayMethods = {
   getCasesForUser,
   getCasesMetadataByLeadDocketNumber,
   getClientId,
-  getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getConfigurationItemValue,
+  getConsolidatedCasesCount,
   getCountOfConsolidatedCases,
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
+  getDocketEntryOnCase,
+  getDocketEntryWorksheetsByDocketEntryIds,
   getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
   getDocument,
@@ -377,14 +384,11 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
-  refreshToken: process.env.IS_LOCAL
-    ? (applicationContext, { refreshToken: aRefreshToken }) => ({
-        token: aRefreshToken,
-      })
-    : refreshToken,
+  refreshConfirmationCodeExpiration,
   removeIrsPractitionerOnCase,
   removeLock,
   removePrivatePractitionerOnCase,
+  renewIdToken,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   verifyCaseForUser,

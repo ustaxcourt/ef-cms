@@ -1,11 +1,11 @@
 import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
-import { petitionerCreatesEletronicCase } from '../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../support/setup/petitionsclerk-serves-petition';
+import { petitionerCreatesElectronicCaseWithDeceasedSpouse } from '../../helpers/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 
 describe('Judge`s chambers stamps an order', () => {
   it('should create an order, serve it, and apply a stamp to it', () => {
     loginAsPetitioner();
-    petitionerCreatesEletronicCase().then(docketNumber => {
+    petitionerCreatesElectronicCaseWithDeceasedSpouse().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       cy.login('docketclerk1', `case-detail/${docketNumber}`);
@@ -17,7 +17,7 @@ describe('Judge`s chambers stamps an order', () => {
       ).type('Motion for Continuance');
       cy.get('#react-select-2-option-0').click({ force: true });
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
-      cy.get('[data-testid="button-upload-pdf"]').click();
+      cy.get('[data-testid="upload-pdf-button"]').click();
       cy.get('input#primaryDocumentFile-file').attachFile(
         '../fixtures/w3-dummy.pdf',
       );

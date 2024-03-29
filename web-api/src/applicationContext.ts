@@ -1,17 +1,12 @@
 /* eslint-disable max-lines */
-import AWS from 'aws-sdk';
-
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import axios from 'axios';
-import pug from 'pug';
-import sass from 'sass';
-import util from 'util';
-
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
+  CLERK_OF_THE_COURT_CONFIGURATION,
   CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
@@ -20,12 +15,10 @@ import {
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-
-// eslint-disable-next-line import/no-unresolved
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
@@ -38,130 +31,76 @@ import { User } from '../../shared/src/business/entities/User';
 import { UserCase } from '../../shared/src/business/entities/UserCase';
 import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
-import {
-  clerkOfCourtNameForSigning,
-  getEnvironment,
-  getUniqueId,
-} from '../../shared/src/sharedAppContext';
-import { cognitoLocalWrapper } from './cognitoLocalWrapper';
+import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
-import { fallbackHandler } from './fallbackHandler';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
+import {
+  getCognito,
+  getLocalCognito,
+} from '@web-api/persistence/cognito/getCognito';
+import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
+import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
+import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
+import { getUserGateway } from '@web-api/getUserGateway';
 import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
-import { scan } from './persistence/dynamodbClientService';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
+import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
 import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
 import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
-import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
-import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
-import { v4 as uuidv4 } from 'uuid';
-import type { ClientApplicationContext } from '../../web-client/src/applicationContext';
-const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
+import { worker } from '@web-api/gateways/worker/worker';
+import { workerLocal } from '@web-api/gateways/worker/workerLocal';
+import AWS, { S3, SES, SQS } from 'aws-sdk';
+import axios from 'axios';
+import pug from 'pug';
+import sass from 'sass';
+import util from 'util';
+
 const execPromise = util.promisify(exec);
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
     ? `app.${process.env.EFCMS_DOMAIN}`
     : 'localhost:1234',
+  cognitoClientId: process.env.COGNITO_CLIENT_ID || 'bvjrggnd3co403c0aahscinne',
   currentColor: process.env.CURRENT_COLOR || 'green',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
-  dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
-  masterDynamoDbEndpoint:
-    process.env.MASTER_DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  emailFromAddress:
+    process.env.EMAIL_SOURCE ||
+    `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`,
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+  userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
+  workerQueueUrl:
+    `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
+    '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-const getDocumentClient = ({ useMasterRegion = false } = {}) => {
-  const type = useMasterRegion ? 'master' : 'region';
-  const mainRegion = environment.region;
-  const fallbackRegion =
-    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
-  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('local')
-    ? environment.dynamoDbEndpoint.includes('localhost')
-      ? 'http://localhost:8000'
-      : environment.dynamoDbEndpoint
-    : `dynamodb.${mainRegion}.amazonaws.com`;
-  const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
-    'localhost',
-  )
-    ? 'http://localhost:8000'
-    : `dynamodb.${fallbackRegion}.amazonaws.com`;
-  const { masterDynamoDbEndpoint, masterRegion } = environment;
-
-  const config = {
-    fallbackRegion,
-    fallbackRegionEndpoint,
-    mainRegion,
-    mainRegionEndpoint,
-    masterDynamoDbEndpoint,
-    masterRegion,
-    useMasterRegion,
-  };
-
-  if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = {
-      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
-      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
-      delete: fallbackHandler({ key: 'delete', ...config }),
-      get: fallbackHandler({ key: 'get', ...config }),
-      put: fallbackHandler({ key: 'put', ...config }),
-      query: fallbackHandler({ key: 'query', ...config }),
-      scan: fallbackHandler({ key: 'scan', ...config }),
-      update: fallbackHandler({ key: 'update', ...config }),
-    };
-  }
-  return dynamoClientCache[type];
-};
-
-const getDynamoClient = ({ useMasterRegion = false } = {}) => {
-  // we don't need fallback logic here because the only method we use is describeTable
-  // which is used for actually checking if the table in the same region exists.
-  const type = useMasterRegion ? 'master' : 'region';
-  if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDB({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      httpOptions: {
-        connectTimeout: 3000,
-        timeout: 5000,
-      },
-      maxRetries: 3,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-    });
-  }
-  return dynamoCache[type];
-};
-
-let dynamoClientCache = {};
-let dynamoCache = {};
-let s3Cache;
+let s3Cache: AWS.S3 | undefined;
 let sesCache;
 let sqsCache;
 let searchClientCache: Client;
@@ -197,6 +136,8 @@ export const createApplicationContext = (
   const getCurrentUser = (): {
     role: string;
     userId: string;
+    email: string;
+    name: string;
   } => {
     return user;
   };
@@ -224,83 +165,11 @@ export const createApplicationContext = (
       process.env.NODE_ENV === 'production'
         ? getChromiumBrowserAWS
         : getChromiumBrowser,
-    getClerkOfCourtNameForSigning: () => {
-      return clerkOfCourtNameForSigning;
-    },
-    getCognito: () => {
+    getCognito: (): CognitoIdentityProvider => {
       if (environment.stage === 'local') {
-        if (process.env.USE_COGNITO_LOCAL === 'true') {
-          return cognitoLocalWrapper(
-            new CognitoIdentityServiceProvider({
-              endpoint: 'http://localhost:9229/',
-              httpOptions: {
-                connectTimeout: 3000,
-                timeout: 5000,
-              },
-              maxRetries: 3,
-              region: 'local',
-            }),
-          );
-        } else {
-          return {
-            adminCreateUser: () => ({
-              promise: () => ({
-                User: {
-                  Username: uuidv4(),
-                },
-              }),
-            }),
-            adminDisableUser: () => ({
-              promise: () => {},
-            }),
-            adminGetUser: ({ Username }) => ({
-              promise: async () => {
-                // TODO: this scan might become REALLY slow while doing a full integration
-                // test run.
-                const items = await scan({
-                  applicationContext: {
-                    environment,
-                    getDocumentClient,
-                  },
-                });
-                const users = items.filter(
-                  ({ pk, sk }) =>
-                    pk.startsWith('user|') && sk.startsWith('user|'),
-                );
-                const foundUser = users.find(({ email }) => email === Username);
-                if (foundUser) {
-                  return {
-                    UserAttributes: [],
-                    Username: foundUser.userId,
-                  };
-                } else {
-                  const error = new Error();
-                  error.code = 'UserNotFoundException';
-                  throw error;
-                }
-              },
-            }),
-            adminUpdateUserAttributes: () => ({
-              promise: () => {},
-            }),
-            listUsers: () => ({
-              promise: () => {
-                throw new Error(
-                  'Please use cognito locally by running npm run start:api:cognito-local',
-                );
-              },
-            }),
-          };
-        }
+        return getLocalCognito();
       } else {
-        return new CognitoIdentityServiceProvider({
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
-          region: 'us-east-1',
-        });
+        return getCognito();
       }
     },
     getConstants: () => ({
@@ -312,12 +181,13 @@ export const createApplicationContext = (
       CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
         ? parseInt(process.env.CHANGE_OF_ADDRESS_CONCURRENCY)
         : undefined,
+      CLERK_OF_THE_COURT_CONFIGURATION,
       CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
-        status => !CLOSED_CASE_STATUSES.includes(status),
+        status => !CLOSED_CASE_STATUSES.includes(status as any),
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
       PENDING_ITEMS_PAGE_SIZE: 100,
@@ -363,6 +233,13 @@ export const createApplicationContext = (
               },
             };
           },
+          sendEmail: () => {
+            return {
+              promise: (): SES.SendEmailResponse => {
+                return { MessageId: '' };
+              },
+            };
+          },
         };
       } else {
         if (!sesCache) {
@@ -393,39 +270,23 @@ export const createApplicationContext = (
           });
         }
       },
+      sendEmailToUser,
       sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
         if (environment.stage === 'local') {
-          applicationContext
+          return applicationContext
             .getUseCases()
             .generateNoticesForCaseTrialSessionCalendarInteractor(
               applicationContext,
               payload,
             );
         } else {
-          sendSetTrialSessionCalendarEvent({
+          return sendSetTrialSessionCalendarEvent({
             applicationContext,
             payload,
           });
         }
       },
-      sendUpdatePetitionerCasesMessage: ({
-        applicationContext: appContext,
-        user: userToSendTo,
-      }) => {
-        if (environment.stage === 'local') {
-          updatePetitionerCasesInteractor({
-            applicationContext: appContext,
-            user: userToSendTo,
-          });
-        } else {
-          sendUpdatePetitionerCasesMessage({
-            applicationContext: appContext,
-            user: userToSendTo,
-          });
-        }
-      },
     }),
-
     getMessagingClient: () => {
       if (!sqsCache) {
         sqsCache = new SQS({
@@ -515,7 +376,7 @@ export const createApplicationContext = (
                     if (err) {
                       reject(err);
                     } else {
-                      resolve(credentials);
+                      resolve(credentials as any);
                     }
                   });
                 }),
@@ -549,7 +410,19 @@ export const createApplicationContext = (
     getUniqueId,
     getUseCaseHelpers,
     getUseCases,
+    getUserGateway,
     getUtilities,
+    getWorkerGateway: () => ({
+      queueWork: (
+        applicationContext: ServerApplicationContext,
+        { message }: { message: WorkerMessage },
+      ) => {
+        if (applicationContext.environment.stage === 'local') {
+          return workerLocal(applicationContext, { message });
+        }
+        return worker(applicationContext, { message });
+      },
+    }),
     isAuthorized,
     isCurrentColorActive,
     logger: {
@@ -561,13 +434,10 @@ export const createApplicationContext = (
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);
     },
+    setTimeout: (callback, timeout) => setTimeout(callback, timeout),
   };
 };
 
-export type IServerApplicationContext = ReturnType<
+export type ServerApplicationContext = ReturnType<
   typeof createApplicationContext
 >;
-
-export type IMergeContext =
-  | IServerApplicationContext
-  | ClientApplicationContext;

@@ -1,3 +1,8 @@
+import {
+  AdminCreateUserCommandInput,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { put } from '../../dynamodbClientService';
 
 export const updateUserRecords = async ({
@@ -46,39 +51,45 @@ export const createNewPractitionerUser = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  user: TPractitioner;
+  user: RawPractitioner;
 }) => {
   const { userId } = user;
 
-  await applicationContext
-    .getCognito()
-    .adminCreateUser({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: user.pendingEmail,
-        },
-        {
-          Name: 'custom:role',
-          Value: user.role,
-        },
-        {
-          Name: 'name',
-          Value: user.name,
-        },
-        {
-          Name: 'custom:userId',
-          Value: user.userId,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: user.pendingEmail,
-    })
-    .promise();
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
+  const params: AdminCreateUserCommandInput = {
+    DesiredDeliveryMediums: ['EMAIL'],
+    UserAttributes: [
+      {
+        Name: 'email_verified',
+        Value: 'True',
+      },
+      {
+        Name: 'email',
+        Value: user.pendingEmail,
+      },
+      {
+        Name: 'custom:role',
+        Value: user.role,
+      },
+      {
+        Name: 'name',
+        Value: user.name,
+      },
+      {
+        Name: 'custom:userId',
+        Value: user.userId,
+      },
+    ],
+    UserPoolId: process.env.USER_POOL_ID,
+    Username: user.pendingEmail,
+  };
+
+  if (process.env.STAGE !== 'prod') {
+    params.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+  }
+
+  await cognito.adminCreateUser(params);
 
   const updatedUser = await updateUserRecords({
     applicationContext,

@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardH } from './ExternalDocumentNonStandardH';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardH', () => {
@@ -10,17 +9,11 @@ describe('ExternalDocumentNonStandardH', () => {
       });
 
       expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
         secondaryDocument: {
-          category:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
-          documentType:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
-              .documentType[1],
+          category: 'Select a Category.',
+          documentType: 'Select a document type',
         },
       });
     });
@@ -55,14 +48,9 @@ describe('ExternalDocumentNonStandardH', () => {
       expect(() => externalDocumentH.validate()).toThrow();
       expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
-          category:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
-          documentType:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
-              .documentType[1],
-          previousDocument:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
-              .previousDocument,
+          category: 'Select a Category.',
+          documentType: 'Select a document type',
+          previousDocument: 'Select a document',
         },
       });
     });
@@ -82,7 +70,7 @@ describe('ExternalDocumentNonStandardH', () => {
 
       expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
         documentTitle:
-          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.documentTitle,
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });

@@ -7,7 +7,6 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from './EntityConstants';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
@@ -201,6 +200,10 @@ export class User extends JoiValidationEntity {
 
   getValidationRules() {
     return User.VALIDATION_RULES;
+  }
+
+  public setIsUpdatingInformation(value: boolean) {
+    this.isUpdatingInformation = value;
   }
 }
 

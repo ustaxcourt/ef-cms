@@ -22,8 +22,6 @@ import {
 } from '@shared/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  getCognitoLoginUrl,
-  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
@@ -77,6 +75,7 @@ import {
 import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import {
   getChambersSections,
   getChambersSectionsLabels,
@@ -90,11 +89,13 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '@shared/business/utilities/getWorkQueueFilters';
+import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from '@shared/business/test/getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
+import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/business/utilities/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
@@ -228,6 +229,7 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    downloadCsv: jest.fn(),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
@@ -250,6 +252,9 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(DateHandler.getBusinessDateInFuture),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getCaseDocumentsIdsFilteredByDocumentType: jest
+      .fn()
+      .mockImplementation(getCaseDocumentsIdsFilteredByDocumentType),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
@@ -258,6 +263,9 @@ const createTestApplicationContext = () => {
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
+    getDocketEntriesByFilter: jest
+      .fn()
+      .mockImplementation(getDocketEntriesByFilter),
     getDocumentTitleWithAdditionalInfo: jest
       .fn()
       .mockImplementation(getDocumentTitleWithAdditionalInfo),
@@ -290,6 +298,9 @@ const createTestApplicationContext = () => {
     getSealedDocketEntryTooltip: jest
       .fn()
       .mockImplementation(getSealedDocketEntryTooltip),
+    getSelectedConsolidatedCasesToMultiDocketOn: jest
+      .fn()
+      .mockImplementation(getSelectedConsolidatedCasesToMultiDocketOn),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     getSortableDocketNumber: jest
       .fn()
@@ -558,7 +569,6 @@ const createTestApplicationContext = () => {
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
-    getClerkOfCourtNameForSigning: jest.fn(),
     getCognito: appContextProxy({
       adminCreateUser: jest.fn().mockReturnValue({
         promise: jest.fn(),
@@ -567,11 +577,6 @@ const createTestApplicationContext = () => {
         promise: jest.fn(),
       }),
     }),
-    getCognitoClientId: jest.fn(),
-    getCognitoLoginUrl,
-    getCognitoRedirectUrl: jest.fn(),
-    getCognitoRequestPasswordResetUrl,
-    getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),
@@ -614,7 +619,6 @@ const createTestApplicationContext = () => {
       sendCalendarSessionEvent: jest.fn(),
       sendEmailEventToQueue: jest.fn(),
       sendSetTrialSessionCalendarEvent: jest.fn(),
-      sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
@@ -626,6 +630,7 @@ const createTestApplicationContext = () => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
+    getPrivateUrl: jest.fn(),
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
     getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),

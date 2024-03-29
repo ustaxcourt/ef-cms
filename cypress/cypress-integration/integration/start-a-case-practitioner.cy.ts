@@ -7,7 +7,7 @@ import {
 
 describe('Start a case as a practitioner', () => {
   it('go to the practitioner dashboard, file a case, and expect case count to incrememt by one', () => {
-    navigateToDashboard('privatepractitioner');
+    navigateToDashboard('privatePractitioner');
 
     getCaseList().then(cases => {
       getStartCaseButton().click();

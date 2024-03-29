@@ -1,4 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -10,7 +11,7 @@ export const serveThirtyDayNoticeModalHelper = (
 
   const formattedStartDate = applicationContext
     .getUtilities()
-    .formatDateString(startDate, 'MM/dd/yy');
+    .formatDateString(startDate, FORMATS.MMDDYY);
 
   return {
     formattedStartDate,

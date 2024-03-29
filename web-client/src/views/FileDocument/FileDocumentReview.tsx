@@ -356,6 +356,7 @@ export const FileDocumentReview = connect(
                 />
                 <label
                   className="usa-checkbox__label"
+                  data-testid="redaction-acknowledgement-label"
                   htmlFor="redaction-acknowledgement"
                   id="redaction-acknowledgement-label"
                 >
@@ -376,28 +377,31 @@ export const FileDocumentReview = connect(
             </div>
           </div>
         </div>
-        <Button
-          className="margin-bottom-1"
-          disabled={!form.redactionAcknowledgement}
-          id="submit-document"
-          type="submit"
-          onClick={() => {
-            submitExternalDocumentSequence();
-          }}
-        >
-          Submit Your Filing
-        </Button>
-        <Button secondary onClick={() => navigateBackSequence()}>
-          Back
-        </Button>
-        <Button
-          link
-          onClick={() => {
-            formCancelToggleCancelSequence();
-          }}
-        >
-          Cancel
-        </Button>
+        <div className="margin-top-2">
+          <Button
+            className="margin-bottom-1"
+            data-testid="file-document-review-submit-document"
+            disabled={!form.redactionAcknowledgement}
+            id="submit-document"
+            type="submit"
+            onClick={() => {
+              submitExternalDocumentSequence();
+            }}
+          >
+            Submit Your Filing
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
+            Back
+          </Button>
+          <Button
+            link
+            onClick={() => {
+              formCancelToggleCancelSequence();
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (

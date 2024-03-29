@@ -6,7 +6,7 @@ const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 export const petitionsClerkViewsSectionDocumentQC = (
   cerebralTest,
-  storeCount,
+  storeCount?,
 ) => {
   return it('Petitions clerk views Section Document QC', async () => {
     await cerebralTest.runSequence('navigateToPathSequence', {

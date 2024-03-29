@@ -51,14 +51,14 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   const formattedEstimatedEndDateFull = applicationContext
     .getUtilities()
     .formatDateString(
-      formattedTrialSessionDetails.estimatedEndDate,
+      formattedTrialSessionDetails.estimatedEndDate!,
       'MONTH_DAY_YEAR',
     );
 
   const endDateForAdditionalPageHeaders = applicationContext
     .getUtilities()
     .formatDateString(
-      formattedTrialSessionDetails.estimatedEndDate,
+      formattedTrialSessionDetails.estimatedEndDate!,
       'SHORT_MONTH_DAY_YEAR',
     );
 
@@ -77,6 +77,8 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     formattedEstimatedEndDateFull,
     formattedIrsCalendarAdministrator:
       formattedTrialSessionDetails.formattedIrsCalendarAdministrator,
+    formattedIrsCalendarAdministratorInfo:
+      formattedTrialSessionDetails.formattedIrsCalendarAdministratorInfo,
     formattedJudge: formattedTrialSessionDetails.formattedJudge,
     formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,

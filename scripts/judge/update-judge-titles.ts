@@ -1,6 +1,6 @@
 import { User } from '@shared/business/entities/User';
 import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME', 'DYNAMODB_ENDPOINT']);
+requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME']);
 import { createApplicationContext } from '@web-api/applicationContext';
 
 /**
@@ -18,6 +18,7 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
 ];
 // **********************************************************************
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
 

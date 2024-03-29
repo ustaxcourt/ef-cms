@@ -1,24 +1,29 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const AddressDisplay = connect(
+const addessDisplayDeps = {
+  constants: state.constants,
+  formattedCaseDetail: state.formattedCaseDetail,
+  openSealAddressModalSequence: sequences.openSealAddressModalSequence,
+};
+
+export const AddressDisplay = connect<
   {
-    boldName: props.boldName,
-    constants: state.constants,
-    contact: props.contact,
-    formattedCaseDetail: state.formattedCaseDetail,
-    nameOverride: props.nameOverride,
-    noMargin: props.noMargin || false,
-    openSealAddressModalSequence: sequences.openSealAddressModalSequence,
-    showEmail: props.showEmail || false,
-    showSealAddressLink: props.showSealAddressLink || false,
+    boldName?: boolean;
+    contact: any;
+    nameOverride?: string;
+    noMargin?: boolean;
+    showEmail?: boolean;
+    showSealAddressLink?: boolean;
   },
+  typeof addessDisplayDeps
+>(
+  addessDisplayDeps,
   function AddressDisplay({
     boldName,
     constants,
@@ -54,6 +59,7 @@ export const AddressDisplay = connect(
               noMargin ? 'no-margin' : 'margin-top-1',
               'address-line',
             )}
+            data-testid="contact-info-phone-number"
           >
             {contact.phone}
           </span>

@@ -1,9 +1,11 @@
 import {
   CONTACT_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { capitalize } from 'lodash';
 import { requestAccessHelper as requestAccessHelperComputed } from './requestAccessHelper';
@@ -17,7 +19,7 @@ describe('requestAccessHelper', () => {
 
   const state = {
     caseDetail: MOCK_CASE,
-    form: {},
+    form: {} as any,
     validationErrors: {},
   };
 
@@ -32,30 +34,34 @@ describe('requestAccessHelper', () => {
     [mockContactId3]: true,
   };
 
-  applicationContext.getCurrentUser = () => ({
-    role: ROLES.privatePractitioner,
-  });
-
   beforeEach(() => {
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.privatePractitioner,
+      }) as RawUser;
+
     state.form = {
       filersMap,
     };
+
+    const TEST_PETITIONERS = [
+      {
+        contactId: mockContactId1,
+        name: 'bob',
+      },
+      {
+        contactId: mockContactId2,
+        name: 'sally',
+      },
+      {
+        contactId: mockContactId3,
+        name: 'rick',
+      },
+    ];
+
     state.caseDetail = {
-      petitioners: [
-        {
-          contactId: mockContactId1,
-          name: 'bob',
-        },
-        {
-          contactId: mockContactId2,
-          name: 'sally',
-        },
-        {
-          contactId: mockContactId3,
-          name: 'rick',
-        },
-      ],
-    };
+      petitioners: TEST_PETITIONERS,
+    } as RawCase;
   });
 
   it('returns correct values when documentType is undefined', () => {
@@ -102,9 +108,10 @@ describe('requestAccessHelper', () => {
   });
 
   it('returns correct number of document options for user role irsPractitioner', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.irsPractitioner,
-    });
+    applicationContext.getCurrentUser = () =>
+      ({
+        role: ROLES.irsPractitioner,
+      }) as RawUser;
     const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(2);
   });
@@ -227,6 +234,95 @@ describe('requestAccessHelper', () => {
     });
   });
 
+  describe('showGenerationTypeForm', () => {
+    beforeEach(() => {
+      state.form = {
+        eventCode: 'EA',
+      };
+
+      const TEST_PETITIONERS = [
+        {
+          contactId: mockContactId1,
+          contactType: CONTACT_TYPES.primary,
+          name: 'bob',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        {
+          contactId: mockContactId2,
+          contactType: CONTACT_TYPES.primary,
+          name: 'sally',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ];
+
+      state.caseDetail = {
+        petitioners: TEST_PETITIONERS,
+      } as RawCase;
+    });
+
+    it('should set showGenerationTypeForm to true when code is EA and no petitioner has paper and user is a irsPractitioner', () => {
+      const TEST_PETITIONERS = [
+        {
+          contactId: mockContactId1,
+          contactType: CONTACT_TYPES.primary,
+          name: 'bob',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        {
+          contactId: mockContactId2,
+          contactType: CONTACT_TYPES.primary,
+          name: 'sally',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ];
+      state.caseDetail = {
+        petitioners: TEST_PETITIONERS,
+      } as RawCase;
+
+      applicationContext.getCurrentUser = () =>
+        ({
+          role: ROLES.irsPractitioner,
+        }) as RawUser;
+      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
+        state,
+      });
+      expect(showGenerationTypeForm).toBeTruthy();
+    });
+
+    it('should set showGenerationTypeForm to false when code is O and any petitioner has paper and user is a private practitioner', () => {
+      state.form = {
+        eventCode: 'O',
+      };
+      applicationContext.getCurrentUser = () =>
+        ({
+          role: ROLES.privatePractitioner,
+        }) as RawUser;
+      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
+        state,
+      });
+      expect(showGenerationTypeForm).toBeFalsy();
+    });
+
+    it('should set showGenerationTypeForm to false when code is EA and any petitioner has paper and user is not a private practitioner', () => {
+      applicationContext.getCurrentUser = () =>
+        ({
+          role: ROLES.irsPractitioner,
+        }) as RawUser;
+      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
+        state,
+      });
+      expect(showGenerationTypeForm).toBeFalsy();
+    });
+
+    it('should set showGenerationTypeForm to true when code is EA and user is a private practitioner with parties that have paper service', () => {
+      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
+        state,
+      });
+
+      expect(showGenerationTypeForm).toBeTruthy();
+    });
+  });
+
   describe('representingPartiesNames', () => {
     beforeEach(() => {
       state.form = {
@@ -255,7 +351,7 @@ describe('requestAccessHelper', () => {
             name: 'rick',
           },
         ],
-      };
+      } as RawCase;
     });
 
     it('should be set to the names of all petitioners being represented', () => {

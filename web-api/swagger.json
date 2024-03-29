@@ -150,7 +150,51 @@
         }
       }
     },
-    "/feature-flag/{featureFlag}": {
+    "/system/maintenance-mode": {
+      "get": {
+        "tags": [],
+        "summary": "get maintenance mode status",
+        "description": "get maintenance mode status. \n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/feature-flag/{featureFlag}": {
       "parameters": [
         {
           "name": "featureFlag",
@@ -250,6 +294,46 @@
       "get": {
         "summary": "create a pdf of the pending report",
         "description": "create a pdf of the pending report.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/pending-report/export": {
+      "get": {
+        "summary": "create a csv of the pending report",
+        "description": "create a csv of the pending report.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -715,6 +799,94 @@
         "responses": {
           "200": {
             "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/docket-entries/pending-motion": {
+      "parameters": [
+        {
+          "name": "judge",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["pending-motion"],
+        "summary": "gets the pending motions associated to a judge",
+        "description": "Gets the pending motions of a judge.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/pending-motion"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      }
+    },
+    "/docket-entry/{docketEntryId}/worksheet": {
+      "parameters": [
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "worksheet",
+          "description": "data for the updated docket entry worksheet",
+          "schema": {
+            "$ref": "#/definitions/pending-motion-worksheet"
+          }
+        }
+      ],
+      "post": {
+        "summary": "update a pending motion docket entry worksheet",
+        "description": "Update a pending motion docket entry worksheet.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/pending-motion-worksheet"
+            }
           }
         },
         "security": [
@@ -4198,7 +4370,7 @@
         }
       }
     },
-    "/async/users/verify-email": {
+    "/users/verify-email": {
       "put": {
         "tags": ["user"],
         "summary": "verifies a user's pending email with a token",
@@ -7499,7 +7671,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "code": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "idToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
                   "type": "string"
                 }
               }
@@ -7507,12 +7685,12 @@
           }
         ],
         "tags": ["auth"],
-        "summary": "uses the oauth2 authorization code to generate a refresh and access token",
-        "description": "Uses the oauth2 authorization code to generate a refresh and access token.\n",
+        "summary": "logs user in and returns access, id, and refresh tokens",
+        "description": "Logs user in and returns access, id, and refresh tokens. \n",
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "the freshly created access token",
+            "description": "access, id, and refresh tokens",
             "schema": {
               "$ref": "#/definitions/authorization"
             },
@@ -7573,7 +7751,7 @@
           "200": {
             "description": "the newly created access token",
             "schema": {
-              "$ref": "#/definitions/authorization"
+              "$ref": "#/definitions/accessToken"
             }
           }
         },
@@ -7669,6 +7847,23 @@
   },
   "definitions": {
     "authorization": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "the access token"
+        },
+        "idToken": {
+          "type": "string",
+          "description": "the identification token"
+        },
+        "refreshToken": {
+          "type": "string",
+          "description": "the refresh token"
+        }
+      }
+    },
+    "accessToken": {
       "type": "object",
       "properties": {
         "token": {
@@ -8098,6 +8293,75 @@
         }
       },
       "description": "a case deadline"
+    },
+    "pending-motion": {
+      "type": "object",
+      "properties": {
+        "docketEntries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "daysSinceCreated": {
+                "type": "number",
+                "description": "Number of days since the pending motion has been created"
+              },
+              "caseCaption": {
+                "type": "string",
+                "description": "Case caption from the docket entry's case"
+              },
+              "consolidatedGroupCount": {
+                "type": "number",
+                "description": "Number of consolidated cases the docket entry's case is in"
+              },
+              "leadDocketNumber": {
+                "type": "number",
+                "description": "Lead docket number"
+              },
+              "docketEntryId": {
+                "type": "string",
+                "description": "Docket entry ID"
+              },
+              "docketEntryWorksheet": {
+                "type": "object",
+                "properties": {
+                  "primaryIssue": {
+                    "type": "string",
+                    "description": "the primary issue noted for the case in Submitted/CAV status to which the worksheet belongs"
+                  },
+                  "finalBriefDueDate": {
+                    "type": "string",
+                    "description": "the date the final briefs are due for the case to which the worksheet belongs"
+                  },
+                  "statusOfMatter": {
+                    "type": "string",
+                    "description": "status of matter"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": "a judge's pending motion results with worksheets"
+    },
+    "pending-motion-worksheet": {
+      "type": "object",
+      "properties": {
+        "primaryIssue": {
+          "type": "string",
+          "description": "the primary issue noted for the case in Submitted/CAV status to which the worksheet belongs"
+        },
+        "finalBriefDueDate": {
+          "type": "string",
+          "description": "the date the final briefs are due for the case to which the worksheet belongs"
+        },
+        "statusOfMatter": {
+          "type": "string",
+          "description": "status of matter"
+        }
+      },
+      "description": "Updated docket entry worksheet"
     },
     "userNote": {
       "type": "object",

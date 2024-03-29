@@ -6,12 +6,16 @@ resource "aws_lambda_function" "api_public_lambda" {
   s3_bucket        = var.lambda_bucket_id
   s3_key           = "api_public_${var.current_color}.js.zip"
   source_code_hash = var.public_object_hash
-  timeout          = "10"
+  timeout          = "29"
   memory_size      = "3008"
 
   runtime = var.node_version
 
   layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
+
+  tracing_config {
+    mode = "Active"
+  }
 
   environment {
     variables = var.lambda_environment

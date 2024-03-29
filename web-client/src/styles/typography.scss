@@ -1,4 +1,4 @@
-@use "../uswds" as *;
+@use '../uswds' as *;
 @use '../variables' as *;
 
 .display-1 {
@@ -194,4 +194,8 @@ a:hover {
 
 .line-height-standard {
   line-height: 1.3em;
+}
+
+.what-to-expect-text {
+  font-size: 17px;
 }

@@ -172,7 +172,7 @@ export const ScanBatchPreviewer = connect(
               errorText={[
                 validationErrors[documentType],
                 documentType === 'requestForPlaceOfTrialFile' &&
-                  validationErrors.chooseAtLeastOneValue,
+                  validationErrors['object.missing'],
               ]}
             >
               <fieldset
@@ -207,6 +207,7 @@ export const ScanBatchPreviewer = connect(
                   />
                   <label
                     className="usa-radio__label"
+                    data-testid="upload-mode-scan"
                     htmlFor="scanMode"
                     id="upload-mode-scan"
                   >
@@ -232,7 +233,7 @@ export const ScanBatchPreviewer = connect(
                   />
                   <label
                     className="usa-radio__label"
-                    data-testid="button-upload-pdf"
+                    data-testid="upload-pdf-button"
                     htmlFor="uploadMode"
                     id="upload-mode-upload"
                   >
@@ -382,6 +383,7 @@ export const ScanBatchPreviewer = connect(
           <FormGroup>
             <label
               className="usa-label ustc-upload-stin with-hint"
+              data-testid={`${documentType}-label`}
               htmlFor={`${documentType}-file`}
               id={`${documentType}-label`}
             >
@@ -398,6 +400,7 @@ export const ScanBatchPreviewer = connect(
               accept=".pdf"
               aria-describedby={`${documentType}-hint`}
               className="usa-input"
+              data-testid={`${documentType}`}
               id={`${documentType}-file`}
               name={documentType}
               type="file"
@@ -431,28 +434,35 @@ export const ScanBatchPreviewer = connect(
               selectDocumentForScanSequence();
             }}
           >
-            {documentTabsList.map(documentTab => (
-              <Tab
-                icon={
-                  scanHelper[`${documentTab.documentType}Completed`] && (
-                    <FontAwesomeIcon
-                      color="green"
-                      icon={['fas', 'check-circle']}
-                    />
-                  )
-                }
-                key={documentTab.documentType}
-                tabName={documentTab.documentType}
-                title={documentTab.title}
-              />
-            ))}
+            {documentTabsList.map(documentTab => {
+              const isFileUploaded =
+                scanHelper[`${documentTab.eventCode}FileCompleted`];
+              return (
+                <Tab
+                  data-testid={`tabButton-${documentTab.documentType}`}
+                  icon={
+                    isFileUploaded && (
+                      <>
+                        <FontAwesomeIcon
+                          color="green"
+                          data-testid={`icon-${documentTab.documentType}`}
+                          icon={['fas', 'check-circle']}
+                        />
+                      </>
+                    )
+                  }
+                  key={`tabButton-${documentTab.documentType}`}
+                  tabName={documentTab.documentType}
+                  title={documentTab.tabTitle}
+                />
+              );
+            })}
           </Tabs>
         );
       }
 
       return null;
     };
-
     return (
       <>
         {showModal === 'ConfirmRescanBatchModal' && (

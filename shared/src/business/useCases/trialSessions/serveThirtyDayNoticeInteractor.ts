@@ -21,9 +21,11 @@ import { replaceBracketed } from '../../utilities/replaceBracketed';
 export const serveThirtyDayNoticeInteractor = async (
   applicationContext: IApplicationContext,
   {
+    clientConnectionId,
     trialSessionId,
   }: {
     trialSessionId: string;
+    clientConnectionId: string;
   },
 ): Promise<void> => {
   const currentUser = applicationContext.getCurrentUser();
@@ -35,6 +37,14 @@ export const serveThirtyDayNoticeInteractor = async (
   if (!trialSessionId) {
     throw new InvalidRequest('No trial Session Id provided');
   }
+
+  const { name, title } = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey:
+        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
+    });
 
   const trialSession = await applicationContext
     .getPersistenceGateway()
@@ -50,6 +60,7 @@ export const serveThirtyDayNoticeInteractor = async (
   if (!trialSession.caseOrder?.length) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
+      clientConnectionId,
       message: {
         action: 'thirty_day_notice_paper_service_complete',
         pdfUrl: undefined,
@@ -71,6 +82,7 @@ export const serveThirtyDayNoticeInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'paper_service_started',
       totalPdfs: trialSession.caseOrder.length,
@@ -136,8 +148,10 @@ export const serveThirtyDayNoticeInteractor = async (
                 .formatNow('MM/dd/yy'),
               docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
               judgeName: trialSession.judge!.name,
+              nameOfClerk: name,
               proceedingType: trialSession.proceedingType,
               scopeType: trialSession.sessionScope,
+              titleOfClerk: title,
               trialDate: trialSession.startDate,
               trialLocation: {
                 address1: trialSession.address1,
@@ -198,6 +212,7 @@ export const serveThirtyDayNoticeInteractor = async (
           .getNotificationGateway()
           .sendNotificationToUser({
             applicationContext,
+            clientConnectionId,
             message: {
               action: 'paper_service_updated',
               pdfsAppended,
@@ -240,6 +255,7 @@ export const serveThirtyDayNoticeInteractor = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'thirty_day_notice_paper_service_complete',
       fileId,

@@ -56,18 +56,19 @@ export const generateTrialCalendarPdfInteractor = async (
       sessionDetail: {
         address1: trialSession.address1,
         address2: trialSession.address2,
+        chambersPhoneNumber: trialSession.chambersPhoneNumber,
         courtReporter: trialSession.courtReporter || 'Not assigned',
         courthouseName: trialSession.courthouseName,
         formattedCityStateZip,
         irsCalendarAdministrator:
           trialSession.irsCalendarAdministrator || 'Not assigned',
+        irsCalendarAdministratorInfo: trialSession.irsCalendarAdministratorInfo,
+        joinPhoneNumber: trialSession.joinPhoneNumber,
         judge: trialSession.judge?.name || 'Not assigned',
-        noLocationEntered:
-          !trialSession.courthouseName &&
-          !trialSession.address1 &&
-          !trialSession.address2 &&
-          !formattedCityStateZip,
+        meetingId: trialSession.meetingId,
         notes: trialSession.notes,
+        password: trialSession.password,
+        proceedingType: trialSession.proceedingType,
         sessionType: trialSession.sessionType,
         startDate: formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR'),
         startTime: startTimeFormatted,

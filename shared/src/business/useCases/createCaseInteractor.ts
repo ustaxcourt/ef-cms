@@ -1,19 +1,23 @@
 import { Case } from '../entities/cases/Case';
-import { CaseExternalIncomplete } from '../entities/cases/CaseExternalIncomplete';
-import { DocketEntry } from '../entities/DocketEntry';
 import {
+  CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
+import { DocketEntry } from '../entities/DocketEntry';
+import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserCase } from '../entities/UserCase';
+import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../entities/WorkItem';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
+
+export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
 const addPetitionDocketEntryToCase = ({
   applicationContext,
@@ -26,6 +30,7 @@ const addPetitionDocketEntryToCase = ({
       assigneeId: null,
       assigneeName: null,
       associatedJudge: caseToAdd.associatedJudge,
+      associatedJudgeId: caseToAdd.associatedJudgeId,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketEntry: {
@@ -64,12 +69,14 @@ const addPetitionDocketEntryToCase = ({
 export const createCaseInteractor = async (
   applicationContext: IApplicationContext,
   {
+    attachmentToPetitionFileId,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     stinFileId,
   }: {
-    corporateDisclosureFileId: string;
+    attachmentToPetitionFileId?: string;
+    corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
@@ -84,7 +91,8 @@ export const createCaseInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-  const petitionEntity = new CaseExternalIncomplete(petitionMetadata, {
+
+  const petitionEntity = new ElectronicPetition(petitionMetadata, {
     applicationContext,
   }).validate();
 
@@ -93,7 +101,7 @@ export const createCaseInteractor = async (
       applicationContext,
     });
 
-  let privatePractitioners = [];
+  let privatePractitioners: UserRecord[] = [];
   if (user.role === ROLES.privatePractitioner) {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()
@@ -243,6 +251,29 @@ export const createCaseInteractor = async (
     cdsDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
+  }
+
+  if (attachmentToPetitionFileId) {
+    const atpDocketEntryEntity = new DocketEntry(
+      {
+        contactPrimary: caseToAdd.getContactPrimary(),
+        contactSecondary: caseToAdd.getContactSecondary(),
+        docketEntryId: attachmentToPetitionFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+        filers,
+        filingDate: caseToAdd.createdAt,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        privatePractitioners,
+      },
+      { applicationContext, petitioners: caseToAdd.petitioners },
+    );
+
+    atpDocketEntryEntity.setFiledBy(user);
+
+    caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({

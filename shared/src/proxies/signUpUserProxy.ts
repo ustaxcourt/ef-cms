@@ -1,13 +1,13 @@
-import { type AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import { SignUpUserResponse } from '@web-api/business/useCases/auth/signUpUserInteractor';
 import { post } from './requests';
 
 export const signUpUserInteractor = (
   applicationContext,
   { user },
-): Promise<AdminCreateUserResponse> => {
+): Promise<SignUpUserResponse> => {
   return post({
     applicationContext,
     body: user,
-    endpoint: '/public-api/account/create',
+    endpoint: '/auth/account/create',
   });
 };

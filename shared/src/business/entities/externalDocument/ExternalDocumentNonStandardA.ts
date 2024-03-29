@@ -4,7 +4,10 @@ import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
 export class ExternalDocumentNonStandardA extends ExternalDocumentBase {
-  public previousDocument: { documentTitle?: string; documentType: string };
+  public previousDocument: {
+    documentTitle?: string | undefined;
+    documentType: string;
+  };
 
   constructor(rawProps) {
     super(rawProps, 'ExternalDocumentNonStandardA');
@@ -20,7 +23,8 @@ export class ExternalDocumentNonStandardA extends ExternalDocumentBase {
         documentTitle: JoiValidationConstants.STRING.optional(),
         documentType: JoiValidationConstants.STRING.required(),
       })
-      .required(),
+      .required()
+      .messages({ '*': 'Select a document' }),
   };
 
   getValidationRules() {

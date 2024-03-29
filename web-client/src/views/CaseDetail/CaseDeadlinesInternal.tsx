@@ -20,7 +20,7 @@ export const CaseDeadlinesInternal = connect(
     openEditCaseDeadlineModalSequence,
   }) {
     return (
-      <>
+      <div className="margin-top-3">
         {caseDetailHelper.showCaseDeadlinesInternalEmpty && (
           <p className="margin-bottom-5">
             There are no deadlines for this case.
@@ -40,7 +40,7 @@ export const CaseDeadlinesInternal = connect(
             <tbody>
               {formattedCaseDeadlines.map(item => (
                 <tr key={item.caseDeadlineId}>
-                  <td className="smaller-column semi-bold">
+                  <td className="smaller-column">
                     {item.deadlineDateFormatted}
                   </td>
                   <td className="overdue smaller-column center-column semi-bold">
@@ -84,7 +84,7 @@ export const CaseDeadlinesInternal = connect(
             </tbody>
           </table>
         )}
-      </>
+      </div>
     );
   },
 );

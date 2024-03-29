@@ -8,7 +8,23 @@ export const ErrorNotification = connect(
     alertError: state.alertError,
     alertHelper: state.alertHelper,
   },
-  function ErrorNotification({ alertError, alertHelper }) {
+  function ErrorNotification({
+    alertError,
+    alertHelper,
+  }: {
+    alertError?: {
+      title?: string;
+      message?: string;
+    };
+    alertHelper: {
+      preventAutoScroll?: boolean;
+      showErrorAlert?: boolean;
+      showSingleMessage?: boolean;
+      showMultipleMessages?: boolean;
+      showTitleOnly?: boolean;
+      messagesDeduped: any;
+    };
+  }) {
     const notificationRef = useRef(null);
 
     useEffect(() => {
@@ -20,10 +36,11 @@ export const ErrorNotification = connect(
 
     return (
       <>
-        {alertHelper.showErrorAlert && (
+        {alertError && alertHelper.showErrorAlert && (
           <div
             aria-live="polite"
             className="usa-alert usa-alert--error"
+            data-testid="error-alert"
             ref={notificationRef}
             role="alert"
           >

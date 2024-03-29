@@ -278,6 +278,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           archivedDocketEntries: [...MOCK_DOCUMENTS],
           associatedJudge: CHIEF_JUDGE,
+          associatedJudgeId: 'CHIEF_JUDGE_ID',
         },
         {
           applicationContext,
@@ -286,6 +287,7 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
+      expect(Object.keys(myCase)).not.toContain('associatedJudgeId');
       expect(Object.keys(myCase)).not.toContain('archivedDocketEntries');
     });
 
@@ -297,6 +299,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           archivedDocketEntries: [...MOCK_DOCUMENTS],
           associatedJudge: CHIEF_JUDGE,
+          associatedJudgeId: 'CHIEF_JUDGE_ID',
         },
         {
           applicationContext,
@@ -305,6 +308,7 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).toContain('associatedJudge');
+      expect(Object.keys(myCase)).toContain('associatedJudgeId');
       expect(Object.keys(myCase)).toContain('archivedDocketEntries');
     });
 
@@ -312,7 +316,11 @@ describe('Case entity', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
+        {
+          ...MOCK_CASE,
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeId: 'CHIEF_JUDGE_ID',
+        },
         {
           applicationContext,
           filtered: false,
@@ -320,13 +328,18 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).toContain('associatedJudge');
+      expect(Object.keys(myCase)).toContain('associatedJudgeId');
     });
 
     it('returns private data if filtered is false and the user is internal', () => {
       applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
+        {
+          ...MOCK_CASE,
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeId: 'CHIEF_JUDGE_ID',
+        },
         {
           applicationContext,
           filtered: false,
@@ -334,6 +347,7 @@ describe('Case entity', () => {
       );
 
       expect(Object.keys(myCase)).toContain('associatedJudge');
+      expect(Object.keys(myCase)).toContain('associatedJudgeId');
     });
 
     it('returns STIN docket entry if filtered is false and the user is docketclerk', () => {
@@ -493,7 +507,8 @@ describe('Case entity', () => {
       const errors = myCase.getFormattedValidationErrors();
 
       expect(errors).toMatchObject({
-        'petitioners[2]': '"petitioners[2]" contains a duplicate value',
+        'petitioners[2]':
+          'Only one (1) Intervenor is allowed per case. Please select a different Role.',
       });
     });
   });
@@ -1089,6 +1104,89 @@ describe('Case entity', () => {
 
       const errors: any = testCase.getFormattedValidationErrors();
       expect(errors.consolidatedCases).toBeDefined();
+    });
+
+    it('should not throw an error when associatedJudge is set to "Chief Judge" and associatedJudgeId is not defined', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Chief Judge',
+          associatedJudgeId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual(null);
+    });
+
+    it('should not throw an error when associatedJudge is not defined and associatedJudgeId is not defined', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: undefined,
+          associatedJudgeId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual(null);
+    });
+
+    it('should not throw an error when associatedJudge is set and associatedJudgeId is defined as a valid UUID', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Colvin',
+          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual(null);
+    });
+
+    it('should throw an error when associatedJudge is set and associatedJudgeId is set but to a non valid uuid', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Colvin',
+          associatedJudgeId: 'uuid',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual({
+        associatedJudgeId: '"associatedJudgeId" must be a valid GUID',
+      });
+    });
+    it('should throw an error when associatedJudge is set and associatedJudgeId is not defined', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Colvin',
+          associatedJudgeId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors).toEqual({
+        associatedJudgeId: '"associatedJudgeId" is required',
+      });
     });
   });
 

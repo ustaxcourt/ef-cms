@@ -1,85 +1,62 @@
-import {
-  PETITIONS_SECTION,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  caseServicesSupervisorUser,
+  judgeColvin,
+  legacyJudgeUser,
+  petitionsClerkUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { createOrUpdateUser, createUserRecords } from './createOrUpdateUser';
 
-const JUDGES_CHAMBERS_WITH_LEGACY = applicationContext
-  .getPersistenceGateway()
-  .getJudgesChambersWithLegacy();
-
 describe('createOrUpdateUser', () => {
-  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-  const petitionsClerkUser = {
-    email: 'test@example.com',
-    name: 'Test Petitionsclerk',
-    password: 'tempPass',
-    role: ROLES.petitionsClerk,
-    section: PETITIONS_SECTION,
-  };
-  const privatePractitionerUser = {
-    barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
-    name: 'Test Private Practitioner',
-    role: ROLES.privatePractitioner,
-    section: 'privatePractitioner',
-  };
-  const privatePractitionerUserWithoutBarNumber = {
-    barNumber: '',
-    name: 'Test Private Practitioner',
-    role: ROLES.privatePractitioner,
-    section: 'privatePractitioner',
-  };
-  const caseServicesSupervisorUser = {
-    name: 'Test Case Services Supervisor',
-    role: ROLES.caseServicesSupervisor,
-    section: 'caseServicesSupervisor',
-  };
+  const mockTemporaryPassword = 'tempPass';
 
-  beforeAll(() => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Username: '562d6260-aa9b-4010-af99-536d3872c752',
-        }),
-    });
-
-    applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          User: { Username: '562d6260-aa9b-4010-af99-536d3872c752' },
-        }),
-    });
-
-    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
-      promise: () => Promise.resolve(),
-    });
-
-    applicationContext.getCognito().adminDisableUser.mockReturnValue({
-      promise: () => Promise.resolve(),
-    });
-
-    applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
-  });
-
-  it('should create a user only if the user does not already exist', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => {
-        const error = new Error();
-        (error as any).code = 'UserNotFoundException';
-        return Promise.reject(error);
-      },
+  it('should ONLY create a user when they do not already exist', async () => {
+    applicationContext
+      .getCognito()
+      .adminGetUser.mockRejectedValue(
+        new UserNotFoundException({ $metadata: {}, message: '' }),
+      );
+    applicationContext.getCognito().adminCreateUser.mockResolvedValue({
+      User: { Username: petitionsClerkUser.userId },
     });
 
     await createOrUpdateUser({
       applicationContext,
       disableCognitoUser: false,
-      password: petitionsClerkUser.password,
-      user: petitionsClerkUser as any,
+      password: mockTemporaryPassword,
+      user: petitionsClerkUser,
     });
 
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).toHaveBeenCalledWith({
+      DesiredDeliveryMediums: ['EMAIL'],
+      MessageAction: 'SUPPRESS',
+      TemporaryPassword: mockTemporaryPassword,
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+
+        {
+          Name: 'email',
+          Value: petitionsClerkUser.email,
+        },
+        {
+          Name: 'custom:role',
+          Value: petitionsClerkUser.role,
+        },
+        {
+          Name: 'name',
+          Value: petitionsClerkUser.name,
+        },
+      ],
+      UserPoolId: undefined,
+      Username: petitionsClerkUser.email,
+    });
     expect(
       applicationContext.getCognito().adminDisableUser,
     ).not.toHaveBeenCalled();
@@ -89,19 +66,20 @@ describe('createOrUpdateUser', () => {
   });
 
   it('should create a user and cognito record, but disable the cognito user', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => {
-        const error = new Error();
-        (error as any).code = 'UserNotFoundException';
-        return Promise.reject(error);
-      },
+    applicationContext
+      .getCognito()
+      .adminGetUser.mockRejectedValue(
+        new UserNotFoundException({ $metadata: {}, message: '' }),
+      );
+    applicationContext.getCognito().adminCreateUser.mockResolvedValue({
+      User: { Username: petitionsClerkUser.userId },
     });
 
     await createOrUpdateUser({
       applicationContext,
       disableCognitoUser: true,
-      password: petitionsClerkUser.password,
-      user: petitionsClerkUser as any,
+      password: mockTemporaryPassword,
+      user: petitionsClerkUser,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
@@ -112,107 +90,75 @@ describe('createOrUpdateUser', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should call adminCreateUser with the correct UserAttributes', async () => {
-    await createOrUpdateUser({
-      applicationContext,
-      disableCognitoUser: false,
-      password: petitionsClerkUser.password,
-      user: petitionsClerkUser as any,
-    });
-    expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).toHaveBeenCalledWith({
-      MessageAction: 'SUPPRESS',
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: 'test@example.com',
-        },
-        {
-          Name: 'custom:role',
-          Value: 'petitionsclerk',
-        },
-        {
-          Name: 'name',
-          Value: 'Test Petitionsclerk',
-        },
-      ],
-      UserPoolId: undefined,
-      Username: 'test@example.com',
-    });
-  });
-
-  it('should attempt to update the user if the user already exists', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Username: '562d6260-aa9b-4010-af99-536d3872c752',
-        }),
+  it('should attempt to update the user when the user already exists', async () => {
+    applicationContext.getCognito().adminGetUser.mockResolvedValue({
+      Username: petitionsClerkUser.userId,
     });
 
     await createOrUpdateUser({
       applicationContext,
       disableCognitoUser: false,
-      password: petitionsClerkUser.password,
-      user: petitionsClerkUser as any,
+      password: mockTemporaryPassword,
+      user: petitionsClerkUser,
     });
 
+    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).not.toHaveBeenCalled();
-    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).toHaveBeenCalled();
   });
 
-  it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
-    await createUserRecords({
-      applicationContext,
-      user: privatePractitionerUser,
-      userId,
-    });
-
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
-      Item: {
-        ...privatePractitionerUser,
-        pk: `user|${userId}`,
-        sk: `user|${userId}`,
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[1][0],
-    ).toMatchObject({
-      Item: {
-        pk: 'privatePractitioner|TEST PRIVATE PRACTITIONER',
-        sk: `user|${userId}`,
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[2][0],
-    ).toMatchObject({
-      Item: {
-        pk: 'privatePractitioner|PT1234',
-        sk: `user|${userId}`,
-      },
-    });
-  });
-
   describe('createUserRecords', () => {
-    it('attempts to persist a petitionsclerk user with a section mapping record', async () => {
+    const mockPrivatePractitionerUser = {
+      ...privatePractitionerUser,
+      barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
+    };
+
+    it('should persist a private practitioner user with name and barNumber mapping records', async () => {
+      await createUserRecords({
+        applicationContext,
+        user: mockPrivatePractitionerUser,
+        userId: mockPrivatePractitionerUser.userId,
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          ...mockPrivatePractitionerUser,
+          pk: `user|${mockPrivatePractitionerUser.userId}`,
+          sk: `user|${mockPrivatePractitionerUser.userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'privatePractitioner|PRIVATE PRACTITIONER',
+          sk: `user|${mockPrivatePractitionerUser.userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[2][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'privatePractitioner|PT1234',
+          sk: `user|${mockPrivatePractitionerUser.userId}`,
+        },
+      });
+    });
+
+    it('should persist a petitions clerk user with a section mapping record', async () => {
       await createUserRecords({
         applicationContext,
         user: petitionsClerkUser,
-        userId,
+        userId: petitionsClerkUser.userId,
       });
 
-      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalledTimes(
         2,
       );
       expect(
@@ -220,7 +166,7 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           pk: 'section|petitions',
-          sk: `user|${userId}`,
+          sk: `user|${petitionsClerkUser.userId}`,
         },
       });
       expect(
@@ -228,33 +174,28 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           ...petitionsClerkUser,
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
+          pk: `user|${petitionsClerkUser.userId}`,
+          sk: `user|${petitionsClerkUser.userId}`,
         },
       });
     });
 
-    it('attempts to persist a judge user with a section mapping record for the chambers and the judge', async () => {
-      const judgeUser = {
-        name: 'Judge Adam',
-        role: ROLES.judge,
-        section: 'adamsChambers',
-      };
-
+    it('should persist a judge user with a section mapping record for the chambers and the judge', async () => {
       await createUserRecords({
         applicationContext,
-        user: judgeUser,
-        userId,
+        user: judgeColvin,
+        userId: judgeColvin.userId,
       });
-      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalledTimes(
         3,
       );
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
-          pk: 'section|adamsChambers',
-          sk: `user|${userId}`,
+          pk: `section|${judgeColvin.section}`,
+          sk: `user|${judgeColvin.userId}`,
         },
       });
       expect(
@@ -262,33 +203,27 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           pk: 'section|judge',
-          sk: `user|${userId}`,
+          sk: `user|${judgeColvin.userId}`,
         },
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[2][0],
       ).toMatchObject({
         Item: {
-          ...judgeUser,
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
+          ...judgeColvin,
+          pk: `user|${judgeColvin.userId}`,
+          sk: `user|${judgeColvin.userId}`,
         },
       });
     });
 
-    it('attempts to persist a legacy judge user with a section mapping record for the chambers and the judge', async () => {
-      const judgeUser = {
-        name: 'Legacy Judge Ginsburg',
-        role: ROLES.legacyJudge,
-        section:
-          JUDGES_CHAMBERS_WITH_LEGACY.LEGACY_JUDGES_CHAMBERS_SECTION.section,
-      };
-
+    it('should persist a legacy judge user with a section mapping record for the chambers and the judge', async () => {
       await createUserRecords({
         applicationContext,
-        user: judgeUser,
-        userId,
+        user: legacyJudgeUser,
+        userId: legacyJudgeUser.userId,
       });
+
       expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
         3,
       );
@@ -296,8 +231,8 @@ describe('createOrUpdateUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
-          pk: `section|${JUDGES_CHAMBERS_WITH_LEGACY.LEGACY_JUDGES_CHAMBERS_SECTION.section}`,
-          sk: `user|${userId}`,
+          pk: `section|${legacyJudgeUser.section}`,
+          sk: `user|${legacyJudgeUser.userId}`,
         },
       });
       expect(
@@ -305,25 +240,30 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           pk: 'section|judge',
-          sk: `user|${userId}`,
+          sk: `user|${legacyJudgeUser.userId}`,
         },
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[2][0],
       ).toMatchObject({
         Item: {
-          ...judgeUser,
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
+          ...legacyJudgeUser,
+          pk: `user|${legacyJudgeUser.userId}`,
+          sk: `user|${legacyJudgeUser.userId}`,
         },
       });
     });
 
-    it('does not persist mapping records for practitioner without barNumber', async () => {
+    it('should NOT persist mapping records for practitioner that does not have a barNumber', async () => {
+      const privatePractitionerUserWithoutBarNumber = {
+        ...privatePractitionerUser,
+        barNumber: undefined,
+      };
+
       await createUserRecords({
         applicationContext,
         user: privatePractitionerUserWithoutBarNumber,
-        userId,
+        userId: privatePractitionerUserWithoutBarNumber.userId,
       });
 
       expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
@@ -334,17 +274,17 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           ...privatePractitionerUserWithoutBarNumber,
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
+          pk: `user|${privatePractitionerUserWithoutBarNumber.userId}`,
+          sk: `user|${privatePractitionerUserWithoutBarNumber.userId}`,
         },
       });
     });
 
-    it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
+    it('should persist a private practitioner user with name and barNumber mapping records', async () => {
       await createUserRecords({
         applicationContext,
-        user: privatePractitionerUser,
-        userId,
+        user: mockPrivatePractitionerUser,
+        userId: mockPrivatePractitionerUser.userId,
       });
 
       expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
@@ -354,17 +294,17 @@ describe('createOrUpdateUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
-          ...privatePractitionerUser,
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
+          ...mockPrivatePractitionerUser,
+          pk: `user|${mockPrivatePractitionerUser.userId}`,
+          sk: `user|${mockPrivatePractitionerUser.userId}`,
         },
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
       ).toMatchObject({
         Item: {
-          pk: 'privatePractitioner|TEST PRIVATE PRACTITIONER',
-          sk: `user|${userId}`,
+          pk: 'privatePractitioner|PRIVATE PRACTITIONER',
+          sk: `user|${mockPrivatePractitionerUser.userId}`,
         },
       });
       expect(
@@ -372,7 +312,7 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           pk: 'privatePractitioner|PT1234',
-          sk: `user|${userId}`,
+          sk: `user|${mockPrivatePractitionerUser.userId}`,
         },
       });
     });
@@ -381,7 +321,7 @@ describe('createOrUpdateUser', () => {
       await createUserRecords({
         applicationContext,
         user: caseServicesSupervisorUser,
-        userId,
+        userId: caseServicesSupervisorUser.userId,
       });
 
       expect(
@@ -389,7 +329,7 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           pk: `section|${caseServicesSupervisorUser.section}`,
-          sk: `user|${userId}`,
+          sk: `user|${caseServicesSupervisorUser.userId}`,
         },
       });
       expect(
@@ -397,7 +337,7 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           pk: 'section|docket',
-          sk: `user|${userId}`,
+          sk: `user|${caseServicesSupervisorUser.userId}`,
         },
       });
       expect(
@@ -405,41 +345,40 @@ describe('createOrUpdateUser', () => {
       ).toMatchObject({
         Item: {
           pk: 'section|petitions',
-          sk: `user|${userId}`,
+          sk: `user|${caseServicesSupervisorUser.userId}`,
         },
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[3][0],
       ).toMatchObject({
         Item: {
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
+          pk: `user|${caseServicesSupervisorUser.userId}`,
+          sk: `user|${caseServicesSupervisorUser.userId}`,
         },
       });
     });
 
-    it('does not persist section mapping record if user does not have a section', async () => {
-      const privatePractitionerUserWithoutSection = {
-        name: 'Test Private Practitioner',
-        role: ROLES.privatePractitioner,
-      };
-
+    it('should NOT persist section mapping record when the user does not have a section', async () => {
       await createUserRecords({
         applicationContext,
-        user: privatePractitionerUserWithoutSection,
-        userId,
+        user: {
+          ...petitionsClerkUser,
+          section: undefined,
+        },
+        userId: petitionsClerkUser.userId,
       });
 
-      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalledTimes(
         1,
       );
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
-          ...privatePractitionerUserWithoutSection,
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
+          ...petitionsClerkUser,
+          pk: `user|${petitionsClerkUser.userId}`,
+          section: undefined,
+          sk: `user|${petitionsClerkUser.userId}`,
         },
       });
     });

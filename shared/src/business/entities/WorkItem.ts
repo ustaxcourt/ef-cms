@@ -1,6 +1,5 @@
 import { CASE_STATUS_TYPES, CHIEF_JUDGE } from './EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
-import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
@@ -10,6 +9,7 @@ export class WorkItem extends JoiValidationEntity {
   public assigneeId: string;
   public assigneeName: string;
   public associatedJudge: string;
+  public associatedJudgeId: string;
   public caseIsInProgress: boolean;
   public caseStatus: string;
   public caseTitle: string;
@@ -49,6 +49,10 @@ export class WorkItem extends JoiValidationEntity {
       caseEntity && caseEntity.associatedJudge
         ? caseEntity.associatedJudge
         : rawWorkItem.associatedJudge || CHIEF_JUDGE;
+    this.associatedJudgeId =
+      caseEntity && caseEntity.associatedJudgeId
+        ? caseEntity.associatedJudgeId
+        : rawWorkItem.associatedJudgeId || undefined;
     this.caseIsInProgress = rawWorkItem.caseIsInProgress;
     this.caseStatus = caseEntity ? caseEntity.status : rawWorkItem.caseStatus;
     this.caseTitle = rawWorkItem.caseTitle;

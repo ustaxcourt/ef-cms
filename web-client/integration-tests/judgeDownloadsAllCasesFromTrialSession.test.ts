@@ -24,10 +24,10 @@ describe('Judge downloads all cases from trial session', () => {
 
     await waitForExpectedItemToExist({
       cerebralTest,
-      currentItem: 'batchTrialSessionAllCasesDownloadUrl',
+      currentItem: 'batchDownloadUrl',
     });
 
-    const url = cerebralTest.getState('batchTrialSessionAllCasesDownloadUrl');
+    const url = cerebralTest.getState('batchDownloadUrl');
     expect(url).toBeDefined();
 
     cerebralTest.url = url;

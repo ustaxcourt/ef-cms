@@ -1,7 +1,6 @@
 #!/bin/zsh
 
 REGION="${DEFAULT_REGION}"
-DYNAMODB_ENDPOINT="dynamodb.${DEFAULT_REGION}.amazonaws.com"
 
 CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
 SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}")
@@ -46,16 +45,14 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "CURRENT_COLOR='${CURRENT_COLOR}'"
   echo "DAWSON_ENV='${ENV}'"
   echo "DOCUMENTS_BUCKET_NAME='${EFCMS_DOMAIN}-documents-${ENV}-${REGION}'"
-  echo "DYNAMODB_ENDPOINT='${DYNAMODB_ENDPOINT}'"
   echo "DYNAMODB_TABLE_NAME='${SOURCE_TABLE}'"
   echo "ELASTICSEARCH_ENDPOINT='${ELASTICSEARCH_ENDPOINT}'"
   echo "EMAIL_CHANGE_VERIFICATION_TEMPLATE='email_change_verification_${ENV}'"
   echo "EMAIL_DOCUMENT_SERVED_TEMPLATE='document_served_${ENV}'"
   echo "EMAIL_SERVED_PETITION_TEMPLATE='petition_served_${ENV}'"
-  echo "EMAIL_SOURCE='noreply@${EFCMS_DOMAIN}'"
+  echo "EMAIL_SOURCE='U.S. Tax Court <noreply@${EFCMS_DOMAIN}>'"
   echo "ENVIRONMENT='${ENV}'"
   echo "IRS_CLIENT_ID='${IRS_CLIENT_ID}'"
-  echo "MASTER_DYNAMODB_ENDPOINT='${DYNAMODB_ENDPOINT}'"
   echo "MASTER_REGION='${REGION}'"
   echo "QUARANTINE_BUCKET_NAME='${EFCMS_DOMAIN}-quarantine-${ENV}-${REGION}'"
   echo "REGION='${REGION}'"

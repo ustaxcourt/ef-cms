@@ -13,6 +13,10 @@ resource "aws_lambda_function" "api_lambda" {
 
   runtime = var.node_version
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = var.lambda_environment
   }
@@ -136,6 +140,37 @@ resource "aws_api_gateway_method" "api_method_head" {
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
+
+# 
+resource "aws_api_gateway_resource" "api_system_resource" {
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
+  path_part   = "system"
+}
+
+resource "aws_api_gateway_resource" "api_system_proxy_resource" {
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  parent_id   = aws_api_gateway_resource.api_system_resource.id
+  path_part   = "{proxy+}"
+}
+
+resource "aws_api_gateway_method" "api_system_method_get" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_system_proxy_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "api_integration_system" {
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id = aws_api_gateway_resource.api_system_proxy_resource.id
+  http_method = aws_api_gateway_method.api_system_method_get.http_method
+
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_lambda.invoke_arn
+}
+# 
 
 resource "aws_api_gateway_authorizer" "custom_authorizer" {
   name                   = "custom_authorizer_${var.environment}_${var.current_color}"
@@ -272,6 +307,9 @@ resource "aws_api_gateway_deployment" "api_deployment" {
       aws_api_gateway_integration.api_auth_integration_delete,
       // AUTHORIZER
       aws_api_gateway_authorizer.custom_authorizer,
+      // SYSTEM
+      aws_api_gateway_method.api_system_method_get,
+      aws_api_gateway_integration.api_integration_system
     ]))
   }
 

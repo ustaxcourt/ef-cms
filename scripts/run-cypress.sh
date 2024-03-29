@@ -80,6 +80,7 @@ while getopts ":chloprst:" option; do
 done
 
 if [ -n "${CI}" ]; then
+  export CYPRESS_NO_COMMAND_LOG=1 #Disable logging of commands in CI to not leak secrets
   echo "Executing ${0}."
 else
   echo "Executing ${0}. For information about available options, run this script again with the -h option for help."
@@ -88,13 +89,14 @@ fi
 CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.ts"
 echo "${CONFIG_FILE}"
 
+export CYPRESS_TARGET_ENV=$ENV
+
 if [ -n "${INTEGRATION}" ]; then
   echo "Running integration tests."
   export CYPRESS_TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
   export CYPRESS_QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1
   export CYPRESS_DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
   export CYPRESS_S3_ENDPOINT=http://0.0.0.0:9000
-  export CYPRESS_MASTER_DYNAMODB_ENDPOINT=http://localhost:8000
   export CYPRESS_SLS_DEPLOYMENT_BUCKET=noop
   export CYPRESS_AWS_ACCESS_KEY_ID=S3RVER
   export CYPRESS_AWS_SECRET_ACCESS_KEY=S3RVER
@@ -122,18 +124,19 @@ else
   export CYPRESS_EFCMS_DOMAIN=$EFCMS_DOMAIN
   export CYPRESS_USTC_ADMIN_PASS=$USTC_ADMIN_PASS
   export CYPRESS_BASE_URL="https://${NON_PUBLIC}${CYPRESS_DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+  export CYPRESS_SMOKETEST_BUCKET="${EFCMS_DOMAIN}-email-inbox-${ENV}-us-east-1"
   DYNAMODB_TABLE_NAME=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
-  export DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
+  export CYPRESS_DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
   CYPRESS_MIGRATE=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
   export CYPRESS_MIGRATE=$CYPRESS_MIGRATE
 fi
 
 if [ -n "${OPEN}" ]; then
-  ./node_modules/.bin/cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
+  ./node_modules/.bin/cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}"
 else
   if [ -n "${RUN_SPECIFIC_TEST}" ]; then
-    ./node_modules/.bin/cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV" --spec "${RUN_SPECIFIC_TEST}"
+    ./node_modules/.bin/cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --spec "${RUN_SPECIFIC_TEST}"
   else 
-    ./node_modules/.bin/cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
+    ./node_modules/.bin/cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}"
   fi    
 fi

@@ -61,7 +61,7 @@ export const TrialSessionDetail = connect(
                 message: formattedTrialSessionDetails.alertMessageForNOTT,
               }}
               dismissAlertSequence={showThirtyDayNoticeModalSequence}
-              dismissable={trialSessionDetailsHelper.canDismissThirtyDayAlert}
+              dismissible={trialSessionDetailsHelper.canDismissThirtyDayAlert}
               iconRight={false}
               messageNotBold={true}
               scrollToTop={false}

@@ -1,6 +1,7 @@
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateTrialCalendarPdfInteractor } from './generateTrialCalendarPdfInteractor';
 import {
@@ -66,7 +67,18 @@ describe('generateTrialCalendarPdfInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+      .getTrialSessionById.mockReturnValue({
+        ...MOCK_TRIAL_INPERSON,
+        chambersPhoneNumber: '1234567890',
+        irsCalendarAdministratorInfo: {
+          email: 'emailbond@me.com',
+          name: 'James Bond',
+          phone: '1234567890',
+        },
+        joinPhoneNumber: '1234567890',
+        meetingId: 'meetingid',
+        password: 'pass1',
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -81,7 +93,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
     const result = await generateTrialCalendarPdfInteractor(
       applicationContext,
       {
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       },
     );
 
@@ -179,13 +191,22 @@ describe('generateTrialCalendarPdfInteractor', () => {
         sessionDetail: {
           address1: MOCK_TRIAL_INPERSON.address1,
           address2: MOCK_TRIAL_INPERSON.address2,
+          chambersPhoneNumber: '1234567890',
           courtReporter: 'Not assigned',
           courthouseName: MOCK_TRIAL_INPERSON.courthouseName,
           formattedCityStateZip: 'Scottsburg, IN 47130',
           irsCalendarAdministrator: 'Not assigned',
+          irsCalendarAdministratorInfo: {
+            email: 'emailbond@me.com',
+            name: 'James Bond',
+            phone: '1234567890',
+          },
+          joinPhoneNumber: '1234567890',
           judge: MOCK_TRIAL_INPERSON.judge!.name,
-          noLocationEntered: false,
+          meetingId: 'meetingid',
           notes: MOCK_TRIAL_INPERSON.notes,
+          password: 'pass1',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
           sessionType: MOCK_TRIAL_INPERSON.sessionType,
           startDate: 'February 28, 3000',
           startTime: undefined,
@@ -199,7 +220,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
 
   it('should NOT include cases that have been removed from trial on the generated PDF', async () => {
     await generateTrialCalendarPdfInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
     const casesOnPDF =
@@ -223,7 +244,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       });
 
     await generateTrialCalendarPdfInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
 
     const formattedTrialSession =

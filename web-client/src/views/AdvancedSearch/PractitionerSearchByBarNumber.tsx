@@ -40,7 +40,7 @@ export const PractitionerSearchByBarNumber = connect(
                   </label>
                   <input
                     className="usa-input"
-                    data-testid="bar-number"
+                    data-testid="bar-number-search-input"
                     id="bar-number"
                     name="barNumber"
                     type="text"

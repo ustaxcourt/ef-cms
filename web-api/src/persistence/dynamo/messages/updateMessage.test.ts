@@ -21,9 +21,7 @@ const mockMessage = {
 describe('updateMessage', () => {
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
-    applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+    applicationContext.getDocumentClient().put.mockResolvedValue(null);
   });
 
   it('attempts to persist the message record', async () => {

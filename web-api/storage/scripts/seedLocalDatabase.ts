@@ -4,11 +4,13 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { chunk } from 'lodash';
+import { createApplicationContext } from '@web-api/applicationContext';
 import { createUsers } from './createUsers';
 import { seedEntries } from '../fixtures/seed';
 import { migrateItems as validationMigration } from '../../workflow-terraform/migration/main/lambdas/migrations/0000-validate-all-items';
 
 Error.stackTraceLimit = Infinity;
+const applicationContext = createApplicationContext({});
 
 export const putEntries = async entries => {
   const client = new DynamoDBClient({
@@ -16,7 +18,7 @@ export const putEntries = async entries => {
       accessKeyId: 'S3RVER',
       secretAccessKey: 'S3RVER',
     },
-    endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
+    endpoint: 'http://localhost:8000',
     region: 'us-east-1',
   });
 
@@ -27,7 +29,7 @@ export const putEntries = async entries => {
   await Promise.all(
     chunks.map(async aChunk => {
       try {
-        validationMigration(aChunk);
+        validationMigration(aChunk, applicationContext);
       } catch (e) {
         console.log('Seed data is invalid, exiting.', e);
         process.exit(1);

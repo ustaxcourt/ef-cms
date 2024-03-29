@@ -82,9 +82,9 @@ export const zipS3Files = ({
       debug && console.log('append to zip', fileName);
       archive.append(file.data.length === 0 ? '' : file.data, entryData);
     })
-    .on('end', function () {
+    .on('end', async function () {
       debug && console.log('end -> finalize');
-      extraFilesPromisesAll
+      await extraFilesPromisesAll
         .then(() => {})
         .catch(() => {})
         .then(() => {

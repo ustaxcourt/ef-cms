@@ -1,11 +1,11 @@
 import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
-import { loginAsPetitionsClerk } from '../../helpers/auth/login-as-helpers';
+import { loginAsPetitionsClerk1 } from '../../helpers/auth/login-as-helpers';
 import { retry } from '../../helpers/retry';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
 describe('search page functionality', () => {
   it('should be able to create a case and serve to IRS', () => {
-    loginAsPetitionsClerk();
+    loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="petitioner-name"]').clear();
@@ -40,10 +40,13 @@ describe('search page functionality', () => {
     cy.get('[data-testid="practitioner-row-PT1234"]').should('exist');
     cy.get('[data-testid="clear-practitioner-search"]').click();
     cy.get('[data-testid="practitioner-row-PT1234"]').should('not.exist');
-    cy.get('[data-testid="bar-number"]').clear();
-    cy.get('[data-testid="bar-number"]').type('pt1234');
+    cy.get('[data-testid="bar-number-search-input"]').clear();
+    cy.get('[data-testid="bar-number-search-input"]').type('pt1234');
     cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
     cy.url().should('include', 'pt1234');
+    cy.get('[data-testid="print-practitioner-case-list"]').click();
+    cy.get('dialog.modal-screen').should('exist');
+    cy.get('h3:contains("Printable Case List")').should('be.visible');
   });
 
   it('should be able to search for practitioners by bar number', () => {
@@ -51,14 +54,14 @@ describe('search page functionality', () => {
     cy.get('[data-testid="inbox-tab-content"]').should('exist');
     cy.get('[data-testid="search-link"]').click();
     cy.get('[data-testid="tab-practitioner"]').click();
-    cy.get('[data-testid="bar-number"]').clear();
-    cy.get('[data-testid="bar-number"]').type('pt1234');
+    cy.get('[data-testid="bar-number-search-input"]').clear();
+    cy.get('[data-testid="bar-number-search-input"]').type('pt1234');
     cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
     cy.url().should('include', 'pt1234');
   });
 
   it('create an opinion on a case and search for it', () => {
-    loginAsPetitionsClerk();
+    loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber }) => {
       cy.login('docketclerk1');
       cy.get('[data-testid="inbox-tab-content"]').should('exist');
@@ -73,9 +76,9 @@ describe('search page functionality', () => {
       cy.get('[data-testid="upload-file-success"]').should('exist');
       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
-      cy.get('#react-select-2-input').clear();
-      cy.get('#react-select-2-input').type('opinion');
-      cy.get('#react-select-2-option-57').click();
+      cy.get(
+        '[data-testid="primary-document"] .select-react-element__input',
+      ).type('Summary Opinion{enter}');
       cy.get('[data-testid="judge-select"]').select('Ashford');
       cy.get('[data-testid="serve-to-parties-btn"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();

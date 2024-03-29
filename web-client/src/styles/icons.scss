@@ -1,4 +1,4 @@
-@use "../uswds" as *;
+@use '../uswds' as *;
 @use '../variables' as *;
 
 .fa-file-pdf {
@@ -101,8 +101,6 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 }
 
 .icon-list {
-  margin-bottom: 20px;
-
   .icon-item {
     display: table;
     border-spacing: 0 15px 15px 0;
@@ -132,7 +130,7 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 
   .description-wrapper {
     display: table-cell;
-    padding: 0 0 30px 0;
+    padding: 0 0 30px 30px;
     font-size: 17px;
     vertical-align: middle;
   }
@@ -168,8 +166,7 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   display: inline-block;
   width: 20px;
   height: 20px;
-  background:
-    url('data:image/svg+xml;utf8,<svg aria-labelledby="svg-inline--fa-title-DIDdjAjqj8je" data-prefix="fa" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="unread messages" color="gold" aria-hidden="false"><title id="svg-inline--fa-title-DIDdjAjqj8je">unread messages</title><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/></svg>')
+  background: url('data:image/svg+xml;utf8,<svg aria-labelledby="svg-inline--fa-title-DIDdjAjqj8je" data-prefix="fa" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="unread messages" color="gold" aria-hidden="false"><title id="svg-inline--fa-title-DIDdjAjqj8je">unread messages</title><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/></svg>')
     20px 20px;
 }
 

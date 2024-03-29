@@ -22,7 +22,7 @@ export const createTrialSessionInteractor = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.CREATE_TRIAL_SESSION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -38,7 +38,7 @@ export const createTrialSessionInteractor = async (
   }
 
   if (trialSessionToAdd.swingSession && trialSessionToAdd.swingSessionId) {
-    applicationContext
+    await applicationContext
       .getUseCaseHelpers()
       .associateSwingTrialSessions(applicationContext, {
         swingSessionId: trialSessionToAdd.swingSessionId,

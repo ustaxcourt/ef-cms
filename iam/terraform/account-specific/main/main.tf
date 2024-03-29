@@ -12,11 +12,19 @@ provider "aws" {
   alias  = "us-west-1"
 }
 
+provider "opensearch" {
+  url = "https://${aws_opensearch_domain.efcms-logs.endpoint}"
+}
+
 terraform {
   backend "s3" {
   }
 
   required_providers {
-    aws = "5.25.0"
+    aws = "5.40.0"
+    opensearch = {
+      source  = "opensearch-project/opensearch"
+      version = "2.2.0"
+    }
   }
 }

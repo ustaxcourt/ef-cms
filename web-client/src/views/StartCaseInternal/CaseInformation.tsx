@@ -115,6 +115,7 @@ export const CaseInformation = connect(
             <input
               checked={form.orderToShowCause || false}
               className="usa-checkbox__input"
+              data-testid="order-to-show-cause-checkbox"
               id="order-to-show-cause"
               name="orderToShowCause"
               type="checkbox"
@@ -127,6 +128,7 @@ export const CaseInformation = connect(
             />
             <label
               className="usa-checkbox__label"
+              data-testid="order-to-show-cause-label"
               htmlFor="order-to-show-cause"
             >
               Order to Show Cause
@@ -149,11 +151,12 @@ export const CaseInformation = connect(
             validatePetitionFromPaperSequence();
           }}
         />
-        <FormGroup errorText={validationErrors.chooseAtLeastOneValue}>
+        <FormGroup errorText={validationErrors['object.missing']}>
           <div className="order-checkbox">
             <input
               checked={form.orderDesignatingPlaceOfTrial || false}
               className="usa-checkbox__input"
+              data-testid="order-for-requested-trial-location-checkbox"
               id="order-for-requested-trial-location"
               name="orderDesignatingPlaceOfTrial"
               type="checkbox"
@@ -167,6 +170,7 @@ export const CaseInformation = connect(
             />
             <label
               className="usa-checkbox__label"
+              data-testid="order-for-requested-trial-location-label"
               htmlFor="order-for-requested-trial-location"
             >
               Order Designating Place of Trial
@@ -216,6 +220,7 @@ export const CaseInformation = connect(
               aria-describedby="orders-needed"
               checked={form.orderForRatification || false}
               className="usa-checkbox__input"
+              data-testid="order-for-ratification-checkbox"
               id="order-for-ratification"
               name="orderForRatification"
               type="checkbox"
@@ -228,6 +233,7 @@ export const CaseInformation = connect(
             />
             <label
               className="usa-checkbox__label"
+              data-testid="order-for-ratification-label"
               htmlFor="order-for-ratification"
             >
               Order for Ratification of Petition
@@ -238,6 +244,7 @@ export const CaseInformation = connect(
               aria-describedby="orders-needed"
               checked={form.noticeOfAttachments || false}
               className="usa-checkbox__input"
+              data-testid="notice-of-attachments-checkbox"
               id="notice-of-attachments"
               name="noticeOfAttachments"
               type="checkbox"
@@ -250,6 +257,7 @@ export const CaseInformation = connect(
             />
             <label
               className="usa-checkbox__label"
+              data-testid="notice-of-attachments-label"
               htmlFor="notice-of-attachments"
             >
               Notice of Attachments in the Nature of Evidence
@@ -260,6 +268,7 @@ export const CaseInformation = connect(
               aria-describedby="orders-needed"
               checked={form.orderForAmendedPetition || false}
               className="usa-checkbox__input"
+              data-testid="order-for-amended-petition-checkbox"
               id="order-for-amended-petition"
               name="orderForAmendedPetition"
               type="checkbox"
@@ -272,6 +281,7 @@ export const CaseInformation = connect(
             />
             <label
               className="usa-checkbox__label"
+              data-testid="order-for-amended-petition-label"
               htmlFor="order-for-amended-petition"
             >
               Order for Amended Petition
@@ -282,6 +292,7 @@ export const CaseInformation = connect(
               aria-describedby="orders-needed"
               checked={form.orderForAmendedPetitionAndFilingFee || false}
               className="usa-checkbox__input"
+              data-testid="order-for-amended-petition-and-filing-fee-checkbox"
               id="order-for-amended-petition-and-filing-fee"
               name="orderForAmendedPetitionAndFilingFee"
               type="checkbox"
@@ -294,6 +305,7 @@ export const CaseInformation = connect(
             />
             <label
               className="usa-checkbox__label"
+              data-testid="order-for-amended-petition-and-filing-fee-label"
               htmlFor="order-for-amended-petition-and-filing-fee"
             >
               Order for Amended Petition and Filing Fee

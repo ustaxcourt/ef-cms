@@ -3,7 +3,8 @@ import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import * as pdfLib from 'pdf-lib';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { DynamoDB, S3, SQS } from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
   FORMATS,
   calculateDifferenceInDays,
@@ -14,8 +15,8 @@ import {
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { JSDOM } from 'jsdom';
+import { S3, SQS } from 'aws-sdk';
 import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
-import { applicationContext } from '../src/applicationContext';
 import {
   back,
   createObjectURL,
@@ -24,6 +25,7 @@ import {
   router,
 } from '../src/router';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
+import { applicationContext as clientApplicationContext } from '../src/applicationContext';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
 import {
@@ -43,9 +45,11 @@ import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHe
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
 import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCasesForUser } from '../../web-api/src/persistence/dynamo/users/getCasesForUser';
+import {
+  getCasesForUser,
+  getDocketNumbersByUser,
+} from '../../web-api/src/persistence/dynamo/users/getCasesForUser';
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
-import { getDocketNumbersByUser } from '../../web-api/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
 import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext';
@@ -56,20 +60,19 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { queueUpdateAssociatedCasesWorker } from '../../web-api/src/business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
 import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
 import { sendBulkTemplatedEmail } from '../../web-api/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
-import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
-import { sleep } from '../../shared/src/business/utilities/sleep';
+import { sleep } from '@shared/tools/helpers';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateDocketEntry } from '../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
-import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { updateUser } from '../../web-api/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -81,6 +84,9 @@ import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 import sass from 'sass';
+
+const applicationContext =
+  clientApplicationContext as unknown as IApplicationContext;
 
 const { CASE_TYPES_MAP, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
   applicationContext.getConstants();
@@ -95,12 +101,23 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
+let s3Cache;
+let sqsCache;
+let dynamoDbCache;
+
 Object.assign(applicationContext, {
   getDocumentClient: () => {
-    return new DynamoDB.DocumentClient({
-      endpoint: 'http://localhost:8000',
-      region: 'us-east-1',
-    });
+    if (!dynamoDbCache) {
+      const dynamoDbClient = new DynamoDBClient({
+        endpoint: 'http://localhost:8000',
+        region: 'us-east-1',
+      });
+      dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
+        marshallOptions: { removeUndefinedValues: true },
+      });
+    }
+
+    return dynamoDbCache;
   },
   getEnvironment: () => ({
     dynamoDbTableName: 'efcms-local',
@@ -116,9 +133,6 @@ export const fakeFile = (() => {
 export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
-
-let s3Cache;
-let sqsCache;
 
 export const callCognitoTriggerForPendingEmail = async userId => {
   // mock application context similar to that in cognito-triggers.js
@@ -138,10 +152,17 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       sendBulkTemplatedEmail,
     }),
     getDocumentClient: () => {
-      return new DynamoDB.DocumentClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
+      if (!dynamoDbCache) {
+        const dynamoDbClient = new DynamoDBClient({
+          endpoint: 'http://localhost:8000',
+          region: 'us-east-1',
+        });
+        dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
+          marshallOptions: { removeUndefinedValues: true },
+        });
+      }
+
+      return dynamoDbCache;
     },
     getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
     getDocumentsBucketName: () => {
@@ -189,15 +210,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
             emailParams,
           });
         }
-      },
-      sendUpdatePetitionerCasesMessage: ({
-        applicationContext: appContext,
-        user,
-      }) => {
-        return updatePetitionerCasesInteractor({
-          applicationContext: appContext,
-          user,
-        });
       },
     }),
     getMessagingClient: () => {
@@ -293,7 +305,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
   };
 
   const user = await getUserRecordById(userId);
-  await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
+  await queueUpdateAssociatedCasesWorker(apiApplicationContext, {
     user,
   });
 };
@@ -356,7 +368,7 @@ export const getConnection = connectionId => {
   });
 };
 
-export const getUserRecordById = userId => {
+export const getUserRecordById = (userId: string) => {
   return client.get({
     Key: {
       pk: `user|${userId}`,
@@ -435,7 +447,7 @@ export const setFeatureFlag = async (isEnabled, key) => {
 
 export const getFormattedDocumentQCSectionInbox = async (
   cerebralTest,
-  selectedSection = null,
+  selectedSection?: string,
 ) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
@@ -740,7 +752,7 @@ export const uploadExternalAdministrativeRecord = async cerebralTest => {
 
 export const uploadPetition = async (
   cerebralTest,
-  overrides = {},
+  overrides: any = {},
   loginUsername = 'petitioner@example.com',
 ) => {
   if (!userMap[loginUsername]) {
@@ -772,8 +784,12 @@ export const uploadPetition = async (
     filingType: 'Myself',
     hasIrsNotice: false,
     partyType: overrides.partyType || PARTY_TYPES.petitioner,
+    petitionFile: {},
+    petitionFileSize: 1,
     preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
     procedureType: overrides.procedureType || 'Regular',
+    stinFile: {},
+    stinFileSize: 1,
   };
 
   const petitionFileId = '1f1aa3f7-e2e3-43e6-885d-4ce341588c76';
@@ -783,6 +799,7 @@ export const uploadPetition = async (
   const userToken = jwt.sign(user, 'secret');
 
   const data = {
+    corporateDisclosureFileId: undefined,
     petitionFileId,
     petitionMetadata,
     stinFileId,
@@ -802,18 +819,19 @@ export const uploadPetition = async (
   return response.data;
 };
 
-export const loginAs = (cerebralTest, user) =>
-  it(`login as ${user}`, async () => {
+export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
+  it(`login as ${email}`, async () => {
     await cerebralTest.runSequence('signOutSequence');
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'name',
-      value: user,
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      email,
     });
 
-    await cerebralTest.runSequence('submitLocalLoginSequence', {
-      path: '/',
+    await cerebralTest.runSequence('updateAuthenticationFormValueSequence', {
+      password,
     });
+
+    await cerebralTest.runSequence('submitLoginSequence');
 
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
@@ -1098,7 +1116,7 @@ export const waitForExpectedItemToExist = async ({
 
 // will run the cb every second until it returns true
 export const waitUntil = cb => {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     const waitUntilInternal = async () => {
       const value = await cb();
       if (value === false) {
@@ -1107,7 +1125,7 @@ export const waitUntil = cb => {
         resolve();
       }
     };
-    waitUntilInternal();
+    return waitUntilInternal();
   });
 };
 

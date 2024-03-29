@@ -12,7 +12,6 @@ export const MessagesIndividualOutbox = connect(
     constants: state.constants,
     formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -21,94 +20,82 @@ export const MessagesIndividualOutbox = connect(
     constants,
     formattedMessages,
     screenMetadata,
-    showSortableHeaders,
     sortTableSequence,
     tableSort,
     updateScreenMetadataSequence,
   }) {
     return (
       <>
-        {formattedMessages.showFilters && (
-          <TableFilters
-            filters={[
-              {
-                isSelected: screenMetadata.caseStatus,
-                key: 'caseStatus',
-                label: 'Case Status',
-                options: formattedMessages.caseStatuses,
-              },
-              {
-                isSelected: screenMetadata.toUser,
-                key: 'toUser',
-                label: 'To',
-                options: formattedMessages.toUsers,
-              },
-              {
-                isSelected: screenMetadata.toSection,
-                key: 'toSection',
-                label: 'Section',
-                options: formattedMessages.toSections,
-              },
-            ]}
-            onSelect={updateScreenMetadataSequence}
-          ></TableFilters>
-        )}
+        <TableFilters
+          filters={[
+            {
+              isSelected: screenMetadata.caseStatus,
+              key: 'caseStatus',
+              label: 'Case Status',
+              options: formattedMessages.caseStatuses,
+            },
+            {
+              isSelected: screenMetadata.toUser,
+              key: 'toUser',
+              label: 'To',
+              options: formattedMessages.toUsers,
+            },
+            {
+              isSelected: screenMetadata.toSection,
+              key: 'toSection',
+              label: 'Section',
+              options: formattedMessages.toSections,
+            },
+          ]}
+          onSelect={updateScreenMetadataSequence}
+        ></TableFilters>
+
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              {showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.DESCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="docketNumber"
-                    title="Docket No."
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  Docket No.
-                </th>
-              )}
-              {showSortableHeaders && (
-                <th className="small">
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.DESCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="createdAt"
-                    title="Sent"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th className="small">Sent</th>}
-              {showSortableHeaders && (
-                <th>
-                  <SortableColumn
-                    ascText={constants.ALPHABETICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="subject"
-                    title="Message"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th>Message</th>}
+              <th aria-label="Docket Number" className="small" colSpan={2}>
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-individual-outbox-docket-number-header-button"
+                  defaultSortOrder={constants.DESCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="docketNumber"
+                  title="Docket No."
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th className="small">
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-individual-outbox-completed-at-header-button"
+                  defaultSortOrder={constants.DESCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="createdAt"
+                  title="Sent"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-individual-outbox-subject-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="subject"
+                  title="Message"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
@@ -128,15 +115,25 @@ export const MessagesIndividualOutbox = connect(
                       showLeadCaseIcon={message.isLeadCase}
                     />
                   </td>
-                  <td className="message-queue-row small" colSpan={2}>
+                  <td
+                    className="message-queue-row small"
+                    colSpan={2}
+                    data-testid="individual-message-outbox-docket-number-cell"
+                  >
                     {message.docketNumberWithSuffix}
                   </td>
-                  <td className="message-queue-row small">
+                  <td
+                    className="message-queue-row small"
+                    data-testid="individual-message-outbox-completed-at-cell"
+                  >
                     <span className="no-wrap">
                       {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-subject">
+                  <td
+                    className="message-queue-row message-subject"
+                    data-testid="individual-message-outbox-subject-cell"
+                  >
                     <div className="message-document-title">
                       <Button
                         link

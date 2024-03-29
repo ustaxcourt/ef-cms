@@ -1,4 +1,4 @@
-@use "../uswds" as *;
+@use '../uswds' as *;
 @use '../variables' as *;
 
 .card {
@@ -47,6 +47,10 @@
 
     &.parties-card {
       padding: 0.5rem;
+
+      h3 {
+        overflow-wrap: break-word;
+      }
     }
 
     &.how-to-search {

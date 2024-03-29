@@ -1,5 +1,16 @@
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
 
+export type TrialSessionInformationType = {
+  chambersPhoneNumber: string;
+  joinPhoneNumber: string;
+  judgeName: string;
+  meetingId: string;
+  password: string;
+  startDate: string;
+  startTime: string;
+  trialLocation: string;
+};
+
 /**
  * setNoticeOfChangeToRemoteProceeding
  *
@@ -13,8 +24,8 @@ import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants'
 export const setNoticeOfChangeToRemoteProceeding = async (
   applicationContext,
   { caseEntity, newPdfDoc, newTrialSessionEntity, user },
-) => {
-  const trialSessionInformation = {
+): Promise<void> => {
+  const trialSessionInformation: TrialSessionInformationType = {
     chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
     joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
     judgeName: newTrialSessionEntity.judge.name,

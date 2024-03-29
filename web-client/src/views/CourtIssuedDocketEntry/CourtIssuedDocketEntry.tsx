@@ -85,7 +85,7 @@ export const CourtIssuedDocketEntry = connect(
                 message:
                   'Document cannot be served until the Petition is served.',
               }}
-              dismissable={false}
+              dismissible={false}
               scrollToTop={false}
             />
           )}
@@ -117,6 +117,7 @@ export const CourtIssuedDocketEntry = connect(
                   </label>
                   <SelectSearch
                     aria-labelledby="document-type-label"
+                    data-testid="primary-document"
                     id="document-type"
                     name="eventCode"
                     options={addCourtIssuedDocketEntryHelper.documentTypes}

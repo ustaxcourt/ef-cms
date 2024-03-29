@@ -15,10 +15,6 @@ export class UserCase extends JoiValidationEntity {
       docketNumber: Case.VALIDATION_RULES.docketNumber,
     };
   }
-
-  getErrorToMessageMap() {
-    return Case.VALIDATION_ERROR_MESSAGES;
-  }
 }
 
 export type RawUserCase = ExcludeMethods<UserCase>;

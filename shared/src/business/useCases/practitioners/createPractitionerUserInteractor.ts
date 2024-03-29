@@ -1,4 +1,4 @@
-import { Practitioner } from '../../entities/Practitioner';
+import { Practitioner, RawPractitioner } from '../../entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -16,7 +16,7 @@ import { createPractitionerUser } from '../../utilities/createPractitionerUser';
  */
 export const createPractitionerUserInteractor = async (
   applicationContext: IApplicationContext,
-  { user }: { user: TPractitioner },
+  { user }: { user: RawPractitioner },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
 

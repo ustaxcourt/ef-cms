@@ -1,6 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
 
 export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
   return it('Petitions clerk submits case to IRS', async () => {
@@ -29,7 +29,8 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsNoticeDate: Case.VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
+      irsNoticeDate:
+        'The IRS notice date cannot be in the future. Enter a valid date.',
     });
 
     await cerebralTest.runSequence(
@@ -44,6 +45,9 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
     await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

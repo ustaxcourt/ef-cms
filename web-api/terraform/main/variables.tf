@@ -2,6 +2,10 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "active_ses_ruleset" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
@@ -29,7 +33,7 @@ variable "es_instance_count" {
 
 variable "es_instance_type" {
   type    = string
-  default = "t2.small.elasticsearch"
+  default = "t2.small.search"
 }
 
 variable "irs_superuser_email" {
@@ -131,4 +135,8 @@ variable "default_account_pass" {
 variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string
+}
+
+variable "deployment_timestamp" {
+  type = number
 }

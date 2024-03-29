@@ -28,7 +28,7 @@ const config = {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
   },
-  endpoint: process.env.DYNAMODB_ENDPOINT,
+  endpoint: 'http://localhost:8000',
   region: 'us-east-1',
 };
 
@@ -37,7 +37,7 @@ const dynamodbClient = new AWS.DynamoDB(config);
 const dynamodbStreamsClient = new AWS.DynamoDBStreams(config);
 const tableName = 'efcms-local';
 
-let chunks = [];
+let chunks: any[] = [];
 
 /**
  * This endpoint it hit to know when the streams queue is empty.  An empty queue
@@ -47,13 +47,14 @@ localStreamsApp.get('/isDone', (req, res) => {
   res.send(chunks.length === 0);
 });
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const streamARN = await dynamodbClient
     .describeTable({
       TableName: tableName,
     })
     .promise()
-    .then(results => results.Table.LatestStreamArn);
+    .then(results => results?.Table?.LatestStreamArn!);
 
   const { StreamDescription } = await dynamodbStreamsClient
     .describeStream({
@@ -80,7 +81,7 @@ localStreamsApp.get('/isDone', (req, res) => {
     );
   };
 
-  StreamDescription.Shards.forEach(shard => processShard(shard));
+  StreamDescription?.Shards?.forEach(shard => processShard(shard));
 })();
 
 const processChunks = async () => {
@@ -96,6 +97,7 @@ const processChunks = async () => {
   setTimeout(processChunks, 1);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 processChunks();
 
 localStreamsApp.listen(5005);
@@ -104,23 +106,23 @@ localStreamsApp.listen(5005);
 const connections = {};
 
 const server = http.createServer((request, response) => {
-  let body = '';
+  let requestBody = '';
   request.on('data', chunk => {
-    body += chunk.toString();
+    requestBody += chunk.toString();
   });
-  request.on('end', () => {
+  request.on('end', async () => {
     const split = request.url!.split('/');
     const connectionId = split[split.length - 1];
     if (connections[connectionId]) {
-      connections[connectionId].sendUTF(body);
+      connections[connectionId].sendUTF(requestBody);
       response.writeHead(200);
-      response.end();
+      return response.end();
     } else if (request.url?.includes('isDone')) {
       response.writeHead(200);
-      response.end();
+      return response.end();
     } else {
       response.writeHead(410);
-      response.end();
+      return response.end();
     }
   });
 });
@@ -137,7 +139,7 @@ const wsServer = new WebSocketServer({
   httpServer: server,
 });
 
-wsServer.on('request', function (request) {
+wsServer.on('request', async function (request) {
   const connection = request.accept('echo-protocol', request.origin);
   const connectionId = uuid();
   connections[connectionId] = connection;
@@ -149,17 +151,17 @@ wsServer.on('request', function (request) {
     },
     {},
   );
-  connectLambda({
+  await connectLambda({
     queryStringParameters,
     requestContext: {
       connectionId,
       domainName: `ws://localhost:${PORT}`,
     },
   });
-  connection.on('close', function () {
+  connection.on('close', async function () {
     delete connections[connectionId];
 
-    disconnectLambda({
+    await disconnectLambda({
       requestContext: {
         connectionId,
       },

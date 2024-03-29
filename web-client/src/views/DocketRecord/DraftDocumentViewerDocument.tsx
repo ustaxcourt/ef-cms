@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { getEditUrl } from '@shared/business/utilities/getFormattedCaseDetail';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -62,7 +63,12 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showEditButtonNotSigned && (
                 <Button
                   link
-                  href={viewerDraftDocumentToDisplay.editUrl}
+                  data-testid="draft-edit-button-not-signed"
+                  href={getEditUrl({
+                    docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
+                    docketNumber: caseDetail.docketNumber,
+                    documentType: viewerDraftDocumentToDisplay.documentType,
+                  })}
                   icon="edit"
                   id="draft-edit-button-not-signed"
                 >
@@ -73,6 +79,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showEditButtonSigned && (
                 <Button
                   link
+                  data-testid="edit-order-button"
                   icon="edit"
                   id="edit-order-button"
                   onClick={() =>
@@ -116,6 +123,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showRemoveSignatureButton && (
                 <Button
                   link
+                  data-testid="remove-signature-docket-entry-button"
                   icon="pencil-alt"
                   onClick={() =>
                     openConfirmRemoveSignatureModalSequence({

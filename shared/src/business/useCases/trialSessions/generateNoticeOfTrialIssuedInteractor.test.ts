@@ -27,6 +27,13 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
+      .getConfigurationItemValue.mockImplementation(() => ({
+        name: 'bob',
+        title: 'clerk of court',
+      }));
+
+    applicationContext
+      .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
         if (docketNumber === '123-45') {
           return {
@@ -81,6 +88,55 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
           password: '2222',
           trialLocation: 'Boise, Idaho',
         },
+      },
+    });
+  });
+
+  it('call the noticeOfTrialIssued pdf generator with the title and name of the clerk of the court', async () => {
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
+      docketNumber: '123-45',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        nameOfClerk: 'bob',
+        titleOfClerk: 'clerk of court',
+      },
+    });
+  });
+
+  it('call the noticeOfTrialIssuedInPerson pdf generator with the title and name of the clerk of the court', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockImplementation(() => ({
+        address1: '1111',
+        address2: '2222',
+        city: 'troutville',
+        judge: { name: 'Test Judge' },
+        postalCode: 'Boise, Idaho',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        startDate: '2019-08-25T05:00:00.000Z',
+        startTime: '10:00',
+        state: '33333',
+        trialLocation: 'Boise, Idaho',
+      }));
+
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
+      docketNumber: '234-56',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfTrialIssuedInPerson
+        .mock.calls[0][0],
+    ).toMatchObject({
+      data: {
+        nameOfClerk: 'bob',
+        titleOfClerk: 'clerk of court',
       },
     });
   });

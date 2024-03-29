@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSearchResultRecord = (
@@ -24,13 +26,10 @@ export const formatSearchResultRecord = (
   return result;
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const advancedSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
@@ -42,13 +41,7 @@ export const advancedSearchHelper = (
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
 
-  const showFeedbackButton = applicationContext
-    .getUtilities()
-    .isInternalUser(user.role);
-
   const result = {
-    feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
-    showFeedbackButton,
     showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };

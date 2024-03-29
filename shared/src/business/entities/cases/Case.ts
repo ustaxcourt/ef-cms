@@ -16,7 +16,6 @@ import {
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   LEGACY_TRIAL_CITY_STRINGS,
-  MAX_FILE_SIZE_MB,
   MINUTE_ENTRIES_MAP,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -63,7 +62,7 @@ import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { UnprocessableEntityError } from '@web-api/errors/errors';
+import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
@@ -73,6 +72,7 @@ import joi from 'joi';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
+  public associatedJudgeId?: string;
   public automaticBlocked?: boolean;
   public automaticBlockedDate?: string;
   public automaticBlockedReason?: string;
@@ -137,7 +137,7 @@ export class Case extends JoiValidationEntity {
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: any[];
-  public correspondence?: any[];
+  public correspondence: any[];
   public archivedCorrespondences?: any[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
@@ -161,6 +161,7 @@ export class Case extends JoiValidationEntity {
     }
 
     this.petitioners = [];
+    this.correspondence = [];
     const currentUser = applicationContext.getCurrentUser();
 
     if (!filtered || User.isInternalUser(currentUser.role)) {
@@ -283,92 +284,9 @@ export class Case extends JoiValidationEntity {
     );
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    applicationForWaiverOfFilingFeeFile:
-      'Upload an Application for Waiver of Filing Fee',
-    applicationForWaiverOfFilingFeeFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Filing Fee Waiver file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Filing Fee Waiver file size is empty',
-    ],
-    caseCaption: 'Enter a case caption',
-    caseNote: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Limit is 9000 characters. Enter 9000 or fewer characters.',
-      },
-    ],
-    caseType: 'Select a case type',
-    corporateDisclosureFile: 'Upload a Corporate Disclosure Statement',
-    corporateDisclosureFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Corporate Disclosure Statement file size is empty',
-    ],
-    docketEntries: 'At least one valid docket entry is required',
-    docketNumber: 'Docket number is required',
-    filingType: 'Select on whose behalf you are filing',
-    hasIrsNotice: 'Indicate whether you received an IRS notice',
-    hasVerifiedIrsNotice: 'Indicate whether you received an IRS notice',
-    irsNoticeDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'The IRS notice date cannot be in the future. Enter a valid date.',
-      },
-      'Please enter a valid IRS notice date',
-    ],
-    mailingDate: 'Enter a mailing date',
-    partyType: 'Select a party type',
-    petitionFile: 'Upload a Petition',
-    petitionFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Petition file size is empty',
-    ],
-    petitionPaymentDate: 'Enter a valid payment date',
-    petitionPaymentMethod: 'Enter payment method',
-    petitionPaymentStatus: 'Enter payment status',
-    petitionPaymentWaivedDate: 'Enter a valid date waived',
-    preferredTrialCity: 'Select a trial location',
-    procedureType: 'Select a case procedure',
-    receivedAt: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Date received cannot be in the future. Enter a valid date.',
-      },
-      'Enter a valid date received',
-    ],
-    requestForPlaceOfTrialFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Request for Place of Trial file size is empty',
-    ],
-    sortableDocketNumber: 'Sortable docket number is required',
-    stinFile: 'Upload a Statement of Taxpayer Identification Number (STIN)',
-    stinFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your STIN file size is empty',
-    ],
-  } as const;
-
-  getErrorToMessageMap() {
-    return Case.VALIDATION_ERROR_MESSAGES;
-  }
-
   assignFieldsForInternalUsers({ applicationContext, rawCase }) {
     this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
+    this.associatedJudgeId = rawCase.associatedJudgeId;
     this.automaticBlocked = rawCase.automaticBlocked;
     this.automaticBlockedDate = rawCase.automaticBlockedDate;
     this.automaticBlockedReason = rawCase.automaticBlockedReason;
@@ -416,6 +334,13 @@ export class Case extends JoiValidationEntity {
       .optional()
       .meta({ tags: ['Restricted'] })
       .description('Judge assigned to this case. Defaults to Chief Judge.'),
+    associatedJudgeId: joi
+      .when('associatedJudge', {
+        is: joi.valid(CHIEF_JUDGE),
+        otherwise: JoiValidationConstants.UUID.required(),
+        then: JoiValidationConstants.UUID.optional(),
+      })
+      .description('Judge ID assigned to this case.'),
     automaticBlocked: joi
       .boolean()
       .optional()
@@ -466,17 +391,23 @@ export class Case extends JoiValidationEntity {
       .meta({ tags: ['Restricted'] }),
     canAllowDocumentService: joi.boolean().optional(),
     canAllowPrintableDocketRecord: joi.boolean().optional(),
-    caseCaption: CASE_CAPTION_RULE,
+    caseCaption: CASE_CAPTION_RULE.messages({ '*': 'Enter a case caption' }),
     caseNote: JoiValidationConstants.STRING.max(9000)
       .optional()
       .meta({
         tags: ['Restricted'],
+      })
+      .messages({
+        'string.max':
+          'Limit is 9000 characters. Enter 9000 or fewer characters.',
       }),
     caseStatusHistory: joi
       .array()
       .required()
       .description('The history of status changes on the case'),
-    caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
+    caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES)
+      .required()
+      .messages({ '*': 'Select a case type' }),
     closedDate: JoiValidationConstants.ISO_DATE.when('status', {
       is: joi.exist().valid(...CLOSED_CASE_STATUSES),
       otherwise: joi.optional(),
@@ -500,12 +431,15 @@ export class Case extends JoiValidationEntity {
       .optional()
       .allow(null)
       .description('Damages for the case.'),
+    // docketEntries: 'At least one valid docket entry is required',
     docketEntries: joi
       .array()
       .items(DOCKET_ENTRY_VALIDATION_RULES)
       .required()
       .description('List of DocketEntry Entities for the case.'),
-    docketNumber: CASE_DOCKET_NUMBER_RULE,
+    docketNumber: CASE_DOCKET_NUMBER_RULE.messages({
+      '*': 'Docket number is required',
+    }),
     docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
       .optional(),
@@ -517,7 +451,9 @@ export class Case extends JoiValidationEntity {
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],
-    ).optional(),
+    )
+      .optional()
+      .messages({ '*': 'Select on whose behalf you are filing' }),
     hasPendingItems: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()
@@ -525,7 +461,8 @@ export class Case extends JoiValidationEntity {
       .allow(null)
       .description(
         'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
-      ),
+      )
+      .messages({ '*': 'Indicate whether you received an IRS notice' }),
     highPriority: joi
       .boolean()
       .optional()
@@ -550,7 +487,12 @@ export class Case extends JoiValidationEntity {
     irsNoticeDate: JoiValidationConstants.ISO_DATE.max('now')
       .optional()
       .allow(null)
-      .description('Last date that the petitioner is allowed to file before.'),
+      .description('Last date that the petitioner is allowed to file before.')
+      .messages({
+        '*': 'Please enter a valid IRS notice date',
+        'date.max':
+          'The IRS notice date cannot be in the future. Enter a valid date.',
+      }),
     irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isPaper: joi.boolean().optional(),
     isSealed: CASE_IS_SEALED_RULE,
@@ -569,7 +511,8 @@ export class Case extends JoiValidationEntity {
         otherwise: joi.allow(null).optional(),
         then: joi.required(),
       })
-      .description('Date that petition was mailed to the court.'),
+      .description('Date that petition was mailed to the court.')
+      .messages({ '*': 'Enter a mailing date' }),
     noticeOfAttachments: joi
       .boolean()
       .optional()
@@ -615,7 +558,8 @@ export class Case extends JoiValidationEntity {
       ...Object.values(PARTY_TYPES),
     )
       .required()
-      .description('Party type of the case petitioner.'),
+      .description('Party type of the case petitioner.')
+      .messages({ '*': 'Select a party type' }),
     petitionPaymentDate: JoiValidationConstants.ISO_DATE.when(
       'petitionPaymentStatus',
       {
@@ -623,19 +567,23 @@ export class Case extends JoiValidationEntity {
         otherwise: joi.optional().allow(null),
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       },
-    ).description('When the petitioner paid the case fee.'),
+    )
+      .description('When the petitioner paid the case fee.')
+      .messages({ '*': 'Enter a valid payment date' }),
     petitionPaymentMethod: JoiValidationConstants.STRING.max(50)
       .when('petitionPaymentStatus', {
         is: PAYMENT_STATUS.PAID,
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       })
-      .description('How the petitioner paid the case fee.'),
+      .description('How the petitioner paid the case fee.')
+      .messages({ '*': 'Enter payment method' }),
     petitionPaymentStatus: JoiValidationConstants.STRING.valid(
       ...Object.values(PAYMENT_STATUS),
     )
       .required()
-      .description('Status of the case fee payment.'),
+      .description('Status of the case fee payment.')
+      .messages({ '*': 'Enter payment status' }),
     petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
       'petitionPaymentStatus',
       {
@@ -643,8 +591,13 @@ export class Case extends JoiValidationEntity {
         otherwise: joi.allow(null).optional(),
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       },
-    ).description('When the case fee was waived.'),
-    petitioners: CASE_PETITIONERS_RULE,
+    )
+      .description('When the case fee was waived.')
+      .messages({ '*': 'Enter a valid date waived' }),
+    petitioners: CASE_PETITIONERS_RULE.messages({
+      ['array.unique']:
+        'Only one (1) Intervenor is allowed per case. Please select a different Role.',
+    }),
     preferredTrialCity: joi
       .alternatives()
       .try(
@@ -656,11 +609,13 @@ export class Case extends JoiValidationEntity {
         JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
       .optional()
-      .description('Where the petitioner would prefer to hold the case trial.'),
+      .description('Where the petitioner would prefer to hold the case trial.')
+      .messages({ '*': 'Select a trial location' }),
     privatePractitioners: CASE_PRIVATE_PRACTITIONERS_RULE,
     procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
       .required()
-      .description('Procedure type of the case.'),
+      .description('Procedure type of the case.')
+      .messages({ '*': 'Select a case procedure' }),
     qcCompleteForTrial: joi
       .object()
       .optional()
@@ -668,13 +623,21 @@ export class Case extends JoiValidationEntity {
       .description(
         'QC Checklist object that must be completed before the case can go to trial.',
       ),
-    receivedAt: JoiValidationConstants.ISO_DATE.required().description(
-      'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
-    ),
+    receivedAt: JoiValidationConstants.ISO_DATE.required()
+      .description(
+        'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
+      )
+      .messages({
+        '*': 'Enter a valid date received',
+        'date.max':
+          'Date received cannot be in the future. Enter a valid date.',
+      }),
     sealedDate: JoiValidationConstants.ISO_DATE.optional()
       .allow(null)
       .description('When the case was sealed from the public.'),
-    sortableDocketNumber: CASE_SORTABLE_DOCKET_NUMBER_RULE,
+    sortableDocketNumber: CASE_SORTABLE_DOCKET_NUMBER_RULE.messages({
+      '*': 'Sortable docket number is required',
+    }),
     statistics: joi
       .array()
       .items(Statistic.VALIDATION_RULES)
@@ -846,7 +809,7 @@ export class Case extends JoiValidationEntity {
   }
 
   hasPrivatePractitioners() {
-    return this.privatePractitioners.length > 0;
+    return this.privatePractitioners && this.privatePractitioners.length > 0;
   }
 
   assignContacts({ applicationContext, rawCase }) {
@@ -987,7 +950,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitioner the irsPractitioner to add to the case
    */
   attachIrsPractitioner(practitioner) {
-    this.irsPractitioners.push(practitioner);
+    this.irsPractitioners?.push(practitioner);
   }
 
   archiveDocketEntry(docketEntry: DocketEntry) {
@@ -997,7 +960,7 @@ export class Case extends JoiValidationEntity {
       );
     }
     docketEntry.archive();
-    this.archivedDocketEntries.push(docketEntry);
+    this.archivedDocketEntries?.push(docketEntry);
     this.deleteDocketEntryById({
       docketEntryId: docketEntry.docketEntryId,
     });
@@ -1009,7 +972,7 @@ export class Case extends JoiValidationEntity {
    */
   archiveCorrespondence(correspondenceEntity) {
     correspondenceEntity.archived = true;
-    this.archivedCorrespondences.push(correspondenceEntity);
+    this.archivedCorrespondences?.push(correspondenceEntity);
     this.deleteCorrespondenceById({
       correspondenceId: correspondenceEntity.correspondenceId,
     });
@@ -1021,7 +984,7 @@ export class Case extends JoiValidationEntity {
    * @returns {void} modifies the irsPractitioners array on the case
    */
   updateIrsPractitioner(practitionerToUpdate) {
-    const foundPractitioner = this.irsPractitioners.find(
+    const foundPractitioner = this.irsPractitioners?.find(
       practitioner => practitioner.userId === practitionerToUpdate.userId,
     );
     if (foundPractitioner)
@@ -1034,10 +997,10 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the modified case entity
    */
   removeIrsPractitioner(practitionerToRemove) {
-    const index = this.irsPractitioners.findIndex(
+    const index = this.irsPractitioners!.findIndex(
       practitioner => practitioner.userId === practitionerToRemove.userId,
     );
-    if (index > -1) this.irsPractitioners.splice(index, 1);
+    if (index > -1) this.irsPractitioners?.splice(index, 1);
     return this;
   }
 
@@ -1046,7 +1009,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitioner the privatePractitioner to add to the case
    */
   attachPrivatePractitioner(practitioner) {
-    this.privatePractitioners.push(practitioner);
+    this.privatePractitioners!.push(practitioner);
   }
 
   /**
@@ -1054,7 +1017,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitionerToUpdate the practitioner user object with updated info
    */
   updatePrivatePractitioner(practitionerToUpdate) {
-    const foundPractitioner = this.privatePractitioners.find(
+    const foundPractitioner = this.privatePractitioners?.find(
       practitioner => practitioner.userId === practitionerToUpdate.userId,
     );
     if (foundPractitioner)
@@ -1069,7 +1032,7 @@ export class Case extends JoiValidationEntity {
     const index = this.privatePractitioners.findIndex(
       practitioner => practitioner.userId === practitionerToRemove.userId,
     );
-    if (index > -1) this.privatePractitioners.splice(index, 1);
+    if (index > -1) this.privatePractitioners?.splice(index, 1);
   }
 
   /**
@@ -1278,7 +1241,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} petitionerContactId the id of the petitioner
    */
   removeRepresentingFromPractitioners(petitionerContactId) {
-    this.privatePractitioners.forEach(practitioner => {
+    this.privatePractitioners?.forEach(practitioner => {
       const representingArrayIndex =
         practitioner.representing.indexOf(petitionerContactId);
       if (representingArrayIndex >= 0) {
@@ -1313,7 +1276,7 @@ export class Case extends JoiValidationEntity {
    * @returns {object} the retrieved correspondence
    */
   getCorrespondenceById({ correspondenceId }) {
-    return this.correspondence.find(
+    return this.correspondence?.find(
       correspondence => correspondence.correspondenceId === correspondenceId,
     );
   }
@@ -1339,7 +1302,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   deleteCorrespondenceById({ correspondenceId }) {
-    this.correspondence = this.correspondence.filter(
+    this.correspondence = this.correspondence?.filter(
       item => item.correspondenceId !== correspondenceId,
     );
 
@@ -1408,14 +1371,18 @@ export class Case extends JoiValidationEntity {
 
   removeFromTrial({
     associatedJudge = CHIEF_JUDGE,
+    associatedJudgeId = undefined,
     changedBy,
     updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
   }: {
     associatedJudge?: string;
+    associatedJudgeId?: string;
     changedBy?: string;
     updatedCaseStatus?: CaseStatus;
   }): Case {
     this.setAssociatedJudge(associatedJudge);
+
+    this.setAssociatedJudgeId(associatedJudgeId);
     this.setCaseStatus({
       changedBy,
       updatedCaseStatus,
@@ -1451,9 +1418,13 @@ export class Case extends JoiValidationEntity {
     this.hearings.splice(removeIndex, 1);
   }
 
-  removeFromTrialWithAssociatedJudge(associatedJudge?: string): Case {
-    if (associatedJudge) {
-      this.associatedJudge = associatedJudge;
+  removeFromTrialWithAssociatedJudge(judgeData?: {
+    associatedJudge: string;
+    associatedJudgeId: string;
+  }): Case {
+    if (judgeData && judgeData.associatedJudge) {
+      this.associatedJudge = judgeData.associatedJudge;
+      this.associatedJudgeId = judgeData.associatedJudgeId;
     }
 
     this.trialDate = undefined;
@@ -1470,6 +1441,11 @@ export class Case extends JoiValidationEntity {
    */
   setAssociatedJudge(associatedJudge) {
     this.associatedJudge = associatedJudge;
+    return this;
+  }
+
+  setAssociatedJudgeId(associatedJudgeId) {
+    this.associatedJudgeId = associatedJudgeId;
     return this;
   }
 
@@ -1496,6 +1472,7 @@ export class Case extends JoiValidationEntity {
       ].includes(updatedCaseStatus)
     ) {
       this.associatedJudge = CHIEF_JUDGE;
+      this.associatedJudgeId = undefined;
     }
 
     if (isClosedStatus(updatedCaseStatus)) {
@@ -1619,8 +1596,8 @@ export class Case extends JoiValidationEntity {
    */
   isPractitioner(userId) {
     return (
-      this.privatePractitioners.some(p => p.userId === userId) ||
-      this.irsPractitioners.some(p => p.userId === userId)
+      this.privatePractitioners?.some(p => p.userId === userId) ||
+      this.irsPractitioners?.some(p => p.userId === userId)
     );
   }
 
@@ -1749,7 +1726,7 @@ export class Case extends JoiValidationEntity {
       receivedAt,
       FORMATS.TRIAL_SORT_TAG,
     );
-    const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
+    const formattedTrialCity = preferredTrialCity?.replace(/[\s.,]/g, '');
 
     const nonHybridSortKey = [
       formattedTrialCity,
@@ -1801,7 +1778,9 @@ export class Case extends JoiValidationEntity {
       trialSessionEntity.judge.name
     ) {
       this.associatedJudge = trialSessionEntity.judge.name;
+      this.associatedJudgeId = trialSessionEntity.judge.userId;
     }
+
     this.trialSessionId = trialSessionEntity.trialSessionId;
     this.trialDate = trialSessionEntity.startDate;
     this.trialTime = trialSessionEntity.startTime;
@@ -1893,8 +1872,14 @@ export class Case extends JoiValidationEntity {
    * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
    * @returns {Case} this case entity
    */
-  setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId }) {
-    this.qcCompleteForTrial[trialSessionId] = qcCompleteForTrial;
+  setQcCompleteForTrial({
+    qcCompleteForTrial,
+    trialSessionId,
+  }: {
+    qcCompleteForTrial: boolean;
+    trialSessionId: string;
+  }) {
+    this.qcCompleteForTrial![trialSessionId] = qcCompleteForTrial;
     return this;
   }
 
@@ -1943,7 +1928,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   updateCorrespondence(correspondenceEntity) {
-    const foundCorrespondence = this.correspondence.find(
+    const foundCorrespondence = this.correspondence?.find(
       correspondence =>
         correspondence.correspondenceId ===
         correspondenceEntity.correspondenceId,
@@ -1961,11 +1946,11 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   addStatistic(statisticEntity) {
-    if (this.statistics.length === 12) {
+    if (this.statistics?.length === 12) {
       throw new Error('maximum number of statistics reached');
     }
 
-    this.statistics = [...this.statistics, statisticEntity];
+    this.statistics = [...this.statistics!, statisticEntity];
 
     return this;
   }
@@ -1977,7 +1962,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   updateStatistic(statisticEntity, statisticId) {
-    const statisticToUpdate = this.statistics.find(
+    const statisticToUpdate = this.statistics?.find(
       statistic => statistic.statisticId === statisticId,
     );
 
@@ -1992,12 +1977,12 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   deleteStatistic(statisticId) {
-    const statisticIndexToDelete = this.statistics.findIndex(
+    const statisticIndexToDelete = this.statistics?.findIndex(
       statistic => statistic.statisticId === statisticId,
     );
 
     if (statisticIndexToDelete !== -1) {
-      this.statistics.splice(statisticIndexToDelete, 1);
+      this.statistics!.splice(statisticIndexToDelete, 1);
     }
 
     return this;
@@ -2154,7 +2139,7 @@ export const getPractitionersRepresenting = function (
   rawCase: RawCase,
   petitionerContactId: string,
 ) {
-  return rawCase.privatePractitioners.filter(practitioner =>
+  return rawCase.privatePractitioners?.filter(practitioner =>
     practitioner.representing.includes(petitionerContactId),
   );
 };

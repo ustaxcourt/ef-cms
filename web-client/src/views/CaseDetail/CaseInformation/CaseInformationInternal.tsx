@@ -70,6 +70,7 @@ export const CaseInformationInternal = connect(
                 <Button
                   link
                   className="margin-0"
+                  data-testid="menu-edit-case-context-button"
                   icon="edit"
                   id="menu-edit-case-context-button"
                   onClick={() => {
@@ -86,20 +87,10 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Case Details
-                    {caseDetailHelper.showEditCaseDetailsButton && (
-                      <Button
-                        link
-                        className="margin-left-2 padding-0"
-                        href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-details`}
-                        icon="edit"
-                      >
-                        Edit
-                      </Button>
-                    )}
                     <If bind="formattedCaseDetail.showPrintConfirmationLink">
                       <Button
                         link
-                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        className="float-right margin-right-0 margin-left-205 margin-top-1 padding-0 "
                         onClick={() => {
                           navigateToPrintableCaseConfirmationSequence({
                             docketNumber: formattedCaseDetail.docketNumber,
@@ -114,6 +105,16 @@ export const CaseInformationInternal = connect(
                         Print Confirmation
                       </Button>
                     </If>
+                    {caseDetailHelper.showEditCaseDetailsButton && (
+                      <Button
+                        link
+                        className="float-right margin-right-0 margin-top-1 padding-0"
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-details`}
+                        icon="edit"
+                      >
+                        Edit
+                      </Button>
+                    )}
                   </h3>
 
                   <CaseDetails
@@ -165,7 +166,7 @@ export const CaseInformationInternal = connect(
                       <Button
                         link
                         aria-label="unconsolidate cases"
-                        className="red-warning margin-right-0 margin-top-1 padding-0 float-right"
+                        className="red-warning margin-right-0 margin-left-205 margin-top-1 padding-0 float-right"
                         icon="minus-circle"
                         onClick={() => {
                           openCleanModalSequence({
@@ -180,7 +181,8 @@ export const CaseInformationInternal = connect(
                       <Button
                         link
                         aria-label="add cases to consolidate with this case"
-                        className="margin-right-4 margin-top-1 padding-0 float-right"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        data-testid="add-cases-to-group"
                         icon="plus-circle"
                         onClick={() => {
                           openCleanModalSequence({

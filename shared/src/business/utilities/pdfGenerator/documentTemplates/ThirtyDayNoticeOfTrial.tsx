@@ -20,6 +20,8 @@ export type ThirtyDayNoticeOfTrialRequiredInfo = {
   dateServed: string;
   proceedingType: TrialSessionProceedingType;
   scopeType: TrialSessionScope;
+  nameOfClerk: string;
+  titleOfClerk: string;
 };
 
 type TrialLocation = {
@@ -92,13 +94,18 @@ const InPersonParagraph1 = ({
     </p>
   );
 };
-const RemoteParagraph1 = () => {
+const RemoteParagraph1 = ({
+  formattedTrialMonthDayYear,
+}: {
+  formattedTrialMonthDayYear: string;
+}) => {
   return (
     <p>
       The parties are reminded that this case is calendared for trial or hearing
       at the Trial Session beginning at{' '}
       <span className="text-bold">
-        10:00 AM local time at the location shown above,
+        10:00 AM local time on {formattedTrialMonthDayYear} at the location
+        shown above,
       </span>{' '}
       as a remote proceeding using Zoomgov. This case will remain on the Court’s
       trial calendar unless: (1) both parties sign an agreed decision and submit
@@ -109,15 +116,21 @@ const RemoteParagraph1 = () => {
     </p>
   );
 };
-const StandaloneRemoteParagraph1 = () => {
+const StandaloneRemoteParagraph1 = ({
+  formattedTrialMonthDayYear,
+}: {
+  formattedTrialMonthDayYear: string;
+}) => {
   return (
     <p>
       The parties are reminded that this case is calendared for trial or hearing
       at the Trial Session beginning at{' '}
-      <span className="text-bold"> 1:00 PM Eastern time (ET),</span> as a remote
-      proceeding using Zoomgov. This case will remain on the Court’s trial
-      calendar unless: (1) both parties sign an agreed decision and submit it to
-      the Court or (2) the Court otherwise notifies the parties that it is
+      <span className="text-bold">
+        1:00 PM Eastern time (ET), on {formattedTrialMonthDayYear}
+      </span>{' '}
+      as a remote proceeding using Zoomgov. This case will remain on the Court’s
+      trial calendar unless: (1) both parties sign an agreed decision and submit
+      it to the Court or (2) the Court otherwise notifies the parties that it is
       removing the case from the trial calendar. If this case remains on the
       Court’s trial calendar and you fail to appear at the Trial Session, the
       case may be dismissed.
@@ -193,14 +206,21 @@ export const ThirtyDayNoticeOfTrial = ({
   caseTitle,
   docketNumberWithSuffix,
   judgeName,
+  nameOfClerk,
   proceedingType,
   scopeType,
+  titleOfClerk,
   trialDate,
   trialLocation,
 }: ThirtyDayNoticeOfTrialRequiredInfo) => {
   const formattedTrialDate = formatDateString(
     trialDate,
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+  );
+
+  const formattedTrialMonthDayYear = formatDateString(
+    trialDate,
+    FORMATS.MONTH_DAY_YEAR,
   );
 
   const isInPerson =
@@ -246,8 +266,16 @@ export const ThirtyDayNoticeOfTrial = ({
         {isInPerson && (
           <InPersonParagraph1 formattedTrialDate={formattedTrialDate} />
         )}
-        {isRemote && <RemoteParagraph1 />}
-        {isStandaloneRemote && <StandaloneRemoteParagraph1 />}
+        {isRemote && (
+          <RemoteParagraph1
+            formattedTrialMonthDayYear={formattedTrialMonthDayYear}
+          />
+        )}
+        {isStandaloneRemote && (
+          <StandaloneRemoteParagraph1
+            formattedTrialMonthDayYear={formattedTrialMonthDayYear}
+          />
+        )}
 
         {isInPerson && <InPersonParagraph2 />}
         {isRemote && <RemoteParagraph2 />}
@@ -266,7 +294,10 @@ export const ThirtyDayNoticeOfTrial = ({
           soon as possible.
         </p>
 
-        <ClerkOfTheCourtSignature />
+        <ClerkOfTheCourtSignature
+          nameOfClerk={nameOfClerk}
+          titleOfClerk={titleOfClerk}
+        />
       </div>
     </div>
   );
