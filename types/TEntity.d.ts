@@ -3,6 +3,7 @@
 */
 
 type TPetitioner = {
+  additionalName?: string;
   updatedEmail?: string;
   email?: string;
   confirmEmail?: string;
