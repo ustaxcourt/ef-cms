@@ -283,7 +283,6 @@
     "babel-plugin-transform-html-import-require-to-string": "0.0.3",
     "checksum": "1.0.0",
     "cognito-local": "3.23.2",
-    "copy-webpack-plugin": "12.0.2",
     "crypto-browserify": "3.12.0",
     "css-loader": "6.10.0",
     "csv-parse": "5.5.5",
@@ -319,8 +318,6 @@
     "eslint-plugin-spellcheck": "0.0.20",
     "esm": "3.2.25",
     "file-loader": "6.2.0",
-    "html-webpack-plugin": "5.6.0",
-    "html-webpack-pug-plugin": "4.0.0",
     "husky": "9.0.11",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
@@ -362,7 +359,6 @@
     "ts-loader": "9.5.1",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
-    "tsconfig-paths-webpack-plugin": "4.1.0",
     "typescript": "5.4.2",
     "utf8": "3.0.0"
   }
