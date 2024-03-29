@@ -186,12 +186,7 @@ export const AddPetitionerToCase = connect(
               </FormGroup>
             )}
 
-            <Country
-              bind={bind}
-              clearTypeOnCountryChange={true}
-              type={type}
-              onChange="updateFormValueSequence"
-            />
+            <Country type={type} onChange="updateFormValueSequence" />
             {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
               <Address
                 bind={bind}

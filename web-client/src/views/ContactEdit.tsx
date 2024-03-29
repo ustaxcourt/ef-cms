@@ -74,8 +74,6 @@ export const ContactEdit = connect(
             )}
 
             <Country
-              bind={bind}
-              clearTypeOnCountryChange={true}
               type={type}
               onChange={contactPrimaryCountryTypeChangeSequence}
             />

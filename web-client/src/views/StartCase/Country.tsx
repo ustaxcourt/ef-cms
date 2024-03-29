@@ -8,7 +8,6 @@ import React from 'react';
 export const Country = connect(
   {
     constants: state.constants,
-    data: state[props.bind], // TODO: get rid of this
     form: state.form,
     // eslint-disable-next-line spellcheck/spell-checker
     onChangeCountryType: sequences[props.onChangeCountryType], // TODO: make this less jank
@@ -19,7 +18,6 @@ export const Country = connect(
   },
   function Country({
     constants,
-    data,
     form,
     onChangeCountryType,
     type,
@@ -102,9 +100,9 @@ export const Country = connect(
             <input
               className={`${type}-country usa-input`}
               id={`${type}-intl-country-input`}
-              name={`${type}-intl-country-name`}
+              name={`${type}.intlCountryName`}
               type="text"
-              value={data[type].country || ''}
+              value={form[`${type}`].intlCountryName || ''}
               onBlur={() => {
                 if (validateStartCaseSequence) {
                   validateStartCaseSequence();

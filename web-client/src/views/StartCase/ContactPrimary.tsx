@@ -198,12 +198,7 @@ export const ContactPrimary = connect(
 
           {contactsHelper.contactPrimary.displayInCareOf && inCareOf()}
 
-          <Country
-            bind={bind}
-            type="contactPrimary"
-            onBlur={onBlur}
-            onChange={onChange}
-          />
+          <Country type="contactPrimary" onBlur={onBlur} onChange={onChange} />
 
           {data.contactPrimary.countryType ===
             constants.COUNTRY_TYPES.DOMESTIC && (

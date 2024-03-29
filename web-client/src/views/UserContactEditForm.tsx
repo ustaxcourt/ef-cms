@@ -28,7 +28,6 @@ export const UserContactEditForm = connect(
     return (
       <>
         <Country
-          bind={bind}
           type={type}
           onBlur={validateUserContactSequence}
           onChange={updateFormValueSequence}

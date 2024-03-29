@@ -34,7 +34,6 @@ export const PractitionerContactForm = connect(
     return (
       <>
         <Country
-          bind={bind}
           type={type}
           onBlur={onBlurSequenceName}
           onChange={onChangeSequenceName}

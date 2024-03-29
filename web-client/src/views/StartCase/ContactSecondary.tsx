@@ -150,7 +150,6 @@ export const ContactSecondary = connect(
             </FormGroup>
           )}
           <Country
-            bind={bind}
             type="contactSecondary"
             onBlur={onBlur}
             onChange={onChange}
