@@ -1,9 +1,5 @@
-import {
-  COURT_ISSUED_EVENT_CODES,
-  INITIAL_DOCUMENT_TYPES,
-  MINUTE_ENTRIES_MAP,
-  UNSERVABLE_EVENT_CODES,
-} from '../entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
 
 const getIsInitialFilingType = docketEntry => {
   const INITIAL_DOCUMENT_EVENT_CODES = Object.keys(INITIAL_DOCUMENT_TYPES).map(
@@ -12,22 +8,6 @@ const getIsInitialFilingType = docketEntry => {
 
   return INITIAL_DOCUMENT_EVENT_CODES.includes(docketEntry.eventCode);
 };
-
-const getIsMinuteEntry = docketEntry => {
-  const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
-    key => MINUTE_ENTRIES_MAP[key].eventCode,
-  );
-
-  return MINUTE_ENTRIES_EVENT_CODES.includes(docketEntry.eventCode);
-};
-
-const getIsCourtIssued = docketEntry =>
-  COURT_ISSUED_EVENT_CODES.map(item => item.eventCode).includes(
-    docketEntry.eventCode,
-  );
-
-const getIsUnservable = docketEntry =>
-  UNSERVABLE_EVENT_CODES.includes(docketEntry.eventCode);
 
 /**
  * determines if a docket entry should get an index
@@ -45,10 +25,10 @@ export const shouldGenerateDocketRecordIndex = ({
     return false; // an index does not need to be generated
   }
 
-  const isMinuteEntry = getIsMinuteEntry(docketEntry);
+  const isMinuteEntry = DocketEntry.isMinuteEntry(docketEntry);
   const isInitialFilingType = getIsInitialFilingType(docketEntry);
-  const isCourtIssued = getIsCourtIssued(docketEntry);
-  const isUnservable = getIsUnservable(docketEntry);
+  const isCourtIssued = DocketEntry.isCourtIssued(docketEntry);
+  const isUnservable = DocketEntry.isUnservable(docketEntry);
 
   if (!isInitialFilingType && !isMinuteEntry && !docketEntry.docketEntryId) {
     return false;
