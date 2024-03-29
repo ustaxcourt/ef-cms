@@ -12,6 +12,8 @@ import React from 'react';
 export const PractitionerForm = connect(
   {
     constants: state.constants,
+    countryTypeUserContactChangeSequence:
+      sequences.countryTypeUserContactChangeSequence,
     createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
@@ -22,6 +24,7 @@ export const PractitionerForm = connect(
   },
   function PractitionerForm({
     constants,
+    countryTypeUserContactChangeSequence,
     createPractitionerUserHelper,
     form,
     formatAndUpdateDateFromDatePickerSequence,
@@ -273,10 +276,12 @@ export const PractitionerForm = connect(
                   )}
                   <PractitionerContactForm
                     bind="form"
-                    changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
+                    changeCountryTypeSequenceName={
+                      countryTypeUserContactChangeSequence
+                    }
                     type="contact"
                     onBlurSequenceName={validateSequenceName}
-                    onChangeSequenceName="updateFormValueSequence"
+                    onChangeSequenceName={updateFormValueSequence}
                   />
                 </div>
               </div>

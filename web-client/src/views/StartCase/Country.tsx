@@ -8,16 +8,19 @@ import React from 'react';
 export const Country = connect(
   {
     constants: state.constants,
-    data: state[props.bind],
-    onChangeCountryType: sequences[props.onChangeCountryType],
+    data: state[props.bind], // TODO: get rid of this
+    form: state.form,
+    // eslint-disable-next-line spellcheck/spell-checker
+    onChangeCountryType: sequences[props.onChangeCountryType], // TODO: make this less jank
     type: props.type,
-    updateFormValueSequence: sequences[props.onChange],
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   function Country({
     constants,
     data,
+    form,
     onChangeCountryType,
     type,
     updateFormValueSequence,
@@ -31,10 +34,10 @@ export const Country = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               checked={
-                data[type].countryType === constants.COUNTRY_TYPES.DOMESTIC
+                form[`${type}`].countryType === constants.COUNTRY_TYPES.DOMESTIC
               }
               className="usa-radio__input"
-              id={`${type}.countryType`}
+              id={`${type}-countryType-domestic`}
               name={`${type}.countryType`}
               type="radio"
               value={constants.COUNTRY_TYPES.DOMESTIC}
@@ -53,17 +56,18 @@ export const Country = connect(
             <label
               className="usa-radio__label"
               data-testid="international-country-btn"
-              htmlFor={`${type}.countryType`}
+              htmlFor={`${type}-countryType-domestic`}
               id="country-radio-label-international"
             >
               United States
             </label>
             <input
               checked={
-                data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL
+                form[`${type}`].countryType ===
+                constants.COUNTRY_TYPES.INTERNATIONAL
               }
               className="usa-radio__input"
-              id={`${type}.countryType`}
+              id={`${type}-countryType-international`}
               name={`${type}.countryType`}
               type="radio"
               value={constants.COUNTRY_TYPES.INTERNATIONAL}
@@ -82,23 +86,23 @@ export const Country = connect(
             <label
               className="usa-radio__label"
               data-testid="international-country-btn"
-              htmlFor={`${type}.countryType`}
+              htmlFor={`${type}-countryType-international`}
               id="country-radio-label-international"
             >
               International
             </label>
           </div>
         </FormGroup>
-        {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
+        {form[`${type}`].countryType ===
+          constants.COUNTRY_TYPES.INTERNATIONAL && (
           <FormGroup errorText={validationErrors?.[type]?.country}>
-            <label className="usa-label" htmlFor={`${type}.country`}>
+            <label className="usa-label" htmlFor={`${type}intl-country-input`}>
               Country name
             </label>
             <input
-              autoCapitalize="none"
               className={`${type}-country usa-input`}
-              id={`${type}.country`}
-              name={`${type}.country`}
+              id={`${type}-intl-country-input`}
+              name={`${type}-intl-country-name`}
               type="text"
               value={data[type].country || ''}
               onBlur={() => {

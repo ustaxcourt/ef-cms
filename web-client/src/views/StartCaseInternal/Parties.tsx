@@ -95,8 +95,8 @@ export const Parties = connect(
                 startCaseInternalHelper.showSecondaryContact
               }
               useSameAsPrimary={true}
-              onBlur={() => validatePetitionFromPaperSequence}
-              onChange={() => updateFormValueAndCaseCaptionSequence}
+              onBlur={validatePetitionFromPaperSequence}
+              onChange={updateFormValueAndCaseCaptionSequence}
             />
           </div>
         )}

@@ -30,9 +30,8 @@ export const UserContactEditForm = connect(
         <Country
           bind={bind}
           type={type}
-          onBlur={'validateUserContactSequence'}
-          onChange={'updateFormValueSequence'}
-          onChangeCountryType={'changeCountryTypeSequence'}
+          onBlur={validateUserContactSequence}
+          onChange={updateFormValueSequence}
         />
         {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
           <Address

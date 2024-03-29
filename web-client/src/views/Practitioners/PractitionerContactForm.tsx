@@ -11,6 +11,8 @@ import React from 'react';
 export const PractitionerContactForm = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
+    // eslint-disable-next-line spellcheck/spell-checker
+    changeCountryTypeSequence: sequences[props.changeCountryTypeSequence], //TODO: make this less jank
     createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
     onBlurValidationSequence: sequences[props.onBlurSequenceName],

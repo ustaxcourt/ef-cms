@@ -92,8 +92,8 @@ export const PartyInformation = connect(
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
               useSameAsPrimary={true}
-              onBlur={() => validateCaseDetailSequence}
-              onChange={() => updateFormValueAndCaseCaptionSequence}
+              onBlur={validateCaseDetailSequence}
+              onChange={updateFormValueAndCaseCaptionSequence}
             />
           </div>
         )}
