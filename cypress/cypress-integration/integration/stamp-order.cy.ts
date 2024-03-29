@@ -17,7 +17,7 @@ describe('Judge`s chambers stamps an order', () => {
       ).type('Motion for Continuance');
       cy.get('#react-select-2-option-0').click({ force: true });
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
-      cy.get('[data-testid="button-upload-pdf"]').click();
+      cy.get('[data-testid="upload-pdf-button"]').click();
       cy.get('input#primaryDocumentFile-file').attachFile(
         '../fixtures/w3-dummy.pdf',
       );

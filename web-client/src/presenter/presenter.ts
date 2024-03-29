@@ -22,6 +22,7 @@ import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkI
 import { associateIrsPractitionerWithCaseSequence } from './sequences/CaseAssociation/associateIrsPractitionerWithCaseSequence';
 import { associatePrivatePractitionerWithCaseSequence } from './sequences/CaseAssociation/associatePrivatePractitionerWithCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
+import { batchDownloadDocketEntriesSequence } from '@web-client/presenter/sequences/batchDownloadDocketEntriesSequence';
 import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequence';
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
@@ -282,6 +283,7 @@ import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCa
 import { openDeletePractitionerDocumentConfirmModalSequence } from './sequences/openDeletePractitionerDocumentConfirmModalSequence';
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
+import { openDownloadDocketEntriesModalSequence } from '@web-client/presenter/sequences/openDownloadDocketEntriesModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
@@ -378,6 +380,7 @@ import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
+import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
@@ -598,6 +601,7 @@ export const presenterSequences = {
     associatePrivatePractitionerWithCaseSequence as unknown as Function,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
+  batchDownloadDocketEntriesSequence,
   batchDownloadErrorSequence: batchDownloadErrorSequence as unknown as Function,
   batchDownloadReadySequence: batchDownloadReadySequence as unknown as Function,
   batchDownloadTrialSessionSequence:
@@ -1036,6 +1040,8 @@ export const presenterSequences = {
     openDeleteSessionNoteConfirmModalSequence as unknown as Function,
   openDeleteUserCaseNoteConfirmModalSequence:
     openDeleteUserCaseNoteConfirmModalSequence as unknown as Function,
+  openDownloadDocketEntriesModalSequence:
+    openDownloadDocketEntriesModalSequence as unknown as Function,
   openEditCaseDeadlineModalSequence:
     openEditCaseDeadlineModalSequence as unknown as Function,
   openEditOrderTitleModalSequence:
@@ -1054,7 +1060,6 @@ export const presenterSequences = {
     openPrintGeneratedPaperServiceSequence as unknown as Function,
   openPrintableTrialSessionWorkingCopyModalSequence:
     openPrintableTrialSessionWorkingCopyModalSequence as unknown as Function,
-
   openPrioritizeCaseModalSequence:
     openPrioritizeCaseModalSequence as unknown as Function,
   openRemoveFromTrialSessionModalSequence:
@@ -1197,6 +1202,7 @@ export const presenterSequences = {
     setSelectedAddressOnFormSequence as unknown as Function,
   setSelectedBatchIndexSequence:
     setSelectedBatchIndexSequence as unknown as Function,
+  setSelectedDocumentsForDownloadSequence,
   setTrialSessionCalendarSequence:
     setTrialSessionCalendarSequence as unknown as Function,
   setViewerCorrespondenceToDisplaySequence:

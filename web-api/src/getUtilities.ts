@@ -28,12 +28,14 @@ import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
+import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../../shared/src/business/utilities/getWorkQueueFilters';
+import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
@@ -68,9 +70,11 @@ const utilities = {
   formatNow,
   formatPendingItem,
   getAddressPhoneDiff,
+  getCaseDocumentsIdsFilteredByDocumentType,
   getCropBox,
   getDescriptionDisplay,
   getDocQcSectionForUser,
+  getDocketEntriesByFilter,
   getDocumentTitleWithAdditionalInfo,
   getDocumentTypeForAddressChange,
   getFormattedCaseDetail,
