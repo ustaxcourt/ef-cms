@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
 import { NonPhone, Phone } from '../ustc-ui/Responsive/Responsive';
@@ -18,6 +19,7 @@ export const CaseListTable = connect(
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
     dashboardExternalHelper: state.dashboardExternalHelper,
     externalUserCasesHelper: state.externalUserCasesHelper,
+    featureFlags: state.featureFlags,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
@@ -29,6 +31,7 @@ export const CaseListTable = connect(
     closedTab,
     dashboardExternalHelper,
     externalUserCasesHelper,
+    featureFlags,
     openTab,
     setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence,
@@ -40,6 +43,12 @@ export const CaseListTable = connect(
       };
     }, []);
 
+    const rdirectUrl = featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key
+    ]
+      ? '/file-a-petition/new'
+      : '/file-a-petition/step-1';
+
     const renderStartButton = () => (
       <Button
         aria-describedby=""
@@ -47,7 +56,7 @@ export const CaseListTable = connect(
         data-testid="file-a-petition"
         href={
           dashboardExternalHelper.showFileACase
-            ? '/file-a-petition/step-1'
+            ? rdirectUrl
             : '/before-filing-a-petition'
         }
         icon="file"
