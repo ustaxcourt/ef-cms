@@ -8,35 +8,36 @@ import React from 'react';
 export const Country = connect(
   {
     constants: state.constants,
+    contactFormType: props.type,
     form: state.form,
     // eslint-disable-next-line spellcheck/spell-checker
-    onChangeCountryType: sequences[props.onChangeCountryType], // TODO: make this less jank
-    type: props.type,
+    onChangeCountryType: sequences[props.onChangeCountryType],
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   function Country({
     constants,
+    contactFormType,
     form,
     onChangeCountryType,
-    type,
     updateFormValueSequence,
     validateStartCaseSequence,
     validationErrors,
   }) {
     return (
       <>
-        <FormGroup errorText={validationErrors?.[type]?.countryType}>
+        <FormGroup errorText={validationErrors?.[contactFormType]?.countryType}>
           <legend className="usa-label">Country</legend>
           <div className="usa-radio usa-radio__inline">
             <input
               checked={
-                form[`${type}`].countryType === constants.COUNTRY_TYPES.DOMESTIC
+                form[contactFormType].countryType ===
+                constants.COUNTRY_TYPES.DOMESTIC
               }
               className="usa-radio__input"
-              id={`${type}-countryType-domestic`}
-              name={`${type}.countryType`}
+              id={`${contactFormType}-countryType-domestic`}
+              name={`${contactFormType}.countryType`}
               type="radio"
               value={constants.COUNTRY_TYPES.DOMESTIC}
               onChange={e => {
@@ -54,19 +55,19 @@ export const Country = connect(
             <label
               className="usa-radio__label"
               data-testid="international-country-btn"
-              htmlFor={`${type}-countryType-domestic`}
+              htmlFor={`${contactFormType}-countryType-domestic`}
               id="country-radio-label-international"
             >
               United States
             </label>
             <input
               checked={
-                form[`${type}`].countryType ===
+                form[contactFormType].countryType ===
                 constants.COUNTRY_TYPES.INTERNATIONAL
               }
               className="usa-radio__input"
-              id={`${type}-countryType-international`}
-              name={`${type}.countryType`}
+              id={`${contactFormType}-countryType-international`}
+              name={`${contactFormType}.countryType`}
               type="radio"
               value={constants.COUNTRY_TYPES.INTERNATIONAL}
               onChange={e => {
@@ -84,25 +85,28 @@ export const Country = connect(
             <label
               className="usa-radio__label"
               data-testid="international-country-btn"
-              htmlFor={`${type}-countryType-international`}
+              htmlFor={`${contactFormType}-countryType-international`}
               id="country-radio-label-international"
             >
               International
             </label>
           </div>
         </FormGroup>
-        {form[`${type}`].countryType ===
+        {form[contactFormType].countryType ===
           constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <FormGroup errorText={validationErrors?.[type]?.country}>
-            <label className="usa-label" htmlFor={`${type}intl-country-input`}>
+          <FormGroup errorText={validationErrors?.[contactFormType]?.country}>
+            <label
+              className="usa-label"
+              htmlFor={`${contactFormType}intl-country-input`}
+            >
               Country name
             </label>
             <input
-              className={`${type}-country usa-input`}
-              id={`${type}-intl-country-input`}
-              name={`${type}.intlCountryName`}
+              className={`${contactFormType}-country usa-input`}
+              id={`${contactFormType}-intl-country-input`}
+              name={`${contactFormType}.intlCountryName`}
               type="text"
-              value={form[`${type}`].intlCountryName || ''}
+              value={form[contactFormType].intlCountryName || ''}
               onBlur={() => {
                 if (validateStartCaseSequence) {
                   validateStartCaseSequence();
