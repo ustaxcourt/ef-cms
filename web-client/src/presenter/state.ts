@@ -135,6 +135,7 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
+import { updatedFilePetitionHelper } from '@web-client/presenter/computeds/updatedFilePetitionHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
@@ -528,6 +529,9 @@ export const computeds = {
   updateCaseModalHelper: updateCaseModalHelper as unknown as ReturnType<
     typeof updateCaseModalHelper
   >,
+  updatedFilePetitionHelper: updatedFilePetitionHelper as unknown as ReturnType<
+    typeof updatedFilePetitionHelper
+  >,
   userContactEditHelper: userContactEditHelper as unknown as ReturnType<
     typeof userContactEditHelper
   >,
@@ -757,6 +761,11 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
+  updatedFilePetitionStep2State: {
+    selectedFilingOption: undefined,
+  } as {
+    selectedFilingOption?: string;
+  },
   user: null as any,
   userContactEditProgress: {},
   users: [] as RawUser[],
