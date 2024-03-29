@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../shared/src/business/entities/EntityConstants';
 import { Accordion, AccordionItem } from '../ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
@@ -9,10 +10,20 @@ import React from 'react';
 
 export const BeforeStartingCase = connect(
   {
+    featureFlags: state.featureFlags,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
   },
-  function BeforeStartingCase({ formCancelToggleCancelSequence, showModal }) {
+  function BeforeStartingCase({
+    featureFlags,
+    formCancelToggleCancelSequence,
+    showModal,
+  }) {
+    const rdirectUrl = featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key
+    ]
+      ? '/file-a-petition/new'
+      : '/file-a-petition/step-1';
     return (
       <>
         <div className="big-blue-header">
@@ -257,7 +268,7 @@ export const BeforeStartingCase = connect(
               </div>
             </div>
           </div>
-          <Button data-testid="go-to-step-1" href="/file-a-petition/step-1">
+          <Button data-testid="go-to-step-1" href={rdirectUrl}>
             Got It, Letʼs Start a Case
           </Button>
           <Button
