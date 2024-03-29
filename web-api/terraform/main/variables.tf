@@ -2,6 +2,10 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "active_ses_ruleset" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }

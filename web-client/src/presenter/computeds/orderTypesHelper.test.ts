@@ -1,13 +1,13 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
+import { docketClerk1User, petitionsClerkUser } from '@shared/test/mockUsers';
 import { orderTypesHelper as orderTypesHelperComputed } from './orderTypesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('orderTypesHelper', () => {
-  let user = {
-    role: ROLES.docketClerk,
-  };
+  let user: RawUser = docketClerk1User;
 
   const orderTypesHelper = withAppContextDecorator(orderTypesHelperComputed, {
     ...applicationContext,
@@ -42,7 +42,7 @@ describe('orderTypesHelper', () => {
   });
 
   it('should filter out and only return type O for petitionsclerk', () => {
-    user.role = ROLES.petitionsClerk;
+    user = petitionsClerkUser;
 
     const result = runCompute(orderTypesHelper, { state: {} });
 

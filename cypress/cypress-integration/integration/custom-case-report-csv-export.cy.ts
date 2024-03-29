@@ -3,6 +3,11 @@ import { retry } from '../../helpers/retry';
 describe('Custom Case Report CSV export', () => {
   beforeEach(() => {
     const downloadPath = Cypress.config('downloadsFolder');
+    cy.task('ensureFolderExists', downloadPath);
+  });
+
+  afterEach(() => {
+    const downloadPath = Cypress.config('downloadsFolder');
     cy.task('deleteAllFilesInFolder', downloadPath);
   });
 
