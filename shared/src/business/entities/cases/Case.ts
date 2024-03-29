@@ -137,7 +137,7 @@ export class Case extends JoiValidationEntity {
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: any[];
-  public correspondence?: any[];
+  public correspondence: any[];
   public archivedCorrespondences?: any[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
@@ -161,6 +161,7 @@ export class Case extends JoiValidationEntity {
     }
 
     this.petitioners = [];
+    this.correspondence = [];
     const currentUser = applicationContext.getCurrentUser();
 
     if (!filtered || User.isInternalUser(currentUser.role)) {
@@ -1916,8 +1917,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   fileCorrespondence(correspondenceEntity) {
-    const correspondence = this.correspondence ? this.correspondence : [];
-    this.correspondence = [...correspondence, correspondenceEntity];
+    this.correspondence = [...this.correspondence, correspondenceEntity];
 
     return this;
   }
