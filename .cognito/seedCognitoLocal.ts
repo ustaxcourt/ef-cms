@@ -32,9 +32,6 @@ type CognitoLocalJSON = {
     LambdaConfig: {
       endpoint: string;
     };
-    TriggerFunctions: {
-      PostAuthentication: string;
-    };
     SchemaAttributes: Array<{
       Name: string;
       AttributeDataType: string;
@@ -84,9 +81,6 @@ const cognitoLocalJSON: CognitoLocalJSON = {
     },
     LambdaConfig: {
       endpoint: 'http://localhost:9991',
-    },
-    TriggerFunctions: {
-      PostAuthentication: 'PostAuthentication_Authentication',
     },
     SchemaAttributes: [
       {
