@@ -85,6 +85,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: mockClientConnectionId,
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
@@ -112,6 +113,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: mockClientConnectionId,
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
@@ -138,6 +140,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: mockClientConnectionId,
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
@@ -210,6 +213,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: mockClientConnectionId,
       message: {
         action: 'batch_download_ready',
         url: MOCK_URL,
