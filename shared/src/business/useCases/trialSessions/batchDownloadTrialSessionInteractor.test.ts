@@ -201,6 +201,32 @@ describe('batchDownloadTrialSessionInteractor', () => {
     });
   });
 
+  it('throws an NotFound error if a case does not exist', async () => {
+    const mockTrialSessionId = '100-10';
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue(false);
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: mockTrialSessionId,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      `Error when batch downloading trial session with id ${mockTrialSessionId} - Trial session ${mockTrialSessionId} was not found.`,
+      expect.anything(),
+    );
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      message: {
+        action: 'batch_download_error',
+        error: expect.anything(),
+      },
+      userId: 'abc-123',
+    });
+  });
+
   it('calls persistence functions to fetch trial sessions and associated cases and then zips their associated documents', async () => {
     await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
