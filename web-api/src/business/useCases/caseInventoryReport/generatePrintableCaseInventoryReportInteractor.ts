@@ -27,7 +27,7 @@ export const generatePrintableCaseInventoryReportInteractor = async (
   applicationContext.logger.info(
     'generatePrintableCaseInventoryReportInteractor - fetched cases',
     {
-      foundCases: foundCases.length,
+      foundCases: foundCases?.length,
     },
   );
 
