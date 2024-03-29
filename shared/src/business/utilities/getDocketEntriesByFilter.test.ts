@@ -1,24 +1,30 @@
 import { DOCKET_RECORD_FILTER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getDocketEntriesByFilter } from './getDocketEntriesByFilter';
 
 describe('getDocketEntriesByFilter', () => {
+  const MOCK_DOCKET_ENTRY = MOCK_CASE.docketEntries[0];
+
   const ORDER_DOCKET_ENTRY = {
+    ...MOCK_DOCKET_ENTRY,
     eventCode: 'O',
     isDraft: false,
   };
 
   const MOTION_DOCKET_ENTRY = {
+    ...MOCK_DOCKET_ENTRY,
     eventCode: 'M006',
     isDraft: false,
   };
 
   const EXHIBITS_EVENT_CODE = {
+    ...MOCK_DOCKET_ENTRY,
     eventCode: 'STIP',
     isDraft: false,
   };
 
-  const mockDocketEntries = [
+  const mockDocketEntries: RawDocketEntry[] = [
     ORDER_DOCKET_ENTRY,
     MOTION_DOCKET_ENTRY,
     EXHIBITS_EVENT_CODE,
