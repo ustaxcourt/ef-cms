@@ -46,9 +46,11 @@ export class User extends JoiValidationEntity {
         rawUser.pendingEmailVerificationToken;
     }
 
-    this.email = rawUser.email;
+    this.email = rawUser.email ? rawUser.email.toLowerCase() : undefined;
     this.name = rawUser.name;
-    this.pendingEmail = rawUser.pendingEmail;
+    this.pendingEmail = rawUser.pendingEmail
+      ? rawUser.pendingEmail.toLowerCase()
+      : undefined;
     this.role = rawUser.role || ROLES.petitioner;
     this.token = rawUser.token;
     this.userId = rawUser.userId;

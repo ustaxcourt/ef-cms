@@ -26,7 +26,7 @@ export async function updateUser(
   if (attributesToUpdate.email) {
     formattedAttributesToUpdate.push({
       Name: 'email',
-      Value: attributesToUpdate.email,
+      Value: attributesToUpdate.email.toLowerCase(),
     });
     formattedAttributesToUpdate.push({
       Name: 'email_verified',
@@ -37,6 +37,6 @@ export async function updateUser(
   await applicationContext.getCognito().adminUpdateUserAttributes({
     UserAttributes: formattedAttributesToUpdate,
     UserPoolId: process.env.USER_POOL_ID,
-    Username: email,
+    Username: email.toLowerCase(),
   });
 }

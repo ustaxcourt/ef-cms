@@ -55,7 +55,7 @@ export class Contact extends JoiValidationEntity {
     this.contactType = rawContact.contactType;
     this.country = rawContact.country;
     this.countryType = rawContact.countryType;
-    this.email = rawContact.email;
+    this.email = rawContact.email ? rawContact.email.toLowerCase() : undefined;
     this.inCareOf = rawContact.inCareOf;
     this.isAddressSealed = rawContact.isAddressSealed || false;
     this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;

@@ -34,10 +34,11 @@ export const changePasswordInteractor = async (
     code?: string;
   },
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
+  const userEmail = email.toLowerCase();
   try {
     const errors = new ChangePasswordForm({
       confirmPassword,
-      email,
+      email: userEmail,
       password,
     }).getFormattedValidationErrors();
 
@@ -52,7 +53,7 @@ export const changePasswordInteractor = async (
           AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
           AuthParameters: {
             PASSWORD: tempPassword,
-            USERNAME: email,
+            USERNAME: userEmail,
           },
           ClientId: applicationContext.environment.cognitoClientId,
         });
@@ -70,7 +71,7 @@ export const changePasswordInteractor = async (
           ChallengeName: ChallengeNameType.NEW_PASSWORD_REQUIRED,
           ChallengeResponses: {
             NEW_PASSWORD: password,
-            USERNAME: email,
+            USERNAME: userEmail,
           },
           ClientId: applicationContext.environment.cognitoClientId,
           Session: initiateAuthResult.Session,
@@ -94,7 +95,7 @@ export const changePasswordInteractor = async (
       if (
         userFromPersistence &&
         userFromPersistence.pendingEmail &&
-        userFromPersistence.pendingEmail === email
+        userFromPersistence.pendingEmail === userEmail
       ) {
         const { updatedUser } = await updateUserPendingEmailRecord(
           applicationContext,
@@ -122,15 +123,15 @@ export const changePasswordInteractor = async (
     } else {
       const user = await applicationContext
         .getUserGateway()
-        .getUserByEmail(applicationContext, { email });
+        .getUserByEmail(applicationContext, { email: userEmail });
 
       if (!user) {
-        throw new NotFoundError(`User not found with email: ${email}`);
+        throw new NotFoundError(`User not found with email: ${userEmail}`);
       }
 
       if (!code) {
         applicationContext.logger.info(
-          `Unable to change password for ${email}. No code was provided.`,
+          `Unable to change password for ${userEmail}. No code was provided.`,
         );
         throw new Error('Unable to change password');
       }
@@ -152,7 +153,7 @@ export const changePasswordInteractor = async (
     }
   } catch (err: any) {
     if (err.name === 'InitiateAuthError') {
-      throw new Error(`Unable to change password for email: ${email}`);
+      throw new Error(`Unable to change password for email: ${userEmail}`);
     }
 
     await authErrorHandling(applicationContext, {

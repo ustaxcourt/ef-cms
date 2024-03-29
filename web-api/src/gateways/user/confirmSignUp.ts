@@ -6,6 +6,6 @@ export async function confirmSignUp(
 ): Promise<void> {
   await applicationContext.getCognito().adminConfirmSignUp({
     UserPoolId: applicationContext.environment.userPoolId,
-    Username: email,
+    Username: email.toLocaleLowerCase(),
   });
 }

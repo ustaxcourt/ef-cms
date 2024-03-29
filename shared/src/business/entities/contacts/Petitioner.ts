@@ -49,7 +49,7 @@ export class Petitioner extends JoiValidationEntity {
     this.contactType = rawProps.contactType;
     this.country = rawProps.country;
     this.countryType = rawProps.countryType;
-    this.email = rawProps.email;
+    this.email = rawProps.email ? rawProps.email.toLowerCase() : undefined;
     this.paperPetitionEmail = rawProps.paperPetitionEmail;
     this.hasConsentedToEService = rawProps.hasConsentedToEService;
     this.hasEAccess = rawProps.hasEAccess || undefined;

@@ -16,7 +16,7 @@ export const submitLoginAction = async ({
     const { accessToken, idToken, refreshToken } = await applicationContext
       .getUseCases()
       .loginInteractor(applicationContext, {
-        email: email.toLowerCase(), 
+        email: email.toLowerCase(),
         password,
       });
 

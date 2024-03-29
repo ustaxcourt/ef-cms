@@ -10,7 +10,7 @@ export class IrsCalendarAdministratorInfo extends JoiValidationEntity {
     super('IrsCalendarAdministratorInfo');
 
     this.name = rawData.name;
-    this.email = rawData.email;
+    this.email = rawData.email.toLowerCase();
     this.phone = rawData.phone;
   }
 

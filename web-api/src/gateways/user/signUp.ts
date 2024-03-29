@@ -17,13 +17,15 @@ export async function signUp(
 ): Promise<{ userId: string }> {
   const userId = applicationContext.getUniqueId();
 
+  const userEmail = email.toLowerCase();
+
   await applicationContext.getCognito().signUp({
     ClientId: applicationContext.environment.cognitoClientId,
     Password: password,
     UserAttributes: [
       {
         Name: 'email',
-        Value: email,
+        Value: userEmail,
       },
       {
         Name: 'name',
@@ -38,7 +40,7 @@ export async function signUp(
         Value: role,
       },
     ],
-    Username: email,
+    Username: userEmail,
   });
 
   return { userId };

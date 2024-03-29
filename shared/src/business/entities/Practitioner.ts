@@ -41,7 +41,9 @@ export class Practitioner extends User {
     this.admissionsStatus = rawUser.admissionsStatus;
     this.barNumber = rawUser.barNumber;
     this.birthYear = rawUser.birthYear;
-    this.confirmEmail = rawUser.confirmEmail;
+    this.confirmEmail = rawUser.confirmEmail
+      ? rawUser.confirmEmail.toLowerCase()
+      : undefined;
     this.employer = rawUser.employer;
     this.firmName = rawUser.firmName;
     this.firstName = rawUser.firstName;
@@ -56,7 +58,9 @@ export class Practitioner extends User {
     this.serviceIndicator =
       rawUser.serviceIndicator ||
       Practitioner.getDefaultServiceIndicator(rawUser);
-    this.updatedEmail = rawUser.updatedEmail;
+    this.updatedEmail = rawUser.updatedEmail
+      ? rawUser.updatedEmail.toLowerCase()
+      : undefined;
     if (this.admissionsStatus === 'Active') {
       this.role = Practitioner.ROLE_MAP[this.employer];
     } else {

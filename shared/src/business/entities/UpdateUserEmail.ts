@@ -9,8 +9,8 @@ export class UpdateUserEmail extends JoiValidationEntity {
   constructor(rawUpdateUserEmail: { email: string; confirmEmail: string }) {
     super('UpdateUserEmail');
 
-    this.email = rawUpdateUserEmail.email;
-    this.confirmEmail = rawUpdateUserEmail.confirmEmail;
+    this.email = rawUpdateUserEmail.email.toLowerCase();
+    this.confirmEmail = rawUpdateUserEmail.confirmEmail.toLowerCase();
   }
 
   static VALIDATION_RULES = {

@@ -22,7 +22,7 @@ const isRecordToUpdate = item => {
 let judgesMap: { [key: string]: string } | null = null;
 
 export const migrateItems = async (
-  items: any[],
+  items: TDynamoRecord[],
   applicationContext: IApplicationContext,
 ) => {
   const itemsAfter: TDynamoRecord[] = [];
