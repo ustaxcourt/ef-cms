@@ -29,7 +29,6 @@ describe('Private Practitioner requests access to case', () => {
       cy.get('[data-testid="primary-document-type-search"]').type(
         'MLSP{enter}',
       );
-      // cy.get('#react-select-2-option-0').click();
 
       cy.get(
         '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
