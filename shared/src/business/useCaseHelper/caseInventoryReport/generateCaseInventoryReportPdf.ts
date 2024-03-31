@@ -30,6 +30,8 @@ export const generateCaseInventoryReportPdf = async ({
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
 
+  applicationContext.logger.info('generateCaseInventoryReportPdf - start');
+
   const { setConsolidationFlagsForDisplay } = applicationContext.getUtilities();
   const formattedCases = cases
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
@@ -67,9 +69,17 @@ export const generateCaseInventoryReportPdf = async ({
       },
     });
 
-  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
-    applicationContext,
-    file: caseInventoryReportPdf,
-    useTempBucket: true,
-  });
+  applicationContext.logger.info('generateCaseInventoryReportPdf - pdf built');
+
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .saveFileAndGenerateUrl({
+      applicationContext,
+      file: caseInventoryReportPdf,
+      useTempBucket: true,
+    });
+
+  applicationContext.logger.info('generateCaseInventoryReportPdf - pdf saved');
+
+  return result;
 };

@@ -142,8 +142,11 @@ else
   SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 fi
 
+ACTIVE_SES_RULESET=$(../../../scripts/ses/get-ses-ruleset.sh)
+
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
 
+export TF_VAR_active_ses_ruleset=$ACTIVE_SES_RULESET
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
