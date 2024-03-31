@@ -4,12 +4,17 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generateDocketRecordPdfUrlAction', () => {
-  const mockPdfUrl = { url: 'www.example.com' };
+  const docketRecordPdfGenerationResults = {
+    fileId: 'fileId',
+    url: 'www.example.com',
+  };
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()
-      .generateDocketRecordPdfInteractor.mockResolvedValue(mockPdfUrl);
+      .generateDocketRecordPdfInteractor.mockResolvedValue(
+        docketRecordPdfGenerationResults,
+      );
   });
 
   it('creates a pdf and returns an object URL', async () => {
@@ -34,7 +39,10 @@ describe('generateDocketRecordPdfUrlAction', () => {
       },
     });
 
-    expect(result.output.pdfUrl).toBe(mockPdfUrl.url);
+    expect(result.output).toMatchObject({
+      fileId: 'fileId',
+      pdfUrl: 'www.example.com',
+    });
   });
 
   it('should call the interactor with includePartyDetail and isIndirectlyAssociated as true if props.isAssociated is true', async () => {
