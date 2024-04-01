@@ -19,7 +19,7 @@ resource "aws_lambda_permission" "allow_sns" {
 
   lifecycle {
     replace_triggered_by = [
-      module.zip_handle_bounce.lambda_function
+      module.zip_handle_bounce.last_modified
     ]
   }
 }

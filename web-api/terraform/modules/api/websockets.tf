@@ -110,7 +110,7 @@ resource "aws_lambda_permission" "apigw_connect_lambda" {
 
   lifecycle {
     replace_triggered_by = [
-      module.websockets_connect_lambda.lambda_function
+      module.websockets_connect_lambda.last_modified
     ]
   }
 }
@@ -125,7 +125,7 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
 
   lifecycle {
     replace_triggered_by = [
-      module.websockets_disconnect_lambda.lambda_function
+      module.websockets_disconnect_lambda.last_modified
     ]
   }
 }
@@ -139,7 +139,7 @@ resource "aws_lambda_permission" "apigw_default_lambda" {
 
   lifecycle {
     replace_triggered_by = [
-      module.websockets_default_lambda.lambda_function
+      module.websockets_default_lambda.last_modified
     ]
   }
 }

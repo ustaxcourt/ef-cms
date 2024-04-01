@@ -39,7 +39,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_wait_for_workflow_lam
 
   lifecycle {
     replace_triggered_by = [
-      module.wait_for_workflow_lambda.lambda_function
+      module.wait_for_workflow_lambda.last_modified
     ]
   }
 }

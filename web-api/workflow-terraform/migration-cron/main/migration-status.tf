@@ -36,7 +36,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_migration_status_lamb
 
   lifecycle {
     replace_triggered_by = [
-      module.migration_status_lambda.lambda_function
+      module.migration_status_lambda.last_modified
     ]
   }
 }

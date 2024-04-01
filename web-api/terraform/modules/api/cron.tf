@@ -57,7 +57,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_check_case_lambda" {
 
   lifecycle {
     replace_triggered_by = [
-      module.check_case_cron_lambda.lambda_function
+      module.check_case_cron_lambda.last_modified
     ]
   }
 }
@@ -73,7 +73,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_health_check_lambda" 
 
   lifecycle {
     replace_triggered_by = [
-      module.health_check_cron_lambda.lambda_function
+      module.health_check_cron_lambda.last_modified
     ]
   }
 }

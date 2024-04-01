@@ -325,7 +325,7 @@ resource "aws_lambda_permission" "apigw_async_lambda" {
   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
   lifecycle {
     replace_triggered_by = [
-      module.api_async_lambda.lambda_function
+      module.api_async_lambda.last_modified
     ]
   }
 }

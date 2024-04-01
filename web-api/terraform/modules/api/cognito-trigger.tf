@@ -63,7 +63,7 @@ resource "aws_lambda_permission" "allow_post_auth_trigger" {
   source_arn    = var.pool_arn
   lifecycle {
     replace_triggered_by = [
-      module.cognito_post_authentication_lambda.lambda_function
+      module.cognito_post_authentication_lambda.last_modified
     ]
   }
 }
@@ -79,7 +79,7 @@ resource "aws_lambda_permission" "allow_trigger" {
 
   lifecycle {
     replace_triggered_by = [
-      module.cognito_post_confirmation_lambda.lambda_function
+      module.cognito_post_confirmation_lambda.last_modified
     ]
   }
 }

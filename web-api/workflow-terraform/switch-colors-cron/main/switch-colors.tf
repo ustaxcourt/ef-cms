@@ -36,7 +36,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_switch_colors_status_
 
   lifecycle {
     replace_triggered_by = [
-      module.switch_colors_status_lambda.lambda_function
+      module.switch_colors_status_lambda.last_modified
     ]
   }
 }

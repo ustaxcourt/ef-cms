@@ -35,7 +35,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_glue_job_status_lambd
 
   lifecycle {
     replace_triggered_by = [
-      module.glue_job_status_lambda.lambda_function
+      module.glue_job_status_lambda.last_modified
     ]
   }
 }

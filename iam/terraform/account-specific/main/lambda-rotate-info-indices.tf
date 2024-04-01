@@ -36,7 +36,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_rotate_info_indices_daily"
   source_arn    = aws_cloudwatch_event_rule.every_day.arn
   lifecycle {
     replace_triggered_by = [
-      module.rotate_info_indices.lambda_function
+      module.rotate_info_indices.last_modified
     ]
   }
 }
