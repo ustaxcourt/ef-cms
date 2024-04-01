@@ -1,4 +1,3 @@
-import { Browser } from 'puppeteer';
 import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
 import { headerFontFace } from '../useCases/headerFontFace';
 import React from 'react';
@@ -24,19 +23,17 @@ export const generatePdfFromHtmlHelper = async (
     overwriteFooter,
   }: {
     contentHtml: string;
-    displayHeaderFooter: boolean;
+    displayHeaderFooter?: boolean;
     docketNumber?: string;
     footerHtml?: string;
     headerHtml?: string;
-    overwriteFooter?: string;
+    overwriteFooter?: boolean;
   },
+  browser,
 ) => {
-  let browser: Browser | undefined;
   let result: any = null;
 
   try {
-    browser = await applicationContext.getChromiumBrowser();
-
     let page = await browser?.newPage()!;
 
     await page.setContent(contentHtml);
@@ -109,8 +106,7 @@ export const generatePdfFromHtmlHelper = async (
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;
-  } finally {
-    await browser?.close();
   }
+
   return result;
 };
