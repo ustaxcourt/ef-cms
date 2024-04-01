@@ -1,10 +1,23 @@
 import { ContactPrimary } from './ContactPrimary';
 import { ContactSecondary } from './ContactSecondary';
+import { props as cerebralProps, sequences } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
+const props = cerebralProps as unknown as {
+  contactsHelper: string;
+  bind: string;
+  onBlur: Function;
+  onChange: Function;
+  parentView: string;
+};
+
 export const Contacts = connect(
-  {},
+  {
+    bind: props.bind,
+    onBlur: props.onBlur,
+    onChange: props.onChange,
+  },
   function Contacts({
     bind,
     contactsHelper,
@@ -16,6 +29,8 @@ export const Contacts = connect(
     useSameAsPrimary,
     wrapperClassName,
   }) {
+    console.log('sequences: ', sequences);
+    console.log('onchange: ', onChange);
     return (
       <>
         {showPrimaryContact && (

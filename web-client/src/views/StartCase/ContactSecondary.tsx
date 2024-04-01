@@ -17,9 +17,9 @@ export const ContactSecondary = connect(
     contactsHelper: state[props.contactsHelper],
     data: state[props.bind],
     onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
+    onBlurSequence: props.onBlur,
     onChange: props.onChange,
-    onChangeSequence: sequences[props.onChange],
+    onChangeSequence: props.onChange,
     parentView: props.parentView,
     toggleUseContactPrimaryAddressSequence:
       sequences.toggleUseContactPrimaryAddressSequence,

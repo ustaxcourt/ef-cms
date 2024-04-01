@@ -351,7 +351,7 @@ export const StartCaseStep3 = connect(
           showPrimaryContact={startCaseHelper.showPrimaryContact}
           showSecondaryContact={startCaseHelper.showSecondaryContact}
           useSameAsPrimary={true}
-          onBlur={validateStartCaseWizardSequence}
+          onBlur={() => validateStartCaseWizardSequence()}
           onChange={updateFormValueSequence}
         />
 

@@ -2,8 +2,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
+import { props, sequences } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -12,11 +11,12 @@ export const Address = connect(
   {
     data: state[props.bind],
     type: props.type,
-    updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
-    updateFormValueSequence: sequences[props.onChange],
+    updateFormValueAndSecondaryContactInfoSequence:
+      sequences.updateFormValueAndSecondaryContactInfoSequence,
+    updateFormValueSequence: props.onChange,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
-    validateStartCaseSequence: sequences[props.onBlur],
+    validateStartCaseSequence: props.onBlur,
     validationErrors: state.validationErrors,
   },
   function Address({

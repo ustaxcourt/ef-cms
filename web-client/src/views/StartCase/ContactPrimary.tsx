@@ -25,9 +25,9 @@ export const ContactPrimary = connect(
     contactsHelper: state[props.contactsHelper],
     data: state[props.bind],
     onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
+    onBlurSequence: props.onBlur,
     onChange: props.onChange,
-    onChangeSequence: sequences[props.onChange],
+    onChangeSequence: props.onChange,
     parentView: props.parentView,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
@@ -54,6 +54,8 @@ export const ContactPrimary = connect(
     },
     wrapperClassName,
   }) {
+    console.log('props.onChange', props);
+
     const secondaryName = () => (
       <FormGroup
         errorText={
@@ -179,9 +181,7 @@ export const ContactPrimary = connect(
               name="contactPrimary.name"
               type="text"
               value={data.contactPrimary.name || ''}
-              onBlur={() => {
-                onBlurSequence();
-              }}
+              onBlur={onBlurSequence}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
