@@ -54,7 +54,7 @@ export const Country = connect(
             />
             <label
               className="usa-radio__label"
-              data-testid="international-country-btn"
+              data-testid="domestic-country-btn"
               htmlFor={`${type}-countryType-domestic`}
               id="country-radio-label-domestic"
             >
@@ -62,8 +62,7 @@ export const Country = connect(
             </label>
             <input
               checked={
-                data[type].countryType.countryType ===
-                constants.COUNTRY_TYPES.INTERNATIONAL
+                data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL
               }
               className="usa-radio__input"
               id={`${type}-countryType-international`}
@@ -84,7 +83,7 @@ export const Country = connect(
             />
             <label
               className="usa-radio__label"
-              data-testid="domestic-country-btn"
+              data-testid="international-country-btn"
               htmlFor={`${type}-countryType-international`}
               id="country-radio-label-international"
             >
@@ -100,6 +99,7 @@ export const Country = connect(
             <input
               autoCapitalize="none"
               className={`${type}-country usa-input`}
+              data-testid="international-country-input"
               id={`${type}.country`}
               name={`${type}.country`}
               type="text"
