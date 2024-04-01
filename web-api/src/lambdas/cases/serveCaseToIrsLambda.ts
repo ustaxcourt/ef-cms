@@ -14,6 +14,7 @@ export const serveCaseToIrsLambda = event =>
         .getUseCases()
         .serveCaseToIrsInteractor(applicationContext, {
           ...event.pathParameters,
+          ...JSON.parse(event.body),
         });
     },
     { logResults: false },
