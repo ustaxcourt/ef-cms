@@ -4,11 +4,11 @@ module "logs_to_es" {
   handler_method = "handler"
   lambda_name    = "LogsToElasticSearch_info"
   role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
-  environment    = {
-      es_endpoint = aws_opensearch_domain.efcms-logs.endpoint
+  environment = {
+    es_endpoint = aws_opensearch_domain.efcms-logs.endpoint
   }
-  timeout        = "900"
-  memory_size    = "3008"
+  timeout     = "900"
+  memory_size = "3008"
 }
 
 resource "aws_cloudwatch_log_group" "logs_to_elasticsearch" {
@@ -21,6 +21,11 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   action        = "lambda:InvokeFunction"
   function_name = module.logs_to_es.function_name
   principal     = "logs.amazonaws.com"
+  lifecycle {
+    replace_triggered_by = [
+      module.logs_to_es.lambda_function
+    ]
+  }
 }
 
 

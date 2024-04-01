@@ -16,4 +16,10 @@ resource "aws_lambda_permission" "allow_topic_to_seal" {
   function_name = module.zip_seal.function_name
   principal     = "sns.amazonaws.com"
   source_arn    = "arn:aws:sns:us-east-1:${var.prod_env_account_id}:seal_notifier"
+
+  lifecycle {
+    replace_triggered_by = [
+      module.zip_seal.lambda_function
+    ]
+  }
 }

@@ -12,7 +12,7 @@ module "switch_colors_status_lambda" {
     CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
     CIRCLE_WORKFLOW_ID        = var.circle_workflow_id
   }
-  timeout     = "900"
+  timeout = "900"
 }
 
 resource "aws_cloudwatch_event_rule" "check_switch_colors_status_cron_rule-sunday" {
@@ -33,4 +33,10 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_switch_colors_status_
   function_name = module.switch_colors_status_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.check_switch_colors_status_cron_rule-sunday.arn
+
+  lifecycle {
+    replace_triggered_by = [
+      module.switch_colors_status_lambda.lambda_function
+    ]
+  }
 }

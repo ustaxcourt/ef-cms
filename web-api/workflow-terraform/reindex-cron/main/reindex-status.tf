@@ -36,4 +36,11 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_reindex_status_lambda
   function_name = module.reindex_status_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.check_reindex_status_cron_rule.arn
+
+  lifecycle {
+    replace_triggered_by = [
+      module.reindex_status_lambda.lambda_function
+    ]
+  }
 }
+

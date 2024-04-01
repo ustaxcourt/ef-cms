@@ -54,6 +54,12 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_check_case_lambda" {
   function_name = module.check_case_cron_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.check_case_cron_rule[0].arn
+
+  lifecycle {
+    replace_triggered_by = [
+      module.check_case_cron_lambda.lambda_function
+    ]
+  }
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_health_check_lambda" {
@@ -63,5 +69,12 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_health_check_lambda" 
   function_name = module.health_check_cron_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.health_check_cron_rule[0].arn
+
+
+  lifecycle {
+    replace_triggered_by = [
+      module.health_check_cron_lambda.lambda_function
+    ]
+  }
 }
 

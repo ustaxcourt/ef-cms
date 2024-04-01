@@ -14,3 +14,7 @@ output "arn" {
 output "qualified_arn" {
   value = aws_lambda_function.lambda_function.qualified_arn
 }
+
+output "lambda_function" {
+  value = aws_lambda_function.lambda_function
+}

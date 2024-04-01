@@ -61,7 +61,13 @@ resource "aws_lambda_permission" "allow_post_auth_trigger" {
   principal     = "cognito-idp.amazonaws.com"
   count         = var.create_triggers
   source_arn    = var.pool_arn
+  lifecycle {
+    replace_triggered_by = [
+      module.cognito_post_authentication_lambda.lambda_function
+    ]
+  }
 }
+
 
 resource "aws_lambda_permission" "allow_trigger" {
   statement_id  = "AllowPostConfirmationExecutionFromCognito"
@@ -70,4 +76,10 @@ resource "aws_lambda_permission" "allow_trigger" {
   principal     = "cognito-idp.amazonaws.com"
   count         = var.create_triggers
   source_arn    = var.pool_arn
+
+  lifecycle {
+    replace_triggered_by = [
+      module.cognito_post_confirmation_lambda.lambda_function
+    ]
+  }
 }

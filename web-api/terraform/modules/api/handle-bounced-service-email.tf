@@ -16,4 +16,10 @@ resource "aws_lambda_permission" "allow_sns" {
   function_name = module.zip_handle_bounce.function_name
   principal     = "sns.amazonaws.com"
   source_arn    = "arn:aws:sns:us-east-1:${data.aws_caller_identity.current.account_id}:bounced_service_emails_${var.environment}"
+
+  lifecycle {
+    replace_triggered_by = [
+      module.zip_handle_bounce.lambda_function
+    ]
+  }
 }
