@@ -39,7 +39,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_reindex_status_lambda
 
   lifecycle {
     replace_triggered_by = [
-      module.reindex_status_lambda.lambda_function
+      module.reindex_status_lambda.last_modified
     ]
   }
 }

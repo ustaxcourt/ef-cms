@@ -23,7 +23,7 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   principal     = "logs.amazonaws.com"
   lifecycle {
     replace_triggered_by = [
-      module.logs_to_es.lambda_function
+      module.logs_to_es.last_modified
     ]
   }
 }

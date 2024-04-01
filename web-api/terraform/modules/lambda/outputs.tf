@@ -15,6 +15,6 @@ output "qualified_arn" {
   value = aws_lambda_function.lambda_function.qualified_arn
 }
 
-output "lambda_function" {
-  value = aws_lambda_function.lambda_function
+output "last_modified" {
+  value = aws_lambda_function.lambda_function.last_modified
 }

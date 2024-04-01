@@ -19,7 +19,7 @@ resource "aws_lambda_permission" "allow_topic_to_seal" {
 
   lifecycle {
     replace_triggered_by = [
-      module.zip_seal.lambda_function
+      module.zip_seal.last_modified
     ]
   }
 }
