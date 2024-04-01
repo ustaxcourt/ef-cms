@@ -5,6 +5,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 describe('scanBatchPreviewerHelper', () => {
   const state = {
+    form: undefined as any,
     scanner: {
       batches: [],
     },

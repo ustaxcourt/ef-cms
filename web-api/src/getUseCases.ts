@@ -12,6 +12,7 @@ import { archiveDraftDocumentInteractor } from '../../shared/src/business/useCas
 import { assignWorkItemsInteractor } from '../../shared/src/business/useCases/workitems/assignWorkItemsInteractor';
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/business/useCases/manualAssociation/associateIrsPractitionerWithCaseInteractor';
 import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src/business/useCases/manualAssociation/associatePrivatePractitionerWithCaseInteractor';
+import { batchDownloadDocketEntriesInteractor } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { blockCaseFromTrialInteractor } from '../../shared/src/business/useCases/blockCaseFromTrialInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/business/useCases/caseAdvancedSearchInteractor';
@@ -28,6 +29,7 @@ import { createCaseDeadlineInteractor } from '../../shared/src/business/useCases
 import { createCaseFromPaperInteractor } from '../../shared/src/business/useCases/createCaseFromPaperInteractor';
 import { createCaseInteractor } from '../../shared/src/business/useCases/createCaseInteractor';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
+import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
 import { createMessageInteractor } from '../../shared/src/business/useCases/messages/createMessageInteractor';
 import { createPetitionerAccountInteractor } from '../../shared/src/business/useCases/users/createPetitionerAccountInteractor';
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
@@ -225,6 +227,7 @@ const useCases = {
   assignWorkItemsInteractor,
   associateIrsPractitionerWithCaseInteractor,
   associatePrivatePractitionerWithCaseInteractor,
+  batchDownloadDocketEntriesInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
   caseAdvancedSearchInteractor,
@@ -241,6 +244,7 @@ const useCases = {
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
+  createCsvCustomCaseReportFileInteractor,
   createMessageInteractor,
   createPetitionerAccountInteractor,
   createPractitionerDocumentInteractor,

@@ -77,6 +77,7 @@ import { getAllFeatureFlagsInteractor } from '../useCases/featureFlag/getAllFeat
 import { getAllWebSocketConnections } from '../../../../web-api/src/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '../../../../web-api/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import {
   getChambersSections,
   getChambersSectionsLabels,
@@ -91,6 +92,7 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../utilities/getWorkQueueFilters';
+import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentQCForSection } from '../../../../web-api/src/persistence/dynamo/workitems/getDocumentQCForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
@@ -253,6 +255,9 @@ export const createTestApplicationContext = ({
       .fn()
       .mockImplementation(DateHandler.getBusinessDateInFuture),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getCaseDocumentsIdsFilteredByDocumentType: jest
+      .fn()
+      .mockImplementation(getCaseDocumentsIdsFilteredByDocumentType),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
@@ -260,6 +265,9 @@ export const createTestApplicationContext = ({
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
+    getDocketEntriesByFilter: jest
+      .fn()
+      .mockImplementation(getDocketEntriesByFilter),
     getDocumentTitleWithAdditionalInfo: jest
       .fn()
       .mockImplementation(getDocumentTitleWithAdditionalInfo),
@@ -690,6 +698,7 @@ export const createTestApplicationContext = ({
     runVirusScan: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
+    setTimeout: jest.fn().mockImplementation(callback => callback()),
   };
   return applicationContext;
 };

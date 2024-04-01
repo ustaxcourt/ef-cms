@@ -12,6 +12,7 @@ import { archiveDraftDocumentLambda } from './lambdas/documents/archiveDraftDocu
 import { assignWorkItemsLambda } from './lambdas/workitems/assignWorkItemsLambda';
 import { associateIrsPractitionerWithCaseLambda } from './lambdas/manualAssociation/associateIrsPractitionerWithCaseLambda';
 import { associatePrivatePractitionerWithCaseLambda } from './lambdas/manualAssociation/associatePrivatePractitionerWithCaseLambda';
+import { batchDownloadDocketEntriesLambda } from '@web-api/lambdas/documents/batchDownloadDocketEntriesLambda';
 import { batchDownloadTrialSessionLambda } from './lambdas/trialSessions/batchDownloadTrialSessionLambda';
 import { blockCaseFromTrialLambda } from './lambdas/cases/blockCaseFromTrialLambda';
 import { caseAdvancedSearchLambda } from './lambdas/cases/caseAdvancedSearchLambda';
@@ -28,6 +29,7 @@ import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadl
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
 import { createCaseLambda } from './lambdas/cases/createCaseLambda';
 import { createCourtIssuedOrderPdfFromHtmlLambda } from './lambdas/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda';
+import { createCsvCustomCaseReportFileLambda } from '@web-api/lambdas/reports/createCsvCustomCaseReportFileLambda';
 import { createMessageLambda } from './lambdas/messages/createMessageLambda';
 import { createPractitionerDocumentLambda } from './lambdas/practitioners/createPractitionerDocumentLambda';
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
@@ -413,6 +415,10 @@ app.use(logger());
     '/case-documents/:docketNumber/court-issued-order',
     lambdaWrapper(fileCourtIssuedOrderToCaseLambda),
   );
+  app.post(
+    '/async/case-documents/batch-download',
+    lambdaWrapper(batchDownloadDocketEntriesLambda, { isAsync: true }),
+  );
 
   // PUT
   app.put(
@@ -797,6 +803,10 @@ app.get(
   app.post(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
+  );
+  app.post(
+    '/async/export/reports/custom-case-report/csv',
+    lambdaWrapper(createCsvCustomCaseReportFileLambda, { isAsync: true }),
   );
 }
 

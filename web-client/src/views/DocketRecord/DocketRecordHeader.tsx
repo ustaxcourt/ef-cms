@@ -147,8 +147,11 @@ export const DocketRecordHeader = connect(
     DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntriesHelper: state.formattedDocketEntries,
     gotoPrintableDocketRecordSequence:
       sequences.gotoPrintableDocketRecordSequence,
+    openDownloadDocketEntriesModalSequence:
+      sequences.openDownloadDocketEntriesModalSequence,
     sessionMetadata: state.sessionMetadata,
     showModal: state.modal.showModal,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
@@ -158,7 +161,9 @@ export const DocketRecordHeader = connect(
     DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper,
     formattedCaseDetail,
+    formattedDocketEntriesHelper,
     gotoPrintableDocketRecordSequence,
+    openDownloadDocketEntriesModalSequence,
     sessionMetadata,
     showModal,
     updateSessionMetadataSequence,
@@ -179,9 +184,8 @@ export const DocketRecordHeader = connect(
                     }
                   />
                 </div>
-
-                {docketRecordHelper.showPrintableDocketRecord && (
-                  <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+                <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+                  {docketRecordHelper.showPrintableDocketRecord && (
                     <Button
                       link
                       aria-label="printable docket record"
@@ -195,8 +199,22 @@ export const DocketRecordHeader = connect(
                     >
                       Printable Docket Record
                     </Button>
-                  </div>
-                )}
+                  )}
+                  {docketRecordHelper.showBatchDownloadControls && (
+                    <Button
+                      link
+                      aria-label="download docket records"
+                      data-testid="download-docket-records-button"
+                      disabled={
+                        !formattedDocketEntriesHelper.isDownloadLinkEnabled
+                      }
+                      icon={['fas', 'cloud-download-alt']}
+                      onClick={() => openDownloadDocketEntriesModalSequence()}
+                    >
+                      Download
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </NonMobile>
