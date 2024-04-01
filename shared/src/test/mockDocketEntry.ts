@@ -270,7 +270,6 @@ export const STANDING_PRETRIAL_ORDER_ENTRY: RawDocketEntry = {
   index: 6,
   isDraft: false,
   isFileAttached: true,
-  isMinuteEntry: false,
   isOnDocketRecord: true,
   isPendingService: false,
   isStricken: false,
