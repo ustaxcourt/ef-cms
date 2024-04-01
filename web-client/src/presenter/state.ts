@@ -555,6 +555,7 @@ export const baseState = {
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   alertError: undefined,
+  alertInfo: undefined,
   alertSuccess: undefined,
   alertWarning: undefined,
   allJudges: [],
