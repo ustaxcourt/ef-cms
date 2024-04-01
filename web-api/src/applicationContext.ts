@@ -164,10 +164,13 @@ export const createApplicationContext = (
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser:
-      process.env.NODE_ENV === 'production'
-        ? getChromiumBrowserAWS
-        : getChromiumBrowser,
+    getChromiumBrowser: async () => {
+      if (environment.stage === 'local') {
+        return await getChromiumBrowser();
+      } else {
+        return await getChromiumBrowserAWS();
+      }
+    },
     getCognito: (): CognitoIdentityProvider => {
       if (environment.stage === 'local') {
         return getLocalCognito();
