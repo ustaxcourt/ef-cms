@@ -1,4 +1,8 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  Accordion,
+  AccordionItem,
+} from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
@@ -175,7 +179,7 @@ export const BeforeStartingCase = connect(
           />
           <div>
             <h3>Deadline to File</h3>
-            <div className="petitioner-flow-text">
+            <div className="petitioner-flow-text margin-bottom-20">
               If you received a notice in the mail from the IRS, it may show the
               last date to file or the number of days you have to file a
               Petition.{' '}
@@ -188,8 +192,96 @@ export const BeforeStartingCase = connect(
               may be dismissed for lack of jurisdiction.
             </div>
           </div>
+          <div className="grid-row grid-gap grid-col-10 margin-top-20">
+            <Accordion
+              className="petitioner-accordion-title"
+              headingLevel="3"
+              role="listitem"
+            >
+              <AccordionItem
+                key="Are you filing jointly with a spouse?"
+                title="Are you filing jointly with a spouse?"
+              >
+                <div>
+                  To file a joint Petition with your spouse, you must have their
+                  consent. Both you and your spouse should{' '}
+                  <Button
+                    link
+                    className="usa-link--external text-left mobile-text-wrap"
+                    href="https://ustaxcourt.gov/dawson_faqs_case_management.html#CASE7"
+                    overrideMargin="margin-right-0"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    sign the Petition
+                  </Button>
+                  {`. If you do not have your spouse's consent, select “Myself” as
+                  the person who is filing.`}
+                </div>
+              </AccordionItem>
+            </Accordion>
+            <Accordion
+              className="petitioner-accordion-title"
+              headingLevel="3"
+              role="listitem"
+            >
+              <AccordionItem
+                key="Are you filing on behalf of someone else?"
+                title="Are you filing on behalf of someone else?"
+              >
+                <div>
+                  To file a case on behalf of another taxpayer, you must be
+                  authorized to practice before this Court as provided by the{' '}
+                  <Button
+                    link
+                    className="usa-link--external text-left mobile-text-wrap"
+                    href="https://ustaxcourt.gov/rules.html"
+                    overrideMargin="margin-right-0"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Tax Court Rules of Practice and Procedure (Rule 60)
+                  </Button>
+                  {
+                    '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent taxpayers.'
+                  }
+                </div>
+              </AccordionItem>
+            </Accordion>
+            <Accordion
+              className="petitioner-accordion-title"
+              headingLevel="3"
+              role="listitem"
+            >
+              <AccordionItem
+                key="Are you filing for a business?"
+                title="Are you filing for a business?"
+              >
+                <div className="margin-bottom-1">
+                  {`If you're filing for a business, you'll need to complete and
+                  submit the Corporate Disclosure Statement.`}
+                </div>
+                <div>
+                  {
+                    "Download and fill out the form if you haven't already done so:"
+                  }
+                </div>
+                <Button
+                  link
+                  className="usa-link--external text-left mobile-text-wrap"
+                  href="https://ustaxcourt.gov/rules.html"
+                  overrideMargin="margin-right-0"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Corporate Disclosure Statement (T.C. Form 6)
+                </Button>
+              </AccordionItem>
+            </Accordion>
+          </div>
+
           <Button
-            className="margin-top-3"
+            className="margin-top-5"
             data-testid="go-to-step-1"
             href={rdirectUrl}
           >
