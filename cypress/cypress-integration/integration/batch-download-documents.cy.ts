@@ -79,6 +79,42 @@ describe('Batch Download Documents', () => {
     cy.task('deleteAllFilesInFolder', downloadPath);
   });
 
+  it('allows only internal court users to batch download case documents', () => {
+    createAndServePaperPetition().then(({ docketNumber, documentsCreated }) => {
+      // check for all internal roles
+      [
+        'adc',
+        'admissionsclerk',
+        'caseservicessupervisor',
+        'clerkofcourt',
+        'colvinschambers',
+        'docketclerk',
+        'floater',
+        'general',
+        'judgecolvin',
+        'petitionsclerk',
+        'reportersoffice',
+        'trialclerk',
+      ].forEach(account => {
+        cy.login(account);
+        searchByDocketNumberInHeader(docketNumber);
+        confirmCountOfDocumentsToDownload(documentsCreated.length);
+        includePrintableDocketRecord();
+        cy.get('[data-testid="modal-button-confirm"]').should('exist');
+      });
+
+      // check for external roles
+      ['privatePractitioner', 'petitioner', 'irspractitioner'].forEach(
+        account => {
+          cy.login(account);
+          cy.get('[data-testid="download-docket-records-button"]').should(
+            'not.exist',
+          );
+        },
+      );
+    });
+  });
+
   it('should download all eligible documents that are not stricken with the printable docket record, with all files in a flat directory', () => {
     const downloadPath = Cypress.config('downloadsFolder');
 
@@ -120,7 +156,7 @@ describe('Batch Download Documents', () => {
         const expectedFileCount = documentsCreated.length;
         let expectedSealedCount = 0;
         let expectedStrickenCount = 0;
-        loginAsDocketClerk();
+
         searchByDocketNumberInHeader(docketNumber);
 
         // strike documents
