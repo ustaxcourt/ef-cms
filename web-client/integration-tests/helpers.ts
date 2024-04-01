@@ -56,6 +56,7 @@ const formattedCaseMessages = withAppContextDecorator(
 );
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
+
 let dynamoDbCache;
 let httpCache;
 
