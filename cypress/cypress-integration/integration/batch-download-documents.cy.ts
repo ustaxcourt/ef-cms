@@ -156,7 +156,7 @@ describe('Batch Download Documents', () => {
         const expectedFileCount = documentsCreated.length;
         let expectedSealedCount = 0;
         let expectedStrickenCount = 0;
-
+        loginAsDocketClerk();
         searchByDocketNumberInHeader(docketNumber);
 
         // strike documents
