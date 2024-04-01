@@ -197,7 +197,13 @@ a:hover {
 }
 
 .petitioner-flow-text {
+  max-width: 1000px;
   margin-top: 8px;
   font-size: 16px;
   line-height: 24px;
+}
+
+.petitioner-label {
+  font-size: 17px;
+  font-weight: bold;
 }
