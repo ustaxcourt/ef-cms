@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 module "worker_lambda" {
   source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/worker-handler.ts"
