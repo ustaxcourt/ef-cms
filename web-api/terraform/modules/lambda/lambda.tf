@@ -22,7 +22,7 @@ data "archive_file" "lambda_function_zip" {
 resource "aws_lambda_function" "lambda_function" {
   function_name    = var.lambda_name
   handler          = "lambda.${var.handler_method}"
-  runtime          = "nodejs18.x"
+  runtime          = "nodejs20.x"
   role             = var.role
   filename         = data.archive_file.lambda_function_zip.output_path
   source_code_hash = data.archive_file.lambda_function_zip.output_base64sha256
