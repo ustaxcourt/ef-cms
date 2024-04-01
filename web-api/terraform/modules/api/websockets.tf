@@ -107,6 +107,12 @@ resource "aws_lambda_permission" "apigw_connect_lambda" {
   function_name = module.websockets_connect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
+
+  lifecycle {
+    replace_triggered_by = [
+      module.websockets_connect_lambda.lambda_function
+    ]
+  }
 }
 
 
@@ -116,6 +122,12 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
   function_name = module.websockets_disconnect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
+
+  lifecycle {
+    replace_triggered_by = [
+      module.websockets_disconnect_lambda.lambda_function
+    ]
+  }
 }
 
 resource "aws_lambda_permission" "apigw_default_lambda" {
@@ -124,6 +136,12 @@ resource "aws_lambda_permission" "apigw_default_lambda" {
   function_name = module.websockets_default_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
+
+  lifecycle {
+    replace_triggered_by = [
+      module.websockets_default_lambda.lambda_function
+    ]
+  }
 }
 
 

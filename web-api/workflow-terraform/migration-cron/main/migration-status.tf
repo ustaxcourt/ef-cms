@@ -4,15 +4,15 @@ module "migration_status_lambda" {
   handler_method = "handler"
   lambda_name    = "migration_status_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_role_${var.environment}"
-  timeout     = "900"
+  timeout        = "900"
   environment = {
-       STAGE                     = var.environment
-       NODE_ENV                  = "production"
-       AWS_ACCOUNT_ID            = data.aws_caller_identity.current.account_id
-       CIRCLE_WORKFLOW_ID        = var.circle_workflow_id
-       MIGRATE_FLAG              = var.migrate_flag
-       CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
-     }
+    STAGE                     = var.environment
+    NODE_ENV                  = "production"
+    AWS_ACCOUNT_ID            = data.aws_caller_identity.current.account_id
+    CIRCLE_WORKFLOW_ID        = var.circle_workflow_id
+    MIGRATE_FLAG              = var.migrate_flag
+    CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
+  }
 }
 
 resource "aws_cloudwatch_event_rule" "check_migration_status_cron_rule" {
@@ -33,4 +33,11 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_migration_status_lamb
   function_name = module.migration_status_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.check_migration_status_cron_rule.arn
+
+  lifecycle {
+    replace_triggered_by = [
+      module.migration_status_lambda.lambda_function
+    ]
+  }
 }
+

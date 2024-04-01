@@ -15,7 +15,7 @@ module "wait_for_workflow_lambda" {
     CIRCLE_PIPELINE_ID        = var.circle_pipeline_id
     APPROVAL_JOB_NAME         = var.approval_job_name
   }
-  timeout     = "29"
+  timeout = "29"
 }
 
 resource "aws_cloudwatch_event_rule" "wait_for_workflow_cron_rule" {
@@ -36,4 +36,10 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_wait_for_workflow_lam
   function_name = module.wait_for_workflow_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.wait_for_workflow_cron_rule.arn
+
+  lifecycle {
+    replace_triggered_by = [
+      module.wait_for_workflow_lambda.lambda_function
+    ]
+  }
 }
