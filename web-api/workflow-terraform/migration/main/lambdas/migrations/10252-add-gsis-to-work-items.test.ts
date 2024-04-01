@@ -68,49 +68,14 @@ describe('migrateItems', () => {
     it('does not add a gsiUserBox or gsiSectionBox on a work item record that has completedAt', () => {
       const migratedItems = migrateItems([mockWorkItemRecord]);
 
-      expect(migratedItems).toEqual(
-        expect.arrayContaining([
-          {
-            ...mockWorkItemRecord,
-            gsi2pk: undefined,
-            [gsiSectionBoxKey]: undefined,
-            [gsiUserBoxKey]: undefined,
-          },
-        ]),
-      );
-    });
-
-    it('adds a user outbox record with a ttl', () => {
-      const migratedItems = migrateItems([mockWorkItemRecord]);
-
-      expect(migratedItems).toEqual(
-        expect.arrayContaining([
-          {
-            ...mockWorkItemRecord,
-            [gsiSectionBoxKey]: undefined,
-            [gsiUserBoxKey]: undefined,
-            pk: `user-outbox|${mockWorkItemRecord.completedByUserId}`,
-            sk: mockWorkItemRecord.completedAt,
-            ttl: expect.anything(),
-          },
-        ]),
-      );
-    });
-    it('adds a section outbox record with a ttl', () => {
-      const migratedItems = migrateItems([mockWorkItemRecord]);
-
-      expect(migratedItems).toEqual(
-        expect.arrayContaining([
-          {
-            ...mockWorkItemRecord,
-            [gsiSectionBoxKey]: undefined,
-            [gsiUserBoxKey]: undefined,
-            pk: `section-outbox|${mockWorkItemRecord.section}`,
-            sk: mockWorkItemRecord.completedAt,
-            ttl: expect.anything(),
-          },
-        ]),
-      );
+      expect(migratedItems).toEqual([
+        {
+          ...mockWorkItemRecord,
+          gsi2pk: undefined,
+          [gsiSectionBoxKey]: undefined,
+          [gsiUserBoxKey]: undefined,
+        },
+      ]);
     });
   });
 
