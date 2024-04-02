@@ -93,6 +93,11 @@ resource "aws_api_gateway_integration" "api_public_integration" {
   uri                     = module.api_public_lambda.invoke_arn
 }
 
+
+resource "terraform_data" "api_public_lambda_last_modified" {
+  input = module.api_public_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "apigw_public_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -101,7 +106,7 @@ resource "aws_lambda_permission" "apigw_public_lambda" {
   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api_public.execution_arn}/*/*/*"
   lifecycle {
     replace_triggered_by = [
-      module.api_public_lambda.last_modified
+      terraform_data.api_public_lambda_last_modified
     ]
   }
 }

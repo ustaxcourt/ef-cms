@@ -30,6 +30,10 @@ resource "aws_cloudwatch_event_target" "wait_for_workflow_cron_target" {
   arn       = module.wait_for_workflow_lambda.arn
 }
 
+resource "terraform_data" "wait_for_workflow_lambda_last_modified" {
+  input = module.wait_for_workflow_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_wait_for_workflow_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
@@ -39,7 +43,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_wait_for_workflow_lam
 
   lifecycle {
     replace_triggered_by = [
-      module.wait_for_workflow_lambda.last_modified
+      terraform_data.wait_for_workflow_lambda_last_modified
     ]
   }
 }

@@ -30,6 +30,10 @@ resource "aws_cloudwatch_event_target" "check_reindex_status_cron_target" {
   arn       = module.reindex_status_lambda.arn
 }
 
+resource "terraform_data" "reindex_status_lambda_last_modified" {
+  input = module.reindex_status_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_reindex_status_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
@@ -39,7 +43,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_reindex_status_lambda
 
   lifecycle {
     replace_triggered_by = [
-      module.reindex_status_lambda.last_modified
+      terraform_data.reindex_status_lambda_last_modified
     ]
   }
 }

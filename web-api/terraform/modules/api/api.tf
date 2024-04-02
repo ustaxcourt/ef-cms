@@ -253,6 +253,10 @@ resource "aws_api_gateway_integration" "api_integration_head" {
   uri                     = module.api_lambda.invoke_arn
 }
 
+resource "terraform_data" "api_lambda_last_modified" {
+  input = module.api_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "apigw_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -261,7 +265,7 @@ resource "aws_lambda_permission" "apigw_lambda" {
   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
   lifecycle {
     replace_triggered_by = [
-      module.api_lambda.last_modified
+      terraform_data.api_lambda_last_modified
     ]
   }
 }

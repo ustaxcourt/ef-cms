@@ -16,6 +16,10 @@ resource "aws_cloudwatch_log_group" "logs_to_elasticsearch" {
   retention_in_days = 14
 }
 
+resource "terraform_data" "logs_to_es_last_modified" {
+  input = module.logs_to_es.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
@@ -23,7 +27,7 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   principal     = "logs.amazonaws.com"
   lifecycle {
     replace_triggered_by = [
-      module.logs_to_es.last_modified
+      terraform_data.logs_to_es
     ]
   }
 }

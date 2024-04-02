@@ -101,6 +101,10 @@ resource "aws_apigatewayv2_integration" "websockets_default_integration" {
   content_handling_strategy = "CONVERT_TO_TEXT"
 }
 
+resource "terraform_data" "websockets_connect_lambda_last_modified" {
+  input = module.websockets_connect_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "apigw_connect_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -110,11 +114,15 @@ resource "aws_lambda_permission" "apigw_connect_lambda" {
 
   lifecycle {
     replace_triggered_by = [
-      module.websockets_connect_lambda.last_modified
+      terraform_data.websockets_connect_lambda_last_modified
     ]
   }
 }
 
+
+resource "terraform_data" "websockets_disconnect_lambda_last_modified" {
+  input = module.websockets_disconnect_lambda.last_modified
+}
 
 resource "aws_lambda_permission" "apigw_disconnect_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
@@ -125,9 +133,13 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
 
   lifecycle {
     replace_triggered_by = [
-      module.websockets_disconnect_lambda.last_modified
+      terraform_data.websockets_disconnect_lambda_last_modified
     ]
   }
+}
+
+resource "terraform_data" "websockets_default_lambda_last_modified" {
+  input = module.websockets_default_lambda.last_modified
 }
 
 resource "aws_lambda_permission" "apigw_default_lambda" {
@@ -139,7 +151,7 @@ resource "aws_lambda_permission" "apigw_default_lambda" {
 
   lifecycle {
     replace_triggered_by = [
-      module.websockets_default_lambda.last_modified
+      terraform_data.websockets_default_lambda_last_modified
     ]
   }
 }

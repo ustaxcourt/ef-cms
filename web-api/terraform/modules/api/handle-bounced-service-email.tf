@@ -10,6 +10,10 @@ module "zip_handle_bounce" {
 }
 
 
+resource "terraform_data" "zip_handle_bounce_last_modified" {
+  input = module.zip_handle_bounce.last_modified
+}
+
 resource "aws_lambda_permission" "allow_sns" {
   count         = var.create_bounce_handler
   action        = "lambda:InvokeFunction"
@@ -19,7 +23,7 @@ resource "aws_lambda_permission" "allow_sns" {
 
   lifecycle {
     replace_triggered_by = [
-      module.zip_handle_bounce.last_modified
+      terraform_data.zip_handle_bounce_last_modified
     ]
   }
 }
