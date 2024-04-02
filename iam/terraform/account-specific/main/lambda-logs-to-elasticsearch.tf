@@ -41,6 +41,8 @@ module "regional-log-subscription-filters-east" {
   providers = {
     aws = aws.us-east-1
   }
+
+  depends_on = [aws_lambda_permission.allow_cloudwatch]
 }
 
 module "regional-log-subscription-filters-west" {
@@ -51,6 +53,8 @@ module "regional-log-subscription-filters-west" {
   providers = {
     aws = aws.us-west-1
   }
+
+  depends_on = [aws_lambda_permission.allow_cloudwatch]
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
@@ -59,6 +63,7 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   filter_pattern  = ""
   name            = "cognito_authorizer_${element(var.log_group_environments, count.index)}_lambda_filter"
   log_group_name  = "/aws/lambda/cognito_authorizer_lambda_${element(var.log_group_environments, count.index)}"
+  depends_on      = [aws_lambda_permission.allow_cloudwatch]
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "cognito_post_authentication_lambda_filter" {
@@ -67,6 +72,7 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_post_authentication_l
   filter_pattern  = ""
   name            = "cognito_post_authentication_lambda_${element(var.log_group_environments, count.index)}_filter"
   log_group_name  = "/aws/lambda/cognito_post_authentication_lambda_${element(var.log_group_environments, count.index)}"
+  depends_on      = [aws_lambda_permission.allow_cloudwatch]
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "clamav_fargate_filter" {
@@ -75,4 +81,5 @@ resource "aws_cloudwatch_log_subscription_filter" "clamav_fargate_filter" {
   filter_pattern  = ""
   name            = "clamav_fargate_${element(var.log_group_environments, count.index)}_filter"
   log_group_name  = "/aws/ecs/clamav_fargate_${element(var.log_group_environments, count.index)}"
+  depends_on      = [aws_lambda_permission.allow_cloudwatch]
 }
