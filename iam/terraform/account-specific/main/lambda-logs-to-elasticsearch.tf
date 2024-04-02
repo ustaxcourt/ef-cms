@@ -27,7 +27,7 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   principal     = "logs.amazonaws.com"
   lifecycle {
     replace_triggered_by = [
-      terraform_data.logs_to_es
+      terraform_data.logs_to_es_last_modified
     ]
   }
 }
