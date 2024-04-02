@@ -56,7 +56,7 @@ export const Country = connect(
               className="usa-radio__label"
               data-testid="domestic-country-btn"
               htmlFor={`${type}-countryType-domestic`}
-              id="country-radio-label-domestic"
+              id={`${type}-country-radio-label-domestic`}
             >
               United States
             </label>
@@ -85,7 +85,7 @@ export const Country = connect(
               className="usa-radio__label"
               data-testid="international-country-btn"
               htmlFor={`${type}-countryType-international`}
-              id="country-radio-label-international"
+              id={`${type}-country-radio-label-international`}
             >
               International
             </label>
