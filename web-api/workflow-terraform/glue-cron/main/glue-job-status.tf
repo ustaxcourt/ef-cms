@@ -26,6 +26,10 @@ resource "aws_cloudwatch_event_target" "check_glue_job_status_cron_target" {
   arn       = module.glue_job_status_lambda.arn
 }
 
+resource "terraform_data" "glue_job_status_lambda_last_modified" {
+  input = module.glue_job_status_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_glue_job_status_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
@@ -35,7 +39,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_glue_job_status_lambd
 
   lifecycle {
     replace_triggered_by = [
-      module.glue_job_status_lambda.last_modified
+      terraform_data.glue_job_status_lambda_last_modified
     ]
   }
 }

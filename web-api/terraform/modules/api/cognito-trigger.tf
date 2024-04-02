@@ -53,6 +53,9 @@ resource "aws_sqs_queue" "update_petitioner_cases_dl_queue" {
   name  = "update_petitioner_cases_dl_queue_${var.environment}_${var.current_color}"
 }
 
+resource "terraform_data" "cognito_post_authentication_lambda_last_modified" {
+  input = module.cognito_post_authentication_lambda.last_modified
+}
 
 resource "aws_lambda_permission" "allow_post_auth_trigger" {
   statement_id  = "AllowPostAuthenticationExecutionFromCognito"
@@ -63,11 +66,14 @@ resource "aws_lambda_permission" "allow_post_auth_trigger" {
   source_arn    = var.pool_arn
   lifecycle {
     replace_triggered_by = [
-      module.cognito_post_authentication_lambda.last_modified
+      terraform_data.cognito_post_authentication_lambda_last_modified
     ]
   }
 }
 
+resource "terraform_data" "cognito_post_confirmation_lambda_last_modified" {
+  input = module.cognito_post_confirmation_lambda.last_modified
+}
 
 resource "aws_lambda_permission" "allow_trigger" {
   statement_id  = "AllowPostConfirmationExecutionFromCognito"
@@ -79,7 +85,7 @@ resource "aws_lambda_permission" "allow_trigger" {
 
   lifecycle {
     replace_triggered_by = [
-      module.cognito_post_confirmation_lambda.last_modified
+      terraform_data.cognito_post_confirmation_lambda_last_modified
     ]
   }
 }

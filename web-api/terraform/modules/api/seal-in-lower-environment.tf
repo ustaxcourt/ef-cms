@@ -9,6 +9,10 @@ module "zip_seal" {
   timeout        = "60"
 }
 
+resource "terraform_data" "zip_seal_last_modified" {
+  input = module.zip_seal.last_modified
+}
+
 resource "aws_lambda_permission" "allow_topic_to_seal" {
   count         = var.create_seal_in_lower
   statement_id  = "AllowExecutionFromSNS"
@@ -19,7 +23,7 @@ resource "aws_lambda_permission" "allow_topic_to_seal" {
 
   lifecycle {
     replace_triggered_by = [
-      module.zip_seal.last_modified
+      terraform_data.zip_seal_last_modified
     ]
   }
 }

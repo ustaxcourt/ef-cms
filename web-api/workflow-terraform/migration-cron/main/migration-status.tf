@@ -27,6 +27,10 @@ resource "aws_cloudwatch_event_target" "check_migration_status_cron_target" {
   arn       = module.migration_status_lambda.arn
 }
 
+resource "terraform_data" "migration_status_lambda_last_modified" {
+  input = module.migration_status_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_migration_status_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
@@ -36,7 +40,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_migration_status_lamb
 
   lifecycle {
     replace_triggered_by = [
-      module.migration_status_lambda.last_modified
+      terraform_data.migration_status_lambda_last_modified
     ]
   }
 }

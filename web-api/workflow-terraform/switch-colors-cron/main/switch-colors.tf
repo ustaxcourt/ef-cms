@@ -27,6 +27,10 @@ resource "aws_cloudwatch_event_target" "check_switch_colors_status_cron_target" 
   arn       = module.switch_colors_status_lambda.arn
 }
 
+resource "terraform_data" "switch_colors_status_lambda_last_modified" {
+  input = module.switch_colors_status_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_switch_colors_status_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
@@ -36,7 +40,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_switch_colors_status_
 
   lifecycle {
     replace_triggered_by = [
-      module.switch_colors_status_lambda.last_modified
+      terraform_data.switch_colors_status_lambda_last_modified
     ]
   }
 }
