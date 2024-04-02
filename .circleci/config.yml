@@ -360,9 +360,6 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: 'Disable Maintenance Mode'
-          command: npm run maintenance:disengage $ENV
-      - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
       - store_artifacts:
