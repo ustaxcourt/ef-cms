@@ -104,10 +104,6 @@ variable "scanner_resource_uri" {
   type = string
 }
 
-variable "cognito_table_name" {
-  type = string
-}
-
 variable "prod_env_account_id" {
   type = string
 }
@@ -153,22 +149,21 @@ variable "deployment_timestamp" {
 variable "template_lambdas" {
   type = list(string)
   default = [
-    "api-public.js",
-    "api.js",
-    "cognito-authorizer.js",
-    "cognito-triggers.js",
-    "cron.js",
-    "handle-bounced-service-email.js",
-    "maintenance-notify.js",
-    "pdf-generation.js",
-    "public-api-authorizer.js",
-    "report.html",
-    "seal-in-lower-environment.js",
-    "send-emails.js",
-    "streams.js",
-    "trial-session.js",
-    "websocket-authorizer.js",
-    "websockets.js",
-    "worker-handler.js",
+      "api-public.js",
+      "api.js",
+      "cognito-authorizer.js",
+      "cron.js",
+      "handle-bounced-service-email.js",
+      "maintenance-notify.js",
+      "pdf-generation.js",
+      "public-api-authorizer.js",
+      "report.html",
+      "seal-in-lower-environment.js",
+      "send-emails.js",
+      "streams.js",
+      "trial-session.js",
+      "websocket-authorizer.js",
+      "websockets.js",
+       "worker-handler.js",
   ]
 }
