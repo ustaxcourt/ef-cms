@@ -1,3 +1,4 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -8,12 +9,12 @@ export const AutoGeneratePetitionForm = connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validationErrors: state.validationErrors,
   },
   function AutoGeneratePetitionForm({
+    factCount = 1,
     form,
+    reasonCount = 1,
     updateFormValueSequence,
-    validationErrors,
   }) {
     return (
       <>
@@ -28,20 +29,35 @@ export const AutoGeneratePetitionForm = connect(
           </label>
 
           <div className="grid-row margin-bottom-2">
-            <b className="margin-right-1">a.</b>
+            <li
+              style={{
+                fontWeight: 'bold',
+                listStyleType: 'lower-alpha',
+                marginRight: '1rem',
+              }}
+            ></li>
             <textarea
               aria-describedby="petition-reasons-label"
               className="usa-textarea height-8"
               id="petition-reasons"
               name="petitionReasons"
-              value={form.petitionReasons || ''}
+              value={form.petitionReasons[reasonCount - 1] || ''}
               onChange={e => {
                 updateFormValueSequence({
-                  key: e.target.name,
+                  key: e.target.name[reasonCount - 1],
                   value: e.target.value,
                 });
               }}
             />
+            <Button
+              link
+              icon="plus"
+              onClick={() => {
+                reasonCount++;
+              }}
+            >
+              Add another reason
+            </Button>
           </div>
 
           <label
@@ -53,20 +69,35 @@ export const AutoGeneratePetitionForm = connect(
             separately):
           </label>
           <div className="grid-row margin-bottom-2">
-            <b className="margin-right-1">a.</b>
+            <li
+              style={{
+                fontWeight: 'bold',
+                listStyleType: 'lower-alpha',
+                marginRight: '1rem',
+              }}
+            ></li>
             <textarea
               aria-describedby="petition-facts-label"
               className="usa-textarea height-8"
               id="petition-facts"
               name="petitionFacts"
-              value={form.petitionFacts || ''}
+              value={form.petitionFacts[factCount - 0] || ''}
               onChange={e => {
                 updateFormValueSequence({
-                  key: e.target.name,
+                  key: e.target.name[factCount - 0],
                   value: e.target.value,
                 });
               }}
             />
+            <Button
+              link
+              icon="plus"
+              onClick={() => {
+                factCount++;
+              }}
+            >
+              Add another fact
+            </Button>
           </div>
         </FormGroup>
       </>
