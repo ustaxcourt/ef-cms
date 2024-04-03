@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
+import { Body } from 'aws-sdk/clients/s3';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 
 export const generatePdfFromHtmlInteractor = async (
@@ -16,55 +16,59 @@ export const generatePdfFromHtmlInteractor = async (
     docketNumber?: string;
     footerHtml?: string;
     headerHtml?: string;
-    overwriteFooter?: string;
+    overwriteFooter?: boolean;
   },
-): Promise<Buffer> => {
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
+): Promise<Buffer | Body | undefined> => {
+  if (applicationContext.environment.stage === 'local') {
+    const browserLocal = await applicationContext.getChromiumBrowser();
 
-  const sendGenerateEvent =
-    featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key];
-
-  if (sendGenerateEvent) {
-    const { currentColor, region, stage } = applicationContext.environment;
-    const client = new LambdaClient({
-      region,
-    });
-    const command = new InvokeCommand({
-      FunctionName: `pdf_generator_${stage}_${currentColor}`,
-      InvocationType: 'RequestResponse',
-      Payload: Buffer.from(
-        JSON.stringify({
+    const result = await applicationContext
+      .getUseCaseHelpers()
+      .generatePdfFromHtmlHelper(
+        applicationContext,
+        {
           contentHtml,
           displayHeaderFooter,
           docketNumber,
           footerHtml,
           headerHtml,
           overwriteFooter,
-        }),
-      ),
-    });
-    const response = await client.send(command);
-    const textDecoder = new TextDecoder('utf-8');
-    const responseStr = textDecoder.decode(response.Payload);
-    const key = JSON.parse(responseStr);
-    return await applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
-      key,
-      useTempBucket: true,
-    });
-  } else {
-    const ret = await applicationContext
-      .getUseCaseHelpers()
-      .generatePdfFromHtmlHelper(applicationContext, {
+        },
+        browserLocal,
+      );
+
+    await browserLocal.close();
+
+    return result;
+  }
+
+  const { currentColor, region, stage } = applicationContext.environment;
+  const client = new LambdaClient({
+    region,
+  });
+  const command = new InvokeCommand({
+    FunctionName: `pdf_generator_${stage}_${currentColor}`,
+    InvocationType: 'RequestResponse',
+    Payload: Buffer.from(
+      JSON.stringify({
         contentHtml,
         displayHeaderFooter,
         docketNumber,
         footerHtml,
         headerHtml,
         overwriteFooter,
-      });
-    return ret;
-  }
+      }),
+    ),
+  });
+
+  const response = await client.send(command);
+  const textDecoder = new TextDecoder('utf-8');
+  const responseStr = textDecoder.decode(response.Payload);
+  const key = JSON.parse(responseStr);
+
+  return await applicationContext.getPersistenceGateway().getDocument({
+    applicationContext,
+    key,
+    useTempBucket: true,
+  });
 };
