@@ -40,8 +40,9 @@ output "east_web_acl_arn" {
 }
 
 output "aws_route53_health_check_failover_west_id" {
-  value = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
+  value = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : ""
 }
+
 output "aws_route53_health_check_failover_east_id" {
-  value = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
+  value = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : ""
 }
