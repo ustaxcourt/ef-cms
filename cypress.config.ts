@@ -1,14 +1,18 @@
-import { defineConfig } from 'cypress';
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
   expireUserConfirmationCode,
-  getNewAccountVerificationCode,
   getEmailVerificationToken,
+  getNewAccountVerificationCode,
 } from './cypress/support/cognito-login';
+import { defineConfig } from 'cypress';
+import {
+  deleteAllFilesInFolder,
+  ensureFolderExists,
+} from './cypress/cypress-integration/support/database';
+import { unzipFile } from './cypress/helpers/unzip-file';
 import { waitForNoce } from './cypress/helpers/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
-import { deleteAllFilesInFolder } from './cypress/cypress-integration/support/database';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -19,20 +23,29 @@ export default defineConfig({
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
-        getEmailVerificationToken({ email }) {
-          return getEmailVerificationToken({ email });
-        },
         confirmUser({ email }) {
           return confirmUser({ email });
         },
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
         },
+        deleteAllFilesInFolder(dir) {
+          return deleteAllFilesInFolder(dir);
+        },
+        ensureFolderExists(directory) {
+          return ensureFolderExists(directory);
+        },
         expireUserConfirmationCode(email: string) {
           return expireUserConfirmationCode(email);
         },
+        getEmailVerificationToken({ email }) {
+          return getEmailVerificationToken({ email });
+        },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        unzipFile({ destinationPath, filePath }) {
+          return unzipFile({ destinationPath, filePath });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
@@ -48,9 +61,6 @@ export default defineConfig({
             docketNumber,
             practitionerEmail,
           });
-        },
-        deleteAllFilesInFolder(dir) {
-          return deleteAllFilesInFolder(dir);
         },
       });
     },

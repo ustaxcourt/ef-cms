@@ -4,7 +4,7 @@ export const countPagesInDocument = async ({
   documentBytes,
 }: {
   applicationContext: IApplicationContext;
-  docketEntryId: string;
+  docketEntryId?: string;
   documentBytes?: any;
 }) => {
   let bytes;

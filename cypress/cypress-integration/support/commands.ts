@@ -58,6 +58,12 @@ Cypress.Commands.add('goToRoute', (...args) => {
   });
 });
 
+Cypress.Commands.add('unzipFile', downloadPath => {
+  cy.task('unzipFile', downloadPath).then(unzippedFiles => {
+    return cy.wrap(unzippedFiles);
+  });
+});
+
 Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
   let didDOMChange = false;
   let consecutiveIdleCallbacksWithUnchangedDOM = 0;
@@ -119,6 +125,10 @@ declare global {
       showsErrorMessage: (shows?: boolean) => void;
       showsSuccessMessage: (shows?: boolean) => void;
       listDownloadedFiles: (directory: string) => Chainable<string[]>;
+      unzipFile: (pathInfo: {
+        destinationPath: string;
+        filePath: string;
+      }) => Chainable<string[]>;
       showsSpinner: (shows?: boolean) => void;
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;
