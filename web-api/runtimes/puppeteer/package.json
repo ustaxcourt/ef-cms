@@ -10,7 +10,7 @@
   "dependencies": {
     "@sparticuz/chromium": "123.0.0",
     "pug": "3.0.2",
-    "puppeteer-core": "22.6.0",
+    "puppeteer-core": "22.6.2",
     "sass": "1.72.0"
   },
   "scripts": {},
