@@ -381,7 +381,7 @@ resource "aws_api_gateway_stage" "api_stage" {
 }
 
 resource "aws_cloudwatch_log_group" "api_stage_logs" {
-  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api.name}"
+  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api.name}_stage_logs"
 }
 
 resource "aws_acm_certificate" "api_gateway_cert" {
