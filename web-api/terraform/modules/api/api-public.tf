@@ -182,7 +182,7 @@ resource "aws_api_gateway_stage" "api_public_stage" {
 }
 
 resource "aws_cloudwatch_log_group" "api_public_stage_logs" {
-  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api_public.name}"
+  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api_public.name}_public_stage_logs"
 }
 
 resource "aws_acm_certificate" "api_gateway_cert_public" {
