@@ -1,6 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { LegalPlaceOfResidenceSelect } from '@web-client/views/StartCase/LegalPlaceOfResidenceSelect';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { PlaceOfLegalResidenceSelect } from '@web-client/views/StartCase/PlaceOfLegalResidenceSelect';
 import { StateSelect } from './StateSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
@@ -91,10 +91,13 @@ export const Address = connect(
                   (if different from mailing address)
                 </span>
               </label>
-              <PlaceOfLegalResidenceSelect
+              <LegalPlaceOfResidenceSelect
+                className="max-width-180"
                 data={data}
                 type={type}
                 updateFormValueSequence={updateFormValueSequence}
+                usStates={usStates}
+                usStatesOther={usStatesOther}
                 validateStartCaseSequence={validateStartCaseSequence}
               />
             </FormGroup>
@@ -192,11 +195,13 @@ export const Address = connect(
                   (if different from mailing address)
                 </span>
               </label>
-              <PlaceOfLegalResidenceSelect
+              <LegalPlaceOfResidenceSelect
                 className="max-width-180"
                 data={data}
                 type={type}
                 updateFormValueSequence={updateFormValueSequence}
+                usStates={usStates}
+                usStatesOther={usStatesOther}
                 validateStartCaseSequence={validateStartCaseSequence}
               />
             </FormGroup>

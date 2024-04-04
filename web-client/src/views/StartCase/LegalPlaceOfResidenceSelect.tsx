@@ -1,14 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export const PlaceOfLegalResidenceSelect = ({
+export const LegalPlaceOfResidenceSelect = ({
   className = '',
   data,
   type,
   updateFormValueSequence,
+  usStates,
+  usStatesOther,
   validateStartCaseSequence,
 }) => {
-  const legalResidenceOptions = ['State', 'Territory', 'Other'];
   return (
     <select
       className={className ? classNames(className, 'usa-select') : 'usa-select'}
@@ -25,17 +26,33 @@ export const PlaceOfLegalResidenceSelect = ({
       }}
     >
       <option value="">- Select -</option>
-      <optgroup label="Place of legal residence">
-        {legalResidenceOptions.map(lro => {
+      <optgroup label="States">
+        {Object.keys(usStates).map(abbrev => {
+          const label = usStates[abbrev];
           return (
-            <option key={lro} value={lro}>
-              {lro}
+            <option key={abbrev} value={abbrev}>
+              {label}
             </option>
           );
         })}
+      </optgroup>
+
+      <optgroup label="Territory">
+        {Object.keys(usStatesOther).map(abbrev => {
+          const label = usStatesOther[abbrev];
+          return (
+            <option key={abbrev} value={abbrev}>
+              {label}
+            </option>
+          );
+        })}
+      </optgroup>
+
+      <optgroup label="Other">
+        <option value={'Other'}>Other</option>
       </optgroup>
     </select>
   );
 };
 
-PlaceOfLegalResidenceSelect.displayName = 'PlaceOfLegalResidenceSelect';
+LegalPlaceOfResidenceSelect.displayName = 'LegalPlaceOfResidenceSelect';
