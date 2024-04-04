@@ -1,27 +1,22 @@
-import { camelCase, kebabCase } from 'lodash';
+import { Contacts } from '@web-client/views/StartCase/Contacts';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
-
 export const UpdatedFilePetitionStep2 = connect(
   {
-    cerebralBindSimpleSetStateSequence:
-      sequences.cerebralBindSimpleSetStateSequence,
-    stepIndicatorInfo: state.stepIndicatorInfo,
+    form: state.form,
+    updateStartCaseFormValueSequence:
+      sequences.updateStartCaseFormValueSequence,
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
-    updatedFilePetitionStep2State: state.updatedFilePetitionStep2State,
   },
   function UpdatedFilePetitionStep2({
-    cerebralBindSimpleSetStateSequence,
-    stepIndicatorInfo,
+    form,
     updatedFilePetitionHelper,
-    updatedFilePetitionStep2State,
+    updateStartCaseFormValueSequence,
   }) {
-    const { currentStep } = stepIndicatorInfo;
-    const { selectedFilingOption } = updatedFilePetitionStep2State;
     return (
       <>
         <ErrorNotification />
@@ -30,40 +25,74 @@ export const UpdatedFilePetitionStep2 = connect(
         </p>
         <h2>I am filing this petition on behalf of...</h2>
         <fieldset className="usa-fieldset margin-bottom-2">
-          {updatedFilePetitionHelper.filingOptions.map(title => {
+          {updatedFilePetitionHelper.filingOptions.map((filingType, index) => {
             return (
-              <div className="usa-radio usa-radio__inline" key={title}>
+              <div className="usa-radio" key={filingType}>
                 <input
-                  checked={selectedFilingOption === camelCase(title)}
+                  aria-describedby="filing-type-legend"
+                  checked={form.filingType === filingType}
                   className="usa-radio__input"
-                  id={`${kebabCase(title)}-radio-option`}
-                  name="selectedFilingOption"
+                  id={filingType}
+                  name="filingType"
                   type="radio"
-                  value={camelCase(title)}
+                  value={filingType}
                   onChange={e => {
-                    cerebralBindSimpleSetStateSequence({
-                      key: updatedFilePetitionHelper.keyGenerator(
-                        currentStep,
-                        e.target.name,
-                      ),
+                    updateStartCaseFormValueSequence({
+                      key: e.target.name,
                       value: e.target.value,
                     });
+                    // validateStartCaseWizardSequence
                   }}
                 />
                 <label
                   className="usa-radio__label"
-                  htmlFor={`${kebabCase(title)}-radio-option`}
-                  id={`${kebabCase(title)}-radio-option-label`}
+                  data-testid={`filing-type-${index}`}
+                  htmlFor={filingType}
+                  id={`${filingType}-radio-option-label`}
                 >
-                  {title}
+                  {filingType}
                 </label>
               </div>
             );
           })}{' '}
         </fieldset>
-
-        {selectedFilingOption}
+        {form.filingType === 'Myself' && (
+          <Contacts
+            bind="form"
+            contactsHelper="contactsHelper"
+            parentView="StartCase"
+            showPrimaryContact={true}
+            showSecondaryContact={false}
+            wrapperClassName={'-'}
+            onChange="updateFormValueSequence"
+            // showPrimaryContact={startCaseHelper.showPrimaryContact}
+            // showSecondaryContact={startCaseHelper.showSecondaryContact}
+            // useSameAsPrimary={true}
+            // onBlur="validateStartCaseWizardSequence"
+          />
+        )}
+        {form.filingType === 'myselfAndMySpouse' && (
+          <PetitionerAndSpouseInfo filingOption={form.filingType} />
+        )}
+        {form.filingType === 'aBusiness' && (
+          <BusinessInfo filingOption={form.filingType} />
+        )}
+        {form.filingType === 'other' && (
+          <OtherInfo filingOption={form.filingType} />
+        )}
       </>
     );
   },
 );
+
+function PetitionerAndSpouseInfo({ filingOption }) {
+  return <div>{filingOption}</div>;
+}
+
+function BusinessInfo({ filingOption }) {
+  return <div>{filingOption}</div>;
+}
+
+function OtherInfo({ filingOption }) {
+  return <div>{filingOption}</div>;
+}

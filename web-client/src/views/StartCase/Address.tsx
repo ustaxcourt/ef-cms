@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { PlaceOfLegalResidenceSelect } from '@web-client/views/StartCase/PlaceOfLegalResidenceSelect';
 import { StateSelect } from './StateSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
@@ -21,6 +22,7 @@ export const Address = connect(
   },
   function Address({
     data,
+    showPlaceOfLegalResidence,
     type,
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
@@ -35,18 +37,37 @@ export const Address = connect(
     function MobileCityAndState() {
       return (
         <Mobile>
-          <FormGroup errorText={validationErrors?.[type]?.city}>
-            <label className="usa-label" htmlFor={`${type}.city`}>
-              City
+          <FormGroup errorText={validationErrors?.[type]?.state}>
+            <label className="usa-label" htmlFor={`${type}.state`}>
+              State
+            </label>
+            <StateSelect
+              useFullStateName
+              data={data}
+              type={type}
+              updateFormValueSequence={updateFormValueSequence}
+              usStates={usStates}
+              usStatesOther={usStatesOther}
+              validateStartCaseSequence={validateStartCaseSequence}
+            />
+          </FormGroup>
+          <FormGroup>
+            <label
+              aria-hidden
+              className="usa-label"
+              htmlFor={`${type}.postalCode`}
+            >
+              Zip code
             </label>
             <input
+              aria-label="zip code"
               autoCapitalize="none"
               className="usa-input"
-              data-testid={`${type}.city`}
-              id={`${type}.city`}
-              name={`${type}.city`}
+              data-testid={`${type}.postalCode`}
+              id={`${type}.postalCode`}
+              name={`${type}.postalCode`}
               type="text"
-              value={data[type].city || ''}
+              value={data[type].postalCode || ''}
               onBlur={() => {
                 validateStartCaseSequence();
               }}
@@ -56,20 +77,6 @@ export const Address = connect(
                   value: e.target.value,
                 });
               }}
-            />
-          </FormGroup>
-
-          <FormGroup errorText={validationErrors?.[type]?.state}>
-            <label className="usa-label" htmlFor={`${type}.state`}>
-              State
-            </label>
-            <StateSelect
-              data={data}
-              type={type}
-              updateFormValueSequence={updateFormValueSequence}
-              usStates={usStates}
-              usStatesOther={usStatesOther}
-              validateStartCaseSequence={validateStartCaseSequence}
             />
           </FormGroup>
         </Mobile>
@@ -86,24 +93,43 @@ export const Address = connect(
           <div
             className={classNames(
               'usa-form-group',
-              (validationErrors?.[type]?.city ||
-                validationErrors?.[type]?.state) &&
+              (validationErrors?.[type]?.state ||
+                validationErrors?.[type]?.postalCode) &&
                 'usa-form-group--error',
             )}
           >
-            <div className="grid-row grid-gap state-and-city">
+            <div className="grid-row grid-gap">
+              <div className="grid-col-4">
+                <label className="usa-label" htmlFor={`${type}.state`}>
+                  State
+                </label>
+                <StateSelect
+                  useFullStateName
+                  data={data}
+                  type={type}
+                  updateFormValueSequence={updateFormValueSequence}
+                  usStates={usStates}
+                  usStatesOther={usStatesOther}
+                  validateStartCaseSequence={validateStartCaseSequence}
+                />
+              </div>
               <div className="grid-col-8">
-                <label className="usa-label" htmlFor={`${type}.city`}>
-                  City
+                <label
+                  aria-hidden
+                  className="usa-label"
+                  htmlFor={`${type}.postalCode`}
+                >
+                  Zip code
                 </label>
                 <input
+                  aria-label="zip code"
                   autoCapitalize="none"
-                  className="usa-input usa-input--inline"
-                  data-testid={`${type}.city`}
-                  id={`${type}.city`}
-                  name={`${type}.city`}
+                  className="usa-input"
+                  data-testid={`${type}.postalCode`}
+                  id={`${type}.postalCode`}
+                  name={`${type}.postalCode`}
                   type="text"
-                  value={data[type].city || ''}
+                  value={data[type].postalCode || ''}
                   onBlur={() => {
                     validateStartCaseSequence();
                   }}
@@ -115,32 +141,19 @@ export const Address = connect(
                   }}
                 />
               </div>
-              <div className="grid-col-4">
-                <label className="usa-label" htmlFor={`${type}.state`}>
-                  State
-                </label>
-                <StateSelect
-                  data={data}
-                  type={type}
-                  updateFormValueSequence={updateFormValueSequence}
-                  usStates={usStates}
-                  usStatesOther={usStatesOther}
-                  validateStartCaseSequence={validateStartCaseSequence}
-                />
-              </div>
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
-                {validationErrors?.[type]?.city && (
+                {validationErrors?.[type]?.state && (
                   <span className="usa-error-message">
-                    {validationErrors[type].city}
+                    {validationErrors[type].state}
                   </span>
                 )}
               </div>
               <div className="grid-col-4">
-                {validationErrors?.[type]?.state && (
+                {validationErrors?.[type]?.postalCode && (
                   <span className="usa-error-message">
-                    {validationErrors[type].state}
+                    {validationErrors[type].postalCode}
                   </span>
                 )}
               </div>
@@ -151,7 +164,7 @@ export const Address = connect(
     }
 
     return (
-      <>
+      <div className="address-info">
         <FormGroup errorText={validationErrors?.[type]?.address1}>
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
@@ -219,39 +232,50 @@ export const Address = connect(
             }}
           />
         </div>
-
-        {NonMobileCityAndState()}
-        {MobileCityAndState()}
-
-        <FormGroup errorText={validationErrors?.[type]?.postalCode}>
-          <label
-            aria-hidden
-            className="usa-label"
-            htmlFor={`${type}.postalCode`}
-          >
-            ZIP code
+        <FormGroup errorText={validationErrors?.[type]?.city}>
+          <label className="usa-label" htmlFor={`${type}.city`}>
+            City
           </label>
           <input
-            aria-label="zip code"
             autoCapitalize="none"
-            className="usa-input max-width-200 tablet:usa-input--medium"
-            data-testid={`${type}.postalCode`}
-            id={`${type}.postalCode`}
-            name={`${type}.postalCode`}
+            className="usa-input"
+            data-testid={`${type}.city`}
+            id={`${type}.city`}
+            name={`${type}.city`}
             type="text"
-            value={data[type].postalCode || ''}
+            value={data[type].city || ''}
             onBlur={() => {
               validateStartCaseSequence();
             }}
             onChange={e => {
-              updateFormValueSequence({
+              updateFormValueAndSecondaryContactInfoSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
             }}
           />
         </FormGroup>
-      </>
+
+        {NonMobileCityAndState()}
+        {MobileCityAndState()}
+        {showPlaceOfLegalResidence && (
+          <FormGroup>
+            <label
+              aria-hidden
+              className="usa-label"
+              htmlFor={`${type}.placeOfLegalResidence`}
+            >
+              Place of legal residence
+            </label>
+            <PlaceOfLegalResidenceSelect
+              data={data}
+              type={type}
+              updateFormValueSequence={updateFormValueSequence}
+              validateStartCaseSequence={validateStartCaseSequence}
+            />
+          </FormGroup>
+        )}
+      </div>
     );
   },
 );
