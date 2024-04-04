@@ -92,7 +92,6 @@ export const Address = connect(
                 </span>
               </label>
               <LegalPlaceOfResidenceSelect
-                className="max-width-180"
                 data={data}
                 type={type}
                 updateFormValueSequence={updateFormValueSequence}
