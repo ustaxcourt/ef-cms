@@ -1,4 +1,5 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { PlaceOfLegalResidenceSelect } from '@web-client/views/StartCase/PlaceOfLegalResidenceSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -15,6 +16,7 @@ export const InternationalAddress = connect(
   },
   function InternationalAddress({
     data,
+    showPlaceOfLegalResidence,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
@@ -154,6 +156,23 @@ export const InternationalAddress = connect(
             }}
           />
         </FormGroup>
+        {showPlaceOfLegalResidence && (
+          <FormGroup>
+            <label
+              aria-hidden
+              className="usa-label"
+              htmlFor={`${type}.placeOfLegalResidence`}
+            >
+              Place of legal residence
+            </label>
+            <PlaceOfLegalResidenceSelect
+              data={data}
+              type={type}
+              updateFormValueSequence={updateFormValueSequence}
+              validateStartCaseSequence={validateStartCaseSequence}
+            />
+          </FormGroup>
+        )}
       </>
     );
   },

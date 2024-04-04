@@ -23,8 +23,13 @@ export const contactsHelper = (
   let contactPrimary, contactSecondary;
   let showEmail = user.role !== USER_ROLES.petitioner;
 
+  const isNewPetitionUpload = !!form.petitionType;
+  const contactHelper = isNewPetitionUpload
+    ? newContactHelperForPetitioner
+    : contactHelperForPetitioner;
+
   if (user.role === USER_ROLES.petitioner) {
-    ({ contactPrimary, contactSecondary } = contactHelperForPetitioner({
+    ({ contactPrimary, contactSecondary } = contactHelper({
       PARTY_TYPES,
       partyType: form.partyType,
     }));
@@ -350,6 +355,148 @@ const contactHelperForNonPetitioner = ({ PARTY_TYPES, partyType }) => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Trustee',
+        nameLabel: 'Name of trust',
+        secondaryNameLabel: 'Name of trustee',
+      },
+    },
+  };
+  return contactTypes[partyType] ?? {};
+};
+
+const newContactHelperForPetitioner = ({ PARTY_TYPES, partyType }) => {
+  const contactTypes = {
+    [PARTY_TYPES.conservator]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of conservator',
+      },
+    },
+    [PARTY_TYPES.corporation]: {
+      contactPrimary: {
+        displayInCareOf: true,
+        inCareOfLabel: 'In care of',
+        inCareOfLabelHint: 'optional',
+        nameLabel: 'Business name',
+      },
+    },
+    [PARTY_TYPES.custodian]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of custodian',
+      },
+    },
+    [PARTY_TYPES.donor]: {
+      contactPrimary: {
+        nameLabel: 'Name of petitioner',
+      },
+    },
+    [PARTY_TYPES.estate]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        displayTitle: true,
+        header:
+          'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
+        nameLabel: 'Name of decedent',
+        secondaryNameLabel: 'Name of executor/personal representative, etc.',
+      },
+    },
+    [PARTY_TYPES.estateWithoutExecutor]: {
+      contactPrimary: {
+        displayInCareOf: true,
+        inCareOfLabel: 'In care of',
+        inCareOfLabelHint: 'optional',
+        nameLabel: 'Name of decedent',
+      },
+    },
+    [PARTY_TYPES.guardian]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of guardian',
+      },
+    },
+    [PARTY_TYPES.nextFriendForIncompetentPerson]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        header:
+          'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
+        nameLabel: 'Name of legally incompetent person',
+        secondaryNameLabel: 'Name of next friend',
+      },
+    },
+    [PARTY_TYPES.nextFriendForMinor]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        nameLabel: 'Name of minor',
+        secondaryNameLabel: 'Name of next friend',
+      },
+    },
+    [PARTY_TYPES.partnershipBBA]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        nameLabel: 'Business name',
+        secondaryNameLabel: 'Partnership representative name',
+      },
+    },
+    [PARTY_TYPES.partnershipOtherThanTaxMatters]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        header:
+          'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
+        nameLabel: 'Business name',
+        secondaryNameLabel: 'Name of partner (other than TMP)',
+      },
+    },
+    [PARTY_TYPES.partnershipAsTaxMattersPartner]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        nameLabel: 'Partnership name',
+        secondaryNameLabel: 'Tax Matters Partner name',
+      },
+    },
+    [PARTY_TYPES.petitioner]: {
+      contactPrimary: {
+        nameLabel: 'Full Name',
+      },
+    },
+    [PARTY_TYPES.petitionerSpouse]: {
+      contactPrimary: {
+        displayPhone: true,
+        nameLabel: 'Name',
+      },
+      contactSecondary: {
+        displayPhone: true,
+        nameLabel: 'Spouse’s name',
+      },
+    },
+    [PARTY_TYPES.petitionerDeceasedSpouse]: {
+      contactPrimary: {
+        nameLabel: 'Name of petitioner/surviving spouse',
+      },
+      contactSecondary: {
+        displayInCareOf: true,
+        displayPhone: true,
+        inCareOfLabel: 'In care of',
+        nameLabel: 'Name of deceased spouse',
+      },
+    },
+    [PARTY_TYPES.survivingSpouse]: {
+      contactPrimary: {
+        displaySecondaryName: true,
+        nameLabel: 'Name of deceased spouse',
+        secondaryNameLabel: 'Name of surviving spouse',
+      },
+    },
+    [PARTY_TYPES.transferee]: {
+      contactPrimary: {
+        nameLabel: 'Name of petitioner',
+      },
+    },
+    [PARTY_TYPES.trust]: {
+      contactPrimary: {
+        displaySecondaryName: true,
         nameLabel: 'Name of trust',
         secondaryNameLabel: 'Name of trustee',
       },
