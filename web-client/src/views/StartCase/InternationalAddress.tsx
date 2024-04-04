@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { LegalPlaceOfResidenceSelect } from '@web-client/views/StartCase/LegalPlaceOfResidenceSelect';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -161,27 +162,53 @@ export const InternationalAddress = connect(
           />
         </FormGroup>
         {showPlaceOfLegalResidence && (
-          <FormGroup>
-            <label
-              aria-hidden
-              className="usa-label"
-              htmlFor={`${type}.placeOfLegalResidence`}
-            >
-              Place of legal residence{' '}
-              <span className="usa-hint">
-                (if different from mailing address)
-              </span>
-            </label>
-            <LegalPlaceOfResidenceSelect
-              className="max-width-180"
-              data={data}
-              type={type}
-              updateFormValueSequence={updateFormValueSequence}
-              usStates={usStates}
-              usStatesOther={usStatesOther}
-              validateStartCaseSequence={validateStartCaseSequence}
-            />
-          </FormGroup>
+          <>
+            <Mobile>
+              <FormGroup>
+                <label
+                  aria-hidden
+                  className="usa-label"
+                  htmlFor={`${type}.placeOfLegalResidence`}
+                >
+                  Place of legal residence{' '}
+                  <span className="usa-hint">
+                    (if different from mailing address)
+                  </span>
+                </label>
+                <LegalPlaceOfResidenceSelect
+                  data={data}
+                  type={type}
+                  updateFormValueSequence={updateFormValueSequence}
+                  usStates={usStates}
+                  usStatesOther={usStatesOther}
+                  validateStartCaseSequence={validateStartCaseSequence}
+                />
+              </FormGroup>
+            </Mobile>
+            <NonMobile>
+              <FormGroup>
+                <label
+                  aria-hidden
+                  className="usa-label"
+                  htmlFor={`${type}.placeOfLegalResidence`}
+                >
+                  Place of legal residence{' '}
+                  <span className="usa-hint">
+                    (if different from mailing address)
+                  </span>
+                </label>
+                <LegalPlaceOfResidenceSelect
+                  className="max-width-180"
+                  data={data}
+                  type={type}
+                  updateFormValueSequence={updateFormValueSequence}
+                  usStates={usStates}
+                  usStatesOther={usStatesOther}
+                  validateStartCaseSequence={validateStartCaseSequence}
+                />
+              </FormGroup>
+            </NonMobile>
+          </>
         )}
       </>
     );
