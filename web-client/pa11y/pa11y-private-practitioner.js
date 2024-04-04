@@ -42,6 +42,7 @@ module.exports = [
       ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-19/request-access',
       'wait for element .select-react-element__control to be visible',
+      'screen capture snapshot.png',
       'click .select-react-element__dropdown-indicator',
       'wait for element .select-react-element__menu to be visible',
       'click #react-select-2-option-2', //Motion to Substitute Parties and Change Caption
