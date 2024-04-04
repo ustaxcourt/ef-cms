@@ -676,7 +676,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
                 innerHTML: 'something',
               },
             ],
-            querySelector: () => { },
+            querySelector: () => {},
           };
         },
       };
@@ -685,7 +685,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
       createObjectURL: () => {
         return fakeData;
       },
-      revokeObjectURL: () => { },
+      revokeObjectURL: () => {},
     },
     document: {},
     localStorage: {
@@ -801,7 +801,7 @@ export const gotoRoute = (routes, routeToGoTo) => {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
-      '$',
+        '$',
     );
     if (routeToGoTo.match(regex)) {
       const match = regex.exec(routeToGoTo);
