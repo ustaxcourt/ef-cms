@@ -1,6 +1,8 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export const StateSelect = ({
+  className = '',
   data,
   type,
   updateFormValueSequence,
@@ -11,7 +13,7 @@ export const StateSelect = ({
 }) => {
   return (
     <select
-      className="usa-select"
+      className={className ? classNames(className, 'usa-select') : 'usa-select'}
       data-testid={`${type}.state`}
       id={`${type}.state`}
       name={`${type}.state`}

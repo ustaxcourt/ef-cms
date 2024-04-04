@@ -79,6 +79,26 @@ export const Address = connect(
               }}
             />
           </FormGroup>
+          {showPlaceOfLegalResidence && (
+            <FormGroup>
+              <label
+                aria-hidden
+                className="usa-label"
+                htmlFor={`${type}.placeOfLegalResidence`}
+              >
+                Place of legal residence{' '}
+                <span className="usa-hint">
+                  (if different from mailing address)
+                </span>
+              </label>
+              <PlaceOfLegalResidenceSelect
+                data={data}
+                type={type}
+                updateFormValueSequence={updateFormValueSequence}
+                validateStartCaseSequence={validateStartCaseSequence}
+              />
+            </FormGroup>
+          )}
         </Mobile>
       );
     }
@@ -99,12 +119,13 @@ export const Address = connect(
             )}
           >
             <div className="grid-row grid-gap">
-              <div className="grid-col-4">
+              <div className="grid-col-5">
                 <label className="usa-label" htmlFor={`${type}.state`}>
                   State
                 </label>
                 <StateSelect
                   useFullStateName
+                  className="max-width-180"
                   data={data}
                   type={type}
                   updateFormValueSequence={updateFormValueSequence}
@@ -113,7 +134,7 @@ export const Address = connect(
                   validateStartCaseSequence={validateStartCaseSequence}
                 />
               </div>
-              <div className="grid-col-8">
+              <div className="grid-col-7">
                 <label
                   aria-hidden
                   className="usa-label"
@@ -159,6 +180,27 @@ export const Address = connect(
               </div>
             </div>
           </div>
+          {showPlaceOfLegalResidence && (
+            <FormGroup>
+              <label
+                aria-hidden
+                className="usa-label"
+                htmlFor={`${type}.placeOfLegalResidence`}
+              >
+                Place of legal residence{' '}
+                <span className="usa-hint">
+                  (if different from mailing address)
+                </span>
+              </label>
+              <PlaceOfLegalResidenceSelect
+                className="max-width-180"
+                data={data}
+                type={type}
+                updateFormValueSequence={updateFormValueSequence}
+                validateStartCaseSequence={validateStartCaseSequence}
+              />
+            </FormGroup>
+          )}
         </NonMobile>
       );
     }
@@ -258,23 +300,6 @@ export const Address = connect(
 
         {NonMobileCityAndState()}
         {MobileCityAndState()}
-        {showPlaceOfLegalResidence && (
-          <FormGroup>
-            <label
-              aria-hidden
-              className="usa-label"
-              htmlFor={`${type}.placeOfLegalResidence`}
-            >
-              Place of legal residence
-            </label>
-            <PlaceOfLegalResidenceSelect
-              data={data}
-              type={type}
-              updateFormValueSequence={updateFormValueSequence}
-              validateStartCaseSequence={validateStartCaseSequence}
-            />
-          </FormGroup>
-        )}
       </div>
     );
   },

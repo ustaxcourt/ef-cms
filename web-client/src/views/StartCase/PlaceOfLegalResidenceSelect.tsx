@@ -1,6 +1,8 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export const PlaceOfLegalResidenceSelect = ({
+  className = '',
   data,
   type,
   updateFormValueSequence,
@@ -9,7 +11,7 @@ export const PlaceOfLegalResidenceSelect = ({
   const legalResidenceOptions = ['State', 'Territory', 'Other'];
   return (
     <select
-      className="usa-select"
+      className={className ? classNames(className, 'usa-select') : 'usa-select'}
       data-testid={`${type}.placeOfLegalResidence`}
       id={`${type}.placeOfLegalResidence`}
       name={`${type}.placeOfLegalResidence`}
