@@ -11,7 +11,7 @@ module "glue_job_status_lambda" {
     CIRCLE_WORKFLOW_ID        = var.circle_workflow_id
     CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
   }
-  timeout     = "29"
+  timeout = "29"
 }
 
 resource "aws_cloudwatch_event_rule" "check_glue_job_status_cron_rule" {
@@ -26,10 +26,20 @@ resource "aws_cloudwatch_event_target" "check_glue_job_status_cron_target" {
   arn       = module.glue_job_status_lambda.arn
 }
 
+resource "terraform_data" "glue_job_status_lambda_last_modified" {
+  input = module.glue_job_status_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_glue_job_status_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = module.glue_job_status_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.check_glue_job_status_cron_rule.arn
+
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.glue_job_status_lambda_last_modified
+    ]
+  }
 }

@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
+import { Agent } from 'http';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
@@ -55,7 +56,9 @@ const formattedCaseMessages = withAppContextDecorator(
 );
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
+
 let dynamoDbCache;
+let httpCache;
 
 Object.assign(applicationContext, {
   getDocumentClient: () => {
@@ -153,8 +156,6 @@ export const getUserRecordById = (userId: string) => {
     applicationContext,
   });
 };
-
-export const describeif = condition => (condition ? describe : describe.skip);
 
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
@@ -612,7 +613,7 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
-export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
+export const setupTest = ({ constantsOverrides = {} } = {}) => {
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
@@ -634,6 +635,27 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
 
   presenter.providers.applicationContext = applicationContext;
 
+  presenter.providers.applicationContext.getHttpClient = () => {
+    // HTTP Client is overridden for integration tests because with the introduction
+    // of Node 20 we saw an increase in ECONNRESET failures in the pipeline. Setting
+    // a custom http agent with keepAlive false resolved those issues.
+    // This appears to be a known issue in Node, see
+    // https://github.com/nodejs/node/issues/47130
+    const stackError = new Error();
+    httpCache =
+      httpCache ||
+      axios.create({
+        httpAgent: new Agent({ keepAlive: false }),
+      });
+
+    httpCache.interceptors.response.use(undefined, error => {
+      error.stack = stackError.stack;
+      throw error;
+    });
+
+    return httpCache;
+  };
+
   const {
     initialize: initializeSocketProvider,
     start,
@@ -654,7 +676,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
                 innerHTML: 'something',
               },
             ],
-            querySelector: () => {},
+            querySelector: () => { },
           };
         },
       };
@@ -663,7 +685,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
       createObjectURL: () => {
         return fakeData;
       },
-      revokeObjectURL: () => {},
+      revokeObjectURL: () => { },
     },
     document: {},
     localStorage: {
@@ -690,7 +712,6 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   const originalUseCases = applicationContext.getUseCases();
   const allUseCases = {
     ...originalUseCases,
-    ...useCases,
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   };
 
@@ -764,6 +785,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
       route,
     });
   });
+
   initializeSocketProvider(cerebralTest);
 
   return cerebralTest;
@@ -779,7 +801,7 @@ export const gotoRoute = (routes, routeToGoTo) => {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
-        '$',
+      '$',
     );
     if (routeToGoTo.match(regex)) {
       const match = regex.exec(routeToGoTo);

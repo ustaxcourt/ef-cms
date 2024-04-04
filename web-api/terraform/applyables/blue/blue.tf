@@ -26,7 +26,7 @@ terraform {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_sns_topic" "system_health_alarms" {
+data "aws_sns_topic" "system_health_alarms_east" {
   // account-level resource
   name = "system_health_alarms"
 }
@@ -67,7 +67,6 @@ data "null_data_source" "locals" {
     DEFAULT_ACCOUNT_PASS               = var.default_account_pass
     DISABLE_EMAILS                     = var.disable_emails
     DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
-    DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
     EFCMS_DOMAIN                       = var.dns_domain
     EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
     EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
@@ -75,7 +74,6 @@ data "null_data_source" "locals" {
     EMAIL_SOURCE                       = "U.S. Tax Court <noreply@${var.dns_domain}>"
     IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
     LOG_LEVEL                          = "info"
-    MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
     MASTER_REGION                      = "us-east-1"
     NODE_ENV                           = "production"
     PROD_ENV_ACCOUNT_ID                = var.prod_env_account_id
@@ -92,7 +90,7 @@ data "null_data_source" "locals" {
 
 module "api-east-blue" {
   source              = "../../modules/api"
-  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms.arn
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   environment         = var.environment
   pool_arn            = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
   dns_domain          = var.dns_domain
@@ -100,7 +98,6 @@ module "api-east-blue" {
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
-    DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-east-1"
@@ -136,7 +133,6 @@ module "api-west-blue" {
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
-    DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-west-1"
@@ -164,4 +160,36 @@ module "api-west-blue" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 0
+}
+
+module "worker-east-blue" {
+  source              = "../../modules/worker"
+  color               = "blue"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
+  lambda_environment = merge(data.null_data_source.locals.outputs, {
+    CURRENT_COLOR          = "blue"
+    DYNAMODB_TABLE_NAME    = var.blue_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-east-1"
+  })
+  providers = {
+    aws = aws.us-east-1
+  }
+  environment = var.environment
+}
+
+module "worker-west-blue" {
+  source              = "../../modules/worker"
+  color               = "blue"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
+  lambda_environment = merge(data.null_data_source.locals.outputs, {
+    CURRENT_COLOR          = "blue"
+    DYNAMODB_TABLE_NAME    = var.blue_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-west-1"
+  })
+  providers = {
+    aws = aws.us-west-1
+  }
+  environment = var.environment
 }

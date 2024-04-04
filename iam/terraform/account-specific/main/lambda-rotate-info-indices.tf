@@ -28,10 +28,19 @@ resource "aws_cloudwatch_event_target" "rotate_info_indices_daily" {
   arn       = module.rotate_info_indices.arn
 }
 
+resource "terraform_data" "rotate_info_indices_last_modified" {
+  input = module.rotate_info_indices.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_rotate_info_indices_daily" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = module.rotate_info_indices.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.every_day.arn
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.rotate_info_indices_last_modified
+    ]
+  }
 }

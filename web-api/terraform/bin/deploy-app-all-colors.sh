@@ -95,6 +95,6 @@ export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
 export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
 terraform apply -auto-approve execution-plan

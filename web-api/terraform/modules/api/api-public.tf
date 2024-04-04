@@ -93,12 +93,22 @@ resource "aws_api_gateway_integration" "api_public_integration" {
   uri                     = module.api_public_lambda.invoke_arn
 }
 
+
+resource "terraform_data" "api_public_lambda_last_modified" {
+  input = module.api_public_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "apigw_public_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = module.api_public_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api_public.execution_arn}/*/*/*"
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.api_public_lambda_last_modified
+    ]
+  }
 }
 
 resource "aws_api_gateway_deployment" "api_public_deployment" {
@@ -172,7 +182,7 @@ resource "aws_api_gateway_stage" "api_public_stage" {
 }
 
 resource "aws_cloudwatch_log_group" "api_public_stage_logs" {
-  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api_public.name}"
+  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api_public.name}_public_stage_logs"
 }
 
 resource "aws_acm_certificate" "api_gateway_cert_public" {

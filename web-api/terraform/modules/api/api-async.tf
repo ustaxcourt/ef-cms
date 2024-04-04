@@ -319,10 +319,19 @@ resource "aws_api_gateway_integration_response" "async_response_get" {
   }
 }
 
+resource "terraform_data" "api_async_lambda_last_modified" {
+  input = module.api_async_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "apigw_async_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = module.api_async_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.api_async_lambda_last_modified
+    ]
+  }
 }
