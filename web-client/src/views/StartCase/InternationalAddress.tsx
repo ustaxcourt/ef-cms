@@ -163,9 +163,13 @@ export const InternationalAddress = connect(
               className="usa-label"
               htmlFor={`${type}.placeOfLegalResidence`}
             >
-              Place of legal residence
+              Place of legal residence{' '}
+              <span className="usa-hint">
+                (if different from mailing address)
+              </span>
             </label>
             <PlaceOfLegalResidenceSelect
+              className="max-width-180"
               data={data}
               type={type}
               updateFormValueSequence={updateFormValueSequence}
