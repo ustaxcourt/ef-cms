@@ -101,14 +101,28 @@ resource "aws_apigatewayv2_integration" "websockets_default_integration" {
   content_handling_strategy = "CONVERT_TO_TEXT"
 }
 
+resource "terraform_data" "websockets_connect_lambda_last_modified" {
+  input = module.websockets_connect_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "apigw_connect_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = module.websockets_connect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
+
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.websockets_connect_lambda_last_modified
+    ]
+  }
 }
 
+
+resource "terraform_data" "websockets_disconnect_lambda_last_modified" {
+  input = module.websockets_disconnect_lambda.last_modified
+}
 
 resource "aws_lambda_permission" "apigw_disconnect_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
@@ -116,6 +130,16 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
   function_name = module.websockets_disconnect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
+
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.websockets_disconnect_lambda_last_modified
+    ]
+  }
+}
+
+resource "terraform_data" "websockets_default_lambda_last_modified" {
+  input = module.websockets_default_lambda.last_modified
 }
 
 resource "aws_lambda_permission" "apigw_default_lambda" {
@@ -124,6 +148,12 @@ resource "aws_lambda_permission" "apigw_default_lambda" {
   function_name = module.websockets_default_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
+
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.websockets_default_lambda_last_modified
+    ]
+  }
 }
 
 

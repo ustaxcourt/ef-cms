@@ -15,7 +15,7 @@ module "wait_for_workflow_lambda" {
     CIRCLE_PIPELINE_ID        = var.circle_pipeline_id
     APPROVAL_JOB_NAME         = var.approval_job_name
   }
-  timeout     = "29"
+  timeout = "29"
 }
 
 resource "aws_cloudwatch_event_rule" "wait_for_workflow_cron_rule" {
@@ -30,10 +30,20 @@ resource "aws_cloudwatch_event_target" "wait_for_workflow_cron_target" {
   arn       = module.wait_for_workflow_lambda.arn
 }
 
+resource "terraform_data" "wait_for_workflow_lambda_last_modified" {
+  input = module.wait_for_workflow_lambda.last_modified
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_wait_for_workflow_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = module.wait_for_workflow_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.wait_for_workflow_cron_rule.arn
+
+  lifecycle {
+    replace_triggered_by = [
+      terraform_data.wait_for_workflow_lambda_last_modified
+    ]
+  }
 }

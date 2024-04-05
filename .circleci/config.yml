@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.1.6
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.0.0
 
 parameters:
   run_build_and_deploy:
@@ -359,9 +359,6 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-      - run:
-          name: 'Disable Maintenance Mode'
-          command: npm run maintenance:disengage $ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
