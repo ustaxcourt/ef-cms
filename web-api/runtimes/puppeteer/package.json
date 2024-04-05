@@ -8,10 +8,10 @@
     "npm": ">=10.2.4 <11.0.0"
   },
   "dependencies": {
-    "@sparticuz/chromium": "123.0.0",
+    "@sparticuz/chromium": "123.0.1",
     "pug": "3.0.2",
-    "puppeteer-core": "22.6.2",
-    "sass": "1.72.0"
+    "puppeteer-core": "22.6.3",
+    "sass": "1.74.1"
   },
   "scripts": {},
   "main": "index.js",
