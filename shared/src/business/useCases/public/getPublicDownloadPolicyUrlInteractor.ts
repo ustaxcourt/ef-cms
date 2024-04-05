@@ -1,10 +1,7 @@
-import {
-  ALLOWLIST_FEATURE_FLAGS,
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} from '../../entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../../entities/EntityConstants';
 import { Case, isSealedCase } from '../../entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { PublicCase } from '../../entities/cases/PublicCase';
 
 export const getPublicDownloadPolicyUrlInteractor = async (
   applicationContext: IApplicationContext,
@@ -34,9 +31,23 @@ export const getPublicDownloadPolicyUrlInteractor = async (
   if (!docketEntryEntity) {
     throw new NotFoundError(`Docket entry ${key} was not found.`);
   }
+
   if (!docketEntryEntity.isFileAttached) {
     throw new NotFoundError(
       `Docket entry ${key} does not have an attached file.`,
+    );
+  }
+
+  if (docketEntryEntity.isSealed) {
+    throw new UnauthorizedError('Docket entry has been sealed.');
+  }
+
+  if (
+    isSealedCase(caseEntity) &&
+    !DocketEntry.isOpinion(docketEntryEntity.eventCode)
+  ) {
+    throw new UnauthorizedError(
+      'Unauthorized to access documents in a sealed case',
     );
   }
 
@@ -49,30 +60,20 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ];
 
-  const isPrivate = PublicCase.isPrivateDocument(
-    docketEntryEntity,
-    applicationContext
-      .getUtilities()
-      .createISODateString(documentVisibilityChangeDate, 'yyyy-MM-dd'),
-  );
-
-  if (!isTerminalUser && isPrivate) {
+  if (
+    !DocketEntry.isDownloadable(docketEntryEntity, {
+      isTerminalUser,
+      rawCase: caseToCheck,
+      user: {
+        entityName: 'User',
+        name: '',
+        role: ROLES.petitioner,
+        userId: '',
+      },
+      visibilityChangeDate: documentVisibilityChangeDate,
+    })
+  ) {
     throw new UnauthorizedError('Unauthorized to access private document');
-  }
-
-  const isOpinionDocument = OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
-    docketEntryEntity.eventCode,
-  );
-
-  if (docketEntryEntity.isSealed) {
-    throw new UnauthorizedError('Docket entry has been sealed.');
-  }
-
-  // opinion documents are public even in sealed cases
-  if (isSealedCase(caseEntity) && !isOpinionDocument) {
-    throw new UnauthorizedError(
-      'Unauthorized to access documents in a sealed case',
-    );
   }
 
   return await applicationContext

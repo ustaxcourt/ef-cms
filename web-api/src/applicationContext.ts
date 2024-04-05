@@ -68,6 +68,8 @@ import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import AWS, { S3, SES, SQS } from 'aws-sdk';
 import axios from 'axios';
+import http from 'http';
+import https from 'https';
 import pug from 'pug';
 import sass from 'sass';
 import util from 'util';
@@ -395,14 +397,24 @@ export const createApplicationContext = (
     },
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient: () => {
+      const agentConfig = {
+        keepAlive: true,
+        maxSockets: 75,
+      };
+      const agent =
+        environment.stage === 'local'
+          ? new http.Agent(agentConfig)
+          : new https.Agent(agentConfig);
+
       if (!s3Cache) {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
           httpOptions: {
+            agent,
             connectTimeout: 3000,
             timeout: 5000,
           },
-          maxRetries: 3,
+          maxRetries: 5,
           region: 'us-east-1',
           s3ForcePathStyle: true,
         });
