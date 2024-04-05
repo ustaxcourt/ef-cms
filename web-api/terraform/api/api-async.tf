@@ -149,6 +149,7 @@ request_templates = {
   "httpMethod" : "$context.httpMethod",
   "headers" : {
     "Authorization": "$input.params('Authorization')",
+    "asyncsyncid": "$input.params('Asyncsyncid')",
     "content-type": "$input.params('Content-Type')"
   },
   "requestContext" : {
