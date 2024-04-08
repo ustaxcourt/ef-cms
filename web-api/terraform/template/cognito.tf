@@ -110,7 +110,7 @@ resource "aws_cognito_user_pool" "pool" {
     attribute_data_type = "String"
     name                = "role"
     required            = false
-    mutable             = false
+    mutable             = true
 
     string_attribute_constraints {
       min_length = 0
@@ -122,7 +122,7 @@ resource "aws_cognito_user_pool" "pool" {
     attribute_data_type = "String"
     name                = "userId"
     required            = false
-    mutable             = false
+    mutable             = true
 
     string_attribute_constraints {
       min_length = 0
