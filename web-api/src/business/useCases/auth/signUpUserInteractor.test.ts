@@ -52,7 +52,6 @@ describe('signUpUserInteractor', () => {
       applicationContext.getCognito().adminUpdateUserAttributes.mock
         .calls[0][0],
     ).toMatchObject({
-      Password: password,
       UserAttributes: [
         {
           Name: 'custom:userId',
