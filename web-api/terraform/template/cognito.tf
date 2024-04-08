@@ -198,8 +198,6 @@ resource "aws_cognito_user_pool_client" "client" {
   write_attributes = [
     "address",
     "birthdate",
-    "custom:userId",
-    "custom:role",
     "email",
     "family_name",
     "gender",
