@@ -661,6 +661,7 @@ export const baseState = {
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  irsNoticeUploadFormInfo: [] as CreateCaseIrsForm[],
   irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
   judgeActivityReport: {
@@ -786,3 +787,10 @@ export const initialState = {
 };
 
 export type ClientState = typeof initialState;
+
+export type CreateCaseIrsForm = {
+  key: string;
+  file: File;
+  size: number;
+  caseType: string;
+};
