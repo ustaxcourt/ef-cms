@@ -52,6 +52,7 @@ export const CaseTypeSelect = connect(
               onChange={e => {
                 onChange({
                   key: e.target.name,
+                  property: 'caseType',
                   value: e.target.value,
                 });
                 if (onChangePreValidation) onChangePreValidation();

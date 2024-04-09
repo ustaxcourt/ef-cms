@@ -499,8 +499,7 @@ import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/upda
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
-import { updateIrsNoticeCaseTypeSequence } from '@web-client/presenter/sequences/updateIrsNoticeCaseTypeSequence';
-import { updateIrsNoticeUploadedFileSequence } from '@web-client/presenter/sequences/updateIrsNoticeUploadedFileSequence';
+import { updateIrsNoticeIndexPropertySequence } from '@web-client/presenter/sequences/updateIrsNoticeIndexPropertySequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -1411,10 +1410,8 @@ export const presenterSequences = {
   updateGenerateNoticesProgressSequence:
     updateGenerateNoticesProgressSequence as unknown as Function,
   updateHearingNoteSequence: updateHearingNoteSequence as unknown as Function,
-  updateIrsNoticeCaseTypeSequence:
-    updateIrsNoticeCaseTypeSequence as unknown as Function,
-  updateIrsNoticeUploadedFileSequence:
-    updateIrsNoticeUploadedFileSequence as unknown as Function,
+  updateIrsNoticeIndexPropertySequence:
+    updateIrsNoticeIndexPropertySequence as unknown as Function,
   updateJudgesCaseNoteOnCaseDetailSequence:
     updateJudgesCaseNoteOnCaseDetailSequence as unknown as Function,
   updateMessageModalAttachmentsSequence:

@@ -1,6 +1,7 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { IrsNoticeUploadForm } from '@web-client/views/StartCaseUpdated/IrsNoticeUploadForm';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -87,6 +88,11 @@ export const UpdatedFilePetitionStep3 = connect(
                   link
                   onClick={() => addAnotherIrsNoticeToFormSequence()}
                 >
+                  <Icon
+                    className="fa-icon-blue"
+                    icon={['fas', 'plus']}
+                    size="1x"
+                  />
                   Add another IRS Notice
                 </Button>
               </>
