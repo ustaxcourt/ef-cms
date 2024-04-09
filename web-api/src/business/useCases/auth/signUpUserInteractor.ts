@@ -24,18 +24,22 @@ export const signUpUserInteractor = async (
 ): Promise<SignUpUserResponse> => {
   // Temporary code to prevent creation of duplicate accounts while Cognito is still case sensitive.
   // We do not want to allow people to make two accounts for the same email that only differ by casing.
-  const { Users: existingAccounts } = await applicationContext
-    .getCognito()
-    .listUsers({
-      AttributesToGet: ['email'],
-      Filter: `email = "${user.email}"`,
-      UserPoolId: applicationContext.environment.userPoolId,
+  // const { Users: existingAccounts } = await applicationContext
+  //   .getCognito()
+  //   .listUsers({
+  //     AttributesToGet: ['email'],
+  //     Filter: `email = "${user.email}"`,
+  //     UserPoolId: applicationContext.environment.userPoolId,
+  //   });
+  const existingAccount = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
+      email: user.email,
     });
 
-  if (existingAccounts?.length) {
-    const accountUnconfirmed = existingAccounts.some(
-      acct => acct.UserStatus === UserStatusType.UNCONFIRMED,
-    );
+  if (existingAccount) {
+    const accountUnconfirmed =
+      existingAccount.accountStatus === UserStatusType.UNCONFIRMED;
 
     const errorMessage = accountUnconfirmed
       ? 'User exists, email unconfirmed'

@@ -19,11 +19,13 @@ export async function createUser(
   {
     attributesToUpdate,
     email,
-    resendInvitationEmail,
+    poolId,
+    resendInvitationEmail = false,
   }: {
     email: string;
+    poolId?: string;
     attributesToUpdate: UserAttributes;
-    resendInvitationEmail: boolean;
+    resendInvitationEmail?: boolean;
   },
 ): Promise<void> {
   const formattedAttributesToUpdate: AttributeType[] = [];
@@ -67,7 +69,7 @@ export async function createUser(
     DesiredDeliveryMediums: [DeliveryMediumType.EMAIL],
     MessageAction: messageAction,
     UserAttributes: formattedAttributesToUpdate,
-    UserPoolId: applicationContext.environment.userPoolId,
+    UserPoolId: poolId ?? applicationContext.environment.userPoolId,
     Username: email.toLowerCase(),
   };
 

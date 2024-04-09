@@ -1,5 +1,4 @@
 import * as client from '../../dynamodbClientService';
-import { AdminCreateUserCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import {
   ROLES,
   Role,
@@ -94,52 +93,16 @@ export const createOrUpdatePractitionerUser = async ({
     });
 
   if (!existingUser) {
-    let params: AdminCreateUserCommandInput = {
-      DesiredDeliveryMediums: ['EMAIL'],
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: userEmail,
-        },
-        {
-          Name: 'custom:role',
-          Value: user.role,
-        },
-        {
-          Name: 'name',
-          Value: user.name,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: userEmail,
-    };
-
-    if (process.env.STAGE !== 'prod') {
-      params.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
-    }
-
-    const response = await applicationContext
-      .getCognito()
-      .adminCreateUser(params);
-
-    if (response?.User?.Username) {
-      const userIdAttribute =
-        response.User.Attributes?.find(element => {
-          if (element.Name === 'custom:userId') {
-            return element;
-          }
-        }) ||
-        response.User.Attributes?.find(element => {
-          if (element.Name === 'sub') {
-            return element;
-          }
-        });
-      userId = userIdAttribute?.Value!;
-    }
+    await applicationContext.getUserGateway().createUser(applicationContext, {
+      attributesToUpdate: {
+        email: userEmail,
+        name: user.name,
+        role: user.role,
+        userId,
+      },
+      email: userEmail,
+      resendInvitationEmail: false,
+    });
   } else {
     await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: {
