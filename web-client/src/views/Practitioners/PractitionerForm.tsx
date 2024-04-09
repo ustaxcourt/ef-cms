@@ -205,19 +205,19 @@ export const PractitionerForm = connect(
                       ))}
                     </fieldset>
                   </FormGroup>
-                  <FormGroup errorText={validationErrors.employer}>
+                  <FormGroup errorText={validationErrors.practiceType}>
                     <fieldset className="usa-fieldset">
-                      <legend className="usa-legend">Employer</legend>
-                      {constants.EMPLOYER_OPTIONS.map(option => (
+                      <legend className="usa-legend">Practice Type</legend>
+                      {constants.PRACTICE_TYPE_OPTIONS.map(option => (
                         <div
                           className="usa-radio usa-radio__inline"
                           key={option}
                         >
                           <input
-                            checked={form.employer === option}
+                            checked={form.practiceType === option}
                             className="usa-radio__input"
-                            id={`employer-${option}`}
-                            name="employer"
+                            id={`practiceType-${option}`}
+                            name="practiceType"
                             type="radio"
                             value={option}
                             onChange={e => {
@@ -230,8 +230,8 @@ export const PractitionerForm = connect(
                           />
                           <label
                             className="usa-radio__label"
-                            data-testid={`employer-${option}-radio`}
-                            htmlFor={`employer-${option}`}
+                            data-testid={`practiceType-${option}-radio`}
+                            htmlFor={`practiceType-${option}`}
                           >
                             {option}
                           </label>
