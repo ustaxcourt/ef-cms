@@ -27,9 +27,9 @@ const baseUser = {
     postalCode: '61234',
     state: 'IL',
   },
-  employer: '',
   lastName: 'Test',
   password: DEFAULT_ACCOUNT_PASS,
+  practiceType: '',
   suffix: '',
 };
 
@@ -125,7 +125,7 @@ const setupPractitioners = async () => {
 
   for (let role in practitioners) {
     const promises = practitioners[role].map((barNumber, i) => {
-      const employer = role === 'privatePractitioner' ? 'Private' : 'IRS';
+      const practiceType = role === 'privatePractitioner' ? 'Private' : 'IRS';
       const email = `${role}${i + 1}@example.com`;
       const user = {
         ...baseUser,
@@ -133,12 +133,12 @@ const setupPractitioners = async () => {
         admissionsStatus: 'Active',
         barNumber,
         email,
-        employer,
         firmName: 'Some Firm',
         firstName: `${role} ${i + 1}`,
         name: `Test ${role}${i + 1}`,
         originalBarState: 'WA',
         password: DEFAULT_ACCOUNT_PASS,
+        practiceType,
         practitionerType: 'Attorney',
         role,
         section: role,
