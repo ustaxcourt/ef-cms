@@ -6,6 +6,6 @@ export async function disableUser(
 ): Promise<void> {
   await applicationContext.getCognito().adminDisableUser({
     UserPoolId: process.env.USER_POOL_ID,
-    Username: email,
+    Username: email.toLowerCase(),
   });
 }
