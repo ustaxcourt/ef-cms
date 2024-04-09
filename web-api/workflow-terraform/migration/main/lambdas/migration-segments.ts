@@ -87,8 +87,9 @@ export const migrateRecords = async (
     ranMigrations?: { [key: string]: boolean } | undefined;
   },
 ) => {
+  console.log(migrationsToRun);
   for (let { key, script } of migrationsToRun) {
-    if (ranMigrations && !ranMigrations[key]) {
+    if (!ranMigrations?.[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
       items = await script(items, applicationContext);
     }
@@ -119,13 +120,15 @@ export const processItems = async (
     applicationContext.logger.error('Error migrating records', err);
     throw err;
   }
-
+  console.log('items', items);
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let aChunk of chunks) {
     const promises: Promise<string | PutCommandOutput>[] = [];
     for (let item of aChunk) {
+      console.log('in item', item);
       promises.push(
         promiseRetry(retry => {
+          console.log('About to put', process.env.DESTINATION_TABLE);
           return dynamoDbDocumentClient
             .put({
               ConditionExpression: 'attribute_not_exists(pk)',
@@ -139,6 +142,7 @@ export const processItems = async (
                 );
                 return 'already-migrated';
               } else {
+                console.log('error', e);
                 throw e;
               }
             })
