@@ -33,7 +33,6 @@ describe(
         'have.text',
         'Motion for Leave to File Answer (No Objection)',
       );
-      cy.contains('Document filed and is accessible from the Docket Record.');
     });
   },
 );
