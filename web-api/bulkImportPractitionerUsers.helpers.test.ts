@@ -6,7 +6,7 @@ import { formatRecord } from './bulkImportPractitionerUsers.helpers';
 
 describe('formatRecord', () => {
   it('formats a record for a practitioner with default values for certain fields when no value is supplied', () => {
-    const defaultEmployer = 'Private';
+    const defaultPracticeType = 'Private';
     const defaultBarState = 'N/A';
 
     const initialRecord = {
@@ -34,11 +34,11 @@ describe('formatRecord', () => {
         address1: 'Somewhere over the rainbow',
         postalCode: 'N/A',
       },
-      employer: defaultEmployer,
       firstName: 'Bob',
       lastName: 'Builder',
       middleName: 'the',
       originalBarState: defaultBarState,
+      practiceType: defaultPracticeType,
       suffix: 'yeswecan',
     });
   });
@@ -61,10 +61,10 @@ describe('formatRecord', () => {
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
       birthYear: 1999,
-      employer: 'IRS',
       firstName: 'Bob',
       lastName: 'Builder',
       middleName: 'the',
+      practiceType: 'IRS',
       suffix: 'yeswecan',
     });
   });
@@ -88,9 +88,9 @@ describe('formatRecord', () => {
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Inactive',
       birthYear: 1999,
-      employer: 'DOJ',
       firstName: 'Mike',
       lastName: 'Wazowski',
+      practiceType: 'DOJ',
     });
   });
 
@@ -113,9 +113,9 @@ describe('formatRecord', () => {
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
       birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
-      employer: 'Private',
       firstName: 'Rachael',
       lastName: 'Ray',
+      practiceType: 'Private',
     });
   });
 
@@ -151,10 +151,10 @@ describe('formatRecord', () => {
         postalCode: '00000',
         state: 'CA',
       },
-      employer: 'Private',
       firstName: 'Rachael',
       lastName: 'Ray',
       middleName: 'R',
+      practiceType: 'Private',
       suffix: 'Esquire',
     });
   });

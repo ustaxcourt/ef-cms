@@ -10,10 +10,10 @@ describe('createPractitionerUser', () => {
       admissionsDate: mockAdmissionsDate,
       admissionsStatus: 'Active',
       birthYear: '1993',
-      employer: 'DOJ',
       firstName: 'Test',
       lastName: 'IRSPractitioner',
       originalBarState: 'CA',
+      practiceType: 'DOJ',
       practitionerType: 'Attorney',
       role: ROLES.irsPractitioner,
     };
@@ -33,10 +33,10 @@ describe('createPractitionerUser', () => {
       admissionsStatus: 'Active',
       barNumber: '1',
       birthYear: '1993',
-      employer: 'DOJ',
       firstName: 'Test',
       lastName: 'IRSPractitioner',
       originalBarState: 'CA',
+      practiceType: 'DOJ',
       practitionerType: 'Attorney',
       role: ROLES.irsPractitioner,
     };
