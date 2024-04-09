@@ -51,7 +51,7 @@ export async function createUser(
   if (attributesToUpdate.email) {
     formattedAttributesToUpdate.push({
       Name: 'email',
-      Value: attributesToUpdate.email,
+      Value: attributesToUpdate.email.toLowerCase(),
     });
     formattedAttributesToUpdate.push({
       Name: 'email_verified',
@@ -68,7 +68,7 @@ export async function createUser(
     MessageAction: messageAction,
     UserAttributes: formattedAttributesToUpdate,
     UserPoolId: applicationContext.environment.userPoolId,
-    Username: email,
+    Username: email.toLowerCase(),
   };
 
   if (process.env.STAGE !== 'prod') {

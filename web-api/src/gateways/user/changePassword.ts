@@ -12,6 +12,6 @@ export async function changePassword(
     ClientId: applicationContext.environment.cognitoClientId,
     ConfirmationCode: code,
     Password: newPassword,
-    Username: email,
+    Username: email.toLowerCase(),
   });
 }

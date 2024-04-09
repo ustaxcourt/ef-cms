@@ -23,7 +23,7 @@ export async function signUp(
     UserAttributes: [
       {
         Name: 'email',
-        Value: email,
+        Value: email.toLowerCase(),
       },
       {
         Name: 'name',
@@ -38,7 +38,7 @@ export async function signUp(
         Value: role,
       },
     ],
-    Username: email,
+    Username: email.toLowerCase(),
   });
 
   return { userId };

@@ -5,17 +5,6 @@ import {
 import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-// Not every user has a custom:userId. If not then their userId is the sub
-// If they have a custom:userId then their userId is custom:userid
-
-// Hosted environment
-// Only attributes you ask for will be given back
-// Will explode when you ask for attributes that the user does not have.
-
-// Cognito Local
-// Will return all attributes no matter what you ask for.
-// Will not explode when you ask for attributes that the user does not have.
-
 export const getUserByEmail = async (
   applicationContext: ServerApplicationContext,
   { email }: { email: string },
@@ -33,7 +22,7 @@ export const getUserByEmail = async (
   try {
     foundUser = await applicationContext.getCognito().adminGetUser({
       UserPoolId: process.env.USER_POOL_ID,
-      Username: email,
+      Username: email.toLowerCase(),
     });
   } catch (err: any) {
     if (err.name === 'UserNotFoundException') {
