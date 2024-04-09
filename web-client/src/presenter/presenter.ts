@@ -7,6 +7,7 @@ import { NotFoundError } from './errors/NotFoundError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
+import { addAnotherIrsNoticeToFormSequence } from '@web-client/presenter/sequences/addAnotherIrsNoticeToFormSequence';
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
@@ -497,6 +498,7 @@ import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/upda
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
+import { updateIrsNoticeCaseTypeSequence } from '@web-client/presenter/sequences/updateIrsNoticeCaseTypeSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -575,6 +577,8 @@ import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateU
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
 export const presenterSequences = {
+  addAnotherIrsNoticeToFormSequence:
+    addAnotherIrsNoticeToFormSequence as unknown as Function,
   addCaseToTrialSessionSequence:
     addCaseToTrialSessionSequence as unknown as Function,
   addPenaltyInputSequence: addPenaltyInputSequence as unknown as Function,
@@ -1403,6 +1407,8 @@ export const presenterSequences = {
   updateGenerateNoticesProgressSequence:
     updateGenerateNoticesProgressSequence as unknown as Function,
   updateHearingNoteSequence: updateHearingNoteSequence as unknown as Function,
+  updateIrsNoticeCaseTypeSequence:
+    updateIrsNoticeCaseTypeSequence as unknown as Function,
   updateJudgesCaseNoteOnCaseDetailSequence:
     updateJudgesCaseNoteOnCaseDetailSequence as unknown as Function,
   updateMessageModalAttachmentsSequence:

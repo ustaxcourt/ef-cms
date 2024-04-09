@@ -10,7 +10,9 @@ export const CaseTypeSelect = connect(
   {
     allowDefaultOption: props.allowDefaultOption,
     caseTypes: props.caseTypes,
+    hint: props.hint,
     legend: props.legend,
+    name: props.name,
     onChange: sequences[props.onChange],
     onChangePreValidation: sequences[props.onChangePreValidation],
     validation: sequences[props.validation],
@@ -21,7 +23,9 @@ export const CaseTypeSelect = connect(
     allowDefaultOption,
     caseTypes,
     className,
+    hint,
     legend,
+    name,
     onChange,
     onChangePreValidation,
     validation,
@@ -36,14 +40,14 @@ export const CaseTypeSelect = connect(
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="case-type-select-legend">
-              {legend}
+              {legend} {hint && <span className="usa-hint">{hint}</span>}
             </legend>
             <select
               aria-labelledby="case-type-select-legend"
               className="usa-select"
               data-testid="case-type-select"
               id="case-type"
-              name="caseType"
+              name={name || 'caseType'}
               value={value}
               onChange={e => {
                 onChange({
