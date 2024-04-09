@@ -6,13 +6,15 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const updateIrsNoticeCaseTypeAction = ({
+export const removeIrsNoticeFromFormAction = ({
+  get,
   props,
   store,
 }: ActionProps) => {
-  if (props.value !== '' && props.value !== null) {
-    store.set(state.irsNoticeUploadFormInfo[+props.key].caseType, props.value);
-  } else {
-    store.unset(state.irsNoticeUploadFormInfo[+props.key].caseType);
-  }
+  const { index } = props;
+  console.log('index', index);
+  const data = get(state.irsNoticeUploadFormInfo);
+  if (data[index]) data.splice(index, 1);
+  store.set(state.irsNoticeUploadFormInfo, data);
+  //remove here
 };

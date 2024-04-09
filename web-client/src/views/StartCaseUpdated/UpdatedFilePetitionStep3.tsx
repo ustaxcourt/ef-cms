@@ -74,7 +74,12 @@ export const UpdatedFilePetitionStep3 = connect(
                 {irsNoticeUploadFormInfo.map((info, index) => {
                   return (
                     <>
-                      <IrsNoticeUploadForm index={index} key={info.key} />
+                      <IrsNoticeUploadForm
+                        caseType={info.caseType}
+                        file={info.file}
+                        index={index}
+                        key={info.key}
+                      />
                     </>
                   );
                 })}

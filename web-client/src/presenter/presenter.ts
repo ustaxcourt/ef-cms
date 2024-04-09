@@ -321,6 +321,7 @@ import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
+import { removeIrsNoticeFromFormSequence } from '@web-client/presenter/sequences/removeIrsNoticeFromFormSequence';
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removePetitionerAndUpdateCaptionSequence } from './sequences/removePetitionerAndUpdateCaptionSequence';
 import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
@@ -499,6 +500,7 @@ import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
 import { updateIrsNoticeCaseTypeSequence } from '@web-client/presenter/sequences/updateIrsNoticeCaseTypeSequence';
+import { updateIrsNoticeUploadedFileSequence } from '@web-client/presenter/sequences/updateIrsNoticeUploadedFileSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -1115,6 +1117,8 @@ export const presenterSequences = {
     removeCaseDetailPendingItemSequence as unknown as Function,
   removeCaseFromTrialSequence:
     removeCaseFromTrialSequence as unknown as Function,
+  removeIrsNoticeFromFormSequence:
+    removeIrsNoticeFromFormSequence as unknown as Function,
   removePetitionForReplacementSequence:
     removePetitionForReplacementSequence as unknown as Function,
   removePetitionerAndUpdateCaptionSequence:
@@ -1409,6 +1413,8 @@ export const presenterSequences = {
   updateHearingNoteSequence: updateHearingNoteSequence as unknown as Function,
   updateIrsNoticeCaseTypeSequence:
     updateIrsNoticeCaseTypeSequence as unknown as Function,
+  updateIrsNoticeUploadedFileSequence:
+    updateIrsNoticeUploadedFileSequence as unknown as Function,
   updateJudgesCaseNoteOnCaseDetailSequence:
     updateJudgesCaseNoteOnCaseDetailSequence as unknown as Function,
   updateMessageModalAttachmentsSequence:

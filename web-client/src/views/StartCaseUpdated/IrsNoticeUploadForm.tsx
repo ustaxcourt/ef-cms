@@ -4,6 +4,7 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -14,7 +15,9 @@ export const IrsNoticeUploadForm = connect(
     caseType: props.caseType,
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     constants: state.constants,
+    file: props.file,
     index: props.index,
+    removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
     validationErrors: state.validationErrors,
   },
   function IrsNoticeUploadForm({
@@ -22,7 +25,9 @@ export const IrsNoticeUploadForm = connect(
     caseType,
     caseTypeDescriptionHelper,
     constants,
+    file,
     index,
+    removeIrsNoticeFromFormSequence,
     validationErrors,
   }) {
     return (
@@ -52,15 +57,25 @@ export const IrsNoticeUploadForm = connect(
             <StateDrivenFileInput
               aria-describedby={`irs-notice-upload-${index}-label`}
               data-testid={`irs-notice-upload-${index}`}
+              file={file}
               id={`irs-notice-upload-${index}`}
-              name={`irsNoticeUpload${index}`}
-              updateFormValueSequence="updateFormValueSequence"
+              ignoreSizeKey={true}
+              name={index}
+              updateFormValueSequence="updateIrsNoticeUploadedFileSequence"
               validationSequence="validateStartCaseWizardSequence"
             />
           </FormGroup>
 
           <h2>
-            IRS Notice {index + 1} {index !== 0 && <Button link>Remove</Button>}
+            IRS Notice {index + 1}{' '}
+            {index !== 0 && (
+              <Button
+                link
+                onClick={() => removeIrsNoticeFromFormSequence({ index })}
+              >
+                Remove
+              </Button>
+            )}
           </h2>
           <CaseTypeSelect
             allowDefaultOption={true}
