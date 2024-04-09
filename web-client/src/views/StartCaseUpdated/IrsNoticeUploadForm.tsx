@@ -1,6 +1,7 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
@@ -61,7 +62,7 @@ export const IrsNoticeUploadForm = connect(
               id={`irs-notice-upload-${index}`}
               ignoreSizeKey={true}
               name={index}
-              updateFormValueSequence="updateIrsNoticeUploadedFileSequence"
+              updateFormValueSequence="updateIrsNoticeIndexPropertySequence"
               validationSequence="validateStartCaseWizardSequence"
             />
           </FormGroup>
@@ -73,6 +74,11 @@ export const IrsNoticeUploadForm = connect(
                 link
                 onClick={() => removeIrsNoticeFromFormSequence({ index })}
               >
+                <Icon
+                  className="fa-icon-blue"
+                  icon={['fas', 'times']}
+                  size="1x"
+                />
                 Remove
               </Button>
             )}
@@ -85,7 +91,7 @@ export const IrsNoticeUploadForm = connect(
             name={index.toString()}
             validation="validateStartCaseWizardSequence"
             value={caseType}
-            onChange="updateIrsNoticeCaseTypeSequence"
+            onChange="updateIrsNoticeIndexPropertySequence"
           />
         </div>
       </>

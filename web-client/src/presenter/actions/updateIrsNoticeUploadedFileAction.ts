@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const updateIrsNoticeUploadedFileAction = ({
+export const updateIrsNoticeIndexPropertyAction = ({
   props,
   store,
 }: ActionProps) => {
