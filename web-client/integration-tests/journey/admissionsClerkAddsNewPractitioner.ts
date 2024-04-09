@@ -17,10 +17,10 @@ export const admissionsClerkAddsNewPractitioner = (
       'email',
       'admissionsDate',
       'birthYear',
-      'practiceType',
       'firstName',
       'lastName',
       'originalBarState',
+      'practiceType',
       'practitionerType',
       'contact',
     ]);
