@@ -16,10 +16,10 @@ describe('validatePractitionerInteractor', () => {
       'admissionsStatus',
       'barNumber',
       'birthYear',
-      'practiceType',
       'firstName',
       'lastName',
       'originalBarState',
+      'practiceType',
       'practitionerType',
     ]);
   });
