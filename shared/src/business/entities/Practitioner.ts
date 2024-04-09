@@ -1,6 +1,6 @@
 import {
   ADMISSIONS_STATUS_OPTIONS,
-  EMPLOYER_OPTIONS,
+  PRACTICE_TYPE_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -19,7 +19,7 @@ export class Practitioner extends User {
   public barNumber: string;
   public birthYear: string;
   public confirmEmail?: string;
-  public employer: string;
+  public practiceType: string;
   public firmName?: string;
   public firstName: string;
   public lastName: string;
@@ -42,7 +42,7 @@ export class Practitioner extends User {
     this.barNumber = rawUser.barNumber;
     this.birthYear = rawUser.birthYear;
     this.confirmEmail = rawUser.confirmEmail;
-    this.employer = rawUser.employer;
+    this.practiceType = rawUser.practiceType;
     this.firmName = rawUser.firmName;
     this.firstName = rawUser.firstName;
     this.lastName = rawUser.lastName;
@@ -58,7 +58,7 @@ export class Practitioner extends User {
       Practitioner.getDefaultServiceIndicator(rawUser);
     this.updatedEmail = rawUser.updatedEmail;
     if (this.admissionsStatus === 'Active') {
-      this.role = Practitioner.ROLE_MAP[this.employer];
+      this.role = Practitioner.ROLE_MAP[this.practiceType];
     } else {
       this.role = ROLES.inactivePractitioner;
     }
@@ -115,10 +115,6 @@ export class Practitioner extends User {
       'any.required': 'Enter a valid email address',
       'string.email': 'Enter a valid email address',
     }),
-    employer: JoiValidationConstants.STRING.valid(...EMPLOYER_OPTIONS)
-      .required()
-      .description('The employer designation for the practitioner.')
-      .messages({ '*': 'Select an employer' }),
     entityName: JoiValidationConstants.STRING.valid('Practitioner').required(),
     firmName: JoiValidationConstants.STRING.max(100)
       .optional()
@@ -144,6 +140,10 @@ export class Practitioner extends User {
         'The state in which the practitioner passed their bar examination.',
       )
       .messages({ '*': 'Select an original bar state' }),
+    practiceType: JoiValidationConstants.STRING.valid(...PRACTICE_TYPE_OPTIONS)
+      .required()
+      .description('The practiceType designation for the practitioner.')
+      .messages({ '*': 'Select an practiceType' }),
     practitionerNotes: JoiValidationConstants.STRING.max(500)
       .optional()
       .allow(null, '')
