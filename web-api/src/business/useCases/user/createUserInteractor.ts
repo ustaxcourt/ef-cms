@@ -59,7 +59,6 @@ export const createUserInteractor = async (
     .getPersistenceGateway()
     .createOrUpdateUser({
       applicationContext,
-      password: user.password,
       user: userEntity.validate().toRawObject(),
     });
 
