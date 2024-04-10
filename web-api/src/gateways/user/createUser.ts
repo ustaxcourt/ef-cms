@@ -11,7 +11,7 @@ interface UserAttributes {
   role?: Role;
   email?: string;
   name?: string;
-  userId?: string;
+  userId: string;
 }
 
 export async function createUser(
@@ -28,7 +28,12 @@ export async function createUser(
     resendInvitationEmail?: boolean;
   },
 ): Promise<void> {
-  const formattedAttributesToUpdate: AttributeType[] = [];
+  const formattedAttributesToUpdate: AttributeType[] = [
+    {
+      Name: 'custom:userId',
+      Value: attributesToUpdate.userId,
+    },
+  ];
 
   if (attributesToUpdate.role) {
     formattedAttributesToUpdate.push({
@@ -41,13 +46,6 @@ export async function createUser(
     formattedAttributesToUpdate.push({
       Name: 'name',
       Value: attributesToUpdate.name,
-    });
-  }
-
-  if (attributesToUpdate.userId) {
-    formattedAttributesToUpdate.push({
-      Name: 'custom:userId',
-      Value: attributesToUpdate.userId,
     });
   }
 
