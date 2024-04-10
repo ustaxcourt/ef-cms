@@ -1,22 +1,11 @@
 /* eslint-disable max-lines */
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
-import * as pdfLib from 'pdf-lib';
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import { Agent } from 'http';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import {
-  FORMATS,
-  calculateDifferenceInDays,
-  calculateISODate,
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
+import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { JSDOM } from 'jsdom';
-import { S3, SQS } from 'aws-sdk';
-import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import {
   back,
   createObjectURL,
@@ -24,15 +13,7 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
-import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { applicationContext as clientApplicationContext } from '../src/applicationContext';
-import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
-import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
-import {
-  createLock,
-  getLock,
-  removeLock,
-} from '../../web-api/src/persistence/dynamo/locks/acquireLock';
 import {
   fakeData,
   getFakeFile,
@@ -41,49 +22,24 @@ import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/p
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
-import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
-import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
-import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
-import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
-import {
-  getCasesForUser,
-  getDocketNumbersByUser,
-} from '../../web-api/src/persistence/dynamo/users/getCasesForUser';
-import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
-import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
 import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
-import { getUniqueId } from '../../shared/src/sharedAppContext';
-import { getUserById } from '../../web-api/src/persistence/dynamo/users/getUserById';
 import {
   image1,
   image2,
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
-import { queueUpdateAssociatedCasesWorker } from '../../web-api/src/business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
-import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
-import { sendBulkTemplatedEmail } from '../../web-api/src/dispatchers/ses/sendBulkTemplatedEmail';
-import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
-import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
-import { sleep } from '@shared/tools/helpers';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
-import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
-import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateDocketEntry } from '../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
-import { updateUser } from '../../web-api/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
 import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
-import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
-import sass from 'sass';
 
 const applicationContext =
   clientApplicationContext as unknown as IApplicationContext;
@@ -101,9 +57,8 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
-let s3Cache;
-let sqsCache;
 let dynamoDbCache;
+let httpCache;
 
 Object.assign(applicationContext, {
   getDocumentClient: () => {
@@ -133,182 +88,6 @@ export const fakeFile = (() => {
 export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
-
-export const callCognitoTriggerForPendingEmail = async userId => {
-  // mock application context similar to that in cognito-triggers.js
-  const environment = {
-    s3Endpoint: process.env.S3_ENDPOINT || 'http://0.0.0.0:9000',
-    stage: process.env.STAGE || 'local',
-  };
-  const apiApplicationContext = {
-    environment: {
-      currentColor: 'blue',
-    },
-    getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser,
-    getConstants: () => ({ MAX_SES_RETRIES: 6 }),
-    getCurrentUser: () => ({}),
-    getDispatchers: () => ({
-      sendBulkTemplatedEmail,
-    }),
-    getDocumentClient: () => {
-      if (!dynamoDbCache) {
-        const dynamoDbClient = new DynamoDBClient({
-          endpoint: 'http://localhost:8000',
-          region: 'us-east-1',
-        });
-        dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
-          marshallOptions: { removeUndefinedValues: true },
-        });
-      }
-
-      return dynamoDbCache;
-    },
-    getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
-    getDocumentsBucketName: () => {
-      return (
-        process.env.DOCUMENTS_BUCKET_NAME || 'noop-documents-local-us-east-1'
-      );
-    },
-    getEmailClient: () => {
-      return {
-        getSendStatistics: () => {
-          // mock this out so the health checks pass on smoke tests
-          return {
-            promise: () => ({
-              SendDataPoints: [
-                {
-                  Rejects: 0,
-                },
-              ],
-            }),
-          };
-        },
-        sendBulkTemplatedEmail: () => {
-          return {
-            promise: () => {
-              return { Status: [] };
-            },
-          };
-        },
-      };
-    },
-    getEnvironment: () => ({
-      dynamoDbTableName: 'efcms-local',
-      stage: process.env.STAGE,
-    }),
-    getIrsSuperuserEmail: () =>
-      process.env.IRS_SUPERUSER_EMAIL || 'irssuperuser@example.com',
-    getMessageGateway: () => ({
-      sendEmailEventToQueue: async ({
-        applicationContext: appContext,
-        emailParams,
-      }) => {
-        if (environment.stage !== 'local') {
-          await sendEmailEventToQueue({
-            applicationContext: appContext,
-            emailParams,
-          });
-        }
-      },
-    }),
-    getMessagingClient: () => {
-      if (!sqsCache) {
-        sqsCache = new SQS({
-          apiVersion: '2012-11-05',
-        });
-      }
-      return sqsCache;
-    },
-    getNodeSass: () => {
-      return sass;
-    },
-    getPdfLib: () => {
-      return pdfLib;
-    },
-    getPersistenceGateway: () => ({
-      createLock,
-      getCaseByDocketNumber,
-      getCasesForUser,
-      getDocketNumbersByUser,
-      getDownloadPolicyUrl: () => {
-        return {
-          url: 'http://example.com',
-        };
-      },
-      getLock,
-      getUserById,
-      removeLock,
-      saveDocumentFromLambda,
-      saveWorkItem,
-      updateCase,
-      updateDocketEntry,
-      updateUser,
-    }),
-    getPug: () => {
-      return pug;
-    },
-    getStorageClient: () => {
-      if (!s3Cache) {
-        s3Cache = new S3({
-          endpoint: environment.s3Endpoint,
-          region: 'us-east-1',
-          s3ForcePathStyle: true,
-        });
-      }
-      return s3Cache;
-    },
-    getTempDocumentsBucketName: () => {
-      return process.env.DOCUMENTS_BUCKET_NAME || '';
-    },
-    getUniqueId,
-    getUseCaseHelpers: () => ({
-      acquireLock,
-      countPagesInDocument,
-      generateAndServeDocketEntry,
-      generatePdfFromHtmlHelper,
-      sendServedPartiesEmails,
-      updateCaseAndAssociations,
-    }),
-    getUseCases: () => ({
-      generatePdfFromHtmlInteractor,
-      getAllFeatureFlagsInteractor: () => ({
-        'chief-judge-name': 'Maurice B. Foley',
-        'consolidated-cases-add-docket-numbers': true,
-        'consolidated-cases-group-access-petitioner': true,
-        'document-visibility-policy-change-date': '2023-05-01',
-        'e-consent-fields-enabled-feature-flag': true,
-        'external-opinion-search-enabled': true,
-        'external-order-search-enabled': true,
-        'internal-opinion-search-enabled': true,
-        'internal-order-search-enabled': true,
-        'updated-trial-status-types': true,
-        'use-external-pdf-generation': false,
-      }),
-    }),
-    getUtilities: () => ({
-      calculateDifferenceInDays,
-      calculateISODate,
-      createISODateString,
-      formatDateString,
-      formatNow,
-      getDocumentTypeForAddressChange,
-      prepareDateFromString,
-      sleep,
-    }),
-    logger: {
-      debug: () => {},
-      error: () => {},
-      info: () => {},
-      warn: () => {},
-    },
-  };
-
-  const user = await getUserRecordById(userId);
-  await queueUpdateAssociatedCasesWorker(apiApplicationContext, {
-    user,
-  });
-};
 
 export const getFormattedDocumentQCMyInbox = async cerebralTest => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
@@ -377,8 +156,6 @@ export const getUserRecordById = (userId: string) => {
     applicationContext,
   });
 };
-
-export const describeif = condition => (condition ? describe : describe.skip);
 
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
@@ -836,7 +613,7 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
-export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
+export const setupTest = ({ constantsOverrides = {} } = {}) => {
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
@@ -857,6 +634,27 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   );
 
   presenter.providers.applicationContext = applicationContext;
+
+  presenter.providers.applicationContext.getHttpClient = () => {
+    // HTTP Client is overridden for integration tests because with the introduction
+    // of Node 20 we saw an increase in ECONNRESET failures in the pipeline. Setting
+    // a custom http agent with keepAlive false resolved those issues.
+    // This appears to be a known issue in Node, see
+    // https://github.com/nodejs/node/issues/47130
+    const stackError = new Error();
+    httpCache =
+      httpCache ||
+      axios.create({
+        httpAgent: new Agent({ keepAlive: false }),
+      });
+
+    httpCache.interceptors.response.use(undefined, error => {
+      error.stack = stackError.stack;
+      throw error;
+    });
+
+    return httpCache;
+  };
 
   const {
     initialize: initializeSocketProvider,
@@ -914,7 +712,6 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   const originalUseCases = applicationContext.getUseCases();
   const allUseCases = {
     ...originalUseCases,
-    ...useCases,
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   };
 
@@ -988,6 +785,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
       route,
     });
   });
+
   initializeSocketProvider(cerebralTest);
 
   return cerebralTest;
