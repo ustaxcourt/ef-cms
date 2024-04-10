@@ -51,7 +51,7 @@ export const changePasswordInteractor = async (
         });
 
       const decoded = jwt.decode(result.idToken);
-      const userId = decoded['custom:userId'] || decoded.sub;
+      const userId = decoded['custom:userId'];
 
       const userFromPersistence = await applicationContext
         .getPersistenceGateway()
