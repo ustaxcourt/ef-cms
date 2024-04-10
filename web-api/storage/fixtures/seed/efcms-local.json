@@ -50424,11 +50424,6 @@
     "pk": "updated-trial-status-types"
   },
   {
-    "sk": "use-external-pdf-generation",
-    "current": false,
-    "pk": "use-external-pdf-generation"
-  },
-  {
     "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "user-email|petitioner@example.com"
