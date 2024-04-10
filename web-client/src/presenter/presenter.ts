@@ -322,6 +322,7 @@ import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
+import { removeFactOrReasonSequence } from '@web-client/presenter/sequences/removeFactOrReasonSequence';
 import { removeIrsNoticeFromFormSequence } from '@web-client/presenter/sequences/removeIrsNoticeFromFormSequence';
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removePetitionerAndUpdateCaptionSequence } from './sequences/removePetitionerAndUpdateCaptionSequence';
@@ -1119,6 +1120,7 @@ export const presenterSequences = {
     removeCaseDetailPendingItemSequence as unknown as Function,
   removeCaseFromTrialSequence:
     removeCaseFromTrialSequence as unknown as Function,
+  removeFactOrReasonSequence,
   removeIrsNoticeFromFormSequence:
     removeIrsNoticeFromFormSequence as unknown as Function,
   removePetitionForReplacementSequence:
