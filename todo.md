@@ -1,0 +1,2 @@
+- email_verified double check 'True' vs 'true'
+- ensure new cognito records are always created with custom:userid
