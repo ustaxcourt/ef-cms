@@ -246,7 +246,7 @@ export const createAdminAccount = async () => {
       },
       {
         Name: 'email_verified',
-        Value: 'True',
+        Value: 'true',
       },
       {
         Name: 'custom:role',
