@@ -1,6 +1,7 @@
 import {
   AdminInitiateAuthCommandOutput,
   CognitoIdentityProvider,
+  UserNotFoundException,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
   generatePassword,
@@ -226,13 +227,13 @@ export const createAdminAccount = async () => {
       UserPoolId,
       Username: USTC_ADMIN_USER,
     });
+    console.log('result', result);
     if (result) {
       console.log('Admin user already exists - not going to try to create it');
       return;
     }
   } catch (err) {
-    const { code }: any = err;
-    if (code !== 'UserNotFoundException') {
+    if (!(err instanceof UserNotFoundException)) {
       console.error(err);
       process.exit(1);
     }
