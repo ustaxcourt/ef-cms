@@ -7,6 +7,7 @@ import { NotFoundError } from './errors/NotFoundError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
+import { addAnotherIrsNoticeToFormSequence } from '@web-client/presenter/sequences/addAnotherIrsNoticeToFormSequence';
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
 import { addFactOrReasonSequence } from '@web-client/presenter/sequences/addFactOrReasonSequence';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
@@ -321,6 +322,7 @@ import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
+import { removeIrsNoticeFromFormSequence } from '@web-client/presenter/sequences/removeIrsNoticeFromFormSequence';
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removePetitionerAndUpdateCaptionSequence } from './sequences/removePetitionerAndUpdateCaptionSequence';
 import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
@@ -498,6 +500,7 @@ import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/upda
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
+import { updateIrsNoticeIndexPropertySequence } from '@web-client/presenter/sequences/updateIrsNoticeIndexPropertySequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -576,6 +579,8 @@ import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateU
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
 export const presenterSequences = {
+  addAnotherIrsNoticeToFormSequence:
+    addAnotherIrsNoticeToFormSequence as unknown as Function,
   addCaseToTrialSessionSequence:
     addCaseToTrialSessionSequence as unknown as Function,
   addFactOrReasonSequence,
@@ -1113,6 +1118,8 @@ export const presenterSequences = {
     removeCaseDetailPendingItemSequence as unknown as Function,
   removeCaseFromTrialSequence:
     removeCaseFromTrialSequence as unknown as Function,
+  removeIrsNoticeFromFormSequence:
+    removeIrsNoticeFromFormSequence as unknown as Function,
   removePetitionForReplacementSequence:
     removePetitionForReplacementSequence as unknown as Function,
   removePetitionerAndUpdateCaptionSequence:
@@ -1405,6 +1412,8 @@ export const presenterSequences = {
   updateGenerateNoticesProgressSequence:
     updateGenerateNoticesProgressSequence as unknown as Function,
   updateHearingNoteSequence: updateHearingNoteSequence as unknown as Function,
+  updateIrsNoticeIndexPropertySequence:
+    updateIrsNoticeIndexPropertySequence as unknown as Function,
   updateJudgesCaseNoteOnCaseDetailSequence:
     updateJudgesCaseNoteOnCaseDetailSequence as unknown as Function,
   updateMessageModalAttachmentsSequence:
