@@ -539,7 +539,7 @@ export const uploadPetition = async (
   }
   const user = {
     ...userMap[loginUsernameLowercase],
-    sub: userMap[loginUsernameLowercase].userId,
+    'custom:userId': userMap[loginUsernameLowercase].userId,
   };
 
   const { COUNTRY_TYPES } = applicationContext.getConstants();

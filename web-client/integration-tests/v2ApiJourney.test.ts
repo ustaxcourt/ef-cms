@@ -25,7 +25,7 @@ describe('View and manage the deadlines of a case', () => {
     }
     const user = {
       ...userMap[loginUsername],
-      sub: userMap[loginUsername].userId,
+      'custom:userId': userMap[loginUsername].userId,
     };
 
     userToken = jwt.sign(user, 'secret');
