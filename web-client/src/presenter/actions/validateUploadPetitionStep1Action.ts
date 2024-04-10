@@ -5,17 +5,18 @@ export const validateUploadPetitionStep1Action = ({
   get,
   path,
 }: ActionProps<{ selectedPage: number }>) => {
-  //TODO: Support generated file source
-  const petitionFileSource = 'upload';
-  const { petitionFile, petitionFileSize, redactionAcknowledgement } = get(
-    state.form,
-  );
+  const {
+    petitionFile,
+    petitionFileSize,
+    petitionType,
+    redactionAcknowledgement,
+  } = get(state.form);
 
   const errors = new UploadPetitionStep1({
     acknowledgeChecked: redactionAcknowledgement,
     petitionFile,
     petitionFileSize,
-    petitionFileSource,
+    petitionType,
   }).getFormattedValidationErrors();
 
   if (errors) {
