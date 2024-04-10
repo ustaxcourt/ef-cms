@@ -6,16 +6,20 @@ export const validateUploadPetitionStep1Action = ({
   path,
 }: ActionProps<{ selectedPage: number }>) => {
   const {
+    petitionFacts,
     petitionFile,
     petitionFileSize,
+    petitionReasons,
     petitionType,
     redactionAcknowledgement,
   } = get(state.form);
 
   const errors = new UploadPetitionStep1({
     acknowledgeChecked: redactionAcknowledgement,
+    petitionFacts,
     petitionFile,
     petitionFileSize,
+    petitionReasons,
     petitionType,
   }).getFormattedValidationErrors();
 
