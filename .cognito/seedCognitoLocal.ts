@@ -200,7 +200,7 @@ users.forEach(user => {
       },
       {
         Name: 'email_verified',
-        Value: 'True',
+        Value: 'true',
       },
       {
         Name: 'custom:role',
