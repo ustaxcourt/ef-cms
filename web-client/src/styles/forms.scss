@@ -6,6 +6,29 @@
   max-width: 40rem;
   margin-top: 0;
   margin-bottom: 35px;
+
+  &.autogenerate-petition-form {
+    max-width: 65rem;
+
+    ol {
+      padding-inline-start: 15px;
+    }
+
+    .fact-or-reason {
+      display: inline-block;
+
+      textarea {
+        display: inline-block;
+        width: 55rem;
+        height: 4rem;
+        vertical-align: top;
+      }
+    }
+    
+    .reason-button {
+      margin-left: 1rem;
+    }
+  }
 }
 
 .usa-form-group--error {
@@ -131,6 +154,10 @@ select {
 .usa-radio {
   margin-bottom: 15px;
   background: transparent;
+
+  &.petition-selection {
+    margin-bottom: 2rem;
+  }
 
   &:last-child {
     margin-bottom: 0;
