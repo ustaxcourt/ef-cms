@@ -20,8 +20,9 @@ describe('signUp', () => {
       role: mockRole,
     });
 
-    expect(applicationContext.getCognito().signUp).toHaveBeenCalledWith({
-      ClientId: mockCognitoClientId,
+    expect(
+      applicationContext.getCognito().signUp.mock.calls[0][0],
+    ).toMatchObject({
       Password: mockPassword,
       UserAttributes: [
         {
@@ -32,13 +33,21 @@ describe('signUp', () => {
           Name: 'name',
           Value: mockName,
         },
+      ],
+      Username: mockEmail,
+    });
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes.mock
+        .calls[0][0],
+    ).toMatchObject({
+      UserAttributes: [
         {
           Name: 'custom:userId',
           Value: mockUserId,
         },
         {
           Name: 'custom:role',
-          Value: mockRole,
+          Value: ROLES.petitioner,
         },
       ],
       Username: mockEmail,
