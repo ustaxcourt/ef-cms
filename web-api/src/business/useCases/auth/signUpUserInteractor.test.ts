@@ -45,6 +45,14 @@ describe('signUpUserInteractor', () => {
           Name: 'name',
           Value: name,
         },
+      ],
+      Username: email,
+    });
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes.mock
+        .calls[0][0],
+    ).toMatchObject({
+      UserAttributes: [
         {
           Name: 'custom:userId',
           Value: userId,
