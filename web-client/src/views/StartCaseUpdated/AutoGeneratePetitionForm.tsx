@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { PetitionFormResponse } from '@web-client/views/StartCaseUpdated/PetitionFormResponse';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -7,54 +8,42 @@ import React from 'react';
 
 export const AutoGeneratePetitionForm = connect(
   {
+    addFactOrReasonSequence: sequences.addFactOrReasonSequence,
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function AutoGeneratePetitionForm({
-    factCount = 1,
-    form,
-    reasonCount = 1,
-    updateFormValueSequence,
-  }) {
+  function AutoGeneratePetitionForm({ addFactOrReasonSequence, form }) {
     return (
       <>
         <FormGroup className="margin-top-2" errorText={undefined}>
           <label
             className="usa-label"
             htmlFor="petitionReasons"
-            id="petition-reasons-label"
+            id="petition-reason-label"
           >
             1. Explain why you disagree with the IRS action(s) in this case
             (please add each reason separately):
           </label>
 
-          <div className="grid-row margin-bottom-2">
-            <li
-              style={{
-                fontWeight: 'bold',
-                listStyleType: 'lower-alpha',
-                marginRight: '1rem',
-              }}
-            ></li>
-            <textarea
-              aria-describedby="petition-reasons-label"
-              className="usa-textarea height-8"
-              id="petition-reasons"
-              name="petitionReasons"
-              value={form.petitionReasons[reasonCount - 1] || ''}
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name[reasonCount - 1],
-                  value: e.target.value,
-                });
-              }}
-            />
+          <div className="margin-bottom-2">
+            <ol>
+              {form.petitionReasons &&
+                form.petitionReasons.map((reason, index) => {
+                  return (
+                    <PetitionFormResponse
+                      count={index}
+                      id={`petition-reason-${index - 1}`}
+                      key={`petition-reason-${index - 1}`}
+                      textName="petitionReasons"
+                    />
+                  );
+                })}
+            </ol>
             <Button
               link
               icon="plus"
-              onClick={() => {
-                reasonCount++;
-              }}
+              onClick={() =>
+                addFactOrReasonSequence({ key: 'petitionReasons' })
+              }
             >
               Add another reason
             </Button>
@@ -62,38 +51,31 @@ export const AutoGeneratePetitionForm = connect(
 
           <label
             className="usa-label"
-            htmlFor="petitionReasons"
-            id="petition-facts-label"
+            htmlFor="petitionFacts"
+            id="petition-fact-label"
           >
             2. State the facts upon which you rely (please add each fact
             separately):
           </label>
-          <div className="grid-row margin-bottom-2">
-            <li
-              style={{
-                fontWeight: 'bold',
-                listStyleType: 'lower-alpha',
-                marginRight: '1rem',
-              }}
-            ></li>
-            <textarea
-              aria-describedby="petition-facts-label"
-              className="usa-textarea height-8"
-              id="petition-facts"
-              name="petitionFacts"
-              value={form.petitionFacts[factCount - 0] || ''}
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name[factCount - 0],
-                  value: e.target.value,
-                });
-              }}
-            />
+          <div className="margin-bottom-2">
+            <ol>
+              {form.petitionFacts &&
+                form.petitionFacts.map((fact, index) => {
+                  return (
+                    <PetitionFormResponse
+                      count={index}
+                      id={`petition-fact-${index - 1}`}
+                      key={`petition-fact-${index - 1}`}
+                      textName="petitionFacts"
+                    />
+                  );
+                })}
+            </ol>
             <Button
               link
               icon="plus"
               onClick={() => {
-                factCount++;
+                addFactOrReasonSequence({ key: 'petitionFacts' });
               }}
             >
               Add another fact
