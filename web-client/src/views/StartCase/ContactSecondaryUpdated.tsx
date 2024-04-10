@@ -1,8 +1,10 @@
 import { Address } from './Address';
 import { Country } from './Country';
+import { ElectronicServiceConsentCheckbox } from '@web-client/views/StartCaseInternal/ElectronicServiceCheckbox';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
 import { PlaceOfLegalResidenceDropdown } from '@web-client/views/StartCase/PlaceOfLegalResidenceDropdown';
+import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -138,13 +140,6 @@ export const ContactSecondaryUpdated = connect(
               )}
             </>
           )}
-
-          {/* {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
-            <>
-              <PaperPetitionEmail bind={bind} contactType="contactSecondary" />
-              <EConsent bind={bind} contactType="contactSecondary" />
-            </>
-          )} */}
           <FormGroup
             className="phone-input"
             // errorText={
@@ -153,11 +148,8 @@ export const ContactSecondaryUpdated = connect(
             // }
           >
             <label className="usa-label" htmlFor="phone">
-              Phone number
+              Phone number <span className="usa-hint">(Optional)</span>
             </label>
-            <span className="usa-hint">
-              If you do not have a current phone number, enter N/A.
-            </span>
             <input
               autoCapitalize="none"
               className="usa-input max-width-200"
@@ -177,6 +169,48 @@ export const ContactSecondaryUpdated = connect(
               }}
             />
           </FormGroup>
+          <FormGroup
+          // errorText={
+          //   validationErrors.contactSecondary &&
+          //   validationErrors.contactSecondary.email
+          // }
+          >
+            <label className="usa-label" htmlFor="email">
+              Email address <span className="usa-hint">(Optional)</span>
+            </label>
+
+            <input
+              autoCapitalize="none"
+              className="usa-input"
+              id="email"
+              name="contactSecondary.email"
+              type="text"
+              value={data.contactSecondary.email || ''}
+              // onBlur={() => {
+              //   onBlurSequence();
+              // }}
+              onChange={e => {
+                onChangeSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+          <ElectronicServiceConsentCheckbox
+            bind="form"
+            contactType="contactSecondary"
+          />
+          {data.contactSecondary.hasConsentedToEService && (
+            <WarningNotificationComponent
+              alertWarning={{
+                message:
+                  'No paper service will be made to the mailing address after the Court verifies the email address.',
+              }}
+              dismissible={false}
+              scrollToTop={false}
+            />
+          )}
         </div>
       </>
     );
@@ -247,31 +281,4 @@ function InCareOf({ inCareOf, onChangeSequence }) {
   );
 }
 
-// const displayTitle = () => (
-//   <div className="usa-form-group">
-//     <label className="usa-label with-hint" htmlFor="title">
-//       Title{' '}
-//       {contactsHelper.contactSecondary.titleHint && (
-//         <span className="usa-hint">
-//           ({contactsHelper.contactSecondary.titleHint})
-//         </span>
-//       )}
-//     </label>
-//     <span className="usa-hint">For example, executor, PR, etc.</span>
-//     <input
-//       autoCapitalize="none"
-//       className="usa-input"
-//       id="title"
-//       name="contactSecondary.title"
-//       type="text"
-//       value={data.contactSecondary.title || ''}
-//       onChange={e => {
-//         onChangeSequence({
-//           key: e.target.name,
-//           value: e.target.value,
-//         });
-//       }}
-//     />
-//   </div>
-// );
 ContactSecondaryUpdated.displayName = 'ContactSecondaryUpdated';
