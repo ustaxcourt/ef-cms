@@ -1,4 +1,4 @@
-import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
+// import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 // move to entity constants?
@@ -11,14 +11,12 @@ export type InitialPetitionFormState = {
   petitionFacts: string[];
   petitionReasons: string[];
   petitionType: string;
-  countryType: string;
   filingType?: string;
 };
 
 export const setupPetitionStateAction = ({ store }: ActionProps) => {
   // should this live in state?
   const initialPetitionForm: InitialPetitionFormState = {
-    countryType: COUNTRY_TYPES.DOMESTIC,
     filingType: undefined,
     petitionFacts: [''],
     petitionReasons: [''],
