@@ -10,7 +10,7 @@ describe('renewIdTokenInteractor', () => {
       message: 'Refresh token is expired',
     });
     applicationContext
-      .getPersistenceGateway()
+      .getUserGateway()
       .renewIdToken.mockRejectedValue(mockError);
 
     await expect(
@@ -23,7 +23,7 @@ describe('renewIdTokenInteractor', () => {
   it('should rethrow when an error occurs that is not recognized', async () => {
     const mockError = new Error('Cognito exploded!!!');
     applicationContext
-      .getPersistenceGateway()
+      .getUserGateway()
       .renewIdToken.mockRejectedValue(mockError);
 
     await expect(
@@ -35,16 +35,14 @@ describe('renewIdTokenInteractor', () => {
 
   it('should make a call to get an id token and refresh token', async () => {
     const expectedRefresh = 'sometoken';
-    applicationContext.getPersistenceGateway().renewIdToken.mockResolvedValue({
-      idToken: 'abc',
-    });
+    applicationContext.getUserGateway().renewIdToken.mockResolvedValue('abc');
 
     const result = await renewIdTokenInteractor(applicationContext, {
       refreshToken: expectedRefresh,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().renewIdToken.mock.calls[0][1],
+      applicationContext.getUserGateway().renewIdToken.mock.calls[0][1],
     ).toEqual({ refreshToken: expectedRefresh });
     expect(result).toEqual({
       idToken: 'abc',

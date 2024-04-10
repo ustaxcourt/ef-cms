@@ -15,7 +15,6 @@ export const documentViewerHelper = (
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
-    UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
 
   const permissions = get(state.permissions);
@@ -50,9 +49,7 @@ export const documentViewerHelper = (
 
   const { servedAtFormatted } = formattedDocumentToDisplay;
   const servedLabel = servedAtFormatted ? `Served ${servedAtFormatted}` : '';
-
   const showNotServed = getShowNotServedForDocument({
-    UNSERVABLE_EVENT_CODES,
     caseDetail,
     docketEntryId: formattedDocumentToDisplay.docketEntryId,
     draftDocuments: formattedCaseDetail.draftDocuments,
