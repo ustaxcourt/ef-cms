@@ -37,7 +37,7 @@ export async function updateUser(
 
   await applicationContext.getCognito().adminUpdateUserAttributes({
     UserAttributes: formattedAttributesToUpdate,
-    UserPoolId: poolId ?? process.env.USER_POOL_ID,
+    UserPoolId: poolId ?? applicationContext.environment.userPoolId,
     Username: email.toLowerCase(),
   });
 }

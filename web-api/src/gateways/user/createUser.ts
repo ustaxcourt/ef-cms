@@ -29,6 +29,7 @@ export async function createUser(
   },
 ): Promise<void> {
   const formattedAttributesToUpdate: AttributeType[] = [];
+
   if (attributesToUpdate.role) {
     formattedAttributesToUpdate.push({
       Name: 'custom:role',
@@ -73,8 +74,9 @@ export async function createUser(
     Username: email.toLowerCase(),
   };
 
-  if (process.env.STAGE !== 'prod') {
-    createUserArgs.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+  if (applicationContext.environment.stage !== 'prod') {
+    createUserArgs.TemporaryPassword =
+      applicationContext.environment.defaultAccountPass;
   }
 
   await applicationContext.getCognito().adminCreateUser(createUserArgs);

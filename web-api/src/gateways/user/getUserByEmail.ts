@@ -21,7 +21,7 @@ export const getUserByEmail = async (
   let foundUser: AdminGetUserCommandOutput;
   try {
     foundUser = await applicationContext.getCognito().adminGetUser({
-      UserPoolId: poolId ?? process.env.USER_POOL_ID,
+      UserPoolId: poolId ?? applicationContext.environment.userPoolId,
       Username: email.toLowerCase(),
     });
   } catch (err: any) {

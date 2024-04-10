@@ -5,7 +5,7 @@ export async function disableUser(
   { email }: { email: string },
 ): Promise<void> {
   await applicationContext.getCognito().adminDisableUser({
-    UserPoolId: process.env.USER_POOL_ID,
+    UserPoolId: applicationContext.environment.userPoolId,
     Username: email.toLowerCase(),
   });
 }

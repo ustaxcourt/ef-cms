@@ -79,6 +79,7 @@ const environment = {
     : 'localhost:1234',
   cognitoClientId: process.env.COGNITO_CLIENT_ID || 'bvjrggnd3co403c0aahscinne',
   currentColor: process.env.CURRENT_COLOR || 'green',
+  defaultAccountPass: process.env.DEFAULT_ACCOUNT_PASS || 'Testing1234$',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
   elasticsearchEndpoint:
