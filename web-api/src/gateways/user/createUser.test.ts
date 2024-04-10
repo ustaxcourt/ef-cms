@@ -37,16 +37,16 @@ describe('createUser', () => {
       MessageAction: undefined,
       UserAttributes: [
         {
+          Name: 'custom:userId',
+          Value: mockUser.userId,
+        },
+        {
           Name: 'custom:role',
           Value: mockUser.role,
         },
         {
           Name: 'name',
           Value: mockUser.name,
-        },
-        {
-          Name: 'custom:userId',
-          Value: mockUser.userId,
         },
         {
           Name: 'email',
@@ -83,16 +83,16 @@ describe('createUser', () => {
       MessageAction: MessageActionType.RESEND,
       UserAttributes: [
         {
+          Name: 'custom:userId',
+          Value: mockUser.userId,
+        },
+        {
           Name: 'custom:role',
           Value: mockUser.role,
         },
         {
           Name: 'name',
           Value: mockUser.name,
-        },
-        {
-          Name: 'custom:userId',
-          Value: mockUser.userId,
         },
         {
           Name: 'email',
@@ -112,7 +112,9 @@ describe('createUser', () => {
     process.env.STAGE = 'prod';
 
     await createUser(applicationContext, {
-      attributesToUpdate: {},
+      attributesToUpdate: {
+        userId: 'b95429eb-54e1-4755-a35f-3b4f137f0693',
+      },
       email: mockUser.email,
       resendInvitationEmail: false,
     });
@@ -127,7 +129,9 @@ describe('createUser', () => {
     process.env.STAGE = 'test';
 
     await createUser(applicationContext, {
-      attributesToUpdate: {},
+      attributesToUpdate: {
+        userId: '2d09e076-1220-4abe-adb9-f73e9acb114d',
+      },
       email: mockUser.email,
       resendInvitationEmail: false,
     });
