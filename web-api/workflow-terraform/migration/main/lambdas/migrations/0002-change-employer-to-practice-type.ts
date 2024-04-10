@@ -8,8 +8,9 @@ const isRecordToUpdate = item => {
   return isUserRecord(item);
 };
 
-export const migrateItems = async (
+export const migrateItems = (
   items: any[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext: IApplicationContext,
 ) => {
   const itemsAfter: TDynamoRecord[] = [];
@@ -19,7 +20,6 @@ export const migrateItems = async (
       if (item.role && item.role.includes('Practitioner')) {
         item.practiceType = item.employer;
         delete item.employer;
-        applicationContext.logger.log('updated practitioner:', item);
       }
     }
     itemsAfter.push(item);
