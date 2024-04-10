@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
@@ -19,6 +20,9 @@ export const IrsNoticeUploadForm = connect(
     file: props.file,
     index: props.index,
     removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
+    taxYear: props.taxYear,
+    updateIrsNoticeIndexPropertySequence:
+      sequences.updateIrsNoticeIndexPropertySequence,
     validationErrors: state.validationErrors,
   },
   function IrsNoticeUploadForm({
@@ -29,6 +33,8 @@ export const IrsNoticeUploadForm = connect(
     file,
     index,
     removeIrsNoticeFromFormSequence,
+    taxYear,
+    updateIrsNoticeIndexPropertySequence,
     validationErrors,
   }) {
     return (
@@ -93,6 +99,43 @@ export const IrsNoticeUploadForm = connect(
             value={caseType}
             onChange="updateIrsNoticeIndexPropertySequence"
           />
+
+          <div className="usa-form-group">
+            <FormGroup>
+              <label className="usa-label" htmlFor="noticeIssuesTaxYear">
+                Tax year or period for which the notice was issued
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="noticeIssuesTaxYear"
+                name="firmName"
+                type="text"
+                value={taxYear}
+                onChange={e => {
+                  updateIrsNoticeIndexPropertySequence({
+                    key: index.toString(),
+                    property: 'taxYear',
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>{' '}
+            <DateSelector
+              // defaultValue={form.lastDateOfPeriod}
+              errorText={validationErrors.lastDateOfPeriod}
+              id="last-date-of-period"
+              label="Last date of period"
+              // onChange={e => {
+              //   formatAndUpdateDateFromDatePickerSequence({
+              //     key: 'lastDateOfPeriod',
+              //     toFormat: DATE_FORMATS.ISO,
+              //     value: e.target.value,
+              //   });
+              //   validateAddDeficiencyStatisticsSequence();
+              // }}
+            />
+          </div>
         </div>
       </>
     );

@@ -1,14 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export const LegalPlaceOfResidenceSelect = ({
+export const PlaceOfLegalResidenceSelect = ({
   className = '',
   data,
   type,
   updateFormValueSequence,
   usStates,
   usStatesOther,
-  validateStartCaseSequence,
+  // validateStartCaseSequence,
 }) => {
   return (
     <select
@@ -22,7 +22,7 @@ export const LegalPlaceOfResidenceSelect = ({
           key: e.target.name,
           value: e.target.value,
         });
-        validateStartCaseSequence();
+        // validateStartCaseSequence();
       }}
     >
       <option value="">- Select -</option>
@@ -55,4 +55,4 @@ export const LegalPlaceOfResidenceSelect = ({
   );
 };
 
-LegalPlaceOfResidenceSelect.displayName = 'LegalPlaceOfResidenceSelect';
+PlaceOfLegalResidenceSelect.displayName = 'PlaceOfLegalResidenceSelect';
