@@ -6,7 +6,7 @@ describe('updateUser', () => {
   it('should update the user`s email in persistence when it is provided as an attribute to update', async () => {
     const mockEmail = 'test@example.com';
     const mockUserPoolId = 'test';
-    process.env.USER_POOL_ID = mockUserPoolId;
+    applicationContext.environment.userPoolId = mockUserPoolId;
 
     await updateUser(applicationContext, {
       attributesToUpdate: {
@@ -28,7 +28,7 @@ describe('updateUser', () => {
           Value: 'true',
         },
       ],
-      UserPoolId: process.env.USER_POOL_ID,
+      UserPoolId: applicationContext.environment.userPoolId,
       Username: mockEmail,
     });
   });
@@ -36,7 +36,7 @@ describe('updateUser', () => {
   it('should update the user`s role in persistence when it is provided as an attribute to update', async () => {
     const mockEmail = 'test@example.com';
     const mockUserPoolId = 'test';
-    process.env.USER_POOL_ID = mockUserPoolId;
+    applicationContext.environment.UserPoolId = mockUserPoolId;
 
     await updateUser(applicationContext, {
       attributesToUpdate: {
@@ -54,7 +54,7 @@ describe('updateUser', () => {
           Value: ROLES.petitioner,
         },
       ],
-      UserPoolId: process.env.USER_POOL_ID,
+      UserPoolId: applicationContext.environment.userPoolId,
       Username: mockEmail,
     });
   });
@@ -62,7 +62,7 @@ describe('updateUser', () => {
   it('should update the user`s role and email in persistence when they are both provided as attributes to update', async () => {
     const mockEmail = 'test@example.com';
     const mockUserPoolId = 'test';
-    process.env.USER_POOL_ID = mockUserPoolId;
+    applicationContext.environment.userPoolId = mockUserPoolId;
 
     await updateUser(applicationContext, {
       attributesToUpdate: {
@@ -89,7 +89,7 @@ describe('updateUser', () => {
           Value: 'true',
         },
       ],
-      UserPoolId: process.env.USER_POOL_ID,
+      UserPoolId: applicationContext.environment.userPoolId,
       Username: mockEmail,
     });
   });
