@@ -5,7 +5,10 @@ export const removeFactOrReasonAction = ({
   props,
   store,
 }: ActionProps) => {
-  // const newIndex = get(state.form[props.key]).length;
-  // store.set(state.form[props.key][newIndex], '');
-  console.log('remove');
+  const { index, key } = props;
+  let factsOrReasons = get(state.form[key]);
+
+  factsOrReasons.splice(index, 1);
+
+  store.set(state.form[key], factsOrReasons);
 };
