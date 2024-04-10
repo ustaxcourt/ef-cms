@@ -61,6 +61,12 @@ export const signUpUserInteractor = async (
         Name: 'name',
         Value: newUser.name,
       },
+    ],
+    Username: newUser.email,
+  });
+
+  await cognito.adminUpdateUserAttributes({
+    UserAttributes: [
       {
         Name: 'custom:userId',
         Value: userId,
@@ -70,6 +76,7 @@ export const signUpUserInteractor = async (
         Value: ROLES.petitioner,
       },
     ],
+    UserPoolId: applicationContext.environment.userPoolId,
     Username: newUser.email,
   });
 
