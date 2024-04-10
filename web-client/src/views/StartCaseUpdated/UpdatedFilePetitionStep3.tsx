@@ -80,6 +80,7 @@ export const UpdatedFilePetitionStep3 = connect(
                         file={info.file}
                         index={index}
                         key={info.key}
+                        taxYear={info.taxYear}
                       />
                     </>
                   );
