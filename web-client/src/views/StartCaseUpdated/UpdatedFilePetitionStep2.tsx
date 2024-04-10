@@ -10,11 +10,13 @@ import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep2 = connect(
   {
+    copyPrimaryContactSequence: sequences.copyPrimaryContactSequence,
     form: state.form,
     updateFilingTypeSequence: sequences.updateFilingTypeSequence,
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
   function UpdatedFilePetitionStep2({
+    copyPrimaryContactSequence,
     form,
     updatedFilePetitionHelper,
     updateFilingTypeSequence,
@@ -78,6 +80,7 @@ export const UpdatedFilePetitionStep2 = connect(
               onChange="updateFormValueSequence"
             />
             <PetitionerAndSpouseInfo
+              copyPrimaryContactSequence={copyPrimaryContactSequence}
               isSpouseDeceasedSelected={form.isSpouseDeceased}
               updateFilingTypeSequence={updateFilingTypeSequence}
             />
@@ -95,6 +98,7 @@ export const UpdatedFilePetitionStep2 = connect(
 );
 
 function PetitionerAndSpouseInfo({
+  copyPrimaryContactSequence,
   isSpouseDeceasedSelected,
   updateFilingTypeSequence,
 }) {
@@ -122,6 +126,7 @@ function PetitionerAndSpouseInfo({
                   key: e.target.name,
                   value: e.target.value,
                 });
+                copyPrimaryContactSequence();
                 // validateStartCaseWizardSequence();
               }}
             />
@@ -150,7 +155,6 @@ function DeceasedSpouse() {
       nameLabel="Full name of deceased spouse"
       showPlaceOfLegalResidence={true}
       showSameAsPrimaryCheckbox={true}
-      useSameAddress={true}
       onChange="updateFormValueSequence"
     />
   );

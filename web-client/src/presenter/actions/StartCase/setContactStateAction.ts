@@ -11,12 +11,21 @@ export const setContactStateAction = ({
   key: string;
   value: string;
 }>) => {
-  const { COUNTRY_TYPES } = applicationContext.getConstants();
-
   const partyType = get(state.form.partyType);
 
   const { showContactPrimary, showContactSecondary } =
     showContactsHelperUpdated(partyType, PARTY_TYPES, props.value);
+
+  if (showContactSecondary && props.key === 'isSpouseDeceased') {
+    store.set(state.form.useSameAsPrimary, true);
+  } else {
+    store.unset(state.form.useSameAsPrimary);
+  }
+
+  // only reset the address if the filing type is updated
+  if (props.key !== 'filingType') return;
+
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   store.set(
     state.form.contactPrimary,
@@ -26,8 +35,6 @@ export const setContactStateAction = ({
     state.form.contactSecondary,
     getDefaultContactState(showContactSecondary, COUNTRY_TYPES),
   );
-
-  store.unset(state.form.useSameAsPrimary);
 };
 
 function getDefaultContactState(showContact, COUNTRY_TYPES) {

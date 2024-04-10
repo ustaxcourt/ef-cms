@@ -196,7 +196,6 @@ function SameAddressCheckbox({
         name="useSameAsPrimary"
         type="checkbox"
         onChange={e => {
-          console.log('checking...', e.target.checked);
           updateFormValueAndSecondaryContactInfoSequence({
             key: e.target.name,
             value: e.target.checked,
