@@ -793,4 +793,6 @@ export type CreateCaseIrsForm = {
   file: File;
   size: number;
   caseType: string;
+  lastDateOfPeriod: string;
+  taxYear: number;
 };
