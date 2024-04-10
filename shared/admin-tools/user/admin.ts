@@ -214,6 +214,7 @@ export const createDawsonUser = async ({
       });
     }
   } catch (err) {
+    console.log(err);
     throw new Error(`Unable to create Dawson user. Cause: ${err.cause}`);
   }
 };
@@ -227,13 +228,18 @@ export const createAdminAccount = async () => {
       UserPoolId,
       Username: USTC_ADMIN_USER,
     });
-    console.log('result', result);
     if (result) {
       console.log('Admin user already exists - not going to try to create it');
       return;
     }
   } catch (err) {
-    if (!(err instanceof UserNotFoundException)) {
+    const { code }: any = err;
+    if (code === undefined && !(err instanceof UserNotFoundException)) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    if (code && code !== 'UserNotFoundException') {
       console.error(err);
       process.exit(1);
     }
