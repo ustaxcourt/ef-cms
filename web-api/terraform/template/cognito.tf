@@ -195,11 +195,12 @@ resource "aws_cognito_user_pool_client" "client" {
 
   user_pool_id = aws_cognito_user_pool.pool.id
 
+  # WARNING: Do NOT add custom:userId or custom:role to this list. Adding those
+  # attributes to this list will allow anyone with a valid access/id token to 
+  # update their role or userId directly in Cognito.
   write_attributes = [
     "address",
     "birthdate",
-    "custom:userId",
-    "custom:role",
     "email",
     "family_name",
     "gender",
