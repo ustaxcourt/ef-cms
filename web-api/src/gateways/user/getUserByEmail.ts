@@ -31,10 +31,9 @@ export const getUserByEmail = async (
     throw err;
   }
 
-  const userId =
-    foundUser.UserAttributes?.find(element => element.Name === 'custom:userId')
-      ?.Value! ||
-    foundUser.UserAttributes?.find(element => element.Name === 'sub')?.Value!;
+  const userId = foundUser.UserAttributes?.find(
+    element => element.Name === 'custom:userId',
+  )?.Value!;
   const role = foundUser.UserAttributes?.find(
     element => element.Name === 'custom:role',
   )?.Value! as Role;

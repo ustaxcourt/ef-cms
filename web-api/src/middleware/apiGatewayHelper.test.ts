@@ -406,53 +406,35 @@ describe('getUserFromAuthHeader', () => {
     expect(user.userId).toEqual(mockUser['custom:userId']);
   });
 
-  it('returns sub as the userId when custom:userId is not present in the token', () => {
-    mockUser = {
-      'custom:role': ROLES.privatePractitioner,
-      name: 'Test Practitioner',
-      sub: '188a5b0f-e7ae-4647-98a1-43a0d4d00eee',
-    };
-
-    token = jwt.sign(mockUser, 'secret');
-
-    const user = getUserFromAuthHeader({
-      headers: {
-        Authorization: `Bearer ${token}`,
-        token,
-      },
+  describe('redirect', () => {
+    it('should return a redirect status in the header', async () => {
+      const response = await redirect({}, () => ({ url: 'example.com' }));
+      expect(response).toEqual({
+        headers: {
+          Location: 'example.com',
+        },
+        statusCode: 302,
+      });
     });
-    expect(user.userId).toEqual(mockUser.sub);
-  });
-});
 
-describe('redirect', () => {
-  it('should return a redirect status in the header', async () => {
-    const response = await redirect({}, () => ({ url: 'example.com' }));
-    expect(response).toEqual({
-      headers: {
-        Location: 'example.com',
-      },
-      statusCode: 302,
+    it('should return error object on errors', async () => {
+      const response = await redirect({}, () => {
+        throw new Error('an error');
+      });
+      expect(response).toEqual({
+        body: JSON.stringify('an error'),
+        headers: EXPECTED_HEADERS,
+        statusCode: '400',
+      });
     });
   });
 
-  it('should return error object on errors', async () => {
-    const response = await redirect({}, () => {
-      throw new Error('an error');
+  describe('getConnectionIdFromEvent', () => {
+    it('should return clientConnectionId from queryStringParameters if it exists', async () => {
+      const response = await getConnectionIdFromEvent({
+        queryStringParameters: { clientConnectionId: 'abc-123' },
+      });
+      expect(response).toEqual('abc-123');
     });
-    expect(response).toEqual({
-      body: JSON.stringify('an error'),
-      headers: EXPECTED_HEADERS,
-      statusCode: '400',
-    });
-  });
-});
-
-describe('getConnectionIdFromEvent', () => {
-  it('should return clientConnectionId from queryStringParameters if it exists', async () => {
-    const response = await getConnectionIdFromEvent({
-      queryStringParameters: { clientConnectionId: 'abc-123' },
-    });
-    expect(response).toEqual('abc-123');
   });
 });
