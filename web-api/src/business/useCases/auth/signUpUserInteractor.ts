@@ -22,15 +22,6 @@ export const signUpUserInteractor = async (
     };
   },
 ): Promise<SignUpUserResponse> => {
-  // Temporary code to prevent creation of duplicate accounts while Cognito is still case sensitive.
-  // We do not want to allow people to make two accounts for the same email that only differ by casing.
-  // const { Users: existingAccounts } = await applicationContext
-  //   .getCognito()
-  //   .listUsers({
-  //     AttributesToGet: ['email'],
-  //     Filter: `email = "${user.email}"`,
-  //     UserPoolId: applicationContext.environment.userPoolId,
-  //   });
   const existingAccount = await applicationContext
     .getUserGateway()
     .getUserByEmail(applicationContext, {

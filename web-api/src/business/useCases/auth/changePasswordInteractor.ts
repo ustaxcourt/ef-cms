@@ -97,7 +97,7 @@ export const changePasswordInteractor = async (
         throw new Error('Unable to change password');
       }
 
-      return applicationContext
+      return await applicationContext
         .getUserGateway()
         .changePassword(applicationContext, {
           code,

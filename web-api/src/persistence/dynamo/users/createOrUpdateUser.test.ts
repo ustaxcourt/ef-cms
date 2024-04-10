@@ -1,4 +1,3 @@
-import { UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
@@ -10,72 +9,49 @@ import {
 import { createOrUpdateUser, createUserRecords } from './createOrUpdateUser';
 
 describe('createOrUpdateUser', () => {
-  const mockTemporaryPassword = 'tempPass';
-
   it('should ONLY create a user when they do not already exist', async () => {
     applicationContext
-      .getCognito()
-      .adminGetUser.mockRejectedValue(
-        new UserNotFoundException({ $metadata: {}, message: '' }),
-      );
-    applicationContext.getCognito().adminCreateUser.mockResolvedValue({
-      User: { Username: petitionsClerkUser.userId },
-    });
+      .getUserGateway()
+      .getUserByEmail.mockResolvedValue(undefined);
 
     await createOrUpdateUser({
       applicationContext,
-      password: mockTemporaryPassword,
       user: petitionsClerkUser,
     });
 
-    expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).toHaveBeenCalledWith({
-      DesiredDeliveryMediums: ['EMAIL'],
-      MessageAction: 'SUPPRESS',
-      TemporaryPassword: mockTemporaryPassword,
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
+    expect(applicationContext.getUserGateway().createUser).toHaveBeenCalledWith(
+      applicationContext,
+      {
+        attributesToUpdate: {
+          email: petitionsClerkUser.email,
+          name: petitionsClerkUser.name,
+          role: petitionsClerkUser.role,
+          userId: expect.anything(),
         },
-
-        {
-          Name: 'email',
-          Value: petitionsClerkUser.email,
-        },
-        {
-          Name: 'custom:role',
-          Value: petitionsClerkUser.role,
-        },
-        {
-          Name: 'name',
-          Value: petitionsClerkUser.name,
-        },
-      ],
-      UserPoolId: undefined,
-      Username: petitionsClerkUser.email,
-    });
-
+        email: petitionsClerkUser.email,
+        poolId: undefined,
+      },
+    );
     expect(
       applicationContext.getUserGateway().updateUser,
     ).not.toHaveBeenCalled();
   });
 
   it('should attempt to update the user when the user already exists', async () => {
-    applicationContext.getCognito().adminGetUser.mockResolvedValue({
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
       Username: petitionsClerkUser.userId,
     });
 
     await createOrUpdateUser({
       applicationContext,
-      password: mockTemporaryPassword,
       user: petitionsClerkUser,
     });
 
-    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
     expect(
-      applicationContext.getCognito().adminCreateUser,
+      applicationContext.getUserGateway().getUserByEmail,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUserGateway().createUser,
     ).not.toHaveBeenCalled();
     expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalled();
   });

@@ -4,5 +4,5 @@ export const isEmailAvailable = async ({ applicationContext, email }) => {
     .getUserByEmail(applicationContext, {
       email,
     });
-  return !!foundUser;
+  return !foundUser;
 };
