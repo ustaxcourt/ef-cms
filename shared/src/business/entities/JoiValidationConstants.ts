@@ -44,7 +44,9 @@ export const JoiValidationConstants = Object.freeze({
   ),
   US_POSTAL_CODE: STRING.regex(/^(\d{5}|\d{5}-\d{4})$/),
   UUID: STRING.uuid({
-    version: ['uuidv4'],
+    // eslint-disable-next-line spellcheck/spell-checker
+    // uuidv7 is what cognito generates
+    version: ['uuidv4', 'uuidv7'],
   }),
   YEAR_MAX_CURRENT: joi.number().integer().min(1900).max(CURRENT_YEAR),
 });
