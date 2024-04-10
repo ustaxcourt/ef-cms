@@ -11,6 +11,7 @@ async function main() {
 
   try {
     let paginationToken;
+    let completedUsers = 0;
 
     do {
       const data = await applicationContext.getCognito().listUsers({
@@ -22,9 +23,12 @@ async function main() {
       await assignCustomUserId(data, applicationContext);
       await lowerCaseUserEmail(data, applicationContext);
 
-      console.log('********** COMPLETED BATCH **********');
-
       paginationToken = data.PaginationToken;
+      completedUsers += 25;
+
+      console.log(
+        `********** COMPLETED BATCH, total users migrated ${completedUsers} **********`,
+      );
     } while (paginationToken);
   } catch (error) {
     console.error('Error updating users:', error);
