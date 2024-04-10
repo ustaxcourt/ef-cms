@@ -209,7 +209,6 @@ export const ContactPrimary = connect(
             constants.COUNTRY_TYPES.DOMESTIC && (
             <Address
               bind={bind}
-              showPlaceOfLegalResidence={!!data.petitionType}
               type="contactPrimary"
               onBlur={onBlur}
               onChange="updateFormValueAndSecondaryContactInfoSequence"
@@ -220,7 +219,6 @@ export const ContactPrimary = connect(
             constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress
               bind={bind}
-              showPlaceOfLegalResidence={!!data.petitionType}
               type="contactPrimary"
               onBlur={onBlur}
               onChange={onChange}

@@ -1,5 +1,4 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { LegalPlaceOfResidenceSelect } from '@web-client/views/StartCase/LegalPlaceOfResidenceSelect';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -22,7 +21,6 @@ export const Address = connect(
   },
   function Address({
     data,
-    showPlaceOfLegalResidence,
     type,
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
@@ -79,28 +77,6 @@ export const Address = connect(
               }}
             />
           </FormGroup>
-          {showPlaceOfLegalResidence && (
-            <FormGroup>
-              <label
-                aria-hidden
-                className="usa-label"
-                htmlFor={`${type}.placeOfLegalResidence`}
-              >
-                Place of legal residence{' '}
-                <span className="usa-hint">
-                  (if different from mailing address)
-                </span>
-              </label>
-              <LegalPlaceOfResidenceSelect
-                data={data}
-                type={type}
-                updateFormValueSequence={updateFormValueSequence}
-                usStates={usStates}
-                usStatesOther={usStatesOther}
-                validateStartCaseSequence={validateStartCaseSequence}
-              />
-            </FormGroup>
-          )}
         </Mobile>
       );
     }
@@ -182,29 +158,6 @@ export const Address = connect(
               </div>
             </div>
           </div>
-          {showPlaceOfLegalResidence && (
-            <FormGroup>
-              <label
-                aria-hidden
-                className="usa-label"
-                htmlFor={`${type}.placeOfLegalResidence`}
-              >
-                Place of legal residence{' '}
-                <span className="usa-hint">
-                  (if different from mailing address)
-                </span>
-              </label>
-              <LegalPlaceOfResidenceSelect
-                className="max-width-180"
-                data={data}
-                type={type}
-                updateFormValueSequence={updateFormValueSequence}
-                usStates={usStates}
-                usStatesOther={usStatesOther}
-                validateStartCaseSequence={validateStartCaseSequence}
-              />
-            </FormGroup>
-          )}
         </NonMobile>
       );
     }
