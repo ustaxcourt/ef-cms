@@ -13,12 +13,14 @@ import classNames from 'classnames';
 
 export const IrsNoticeUploadForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     attachmentToPetitionFile: props.attachmentToPetitionFile,
     caseType: props.caseType,
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     constants: state.constants,
     file: props.file,
     index: props.index,
+    lastDateOfPeriod: props.lastDateOfPeriod,
     removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
     taxYear: props.taxYear,
     updateIrsNoticeIndexPropertySequence:
@@ -30,8 +32,10 @@ export const IrsNoticeUploadForm = connect(
     caseType,
     caseTypeDescriptionHelper,
     constants,
+    DATE_FORMATS,
     file,
     index,
+    lastDateOfPeriod,
     removeIrsNoticeFromFormSequence,
     taxYear,
     updateIrsNoticeIndexPropertySequence,
@@ -39,7 +43,7 @@ export const IrsNoticeUploadForm = connect(
   }) {
     return (
       <>
-        <div className="usa-form-group">
+        <div className="usa-form-group john	">
           <FormGroup
             errorText={[
               validationErrors.attachmentToPetitionFile,
@@ -100,8 +104,8 @@ export const IrsNoticeUploadForm = connect(
             onChange="updateIrsNoticeIndexPropertySequence"
           />
 
-          <div className="usa-form-group">
-            <FormGroup>
+          <div className="grid-row grid-gap">
+            <FormGroup className="grid-col-7">
               <label className="usa-label" htmlFor="noticeIssuesTaxYear">
                 Tax year or period for which the notice was issued
               </label>
@@ -122,18 +126,19 @@ export const IrsNoticeUploadForm = connect(
               />
             </FormGroup>{' '}
             <DateSelector
-              // defaultValue={form.lastDateOfPeriod}
+              className="grid-col-5"
+              defaultValue={lastDateOfPeriod}
               errorText={validationErrors.lastDateOfPeriod}
               id="last-date-of-period"
               label="Last date of period"
-              // onChange={e => {
-              //   formatAndUpdateDateFromDatePickerSequence({
-              //     key: 'lastDateOfPeriod',
-              //     toFormat: DATE_FORMATS.ISO,
-              //     value: e.target.value,
-              //   });
-              //   validateAddDeficiencyStatisticsSequence();
-              // }}
+              onChange={e => {
+                updateIrsNoticeIndexPropertySequence({
+                  key: index.toString(),
+                  property: 'lastDateOfPeriod',
+                  toFormat: DATE_FORMATS.ISO,
+                  value: e.target.value,
+                });
+              }}
             />
           </div>
         </div>
