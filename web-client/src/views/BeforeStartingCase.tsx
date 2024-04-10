@@ -23,7 +23,7 @@ export const BeforeStartingCase = connect(
     formCancelToggleCancelSequence,
     showModal,
   }) {
-    const rdirectUrl = featureFlags[
+    const redirectUrl = featureFlags[
       ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key
     ]
       ? '/file-a-petition/new'
@@ -283,7 +283,7 @@ export const BeforeStartingCase = connect(
           <Button
             className="margin-top-5"
             data-testid="go-to-step-1"
-            href={rdirectUrl}
+            href={redirectUrl}
           >
             {"I'm Ready to Start"}
           </Button>

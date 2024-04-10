@@ -43,7 +43,7 @@ export const CaseListTable = connect(
       };
     }, []);
 
-    const rdirectUrl = featureFlags[
+    const redirectUrl = featureFlags[
       ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key
     ]
       ? '/file-a-petition/new'
@@ -56,7 +56,7 @@ export const CaseListTable = connect(
         data-testid="file-a-petition"
         href={
           dashboardExternalHelper.showFileACase
-            ? rdirectUrl
+            ? redirectUrl
             : '/before-filing-a-petition'
         }
         icon="file"
