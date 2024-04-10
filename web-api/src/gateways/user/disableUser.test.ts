@@ -5,7 +5,7 @@ describe('disableUser', () => {
   it('should make a call to disable the user with the provided email', async () => {
     const mockEmail = 'test@example.com';
     const mockUserPoolId = 'test';
-    process.env.USER_POOL_ID = mockUserPoolId;
+    applicationContext.environment.userPoolId = mockUserPoolId;
 
     await disableUser(applicationContext, {
       email: mockEmail,
