@@ -29,6 +29,12 @@ export async function signUp(
         Name: 'name',
         Value: name,
       },
+    ],
+    Username: email,
+  });
+
+  await applicationContext.getCognito().adminUpdateUserAttributes({
+    UserAttributes: [
       {
         Name: 'custom:userId',
         Value: userId,
@@ -38,6 +44,7 @@ export async function signUp(
         Value: role,
       },
     ],
+    UserPoolId: applicationContext.environment.userPoolId,
     Username: email,
   });
 
