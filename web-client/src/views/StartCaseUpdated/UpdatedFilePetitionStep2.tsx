@@ -12,15 +12,15 @@ import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep2 = connect(
   {
-    copyPrimaryContactSequence: sequences.copyPrimaryContactSequence,
     form: state.form,
+    resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     updateFilingTypeSequence: sequences.updateFilingTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
   function UpdatedFilePetitionStep2({
-    copyPrimaryContactSequence,
     form,
+    resetSecondaryAddressSequence,
     updatedFilePetitionHelper,
     updateFilingTypeSequence,
     updateFormValueSequence,
@@ -85,9 +85,9 @@ export const UpdatedFilePetitionStep2 = connect(
               onChange="updateFormValueSequence"
             />
             <PetitionerAndSpouseInfo
-              copyPrimaryContactSequence={copyPrimaryContactSequence}
               hasSpouseConsent={form.hasSpouseConsent}
               isSpouseDeceasedSelected={form.isSpouseDeceased}
+              resetSecondaryAddressSequence={resetSecondaryAddressSequence}
               updateFilingTypeSequence={updateFilingTypeSequence}
               updateFormValueSequence={updateFormValueSequence}
             />
@@ -105,9 +105,9 @@ export const UpdatedFilePetitionStep2 = connect(
 );
 
 function PetitionerAndSpouseInfo({
-  copyPrimaryContactSequence,
   hasSpouseConsent,
   isSpouseDeceasedSelected,
+  resetSecondaryAddressSequence,
   updateFilingTypeSequence,
   updateFormValueSequence,
 }) {
@@ -135,7 +135,6 @@ function PetitionerAndSpouseInfo({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                copyPrimaryContactSequence();
                 // validateStartCaseWizardSequence();
               }}
             />
@@ -154,6 +153,7 @@ function PetitionerAndSpouseInfo({
       {isSpouseDeceasedSelected === 'No' && (
         <Spouse
           hasSpouseConsent={hasSpouseConsent}
+          resetSecondaryAddressSequence={resetSecondaryAddressSequence}
           updateFormValueSequence={updateFormValueSequence}
         />
       )}
@@ -161,7 +161,11 @@ function PetitionerAndSpouseInfo({
   );
 }
 
-function Spouse({ hasSpouseConsent, updateFormValueSequence }) {
+function Spouse({
+  hasSpouseConsent,
+  resetSecondaryAddressSequence,
+  updateFormValueSequence,
+}) {
   return (
     <>
       <WarningNotificationComponent
@@ -184,8 +188,10 @@ function Spouse({ hasSpouseConsent, updateFormValueSequence }) {
               key: e.target.name,
               value: e.target.checked,
             });
-            // updateFormValueAndSecondaryContactInfoSequence
-            // clear out secondary contact if uncheck
+            resetSecondaryAddressSequence({
+              key: e.target.name,
+              value: e.target.checked,
+            });
           }}
         />
         <label className="usa-checkbox__label" htmlFor="spouse-consent">
