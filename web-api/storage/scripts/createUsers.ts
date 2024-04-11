@@ -1,3 +1,4 @@
+import { Practitioner } from '@shared/business/entities/Practitioner';
 import {
   ROLES,
   Role,
@@ -15,11 +16,9 @@ const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
 export const createUsers = async () => {
   usersByEmail = {};
 
-  const user = {
+  const applicationContext = createApplicationContext({
     role: ROLES.admin,
-  };
-
-  const applicationContext = createApplicationContext(user);
+  });
 
   await Promise.all(
     users.map(userRecord => {
@@ -35,11 +34,17 @@ export const createUsers = async () => {
         ROLES.inactivePractitioner,
       ];
       if (practitionerRoles.includes(userRecord.role as Role)) {
+        const practitionerUser = new Practitioner(
+          omit(userRecord, ['pk', 'sk']),
+        )
+          .validate()
+          .toRawObject();
+
         return applicationContext
           .getPersistenceGateway()
           .createUserRecords({
             applicationContext,
-            user: omit(userRecord, EXCLUDE_PROPS),
+            user: practitionerUser,
             userId,
           })
           .then(userCreated => {
@@ -75,13 +80,4 @@ export const createUsers = async () => {
       });
     }),
   );
-};
-
-export const asUserFromEmail = async (email, callback) => {
-  const asUser = usersByEmail[email];
-  if (!asUser) {
-    throw new Error('User not found');
-  }
-  const applicationContext = createApplicationContext(asUser);
-  return await callback(applicationContext);
 };
