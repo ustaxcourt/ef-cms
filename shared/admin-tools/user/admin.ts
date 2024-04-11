@@ -1,6 +1,7 @@
 import {
   AdminInitiateAuthCommandOutput,
   CognitoIdentityProvider,
+  UserNotFoundException,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
   generatePassword,
@@ -213,6 +214,7 @@ export const createDawsonUser = async ({
       });
     }
   } catch (err) {
+    console.log(err);
     throw new Error(`Unable to create Dawson user. Cause: ${err.cause}`);
   }
 };
@@ -232,7 +234,12 @@ export const createAdminAccount = async () => {
     }
   } catch (err) {
     const { code }: any = err;
-    if (code !== 'UserNotFoundException') {
+    if (code === undefined && !(err instanceof UserNotFoundException)) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    if (code && code !== 'UserNotFoundException') {
       console.error(err);
       process.exit(1);
     }
