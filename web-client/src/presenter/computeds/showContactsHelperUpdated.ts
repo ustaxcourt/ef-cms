@@ -1,19 +1,15 @@
-export const showContactsHelperUpdated = (
-  partyType,
-  PARTY_TYPES,
-  filingType,
-) => {
+export const showContactsHelperUpdated = (partyType, PARTY_TYPES, props) => {
   const showContactPrimary = getShowContactPrimary(
     partyType,
     PARTY_TYPES,
-    filingType,
+    props.value,
   );
 
-  const showContactSecondary = [
-    PARTY_TYPES.petitionerDeceasedSpouse,
-    PARTY_TYPES.petitionerSpouse,
-  ].includes(partyType);
-
+  const showContactSecondary = getShowContactSecondary(
+    partyType,
+    PARTY_TYPES,
+    props,
+  );
   return { showContactPrimary, showContactSecondary };
 };
 
@@ -40,4 +36,14 @@ function getShowContactPrimary(partyType, PARTY_TYPES, filingType) {
       PARTY_TYPES.trust,
     ].includes(partyType) || filingType === 'Myself and my spouse'
   );
+}
+function getShowContactSecondary(partyType, PARTY_TYPES, props) {
+  const isContactSecondaryPartyType = [
+    PARTY_TYPES.petitionerDeceasedSpouse,
+    PARTY_TYPES.petitionerSpouse,
+  ].includes(partyType);
+  if (!isContactSecondaryPartyType) return false;
+  if (!(props.key === 'isSpouseDeceased')) return false;
+  if (props.value === 'Yes') return true;
+  return false;
 }
