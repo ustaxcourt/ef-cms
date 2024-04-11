@@ -234,7 +234,6 @@ function SameAddressCheckbox({
             key: e.target.name,
             value: e.target.checked,
           });
-          // toggleUseContactPrimaryAddressSequence(); // not sure if we need
         }}
       />
       <label
