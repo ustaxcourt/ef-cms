@@ -26,7 +26,6 @@ aws s3 cp "s3://${EAST_BUCKET_NAME}/${DEPLOYING_COLOR}_puppeteer_lambda_layer.zi
 # streams & cron are ONLY on east
 aws s3 cp "s3://${EAST_BUCKET_NAME}/cron_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/cron_${CURRENT_COLOR}.js.zip"
 aws s3 cp "s3://${EAST_BUCKET_NAME}/streams_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/streams_${CURRENT_COLOR}.js.zip"
-aws s3 cp "s3://${EAST_BUCKET_NAME}/triggers_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/triggers_${CURRENT_COLOR}.js.zip"
 aws s3 cp "s3://${EAST_BUCKET_NAME}/bounce_handler_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/bounce_handler_${CURRENT_COLOR}.js.zip"
 aws s3 cp "s3://${EAST_BUCKET_NAME}/seal_in_lower_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/seal_in_lower_${CURRENT_COLOR}.js.zip"
 
