@@ -153,10 +153,6 @@ resource "aws_cognito_user_pool" "pool" {
 
   lifecycle {
     prevent_destroy = true
-
-    # the lambda_config isn't specified in this block because we only want to change its configuration during the color-change step of a deployment
-    # but we also don't want the lambda_config to be deleted, so we need to ignore its configuration
-    ignore_changes = [lambda_config]
   }
 }
 
@@ -182,12 +178,6 @@ resource "aws_cognito_user_pool_client" "client" {
   refresh_token_validity = 1
   access_token_validity  = 1
   id_token_validity      = 1
-
-  # TODO 10007 Cleanup: remove when triggers are removed 
-  callback_urls = [
-    "http://localhost:1234/log-in",
-    "https://app.${var.dns_domain}/log-in",
-  ]
 
   allowed_oauth_flows          = ["code", "implicit"]
   allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
@@ -361,12 +351,6 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   refresh_token_validity = 30 # irs app expects 30 days
   access_token_validity  = 1
   id_token_validity      = 1
-
-  # TODO 10007 Cleanup: remove when triggers are removed 
-  callback_urls = [
-    "http://localhost:1234/log-in",
-    "https://app.${var.dns_domain}/log-in",
-  ]
 
   allowed_oauth_flows          = ["code", "implicit"]
   allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
