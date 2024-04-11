@@ -1,3 +1,4 @@
+import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { sortDocketEntries } from './getFormattedCaseDetail';
 
@@ -5,27 +6,37 @@ describe('sortDocketEntries', () => {
   const getDateISO = () =>
     applicationContext.getUtilities().createISODateString();
 
+  const mockDocketEntry = {
+    ...MOCK_DOCUMENTS[0],
+    createdAtFormatted: '2019-08-04T00:10:02.000Z',
+  };
+
   it('should sort docket records by date by default', () => {
     // following dates selected to ensure test coverage of 'dateStringsCompared'
     const result = sortDocketEntries(
       [
         {
+          ...mockDocketEntry,
           filingDate: '2019-07-08',
           index: 2,
         },
         {
+          ...mockDocketEntry,
           filingDate: '2019-08-03T00:06:44.000Z',
           index: 1,
         },
         {
+          ...mockDocketEntry,
           filingDate: '2019-07-08T00:01:19.000Z',
           index: 4,
         },
         {
+          ...mockDocketEntry,
           filingDate: '2017-01-01T00:01:02.025Z',
           index: 3,
         },
         {
+          ...mockDocketEntry,
           filingDate: '2017-01-01T00:01:12.025Z',
           index: 5,
         },
@@ -40,22 +51,27 @@ describe('sortDocketEntries', () => {
     const result = sortDocketEntries(
       [
         {
+          ...mockDocketEntry,
           filingDate: '2019-08-03T00:10:02.000Z', // 8/2 @ 8:10:02PM EST
           index: 2,
         },
         {
+          ...mockDocketEntry,
           filingDate: '2019-08-03T00:10:00.000Z', // 8/2 @ 8:10:00PM EST
           index: 1,
         },
         {
+          ...mockDocketEntry,
           filingDate: '2019-08-03T02:06:10.000Z', // 8/2 @ 10:10:00PM EST
           index: 4,
         },
         {
+          ...mockDocketEntry,
           filingDate: '2019-08-03T06:06:44.000Z', // 8/3 @ 2:10:02AM EST
           index: 3,
         },
         {
+          ...mockDocketEntry,
           filingDate: '2019-09-01T00:01:12.025Z', // 8/31 @ 8:01:12AM EST
           index: 5,
         },
@@ -87,14 +103,17 @@ describe('sortDocketEntries', () => {
     const result = sortDocketEntries(
       [
         {
+          ...mockDocketEntry,
           filingDate: getDateISO(),
           index: 2,
         },
         {
+          ...mockDocketEntry,
           filingDate: getDateISO(),
           index: 3,
         },
         {
+          ...mockDocketEntry,
           filingDate: getDateISO(),
           index: 1,
         },
@@ -109,14 +128,17 @@ describe('sortDocketEntries', () => {
     const result = sortDocketEntries(
       [
         {
+          ...mockDocketEntry,
           filingDate: getDateISO(),
           index: 2,
         },
         {
+          ...mockDocketEntry,
           filingDate: getDateISO(),
           index: 3,
         },
         {
+          ...mockDocketEntry,
           filingDate: getDateISO(),
           index: 1,
         },
@@ -137,17 +159,21 @@ describe('sortDocketEntries', () => {
     const result = sortDocketEntries(
       [
         {
+          ...mockDocketEntry,
           createdAtFormatted: '2019-08-04T00:10:02.000Z',
           index: 2,
         },
         {
+          ...mockDocketEntry,
           createdAtFormatted: undefined,
         },
         {
+          ...mockDocketEntry,
           createdAtFormatted: '2019-08-03T00:10:02.000Z',
           index: 1,
         },
         {
+          ...mockDocketEntry,
           createdAtFormatted: undefined,
         },
       ],
@@ -156,17 +182,21 @@ describe('sortDocketEntries', () => {
 
     expect(result).toEqual([
       {
+        ...mockDocketEntry,
         createdAtFormatted: '2019-08-04T00:10:02.000Z',
         index: 2,
       },
       {
+        ...mockDocketEntry,
         createdAtFormatted: '2019-08-03T00:10:02.000Z',
         index: 1,
       },
       {
+        ...mockDocketEntry,
         createdAtFormatted: undefined,
       },
       {
+        ...mockDocketEntry,
         createdAtFormatted: undefined,
       },
     ]);

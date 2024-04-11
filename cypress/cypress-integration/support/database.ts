@@ -1,5 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import fs from 'fs';
 
 const dynamoClient = new DynamoDBClient({
   credentials: {
@@ -22,4 +23,16 @@ export const setAllowedTerminalIpAddresses = async (ipAddresses: string[]) => {
     },
     TableName: 'efcms-local',
   });
+};
+
+export const deleteAllFilesInFolder = (directoryPath: string) => {
+  if (!fs.existsSync(directoryPath)) return null;
+  fs.rmSync(directoryPath, { recursive: true });
+  return null;
+};
+
+export const ensureFolderExists = (directory: string) => {
+  if (fs.existsSync(directory)) return null;
+  fs.mkdirSync(directory);
+  return null;
 };
