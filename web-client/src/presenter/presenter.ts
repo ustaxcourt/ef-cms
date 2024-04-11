@@ -526,6 +526,7 @@ import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequen
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { updatedFilePetitionCompleteStep1Sequence } from './sequences/updatedFilePetitionCompleteStep1Sequence';
+import { updatedFilePetitionCompleteStep3Sequence } from './sequences/updatedFilePetitionCompleteStep3Sequence';
 import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespondenceDocumentSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { userContactUpdateCompleteSequence } from './sequences/userContactUpdateCompleteSequence';
@@ -1460,6 +1461,8 @@ export const presenterSequences = {
     updateWorkingCopySessionNoteSequence as unknown as Function,
   updatedFilePetitionCompleteStep1Sequence:
     updatedFilePetitionCompleteStep1Sequence as unknown as Function,
+  updatedFilePetitionCompleteStep3Sequence:
+    updatedFilePetitionCompleteStep3Sequence as unknown as Function,
   uploadCorrespondenceDocumentSequence:
     uploadCorrespondenceDocumentSequence as unknown as Function,
   uploadCourtIssuedDocumentSequence:
