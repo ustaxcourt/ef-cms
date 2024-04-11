@@ -167,11 +167,13 @@ const setupPractitioners = async () => {
 async function createOrUpdateUser(
   applicationContext: ServerApplicationContext,
   {
+    password,
     user,
   }: {
-    user: (RawUser | RawPractitioner) & { password: string };
+    user: RawUser | RawPractitioner;
+    password: string;
   },
-) {
+): Promise<void> {
   const userPoolId =
     user.role === ROLES.irsSuperuser
       ? process.env.USER_POOL_IRS_ID
@@ -180,61 +182,43 @@ async function createOrUpdateUser(
   const userExists = await applicationContext
     .getUserGateway()
     .getUserByEmail(applicationContext, {
-      email: user.email,
+      email: user.email!,
       poolId: userPoolId,
     });
 
+  const userId = userExists?.userId || applicationContext.getUniqueId();
+
+  let rawUser: RawUser | RawPractitioner;
+  if (
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner ||
+    user.role === ROLES.inactivePractitioner
+  ) {
+    rawUser = new Practitioner({
+      ...user,
+      userId,
+    })
+      .validate()
+      .toRawObject();
+  } else {
+    rawUser = new User({ ...user, userId }).validate().toRawObject();
+  }
+
+  await applicationContext.getPersistenceGateway().createUserRecords({
+    applicationContext,
+    user: rawUser,
+    userId: rawUser.userId,
+  });
+
   if (userExists) {
-    let rawUser: RawUser | RawPractitioner;
-    if (
-      user.role === ROLES.privatePractitioner ||
-      user.role === ROLES.irsPractitioner ||
-      user.role === ROLES.inactivePractitioner
-    ) {
-      rawUser = new Practitioner({
-        ...user,
-        userId: userExists.userId,
-      })
-        .validate()
-        .toRawObject();
-    } else {
-      rawUser = new User({ ...user, userId: userExists.userId })
-        .validate()
-        .toRawObject();
-    }
     await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: {
         role: rawUser.role,
       },
-      email: rawUser.email,
+      email: rawUser.email!,
       poolId: userPoolId,
     });
-
-    await applicationContext.getPersistenceGateway().createUserRecords({
-      applicationContext,
-      user: rawUser,
-      userId: rawUser.userId,
-    });
   } else {
-    const userId = applicationContext.getUniqueId();
-    let rawUser: RawUser | RawPractitioner;
-
-    if (
-      user.role === ROLES.privatePractitioner ||
-      user.role === ROLES.irsPractitioner ||
-      user.role === ROLES.inactivePractitioner
-    ) {
-      rawUser = new Practitioner({
-        ...user,
-        userId,
-      })
-        .validate()
-        .toRawObject();
-    } else {
-      rawUser = new User({ ...user, userId }).validate().toRawObject();
-    }
-
-    // create in cognito
     await applicationContext.getUserGateway().createUser(applicationContext, {
       attributesToUpdate: {
         email: rawUser.email,
@@ -245,31 +229,20 @@ async function createOrUpdateUser(
       email: rawUser.email!,
       poolId: userPoolId,
     });
+  }
 
-    // create in dynamo
-    await applicationContext.getPersistenceGateway().createUserRecords({
-      applicationContext,
-      user: rawUser,
-      userId: rawUser.userId,
+  if (user.role === ROLES.legacyJudge) {
+    await applicationContext.getUserGateway().disableUser(applicationContext, {
+      email: user.email!,
     });
   }
 
-  // const { userId } = await applicationContext
-  //   .getPersistenceGateway()
-  //   .createOrUpdateUser({
-  //     applicationContext,
-  //     user: rawUser,
-  //   });
-
-  // if (user.role === ROLES.legacyJudge) {
-  //   await applicationContext.getUserGateway().disableUser(applicationContext, {
-  //     email: user.email,
-  //   });
-  // }
-
-  // rawUser.userId = userId;
-
-  // return rawUser;
+  await applicationContext.getCognito().adminSetUserPassword({
+    Password: password,
+    Permanent: true,
+    UserPoolId: userPoolId,
+    Username: user.email?.toLowerCase(),
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
