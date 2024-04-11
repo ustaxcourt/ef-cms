@@ -6,7 +6,7 @@ import {
   petitionsClerkUser,
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
-import { createUserRecords } from './createOrUpdateUser';
+import { createUserRecords } from './createUserRecords';
 
 describe('createUserRecords', () => {
   const mockPrivatePractitionerUser = {

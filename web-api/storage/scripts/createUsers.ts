@@ -5,7 +5,7 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
-import { createUserRecords } from '../../../web-api/src/persistence/dynamo/users/createOrUpdateUser';
+import { createUserRecords } from '../../src/persistence/dynamo/users/createUserRecords';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
 
