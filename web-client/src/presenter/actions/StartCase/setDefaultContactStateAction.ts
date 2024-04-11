@@ -14,35 +14,31 @@ export const setDefaultContactStateAction = ({
   const partyType = get(state.form.partyType);
 
   const { showContactPrimary, showContactSecondary } =
-    showContactsHelperUpdated(partyType, PARTY_TYPES, props.value);
+    showContactsHelperUpdated(partyType, PARTY_TYPES, props);
 
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   if (props.key === 'filingType') {
-    store.set(
-      state.form.contactPrimary,
-      getDefaultContactState(showContactPrimary, COUNTRY_TYPES),
-    );
-    store.set(
-      state.form.contactSecondary,
-      getDefaultContactState(showContactSecondary, COUNTRY_TYPES),
-    );
+    // toggling filing type
+    const defaultContact = showContactPrimary
+      ? { countryType: COUNTRY_TYPES.DOMESTIC }
+      : {};
+    store.set(state.form.contactPrimary, defaultContact);
+    store.unset(state.form.contactSecondary);
     store.unset(state.form.useSameAsPrimary);
     store.unset(state.form.isSpouseDeceased);
     store.unset(state.form.hasSpouseConsent);
   }
 
   if (showContactSecondary) {
-    store.set(
-      state.form.contactSecondary,
-      getDefaultContactState(showContactSecondary, COUNTRY_TYPES),
-    );
+    // spouse deceased
+    store.set(state.form.contactSecondary, {});
     store.set(state.form.useSameAsPrimary, true);
     store.unset(state.form.hasSpouseConsent);
+  } else {
+    // spouse live
+    store.unset(state.form.contactSecondary);
+    store.unset(state.form.hasSpouseConsent);
+    store.unset(state.form.useSameAsPrimary);
   }
 };
-
-function getDefaultContactState(showContact, COUNTRY_TYPES) {
-  if (showContact) return { countryType: COUNTRY_TYPES.DOMESTIC };
-  return {};
-}
