@@ -156,10 +156,6 @@ Other start commands:
 
 - `npm run start:client`
 
-#### Login and test users
-
-There are two login mechanisms available — the legacy mock login system, and a new one that emulates AWS Cognito.
-
 ##### Mock login
 
 You can log in using the following accounts.
@@ -203,9 +199,6 @@ colvinschambers@example.com
 
 No password is required.
 
-##### AWS Cognito
-
-To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with the following accounts.
 
 ###### External Users
 
