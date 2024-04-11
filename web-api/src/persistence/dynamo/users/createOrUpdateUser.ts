@@ -4,8 +4,6 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { RawUser } from '@shared/business/entities/User';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -107,64 +105,4 @@ export const createUserRecords = async ({
     ...user,
     userId,
   };
-};
-
-export const createOrUpdateUser = async ({
-  applicationContext,
-  user,
-}: {
-  applicationContext: ServerApplicationContext;
-  user: RawUser;
-}) => {
-  const { email } = user;
-
-  if (!email) {
-    throw new Error('expected email to be defined');
-  }
-
-  let userPoolId =
-    user.role === ROLES.irsSuperuser
-      ? process.env.USER_POOL_IRS_ID
-      : process.env.USER_POOL_ID;
-
-  const foundUser = await applicationContext
-    .getUserGateway()
-    .getUserByEmail(applicationContext, {
-      email,
-      poolId: userPoolId,
-    });
-
-  if (!foundUser) {
-    const userId = applicationContext.getUniqueId();
-
-    await applicationContext.getUserGateway().createUser(applicationContext, {
-      attributesToUpdate: {
-        email,
-        name: user.name,
-        role: user.role,
-        userId,
-      },
-      email,
-      poolId: userPoolId,
-    });
-
-    return await createUserRecords({
-      applicationContext,
-      user,
-      userId,
-    });
-  } else {
-    await applicationContext.getUserGateway().updateUser(applicationContext, {
-      attributesToUpdate: {
-        role: user.role,
-      },
-      email,
-      poolId: userPoolId,
-    });
-    return await createUserRecords({
-      applicationContext,
-      user,
-      userId: foundUser.userId,
-    });
-  }
 };

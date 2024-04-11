@@ -6,56 +6,6 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-export const createUserRecords = async ({
-  applicationContext,
-  user,
-  userId,
-}: {
-  applicationContext: IApplicationContext;
-  user: any;
-  userId: string;
-}) => {
-  delete user.password;
-
-  if (user.barNumber === '') {
-    delete user.barNumber;
-  }
-
-  await client.put({
-    Item: {
-      ...user,
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-      userId,
-    },
-    applicationContext,
-  });
-
-  if (user.name && user.barNumber) {
-    const upperCaseName = user.name.toUpperCase();
-    await client.put({
-      Item: {
-        pk: `${user.role}|${upperCaseName}`,
-        sk: `user|${userId}`,
-      },
-      applicationContext,
-    });
-    const upperCaseBarNumber = user.barNumber.toUpperCase();
-    await client.put({
-      Item: {
-        pk: `${user.role}|${upperCaseBarNumber}`,
-        sk: `user|${userId}`,
-      },
-      applicationContext,
-    });
-  }
-
-  return {
-    ...user,
-    userId,
-  };
-};
-
 export const createOrUpdatePractitionerUser = async ({
   applicationContext,
   user,
@@ -79,7 +29,7 @@ export const createOrUpdatePractitionerUser = async ({
   const userEmail = user.email || user.pendingEmail;
 
   if (!userEmail) {
-    return await createUserRecords({
+    return await applicationContext.getPersistenceGateway().createUserRecords({
       applicationContext,
       user,
       userId,
@@ -115,7 +65,7 @@ export const createOrUpdatePractitionerUser = async ({
     userId = existingUser.userId;
   }
 
-  return await createUserRecords({
+  return await applicationContext.getPersistenceGateway().createUserRecords({
     applicationContext,
     user,
     userId,

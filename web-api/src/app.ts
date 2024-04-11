@@ -34,7 +34,6 @@ import { createMessageLambda } from './lambdas/messages/createMessageLambda';
 import { createPractitionerDocumentLambda } from './lambdas/practitioners/createPractitionerDocumentLambda';
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
 import { createTrialSessionLambda } from './lambdas/trialSessions/createTrialSessionLambda';
-import { createUserLambda } from './lambdas/users/createUserLambda';
 import { deleteAuthCookieLambda } from './lambdas/auth/deleteAuthCookieLambda';
 import { deleteCaseDeadlineLambda } from './lambdas/caseDeadline/deleteCaseDeadlineLambda';
 import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
@@ -973,7 +972,6 @@ app.get(
   );
   app.get('/users-by-role', lambdaWrapper(getAllUsersByRoleLambda));
   app.get('/users', lambdaWrapper(getUserLambda));
-  app.post('/users', lambdaWrapper(createUserLambda));
 }
 
 /**
