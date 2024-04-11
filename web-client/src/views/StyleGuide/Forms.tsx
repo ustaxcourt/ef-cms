@@ -338,6 +338,7 @@ export const Forms = () => (
             </label>
             <input
               className="usa-input"
+              data-testid="contact.address1"
               id="mailing-address-1"
               name="mailing-address-1"
               type="text"
