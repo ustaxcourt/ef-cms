@@ -1,4 +1,3 @@
-import * as client from '../../dynamodbClientService';
 import {
   ROLES,
   Role,
