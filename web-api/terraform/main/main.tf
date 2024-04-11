@@ -62,7 +62,6 @@ module "ef-cms_apis" {
   bounce_alert_recipients    = var.bounce_alert_recipients
   bounced_email_recipient    = var.bounced_email_recipient
   cognito_suffix             = var.cognito_suffix
-  cognito_table_name         = var.cognito_table_name
   default_account_pass       = var.default_account_pass
   deploying_color            = var.deploying_color
   deployment_timestamp       = var.deployment_timestamp
