@@ -19,7 +19,7 @@ export const updatePractitionerUser = async (
     bypassDocketEntry = false,
     user,
   }: { barNumber: string; bypassDocketEntry?: boolean; user: RawPractitioner },
-) => {
+): Promise<void> => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (
