@@ -1,9 +1,4 @@
 import {
-  AdminCreateUserCommandInput,
-  AuthFlowType,
-  ChallengeNameType,
-} from '@aws-sdk/client-cognito-identity-provider';
-import {
   InvalidRequest,
   NotFoundError,
   UnauthorizedError,
@@ -16,40 +11,20 @@ export const loginInteractor = async (
   { email, password }: { email: string; password: string },
 ): Promise<{ idToken: string; accessToken: string; refreshToken: string }> => {
   try {
-    const result = await applicationContext.getCognito().initiateAuth({
-      AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-      AuthParameters: {
-        PASSWORD: password,
-        USERNAME: email,
-      },
-      ClientId: applicationContext.environment.cognitoClientId,
-    });
-
-    if (result?.ChallengeName === ChallengeNameType.NEW_PASSWORD_REQUIRED) {
-      const PasswordChangeError = new Error('NewPasswordRequired');
-      PasswordChangeError.name = 'NewPasswordRequired';
-      throw PasswordChangeError;
-    }
-
-    if (
-      !result.AuthenticationResult?.AccessToken ||
-      !result.AuthenticationResult?.IdToken ||
-      !result.AuthenticationResult?.RefreshToken
-    ) {
+    return await applicationContext
+      .getUserGateway()
+      .initiateAuth(applicationContext, { email, password });
+  } catch (err: any) {
+    if (err.name === 'InitiateAuthError') {
       throw new Error('Unsuccessful authentication');
     }
 
-    return {
-      accessToken: result.AuthenticationResult.AccessToken,
-      idToken: result.AuthenticationResult.IdToken,
-      refreshToken: result.AuthenticationResult.RefreshToken,
-    };
-  } catch (err: any) {
     await authErrorHandling(applicationContext, {
       email,
       error: err,
       sendAccountConfirmation: true,
     });
+
     throw err;
   }
 };
@@ -72,12 +47,16 @@ export async function authErrorHandling(
     error.name === 'UserNotFoundException'
   ) {
     if (error.message?.includes('Temporary password has expired')) {
-      await resendTemporaryPassword(applicationContext, { email });
+      await applicationContext
+        .getUseCaseHelpers()
+        .resendTemporaryPassword(applicationContext, { email });
       throw new UnauthorizedError('User temporary password expired'); //403
     }
+
     if (error.message?.includes('Password attempts exceeded')) {
       throw new Error('Password attempts exceeded');
     }
+
     throw new UnidentifiedUserError('Invalid Username or Password'); //401 Security Concern do not reveal if the user account does not exist or if they have an incorrect password.
   }
 
@@ -117,22 +96,4 @@ async function resendAccountConfirmation(
       email,
       userId: user.userId,
     });
-}
-
-export async function resendTemporaryPassword(
-  applicationContext: ServerApplicationContext,
-  { email }: { email: string },
-): Promise<void> {
-  const input: AdminCreateUserCommandInput = {
-    DesiredDeliveryMediums: ['EMAIL'],
-    MessageAction: 'RESEND',
-    UserPoolId: applicationContext.environment.userPoolId,
-    Username: email,
-  };
-
-  if (process.env.STAGE !== 'prod') {
-    input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
-  }
-
-  await applicationContext.getCognito().adminCreateUser(input);
 }
