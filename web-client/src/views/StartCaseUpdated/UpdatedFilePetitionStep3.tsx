@@ -17,6 +17,8 @@ export const UpdatedFilePetitionStep3 = connect(
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
     startCaseHelper: state.startCaseHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updatedFilePetitionCompleteStep3Sequence:
+      sequences.updatedFilePetitionCompleteStep3Sequence,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep3({
@@ -25,6 +27,7 @@ export const UpdatedFilePetitionStep3 = connect(
     form,
     irsNoticeUploadFormInfo,
     startCaseHelper,
+    updatedFilePetitionCompleteStep3Sequence,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -117,7 +120,7 @@ export const UpdatedFilePetitionStep3 = connect(
 
         <Button
           onClick={() => {
-            console.log('next');
+            updatedFilePetitionCompleteStep3Sequence();
           }}
         >
           Next
