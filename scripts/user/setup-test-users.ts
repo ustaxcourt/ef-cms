@@ -10,38 +10,19 @@ import {
 } from '@web-api/applicationContext';
 import {
   activateAdminAccount,
-  createDawsonUser,
   deactivateAdminAccount,
 } from '../../shared/admin-tools/user/admin';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
-  'DEPLOYING_COLOR',
-  'EFCMS_DOMAIN',
+  // 'DEPLOYING_COLOR',
+  // 'EFCMS_DOMAIN',
   'USTC_ADMIN_PASS',
   'USTC_ADMIN_USER',
 ]);
 
-const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
-
-const baseUser = {
-  birthYear: '1950',
-  contact: {
-    address1: '234 Main St',
-    address2: 'Apartment 4',
-    address3: 'Under the stairs',
-    city: 'Chicago',
-    countryType: 'domestic',
-    phone: '+1 (555) 555-5555',
-    postalCode: '61234',
-    state: 'IL',
-  },
-  employer: '',
-  lastName: 'Test',
-  password: DEFAULT_ACCOUNT_PASS,
-  suffix: '',
-};
+const { DEFAULT_ACCOUNT_PASS } = process.env;
 
 const createManyAccounts = async (
   applicationContext: ServerApplicationContext,
@@ -54,21 +35,33 @@ const createManyAccounts = async (
         : `${role}${i}@example.com`;
 
     const user = {
-      ...baseUser,
+      birthYear: '1950',
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: 'domestic',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
       email,
+      employer: '',
+      lastName: 'Test',
       name: `Test ${role}${i}`,
       role,
       section,
+      suffix: '',
     };
+
     await createOrUpdateUser(applicationContext, {
+      password: DEFAULT_ACCOUNT_PASS!,
       user,
     });
   }
 };
 
-/**
- * Create Court Users
- */
 const setupCourtUsers = async (
   applicationContext: ServerApplicationContext,
 ) => {
@@ -96,17 +89,19 @@ const setupCourtUsers = async (
   await Promise.all(promises);
 };
 
-/**
- * Create Petitioners
- */
-const setupPetitioners = async () => {
-  await createManyAccounts([30, 'petitioner', 'petitioner']);
+const setupPetitioners = async (
+  applicationContext: ServerApplicationContext,
+) => {
+  await createManyAccounts(applicationContext, [
+    30,
+    'petitioner',
+    'petitioner',
+  ]);
 };
 
-/**
- * Create Practitioners
- */
-const setupPractitioners = async () => {
+const setupPractitioners = async (
+  applicationContext: ServerApplicationContext,
+) => {
   const practitioners = {
     irsPractitioner: [
       'RT6789',
@@ -139,27 +134,40 @@ const setupPractitioners = async () => {
       const employer = role === 'privatePractitioner' ? 'Private' : 'IRS';
       const email = `${role}${i + 1}@example.com`;
       const user = {
-        ...baseUser,
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber,
+        birthYear: '1950',
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          countryType: 'domestic',
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
         email,
         employer,
         firmName: 'Some Firm',
         firstName: `${role} ${i + 1}`,
+        lastName: 'Test',
         name: `Test ${role}${i + 1}`,
         originalBarState: 'WA',
         password: DEFAULT_ACCOUNT_PASS,
         practitionerType: 'Attorney',
         role,
         section: role,
+        suffix: '',
       };
-      return createDawsonUser({
-        deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
-        setPermanentPassword: true,
+
+      return createOrUpdateUser(applicationContext, {
+        password: DEFAULT_ACCOUNT_PASS!,
         user,
       });
     });
+
     await Promise.all(promises);
   }
 };
@@ -248,15 +256,21 @@ async function createOrUpdateUser(
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
+
   console.log('== Activating Admin Account');
   await activateAdminAccount();
+
   console.log('== Creating Court Users');
   await setupCourtUsers(applicationContext);
+
   console.log('== Creating Petitioners');
-  await setupPetitioners();
+  await setupPetitioners(applicationContext);
+
   console.log('== Creating Practitioners');
-  await setupPractitioners();
+  await setupPractitioners(applicationContext);
+
   console.log('== Deactivating Admin Account');
   await deactivateAdminAccount();
+
   console.log('== Done!');
 })();
