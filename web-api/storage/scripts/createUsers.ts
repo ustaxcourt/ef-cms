@@ -9,19 +9,16 @@ import { createUserRecords } from '../../../web-api/src/persistence/dynamo/users
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
 
-let usersByEmail = {};
-
-const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
-
 export const createUsers = async () => {
-  usersByEmail = {};
+  const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
+  const usersByEmail = {};
 
   const applicationContext = createApplicationContext({
     role: ROLES.admin,
   });
 
   await Promise.all(
-    users.map(userRecord => {
+    users.map(async userRecord => {
       if (!userRecord.userId) {
         throw new Error('User has no uuid');
       }
@@ -40,44 +37,48 @@ export const createUsers = async () => {
           .validate()
           .toRawObject();
 
-        return applicationContext
+        const userCreated = await applicationContext
           .getPersistenceGateway()
           .createUserRecords({
             applicationContext,
             user: practitionerUser,
             userId,
-          })
-          .then(userCreated => {
-            if (usersByEmail[userCreated.email]) {
-              throw new Error('User already exists');
-            }
-            usersByEmail[userCreated.email] = userCreated;
           });
+
+        if (usersByEmail[userCreated.email]) {
+          throw new Error('User already exists');
+        }
+
+        usersByEmail[userCreated.email] = userCreated;
+        return;
       }
 
       if (userRecord.role === ROLES.petitioner) {
-        return createPetitionerUserRecords({
+        const userCreated = await createPetitionerUserRecords({
           applicationContext,
           user: omit(userRecord, EXCLUDE_PROPS),
           userId,
-        }).then(userCreated => {
-          if (usersByEmail[userCreated.email]) {
-            throw new Error('User already exists');
-          }
-          usersByEmail[userCreated.email] = userCreated;
         });
-      }
 
-      return createUserRecords({
-        applicationContext,
-        user: omit(userRecord, EXCLUDE_PROPS),
-        userId,
-      }).then(userCreated => {
         if (usersByEmail[userCreated.email]) {
           throw new Error('User already exists');
         }
         usersByEmail[userCreated.email] = userCreated;
+        return;
+      }
+
+      const userCreated = await createUserRecords({
+        applicationContext,
+        user: omit(userRecord, EXCLUDE_PROPS),
+        userId,
       });
+
+      if (usersByEmail[userCreated.email]) {
+        throw new Error('User already exists');
+      }
+
+      usersByEmail[userCreated.email] = userCreated;
+      return;
     }),
   );
 };
