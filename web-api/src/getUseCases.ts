@@ -31,14 +31,13 @@ import { createCaseInteractor } from '../../shared/src/business/useCases/createC
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
 import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
 import { createMessageInteractor } from '../../shared/src/business/useCases/messages/createMessageInteractor';
-import { createPetitionerAccountInteractor } from '../../shared/src/business/useCases/users/createPetitionerAccountInteractor';
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
-import { createPractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor';
+import { createPractitionerUserInteractor } from './business/useCases/practitioner/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor';
-import { createUserInteractor } from '../../shared/src/business/useCases/users/createUserInteractor';
+import { createUserInteractor } from './business/useCases/user/createUserInteractor';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor';
-import { deleteCounselFromCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
+import { deleteCounselFromCaseInteractor } from './business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor';
 import { deleteDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/deleteDocketEntryWorksheetInteractor';
 import { deletePractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/deletePractitionerDocumentInteractor';
@@ -132,7 +131,6 @@ import { getTrialSessionsForJudgeActivityReportInteractor } from '../../shared/s
 import { getTrialSessionsForJudgeInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionsForJudgeInteractor';
 import { getTrialSessionsInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor';
 import { getUploadPolicyInteractor } from '../../shared/src/business/useCases/getUploadPolicyInteractor';
-import { getUserByIdInteractor } from '../../shared/src/business/useCases/getUserByIdInteractor';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/business/useCases/caseNote/getUserCaseNoteForCasesInteractor';
 import { getUserCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor';
 import { getUserInteractor } from '../../shared/src/business/useCases/getUserInteractor';
@@ -248,7 +246,6 @@ const useCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createCsvCustomCaseReportFileInteractor,
   createMessageInteractor,
-  createPetitionerAccountInteractor,
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
@@ -349,7 +346,6 @@ const useCases = {
   getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
   getUploadPolicyInteractor,
-  getUserByIdInteractor,
   getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
   getUserInteractor,
