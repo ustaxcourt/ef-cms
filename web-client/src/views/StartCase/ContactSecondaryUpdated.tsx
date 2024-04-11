@@ -33,10 +33,9 @@ export const ContactSecondaryUpdated = connect(
     onChange: props.onChange,
 
     onChangeSequence: sequences[props.onChange],
+    resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
     showSameAsPrimaryCheckbox: props.showSameAsPrimaryCheckbox,
-    updateFormValueAndSecondaryContactInfoSequence:
-      sequences.updateFormValueAndSecondaryContactInfoSequence,
     //   validationErrors: state.validationErrors,
   },
   function ContactSecondaryUpdated({
@@ -48,9 +47,9 @@ export const ContactSecondaryUpdated = connect(
     // onBlurSequence,
     onChange,
     onChangeSequence,
+    resetSecondaryAddressSequence,
     showPlaceOfLegalResidence,
     showSameAsPrimaryCheckbox,
-    updateFormValueAndSecondaryContactInfoSequence,
     // validationErrors = {} as {
     //   contactSecondary?: {
     //     secondaryName: string;
@@ -99,9 +98,7 @@ export const ContactSecondaryUpdated = connect(
           )}
           {showSameAsPrimaryCheckbox && (
             <SameAddressCheckbox
-              updateFormValueAndSecondaryContactInfoSequence={
-                updateFormValueAndSecondaryContactInfoSequence
-              }
+              resetSecondaryAddressSequence={resetSecondaryAddressSequence}
               useSameAsPrimary={data.useSameAsPrimary}
             />
           )}
@@ -218,7 +215,7 @@ export const ContactSecondaryUpdated = connect(
 );
 
 function SameAddressCheckbox({
-  updateFormValueAndSecondaryContactInfoSequence,
+  resetSecondaryAddressSequence,
   useSameAsPrimary,
 }) {
   return (
@@ -230,11 +227,10 @@ function SameAddressCheckbox({
         name="useSameAsPrimary"
         type="checkbox"
         onChange={e => {
-          updateFormValueAndSecondaryContactInfoSequence({
+          resetSecondaryAddressSequence({
             key: e.target.name,
             value: e.target.checked,
           });
-          // toggleUseContactPrimaryAddressSequence(); // not sure if we need
         }}
       />
       <label
@@ -243,7 +239,7 @@ function SameAddressCheckbox({
         htmlFor="use-same-address-above"
         id="use-same-address-above-label"
       >
-        Use same address &amp; phone number as above
+        Use same mailing address as above
       </label>
     </FormGroup>
   );

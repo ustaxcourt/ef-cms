@@ -28,6 +28,7 @@ export const updatePartyTypeActionUpdated = ({
     store.unset(state.form.isSpouseDeceased);
     store.unset(state.form.estateType);
     store.unset(state.form.minorIncompetentType);
+    store.unset(state.form.hasSpouseConsent);
   };
 
   const updatePartyType = (newPartyType: string) => {
