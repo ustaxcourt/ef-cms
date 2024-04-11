@@ -1,4 +1,14 @@
 import {
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { RawUser, User } from '@shared/business/entities/User';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import {
   activateAdminAccount,
   createDawsonUser,
   deactivateAdminAccount,
@@ -33,11 +43,10 @@ const baseUser = {
   suffix: '',
 };
 
-const createManyAccounts = async ([num, role, section]: [
-  number,
-  string,
-  string,
-]) => {
+const createManyAccounts = async (
+  applicationContext: ServerApplicationContext,
+  [num, role, section]: [number, string, string],
+) => {
   for (let i = 1; i <= num; i++) {
     const email =
       role === 'chambers'
@@ -51,9 +60,7 @@ const createManyAccounts = async ([num, role, section]: [
       role,
       section,
     };
-    await createDawsonUser({
-      deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
-      setPermanentPassword: true,
+    await createOrUpdateUser(applicationContext, {
       user,
     });
   }
@@ -62,7 +69,9 @@ const createManyAccounts = async ([num, role, section]: [
 /**
  * Create Court Users
  */
-const setupCourtUsers = async () => {
+const setupCourtUsers = async (
+  applicationContext: ServerApplicationContext,
+) => {
   const userSet: Array<[number, string, string]> = [
     [10, 'adc', 'adc'],
     [10, 'admissionsclerk', 'admissions'],
@@ -81,7 +90,9 @@ const setupCourtUsers = async () => {
     [5, 'chambers', 'kerrigansChambers'],
   ];
 
-  const promises = userSet.map(createManyAccounts);
+  const promises = userSet.map(user =>
+    createManyAccounts(applicationContext, user),
+  );
   await Promise.all(promises);
 };
 
@@ -153,12 +164,121 @@ const setupPractitioners = async () => {
   }
 };
 
+async function createOrUpdateUser(
+  applicationContext: ServerApplicationContext,
+  {
+    user,
+  }: {
+    user: (RawUser | RawPractitioner) & { password: string };
+  },
+) {
+  const userPoolId =
+    user.role === ROLES.irsSuperuser
+      ? process.env.USER_POOL_IRS_ID
+      : process.env.USER_POOL_ID;
+
+  const userExists = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
+      email: user.email,
+      poolId: userPoolId,
+    });
+
+  if (userExists) {
+    let rawUser: RawUser | RawPractitioner;
+    if (
+      user.role === ROLES.privatePractitioner ||
+      user.role === ROLES.irsPractitioner ||
+      user.role === ROLES.inactivePractitioner
+    ) {
+      rawUser = new Practitioner({
+        ...user,
+        userId: userExists.userId,
+      })
+        .validate()
+        .toRawObject();
+    } else {
+      rawUser = new User({ ...user, userId: userExists.userId })
+        .validate()
+        .toRawObject();
+    }
+    await applicationContext.getUserGateway().updateUser(applicationContext, {
+      attributesToUpdate: {
+        role: rawUser.role,
+      },
+      email: rawUser.email,
+      poolId: userPoolId,
+    });
+
+    await applicationContext.getPersistenceGateway().createUserRecords({
+      applicationContext,
+      user: rawUser,
+      userId: rawUser.userId,
+    });
+  } else {
+    const userId = applicationContext.getUniqueId();
+    let rawUser: RawUser | RawPractitioner;
+
+    if (
+      user.role === ROLES.privatePractitioner ||
+      user.role === ROLES.irsPractitioner ||
+      user.role === ROLES.inactivePractitioner
+    ) {
+      rawUser = new Practitioner({
+        ...user,
+        userId,
+      })
+        .validate()
+        .toRawObject();
+    } else {
+      rawUser = new User({ ...user, userId }).validate().toRawObject();
+    }
+
+    // create in cognito
+    await applicationContext.getUserGateway().createUser(applicationContext, {
+      attributesToUpdate: {
+        email: rawUser.email,
+        name: rawUser.name,
+        role: rawUser.role,
+        userId,
+      },
+      email: rawUser.email!,
+      poolId: userPoolId,
+    });
+
+    // create in dynamo
+    await applicationContext.getPersistenceGateway().createUserRecords({
+      applicationContext,
+      user: rawUser,
+      userId: rawUser.userId,
+    });
+  }
+
+  // const { userId } = await applicationContext
+  //   .getPersistenceGateway()
+  //   .createOrUpdateUser({
+  //     applicationContext,
+  //     user: rawUser,
+  //   });
+
+  // if (user.role === ROLES.legacyJudge) {
+  //   await applicationContext.getUserGateway().disableUser(applicationContext, {
+  //     email: user.email,
+  //   });
+  // }
+
+  // rawUser.userId = userId;
+
+  // return rawUser;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
+  const applicationContext = createApplicationContext({});
   console.log('== Activating Admin Account');
   await activateAdminAccount();
   console.log('== Creating Court Users');
-  await setupCourtUsers();
+  await setupCourtUsers(applicationContext);
   console.log('== Creating Petitioners');
   await setupPetitioners();
   console.log('== Creating Practitioners');

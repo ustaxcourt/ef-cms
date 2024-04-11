@@ -22,10 +22,10 @@ import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
-import { createOrUpdateUser } from './persistence/dynamo/users/createOrUpdateUser';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
+import { createUserRecords } from './persistence/dynamo/users/createOrUpdateUser';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteCaseDeadline } from './persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
@@ -232,10 +232,10 @@ const gatewayMethods = {
     createNewPetitionerUser,
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
-    createOrUpdateUser,
     createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
+    createUserRecords,
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,

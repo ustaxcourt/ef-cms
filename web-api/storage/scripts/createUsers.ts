@@ -4,7 +4,6 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
-import { createUserRecords as createPractitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createUserRecords } from '../../../web-api/src/persistence/dynamo/users/createOrUpdateUser';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
@@ -36,16 +35,19 @@ export const createUsers = async () => {
         ROLES.inactivePractitioner,
       ];
       if (practitionerRoles.includes(userRecord.role as Role)) {
-        return createPractitionerUserRecords({
-          applicationContext,
-          user: omit(userRecord, EXCLUDE_PROPS),
-          userId,
-        }).then(userCreated => {
-          if (usersByEmail[userCreated.email]) {
-            throw new Error('User already exists');
-          }
-          usersByEmail[userCreated.email] = userCreated;
-        });
+        return applicationContext
+          .getPersistenceGateway()
+          .createUserRecords({
+            applicationContext,
+            user: omit(userRecord, EXCLUDE_PROPS),
+            userId,
+          })
+          .then(userCreated => {
+            if (usersByEmail[userCreated.email]) {
+              throw new Error('User already exists');
+            }
+            usersByEmail[userCreated.email] = userCreated;
+          });
       }
 
       if (userRecord.role === ROLES.petitioner) {
