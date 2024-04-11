@@ -128,42 +128,39 @@ export const changePasswordInteractor = async (
         throw new NotFoundError(`User not found with email: ${email}`);
       }
 
-      await applicationContext.getCognito().confirmForgotPassword({
-        ClientId: applicationContext.environment.cognitoClientId,
-        ConfirmationCode: code,
-        Password: password,
-        Username: email,
-      });
-
-      const result = await applicationContext.getCognito().initiateAuth({
-        AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-        AuthParameters: {
-          PASSWORD: password,
-          USERNAME: email,
-        },
-        ClientId: applicationContext.environment.cognitoClientId,
-      });
-
-      if (
-        !result.AuthenticationResult?.AccessToken ||
-        !result.AuthenticationResult?.IdToken ||
-        !result.AuthenticationResult?.RefreshToken
-      ) {
-        throw new Error(`Unable to change password for email: ${email}`);
+      if (!code) {
+        applicationContext.logger.info(
+          `Unable to change password for ${email}. No code was provided.`,
+        );
+        throw new Error('Unable to change password');
       }
 
-      return {
-        accessToken: result.AuthenticationResult.AccessToken,
-        idToken: result.AuthenticationResult.IdToken,
-        refreshToken: result.AuthenticationResult.RefreshToken,
-      };
+      await applicationContext
+        .getUserGateway()
+        .changePassword(applicationContext, {
+          code,
+          email,
+          newPassword: password,
+        });
+
+      return await applicationContext
+        .getUserGateway()
+        .initiateAuth(applicationContext, {
+          email,
+          password,
+        });
     }
   } catch (err: any) {
+    if (err.name === 'InitiateAuthError') {
+      throw new Error(`Unable to change password for email: ${email}`);
+    }
+
     await authErrorHandling(applicationContext, {
       email,
       error: err,
       sendAccountConfirmation: false,
     });
+
     throw err;
   }
 };
