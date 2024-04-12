@@ -4,7 +4,7 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import readline from 'readline';
 
 const { ENV } = process.env;
-const UserPoolCache = {};
+const UserPoolCache: Record<string, string> = {};
 
 // Look up the current version so that we can perform searches against it
 export const getVersion = async (): Promise<string> => {
@@ -33,6 +33,29 @@ export const getVersion = async (): Promise<string> => {
   return result.Item.current;
 };
 
+export const getDestinationTableName = async (): Promise<string> => {
+  requireEnvVars(['ENV']);
+
+  const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
+  const documentClient = DynamoDBDocument.from(dynamodbClient, {
+    marshallOptions: { removeUndefinedValues: true },
+  });
+  const result = await documentClient.get({
+    Key: {
+      pk: 'destination-table-version',
+      sk: 'destination-table-version',
+    },
+    TableName: `efcms-deploy-${ENV}`,
+  });
+
+  const version = result?.Item?.current;
+  if (version) {
+    return `efcms-${ENV}-${version}`;
+  } else {
+    throw 'Could not determine the current version';
+  }
+};
+
 // Exit if any of the provided strings are not set as environment variables
 export const requireEnvVars = (requiredEnvVars: Array<string>): void => {
   const envVars = Object.keys(process.env);
@@ -48,8 +71,7 @@ export const requireEnvVars = (requiredEnvVars: Array<string>): void => {
   }
 };
 
-// Ascertain the Cognito User Pool based on the current environment
-export const getUserPoolId = async (): Promise<string | undefined> => {
+export const getUserPoolId = async (): Promise<string> => {
   requireEnvVars(['ENV']);
 
   if (UserPoolCache[ENV!]) {
@@ -68,7 +90,7 @@ export const getUserPoolId = async (): Promise<string | undefined> => {
     }
   }
 
-  return undefined;
+  throw new Error(`No user pool found for name: efcms-${ENV}`);
 };
 
 // Ascertain the Client ID for the Cognito User Pool we use to authenticate users
@@ -138,7 +160,6 @@ const shuffle = (arr: Array<string>): Array<string> => {
   return arr;
 };
 
-// Wrapper for readline that asks a question and returns the input from stdin
 export const askQuestion = (query: string): Promise<string> => {
   const rl = readline.createInterface({
     input: process.stdin,

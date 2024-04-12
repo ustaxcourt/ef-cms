@@ -1,7 +1,6 @@
 import {
   AdminInitiateAuthCommandOutput,
   CognitoIdentityProvider,
-  UserNotFoundException,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
   generatePassword,
@@ -11,108 +10,26 @@ import {
 } from '../util';
 import axios from 'axios';
 
-const { ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
+const { USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
 let cachedAuthToken;
 
-export const enableUser = async email => {
+export const enableUser = async (email: string): Promise<void> => {
   const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   await cognito.adminEnableUser({
     UserPoolId,
-    Username: email,
+    Username: email.toLowerCase(),
   });
 };
 
-export const disableUser = async email => {
+export const disableUser = async (email: string): Promise<void> => {
   const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   await cognito.adminDisableUser({
     UserPoolId,
-    Username: email,
+    Username: email.toLowerCase(),
   });
-};
-
-export const activateAdminAccount = async () => {
-  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-  const UserPoolId = await getUserPoolId();
-
-  try {
-    await cognito.adminEnableUser({
-      UserPoolId,
-      Username: USTC_ADMIN_USER,
-    });
-  } catch (err) {
-    const { code }: any = err;
-    switch (code) {
-      case 'UserNotFoundException':
-        console.error(
-          `ERROR: Admin User: ${USTC_ADMIN_USER} does not exist for ${ENV}`,
-        );
-        break;
-      default:
-        console.error(err);
-        break;
-    }
-    process.exit(1);
-  }
-};
-
-export const deactivateAdminAccount = async () => {
-  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-  const UserPoolId = await getUserPoolId();
-
-  await cognito.adminDisableUser({
-    UserPoolId,
-    Username: USTC_ADMIN_USER,
-  });
-};
-
-/**
- * This verifies that the USTC admin user is disabled in Cognito
- */
-export const verifyAdminUserDisabled = async ({ attempt }) => {
-  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-  const UserPoolId = await getUserPoolId();
-
-  try {
-    let result = await cognito.adminGetUser({
-      UserPoolId,
-      Username: USTC_ADMIN_USER,
-    });
-
-    if (result && result.Enabled === false) {
-      console.log('USTC Admin user is disabled in verifyAdminUserDisabled.');
-      return;
-    } else {
-      console.error(
-        'USTC Admin user is NOT disabled as expected. Disabling...',
-      );
-
-      const maxRetries = 3;
-      await cognito.adminDisableUser({
-        UserPoolId,
-        Username: USTC_ADMIN_USER,
-      });
-
-      if (attempt < maxRetries) {
-        attempt++;
-        await verifyAdminUserDisabled({ attempt });
-      } else {
-        console.error(
-          'Unable to verify that the USTC Admin user is disabled - max retries reached. Exiting...',
-        );
-        process.exit(1);
-      }
-    }
-  } catch (err) {
-    const { code, message }: any = err;
-    if (code !== 'UserNotFoundException') {
-      console.log('err', err);
-      console.error(message);
-      process.exit(1);
-    }
-  }
 };
 
 export const getAuthToken = async () => {
@@ -217,58 +134,4 @@ export const createDawsonUser = async ({
     console.log(err);
     throw new Error(`Unable to create Dawson user. Cause: ${err.cause}`);
   }
-};
-
-export const createAdminAccount = async () => {
-  // does the user exist?
-  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-  const UserPoolId = await getUserPoolId();
-  try {
-    let result = await cognito.adminGetUser({
-      UserPoolId,
-      Username: USTC_ADMIN_USER,
-    });
-    if (result) {
-      console.log('Admin user already exists - not going to try to create it');
-      return;
-    }
-  } catch (err) {
-    const { code }: any = err;
-    if (code === undefined && !(err instanceof UserNotFoundException)) {
-      console.error(err);
-      process.exit(1);
-    }
-
-    if (code && code !== 'UserNotFoundException') {
-      console.error(err);
-      process.exit(1);
-    }
-  }
-  await cognito.adminCreateUser({
-    MessageAction: 'SUPPRESS',
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: USTC_ADMIN_USER,
-      },
-      {
-        Name: 'email_verified',
-        Value: 'true',
-      },
-      {
-        Name: 'custom:role',
-        Value: 'admin',
-      },
-    ],
-    UserPoolId,
-    Username: USTC_ADMIN_USER,
-  });
-
-  await cognito.adminSetUserPassword({
-    Password: USTC_ADMIN_PASS,
-    Permanent: true,
-    UserPoolId,
-    Username: USTC_ADMIN_USER,
-  });
-  return true;
 };

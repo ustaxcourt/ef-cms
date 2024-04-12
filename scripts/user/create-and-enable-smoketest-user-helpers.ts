@@ -1,12 +1,13 @@
+import { createApplicationContext } from '@web-api/applicationContext';
+import { createOrUpdateUser } from 'scripts/user/setup-test-users';
+import { enableUser } from '../../shared/admin-tools/user/admin';
+import { environment } from '@web-api/environment';
 import {
-  activateAdminAccount,
-  createAdminAccount,
-  createDawsonUser,
-  deactivateAdminAccount,
-  enableUser,
-} from '../../shared/admin-tools/user/admin';
+  getDestinationTableName,
+  getUserPoolId,
+} from 'shared/admin-tools/util';
 
-const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
+const { DEFAULT_ACCOUNT_PASS } = process.env;
 
 const baseUser = {
   birthYear: '1950',
@@ -35,26 +36,22 @@ const user = {
 };
 
 export const createAndEnableSmoketestUser = async () => {
+  const userPoolId = await getUserPoolId();
+  const destinationTable = await getDestinationTableName();
+  environment.userPoolId = userPoolId;
+  environment.dynamoDbTableName = destinationTable;
+  const applicationContext = createApplicationContext({});
+
   try {
-    console.log('About to create admin user!');
-    await createAdminAccount();
-
-    console.log('About to activate admin user!');
-    await activateAdminAccount();
-
     console.log('About to create test user!');
-    await createDawsonUser({
-      deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
-      setPermanentPassword: true,
+    await createOrUpdateUser(applicationContext, {
+      password: DEFAULT_ACCOUNT_PASS!,
       user,
     });
     console.log('Successfully created test user!');
 
     await enableUser(user.email);
     console.log('Successfully enabled test user!');
-
-    console.log('About to deactivate admin user!');
-    await deactivateAdminAccount();
   } catch (e) {
     console.log('Unable to create and enable test user. Error was: ', e);
     process.exit(1);

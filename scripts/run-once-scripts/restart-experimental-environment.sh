@@ -42,7 +42,6 @@ npm run deploy:api "${ENV}"
 npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.ts "${DESTINATION_TABLE}"
 
 # Setting up users
-npx ts-node --transpile-only scripts/user/setup-admin.ts
 # shellcheck disable=SC1091
 . ./scripts/user/setup-test-users.sh "${ENV}"
 
