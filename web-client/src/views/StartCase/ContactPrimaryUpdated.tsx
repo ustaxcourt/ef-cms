@@ -16,6 +16,8 @@ const props = cerebralProps as unknown as {
   nameLabel: string;
   displayInCareOf?: boolean;
   showPlaceOfLegalResidence?: boolean;
+  isSecondaryFieldOptional?: boolean;
+  secondaryLabel?: string;
 };
 
 export const ContactPrimaryUpdated = connect(
@@ -23,11 +25,13 @@ export const ContactPrimaryUpdated = connect(
     bind: props.bind,
     constants: state.constants,
     data: state[props.bind],
+    isSecondaryFieldOptional: props.isSecondaryFieldOptional,
     nameLabel: props.nameLabel,
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
+    secondaryLabel: props.secondaryLabel,
     showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
@@ -37,11 +41,13 @@ export const ContactPrimaryUpdated = connect(
     bind,
     constants,
     data,
+    isSecondaryFieldOptional,
     nameLabel,
     onBlur,
     onBlurSequence,
     onChange,
     onChangeSequence,
+    secondaryLabel,
     showPlaceOfLegalResidence,
     updateFormValueAndSecondaryContactInfoSequence,
     validationErrors = {} as {
@@ -84,6 +90,39 @@ export const ContactPrimaryUpdated = connect(
               }}
             />
           </FormGroup>
+          {secondaryLabel && (
+            <FormGroup
+            // errorText={
+            //   validationErrors.contactPrimary &&
+            //   validationErrors.contactPrimary.inCareOf
+            // }
+            >
+              <label className="usa-label" htmlFor="inCareOf">
+                {secondaryLabel}{' '}
+                {isSecondaryFieldOptional && (
+                  <span className="usa-hint">(Optional)</span>
+                )}
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="contact-primary-in-care-of"
+                id="name"
+                name="contactPrimary.inCareOf"
+                type="text"
+                value={data.contactPrimary.inCareOf || ''}
+                onBlur={() => {
+                  onBlurSequence();
+                }}
+                onChange={e => {
+                  onChangeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
+          )}
 
           <Country
             bind={bind}
